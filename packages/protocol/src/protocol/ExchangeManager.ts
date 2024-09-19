@@ -31,6 +31,8 @@ import { ProtocolHandler } from "./ProtocolHandler.js";
 
 const logger = Logger.get("ExchangeManager");
 
+const MAXIMUM_CONCURRENT_EXCHANGES_PER_SESSION = 5;
+
 export class ChannelNotConnectedError extends MatterError {}
 
 export class MessageChannel implements Channel<Message> {
@@ -283,9 +285,6 @@ export class ExchangeManager {
                     );
                 }
             }
-
-            // TODO A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
-            //  to prevent a node from exhausting the message counter window of the peer node.
         }
     }
 
@@ -357,6 +356,24 @@ export class ExchangeManager {
     #addExchange(exchangeIndex: number, exchange: MessageExchange) {
         exchange.closed.on(() => this.deleteExchange(exchangeIndex));
         this.exchanges.set(exchangeIndex, exchange);
+
+        // A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
+        // to prevent a node from exhausting the message counter window of the peer node.
+        // TODO Make sure Group sessions are handled differently
+        this.#cleanupSessionExchanges(exchange.session.id);
+    }
+
+    #cleanupSessionExchanges(sessionId: number) {
+        const sessionExchanges = Array.from(this.exchanges.values()).filter(
+            exchange => exchange.session.id === sessionId && !exchange.isClosing,
+        );
+        if (sessionExchanges.length <= MAXIMUM_CONCURRENT_EXCHANGES_PER_SESSION) {
+            return;
+        }
+        // let's use the first entry in the Map as the oldest exchange and close it
+        const exchangeToClose = sessionExchanges[0];
+        logger.debug(`Closing oldest exchange ${exchangeToClose.id} for session ${sessionId}`);
+        exchangeToClose.close().catch(error => logger.error("Error closing exchange", error)); // TODO Promise??
     }
 }
 

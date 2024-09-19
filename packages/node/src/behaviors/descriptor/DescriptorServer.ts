@@ -38,7 +38,12 @@ export class DescriptorServer extends DescriptorBehavior {
         // Initialize ServerList
         this.state.serverList = this.#serverList;
 
-        // Initialize device type list
+        // Initialize DeviceTypeList
+        this.#initializeDeviceTypeList();
+    }
+
+    /** Initialize device type list when it is not already initialized. */
+    #initializeDeviceTypeList() {
         if (!this.state.deviceTypeList.length) {
             const partType = this.endpoint.type;
             this.state.deviceTypeList = [
@@ -73,6 +78,7 @@ export class DescriptorServer extends DescriptorBehavior {
      * @param deviceTypes an array of objects or named device types as defined in {@link MatterModel.standard}
      */
     addDeviceTypes(...deviceTypes: (DescriptorServer.DeviceType | string)[]) {
+        this.#initializeDeviceTypeList(); // Initialize if not already done
         const list = this.state.deviceTypeList;
 
         nextInput: for (let newDeviceType of deviceTypes) {

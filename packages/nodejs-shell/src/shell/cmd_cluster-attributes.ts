@@ -107,11 +107,19 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                     describe: "node id to read",
                                     type: "string",
                                     demandOption: true,
+                                })
+                                .options({
+                                    remote: {
+                                        describe: "request value always remote",
+                                        default: false,
+                                        type: "boolean",
+                                    },
                                 });
                         },
                         async argv => {
                             const clusterId = cluster.id;
-                            const { nodeId, endpointId } = argv;
+                            const { nodeId, endpointId, remote } = argv;
+                            const requestRemote = remote ? true : undefined;
                             const node = (await theNode.connectAndGetNodes(nodeId))[0];
 
                             const clusterClient = node
@@ -133,7 +141,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                     continue;
                                 }
                                 console.log(
-                                    `    ${attributeName} (${attribute.id}): ${Logger.toJSON(await attributeClient.get())}`,
+                                    `    ${attributeName} (${attribute.id}): ${Logger.toJSON(await attributeClient.get(requestRemote))}`,
                                 );
                             }
                         },
@@ -200,9 +208,17 @@ function generateAttributeReadHandler(
                     describe: "node id to read",
                     type: "string",
                     demandOption: true,
+                })
+                .options({
+                    remote: {
+                        describe: "request value always remote",
+                        default: false,
+                        type: "boolean",
+                    },
                 }),
         async argv => {
-            const { nodeId, endpointId } = argv;
+            const { nodeId, endpointId, remote } = argv;
+            const requestRemote = remote ? true : undefined;
             const node = (await theNode.connectAndGetNodes(nodeId))[0];
 
             const clusterClient = node.getDeviceById(endpointId)?.getClusterClientById(ClusterId(clusterId));
@@ -219,7 +235,7 @@ function generateAttributeReadHandler(
             }
             try {
                 console.log(
-                    `Attribute value for ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id}: ${Logger.toJSON(await attributeClient.get())}`,
+                    `Attribute value for ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id}: ${Logger.toJSON(await attributeClient.get(requestRemote))}`,
                 );
             } catch (error) {
                 console.log(`ERROR: Could not get attribute ${attribute.name}: ${error}`);
