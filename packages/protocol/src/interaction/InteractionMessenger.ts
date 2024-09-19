@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
 import {
     Status,
     StatusCode,
@@ -27,7 +27,7 @@ import {
     TypeFromSchema,
 } from "#types";
 import { Message, SessionType } from "../codec/MessageCodec.js";
-import { ExchangeProvider } from "../protocol/ExchangeManager.js";
+import { ChannelNotConnectedError, ExchangeProvider } from "../protocol/ExchangeManager.js";
 import {
     ExchangeSendOptions,
     MessageExchange,

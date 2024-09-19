@@ -14,8 +14,10 @@ import {
     MatterError,
     Time,
 } from "#general";
+import { NodeDiscoveryType } from "#MatterController.js";
 import {
     AttributeClientValues,
+    ChannelStatusResponseError,
     ClusterClient,
     ClusterClientObj,
     DecodedAttributeReportValue,
@@ -27,7 +29,6 @@ import {
     logEndpoint,
     structureReadAttributeDataToClusterObject,
 } from "#protocol";
-import { ChannelStatusResponseError } from "../protocol/securechannel/SecureChannelMessenger.js";
 import {
     Attributes,
     ClusterId,
@@ -48,7 +49,7 @@ import { CommissioningController } from "../CommissioningController.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
-import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode, UnknownDeviceType } from "./DeviceTypes.js";
+import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
 import { asClusterClientInternal, isClusterClient } from "./TypeHelpers.js";
 

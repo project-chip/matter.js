@@ -5,7 +5,7 @@
  */
 
 import { Diagnostic, Logger, MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "#general";
-import { RetransmissionLimitReachedError } from "@project-chip/matter.js/protocol";
+import { RetransmissionLimitReachedError } from "#protocol";
 import * as dgram from "dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
 

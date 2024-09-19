@@ -136,12 +136,6 @@ export enum NodeDiscoveryType {
     FullDiscovery = 3,
 }
 
-/**
- * Special Error instance used to detect if the retransmission limit was reached during pairing for case or pase.
- * Mainly means that the device was not responding to the pairing request.
- */
-export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError {}
-
 export class MatterController implements SessionContext {
     public static async create(options: {
         sessionStorage: StorageContext;
@@ -305,7 +299,7 @@ export class MatterController implements SessionContext {
         NodeId,
         {
             type: NodeDiscoveryType;
-            promises?: (() => Promise<MessageChannel<MatterController>>)[];
+            promises?: (() => Promise<MessageChannel>)[];
             timer?: Timer;
         }
     >();

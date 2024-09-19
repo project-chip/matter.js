@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger, MaybePromise, NetworkError, Time, Timer, isObject } from "#general";
+import {
+    InternalError,
+    Logger,
+    MaybePromise,
+    NetworkError,
+    NoResponseTimeoutError,
+    Time,
+    Timer,
+    isObject,
+} from "#general";
 import {
     EventNumber,
     NodeId,
@@ -23,7 +32,7 @@ import { MatterDevice } from "../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../cluster/server/EventServer.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
+import { NoChannelError } from "../protocol/ChannelManager.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventStorageData } from "./EventHandler.js";

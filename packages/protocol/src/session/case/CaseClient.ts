@@ -30,7 +30,7 @@ const logger = Logger.get("CaseClient");
 export class CaseClient {
     async pair(
         client: SessionContext,
-        exchange: MessageExchange<MatterController>,
+        exchange: MessageExchange,
         fabric: Fabric,
         peerNodeId: NodeId,
         expectedProcessingTimeMs?: number,
