@@ -10,17 +10,14 @@ RUN git clone --depth=1 https://github.com/project-chip/connectedhomeip.git
 WORKDIR /connectedhomeip
 RUN ./scripts/checkout_submodules.py --shallow --platform linux
 
-RUN source scripts/activate.sh
 RUN source scripts/activate.sh && gn gen out/host && ninja -C out/host
 
-RUN apt-get -qq -y install curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-RUN source ~/.nvm/nvm.sh && nvm install 20
+RUN source scripts/activate.sh && ./scripts/build_python.sh --install_virtual_env /venv
+
+ENV PATH="/venv/bin:$PATH"
 
 RUN apt-get -qq -y install iproute2
 
 WORKDIR /
-ADD run-tests.sh .
-RUN chmod a+x run-tests.sh
 
-ENTRYPOINT /run-tests.sh
+ENTRYPOINT ["/venv/bin/python3", "-B"]

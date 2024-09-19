@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Branded } from "../../src/util/Type.js";
+import { Branded } from "#util/Type.js";
 
 export type NumberId = Branded<number, "NumberId">;
 export function NumberId(numberId: number): NumberId {

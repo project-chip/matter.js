@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, isObject, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { Bytes, isObject, UnexpectedDataError } from "@matter.js/general";
 
 export class UnsupportedCastError extends UnexpectedDataError {}
 

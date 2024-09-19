@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogLevel } from "@project-chip/matter.js-general";
+import { LogLevel } from "#general";
 import { open } from "fs/promises";
 
 /**

@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "@project-chip/matter.js-nodejs";
+import "@matter.js/nodejs";

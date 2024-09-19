@@ -20,9 +20,9 @@ import {
     UINT32_MAX,
     UINT64_MAX,
     UINT8_MAX,
-} from "@project-chip/matter.js-general";
-import * as Elements from "@project-chip/matter.js-model";
-import { Model } from "@project-chip/matter.js-model";
+} from "#general";
+import * as Elements from "#model";
+import { Model } from "#model";
 
 function special(type: string, category: "datatype" | "number" = "datatype") {
     return { type, category };

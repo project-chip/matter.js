@@ -24,8 +24,11 @@ export class PicsFile {
     #lines: string[];
     #values?: Record<string, string>;
 
-    constructor(path: string) {
-        this.#lines = readFileSync(path, "utf-8").split("\n");
+    constructor(pathOrBody: string, inline = false) {
+        if (inline === false) {
+            pathOrBody = readFileSync(pathOrBody, "utf-8");
+        }
+        this.#lines = pathOrBody.split("\n").map(l => l.trim());
     }
 
     get lines() {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Spake2p } from "@project-chip/matter.js-general";
+import { Bytes, Crypto, Spake2p } from "#general";
 import * as assert from "assert";
 
 describe("Spake2p", () => {

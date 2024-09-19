@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger } from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+import { InternalError, Logger } from "#general";
+import { Specification } from "#model";
 import { camelize } from "../../util/string.js";
 import { ScanDirective, repairIncomingHtml } from "./repairs/cluster-html-repairs.js";
 import { scanDocument } from "./scan-document.js";

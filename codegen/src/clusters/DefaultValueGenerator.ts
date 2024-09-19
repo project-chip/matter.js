@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Properties } from "@project-chip/matter.js-general";
-import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js-model";
+import { InternalError, Properties } from "#general";
+import { DefaultValue, Metatype, ValueModel } from "#model";
 import { camelize, serialize } from "../util/string.js";
 import { SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
 import { TlvGenerator } from "./TlvGenerator.js";
@@ -118,7 +118,7 @@ export class DefaultValueGenerator {
             throw new InternalError(`No defining model for ${model}`);
         }
 
-        this.tlv.file.addImport("#/schema/BitmapSchema.js", "BitsFromPartial");
+        this.tlv.file.addImport("!types/schema/BitmapSchema.js", "BitsFromPartial");
         return serialize.asIs(`BitsFromPartial(${this.tlv.file.reference(defining)}, ${serialize(properties)})`);
     }
 

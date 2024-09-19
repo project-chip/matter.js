@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize } from "@project-chip/matter.js-general";
+import { camelize } from "@matter.js/general";
 import { ClusterModel, FieldModel } from "../../models/index.js";
 
 export type FeatureFlags = string[];

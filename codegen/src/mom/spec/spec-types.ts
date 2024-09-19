@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Specification } from "@project-chip/matter.js-model";
+import { Specification } from "#model";
 
 /**
  * An HTML table

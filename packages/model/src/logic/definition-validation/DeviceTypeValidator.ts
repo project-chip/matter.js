@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DeviceClassification } from "../../common/DeviceClassification.js";
 import { DeviceTypeElement } from "../../elements/index.js";
 import { DeviceTypeModel, FieldModel, RequirementModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
@@ -13,7 +14,7 @@ ModelValidator.validators[DeviceTypeElement.Tag] = class DeviceTypeValidator ext
         this.validateStructure(false, DeviceTypeModel, RequirementModel, FieldModel);
         this.validateProperty({
             name: "classification",
-            type: DeviceTypeElement.Classification,
+            type: DeviceClassification,
         });
 
         super.validate();

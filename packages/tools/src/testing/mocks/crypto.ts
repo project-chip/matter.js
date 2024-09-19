@@ -54,8 +54,17 @@ const TheCrypto = {
         // We do not really verify anything
         return;
     },
+
+    mock: true,
 };
 
 export function cryptoSetup(Crypto: any) {
-    Crypto.get = () => TheCrypto;
+    try {
+        Crypto.get();
+    } catch (e) {
+        if ((e as Error).constructor.name !== "NoProviderError") {
+            throw e;
+        }
+        Crypto.get = () => TheCrypto;
+    }
 }

@@ -47,9 +47,9 @@ export async function main(argv = process.argv) {
     const project = new Project(dir);
 
     let format: "esm" | "cjs";
-    if (project.pkg.esm) {
+    if (project.pkg.supportsEsm) {
         format = "esm";
-    } else if (project.pkg.cjs) {
+    } else if (project.pkg.supportsCjs) {
         format = "cjs";
     } else {
         console.error("Error: Could not identify project format");

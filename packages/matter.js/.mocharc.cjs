@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-module.exports = require("@project-chip/matter.js-tools").mocharc();
-
+module.exports = require("@matter.js/tools").mocharc();

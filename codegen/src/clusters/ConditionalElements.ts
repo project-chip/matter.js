@@ -4,14 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    ClusterModel,
-    ClusterVariance,
-    FeatureBitmap,
-    Model,
-    translateBitmap,
-    VarianceCondition,
-} from "@project-chip/matter.js-model";
+import { ClusterModel, ClusterVariance, FeatureBitmap, Model, translateBitmap, VarianceCondition } from "#model";
 import { serialize } from "../util/string.js";
 
 export type ConditionBitmap = {

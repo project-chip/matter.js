@@ -4,10 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export {
-    commandExecutor,
-    getIntParameter,
-    getParameter,
-    hasParameter,
-    requireMinNodeVersion,
-} from "@project-chip/matter.js-nodejs";
+export { Time, singleton } from "@matter.js/general";
+export * from "./CommandLine.js";
+export * from "./nodejs-version.js";

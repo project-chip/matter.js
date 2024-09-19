@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger } from "@project-chip/matter.js-general";
+import { decamelize, InternalError, Logger } from "#general";
 import {
     AttributeModel,
     ClusterModel,
     ClusterVariance,
     CommandModel,
+    conditionToBitmaps,
     Conformance,
     FeatureBitmap,
-    ValueModel,
-    conditionToBitmaps,
     translateBitmap,
-} from "@project-chip/matter.js-model";
+    ValueModel,
+} from "#model";
 import { Block, Entry } from "../util/TsFile.js";
 import { camelize, serialize } from "../util/string.js";
 import { ClusterComponentGenerator } from "./ClusterComponentGenerator.js";
@@ -28,7 +28,7 @@ export function generateCluster(file: ClusterFile) {
     const cluster = file.cluster;
     logger.info(`${cluster.name} → ${file.name}.ts`);
 
-    file.addImport("#/cluster/mutation/MutableCluster.js", "MutableCluster");
+    file.addImport("!types/cluster/mutation/MutableCluster.js", "MutableCluster");
 
     if (cluster.type === undefined || cluster.children.length) {
         generateDefinition(file);
@@ -193,7 +193,7 @@ function generateMutableCluster(
             // Add any default components
             if (defaultComponents.size) {
                 // Inform cluster composer that composed clusters should build off of base
-                file.addImport("#/cluster/ClusterType.js", "ClusterType");
+                file.addImport("!types/cluster/ClusterType.js", "ClusterType");
                 base.atom("base: ClusterType(Base)");
 
                 // Add the components
@@ -222,7 +222,7 @@ function generateClusterExport(file: ClusterFile) {
     file.atom(`export type ${file.clusterName} = ${file.cluster.name}.Cluster`);
     file.atom(`export const ${file.clusterName} = ${file.cluster.name}.Cluster`);
 
-    file.addImport("#/cluster/ClusterRegistry.js", "ClusterRegistry");
+    file.addImport("!types/cluster/ClusterRegistry.js", "ClusterRegistry");
     file.atom(`ClusterRegistry.register(${file.cluster.name}.Complete)`);
 }
 
@@ -267,7 +267,7 @@ function generateFeatures(file: ClusterFile, base: Block) {
     });
 
     const featureBlock = base.expressions("features: {", "}");
-    base.file.addImport("#/schema/BitmapSchema.js", "BitFlag");
+    base.file.addImport("!types/schema/BitmapSchema.js", "BitFlag");
     features.forEach(feature => {
         const name = camelize(feature.description ?? feature.name);
         featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
@@ -452,7 +452,7 @@ function generateComplete(file: ClusterFile, variance: ClusterVariance) {
     ["attribute", "command", "event"].forEach(addElements);
 
     // Generate an interface for Complete
-    file.addImport("@project-chip/matter.js-general", "Identity");
+    file.addImport("#general", "Identity");
     const definition = generateExportableTypeAndObject(file.ns, "Complete");
     documentComplete(file.cluster.name, definition);
 }
@@ -473,7 +473,7 @@ function generateAlias(file: ClusterFile) {
         throw new InternalError(`Cluster ${name} has no children or base type`);
     }
 
-    file.addImport(`#clusters/${base.name}Cluster.js`, base.name);
+    file.addImport(`!clusters/${decamelize(base.name)}.js`, base.name);
 
     const variance = ClusterVariance(base);
 
@@ -502,7 +502,7 @@ function generateAlias(file: ClusterFile) {
  * If TS were to fix this at some point then we can stop doing this.
  */
 export function generateExportableTypeAndObject(target: Block, name: string): Entry {
-    target.file.addImport("@project-chip/matter.js-general", "Identity");
+    target.file.addImport("#general", "Identity");
     const definition = target.atom(`export interface ${name} extends Identity<typeof ${name}Instance> {}`);
     target.undefine(name);
     target.atom(`export const ${name}: ${name} = ${name}Instance`);

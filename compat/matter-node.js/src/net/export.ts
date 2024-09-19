@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { NetworkNode, UdpChannelNode } from "@project-chip/matter.js-nodejs";
+export { NodeJsNetwork as NetworkNode, NodeJsUdpChannel as UdpChannelNode } from "@matter.js/nodejs";

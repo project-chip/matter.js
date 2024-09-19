@@ -11,7 +11,7 @@ import {
     SupportedStorageTypes,
     fromJson,
     toJson,
-} from "@project-chip/matter.js-general";
+} from "@matter.js/general";
 import { readFile, writeFile } from "fs/promises";
 
 export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {

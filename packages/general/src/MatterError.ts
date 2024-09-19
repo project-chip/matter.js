@@ -89,8 +89,14 @@ export class MatterError extends Error {
     static formatterFor: (formatName: string) => (value: unknown, indents?: number) => unknown =
         MatterError.defaultFormatterFactory;
 
-    // Remove when es2022
-    declare cause?: unknown;
+    // TODO - this is probably correct; MatterAggregateError should be typeof MatterError.  Need to diagnose some test
+    // breakage before enabling though
+    // static [Symbol.hasInstance](instance: unknown) {
+    //     if (instance instanceof MatterAggregateError) {
+    //         return true;
+    //     }
+    //     return Error[Symbol.hasInstance](instance);
+    // }
 }
 
 /**
@@ -141,6 +147,7 @@ export class MatterAggregateError extends AggregateError {
     [inspect] = MatterError.prototype[inspect];
     format = MatterError.prototype.format;
 
+    // TODO - see comment on MatterError.  If that one is correct this is incorrect
     static [Symbol.hasInstance](instance: unknown) {
         if (instance instanceof MatterError) {
             return true;
