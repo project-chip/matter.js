@@ -52,7 +52,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
 
-
 ## 0.10.4 (2024-09-16)
 
 -   matter.js API:
