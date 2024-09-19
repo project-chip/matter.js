@@ -476,7 +476,7 @@ export class MessageExchange {
             finalWaitTime += this.getResubmissionBackOffTime(i, this.session.context.sessionParameters);
         }
 
-        // TODO: Also add any network latency buffer, for now lets consider it's included in the max already
+        // TODO: Also add any network latency buffer, for now lets consider it's included in the processing time already
         return finalWaitTime;
     }
 
