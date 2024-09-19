@@ -46,12 +46,12 @@ export class AccessControlServer extends AccessControlBehavior {
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
-        if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online);
+        if (lifecycle.finalized !== undefined) {
+            this.reactTo(lifecycle.finalized, this.#finalized);
         }
     }
 
-    #online() {
+    #finalized() {
         // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
         // so far by the controller
         const fabrics = this.endpoint.env.get(FabricManager).getFabrics();

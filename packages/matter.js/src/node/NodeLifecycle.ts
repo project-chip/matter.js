@@ -13,6 +13,7 @@ import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
  * Extended lifecycle information that only applies to root endpoints.
  */
 export class NodeLifecycle extends EndpointLifecycle {
+    #finalized = AsyncObservable<[context: ActionContext]>();
     #online = AsyncObservable<[context: ActionContext]>();
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
@@ -53,6 +54,13 @@ export class NodeLifecycle extends EndpointLifecycle {
      */
     get online() {
         return this.#online;
+    }
+
+    /**
+     * Emits when the node is finalized and goes online next
+     */
+    get finalized() {
+        return this.#finalized;
     }
 
     /**
