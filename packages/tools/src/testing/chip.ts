@@ -4,18 +4,220 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import Docker from "dockerode";
-import { readdir } from "fs/promises";
-import { Writable } from "stream";
+import { Docker } from "../util/docker.js";
 import { Package } from "../util/package.js";
-import {
-    DOCKER_BUILD_PATH,
-    DOCKER_NAME,
-    NamedEnvironments,
-    TestEnvironment,
-    TestEnvironmentVariables,
-} from "./chip/chip-config.js";
+import { PicsFile } from "./chip/pics-file.js";
 import { type TestRunner } from "./runner.js";
+
+/**
+ * Path configuration.
+ */
+namespace Constants {
+    export const chip = "/connectedhomeip";
+    export const chipTool = `${chip}/scripts/tests/chipyaml/chiptool.py`;
+    export const yamlTests = `${chip}/src/app/tests/suites/certification`;
+    export const pythonTests = `${chip}/src/python_testing`;
+    export const python = ["/usr/bin/env", "-S", "python3", "-B"];
+
+    export const pics = "/matter.js/packages/tools/build/pics.properties";
+    export const chipPics = "/connectedhomeip/src/app/tests/suites/certification/ci-pics-values";
+    export const buildTimeout = 600_000;
+    export const defaultTimeout = 60_000;
+    export const dockerBuildPath = "chip";
+    export const dockerName = "matterjs-chip";
+}
+
+/**
+ * Internal state.
+ */
+const State = {
+    configured: false,
+    options: undefined as Chip.Options | undefined,
+    docker: undefined as Docker | undefined,
+    yamlTests: Array<string>(),
+};
+
+/**
+ * Internal configuration management.
+ */
+const Config = {
+    set options(options: Chip.Options) {
+        State.options = options;
+    },
+
+    get runner() {
+        const runner = State.options?.runner;
+
+        if (runner === undefined) {
+            throw new Error("No test runner configured");
+        }
+
+        return runner;
+    },
+
+    async docker() {
+        if (State.docker) {
+            return State.docker;
+        }
+
+        const docker = new Docker();
+
+        const { progress } = Config.runner;
+
+        await progress.run(`Build ${progress.emphasize("CHIP image")}`, () =>
+            docker.buildImage(Constants.dockerName, Package.tools.resolve(Constants.dockerBuildPath)),
+        );
+
+        State.docker = docker;
+
+        return docker;
+    },
+};
+
+/**
+ * CHIP testing controller.  "CHIP tests" are official tests implemented in the connectedhomeip repository.
+ */
+export const Chip = {
+    /**
+     * Configure CHIP testing.  Invoke prior to use of other methods.
+     */
+    set config(config: Chip.Options) {
+        Config.options = config;
+    },
+
+    /**
+     * Define YAML tests.  This is a declarative CHIP test defined in a YAML file.
+     */
+    yaml(testee: Chip.Testee, includeGlob: string, excludeGlob?: string) {
+        let files = filterWithGlob(State.yamlTests, includeGlob);
+        if (excludeGlob !== undefined) {
+            files = filterWithGlob(files, excludeGlob, true);
+        }
+
+        for (const file of files) {
+            implementTest(testee, {
+                name: file.replace(/^.*\/(?:Test_)(?:TC_)(.*)\.yaml$/, "$1"),
+
+                // TODO - complete argument set
+                args: [file, "--pics-file", Constants.pics, "--discriminator", "1234", "--passcode", "20202021"],
+            });
+        }
+    },
+
+    /**
+     * Define a "python" test.  This is a CHIP test implemented as a python script.
+     */
+    python(testee: Chip.Testee, tester: Chip.TestSelection) {
+        if (typeof tester === "string") {
+            tester = {
+                name: tester,
+
+                // TODO - complete argument set
+                args: [
+                    `${Constants.pythonTests}/${tester}.py`,
+                    "--commissioning-method",
+                    "on-network",
+                    "--PICS",
+                    Constants.pics,
+                    "--discriminator",
+                    "1234",
+                    "--passcode",
+                    "20202021",
+                ],
+            };
+        }
+
+        implementTest(testee, tester);
+    },
+};
+
+let containerInitializerInstalled = false;
+
+function implementTest(testee: Chip.Testee, tester: Chip.Tester) {
+    if (!containerInitializerInstalled) {
+        containerInitializerInstalled = true;
+        before(async function () {
+            this.timeout(Constants.buildTimeout);
+            await configure();
+        });
+    }
+
+    it(tester.description ?? tester.name, async () => {
+        await testee.setup();
+        await testee.start();
+
+        try {
+            await invokeTester(tester);
+        } finally {
+            try {
+                await testee.stop();
+            } catch (e) {
+                console.warn("Error stopping test subject", e);
+            }
+        }
+    }).timeout(tester.timeout ?? Constants.defaultTimeout);
+}
+
+async function invokeTester(tester: Chip.Tester) {
+    const docker = await Config.docker();
+
+    const args = [];
+    if (tester.command) {
+        args.push(...tester.command);
+    }
+    if (tester.args) {
+        args.push(...tester.args);
+    }
+
+    // TODO - define docker network to match CHIP's testing infrastructure
+    const output = docker.run(Constants.dockerName, {
+        args,
+        env: tester.environment,
+        binds: {
+            [Package.workspace.path]: "/matter.js",
+        },
+        network: "host",
+    });
+
+    await translateTestOutput(Config.runner, output);
+}
+
+export namespace Chip {
+    /**
+     * The test subject.
+     */
+    export interface Testee {
+        setup(): Promise<void>;
+        start(): Promise<void>;
+        stop(): Promise<void>;
+    }
+
+    /**
+     * The test implementation.
+     */
+    export type TestSelection = Tester | string;
+
+    /**
+     * Configuration required from testing program.
+     */
+    export interface Options {
+        runner: TestRunner;
+    }
+
+    /**
+     * Details of how to run a specific test.
+     */
+    export interface Tester {
+        name: string;
+        description?: string;
+        command?: string[];
+        args?: string[];
+        timeout?: number;
+        environment?: Record<string, string>;
+    }
+}
+
+export type Chip = typeof Chip;
 
 /**
  * Strip ANSI escape codes from a string.
@@ -26,70 +228,12 @@ function deansify(text: string) {
     return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "");
 }
 
-export async function testChip(runner: TestRunner, environment: TestEnvironment) {
-    // This may be customized via environment variables
-    const docker = new Docker();
-
-    // Configure tests based on environment definition
-    if (typeof environment !== "object") {
-        environment = NamedEnvironments[environment];
-        if (environment === undefined) {
-            throw new Error(`There is no predefined environment named ${environment}`);
-        }
-    }
-
-    runner.progress.startup("Testing CHIP");
-    await runner.progress.run("Build test image", () => buildImage(docker));
-    await runTests(runner, docker, environment);
-}
-
-async function buildImage(docker: Docker) {
-    const dockerPath = Package.tools.resolve(DOCKER_BUILD_PATH);
-    const files = await readdir(dockerPath);
-
-    const stream = await docker.buildImage(
-        {
-            context: dockerPath,
-            src: files,
-        },
-        {
-            t: DOCKER_NAME,
-        },
-    );
-
-    await new Promise((resolve, reject) => {
-        docker.modem.followProgress(stream, (error, result) => (error ? reject(error) : resolve(result)));
-    });
-}
-
-async function runTests(runner: TestRunner, docker: Docker, environment: TestEnvironmentVariables) {
-    try {
-        const container = docker.getContainer(DOCKER_NAME);
-        await container.remove();
-    } catch (e) {
-        if ((e as { reason?: string }).reason !== "no such container") {
-            throw e;
-        }
-    }
-
-    const output = OutputProcessor(runner);
-
-    const Env = Object.entries(environment).map(([key, value]) => {
-        if (Array.isArray(value)) {
-            value = value.join(",");
-        }
-        return `${key}=${value}`;
-    });
-
-    await docker.run(DOCKER_NAME, [], output.collector, {
-        Env,
-        HostConfig: { Binds: [`${Package.workspace.path}:/matter.js`], Privileged: true },
-    });
-}
-
-function OutputProcessor(runner: TestRunner) {
+// TODO - can simplify because we've removed two layers of CHIP extraction.
+//
+// TODO - Adaptation to support both python and yaml tests
+async function translateTestOutput(runner: TestRunner, output: AsyncIterable<string>) {
     let testCount = 0;
-    const collector = new Writable();
+
     let capture = Array<string>();
 
     let partial: string | undefined;
@@ -180,9 +324,7 @@ function OutputProcessor(runner: TestRunner) {
         capture.push(line);
     }
 
-    collector._write = (chunk, _encoding, done) => {
-        chunk = chunk.toString();
-
+    for await (const chunk of output) {
         const lines = chunk.split("\n");
         if (partial) {
             lines[0] = partial + lines[0];
@@ -193,23 +335,50 @@ function OutputProcessor(runner: TestRunner) {
         for (const line of lines) {
             processLine(line);
         }
-        done();
-    };
+    }
 
-    collector._final = done => {
-        if (partial !== undefined) {
-            processLine(partial);
-        }
+    if (partial !== undefined) {
+        processLine(partial);
+    }
 
-        // If we didn't notice any tests assume something calamitous occurred and dump all output
-        if (!testCount) {
-            console.log(capture.join(""));
-        }
+    // If we didn't notice any tests assume something calamitous occurred and dump all output
+    if (!testCount) {
+        console.log(capture.join("\n"));
+    }
+}
 
-        done();
-    };
+async function configure() {
+    if (State.configured) {
+        return;
+    }
 
-    return {
-        collector: collector,
-    };
+    await Config.docker();
+    await configurePics();
+    await configureYaml();
+
+    State.configured = true;
+}
+
+async function configurePics() {
+    const docker = await Config.docker();
+    const ciPics = await docker.readFileFromImage(Constants.dockerName, Constants.chipPics);
+    const pics = new PicsFile(ciPics, true);
+
+    const overrides = new PicsFile(Package.tools.resolve("src/testing/chip/pics.properties"));
+    pics.patch(overrides);
+
+    pics.save(Package.tools.resolve("build/pics.properties"));
+}
+
+async function configureYaml() {
+    const docker = await Config.docker();
+
+    const yamlTests = await docker.resolveGlobFromImage(Constants.dockerName, `${Constants.yamlTests}/Test_*.yaml`);
+
+    State.yamlTests.push(...yamlTests);
+}
+
+function filterWithGlob(list: string[], glob: string, invert = false) {
+    const pattern = new RegExp(glob.replace(/\*/g, ".*"));
+    return list.filter(s => !!s.match(pattern) === !invert);
 }

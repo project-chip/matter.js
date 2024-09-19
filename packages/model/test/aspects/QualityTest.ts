@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Quality } from "../../src/aspects/Quality.js";
+import { Quality } from "#aspects/Quality.js";
 
 describe("Quality", () => {
     Quality.FlagNames.forEach(flag => {

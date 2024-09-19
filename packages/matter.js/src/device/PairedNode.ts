@@ -3,6 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { AdministratorCommissioning, BasicInformation, DescriptorCluster, OperationalCredentials } from "#clusters";
 import {
     AtLeastOne,
     Crypto,
@@ -12,50 +13,44 @@ import {
     Logger,
     MatterError,
     Time,
-} from "@project-chip/matter.js-general";
-import { CommissioningController } from "../CommissioningController.js";
-import { NodeDiscoveryType } from "../MatterController.js";
-import { Attributes } from "../cluster/Cluster.js";
-import { getClusterById } from "../cluster/ClusterHelper.js";
-import { ClusterType } from "../cluster/ClusterType.js";
-import { ClusterClient } from "../cluster/client/ClusterClient.js";
-import { asClusterClientInternal, ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
-import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
-import { AdministratorCommissioning } from "../cluster/definitions/index.js";
-import { ClusterServer } from "../cluster/server/ClusterServer.js";
+} from "#general";
 import {
-    AttributeInitialValues,
-    AttributeServerValues,
-    ClusterServerObj,
-    isClusterServer,
-} from "../cluster/server/ClusterServerTypes.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import {
+    AttributeClientValues,
+    ClusterClient,
+    ClusterClientObj,
     DecodedAttributeReportValue,
+    DecodedEventReportValue,
+    EndpointInterface,
+    EndpointLoggingOptions,
+    InteractionClient,
+    PaseClient,
+    logEndpoint,
     structureReadAttributeDataToClusterObject,
-} from "../protocol/interaction/AttributeDataDecoder.js";
-import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
-import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
+} from "#protocol";
 import { ChannelStatusResponseError } from "../protocol/securechannel/SecureChannelMessenger.js";
 import {
+    Attributes,
+    ClusterId,
+    ClusterType,
     CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
+    EndpointNumber,
     ManualPairingCodeCodec,
+    NodeId,
     QrPairingCodeCodec,
-} from "../schema/PairingCodeSchema.js";
-import { PaseClient } from "../session/pase/PaseClient.js";
+    StatusCode,
+    StatusResponseError,
+    getClusterById,
+} from "#types";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
+import { CommissioningController } from "../CommissioningController.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
 import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode, UnknownDeviceType } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
-import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.js";
+import { asClusterClientInternal, isClusterClient } from "./TypeHelpers.js";
 
 const logger = Logger.get("PairedNode");
 
@@ -507,7 +502,7 @@ export class PairedNode {
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
             const endpointIdNumber = EndpointNumber(parseInt(endpointId));
-            const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<
+            const descriptorData = clusters[DescriptorCluster.id] as AttributeClientValues<
                 typeof DescriptorCluster.attributes
             >;
 
@@ -598,7 +593,7 @@ export class PairedNode {
         data: { [key: ClusterId]: { [key: string]: any } },
         interactionClient: InteractionClient,
     ) {
-        const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
+        const descriptorData = data[DescriptorCluster.id] as AttributeClientValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
             const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);

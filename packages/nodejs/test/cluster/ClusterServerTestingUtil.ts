@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PrivateKey } from "@project-chip/matter.js-general";
+import { PrivateKey } from "#general";
+import { Fabric, Message, SecureSession } from "#protocol";
+import { FabricId, FabricIndex, NodeId, StatusCode, VendorId } from "#types";
 import { asClusterServerInternal, ClusterServerObj, ClusterType } from "@project-chip/matter.js/cluster";
-import { Message } from "@project-chip/matter.js/codec";
-import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/device";
-import { Fabric } from "@project-chip/matter.js/fabric";
-import { StatusCode } from "@project-chip/matter.js/interaction";
-import { SecureSession } from "@project-chip/matter.js/session";
 
 export const ZERO = new Uint8Array(1);
 const PRIVATE_KEY = new Uint8Array(32);
@@ -24,13 +21,13 @@ export async function callCommandOnClusterServer<T extends ClusterType>(
     commandName: string,
     args: any,
     endpoint: Endpoint,
-    session?: SecureSession<any>,
+    session?: SecureSession,
     message?: Message,
 ): Promise<{ code: StatusCode; responseId: number; response: any }> {
     const command = (asClusterServerInternal(clusterServer).commands as any)[commandName];
     if (command === undefined) throw new Error(`Command ${commandName} not found`);
     const { code, responseId, response } = await command.invoke(
-        session ?? ({} as SecureSession<any>),
+        session ?? ({} as SecureSession),
         command.requestSchema.encodeTlv(args),
         message ?? ({} as Message),
         endpoint,

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { deepCopy } from "../../src/util/DeepCopy.js";
+import { deepCopy } from "#util/DeepCopy.js";
 
 describe("DeepCopy", () => {
     it("should return a new object, not the reference", () => {

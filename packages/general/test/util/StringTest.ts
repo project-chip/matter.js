@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, capitalize } from "../../src/util/String.js";
+import { camelize, capitalize } from "#util/String.js";
 
 const CAMELIZE_TESTS = {
     foo: "Foo",

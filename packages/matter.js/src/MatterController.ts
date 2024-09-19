@@ -10,6 +10,7 @@
  * @deprecated
  */
 
+import { GeneralCommissioning } from "#clusters";
 import {
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Channel,
@@ -32,51 +33,61 @@ import {
     createPromise,
     isIPv6,
     serverAddressToString,
-} from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
-import { NodeCommissioningOptions } from "./CommissioningController.js";
-import { Ble } from "./ble/Ble.js";
-import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
-import { ClusterClient } from "./cluster/client/ClusterClient.js";
-import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { FabricId } from "./datatype/FabricId.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { NodeId } from "./datatype/NodeId.js";
-import { VendorId } from "./datatype/VendorId.js";
-import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
+} from "#general";
+import { Specification } from "#model";
 import {
+    Ble,
+    CaseClient,
+    ChannelManager,
+    ClusterClient,
+    CommissionableDevice,
     CommissioningError,
-    CommissioningOptions,
     CommissioningSuccessfullyFinished,
     ControllerCommissioner,
-} from "./protocol/ControllerCommissioner.js";
-import { ControllerDiscovery, DiscoveryError } from "./protocol/ControllerDiscovery.js";
-import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
-import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
-import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
-import {
+    ControllerCommissioningOptions,
+    ControllerDiscovery,
+    DiscoveryData,
+    DiscoveryError,
+    ExchangeManager,
+    ExchangeProvider,
+    Fabric,
+    FabricBuilder,
+    FabricJsonObject,
+    InteractionClient,
+    MdnsScanner,
+    MessageChannel,
+    NoChannelError,
+    PairRetransmissionLimitReachedError,
+    PaseClient,
+    ResumptionRecord,
+    RetransmissionLimitReachedError,
+    RootCertificateManager,
+    SECURE_CHANNEL_PROTOCOL_ID,
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
+    Scanner,
     SessionContext,
+    SessionManager,
     SessionParameters,
-} from "./session/Session.js";
-import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
-import { CaseClient } from "./session/case/CaseClient.js";
-import { PaseClient } from "./session/pase/PaseClient.js";
-import { TlvEnum } from "./tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "./tlv/TlvObject.js";
-import { TypeFromSchema } from "./tlv/TlvSchema.js";
-import { TlvString } from "./tlv/TlvString.js";
+    StatusReportOnlySecureChannelProtocol,
+} from "#protocol";
+import {
+    CaseAuthenticatedTag,
+    DiscoveryCapabilitiesBitmap,
+    EndpointNumber,
+    FabricId,
+    FabricIndex,
+    NodeId,
+    TlvEnum,
+    TlvField,
+    TlvObject,
+    TlvString,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+    VendorId,
+} from "#types";
+import { NodeCommissioningOptions } from "./CommissioningController.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -270,9 +281,9 @@ export class MatterController implements SessionContext {
         return controller;
     }
 
-    readonly sessionManager: SessionManager<MatterController>;
+    readonly sessionManager: SessionManager;
     private readonly channelManager = new ChannelManager(CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE);
-    private readonly exchangeManager: ExchangeManager<MatterController>;
+    private readonly exchangeManager: ExchangeManager;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
     private netInterfaceBle: NetInterface | undefined;
@@ -347,7 +358,7 @@ export class MatterController implements SessionContext {
             this.sessionClosedCallback?.(session.peerNodeId);
         });
 
-        this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
+        this.exchangeManager = new ExchangeManager(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
 
         if (netInterfaceIpv4 !== undefined) {
@@ -382,6 +393,10 @@ export class MatterController implements SessionContext {
 
     get fabricData() {
         return this.fabric.toStorageObject();
+    }
+
+    getFabrics() {
+        return [this.fabric];
     }
 
     /** Our own client/controller session parameters. */
@@ -493,7 +508,7 @@ export class MatterController implements SessionContext {
         );
 
         // If we have a known address we try this first before we discover the device
-        let paseSecureChannel: MessageChannel<MatterController> | undefined;
+        let paseSecureChannel: MessageChannel | undefined;
         let discoveryData: DiscoveryData | undefined;
 
         // If we have a last known address, try this first
@@ -558,7 +573,7 @@ export class MatterController implements SessionContext {
         address: ServerAddress,
         passcode: number,
         device?: CommissionableDevice,
-    ): Promise<MessageChannel<MatterController>> {
+    ): Promise<MessageChannel> {
         let paseChannel: Channel<Uint8Array>;
         if (device !== undefined) {
             logger.info(`Commissioning device`, MdnsScanner.discoveryDataDiagnostics(device));
@@ -619,8 +634,8 @@ export class MatterController implements SessionContext {
      * success.
      */
     private async commissionDevice(
-        paseSecureMessageChannel: MessageChannel<MatterController>,
-        commissioningOptions: CommissioningOptions,
+        paseSecureMessageChannel: MessageChannel,
+        commissioningOptions: ControllerCommissioningOptions,
         discoveryData?: DiscoveryData,
         completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
     ): Promise<NodeId> {
@@ -754,7 +769,7 @@ export class MatterController implements SessionContext {
         operationalAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
         expectedProcessingTimeMs?: number,
-    ): Promise<MessageChannel<MatterController> | undefined> {
+    ): Promise<MessageChannel | undefined> {
         const { ip, port } = operationalAddress;
         try {
             logger.debug(
@@ -843,13 +858,13 @@ export class MatterController implements SessionContext {
             }
         }
 
-        const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
+        const discoveryPromises = new Array<() => Promise<MessageChannel>>();
         let reconnectionPollingTimer: Timer | undefined;
 
         if (operationalAddress !== undefined) {
             // Additionally to general discovery we also try to poll the formerly known operational address
             if (requestedDiscoveryType === NodeDiscoveryType.FullDiscovery) {
-                const { promise, resolver, rejecter } = createPromise<MessageChannel<MatterController>>();
+                const { promise, resolver, rejecter } = createPromise<MessageChannel>();
 
                 reconnectionPollingTimer = Time.getPeriodicTimer(
                     "Controller reconnect",
@@ -1079,7 +1094,7 @@ export class MatterController implements SessionContext {
     async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
         const { discoveryData } = discoveryOptions;
 
-        let channel: MessageChannel<any>;
+        let channel: MessageChannel;
         try {
             channel = this.channelManager.getChannel(this.fabric, peerNodeId);
         } catch (error) {

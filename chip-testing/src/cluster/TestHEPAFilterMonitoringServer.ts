@@ -3,8 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { HepaFilterMonitoringServer } from "@project-chip/matter.js/behavior/definitions/hepa-filter-monitoring";
-import { ResourceMonitoring } from "@project-chip/matter.js/cluster";
+import { HepaFilterMonitoringServer } from "@matter.js/main/behaviors/hepa-filter-monitoring";
+import { ResourceMonitoring } from "@matter.js/main/clusters/resource-monitoring";
 
 const TestHepaFilterMonitoringServerBase = HepaFilterMonitoringServer.with(
     ResourceMonitoring.Feature.Condition,

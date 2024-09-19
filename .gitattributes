@@ -1,0 +1,9 @@
+packages/model/src/standard/elements/*.ts linguist-generated=true
+packages/types/src/clusters/* linguist-generated=true
+packages/types/src/globals/* linguist-generated=true
+packages/node/src/tags/* linguist-generated=true
+packages/node/src/endpoints/* linguist-generated=true
+packages/node/src/devices/* linguist-generated=true
+packages/node/src/behaviors/*/index.ts linguist-generated=true
+packages/node/src/behaviors/*/*Behavior.ts linguist-generated=true
+packages/node/src/behaviors/*/*Interface.ts linguist-generated=true

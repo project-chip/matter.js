@@ -3,13 +3,9 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, Time, Timer } from "@project-chip/matter.js-general";
-import {
-    MovementDirection,
-    MovementType,
-    WindowCoveringServer,
-} from "@project-chip/matter.js/behavior/definitions/window-covering";
-import { WindowCovering } from "@project-chip/matter.js/cluster";
+import { Logger, Time, Timer } from "@matter.js/main";
+import { MovementDirection, MovementType, WindowCoveringServer } from "@matter.js/main/behaviors/window-covering";
+import { WindowCovering } from "@matter.js/main/clusters/window-covering";
 
 const logger = Logger.get("TestWindowCoveringServer");
 

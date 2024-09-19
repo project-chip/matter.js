@@ -29,7 +29,7 @@ export class Typescript {
         };
 
         this.#host = ts.createIncrementalCompilerHost(options);
-        const baseOptions = this.getCompilerOptions(Package.tools.resolve("tsconfig.base.json"));
+        const baseOptions = this.#getCompilerOptions(Package.tools.resolve("tsconfig.base.json"));
         this.options = {
             ...baseOptions,
 
@@ -38,27 +38,25 @@ export class Typescript {
             tsBuildInfoFile: pkg.resolve("build/tsbuildinfo"),
             rootDir: this.pkg.path,
 
-            // So this guy is interesting.  It reduces redundant work and
-            // drastically speeds things up so seems worthwhile.  May want to
-            // enable in some nightly process but I think we're safe enough
-            // as is
+            // So this guy is interesting.  It reduces redundant work and drastically speeds things up so seems
+            // worthwhile.  May want to enable in some nightly process but I think we're safe enough as is
             skipLibCheck: true,
 
             ...options,
         };
 
         delete options.composite;
-        if (this.pkg.src) {
-            this.loadPackageOptions("src/tsconfig.json");
+        if (this.pkg.hasSrc) {
+            this.#loadPackageOptions("src/tsconfig.json");
         }
 
-        if (this.pkg.tests) {
-            this.loadPackageOptions("test/tsconfig.json");
+        if (this.pkg.hasTests) {
+            this.#loadPackageOptions("test/tsconfig.json");
         }
 
         // The refresh callback allows us to make spinner updates even though TS is synchronous.
         //
-        // TODO - we need additional interception points as spinner still hangs
+        // TODO - add interception points as spinner still hangs
         if (refreshCallback) {
             const { getSourceFile, writeFile } = this.#host;
 
@@ -86,7 +84,7 @@ export class Typescript {
                 declarationMap: true,
             },
             refreshCallback,
-        ).run();
+        ).#run();
     }
 
     static validateTypes(pkg: Package, refreshCallback?: () => void) {
@@ -96,17 +94,20 @@ export class Typescript {
                 noEmit: true,
             },
             refreshCallback,
-        ).run();
+        ).#run();
     }
 
-    private run() {
+    #run() {
         const sources = Array<string>();
 
-        if (this.pkg.src) {
+        if (this.pkg.hasSrc) {
             sources.push(...glob.sync(this.pkg.resolve("src/**/*.ts").replace(/\\/g, "/")));
         }
-        if (this.pkg.tests) {
+        if (this.pkg.hasTests) {
             sources.push(...glob.sync(this.pkg.resolve("test/**/*.ts").replace(/\\/g, "/")));
+        }
+        if (this.pkg.hasCodegen) {
+            sources.push(...glob.sync(this.pkg.resolve("build/src/**/*.ts").replace(/\\/g, "/")));
         }
 
         const program = ts.createIncrementalProgram({
@@ -126,25 +127,25 @@ export class Typescript {
         if (!this.options.noEmit) {
             diagnostics.push(...program.emit().diagnostics);
         }
-        this.passTscErrors(diagnostics);
+        this.#passTscErrors(diagnostics);
     }
 
-    private getCompilerOptions(filename: string) {
+    #getCompilerOptions(filename: string) {
         filename = this.pkg.resolve(filename);
         const file = ts.readConfigFile(filename, ts.sys.readFile);
-        this.passTscError(file.error);
+        this.#passTscError(file.error);
         const config = ts.parseJsonConfigFileContent(file.config, ts.sys, dirname(filename));
-        this.passTscError(config.errors && config.errors[0]);
+        this.#passTscError(config.errors && config.errors[0]);
         return config.options;
     }
 
-    private passTscError(diagnostic: undefined | ts.Diagnostic) {
+    #passTscError(diagnostic: undefined | ts.Diagnostic) {
         if (diagnostic) {
             throw new InternalBuildError(ts.formatDiagnostic(diagnostic, this.#host));
         }
     }
 
-    private passTscErrors(diagnostics: undefined | readonly ts.Diagnostic[]) {
+    #passTscErrors(diagnostics: undefined | readonly ts.Diagnostic[]) {
         if (!diagnostics) {
             return;
         }
@@ -155,10 +156,9 @@ export class Typescript {
 
         let formatted = ts.formatDiagnosticsWithColorAndContext(diagnostics, this.#host);
 
-        // Strangely there are not newlines between errors in this output like
-        // there is when you run tsc from the command line.  Use the "light
-        // blue" ANSI escape code as an injection point for an additional
-        // newline
+        // Strangely there are not newlines between errors in this output like there is when you run tsc from the
+        // command line.  Use the "light blue" ANSI escape code as an injection point for an additional newline
+        //
         // eslint-disable-next-line no-control-regex
         formatted = formatted.replace(/\u001b\[96m/gms, "\n\u001b[96m");
 
@@ -166,18 +166,17 @@ export class Typescript {
     }
 
     /**
-     * As we largely configure based on convention, we mostly ignore
-     * tsconfig.json files in project directories.  The limited number of
-     * project-specific options we allow load here.
+     * As we largely configure based on convention, we mostly ignore tsconfig.json files in project directories.  The
+     * limited number of project-specific options we allow load here.
      */
-    private loadPackageOptions(path: string) {
+    #loadPackageOptions(path: string) {
         const filename = this.pkg.resolve(path);
         if (!existsSync(filename)) {
             // Package tsconfigs are optional
             return;
         }
 
-        const options = this.getCompilerOptions(path);
+        const options = this.#getCompilerOptions(path);
 
         delete options?.composite;
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommandModel, InferredComponent, VarianceCondition, conditionToBitmaps } from "@project-chip/matter.js-model";
+import { CommandModel, InferredComponent, VarianceCondition, conditionToBitmaps } from "#model";
 import { camelize } from "../util/string.js";
 import type { InterfaceFile } from "./InterfaceFile.js";
 import { TypeGenerator } from "./TypeGenerator.js";
@@ -32,7 +32,7 @@ export class InterfaceGenerator {
         const intf = this.file.ns.statements(`export interface ${name} {`, "}");
 
         for (const command of commands) {
-            this.file.addImport("@project-chip/matter.js-general", "MaybePromise");
+            this.file.addImport("#general", "MaybePromise");
 
             let request = this.types.reference(command, "");
             if (request.length) {

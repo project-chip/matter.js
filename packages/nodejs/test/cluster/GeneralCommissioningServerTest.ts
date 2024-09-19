@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Message, SecureSession, SessionType } from "#protocol";
+import { EndpointNumber, VendorId } from "#types";
 import {
     BasicInformationCluster,
     ClusterServer,
@@ -12,17 +14,14 @@ import {
     GeneralCommissioningCluster,
     GeneralCommissioningClusterHandler,
 } from "@project-chip/matter.js/cluster";
-import { Message, SessionType } from "@project-chip/matter.js/codec";
-import { EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
-import { SecureSession } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("GeneralCommissioning Server test", () => {
     let generalCommissioningServer: ClusterServerObj<GeneralCommissioningCluster> | undefined;
     let basicInformationServer: ClusterServerObj<BasicInformationCluster> | undefined;
-    let testSession: SecureSession<any> | undefined;
+    let testSession: SecureSession | undefined;
     let endpoint: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"

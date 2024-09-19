@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, toJson } from "../../src/storage/StringifyTools.js";
+import { fromJson, toJson } from "#storage/StringifyTools.js";
 import { BigintId, NumberId } from "../util/fake-brands.js";
 
 describe("JsonConverter", () => {

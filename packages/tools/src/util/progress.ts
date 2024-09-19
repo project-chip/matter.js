@@ -88,6 +88,14 @@ export class Progress {
 
     constructor() {}
 
+    emphasize(text: unknown) {
+        return colors.bold(`${text}`);
+    }
+
+    deemphasize(text: unknown) {
+        return colors.dim(`${text}`);
+    }
+
     skip(why: string, pkg: Package) {
         stdout.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
     }
@@ -178,7 +186,7 @@ export class Progress {
         return true;
     }
 
-    async run(what: string, fn: () => Promise<void>) {
+    async run(what: string, fn: () => void | Promise<void>) {
         this.update(what);
         await fn();
         this.success(what);

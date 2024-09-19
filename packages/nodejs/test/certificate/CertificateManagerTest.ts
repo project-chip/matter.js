@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, DerKey, PrivateKey, PublicKey, X962 } from "@project-chip/matter.js-general";
+import { Bytes, Crypto, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, X962 } from "#general";
 import {
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
-} from "@project-chip/matter.js/certificate";
-import { DerCodec, DerNode } from "@project-chip/matter.js/codec";
-import { ValidationOutOfBoundsError } from "@project-chip/matter.js/common";
-import { CaseAuthenticatedTag, FabricId, NodeId } from "@project-chip/matter.js/datatype";
+} from "#protocol";
+import { CaseAuthenticatedTag, FabricId, NodeId, ValidationOutOfBoundsError } from "#types";
 import * as assert from "assert";
 import {
     CERTIFICATE_SETS,

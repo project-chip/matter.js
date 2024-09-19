@@ -4,23 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    AtLeastOne,
-    HandlerFunction,
-    ImplementationError,
-    NamedHandler,
-    NotImplementedError,
-} from "@project-chip/matter.js-general";
-import { Cluster } from "../cluster/Cluster.js";
-import { ClusterType } from "../cluster/ClusterType.js";
-import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
-import { Binding } from "../cluster/definitions/BindingCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
+import { Binding, BridgedDeviceBasicInformationCluster } from "#clusters";
+import { AtLeastOne, HandlerFunction, ImplementationError, NamedHandler, NotImplementedError } from "#general";
+import { ClusterClientObj } from "#protocol";
+import { Cluster, ClusterType, EndpointNumber } from "#types";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
+import { isClusterClient } from "./TypeHelpers.js";
 
 /**
  * Utility function to wrap externally registered command handlers into the internal command handler and make sure

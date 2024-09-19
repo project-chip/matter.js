@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Key, PrivateKey } from "@project-chip/matter.js-general";
+import { Bytes, Crypto, Key, PrivateKey } from "#general";
 import { FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { FabricBuilder } from "@project-chip/matter.js/fabric";
 

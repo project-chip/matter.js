@@ -4,13 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, NoProviderError, singleton } from "@project-chip/matter.js-general";
-import { CryptoNode } from "./CryptoNode.js";
+import { Crypto, NoProviderError, singleton } from "#general";
+import { NodeJsCrypto } from "./NodeJsCrypto.js";
 
-// Check if Crypto singleton is already registered and auto register if not
+// Check if Crypto singleton is already registered
+let needCrypto = true;
 try {
-    Crypto.get();
+    const crypto = Crypto.get();
+
+    if ((crypto as { mock?: boolean }).mock !== true) {
+        needCrypto = false;
+    }
 } catch (error) {
     NoProviderError.accept(error);
-    Crypto.get = singleton(() => new CryptoNode());
+}
+
+// Register if necessary
+if (needCrypto) {
+    Crypto.get = singleton(() => new NodeJsCrypto());
 }

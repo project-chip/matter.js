@@ -6,12 +6,16 @@
 
 import { readFileSync, statSync } from "fs";
 import { readdir, stat, writeFile } from "fs/promises";
+import { glob } from "glob";
 import { dirname, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
 export class JsonNotFoundError extends Error {}
+
+export const CONFIG_PATH = `src/build.config.ts`;
+export const CODEGEN_PATH = `build/src`;
 
 function findJson(filename: string, path: string = ".", title?: string) {
     path = resolve(path);
@@ -39,11 +43,12 @@ function isDirectory(path: string) {
 export class Package {
     path: string;
     json: PackageJson;
-    esm: boolean;
-    cjs: boolean;
-    src: boolean;
-    tests: boolean;
-    library: boolean;
+    supportsEsm: boolean;
+    supportsCjs: boolean;
+    hasSrc: boolean;
+    hasTests: boolean;
+    hasConfig: boolean;
+    isLibrary: boolean;
 
     constructor({
         path = ".",
@@ -57,13 +62,15 @@ export class Package {
         this.json = json;
 
         const { esm, cjs } = selectFormats(this.json);
-        this.esm = esm;
-        this.cjs = cjs;
+        this.supportsEsm = esm;
+        this.supportsCjs = cjs;
 
-        this.src = isDirectory(this.resolve("src"));
-        this.tests = isDirectory(this.resolve("test"));
+        this.hasSrc = isDirectory(this.resolve("src"));
+        this.hasTests = isDirectory(this.resolve("test"));
 
-        this.library = !!(this.json.main || this.json.module || this.json.exports);
+        this.isLibrary = !!(this.json.main || this.json.module || this.json.exports);
+
+        this.hasConfig = this.hasFile(this.resolve(CONFIG_PATH));
     }
 
     get name() {
@@ -74,12 +81,23 @@ export class Package {
         return this.json.exports;
     }
 
+    get hasCodegen() {
+        return this.hasDirectory(CODEGEN_PATH);
+    }
+
     resolve(path: string) {
         return resolve(this.path, path);
     }
 
     relative(path: string) {
         return relative(this.path, path);
+    }
+
+    async glob(pattern: string) {
+        // Glob only understands forward-slash as separator because reasons
+        pattern = this.resolve(pattern).replace(/\\/g, "/");
+
+        return await glob(pattern);
     }
 
     start(what: string) {
@@ -118,7 +136,7 @@ export class Package {
 
     get dependencies() {
         let result = Array<string>();
-        for (const type of ["dependencies", "devDependencies", "peerDependencies"]) {
+        for (const type of ["dependencies", "optionalDependencies", "devDependencies", "peerDependencies"]) {
             if (typeof this.json[type] === "object" && this.json[type] !== null) {
                 result = [...result, ...Object.keys(this.json[type])];
             }
@@ -204,8 +222,24 @@ export class Package {
         return pkg.resolveExport(segments.length ? segments.join("/") : ".", type);
     }
 
+    hasFile(path: string) {
+        return !!this.#maybeStat(path)?.isFile();
+    }
+
+    hasDirectory(path: string) {
+        return !!this.#maybeStat(path)?.isDirectory();
+    }
+
+    async writeFile(path: string, contents: unknown) {
+        await writeFile(path, `${contents}`);
+    }
+
     async save() {
-        await writeFile(this.resolve("package.json"), JSON.stringify(this.json, undefined, 4));
+        await this.writeFile("package.json", JSON.stringify(this.json, undefined, 4));
+    }
+
+    #maybeStat(path: string) {
+        return ignoreErrorSync("ENOENT", () => statSync(this.resolve(path)));
     }
 }
 

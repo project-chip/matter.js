@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AnyElement, MatterModel, ModelVariantTraversal, VariantDetail } from "../../src/index.js";
+import { AnyElement, MatterModel, ModelVariantTraversal, VariantDetail } from "#index.js";
 
 describe("ModelVariantTraversal", () => {
     it("associates attributes by ID", () => {

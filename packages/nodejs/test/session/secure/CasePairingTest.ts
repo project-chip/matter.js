@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, PublicKey } from "@project-chip/matter.js-general";
-import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "@project-chip/matter.js/session";
+import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
+import { Bytes, PublicKey } from "#general";
+import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "#protocol";
 import * as assert from "assert";
-import { CryptoNode } from "../../../src/crypto/CryptoNode.js";
 
-const cryptoNode = new CryptoNode();
+const crypto = new NodeJsCrypto();
 
 describe("CasePairing", () => {
     describe("pair", () => {
@@ -33,14 +33,14 @@ describe("CasePairing", () => {
                 "04531a14e4c1b4cc7ac69aa5e403d5ccc3c5152c29fddedc29ac98ecff6c8f8695317446029cf3eb3e295ee18f0fd0ba9f06f7fa229138db0bc8d8c6f9875c9707",
             );
 
-            const sigma2Salt = Buffer.concat([ipk, random, pubKey, cryptoNode.hash(sigma1Bytes)]);
+            const sigma2Salt = Buffer.concat([ipk, random, pubKey, crypto.hash(sigma1Bytes)]);
 
             assert.equal(
                 Bytes.toHex(sigma2Salt),
                 "0c677d9b5ac585827b577470bd9bd51675d1443943a23371699bb017958a87e9ec6bbcad5f990aa3822a45bec778648904e2690445cc017a388853eaeca3a1ffd2712f6898e0bb523b8b496590804a39bf1555300bbd2a159e927b428397fb07a41e26c8cdf858ec62a310d0480d94eb64df506d7014c72ed4a18169954cf24a5cacf44fc7c13eb39906c06a50864f8106",
             );
 
-            const sigma2Key = await cryptoNode.hkdf(sharedSecret, sigma2Salt, Bytes.fromString("Sigma2"));
+            const sigma2Key = await crypto.hkdf(sharedSecret, sigma2Salt, Bytes.fromString("Sigma2"));
 
             assert.equal(Bytes.toHex(sigma2Key), "7ed5e720195c511dc2d97535e262f935");
 
@@ -59,7 +59,7 @@ describe("CasePairing", () => {
                 "1736972364d84c4ae069f642f491256c6e74c86eda9f5ed4d89dfd7cadb68b67574f032afa2764fcc890e9218eaedcc484576d2d65e4df1ae22dd916f12ab59e",
             );
 
-            cryptoNode.verify(PublicKey(fabricPubKey), signatureData, signature);
+            crypto.verify(PublicKey(fabricPubKey), signatureData, signature);
 
             const encryptedDataPlain = TlvEncryptedDataSigma2.encode({
                 nodeOpCert: noc,
@@ -72,7 +72,7 @@ describe("CasePairing", () => {
                 "153001f1153001010124020137032414001826048012542826058015203b370624150124115a1824070124080130094104531a14e4c1b4cc7ac69aa5e403d5ccc3c5152c29fddedc29ac98ecff6c8f8695317446029cf3eb3e295ee18f0fd0ba9f06f7fa229138db0bc8d8c6f9875c9707370a3501280118240201360304020401183004149038f60c3542d5e610f29abc5f42ac09b07ee0d7300514e766069362d7e35b79687161644d222bdde93a6818300b40cbd9a06e77e9a7bcd19d02da0f2e50042f7d78201e8be26e793e995ca8f02f1094b34d0fd53b1f1458908d0d29183f2611e6132c6401d15dfff081d1021358ad183003401736972364d84c4ae069f642f491256c6e74c86eda9f5ed4d89dfd7cadb68b67574f032afa2764fcc890e9218eaedcc484576d2d65e4df1ae22dd916f12ab59e3004108731f8cec507136df7558fca9360e9fc18",
             );
 
-            const encrypted = cryptoNode.encrypt(sigma2Key, encryptedDataPlain, Bytes.fromString("NCASE_Sigma2N"));
+            const encrypted = crypto.encrypt(sigma2Key, encryptedDataPlain, Bytes.fromString("NCASE_Sigma2N"));
 
             assert.equal(
                 Bytes.toHex(encrypted),
@@ -91,7 +91,7 @@ describe("CasePairing", () => {
                 "75e35c22a5da60805d65772b3d4decc8c6eabe30bd2925608524ea12b729efd00a12faeb5757cdfc65aaefddd01c57be9f14d37e2c0beca43434f8ebdd81d635",
             );
 
-            cryptoNode.verify(PublicKey(fabricPubKey), signatureData, signature);
+            crypto.verify(PublicKey(fabricPubKey), signatureData, signature);
         });
 
         it("generates the right bytes for sigma 3", async () => {
@@ -116,18 +116,18 @@ describe("CasePairing", () => {
                 "d3e009b49a46a2492a96fc8391dd90a53ad5de4fadc911a524036bbaf439577bf4ce9bb4b5cab2942c8c6e8d5666b3ce7449e0fb290833291641f40a366a4a9fd5573b5913b932914e23f13d25353d4cad0ad6e2ecbb85163800580dfb7ea88c56bb67565e94542f49c2f0fe4a7de22ee0fecc85a28da31e32508c3ce1d30b4cfe7b7bb84d5c4425f20336ea816f4b9a04c6c0828e4f4b24eb4aacf29a4b6b419d85dcf02d222c9826691aa73864f9cd6b8ebfd94680b0db75f7356018284e2c9b3bcea807f73f5adaff5db005550e441921420ddc65500a2bd4a177875f71be4e293c35c8221867bf206c016d6d5add4ceba754fb3ad375a03061634d3a0b0ae6b0bafe272640c545f07cf7742d960f399a12c09b7bf7833678e048e039ee7b1a66e365817fff0d0d7e28edb7beae205a2974b3273ae23909e9bb482cdc5b05363265d78eb747536336b7ef",
             );
 
-            const sigma3Salt = Buffer.concat([identityProtectionKey, cryptoNode.hash([sigma1Bytes, sigma2Bytes])]);
+            const sigma3Salt = Buffer.concat([identityProtectionKey, crypto.hash([sigma1Bytes, sigma2Bytes])]);
 
             assert.equal(
                 Bytes.toHex(sigma3Salt),
                 "0c677d9b5ac585827b577470bd9bd51678d8306a4055524d843215d1e697791dd53abd3db440370264bf9d191f1cb786",
             );
 
-            const sigma3Key = await cryptoNode.hkdf(sharedSecret, sigma3Salt, Bytes.fromString("Sigma3"));
+            const sigma3Key = await crypto.hkdf(sharedSecret, sigma3Salt, Bytes.fromString("Sigma3"));
 
             assert.equal(Bytes.toHex(sigma3Key), "5ba760e89d08efcfe22dbe5832684415");
 
-            const peerEncryptedData = cryptoNode.decrypt(sigma3Key, peerEncrypted, Bytes.fromString("NCASE_Sigma3N"));
+            const peerEncryptedData = crypto.decrypt(sigma3Key, peerEncrypted, Bytes.fromString("NCASE_Sigma3N"));
 
             assert.equal(
                 Bytes.toHex(peerEncryptedData),
@@ -150,14 +150,9 @@ describe("CasePairing", () => {
 
             const secureSessionSalt = Buffer.concat([
                 identityProtectionKey,
-                cryptoNode.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             ]);
-            const decryptKey = await cryptoNode.hkdf(
-                sharedSecret,
-                secureSessionSalt,
-                Bytes.fromString("SessionKeys"),
-                16,
-            );
+            const decryptKey = await crypto.hkdf(sharedSecret, secureSessionSalt, Bytes.fromString("SessionKeys"), 16);
 
             assert.equal(Bytes.toHex(decryptKey), "e3ffee2792dc6d8dee832e248d1df718");
         });

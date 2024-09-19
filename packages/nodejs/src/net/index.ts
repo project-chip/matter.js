@@ -5,5 +5,5 @@
  */
 
 import "./register.js";
-export * from "./NetworkNode.js";
-export * from "./UdpChannelNode.js";
+export * from "./NodeJsNetwork.js";
+export * from "./NodeJsUdpChannel.js";

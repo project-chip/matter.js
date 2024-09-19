@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, camelize, NotImplementedError } from "@project-chip/matter.js-general";
+import { Bytes, camelize, NotImplementedError } from "@matter.js/general";
 import { ElementTag, FieldValue, Metatype } from "../common/index.js";
 import { Model } from "../models/Model.js";
 import type { ValueModel } from "../models/ValueModel.js";

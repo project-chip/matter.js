@@ -4,14 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, Logger } from "@project-chip/matter.js-general";
-import {
-    ClusterModel,
-    ElementTag,
-    FieldValue,
-    RequirementElement,
-    RequirementModel,
-} from "@project-chip/matter.js-model";
+import { camelize, Logger } from "#general";
+import { ClusterModel, ElementTag, FieldValue, RequirementElement, RequirementModel } from "#model";
 import { EndpointFile } from "./EndpointFile.js";
 
 const logger = Logger.get("ClusterRequirements");
