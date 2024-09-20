@@ -150,10 +150,14 @@ export class AccessControlManager {
         }
 
         logger.notice(
-            `Failed access control check for ${endpoint.number}/${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
+            `Failed access control check for ${endpoint.number}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
             this.#getAccessControlEntriesForFabric(session.associatedFabric),
+            "with ISD=",
+            this.#getIsdFromMessage(session),
             "granted privileges=",
             grantedPrivileges,
+            "not contains",
+            privilege,
         );
 
         return false;
