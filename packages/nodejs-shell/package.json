@@ -45,7 +45,6 @@
         "@project-chip/matter.js": "*",
         "@matter.js/tools": "*",
         "child_process": "^1.0.2",
-        "readline": "^1.3.0",
         "yargs": "^17.7.2"
     },
     "engines": {
