@@ -42,7 +42,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
 
 -   @matter.js/nodejs-shell:
-    -   Enhancement: Added option to specify if attributes are loaded from remote or locally
+    - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
+    - Enhancement: Added option to specify if attributes are loaded from remote or locally
 
 -   @matter.js/protocol:
     -   Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
