@@ -31,6 +31,10 @@
     "bin": {
         "matter-shell": "dist/cjs/app.js"
     },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#types": "@matter.js/types"
+    },
     "devDependencies": {
         "typescript": "~5.5.3"
     },

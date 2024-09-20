@@ -126,42 +126,35 @@ export class AnySchema extends TlvSchema<TlvStream> {
     }
 
     decodeGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<any>, allowTag = false) {
-        while (true) {
-            const element = preReadElement ?? reader.readTagType();
-            const {
-                tag,
-                typeLength: { type },
-            } = element;
+        const element = preReadElement ?? reader.readTagType();
+        const {
+            tag,
+            typeLength: { type },
+        } = element;
 
-            switch (type) {
-                case TlvType.Null:
-                case TlvType.Boolean:
-                case TlvType.UnsignedInt:
-                case TlvType.SignedInt:
-                case TlvType.Float:
-                case TlvType.Utf8String:
-                case TlvType.ByteString: {
-                    if (tag !== undefined && !allowTag) {
-                        throw new UnexpectedDataError(
-                            `Tag detected or invalid length for a native type: ${Logger.toJSON(element)}`,
-                        );
-                    }
-                    return reader.readPrimitive(element.typeLength);
+        switch (type) {
+            case TlvType.Null:
+            case TlvType.Boolean:
+            case TlvType.UnsignedInt:
+            case TlvType.SignedInt:
+            case TlvType.Float:
+            case TlvType.Utf8String:
+            case TlvType.ByteString:
+                if (tag !== undefined && !allowTag) {
+                    throw new UnexpectedDataError(`Tag detected for a native type: ${Logger.toJSON(element)}`);
                 }
-                case TlvType.Array:
-                case TlvType.List: {
-                    return this.decodeGenericArrayOrList(reader);
-                }
-                case TlvType.Structure: {
-                    return this.decodeGenericStructure(reader);
-                }
-                default:
-                    throw new UnexpectedDataError(`Unknown type: ${type}`);
-            }
+                return reader.readPrimitive(element.typeLength);
+            case TlvType.Array:
+            case TlvType.List:
+                return this.decodeGenericArrayOrList(reader, type === TlvType.List);
+            case TlvType.Structure:
+                return this.decodeGenericStructure(reader);
+            default:
+                throw new UnexpectedDataError(`Unknown type: ${type}`);
         }
     }
 
-    decodeGenericArrayOrList(reader: TlvArrayReader) {
+    decodeGenericArrayOrList(reader: TlvArrayReader, allowTag = false) {
         const result = new Array<any>();
         while (true) {
             const element = reader.readTagType();
@@ -170,12 +163,10 @@ export class AnySchema extends TlvSchema<TlvStream> {
                 typeLength: { type },
             } = element;
             if (type === TlvType.EndOfContainer) break;
-            if (tag !== undefined) {
-                throw new UnexpectedDataError(
-                    `Tag detected or invalid length for a native type: ${Logger.toJSON(element)}`,
-                );
+            if (tag !== undefined && !allowTag) {
+                throw new UnexpectedDataError(`Tag detected : ${Logger.toJSON(element)}`);
             }
-            result.push(this.decodeGenericElement(reader, element));
+            result.push(this.decodeGenericElement(reader, element, allowTag));
         }
         return result;
     }
@@ -190,9 +181,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
             } = element;
             if (type === TlvType.EndOfContainer) break;
             if (tag === undefined || tag.id === undefined) {
-                throw new UnexpectedDataError(
-                    `Tag not detected or invalid length for a structure: ${Logger.toJSON(element)}`,
-                );
+                throw new UnexpectedDataError(`Tag missing for a structure: ${Logger.toJSON(element)}`);
             }
             result[tag.id] = this.decodeGenericElement(reader, element, true);
         }
