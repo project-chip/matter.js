@@ -9,6 +9,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter-Core functionality:
+    -   Enhancement: Added some more logging for sessions and ACL failures
 
 ## 0.10.4 (2024-09-16)
 
