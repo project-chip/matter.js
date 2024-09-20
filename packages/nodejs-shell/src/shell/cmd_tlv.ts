@@ -15,7 +15,7 @@ const TlvTypeNames: { [key: number]: string } = {
     [TlvType.Null]: "(Null)",
     [TlvType.Boolean]: "Boolean(",
     [TlvType.UnsignedInt]: "UnsignedInt(",
-    [TlvType.SignedInt]: "SignedIn(t",
+    [TlvType.SignedInt]: "SignedInt(",
     [TlvType.Float]: "Float(",
     [TlvType.Utf8String]: "Utf8String(",
     [TlvType.ByteString]: "ByteString(",
@@ -55,18 +55,31 @@ function logGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<a
             if (tag !== undefined && !allowTag) {
                 throw new UnexpectedDataError(`Tag detected for a native type: ${Logger.toJSON(element)}`);
             }
-            logger.info(tag ? `${tag.id} => ` : "", TlvTypeNames[type], reader.readPrimitive(element.typeLength), ")");
+            const value = reader.readPrimitive(element.typeLength);
+            const logValue = value instanceof Uint8Array ? Bytes.toHex(value) : value;
+            const logNumberHex =
+                typeof value === "number" || typeof value === "bigint" ? value.toString(16) : undefined;
+            logger.info(
+                tag?.id !== undefined ? `${tag.id}/0x${tag?.id?.toString(16)} => ` : "",
+                TlvTypeNames[type],
+                `${logValue}${logNumberHex !== undefined ? `/0x${logNumberHex}` : ""}`,
+                ")",
+            );
             break;
         case TlvType.Array:
         case TlvType.List:
-            logger.info(tag ? `${tag.id} => ` : "", TlvTypeNames[type]);
+            tag?.id !== undefined
+                ? logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type])
+                : logger.info(TlvTypeNames[type]);
             Logger.nest(() => logGenericArrayOrList(reader, type === TlvType.List));
-            logger.info("", TlvTypeNames[TlvType.EndOfContainer]);
+            logger.info(TlvTypeNames[TlvType.EndOfContainer]);
             break;
         case TlvType.Structure:
-            logger.info(tag ? `${tag.id} => ` : "", TlvTypeNames[type]);
+            tag?.id !== undefined
+                ? logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type])
+                : logger.info(TlvTypeNames[type]);
             Logger.nest(() => logGenericStructure(reader));
-            logger.info("", TlvTypeNames[TlvType.EndOfContainer]);
+            logger.info(TlvTypeNames[TlvType.EndOfContainer]);
             break;
         default:
             throw new UnexpectedDataError(`Unknown type: ${type}`);
