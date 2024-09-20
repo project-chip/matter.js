@@ -105,6 +105,17 @@ describe("TlvAny", () => {
             ).deep.equal(["a", "b"]);
         });
 
+        it("decodes a list of strings with partial tags", () => {
+            expect(
+                TlvAny.decodeAnyTlvStream([
+                    { typeLength: { type: TlvType.List } },
+                    { typeLength: { type: TlvType.Utf8String }, value: "a" },
+                    { tag: { id: 2 }, typeLength: { type: TlvType.Utf8String }, value: "b" },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                ]),
+            ).deep.equal(["a", "b"]); // Result ok because we ignore list tags currently
+        });
+
         it("decodes a structure", () => {
             expect(
                 TlvAny.decodeAnyTlvStream([

@@ -558,7 +558,7 @@ export class InteractionClient {
             };
             this.registerSubscriptionListener(subscriptionId, subscriptionListener);
             if (updateTimeoutHandler !== undefined) {
-                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+                this.registerSubscriptionUpdateTimer(messenger, subscriptionId, maxInterval, updateTimeoutHandler);
             }
             subscriptionListener(report);
             return;
@@ -629,7 +629,7 @@ export class InteractionClient {
             };
             this.registerSubscriptionListener(subscriptionId, subscriptionListener);
             if (updateTimeoutHandler !== undefined) {
-                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+                this.registerSubscriptionUpdateTimer(messenger, subscriptionId, maxInterval, updateTimeoutHandler);
             }
             subscriptionListener(report);
             return;
@@ -803,7 +803,7 @@ export class InteractionClient {
             });
 
             if (updateTimeoutHandler !== undefined) {
-                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+                this.registerSubscriptionUpdateTimer(messenger, subscriptionId, maxInterval, updateTimeoutHandler);
             }
 
             const seedReport = {
@@ -986,8 +986,9 @@ export class InteractionClient {
     }
 
     private registerSubscriptionUpdateTimer(
+        messenger: InteractionClientMessenger,
         subscriptionId: number,
-        maxInterval: number,
+        maxIntervalS: number,
         updateTimeoutHandler: Timer.Callback,
     ) {
         if (!this.ownSubscriptionIds.has(subscriptionId)) {
@@ -995,11 +996,10 @@ export class InteractionClient {
                 `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
             );
         }
+        const maxIntervalMs = maxIntervalS * 1000 + messenger.calculateMaximumPeerResponseTime();
 
-        // TODO: Add measurement of latency and also consider this in the timeout calculation
-        maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
-        const timer = Time.getTimer("Subscription retry", maxInterval * 1000, () => {
-            logger.info(`Subscription ${subscriptionId} timed out ...`);
+        const timer = Time.getTimer("Subscription retry", maxIntervalMs, () => {
+            logger.info(`Subscription ${subscriptionId} timed out after ${maxIntervalMs}ms ...`);
             this.removeSubscription(subscriptionId);
             // We remove all data because we don't know which data is still valid, so we better read from remote if needed
             this.subscribedLocalValues.clear();

@@ -21,6 +21,7 @@ import cmdIdentify from "./cmd_identify.js";
 import cmdNodes from "./cmd_nodes.js";
 import cmdSession from "./cmd_session.js";
 import cmdSubscribe from "./cmd_subscribe.js";
+import cmdTlv from "./cmd_tlv";
 
 function exitCommand() {
     return {
@@ -105,6 +106,7 @@ export class Shell {
                     cmdAttributes(this.theNode),
                     cmdEvents(this.theNode),
                     cmdCommands(this.theNode),
+                    cmdTlv(),
                     exitCommand(),
                 ])
                 .command({

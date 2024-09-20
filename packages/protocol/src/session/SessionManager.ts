@@ -332,8 +332,15 @@ export class SessionManager {
                 } = {},
                 caseAuthenticatedTags,
             }) => {
-                logger.info("restoring resumption record for node", nodeId);
                 const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
+                logger.info(
+                    "restoring resumption record for node",
+                    nodeId,
+                    "and peer node",
+                    peerNodeId,
+                    "for fabric index",
+                    fabric?.fabricIndex,
+                );
                 if (!fabric) {
                     logger.error("fabric not found for resumption record", fabricId);
                     return;
