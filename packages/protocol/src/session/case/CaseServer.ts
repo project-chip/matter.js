@@ -126,6 +126,8 @@ export class CaseServer implements ProtocolHandler {
                 `session ${secureSession.id} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
+                "with CATs",
+                caseAuthenticatedTags,
             );
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
@@ -228,6 +230,8 @@ export class CaseServer implements ProtocolHandler {
                 `session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
+                "with CATs",
+                caseAuthenticatedTags,
             );
             await messenger.sendSuccess();
 
