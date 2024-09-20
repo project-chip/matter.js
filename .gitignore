@@ -1,4 +1,6 @@
-/node_modules/
+node_modules/
+build/
+dist/
 .DS_Store
 .idea/
 /bin/

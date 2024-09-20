@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
-import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
-import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
+import {
+    AdministratorCommissioning,
+    BasicInformationCluster,
+    GeneralCommissioning,
+    GeneralCommissioningCluster,
+} from "#clusters";
+import { ImplementationError, Logger, MatterFlowError } from "#general";
+import { assertSecureSession, MatterDevice } from "#protocol";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { CommissioningServerFailsafeContext } from "./CommissioningServerFailsafeContext.js";
 
@@ -33,7 +35,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         endpoint,
     }) => {
         assertSecureSession(session, "armFailSafe can only be called on a secure session");
-        const device = session.context;
+        const device = MatterDevice.of(session);
 
         try {
             // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
@@ -166,7 +168,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
             };
         }
 
-        const device = session.context;
+        const device = MatterDevice.of(session);
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }

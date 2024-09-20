@@ -4,17 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FailsafeContext } from "../../common/FailsafeContext.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { BasicInformation, GeneralCommissioning, NetworkCommissioning, OperationalCredentials } from "#clusters";
+import { asyncNew } from "#general";
+import { EndpointInterface, Fabric, FailsafeContext } from "#protocol";
+import { EndpointNumber, TypeFromSchema } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Fabric } from "../../fabric/Fabric.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { asyncNew } from "../../util/Construction.js";
-import { BasicInformation } from "../definitions/BasicInformationCluster.js";
-import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster.js";
-import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";
-import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 
 /**
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.

@@ -3,37 +3,47 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { MatterController } from "./MatterController.js";
-import { MatterNode } from "./MatterNode.js";
-import { GlobalAttributes } from "./cluster/Cluster.js";
-import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
-import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
-import { ImplementationError, InternalError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
-import { ServerAddress } from "./common/ServerAddress.js";
-import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { FabricId } from "./datatype/FabricId.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { NodeId } from "./datatype/NodeId.js";
-import { VendorId } from "./datatype/VendorId.js";
+
+import { BasicInformation } from "#clusters";
+import {
+    Environment,
+    ImplementationError,
+    InternalError,
+    Logger,
+    Network,
+    ServerAddress,
+    StorageContext,
+    SupportedStorageTypes,
+    SyncStorage,
+    UdpInterface,
+} from "#general";
+import { ControllerStore } from "#node";
+import {
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    ControllerCommissioningOptions,
+    ControllerDiscovery,
+    DiscoveryData,
+    InteractionClient,
+    MdnsBroadcaster,
+    MdnsScanner,
+    MdnsService,
+    SupportedAttributeClient,
+} from "#protocol";
+import {
+    CaseAuthenticatedTag,
+    DiscoveryCapabilitiesBitmap,
+    EndpointNumber,
+    FabricId,
+    FabricIndex,
+    GlobalAttributes,
+    NodeId,
+    TypeFromPartialBitSchema,
+    VendorId,
+} from "#types";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
-import { Environment } from "./environment/Environment.js";
-import { MdnsService } from "./environment/MdnsService.js";
-import { Logger } from "./log/Logger.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Network } from "./net/Network.js";
-import { UdpInterface } from "./net/UdpInterface.js";
-import { ControllerStore } from "./node/client/storage/ControllerStore.js";
-import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
-import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
-import { SyncStorage } from "./storage/Storage.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { SupportedStorageTypes } from "./storage/StringifyTools.js";
+import { MatterController, NodeDiscoveryType } from "./MatterController.js";
+import { MatterNode } from "./MatterNode.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -107,7 +117,7 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
 /** Options needed to commission a new node */
 export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
     /** Commission related options. */
-    commissioning?: CommissioningOptions;
+    commissioning?: ControllerCommissioningOptions;
 
     /** Discovery related options. */
     discovery: (
@@ -342,7 +352,7 @@ export class CommissioningController extends MatterNode {
         const existingNode = this.connectedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.isConnected) {
-                await existingNode.reconnect();
+                await existingNode.reconnect(connectOptions);
             }
             return existingNode;
         }
@@ -351,7 +361,7 @@ export class CommissioningController extends MatterNode {
             nodeId,
             this,
             connectOptions,
-            async () => this.createInteractionClient(nodeId),
+            async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
         this.connectedNodes.set(nodeId, pairedNode);
@@ -473,9 +483,9 @@ export class CommissioningController extends MatterNode {
      * Creates and Return a new InteractionClient to communicate with a node. This is mainly used internally and should
      * not be used directly. See the PairedNode class for the public API.
      */
-    async createInteractionClient(nodeId: NodeId): Promise<InteractionClient> {
+    async createInteractionClient(nodeId: NodeId, discoveryType?: NodeDiscoveryType): Promise<InteractionClient> {
         const controller = this.assertControllerIsStarted();
-        return controller.connect(nodeId);
+        return controller.connect(nodeId, { discoveryType });
     }
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */

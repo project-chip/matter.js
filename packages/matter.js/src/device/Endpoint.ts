@@ -4,24 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { getClusterNameById } from "../cluster/ClusterHelper.js";
-import { ClusterType } from "../cluster/ClusterType.js";
-import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
-import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
+import {
+    BasicInformationCluster,
+    BridgedDeviceBasicInformationCluster,
+    DescriptorCluster,
+    FixedLabelCluster,
+    UserLabelCluster,
+} from "#clusters";
+import { AtLeastOne, ImplementationError, InternalError, NotImplementedError } from "#general";
+import { ClusterClientObj, EndpointInterface } from "#protocol";
+import {
+    Attributes,
+    BitSchema,
+    Cluster,
+    ClusterId,
+    ClusterType,
+    Commands,
+    DeviceTypeId,
+    EndpointNumber,
+    Events,
+    TypeFromPartialBitSchema,
+    getClusterNameById,
+} from "#types";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
-import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { AtLeastOne } from "../util/Array.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 
 export interface EndpointOptions {

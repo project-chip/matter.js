@@ -93,6 +93,10 @@ jobs:
         with:
           node-version: 20.x
 
+      - name: Install dependencies and build
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        run: npm ci
+
       - name: Determine version
         if: steps.automerge.outputs.mergeResult == 'merged'
         id: version
@@ -100,11 +104,12 @@ jobs:
         with:
           result-encoding: string
           script: |
-            return require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+            const fs = require('fs');
+            return fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
-      - name: Install dependencies and build
+      - name: Apply new version to package files
         if: steps.automerge.outputs.mergeResult == 'merged'
-        run: npm ci
+        run: npm run version -- --apply
 
       - name: Publish npm
         if: steps.automerge.outputs.mergeResult == 'merged'
@@ -115,9 +120,9 @@ jobs:
           npm whoami
           
           if [[ "$PRERELEASE" == "true" ]]; then
-            npx lerna publish from-package --yes --dist-tag dev
+            npm publish --workspaces --tag dev
           else
-            npx lerna publish from-package --yes
+            npm publish --workspaces
           fi
 
       - name: Create Github Release

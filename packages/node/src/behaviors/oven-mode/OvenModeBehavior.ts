@@ -1,0 +1,23 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
+
+import { OvenMode } from "#clusters/oven-mode";
+import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+
+/**
+ * OvenModeBehavior is the base class for objects that support interaction with {@link OvenMode.Cluster}.
+ *
+ * This class does not have optional features of OvenMode.Cluster enabled. You can enable additional features using
+ * OvenModeBehavior.with.
+ */
+export const OvenModeBehavior = ClusterBehavior.for(OvenMode.Cluster);
+
+type OvenModeBehaviorType = InstanceType<typeof OvenModeBehavior>;
+export interface OvenModeBehavior extends OvenModeBehaviorType {}
+type StateType = InstanceType<typeof OvenModeBehavior.State>;
+export namespace OvenModeBehavior { export interface State extends StateType {} }

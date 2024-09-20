@@ -4,18 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
-import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
-import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
-import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
-import { Environment, StorageService } from "@project-chip/matter.js/environment";
-import { ServerNode } from "@project-chip/matter.js/node";
-import { Storage } from "@project-chip/matter.js/storage";
-import { ByteArray } from "@project-chip/matter.js/util";
-import { TestInstance } from "./GenericTestApp.js";
+import { Storage } from "@matter.js/general";
+import { Endpoint, Environment, ServerNode, StorageService } from "@matter.js/main";
+import { AdministratorCommissioningServer } from "@matter.js/main/behaviors/administrator-commissioning";
+import { BridgedDeviceBasicInformationServer } from "@matter.js/main/behaviors/bridged-device-basic-information";
+import { NetworkCommissioningServer } from "@matter.js/main/behaviors/network-commissioning";
+import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@matter.js/main/clusters";
+import { DimmableLightDevice } from "@matter.js/main/devices/dimmable-light";
+import { AggregatorEndpoint } from "@matter.js/main/endpoints/aggregator";
+import { DeviceTypeId, VendorId } from "@matter.js/main/types";
+import { log, TestInstance } from "./GenericTestApp.js";
 
 export class BridgeTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -42,11 +40,11 @@ export class BridgeTestInstance implements TestInstance {
             this.serverNode = await this.setupServer();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
-            console.log((error as Error).stack);
+            log.error(error);
+            log.error((error as Error).stack);
             throw error;
         }
-        console.log(`======> ${this.appName}: Setup done`);
+        log.directive(`======> ${this.appName}: Setup done`);
     }
 
     /** Start the test instance MatterServer with the included device. */
@@ -62,18 +60,18 @@ export class BridgeTestInstance implements TestInstance {
             await this.serverNode.start();
             const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
             // Magic logging chip testing waits for
-            console.log(`SetupQRCode: [${qrPairingCode}]`);
-            console.log();
+            log.directive(`SetupQRCode: [${qrPairingCode}]`);
+            log.directive();
             // Magic logging chip testing waits for
-            console.log("mDNS service published:");
-            console.log();
+            log.directive("mDNS service published:");
+            log.directive();
 
-            console.log(`======> ${this.appName}: Instance started`);
+            log.directive(`======> ${this.appName}: Instance started`);
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
+            log.error(error);
         }
-        console.log("=====>>> STARTED");
+        log.directive("=====>>> STARTED");
     }
 
     /** Stop the test instance MatterServer and the device. */
@@ -83,13 +81,13 @@ export class BridgeTestInstance implements TestInstance {
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
-        console.log(`======> ${this.appName}: Instance stopped`);
+        log.directive(`======> ${this.appName}: Instance stopped`);
     }
 
     async setupServer(): Promise<ServerNode> {
         Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
 
-        const networkId = new ByteArray(32);
+        const networkId = new Uint8Array(32);
 
         const serverNode = await ServerNode.create(
             ServerNode.RootEndpoint.with(

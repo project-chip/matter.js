@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError } from "../../common/MatterError.js";
+import { OnOff } from "#clusters";
+import { NamedHandler, NotImplementedError, Time, Timer } from "#general";
+import { AttributeServer } from "#protocol";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { Time, Timer } from "../../time/Time.js";
-import { NamedHandler } from "../../util/NamedHandler.js";
-import { OnOff } from "../definitions/OnOffCluster.js";
-import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
 

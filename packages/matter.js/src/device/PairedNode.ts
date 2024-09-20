@@ -3,55 +3,55 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { CommissioningController } from "../CommissioningController.js";
-import { Attributes } from "../cluster/Cluster.js";
-import { ClusterClientObj, asClusterClientInternal, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
-
-import { getClusterById } from "../cluster/ClusterHelper.js";
-import { ClusterClient } from "../cluster/client/ClusterClient.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
-import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { AdministratorCommissioning, BasicInformation, DescriptorCluster, OperationalCredentials } from "#clusters";
 import {
-    AttributeInitialValues,
-    AttributeServerValues,
-    ClusterServerObj,
-    isClusterServer,
-} from "../cluster/server/ClusterServerTypes.js";
-import { ImplementationError, InternalError, MatterError } from "../common/MatterError.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { Logger } from "../log/Logger.js";
+    AtLeastOne,
+    Crypto,
+    Diagnostic,
+    ImplementationError,
+    InternalError,
+    Logger,
+    MatterError,
+    Time,
+} from "#general";
+import { NodeDiscoveryType } from "#MatterController.js";
 import {
+    AttributeClientValues,
+    ChannelStatusResponseError,
+    ClusterClient,
+    ClusterClientObj,
     DecodedAttributeReportValue,
+    DecodedEventReportValue,
+    EndpointInterface,
+    EndpointLoggingOptions,
+    InteractionClient,
+    PaseClient,
+    logEndpoint,
     structureReadAttributeDataToClusterObject,
-} from "../protocol/interaction/AttributeDataDecoder.js";
-import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { AtLeastOne } from "../util/Array.js";
+} from "#protocol";
+import {
+    Attributes,
+    ClusterId,
+    ClusterType,
+    CommissioningFlowType,
+    DiscoveryCapabilitiesSchema,
+    EndpointNumber,
+    ManualPairingCodeCodec,
+    NodeId,
+    QrPairingCodeCodec,
+    StatusCode,
+    StatusResponseError,
+    getClusterById,
+} from "#types";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
+import { CommissioningController } from "../CommissioningController.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
-
-import { ClusterType } from "../cluster/ClusterType.js";
-import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
-import { AdministratorCommissioning } from "../cluster/definitions/index.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
-import {
-    CommissioningFlowType,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
-} from "../schema/PairingCodeSchema.js";
-import { PaseClient } from "../session/pase/PaseClient.js";
-import { Time } from "../time/Time.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
-import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.js";
+import { asClusterClientInternal, isClusterClient } from "./TypeHelpers.js";
 
 const logger = Logger.get("PairedNode");
 
@@ -59,21 +59,27 @@ const logger = Logger.get("PairedNode");
 const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
 
 export enum NodeStateInformation {
-    /** Node is connected and all data is up-to-date. */
+    /**
+     * Node seems active nd last communications were successful and subscription updates were received and all data is
+     * up-to-date.
+     */
     Connected,
 
     /**
-     * Node is disconnected. Data are stale and interactions will most likely return an error. If controller instance
-     * is still active then the device will be reconnected once it is available again.
+     * Node is disconnected. This means that the node was not connected so far or the developer disconnected it by API
+     * call or the node is removed. A real disconnection can not be detected because the main Matter protocol uses UDP.
+     * Data are stale and interactions will most likely return an error.
      */
     Disconnected,
 
-    /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
+    /**
+     * Node is reconnecting. This means that former communications failed, and we are trying to reach the device on
+     * known addresses. Data are stale. It is yet unknown if the reconnection is successful. */
     Reconnecting,
 
     /**
-     * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
-     * minutes to reconnect.
+     * The node seems offline because communication was not possible or is just initialized. The controller is now
+     * waiting for a MDNS announcement and tries every 10 minutes to reconnect.
      */
     WaitingForDeviceDiscovery,
 
@@ -84,7 +90,7 @@ export enum NodeStateInformation {
     StructureChanged,
 
     /**
-     * The node was just Decommissioned.
+     * The node was just Decommissioned. This is a final state.
      */
     Decommissioned,
 }
@@ -126,6 +132,8 @@ export type CommissioningControllerNodeOptions = {
     readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
 
+export class NodeNotConnectedError extends MatterError {}
+
 /**
  * Class to represents one node that is paired/commissioned with the matter.js Controller. Instances are returned by
  * the CommissioningController on commissioning or when connecting.
@@ -144,6 +152,7 @@ export class PairedNode {
         async () => await this.updateEndpointStructure(),
     );
     private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
+    private reconnectionInProgress = false;
 
     static async create(
         nodeId: NodeId,
@@ -166,8 +175,8 @@ export class PairedNode {
     constructor(
         readonly nodeId: NodeId,
         private readonly commissioningController: CommissioningController,
-        private readonly options: CommissioningControllerNodeOptions = {},
-        private readonly reconnectInteractionClient: () => Promise<InteractionClient>,
+        private options: CommissioningControllerNodeOptions = {},
+        private readonly reconnectInteractionClient: (discoveryType?: NodeDiscoveryType) => Promise<InteractionClient>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
     ) {
         assignDisconnectedHandler(async () => {
@@ -177,7 +186,7 @@ export class PairedNode {
                 }`,
             );
             if (this.connectionState === NodeStateInformation.Connected) {
-                await this.reconnect();
+                this.scheduleReconnect();
             }
         });
     }
@@ -189,47 +198,100 @@ export class PairedNode {
     private setConnectionState(state: NodeStateInformation) {
         if (
             this.connectionState === state ||
-            (this.connectionState === NodeStateInformation.Disconnected &&
-                state === NodeStateInformation.Reconnecting) ||
             (this.connectionState === NodeStateInformation.WaitingForDeviceDiscovery &&
                 state === NodeStateInformation.Reconnecting)
         )
             return;
         this.connectionState = state;
         this.options.stateInformationCallback?.(this.nodeId, state);
+        if (state === NodeStateInformation.Disconnected) {
+            this.reconnectDelayTimer.stop();
+        }
     }
 
     /**
      * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
      * was closed or the device went offline and was detected as being online again.
      */
-    async reconnect() {
-        this.setConnectionState(NodeStateInformation.Reconnecting);
-        while (true) {
-            if (this.interactionClient !== undefined) {
-                this.interactionClient.close();
-                this.interactionClient = undefined;
-            }
+    async reconnect(connectOptions?: CommissioningControllerNodeOptions) {
+        if (connectOptions !== undefined) {
+            this.options = connectOptions;
+        }
+        if (this.reconnectionInProgress) {
+            logger.debug("Reconnection already in progress ...");
+            return;
+        }
+
+        this.reconnectionInProgress = true;
+        if (this.connectionState !== NodeStateInformation.WaitingForDeviceDiscovery) {
+            this.setConnectionState(NodeStateInformation.Reconnecting);
+
             try {
+                // First try a reconnect to known addresses to see if the device is reachable
+                this.interactionClient = await this.reconnectInteractionClient(NodeDiscoveryType.None);
+                this.reconnectionInProgress = false;
                 await this.initialize();
                 return;
             } catch (error) {
                 MatterError.accept(error);
+                logger.info(
+                    `Node ${this.nodeId}: Simple re-establishing session did not worked. Reconnect ... `,
+                    error,
+                );
+            }
+        }
 
-                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
-                if (this.connectionState === NodeStateInformation.Disconnected) {
+        while (true) {
+            this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+
+            if (this.interactionClient !== undefined) {
+                this.interactionClient.close();
+                this.interactionClient = undefined;
+            }
+
+            try {
+                await this.initialize();
+                this.reconnectionInProgress = false;
+                return;
+            } catch (error) {
+                MatterError.accept(error);
+
+                if (
+                    this.connectionState === NodeStateInformation.Disconnected ||
+                    this.connectionState === NodeStateInformation.Decommissioned
+                ) {
+                    this.reconnectionInProgress = false;
+                    logger.info("No reconnection desired because requested status is Disconnected.");
+                    return;
+                }
+                if (error instanceof ChannelStatusResponseError) {
+                    logger.info(`Node ${this.nodeId}: Error while establishing new Session, retry in 5s ...`, error);
+                    this.reconnectionInProgress = false;
+                    this.scheduleReconnect();
                     return;
                 }
                 logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
             }
         }
     }
 
     /** Ensure that the node is connected by creating a new InteractionClient if needed. */
-    private async ensureConnection() {
+    private async ensureConnection(forceConnect = false): Promise<InteractionClient> {
         if (this.interactionClient !== undefined) return this.interactionClient;
-        this.interactionClient = await this.reconnectInteractionClient();
+        if (this.connectionState !== NodeStateInformation.Disconnected && !forceConnect) {
+            // We assumed Connected status, but we have no interaction client ... so plan a reconnect but fail this request
+            if (this.connectionState === NodeStateInformation.Connected) {
+                this.scheduleReconnect();
+            }
+            throw new NodeNotConnectedError(`Node ${this.nodeId} is not connected. Check the Node state.`);
+        }
+        // If we come from a Disconnected state (meaning initial call) or we want to force a connection we try to connect directly
+        this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+
+        this.interactionClient = await this.reconnectInteractionClient(NodeDiscoveryType.FullDiscovery);
+        if (!forceConnect) {
+            this.setConnectionState(NodeStateInformation.Connected);
+        }
         return this.interactionClient;
     }
 
@@ -237,7 +299,7 @@ export class PairedNode {
      * Initialize the node after the InteractionClient was created and to subscribe attributes and events if requested.
      */
     private async initialize() {
-        const interactionClient = await this.ensureConnection();
+        const interactionClient = await this.ensureConnection(true);
         const { autoSubscribe, attributeChangedCallback, eventTriggeredCallback } = this.options;
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
@@ -300,6 +362,7 @@ export class PairedNode {
             isUrgent: true,
             minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
             maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 60,
+            keepSubscriptions: false,
             attributeListener: data => {
                 const {
                     path: { endpointId, clusterId, attributeId },
@@ -366,19 +429,21 @@ export class PairedNode {
                     clusterId === BasicInformation.Cluster.id &&
                     eventId === BasicInformation.Cluster.events.shutDown.id
                 ) {
-                    this.handleNodeShutdown().catch(error =>
-                        logger.warn(`Node ${this.nodeId}: Error handling node shutdown`, error),
-                    );
+                    this.handleNodeShutdown();
                 }
             },
             updateTimeoutHandler: async () => {
                 logger.info(`Node ${this.nodeId}: Subscription update not received ...`);
+                this.setConnectionState(NodeStateInformation.Reconnecting);
                 try {
                     await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
+                    this.setConnectionState(NodeStateInformation.Connected);
                 } catch (error) {
-                    logger.info(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
-                    // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
-                    this.interactionClient = undefined;
+                    logger.info(
+                        `Node ${this.nodeId}: Error resubscribing to all attributes and events. Try to reconnect ...`,
+                        error,
+                    );
+                    this.scheduleReconnect();
                 }
             },
         });
@@ -387,12 +452,17 @@ export class PairedNode {
     }
 
     /** Handles a node shutDown event (if supported by the node and received). */
-    private async handleNodeShutdown() {
+    private handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
+        this.scheduleReconnect();
+    }
+
+    private scheduleReconnect() {
+        this.setConnectionState(NodeStateInformation.Reconnecting);
+
         if (!this.reconnectDelayTimer.isRunning) {
             this.reconnectDelayTimer.start();
         }
-        this.setConnectionState(NodeStateInformation.Reconnecting);
     }
 
     async updateEndpointStructure() {
@@ -433,7 +503,7 @@ export class PairedNode {
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
             const endpointIdNumber = EndpointNumber(parseInt(endpointId));
-            const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<
+            const descriptorData = clusters[DescriptorCluster.id] as AttributeClientValues<
                 typeof DescriptorCluster.attributes
             >;
 
@@ -524,7 +594,7 @@ export class PairedNode {
         data: { [key: ClusterId]: { [key: string]: any } },
         interactionClient: InteractionClient,
     ) {
-        const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
+        const descriptorData = data[DescriptorCluster.id] as AttributeClientValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
             const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
@@ -758,6 +828,8 @@ export class PairedNode {
     }
 
     close() {
+        this.reconnectDelayTimer.stop();
+        this.updateEndpointStructureTimer.stop();
         this.interactionClient?.close();
         this.setConnectionState(NodeStateInformation.Disconnected);
     }

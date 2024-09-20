@@ -80,13 +80,13 @@ A "Endpoint" describes an endpoint which is added in the Matter endpoint structu
 **Note**
 The name "Endpoint" is now defined twice - one time by both APIs, but have different exports and interfaces!
 
--   Legacy-API: Endpoint is on the "@project-chip/matter.js/device" export
--   New-API: Endpoint is on the "@project-chip/matter.js/endpoint" export
+-   New-API: Endpoint is on the "@matter.js/node" export
+-   Legacy-API: Endpoint is on the deprecated "@project-chip/matter.js" export
     Do not mix them up!
 
 As the ServerNode above each Endpoint consists of an endpoint type definition and configuration for the Endpoint and the contained clusters.
 
-The Device class exports to use for the new API are all located in "@project-chip/matter.js/devices/<Devicename>" and can be imported as needed to prevent importing too many classes.
+The Device class exports to use for the new API are all located in "@matter.js/node/devices/<device-name>" and can be imported as needed to prevent importing too many classes.
 The main difference between the new and the legacy Device classes are that the new ones are working generically, so that special convenience shortcut methods like in the legacy classes do not exist. But the new API adds a lot more flexibility.
 
 There are several options to define and interact with the Endpoints that are described now.

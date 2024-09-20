@@ -9,6 +9,79 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter.js" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
+
+-   Cross-module changes
+    -   Info: Matter.js now uses aliases via `package.json` "imports" field.  This is an internal change that simplifies imports but should not affect consumers
+    -   Info: Previously we used a mix of snake-case and CamelCase for sub-package exports.  We have now standardized on snake case.  Compatibility packages (see below) continue to support the original module names
+
+-   @matter.js/general:
+    -   Info: General functionality that is not Matter specific previously resided in `@project-chip/matter.js`.  It now lives in `@matter.js/general`
+    -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
+    -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
+
+-   @matter.js/main:
+    -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate
+
+-   @matter.js/model:
+    -   Info: The Matter object model previously exported as `@project-chip/matter.js/model` now resides in `@matter.js/model`
+    -   Info: Individual elements exported by name are now models (fully functional classes) rather than elements (raw JSON data).  This should be backwards compatible but makes them more useful operationally
+
+-   @matter.js/node:
+    -   Info: The high-level APIs previously defined in `@project-chip/matter.js` now reside in `@matter.js/node`.  The Node API includes node management, behavior definitions and endpoint definitions
+    -   Info: We export behaviors under `@matter.js/node/behaviors` or individually (e.g. `@matter.js/node/behaviors/on-off`)
+    -   Info: We export device type definitions for system endpoints and devices under `@matter.js/node/endpoints` and `@matter.js/node/devices` respectively.  You may also import these via index or individually
+
+-   @matter.js/nodejs:
+    -   Info: Node.js specialization is moved here.  `@project-chip/matter-node.js` remains as a compatibility import.
+    -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.
+
+-   @matter.js/nodejs-ble
+    -   Info: The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
+
+-   @matter.js/nodejs-shell:
+    - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
+    - Enhancement: Added option to specify if attributes are loaded from remote or locally
+
+-   @matter.js/protocol:
+    -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
+    -   BREAKING: Various types that were previously specialized with template parameters are no longer generic.  This should be largely transparent to API consumers.  Compatibility exports still support the generic parameters in some, but not all, cases.
+    -   Enhancement: Limits the number of parallel exchanges to 5
+    -   Enhancement: Uses the session timing details to calculate the timeout for subscription messages when received as client additionally to the subscription maxInterval  
+
+-   @matter.js/types:
+    -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
+    -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
+
+## 0.10.4 (2024-09-16)
+
+-   matter.js API:
+    -   Fix: Prevent trying to access PowerTopology attribute which is not always present
+    -   Fix: Always add the endpoint device types first to the device type list
+
+## 0.10.3 (2024-09-15)
+
+-   Matter-Core functionality:
+    -   Fix: Fixes channel cleanup
+    -   Fix: Fixes Subscription error handling
+
+## 0.10.1 (2024-09-08)
+
+-   Matter-Core functionality:
+    -   Enhancement: Added an "expected processing time" for interactions to be executed by the peer
+    -   Enhancement: Added additional wait time after last resubmission was done to allow a full resubmission cycle from the peer
+    -   Enhancement: Optimized PASE/CASE message timing comparable to chip sdk (expects e.g. 30s processing time for crypto related calls)
+    -   Fix: Optimized exchange handling for cases where retransmissions were all sent but no ack was received
+    -   Fix: Makes sure that Retransmissions happen in all error cases
+-   matter.js New API:
+    -   Fix: Optimized some special cases in the ColorControl cluster default implementation
+-   matter.js Controller API:
+    -   Breaking: Adjusted some method signatures slightly (e.g. connect()) to summarize singe parameters into an options object
+    -   Enhancement: Restructured Paired Node connection handling to make sure NodeStatus is correct and commands return in case of error. Reconnections are handled in the background.
+    -   Enhancement: Takes over new connection options when a node is connected again after disconnect with different options
+
 ## 0.10.0 (2024-08-31)
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js.

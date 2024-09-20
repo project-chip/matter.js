@@ -4,31 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
-import { AdministratorCommissioningCluster } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
-import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
-import { Identify, IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
-import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
-import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
-import { ClusterDatasource, asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
-import { ImplementationError } from "../../src/common/MatterError.js";
-import { AttributeId } from "../../src/datatype/AttributeId.js";
-import { CommandId } from "../../src/datatype/CommandId.js";
-import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
-import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { Endpoint } from "../../src/device/Endpoint.js";
-import { Fabric } from "../../src/fabric/Fabric.js";
-import { Level } from "../../src/log/Level.js";
-import { Specification } from "../../src/model/index.js";
-import { SyncStorage } from "../../src/storage/Storage.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { StorageManager } from "../../src/storage/StorageManager.js";
-import { captureLogs } from "../support/logging.js";
+import { ClusterServer } from "#cluster/server/ClusterServer.js";
+import { asClusterServerInternal } from "#cluster/server/ClusterServerTypes.js";
+import {
+    AdministratorCommissioningCluster,
+    BasicInformationCluster,
+    BindingCluster,
+    GroupsCluster,
+    Identify,
+    IdentifyCluster,
+    WindowCovering,
+} from "#clusters";
+import { DeviceTypes } from "#device/DeviceTypes.js";
+import { Endpoint } from "#device/Endpoint.js";
+import { ImplementationError, LogLevel, Logger, StorageBackendMemory, StorageManager, SyncStorage } from "#general";
+import { Specification } from "#model";
+import { AttributeServer, ClusterDatasource, Fabric, FixedAttributeServer } from "#protocol";
+import { AttributeId, Cluster, ClusterExtend, CommandId, EndpointNumber, FabricIndex, VendorId } from "#types";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -701,7 +693,7 @@ describe("ClusterServer structure", () => {
         });
 
         it("Missing Conditionals Log warnings", () => {
-            const messages = captureLogs(() => {
+            const messages = Logger.capture(() => {
                 const TestCluster = ClusterExtend(WindowCovering.Complete, {
                     supportedFeatures: {
                         lift: true,
@@ -755,17 +747,17 @@ describe("ClusterServer structure", () => {
 
             expect(messages).deep.equal([
                 {
-                    level: Level.DEBUG,
+                    level: LogLevel.DEBUG,
                     message:
                         'xxxx-xx-xx xx:xx:xx.xxx DEBUG ClusterServer InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!',
                 },
                 {
-                    level: Level.WARN,
+                    level: LogLevel.WARN,
                     message:
                         'xxxx-xx-xx xx:xx:xx.xxx WARN ClusterServer InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!',
                 },
                 {
-                    level: Level.WARN,
+                    level: LogLevel.WARN,
                     message:
                         'xxxx-xx-xx xx:xx:xx.xxx WARN ClusterServer Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!',
                 },

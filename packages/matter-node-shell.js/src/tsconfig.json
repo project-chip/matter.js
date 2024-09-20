@@ -1,8 +1,0 @@
-{
-    "extends": "../../matter.js-tools/tsconfig.base.json",
-    "compilerOptions": {
-        "outDir": "../dist/cjs",
-        "types": ["node"]
-    },
-    "references": [{ "path": "../../matter-node.js/src" }, { "path": "../../matter-node-ble.js/src" }]
-}

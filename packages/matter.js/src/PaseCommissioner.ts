@@ -3,26 +3,25 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Environment, ImplementationError, Logger, Network, UdpInterface } from "#general";
+import {
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    ControllerDiscovery,
+    DiscoveryData,
+    FabricJsonObject,
+    MdnsScanner,
+    MdnsService,
+    RootCertificateManager,
+    Scanner,
+} from "#protocol";
+import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "#types";
 import {
     CommissioningControllerOptions,
     ControllerEnvironmentOptions,
     NodeCommissioningOptions,
 } from "./CommissioningController.js";
 import { MatterController } from "./MatterController.js";
-import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
-import { ImplementationError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { NodeId } from "./datatype/NodeId.js";
-import { Environment } from "./environment/Environment.js";
-import { MdnsService } from "./environment/MdnsService.js";
-import { FabricJsonObject } from "./fabric/Fabric.js";
-import { Logger } from "./log/Logger.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Network } from "./net/Network.js";
-import { UdpInterface } from "./net/UdpInterface.js";
-import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 
 const logger = new Logger("PaseCommissioner");
 

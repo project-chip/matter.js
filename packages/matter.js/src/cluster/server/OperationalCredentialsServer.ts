@@ -6,31 +6,35 @@
 
 // TODO: Rename to NodeOperationalCredentialsServer to match with specs
 
-import { DeviceCertification } from "../../behavior/definitions/operational-credentials/DeviceCertification.js";
+import { AccessControl, BasicInformation, OperationalCredentials } from "#clusters";
+import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { AccessLevel } from "#model";
 import {
+    assertSecureSession,
+    CertificateError,
+    DeviceCertification,
+    FabricTableFullError,
+    FailsafeContext,
+    MatterDevice,
+    MatterFabricConflictError,
+    MatterFabricInvalidAdminSubjectError,
+    PublicKeyError,
     TlvAttestation,
     TlvCertSigningRequest,
-} from "../../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
-import { ProductDescription } from "../../behavior/system/product-description/ProductDescription.js";
-import { CertificateError } from "../../certificate/CertificateManager.js";
-import { MatterFabricInvalidAdminSubjectError } from "../../common/FailsafeContext.js";
-import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
-import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { ValidationError } from "../../common/ValidationError.js";
-import { CryptoVerifyError } from "../../crypto/Crypto.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { PublicKeyError } from "../../fabric/Fabric.js";
-import { FabricTableFullError } from "../../fabric/FabricManager.js";
-import { Logger } from "../../log/Logger.js";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
-import { AccessLevel, Command } from "../Cluster.js";
-import { BasicInformation } from "../definitions/BasicInformationCluster.js";
-import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
-import { AccessControl } from "../definitions/index.js";
+} from "#protocol";
+import {
+    Command,
+    FabricIndex,
+    ProductDescription,
+    StatusCode,
+    StatusResponseError,
+    TlvBoolean,
+    TlvByteString,
+    TlvField,
+    TlvObject,
+    TlvOptionalField,
+    ValidationError,
+} from "#types";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
@@ -103,7 +107,7 @@ export const OperationalCredentialsClusterHandler: (
                     StatusCode.InvalidCommand,
                 );
             }
-            const device = session.context;
+            const device = MatterDevice.of(session);
             device.assertFailSafeArmed("csrRequest received while failsafe is not armed.");
 
             const timedOp = device.failsafeContext;
@@ -146,9 +150,7 @@ export const OperationalCredentialsClusterHandler: (
             if (!session.isSecure)
                 throw new MatterFlowError("addOperationalCert should be called on a secure session.");
 
-            const device = session.context;
-
-            const failsafeContext = device.failsafeContext;
+            const failsafeContext = FailsafeContext.of(session);
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
@@ -178,7 +180,7 @@ export const OperationalCredentialsClusterHandler: (
                 );
             }
 
-            if (device.getFabrics().length === supportedFabrics.getLocal()) {
+            if (session.context.getFabrics().length === supportedFabrics.getLocal()) {
                 return {
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
                     debugText: `No more fabrics can be added because limit ${supportedFabrics.getLocal()} reached.`,
@@ -326,7 +328,7 @@ export const OperationalCredentialsClusterHandler: (
 
             const rootCerts = session.context.getFabrics().map(fabric => fabric.rootCert);
 
-            const device = session.context;
+            const device = MatterDevice.of(session);
             if (device.isFailsafeArmed()) {
                 const failsafeContext = device.failsafeContext;
                 const temporaryRootCert = failsafeContext.rootCert;
@@ -352,9 +354,7 @@ export const OperationalCredentialsClusterHandler: (
             // Assert associated fabric is present
             session.associatedFabric;
 
-            const device = session.context;
-
-            const failsafeContext = device.failsafeContext;
+            const failsafeContext = FailsafeContext.of(session);
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
@@ -454,9 +454,7 @@ export const OperationalCredentialsClusterHandler: (
             session,
             endpoint,
         }) => {
-            const device = session.context;
-
-            const fabric = device.getFabricByIndex(fabricIndex);
+            const fabric = MatterDevice.of(session).getFabricByIndex(fabricIndex);
 
             if (fabric === undefined) {
                 return {
@@ -489,7 +487,7 @@ export const OperationalCredentialsClusterHandler: (
         }) => {
             assertSecureSession(session);
 
-            const failsafeContext = session.context.failsafeContext;
+            const failsafeContext = FailsafeContext.of(session);
 
             if (failsafeContext.hasRootCert) {
                 throw new StatusResponseError(

@@ -1,0 +1,72 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "#general";
+import { TlvBoolean, TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt16, TlvUInt32 } from "#types";
+
+/** @see {@link MatterSpecification.v13.Core} § 4.12.8 */
+export const TlvSessionParameters = TlvObject({
+    /** Maximum sleep interval of node when in idle mode. */
+    idleIntervalMs: TlvOptionalField(1, TlvUInt32) /* default: SESSION_IDLE_INTERVAL */,
+
+    /** Maximum sleep interval of node when in active mode. */
+    activeIntervalMs: TlvOptionalField(2, TlvUInt32) /* default: SESSION_ACTIVE_INTERVAL */,
+
+    /** Minimum amount of time the node SHOULD stay active after network activity. */
+    activeThresholdMs: TlvOptionalField(3, TlvUInt16) /* default: SESSION_ACTIVE_THRESHOLD */,
+
+    /** Data model revision. */
+    dataModelRevision: TlvOptionalField(4, TlvUInt16) /* default: 16 OR 17, we choose 17 aka Matter 1.2 */,
+
+    /** Interaction model revision. */
+    interactionModelRevision: TlvOptionalField(5, TlvUInt16) /* default 10 OR 11, we choose 11 aka Matter 1.2 */,
+
+    /** Specification version. */
+    specificationVersion: TlvOptionalField(6, TlvUInt32) /* default: STRICTLY SMALLER THAN 0x01030000, we choose 0 */,
+
+    /** Maximum Paths pert Invoke */
+    maxPathsPerInvoke: TlvOptionalField(7, TlvUInt16) /* default: 1 */,
+});
+
+/** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */
+export const TlvPbkdfParamRequest = TlvObject({
+    initiatorRandom: TlvField(1, TlvByteString.bound({ length: 32 })),
+    initiatorSessionId: TlvField(2, TlvUInt16), // Specs: range: 16bits
+    passcodeId: TlvField(3, TlvUInt16), // Specs: length: 16bits so min is 0x8000?
+    hasPbkdfParameters: TlvField(4, TlvBoolean),
+    initiatorSessionParams: TlvOptionalField(5, TlvSessionParameters),
+});
+
+/** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */
+export const TlvPbkdfParamResponse = TlvObject({
+    initiatorRandom: TlvField(1, TlvByteString.bound({ length: 32 })),
+    responderRandom: TlvField(2, TlvByteString.bound({ length: 32 })),
+    responderSessionId: TlvField(3, TlvUInt16),
+    pbkdfParameters: TlvOptionalField(
+        4,
+        TlvObject({
+            iterations: TlvField(1, TlvUInt32),
+            salt: TlvField(2, TlvByteString.bound({ minLength: 16, maxLength: 32 })),
+        }),
+    ),
+    responderSessionParams: TlvOptionalField(5, TlvSessionParameters),
+});
+
+/** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */
+export const TlvPasePake1 = TlvObject({
+    x: TlvField(1, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })), // pA
+});
+
+/** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */
+export const TlvPasePake2 = TlvObject({
+    y: TlvField(1, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })), // pB
+    verifier: TlvField(2, TlvByteString.bound({ length: CRYPTO_HASH_LEN_BYTES })), // cB
+});
+
+/** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */
+export const TlvPasePake3 = TlvObject({
+    verifier: TlvField(1, TlvByteString.bound({ length: CRYPTO_HASH_LEN_BYTES })), // cA
+});

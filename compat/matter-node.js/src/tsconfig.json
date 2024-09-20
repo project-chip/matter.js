@@ -1,0 +1,8 @@
+{
+    "extends": "../../../packages/tools/tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist/esm",
+        "types": ["node"]
+    },
+    "references": [{ "path": "../../matter.js/src" }]
+}

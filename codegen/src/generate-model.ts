@@ -6,9 +6,8 @@
 
 // Generates the runtime Matter model
 
-import { LocalMatter } from "@project-chip/matter.js-intermediate-models";
-import { InternalError } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
+import { InternalError, Logger } from "#general";
+import { LocalMatter } from "#intermediate-models";
 import {
     AttributeModel,
     DatatypeModel,
@@ -19,8 +18,7 @@ import {
     Model,
     Specification,
     TraverseMap,
-} from "@project-chip/matter.js/model";
-import { camelize } from "@project-chip/matter.js/util";
+} from "#model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { generateElement } from "./mom/common/generate-element.js";
@@ -29,6 +27,7 @@ import { TsFile } from "./util/TsFile.js";
 import { clean } from "./util/file.js";
 import { finalizeModel } from "./util/finalize-model.js";
 import "./util/setup.js";
+import { camelize } from "./util/string.js";
 export const CLUSTER_SUFFIX = "Element";
 
 const logger = Logger.get("generate-model");
@@ -49,40 +48,41 @@ if (revisionComponents.length > 2) {
     args.revision = revisionComponents.join(".");
 }
 
-function elementIdentifierName(element: Model) {
+function elementDiscriminatedName(element: Model) {
+    const { name } = element;
     if (element.tag === ElementTag.DeviceType) {
-        return `${element.name}DT`;
+        return `${name}DT`;
     }
     if (element.tag === ElementTag.SemanticNamespace) {
-        return `${element.name}NS`;
+        return `${name}NS`;
     }
-    return element.name;
+    return name;
+}
+
+function elementIdentifierName(element: Model) {
+    const name = elementDiscriminatedName(element);
+    return camelize(name, name[0] < "a" || name[0] > "z");
 }
 
 function generateElementFile(element: Model) {
     logger.debug(element.name);
 
-    const name = elementIdentifierName(element);
+    const file = new TsFile(`!elements/${elementDiscriminatedName(element)}`);
 
-    const file = new TsFile(`#elements/${name}`);
-
-    file.addImport(`../Matter.js`, `Matter`);
-
-    const exportName = camelize(name, name[0] < "a" || name[0] > "z");
-
-    generateElement(file, "#/model/elements/index.js", element, `export const ${exportName} = `);
-
-    file.atom(`Matter.children.push(${exportName})`);
+    file.addImport(`../MatterDefinition.js`, `MatterDefinition`);
+    const exportName = elementIdentifierName(element);
+    generateElement(file, "!model/elements/index.js", element, `export const ${exportName} = `);
+    file.atom(`MatterDefinition.children.push(${exportName})`);
 
     if (args.save) {
         file.save();
     }
 }
 
-function generateIndex(elements: Model[]) {
-    const file = new TsFile(`#elements/index`);
+function generateDefinitions(elements: Model[]) {
+    const file = new TsFile(`!elements/definitions`);
     for (const element of elements) {
-        file.addReexport(`./${elementIdentifierName(element)}.js`);
+        file.addReexport(`./${elementDiscriminatedName(element)}.js`);
     }
 
     if (args.save) {
@@ -90,10 +90,14 @@ function generateIndex(elements: Model[]) {
     }
 }
 
-function generateExport(elements: Model[]) {
-    const file = new TsFile(`#elements/export`);
+function generateModels(elements: Model[]) {
+    const file = new TsFile(`!elements/models`);
+    file.addImport("./definitions.js", "* as definitions");
     for (const element of elements) {
-        file.addReexport(`./${elementIdentifierName(element)}.js`);
+        const type = `${camelize(element.tag, true)}Model`;
+        file.addImport(`../../models/${type}.js`, type);
+        const exportName = elementIdentifierName(element);
+        file.atom(`export const ${exportName} = new ${type}(definitions.${exportName})`);
     }
 
     if (args.save) {
@@ -102,7 +106,7 @@ function generateExport(elements: Model[]) {
 }
 
 async function importModel(source: string) {
-    return (await import(`@project-chip/matter.js-intermediate-models/v${args.revision}/${source}`))[
+    return (await import(`@matter.js/intermediate-models/v${args.revision}/${source}`))[
         `${camelize(source, true)}Matter`
     ] as MatterElement;
 }
@@ -134,7 +138,7 @@ if (
 
 logger.info("remove matter model elements");
 if (args.save) {
-    clean("#elements");
+    clean("!elements");
 }
 
 logger.info("generate matter model");
@@ -144,8 +148,8 @@ Logger.nest(() => {
     }
 
     logger.info("index");
-    generateIndex(matter.children as Model[]);
-    generateExport(matter.children as Model[]);
+    generateDefinitions(matter.children as Model[]);
+    generateModels(matter.children as Model[]);
 });
 
 validationResult.report();

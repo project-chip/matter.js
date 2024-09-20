@@ -4,31 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
-import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { GroupId } from "../../datatype/GroupId.js";
-import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
-import { AclExtensionEntry } from "../../protocol/interaction/AccessControlManager.js";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
-import { SyncStorage } from "../../storage/Storage.js";
-import { TlvType } from "../../tlv/TlvCodec.js";
-import { TlvTaggedList } from "../../tlv/TlvObject.js";
-import { isDeepEqual } from "../../util/DeepEqual.js";
-import { AccessControl, AccessControlCluster } from "../definitions/AccessControlCluster.js";
+import { AccessControl, AccessControlCluster } from "#clusters";
+import { InternalError, isDeepEqual, Logger, SyncStorage } from "#general";
 import {
+    AclExtensionEntry,
+    assertSecureSession,
+    FabricSensitiveEventServer,
     genericFabricScopedAttributeGetter,
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
-} from "./AttributeServer.js";
+    MatterDevice,
+} from "#protocol";
+import {
+    CaseAuthenticatedTag,
+    ClusterId,
+    DeviceTypeId,
+    EndpointNumber,
+    GroupId,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TlvTaggedList,
+    TlvType,
+    TypeFromBitmapSchema,
+} from "#types";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { FabricSensitiveEventServer } from "./EventServer.js";
 
 const logger = Logger.get("AccessControlClusterServer");
 
@@ -184,9 +185,9 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         aclAttributeSetter: (value, { session }) => {
-            assertSecureSession(session!);
+            assertSecureSession(session);
             // it can happen internally that we set a value for another fabricIndex, so handle this here
-            const fabric = session.context.getFabricByIndex(
+            const fabric = MatterDevice.of(session).getFabricByIndex(
                 value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
             );
             if (fabric === undefined) {
@@ -274,13 +275,13 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         extensionAttributeSetter: (value, { session }) => {
-            assertSecureSession(session!);
+            assertSecureSession(session);
             // it can happen internally that we set a value for another fabricIndex, so handle this here
-            const fabric = session.context.getFabricByIndex(
+            const fabric = MatterDevice.of(session).getFabricByIndex(
                 value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
             );
             if (fabric === undefined) {
-                throw new InternalError("Fabric not found. SHould never happen");
+                throw new InternalError("Fabric not found. Should never happen");
             }
             const oldValue =
                 genericFabricScopedAttributeGetterFromFabric(

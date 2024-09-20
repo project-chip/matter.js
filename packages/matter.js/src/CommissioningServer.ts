@@ -4,38 +4,71 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "./MatterDevice.js";
-import { MatterNode } from "./MatterNode.js";
-import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
-import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
-import { Ble } from "./ble/Ble.js";
-import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
-import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { ClusterType } from "./cluster/ClusterType.js";
-import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
-import { AccessControl } from "./cluster/definitions/AccessControlCluster.js";
 import {
+    AccessControl,
     AdministratorCommissioning,
     AdministratorCommissioningCluster,
-} from "./cluster/definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
-import {
+    BasicInformationCluster,
     GeneralCommissioning,
     GeneralCommissioningCluster,
-} from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
-import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
-import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
-import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
-import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
+    GeneralDiagnostics,
+    GeneralDiagnosticsCluster,
+    GroupKeyManagementCluster,
+    OperationalCredentialsCluster,
+} from "#clusters";
 import {
+    Bytes,
+    Crypto,
+    ImplementationError,
+    InternalError,
+    Logger,
+    NamedHandler,
+    Network,
+    NoProviderError,
+    StorageContext,
+    SupportedStorageTypes,
+    SyncStorage,
+    UdpInterface,
+} from "#general";
+import { Specification } from "#model";
+import {
+    AttestationCertificateManager,
+    Ble,
+    CertificationDeclarationManager,
+    ClusterClientObj,
+    ClusterDatasource,
+    DeviceCertification,
+    EndpointInterface,
+    EventHandler,
+    Fabric,
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
-} from "./cluster/server/AttributeServer.js";
+    InteractionEndpointStructure,
+    MatterDevice,
+    MdnsBroadcaster,
+    MdnsInstanceBroadcaster,
+    MdnsScanner,
+    PaseClient,
+} from "#protocol";
+import {
+    ClusterType,
+    CommissioningFlowType,
+    DiscoveryCapabilitiesBitmap,
+    DiscoveryCapabilitiesSchema,
+    EndpointNumber,
+    FabricIndex,
+    ManualPairingCodeCodec,
+    ProductDescription,
+    QrPairingCodeCodec,
+    TypeFromBitSchema,
+    TypeFromPartialBitSchema,
+    VendorId,
+} from "#types";
+import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
+import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
-    ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
 } from "./cluster/server/ClusterServerTypes.js";
@@ -43,40 +76,11 @@ import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralComm
 import { createDefaultGeneralDiagnosticsClusterServer } from "./cluster/server/GeneralDiagnosticsServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
-import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
-import { Crypto } from "./crypto/Crypto.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { LegacyInteractionServer } from "./device/LegacyInteractionServer.js";
-import { EndpointInterface } from "./endpoint/EndpointInterface.js";
-import { Fabric } from "./fabric/Fabric.js";
-import { Logger } from "./log/Logger.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Specification } from "./model/definitions/Specification.js";
-import { Network } from "./net/Network.js";
-import { UdpInterface } from "./net/UdpInterface.js";
-import { EventHandler } from "./protocol/interaction/EventHandler.js";
-import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import {
-    CommissioningFlowType,
-    DiscoveryCapabilitiesBitmap,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
-} from "./schema/PairingCodeSchema.js";
-import { PaseClient } from "./session/pase/PaseClient.js";
-import { SyncStorage } from "./storage/Storage.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { SupportedStorageTypes } from "./storage/StringifyTools.js";
-import { ByteArray } from "./util/ByteArray.js";
-import { NamedHandler } from "./util/NamedHandler.js";
+import { MatterNode } from "./MatterNode.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -126,7 +130,7 @@ export interface CommissioningServerOptions {
     flowType?: CommissioningFlowType;
 
     /** Optional Vendor specific additional BLE Advertisement data. */
-    additionalBleAdvertisementData?: ByteArray;
+    additionalBleAdvertisementData?: Uint8Array;
 
     /** Should the device directly be announced automatically by the MatterServer of manually via announce(). */
     delayedAnnouncement?: boolean;
@@ -280,7 +284,7 @@ export class CommissioningServer extends MatterNode {
                 caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
                 subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
             },
-            serialNumber: `matter.js-${Crypto.get().getRandomData(4).toHex()}`,
+            serialNumber: `matter.js-${Bytes.toHex(Crypto.get().getRandomData(4))}`,
             specificationVersion: Specification.SPECIFICATION_VERSION,
             maxPathsPerInvoke: 1,
 

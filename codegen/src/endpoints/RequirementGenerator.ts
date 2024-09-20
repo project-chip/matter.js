@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, ClusterVariance, MatterModel, RequirementModel } from "@project-chip/matter.js/model";
-import { decamelize } from "@project-chip/matter.js/util";
+import { decamelize, Logger } from "#general";
+import { ClusterModel, ClusterVariance, MatterModel, RequirementModel } from "#model";
 import { Block } from "../util/TsFile.js";
 import { ClusterRequirements } from "./ClusterRequirements.js";
 import { EndpointFile } from "./EndpointFile.js";
@@ -82,8 +81,8 @@ export class RequirementGenerator {
 
     generate() {
         if (this.#mandatoryParts) {
-            this.file.addImport("#/behavior/system/parts/PartsBehavior.js", "PartsBehavior");
-            this.file.addImport("#/behavior/system/index/IndexBehavior.js", "IndexBehavior");
+            this.file.addImport("!node/behavior/system/parts/PartsBehavior.js", "PartsBehavior");
+            this.file.addImport("!node/behavior/system/index/IndexBehavior.js", "IndexBehavior");
             this.mandatoryBlock.atom("Parts", "PartsBehavior");
             this.mandatoryBlock.atom("Index", "IndexBehavior");
         }
@@ -126,7 +125,7 @@ export class RequirementGenerator {
 
     #generateOne(detail: ClusterDetail, target: Block) {
         let name;
-        const prefix = `#/behavior/definitions/${decamelize(detail.definition.name)}/${detail.definition.name}`;
+        const prefix = `!behaviors/${decamelize(detail.definition.name)}/${detail.definition.name}`;
         if (this.type === "server") {
             name = `${detail.definition.name}Server`;
             this.file.addImport(`${prefix}Server.js`, `${name} as Base${name}`);

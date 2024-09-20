@@ -23,7 +23,7 @@ Alternatively you can use a "trick" with a matter.js test device to gather the t
 This requires a Raspberry Pi with BLE available and Matter.js's `matter-node.js-examples` package installed (other hardware will work but here BLE support can be finicky). Then you use the `DeviceFull` example with these parameters:
 
 ```
-node node_modules/@project-chip/matter-node.js-examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202021 --discriminator=1234
+node node_modules/@matter.js/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202021 --discriminator=1234
 ```
 (In case of issues with BLE or such and you need to redo the pairing just slightly change the passcode or discriminator parameter.)
 
@@ -42,7 +42,7 @@ On the OTBR host use `sudo ot-ctl discover` to scan for Thread networks and sele
 Using these fields as additional parameters, your start command for the device looks like:
 
 ```
-node node_modules/@project-chip/matter-node.js-examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202438 --discriminator=1248 --ble-thread-panid=XXXX --ble-thread-extendedpanid=XXXXXXXXX --ble-thread-networkname=AMZN-Thread-XXXX --ble-thread-channel=XX --ble-thread-address=XXXXXXXXXXX
+node node_modules/@matter.js/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202438 --discriminator=1248 --ble-thread-panid=XXXX --ble-thread-extendedpanid=XXXXXXXXX --ble-thread-networkname=AMZN-Thread-XXXX --ble-thread-channel=XX --ble-thread-address=XXXXXXXXXXX
 ```
 
 When Amazon sends the scan command the device returns this network as "found" and Amazon will add the device to the network.  You can then view the operational credentials in the log at line "---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ..." as a hex-string.

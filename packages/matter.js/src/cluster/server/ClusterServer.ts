@@ -4,32 +4,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EventId } from "../../datatype/EventId.js";
+import { capitalize, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
+import { AccessLevel } from "#model";
+import {
+    ClusterServer as BaseClusterServer,
+    ClusterDatasource,
+    CommandServer,
+    createAttributeServer,
+    createEventServer,
+    Fabric,
+} from "#protocol";
+import {
+    AttributeId,
+    BitSchema,
+    ClusterId,
+    ClusterType,
+    CommandId,
+    ConditionalFeatureList,
+    EventId,
+    TlvNoResponse,
+    TypeFromPartialBitSchema,
+} from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
-import { Fabric } from "../../fabric/Fabric.js";
-import { Logger } from "../../log/Logger.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { MaybePromise } from "../../util/Promises.js";
-import { capitalize } from "../../util/String.js";
-import { AccessLevel, ConditionalFeatureList, TlvNoResponse } from "../Cluster.js";
-import { ClusterType } from "../ClusterType.js";
-import { createAttributeServer } from "./AttributeServer.js";
 import {
     AttributeInitialValues,
     AttributeServers,
-    ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
     CommandServers,
     EventServers,
     SupportedEventsList,
 } from "./ClusterServerTypes.js";
-import { CommandServer } from "./CommandServer.js";
-import { createEventServer } from "./EventServer.js";
 
 const logger = Logger.get("ClusterServer");
 
@@ -48,7 +53,7 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
 /**
  * A collection of servers for a cluster's attributes, commands and events.
  */
-export interface ClusterServer<T extends ClusterType = ClusterType> {
+export interface ClusterServer<T extends ClusterType = ClusterType> extends BaseClusterServer {
     /**
      * Cluster ID
      */
