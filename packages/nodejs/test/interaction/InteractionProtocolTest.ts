@@ -728,15 +728,23 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(0) },
+            commandFields: TlvNoArguments.encodeTlv(undefined),
+            commandRef: 1,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandFields: TlvNoArguments.encodeTlv(undefined),
+            commandRef: 2,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(2) },
+            commandFields: TlvNoArguments.encodeTlv(undefined),
+            commandRef: 3,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
+            commandFields: TlvNoArguments.encodeTlv(undefined),
+            commandRef: 4,
         },
     ],
 };
@@ -798,24 +806,28 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
+                commandRef: 1,
                 status: { status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
+                commandRef: 2,
                 status: { status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                commandRef: 3,
                 status: { status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                commandRef: 4,
                 status: { status: 129 },
             },
         },
@@ -1651,6 +1663,8 @@ describe("InteractionProtocol", () => {
                         clusterId: ClusterId(6),
                         commandId: CommandId(100 + i),
                     },
+                    commandFields: TlvNoArguments.encodeTlv(undefined),
+                    commandRef: i + 4,
                 });
             }
 
