@@ -1026,7 +1026,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             maxIntervalCeiling: maxIntervalCeilingSeconds,
             cancelCallback: () => this.#subscriptionMap.delete(subscriptionId),
             subscriptionOptions: this.#subscriptionConfig,
-            readAttribute: (path, attribute, checkAcl = true) =>
+            readAttribute: (path, attribute, offline) =>
                 this.readAttribute(
                     path,
                     attribute,
@@ -1034,7 +1034,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     isFabricFiltered,
                     message,
                     this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    checkAcl,
+                    offline,
                 ),
             readEvent: (path, event, eventFilters) =>
                 this.readEvent(
