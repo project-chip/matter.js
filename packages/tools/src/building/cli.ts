@@ -9,12 +9,14 @@ import { hideBin } from "yargs/helpers";
 import { Builder, Target } from "./builder.js";
 import { Graph } from "./graph.js";
 import { Project } from "./project.js";
+import { syncAllTsconfigs } from "./tsconfig.js";
 
 enum Mode {
     BuildProject,
     BuildProjectWithDependencies,
     BuildWorkspace,
     DisplayGraph,
+    SyncTsconfigs,
 }
 
 export async function main(argv = process.argv) {
@@ -33,6 +35,7 @@ export async function main(argv = process.argv) {
         .command("esm", "build JS (ES6 modules)", () => targets.push(Target.esm))
         .command("cjs", "build JS (CommonJS modules)", () => targets.push(Target.cjs))
         .command("graph", "display the workspace graph", () => (mode = Mode.DisplayGraph))
+        .command("tsconfigs", "sync all tsconfigs with package.json", () => (mode = Mode.SyncTsconfigs))
         .wrap(Math.min(process.stdout.columns, 80))
         .strict().argv;
 
@@ -55,19 +58,32 @@ export async function main(argv = process.argv) {
             break;
 
         case Mode.BuildProjectWithDependencies:
-            const graph = await Graph.forProject(args.prefix);
-            if (graph === undefined) {
-                throw new Error(`Cannot build with dependencies because ${args.prefix} is not in a workspace`);
+            {
+                const graph = await Graph.forProject(args.prefix);
+                if (graph === undefined) {
+                    throw new Error(`Cannot build with dependencies because ${args.prefix} is not in a workspace`);
+                }
+                await graph.build(builder());
             }
-            await graph.build(builder());
             break;
 
         case Mode.BuildWorkspace:
-            await (await Graph.load()).build(builder());
+            {
+                const graph = await Graph.load();
+                await syncAllTsconfigs(graph);
+                await graph.build(builder());
+            }
             break;
 
         case Mode.DisplayGraph:
             (await Graph.load()).display();
+            break;
+
+        case Mode.SyncTsconfigs:
+            {
+                const graph = await Graph.load();
+                await syncAllTsconfigs(graph);
+            }
             break;
     }
 }

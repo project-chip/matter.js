@@ -2,6 +2,13 @@
     "extends": "../../packages/tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../dist/esm",
-        "types": ["node"]
-    }
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../packages/model/src"
+        }
+    ]
 }

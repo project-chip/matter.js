@@ -4,5 +4,15 @@
         "outDir": "../dist/esm",
         "types": []
     },
-    "references": [{ "path": "../../matter.js/src" }]
+    "references": [
+        {
+            "path": "../../general/src"
+        },
+        {
+            "path": "../../nodejs/src"
+        },
+        {
+            "path": "../../protocol/src"
+        }
+    ]
 }

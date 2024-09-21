@@ -32,7 +32,7 @@
     "test": "npm run -s test --workspaces --if-present",
     "lint": "eslint \"**/*.ts\"",
     "lint-fix": "eslint --fix \"**/*.ts\"",
-    "format": "prettier --write 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts'",
+    "format": "prettier --write 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts' 'compat/**/*.ts'",
     "format-verify": "prettier --check 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts'",
     "matter-device": "matter-run packages/examples/src/examples/DeviceNode.ts",
     "matter-bridge": "matter-run packages/examples/src/examples/BridgedDevicesNode.ts",
