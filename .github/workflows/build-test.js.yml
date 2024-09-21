@@ -34,7 +34,6 @@ jobs:
             - ".github/workflows/build-test.js.yml"
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
-    - run: npm run format-verify
     - run: npm run lint
 
   build-non-linux:

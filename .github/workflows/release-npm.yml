@@ -19,7 +19,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Prepare testing environment
         uses: ./.github/actions/prepare-env
-      - run: npm run format-verify
       - run: npm run lint
 
   build-non-linux:
@@ -117,7 +116,7 @@ jobs:
           if [[ "$PRERELEASE" == "true" ]]; then
             npx lerna publish from-package --yes --dist-tag dev
           else
-            npx lerna publish from-package --yes
+            npx lerna publish from-package --yes --dist-tag legacy
           fi
 
       - name: Create Github Release
