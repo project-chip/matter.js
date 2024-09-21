@@ -216,7 +216,7 @@ ColorControlServerBase.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
 
 ## Properties
 
@@ -230,7 +230,7 @@ ColorControlServerBase.#agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -244,13 +244,13 @@ ColorControlServerBase.[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -264,13 +264,13 @@ ColorControlServerBase.agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -286,9 +286,9 @@ ColorControlServerBase.cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
 
 ___
 
@@ -302,13 +302,13 @@ ColorControlServerBase.context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -322,13 +322,13 @@ ColorControlServerBase.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
@@ -344,9 +344,9 @@ ColorControlServerBase.events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L145)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
 
 ___
 
@@ -362,19 +362,19 @@ ColorControlServerBase.features
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
 ___
 
@@ -384,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L137)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:137](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L137)
 
 ___
 
@@ -398,13 +398,13 @@ ColorControlServerBase.session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -418,7 +418,7 @@ ColorControlServerBase.state
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:138](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L138)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:138](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L138)
 
 ___
 
@@ -432,7 +432,7 @@ ColorControlServerBase.Events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
 
 ___
 
@@ -446,7 +446,7 @@ ColorControlServerBase.Interface
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
 
 ___
 
@@ -462,7 +462,7 @@ ColorControlServerBase.cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
 
 ___
 
@@ -476,7 +476,7 @@ ColorControlServerBase.defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
 
 ___
 
@@ -490,7 +490,7 @@ ColorControlServerBase.dependencies
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
 
 ___
 
@@ -504,7 +504,7 @@ ColorControlServerBase.early
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
 
 ___
 
@@ -520,7 +520,7 @@ ColorControlServerBase.id
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
 
 ___
 
@@ -534,7 +534,7 @@ ColorControlServerBase.name
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
 
 ___
 
@@ -548,7 +548,7 @@ ColorControlServerBase.schema
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
 
 ___
 
@@ -562,7 +562,7 @@ ColorControlServerBase.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
 
 ___
 
@@ -590,7 +590,7 @@ ColorControlServerBase.supports
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
 
 ## Accessors
 
@@ -606,7 +606,7 @@ Returns the current colorPoint Bx value as decimal number according to CIE in th
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:338](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L338)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:338](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L338)
 
 • `set` **colorPointBx**(`value`): `void`
 
@@ -625,7 +625,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:346](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L346)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:346](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L346)
 
 ___
 
@@ -641,7 +641,7 @@ Returns the current colorPoint Gx value as decimal number according to CIE in th
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:312](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L312)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:312](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L312)
 
 • `set` **colorPointGx**(`value`): `void`
 
@@ -660,7 +660,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:320](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L320)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:320](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L320)
 
 ___
 
@@ -676,7 +676,7 @@ Returns the current colorPoint Gy value as decimal number according to CIE in th
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:325](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L325)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:325](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L325)
 
 • `set` **colorPointGy**(`value`): `void`
 
@@ -695,7 +695,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:333](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L333)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:333](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L333)
 
 ___
 
@@ -711,7 +711,7 @@ Returns the current colorPoint Rx value as decimal number according to CIE in th
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:286](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L286)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:286](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L286)
 
 • `set` **colorPointRx**(`value`): `void`
 
@@ -730,7 +730,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:294](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L294)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:294](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L294)
 
 ___
 
@@ -746,7 +746,7 @@ Returns the current colorPoint Ry value as decimal number according to CIE in th
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:299](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L299)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:299](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L299)
 
 • `set` **colorPointRy**(`value`): `void`
 
@@ -765,7 +765,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:307](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L307)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:307](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L307)
 
 ___
 
@@ -781,7 +781,7 @@ Returns the current enhanced hue value as decimal number in the range 0..0xFFFF.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:186](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L186)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:186](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L186)
 
 • `set` **enhancedHue**(`value`): `void`
 
@@ -799,7 +799,7 @@ Sets the current enhanced hue value as decimal number in the range 0..0xFFFF and
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:193](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L193)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:193](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L193)
 
 ___
 
@@ -815,7 +815,7 @@ Returns the current hue value as decimal number in the range 0..360.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:174](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L174)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:174](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L174)
 
 • `set` **hue**(`value`): `void`
 
@@ -833,7 +833,7 @@ Sets the current hue value as decimal number in the range 0..360 and converts in
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:181](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L181)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:181](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L181)
 
 ___
 
@@ -849,7 +849,7 @@ Returns the current color temperature value in Kelvin (from internal Mireds).
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:230](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L230)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:230](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L230)
 
 • `set` **kelvin**(`value`): `void`
 
@@ -867,7 +867,7 @@ Sets the current color temperature value in Kelvin and updates the internal mire
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:235](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L235)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:235](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L235)
 
 ___
 
@@ -884,7 +884,7 @@ physical maximum value is defined.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:253](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L253)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:253](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L253)
 
 ___
 
@@ -901,7 +901,7 @@ physical minimum value is defined.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:243](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L243)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:243](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L243)
 
 ___
 
@@ -917,7 +917,7 @@ Returns the current color temperature value in Mireds (0..0xFFFF).
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:214](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L214)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:214](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L214)
 
 • `set` **mireds**(`value`): `void`
 
@@ -935,7 +935,7 @@ Sets the current color temperature value in Mireds (0..0xFFFF) and converts into
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L221)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:221](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L221)
 
 ___
 
@@ -951,7 +951,7 @@ Returns the current saturation value as decimal number in the range 0..1.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:198](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L198)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:198](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L198)
 
 • `set` **saturation**(`value`): `void`
 
@@ -969,7 +969,7 @@ Sets the current saturation value as decimal number in the range 0..1 and conver
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:205](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L205)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:205](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L205)
 
 ___
 
@@ -985,7 +985,7 @@ Returns the current whitePoint X value as decimal number according to CIE in the
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:260](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L260)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:260](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L260)
 
 • `set` **whitePointX**(`value`): `void`
 
@@ -1004,7 +1004,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:268](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L268)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:268](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L268)
 
 ___
 
@@ -1020,7 +1020,7 @@ Returns the current whitePoint Y value as decimal number according to CIE in the
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:273](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L273)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:273](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L273)
 
 • `set` **whitePointY**(`value`): `void`
 
@@ -1039,7 +1039,7 @@ number range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:281](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L281)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:281](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L281)
 
 ___
 
@@ -1055,7 +1055,7 @@ Returns the current X value as decimal number according to CIE in the range 0..1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:146](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L146)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:146](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L146)
 
 • `set` **x**(`value`): `void`
 
@@ -1074,7 +1074,7 @@ range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:154](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L154)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:154](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L154)
 
 ___
 
@@ -1090,7 +1090,7 @@ Returns the current Y value as decimal number according to CIE in the range 0..1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:159](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L159)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:159](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L159)
 
 • `set` **y**(`value`): `void`
 
@@ -1109,7 +1109,7 @@ range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L167)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:167](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L167)
 
 ## Methods
 
@@ -1130,7 +1130,7 @@ range.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1654](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1654)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1654](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1654)
 
 ___
 
@@ -1151,7 +1151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1733](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1733)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1733](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1733)
 
 ___
 
@@ -1165,7 +1165,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1867](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1867)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1867](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1867)
 
 ___
 
@@ -1179,7 +1179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1726](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1726)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1726](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1726)
 
 ___
 
@@ -1204,7 +1204,7 @@ Calculate the hue distance depending on the direction and the current and target
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1661](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1661)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1661](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1661)
 
 ___
 
@@ -1218,7 +1218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1848](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1848)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1848](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1848)
 
 ___
 
@@ -1234,7 +1234,7 @@ Initialize the managed transition timers..
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1695](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1695)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1695](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1695)
 
 ___
 
@@ -1258,7 +1258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1751](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1751)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1751](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1751)
 
 ___
 
@@ -1279,7 +1279,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1743](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1743)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1743](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1743)
 
 ___
 
@@ -1299,7 +1299,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2061](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2061)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2061](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2061)
 
 ___
 
@@ -1319,7 +1319,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2057](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2057)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2057](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2057)
 
 ___
 
@@ -1333,7 +1333,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1858](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1858)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1858](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1858)
 
 ___
 
@@ -1354,7 +1354,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2068](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2068)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2068](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2068)
 
 ___
 
@@ -1370,7 +1370,7 @@ This method is used to set the remaining Time by checking the current transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1563](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1563)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1563](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1563)
 
 ___
 
@@ -1393,7 +1393,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1894](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1894)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1894](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1894)
 
 ___
 
@@ -1410,7 +1410,7 @@ enhanced hue. It uses [stopColorLoopLogic](behavior_definitions_color_control_ex
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1192](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1192)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1192](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1192)
 
 ___
 
@@ -1424,7 +1424,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1876](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1876)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1876](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1876)
 
 ___
 
@@ -1438,7 +1438,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1885](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1885)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1885](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1885)
 
 ___
 
@@ -1456,7 +1456,7 @@ ColorControlServerBase.[asyncDispose]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2079](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2079)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2079](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2079)
 
 ___
 
@@ -1489,7 +1489,7 @@ ColorControlServerBase.asAdmin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L125)
 
 ___
 
@@ -1521,7 +1521,7 @@ ColorControlServerBase.assertAttributeEnabled
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
 
 ___
 
@@ -1570,7 +1570,7 @@ ColorControlServerBase.callback
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
@@ -1602,7 +1602,7 @@ ColorControlServerBase.colorLoopSet
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1140](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1140)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1140](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1140)
 
 ___
 
@@ -1634,7 +1634,7 @@ ColorControlServerBase.enhancedMoveHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1039](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1039)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1039](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1039)
 
 ___
 
@@ -1666,7 +1666,7 @@ ColorControlServerBase.enhancedMoveToHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1014](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1014)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1014](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1014)
 
 ___
 
@@ -1698,7 +1698,7 @@ ColorControlServerBase.enhancedMoveToHueAndSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1090](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1090)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1090](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1090)
 
 ___
 
@@ -1730,7 +1730,7 @@ ColorControlServerBase.enhancedStepHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1065](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1065)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1065](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1065)
 
 ___
 
@@ -1748,7 +1748,7 @@ ColorControlServerBase.initialize
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:350](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L350)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:350](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L350)
 
 ___
 
@@ -1779,7 +1779,7 @@ ColorControlServerBase.moveColor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:845](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L845)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:845](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L845)
 
 ___
 
@@ -1804,7 +1804,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:883](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L883)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:883](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L883)
 
 ___
 
@@ -1837,7 +1837,7 @@ ColorControlServerBase.moveColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1269](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1269)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1269](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1269)
 
 ___
 
@@ -1864,7 +1864,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1324](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1324)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1324](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1324)
 
 ___
 
@@ -1897,7 +1897,7 @@ ColorControlServerBase.moveHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:449](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L449)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:449](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L449)
 
 ___
 
@@ -1925,7 +1925,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:475](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L475)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:475](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L475)
 
 ___
 
@@ -1956,7 +1956,7 @@ ColorControlServerBase.moveSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:634](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L634)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:634](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L634)
 
 ___
 
@@ -1981,7 +1981,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:657](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L657)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:657](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L657)
 
 ___
 
@@ -2012,7 +2012,7 @@ ColorControlServerBase.moveToColor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:792](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L792)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:792](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L792)
 
 ___
 
@@ -2040,7 +2040,7 @@ already you might not need to override this method.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:819](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L819)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:819](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L819)
 
 ___
 
@@ -2071,7 +2071,7 @@ ColorControlServerBase.moveToColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:963](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L963)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:963](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L963)
 
 ___
 
@@ -2096,7 +2096,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:986](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L986)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:986](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L986)
 
 ___
 
@@ -2126,7 +2126,7 @@ level is increased or decreased by the step size every second.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1115](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1115)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1115](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1115)
 
 ___
 
@@ -2157,7 +2157,7 @@ ColorControlServerBase.moveToHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:388](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L388)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:388](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L388)
 
 ___
 
@@ -2189,7 +2189,7 @@ ColorControlServerBase.moveToHueAndSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:746](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L746)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:746](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L746)
 
 ___
 
@@ -2217,7 +2217,7 @@ saturation changes, so if you have implemented them already you might not need t
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:773](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L773)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:773](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L773)
 
 ___
 
@@ -2243,7 +2243,7 @@ step based to manage the move. The method handled hue and enhanced-Hue changes d
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:407](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L407)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:407](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L407)
 
 ___
 
@@ -2276,7 +2276,7 @@ ColorControlServerBase.moveToSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:589](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L589)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:589](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L589)
 
 ___
 
@@ -2301,7 +2301,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:607](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L607)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:607](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L607)
 
 ___
 
@@ -2337,7 +2337,7 @@ ColorControlServerBase.reactTo
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -2369,7 +2369,7 @@ ColorControlServerBase.requireAttributeEnabled
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
 
 ___
 
@@ -2392,7 +2392,7 @@ convert the current color attributes to the new mode. Override this method for d
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1443](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1443)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1443](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1443)
 
 ___
 
@@ -2415,7 +2415,7 @@ convert the current color attributes to the new mode. Override this method for d
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1459](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1459)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1459](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1459)
 
 ___
 
@@ -2439,7 +2439,7 @@ If this is sufficient for your implementation you might not need to override thi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1218](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1218)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1218](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1218)
 
 ___
 
@@ -2470,7 +2470,7 @@ ColorControlServerBase.stepColor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:913](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L913)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:913](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L913)
 
 ___
 
@@ -2496,7 +2496,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:932](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L932)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:932](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L932)
 
 ___
 
@@ -2528,7 +2528,7 @@ ColorControlServerBase.stepColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1356](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1356)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1356](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1356)
 
 ___
 
@@ -2556,7 +2556,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1409](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1409)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1409](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1409)
 
 ___
 
@@ -2587,7 +2587,7 @@ ColorControlServerBase.stepHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:521](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L521)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:521](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L521)
 
 ___
 
@@ -2616,7 +2616,7 @@ or decreased by the step size every transition time interval.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:542](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L542)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:542](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L542)
 
 ___
 
@@ -2648,7 +2648,7 @@ ColorControlServerBase.stepSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:683](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L683)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:683](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L683)
 
 ___
 
@@ -2674,7 +2674,7 @@ Otherwise the method initiates a transition with the given rate.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:708](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L708)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:708](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L708)
 
 ___
 
@@ -2692,7 +2692,7 @@ color temperature transitions. Override this method with hardware specific logic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:865](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L865)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:865](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L865)
 
 ___
 
@@ -2709,7 +2709,7 @@ Implement stopping the color loop here if any special hardware specific logic is
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1206](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1206)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1206](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1206)
 
 ___
 
@@ -2727,7 +2727,7 @@ this method with hardware specific logic to implement this functionality.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:508](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L508)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:508](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L508)
 
 ___
 
@@ -2755,7 +2755,7 @@ ColorControlServerBase.stopMoveStep
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1235](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1235)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1235](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1235)
 
 ___
 
@@ -2774,7 +2774,7 @@ when they do not belong to a color loop.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1249](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1249)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1249](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1249)
 
 ___
 
@@ -2801,7 +2801,7 @@ attribute update itself is handled by the calling method, so is not needed to be
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1486](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1486)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1486](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1486)
 
 ___
 
@@ -2826,7 +2826,7 @@ called by this method if a sync is needed.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1597](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1597)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1597](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1597)
 
 ___
 
@@ -2851,7 +2851,7 @@ you do not need to override it.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1615](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1615)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1615](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1615)
 
 ___
 
@@ -2871,7 +2871,7 @@ ColorControlServerBase.toString
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -2903,7 +2903,7 @@ ColorControlServerBase.alter
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
 
 ___
 
@@ -2935,7 +2935,7 @@ ColorControlServerBase.enable
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
 
 ___
 
@@ -2968,7 +2968,7 @@ ColorControlServerBase.for
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
 
 ___
 
@@ -2999,7 +2999,7 @@ ColorControlServerBase.set
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
 
 ___
 
@@ -3031,4 +3031,4 @@ ColorControlServerBase.with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)

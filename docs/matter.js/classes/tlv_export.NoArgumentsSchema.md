@@ -72,7 +72,7 @@ VoidSchema.decode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -96,7 +96,7 @@ VoidSchema.decodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L28)
+[packages/matter.js/src/tlv/TlvSchema.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L28)
 
 ___
 
@@ -120,7 +120,7 @@ VoidSchema.decodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvVoid.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvVoid.ts#L20)
+[packages/matter.js/src/tlv/TlvVoid.ts:20](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvVoid.ts#L20)
 
 ___
 
@@ -149,7 +149,7 @@ VoidSchema.decodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L48)
+[packages/matter.js/src/tlv/TlvSchema.ts:48](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L48)
 
 ___
 
@@ -174,7 +174,7 @@ VoidSchema.decodeTlvInternalValue
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvVoid.ts:24](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvVoid.ts#L24)
+[packages/matter.js/src/tlv/TlvVoid.ts:24](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvVoid.ts#L24)
 
 ___
 
@@ -200,7 +200,7 @@ VoidSchema.encode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -224,7 +224,7 @@ VoidSchema.encodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:32](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L32)
+[packages/matter.js/src/tlv/TlvSchema.ts:32](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L32)
 
 ___
 
@@ -249,7 +249,7 @@ VoidSchema.encodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L38)
+[packages/matter.js/src/tlv/TlvSchema.ts:38](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L38)
 
 ___
 
@@ -275,7 +275,7 @@ VoidSchema.encodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNoArguments.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvNoArguments.ts#L19)
+[packages/matter.js/src/tlv/TlvNoArguments.ts:19](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvNoArguments.ts#L19)
 
 ___
 
@@ -302,7 +302,7 @@ VoidSchema.injectField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L57)
+[packages/matter.js/src/tlv/TlvSchema.ts:57](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L57)
 
 ___
 
@@ -328,7 +328,7 @@ VoidSchema.removeField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvSchema.ts#L61)
+[packages/matter.js/src/tlv/TlvSchema.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvSchema.ts#L61)
 
 ___
 
@@ -352,4 +352,4 @@ VoidSchema.validate
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvVoid.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/tlv/TlvVoid.ts#L28)
+[packages/matter.js/src/tlv/TlvVoid.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/tlv/TlvVoid.ts#L28)

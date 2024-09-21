@@ -38,7 +38,7 @@ StateType.groupKeyMap
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:355](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L355)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:355](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L355)
 
 ___
 
@@ -65,7 +65,7 @@ StateType.groupTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:373](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L373)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:373](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L373)
 
 ___
 
@@ -87,7 +87,7 @@ StateType.maxGroupKeysPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:396](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L396)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:396](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L396)
 
 ___
 
@@ -110,4 +110,4 @@ StateType.maxGroupsPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:387](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:387](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L387)

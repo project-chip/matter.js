@@ -30,7 +30,7 @@ We provide this alias to the default implementation [AccountLoginServer](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L100)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:100](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L100)
 
 ___
 
@@ -44,7 +44,7 @@ We provide this alias to the default implementation [ApplicationBasicServer](end
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:65](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L65)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:65](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L65)
 
 ___
 
@@ -58,7 +58,7 @@ We provide this alias to the default implementation [ApplicationLauncherServer](
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:58](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L58)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:58](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L58)
 
 ___
 
@@ -72,7 +72,7 @@ We provide this alias to the default implementation [ChannelServer](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:72](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L72)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:72](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L72)
 
 ___
 
@@ -86,7 +86,7 @@ We provide this alias to the default implementation [ContentLauncherServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:93](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L93)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:93](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L93)
 
 ___
 
@@ -100,7 +100,7 @@ We provide this alias to the default implementation [KeypadInputServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L51)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:51](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L51)
 
 ___
 
@@ -114,7 +114,7 @@ We provide this alias to the default implementation [MediaPlaybackServer](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:86](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L86)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:86](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L86)
 
 ___
 
@@ -128,7 +128,7 @@ We provide this alias to the default implementation [TargetNavigatorServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:79](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L79)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:79](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L79)
 
 ___
 
@@ -155,4 +155,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L105)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:105](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L105)

@@ -97,7 +97,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:113](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L113)
+[packages/matter.js/src/fabric/Fabric.ts:113](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L113)
 
 ## Properties
 
@@ -107,7 +107,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L108)
+[packages/matter.js/src/fabric/Fabric.ts:108](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L108)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L111)
+[packages/matter.js/src/fabric/Fabric.ts:111](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L111)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:110](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L110)
+[packages/matter.js/src/fabric/Fabric.ts:110](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L110)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:106](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L106)
+[packages/matter.js/src/fabric/Fabric.ts:106](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L106)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L105)
+[packages/matter.js/src/fabric/Fabric.ts:105](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L105)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:128](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L128)
+[packages/matter.js/src/fabric/Fabric.ts:128](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L128)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:115](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L115)
+[packages/matter.js/src/fabric/Fabric.ts:115](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L115)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:114](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L114)
+[packages/matter.js/src/fabric/Fabric.ts:114](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L114)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:123](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L123)
+[packages/matter.js/src/fabric/Fabric.ts:123](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L123)
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:125](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L125)
+[packages/matter.js/src/fabric/Fabric.ts:125](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L125)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:127](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L127)
+[packages/matter.js/src/fabric/Fabric.ts:127](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L127)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:116](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L116)
+[packages/matter.js/src/fabric/Fabric.ts:116](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L116)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:126](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L126)
+[packages/matter.js/src/fabric/Fabric.ts:126](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L126)
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:118](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L118)
+[packages/matter.js/src/fabric/Fabric.ts:118](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L118)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:124](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L124)
+[packages/matter.js/src/fabric/Fabric.ts:124](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L124)
 
 ___
 
@@ -257,7 +257,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:122](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L122)
+[packages/matter.js/src/fabric/Fabric.ts:122](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L122)
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:117](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L117)
+[packages/matter.js/src/fabric/Fabric.ts:117](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L117)
 
 ___
 
@@ -277,7 +277,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:119](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L119)
+[packages/matter.js/src/fabric/Fabric.ts:119](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L119)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:121](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L121)
+[packages/matter.js/src/fabric/Fabric.ts:121](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L121)
 
 ## Accessors
 
@@ -301,7 +301,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:343](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L343)
+[packages/matter.js/src/fabric/Fabric.ts:343](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L343)
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:252](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L252)
+[packages/matter.js/src/fabric/Fabric.ts:252](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L252)
 
 ___
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:182](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L182)
+[packages/matter.js/src/fabric/Fabric.ts:182](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L182)
 
 ## Methods
 
@@ -355,7 +355,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:241](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L241)
+[packages/matter.js/src/fabric/Fabric.ts:241](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L241)
 
 ___
 
@@ -375,7 +375,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:230](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L230)
+[packages/matter.js/src/fabric/Fabric.ts:230](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L230)
 
 ___
 
@@ -395,7 +395,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:245](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L245)
+[packages/matter.js/src/fabric/Fabric.ts:245](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L245)
 
 ___
 
@@ -415,7 +415,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:298](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L298)
+[packages/matter.js/src/fabric/Fabric.ts:298](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L298)
 
 ___
 
@@ -436,7 +436,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:286](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L286)
+[packages/matter.js/src/fabric/Fabric.ts:286](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L286)
 
 ___
 
@@ -450,7 +450,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:338](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L338)
+[packages/matter.js/src/fabric/Fabric.ts:338](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L338)
 
 ___
 
@@ -471,7 +471,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L221)
+[packages/matter.js/src/fabric/Fabric.ts:221](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L221)
 
 ___
 
@@ -491,7 +491,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:310](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L310)
+[packages/matter.js/src/fabric/Fabric.ts:310](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L310)
 
 ___
 
@@ -505,7 +505,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:318](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L318)
+[packages/matter.js/src/fabric/Fabric.ts:318](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L318)
 
 ___
 
@@ -525,7 +525,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:303](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L303)
+[packages/matter.js/src/fabric/Fabric.ts:303](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L303)
 
 ___
 
@@ -552,7 +552,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:270](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L270)
+[packages/matter.js/src/fabric/Fabric.ts:270](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L270)
 
 ___
 
@@ -573,7 +573,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:294](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L294)
+[packages/matter.js/src/fabric/Fabric.ts:294](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L294)
 
 ___
 
@@ -594,7 +594,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:213](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L213)
+[packages/matter.js/src/fabric/Fabric.ts:213](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L213)
 
 ___
 
@@ -614,7 +614,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:217](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L217)
+[packages/matter.js/src/fabric/Fabric.ts:217](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L217)
 
 ___
 
@@ -634,7 +634,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:266](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L266)
+[packages/matter.js/src/fabric/Fabric.ts:266](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L266)
 
 ___
 
@@ -654,7 +654,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:257](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L257)
+[packages/matter.js/src/fabric/Fabric.ts:257](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L257)
 
 ___
 
@@ -674,7 +674,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:234](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L234)
+[packages/matter.js/src/fabric/Fabric.ts:234](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L234)
 
 ___
 
@@ -694,7 +694,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:177](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L177)
+[packages/matter.js/src/fabric/Fabric.ts:177](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L177)
 
 ___
 
@@ -722,7 +722,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:278](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L278)
+[packages/matter.js/src/fabric/Fabric.ts:278](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L278)
 
 ___
 
@@ -742,7 +742,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:186](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L186)
+[packages/matter.js/src/fabric/Fabric.ts:186](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L186)
 
 ___
 
@@ -756,7 +756,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:135](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L135)
+[packages/matter.js/src/fabric/Fabric.ts:135](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L135)
 
 ___
 
@@ -777,7 +777,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:190](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L190)
+[packages/matter.js/src/fabric/Fabric.ts:190](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L190)
 
 ___
 
@@ -797,4 +797,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:156](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/fabric/Fabric.ts#L156)
+[packages/matter.js/src/fabric/Fabric.ts:156](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/fabric/Fabric.ts#L156)

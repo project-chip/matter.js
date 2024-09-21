@@ -91,7 +91,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L28)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L28)
 
 ## Properties
 
@@ -105,7 +105,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L41)
+[packages/matter.js/src/common/FailsafeContext.ts:41](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L41)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L46)
+[packages/matter.js/src/common/FailsafeContext.ts:46](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L46)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L40)
+[packages/matter.js/src/common/FailsafeContext.ts:40](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L40)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L42)
+[packages/matter.js/src/common/FailsafeContext.ts:42](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L42)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:44](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L44)
+[packages/matter.js/src/common/FailsafeContext.ts:44](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L44)
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L38)
+[packages/matter.js/src/common/FailsafeContext.ts:38](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L38)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:39](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L39)
+[packages/matter.js/src/common/FailsafeContext.ts:39](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L39)
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:43](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L43)
+[packages/matter.js/src/common/FailsafeContext.ts:43](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L43)
 
 ___
 
@@ -213,7 +213,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:22](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L22)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:22](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L22)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:37](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L37)
+[packages/matter.js/src/common/FailsafeContext.ts:37](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L37)
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L23)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:23](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L23)
 
 ## Accessors
 
@@ -255,7 +255,7 @@ FailsafeContext.associatedFabric
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:93](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L93)
+[packages/matter.js/src/common/FailsafeContext.ts:93](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L93)
 
 ___
 
@@ -273,7 +273,7 @@ FailsafeContext.commissioned
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:89](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L89)
+[packages/matter.js/src/common/FailsafeContext.ts:89](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L89)
 
 ___
 
@@ -291,7 +291,7 @@ FailsafeContext.construction
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L85)
+[packages/matter.js/src/common/FailsafeContext.ts:85](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L85)
 
 ___
 
@@ -309,7 +309,7 @@ FailsafeContext.csrSessionId
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:97](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L97)
+[packages/matter.js/src/common/FailsafeContext.ts:97](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L97)
 
 ___
 
@@ -327,7 +327,7 @@ FailsafeContext.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:81](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L81)
+[packages/matter.js/src/common/FailsafeContext.ts:81](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L81)
 
 ___
 
@@ -345,7 +345,7 @@ FailsafeContext.forUpdateNoc
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:101](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L101)
+[packages/matter.js/src/common/FailsafeContext.ts:101](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L101)
 
 ___
 
@@ -363,7 +363,7 @@ FailsafeContext.hasRootCert
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L105)
+[packages/matter.js/src/common/FailsafeContext.ts:105](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L105)
 
 ___
 
@@ -381,7 +381,7 @@ FailsafeContext.rootCert
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L109)
+[packages/matter.js/src/common/FailsafeContext.ts:109](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L109)
 
 ## Methods
 
@@ -399,7 +399,7 @@ FailsafeContext.rootCert
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:254](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L254)
+[packages/matter.js/src/common/FailsafeContext.ts:254](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L254)
 
 ___
 
@@ -419,7 +419,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:83](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L83)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:83](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L83)
 
 ___
 
@@ -439,7 +439,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L70)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:70](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L70)
 
 ___
 
@@ -463,7 +463,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:146](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L146)
+[packages/matter.js/src/common/FailsafeContext.ts:146](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L146)
 
 ___
 
@@ -494,7 +494,7 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:211](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L211)
+[packages/matter.js/src/common/FailsafeContext.ts:211](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L211)
 
 ___
 
@@ -522,7 +522,7 @@ cluster.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:201](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L201)
+[packages/matter.js/src/common/FailsafeContext.ts:201](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L201)
 
 ___
 
@@ -540,7 +540,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:181](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L181)
+[packages/matter.js/src/common/FailsafeContext.ts:181](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L181)
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:113](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L113)
+[packages/matter.js/src/common/FailsafeContext.ts:113](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L113)
 
 ___
 
@@ -586,7 +586,7 @@ validity checks.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:163](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L163)
+[packages/matter.js/src/common/FailsafeContext.ts:163](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L163)
 
 ___
 
@@ -611,7 +611,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:73](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L73)
+[packages/matter.js/src/common/FailsafeContext.ts:73](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L73)
 
 ___
 
@@ -629,7 +629,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L137)
+[packages/matter.js/src/common/FailsafeContext.ts:137](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L137)
 
 ___
 
@@ -647,7 +647,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:142](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L142)
+[packages/matter.js/src/common/FailsafeContext.ts:142](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L142)
 
 ___
 
@@ -665,7 +665,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:174](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L174)
+[packages/matter.js/src/common/FailsafeContext.ts:174](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L174)
 
 ___
 
@@ -683,7 +683,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:65](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L65)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:65](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L65)
 
 ___
 
@@ -707,7 +707,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L41)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:41](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L41)
 
 ___
 
@@ -727,7 +727,7 @@ Restore Cluster data when the FailSafe context expired.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L48)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:48](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L48)
 
 ___
 
@@ -751,7 +751,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L52)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L52)
 
 ___
 
@@ -769,7 +769,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:260](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L260)
+[packages/matter.js/src/common/FailsafeContext.ts:260](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L260)
 
 ___
 
@@ -795,7 +795,7 @@ Handles adding a trusted root certificate from Operational Credentials cluster.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:193](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L193)
+[packages/matter.js/src/common/FailsafeContext.ts:193](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L193)
 
 ___
 
@@ -813,7 +813,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:37](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L37)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:37](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L37)
 
 ___
 
@@ -837,7 +837,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeContext.ts:154](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/FailsafeContext.ts#L154)
+[packages/matter.js/src/common/FailsafeContext.ts:154](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/common/FailsafeContext.ts#L154)
 
 ___
 
@@ -858,4 +858,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L33)
+[packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts:33](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/CommissioningServerFailsafeContext.ts#L33)

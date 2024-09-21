@@ -37,7 +37,7 @@ StateType.barrierCapabilities
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:40](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L40)
 
 ___
 
@@ -51,7 +51,7 @@ StateType.barrierCloseEvents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:42](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L42)
 
 ___
 
@@ -65,7 +65,7 @@ StateType.barrierClosePeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:46](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L46)
 
 ___
 
@@ -79,7 +79,7 @@ StateType.barrierCommandCloseEvents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L44)
 
 ___
 
@@ -93,7 +93,7 @@ StateType.barrierCommandOpenEvents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:43](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:43](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L43)
 
 ___
 
@@ -107,7 +107,7 @@ StateType.barrierMovingState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L38)
 
 ___
 
@@ -121,7 +121,7 @@ StateType.barrierOpenEvents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:41](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L41)
 
 ___
 
@@ -135,7 +135,7 @@ StateType.barrierOpenPeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L45)
 
 ___
 
@@ -149,7 +149,7 @@ StateType.barrierPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L47)
 
 ___
 
@@ -163,4 +163,4 @@ StateType.barrierSafetyStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:39](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:39](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L39)

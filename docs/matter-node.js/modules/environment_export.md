@@ -59,7 +59,7 @@ The following variables are defined by this class additionally to [Environment](
 
 #### Defined in
 
-[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L52)
+[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L52)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:150](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L150)
+[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:150](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L150)
 
 ___
 
@@ -109,4 +109,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L111)
+[packages/matter-node.js/src/environment/NodeJsEnvironment.ts:111](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter-node.js/src/environment/NodeJsEnvironment.ts#L111)

@@ -304,7 +304,7 @@ ___
 
 ### readAttribute
 
-▸ **readAttribute**(`_path`, `attribute`, `exchange`, `isFabricFiltered`, `message`, `_endpoint`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
+▸ **readAttribute**(`_path`, `attribute`, `exchange`, `isFabricFiltered`, `message`, `_endpoint`, `offline?`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
 
 #### Parameters
 
@@ -316,6 +316,7 @@ ___
 | `isFabricFiltered` | `boolean` |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `_endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
+| `offline?` | `boolean` |
 
 #### Returns
 

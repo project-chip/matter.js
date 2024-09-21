@@ -26,7 +26,7 @@ The Node detects the temperature of this battery power source is above ideal ope
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:152](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:152](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L152)
 
 ___
 
@@ -38,7 +38,7 @@ The Node detects the temperature of this battery power source is below ideal ope
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:157](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:157](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L157)
 
 ___
 
@@ -50,4 +50,4 @@ The Node detects an unspecified fault on this battery power source.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:147](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:147](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L147)

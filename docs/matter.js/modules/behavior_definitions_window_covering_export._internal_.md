@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L57)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:57](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L57)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:26](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:26](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L26)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:24](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:24](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L24)
 
 ## Variables
 
@@ -59,4 +59,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:25](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L25)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:25](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L25)

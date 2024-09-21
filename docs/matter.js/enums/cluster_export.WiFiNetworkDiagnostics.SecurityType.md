@@ -29,7 +29,7 @@ Indicate the usage of no Wi-Fi security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:41](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L41)
 
 ___
 
@@ -41,7 +41,7 @@ Indicate the usage of an unspecified Wi-Fi security type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:36](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L36)
 
 ___
 
@@ -53,7 +53,7 @@ Indicate the usage of WEP Wi-Fi security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:46](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L46)
 
 ___
 
@@ -65,7 +65,7 @@ Indicate the usage of WPA Wi-Fi security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:51](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L51)
 
 ___
 
@@ -77,7 +77,7 @@ Indicate the usage of WPA2 Wi-Fi security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L56)
 
 ___
 
@@ -89,4 +89,4 @@ Indicate the usage of WPA3 Wi-Fi security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L61)

@@ -34,7 +34,7 @@ Diagnostics from common value types.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:16](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/log/Diagnostic.ts#L16)
+[packages/matter.js/src/log/Diagnostic.ts:16](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/log/Diagnostic.ts#L16)
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:17](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/log/Diagnostic.ts#L17)
+[packages/matter.js/src/log/Diagnostic.ts:17](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/log/Diagnostic.ts#L17)

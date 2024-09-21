@@ -126,7 +126,7 @@ on fabric level if no custom getter or setter is defined.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:746](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L746)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:746](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L746)
 
 ## Properties
 
@@ -140,7 +140,7 @@ on fabric level if no custom getter or setter is defined.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:156](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L156)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:156](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L156)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:157](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L157)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:157](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L157)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:757](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L757)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:757](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L757)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:249](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L249)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:249](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L249)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:155](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L155)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:155](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L155)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:390](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L390)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:390](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L390)
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:154](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L154)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:154](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L154)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:744](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L744)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:744](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L744)
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:231](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L231)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:231](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L231)
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:160](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L160)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:160](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L160)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:742](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L742)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:742](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L742)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:743](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L743)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:743](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L743)
 
 ___
 
@@ -309,7 +309,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:380](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L380)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:380](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L380)
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:166](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L166)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:166](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L166)
 
 ___
 
@@ -337,7 +337,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:165](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L165)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:165](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L165)
 
 ___
 
@@ -351,7 +351,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:161](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L161)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:161](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L161)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L167)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:167](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L167)
 
 ___
 
@@ -379,7 +379,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:164](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L164)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:164](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L164)
 
 ___
 
@@ -410,7 +410,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:383](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L383)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:383](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L383)
 
 ___
 
@@ -440,7 +440,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:389](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L389)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:389](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L389)
 
 ___
 
@@ -456,7 +456,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:153](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L153)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:153](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L153)
 
 ___
 
@@ -470,7 +470,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:381](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L381)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:381](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L381)
 
 ___
 
@@ -484,7 +484,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:382](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L382)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:382](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L382)
 
 ## Accessors
 
@@ -502,7 +502,7 @@ AttributeServer.hasFabricSensitiveData
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:872](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L872)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:872](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L872)
 
 ___
 
@@ -520,7 +520,7 @@ AttributeServer.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:220](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L220)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:220](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L220)
 
 ___
 
@@ -538,7 +538,7 @@ AttributeServer.writeAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:216](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L216)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:216](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L216)
 
 ## Methods
 
@@ -552,7 +552,7 @@ AttributeServer.writeAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:836](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L836)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:836](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L836)
 
 ___
 
@@ -579,7 +579,7 @@ new value and the version number.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:614](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L614)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:614](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L614)
 
 ___
 
@@ -606,7 +606,7 @@ new value and the old value.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:632](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L632)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:632](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L632)
 
 ___
 
@@ -630,7 +630,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:206](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L206)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:206](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L206)
 
 ___
 
@@ -661,7 +661,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:298](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L298)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:298](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L298)
 
 ___
 
@@ -683,7 +683,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:320](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L320)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:320](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L320)
 
 ___
 
@@ -707,7 +707,7 @@ If a getter is defined this method returns an error and the value should be retr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:1005](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L1005)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:1005](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L1005)
 
 ___
 
@@ -744,7 +744,7 @@ attributes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:311](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L311)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:311](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L311)
 
 ___
 
@@ -773,7 +773,7 @@ internally.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:570](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L570)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:570](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L570)
 
 ___
 
@@ -800,7 +800,7 @@ the version number.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:901](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L901)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:901](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L901)
 
 ___
 
@@ -829,7 +829,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:541](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L541)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:541](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L541)
 
 ___
 
@@ -855,7 +855,7 @@ Remove an internal listener.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:621](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L621)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:621](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L621)
 
 ___
 
@@ -881,7 +881,7 @@ Remove an external listener.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:647](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L647)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:647](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L647)
 
 ___
 
@@ -905,7 +905,7 @@ associated fabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:880](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L880)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:880](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L880)
 
 ___
 
@@ -935,7 +935,7 @@ Fabric scoped enhancement of set to allow setting special fabricindex locally.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:910](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L910)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:910](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L910)
 
 ___
 
@@ -961,7 +961,7 @@ Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric ins
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:950](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L950)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:950](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L950)
 
 ___
 
@@ -988,7 +988,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:963](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L963)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:963](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L963)
 
 ___
 
@@ -1019,7 +1019,7 @@ we need to inject the fabric index into the value.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:928](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L928)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:928](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L928)
 
 ___
 
@@ -1046,7 +1046,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:640](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L640)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:640](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L640)
 
 ___
 
@@ -1064,7 +1064,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:557](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L557)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:557](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L557)
 
 ___
 
@@ -1094,7 +1094,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:587](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L587)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:587](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L587)
 
 ___
 
@@ -1118,7 +1118,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:604](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L604)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:604](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L604)
 
 ___
 
@@ -1143,7 +1143,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:990](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L990)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:990](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L990)
 
 ___
 
@@ -1167,4 +1167,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:195](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/AttributeServer.ts#L195)
+[packages/matter.js/src/cluster/server/AttributeServer.ts:195](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/AttributeServer.ts#L195)

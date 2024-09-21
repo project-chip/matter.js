@@ -37,7 +37,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:191](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:191](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L191)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:192](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:192](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L192)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.saturation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:189](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:189](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L189)
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:190](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:190](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L190)

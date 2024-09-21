@@ -82,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L67)
+[packages/matter.js/src/cluster/server/EventServer.ts:67](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L67)
 
 ## Properties
 
@@ -96,7 +96,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L64)
+[packages/matter.js/src/cluster/server/EventServer.ts:64](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L64)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L69)
+[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L69)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L62)
+[packages/matter.js/src/cluster/server/EventServer.ts:62](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L62)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L63)
+[packages/matter.js/src/cluster/server/EventServer.ts:63](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L63)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:165](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L165)
+[packages/matter.js/src/cluster/server/EventServer.ts:165](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L165)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:68](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L68)
+[packages/matter.js/src/cluster/server/EventServer.ts:68](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L68)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L70)
+[packages/matter.js/src/cluster/server/EventServer.ts:70](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L70)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:72](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L72)
+[packages/matter.js/src/cluster/server/EventServer.ts:72](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L72)
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L71)
+[packages/matter.js/src/cluster/server/EventServer.ts:71](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L71)
 
 ## Accessors
 
@@ -226,7 +226,7 @@ EventServer.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:78](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L78)
+[packages/matter.js/src/cluster/server/EventServer.ts:78](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L78)
 
 ## Methods
 
@@ -250,7 +250,7 @@ EventServer.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:131](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L131)
+[packages/matter.js/src/cluster/server/EventServer.ts:131](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L131)
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:82](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L82)
+[packages/matter.js/src/cluster/server/EventServer.ts:82](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L82)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:88](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L88)
+[packages/matter.js/src/cluster/server/EventServer.ts:88](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L88)
 
 ___
 
@@ -325,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L167)
+[packages/matter.js/src/cluster/server/EventServer.ts:167](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L167)
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:135](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L135)
+[packages/matter.js/src/cluster/server/EventServer.ts:135](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L135)
 
 ___
 
@@ -373,4 +373,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:177](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L177)
+[packages/matter.js/src/cluster/server/EventServer.ts:177](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/server/EventServer.ts#L177)

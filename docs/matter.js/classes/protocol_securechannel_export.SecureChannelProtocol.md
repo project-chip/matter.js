@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:92](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L92)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:92](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L92)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:92](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L92)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:92](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L92)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:89](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L89)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:89](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L89)
 
 ## Methods
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:83](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L83)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:83](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L83)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L28)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L28)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L47)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L47)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:104](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L104)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:104](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L104)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L100)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:100](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L100)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:96](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L96)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:96](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L96)
 
 ___
 
@@ -233,4 +233,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:136](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L136)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:136](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L136)

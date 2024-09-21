@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.5 (2024-09-21)
 * Matter-Core functionality:
   * Fix: makes sure subscription data updates are mot checking acl permissions
   * Fix: Only use CATs from CASE session and not former ones from fabric 

@@ -31,7 +31,7 @@ Level 1 reduced functionality
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L47)
 
 ___
 
@@ -43,7 +43,7 @@ Level 2 reduced functionality
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L52)
 
 ___
 
@@ -55,7 +55,7 @@ Level 3 reduced functionality
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:57](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L57)
 
 ___
 
@@ -67,7 +67,7 @@ Level 4 reduced functionality
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:62](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L62)
 
 ___
 
@@ -79,7 +79,7 @@ Least functionality available to the user
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:67](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L67)
 
 ___
 
@@ -91,4 +91,4 @@ All functionality available to the user
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:42](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L42)

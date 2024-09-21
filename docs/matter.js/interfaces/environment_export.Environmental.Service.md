@@ -35,7 +35,7 @@ Asynchronous destruction.  Invoked by the environment when it is destroyed.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environmental.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/environment/Environmental.ts#L28)
+[packages/matter.js/src/environment/Environmental.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/environment/Environmental.ts#L28)
 
 ___
 
@@ -47,7 +47,7 @@ Standard diagnostic presentation.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environmental.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/environment/Environmental.ts#L33)
+[packages/matter.js/src/environment/Environmental.ts:33](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/environment/Environmental.ts#L33)
 
 ___
 
@@ -59,7 +59,7 @@ Standard diagnostic value.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environmental.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/environment/Environmental.ts#L38)
+[packages/matter.js/src/environment/Environmental.ts:38](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/environment/Environmental.ts#L38)
 
 ___
 
@@ -71,4 +71,4 @@ Asynchronous construction, respected by [Environment.load](../classes/environmen
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environmental.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/environment/Environmental.ts#L23)
+[packages/matter.js/src/environment/Environmental.ts:23](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/environment/Environmental.ts#L23)

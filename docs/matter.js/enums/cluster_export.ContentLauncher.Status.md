@@ -26,7 +26,7 @@ Requested URL returned 401 error code.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:263](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L263)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:263](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L263)
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:253](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L253)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:253](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L253)
 
 ___
 
@@ -50,4 +50,4 @@ Requested URL could not be reached by device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:258](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L258)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:258](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L258)

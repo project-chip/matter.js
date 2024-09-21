@@ -29,7 +29,7 @@ Indicates a Cellular interface.
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:35](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/net/Network.ts#L35)
+[packages/matter.js/src/net/Network.ts:35](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/net/Network.ts#L35)
 
 ___
 
@@ -41,7 +41,7 @@ Indicates a Ethernet interface.
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/net/Network.ts#L30)
+[packages/matter.js/src/net/Network.ts:30](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/net/Network.ts#L30)
 
 ___
 
@@ -53,7 +53,7 @@ Indicates a Thread interface.
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/net/Network.ts#L40)
+[packages/matter.js/src/net/Network.ts:40](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/net/Network.ts#L40)
 
 ___
 
@@ -65,7 +65,7 @@ Indicates an interface of an unspecified type.
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/net/Network.ts#L20)
+[packages/matter.js/src/net/Network.ts:20](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/net/Network.ts#L20)
 
 ___
 
@@ -77,4 +77,4 @@ Indicates a Wi-Fi interface.
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:25](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/net/Network.ts#L25)
+[packages/matter.js/src/net/Network.ts:25](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/net/Network.ts#L25)

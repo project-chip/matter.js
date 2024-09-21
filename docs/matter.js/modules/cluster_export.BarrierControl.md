@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L61)
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:63](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L63)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:32](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:32](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L32)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:64](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L64)
 
 ___
 
@@ -64,4 +64,4 @@ Input to the BarrierControl barrierControlGoToPercent command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:22](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:22](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L22)

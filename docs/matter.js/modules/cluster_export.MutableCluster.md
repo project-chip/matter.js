@@ -50,7 +50,7 @@ Create a conditional version of an unconditional element definition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:123](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L123)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:123](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L123)
 
 ___
 
@@ -78,7 +78,7 @@ Define a "component" -- a set of elements that may be added to a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L52)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L52)
 
 ___
 
@@ -106,7 +106,7 @@ Create a factory for clusters that require extension.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L109)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:109](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L109)
 
 ___
 
@@ -134,4 +134,4 @@ Define a cluster's extension set.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L59)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:59](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L59)

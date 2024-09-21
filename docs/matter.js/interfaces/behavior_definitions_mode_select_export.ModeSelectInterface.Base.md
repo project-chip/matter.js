@@ -37,4 +37,4 @@ MatterSpecification.v11.Cluster § 1.8.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L33)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:33](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L33)

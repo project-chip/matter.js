@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:95](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L95)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:95](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L95)
 
 ## Functions
 
@@ -60,7 +60,7 @@ commonName = ASN.1 OID 2.5.4.3
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:113](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L113)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:113](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L113)
 
 ___
 
@@ -83,7 +83,7 @@ countryName = ASN.1 OID 2.5.4.6
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:119](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L119)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:119](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L119)
 
 ___
 
@@ -106,7 +106,7 @@ dnQualifier = ASN.1 OID 2.5.4.46
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:139](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L139)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:139](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L139)
 
 ___
 
@@ -128,7 +128,7 @@ domain-component = ASN.1 OID 0.9.2342.19200300.100.1.25, IA5String
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:143](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L143)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:143](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L143)
 
 ___
 
@@ -151,7 +151,7 @@ generationQualifier = ASN.1 OID 2.5.4.44
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L137)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:137](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L137)
 
 ___
 
@@ -174,7 +174,7 @@ givenName = ASN.1 OID 2.5.4.42
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:133](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L133)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:133](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L133)
 
 ___
 
@@ -197,7 +197,7 @@ initials = ASN.1 OID 2.5.4.43
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:135](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L135)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:135](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L135)
 
 ___
 
@@ -220,7 +220,7 @@ localityName = ASN.1 OID 2.5.4.7
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:121](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L121)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:121](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L121)
 
 ___
 
@@ -243,7 +243,7 @@ name = ASN.1 OID 2.5.4.41
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:131](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L131)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:131](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L131)
 
 ___
 
@@ -266,7 +266,7 @@ organizationName = ASN.1 OID 2.5.4.10
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:125](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L125)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:125](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L125)
 
 ___
 
@@ -289,7 +289,7 @@ organizationalUnitName = ASN.1 OID 2.5.4.11
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:127](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L127)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:127](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L127)
 
 ___
 
@@ -312,7 +312,7 @@ pseudonym = ASN.1 OID 2.5.4.65
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:141](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L141)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:141](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L141)
 
 ___
 
@@ -335,7 +335,7 @@ serialNumber = ASN.1 OID 2.5.4.5
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:117](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L117)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:117](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L117)
 
 ___
 
@@ -358,7 +358,7 @@ stateOrProvinceName = ASN.1 OID 2.5.4.8
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:123](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L123)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:123](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L123)
 
 ___
 
@@ -381,7 +381,7 @@ surName = ASN.1 OID 2.5.4.4
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:115](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L115)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:115](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L115)
 
 ___
 
@@ -404,4 +404,4 @@ title = ASN.1 OID 2.5.4.12
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateDerTypes.ts:129](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificateDerTypes.ts#L129)
+[packages/matter.js/src/certificate/CertificateDerTypes.ts:129](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/certificate/CertificateDerTypes.ts#L129)

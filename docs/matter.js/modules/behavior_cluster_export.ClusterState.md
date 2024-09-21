@@ -28,7 +28,7 @@ Properties a cluster contributes state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterState.ts#L30)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:30](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterState.ts#L30)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:32](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterState.ts#L32)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:32](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterState.ts#L32)
 
 ___
 
@@ -63,4 +63,4 @@ Instance type for ClusterBehavior state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterState.ts#L21)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:21](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/cluster/ClusterState.ts#L21)

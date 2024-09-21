@@ -65,7 +65,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
 
 ## Properties
 
@@ -75,7 +75,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
 
 ## Accessors
 
@@ -103,7 +103,7 @@ SyncStorage.initialized
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:17](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L17)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:17](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L17)
 
 ## Methods
 
@@ -125,7 +125,7 @@ SyncStorage.initialized
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:55](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L55)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:55](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L55)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L45)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:45](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L45)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:118](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L118)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:118](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L118)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L40)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:40](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L40)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L100)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:100](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L100)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:27](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L27)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:27](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L27)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:79](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L79)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:79](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L79)
 
 ___
 
@@ -281,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L49)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:49](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L49)
 
 ___
 
@@ -299,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:34](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L34)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:34](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L34)
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L85)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:85](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L85)
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L64)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:64](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L64)
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:91](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L91)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:91](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L91)
 
 ___
 
@@ -393,4 +393,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StorageBackendMemory.ts#L21)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:21](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StorageBackendMemory.ts#L21)

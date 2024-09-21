@@ -84,7 +84,7 @@
 | `options.isFabricFiltered` | `boolean` |
 | `options.maxIntervalCeiling` | `number` |
 | `options.minIntervalFloor` | `number` |
-| `options.readAttribute` | (`path`: [`AttributePath`](../interfaces/protocol_interaction_export.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\> |
+| `options.readAttribute` | (`path`: [`AttributePath`](../interfaces/protocol_interaction_export.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\>, `offline?`: `boolean`) => `Promise`\<`any`\> |
 | `options.readEvent` | (`path`: [`EventPath`](../interfaces/protocol_interaction_export.EventPath.md), `event`: [`AnyEventServer`](../modules/cluster_export.md#anyeventserver)\<`any`, `any`\>, `eventFilters`: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]) => `Promise`\<[`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`any`\>[]\> |
 | `options.session` | [`SecureSession`](session_export.SecureSession.md)\<`any`\> |
 | `options.subscriptionId` | `number` |
@@ -96,7 +96,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:116](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L116)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:120](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L120)
 
 ## Properties
 
@@ -106,7 +106,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:88](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L88)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:92](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L92)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L70)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:70](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L70)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:114](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L114)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:118](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L118)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:75](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L75)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:75](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L75)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L71)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:71](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L71)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:69](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L69)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:69](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L69)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:73](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L73)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:73](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L73)
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:95](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L95)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:99](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L99)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:72](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L72)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:72](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L72)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L108)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:112](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L112)
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:74](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L74)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:74](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L74)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:83](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L83)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:87](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L87)
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:103](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L103)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:107](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L107)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:106](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L106)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:110](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L110)
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L105)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:109](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L109)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:86](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L86)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:90](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L90)
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:87](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L87)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:91](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L91)
 
 ___
 
@@ -284,17 +284,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L109)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:113](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L113)
 
 ___
 
 ### readAttribute
 
-• `Private` `Readonly` **readAttribute**: (`path`: [`AttributePath`](../interfaces/protocol_interaction_export.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\>
+• `Private` `Readonly` **readAttribute**: (`path`: [`AttributePath`](../interfaces/protocol_interaction_export.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\>, `offline?`: `boolean`) => `Promise`\<`any`\>
 
 #### Type declaration
 
-▸ (`path`, `attribute`): `Promise`\<`any`\>
+▸ (`path`, `attribute`, `offline?`): `Promise`\<`any`\>
 
 ##### Parameters
 
@@ -302,6 +302,7 @@ ___
 | :------ | :------ |
 | `path` | [`AttributePath`](../interfaces/protocol_interaction_export.AttributePath.md) |
 | `attribute` | [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\> |
+| `offline?` | `boolean` |
 
 ##### Returns
 
@@ -309,7 +310,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:76](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L76)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:76](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L76)
 
 ___
 
@@ -335,7 +336,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:77](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L77)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:81](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L81)
 
 ___
 
@@ -345,7 +346,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L85)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:89](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L89)
 
 ___
 
@@ -355,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:104](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L104)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:108](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L108)
 
 ___
 
@@ -365,7 +366,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:112](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L112)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:116](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L116)
 
 ___
 
@@ -375,7 +376,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:113](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L113)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:117](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L117)
 
 ___
 
@@ -385,7 +386,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:102](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L102)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:106](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L106)
 
 ___
 
@@ -395,7 +396,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L111)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:115](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L115)
 
 ___
 
@@ -405,7 +406,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:107](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L107)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:111](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L111)
 
 ___
 
@@ -415,7 +416,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:68](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L68)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:68](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L68)
 
 ___
 
@@ -425,7 +426,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L67)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:67](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L67)
 
 ___
 
@@ -435,7 +436,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:84](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L84)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:88](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L88)
 
 ## Methods
 
@@ -449,7 +450,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:460](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L460)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:464](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L464)
 
 ___
 
@@ -478,7 +479,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:719](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L719)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:723](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L723)
 
 ___
 
@@ -507,7 +508,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:709](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L709)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:713](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L713)
 
 ___
 
@@ -528,7 +529,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:776](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L776)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:780](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L780)
 
 ___
 
@@ -555,7 +556,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:180](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L180)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:184](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L184)
 
 ___
 
@@ -583,7 +584,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:748](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L748)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:752](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L752)
 
 ___
 
@@ -597,7 +598,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:766](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L766)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:770](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L770)
 
 ___
 
@@ -611,7 +612,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:452](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L452)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:456](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L456)
 
 ___
 
@@ -625,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:456](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L456)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:460](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L460)
 
 ___
 
@@ -642,7 +643,7 @@ sending by 50ms in any case to mke sure to catch all updates.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:478](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L478)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:482](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L482)
 
 ___
 
@@ -661,7 +662,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:212](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L212)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:216](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L216)
 
 ___
 
@@ -680,7 +681,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:315](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L315)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:319](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L319)
 
 ___
 
@@ -700,7 +701,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:576](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L576)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:580](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L580)
 
 ___
 
@@ -716,7 +717,7 @@ Determine all attributes that have changed since the last update and send them t
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:510](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L510)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:514](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L514)
 
 ___
 
@@ -737,7 +738,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:797](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L797)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:801](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L801)
 
 ___
 
@@ -757,7 +758,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:302](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L302)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:306](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L306)
 
 ___
 
@@ -777,7 +778,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:386](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L386)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:390](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L390)
 
 ___
 
@@ -796,4 +797,4 @@ controller. The data of newly added events are not sent automatically.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:405](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L405)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:409](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L409)

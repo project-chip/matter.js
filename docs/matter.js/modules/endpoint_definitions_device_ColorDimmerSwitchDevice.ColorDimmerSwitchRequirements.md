@@ -30,7 +30,7 @@ We provide this alias to the default implementation [ColorControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:66](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:66](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L66)
 
 ___
 
@@ -44,7 +44,7 @@ We provide this alias to the default implementation [GroupsBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:73](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:73](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L73)
 
 ___
 
@@ -58,7 +58,7 @@ We provide this alias to the default implementation [IdentifyBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:45](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L45)
 
 ___
 
@@ -72,7 +72,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:38](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L38)
 
 ___
 
@@ -86,7 +86,7 @@ We provide this alias to the default implementation [LevelControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L59)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:59](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L59)
 
 ___
 
@@ -100,7 +100,7 @@ We provide this alias to the default implementation [OnOffBehavior](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L52)
 
 ___
 
@@ -114,7 +114,7 @@ We provide this alias to the default implementation [ScenesBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L80)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L80)
 
 ___
 
@@ -139,7 +139,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:90](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L90)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:90](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L90)
 
 ___
 
@@ -158,4 +158,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts:85](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/definitions/device/ColorDimmerSwitchDevice.ts#L85)

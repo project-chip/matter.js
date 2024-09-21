@@ -43,7 +43,7 @@ TypeFromSchema.intent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:89](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:89](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L89)
 
 ___
 
@@ -67,7 +67,7 @@ TypeFromSchema.requestedProtocol
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:100](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L100)
 
 ___
 
@@ -117,4 +117,4 @@ TypeFromSchema.transferFileDesignator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:137](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L137)

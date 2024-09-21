@@ -43,7 +43,7 @@ TypeFromSchema.label
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:76](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:76](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L76)
 
 ___
 
@@ -64,7 +64,7 @@ TypeFromSchema.mode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:84](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:84](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L84)
 
 ___
 
@@ -95,4 +95,4 @@ TypeFromSchema.semanticTags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:102](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:102](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L102)

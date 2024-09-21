@@ -55,9 +55,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:152](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L152)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:152](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L152)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:300](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L300)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:300](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L300)
 
 ___
 
@@ -75,7 +75,7 @@ MatterSpecification.v11.Core § 9.14.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:138](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L138)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:138](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L138)
 
 ___
 
@@ -96,7 +96,7 @@ MatterSpecification.v11.Core § 9.14.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:150](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L150)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:150](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L150)
 
 ___
 
@@ -114,7 +114,7 @@ MatterSpecification.v11.Core § 9.14.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:117](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L117)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:117](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L117)
 
 ___
 
@@ -135,7 +135,7 @@ MatterSpecification.v11.Core § 9.14.6.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:129](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L129)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:129](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L129)
 
 ___
 
@@ -154,7 +154,7 @@ MatterSpecification.v11.Core § 9.14.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L21)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:21](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L21)
 
 ___
 
@@ -178,7 +178,7 @@ MatterSpecification.v11.Core § 9.14.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:36](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L36)
 
 ___
 
@@ -197,7 +197,7 @@ MatterSpecification.v11.Core § 9.14.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L80)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L80)
 
 ___
 
@@ -221,7 +221,7 @@ MatterSpecification.v11.Core § 9.14.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:95](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L95)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:95](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L95)
 
 ___
 
@@ -243,7 +243,7 @@ MatterSpecification.v11.Core § 9.14.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L108)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:108](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L108)
 
 ___
 
@@ -266,7 +266,7 @@ MatterSpecification.v11.Core § 9.14.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L50)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:50](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L50)
 
 ___
 
@@ -286,7 +286,7 @@ MatterSpecification.v11.Core § 9.14.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L61)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L61)
 
 ___
 
@@ -304,7 +304,7 @@ MatterSpecification.v11.Core § 9.14.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L70)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:70](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L70)
 
 ## Variables
 
@@ -316,8 +316,8 @@ ActionsBehavior is the base class for objects that support interaction with [Act
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L23)

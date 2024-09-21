@@ -43,7 +43,7 @@ TypeFromSchema.moveMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:90](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:90](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L90)
 
 ___
 
@@ -57,7 +57,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:104](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:104](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L104)
 
 ___
 
@@ -71,7 +71,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:105](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L105)
 
 ___
 
@@ -96,4 +96,4 @@ TypeFromSchema.rate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:102](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:102](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L102)
