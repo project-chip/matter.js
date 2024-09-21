@@ -23,7 +23,7 @@ import cmdSession from "./cmd_session.js";
 import cmdSubscribe from "./cmd_subscribe.js";
 import cmdTlv from "./cmd_tlv";
 
-const MAX_HISTORY_SIZE = 100;
+const MAX_HISTORY_SIZE = 1000;
 
 function exitCommand() {
     return {
