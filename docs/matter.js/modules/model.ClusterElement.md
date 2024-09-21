@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L51)
+[packages/matter.js/src/model/elements/ClusterElement.ts:51](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L51)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L50)
+[packages/matter.js/src/model/elements/ClusterElement.ts:50](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L50)
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
+[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L49)
+[packages/matter.js/src/model/elements/ClusterElement.ts:49](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L49)
 
 ## Variables
 
@@ -60,6 +60,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
+[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/ClusterElement.ts#L49)
+[packages/matter.js/src/model/elements/ClusterElement.ts:49](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/model/elements/ClusterElement.ts#L49)

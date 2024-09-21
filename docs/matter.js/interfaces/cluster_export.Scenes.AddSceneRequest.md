@@ -38,7 +38,7 @@ TypeFromSchema.extensionFieldSets
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:111](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L111)
 
 ___
 
@@ -52,7 +52,7 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:107](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:107](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L107)
 
 ___
 
@@ -66,7 +66,7 @@ TypeFromSchema.sceneId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:108](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L108)
 
 ___
 
@@ -80,7 +80,7 @@ TypeFromSchema.sceneName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:110](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:110](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L110)
 
 ___
 
@@ -94,4 +94,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:109](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L109)

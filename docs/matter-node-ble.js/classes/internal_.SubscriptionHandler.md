@@ -84,7 +84,7 @@
 | `options.isFabricFiltered` | `boolean` |
 | `options.maxIntervalCeiling` | `number` |
 | `options.minIntervalFloor` | `number` |
-| `options.readAttribute` | (`path`: [`AttributePath`](../interfaces/internal_.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\> |
+| `options.readAttribute` | (`path`: [`AttributePath`](../interfaces/internal_.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)\<`any`\>, `offline?`: `boolean`) => `Promise`\<`any`\> |
 | `options.readEvent` | (`path`: [`EventPath`](../interfaces/internal_.EventPath.md), `event`: [`AnyEventServer`](../modules/internal_.md#anyeventserver)\<`any`, `any`\>, `eventFilters`: `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[]) => `Promise`\<[`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]\> |
 | `options.session` | [`SecureSession`](internal_.SecureSession.md)\<`any`\> |
 | `options.subscriptionId` | `number` |

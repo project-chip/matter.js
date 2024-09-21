@@ -31,7 +31,7 @@ All modes are possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:207](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:207](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L207)
 
 ___
 
@@ -43,7 +43,7 @@ All modes are possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:212](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:212](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L212)
 
 ___
 
@@ -55,7 +55,7 @@ Heat and Emergency are not possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:187](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:187](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L187)
 
 ___
 
@@ -67,7 +67,7 @@ Heat and Emergency are not possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:192](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:192](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L192)
 
 ___
 
@@ -79,7 +79,7 @@ Cool and precooling (see Terms) are not possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:197](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:197](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L197)
 
 ___
 
@@ -91,4 +91,4 @@ Cool and precooling are not possible
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:202](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:202](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L202)

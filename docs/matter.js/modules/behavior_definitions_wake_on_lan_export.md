@@ -34,8 +34,8 @@ WakeOnLanBehavior is the base class for objects that support interaction with [W
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:15](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L15)
+[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:15](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L15)
 
-[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:18](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L18)
+[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:18](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L18)
 
-[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts:20](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/wake-on-lan/WakeOnLanBehavior.ts#L20)

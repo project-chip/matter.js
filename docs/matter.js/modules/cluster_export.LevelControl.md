@@ -88,7 +88,7 @@ These elements and properties are present in all LevelControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:329](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L329)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:329](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L329)
 
 ___
 
@@ -98,9 +98,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:526](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L526)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:526](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L526)
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L528)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L528)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:513](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L513)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:513](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L513)
 
 ___
 
@@ -124,9 +124,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:580](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L580)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:580](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L580)
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:582](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L582)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:582](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L582)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:535](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L535)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:535](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L535)
 
 ___
 
@@ -163,7 +163,7 @@ A LevelControlCluster supports these elements if it supports feature Frequency.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:262](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L262)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:262](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L262)
 
 ___
 
@@ -183,7 +183,7 @@ A LevelControlCluster supports these elements if it supports feature Lighting.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:229](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L229)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:229](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L229)
 
 ___
 
@@ -206,7 +206,7 @@ MatterSpecification.v11.Cluster § 1.6.5.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L47)
 
 ___
 
@@ -222,7 +222,7 @@ MatterSpecification.v11.Cluster § 1.6.6.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:78](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:78](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L78)
 
 ___
 
@@ -238,7 +238,7 @@ MatterSpecification.v11.Cluster § 1.6.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:33](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L33)
 
 ___
 
@@ -254,7 +254,7 @@ MatterSpecification.v11.Cluster § 1.6.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L54)
 
 ___
 
@@ -270,7 +270,7 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:156](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L156)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:156](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L156)
 
 ___
 
@@ -286,7 +286,7 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:175](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:175](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L175)
 
 ___
 
@@ -302,7 +302,7 @@ MatterSpecification.v11.Cluster § 1.6.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:119](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:119](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L119)
 
 ___
 
@@ -318,7 +318,7 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:194](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L194)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:194](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L194)
 
 ___
 
@@ -334,7 +334,7 @@ MatterSpecification.v11.Cluster § 1.6.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:139](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:139](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L139)
 
 ___
 
@@ -350,4 +350,4 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:214](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:214](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L214)

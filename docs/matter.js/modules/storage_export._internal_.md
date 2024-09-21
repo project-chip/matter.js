@@ -19,7 +19,7 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StringifyTools.ts#L52)
+[packages/matter.js/src/storage/StringifyTools.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StringifyTools.ts#L52)
 
 ___
 
@@ -31,4 +31,4 @@ Supported base types to stringify the data for the storage that can be used as k
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:28](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/storage/StringifyTools.ts#L28)
+[packages/matter.js/src/storage/StringifyTools.ts:28](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/storage/StringifyTools.ts#L28)

@@ -31,7 +31,7 @@ StateType.activeModeInterval
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:63](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L63)
 
 ___
 
@@ -45,7 +45,7 @@ StateType.activeModeThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:64](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L64)
 
 ___
 
@@ -59,7 +59,7 @@ StateType.expectedClients
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:65](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:65](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L65)
 
 ___
 
@@ -73,4 +73,4 @@ StateType.idleModeInterval
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:62](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L62)

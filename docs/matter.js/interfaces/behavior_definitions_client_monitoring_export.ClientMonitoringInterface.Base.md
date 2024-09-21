@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:18](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:18](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L18)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L20)
+[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:20](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L20)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L19)
+[packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts:19](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/client-monitoring/ClientMonitoringInterface.ts#L19)

@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 7.18.2.25
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:713](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/Cluster.ts#L713)
+[packages/matter.js/src/cluster/Cluster.ts:713](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/Cluster.ts#L713)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:711](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/Cluster.ts#L711)
+[packages/matter.js/src/cluster/Cluster.ts:711](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/Cluster.ts#L711)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:712](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/Cluster.ts#L712)
+[packages/matter.js/src/cluster/Cluster.ts:712](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/Cluster.ts#L712)

@@ -155,7 +155,7 @@ StateType.acCurrentDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:161](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L161)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:161](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L161)
 
 ___
 
@@ -169,7 +169,7 @@ StateType.acCurrentMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:160](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:160](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L160)
 
 ___
 
@@ -183,7 +183,7 @@ StateType.acCurrentOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:169](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:169](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L169)
 
 ___
 
@@ -197,7 +197,7 @@ StateType.acFrequency
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:58](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:58](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L58)
 
 ___
 
@@ -211,7 +211,7 @@ StateType.acFrequencyDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:126](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:126](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L126)
 
 ___
 
@@ -225,7 +225,7 @@ StateType.acFrequencyMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L60)
 
 ___
 
@@ -239,7 +239,7 @@ StateType.acFrequencyMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L59)
 
 ___
 
@@ -253,7 +253,7 @@ StateType.acFrequencyMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:125](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:125](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L125)
 
 ___
 
@@ -267,7 +267,7 @@ StateType.acOverloadAlarmsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:167](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L167)
 
 ___
 
@@ -281,7 +281,7 @@ StateType.acPowerDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:163](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L163)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:163](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L163)
 
 ___
 
@@ -295,7 +295,7 @@ StateType.acPowerFactor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:151](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:151](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L151)
 
 ___
 
@@ -309,7 +309,7 @@ StateType.acPowerMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:162](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:162](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L162)
 
 ___
 
@@ -323,7 +323,7 @@ StateType.acPowerOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:170](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:170](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L170)
 
 ___
 
@@ -337,7 +337,7 @@ StateType.acReactivePowerOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:171](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L171)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:171](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L171)
 
 ___
 
@@ -351,7 +351,7 @@ StateType.acVoltageDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:159](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:159](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L159)
 
 ___
 
@@ -365,7 +365,7 @@ StateType.acVoltageMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:158](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:158](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L158)
 
 ___
 
@@ -379,7 +379,7 @@ StateType.acVoltageOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:168](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:168](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L168)
 
 ___
 
@@ -393,7 +393,7 @@ StateType.activeCurrentPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:179](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L179)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:179](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L179)
 
 ___
 
@@ -407,7 +407,7 @@ StateType.activeCurrentPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:201](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:201](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L201)
 
 ___
 
@@ -421,7 +421,7 @@ StateType.activePower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:146](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:146](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L146)
 
 ___
 
@@ -435,7 +435,7 @@ StateType.activePowerMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:148](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:148](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L148)
 
 ___
 
@@ -449,7 +449,7 @@ StateType.activePowerMaxPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:189](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:189](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L189)
 
 ___
 
@@ -463,7 +463,7 @@ StateType.activePowerMaxPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:211](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L211)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:211](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L211)
 
 ___
 
@@ -477,7 +477,7 @@ StateType.activePowerMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:147](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:147](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L147)
 
 ___
 
@@ -491,7 +491,7 @@ StateType.activePowerMinPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:188](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:188](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L188)
 
 ___
 
@@ -505,7 +505,7 @@ StateType.activePowerMinPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:210](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L210)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:210](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L210)
 
 ___
 
@@ -519,7 +519,7 @@ StateType.activePowerPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:187](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:187](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L187)
 
 ___
 
@@ -533,7 +533,7 @@ StateType.activePowerPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:209](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:209](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L209)
 
 ___
 
@@ -547,7 +547,7 @@ StateType.apparentPower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:150](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L150)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:150](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L150)
 
 ___
 
@@ -561,7 +561,7 @@ StateType.apparentPowerPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:191](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:191](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L191)
 
 ___
 
@@ -575,7 +575,7 @@ StateType.apparentPowerPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:213](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L213)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:213](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L213)
 
 ___
 
@@ -589,7 +589,7 @@ StateType.averageRmsOverVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:172](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L172)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:172](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L172)
 
 ___
 
@@ -603,7 +603,7 @@ StateType.averageRmsOverVoltageCounterPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:194](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L194)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:194](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L194)
 
 ___
 
@@ -617,7 +617,7 @@ StateType.averageRmsOverVoltageCounterPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:216](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L216)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:216](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L216)
 
 ___
 
@@ -631,7 +631,7 @@ StateType.averageRmsUnderVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:173](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L173)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:173](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L173)
 
 ___
 
@@ -645,7 +645,7 @@ StateType.averageRmsUnderVoltageCounter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:153](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:153](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L153)
 
 ___
 
@@ -659,7 +659,7 @@ StateType.averageRmsUnderVoltageCounterPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:195](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L195)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:195](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L195)
 
 ___
 
@@ -673,7 +673,7 @@ StateType.averageRmsUnderVoltageCounterPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:217](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L217)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:217](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L217)
 
 ___
 
@@ -687,7 +687,7 @@ StateType.averageRmsVoltageMeasurementPeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:152](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:152](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L152)
 
 ___
 
@@ -701,7 +701,7 @@ StateType.averageRmsVoltageMeasurementPeriodPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:193](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L193)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:193](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L193)
 
 ___
 
@@ -715,7 +715,7 @@ StateType.averageRmsVoltageMeasurementPeriodPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:215](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:215](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L215)
 
 ___
 
@@ -729,7 +729,7 @@ StateType.dcCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:46](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L46)
 
 ___
 
@@ -743,7 +743,7 @@ StateType.dcCurrentDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:55](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:55](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L55)
 
 ___
 
@@ -757,7 +757,7 @@ StateType.dcCurrentMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:48](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L48)
 
 ___
 
@@ -771,7 +771,7 @@ StateType.dcCurrentMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:47](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L47)
 
 ___
 
@@ -785,7 +785,7 @@ StateType.dcCurrentMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:54](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L54)
 
 ___
 
@@ -799,7 +799,7 @@ StateType.dcCurrentOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:166](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:166](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L166)
 
 ___
 
@@ -813,7 +813,7 @@ StateType.dcOverloadAlarmsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:164](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:164](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L164)
 
 ___
 
@@ -827,7 +827,7 @@ StateType.dcPower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L49)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:49](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L49)
 
 ___
 
@@ -841,7 +841,7 @@ StateType.dcPowerDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:57](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L57)
 
 ___
 
@@ -855,7 +855,7 @@ StateType.dcPowerMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L51)
 
 ___
 
@@ -869,7 +869,7 @@ StateType.dcPowerMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:50](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L50)
 
 ___
 
@@ -883,7 +883,7 @@ StateType.dcPowerMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:56](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:56](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L56)
 
 ___
 
@@ -897,7 +897,7 @@ StateType.dcVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L43)
 
 ___
 
@@ -911,7 +911,7 @@ StateType.dcVoltageDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:53](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:53](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L53)
 
 ___
 
@@ -925,7 +925,7 @@ StateType.dcVoltageMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:45](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L45)
 
 ___
 
@@ -939,7 +939,7 @@ StateType.dcVoltageMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L44)
 
 ___
 
@@ -953,7 +953,7 @@ StateType.dcVoltageMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L52)
 
 ___
 
@@ -967,7 +967,7 @@ StateType.dcVoltageOverload
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:165](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:165](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L165)
 
 ___
 
@@ -981,7 +981,7 @@ StateType.harmonicCurrentMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:129](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:129](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L129)
 
 ___
 
@@ -995,7 +995,7 @@ StateType.instantaneousActiveCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:137](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L137)
 
 ___
 
@@ -1009,7 +1009,7 @@ StateType.instantaneousLineCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:136](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:136](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L136)
 
 ___
 
@@ -1023,7 +1023,7 @@ StateType.instantaneousPower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:139](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:139](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L139)
 
 ___
 
@@ -1037,7 +1037,7 @@ StateType.instantaneousReactiveCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:138](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:138](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L138)
 
 ___
 
@@ -1051,7 +1051,7 @@ StateType.instantaneousVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:135](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L135)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:135](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L135)
 
 ___
 
@@ -1065,7 +1065,7 @@ StateType.lineCurrentPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:178](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L178)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:178](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L178)
 
 ___
 
@@ -1079,7 +1079,7 @@ StateType.lineCurrentPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:200](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:200](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L200)
 
 ___
 
@@ -1093,7 +1093,7 @@ StateType.measured11ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:90](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:90](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L90)
 
 ___
 
@@ -1107,7 +1107,7 @@ StateType.measured1StHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:65](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:65](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L65)
 
 ___
 
@@ -1121,7 +1121,7 @@ StateType.measured3RdHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:70](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L70)
 
 ___
 
@@ -1135,7 +1135,7 @@ StateType.measured5ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L75)
 
 ___
 
@@ -1149,7 +1149,7 @@ StateType.measured7ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:80](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:80](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L80)
 
 ___
 
@@ -1163,7 +1163,7 @@ StateType.measured9ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:85](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L85)
 
 ___
 
@@ -1177,7 +1177,7 @@ StateType.measuredPhase11ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:120](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:120](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L120)
 
 ___
 
@@ -1191,7 +1191,7 @@ StateType.measuredPhase1StHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:95](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:95](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L95)
 
 ___
 
@@ -1205,7 +1205,7 @@ StateType.measuredPhase3RdHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:100](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L100)
 
 ___
 
@@ -1219,7 +1219,7 @@ StateType.measuredPhase5ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:105](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L105)
 
 ___
 
@@ -1233,7 +1233,7 @@ StateType.measuredPhase7ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:110](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:110](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L110)
 
 ___
 
@@ -1247,7 +1247,7 @@ StateType.measuredPhase9ThHarmonicCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:115](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:115](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L115)
 
 ___
 
@@ -1261,7 +1261,7 @@ StateType.measurementType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:42](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L42)
 
 ___
 
@@ -1275,7 +1275,7 @@ StateType.neutralCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L61)
 
 ___
 
@@ -1289,7 +1289,7 @@ StateType.phaseHarmonicCurrentMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:130](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:130](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L130)
 
 ___
 
@@ -1303,7 +1303,7 @@ StateType.powerDivisor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:128](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L128)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:128](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L128)
 
 ___
 
@@ -1317,7 +1317,7 @@ StateType.powerFactorPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:192](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:192](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L192)
 
 ___
 
@@ -1331,7 +1331,7 @@ StateType.powerFactorPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:214](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:214](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L214)
 
 ___
 
@@ -1345,7 +1345,7 @@ StateType.powerMultiplier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:127](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L127)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:127](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L127)
 
 ___
 
@@ -1359,7 +1359,7 @@ StateType.reactiveCurrentPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:180](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L180)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:180](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L180)
 
 ___
 
@@ -1373,7 +1373,7 @@ StateType.reactiveCurrentPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:202](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:202](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L202)
 
 ___
 
@@ -1387,7 +1387,7 @@ StateType.reactivePower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:149](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:149](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L149)
 
 ___
 
@@ -1401,7 +1401,7 @@ StateType.reactivePowerPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:190](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:190](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L190)
 
 ___
 
@@ -1415,7 +1415,7 @@ StateType.reactivePowerPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:212](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:212](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L212)
 
 ___
 
@@ -1429,7 +1429,7 @@ StateType.rmsCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:143](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L143)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:143](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L143)
 
 ___
 
@@ -1443,7 +1443,7 @@ StateType.rmsCurrentMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:145](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:145](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L145)
 
 ___
 
@@ -1457,7 +1457,7 @@ StateType.rmsCurrentMaxPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:186](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:186](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L186)
 
 ___
 
@@ -1471,7 +1471,7 @@ StateType.rmsCurrentMaxPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:208](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:208](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L208)
 
 ___
 
@@ -1485,7 +1485,7 @@ StateType.rmsCurrentMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:144](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:144](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L144)
 
 ___
 
@@ -1499,7 +1499,7 @@ StateType.rmsCurrentMinPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:185](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L185)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:185](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L185)
 
 ___
 
@@ -1513,7 +1513,7 @@ StateType.rmsCurrentMinPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:207](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:207](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L207)
 
 ___
 
@@ -1527,7 +1527,7 @@ StateType.rmsCurrentPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:184](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:184](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L184)
 
 ___
 
@@ -1541,7 +1541,7 @@ StateType.rmsCurrentPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:206](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L206)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:206](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L206)
 
 ___
 
@@ -1555,7 +1555,7 @@ StateType.rmsExtremeOverVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:174](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L174)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:174](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L174)
 
 ___
 
@@ -1569,7 +1569,7 @@ StateType.rmsExtremeOverVoltagePeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:154](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:154](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L154)
 
 ___
 
@@ -1583,7 +1583,7 @@ StateType.rmsExtremeOverVoltagePeriodPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:196](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:196](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L196)
 
 ___
 
@@ -1597,7 +1597,7 @@ StateType.rmsExtremeOverVoltagePeriodPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:218](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:218](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L218)
 
 ___
 
@@ -1611,7 +1611,7 @@ StateType.rmsExtremeUnderVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:175](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:175](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L175)
 
 ___
 
@@ -1625,7 +1625,7 @@ StateType.rmsExtremeUnderVoltagePeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:155](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:155](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L155)
 
 ___
 
@@ -1639,7 +1639,7 @@ StateType.rmsExtremeUnderVoltagePeriodPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:197](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:197](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L197)
 
 ___
 
@@ -1653,7 +1653,7 @@ StateType.rmsExtremeUnderVoltagePeriodPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:219](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L219)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:219](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L219)
 
 ___
 
@@ -1667,7 +1667,7 @@ StateType.rmsVoltage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:140](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:140](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L140)
 
 ___
 
@@ -1681,7 +1681,7 @@ StateType.rmsVoltageMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:142](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L142)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:142](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L142)
 
 ___
 
@@ -1695,7 +1695,7 @@ StateType.rmsVoltageMaxPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:183](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:183](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L183)
 
 ___
 
@@ -1709,7 +1709,7 @@ StateType.rmsVoltageMaxPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:205](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:205](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L205)
 
 ___
 
@@ -1723,7 +1723,7 @@ StateType.rmsVoltageMin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:141](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:141](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L141)
 
 ___
 
@@ -1737,7 +1737,7 @@ StateType.rmsVoltageMinPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L182)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L182)
 
 ___
 
@@ -1751,7 +1751,7 @@ StateType.rmsVoltageMinPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:204](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L204)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:204](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L204)
 
 ___
 
@@ -1765,7 +1765,7 @@ StateType.rmsVoltagePhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L181)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L181)
 
 ___
 
@@ -1779,7 +1779,7 @@ StateType.rmsVoltagePhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:203](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L203)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:203](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L203)
 
 ___
 
@@ -1793,7 +1793,7 @@ StateType.rmsVoltageSag
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:176](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L176)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:176](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L176)
 
 ___
 
@@ -1807,7 +1807,7 @@ StateType.rmsVoltageSagPeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:156](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L156)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:156](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L156)
 
 ___
 
@@ -1821,7 +1821,7 @@ StateType.rmsVoltageSagPeriodPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:198](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:198](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L198)
 
 ___
 
@@ -1835,7 +1835,7 @@ StateType.rmsVoltageSagPeriodPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:220](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L220)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:220](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L220)
 
 ___
 
@@ -1849,7 +1849,7 @@ StateType.rmsVoltageSwell
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:177](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:177](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L177)
 
 ___
 
@@ -1863,7 +1863,7 @@ StateType.rmsVoltageSwellPeriod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:157](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:157](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L157)
 
 ___
 
@@ -1877,7 +1877,7 @@ StateType.rmsVoltageSwellPeriodPhaseB
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:199](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:199](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L199)
 
 ___
 
@@ -1891,7 +1891,7 @@ StateType.rmsVoltageSwellPeriodPhaseC
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L221)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:221](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L221)
 
 ___
 
@@ -1905,7 +1905,7 @@ StateType.totalActivePower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:62](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L62)
 
 ___
 
@@ -1919,7 +1919,7 @@ StateType.totalApparentPower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:64](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L64)
 
 ___
 
@@ -1933,4 +1933,4 @@ StateType.totalReactivePower
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:63](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L63)

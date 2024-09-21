@@ -61,7 +61,7 @@ A MediaPlaybackCluster supports these elements if it supports feature AdvancedSe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:228](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:228](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L228)
 
 ___
 
@@ -96,7 +96,7 @@ These elements and properties are present in all MediaPlayback clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:408](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L408)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:408](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L408)
 
 ___
 
@@ -106,9 +106,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:529](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L529)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:529](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L529)
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:531](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L531)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:531](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L531)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:516](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L516)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:516](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L516)
 
 ___
 
@@ -132,9 +132,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:583](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L583)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:583](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L583)
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:585](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L585)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:585](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L585)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:538](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L538)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:538](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L538)
 
 ___
 
@@ -164,7 +164,7 @@ MatterSpecification.v11.Cluster § 6.10.5.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:27](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:27](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L27)
 
 ___
 
@@ -180,7 +180,7 @@ MatterSpecification.v11.Cluster § 6.10.4.12
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:125](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:125](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L125)
 
 ___
 
@@ -196,7 +196,7 @@ MatterSpecification.v11.Cluster § 6.10.4.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:61](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L61)
 
 ___
 
@@ -212,7 +212,7 @@ MatterSpecification.v11.Cluster § 6.10.4.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:204](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L204)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:204](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L204)
 
 ___
 
@@ -228,7 +228,7 @@ MatterSpecification.v11.Cluster § 6.10.4.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:178](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L178)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:178](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L178)
 
 ___
 
@@ -248,4 +248,4 @@ A MediaPlaybackCluster supports these elements if it supports feature VariableSp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:343](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:343](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L343)

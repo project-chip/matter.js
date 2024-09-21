@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:82](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:82](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L82)
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:84](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:84](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L84)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:56](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:56](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L56)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:85](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L85)
 
 ___
 
@@ -76,4 +76,4 @@ MatterSpecification.v11.Core § 9.15.14.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:33](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L33)

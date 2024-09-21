@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:388](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/util/Observable.ts#L388)
+[packages/matter.js/src/util/Observable.ts:388](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/util/Observable.ts#L388)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:401](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/util/Observable.ts#L401)
+[packages/matter.js/src/util/Observable.ts:401](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/util/Observable.ts#L401)
 
 ___
 
@@ -64,7 +64,7 @@ untyped instance and allow any argument.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:386](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/util/Observable.ts#L386)
+[packages/matter.js/src/util/Observable.ts:386](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/util/Observable.ts#L386)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:405](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/util/Observable.ts#L405)
+[packages/matter.js/src/util/Observable.ts:405](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/util/Observable.ts#L405)
 
 ___
 
@@ -101,4 +101,4 @@ an untyped emitter and allow any argument.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:397](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/util/Observable.ts#L397)
+[packages/matter.js/src/util/Observable.ts:397](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/util/Observable.ts#L397)

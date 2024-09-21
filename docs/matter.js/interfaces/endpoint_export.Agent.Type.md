@@ -40,4 +40,4 @@ Behaviors available at construction time are available as instance properties.  
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:163](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Agent.ts#L163)
+[packages/matter.js/src/endpoint/Agent.ts:163](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/endpoint/Agent.ts#L163)

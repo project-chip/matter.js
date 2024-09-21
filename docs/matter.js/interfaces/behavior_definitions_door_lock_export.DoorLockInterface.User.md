@@ -37,7 +37,7 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:187](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L187)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:187](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L187)
 
 ___
 
@@ -61,7 +61,7 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:172](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L172)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:172](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L172)
 
 ___
 
@@ -85,7 +85,7 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:182](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L182)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:182](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L182)
 
 ___
 
@@ -109,7 +109,7 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L167)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:167](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L167)
 
 ___
 
@@ -133,7 +133,7 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:177](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L177)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:177](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L177)
 
 ___
 
@@ -157,4 +157,4 @@ MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:162](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L162)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:162](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L162)

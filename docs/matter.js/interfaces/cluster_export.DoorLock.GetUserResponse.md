@@ -41,7 +41,7 @@ TypeFromSchema.creatorFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:332](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:332](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L332)
 
 ___
 
@@ -55,7 +55,7 @@ TypeFromSchema.credentialRule
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:330](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L330)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:330](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L330)
 
 ___
 
@@ -69,7 +69,7 @@ TypeFromSchema.credentials
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:331](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L331)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:331](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L331)
 
 ___
 
@@ -83,7 +83,7 @@ TypeFromSchema.lastModifiedFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:333](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:333](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L333)
 
 ___
 
@@ -97,7 +97,7 @@ TypeFromSchema.nextUserIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:334](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L334)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:334](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L334)
 
 ___
 
@@ -111,7 +111,7 @@ TypeFromSchema.userIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:325](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L325)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:325](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L325)
 
 ___
 
@@ -125,7 +125,7 @@ TypeFromSchema.userName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:326](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L326)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:326](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L326)
 
 ___
 
@@ -139,7 +139,7 @@ TypeFromSchema.userStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:328](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L328)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:328](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L328)
 
 ___
 
@@ -153,7 +153,7 @@ TypeFromSchema.userType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:329](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L329)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:329](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L329)
 
 ___
 
@@ -167,4 +167,4 @@ TypeFromSchema.userUniqueId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:327](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L327)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:327](https://github.com/project-chip/matter.js/blob/0c058ae17fdba4c0b89b8b13c309011d51782299/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L327)
