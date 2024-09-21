@@ -168,6 +168,7 @@ export class SecureSession extends Session {
                 interactionModelRevision: this.interactionModelRevision,
                 specificationVersion: this.specificationVersion,
                 maxPathsPerInvoke: this.maxPathsPerInvoke,
+                caseAuthenticatedTags: this.#caseAuthenticatedTags,
             }),
         );
     }

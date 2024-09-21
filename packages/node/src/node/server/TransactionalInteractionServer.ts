@@ -8,6 +8,7 @@ import { AccessControl } from "#behavior/AccessControl.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
+import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlCluster } from "#clusters/access-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
@@ -153,8 +154,15 @@ export class TransactionalInteractionServer extends InteractionServer {
         fabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
+        offline = false,
     ) {
-        const readAttribute = () => super.readAttribute(path, attribute, exchange, fabricFiltered, message, endpoint);
+        const readAttribute = () =>
+            super.readAttribute(path, attribute, exchange, fabricFiltered, message, endpoint, offline);
+
+        // Offline read do not require ACL checks
+        if (offline) {
+            return OfflineContext.act("offline-read", this.#activity, readAttribute);
+        }
 
         return OnlineContext({
             activity: (exchange as WithActivity)[activityKey],
