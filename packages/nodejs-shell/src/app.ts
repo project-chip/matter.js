@@ -13,7 +13,7 @@ import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
 
-const PROMPT = "matter-node> ";
+const PROMPT = "matter> ";
 const logger = Logger.get("Shell");
 if (process.stdin?.isTTY) Logger.format = LogFormat.ANSI;
 
@@ -110,7 +110,7 @@ async function main() {
                 }
                 setLogLevel("default", await theNode.Store.get<string>("LogLevel", "info"));
 
-                const theShell = new Shell(theNode, PROMPT);
+                const theShell = new Shell(theNode, nodeNum, PROMPT);
 
                 if (bleHciId !== undefined) {
                     await theNode.Store.set("BleHciId", bleHciId);

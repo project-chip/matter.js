@@ -44,6 +44,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter.js/nodejs-shell:
     - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
     - Enhancement: Added option to specify if attributes are loaded from remote or locally
+    - Enhancement: The shell now saves a 100 history of commands and restores this on startup
 
 -   @matter.js/protocol:
     -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
