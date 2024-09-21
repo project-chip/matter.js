@@ -166,6 +166,7 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
                 interactionModelRevision: this.interactionModelRevision,
                 specificationVersion: this.specificationVersion,
                 maxPathsPerInvoke: this.maxPathsPerInvoke,
+                caseAuthenticatedTags: this.#caseAuthenticatedTags,
             }),
         );
     }

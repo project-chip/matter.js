@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter-Core functionality:
+    -   Fix: Excludes subscription based attribute change reads from acl check in all cases
+
 ## 0.10.5 (2024-09-20)
 
 -   Matter-Core functionality:
