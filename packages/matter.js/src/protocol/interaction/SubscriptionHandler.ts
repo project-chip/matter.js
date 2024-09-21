@@ -72,7 +72,11 @@ export class SubscriptionHandler {
     private readonly eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
     private readonly isFabricFiltered: boolean;
     private readonly cancelCallback: () => void;
-    private readonly readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+    private readonly readAttribute: (
+        path: AttributePath,
+        attribute: AnyAttributeServer<any>,
+        offline?: boolean,
+    ) => Promise<any>;
     private readonly readEvent: (
         path: EventPath,
         event: AnyEventServer<any, any>,
@@ -125,7 +129,7 @@ export class SubscriptionHandler {
         maxIntervalCeiling: number;
         cancelCallback: () => void;
         subscriptionOptions: SubscriptionOptions.Configuration;
-        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>, offline?: boolean) => Promise<any>;
         readEvent: (
             path: EventPath,
             event: AnyEventServer<any, any>,
@@ -727,8 +731,8 @@ export class SubscriptionHandler {
         if (attribute instanceof FabricScopedAttributeServer) {
             // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we cannot get the value?
-            return this.readAttribute(path, attribute).then(({ value }) => {
+            // TODO: Remove this once we remove the legacy API and go away from using AttributeServers in the background
+            return this.readAttribute(path, attribute, true).then(({ value }) => {
                 this.outstandingAttributeUpdates.set(attributePathToId(path), {
                     attribute,
                     path,
