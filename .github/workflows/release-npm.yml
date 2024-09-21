@@ -117,7 +117,7 @@ jobs:
           if [[ "$PRERELEASE" == "true" ]]; then
             npx lerna publish from-package --yes --dist-tag dev
           else
-            npx lerna publish from-package --yes
+            npx lerna publish from-package --yes --dist-tag legacy
           fi
 
       - name: Create Github Release

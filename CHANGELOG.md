@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Fix: makes sure subscription data updates are mot checking acl permissions
+  * Fix: Only use CATs from CASE session and not former ones from fabric 
+
 ### 0.9.4 (2024-07-19)
 * Matter-Core functionality:
   * Feature: Allows to generate Certification declarations flagged as provisional for certification purposes

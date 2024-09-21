@@ -150,7 +150,7 @@ export class SecureSession<T> extends Session<T> {
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
         this.#subscriptionChangedCallback = subscriptionChangedCallback;
-        this.#caseAuthenticatedTags = caseAuthenticatedTags ?? fabric?.caseAuthenticatedTags ?? [];
+        this.#caseAuthenticatedTags = caseAuthenticatedTags ?? [];
 
         fabric?.addSession(this);
 
@@ -161,6 +161,7 @@ export class SecureSession<T> extends Session<T> {
                 idleIntervalMs: this.idleIntervalMs,
                 activeIntervalMs: this.activeIntervalMs,
                 activeThresholdMs: this.activeThresholdMs,
+                caseAuthenticatedTags: this.#caseAuthenticatedTags,
             }),
         );
     }
@@ -216,7 +217,7 @@ export class SecureSession<T> extends Session<T> {
         const securityFlags = headerBytes[3];
         const sessionNodeId = this.isPase
             ? NodeId.UNSPECIFIED_NODE_ID
-            : this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+            : (this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID);
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
@@ -234,7 +235,6 @@ export class SecureSession<T> extends Session<T> {
             throw new MatterFlowError("Session already has an associated Fabric. Cannot change this.");
         }
         this.#fabric = fabric;
-        this.#caseAuthenticatedTags = fabric.caseAuthenticatedTags;
     }
 
     get id() {
