@@ -566,8 +566,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         isFabricFiltered: boolean,
         message: Message,
         _endpoint: EndpointInterface,
+        offline = false,
     ) {
-        return attribute.getWithVersion(exchange.session, isFabricFiltered, message);
+        return attribute.getWithVersion(exchange.session, isFabricFiltered, offline ? undefined : message);
     }
 
     protected async readEvent(
@@ -1025,7 +1026,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             maxIntervalCeiling: maxIntervalCeilingSeconds,
             cancelCallback: () => this.#subscriptionMap.delete(subscriptionId),
             subscriptionOptions: this.#subscriptionConfig,
-            readAttribute: (path, attribute) =>
+            readAttribute: (path, attribute, checkAcl = true) =>
                 this.readAttribute(
                     path,
                     attribute,
@@ -1033,6 +1034,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     isFabricFiltered,
                     message,
                     this.#endpointStructure.getEndpoint(path.endpointId)!,
+                    checkAcl,
                 ),
             readEvent: (path, event, eventFilters) =>
                 this.readEvent(
