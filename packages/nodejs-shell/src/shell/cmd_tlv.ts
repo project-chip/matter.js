@@ -5,8 +5,7 @@
  */
 
 import { Bytes, Logger, serialize, UnexpectedDataError } from "#general";
-import { TlvAny } from "#types";
-import { TlvArrayReader, TlvElement, TlvStream, TlvType } from "@matter.js/types";
+import { TlvAny, TlvArrayReader, TlvElement, TlvStream, TlvType } from "#types";
 import type { Argv } from "yargs";
 
 const logger = Logger.get("tlv");
