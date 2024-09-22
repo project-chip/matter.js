@@ -35,11 +35,6 @@
         "#nodejs": "@matter.js/nodejs",
         "#*": "./src/*"
     },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "ts-node": "^10.9.2",
-        "typescript": "~5.5.3"
-    },
     "dependencies": {
         "@matter.js/nodejs": "*",
         "@matter.js/general": "*",
@@ -53,6 +48,9 @@
         "react-native-polyfill-globals": "^3.1.0",
         "react-native-quick-crypto": "^0.7.4",
         "react-native-udp": "^4.1.7"
+    },
+    "devDependencies": {
+        "@matter.js/tools": "*"
     },
     "overrides": {
         "brorand": "npm:@matter.js/brorand@1.1.0"

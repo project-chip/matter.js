@@ -35,16 +35,12 @@
         "#general": "@matter.js/general",
         "#types": "@matter.js/types"
     },
-    "devDependencies": {
-        "typescript": "~5.5.3"
-    },
     "dependencies": {
         "@matter.js/nodejs-ble": "*",
         "@matter.js/nodejs": "*",
         "@matter.js/general": "*",
         "@project-chip/matter.js": "*",
         "@matter.js/tools": "*",
-        "child_process": "^1.0.2",
         "yargs": "^17.7.2"
     },
     "engines": {

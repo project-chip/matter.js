@@ -10,9 +10,6 @@
     },
     "references": [
         {
-            "path": "../../../codegen/src"
-        },
-        {
             "path": "../../general/src"
         },
         {

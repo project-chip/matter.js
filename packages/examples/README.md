@@ -16,7 +16,7 @@ For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-
 The examples provided by this repository show different use cases demonstrating how to build different device types and show various ways to implement and interact with the matter.js structures. This section gives an overview regarding what the different examples demonstrate.
 
 > [!IMPORTANT]
-> With matter.js 0.8 we introduced a new API that is not compatible with the old API. The new API is more flexible and allows for more complex use cases. The old API is still supported but will be removed in a future release. The examples are provided for both APIs. The new API examples are named without "Legacy" in the filename and the npm run script is named without "-legacy". The old API examples are named with "Legacy" in the filename and the npm run script is named with "-legacy".
+> With matter.js 0.8 we introduced a new API that is not compatible with the old API. The new API is more flexible and allows for more complex use cases. The old API is still supported but will be removed in a future release. The examples for the old API are available in the NPM package @project-chip/matter-node.js-examples.
 
 ## Device Examples
 Some command line parameters, for example those used to set the level of logging or the MDNS interface are now included in the new environment processing. These can be set by generic command line arguments or by using environment variables. These parameters are processed automatically so are no longer handled by the new example code directly. These are:

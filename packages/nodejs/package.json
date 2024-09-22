@@ -56,8 +56,7 @@
         "@matter.js/protocol": "*",
         "@matter.js/tools": "*",
         "@types/bytebuffer": "^5.0.49",
-        "@types/node-localstorage": "^1.3.3",
-        "typescript": "~5.5.3"
+        "@types/node-localstorage": "^1.3.3"
     },
     "files": [
         "dist/**/*",

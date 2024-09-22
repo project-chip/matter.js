@@ -53,9 +53,7 @@
         "@matter.js/react-native": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "@matter.js/codegen": "*",
-        "typescript": "~5.5.3"
+        "@matter.js/tools": "*"
     },
     "files": [
         "dist/**/*",
