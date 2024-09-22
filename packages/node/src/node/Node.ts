@@ -150,7 +150,7 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
         return ["Runtime for", Diagnostic.strong(this.toString())];
     }
 
-    get [Diagnostic.value](): unknown {
+    override get [Diagnostic.value](): unknown {
         const nodeActivity = this.#environment.get(NodeActivity);
         using _activity = nodeActivity.begin("diagnostics");
         return Diagnostic.node("🧩", this.id, {

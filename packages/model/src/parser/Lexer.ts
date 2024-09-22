@@ -70,7 +70,7 @@ function* lex(
 
     function tokenizeName(): Token | BasicToken.Word {
         const chars = [current.value];
-        while (isNameChar(peeked.value)) {
+        while (peeked.value !== undefined && isNameChar(peeked.value)) {
             next();
             chars.push(current.value);
         }
@@ -83,7 +83,7 @@ function* lex(
         return { type: "word", value: name, startLine, startChar };
     }
 
-    function binaryValueOf(digit: string) {
+    function binaryValueOf(digit: string | undefined) {
         if (digit === "0") {
             return 0;
         }
@@ -92,13 +92,19 @@ function* lex(
         }
     }
 
-    function decimalValueOf(digit: string) {
+    function decimalValueOf(digit: string | undefined) {
+        if (digit === undefined) {
+            return;
+        }
         if (digit >= "0" && digit <= "9") {
             return digit.charCodeAt(0) - "0".charCodeAt(0);
         }
     }
 
-    function hexadecimalValueOf(digit: string) {
+    function hexadecimalValueOf(digit: string | undefined) {
+        if (digit === undefined) {
+            return;
+        }
         if (digit >= "0" && digit <= "9") {
             return digit.charCodeAt(0) - "0".charCodeAt(0);
         }
@@ -133,7 +139,11 @@ function* lex(
         return tokenizeDigits(10, sign, decimalValueOf);
     }
 
-    function tokenizeDigits(base: number, sign: number, valueOf: (digit: string[1]) => number | undefined): BasicToken {
+    function tokenizeDigits(
+        base: number,
+        sign: number,
+        valueOf: (digit: string[1] | undefined) => number | undefined,
+    ): BasicToken {
         // The first digit may not actually be a digit if number is hexadecimal or binary
         let num = valueOf(current.value);
         if (num === undefined) {
@@ -187,7 +197,7 @@ function* lex(
                 break;
 
             case "-":
-                if (peeked.value >= "0" || peeked.value <= "0") {
+                if (peeked.value !== undefined && (peeked.value >= "0" || peeked.value <= "0")) {
                     yield tokenizeNumber(-1);
                 } else {
                     yield { type: current.value, startLine: line, startChar: char };

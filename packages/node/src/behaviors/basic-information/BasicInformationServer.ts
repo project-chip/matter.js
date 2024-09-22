@@ -84,7 +84,7 @@ export class BasicInformationServer extends Base {
         }
     }
 
-    [Symbol.asyncDispose]() {
+    override [Symbol.asyncDispose]() {
         this.events.shutDown?.emit(undefined, this.context);
     }
 
