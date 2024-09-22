@@ -46,8 +46,7 @@
         "@matter.js/types": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "@matter.js/tools": "*"
     },
     "files": [
         "dist/**/*",

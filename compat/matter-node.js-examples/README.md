@@ -1,6 +1,7 @@
 # matter-node.js-examples
 
-The examples in this package are deprecated.  We will remove them in a future release when we remove the corresponding
+> [!IMPORTANT]
+> The examples in this package are deprecated.  We will remove them in a future release when we remove the corresponding
 deprecated API surface area.
 
 Current examples are in [@matter.js/examples](../../packages/examples/README.md).

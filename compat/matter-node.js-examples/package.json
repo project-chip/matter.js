@@ -42,13 +42,12 @@
         "matter-controller-legacy": "dist/esm/examples/ControllerNodeLegacy.js",
         "matter-legacystorageconverter": "dist/esm/examples/LegacyStorageConverter.js"
     },
-    "devDependencies": {
-        "typescript": "~5.5.3",
-        "@matter.js/tools": "*"
-    },
     "dependencies": {
         "@project-chip/matter-node-ble.js": "*",
         "@project-chip/matter.js": "*"
+    },
+    "devDependencies": {
+        "@matter.js/tools": "*"
     },
     "engines": {
         "node": ">=18.0.0"

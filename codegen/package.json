@@ -36,6 +36,12 @@
         "@matter.js/tools": "*",
         "@matter.js/intermediate-models": "*"
     },
+    "devDependencies": {
+        "@types/jsdom": "^21.1.6",
+        "jsdom": "^25.0.0",
+        "word-list": "^4.0.0",
+        "yargs": "^17.7.2"
+    },
     "imports": {
         "#general": "@matter.js/general",
         "#model": "@matter.js/model",
@@ -54,13 +60,5 @@
     },
     "engines": {
         "node": ">=18.0.0"
-    },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "@types/jsdom": "^21.1.6",
-        "jsdom": "^25.0.0",
-        "typescript": "~5.5.3",
-        "word-list": "^4.0.0",
-        "yargs": "^17.7.2"
     }
 }
