@@ -53,7 +53,8 @@
         "@matter.js/node": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter.js/tools": "*",
+        "@matter.js/codegen": "*"
     },
     "files": [
         "dist/**/*",
