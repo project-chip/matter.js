@@ -364,6 +364,10 @@ export class ExchangeManager {
     }
 
     #cleanupSessionExchanges(sessionId: number) {
+        if (sessionId === UNICAST_UNSECURE_SESSION_ID) {
+            // PASE/CASE exchanges are not relevant for this limit
+            return;
+        }
         const sessionExchanges = Array.from(this.exchanges.values()).filter(
             exchange => exchange.session.id === sessionId && !exchange.isClosing,
         );
