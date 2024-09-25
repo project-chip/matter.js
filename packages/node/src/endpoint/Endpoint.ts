@@ -25,6 +25,7 @@ import { EndpointNumber } from "#types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
 import { Behaviors } from "./properties/Behaviors.js";
+import { EndpointContainer } from "./properties/EndpointContainer.js";
 import { EndpointInitializer } from "./properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "./properties/EndpointLifecycle.js";
 import { Parts } from "./properties/Parts.js";
@@ -102,7 +103,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * The owner of the endpoint.
      *
-     * Every endpoint but the root endpoint (the "node") is owned by another endpoint.
+     * Every endpoint but the root endpoint (the "server node") is owned by another endpoint.
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
@@ -323,12 +324,16 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             throw new ImplementationError('Endpoint ID may not include "."');
         }
 
-        if (this.lifecycle.isInstalled && this.owner instanceof Endpoint) {
-            this.owner.parts.assertIdAvailable(id, this);
+        if (this.lifecycle.isInstalled) {
+            this.#container.assertIdAvailable(id, this);
         }
 
         this.#id = id;
         this.lifecycle.change(EndpointLifecycle.Change.IdAssigned);
+    }
+
+    protected get container(): undefined | EndpointContainer {
+        return this.owner?.parts;
     }
 
     set number(number: number) {
@@ -386,9 +391,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         this.#owner = owner;
 
         try {
-            owner.parts.add(this);
+            this.#container.add(this);
         } catch (e) {
-            owner.parts.delete(this);
+            this.#container.delete(this);
             this.#owner = undefined;
             throw e;
         }
@@ -732,6 +737,16 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             "endpoint#": this.number,
             type: `${this.type.name} (0x${this.type.deviceType.toString(16)})`,
         };
+    }
+
+    get #container() {
+        const container = this.container;
+
+        if (container === undefined) {
+            throw new ImplementationError(`No container for installed endpoint ${this}`);
+        }
+
+        return container;
     }
 }
 

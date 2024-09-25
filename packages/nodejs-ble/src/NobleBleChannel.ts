@@ -6,10 +6,12 @@
 
 import {
     Channel,
+    ChannelType,
     InternalError,
     Logger,
     NetInterface,
     ServerAddress,
+    ServerAddressBle,
     Time,
     TransportInterface,
     createPromise,
@@ -210,6 +212,21 @@ export class NobleBleCentralInterface implements NetInterface {
         for (const peripheral of this.openChannels.values()) {
             await peripheral.disconnectAsync();
         }
+    }
+
+    supports(type: ChannelType, address?: string) {
+        if (type !== ChannelType.BLE) {
+            return false;
+        }
+        if (address === undefined) {
+            return false;
+        }
+        for (const key of this.openChannels.keys()) {
+            if ((key as ServerAddressBle).peripheralAddress === address) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

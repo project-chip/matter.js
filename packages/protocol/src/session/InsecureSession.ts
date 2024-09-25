@@ -4,37 +4,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterFlowError } from "#general";
+import { Logger, MatterFlowError } from "#general";
 import { NodeId } from "#types";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
-import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
-import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
+import { Session, SessionParameterOptions } from "./Session.js";
+import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
+
+const logger = Logger.get("InsecureSession");
 
 export class InsecureSession extends Session {
     readonly #initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
-    readonly #context: SessionContext;
     readonly supportsMRP = true;
 
     constructor(args: {
-        context: SessionContext;
+        manager?: SessionManager;
         messageCounter: MessageCounter;
-        closeCallback: () => Promise<void>;
         initiatorNodeId?: NodeId;
         sessionParameters?: SessionParameterOptions;
         isInitiator?: boolean;
     }) {
-        const { context, initiatorNodeId, isInitiator } = args;
+        const { initiatorNodeId, isInitiator } = args;
         super({
             ...args,
             setActiveTimestamp: !isInitiator, // When we are the initiator we assume the node is in idle mode
             messageReceptionState: new MessageReceptionStateUnencryptedWithRollover(),
         });
-        this.#context = context;
         this.#initiatorNodeId = initiatorNodeId ?? NodeId.randomOperationalNodeId();
     }
 
@@ -66,10 +65,6 @@ export class InsecureSession extends Session {
         return `insecure/${this.#initiatorNodeId}`;
     }
 
-    get context() {
-        return this.#context;
-    }
-
     get id(): number {
         return UNICAST_UNSECURE_SESSION_ID;
     }
@@ -95,6 +90,7 @@ export class InsecureSession extends Session {
     }
 
     async end() {
-        await this.closeCallback?.();
+        logger.info(`End insecure session ${this.name}`);
+        this.manager?.insecureSessions.delete(this.nodeId);
     }
 }

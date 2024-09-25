@@ -11,16 +11,16 @@ import { EndpointServer } from "#endpoint/EndpointServer.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { Environment, InternalError, Logger } from "#general";
 import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
-import { ServerStore } from "./storage/ServerStore.js";
+import { NodeStore } from "../storage/NodeStore.js";
 
 const logger = Logger.get("BehaviorInit");
 
 export class ServerEndpointInitializer extends EndpointInitializer {
-    #store: ServerStore;
+    #store: NodeStore;
 
     constructor(environment: Environment) {
         super();
-        this.#store = environment.get(ServerStore);
+        this.#store = environment.get(NodeStore);
     }
 
     override initializeDescendent(endpoint: Endpoint) {
@@ -28,7 +28,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
             endpoint.id = this.#identifyPart(endpoint);
         }
 
-        this.#store.partStores.assignNumber(endpoint);
+        this.#store.endpointStores.assignNumber(endpoint);
 
         endpoint.behaviors.require(DescriptorServer);
     }

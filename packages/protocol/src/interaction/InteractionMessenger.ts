@@ -5,6 +5,7 @@
  */
 
 import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
+import { Specification } from "#model";
 import {
     Status,
     StatusCode,
@@ -41,7 +42,6 @@ import {
     encodeAttributePayload,
     encodeEventPayload,
 } from "./AttributeDataEncoder.js";
-import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
 
 export enum MessageType {
     StatusResponse = 0x01,
@@ -82,7 +82,7 @@ class InteractionMessenger {
     sendStatus(status: StatusCode) {
         return this.send(
             MessageType.StatusResponse,
-            TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),
+            TlvStatusResponse.encode({ status, interactionModelRevision: Specification.INTERACTION_MODEL_REVISION }),
         );
     }
 
@@ -518,7 +518,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     sendTimedRequest(timeoutSeconds: number) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
             timeout: timeoutSeconds,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
         });
     }
 

@@ -14,12 +14,12 @@ import { GeneralCommissioning } from "#clusters";
 import {
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Channel,
+    ChannelType,
     Construction,
     Crypto,
     ImplementationError,
     Logger,
-    NetInterface,
-    NoProviderError,
+    NetInterfaceSet,
     NoResponseTimeoutError,
     ServerAddress,
     ServerAddressIp,
@@ -34,9 +34,7 @@ import {
     isIPv6,
     serverAddressToString,
 } from "#general";
-import { Specification } from "#model";
 import {
-    Ble,
     CaseClient,
     ChannelManager,
     ClusterClient,
@@ -53,6 +51,7 @@ import {
     Fabric,
     FabricBuilder,
     FabricJsonObject,
+    FabricManager,
     InteractionClient,
     MdnsScanner,
     MessageChannel,
@@ -62,14 +61,8 @@ import {
     ResumptionRecord,
     RetransmissionLimitReachedError,
     RootCertificateManager,
-    SECURE_CHANNEL_PROTOCOL_ID,
-    SESSION_ACTIVE_INTERVAL_MS,
-    SESSION_ACTIVE_THRESHOLD_MS,
-    SESSION_IDLE_INTERVAL_MS,
-    Scanner,
-    SessionContext,
+    ScannerSet,
     SessionManager,
-    SessionParameters,
     StatusReportOnlySecureChannelProtocol,
 } from "#protocol";
 import {
@@ -79,6 +72,7 @@ import {
     FabricId,
     FabricIndex,
     NodeId,
+    SECURE_CHANNEL_PROTOCOL_ID,
     TlvEnum,
     TlvField,
     TlvObject,
@@ -136,15 +130,14 @@ export enum NodeDiscoveryType {
     FullDiscovery = 3,
 }
 
-export class MatterController implements SessionContext {
+export class MatterController {
     public static async create(options: {
         sessionStorage: StorageContext;
         rootCertificateStorage: StorageContext;
         fabricStorage: StorageContext;
         nodesStorage: StorageContext;
-        mdnsScanner: MdnsScanner;
-        netInterfaceIpv4: NetInterface | undefined;
-        netInterfaceIpv6: NetInterface;
+        scanners: ScannerSet;
+        netInterfaces: NetInterfaceSet;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
         adminVendorId?: VendorId;
         adminFabricId?: FabricId;
@@ -156,9 +149,8 @@ export class MatterController implements SessionContext {
             rootCertificateStorage,
             fabricStorage,
             nodesStorage,
-            mdnsScanner,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
+            scanners,
+            netInterfaces,
             sessionClosedCallback,
             adminVendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
             adminFabricId = FabricId(DEFAULT_FABRIC_ID),
@@ -176,9 +168,8 @@ export class MatterController implements SessionContext {
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                mdnsScanner,
-                netInterfaceIpv4,
-                netInterfaceIpv6,
+                scanners,
+                netInterfaces,
                 certificateManager,
                 fabric,
                 adminVendorId: fabric.rootVendorId,
@@ -206,9 +197,8 @@ export class MatterController implements SessionContext {
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                mdnsScanner,
-                netInterfaceIpv4,
-                netInterfaceIpv6,
+                scanners,
+                netInterfaces,
                 certificateManager,
                 fabric,
                 adminVendorId,
@@ -222,27 +212,15 @@ export class MatterController implements SessionContext {
     public static async createAsPaseCommissioner(options: {
         rootCertificateData: RootCertificateManager.Data;
         fabricData: FabricJsonObject;
-        mdnsScanner?: MdnsScanner;
-        netInterfaceIpv4?: NetInterface | undefined;
-        netInterfaceIpv6?: NetInterface;
+        scanners: ScannerSet;
+        netInterfaces: NetInterfaceSet;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
     }): Promise<MatterController> {
-        const {
-            rootCertificateData,
-            fabricData,
-            mdnsScanner,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
-            sessionClosedCallback,
-        } = options;
+        const { rootCertificateData, fabricData, scanners, netInterfaces, sessionClosedCallback } = options;
 
-        // Verify BLE initialization
-        try {
-            Ble.get();
-        } catch (error) {
-            NoProviderError.accept(error);
-
-            if (!mdnsScanner || !netInterfaceIpv6) {
+        // Verify an appropriate network interface is available
+        if (!netInterfaces.hasInterfaceFor(ChannelType.BLE)) {
+            if (!scanners.hasScannerFor(ChannelType.UDP) || !netInterfaces.hasInterfaceFor(ChannelType.UDP, "::")) {
                 throw new ImplementationError(
                     "Ble must be initialized to create a Sub Commissioner without an IP network!",
                 );
@@ -263,9 +241,8 @@ export class MatterController implements SessionContext {
         const controller = new MatterController({
             sessionStorage,
             nodesStorage,
-            mdnsScanner,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
+            scanners,
+            netInterfaces,
             certificateManager,
             fabric,
             adminVendorId: fabric.rootVendorId,
@@ -276,21 +253,18 @@ export class MatterController implements SessionContext {
     }
 
     readonly sessionManager: SessionManager;
+    private readonly netInterfaces = new NetInterfaceSet();
     private readonly channelManager = new ChannelManager(CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE);
     private readonly exchangeManager: ExchangeManager;
-    private readonly paseClient = new PaseClient();
-    private readonly caseClient = new CaseClient();
-    private netInterfaceBle: NetInterface | undefined;
-    private bleScanner: Scanner | undefined;
+    private readonly paseClient;
+    private readonly caseClient;
     private readonly commissionedNodes = new Map<NodeId, CommissionedNodeDetails>();
     #construction: Construction<MatterController>;
 
     readonly sessionStorage: StorageContext;
     readonly fabricStorage?: StorageContext;
     readonly nodesStorage: StorageContext;
-    private readonly mdnsScanner: MdnsScanner | undefined;
-    private readonly netInterfaceIpv4: NetInterface | undefined;
-    private readonly netInterfaceIpv6: NetInterface | undefined;
+    private readonly scanners: ScannerSet;
     private readonly certificateManager: RootCertificateManager;
     private readonly fabric: Fabric;
     private readonly adminVendorId: VendorId;
@@ -312,9 +286,8 @@ export class MatterController implements SessionContext {
         sessionStorage: StorageContext;
         fabricStorage?: StorageContext;
         nodesStorage: StorageContext;
-        mdnsScanner?: MdnsScanner;
-        netInterfaceIpv4?: NetInterface;
-        netInterfaceIpv6?: NetInterface;
+        scanners: ScannerSet;
+        netInterfaces: NetInterfaceSet;
         certificateManager: RootCertificateManager;
         fabric: Fabric;
         adminVendorId: VendorId;
@@ -324,9 +297,8 @@ export class MatterController implements SessionContext {
             sessionStorage,
             fabricStorage,
             nodesStorage,
-            mdnsScanner,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
+            scanners,
+            netInterfaces,
             certificateManager,
             fabric,
             sessionClosedCallback,
@@ -335,32 +307,36 @@ export class MatterController implements SessionContext {
         this.sessionStorage = sessionStorage;
         this.fabricStorage = fabricStorage;
         this.nodesStorage = nodesStorage;
-        this.mdnsScanner = mdnsScanner;
-        this.netInterfaceIpv4 = netInterfaceIpv4;
-        this.netInterfaceIpv6 = netInterfaceIpv6;
+        this.scanners = scanners;
+        this.netInterfaces = netInterfaces;
         this.certificateManager = certificateManager;
         this.fabric = fabric;
         this.sessionClosedCallback = sessionClosedCallback;
         this.adminVendorId = adminVendorId;
 
-        this.sessionManager = new SessionManager(this, sessionStorage);
-        this.sessionManager.sessionClosed.on(async session => {
-            if (!session.closingAfterExchangeFinished) {
-                // Delayed closing is executed when exchange is closed
-                await this.exchangeManager.closeSession(session);
-            }
+        const fabricManager = new FabricManager();
+        fabricManager.addFabric(fabric);
+
+        this.sessionManager = new SessionManager({
+            fabrics: fabricManager,
+            storage: sessionStorage,
+            parameters: {
+                maxPathsPerInvoke: CONTROLLER_MAX_PATHS_PER_INVOKE,
+            },
+        });
+        this.paseClient = new PaseClient(this.sessionManager);
+        this.caseClient = new CaseClient(this.sessionManager);
+        this.sessionManager.sessions.deleted.on(async session => {
             this.sessionClosedCallback?.(session.peerNodeId);
         });
+        this.sessionManager.resubmissionStarted.on(this.#handleResubmissionStarted.bind(this));
 
-        this.exchangeManager = new ExchangeManager(this.sessionManager, this.channelManager);
+        this.exchangeManager = new ExchangeManager({
+            sessionManager: this.sessionManager,
+            channelManager: this.channelManager,
+            transportInterfaces: this.netInterfaces,
+        });
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
-
-        if (netInterfaceIpv4 !== undefined) {
-            this.addTransportInterface(netInterfaceIpv4);
-        }
-        if (netInterfaceIpv6 !== undefined) {
-            this.addTransportInterface(netInterfaceIpv6);
-        }
 
         this.#construction = Construction(this, async () => {
             // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
@@ -373,7 +349,7 @@ export class MatterController implements SessionContext {
                 }
             }
 
-            await this.sessionManager.initFromStorage([this.fabric]);
+            await this.sessionManager.construction.ready;
         });
     }
 
@@ -393,53 +369,11 @@ export class MatterController implements SessionContext {
         return [this.fabric];
     }
 
-    /** Our own client/controller session parameters. */
-    get sessionParameters(): SessionParameters {
-        return {
-            idleIntervalMs: SESSION_IDLE_INTERVAL_MS,
-            activeIntervalMs: SESSION_ACTIVE_INTERVAL_MS,
-            activeThresholdMs: SESSION_ACTIVE_THRESHOLD_MS,
-            dataModelRevision: Specification.DATA_MODEL_REVISION,
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            specificationVersion: Specification.SPECIFICATION_VERSION,
-            maxPathsPerInvoke: CONTROLLER_MAX_PATHS_PER_INVOKE,
-        };
-    }
-
-    public addTransportInterface(netInterface: NetInterface) {
-        this.exchangeManager.addTransportInterface(netInterface);
-    }
-
     public collectScanners(
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = { onIpNetwork: true },
     ) {
-        const scannersToUse = new Array<Scanner>();
-
-        if (this.mdnsScanner !== undefined) {
-            scannersToUse.push(this.mdnsScanner); // Scan always on IP Network if available
-        }
-
-        if (discoveryCapabilities.ble) {
-            if (this.bleScanner === undefined) {
-                let ble: Ble;
-                try {
-                    ble = Ble.get();
-                    this.netInterfaceBle = ble.getBleCentralInterface();
-                    this.addTransportInterface(this.netInterfaceBle);
-
-                    this.bleScanner = ble.getBleScanner();
-                } catch (error) {
-                    NoProviderError.accept(error);
-
-                    logger.warn("BLE is not supported on this platform. The device to commission might not be found!");
-                }
-            }
-            // If we have an BLE Scanner then we use it
-            if (this.bleScanner !== undefined) {
-                scannersToUse.push(this.bleScanner);
-            }
-        }
-        return scannersToUse;
+        // Note we always scan on IP network if available
+        return this.scanners.filter(scanner => scanner.type !== ChannelType.BLE || discoveryCapabilities.ble);
     }
 
     /**
@@ -472,7 +406,10 @@ export class MatterController implements SessionContext {
         } = options;
         let identifierData = "identifierData" in options.discovery ? options.discovery.identifierData : {};
 
-        if (this.mdnsScanner !== undefined && this.netInterfaceIpv6 !== undefined) {
+        if (
+            this.scanners.hasScannerFor(ChannelType.UDP) &&
+            this.netInterfaces.hasInterfaceFor(ChannelType.UDP, "::") !== undefined
+        ) {
             discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
         }
         if (commissionableDevice !== undefined) {
@@ -576,7 +513,7 @@ export class MatterController implements SessionContext {
             const { ip } = address;
 
             const isIpv6Address = isIPv6(ip);
-            const paseInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
+            const paseInterface = this.netInterfaces.interfaceFor(ChannelType.UDP, isIpv6Address ? "::" : "0.0.0.0");
             if (paseInterface === undefined) {
                 // mainly IPv6 address when IPv4 is disabled
                 throw new PairRetransmissionLimitReachedError(
@@ -585,17 +522,18 @@ export class MatterController implements SessionContext {
             }
             paseChannel = await paseInterface.openChannel(address);
         } else {
-            if (this.netInterfaceBle === undefined) {
+            const ble = this.netInterfaces.interfaceFor(ChannelType.BLE);
+            if (!ble) {
                 throw new PairRetransmissionLimitReachedError(
                     `BLE interface not initialized. Cannot use ${address.peripheralAddress} for commissioning.`,
                 );
             }
             // TODO Have a Timeout mechanism here for connections
-            paseChannel = await this.netInterfaceBle.openChannel(address);
+            paseChannel = await ble.openChannel(address);
         }
 
         // Do PASE paring
-        const unsecureSession = this.sessionManager.createUnsecureSession({
+        const unsecureSession = this.sessionManager.createInsecureSession({
             // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
                 idleIntervalMs: device?.SII,
@@ -612,7 +550,11 @@ export class MatterController implements SessionContext {
 
         let paseSecureSession;
         try {
-            paseSecureSession = await this.paseClient.pair(this, paseExchange, passcode);
+            paseSecureSession = await this.paseClient.pair(
+                this.sessionManager.sessionParameters,
+                paseExchange,
+                passcode,
+            );
         } catch (e) {
             // Close the exchange and rethrow
             await paseExchange.close();
@@ -740,13 +682,17 @@ export class MatterController implements SessionContext {
         await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
     }
 
-    handleResubmissionStarted(peerNodeId: NodeId) {
+    #handleResubmissionStarted(peerNodeId?: NodeId) {
+        if (peerNodeId === undefined) {
+            return;
+        }
         if (this.#runningNodeDiscoveries.has(peerNodeId)) {
             // We already discover for this node, so we do not need to start a new discovery
             return;
         }
         this.#runningNodeDiscoveries.set(peerNodeId, { type: NodeDiscoveryType.RetransmissionDiscovery });
-        this.mdnsScanner
+        this.scanners
+            .scannerFor(ChannelType.UDP)
             ?.findOperationalDevice(this.fabric, peerNodeId, RETRANSMISSION_DISCOVERY_TIMEOUT_MS, true)
             .catch(error => {
                 logger.error(`Failed to discover device ${peerNodeId} after resubmission started.`, error);
@@ -804,10 +750,10 @@ export class MatterController implements SessionContext {
             throw new ImplementationError("Cannot set retransmission discovery type.");
         }
 
-        if (this.mdnsScanner === undefined) {
+        const mdnsScanner = this.scanners.scannerFor(ChannelType.UDP) as MdnsScanner | undefined;
+        if (!mdnsScanner) {
             throw new ImplementationError("Cannot discover device without mDNS scanner.");
         }
-        const mdnsScanner = this.mdnsScanner;
 
         const existingDiscoveryDetails = this.#runningNodeDiscoveries.get(peerNodeId) ?? {
             type: NodeDiscoveryType.None,
@@ -967,7 +913,7 @@ export class MatterController implements SessionContext {
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);
-        const operationalInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
+        const operationalInterface = this.netInterfaces.interfaceFor(ChannelType.UDP, isIpv6Address ? "::" : "0.0.0.0");
 
         if (operationalInterface === undefined) {
             throw new PairRetransmissionLimitReachedError(
@@ -979,7 +925,7 @@ export class MatterController implements SessionContext {
 
         const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
         const { sessionParameters } = this.findResumptionRecordByNodeId(peerNodeId) ?? {};
-        const unsecureSession = this.sessionManager.createUnsecureSession({
+        const unsecureSession = this.sessionManager.createInsecureSession({
             // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
                 idleIntervalMs: discoveryData?.SII ?? sessionParameters?.idleIntervalMs,
@@ -998,7 +944,6 @@ export class MatterController implements SessionContext {
 
             try {
                 operationalSecureSession = await this.caseClient.pair(
-                    this,
                     exchange,
                     this.fabric,
                     peerNodeId,
@@ -1103,7 +1048,8 @@ export class MatterController implements SessionContext {
                 }
                 await this.channelManager.removeAllNodeChannels(this.fabric, peerNodeId);
 
-                const discoveredAddresses = this.mdnsScanner?.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
+                const mdnsScanner = this.scanners.scannerFor(ChannelType.UDP) as MdnsScanner | undefined;
+                const discoveredAddresses = mdnsScanner?.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
                 const lastKnownAddress = this.getLastOperationalAddress(peerNodeId);
 
                 if (
@@ -1161,16 +1107,15 @@ export class MatterController implements SessionContext {
     }
 
     async close() {
+        const mdnsScanner = this.scanners.scannerFor(ChannelType.UDP) as MdnsScanner | undefined;
         for (const [nodeId, { timer }] of this.#runningNodeDiscoveries.entries()) {
             timer?.stop();
-            this.mdnsScanner?.cancelOperationalDeviceDiscovery(this.fabric, nodeId, false); // This ends discovery without triggering promises
+            mdnsScanner?.cancelOperationalDeviceDiscovery(this.fabric, nodeId, false); // This ends discovery without triggering promises
         }
         await this.exchangeManager.close();
         await this.sessionManager.close();
         await this.channelManager.close();
-        await this.netInterfaceBle?.close();
-        await this.netInterfaceIpv4?.close();
-        await this.netInterfaceIpv6?.close();
+        await this.netInterfaces.close();
     }
 
     getActiveSessionInformation() {

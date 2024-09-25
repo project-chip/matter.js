@@ -7,6 +7,7 @@
 import { Bytes } from "@matter.js/main";
 import { GeneralCommissioningBehavior } from "@matter.js/main/behaviors/general-commissioning";
 import { NetworkCommissioningBehavior } from "@matter.js/main/behaviors/network-commissioning";
+import { DeviceAdvertiser, DeviceCommissioner } from "@matter.js/main/protocol";
 import { NetworkCommissioning } from "@matter.js/types/clusters/network-commissioning";
 
 const firstNetworkId = new Uint8Array(32);
@@ -44,8 +45,8 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
                         wpa2Personal: true,
                         wpa3Personal: true,
                     },
-                    ssid: ssid || Bytes.fromString(this.endpoint.env.vars.get("ble.wifi.scanSsid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
-                    bssid: Bytes.fromString(this.endpoint.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00"),
+                    ssid: ssid || Bytes.fromString(this.env.vars.get("ble.wifi.scanSsid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
+                    bssid: Bytes.fromString(this.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00"),
                     channel: 1,
                 },
             ],
@@ -61,7 +62,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
             `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(ssid)} ${Bytes.toHex(credentials)} ${breadcrumb}`,
         );
 
-        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.env
+            .get(DeviceCommissioner)
+            .assertFailsafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful add or update
         if (breadcrumb !== undefined) {
@@ -84,7 +87,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
             `---> removeNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
         );
 
-        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.env
+            .get(DeviceCommissioner)
+            .assertFailsafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful add or update
         if (breadcrumb !== undefined) {
@@ -107,7 +112,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
             `---> connectNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
         );
 
-        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.env
+            .get(DeviceCommissioner)
+            .assertFailsafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful connection
         if (breadcrumb !== undefined) {
@@ -123,8 +130,7 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
         this.state.lastConnectErrorValue = null;
 
         // Announce operational in IP network
-        const device = this.session.context;
-        await device.startAnnouncement();
+        await this.env.get(DeviceAdvertiser).startAdvertising();
 
         return {
             networkingStatus,

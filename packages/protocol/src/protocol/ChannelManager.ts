@@ -18,11 +18,15 @@ export class NoChannelError extends MatterError {}
 export class ChannelManager {
     readonly #channels = new Map<string, MessageChannel[]>();
     readonly #paseChannels = new Map<Session, MessageChannel>();
-    readonly #caseSessionsPerFabricAndNode: number;
+    #caseSessionsPerFabricAndNode: number;
 
     // TODO evaluate with controller the effects of limiting the entries just for FabricIndex and not also NodeId
     constructor(caseSessionsPerFabricAndNode = 3) {
         this.#caseSessionsPerFabricAndNode = caseSessionsPerFabricAndNode;
+    }
+
+    set caseSessionsPerFabricAndNode(count: number) {
+        this.#caseSessionsPerFabricAndNode = count;
     }
 
     #getChannelKey(fabric: Fabric, nodeId: NodeId) {

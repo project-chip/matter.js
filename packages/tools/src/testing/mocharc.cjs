@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// This file configures mocha for "buildless" dev execution.  May be useful for
-// running tests in IDE with Mocha support.  Utilize by importing into
-// .mocharc.cjs as a sibling of package.json in the package to test
+// This file configures mocha for "buildless" dev execution.  May be useful for running tests in IDE with Mocha support.
+// Utilize by importing into .mocharc.cjs as a sibling of package.json in the package to test
 
 // Required for Node < 19 (see node-shims.ts)
 const webcrypto = require("node:crypto").webcrypto;

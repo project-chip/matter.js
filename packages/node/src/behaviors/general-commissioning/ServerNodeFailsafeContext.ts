@@ -7,14 +7,14 @@
 import { NetworkCommissioningBehavior } from "#behaviors/network-commissioning";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Immutable, Lifecycle, UnsupportedDependencyError } from "#general";
-import { Node } from "#node/Node.js";
+import { ServerNode } from "#node/ServerNode.js";
 import { Fabric, FabricManager, FailsafeContext } from "#protocol";
 
 /**
- * {@link FailsafeContext} for {@link Node} API.
+ * {@link FailsafeContext} for {@link ServerNode} API.
  */
 export class ServerNodeFailsafeContext extends FailsafeContext {
-    #node: Node;
+    #node: ServerNode;
     #storedState?: {
         networks: Map<Endpoint, Immutable<NetworkCommissioningBehavior.State["networks"]>>;
         /*
@@ -30,7 +30,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
          */
     };
 
-    constructor(node: Node, options: FailsafeContext.Options) {
+    constructor(node: ServerNode, options: FailsafeContext.Options) {
         super(options);
         this.#node = node;
         this.#node.env.set(FailsafeContext, this);

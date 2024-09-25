@@ -58,6 +58,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                 AccessControlCluster,
                 "acl",
                 new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntry>>(),
+                MatterDevice.of(session).getFabrics(),
             );
         },
 
@@ -248,6 +249,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                 AccessControlCluster,
                 "extension",
                 new Array<AclExtensionEntry>(),
+                MatterDevice.of(session).getFabrics(),
             );
         },
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, createPromise, Logger, Time, Timer } from "@matter.js/general";
+import { Bytes, ChannelType, createPromise, Logger, Time, Timer } from "@matter.js/general";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
@@ -25,6 +25,10 @@ type CommissionableDeviceData = CommissionableDevice & {
 };
 
 export class BleScanner implements Scanner {
+    get type() {
+        return ChannelType.BLE;
+    }
+
     private readonly recordWaiters = new Map<
         string,
         {

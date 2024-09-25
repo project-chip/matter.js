@@ -5,15 +5,15 @@
  */
 
 import { MatterError, UnexpectedDataError } from "#general";
-import { TlvSchema } from "#types";
-import { Message } from "../codec/MessageCodec.js";
-import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
 import {
     GeneralStatusCode,
     ProtocolStatusCode,
     SECURE_CHANNEL_PROTOCOL_ID,
     SecureMessageType,
-} from "./SecureChannelMessages.js";
+    TlvSchema,
+} from "#types";
+import { Message } from "../codec/MessageCodec.js";
+import { ExchangeSendOptions, MessageExchange } from "../protocol/MessageExchange.js";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
 
 /** Error base Class for all errors related to the status response messages. */

@@ -183,10 +183,16 @@ export type OperationalInstanceData = {
     sessionActiveThreshold?: number;
 };
 
+export enum CommissioningMode {
+    NotCommissioning = 0,
+    Basic = 1,
+    Enhanced = 2,
+}
+
 /** Interface for classes that allow to announce one Matter instance. */
 export interface InstanceBroadcaster {
     /** Set a commissionable mode and details to announce a commissionable device. */
-    setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData): Promise<void>;
+    setCommissionMode(mode: CommissioningMode, deviceData: CommissioningModeInstanceData): Promise<void>;
 
     /**
      * Set operational details to Announce an operational device which is already commissioned.

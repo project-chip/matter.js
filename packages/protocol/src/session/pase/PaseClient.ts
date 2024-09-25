@@ -5,9 +5,10 @@
  */
 
 import { Bytes, Crypto, ec, Logger, PbkdfParameters, Spake2p, UnexpectedDataError } from "#general";
+import { SessionManager } from "#session/SessionManager.js";
 import { CommissioningOptions, NodeId } from "#types";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
-import { SessionContext } from "../Session.js";
+import { SessionParameters } from "../Session.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const { numberToBytesBE } = ec;
@@ -15,6 +16,12 @@ const { numberToBytesBE } = ec;
 const logger = Logger.get("PaseClient");
 
 export class PaseClient {
+    #sessions: SessionManager;
+
+    constructor(sessions: SessionManager) {
+        this.#sessions = sessions;
+    }
+
     static async generatePakePasscodeVerifier(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
         return Bytes.concat(numberToBytesBE(w0, 32), L);
@@ -33,10 +40,10 @@ export class PaseClient {
         return Crypto.getRandomUInt16() % 4096;
     }
 
-    async pair(client: SessionContext, exchange: MessageExchange, setupPin: number) {
+    async pair(sessionParameters: SessionParameters, exchange: MessageExchange, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
         const initiatorRandom = Crypto.getRandom();
-        const initiatorSessionId = await client.sessionManager.getNextAvailableSessionId(); // Initiator Session Id
+        const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
 
         // Send pbkdfRequest and Read pbkdfResponse
         const requestPayload = await messenger.sendPbkdfParamRequest({
@@ -44,7 +51,7 @@ export class PaseClient {
             initiatorSessionId,
             passcodeId: DEFAULT_PASSCODE_ID,
             hasPbkdfParameters: false,
-            initiatorSessionParams: client.sessionParameters,
+            initiatorSessionParams: sessionParameters,
         });
         const {
             responsePayload,
@@ -53,8 +60,8 @@ export class PaseClient {
         if (pbkdfParameters === undefined)
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
 
-        // THis includes the Fallbacks for the session parameters overridden by what was sent by the device in PbkdfResponse
-        const sessionParameters = {
+        // This includes the Fallbacks for the session parameters overridden by what was sent by the device in PbkdfResponse
+        sessionParameters = {
             ...exchange.session.parameters,
             ...(responderSessionParams ?? {}),
         };
@@ -74,7 +81,7 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess("Success after PASE Pake3");
-        const secureSession = await client.sessionManager.createSecureSession({
+        const secureSession = await this.#sessions.createSecureSession({
             sessionId: initiatorSessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

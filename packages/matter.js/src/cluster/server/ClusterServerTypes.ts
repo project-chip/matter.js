@@ -13,8 +13,8 @@ import {
     Fabric,
     FabricScopedAttributeServer,
     FixedAttributeServer,
-    MatterDeviceSession,
     Message,
+    Session,
 } from "#protocol";
 import {
     Attribute,
@@ -91,20 +91,20 @@ type AttributeGetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeGetter`]?: (args: {
         attributes: AttributeServers<A>;
         endpoint?: Endpoint;
-        session?: MatterDeviceSession;
+        session?: Session;
         isFabricFiltered?: boolean;
     }) => AttributeJsType<A[P]>;
 };
 type AttributeSetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeSetter`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: MatterDeviceSession },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session },
     ) => boolean;
 };
 type AttributeValidators<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeValidator`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: MatterDeviceSession },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session },
     ) => void;
 };
 export type CommandHandler<
@@ -117,7 +117,7 @@ export type CommandHandler<
               request: RequestT;
               attributes: AS;
               events: ES;
-              session: MatterDeviceSession;
+              session: Session;
               message: Message;
               endpoint: Endpoint;
           }) => Promise<ResponseT> | ResponseT

@@ -16,11 +16,10 @@ import {
     Timer,
     UnexpectedDataError,
 } from "#general";
-import { NodeId } from "#types";
-import { MatterDevice } from "../../MatterDevice.js";
+import { SessionManager } from "#session/SessionManager.js";
+import { NodeId, ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "#types";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../securechannel/SecureChannelMessages.js";
 import { ChannelStatusResponseError } from "../../securechannel/SecureChannelMessenger.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
@@ -37,18 +36,23 @@ export class PaseServer implements ProtocolHandler {
     private pairingTimer: Timer | undefined;
     private pairingErrors = 0;
 
-    static async fromPin(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
+    static async fromPin(sessions: SessionManager, setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
-        return new PaseServer(w0, L, pbkdfParameters);
+        return new PaseServer(sessions, w0, L, pbkdfParameters);
     }
 
-    static fromVerificationValue(verificationValue: Uint8Array, pbkdfParameters?: PbkdfParameters) {
+    static fromVerificationValue(
+        sessions: SessionManager,
+        verificationValue: Uint8Array,
+        pbkdfParameters?: PbkdfParameters,
+    ) {
         const w0 = bytesToNumberBE(verificationValue.slice(0, 32));
         const L = verificationValue.slice(32, 32 + 65);
-        return new PaseServer(w0, L, pbkdfParameters);
+        return new PaseServer(sessions, w0, L, pbkdfParameters);
     }
 
     constructor(
+        private sessions: SessionManager,
         private readonly w0: bigint,
         private readonly L: Uint8Array,
         private readonly pbkdfParameters?: PbkdfParameters,
@@ -61,7 +65,7 @@ export class PaseServer implements ProtocolHandler {
     async onNewExchange(exchange: MessageExchange) {
         const messenger = new PaseServerMessenger(exchange);
         try {
-            await this.handlePairingRequest(MatterDevice.of(exchange.session), messenger);
+            await this.handlePairingRequest(messenger);
         } catch (error) {
             this.pairingErrors++;
             logger.error(
@@ -84,12 +88,12 @@ export class PaseServer implements ProtocolHandler {
         }
     }
 
-    private async handlePairingRequest(server: MatterDevice, messenger: PaseServerMessenger) {
+    private async handlePairingRequest(messenger: PaseServerMessenger) {
         // When a Commissioner is either in the process of establishing a PASE session with the Commissionee or has
         // successfully established a session, the Commissionee SHALL NOT accept any more requests for new PASE
         // sessions until session establishment fails or the successfully established PASE session is terminated on
         // the commissioning channel.
-        if (server.existsOpenPaseSession()) {
+        if (this.sessions.getPaseSession()) {
             throw new MatterFlowError(
                 "Pase server: Pairing already in progress (PASE session exists), ignoring new exchange.",
             );
@@ -122,7 +126,7 @@ export class PaseServer implements ProtocolHandler {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
         }
 
-        const responderSessionId = await server.getNextAvailableSessionId(); // Responder Session Id
+        const responderSessionId = await this.sessions.getNextAvailableSessionId(); // Responder Session Id
         const responderRandom = Crypto.getRandom();
 
         const responsePayload = await messenger.sendPbkdfParamResponse({
@@ -130,7 +134,7 @@ export class PaseServer implements ProtocolHandler {
             responderRandom,
             responderSessionId,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
-            responderSessionParams: server.sessionParameters, // responder session parameters
+            responderSessionParams: this.sessions.sessionParameters, // responder session parameters
         });
 
         // Process pake1 and send pake2
@@ -147,7 +151,7 @@ export class PaseServer implements ProtocolHandler {
         }
 
         // All good! Creating the secure PASE session
-        await server.sessionManager.createSecureSession({
+        await this.sessions.createSecureSession({
             sessionId: responderSessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

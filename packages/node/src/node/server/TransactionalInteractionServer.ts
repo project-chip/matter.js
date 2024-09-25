@@ -26,17 +26,19 @@ import {
     EndpointInterface,
     EventPath,
     EventStorageData,
+    ExchangeManager,
+    InteractionContext,
     InteractionEndpointStructure,
     InteractionServer,
     InteractionServerMessenger,
     Message,
     MessageExchange,
+    SessionManager,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
 import { TlvEventFilter, TypeFromSchema } from "#types";
 import { AccessControlServer } from "../../behaviors/access-control/AccessControlServer.js";
-import { BasicInformationServer } from "../../behaviors/basic-information/BasicInformationServer.js";
 import { ServerNode } from "../ServerNode.js";
 
 const activityKey = Symbol("activity");
@@ -69,29 +71,28 @@ export class TransactionalInteractionServer extends InteractionServer {
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayed = false;
 
-    static async create(endpoint: Endpoint<ServerNode.RootEndpoint>) {
-        const endpointStructure = new InteractionEndpointStructure();
-
-        const maxPathsPerInvoke = await endpoint.act(
-            agent => agent.get(BasicInformationServer).state.maxPathsPerInvoke,
-        );
+    static async create(endpoint: Endpoint<ServerNode.RootEndpoint>, sessions: SessionManager) {
+        const structure = new InteractionEndpointStructure();
 
         return new TransactionalInteractionServer(endpoint, {
-            endpointStructure,
+            sessions,
+            structure,
             subscriptionOptions: endpoint.state.network.subscriptionOptions,
-            maxPathsPerInvoke,
+            maxPathsPerInvoke: endpoint.state.basicInformation.maxPathsPerInvoke,
+            initiateExchange: (fabric, nodeId, protocolId) =>
+                endpoint.env.get(ExchangeManager).initiateExchange(fabric, nodeId, protocolId),
         });
     }
 
-    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>, config: InteractionServer.Configuration) {
-        super(config);
+    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>, context: InteractionContext) {
+        super(context);
 
-        const { endpointStructure } = config;
+        const { structure } = context;
 
         this.#activity = endpoint.env.get(NodeActivity);
 
         this.#endpoint = endpoint;
-        this.#endpointStructure = endpointStructure;
+        this.#endpointStructure = structure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();

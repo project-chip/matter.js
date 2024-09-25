@@ -52,8 +52,8 @@ export async function createTestSessionWithFabric() {
         ZERO,
         "",
     );
+    ``;
     return await SecureSession.create({
-        context: {} as any,
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),
@@ -62,9 +62,6 @@ export async function createTestSessionWithFabric() {
         salt: ZERO,
         isInitiator: false,
         isResumption: false,
-        closeCallback: async () => {
-            /* */
-        },
         peerSessionParameters: {
             idleIntervalMs: 1,
             activeIntervalMs: 2,

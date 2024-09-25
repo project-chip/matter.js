@@ -6,6 +6,10 @@
 
 import {
     Bytes,
+    Construction,
+    Environment,
+    Environmental,
+    ImplementationError,
     InternalError,
     Key,
     MatterError,
@@ -13,6 +17,7 @@ import {
     MaybePromise,
     Observable,
     StorageContext,
+    StorageManager,
 } from "#general";
 import { FabricIndex } from "#types";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
@@ -31,23 +36,54 @@ export class FabricManager {
     #nextFabricIndex = 1;
     readonly #fabrics = new Map<FabricIndex, Fabric>();
     #initializationDone = false;
-    #fabricStorage: StorageContext;
+    #storage?: StorageContext;
     #events = {
         added: Observable<[fabric: Fabric]>(),
         updated: Observable<[fabric: Fabric]>(),
         deleted: Observable<[fabric: Fabric]>(),
         failsafeClosed: Observable<[]>(),
     };
+    #construction: Construction<FabricManager>;
 
-    constructor(fabricStorage: StorageContext) {
-        this.#fabricStorage = fabricStorage;
+    constructor(storage?: StorageContext) {
+        this.#storage = storage;
+
+        let construct;
+        if (this.#storage === undefined) {
+            construct = () => {};
+        } else {
+            construct = async () => {
+                if (this.#storage === undefined) {
+                    // Storage disabled
+                    return;
+                }
+
+                const fabrics = await this.#storage.get<FabricJsonObject[]>("fabrics", []);
+                for (const fabric of fabrics) {
+                    this.#addFabric(Fabric.createFromStorageObject(fabric));
+                }
+
+                this.#nextFabricIndex = await this.#storage.get("nextFabricIndex", this.#nextFabricIndex);
+
+                this.#initializationDone = true;
+            };
+        }
+
+        this.#construction = Construction(this, construct);
     }
 
-    async initFromStorage() {
-        const fabrics = await this.#fabricStorage.get<FabricJsonObject[]>("fabrics", []);
-        fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
-        this.#nextFabricIndex = await this.#fabricStorage.get("nextFabricIndex", this.#nextFabricIndex);
-        this.#initializationDone = true;
+    get construction() {
+        return this.#construction;
+    }
+
+    async [Construction.construct]() {
+        await this.construction;
+    }
+
+    [Environmental.create](env: Environment) {
+        const instance = new FabricManager(env.get(StorageManager).createContext("fabrics"));
+        env.set(FabricManager, instance);
+        return instance;
     }
 
     get events() {
@@ -55,6 +91,8 @@ export class FabricManager {
     }
 
     getNextFabricIndex() {
+        this.#construction.assert();
+
         for (let i = 0; i < 254; i++) {
             const fabricIndex = this.#nextFabricIndex++;
             if (this.#nextFabricIndex > 254) this.#nextFabricIndex = 1;
@@ -66,17 +104,30 @@ export class FabricManager {
     }
 
     persistFabrics(): MaybePromise<void> {
-        const storeResult = this.#fabricStorage.set(
+        if (this.#storage === undefined) {
+            throw new ImplementationError(
+                "Fabric persistence is disabled because FabricManager constructed without storage",
+            );
+        }
+
+        this.#construction.assert();
+
+        const storeResult = this.#storage.set(
             "fabrics",
             Array.from(this.#fabrics.values()).map(fabric => fabric.toStorageObject()),
         );
         if (MaybePromise.is(storeResult)) {
-            return storeResult.then(() => this.#fabricStorage.set("nextFabricIndex", this.#nextFabricIndex));
+            return storeResult.then(() => this.#storage!.set("nextFabricIndex", this.#nextFabricIndex));
         }
-        return this.#fabricStorage.set("nextFabricIndex", this.#nextFabricIndex);
+        return this.#storage.set("nextFabricIndex", this.#nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {
+        this.#construction.assert();
+        this.#addFabric(fabric);
+    }
+
+    #addFabric(fabric: Fabric) {
         const { fabricIndex } = fabric;
         if (this.#fabrics.has(fabricIndex)) {
             throw new MatterFlowError(`Fabric with index ${fabricIndex} already exists.`);
@@ -97,6 +148,8 @@ export class FabricManager {
     }
 
     async removeFabric(fabricIndex: FabricIndex) {
+        await this.#construction;
+
         const fabric = this.#fabrics.get(fabricIndex);
         if (fabric === undefined)
             throw new FabricNotFoundError(
@@ -108,10 +161,14 @@ export class FabricManager {
     }
 
     getFabrics() {
+        this.#construction.assert();
+
         return Array.from(this.#fabrics.values());
     }
 
     findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {
+        this.#construction.assert();
+
         for (const fabric of this.#fabrics.values()) {
             const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
             if (!Bytes.areEqual(candidateDestinationId, destinationId)) continue;
@@ -122,6 +179,8 @@ export class FabricManager {
     }
 
     findByKeypair(keypair: Key) {
+        this.#construction.assert();
+
         for (const fabric of this.#fabrics.values()) {
             if (fabric.matchesKeyPair(keypair)) {
                 return fabric;
@@ -130,7 +189,13 @@ export class FabricManager {
         return undefined;
     }
 
+    findByIndex(index: FabricIndex) {
+        return Array.from(this.#fabrics.values()).find(fabric => fabric.fabricIndex === index);
+    }
+
     async updateFabric(fabric: Fabric) {
+        await this.#construction;
+
         const { fabricIndex } = fabric;
         if (!this.#fabrics.has(fabricIndex)) {
             throw new FabricNotFoundError(
@@ -143,6 +208,8 @@ export class FabricManager {
     }
 
     async revokeFabric(fabricIndex: FabricIndex) {
+        await this.#construction;
+
         const fabric = this.#fabrics.get(fabricIndex);
         if (fabric === undefined) {
             throw new MatterFlowError(`Fabric with index ${fabricIndex} does not exist to revoke.`);

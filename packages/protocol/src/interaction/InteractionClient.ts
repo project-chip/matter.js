@@ -5,6 +5,7 @@
  */
 
 import { ImplementationError, Logger, MatterFlowError, Time, Timer, UnexpectedDataError } from "#general";
+import { Specification } from "#model";
 import {
     Attribute,
     AttributeId,
@@ -15,6 +16,7 @@ import {
     Event,
     EventId,
     EventNumber,
+    INTERACTION_PROTOCOL_ID,
     NodeId,
     RequestType,
     ResponseType,
@@ -38,12 +40,7 @@ import {
     InteractionClientMessenger,
     ReadRequest,
 } from "./InteractionMessenger.js";
-import {
-    INTERACTION_MODEL_REVISION,
-    INTERACTION_PROTOCOL_ID,
-    attributePathToId,
-    clusterPathToId,
-} from "./InteractionServer.js";
+import { attributePathToId, clusterPathToId } from "./InteractionServer.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -277,7 +274,7 @@ export class InteractionClient {
                 eventRequests,
                 eventFilters,
                 isFabricFiltered,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             });
         });
     }
@@ -460,7 +457,7 @@ export class InteractionClient {
                 timedRequest,
                 writeRequests,
                 moreChunkedMessages: false,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             });
             if (response === undefined) {
                 if (!suppressResponse) {
@@ -518,7 +515,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
                 dataVersionFilters:
                     knownDataVersion !== undefined
@@ -598,7 +595,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                 eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                 keepSubscriptions: true,
@@ -726,7 +723,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 attributeRequests,
                 eventRequests,
                 keepSubscriptions,
@@ -863,7 +860,7 @@ export class InteractionClient {
                     invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
                     timedRequest,
                     suppressResponse: false,
-                    interactionModelRevision: INTERACTION_MODEL_REVISION,
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 },
                 useExtendedFailSafeMessageResponseTimeout
                     ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
@@ -958,7 +955,7 @@ export class InteractionClient {
                 invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
                 timedRequest,
                 suppressResponse: true,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             });
             if (invokeResponse !== undefined) {
                 throw new MatterFlowError(

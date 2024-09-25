@@ -2,27 +2,29 @@ import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { DatasourceStore } from "#endpoint/storage/DatasourceStore.js";
-import { PartStore } from "#endpoint/storage/PartStore.js";
 import { Construction, ImplementationError, StorageContext, SupportedStorageTypes } from "#general";
 
 const NUMBER_KEY = "__number__";
 
 /**
- * The server implementation of {@link PartStore}.
+ * Persistence backing for an {@link Endpoint}.
  *
- * Manages storage for a specific endpoint.
+ * This is the API {@link Endpoint} uses for reading and writing non-volatile values.
  */
-export class ServerPartStore implements PartStore {
+export class EndpointStore {
     #storage: StorageContext;
     #initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
-    #construction: Construction<PartStore>;
+    #construction: Construction<EndpointStore>;
 
     #childStorage: StorageContext;
-    #childStores = {} as Record<string, ServerPartStore>;
+    #childStores = {} as Record<string, EndpointStore>;
 
     #knownBehaviors = new Set<string>();
 
+    /**
+     * Description used in diagnostic messages.
+     */
     toString() {
         return `storage:${this.#storage.thisContexts.join(".")}`;
     }
@@ -31,6 +33,9 @@ export class ServerPartStore implements PartStore {
         return this.#construction;
     }
 
+    /**
+     * Currently persisted values, keyed by {@link Behavior.id} then property name.
+     */
     get initialValues() {
         return this.#initialValues;
     }
@@ -84,13 +89,16 @@ export class ServerPartStore implements PartStore {
         await this.#loadSubparts();
     }
 
+    /**
+     * Obtain a {@link Datasource.Store} for a behavior.
+     */
     storeForBehavior(behaviorId: string): Datasource.Store {
         this.#construction.assert();
 
         return DatasourceStore(this, behaviorId);
     }
 
-    childStoreFor(endpoint: Endpoint): ServerPartStore {
+    childStoreFor(endpoint: Endpoint): EndpointStore {
         if (!endpoint.lifecycle.hasId) {
             throw new ImplementationError("Cannot access endpoint storage because endpoint has no assigned ID");
         }
@@ -102,7 +110,7 @@ export class ServerPartStore implements PartStore {
 
         let store = this.#childStores[partId];
         if (store === undefined) {
-            store = this.#childStores[partId] = new ServerPartStore(this.#childStorage.createContext(partId), false);
+            store = this.#childStores[partId] = new EndpointStore(this.#childStorage.createContext(partId), false);
         }
 
         return store;
@@ -114,6 +122,11 @@ export class ServerPartStore implements PartStore {
         await this.#storage.set(NUMBER_KEY, this.number);
     }
 
+    /**
+     * Patch values.  Keyed by {@link Behavior.id} then property name.
+     *
+     * See {@link Datasource.Store.set} for the patch semantics the individual structs use.
+     */
     async set(values: Record<string, undefined | Val.Struct>) {
         await this.#construction;
 
@@ -144,6 +157,9 @@ export class ServerPartStore implements PartStore {
         }
     }
 
+    /**
+     * Remove all persisted information for the {@link Endpoint}
+     */
     async delete() {
         await this.#construction;
 
@@ -158,8 +174,8 @@ export class ServerPartStore implements PartStore {
     }
 
     async #loadKnownChildStores(partId: string) {
-        const partStore = new ServerPartStore(this.#childStorage.createContext(partId));
-        this.#childStores[partId] = partStore;
-        await partStore.construction;
+        const endpointStore = new EndpointStore(this.#childStorage.createContext(partId));
+        this.#childStores[partId] = endpointStore;
+        await endpointStore.construction;
     }
 }

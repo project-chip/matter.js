@@ -135,7 +135,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
-    private clientAddress: string | undefined;
+    public clientAddress: string | undefined;
     private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
         this.btpHandshakeTimeoutTriggered(),
     );

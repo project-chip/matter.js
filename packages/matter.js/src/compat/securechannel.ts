@@ -8,12 +8,11 @@ export {
     ChannelStatusResponseError,
     DEFAULT_NORMAL_PROCESSING_TIME_MS,
     EXPECTED_CRYPTO_PROCESSING_TIME_MS,
-    GeneralStatusCode,
-    ProtocolStatusCode,
     SecureChannelMessenger,
     SecureChannelProtocol,
     SecureChannelStatusMessageSchema,
-    SecureMessageType,
     StatusReportOnlySecureChannelProtocol,
     type StatusMessage,
 } from "#protocol";
+
+export { GeneralStatusCode, ProtocolStatusCode, SecureMessageType } from "#types";

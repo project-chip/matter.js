@@ -19,12 +19,11 @@ import {
     assertSecureSession,
     CertificateError,
     DeviceCertification,
+    DeviceCommissioner,
     Fabric,
     FabricAction,
     FabricManager,
     FabricTableFullError,
-    FailsafeContext,
-    MatterDevice,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
     PublicKeyError,
@@ -125,7 +124,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        const failsafeContext = FailsafeContext.of(this.session);
+        const commissioner = this.env.get(DeviceCommissioner);
+        const failsafeContext = commissioner.failsafeContext;
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
                 `csrRequest received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
@@ -201,7 +201,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         caseAdminSubject,
         adminVendorId,
     }: OperationalCredentials.AddNocRequest) {
-        const failsafeContext = MatterDevice.of(this.session).failsafeContext;
+        const failsafeContext = this.#failsafeContext;
 
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -304,7 +304,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     override async updateNoc({ nocValue, icacValue }: OperationalCredentials.UpdateNocRequest) {
         assertSecureSession(this.session);
 
-        const timedOp = FailsafeContext.of(this.session);
+        const timedOp = this.#failsafeContext;
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -359,8 +359,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const fabric = this.session.associatedFabric;
 
         const currentFabricIndex = fabric.fabricIndex;
-        const device = this.session.context;
-        const conflictingLabelFabric = device
+        const fabrics = this.env.get(FabricManager);
+        const conflictingLabelFabric = fabrics
             .getFabrics()
             .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
         if (conflictingLabelFabric !== undefined) {
@@ -376,7 +376,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async removeFabric({ fabricIndex }: OperationalCredentials.RemoveFabricRequest) {
-        const fabric = MatterDevice.of(this.session).getFabricByIndex(fabricIndex);
+        const fabric = this.env.get(FabricManager).findByIndex(fabricIndex);
 
         if (fabric === undefined) {
             return {
@@ -395,7 +395,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override addTrustedRootCertificate({ rootCaCertificate }: OperationalCredentials.AddTrustedRootCertificateRequest) {
-        const failsafeContext = FailsafeContext.of(this.session);
+        const failsafeContext = this.#failsafeContext;
 
         if (failsafeContext.hasRootCert) {
             throw new StatusResponseError(
@@ -426,14 +426,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw error;
         }
 
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager).getFabrics();
         const trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
         trustedRootCertificates.push(rootCaCertificate);
         this.state.trustedRootCertificates = trustedRootCertificates;
     }
 
     async #updateFabrics() {
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager).getFabrics();
         this.state.fabrics = fabrics.map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,
@@ -489,12 +489,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     async #nodeOnline() {
-        const fabricManager = this.endpoint.env.get(FabricManager);
+        const fabricManager = this.env.get(FabricManager);
         this.reactTo(fabricManager.events.added, this.#handleAddedFabric, { lock: true });
         this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric, { lock: true });
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric, { lock: true });
         this.reactTo(fabricManager.events.failsafeClosed, this.#handleFailsafeClosed, { lock: true });
         await this.#updateFabrics();
+    }
+
+    get #failsafeContext() {
+        return this.env.get(DeviceCommissioner).failsafeContext;
     }
 }
 

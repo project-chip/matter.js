@@ -5,7 +5,6 @@
  */
 
 // Export SecureChannel Classes
-export * from "./SecureChannelMessages.js";
 export * from "./SecureChannelMessenger.js";
 export * from "./SecureChannelProtocol.js";
 export * from "./SecureChannelStatusMessageSchema.js";

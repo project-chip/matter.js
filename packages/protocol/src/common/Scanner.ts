@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ServerAddress, ServerAddressIp } from "#general";
+import { BasicSet, ChannelType, ServerAddress, ServerAddressIp } from "#general";
 import { NodeId, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
@@ -104,6 +104,8 @@ export type CommissionableDeviceIdentifiers =
       };
 
 export interface Scanner {
+    type: ChannelType;
+
     /**
      * Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
      * and return them.
@@ -153,4 +155,14 @@ export interface Scanner {
 
     /** Close the scanner server and free resources. */
     close(): void;
+}
+
+export class ScannerSet extends BasicSet<Scanner> {
+    scannerFor(type: ChannelType) {
+        return this.find(scanner => scanner.type === type);
+    }
+
+    hasScannerFor(type: ChannelType) {
+        return this.scannerFor(type) !== undefined;
+    }
 }

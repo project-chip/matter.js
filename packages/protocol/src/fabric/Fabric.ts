@@ -102,7 +102,7 @@ export type ExposedFabricInformation = {
 };
 
 export class Fabric {
-    readonly #sessions = new Array<SecureSession>();
+    readonly #sessions = new Set<SecureSession>();
     readonly #scopedClusterData: Map<number, any>;
 
     readonly #keyPair: Key;
@@ -228,14 +228,11 @@ export class Fabric {
     }
 
     addSession(session: SecureSession) {
-        this.#sessions.push(session);
+        this.#sessions.add(session);
     }
 
     removeSession(session: SecureSession) {
-        const index = this.#sessions.indexOf(session);
-        if (index >= 0) {
-            this.#sessions.splice(index, 1);
-        }
+        this.#sessions.delete(session);
     }
 
     addRemoveCallback(callback: () => MaybePromise<void>) {

@@ -383,7 +383,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      */
     #prepareMovement(type: MovementType, direction: MovementDirection, targetPercent100ths?: number): void {
         if (this.state.supportsCalibration && this.internal.calibrationMode === CalibrationMode.Enabled) {
-            return this.endpoint.env.runtime.add(this.#executeCalibrationAndMove(type, direction, targetPercent100ths));
+            return this.env.runtime.add(this.#executeCalibrationAndMove(type, direction, targetPercent100ths));
         }
         if (type === MovementType.Lift && this.state.configStatus.liftMovementReversed) {
             logger.debug("Lift movement is reversed");
@@ -433,7 +433,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 break;
         }
 
-        this.endpoint.env.runtime.add(
+        this.env.runtime.add(
             this.handleMovement(
                 type,
                 type === MovementType.Lift && !!this.state.configStatus.liftMovementReversed,

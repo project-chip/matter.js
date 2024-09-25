@@ -14,13 +14,12 @@ import { OnOff } from "#clusters/on-off";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Bytes } from "#general";
-import { AcceptedCommandList, FeatureMap, GeneratedCommandList } from "#model";
+import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
 import {
     ExchangeManager,
     Fabric,
     FabricBuilder,
     FabricManager,
-    INTERACTION_MODEL_REVISION,
     InteractionServerMessenger,
     Message,
     MessageExchange,
@@ -124,7 +123,7 @@ async function performWrite(
         exchange,
         {
             suppressResponse: true,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             timedRequest: false,
             writeRequests: [request],
         },
@@ -145,7 +144,7 @@ async function performRead(
     const result = await interactionServer.handleReadRequest(
         exchange,
         {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             attributeRequests: [request],
             isFabricFiltered: isFabricFiltered,
         },
@@ -180,7 +179,7 @@ async function performInvoke(
         exchange,
         {
             invokeRequests: [request],
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             suppressResponse: false,
             timedRequest: false,
         },
@@ -287,7 +286,7 @@ describe("ClusterServerBacking", () => {
 
         // Create a subscription to a couple of attributes and an event
         await performSubscribe(node, fabric1, {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             isFabricFiltered: false,
             attributeRequests: [FABRICS_PATH, COMMISSIONED_FABRICS_PATH],
             eventRequests: [LEAVE_PATH],
@@ -314,7 +313,7 @@ describe("ClusterServerBacking", () => {
                         },
                         payload: TlvStatusResponse.encode({
                             status: StatusCode.Success,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
+                            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                         }),
                     } as Message;
                 },

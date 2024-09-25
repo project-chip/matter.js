@@ -21,6 +21,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: General functionality that is not Matter specific previously resided in `@project-chip/matter.js`.  It now lives in `@matter.js/general`
     -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
     -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
+    -   Enhancement: Network transports can now self select which the protocols and addresses they support
+    -   Feature: A new `ObserverGroup` class simplifies binding binding management for multiple observables
 
 -   @matter.js/main:
     -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate
@@ -49,6 +51,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter.js/protocol:
     -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
     -   BREAKING: Various types that were previously specialized with template parameters are no longer generic.  This should be largely transparent to API consumers.  Compatibility exports still support the generic parameters in some, but not all, cases.
+    -   BREAKING: We have done some reorganization of lower-level implementation classes to improve implementation flexibility.  You probably do not use these classes directly so will be unaffected.
+    -   Feature: New functional components including `DeviceCommissioner`, `DeviceAdvertiser`, `NodeFinder` and `Subscription` now perform functions that previously were in the (deprecated) MatterDevice class
+    -   Enhancement: To simplify low-level configuration, many components in the protocol module now optionally retrieve dependencies from an Environment
     -   Enhancement: Limits the number of parallel exchanges to 5
     -   Enhancement: Uses the session timing details to calculate the timeout for subscription messages when received as client additionally to the subscription maxInterval
     -   Fix: When subscribing with keepSubscriptions === false the existing subscriptions need to be removed earlier in the flow

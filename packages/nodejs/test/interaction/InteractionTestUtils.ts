@@ -102,10 +102,6 @@ export async function createDummyMessageExchange(
     closeCallback?: () => void,
 ) {
     const session = await SecureSession.create({
-        context: {
-            getFabrics: () => [],
-            _mockDevice: true,
-        } as any,
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),
@@ -114,9 +110,6 @@ export async function createDummyMessageExchange(
         salt: Bytes.fromHex("00"),
         isInitiator: false,
         isResumption: false,
-        closeCallback: async () => {
-            /* */
-        },
         peerSessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
     });
     return new DummyMessageExchange(

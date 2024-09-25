@@ -8,7 +8,7 @@ import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { ClusterServerBacking } from "#behavior/internal/ClusterServerBacking.js";
-import { ServerBehaviorBacking } from "#behavior/internal/ServerBacking.js";
+import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
 import { ImplementationError, InternalError, NotImplementedError } from "#general";
 import { ClusterClientObj, ClusterServer, EndpointInterface } from "#protocol";
 import { ClusterId, ClusterType, EndpointNumber } from "#types";

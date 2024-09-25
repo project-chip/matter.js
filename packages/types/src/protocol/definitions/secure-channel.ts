@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * Protocol ID for secure channels as per Matter specification.
+ */
 export const SECURE_CHANNEL_PROTOCOL_ID = 0x0000;
 
 export enum SecureMessageType {

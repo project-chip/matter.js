@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto } from "#general";
-import { Fabric, SecureSession } from "#protocol";
+import { Bytes, Crypto, StorageBackendMemory, StorageManager } from "#general";
+import { Fabric, FabricManager, SecureSession, SessionManager } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import * as assert from "assert";
 import { buildFabric } from "./FabricTestingUtil.js";
@@ -118,8 +118,9 @@ describe("Fabric", () => {
 
             let session1Destroyed = false;
             let session2Destroyed = false;
+            const manager = await createManager();
             const secureSession1 = new SecureSession({
-                context: {} as any,
+                manager,
                 id: 1,
                 fabric: undefined,
                 peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
@@ -127,14 +128,12 @@ describe("Fabric", () => {
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
                 attestationKey: Buffer.alloc(0),
-                closeCallback: async () => {
-                    session1Destroyed = true;
-                },
                 isInitiator: true,
             });
+
             fabric.addSession(secureSession1);
             const secureSession2 = new SecureSession({
-                context: {} as any,
+                manager,
                 id: 2,
                 fabric: undefined,
                 peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
@@ -142,12 +141,18 @@ describe("Fabric", () => {
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
                 attestationKey: Buffer.alloc(0),
-                closeCallback: async () => {
-                    session2Destroyed = true;
-                },
                 isInitiator: true,
             });
             fabric.addSession(secureSession2);
+
+            manager.sessions.deleted.on(session => {
+                if (session === secureSession1) {
+                    session1Destroyed = true;
+                }
+                if (session === secureSession2) {
+                    session2Destroyed = true;
+                }
+            });
 
             let removeCallbackCalled = false;
             fabric.addRemoveCallback(async () => {
@@ -173,8 +178,9 @@ describe("Fabric", () => {
 
             let session1Destroyed = false;
             let session2Destroyed = false;
+            const manager = await createManager();
             const secureSession1 = new SecureSession({
-                context: {} as any,
+                manager,
                 id: 1,
                 fabric: undefined,
                 peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
@@ -182,14 +188,11 @@ describe("Fabric", () => {
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
                 attestationKey: Buffer.alloc(0),
-                closeCallback: async () => {
-                    session1Destroyed = true;
-                },
                 isInitiator: true,
             });
             fabric.addSession(secureSession1);
             const secureSession2 = new SecureSession({
-                context: {} as any,
+                manager,
                 id: 2,
                 fabric: undefined,
                 peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
@@ -197,12 +200,19 @@ describe("Fabric", () => {
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
                 attestationKey: Buffer.alloc(0),
-                closeCallback: async () => {
-                    session2Destroyed = true;
-                },
                 isInitiator: true,
             });
             fabric.addSession(secureSession2);
+
+            manager.sessions.deleted.on(session => {
+                if (session === secureSession1) {
+                    session1Destroyed = true;
+                }
+                if (session === secureSession2) {
+                    session2Destroyed = true;
+                }
+            });
+
             fabric.removeSession(secureSession1);
 
             assert.equal(session1Destroyed, false);
@@ -210,3 +220,12 @@ describe("Fabric", () => {
         });
     });
 });
+
+async function createManager() {
+    const storage = new StorageManager(new StorageBackendMemory());
+    await storage.initialize();
+    return new SessionManager({
+        fabrics: new FabricManager(),
+        storage: storage.createContext("session"),
+    });
+}
