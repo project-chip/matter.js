@@ -52,41 +52,35 @@ jobs:
           filters: |
             src:
               - "chip-testing/**"
-              - "packages/matter.js/src/**"
-              - "packages/matter-node.js/src/**"
               - ".github/workflows/chip-tool-tests.yml"
               - "package.json"
               - "packages/**/package.json"
-
-      - uses: dorny/paths-filter@v3
-        id: changes-slowapp-tests
-        with:
-          filters: |
-            src:
-              - "packages/matter.js/src/behavior/definitions/color-control/**"
-              - "packages/matter.js/src/behavior/definitions/level-control/**"
-              - "packages/matter.js/src/behavior/definitions/window-covering/**"
-              - "packages/matter.js/src/cluster/definitions/ColorControlCluster.ts"
-              - "packages/matter.js/src/cluster/definitions/LevelControlCluster.ts"
-              - "packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts"
-
-      - uses: dorny/paths-filter@v3
-        id: changes-long-tests
-        with:
-          filters: |
-            src:
-              - "packages/matter.js/src/behavior/definitions/administrator-commissioning/**"
-              - "packages/matter.js/src/behavior/definitions/general-commissioning/**"
-              - "packages/matter.js/src/behavior/definitions/operational-credentials/**"
-              - "packages/matter.js/src/session/pase/**"
-              - "packages/matter.js/src/session/case/**"
+              - "packages/**/src/**"
+              - "!packages/react-native/**"
+              - "!packages/nodejs-ble/**"
+              - "!packages/nodejs-shell/**"
+              - "!packages/examples/**"
+              - "!packages/tools/**"
+            slowapp-tests:
+              - "packages/node/src/behaviors/color-control/**"
+              - "packages/node/src/behaviors/level-control/**"
+              - "packages/node/src/behaviors/window-covering/**"
+              - "packages/types/src/clusters/definitions/ColorControlCluster.ts"
+              - "packages/types/src/clusters/definitions/LevelControlCluster.ts"
+              - "packages/types/src/clusters/definitions/WindowCoveringCluster.ts"
+            long-tests:
+              - "packages/node/src/behaviors/administrator-commissioning/**"
+              - "packages/node/src/behaviors/general-commissioning/**"
+              - "packages/node/src/behaviors/operational-credentials/**"
+              - "packages/protocol/src/session/pase/**"
+              - "packages/protocol/src/session/case/**"
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
         id: check-trigger
         run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
 
-      - if: ${{ (github.event_name != 'schedule' && (steps.changes-slowapp-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
+      - if: ${{ (github.event_name != 'schedule' && (steps.changes.outputs.slowapp-tests == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
         name: Enable slow App tests if needed
         id: check-slowapp-tests
         run: |
@@ -102,7 +96,7 @@ jobs:
       - name: Get Day of the week
         run: echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
-      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
+      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || (github.event_name != 'schedule' && (steps.changes.outputs.long-tests == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
         name: Enable Long tests if needed
         id: check-long-tests
         run: |
