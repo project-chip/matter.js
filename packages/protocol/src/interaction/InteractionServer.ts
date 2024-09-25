@@ -955,6 +955,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 StatusCode.InvalidAction,
             );
 
+        if (!keepSubscriptions) {
+            logger.debug(
+                `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
+            );
+            await MatterDevice.of(session).clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
+        }
+
         if (
             (!Array.isArray(attributeRequests) || attributeRequests.length === 0) &&
             (!Array.isArray(eventRequests) || eventRequests.length === 0)
@@ -1063,13 +1070,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             }
             await messenger.close();
             return; // Make sure to not bubble up the exception
-        }
-
-        if (!keepSubscriptions) {
-            logger.debug(
-                `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
-            );
-            await MatterDevice.of(session).clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
         }
 
         const maxInterval = subscriptionHandler.maxInterval;
