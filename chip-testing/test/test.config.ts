@@ -19,3 +19,5 @@ declare global {
     const Chip: ChipType;
 }
 Object.assign(globalThis, { Chip: ChipType });
+
+await Chip.initialize();

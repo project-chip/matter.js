@@ -22,7 +22,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
     -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
     -   Enhancement: Network transports can now self select which the protocols and addresses they support
-    -   Feature: A new `ObserverGroup` class simplifies binding binding management for multiple observables
+    -   Feature: A new `ObserverGroup` class simplifies binding management for multiple observables
 
 -   @matter.js/main:
     -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate

@@ -28,7 +28,6 @@ import {
     MatterDevice,
     MdnsInstanceBroadcaster,
     MdnsService,
-    NodeFinder,
     SessionManager,
 } from "#protocol";
 import { FabricIndex } from "#types";
@@ -265,7 +264,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     protected override async start() {
-        const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
+        // Ensure MdnsService is fully constructed
+        await this.owner.env.load(MdnsService);
+
         await this.owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
         const { sessionStorage, fabricStorage } = this.owner.env.get(NodeStore);
@@ -293,8 +294,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.#interactionServer = await TransactionalInteractionServer.create(this.owner, matterDevice.sessionManager);
         matterDevice.addProtocolHandler(this.#interactionServer);
 
-        matterDevice.addScanner(mdnsScanner);
-
         matterDevice.fabricManager.events.added.on(fabric => {
             const fabrics = this.#matterDevice?.fabricManager.getFabrics() ?? [];
             if (fabrics.length === 1 && fabrics[0].fabricIndex === fabric.fabricIndex) {
@@ -309,7 +308,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(ExchangeManager, matterDevice.exchangeManager);
         this.owner.env.set(DeviceCommissioner, matterDevice.commissioner);
         this.owner.env.set(DeviceAdvertiser, matterDevice.advertiser);
-        this.owner.env.set(NodeFinder, matterDevice.nodeFinder);
 
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
@@ -329,7 +327,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             this.owner.env.delete(ExchangeManager, this.#matterDevice.exchangeManager);
             this.owner.env.delete(DeviceCommissioner, this.#matterDevice.commissioner);
             this.owner.env.delete(DeviceAdvertiser, this.#matterDevice.advertiser);
-            this.owner.env.delete(NodeFinder, this.#matterDevice.nodeFinder);
 
             await this.#matterDevice.close();
 

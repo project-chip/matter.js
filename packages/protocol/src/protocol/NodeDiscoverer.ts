@@ -6,15 +6,15 @@
 
 import { Scanner } from "#common/Scanner.js";
 import { Fabric } from "#fabric/Fabric.js";
-import { Channel, Environment, Environmental, isNetworkInterface, NetworkError, TransportInterfaceSet } from "#general";
+import { Channel, Environment, Environmental, NotImplementedError, TransportInterfaceSet } from "#general";
 import { Session } from "#session/Session.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId } from "#types";
 
 /**
- * Interfaces {@link NodeFinder} with other components.
+ * Interfaces {@link NodeDiscoverer} with other components.
  */
-export interface NodeFinderContext {
+export interface NodeDiscovererContext {
     sessions: SessionManager;
     transportInterfaces: TransportInterfaceSet;
 }
@@ -30,14 +30,14 @@ export interface PeerConnection {
 /**
  * Performs discovery of other nodes.
  *
- * TODO - currently just does operational discovery, may add discovery of uncommissioned nodes
+ * TODO - this is placeholder destination for node discovery logic
  */
-export class NodeFinder {
+export class NodeDiscoverer {
     readonly #transportInterfaces: TransportInterfaceSet;
     readonly #sessions: SessionManager;
     readonly #scanners = new Set<Scanner>();
 
-    constructor(context: NodeFinderContext) {
+    constructor(context: NodeDiscovererContext) {
         const { transportInterfaces, sessions } = context;
 
         this.#sessions = sessions;
@@ -45,11 +45,11 @@ export class NodeFinder {
     }
 
     [Environmental.create](env: Environment) {
-        const instance = new NodeFinder({
+        const instance = new NodeDiscoverer({
             transportInterfaces: env.get(TransportInterfaceSet),
             sessions: env.get(SessionManager),
         });
-        env.set(NodeFinder, instance);
+        env.set(NodeDiscoverer, instance);
         return instance;
     }
 
@@ -67,33 +67,15 @@ export class NodeFinder {
         return this.#scanners;
     }
 
+    /** TODO - remove, just to make codeql happy */
+    get sessions() {
+        return this.#sessions;
+    }
+
     /**
      * Find a node for operational (non-commissioning) purposes.
      */
-    async connectToPeer(fabric: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<undefined | PeerConnection> {
-        let device;
-        for (const scanner of this.scanners) {
-            device = await scanner.findOperationalDevice(fabric, nodeId, timeoutSeconds);
-            if (device !== undefined) {
-                break;
-            }
-        }
-        if (device === undefined) {
-            return;
-        }
-
-        const session = this.#sessions.getSessionForNode(fabric, nodeId);
-        if (session === undefined) {
-            return undefined;
-        }
-
-        // TODO: have the interface and scanner linked
-        const networkInterface = this.transportInterfaces.find(netInterface => isNetworkInterface(netInterface));
-        if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
-            throw new NetworkError("No network interface found");
-        }
-
-        // TODO meeehhh
-        return { session, channel: await networkInterface.openChannel(device.addresses[0]) };
+    async connectToPeer(_fabric: Fabric, _nodeId: NodeId, _timeoutSeconds = 5): Promise<undefined | PeerConnection> {
+        throw new NotImplementedError("NodeDiscoverer is a WIP");
     }
 }

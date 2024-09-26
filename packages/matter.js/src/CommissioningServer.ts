@@ -586,7 +586,6 @@ export class CommissioningServer extends MatterNode {
         deviceInstance.addTransportInterface(
             await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),
         );
-        deviceInstance.addScanner(this.mdnsScanner);
 
         this.interactionServer = new LegacyInteractionServer({
             sessions: deviceInstance.sessionManager,
@@ -598,7 +597,7 @@ export class CommissioningServer extends MatterNode {
             },
             maxPathsPerInvoke,
             initiateExchange: (fabric, nodeId, protocolId) => {
-                return this.deviceInstance!.initiateExchange(fabric, nodeId, protocolId);
+                return deviceInstance.initiateExchange(fabric, nodeId, protocolId);
             },
         });
         deviceInstance.addProtocolHandler(this.interactionServer);

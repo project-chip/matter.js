@@ -116,7 +116,7 @@ export class Typescript {
             host: this.#host,
         });
 
-        // See https://github.com/microsoft/TypeScript/issues/31849p
+        // See https://github.com/microsoft/TypeScript/issues/31849
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getSyntacticDiagnostics(),

@@ -258,13 +258,13 @@ export class DeviceCommissioner {
         }
         this.#windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
 
-        await this.#context.advertiser.exitCommissioningMode();
-
         if (this.#activeCommissioningEndCallback !== undefined) {
             const activeCommissioningEndCallback = this.#activeCommissioningEndCallback;
             this.#activeCommissioningEndCallback = undefined;
             activeCommissioningEndCallback();
         }
+
+        await this.#context.advertiser.exitCommissioningMode();
 
         logger.info("All announcements stopped");
     }

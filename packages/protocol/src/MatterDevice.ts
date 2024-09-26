@@ -11,7 +11,6 @@
  */
 
 import {
-    Channel,
     Construction,
     InternalError,
     ObserverGroup,
@@ -22,11 +21,9 @@ import {
 } from "#general";
 import { DeviceAdvertiser } from "#protocol/DeviceAdvertiser.js";
 import { CommissioningConfigProvider, DeviceCommissioner } from "#protocol/DeviceCommissioner.js";
-import { NodeFinder } from "#protocol/NodeFinder.js";
 import { CommissioningOptions, FabricIndex, NodeId } from "#types";
 import { FailsafeContext } from "./common/FailsafeContext.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { Scanner } from "./common/Scanner.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
@@ -43,7 +40,6 @@ export class MatterDevice {
     readonly #sessionManager: SessionManager;
     readonly #commissioner: DeviceCommissioner;
     readonly #advertiser: DeviceAdvertiser;
-    readonly #nodeFinder: NodeFinder;
     readonly #transportInterfaces: TransportInterfaceSet;
     readonly #channelManager: ChannelManager;
     readonly #observers = new ObserverGroup();
@@ -150,10 +146,6 @@ export class MatterDevice {
                 }
             })(),
         });
-        this.#nodeFinder = new NodeFinder({
-            sessions: this.sessionManager,
-            transportInterfaces: this.#transportInterfaces,
-        });
 
         this.#construction = Construction(this, async () => {
             await this.#fabricManager.construction.ready;
@@ -183,10 +175,6 @@ export class MatterDevice {
         return this.#advertiser;
     }
 
-    get nodeFinder() {
-        return this.#nodeFinder;
-    }
-
     get commissioner() {
         return this.#commissioner;
     }
@@ -209,15 +197,6 @@ export class MatterDevice {
 
     isFailsafeArmed() {
         return this.#commissioner.isFailsafeArmed;
-    }
-
-    addScanner(scanner: Scanner) {
-        this.#nodeFinder.scanners.add(scanner);
-        return this;
-    }
-
-    deleteScanner(scanner: Scanner) {
-        this.#nodeFinder.scanners.delete(scanner);
     }
 
     hasBroadcaster(broadcaster: InstanceBroadcaster) {
@@ -311,14 +290,6 @@ export class MatterDevice {
         return !!this.#sessionManager.getPaseSession();
     }
 
-    async findDevice(
-        fabric: Fabric,
-        nodeId: NodeId,
-        timeOutSeconds = 5,
-    ): Promise<undefined | { session: Session; channel: Channel<Uint8Array> }> {
-        return this.#nodeFinder.connectToPeer(fabric, nodeId, timeOutSeconds);
-    }
-
     async close() {
         this.#isClosing = true;
         this.#observers.close();
@@ -338,7 +309,7 @@ export class MatterDevice {
         if (session === undefined) {
             throw new InternalError("Device operation without session");
         }
-        const device = session.manager?.owner;
+        const device = session.owner;
         if (!(device instanceof MatterDevice)) {
             throw new InternalError("Device operation on non-device session");
         }

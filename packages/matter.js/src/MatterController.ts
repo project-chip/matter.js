@@ -372,8 +372,11 @@ export class MatterController {
     public collectScanners(
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = { onIpNetwork: true },
     ) {
-        // Note we always scan on IP network if available
-        return this.scanners.filter(scanner => scanner.type !== ChannelType.BLE || discoveryCapabilities.ble);
+        // Note we always scan via MDNS if available
+        return this.scanners.filter(
+            scanner =>
+                scanner.type === ChannelType.UDP || (discoveryCapabilities.ble && scanner.type === ChannelType.BLE),
+        );
     }
 
     /**

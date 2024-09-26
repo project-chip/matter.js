@@ -1047,9 +1047,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 this.#context.initiateExchange(fabric, nodeId, protocolId),
         };
 
-        // TODO: Interpret specs:
-        // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
-
         const subscription = new ServerSubscription({
             id: subscriptionId,
             context,

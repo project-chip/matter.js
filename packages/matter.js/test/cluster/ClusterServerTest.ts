@@ -572,7 +572,7 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
         });
 
-        it("Verify init/destroy is called on ClusterServe when defined", async () => {
+        it("Verify init/destroy is called on ClusterServer when defined", async () => {
             let initCalled = false;
             let destroyCalled = false;
             const server = ClusterServer(

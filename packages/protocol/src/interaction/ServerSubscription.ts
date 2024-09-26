@@ -770,7 +770,7 @@ export class ServerSubscription extends Subscription {
         if (attribute instanceof FabricScopedAttributeServer) {
             // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we cannot get the value?
+            // TODO: Remove this once we remove the legacy API and go away from using AttributeServers in the background
             return this.#context.readAttribute(path, attribute, true).then(({ value }) => {
                 this.#outstandingAttributeUpdates.set(attributePathToId(path), {
                     attribute,

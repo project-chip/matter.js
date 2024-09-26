@@ -52,7 +52,7 @@ export async function createTestSessionWithFabric() {
         ZERO,
         "",
     );
-    ``;
+
     return await SecureSession.create({
         id: 1,
         fabric: testFabric,

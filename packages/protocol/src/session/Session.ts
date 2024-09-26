@@ -73,10 +73,6 @@ export abstract class Session {
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState: MessageReceptionState;
 
-    get manager() {
-        return this.#manager;
-    }
-
     /**
      * If the ExchangeManager performs async work to clean up a session it sets this promise.  This is because
      * historically we didn't return from destroy() until ExchangeManager was complete.  Not sure if this is entirely
@@ -178,4 +174,15 @@ export abstract class Session {
     abstract encode(message: Message): Packet;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
+
+    protected get manager() {
+        return this.#manager;
+    }
+
+    /**
+     * @deprecated
+     */
+    get owner() {
+        return this.#manager?.owner;
+    }
 }

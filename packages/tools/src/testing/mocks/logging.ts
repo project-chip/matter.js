@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import colors from "ansi-colors";
+
 interface LoggerLike {
     format: string;
     log(level: number, message: string): void;
@@ -11,11 +13,17 @@ interface LoggerLike {
 
 export interface MockLogger {
     emitAll: boolean;
+    injectExternalMessage: (source: string, text: string) => void;
 }
 
 export const TheMockLogger: MockLogger = {
     emitAll: false,
+    injectExternalMessage: (source: string, text: string) => console.log(formatExternalMessage(source, text)),
 };
+
+function formatExternalMessage(source: string, text: string) {
+    return `    ${colors.bgCyan.black.bold(` ${source} `)} ${colors.dim(text)}`;
+}
 
 /**
  * These functions are invoked by beforeEach/afterEach handlers in generalSetup for Mocha.
@@ -65,6 +73,8 @@ export function loggerSetup(Logger: LoggerLike) {
             passMessage(args);
         }
     }
+
+    TheMockLogger.injectExternalMessage = (source, text) => interceptingLogger(0, formatExternalMessage(source, text));
 
     Logger.log = interceptingLogger;
 

@@ -526,9 +526,11 @@ export class ObserverGroup {
             }
         }
         const observers = this.#observers.get(observable);
-        const index = observers?.indexOf(observer);
-        if (index !== undefined) {
-            observers?.splice(index, 1);
+        if (observers) {
+            const index = observers.indexOf(observer);
+            if (index !== -1) {
+                observers?.splice(index, 1);
+            }
         }
         observable.off(observer);
     }
