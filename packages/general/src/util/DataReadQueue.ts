@@ -11,7 +11,7 @@ import { Time, Timer } from "../time/Time.js";
 import { createPromise } from "./Promises.js";
 import { EndOfStreamError, NoResponseTimeoutError, Stream } from "./Stream.js";
 
-export class Queue<T> implements Stream<T> {
+export class DataReadQueue<T> implements Stream<T> {
     private readonly queue = new Array<T>();
     private pendingRead?: { resolver: (data: T) => void; rejecter: (reason: any) => void; timeoutTimer?: Timer };
     private closed = false;
