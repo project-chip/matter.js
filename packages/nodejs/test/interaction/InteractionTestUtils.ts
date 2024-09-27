@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, MAX_UDP_MESSAGE_SIZE, Queue } from "#general";
+import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
 import {
     ExchangeSendOptions,
     Fabric,
@@ -36,7 +36,7 @@ export function createTestFabric() {
 }
 
 class DummyMessageExchange {
-    messagesQueue = new Queue<Message>();
+    messagesQueue = new DataReadQueue<Message>();
     channel = { name: "test" };
     maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
 

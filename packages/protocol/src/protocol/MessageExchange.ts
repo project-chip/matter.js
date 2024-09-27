@@ -7,13 +7,13 @@
 import {
     AsyncObservable,
     CRYPTO_AEAD_MIC_LENGTH_BYTES,
+    DataReadQueue,
     Diagnostic,
     InternalError,
     Logger,
     MatterError,
     MatterFlowError,
     NoResponseTimeoutError,
-    Queue,
     Time,
     Timer,
     createPromise,
@@ -148,7 +148,7 @@ export class MessageExchange {
     readonly #idleIntervalMs: number;
     readonly #activeThresholdMs: number;
     readonly #maxTransmissions: number;
-    readonly #messagesQueue = new Queue<Message>();
+    readonly #messagesQueue = new DataReadQueue<Message>();
     #receivedMessageToAck: Message | undefined;
     #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
         if (this.#receivedMessageToAck !== undefined) {
