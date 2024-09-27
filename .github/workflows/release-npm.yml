@@ -95,7 +95,9 @@ jobs:
 
       - name: Install dependencies and build
         if: steps.automerge.outputs.mergeResult == 'merged'
-        run: npm ci
+        run: |
+          npm ci
+          npm i
 
       - name: Determine version
         if: steps.automerge.outputs.mergeResult == 'merged'
