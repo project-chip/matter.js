@@ -11,7 +11,7 @@ export {
     EventEmitter,
     MaybePromise,
     Observable,
-    Queue,
+    DataReadQueue as Queue,
     camelize,
     createPromise,
     deepCopy,
