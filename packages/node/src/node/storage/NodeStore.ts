@@ -17,17 +17,15 @@ import {
     asyncNew,
 } from "#general";
 import { EventHandler } from "#protocol";
-import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
+import type { Node } from "../Node.js";
+import { EndpointStoreFactory, EndpointStoreService } from "./EndpointStoreService.js";
 
 const logger = Logger.get("ServerStore");
 
 /**
- * Non-volatile state management for a {@link NodeServer}.
- *
- * The default implementation for matter.js uses synchronous APIs for storage. However, this will change in the future,
- * and other implementations may be backed by asynchronous storage.  So the public API is asynchronous.
+ * Non-volatile state management for a {@link Node}.
  */
-export class ServerStore implements Destructable {
+export class NodeStore implements Destructable {
     #location: string;
     #nodeId: string;
     #storageManager?: StorageManager;
@@ -35,8 +33,8 @@ export class ServerStore implements Destructable {
     #sessionStorage?: StorageContext;
     #fabricStorage?: StorageContext;
     #eventStorage?: StorageContext;
-    #rootStore?: PartStoreFactory;
-    #construction: Construction<ServerStore>;
+    #rootStore?: EndpointStoreFactory;
+    #construction: Construction<NodeStore>;
 
     get construction() {
         return this.#construction;
@@ -44,8 +42,6 @@ export class ServerStore implements Destructable {
 
     /**
      * Create a new store.
-     *
-     * TODO - implement conversion from 0.7 format so people can change API seamlessly
      */
     constructor(environment: Environment, nodeId?: string) {
         if (nodeId === undefined) {
@@ -59,7 +55,7 @@ export class ServerStore implements Destructable {
         const initializeStorage = async () => {
             this.#storageManager = await storage.open(nodeId);
 
-            this.#rootStore = await asyncNew(PartStoreFactory, {
+            this.#rootStore = await asyncNew(EndpointStoreFactory, {
                 storage: this.#storageManager.createContext("root"),
             });
 
@@ -118,7 +114,7 @@ export class ServerStore implements Destructable {
         return this.#fabricStorage;
     }
 
-    get partStores(): PartStoreService {
+    get endpointStores(): EndpointStoreService {
         if (this.#rootStore === undefined) {
             throw new ImplementationError("Endpoint storage accessed prior to initialization");
         }

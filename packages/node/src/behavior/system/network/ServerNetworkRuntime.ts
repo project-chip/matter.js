@@ -16,9 +16,11 @@ import {
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
-import { ServerStore } from "#node/server/storage/ServerStore.js";
+import { NodeStore } from "#node/storage/NodeStore.js";
 import {
     Ble,
+    DeviceAdvertiser,
+    DeviceCommissioner,
     ExchangeManager,
     FabricAction,
     FabricManager,
@@ -105,7 +107,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#matterDevice.startAnnouncement();
     }
 
-    announceNow() {
+    advertiseNow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
@@ -262,13 +264,14 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     protected override async start() {
-        const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
+        // Ensure MdnsService is fully constructed
+        await this.owner.env.load(MdnsService);
+
         await this.owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
-        this.#interactionServer = await TransactionalInteractionServer.create(this.owner);
+        const { sessionStorage, fabricStorage } = this.owner.env.get(NodeStore);
 
-        const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
-
+        // TODO - convert to using components directly, not via MatterDevice
         const matterDevice = await MatterDevice.create(
             sessionStorage,
             fabricStorage,
@@ -284,11 +287,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             (_fabricIndex: FabricIndex) => {
                 // Wired differently using SessionBehavior
             },
-            { maxPathsPerInvoke: this.#interactionServer.maxPathsPerInvoke },
+            { maxPathsPerInvoke: this.owner.state.basicInformation.maxPathsPerInvoke },
         );
         this.#matterDevice = matterDevice;
+
+        this.#interactionServer = await TransactionalInteractionServer.create(this.owner, matterDevice.sessionManager);
         matterDevice.addProtocolHandler(this.#interactionServer);
-        matterDevice.addScanner(mdnsScanner);
 
         matterDevice.fabricManager.events.added.on(fabric => {
             const fabrics = this.#matterDevice?.fabricManager.getFabrics() ?? [];
@@ -298,9 +302,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         });
 
         // Expose internal managers for other components in the environment
+        // TODO - these should live for lifetime of the node and will be managed by node so this is just temporary
         this.owner.env.set(SessionManager, matterDevice.sessionManager);
         this.owner.env.set(FabricManager, matterDevice.fabricManager);
-        this.owner.env.set(ExchangeManager, this.#matterDevice.exchangeManager);
+        this.owner.env.set(ExchangeManager, matterDevice.exchangeManager);
+        this.owner.env.set(DeviceCommissioner, matterDevice.commissioner);
+        this.owner.env.set(DeviceAdvertiser, matterDevice.advertiser);
 
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
@@ -318,6 +325,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             this.owner.env.delete(SessionManager, this.#matterDevice.sessionManager);
             this.owner.env.delete(FabricManager, this.#matterDevice.fabricManager);
             this.owner.env.delete(ExchangeManager, this.#matterDevice.exchangeManager);
+            this.owner.env.delete(DeviceCommissioner, this.#matterDevice.commissioner);
+            this.owner.env.delete(DeviceAdvertiser, this.#matterDevice.advertiser);
 
             await this.#matterDevice.close();
 

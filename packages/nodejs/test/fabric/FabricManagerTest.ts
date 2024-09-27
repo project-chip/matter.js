@@ -20,7 +20,7 @@ describe("FabricManager", () => {
         storageManager = new StorageManager(storage);
         await storageManager.initialize();
         fabricManager = new FabricManager(storageManager.createContext("Context"));
-        await fabricManager.initFromStorage();
+        await fabricManager.construction.ready;
     });
 
     describe("adding Fabrics", () => {
@@ -37,7 +37,7 @@ describe("FabricManager", () => {
             const storage = new StorageManager(new StorageBackendMemory());
             await storage.initialize();
             const fabricManager = new FabricManager(storage.createContext("Context"));
-            await fabricManager.initFromStorage();
+            await fabricManager.construction.ready;
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
 
@@ -64,7 +64,7 @@ describe("FabricManager", () => {
             storage.set(["Context"], "fabrics", [fabric.toStorageObject()]);
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
-            await fabricManager.initFromStorage();
+            await fabricManager.construction.ready;
             assert.equal(fabricManager.getFabrics().length, 1);
             assert.deepEqual(fabricManager.getFabrics()[0].toStorageObject(), fabric.toStorageObject());
         });

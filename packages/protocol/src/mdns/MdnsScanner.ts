@@ -6,6 +6,7 @@
 
 import {
     Bytes,
+    ChannelType,
     Diagnostic,
     DnsCodec,
     DnsMessagePartiallyPreEncoded,
@@ -77,6 +78,10 @@ const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
  * It sends out queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
+    get type() {
+        return ChannelType.UDP;
+    }
+
     static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4, netInterface } = options ?? {};
         return new MdnsScanner(

@@ -76,8 +76,8 @@ export class CommissioningBehavior extends Behavior {
     handleFabricChange(fabricIndex: FabricIndex, fabricAction: FabricAction) {
         // Do not consider commissioned so long as there is an active failsafe timer as commissioning may not be
         // complete and could still be rolled back
-        if (this.endpoint.env.has(FailsafeContext)) {
-            const failsafe = this.endpoint.env.get(FailsafeContext);
+        if (this.env.has(FailsafeContext)) {
+            const failsafe = this.env.get(FailsafeContext);
             if (fabricAction === FabricAction.Added || fabricAction === FabricAction.Updated) {
                 // Added or updated fabric with active Failsafe are temporary and should not be considered until failsafe ends
                 if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
@@ -98,7 +98,7 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager).getFabrics();
         const commissioned = !!fabrics.length;
         if (fabricAction === FabricAction.Removed) {
             delete this.state.fabrics[fabricIndex];
@@ -151,7 +151,7 @@ export class CommissioningBehavior extends Behavior {
     }
 
     #triggerFactoryReset() {
-        this.endpoint.env.runtime.add(
+        this.env.runtime.add(
             (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
         );
     }
@@ -254,7 +254,7 @@ export class CommissioningBehavior extends Behavior {
     });
 
     #nodeOnline() {
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager).getFabrics();
         if (!fabrics.length) {
             this.initiateCommissioning();
         } else {

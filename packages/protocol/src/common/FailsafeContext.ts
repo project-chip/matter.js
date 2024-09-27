@@ -5,8 +5,6 @@
  */
 
 import { AsyncObservable, Construction, Logger, MatterFlowError, UnexpectedDataError } from "#general";
-import { MatterDevice } from "#MatterDevice.js";
-import { Session } from "#session/Session.js";
 import { CaseAuthenticatedTag, NodeId, ValidationError, VendorId } from "#types";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
@@ -61,10 +59,6 @@ export abstract class FailsafeContext {
             );
             logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
         });
-    }
-
-    static of(session: Session) {
-        return MatterDevice.of(session).failsafeContext;
     }
 
     async extend(fabric: Fabric | undefined, expiryLengthSeconds: number) {

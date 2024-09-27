@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { InternalError, Logger, Time, Timer } from "#general";
 import { AccessLevel } from "#model";
-import { FailsafeContext, MatterDevice, PaseServer } from "#protocol";
+import { DeviceCommissioner, FailsafeContext, PaseServer, SessionManager } from "#protocol";
 import {
     Command,
     MAXIMUM_COMMISSIONING_TIMEOUT_S,
@@ -95,18 +94,21 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             );
         }
 
-        const device = MatterDevice.of(this.session);
+        const commissioner = this.env.get(DeviceCommissioner);
 
-        this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
+        this.#assertCommissioningWindowRequirements(commissioningTimeout, commissioner);
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
             AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
         );
 
-        await device.allowEnhancedCommissioning(
+        await this.env.get(DeviceCommissioner).allowEnhancedCommissioning(
             discriminator,
-            PaseServer.fromVerificationValue(pakePasscodeVerifier, { iterations, salt }),
+            PaseServer.fromVerificationValue(this.env.get(SessionManager), pakePasscodeVerifier, {
+                iterations,
+                salt,
+            }),
             this.callback(this.#endCommissioning),
         );
     }
@@ -115,16 +117,16 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     async openBasicCommissioningWindow({
         commissioningTimeout,
     }: AdministratorCommissioning.OpenBasicCommissioningWindowRequest) {
-        const device = MatterDevice.of(this.session);
+        const commissioner = this.env.get(DeviceCommissioner);
 
-        this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
+        this.#assertCommissioningWindowRequirements(commissioningTimeout, commissioner);
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
             AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
-        await device.allowBasicCommissioning(this.callback(this.#endCommissioning));
+        await commissioner.allowBasicCommissioning(this.callback(this.#endCommissioning));
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -141,8 +143,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         await this.#closeCommissioningWindow();
 
-        if (this.endpoint.env.has(FailsafeContext)) {
-            const failsafeContext = this.endpoint.env.get(FailsafeContext);
+        if (this.env.has(FailsafeContext)) {
+            const failsafeContext = this.env.get(FailsafeContext);
             if (failsafeContext) {
                 await failsafeContext.close();
             }
@@ -188,7 +190,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     /**
      * This method validates if a commissioning window can be opened and throws various exceptions in case of failures.
      */
-    #assertCommissioningWindowRequirements(commissioningTimeout: number, device: MatterDevice) {
+    #assertCommissioningWindowRequirements(commissioningTimeout: number, commissioner: DeviceCommissioner) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             throw new StatusResponseError(
                 "A commissioning window is already opened.",
@@ -211,7 +213,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             );
         }
 
-        if (device.isFailsafeArmed()) {
+        if (commissioner.isFailsafeArmed) {
             throw new StatusResponseError(
                 "Failsafe timer armed, assume commissioning in progress.",
                 StatusCode.Failure,
@@ -243,14 +245,14 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     async #closeCommissioningWindow() {
         this.callback(this.#endCommissioning);
-        await this.agent.get(NetworkServer).endCommissioning();
+        await this.env.get(DeviceCommissioner).endCommissioning();
     }
 
     /**
      * Close commissioning window on timeout when there's nobody to await the resulting promise
      * */
     #commissioningTimeout() {
-        this.endpoint.env.runtime.add(this.#closeCommissioningWindow());
+        this.env.runtime.add(this.#closeCommissioningWindow());
     }
 
     /**

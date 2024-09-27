@@ -4,17 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FabricManager } from "#fabric/FabricManager.js";
 import {
-    AsyncObservable,
     BasicSet,
     Bytes,
+    Construction,
     Crypto,
+    Environment,
+    Environmental,
+    Lifecycle,
     Logger,
     MatterFlowError,
+    Mutex,
     Observable,
+    ObserverGroup,
     StorageContext,
+    StorageManager,
 } from "#general";
-import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId } from "#types";
+import { Subscription } from "#interaction/Subscription.js";
+import { Specification } from "#model";
+import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, NodeId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";
@@ -27,12 +36,21 @@ import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
-    SessionContext,
     SessionParameterOptions,
     SessionParameters,
 } from "./Session.js";
 
 const logger = Logger.get("SessionManager");
+
+const DEFAULT_SESSION_PARAMETERS = {
+    idleIntervalMs: SESSION_IDLE_INTERVAL_MS,
+    activeIntervalMs: SESSION_ACTIVE_INTERVAL_MS,
+    activeThresholdMs: SESSION_ACTIVE_THRESHOLD_MS,
+    dataModelRevision: Specification.DATA_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+    specificationVersion: Specification.SPECIFICATION_VERSION,
+    maxPathsPerInvoke: DEFAULT_MAX_PATHS_PER_INVOKE,
+};
 
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 
@@ -63,41 +81,122 @@ type ResumptionStorageRecord = {
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
 
+/**
+ * Interfaces {@link SessionManager} with other components.
+ */
+export interface SessionManagerContext {
+    fabrics: FabricManager;
+    storage: StorageContext;
+
+    /**
+     * Parameter overrides.
+     */
+    parameters?: Partial<SessionParameters>;
+
+    /**
+     * This is an arbitrary contextual object attached to sessions used for compatibility with legacy APIs.
+     *
+     * @deprecated
+     */
+    owner?: unknown;
+}
+
+/**
+ * Manages Matter sessions associated with peer connections.
+ */
 export class SessionManager {
+    readonly #context: SessionManagerContext;
     readonly #insecureSessions = new Map<NodeId, InsecureSession>();
     readonly #sessions = new BasicSet<SecureSession>();
     #nextSessionId = Crypto.getRandomUInt16();
     #resumptionRecords = new Map<NodeId, ResumptionRecord>();
-    readonly #sessionStorage: StorageContext;
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
-    readonly #subscriptionsChanged = Observable<[session: SecureSession]>();
-    readonly #sessionOpened = Observable<[session: SecureSession]>();
-    readonly #sessionClosed = AsyncObservable<[session: SecureSession], void>();
+    readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
+    readonly #sessionParameters;
+    readonly #resubmissionStarted = new Observable<[nodeId?: NodeId]>();
+    readonly #construction: Construction<SessionManager>;
+    readonly #observers = new ObserverGroup();
+    readonly #subscriptionUpdateMutex = new Mutex(this);
 
-    constructor(
-        private readonly context: SessionContext,
-        sessionStorage: StorageContext,
-    ) {
-        this.#sessionStorage = sessionStorage;
+    constructor(context: SessionManagerContext) {
+        this.#context = context;
+        this.#sessionParameters = { ...DEFAULT_SESSION_PARAMETERS, ...context.parameters };
+
+        // When fabric is removed, also remove the resumption record
+        this.#observers.on(context.fabrics.events.deleted, async fabric =>
+            this.removeResumptionRecord(fabric.rootNodeId),
+        );
+
+        this.#construction = Construction(this, () => this.#initialize());
     }
 
+    [Environmental.create](env: Environment) {
+        const instance = new SessionManager({
+            storage: env.get(StorageManager).createContext("sessions"),
+            fabrics: env.get(FabricManager),
+        });
+        env.set(SessionManager, instance);
+        return instance;
+    }
+
+    get construction() {
+        return this.#construction;
+    }
+
+    get context() {
+        return this.#context;
+    }
+
+    /**
+     * Active secure sessions.
+     */
+    get sessions() {
+        return this.#sessions;
+    }
+
+    /**
+     * Active insecure sessions.
+     */
+    get insecureSessions() {
+        return this.#insecureSessions;
+    }
+
+    /**
+     * Our session parameters.  These are the parameters we provide during session negotiation.  The peer may specify
+     * different parameters.
+     */
+    get sessionParameters() {
+        return this.#sessionParameters;
+    }
+
+    /**
+     * Emits when there is a change to the subscription set.
+     */
     get subscriptionsChanged() {
         return this.#subscriptionsChanged;
     }
 
-    get sessionOpened() {
-        return this.#sessionOpened;
+    /**
+     * Emits when resubmission is necessary due to timeout or network error.
+     */
+    get resubmissionStarted() {
+        return this.#resubmissionStarted;
     }
 
-    get sessionClosed() {
-        return this.#sessionClosed;
+    /**
+     * @deprecated
+     */
+    get owner() {
+        return this.#context.owner;
     }
 
-    createUnsecureSession(options: {
+    createInsecureSession(options: {
         initiatorNodeId?: NodeId;
         sessionParameters?: SessionParameterOptions;
         isInitiator?: boolean;
     }) {
+        this.#construction.assert();
+
         const { initiatorNodeId, sessionParameters, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
             if (this.#insecureSessions.has(initiatorNodeId)) {
@@ -106,21 +205,17 @@ export class SessionManager {
         }
         while (true) {
             const session = new InsecureSession({
-                context: this.context,
+                manager: this,
                 messageCounter: this.#globalUnencryptedMessageCounter,
-                closeCallback: async () => {
-                    logger.info(`End insecure session ${session.name}`);
-                    this.#insecureSessions.delete(session.nodeId);
-                },
                 initiatorNodeId,
                 sessionParameters,
                 isInitiator: isInitiator ?? false,
             });
 
-            const ephermalNodeId = session.nodeId;
-            if (this.#insecureSessions.has(ephermalNodeId)) continue;
+            const ephemeralNodeId = session.nodeId;
+            if (this.#insecureSessions.has(ephemeralNodeId)) continue;
 
-            this.#insecureSessions.set(ephermalNodeId, session);
+            this.#insecureSessions.set(ephemeralNodeId, session);
             return session;
         }
     }
@@ -137,6 +232,8 @@ export class SessionManager {
         peerSessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
+        await this.construction;
+
         const {
             sessionId,
             fabric,
@@ -150,7 +247,7 @@ export class SessionManager {
             caseAuthenticatedTags,
         } = args;
         const session = await SecureSession.create({
-            context: this.context,
+            manager: this,
             id: sessionId,
             fabric,
             peerNodeId,
@@ -159,37 +256,36 @@ export class SessionManager {
             salt,
             isInitiator,
             isResumption,
-            closeCallback: async () => {
-                logger.info(`End ${session.isPase ? "PASE" : "CASE"} session ${session.name}`);
-                this.#sessions.delete(session);
-                await this.#sessionClosed.emit(session);
-            },
             peerSessionParameters: peerSessionParameters,
             caseAuthenticatedTags,
-            subscriptionChangedCallback: () => {
-                this.#subscriptionsChanged.emit(session);
-            },
         });
 
+        const subscriptionsChanged = (subscription: Subscription) => {
+            if (session.isClosing) {
+                return;
+            }
+
+            this.#subscriptionsChanged.emit(session, subscription);
+        };
+
+        session.subscriptions.added.on(subscriptionsChanged);
+        session.subscriptions.deleted.on(subscriptionsChanged);
+
         this.#sessions.add(session);
-        this.#sessionOpened.emit(session);
 
         return session;
     }
 
-    removeSession(sessionId: number) {
-        const session = this.getSession(sessionId);
-        if (session !== undefined) {
-            this.#sessions.delete(session);
-        }
-    }
-
     async removeResumptionRecord(peerNodeId: NodeId) {
+        await this.#construction;
+
         this.#resumptionRecords.delete(peerNodeId);
         await this.storeResumptionRecords();
     }
 
     findOldestInactiveSession() {
+        this.#construction.assert();
+
         let oldestSession: SecureSession | undefined = undefined;
         for (const session of this.#sessions) {
             if (!oldestSession || session.activeTimestamp < oldestSession.activeTimestamp) {
@@ -203,6 +299,8 @@ export class SessionManager {
     }
 
     async getNextAvailableSessionId() {
+        await this.#construction;
+
         for (let i = 0; i < 0xffff; i++) {
             const id = this.#nextSessionId;
             this.#nextSessionId = (this.#nextSessionId + 1) & 0xffff;
@@ -221,16 +319,22 @@ export class SessionManager {
     }
 
     getSession(sessionId: number) {
+        this.#construction.assert();
+
         return this.#sessions.get("id", sessionId);
     }
 
     getPaseSession() {
+        this.#construction.assert();
+
         return [...this.#sessions].find(
             session => session.isSecure && session.isPase && !session.closingAfterExchangeFinished,
         ) as SecureSession;
     }
 
     getSessionForNode(fabric: Fabric, nodeId: NodeId) {
+        this.#construction.assert();
+
         //TODO: It can have multiple sessions for one node ...
         return [...this.#sessions].find(session => {
             if (!session.isSecure) return false;
@@ -240,6 +344,8 @@ export class SessionManager {
     }
 
     async removeAllSessionsForNode(nodeId: NodeId, sendClose = false) {
+        await this.#construction;
+
         for (const session of this.#sessions) {
             if (!session.isSecure) continue;
             const secureSession = session;
@@ -250,6 +356,8 @@ export class SessionManager {
     }
 
     getUnsecureSession(sourceNodeId?: NodeId) {
+        this.#construction.assert();
+
         if (sourceNodeId === undefined) {
             return this.#insecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
         }
@@ -257,6 +365,8 @@ export class SessionManager {
     }
 
     findGroupSession(groupId: number, groupSessionId: number) {
+        this.#construction.assert();
+
         // Use groupsession id to find the key ??!!
         // The Group Session ID MAY help receiving nodes efficiently locate the Operational Group Key used to encrypt an incoming groupcast message. It SHALL NOT be used as the sole means to locate the asso­ ciated Operational Group Key, since it MAY collide within the fabric. Instead, the Group Session ID provides receiving nodes a means to identify Operational Group Key candidates without the need to first attempt to decrypt groupcast messages using all available keys.
         // On receipt of a message of Group Session Type, all valid, installed, operational group key candidates referenced by the given Group Session ID SHALL be attempted until authentication is passed or there are no more operational group keys to try. This is done because the same Group Session ID might arise from different keys. The chance of a Group Session ID collision is 2-16 but the chance of both a Group Session ID collision and the message MIC matching two different operational group keys is 2-80.
@@ -266,19 +376,23 @@ export class SessionManager {
     }
 
     findResumptionRecordById(resumptionId: Uint8Array) {
+        this.#construction.assert();
         return [...this.#resumptionRecords.values()].find(record => Bytes.areEqual(record.resumptionId, resumptionId));
     }
 
     findResumptionRecordByNodeId(nodeId: NodeId) {
+        this.#construction.assert();
         return this.#resumptionRecords.get(nodeId);
     }
 
     async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+        await this.#construction;
         this.#resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
         await this.storeResumptionRecords();
     }
 
     async updateFabricForResumptionRecords(fabric: Fabric) {
+        await this.#construction;
         const record = this.#resumptionRecords.get(fabric.rootNodeId);
         if (record === undefined) {
             throw new MatterFlowError("Resumption record not found. Should never happen.");
@@ -288,7 +402,8 @@ export class SessionManager {
     }
 
     async storeResumptionRecords() {
-        await this.#sessionStorage.set(
+        await this.#construction;
+        await this.#context.storage.set(
             "resumptionRecords",
             [...this.#resumptionRecords].map(
                 ([
@@ -308,8 +423,10 @@ export class SessionManager {
         );
     }
 
-    async initFromStorage(fabrics: Fabric[]) {
-        const storedResumptionRecords = await this.#sessionStorage.get<ResumptionStorageRecord[]>(
+    async #initialize() {
+        await this.#context.fabrics.construction;
+
+        const storedResumptionRecords = await this.#context.storage.get<ResumptionStorageRecord[]>(
             "resumptionRecords",
             [],
         );
@@ -332,7 +449,7 @@ export class SessionManager {
                 } = {},
                 caseAuthenticatedTags,
             }) => {
-                const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
+                const fabric = this.#context.fabrics.getFabrics().find(fabric => fabric.fabricId === fabricId);
                 logger.info(
                     "restoring resumption record for node",
                     nodeId,
@@ -367,6 +484,7 @@ export class SessionManager {
     }
 
     getActiveSessionInformation() {
+        this.#construction.assert();
         return [...this.#sessions]
             .filter(session => session.isSecure && !session.isPase)
             .map(session => ({
@@ -378,19 +496,18 @@ export class SessionManager {
                 secure: session.isSecure,
                 lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,
                 lastActiveTimestamp: session instanceof SecureSession ? session.activeTimestamp : undefined,
-                numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
+                numberOfActiveSubscriptions: session instanceof SecureSession ? session.subscriptions.size : 0,
             }));
     }
 
-    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
-        for (const session of this.#sessions) {
-            if (session.fabric?.fabricIndex === fabricIndex && session.peerNodeId === nodeId) {
-                await session.clearSubscriptions(flushSubscriptions);
-            }
-        }
-    }
-
     async close() {
+        if (this.#construction.status === Lifecycle.Status.Initializing) {
+            await this.#construction;
+        }
+
+        await this.#subscriptionUpdateMutex;
+
+        this.#observers.close();
         await this.storeResumptionRecords();
         for (const session of this.#sessions) {
             await session?.end(false);
@@ -398,7 +515,28 @@ export class SessionManager {
         }
         for (const session of this.#insecureSessions.values()) {
             await session?.end();
-            this.#insecureSessions.delete(session.nodeId);
+        }
+    }
+
+    updateAllSubscriptions() {
+        this.#subscriptionUpdateMutex.run(async () => {
+            for (const session of this.#sessions) {
+                for (const subscription of session.subscriptions) {
+                    await subscription.update();
+                }
+            }
+        });
+    }
+
+    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
+        for (const session of this.#sessions) {
+            if (session.fabric?.fabricIndex !== fabricIndex) {
+                continue;
+            }
+            if (session.peerNodeId !== nodeId) {
+                continue;
+            }
+            await session.clearSubscriptions(flushSubscriptions);
         }
     }
 }

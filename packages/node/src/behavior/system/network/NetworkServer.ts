@@ -5,7 +5,7 @@
  */
 
 import { ImplementationError, Logger } from "#general";
-import { Ble, SubscriptionOptions } from "#protocol";
+import { Ble, ServerSubscriptionConfig } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "#types";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
@@ -79,13 +79,7 @@ export class NetworkServer extends NetworkBehavior {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.endpoint.env.runtime.add(this.internal.runtime.announceNow());
-    }
-
-    async endCommissioning() {
-        if (this.internal.runtime) {
-            return this.internal.runtime.endCommissioning();
-        }
+        this.env.runtime.add(this.internal.runtime.advertiseNow());
     }
 
     #endUncommissionedMode() {
@@ -108,6 +102,6 @@ export namespace NetworkServer {
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };
-        subscriptionOptions?: SubscriptionOptions = undefined;
+        subscriptionOptions?: ServerSubscriptionConfig = undefined;
     }
 }

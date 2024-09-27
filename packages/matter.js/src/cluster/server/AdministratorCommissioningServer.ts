@@ -168,7 +168,7 @@ class AdministratorCommissioningManager {
 
         await device.allowEnhancedCommissioning(
             discriminator,
-            PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
+            PaseServer.fromVerificationValue(device.sessionManager, pakeVerifier, { iterations, salt }),
             () => {
                 session.associatedFabric.deleteRemoveCallback(this.fabricRemoveHandler);
                 this.endCommissioning();

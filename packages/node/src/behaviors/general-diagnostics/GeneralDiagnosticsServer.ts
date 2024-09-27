@@ -11,9 +11,9 @@ import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
-import { FieldElement } from "#model";
+import { FieldElement, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { INTERACTION_MODEL_REVISION, MdnsService } from "#protocol";
+import { MdnsService } from "#protocol";
 import { CommandId, StatusCode, StatusResponseError, TlvInvokeResponse } from "#types";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
 
@@ -128,7 +128,7 @@ export class GeneralDiagnosticsServer extends Base {
         // but near enough
         const responseSize = TlvInvokeResponse.encode({
             suppressResponse: false,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             moreChunkedMessages: true,
             invokeResponses: [
                 {
@@ -302,7 +302,7 @@ export class GeneralDiagnosticsServer extends Base {
     }
 
     async #updateNetworkList() {
-        const mdnsService = this.endpoint.env.get(MdnsService);
+        const mdnsService = this.env.get(MdnsService);
         const mdnsLimitedToNetworkInterfaces = mdnsService.limitedToNetInterface;
 
         const networkRuntime = this.endpoint.behaviors.internalsOf(NetworkServer).runtime;

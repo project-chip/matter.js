@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { parse } from "path";
 import { Docker } from "../util/docker.js";
 import { Package } from "../util/package.js";
 import { PicsFile } from "./chip/pics-file.js";
@@ -18,6 +19,7 @@ namespace Constants {
     export const yamlTests = `${chip}/src/app/tests/suites/certification`;
     export const pythonTests = `${chip}/src/python_testing`;
     export const python = ["/usr/bin/env", "-S", "python3", "-B"];
+    export const pythonRunner = `${chip}/scripts/tests/run_python_test.py`;
 
     export const pics = "/matter.js/packages/tools/build/pics.properties";
     export const chipPics = "/connectedhomeip/src/app/tests/suites/certification/ci-pics-values";
@@ -35,6 +37,7 @@ const State = {
     options: undefined as Chip.Options | undefined,
     docker: undefined as Docker | undefined,
     yamlTests: Array<string>(),
+    pythonTests: Array<string>(),
 };
 
 /**
@@ -86,20 +89,37 @@ export const Chip = {
     },
 
     /**
+     * Initialize.  This must run before defining tests to enable test definition via globs.
+     */
+    async initialize() {
+        await initialize();
+    },
+
+    /**
      * Define YAML tests.  This is a declarative CHIP test defined in a YAML file.
      */
     yaml(testee: Chip.Testee, includeGlob: string, excludeGlob?: string) {
-        let files = filterWithGlob(State.yamlTests, includeGlob);
+        let tests = filterWithGlob(State.yamlTests, includeGlob);
         if (excludeGlob !== undefined) {
-            files = filterWithGlob(files, excludeGlob, true);
+            tests = filterWithGlob(tests, excludeGlob, true);
         }
 
-        for (const file of files) {
+        if (tests.length === 0) {
+            throw new Error(`YAML test glob ${includeGlob} matched no tests`);
+        }
+
+        for (const file of tests) {
             implementTest(testee, {
-                name: file.replace(/^.*\/(?:Test_)(?:TC_)(.*)\.yaml$/, "$1"),
+                name: parse(file).base,
+
+                command: [Constants.pythonRunner, file],
 
                 // TODO - complete argument set
-                args: [file, "--pics-file", Constants.pics, "--discriminator", "1234", "--passcode", "20202021"],
+                args: {
+                    "--pics-file": Constants.pics,
+                    "--discriminator": "1234",
+                    "--passcode": "20202021",
+                },
             });
         }
     },
@@ -107,27 +127,37 @@ export const Chip = {
     /**
      * Define a "python" test.  This is a CHIP test implemented as a python script.
      */
-    python(testee: Chip.Testee, tester: Chip.TestSelection) {
+    python(testee: Chip.Testee, tester: Chip.TestSelection, excludeGlob?: string) {
         if (typeof tester === "string") {
             tester = {
                 name: tester,
-
-                // TODO - complete argument set
-                args: [
-                    `${Constants.pythonTests}/${tester}.py`,
-                    "--commissioning-method",
-                    "on-network",
-                    "--PICS",
-                    Constants.pics,
-                    "--discriminator",
-                    "1234",
-                    "--passcode",
-                    "20202021",
-                ],
             };
+        } else {
+            tester = { ...tester };
         }
 
-        implementTest(testee, tester);
+        // TODO - complete arguments
+        tester.args = {
+            "--commissioning-method": "on-network",
+            "--PICS": Constants.pics,
+            "--discriminator": "1234",
+            "--passcode": "20202021",
+            ...tester.args,
+        };
+
+        let files = filterWithGlob(State.pythonTests, tester.name, false);
+        if (excludeGlob !== undefined) {
+            files = filterWithGlob(files, excludeGlob, true);
+        }
+
+        if (files.length === 0) {
+            throw new Error(`Python test glob ${tester.name} matched no tests`);
+        }
+
+        for (const file of files) {
+            const name = parse(file).name;
+            implementTest(testee, { ...tester, name, command: [file] });
+        }
     },
 };
 
@@ -138,7 +168,7 @@ function implementTest(testee: Chip.Testee, tester: Chip.Tester) {
         containerInitializerInstalled = true;
         before(async function () {
             this.timeout(Constants.buildTimeout);
-            await configure();
+            await initialize();
         });
     }
 
@@ -161,12 +191,12 @@ function implementTest(testee: Chip.Testee, tester: Chip.Tester) {
 async function invokeTester(tester: Chip.Tester) {
     const docker = await Config.docker();
 
-    const args = [];
+    const args = Array<string>();
     if (tester.command) {
         args.push(...tester.command);
     }
     if (tester.args) {
-        args.push(...tester.args);
+        args.push(...Object.entries(tester.args).flat());
     }
 
     // TODO - define docker network to match CHIP's testing infrastructure
@@ -211,7 +241,7 @@ export namespace Chip {
         name: string;
         description?: string;
         command?: string[];
-        args?: string[];
+        args?: Record<string, string>;
         timeout?: number;
         environment?: Record<string, string>;
     }
@@ -298,6 +328,9 @@ async function translateTestOutput(runner: TestRunner, output: AsyncIterable<str
      * per-test information from failure output.
      */
     function processLine(line: string) {
+        // Inject the message into our log stream
+        MockLogger.injectExternalMessage("CHIP", line);
+
         line = line.trim();
         const plain = deansify(line);
         const testBoundary = plain.match(
@@ -315,10 +348,6 @@ async function translateTestOutput(runner: TestRunner, output: AsyncIterable<str
                 reportFailures();
                 runner.reporter.endRun();
             }
-        }
-
-        if (runner.options.allLogs) {
-            console.log(line);
         }
 
         capture.push(line);
@@ -340,14 +369,9 @@ async function translateTestOutput(runner: TestRunner, output: AsyncIterable<str
     if (partial !== undefined) {
         processLine(partial);
     }
-
-    // If we didn't notice any tests assume something calamitous occurred and dump all output
-    if (!testCount) {
-        console.log(capture.join("\n"));
-    }
 }
 
-async function configure() {
+async function initialize() {
     if (State.configured) {
         return;
     }
@@ -355,6 +379,7 @@ async function configure() {
     await Config.docker();
     await configurePics();
     await configureYaml();
+    await configurePython();
 
     State.configured = true;
 }
@@ -373,12 +398,23 @@ async function configurePics() {
 async function configureYaml() {
     const docker = await Config.docker();
 
-    const yamlTests = await docker.resolveGlobFromImage(Constants.dockerName, `${Constants.yamlTests}/Test_*.yaml`);
+    const tests = await docker.resolveGlobFromImage(Constants.dockerName, `${Constants.yamlTests}/Test_*.yaml`);
 
-    State.yamlTests.push(...yamlTests);
+    State.yamlTests.push(...tests);
+}
+
+async function configurePython() {
+    const docker = await Config.docker();
+
+    const tests = (await docker.resolveGlobFromImage(Constants.dockerName, `${Constants.pythonTests}/*.py`)).filter(
+        name => name.match(/(?:TC_|Test)[^/]\.py$/),
+    );
+
+    State.pythonTests.push(...tests);
 }
 
 function filterWithGlob(list: string[], glob: string, invert = false) {
-    const pattern = new RegExp(glob.replace(/\*/g, ".*"));
+    const globPattern = glob.replace(/\*/g, "[^\\/]+");
+    const pattern = new RegExp(`^.*/(?:Test_TC_|TC|Test)${globPattern}\\.(?:py|yaml)$`);
     return list.filter(s => !!s.match(pattern) === !invert);
 }

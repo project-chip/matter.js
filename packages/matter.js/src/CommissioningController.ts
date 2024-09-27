@@ -10,7 +10,9 @@ import {
     ImplementationError,
     InternalError,
     Logger,
+    NetInterfaceSet,
     Network,
+    NoProviderError,
     ServerAddress,
     StorageContext,
     SupportedStorageTypes,
@@ -19,6 +21,7 @@ import {
 } from "#general";
 import { ControllerStore } from "#node";
 import {
+    Ble,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
     ControllerCommissioningOptions,
@@ -28,6 +31,7 @@ import {
     MdnsBroadcaster,
     MdnsScanner,
     MdnsService,
+    ScannerSet,
     SupportedAttributeClient,
 } from "#protocol";
 import {
@@ -240,16 +244,21 @@ export class CommissioningController extends MatterNode {
             throw new InternalError("Storage not initialized correctly."); // Should not happen
         }
 
+        const { netInterfaces, scanners } = await configureNetwork({
+            ipv4Disabled: this.ipv4Disabled,
+            mdnsScanner,
+            localPort,
+            listeningAddressIpv4: this.listeningAddressIpv4,
+            listeningAddressIpv6: this.listeningAddressIpv6,
+        });
+
         return await MatterController.create({
             sessionStorage,
             rootCertificateStorage,
             fabricStorage,
             nodesStorage,
-            mdnsScanner,
-            netInterfaceIpv4: this.ipv4Disabled
-                ? undefined
-                : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
-            netInterfaceIpv6: await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
+            scanners,
+            netInterfaces,
             sessionClosedCallback: peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
                 const handler = this.sessionDisconnectedHandler.get(peerNodeId);
@@ -610,4 +619,39 @@ export class CommissioningController extends MatterNode {
     getActiveSessionInformation() {
         return this.controllerInstance?.getActiveSessionInformation() ?? [];
     }
+}
+
+export async function configureNetwork(options: {
+    ipv4Disabled?: boolean;
+    mdnsScanner?: MdnsScanner;
+    localPort?: number;
+    listeningAddressIpv6?: string;
+    listeningAddressIpv4?: string;
+}) {
+    const { ipv4Disabled, mdnsScanner, localPort, listeningAddressIpv6, listeningAddressIpv4 } = options;
+
+    const netInterfaces = new NetInterfaceSet();
+    const scanners = new ScannerSet();
+
+    netInterfaces.add(await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6));
+    if (!ipv4Disabled) {
+        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", localPort, listeningAddressIpv4));
+    }
+    if (mdnsScanner) {
+        scanners.add(mdnsScanner);
+    }
+
+    try {
+        const ble = Ble.get();
+        netInterfaces.add(ble.getBleCentralInterface());
+        scanners.add(ble.getBleScanner());
+    } catch (e) {
+        if (e instanceof NoProviderError) {
+            logger.warn("BLE is not supported on this platform");
+        } else {
+            logger.error("Disabling BLE due to initialization error:", e);
+        }
+    }
+
+    return { netInterfaces, scanners };
 }

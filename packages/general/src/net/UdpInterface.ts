@@ -20,6 +20,10 @@ export class UdpInterface implements NetInterface {
 
     constructor(private readonly server: UdpChannel) {}
 
+    supports(type: ChannelType, address: string) {
+        return this.server.supports(type, address);
+    }
+
     async openChannel(address: ServerAddress) {
         if (address.type !== "udp") {
             throw new NetworkError(`Unsupported address type ${address.type}`);

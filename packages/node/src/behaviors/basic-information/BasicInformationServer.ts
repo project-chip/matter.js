@@ -9,8 +9,8 @@ import { BasicInformation } from "#clusters/basic-information";
 import { Diagnostic, Logger, Observable } from "#general";
 import { Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { DEFAULT_MAX_PATHS_PER_INVOKE, Fabric, FabricManager } from "#protocol";
-import { VendorId } from "#types";
+import { Fabric, FabricManager } from "#protocol";
+import { DEFAULT_MAX_PATHS_PER_INVOKE, VendorId } from "#types";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
 const logger = Logger.get("BasicInformationServer");
@@ -91,7 +91,7 @@ export class BasicInformationServer extends Base {
     #online() {
         this.events.startUp.emit({ softwareVersion: this.state.softwareVersion }, this.context);
 
-        const fabricManager = this.endpoint.env.get(FabricManager);
+        const fabricManager = this.env.get(FabricManager);
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
     }
 

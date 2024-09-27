@@ -20,6 +20,7 @@ import {
     EventPath,
     EventStorageData,
     FabricScopedAttributeServer,
+    InteractionContext,
     InteractionEndpointStructure,
     InteractionServer,
     Message,
@@ -40,10 +41,9 @@ export class LegacyInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #aclManager?: AccessControlManager;
 
-    constructor(config: InteractionServer.Configuration) {
-        const { endpointStructure } = config;
-        super(config);
-        this.#endpointStructure = endpointStructure;
+    constructor(context: InteractionContext) {
+        super(context);
+        this.#endpointStructure = context.structure;
     }
 
     #getAclManager(session: Session) {

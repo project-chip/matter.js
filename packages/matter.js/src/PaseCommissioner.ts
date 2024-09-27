@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Environment, ImplementationError, Logger, Network, UdpInterface } from "#general";
+import { Environment, ImplementationError, Logger } from "#general";
 import {
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
@@ -18,6 +18,7 @@ import {
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "#types";
 import {
     CommissioningControllerOptions,
+    configureNetwork as configureControllerNetwork,
     ControllerEnvironmentOptions,
     NodeCommissioningOptions,
 } from "./CommissioningController.js";
@@ -77,31 +78,30 @@ export class PaseCommissioner {
             return this.controllerInstance;
         }
 
-        const { localPort, listeningAddressIpv4, listeningAddressIpv6, rootCertificateData, fabricData } = this.options;
+        const { rootCertificateData, fabricData } = this.options;
 
         let mdnsScanner: MdnsScanner | undefined;
         let ipv4Disabled = false;
-        let netInterfaceIpv4: UdpInterface | undefined;
-        let netInterfaceIpv6: UdpInterface | undefined;
 
         try {
             const mdnsService = await this.environment.load(MdnsService);
             ipv4Disabled = !mdnsService.enableIpv4;
             mdnsScanner = mdnsService.scanner;
-            if (!ipv4Disabled) {
-                netInterfaceIpv4 = await UdpInterface.create(Network.get(), "udp4", localPort, listeningAddressIpv4);
-            }
-            netInterfaceIpv6 = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
         } catch {
             logger.debug("No networking available, using only BLE");
         }
 
+        const { scanners, netInterfaces } = await configureControllerNetwork({
+            mdnsScanner,
+            ipv4Disabled,
+            ...this.options,
+        });
+
         return await MatterController.createAsPaseCommissioner({
             rootCertificateData,
             fabricData,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
-            mdnsScanner,
+            scanners,
+            netInterfaces,
         });
     }
 

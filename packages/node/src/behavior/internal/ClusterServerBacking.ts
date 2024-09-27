@@ -14,6 +14,7 @@ import {
     CommandServer,
     createAttributeServer as ConstructAttributeServer,
     EventServer,
+    FabricManager,
     Message,
     SecureSession,
 } from "#protocol";
@@ -28,7 +29,7 @@ import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { ServerBehaviorBacking } from "./ServerBacking.js";
+import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 
 const logger = Logger.get("Behavior");
 
@@ -142,6 +143,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
     #createClusterDatasource(): ClusterDatasource {
         const eventHandler = this.eventHandler;
         const datasource = this.datasource;
+        const env = this.endpoint.env;
 
         return {
             get version() {
@@ -150,6 +152,10 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
 
             get eventHandler() {
                 return eventHandler;
+            },
+
+            get fabrics() {
+                return env.get(FabricManager).getFabrics();
             },
 
             // We handle change management ourselves

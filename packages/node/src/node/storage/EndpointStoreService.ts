@@ -5,25 +5,25 @@
  */
 
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { PartStore } from "#endpoint/storage/PartStore.js";
 import type { StorageContext } from "#general";
 import { Construction, ImplementationError, InternalError, Lifecycle, Logger, asyncNew } from "#general";
-import { IdentityConflictError } from "../IdentityService.js";
-import { ServerPartStore } from "./ServerPartStore.js";
+import { EndpointStore } from "../../endpoint/storage/EndpointStore.js";
+import { type Node } from "../Node.js";
+import { IdentityConflictError } from "../server/IdentityService.js";
 
 const NEXT_NUMBER_KEY = "__nextNumber__";
 
-const logger = Logger.get("PartStoreService");
+const logger = Logger.get("EndpointStoreService");
 
 /**
- * Manages all {@link ServerPartStore}s for a {@link NodeServer}.
+ * Manages all {@link EndpointStore}s for a {@link Node}.
  *
  * We eagerly load all available endpoint data from disk because this allows us to keep {@link Endpoint} initialization
  * more synchronous.  We can initialize most behaviors synchronously if their state is already in memory.
  *
  * TODO - cleanup of storage for permanently removed endpoints
  */
-export abstract class PartStoreService {
+export abstract class EndpointStoreService {
     /**
      * Allocate an endpoint number.
      *
@@ -43,25 +43,25 @@ export abstract class PartStoreService {
      * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
      * somesuch
      */
-    abstract storeForPart(endpoint: Endpoint): PartStore;
+    abstract storeForPart(endpoint: Endpoint): EndpointStore;
 }
 
-export class PartStoreFactory extends PartStoreService {
+export class EndpointStoreFactory extends EndpointStoreService {
     #storage: StorageContext;
     #allocatedNumbers = new Set<number>();
-    #construction: Construction<PartStoreFactory>;
+    #construction: Construction<EndpointStoreFactory>;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
     #numbersToPersist?: Array<Endpoint>;
     #nextNumber?: number;
     #defaultNextNumber: number;
-    #root?: ServerPartStore;
+    #root?: EndpointStore;
 
     get construction() {
         return this.#construction;
     }
 
-    constructor({ storage, nextNumber }: PartStoreService.Options) {
+    constructor({ storage, nextNumber }: EndpointStoreService.Options) {
         super();
 
         this.#storage = storage;
@@ -82,7 +82,7 @@ export class PartStoreFactory extends PartStoreService {
         }
 
         // Preload stores so we can access synchronously going forward
-        this.#root = await asyncNew(ServerPartStore, this.#storage);
+        this.#root = await asyncNew(EndpointStore, this.#storage);
     }
 
     async erase() {
@@ -97,7 +97,7 @@ export class PartStoreFactory extends PartStoreService {
 
         this.#allocatedNumbers = new Set();
         this.#persistedNextNumber = this.#nextNumber = (this.#defaultNextNumber ?? 1) % 0xffff;
-        this.#root = new ServerPartStore(this.#storage, false);
+        this.#root = new EndpointStore(this.#storage, false);
 
         await this.construction;
     }
@@ -160,7 +160,7 @@ export class PartStoreFactory extends PartStoreService {
         this.#persistNumber(endpoint);
     }
 
-    storeForPart(endpoint: Endpoint): ServerPartStore {
+    storeForPart(endpoint: Endpoint): EndpointStore {
         this.#construction.assert();
 
         if (!endpoint.lifecycle.hasId) {
@@ -224,7 +224,7 @@ export class PartStoreFactory extends PartStoreService {
     }
 }
 
-export namespace PartStoreService {
+export namespace EndpointStoreService {
     export interface Options {
         storage: StorageContext;
         nextNumber?: number;

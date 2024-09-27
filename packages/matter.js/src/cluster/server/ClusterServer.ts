@@ -121,6 +121,10 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
             return datasource?.eventHandler;
         },
 
+        get fabrics() {
+            return datasource?.fabrics ?? [];
+        },
+
         increaseVersion() {
             return datasource?.increaseVersion() ?? 0;
         },

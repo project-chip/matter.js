@@ -4,7 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger, MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "#general";
+import {
+    ChannelType,
+    Diagnostic,
+    isIPv4,
+    isIPv6,
+    Logger,
+    MAX_UDP_MESSAGE_SIZE,
+    NetworkError,
+    UdpChannel,
+    UdpChannelOptions,
+} from "#general";
 import { RetransmissionLimitReachedError } from "#protocol";
 import * as dgram from "dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
@@ -94,12 +104,13 @@ export class NodeJsUdpChannel implements UdpChannel {
                 }
             }
         }
-        return new NodeJsUdpChannel(socket, netInterfaceZone);
+        return new NodeJsUdpChannel(type, socket, netInterfaceZone);
     }
 
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
+        private readonly type: "udp4" | "udp6",
         private readonly socket: dgram.Socket,
         private readonly netInterface?: string,
     ) {}
@@ -146,5 +157,23 @@ export class NodeJsUdpChannel implements UdpChannel {
 
     get port() {
         return this.socket.address().port;
+    }
+
+    supports(type: ChannelType, address?: string) {
+        if (type !== ChannelType.UDP) {
+            return false;
+        }
+
+        if (address === undefined) {
+            return true;
+        }
+
+        // TODO - we currently only discriminate based on protocol type.  We should also determine whether the address subnet is correct
+
+        if (this.type === "udp4") {
+            return isIPv4(address);
+        }
+
+        return isIPv6(address);
     }
 }

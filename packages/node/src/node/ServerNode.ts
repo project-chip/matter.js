@@ -16,9 +16,10 @@ import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
+import { Nodes } from "./Nodes.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
-import { ServerStore } from "./server/storage/ServerStore.js";
+import { NodeStore } from "./storage/NodeStore.js";
 
 /**
  * Thrown when there is an error during factory reset.
@@ -36,6 +37,8 @@ class FactoryResetError extends MatterError {
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
+    #nodes?: Nodes;
+
     /**
      * Construct a new ServerNode.
      *
@@ -96,10 +99,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
 
-        if (this.env.has(ServerStore)) {
-            const store = this.env.get(ServerStore);
+        if (this.env.has(NodeStore)) {
+            const store = this.env.get(NodeStore);
             await store.close();
-            this.env.delete(ServerStore, store);
+            this.env.delete(NodeStore, store);
         }
     }
 
@@ -147,18 +150,25 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         }
     }
 
+    /**
+     * Access other nodes on the fabric.
+     */
+    get nodes() {
+        if (!this.#nodes) {
+            this.#nodes = new Nodes(this);
+        }
+        return this.#nodes;
+    }
+
     async advertiseNow() {
         await this.act(`advertiseNow<${this}>`, agent => agent.get(NetworkServer).advertiseNow());
     }
 
     protected override async initialize() {
-        // Load the environment with node-specific services
-        const serverStore = await ServerStore.create(this.env, this.id);
+        const nodeStore = await NodeStore.create(this.env, this.id);
 
-        this.env.set(ServerStore, serverStore);
-
+        this.env.set(NodeStore, nodeStore);
         this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
-
         this.env.set(IdentityService, new IdentityService(this));
 
         return super.initialize();
@@ -173,8 +183,14 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @see {@link MatterSpecification.v12.Core} § 13.4
      */
     protected async resetStorage() {
-        await this.env.get(ServerStore).erase();
+        await this.env.get(NodeStore).erase();
     }
+
+    /**
+     * Normal endpoints must have an owner to complete construction but server nodes have no such precondition for
+     * construction.
+     */
+    protected override assertConstructable() {}
 }
 
 export namespace ServerNode {

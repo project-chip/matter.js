@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, createPromise, Logger, Time, Timer } from "#general";
+import { Bytes, ChannelType, createPromise, Logger, Time, Timer } from "#general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "#protocol";
 import { VendorId } from "#types";
 import { Device } from "react-native-ble-plx";
@@ -23,6 +23,10 @@ type CommissionableDeviceData = CommissionableDevice & {
 };
 
 export class BleScanner implements Scanner {
+    get type() {
+        return ChannelType.BLE;
+    }
+
     private readonly recordWaiters = new Map<
         string,
         {

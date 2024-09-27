@@ -5,8 +5,7 @@
  */
 
 import { MatterFlowError } from "#general";
-import { TypeFromSchema } from "#types";
-import { SecureMessageType } from "../../securechannel/SecureChannelMessages.js";
+import { SecureMessageType, TypeFromSchema } from "#types";
 import { SecureChannelMessenger } from "../../securechannel/SecureChannelMessenger.js";
 import { TlvCaseSigma1, TlvCaseSigma2, TlvCaseSigma2Resume, TlvCaseSigma3 } from "./CaseMessages.js";
 

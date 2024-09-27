@@ -24,6 +24,15 @@ const ZERO = new Uint8Array(1);
 
 class MockClusterDatasource implements ClusterDatasource {
     #version = 0;
+    #fabrics: Fabric[];
+
+    constructor(fabric?: Fabric) {
+        if (fabric) {
+            this.#fabrics = [fabric];
+        } else {
+            this.#fabrics = [];
+        }
+    }
 
     get version() {
         return this.#version;
@@ -34,6 +43,10 @@ class MockClusterDatasource implements ClusterDatasource {
     }
 
     changed() {}
+
+    get fabrics() {
+        return this.#fabrics;
+    }
 }
 
 interface CreateOptions<T> {
@@ -53,7 +66,7 @@ interface CreateOptions<T> {
     validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void;
 }
 
-function withDefaults(options: Partial<CreateOptions<number>>) {
+function withDefaults(options: Partial<CreateOptions<number>>, fabric?: Fabric) {
     return {
         id: AttributeId(1),
         name: "test",
@@ -63,7 +76,7 @@ function withDefaults(options: Partial<CreateOptions<number>>) {
         requiresTimedInteraction: false,
         initValue: 3,
         defaultValue: 4,
-        datasource: new MockClusterDatasource(),
+        datasource: new MockClusterDatasource(fabric),
         ...options,
     } as CreateOptions<number>;
 }
@@ -444,7 +457,7 @@ describe("AttributeServerTest", () => {
                 "",
             );
 
-            const config = withDefaults(options);
+            const config = withDefaults(options, testFabric);
             datasource = config.datasource;
 
             return new FabricScopedAttributeServer(
