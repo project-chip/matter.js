@@ -5,6 +5,17 @@ on:
   schedule:
     - cron: 0 2 * * * # Every day at 02:00
   workflow_dispatch: # Manually on demand
+    inputs:
+      versionBump:
+        description: 'Type of version bump'
+        required: true
+        default: 'prerelease'
+        type: choice
+        options:
+          - prerelease
+          - prepatch
+          - preminor
+          - premajor
 
 jobs:
   publish-config:
@@ -83,6 +94,8 @@ jobs:
 
     - name: Determine the version bump
       if: steps.changes.outputs.result == 'ok'
+      env:
+        VERSION_BUMP: ${{ inputs.versionBump }}
       id: version
       uses: actions/github-script@v7
       with:
@@ -113,7 +126,8 @@ jobs:
           }
 
           // Figure out the next version
-          return `${semver.inc(parsed, "prerelease", prereleaseIdentifier)}-${dateStr}-${sha}`;
+          const versionBump = process.env.VERSION_BUMP || "prerelease";
+          return `${semver.inc(parsed, versionBump, prereleaseIdentifier)}-${dateStr}-${sha}`;
 
     - name: Bump version locally
       if: steps.changes.outputs.result == 'ok'
