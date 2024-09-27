@@ -37,7 +37,7 @@
     },
     "optionalDependencies": {
         "@stoprocent/bleno": "^0.7.6",
-        "@stoprocent/noble": "^1.14.1"
+        "@stoprocent/noble": "^1.14.2"
     },
     "engines": {
         "node": ">=18.0.0"
