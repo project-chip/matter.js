@@ -152,7 +152,7 @@ export class DeviceAdvertiser {
         if (fabrics.length) {
             let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
-                const session = this.#context.sessions.getSessionForNode(fabric, fabric.rootNodeId);
+                const session = this.#context.sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session === undefined || !session.isSecure || session.subscriptions.size === 0) {
                     fabricsWithoutSessions++;
                     logger.debug("Announcing", Diagnostic.dict({ fabric: fabric.fabricId }));

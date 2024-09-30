@@ -23,6 +23,7 @@ import {
 } from "#general";
 import { Subscription } from "#interaction/Subscription.js";
 import { Specification } from "#model";
+import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, NodeId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
@@ -33,6 +34,7 @@ import {
     FALLBACK_INTERACTIONMODEL_REVISION,
     FALLBACK_MAX_PATHS_PER_INVOKE,
     FALLBACK_SPECIFICATION_VERSION,
+    Session,
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
@@ -109,11 +111,11 @@ export class SessionManager {
     readonly #insecureSessions = new Map<NodeId, InsecureSession>();
     readonly #sessions = new BasicSet<SecureSession>();
     #nextSessionId = Crypto.getRandomUInt16();
-    #resumptionRecords = new Map<NodeId, ResumptionRecord>();
+    #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
     readonly #sessionParameters;
-    readonly #resubmissionStarted = new Observable<[nodeId?: NodeId]>();
+    readonly #resubmissionStarted = new Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
     readonly #subscriptionUpdateMutex = new Mutex(this);
@@ -124,7 +126,7 @@ export class SessionManager {
 
         // When fabric is removed, also remove the resumption record
         this.#observers.on(context.fabrics.events.deleted, async fabric =>
-            this.removeResumptionRecord(fabric.rootNodeId),
+            this.removeResumptionRecord(fabric.addressOf(fabric.rootNodeId)),
         );
 
         this.#construction = Construction(this, () => this.#initialize());
@@ -181,6 +183,13 @@ export class SessionManager {
      */
     get resubmissionStarted() {
         return this.#resubmissionStarted;
+    }
+
+    /**
+     * Convenience function for accessing a fabric by address.
+     */
+    fabricFor(address: FabricIndex | PeerAddress) {
+        return this.#context.fabrics.for(address);
     }
 
     /**
@@ -276,10 +285,10 @@ export class SessionManager {
         return session;
     }
 
-    async removeResumptionRecord(peerNodeId: NodeId) {
+    async removeResumptionRecord(address: PeerAddress) {
         await this.#construction;
 
-        this.#resumptionRecords.delete(peerNodeId);
+        this.#resumptionRecords.delete(address);
         await this.storeResumptionRecords();
     }
 
@@ -332,24 +341,24 @@ export class SessionManager {
         ) as SecureSession;
     }
 
-    getSessionForNode(fabric: Fabric, nodeId: NodeId) {
+    getSessionForNode(address: PeerAddress) {
         this.#construction.assert();
 
         //TODO: It can have multiple sessions for one node ...
         return [...this.#sessions].find(session => {
             if (!session.isSecure) return false;
             const secureSession = session;
-            return secureSession.fabric?.fabricId === fabric.fabricId && secureSession.peerNodeId === nodeId;
+            return secureSession.peerIs(address);
         });
     }
 
-    async removeAllSessionsForNode(nodeId: NodeId, sendClose = false) {
+    async removeAllSessionsForNode(address: PeerAddress, sendClose = false) {
         await this.#construction;
 
         for (const session of this.#sessions) {
             if (!session.isSecure) continue;
             const secureSession = session;
-            if (secureSession.peerNodeId === nodeId) {
+            if (secureSession.peerIs(address)) {
                 await secureSession.destroy(sendClose, false);
             }
         }
@@ -380,24 +389,24 @@ export class SessionManager {
         return [...this.#resumptionRecords.values()].find(record => Bytes.areEqual(record.resumptionId, resumptionId));
     }
 
-    findResumptionRecordByNodeId(nodeId: NodeId) {
+    findResumptionRecordByAddress(address: PeerAddress) {
         this.#construction.assert();
-        return this.#resumptionRecords.get(nodeId);
+        return this.#resumptionRecords.get(address);
     }
 
     async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         await this.#construction;
-        this.#resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
+        this.#resumptionRecords.set(resumptionRecord.fabric.addressOf(resumptionRecord.peerNodeId), resumptionRecord);
         await this.storeResumptionRecords();
     }
 
     async updateFabricForResumptionRecords(fabric: Fabric) {
         await this.#construction;
-        const record = this.#resumptionRecords.get(fabric.rootNodeId);
+        const record = this.#resumptionRecords.get(fabric.addressOf(fabric.rootNodeId));
         if (record === undefined) {
             throw new MatterFlowError("Resumption record not found. Should never happen.");
         }
-        this.#resumptionRecords.set(fabric.rootNodeId, { ...record, fabric });
+        this.#resumptionRecords.set(fabric.addressOf(fabric.rootNodeId), { ...record, fabric });
         await this.storeResumptionRecords();
     }
 
@@ -407,11 +416,11 @@ export class SessionManager {
             "resumptionRecords",
             [...this.#resumptionRecords].map(
                 ([
-                    nodeId,
+                    address,
                     { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters, caseAuthenticatedTags },
                 ]) =>
                     ({
-                        nodeId,
+                        nodeId: address.nodeId,
                         sharedSecret,
                         resumptionId,
                         fabricId: fabric.fabricId,
@@ -462,7 +471,7 @@ export class SessionManager {
                     logger.error("fabric not found for resumption record", fabricId);
                     return;
                 }
-                this.#resumptionRecords.set(nodeId, {
+                this.#resumptionRecords.set(fabric.addressOf(nodeId), {
                     sharedSecret,
                     resumptionId,
                     fabric,

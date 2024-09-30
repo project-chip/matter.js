@@ -31,7 +31,6 @@ import {
     ClusterId,
     CommandId,
     EndpointNumber,
-    FabricId,
     FabricIndex,
     NodeId,
     Status,
@@ -301,9 +300,9 @@ describe("ClusterServerBacking", () => {
         let report: TypeFromSchema<typeof TlvDataReport> | undefined;
 
         // Mock ExchangeManager's "initiateExchange" method
-        node.env.get(ExchangeManager).initiateExchange = (fabric, nodeId) => {
-            expect(fabric.fabricId).equals(FabricId(1));
-            expect(nodeId).equals(NodeId(0));
+        node.env.get(ExchangeManager).initiateExchange = address => {
+            expect(address.fabricIndex).equals(FabricIndex(1));
+            expect(address.nodeId).equals(NodeId(0));
 
             return {
                 async nextMessage() {

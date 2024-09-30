@@ -19,9 +19,10 @@ import {
     TransportInterfaceSet,
     asyncNew,
 } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
 import { DeviceAdvertiser } from "#protocol/DeviceAdvertiser.js";
 import { CommissioningConfigProvider, DeviceCommissioner } from "#protocol/DeviceCommissioner.js";
-import { CommissioningOptions, FabricIndex, NodeId } from "#types";
+import { CommissioningOptions, FabricIndex } from "#types";
 import { FailsafeContext } from "./common/FailsafeContext.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Fabric } from "./fabric/Fabric.js";
@@ -258,8 +259,8 @@ export class MatterDevice {
         return this.#fabricManager.findByIndex(fabricIndex);
     }
 
-    initiateExchange(fabric: Fabric, nodeId: NodeId, protocolId: number) {
-        return this.#exchangeManager.initiateExchange(fabric, nodeId, protocolId);
+    initiateExchange(address: PeerAddress, protocolId: number) {
+        return this.#exchangeManager.initiateExchange(address, protocolId);
     }
 
     getFabrics() {

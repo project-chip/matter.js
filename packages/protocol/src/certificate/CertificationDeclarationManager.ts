@@ -43,7 +43,7 @@ export class CertificationDeclarationManager {
             certificationType: provisional ? 1 : 0, // 0 = Test, 1 = Provisional/In certification, 2 = official
         });
 
-        return CertificateManager.CertificationDeclarationToAsn1(
+        return CertificateManager.certificationDeclarationToAsn1(
             certificationElements,
             TestCMS_SignerSubjectKeyIdentifier,
             PrivateKey(TestCMS_SignerPrivateKey),

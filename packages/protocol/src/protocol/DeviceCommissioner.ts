@@ -22,7 +22,7 @@ import {
 import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
 import { PaseServer, SessionManager } from "#session/index.js";
 import { CommissioningOptions, StatusCode, StatusResponseError } from "#types";
-import type { ControllerCommissioner } from "./ControllerCommissioner.js";
+import type { ControllerCommissioningFlow } from "../peer/ControllerCommissioningFlow.js";
 import { DeviceAdvertiser } from "./DeviceAdvertiser.js";
 
 const logger = Logger.get("DeviceCommissioner");
@@ -48,7 +48,7 @@ export interface DeviceCommissionerContext {
 /**
  * Implements commissioning for devices.
  *
- * Note this implements commissioning for a *local* device; use {@link ControllerCommissioner} to commission a *remote*
+ * Note this implements commissioning for a *local* device; use {@link ControllerCommissioningFlow} to commission a *remote*
  * device.
  */
 export class DeviceCommissioner {

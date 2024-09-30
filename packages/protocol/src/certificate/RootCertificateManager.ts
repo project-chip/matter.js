@@ -9,9 +9,12 @@ import {
     Bytes,
     Construction,
     Crypto,
+    Environment,
+    Environmental,
     Logger,
     PrivateKey,
     StorageContext,
+    StorageManager,
     Time,
     asyncNew,
     toHex,
@@ -78,6 +81,13 @@ export class RootCertificateManager {
                 });
             }
         });
+    }
+
+    [Environmental.create](env: Environment) {
+        const storage = env.get(StorageManager).createContext("certificates");
+        const instance = new RootCertificateManager(storage);
+        env.set(RootCertificateManager, instance);
+        return instance;
     }
 
     get rootCert() {

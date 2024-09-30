@@ -14,7 +14,6 @@ import {
     MatterError,
     Time,
 } from "#general";
-import { NodeDiscoveryType } from "#MatterController.js";
 import {
     AttributeClientValues,
     ChannelStatusResponseError,
@@ -25,6 +24,7 @@ import {
     EndpointInterface,
     EndpointLoggingOptions,
     InteractionClient,
+    NodeDiscoveryType,
     PaseClient,
     logEndpoint,
     structureReadAttributeDataToClusterObject,

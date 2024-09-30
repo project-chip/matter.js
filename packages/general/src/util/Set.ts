@@ -68,6 +68,10 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         return this.#entries.size;
     }
 
+    map<R>(mapper: (item: T) => R) {
+        return [...this].map(mapper);
+    }
+
     find(predicate: (item: T) => boolean | undefined) {
         for (const item of this) {
             if (predicate(item)) {
