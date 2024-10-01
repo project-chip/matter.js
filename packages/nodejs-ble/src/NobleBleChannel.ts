@@ -11,7 +11,6 @@ import {
     Logger,
     NetInterface,
     ServerAddress,
-    ServerAddressBle,
     Time,
     TransportInterface,
     createPromise,
@@ -214,19 +213,11 @@ export class NobleBleCentralInterface implements NetInterface {
         }
     }
 
-    supports(type: ChannelType, address?: string) {
+    supports(type: ChannelType, _address?: string) {
         if (type !== ChannelType.BLE) {
             return false;
         }
-        if (address === undefined) {
-            return false;
-        }
-        for (const key of this.openChannels.keys()) {
-            if ((key as ServerAddressBle).peripheralAddress === address) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }
 

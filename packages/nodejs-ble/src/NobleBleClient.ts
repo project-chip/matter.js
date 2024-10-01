@@ -38,7 +38,7 @@ export class NobleBleClient {
 
     constructor(options?: BleOptions) {
         loadNoble(options?.hciId);
-        try {
+        /*try {
             noble.reset();
         } catch (error: any) {
             logger.debug(
@@ -46,7 +46,7 @@ export class NobleBleClient {
                     (error as unknown as Error).message
                 }`,
             );
-        }
+        }*/
         noble.on("stateChange", state => {
             this.nobleState = state;
             logger.debug(`Noble state changed to ${state}`);
