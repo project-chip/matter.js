@@ -596,8 +596,8 @@ export class CommissioningServer extends MatterNode {
                 randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
             },
             maxPathsPerInvoke,
-            initiateExchange: (fabric, nodeId, protocolId) => {
-                return deviceInstance.initiateExchange(fabric, nodeId, protocolId);
+            initiateExchange: (address, protocolId) => {
+                return deviceInstance.initiateExchange(address, protocolId);
             },
         });
         deviceInstance.addProtocolHandler(this.interactionServer);

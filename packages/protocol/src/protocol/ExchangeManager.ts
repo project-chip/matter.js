@@ -19,9 +19,9 @@ import {
     TransportInterfaceSet,
     UdpInterface,
 } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
 import { INTERACTION_PROTOCOL_ID, NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { Fabric } from "../fabric/Fabric.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
@@ -162,8 +162,8 @@ export class ExchangeManager {
         this.#protocols.set(protocol.getId(), protocol);
     }
 
-    initiateExchange(fabric: Fabric, nodeId: NodeId, protocolId: number) {
-        return this.initiateExchangeWithChannel(this.#channelManager.getChannel(fabric, nodeId), protocolId);
+    initiateExchange(address: PeerAddress, protocolId: number) {
+        return this.initiateExchangeWithChannel(this.#channelManager.getChannel(address), protocolId);
     }
 
     initiateExchangeWithChannel(channel: MessageChannel, protocolId: number) {
@@ -402,7 +402,7 @@ export class ExchangeManager {
         return {
             channel,
             localSessionParameters: this.#sessionManager.sessionParameters,
-            resubmissionStarted: nodeId => this.#sessionManager.resubmissionStarted.emit(nodeId),
+            resubmissionStarted: () => this.#sessionManager.resubmissionStarted.emit(channel.session),
         };
     }
 

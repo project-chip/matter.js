@@ -109,7 +109,7 @@ export const MATTER_MESSAGE_OVERHEAD = 26 + 12 + CRYPTO_AEAD_MIC_LENGTH_BYTES;
  */
 export interface MessageExchangeContext {
     channel: MessageChannel;
-    resubmissionStarted(nodeId?: NodeId): void;
+    resubmissionStarted(): void;
     localSessionParameters: SessionParameters;
 }
 
@@ -539,7 +539,7 @@ export class MessageExchange {
         this.session.notifyActivity(false);
 
         if (this.#retransmissionCounter === 1) {
-            this.context.resubmissionStarted(this.session.nodeId);
+            this.context.resubmissionStarted();
         }
         const resubmissionBackoffTime = this.#getResubmissionBackOffTime(this.#retransmissionCounter);
         logger.debug(

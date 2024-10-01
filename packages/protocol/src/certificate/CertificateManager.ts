@@ -577,8 +577,8 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
     return asn;
 }
 
-export class CertificateManager {
-    static #assertCertificateDerSize(certBytes: Uint8Array) {
+export namespace CertificateManager {
+    function assertCertificateDerSize(certBytes: Uint8Array) {
         if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
             throw new ImplementationError(
                 `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
@@ -586,7 +586,7 @@ export class CertificateManager {
         }
     }
 
-    static #genericBuildAsn1Structure({
+    function genericBuildAsn1Structure({
         serialNumber,
         notBefore,
         notAfter,
@@ -616,13 +616,13 @@ export class CertificateManager {
         };
     }
 
-    static #genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
-        const certBytes = DerCodec.encode(this.#genericBuildAsn1Structure(cert));
-        this.#assertCertificateDerSize(certBytes);
+    function genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
+        const certBytes = DerCodec.encode(genericBuildAsn1Structure(cert));
+        assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    static rootCertToAsn1(cert: Unsigned<RootCertificate>) {
+    export function rootCertToAsn1(cert: Unsigned<RootCertificate>) {
         const {
             extensions: {
                 basicConstraints: { isCa },
@@ -631,10 +631,10 @@ export class CertificateManager {
         if (!isCa) {
             throw new CertificateError("Root certificate must be a CA.");
         }
-        return this.#genericCertToAsn1(cert);
+        return genericCertToAsn1(cert);
     }
 
-    static intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
+    export function intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
         const {
             extensions: {
                 basicConstraints: { isCa },
@@ -643,10 +643,10 @@ export class CertificateManager {
         if (!isCa) {
             throw new CertificateError("Intermediate certificate must be a CA.");
         }
-        return this.#genericCertToAsn1(cert);
+        return genericCertToAsn1(cert);
     }
 
-    static nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
+    export function nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
         const {
             issuer: { icacId, rcacId },
             extensions: {
@@ -660,46 +660,49 @@ export class CertificateManager {
             throw new CertificateError("Node operational certificate must not be a CA.");
         }
 
-        return this.#genericCertToAsn1(cert);
+        return genericCertToAsn1(cert);
     }
 
-    static deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
-        const certificate = this.#genericBuildAsn1Structure(cert);
+    export function deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
+        const certificate = genericBuildAsn1Structure(cert);
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
-        this.#assertCertificateDerSize(certBytes);
+        assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    static productAttestationIntermediateCertToAsn1(
+    export function productAttestationIntermediateCertToAsn1(
         cert: Unsigned<ProductAttestationIntermediateCertificate>,
         key: Key,
     ) {
-        const certificate = this.#genericBuildAsn1Structure(cert);
+        const certificate = genericBuildAsn1Structure(cert);
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
-        this.#assertCertificateDerSize(certBytes);
+        assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    static productAttestationAuthorityCertToAsn1(cert: Unsigned<ProductAttestationAuthorityCertificate>, key: Key) {
-        const certificate = this.#genericBuildAsn1Structure(cert);
+    export function productAttestationAuthorityCertToAsn1(
+        cert: Unsigned<ProductAttestationAuthorityCertificate>,
+        key: Key,
+    ) {
+        const certificate = genericBuildAsn1Structure(cert);
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
-        this.#assertCertificateDerSize(certBytes);
+        assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    static CertificationDeclarationToAsn1(
+    export function certificationDeclarationToAsn1(
         eContent: Uint8Array,
         subjectKeyIdentifier: Uint8Array,
         privateKey: JsonWebKey,
@@ -720,7 +723,7 @@ export class CertificateManager {
         };
 
         const certBytes = DerCodec.encode(Pkcs7.SignedData(certificate));
-        this.#assertCertificateDerSize(certBytes);
+        assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
@@ -728,7 +731,9 @@ export class CertificateManager {
      * Validate general requirements a Matter certificate fields must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    static validateGeneralCertificateFields(cert: RootCertificate | OperationalCertificate | IntermediateCertificate) {
+    export function validateGeneralCertificateFields(
+        cert: RootCertificate | OperationalCertificate | IntermediateCertificate,
+    ) {
         if (cert.serialNumber.length > 20)
             throw new CertificateError(
                 `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.length} octets.`,
@@ -771,7 +776,7 @@ export class CertificateManager {
      * Verify requirements a Matter Root certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    static verifyRootCertificate(rootCert: RootCertificate) {
+    export function verifyRootCertificate(rootCert: RootCertificate) {
         CertificateManager.validateGeneralCertificateFields(rootCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
@@ -850,14 +855,14 @@ export class CertificateManager {
             );
         }
 
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), rootCertToAsn1(rootCert), rootCert.signature);
     }
 
     /**
      * Verify requirements a Matter Node Operational certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    static verifyNodeOperationalCertificate(
+    export function verifyNodeOperationalCertificate(
         rootOrIcaCert: RootCertificate | IntermediateCertificate,
         nocCert: OperationalCertificate,
     ) {
@@ -962,7 +967,7 @@ export class CertificateManager {
 
         Crypto.verify(
             PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
-            this.nodeOperationalCertToAsn1(nocCert),
+            nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
         );
     }
@@ -971,7 +976,7 @@ export class CertificateManager {
      * Verify requirements a Matter Intermediate CA certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    static verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
+    export function verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
         CertificateManager.validateGeneralCertificateFields(icaCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
@@ -1078,14 +1083,10 @@ export class CertificateManager {
             );
         }
 
-        Crypto.verify(
-            PublicKey(rootCert.ellipticCurvePublicKey),
-            this.intermediateCaCertToAsn1(icaCert),
-            icaCert.signature,
-        );
+        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), intermediateCaCertToAsn1(icaCert), icaCert.signature);
     }
 
-    static createCertificateSigningRequest(key: Key) {
+    export function createCertificateSigningRequest(key: Key) {
         const request = {
             version: 0,
             subject: { organization: X520.OrganisationName("CSR") },
@@ -1100,7 +1101,7 @@ export class CertificateManager {
         });
     }
 
-    static getPublicKeyFromCsr(csr: Uint8Array) {
+    export function getPublicKeyFromCsr(csr: Uint8Array) {
         const { [DerKey.Elements]: rootElements } = DerCodec.decode(csr);
         if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;

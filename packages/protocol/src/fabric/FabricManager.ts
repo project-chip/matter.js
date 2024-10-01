@@ -19,6 +19,7 @@ import {
     StorageContext,
     StorageManager,
 } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
 import { FabricIndex } from "#types";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
 
@@ -88,6 +89,17 @@ export class FabricManager {
 
     get events() {
         return this.#events;
+    }
+
+    for(address: FabricIndex | PeerAddress) {
+        if (typeof address === "object") {
+            address = address.fabricIndex;
+        }
+        const fabric = this.#fabrics.get(address);
+        if (fabric === undefined) {
+            throw new FabricNotFoundError(`Cannot access fabric for unknown index ${address}`);
+        }
+        return fabric;
     }
 
     getNextFabricIndex() {

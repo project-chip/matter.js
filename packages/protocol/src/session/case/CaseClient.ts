@@ -45,7 +45,7 @@ export class CaseClient {
 
         // Send sigma1
         let sigma1Bytes;
-        let resumptionRecord = this.#sessions.findResumptionRecordByNodeId(peerNodeId);
+        let resumptionRecord = this.#sessions.findResumptionRecordByAddress(fabric.addressOf(peerNodeId));
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
             const resumeKey = await Crypto.hkdf(

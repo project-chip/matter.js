@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment } from "#environment/Environment.js";
+import { Environmental } from "#environment/Environmental.js";
 import { Channel } from "./Channel.js";
 import { ServerAddress } from "./ServerAddress.js";
 import { TransportInterface, TransportInterfaceSet } from "./TransportInterface.js";
@@ -22,4 +24,10 @@ export function isNetworkInterface(obj: TransportInterface | NetInterface): obj 
 /**
  * A collection of {@link NetInterfaces} managed as a unit.
  */
-export class NetInterfaceSet extends TransportInterfaceSet<NetInterface> {}
+export class NetInterfaceSet extends TransportInterfaceSet<NetInterface> {
+    [Environmental.create](env: Environment) {
+        const instance = new NetInterfaceSet();
+        env.set(NetInterfaceSet, this);
+        return instance;
+    }
+}

@@ -16,8 +16,8 @@ import {
 } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
-import { CommissioningError } from "../protocol/ControllerCommissioner.js";
-import { RetransmissionLimitReachedError } from "./MessageExchange.js";
+import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
+import { CommissioningError } from "./ControllerCommissioningFlow.js";
 
 const logger = Logger.get("ControllerDiscovery");
 

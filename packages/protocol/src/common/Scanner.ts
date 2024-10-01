@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, ChannelType, ServerAddress, ServerAddressIp } from "#general";
-import { NodeId, VendorId } from "#types";
+import { BasicSet, ChannelType, Environment, Environmental, ServerAddress, ServerAddressIp } from "#general";
+import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
 /**
@@ -164,5 +164,22 @@ export class ScannerSet extends BasicSet<Scanner> {
 
     hasScannerFor(type: ChannelType) {
         return this.scannerFor(type) !== undefined;
+    }
+
+    /**
+     * Select a set of scanners based on discovery capabilities.
+     */
+    public select(discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
+        // Note we always scan via MDNS if available
+        return this.filter(
+            scanner =>
+                scanner.type === ChannelType.UDP || (discoveryCapabilities?.ble && scanner.type === ChannelType.BLE),
+        );
+    }
+
+    [Environmental.create](env: Environment) {
+        const instance = new ScannerSet();
+        env.set(ScannerSet, instance);
+        return instance;
     }
 }

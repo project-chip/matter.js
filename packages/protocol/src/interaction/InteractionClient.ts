@@ -6,6 +6,7 @@
 
 import { ImplementationError, Logger, MatterFlowError, Time, Timer, UnexpectedDataError } from "#general";
 import { Specification } from "#model";
+import { PeerAddress } from "#peer/PeerAddress.js";
 import {
     Attribute,
     AttributeId,
@@ -130,7 +131,7 @@ export class InteractionClient {
 
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
-        readonly nodeId: NodeId,
+        readonly address: PeerAddress,
     ) {
         if (this.exchangeProvider.hasProtocolHandler(INTERACTION_PROTOCOL_ID)) {
             const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);

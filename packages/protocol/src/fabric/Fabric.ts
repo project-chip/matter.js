@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    CertificateManager,
+    TlvIntermediateCertificate,
+    TlvOperationalCertificate,
+    TlvRootCertificate,
+} from "#certificate/CertificateManager.js";
 import { GroupKeyManagement } from "#clusters/group-key-management";
 import {
     BinaryKeyPair,
@@ -20,13 +26,8 @@ import {
     PrivateKey,
     SupportedStorageTypes,
 } from "#general";
+import { PeerAddress } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, Cluster, FabricId, FabricIndex, NodeId, TypeFromSchema, VendorId } from "#types";
-import {
-    CertificateManager,
-    TlvIntermediateCertificate,
-    TlvOperationalCertificate,
-    TlvRootCertificate,
-} from "../certificate/CertificateManager.js";
 import { SecureSession } from "../session/SecureSession.js";
 
 const logger = Logger.get("Fabric");
@@ -346,6 +347,10 @@ export class Fabric {
             rootVendorId: this.rootVendorId,
             label: this.label,
         };
+    }
+
+    addressOf(nodeId: NodeId) {
+        return PeerAddress({ fabricIndex: this.fabricIndex, nodeId });
     }
 }
 

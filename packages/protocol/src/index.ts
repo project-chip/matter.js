@@ -14,6 +14,7 @@ export * from "./fabric/index.js";
 export * from "./interaction/index.js";
 export * from "./MatterDevice.js";
 export * from "./mdns/index.js";
+export * from "./peer/index.js";
 export * from "./protocol/index.js";
 export * from "./securechannel/index.js";
 export * from "./session/index.js";

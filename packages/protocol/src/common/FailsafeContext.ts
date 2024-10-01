@@ -266,7 +266,7 @@ export abstract class FailsafeContext {
             const fabricIndex = this.fabricIndex;
             fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
             if (fabric !== undefined) {
-                const session = this.#sessions.getSessionForNode(fabric, fabric.rootNodeId);
+                const session = this.#sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session !== undefined && session.isSecure) {
                     await session.close(false);
                 }

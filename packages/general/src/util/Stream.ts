@@ -5,7 +5,12 @@
  */
 import { MatterError } from "../MatterError.js";
 
-export class EndOfStreamError extends MatterError {}
+export class EndOfStreamError extends MatterError {
+    constructor(message = "Unexpected end of stream") {
+        super(message);
+    }
+}
+
 export class NoResponseTimeoutError extends MatterError {}
 
 export interface Stream<T> {

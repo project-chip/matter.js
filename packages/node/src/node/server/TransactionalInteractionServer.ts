@@ -79,8 +79,8 @@ export class TransactionalInteractionServer extends InteractionServer {
             structure,
             subscriptionOptions: endpoint.state.network.subscriptionOptions,
             maxPathsPerInvoke: endpoint.state.basicInformation.maxPathsPerInvoke,
-            initiateExchange: (fabric, nodeId, protocolId) =>
-                endpoint.env.get(ExchangeManager).initiateExchange(fabric, nodeId, protocolId),
+            initiateExchange: (address, protocolId) =>
+                endpoint.env.get(ExchangeManager).initiateExchange(address, protocolId),
         });
     }
 
