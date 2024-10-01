@@ -134,12 +134,6 @@ class RecoverableCommissioningError extends CommissioningError {}
 const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
 
 /**
- * The operative connection callback may return this value to skip PASE commissioning.
- */
-export const SKIP_CASE_COMMISSIONING = Symbol("skip-pase-commissioning");
-export type SKIP_PASE_COMMISSIONING = typeof SKIP_CASE_COMMISSIONING;
-
-/**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
  */
 export class ControllerCommissioningFlow {
