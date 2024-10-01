@@ -126,7 +126,7 @@ export class SessionManager {
 
         // When fabric is removed, also remove the resumption record
         this.#observers.on(context.fabrics.events.deleted, async fabric =>
-            this.removeResumptionRecord(fabric.addressOf(fabric.rootNodeId)),
+            this.deleteResumptionRecordsForFabric(fabric),
         );
 
         this.#construction = Construction(this, () => this.#initialize());
@@ -285,11 +285,23 @@ export class SessionManager {
         return session;
     }
 
-    async removeResumptionRecord(address: PeerAddress) {
+    async deleteResumptionRecord(address: PeerAddress) {
         await this.#construction;
 
         this.#resumptionRecords.delete(address);
-        await this.storeResumptionRecords();
+        await this.#storeResumptionRecords();
+    }
+
+    async deleteResumptionRecordsForFabric(fabric: Fabric) {
+        await this.#construction;
+
+        for (const address of this.#resumptionRecords.keys()) {
+            if (address.fabricIndex === fabric.fabricIndex) {
+                this.#resumptionRecords.delete(address);
+            }
+        }
+
+        await this.#storeResumptionRecords();
     }
 
     findOldestInactiveSession() {
@@ -397,20 +409,10 @@ export class SessionManager {
     async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         await this.#construction;
         this.#resumptionRecords.set(resumptionRecord.fabric.addressOf(resumptionRecord.peerNodeId), resumptionRecord);
-        await this.storeResumptionRecords();
+        await this.#storeResumptionRecords();
     }
 
-    async updateFabricForResumptionRecords(fabric: Fabric) {
-        await this.#construction;
-        const record = this.#resumptionRecords.get(fabric.addressOf(fabric.rootNodeId));
-        if (record === undefined) {
-            throw new MatterFlowError("Resumption record not found. Should never happen.");
-        }
-        this.#resumptionRecords.set(fabric.addressOf(fabric.rootNodeId), { ...record, fabric });
-        await this.storeResumptionRecords();
-    }
-
-    async storeResumptionRecords() {
+    async #storeResumptionRecords() {
         await this.#construction;
         await this.#context.storage.set(
             "resumptionRecords",
@@ -517,7 +519,7 @@ export class SessionManager {
         await this.#subscriptionUpdateMutex;
 
         this.#observers.close();
-        await this.storeResumptionRecords();
+        await this.#storeResumptionRecords();
         for (const session of this.#sessions) {
             await session?.end(false);
             this.#sessions.delete(session);

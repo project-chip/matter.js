@@ -144,7 +144,7 @@ export abstract class FailsafeContext {
 
     async updateFabric(fabric: Fabric) {
         await this.#fabrics.updateFabric(fabric);
-        await this.#sessions.updateFabricForResumptionRecords(fabric);
+        await this.#sessions.deleteResumptionRecordsForFabric(fabric);
     }
 
     /**

@@ -76,13 +76,6 @@ interface RunningDiscovery {
 }
 
 /**
- * API for establishing a connection to a peer.
- */
-export interface PeerConnector {
-    connect(address: PeerAddress, discoveryOptions: DiscoveryOptions): Promise<InteractionClient>;
-}
-
-/**
  * Interfaces {@link PeerSet} with other components.
  */
 export interface PeerSetContext {
@@ -97,7 +90,7 @@ export interface PeerSetContext {
 /**
  * Manages operational connections to peers on shared fabric.
  */
-export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<OperationalPeer>, PeerConnector {
+export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<OperationalPeer> {
     readonly #sessions: SessionManager;
     readonly #channels: ChannelManager;
     readonly #exchanges: ExchangeManager;
@@ -280,7 +273,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         this.#peers.delete(actual);
         await this.#store.deletePeer(actual.address);
         await this.disconnect(actual);
-        await this.#sessions.removeResumptionRecord(actual.address);
+        await this.#sessions.deleteResumptionRecord(actual.address);
     }
 
     async close() {
