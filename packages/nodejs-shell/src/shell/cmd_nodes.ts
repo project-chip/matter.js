@@ -98,7 +98,7 @@ export default function commands(theNode: MatterNode) {
                             case "connected": {
                                 const nodeIds = theNode.commissioningController
                                     .getCommissionedNodes()
-                                    .filter(nodeId => !!theNode.commissioningController?.getConnectedNode(nodeId));
+                                    .filter(nodeId => !!theNode.commissioningController?.getPairedNode(nodeId));
                                 console.log(nodeIds.map(nodeId => nodeId.toString()));
                                 break;
                             }
@@ -200,7 +200,7 @@ export default function commands(theNode: MatterNode) {
                         }
 
                         for (const nodeIdToProcess of nodeIds) {
-                            const node = theNode.commissioningController.getConnectedNode(nodeIdToProcess);
+                            const node = theNode.commissioningController.getPairedNode(nodeIdToProcess);
                             if (node === undefined) {
                                 console.log(`Node ${nodeIdToProcess} not connected`);
                                 continue;
@@ -237,7 +237,7 @@ export default function commands(theNode: MatterNode) {
                         }
 
                         for (const nodeIdToProcess of nodeIds) {
-                            const node = theNode.commissioningController.getConnectedNode(nodeIdToProcess);
+                            const node = theNode.commissioningController.getPairedNode(nodeIdToProcess);
                             if (node === undefined) {
                                 console.log(
                                     `Node ${nodeIdToProcess}: ${NodeStateString[NodeStateInformation.Disconnected]}`,

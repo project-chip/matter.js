@@ -408,7 +408,7 @@ export class CommissioningController extends MatterNode {
     }
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */
-    getConnectedNode(nodeId: NodeId) {
+    getPairedNode(nodeId: NodeId) {
         return this.initializedNodes.get(nodeId);
     }
 
