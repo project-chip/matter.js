@@ -58,29 +58,32 @@ import {
     FabricId,
     FabricIndex,
     NodeId,
-    TlvEnum,
-    TlvField,
-    TlvObject,
-    TlvString,
     TypeFromPartialBitSchema,
-    TypeFromSchema,
     VendorId,
 } from "#types";
 
-const TlvCommissioningSuccessFailureResponse = TlvObject({
-    /** Contain the result of the operation. */
-    errorCode: TlvField(0, TlvEnum<GeneralCommissioning.CommissioningError>()),
+export const COMMISSIONED_NODE_DEVICE_DATA_REVISION = 1;
 
-    /** Should help developers in troubleshooting errors. The value MAY go into logs or crash reports, not User UIs. */
-    debugText: TlvField(1, TlvString.bound({ maxLength: 128 })),
-});
-export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommissioningSuccessFailureResponse>;
+export type CommissionedNodeDeviceData = {
+    threadConnected: boolean;
+    wifiConnected: boolean;
+    ethernetConnected: boolean;
+    rootEndpointServerList: number[];
+    isBatteryPowered: boolean;
+    isIntermittentlyConnected: boolean;
+    isThreadSleepyEndDevice: boolean;
+    dataRevision: number;
+};
+
+export type CommissionedNodeClusterDetails = {
+    basicInformationData?: Record<string, SupportedStorageTypes>;
+    deviceData?: CommissionedNodeDeviceData;
+};
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
     discoveryData?: DiscoveryData;
-    basicInformationData?: Record<string, SupportedStorageTypes>;
-};
+} & CommissionedNodeClusterDetails;
 
 const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
@@ -92,7 +95,7 @@ const CONTROLLER_MAX_PATHS_PER_INVOKE = 10;
 const logger = Logger.get("MatterController");
 
 // Operational peer extended with basic information as required for conversion to CommissionedNodeDetails
-type CommissionedPeer = OperationalPeer & { basicInformationData?: Record<string, SupportedStorageTypes> };
+type CommissionedPeer = OperationalPeer & CommissionedNodeClusterDetails;
 
 // Backward-compatible persistence record for nodes
 type StoredOperationalPeer = [NodeId, CommissionedNodeDetails];
@@ -420,27 +423,41 @@ export class MatterController {
 
     getCommissionedNodesDetails() {
         return this.peers.map(peer => {
-            const { address, operationalAddress, discoveryData, basicInformationData } = peer as CommissionedPeer;
+            const { address, operationalAddress, discoveryData, basicInformationData, deviceData } =
+                peer as CommissionedPeer;
             return {
                 nodeId: address.nodeId,
                 operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
                 advertisedName: discoveryData?.DN,
                 discoveryData,
                 basicInformationData,
+                deviceData,
             };
         });
     }
 
-    async enhanceCommissionedNodeDetails(
-        nodeId: NodeId,
-        data: { basicInformationData: Record<string, SupportedStorageTypes> },
-    ) {
+    getCommissionedNodeDetails(nodeId: NodeId) {
         const nodeDetails = this.peers.get(this.fabric.addressOf(nodeId)) as CommissionedPeer;
         if (nodeDetails === undefined) {
             throw new Error(`Node ${nodeId} is not commissioned.`);
         }
-        const { basicInformationData } = data;
-        nodeDetails.basicInformationData = basicInformationData;
+        const { address, operationalAddress, discoveryData, basicInformationData, deviceData } = nodeDetails;
+        return {
+            nodeId: address.nodeId,
+            operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
+            advertisedName: discoveryData?.DN,
+            discoveryData,
+            basicInformationData,
+            deviceData,
+        };
+    }
+
+    async enhanceCommissionedNodeDetails(nodeId: NodeId, data: CommissionedNodeClusterDetails) {
+        const nodeDetails = this.peers.get(this.fabric.addressOf(nodeId)) as CommissionedPeer;
+        if (nodeDetails === undefined) {
+            throw new Error(`Node ${nodeId} is not commissioned.`);
+        }
+        Object.assign(nodeDetails, data);
         await this.nodesStore.save();
     }
 
@@ -502,12 +519,13 @@ class CommissionedNodeStore extends PeerStore {
 
         const commissionedNodes = await this.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
         return commissionedNodes.map(
-            ([nodeId, { operationalServerAddress, discoveryData, basicInformationData }]) =>
+            ([nodeId, { operationalServerAddress, discoveryData, basicInformationData, deviceData }]) =>
                 ({
                     address: this.fabric.addressOf(nodeId),
                     operationalAddress: operationalServerAddress,
                     discoveryData,
                     basicInformationData,
+                    deviceData,
                 }) satisfies CommissionedPeer,
         );
     }
@@ -528,11 +546,12 @@ class CommissionedNodeStore extends PeerStore {
                     address,
                     operationalAddress: operationalServerAddress,
                     basicInformationData,
+                    deviceData,
                     discoveryData,
                 } = peer as CommissionedPeer;
                 return [
                     address.nodeId,
-                    { operationalServerAddress, basicInformationData, discoveryData },
+                    { operationalServerAddress, basicInformationData, discoveryData, deviceData },
                 ] satisfies StoredOperationalPeer;
             }),
         );
