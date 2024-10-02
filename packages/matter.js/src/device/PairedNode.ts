@@ -215,26 +215,6 @@ export class PairedNode {
         nodeStructureChanged: AsyncObservable<[void]>(),
     };
 
-    static create(
-        nodeId: NodeId,
-        commissioningController: CommissioningController,
-        options: CommissioningControllerNodeOptions = {},
-        knownNodeDetails: CommissionedNodeDetails,
-        reconnectInteractionClient: () => Promise<InteractionClient>,
-        assignDisconnectedHandler: (handler: () => Promise<void>) => void,
-    ) {
-        const node = new PairedNode(
-            nodeId,
-            commissioningController,
-            options,
-            knownNodeDetails,
-            reconnectInteractionClient,
-            assignDisconnectedHandler,
-        );
-        node.initialize().catch(error => logger.info(`Node ${nodeId}: Error during initialization`, error));
-        return node;
-    }
-
     constructor(
         readonly nodeId: NodeId,
         private readonly commissioningController: CommissioningController,
@@ -255,6 +235,11 @@ export class PairedNode {
         });
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, knownNodeDetails.deviceData);
         this.#nodeDetails = knownNodeDetails;
+
+        this.initialize().catch(error => {
+            logger.info(`Node ${nodeId}: Error during initialization`, error);
+            this.scheduleReconnect();
+        });
     }
 
     get isConnected() {

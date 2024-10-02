@@ -326,7 +326,7 @@ export class CommissioningController extends MatterNode {
             return existingNode;
         }
 
-        const pairedNode = PairedNode.create(
+        const pairedNode = new PairedNode(
             nodeId,
             this,
             connectOptions,
@@ -336,8 +336,8 @@ export class CommissioningController extends MatterNode {
         );
         this.initializedNodes.set(nodeId, pairedNode);
 
-        await pairedNode.events.initialized.on(details =>
-            controller.enhanceCommissionedNodeDetails(nodeId, { ...details }),
+        pairedNode.events.initialized.on(
+            async details => await controller.enhanceCommissionedNodeDetails(nodeId, { ...details }),
         );
 
         return pairedNode;
