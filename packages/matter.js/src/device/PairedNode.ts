@@ -345,6 +345,19 @@ export class PairedNode {
     private async initialize() {
         const interactionClient = await this.ensureConnection(true);
         const { autoSubscribe, attributeChangedCallback, eventTriggeredCallback } = this.options;
+
+        let deviceDetailsUpdated = false;
+        // We need to query some Device metadata because we do not have them (or update them anyway)
+        if (
+            this.#nodeDetails.basicInformationData === undefined ||
+            this.#nodeDetails.deviceData === undefined ||
+            this.#nodeDetails.deviceData.dataRevision !== COMMISSIONED_NODE_DEVICE_DATA_REVISION ||
+            (autoSubscribe === false && !this.#initializationDone)
+        ) {
+            await this.enhanceDeviceDetailsFromRemote();
+            deviceDetailsUpdated = true;
+        }
+
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
                 ignoreInitialTriggers: true,
@@ -357,11 +370,9 @@ export class PairedNode {
             }
             await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
 
-            const rootDescriptorCluster = this.getRootClusterClient(DescriptorCluster);
-            rootDescriptorCluster?.addPartsListAttributeListener(() => {
-                logger.info(`Node ${this.nodeId}: PartsList changed, reinitializing endpoint structure ...`);
-                this.updateEndpointStructureTimer.stop().start(); // Restart timer
-            });
+            if (!deviceDetailsUpdated) {
+                await this.enhanceDeviceDetailsFromCache();
+            }
         } else {
             const allClusterAttributes = await interactionClient.getAllAttributes();
             await this.initializeEndpointStructure(allClusterAttributes);
