@@ -243,7 +243,7 @@ export class CommissioningController extends MatterNode {
         const nodeId = await controller.commission(nodeOptions);
 
         if (connectNodeAfterCommissioning) {
-            await this.connectNode(nodeId, {
+            const node = await this.connectNode(nodeId, {
                 ...nodeOptions,
                 autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
                 subscribeMinIntervalFloorSeconds:
@@ -251,6 +251,7 @@ export class CommissioningController extends MatterNode {
                 subscribeMaxIntervalCeilingSeconds:
                     nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
             });
+            await node.events.initialized;
         }
 
         return nodeId;

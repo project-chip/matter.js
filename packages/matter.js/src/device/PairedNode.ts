@@ -17,12 +17,14 @@ import {
 import {
     AsyncObservable,
     AtLeastOne,
+    Construction,
     Crypto,
     Diagnostic,
     ImplementationError,
     InternalError,
     Logger,
     MatterError,
+    Observable,
     SupportedStorageTypes,
     Time,
 } from "#general";
@@ -196,23 +198,27 @@ export class PairedNode {
     private reconnectionInProgress = false;
     #initializationDone = false;
     #nodeDetails: CommissionedNodeDetails;
+    #construction: Construction<PairedNode>;
     readonly events = {
-        /** Emitted when the node is fully initialized and all attributes and events are subscribed. */
+        /**
+         * Emitted when the node is fully initialized and all attributes and events are subscribed.
+         * This event can also be awaited if code needs to be blocked until the node is fully initialized.
+         */
         initialized: AsyncObservable<[details: CommissionedNodeClusterDetails]>(),
 
         /** Emitted when the state of the node changes. */
-        nodeStateChanged: AsyncObservable<[nodeState: NodeStateInformation]>(),
+        nodeStateChanged: Observable<[nodeState: NodeStateInformation]>(),
 
         /**
          * Emitted when an attribute value changes. If the oldValue is undefined then no former value was known.
          */
-        attributeChanged: AsyncObservable<[data: DecodedAttributeReportValue<any>, oldValue: any]>(),
+        attributeChanged: Observable<[data: DecodedAttributeReportValue<any>, oldValue: any]>(),
 
         /** Emitted when an event is triggered. */
-        eventTriggered: AsyncObservable<[DecodedEventReportValue<any>]>(),
+        eventTriggered: Observable<[DecodedEventReportValue<any>]>(),
 
         /** Emitted when the structure of the node changes (Endpoints got added or also removed). */
-        nodeStructureChanged: AsyncObservable<[void]>(),
+        nodeStructureChanged: Observable<[void]>(),
     };
 
     constructor(
@@ -236,10 +242,18 @@ export class PairedNode {
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, knownNodeDetails.deviceData);
         this.#nodeDetails = knownNodeDetails;
 
-        this.initialize().catch(error => {
-            logger.info(`Node ${nodeId}: Error during initialization`, error);
-            this.scheduleReconnect();
+        this.#construction = Construction(this, async () => {
+            try {
+                await this.initialize();
+            } catch (error) {
+                logger.info(`Node ${nodeId}: Error during initialization`, error);
+                this.scheduleReconnect();
+            }
         });
+    }
+
+    get construction() {
+        return this.#construction;
     }
 
     get isConnected() {
@@ -401,7 +415,7 @@ export class PairedNode {
             await this.initializeEndpointStructure(allClusterAttributes, this.#initializationDone);
         }
         this.setConnectionState(NodeStateInformation.Connected);
-        this.events.initialized.emit(this.#nodeDetails);
+        await this.events.initialized.emit(this.#nodeDetails);
         this.#initializationDone = true;
     }
 
