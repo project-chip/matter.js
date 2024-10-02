@@ -210,7 +210,7 @@ export class PairedNode {
             reconnectInteractionClient,
             assignDisconnectedHandler,
         );
-        await node.initialize();
+        node.initialize().catch(error => logger.info(`Node ${nodeId}: Error during initialization`, error));
         return node;
     }
 
