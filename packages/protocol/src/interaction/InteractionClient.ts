@@ -279,6 +279,26 @@ export class InteractionClient {
             );
         }
 
+        logger.debug(
+            `Sending read request: attributes: ${attributeRequests
+                ?.map(path => resolveAttributeName(path))
+                .join(", ")} and events: ${eventRequests?.map(path => resolveEventName(path)).join(", ")}`,
+        );
+        if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
+            logger.debug(
+                `Using data version filters: ${dataVersionFilters
+                    .map(({ endpointId, clusterId, dataVersion }) => `${endpointId}/${clusterId}=${dataVersion}`)
+                    .join(", ")}`,
+            );
+        }
+        if (eventFilters !== undefined && eventFilters?.length > 0) {
+            logger.debug(
+                `Using event filters: ${eventFilters
+                    .map(({ nodeId, eventMin }) => `${nodeId}=${eventMin}`)
+                    .join(", ")}`,
+            );
+        }
+
         return this.withMessenger<{
             attributeReports: DecodedAttributeReportValue<any>[];
             eventReports: DecodedEventReportValue<any>[];
@@ -554,7 +574,7 @@ export class InteractionClient {
                     endpointId,
                     clusterId,
                     attributeId,
-                })}`,
+                })}${knownDataVersion !== undefined ? ` (knownDataVersion=${knownDataVersion})` : ""}`,
             );
             const {
                 report,
@@ -762,6 +782,20 @@ export class InteractionClient {
                     .map(path => resolveAttributeName(path))
                     .join(", ")} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}`,
             );
+            if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
+                logger.debug(
+                    `Using data version filters: ${dataVersionFilters
+                        .map(({ endpointId, clusterId, dataVersion }) => `${endpointId}/${clusterId}=${dataVersion}`)
+                        .join(", ")}`,
+                );
+            }
+            if (eventFilters !== undefined && eventFilters?.length > 0) {
+                logger.debug(
+                    `Using event filters: ${eventFilters
+                        .map(({ nodeId, eventMin }) => `${nodeId}=${eventMin}`)
+                        .join(", ")}`,
+                );
+            }
             const {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
