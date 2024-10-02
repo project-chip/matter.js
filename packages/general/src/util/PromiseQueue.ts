@@ -63,16 +63,25 @@ export class PromiseQueue {
         const { func } = this.#queue.shift() ?? {};
         if (func !== undefined) {
             this.#runningCount++;
-            func().finally(async () => {
-                logger.debug("Promise processed ... Still running:", this.#runningCount - 1);
-                if (this.#delay > 0) {
-                    // Keep the queue blocked for the delay time
-                    await Time.sleep("Queue delay", this.#delay);
-                }
-                this.#runningCount--;
-                this.#run();
-            });
+            func()
+                .catch(() => {}) // already catched internally, can not happen
+                .finally(() => {
+                    logger.debug("Promise processed ... Still running:", this.#runningCount - 1);
+                    if (this.#delay > 0) {
+                        // Keep the queue blocked for the delay time
+                        Time.sleep("Queue delay", this.#delay)
+                            .then(() => this.#runNext())
+                            .catch(() => {}); // not relevant
+                    } else {
+                        this.#runNext();
+                    }
+                });
         }
+    }
+
+    #runNext(): void {
+        this.#runningCount--;
+        this.#run();
     }
 
     /**
