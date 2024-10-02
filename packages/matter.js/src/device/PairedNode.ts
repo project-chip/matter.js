@@ -740,6 +740,8 @@ export class PairedNode {
                 if (attributeChangedCallback !== undefined) {
                     attributeChangedCallback(data);
                 }
+
+                this.#checkAttributesForNeededStructureUpdate(endpointId, clusterId, attributeId);
             },
             eventListener: data => {
                 if (ignoreInitialTriggers) return;
@@ -770,13 +772,7 @@ export class PairedNode {
                     eventTriggeredCallback(data);
                 }
 
-                // When we subscribe all data here then we can also catch this case and handle it
-                if (
-                    clusterId === BasicInformation.Cluster.id &&
-                    eventId === BasicInformation.Cluster.events.shutDown.id
-                ) {
-                    this.handleNodeShutdown();
-                }
+                this.#checkEventsForNeededStructureUpdate(endpointId, clusterId, eventId);
             },
             updateTimeoutHandler: async () => {
                 logger.info(`Node ${this.nodeId}: Subscription update not received ...`);
