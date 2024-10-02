@@ -20,6 +20,7 @@ import {
     NetInterfaceSet,
     NoResponseTimeoutError,
     ObservableSet,
+    PromiseQueue,
     ServerAddressIp,
     serverAddressToString,
     Time,
@@ -42,6 +43,9 @@ const logger = Logger.get("PeerSet");
 
 const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
 const RETRANSMISSION_DISCOVERY_TIMEOUT_MS = 5_000;
+
+const CONCURRENT_QUEUED_INTERACTIONS = 5;
+const INTERACTION_QUEUE_DELAY_MS = 100;
 
 /**
  * Types of discovery that may be performed when connecting operationally.
@@ -102,6 +106,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #runningPeerDiscoveries = new PeerAddressMap<RunningDiscovery>();
     readonly #construction: Construction<PeerSet>;
     readonly #store: PeerStore;
+    readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
 
     constructor(context: PeerSetContext) {
         const { sessions, channels, exchanges, scanners, netInterfaces, store } = context;
@@ -234,6 +239,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 return this.#channels.getChannel(address);
             }),
             address,
+            this.#interactionQueue,
         );
     }
 
@@ -284,6 +290,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             // This ends discovery without triggering promises
             mdnsScanner?.cancelOperationalDeviceDiscovery(this.#sessions.fabricFor(address), address.nodeId, false);
         }
+        this.#interactionQueue.close();
     }
 
     /**

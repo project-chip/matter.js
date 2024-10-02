@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger, MatterFlowError, Time, Timer, UnexpectedDataError } from "#general";
+import { ImplementationError, Logger, MatterFlowError, PromiseQueue, Time, Timer, UnexpectedDataError } from "#general";
 import { Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import {
@@ -128,11 +128,15 @@ export class InteractionClient {
     private readonly subscribedClusterDataVersions = new Map<string, number>();
     private readonly ownSubscriptionIds = new Set<number>();
     private readonly subscriptionClient: SubscriptionClient;
+    #queue?: PromiseQueue;
 
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
         readonly address: PeerAddress,
+        queue?: PromiseQueue,
     ) {
+        this.#queue = queue;
+
         if (this.exchangeProvider.hasProtocolHandler(INTERACTION_PROTOCOL_ID)) {
             const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
             if (!(client instanceof SubscriptionClient)) {
@@ -162,14 +166,13 @@ export class InteractionClient {
         options: {
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<DecodedAttributeReportValue<any>[]> {
-        const { dataVersionFilters, isFabricFiltered } = options;
         return (
             await this.getMultipleAttributesAndEvents({
                 attributes: REQUEST_ALL,
-                dataVersionFilters,
-                isFabricFiltered,
+                ...options,
             })
         ).attributeReports;
     }
@@ -178,11 +181,15 @@ export class InteractionClient {
         options: {
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
-        const { eventFilters, isFabricFiltered } = options;
-        return (await this.getMultipleAttributesAndEvents({ events: REQUEST_ALL, eventFilters, isFabricFiltered }))
-            .eventReports;
+        return (
+            await this.getMultipleAttributesAndEvents({
+                events: REQUEST_ALL,
+                ...options,
+            })
+        ).eventReports;
     }
 
     async getAllAttributesAndEvents(
@@ -194,18 +201,16 @@ export class InteractionClient {
             }[];
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<{
         attributeReports: DecodedAttributeReportValue<any>[];
         eventReports: DecodedEventReportValue<any>[];
     }> {
-        const { dataVersionFilters, eventFilters, isFabricFiltered } = options;
         return this.getMultipleAttributesAndEvents({
             attributes: REQUEST_ALL,
             events: REQUEST_ALL,
-            eventFilters,
-            dataVersionFilters,
-            isFabricFiltered,
+            ...options,
         });
     }
 
@@ -214,11 +219,10 @@ export class InteractionClient {
             attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<DecodedAttributeReportValue<any>[]> {
-        const { attributes, dataVersionFilters, isFabricFiltered } = options;
-        return (await this.getMultipleAttributesAndEvents({ attributes, dataVersionFilters, isFabricFiltered }))
-            .attributeReports;
+        return (await this.getMultipleAttributesAndEvents(options)).attributeReports;
     }
 
     async getMultipleEvents(
@@ -226,10 +230,10 @@ export class InteractionClient {
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
-        const { events, eventFilters, isFabricFiltered } = options;
-        return (await this.getMultipleAttributesAndEvents({ events, eventFilters, isFabricFiltered })).eventReports;
+        return (await this.getMultipleAttributesAndEvents(options)).eventReports;
     }
 
     async getMultipleAttributesAndEvents(
@@ -239,6 +243,7 @@ export class InteractionClient {
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
+            executeQueued?: boolean;
         } = {},
     ): Promise<{
         attributeReports: DecodedAttributeReportValue<any>[];
@@ -247,9 +252,9 @@ export class InteractionClient {
         const {
             attributes: attributeRequests,
             dataVersionFilters,
+            executeQueued,
             events: eventRequests,
             eventFilters,
-            isFabricFiltered = true,
         } = options;
         if (attributeRequests === undefined && eventRequests === undefined) {
             throw new ImplementationError("When reading attributes and events, at least one must be specified.");
@@ -266,7 +271,8 @@ export class InteractionClient {
             attributeReports: DecodedAttributeReportValue<any>[];
             eventReports: DecodedEventReportValue<any>[];
         }>(async messenger => {
-            return await this.processReadRequest(messenger, {
+            const { isFabricFiltered = true } = options;
+            const result = await this.processReadRequest(messenger, {
                 attributeRequests,
                 dataVersionFilters: dataVersionFilters?.map(({ endpointId, clusterId, dataVersion }) => ({
                     path: { endpointId, clusterId },
@@ -286,14 +292,12 @@ export class InteractionClient {
         attribute: A;
         isFabricFiltered?: boolean;
         alwaysRequestFromRemote?: boolean;
+        executeQueued?: boolean;
     }): Promise<AttributeJsType<A> | undefined> {
-        const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
+        const { alwaysRequestFromRemote = false } = options;
         const response = await this.getAttributeWithVersion({
-            endpointId,
-            clusterId,
-            attribute,
+            ...options,
             alwaysRequestFromRemote,
-            isFabricFiltered,
         });
         return response?.value;
     }
@@ -304,8 +308,16 @@ export class InteractionClient {
         attribute: A;
         isFabricFiltered?: boolean;
         alwaysRequestFromRemote?: boolean;
+        executeQueued?: boolean;
     }): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
-        const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
+        const {
+            endpointId,
+            clusterId,
+            attribute,
+            alwaysRequestFromRemote = false,
+            isFabricFiltered,
+            executeQueued,
+        } = options;
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
             const value = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }));
@@ -318,6 +330,7 @@ export class InteractionClient {
         const { attributeReports } = await this.getMultipleAttributesAndEvents({
             attributes: [{ endpointId, clusterId, attributeId }],
             isFabricFiltered,
+            executeQueued,
         });
 
         if (attributeReports.length === 0) {
@@ -335,13 +348,15 @@ export class InteractionClient {
         event: E;
         minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
+        executeQueued?: boolean;
     }): Promise<DecodedEventData<T>[] | undefined> {
-        const { endpointId, clusterId, event, minimumEventNumber, isFabricFiltered = true } = options;
+        const { endpointId, clusterId, event, minimumEventNumber, isFabricFiltered = true, executeQueued } = options;
         const { id: eventId } = event;
         const response = await this.getMultipleAttributesAndEvents({
             events: [{ endpointId, clusterId, eventId }],
             eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
             isFabricFiltered,
+            executeQueued,
         });
         return response?.eventReports[0]?.events;
     }
@@ -385,14 +400,16 @@ export class InteractionClient {
         asTimedRequest?: boolean;
         timedRequestTimeoutMs?: number;
         suppressResponse?: boolean;
+        executeQueued?: boolean;
     }): Promise<void> {
-        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse } = options;
+        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse, executeQueued } = options;
         const { endpointId, clusterId, attribute, value, dataVersion } = attributeData;
         const response = await this.setMultipleAttributes({
             attributes: [{ endpointId, clusterId, attribute, value, dataVersion }],
             asTimedRequest,
             timedRequestTimeoutMs,
             suppressResponse,
+            executeQueued,
         });
 
         // Response contains Status error if there was an error on write
@@ -421,14 +438,16 @@ export class InteractionClient {
         asTimedRequest?: boolean;
         timedRequestTimeoutMs?: number;
         suppressResponse?: boolean;
+        executeQueued?: boolean;
     }): Promise<AttributeStatus[]> {
-        const {
-            attributes,
-            asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            suppressResponse = false, // TODO needs to be TRUE for Group writes
-        } = options;
+        const { executeQueued } = options;
         return this.withMessenger<AttributeStatus[]>(async messenger => {
+            const {
+                attributes,
+                asTimedRequest,
+                timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+                suppressResponse = false, // TODO needs to be TRUE for Group writes
+            } = options;
             logger.debug(
                 `Sending write request: ${attributes
                     .map(
@@ -476,7 +495,7 @@ export class InteractionClient {
                     },
                 )
                 .filter(({ status }) => status !== StatusCode.Success);
-        });
+        }, executeQueued);
     }
 
     async subscribeAttribute<A extends Attribute<any, any>>(options: {
@@ -490,21 +509,24 @@ export class InteractionClient {
         keepSubscriptions?: boolean;
         listener?: (value: AttributeJsType<A>, version: number) => void;
         updateTimeoutHandler?: Timer.Callback;
+        executeQueued?: boolean;
     }): Promise<void> {
-        const {
-            endpointId,
-            clusterId,
-            attribute,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            isFabricFiltered = true,
-            listener,
-            knownDataVersion,
-            keepSubscriptions = true,
-            updateTimeoutHandler,
-        } = options;
+        const { executeQueued } = options;
         return this.withMessenger<void>(async messenger => {
+            const {
+                endpointId,
+                clusterId,
+                attribute,
+                minIntervalFloorSeconds,
+                maxIntervalCeilingSeconds,
+                isFabricFiltered = true,
+                listener,
+                knownDataVersion,
+                keepSubscriptions = true,
+                updateTimeoutHandler,
+            } = options;
             const { id: attributeId } = attribute;
+
             logger.debug(
                 `Sending subscribe request for attribute: ${resolveAttributeName({
                     endpointId,
@@ -560,7 +582,7 @@ export class InteractionClient {
             }
             subscriptionListener(report);
             return;
-        });
+        }, executeQueued);
     }
 
     async subscribeEvent<T, E extends Event<T, any>>(options: {
@@ -574,7 +596,9 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         listener?: (value: DecodedEventData<T>) => void;
         updateTimeoutHandler?: Timer.Callback;
+        executeQueued?: boolean;
     }): Promise<void> {
+        const { executeQueued } = options;
         return this.withMessenger<void>(async messenger => {
             const {
                 endpointId,
@@ -631,7 +655,7 @@ export class InteractionClient {
             }
             subscriptionListener(report);
             return;
-        });
+        }, executeQueued);
     }
 
     async subscribeAllAttributesAndEvents(options: {
@@ -645,6 +669,7 @@ export class InteractionClient {
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
         updateTimeoutHandler?: Timer.Callback;
+        executeQueued?: boolean;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
@@ -660,6 +685,7 @@ export class InteractionClient {
             eventFilters,
             dataVersionFilters,
             updateTimeoutHandler,
+            executeQueued,
         } = options;
         return this.subscribeMultipleAttributesAndEvents({
             attributes: REQUEST_ALL,
@@ -673,6 +699,7 @@ export class InteractionClient {
             eventFilters,
             dataVersionFilters,
             updateTimeoutHandler,
+            executeQueued,
         });
     }
 
@@ -688,23 +715,12 @@ export class InteractionClient {
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
         updateTimeoutHandler?: Timer.Callback;
+        executeQueued?: boolean;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
     }> {
-        const {
-            attributes: attributeRequests,
-            events: eventRequests,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            keepSubscriptions = true,
-            isFabricFiltered = true,
-            attributeListener,
-            eventListener,
-            eventFilters,
-            dataVersionFilters,
-            updateTimeoutHandler,
-        } = options;
+        const { attributes: attributeRequests, events: eventRequests, executeQueued } = options;
 
         const subscriptionPathsCount = (attributeRequests?.length ?? 0) + (eventRequests?.length ?? 0);
         if (subscriptionPathsCount > 3) {
@@ -715,6 +731,18 @@ export class InteractionClient {
             attributeReports?: DecodedAttributeReportValue<any>[];
             eventReports?: DecodedEventReportValue<any>[];
         }>(async messenger => {
+            const {
+                minIntervalFloorSeconds,
+                maxIntervalCeilingSeconds,
+                keepSubscriptions = true,
+                isFabricFiltered = true,
+                attributeListener,
+                eventListener,
+                eventFilters,
+                dataVersionFilters,
+                updateTimeoutHandler,
+            } = options;
+
             logger.debug(
                 `Sending subscribe request: attributes: ${attributeRequests
                     .map(path => resolveAttributeName(path))
@@ -816,7 +844,7 @@ export class InteractionClient {
             };
             subscriptionListener(seedReport);
             return seedReport;
-        });
+        }, executeQueued);
     }
 
     async invoke<C extends Command<any, any, any>>(options: {
@@ -827,19 +855,22 @@ export class InteractionClient {
         asTimedRequest?: boolean;
         timedRequestTimeoutMs?: number;
         useExtendedFailSafeMessageResponseTimeout?: boolean;
+        executeQueued?: boolean;
     }): Promise<ResponseType<C>> {
-        const {
-            endpointId,
-            clusterId,
-            request,
-            command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
-            asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            useExtendedFailSafeMessageResponseTimeout = false,
-        } = options;
-        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+        const { executeQueued } = options;
 
         return this.withMessenger<ResponseType<C>>(async messenger => {
+            const {
+                endpointId,
+                clusterId,
+                request,
+                command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
+                asTimedRequest,
+                timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+                useExtendedFailSafeMessageResponseTimeout = false,
+            } = options;
+            const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
             logger.debug(
                 `Invoking command: ${resolveCommandName({
                     endpointId,
@@ -916,7 +947,7 @@ export class InteractionClient {
                 return undefined as ResponseType<C>; // ResponseType allows undefined for optional commands
             }
             throw new MatterFlowError("Received invoke response with no result nor response.");
-        });
+        }, executeQueued);
     }
 
     // TODO Add to ClusterClient when needed/when Group communication is implemented
@@ -927,18 +958,20 @@ export class InteractionClient {
         command: C;
         asTimedRequest?: boolean;
         timedRequestTimeoutMs?: number;
+        executeQueued?: boolean;
     }): Promise<void> {
-        const {
-            endpointId,
-            clusterId,
-            request,
-            command: { requestId, requestSchema, timed },
-            asTimedRequest,
-            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-        } = options;
-        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+        const { executeQueued } = options;
 
         return this.withMessenger<void>(async messenger => {
+            const {
+                endpointId,
+                clusterId,
+                request,
+                command: { requestId, requestSchema, timed },
+                asTimedRequest,
+                timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            } = options;
+            const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
             logger.debug(
                 `Invoking command with suppressedResponse: ${resolveCommandName({
                     endpointId,
@@ -971,12 +1004,21 @@ export class InteractionClient {
                     commandId: requestId,
                 })}`,
             );
-        });
+        }, executeQueued);
     }
 
-    private async withMessenger<T>(invoke: (messenger: InteractionClientMessenger) => Promise<T>): Promise<T> {
+    private async withMessenger<T>(
+        invoke: (messenger: InteractionClientMessenger) => Promise<T>,
+        executeQueued = false,
+    ): Promise<T> {
         const messenger = new InteractionClientMessenger(this.exchangeProvider);
         try {
+            if (executeQueued) {
+                if (this.#queue === undefined) {
+                    throw new ImplementationError("Cannot execute queued operation without a queue.");
+                }
+                return await this.#queue.add(() => invoke(messenger));
+            }
             return await invoke(messenger);
         } finally {
             await messenger.close();
