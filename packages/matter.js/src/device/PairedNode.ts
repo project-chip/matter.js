@@ -343,7 +343,8 @@ export class PairedNode {
      * Initialize the node after the InteractionClient was created and to subscribe attributes and events if requested.
      */
     private async initialize() {
-        const interactionClient = await this.ensureConnection(true);
+        // Enforce a new Connection
+        await this.ensureConnection(true);
         const { autoSubscribe, attributeChangedCallback, eventTriggeredCallback } = this.options;
 
         let deviceDetailsUpdated = false;
@@ -622,8 +623,8 @@ export class PairedNode {
      * Request the current InteractionClient for custom special case interactions with the device. Usually the
      * ClusterClients of the Devices of the node should be used instead.
      */
-    async getInteractionClient() {
-        return await this.ensureConnection();
+    getInteractionClient() {
+        return this.ensureConnection();
     }
 
     /** Method to log the structure of this node with all endpoint and clusters. */
@@ -685,6 +686,8 @@ export class PairedNode {
         attributeChangedCallback?: (data: DecodedAttributeReportValue<any>) => void;
         eventTriggeredCallback?: (data: DecodedEventReportValue<any>) => void;
     }) {
+        const interactionClient = await this.getInteractionClient();
+
         options = options ?? {};
         const { attributeChangedCallback, eventTriggeredCallback } = options;
         let { ignoreInitialTriggers = false } = options;
@@ -805,6 +808,46 @@ export class PairedNode {
         });
     }
 
+    #checkAttributesForNeededStructureUpdate(
+        _endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        attributeId: AttributeId,
+    ) {
+        // Any change in the Descriptor Cluster partsList attribute requires a reinitialization of the endpoint structure
+        let structureUpdateNeeded = false;
+        if (clusterId === DescriptorCluster.id) {
+            switch (attributeId) {
+                case DescriptorCluster.attributes.partsList.id:
+                case DescriptorCluster.attributes.serverList.id:
+                case DescriptorCluster.attributes.deviceTypeList.id:
+                    structureUpdateNeeded = true;
+                    break;
+            }
+        }
+        if (!structureUpdateNeeded) {
+            switch (attributeId) {
+                case FeatureMap.id:
+                case AttributeList.id:
+                case AcceptedCommandList.id:
+                case ClusterRevision.id:
+                    structureUpdateNeeded = true;
+                    break;
+            }
+        }
+
+        if (structureUpdateNeeded) {
+            logger.info(`Node ${this.nodeId}: Endpoint structure needs to be updated ...`);
+            this.updateEndpointStructureTimer.stop().start();
+        }
+    }
+
+    #checkEventsForNeededStructureUpdate(_endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId) {
+        // When we subscribe all data here then we can also catch this case and handle it
+        if (clusterId === BasicInformation.Cluster.id && eventId === BasicInformation.Cluster.events.shutDown.id) {
+            this.handleNodeShutdown();
+        }
+    }
+
     /** Handles a node shutDown event (if supported by the node and received). */
     private handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
@@ -830,7 +873,7 @@ export class PairedNode {
         allClusterAttributes: DecodedAttributeReportValue<any>[],
         updateStructure = false,
     ) {
-        const interactionClient = await this.ensureConnection();
+        const interactionClient = await this.getInteractionClient();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
         if (updateStructure) {
