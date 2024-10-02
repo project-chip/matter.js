@@ -239,6 +239,14 @@ export class PairedNode {
         return this.connectionState === NodeStateInformation.Connected;
     }
 
+    get nodeState() {
+        return this.connectionState;
+    }
+
+    get basicInformation() {
+        return this.#nodeDetails.basicInformationData;
+    }
+
     private setConnectionState(state: NodeStateInformation) {
         if (
             this.connectionState === state ||
