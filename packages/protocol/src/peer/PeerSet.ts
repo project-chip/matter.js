@@ -654,6 +654,10 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     }
 
     #handleResubmissionStarted(session: Session) {
+        if (!session.isSecure) {
+            // For insecure sessions from CASE/PASE session establishments we do not need to do anything
+            return;
+        }
         const { associatedFabric: fabric, peerNodeId: nodeId } = session;
         if (fabric === undefined || nodeId === undefined) {
             return;
