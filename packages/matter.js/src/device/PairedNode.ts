@@ -162,6 +162,7 @@ export type CommissioningControllerNodeOptions = {
     /**
      * Optional callback method which is called when the state of the node changes. This can be used to detect when
      * the node goes offline or comes back online.
+     * @deprecated
      */
     readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
@@ -256,6 +257,7 @@ export class PairedNode {
             return;
         this.connectionState = state;
         this.options.stateInformationCallback?.(this.nodeId, state);
+        this.nodeStateChanged.emit(state);
         if (state === NodeStateInformation.Disconnected) {
             this.reconnectDelayTimer.stop();
         }
@@ -870,6 +872,7 @@ export class PairedNode {
         const allClusterAttributes = await this.readAllAttributes();
         await this.initializeEndpointStructure(allClusterAttributes, true);
         this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
+        this.nodeStructureChanged.emit();
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
