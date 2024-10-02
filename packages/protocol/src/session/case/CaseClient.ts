@@ -45,6 +45,7 @@ export class CaseClient {
 
         // Send sigma1
         let sigma1Bytes;
+        let resumed = false;
         let resumptionRecord = this.#sessions.findResumptionRecordByAddress(fabric.addressOf(peerNodeId));
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
@@ -111,6 +112,7 @@ export class CaseClient {
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
             resumptionRecord.sessionParameters = secureSession.parameters; /* update mrpParams */
+            resumed = true;
         } else {
             // Process sigma2
             const {
@@ -228,6 +230,6 @@ export class CaseClient {
         await messenger.close();
         await this.#sessions.saveResumptionRecord(resumptionRecord);
 
-        return secureSession;
+        return { session: secureSession, resumed };
     }
 }

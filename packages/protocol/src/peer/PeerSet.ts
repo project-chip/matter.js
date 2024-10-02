@@ -574,12 +574,18 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             );
 
             try {
-                operationalSecureSession = await this.#caseClient.pair(
+                const { session, resumed } = await this.#caseClient.pair(
                     exchange,
                     this.#sessions.fabricFor(address),
                     address.nodeId,
                     expectedProcessingTimeMs,
                 );
+                operationalSecureSession = session;
+
+                if (!resumed) {
+                    // When the session was not resumed then most likely the device firmware got updated, so we clear the cache
+                    this.#nodeCachedData.delete(address);
+                }
             } catch (e) {
                 await exchange.close();
                 throw e;
