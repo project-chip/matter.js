@@ -83,6 +83,15 @@ const logger = Logger.get("PairedNode");
 /** Delay after receiving a changed partList  from a device to update the device structure */
 const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
 
+const DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S = 1;
+const DEFAULT_SUBSCRIPTION_FLOOR_ICD_S = 0;
+const DEFAULT_SUBSCRIPTION_CEILING_WIFI_S = 60;
+const DEFAULT_SUBSCRIPTION_CEILING_THREAD_S = 60;
+const DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S = 180;
+const DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S = 600;
+
+const GlobalAttributeKeys = Object.keys(GlobalAttributes({}));
+
 export enum NodeStateInformation {
     /**
      * Node seems active nd last communications were successful and subscription updates were received and all data is
@@ -616,6 +625,46 @@ export class PairedNode {
         logEndpoint(rootEndpoint, options);
     }
 
+    #determineSubscriptionParameters() {
+        let {
+            subscribeMinIntervalFloorSeconds: minIntervalFloorSeconds,
+            subscribeMaxIntervalCeilingSeconds: maxIntervalCeilingSeconds,
+        } = this.options;
+
+        const { isBatteryPowered, isIntermittentlyConnected, threadConnected, isThreadSleepyEndDevice } =
+            this.#nodeDetails.deviceData ?? {};
+
+        if (isIntermittentlyConnected) {
+            if (minIntervalFloorSeconds !== undefined && minIntervalFloorSeconds !== DEFAULT_SUBSCRIPTION_FLOOR_ICD_S) {
+                logger.info(
+                    `Node ${this.nodeId}: Overwriting minIntervalFloorSeconds for intermittently connected device to 0`,
+                );
+                minIntervalFloorSeconds = DEFAULT_SUBSCRIPTION_FLOOR_ICD_S;
+            }
+        }
+
+        const defaultCeiling = isBatteryPowered
+            ? DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S
+            : isThreadSleepyEndDevice
+              ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S
+              : threadConnected
+                ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_S
+                : DEFAULT_SUBSCRIPTION_CEILING_WIFI_S;
+        if (maxIntervalCeilingSeconds === undefined) {
+            maxIntervalCeilingSeconds = defaultCeiling;
+        }
+        if (maxIntervalCeilingSeconds < defaultCeiling) {
+            logger.debug(
+                `Node ${this.nodeId}: maxIntervalCeilingSeconds should idealy be set to ${defaultCeiling}s instead of ${maxIntervalCeilingSeconds}s because of device type`,
+            );
+        }
+
+        return {
+            minIntervalFloorSeconds: minIntervalFloorSeconds ?? DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S,
+            maxIntervalCeilingSeconds,
+        };
+    }
+
     /**
      * Subscribe to all attributes and events of the device. Unless setting the Controller property autoSubscribe to
      * false this is executed automatically. Alternatively you can manually subscribe by calling this method.
@@ -629,19 +678,28 @@ export class PairedNode {
         const { attributeChangedCallback, eventTriggeredCallback } = options;
         let { ignoreInitialTriggers = false } = options;
 
-        const interactionClient = await this.ensureConnection();
+        const { minIntervalFloorSeconds, maxIntervalCeilingSeconds } = this.#determineSubscriptionParameters();
+        const { threadConnected } = this.#nodeDetails.deviceData ?? {};
+
+        const maxKnownEventNumber = interactionClient.maxKnownEventNumber;
         // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
         const initialSubscriptionData = await interactionClient.subscribeAllAttributesAndEvents({
             isUrgent: true,
-            minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
-            maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 60,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
             keepSubscriptions: false,
-            attributeListener: data => {
+            dataVersionFilters: interactionClient.getCachedClusterDataVersions(),
+            enrichCachedAttributeData: true,
+            eventFilters: maxKnownEventNumber !== undefined ? [{ eventMin: maxKnownEventNumber + 1n }] : undefined,
+            executeQueued: !!threadConnected, // We queue subscriptions for thread devices
+            attributeListener: (data, changed) => {
+                if (ignoreInitialTriggers || changed === false) {
+                    return;
+                }
                 const {
                     path: { endpointId, clusterId, attributeId },
                     value,
                 } = data;
-                if (ignoreInitialTriggers) return;
                 const device = this.endpoints.get(endpointId);
                 if (device === undefined) {
                     logger.info(
@@ -663,17 +721,18 @@ export class PairedNode {
                         value,
                     )}`,
                 );
+
                 asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
                 if (attributeChangedCallback !== undefined) {
                     attributeChangedCallback(data);
                 }
             },
             eventListener: data => {
+                if (ignoreInitialTriggers) return;
                 const {
                     path: { endpointId, clusterId, eventId },
                     events,
                 } = data;
-                if (ignoreInitialTriggers) return;
                 const device = this.endpoints.get(endpointId);
                 if (device === undefined) {
                     logger.info(`Node ${this.nodeId} Ignoring received event for unknown endpoint ${endpointId}!`);
@@ -720,7 +779,10 @@ export class PairedNode {
                 }
             },
         });
+
+        // After initial data are processed we want to send out callbacks, so we set ignoreInitialTriggers to false
         ignoreInitialTriggers = false;
+
         return initialSubscriptionData;
     }
 
