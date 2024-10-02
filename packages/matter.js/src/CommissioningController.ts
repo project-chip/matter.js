@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicInformation } from "#clusters";
 import {
     Environment,
     ImplementationError,
@@ -14,7 +13,6 @@ import {
     Network,
     NoProviderError,
     StorageContext,
-    SupportedStorageTypes,
     SyncStorage,
     UdpInterface,
 } from "#general";
@@ -32,15 +30,12 @@ import {
     NodeDiscoveryType,
     PeerCommissioningOptions,
     ScannerSet,
-    SupportedAttributeClient,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
     DiscoveryCapabilitiesBitmap,
-    EndpointNumber,
     FabricId,
     FabricIndex,
-    GlobalAttributes,
     NodeId,
     TypeFromPartialBitSchema,
     VendorId,
@@ -331,72 +326,19 @@ export class CommissioningController extends MatterNode {
             return existingNode;
         }
 
-        const pairedNode = await PairedNode.create(
+        const pairedNode = PairedNode.create(
             nodeId,
             this,
             connectOptions,
+            this.controllerInstance?.getCommissionedNodeDetails(nodeId) ?? {},
             async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
         this.connectedNodes.set(nodeId, pairedNode);
 
-        if (connectOptions?.autoSubscribe !== false) {
-            await this.enhanceDeviceDetailsFromCache(nodeId, pairedNode);
-        } else {
-            await this.enhanceDeviceDetailsFromRemote(nodeId, pairedNode);
-        }
+        await pairedNode.initialized.on(details => controller.enhanceCommissionedNodeDetails(nodeId, { ...details }));
 
         return pairedNode;
-    }
-
-    private async enhanceDeviceDetailsFromCache(nodeId: NodeId, pairedNode: PairedNode) {
-        const controller = this.assertControllerIsStarted();
-
-        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
-        const basicInformationClient = pairedNode.getRootClusterClient(BasicInformation.Cluster);
-        if (basicInformationClient === undefined) {
-            logger.info(`No basic information cluster found for node ${nodeId}`);
-            return;
-        }
-        const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-        for (const attributeName of Object.keys(basicInformationClient.attributes)) {
-            if (globalAttributeKeys.includes(attributeName)) {
-                continue;
-            }
-            const attribute = (basicInformationClient.attributes as any)[attributeName];
-            if (attribute instanceof SupportedAttributeClient) {
-                try {
-                    basicInformationData[attributeName] = await attribute.get();
-                } catch (error) {
-                    logger.info(`Error while getting attribute ${attributeName} for node ${nodeId}: ${error}`);
-                }
-            }
-        }
-        await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-    }
-
-    private async enhanceDeviceDetailsFromRemote(nodeId: NodeId, pairedNode: PairedNode) {
-        const controller = this.assertControllerIsStarted();
-
-        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
-        try {
-            const interactionClient = await pairedNode.getInteractionClient();
-            const basicInformationAttributes = await interactionClient.getMultipleAttributes({
-                attributes: [{ endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }],
-            });
-            const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-            for (const {
-                path: { attributeName },
-                value,
-            } of basicInformationAttributes) {
-                if (!globalAttributeKeys.includes(attributeName)) {
-                    basicInformationData[attributeName] = value;
-                }
-            }
-            await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-        } catch (error) {
-            logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
-        }
     }
 
     /**
