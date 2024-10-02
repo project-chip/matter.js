@@ -31,6 +31,7 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
+import { isDeepEqual } from "@matter.js/general";
 import { ExchangeProvider } from "../protocol/ExchangeManager.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
@@ -713,7 +714,11 @@ export class InteractionClient {
     async subscribeAllAttributesAndEvents(options: {
         minIntervalFloorSeconds: number;
         maxIntervalCeilingSeconds: number;
-        attributeListener?: (data: DecodedAttributeReportValue<any>) => void;
+        attributeListener?: (
+            data: DecodedAttributeReportValue<any>,
+            valueChanged?: boolean,
+            oldValue?: unknown,
+        ) => void;
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         isUrgent?: boolean;
         keepSubscriptions?: boolean;
@@ -742,7 +747,7 @@ export class InteractionClient {
         maxIntervalCeilingSeconds: number;
         keepSubscriptions?: boolean;
         isFabricFiltered?: boolean;
-        attributeListener?: (data: DecodedAttributeReportValue<any>) => void;
+        attributeListener?: (data: DecodedAttributeReportValue<any>, valueChanged?: boolean, oldValue?: any) => void;
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
@@ -859,6 +864,10 @@ export class InteractionClient {
                             clusterId,
                             dataVersion: version,
                         });
+                        attributeListener?.(
+                            data,
+                            oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined,
+                            oldValue,
                         );
                     });
                 }
