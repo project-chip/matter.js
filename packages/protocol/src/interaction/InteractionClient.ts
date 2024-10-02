@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger, MatterFlowError, PromiseQueue, Time, Timer, UnexpectedDataError } from "#general";
+import {
+    ImplementationError,
+    Logger,
+    MatterFlowError,
+    PromiseQueue,
+    Time,
+    Timer,
+    UnexpectedDataError,
+    isDeepEqual,
+} from "#general";
 import { Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { NodeCachedData } from "#peer/PeerSet.js";
@@ -31,7 +40,6 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
-import { isDeepEqual } from "@matter.js/general";
 import { ExchangeProvider } from "../protocol/ExchangeManager.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
