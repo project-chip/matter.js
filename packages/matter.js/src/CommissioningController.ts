@@ -133,7 +133,7 @@ export class CommissioningController extends MatterNode {
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
-    private connectedNodes = new Map<NodeId, PairedNode>();
+    private initializedNodes = new Map<NodeId, PairedNode>();
     private sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
 
     /**
@@ -281,7 +281,7 @@ export class CommissioningController extends MatterNode {
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
-        const node = this.connectedNodes.get(nodeId);
+        const node = this.initializedNodes.get(nodeId);
         if (tryDecommissioning) {
             try {
                 if (node == undefined) {
@@ -296,11 +296,11 @@ export class CommissioningController extends MatterNode {
             node.close();
         }
         await controller.removeNode(nodeId);
-        this.connectedNodes.delete(nodeId);
+        this.initializedNodes.delete(nodeId);
     }
 
     async disconnectNode(nodeId: NodeId) {
-        const node = this.connectedNodes.get(nodeId);
+        const node = this.initializedNodes.get(nodeId);
         if (node === undefined) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
@@ -318,7 +318,7 @@ export class CommissioningController extends MatterNode {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
-        const existingNode = this.connectedNodes.get(nodeId);
+        const existingNode = this.initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.isConnected) {
                 await existingNode.reconnect(connectOptions);
@@ -334,7 +334,7 @@ export class CommissioningController extends MatterNode {
             async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
-        this.connectedNodes.set(nodeId, pairedNode);
+        this.initializedNodes.set(nodeId, pairedNode);
 
         await pairedNode.initialized.on(details => controller.enhanceCommissionedNodeDetails(nodeId, { ...details }));
 
@@ -357,7 +357,7 @@ export class CommissioningController extends MatterNode {
         for (const nodeId of controller.getCommissionedNodes()) {
             await this.connectNode(nodeId, connectOptions);
         }
-        return Array.from(this.connectedNodes.values());
+        return Array.from(this.initializedNodes.values());
     }
 
     /**
@@ -406,7 +406,7 @@ export class CommissioningController extends MatterNode {
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */
     getConnectedNode(nodeId: NodeId) {
-        return this.connectedNodes.get(nodeId);
+        return this.initializedNodes.get(nodeId);
     }
 
     /** Returns an array with the Node Ids for all commissioned nodes. */
@@ -424,12 +424,12 @@ export class CommissioningController extends MatterNode {
 
     /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
     async close() {
-        for (const node of this.connectedNodes.values()) {
+        for (const node of this.initializedNodes.values()) {
             node.close();
         }
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
-        this.connectedNodes.clear();
+        this.initializedNodes.clear();
         this.ipv4Disabled = undefined;
         this.started = false;
     }
