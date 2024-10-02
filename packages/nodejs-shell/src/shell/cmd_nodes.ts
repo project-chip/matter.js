@@ -10,6 +10,15 @@ import { CommissioningControllerNodeOptions, NodeStateInformation } from "@proje
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 
+const NodeStateString = {
+    [NodeStateInformation.Connected]: "Connected",
+    [NodeStateInformation.Disconnected]: "Disconnected",
+    [NodeStateInformation.Reconnecting]: "Reconnecting",
+    [NodeStateInformation.WaitingForDeviceDiscovery]: "Waiting for device discovery",
+    [NodeStateInformation.StructureChanged]: "Structure changed",
+    [NodeStateInformation.Decommissioned]: "Decommissioned",
+};
+
 export function createDiagnosticCallbacks(): Partial<CommissioningControllerNodeOptions> {
     return {
         attributeChangedCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
@@ -132,7 +141,7 @@ export default function commands(theNode: MatterNode) {
                             })
                             .positional("max-subscription-interval", {
                                 describe:
-                                    "Maximum subscription interval in seconds. If minimum interval is set and this not this is set to 30 seconds.",
+                                    "Maximum subscription interval in seconds. If minimum interval is set and this not it will be determined automatically.",
                                 type: "number",
                             });
                     },
@@ -157,9 +166,7 @@ export default function commands(theNode: MatterNode) {
                             await theNode.commissioningController.connectNode(nodeIdToProcess, {
                                 autoSubscribe,
                                 subscribeMinIntervalFloorSeconds: autoSubscribe ? minSubscriptionInterval : undefined,
-                                subscribeMaxIntervalCeilingSeconds: autoSubscribe
-                                    ? (maxSubscriptionInterval ?? 30)
-                                    : undefined,
+                                subscribeMaxIntervalCeilingSeconds: autoSubscribe ? maxSubscriptionInterval : undefined,
                                 ...createDiagnosticCallbacks(),
                             });
                         }
@@ -199,6 +206,48 @@ export default function commands(theNode: MatterNode) {
                                 continue;
                             }
                             await node.disconnect();
+                        }
+                    },
+                )
+                .command(
+                    "status <node-ids>",
+                    "Logs the connection status for all or specified nodes",
+                    yargs => {
+                        return yargs.positional("node-ids", {
+                            describe:
+                                "node ids to connect (comma separated list allowed). Use 'all' to log status for all nodes.",
+                            default: undefined,
+                            type: "string",
+                            demandOption: true,
+                        });
+                    },
+                    async argv => {
+                        const { nodeIds: nodeIdStr } = argv;
+                        await theNode.start();
+                        if (theNode.commissioningController === undefined) {
+                            throw new Error("CommissioningController not initialized");
+                        }
+                        let nodeIds = theNode.commissioningController.getCommissionedNodes();
+                        if (nodeIdStr !== "all") {
+                            const nodeIdList = nodeIdStr.split(",").map(nodeId => NodeId(BigInt(nodeId)));
+                            nodeIds = nodeIds.filter(nodeId => nodeIdList.includes(nodeId));
+                            if (!nodeIds.length) {
+                                throw new Error(`Node ${nodeIdStr} not commissioned`);
+                            }
+                        }
+
+                        for (const nodeIdToProcess of nodeIds) {
+                            const node = theNode.commissioningController.getConnectedNode(nodeIdToProcess);
+                            if (node === undefined) {
+                                console.log(
+                                    `Node ${nodeIdToProcess}: ${NodeStateString[NodeStateInformation.Disconnected]}`,
+                                );
+                            } else {
+                                const basicInfo = node.basicInformation;
+                                console.log(
+                                    `Node ${nodeIdToProcess}: Node Status: ${NodeStateString[node.nodeState]}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
+                                );
+                            }
                         }
                     },
                 ),
