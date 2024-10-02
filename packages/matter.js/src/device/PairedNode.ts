@@ -360,7 +360,7 @@ export class PairedNode {
 
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
-                ignoreInitialTriggers: true,
+                ignoreInitialTriggers: !this.#initializationDone, // Trigger on updates only after initialization
                 attributeChangedCallback: data => attributeChangedCallback?.(this.nodeId, data),
                 eventTriggeredCallback: data => eventTriggeredCallback?.(this.nodeId, data),
             }); // Ignore Triggers from Subscribing during initialization
@@ -368,14 +368,14 @@ export class PairedNode {
             if (initialSubscriptionData.attributeReports === undefined) {
                 throw new InternalError("No attribute reports received when subscribing to all values!");
             }
-            await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
+            await this.initializeEndpointStructure(initialSubscriptionData.attributeReports, this.#initializationDone);
 
             if (!deviceDetailsUpdated) {
                 await this.enhanceDeviceDetailsFromCache();
             }
         } else {
-            const allClusterAttributes = await interactionClient.getAllAttributes();
-            await this.initializeEndpointStructure(allClusterAttributes);
+            const allClusterAttributes = await this.readAllAttributes();
+            await this.initializeEndpointStructure(allClusterAttributes, this.#initializationDone);
         }
         this.setConnectionState(NodeStateInformation.Connected);
         this.initialized.emit(this.#nodeDetails);
@@ -797,6 +797,14 @@ export class PairedNode {
         return initialSubscriptionData;
     }
 
+    async readAllAttributes() {
+        const interactionClient = await this.getInteractionClient();
+        return interactionClient.getAllAttributes({
+            dataVersionFilters: interactionClient.getCachedClusterDataVersions(),
+            enrichCachedAttributeData: true,
+        });
+    }
+
     /** Handles a node shutDown event (if supported by the node and received). */
     private handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
@@ -812,8 +820,7 @@ export class PairedNode {
     }
 
     async updateEndpointStructure() {
-        const interactionClient = await this.ensureConnection();
-        const allClusterAttributes = await interactionClient.getAllAttributes();
+        const allClusterAttributes = await this.readAllAttributes();
         await this.initializeEndpointStructure(allClusterAttributes, true);
         this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
     }
