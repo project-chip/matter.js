@@ -7,6 +7,7 @@
 import { ImplementationError, Logger, MatterFlowError, PromiseQueue, Time, Timer, UnexpectedDataError } from "#general";
 import { Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
+import { NodeCachedData } from "#peer/PeerSet.js";
 import {
     Attribute,
     AttributeId,
@@ -123,9 +124,10 @@ export class SubscriptionClient implements ProtocolHandler {
 }
 
 export class InteractionClient {
-    // TODO Add storage for these data to be able to optimize follow up subscriptions by only request updated data
-    private readonly subscribedLocalValues = new Map<string, any>();
-    private readonly subscribedClusterDataVersions = new Map<string, number>();
+    readonly #cachedData: NodeCachedData = {
+        attributeValues: new Map(),
+        clusterDataVersions: new Map(),
+    };
     private readonly ownSubscriptionIds = new Set<number>();
     private readonly subscriptionClient: SubscriptionClient;
     #queue?: PromiseQueue;
@@ -325,8 +327,12 @@ export class InteractionClient {
         } = options;
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
-            const value = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }));
-            const version = this.subscribedClusterDataVersions.get(clusterPathToId({ endpointId, clusterId }));
+            const value = this.#cachedData.attributeValues.get(
+                attributePathToId({ endpointId, clusterId, attributeId }),
+            )?.value;
+            const version = this.#cachedData.clusterDataVersions.get(
+                clusterPathToId({ endpointId, clusterId }),
+            )?.dataVersion;
             if (value !== undefined && version !== undefined) {
                 return { value, version } as { value: AttributeJsType<A>; version: number };
             }
@@ -570,15 +576,25 @@ export class InteractionClient {
                     throw new UnexpectedDataError("Unexpected response with more then one attribute");
                 }
                 const {
-                    path: { endpointId, clusterId, attributeId },
+                    path: { endpointId, clusterId, attributeId, attributeName },
                     value,
                     version,
                 } = data[0];
                 if (value === undefined)
                     throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
-                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), value);
-                this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
+                this.#cachedData.attributeValues.set(attributePathToId({ endpointId, clusterId, attributeId }), {
+                    endpointId,
+                    clusterId,
+                    attributeId,
+                    attributeName,
+                    value,
+                });
+                this.#cachedData.clusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), {
+                    endpointId,
+                    clusterId,
+                    dataVersion: version,
+                });
                 listener?.(value, version);
             };
             this.registerSubscriptionListener(subscriptionId, subscriptionListener);
@@ -790,7 +806,7 @@ export class InteractionClient {
                 if (attributeReports !== undefined) {
                     attributeReports.forEach(data => {
                         const {
-                            path: { endpointId, clusterId, attributeId },
+                            path: { endpointId, clusterId, attributeId, attributeName },
                             value,
                             version,
                         } = data;
@@ -802,12 +818,21 @@ export class InteractionClient {
                             })} = ${Logger.toJSON(value)} (version=${version})`,
                         );
                         if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
-                        this.subscribedLocalValues.set(
-                            attributePathToId({ endpointId, clusterId, attributeId }),
+                        const attributeKey = attributePathToId({ endpointId, clusterId, attributeId });
+                        const oldValue = this.#cachedData.attributeValues.get(attributeKey)?.value;
+                        this.#cachedData.attributeValues.set(attributeKey, {
+                            endpointId,
+                            clusterId,
+                            attributeId,
+                            attributeName,
                             value,
+                        });
+                        this.#cachedData.clusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), {
+                            endpointId,
+                            clusterId,
+                            dataVersion: version,
+                        });
                         );
-                        this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
-                        attributeListener?.(data);
                     });
                 }
 
@@ -816,6 +841,15 @@ export class InteractionClient {
                         logger.debug(
                             `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
                         );
+                        const { events } = data;
+
+                        this.#cachedData.maxEventNumber =
+                            events.length === 1
+                                ? events[0].eventNumber
+                                : events.reduce(
+                                      (max, { eventNumber }) => (max < eventNumber ? eventNumber : max),
+                                      this.#cachedData.maxEventNumber ?? events[0].eventNumber,
+                                  );
                         eventListener?.(data);
                     });
                 }
@@ -1046,9 +1080,6 @@ export class InteractionClient {
         const timer = Time.getTimer("Subscription retry", maxIntervalMs, () => {
             logger.info(`Subscription ${subscriptionId} timed out after ${maxIntervalMs}ms ...`);
             this.removeSubscription(subscriptionId);
-            // We remove all data because we don't know which data is still valid, so we better read from remote if needed
-            this.subscribedLocalValues.clear();
-            this.subscribedClusterDataVersions.clear();
             updateTimeoutHandler();
         }).start();
         this.subscriptionClient.registerSubscriptionUpdateTimer(subscriptionId, timer);
@@ -1058,8 +1089,8 @@ export class InteractionClient {
         for (const subscriptionId of this.ownSubscriptionIds) {
             this.removeSubscription(subscriptionId);
         }
-        this.subscribedLocalValues.clear();
-        this.subscribedClusterDataVersions.clear();
+        this.#cachedData.attributeValues.clear();
+        this.#cachedData.clusterDataVersions.clear();
     }
 
     get session() {

@@ -31,7 +31,7 @@ import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseClient, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
+import { AttributeId, ClusterId, EndpointNumber, EventNumber, SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
 import { ChannelManager, NoChannelError } from "../protocol/ChannelManager.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "../protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
@@ -90,6 +90,21 @@ export interface PeerSetContext {
     netInterfaces: NetInterfaceSet;
     store: PeerStore;
 }
+
+export type NodeCachedData = {
+    attributeValues: Map<
+        string,
+        {
+            endpointId: EndpointNumber;
+            clusterId: ClusterId;
+            attributeId: AttributeId;
+            attributeName: string;
+            value: any;
+        }
+    >;
+    clusterDataVersions: Map<string, { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }>;
+    maxEventNumber?: EventNumber;
+};
 
 /**
  * Manages operational connections to peers on shared fabric.
@@ -210,6 +225,14 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
 
             channel = await this.#resume(address, discoveryOptions);
         }
+
+        const cachedData =
+            this.#nodeCachedData.get(address) ??
+            ({
+                attributeValues: new Map(),
+                clusterDataVersions: new Map(),
+            } as NodeCachedData);
+        this.#nodeCachedData.set(address, cachedData);
 
         return new InteractionClient(
             new ExchangeProvider(this.#exchanges, channel, async () => {
