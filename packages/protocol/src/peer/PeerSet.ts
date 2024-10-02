@@ -107,6 +107,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #construction: Construction<PeerSet>;
     readonly #store: PeerStore;
     readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
+    readonly #nodeCachedData = new Map<PeerAddress, NodeCachedData>(); // Temporarily until we store it in new API
 
     constructor(context: PeerSetContext) {
         const { sessions, channels, exchanges, scanners, netInterfaces, store } = context;
@@ -240,6 +241,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             }),
             address,
             this.#interactionQueue,
+            cachedData,
         );
     }
 

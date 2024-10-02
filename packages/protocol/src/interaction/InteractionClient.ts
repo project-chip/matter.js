@@ -134,9 +134,14 @@ export class InteractionClient {
         private readonly exchangeProvider: ExchangeProvider,
         readonly address: PeerAddress,
         queue?: PromiseQueue,
+        cachedData?: NodeCachedData,
     ) {
         this.#queue = queue;
 
+        // With externally provided cache, we use this, else we at least have a local cache
+        if (cachedData !== undefined) {
+            this.#cachedData = cachedData;
+        }
         if (this.exchangeProvider.hasProtocolHandler(INTERACTION_PROTOCOL_ID)) {
             const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
             if (!(client instanceof SubscriptionClient)) {
