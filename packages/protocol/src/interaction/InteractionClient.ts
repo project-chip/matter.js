@@ -172,6 +172,7 @@ export class InteractionClient {
     async getAllAttributes(
         options: {
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
             isFabricFiltered?: boolean;
             executeQueued?: boolean;
         } = {},
@@ -206,6 +207,7 @@ export class InteractionClient {
                 clusterId: ClusterId;
                 dataVersion: number;
             }[];
+            enrichCachedAttributeData?: boolean;
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
             executeQueued?: boolean;
@@ -225,6 +227,7 @@ export class InteractionClient {
         options: {
             attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
             isFabricFiltered?: boolean;
             executeQueued?: boolean;
         } = {},
@@ -247,6 +250,7 @@ export class InteractionClient {
         options: {
             attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             isFabricFiltered?: boolean;
@@ -261,6 +265,7 @@ export class InteractionClient {
             dataVersionFilters,
             executeQueued,
             events: eventRequests,
+            enrichCachedAttributeData,
             eventFilters,
         } = options;
         if (attributeRequests === undefined && eventRequests === undefined) {
@@ -290,7 +295,13 @@ export class InteractionClient {
                 isFabricFiltered,
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             });
-        });
+
+            if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
+                this.#enrichCachedAttributeData(result.attributeReports, dataVersionFilters);
+            }
+
+            return result;
+        }, executeQueued);
     }
 
     async getAttribute<A extends Attribute<any, any>>(options: {
@@ -689,38 +700,18 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+        enrichCachedAttributeData?: boolean;
         updateTimeoutHandler?: Timer.Callback;
         executeQueued?: boolean;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
     }> {
-        const {
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            attributeListener,
-            eventListener,
-            isUrgent,
-            keepSubscriptions = true,
-            isFabricFiltered = true,
-            eventFilters,
-            dataVersionFilters,
-            updateTimeoutHandler,
-            executeQueued,
-        } = options;
+        const { isUrgent } = options;
         return this.subscribeMultipleAttributesAndEvents({
+            ...options,
             attributes: REQUEST_ALL,
             events: [{ isUrgent }],
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            keepSubscriptions,
-            isFabricFiltered,
-            attributeListener,
-            eventListener,
-            eventFilters,
-            dataVersionFilters,
-            updateTimeoutHandler,
-            executeQueued,
         });
     }
 
@@ -735,6 +726,7 @@ export class InteractionClient {
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+        enrichCachedAttributeData?: boolean;
         updateTimeoutHandler?: Timer.Callback;
         executeQueued?: boolean;
     }): Promise<{
@@ -762,6 +754,7 @@ export class InteractionClient {
                 eventFilters,
                 dataVersionFilters,
                 updateTimeoutHandler,
+                enrichCachedAttributeData,
             } = options;
 
             logger.debug(
@@ -882,6 +875,11 @@ export class InteractionClient {
                         : undefined,
             };
             subscriptionListener(seedReport);
+
+            if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
+                this.#enrichCachedAttributeData(seedReport.attributeReports ?? [], dataVersionFilters);
+            }
+
             return seedReport;
         }, executeQueued);
     }
@@ -1099,5 +1097,68 @@ export class InteractionClient {
 
     get channelType() {
         return this.exchangeProvider.channelType;
+    }
+
+    /** Enrich cached data to get complete responses when data version filters were used. */
+    #enrichCachedAttributeData(
+        attributeReports: DecodedAttributeReportValue<any>[],
+        dataVersionFilters: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[],
+    ) {
+        // Collect the Endpoints and clusters to potentially enrich data from the cache
+        const candidates = new Map<EndpointNumber, Map<ClusterId, number>>();
+        dataVersionFilters.forEach(({ endpointId, clusterId, dataVersion }) => {
+            if (!candidates.has(endpointId)) {
+                candidates.set(endpointId, new Map());
+            }
+            candidates
+                .get(endpointId)
+                ?.set(
+                    clusterId,
+                    this.#cachedData.clusterDataVersions.get(clusterPathToId({ endpointId, clusterId }))?.dataVersion ??
+                        dataVersion,
+                );
+        });
+
+        // Remove all where data were returned because there the versions did not match
+        attributeReports.forEach(({ path: { endpointId, clusterId } }) => {
+            if (candidates.has(endpointId)) {
+                candidates.get(endpointId)?.delete(clusterId);
+            }
+        });
+
+        // Enrich the data from the cache for all Endpoints and clusters that are left
+        this.#cachedData.attributeValues.forEach(({ endpointId, clusterId, attributeId, attributeName, value }) => {
+            const version = candidates.get(endpointId)?.get(clusterId);
+            if (version !== undefined) {
+                logger.debug(`Enriching cached data for ${endpointId}/${clusterId}/${attributeId}=`, value);
+                attributeReports.push({
+                    path: { endpointId, clusterId, attributeId, attributeName },
+                    value,
+                    version,
+                });
+            }
+        });
+    }
+
+    /**
+     * Returns the list (optionally filtered by endpointId and/or clusterId) of the dataVersions of the currently cached
+     * values to use them as knownDataVersion for read or subscription requests.
+     */
+    getCachedClusterDataVersions(filter?: {
+        endpointId?: EndpointNumber;
+        clusterId?: ClusterId;
+    }): { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[] {
+        const { endpointId: filterEndpointId, clusterId: filterClusterId } = filter ?? {};
+        return [...this.#cachedData.clusterDataVersions.values()]
+            .filter(
+                ({ endpointId, clusterId }) =>
+                    (filterEndpointId === undefined || filterEndpointId === endpointId) &&
+                    (filterClusterId === undefined || filterClusterId === clusterId),
+            )
+            .map(({ endpointId, clusterId, dataVersion }) => ({ endpointId, clusterId, dataVersion }));
+    }
+
+    get maxKnownEventNumber() {
+        return this.#cachedData.maxEventNumber;
     }
 }
