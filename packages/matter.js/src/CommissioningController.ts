@@ -336,7 +336,9 @@ export class CommissioningController extends MatterNode {
         );
         this.initializedNodes.set(nodeId, pairedNode);
 
-        await pairedNode.initialized.on(details => controller.enhanceCommissionedNodeDetails(nodeId, { ...details }));
+        await pairedNode.events.initialized.on(details =>
+            controller.enhanceCommissionedNodeDetails(nodeId, { ...details }),
+        );
 
         return pairedNode;
     }

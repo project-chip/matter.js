@@ -138,31 +138,37 @@ export type CommissioningControllerNodeOptions = {
      */
     readonly autoSubscribe?: boolean;
 
-    /** Minimum subscription interval when values are changed. Default it is set to 0s.*/
+    /**
+     * Minimum subscription interval when values are changed. Default it is set to 1s.
+     * If the device is intermittently connected, the minimum interval is always set to 0s because required by Matter specs.
+     */
     readonly subscribeMinIntervalFloorSeconds?: number;
 
     /**
      * Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate
-     * that the device is still available. Default it is set to 60s.
+     * that the device is still available. matter.js tries to set meaningful values based on the device type, connection
+     * type and other details. So ideally do not set this parameter unless you know it better.
      */
     readonly subscribeMaxIntervalCeilingSeconds?: number;
 
     /**
      * Optional additional callback method which is called for each Attribute change reported by the device. Use this
      * if subscribing to all relevant attributes is too much effort.
+     * @deprecated Please use the events.attributeChanged observable instead.
      */
     readonly attributeChangedCallback?: (nodeId: NodeId, data: DecodedAttributeReportValue<any>) => void;
 
     /**
      * Optional additional callback method which is called for each Event reported by the device. Use this if
      * subscribing to all relevant events is too much effort.
+     * @deprecated Please use the events.eventTriggered observable instead.
      */
     readonly eventTriggeredCallback?: (nodeId: NodeId, data: DecodedEventReportValue<any>) => void;
 
     /**
      * Optional callback method which is called when the state of the node changes. This can be used to detect when
      * the node goes offline or comes back online.
-     * @deprecated
+     * @deprecated Please use the events.nodeStateChanged observable instead.
      */
     readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
@@ -189,10 +195,25 @@ export class PairedNode {
     private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
     private reconnectionInProgress = false;
     #initializationDone = false;
-    readonly initialized = AsyncObservable<[details: CommissionedNodeClusterDetails]>();
-    readonly nodeStateChanged = AsyncObservable<[nodeState: NodeStateInformation]>();
-    readonly nodeStructureChanged = AsyncObservable<[void]>();
     #nodeDetails: CommissionedNodeDetails;
+    readonly events = {
+        /** Emitted when the node is fully initialized and all attributes and events are subscribed. */
+        initialized: AsyncObservable<[details: CommissionedNodeClusterDetails]>(),
+
+        /** Emitted when the state of the node changes. */
+        nodeStateChanged: AsyncObservable<[nodeState: NodeStateInformation]>(),
+
+        /**
+         * Emitted when an attribute value changes. If the oldValue is undefined then no former value was known.
+         */
+        attributeChanged: AsyncObservable<[data: DecodedAttributeReportValue<any>, oldValue: any]>(),
+
+        /** Emitted when an event is triggered. */
+        eventTriggered: AsyncObservable<[DecodedEventReportValue<any>]>(),
+
+        /** Emitted when the structure of the node changes (Endpoints got added or also removed). */
+        nodeStructureChanged: AsyncObservable<[void]>(),
+    };
 
     static create(
         nodeId: NodeId,
@@ -257,7 +278,7 @@ export class PairedNode {
             return;
         this.connectionState = state;
         this.options.stateInformationCallback?.(this.nodeId, state);
-        this.nodeStateChanged.emit(state);
+        this.events.nodeStateChanged.emit(state);
         if (state === NodeStateInformation.Disconnected) {
             this.reconnectDelayTimer.stop();
         }
@@ -372,8 +393,14 @@ export class PairedNode {
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
                 ignoreInitialTriggers: !this.#initializationDone, // Trigger on updates only after initialization
-                attributeChangedCallback: data => attributeChangedCallback?.(this.nodeId, data),
-                eventTriggeredCallback: data => eventTriggeredCallback?.(this.nodeId, data),
+                attributeChangedCallback: (data, oldValue) => {
+                    attributeChangedCallback?.(this.nodeId, data);
+                    this.events.attributeChanged.emit(data, oldValue);
+                },
+                eventTriggeredCallback: data => {
+                    eventTriggeredCallback?.(this.nodeId, data);
+                    this.events.eventTriggered.emit(data);
+                },
             }); // Ignore Triggers from Subscribing during initialization
 
             if (initialSubscriptionData.attributeReports === undefined) {
@@ -389,7 +416,7 @@ export class PairedNode {
             await this.initializeEndpointStructure(allClusterAttributes, this.#initializationDone);
         }
         this.setConnectionState(NodeStateInformation.Connected);
-        this.initialized.emit(this.#nodeDetails);
+        this.events.initialized.emit(this.#nodeDetails);
         this.#initializationDone = true;
     }
 
@@ -693,7 +720,7 @@ export class PairedNode {
      */
     async subscribeAllAttributesAndEvents(options?: {
         ignoreInitialTriggers?: boolean;
-        attributeChangedCallback?: (data: DecodedAttributeReportValue<any>) => void;
+        attributeChangedCallback?: (data: DecodedAttributeReportValue<any>, oldValue: any) => void;
         eventTriggeredCallback?: (data: DecodedEventReportValue<any>) => void;
     }) {
         const interactionClient = await this.getInteractionClient();
@@ -716,7 +743,7 @@ export class PairedNode {
             enrichCachedAttributeData: true,
             eventFilters: maxKnownEventNumber !== undefined ? [{ eventMin: maxKnownEventNumber + 1n }] : undefined,
             executeQueued: !!threadConnected, // We queue subscriptions for thread devices
-            attributeListener: (data, changed) => {
+            attributeListener: (data, changed, oldValue) => {
                 if (ignoreInitialTriggers || changed === false) {
                     return;
                 }
@@ -747,9 +774,8 @@ export class PairedNode {
                 );
 
                 asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
-                if (attributeChangedCallback !== undefined) {
-                    attributeChangedCallback(data);
-                }
+                attributeChangedCallback?.(data, oldValue);
+                this.events.attributeChanged.emit(data, oldValue);
 
                 this.#checkAttributesForNeededStructureUpdate(endpointId, clusterId, attributeId);
             },
@@ -778,9 +804,8 @@ export class PairedNode {
                 );
                 asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
 
-                if (eventTriggeredCallback !== undefined) {
-                    eventTriggeredCallback(data);
-                }
+                eventTriggeredCallback?.(data);
+                this.events.eventTriggered.emit(data);
 
                 this.#checkEventsForNeededStructureUpdate(endpointId, clusterId, eventId);
             },
@@ -872,7 +897,7 @@ export class PairedNode {
         const allClusterAttributes = await this.readAllAttributes();
         await this.initializeEndpointStructure(allClusterAttributes, true);
         this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
-        this.nodeStructureChanged.emit();
+        this.events.nodeStructureChanged.emit();
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
