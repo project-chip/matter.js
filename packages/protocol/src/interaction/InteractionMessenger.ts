@@ -14,6 +14,7 @@ import {
     TlvAttributeReport,
     TlvDataReport,
     TlvDataReportForSend,
+    TlvDataVersionFilter,
     TlvEventReport,
     TlvInvokeRequest,
     TlvInvokeResponse,
@@ -456,8 +457,47 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         return this.readDataReports();
     }
 
+    #encodeSubscribeRequest(subscribeRequest: SubscribeRequest) {
+        const request = TlvSubscribeRequest.encode(subscribeRequest);
+
+        if (request.length <= this.exchange.maxPayloadSize) {
+            return request;
+        }
+
+        const dataVersionFilters = subscribeRequest.dataVersionFilters ?? [];
+        subscribeRequest.dataVersionFilters = [];
+        const requestWithoutDataVersionFilters = TlvSubscribeRequest.encode(subscribeRequest);
+        if (requestWithoutDataVersionFilters.length > this.exchange.maxPayloadSize) {
+            throw new MatterFlowError(
+                `SubscribeRequest is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
+                    subscribeRequest,
+                )}`,
+            );
+        }
+        let remainingBytes = this.exchange.maxPayloadSize - requestWithoutDataVersionFilters.length;
+        while (remainingBytes > 0 && dataVersionFilters.length > 0) {
+            const dataVersionFilter = dataVersionFilters.shift();
+            if (dataVersionFilter === undefined) {
+                break;
+            }
+            const encodedDataVersionFilter = TlvDataVersionFilter.encodeTlv(dataVersionFilter);
+            const encodedDataVersionFilterLength = encodedDataVersionFilter.length;
+            if (encodedDataVersionFilterLength > remainingBytes) {
+                dataVersionFilters.unshift(dataVersionFilter);
+                break;
+            }
+            subscribeRequest.dataVersionFilters.push(dataVersionFilter);
+            remainingBytes -= encodedDataVersionFilterLength;
+        }
+        logger.debug(
+            `Removed ${dataVersionFilters.length} DataVersionFilters from SubscribeRequest to fit into a single message`,
+        );
+        return TlvSubscribeRequest.encode(subscribeRequest);
+    }
+
     async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
-        await this.send(MessageType.SubscribeRequest, TlvSubscribeRequest.encode(subscribeRequest));
+        const request = this.#encodeSubscribeRequest(subscribeRequest);
+        await this.send(MessageType.SubscribeRequest, request);
 
         const report = await this.readDataReports();
         const { subscriptionId } = report;
