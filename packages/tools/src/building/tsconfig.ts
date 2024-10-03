@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFile, writeFile } from "fs/promises";
 import { relative, resolve } from "path";
 import { Graph } from "./graph.js";
 
@@ -16,9 +15,24 @@ import { Graph } from "./graph.js";
  * One discussion on the topic: https://github.com/microsoft/TypeScript/issues/25376
  */
 export async function syncAllTsconfigs(graph: Graph) {
+    const workspace = graph.nodes[0].pkg.workspace;
+    const rootTsconfig = await workspace.readJson("tsconfig.json");
+
+    const originalReferences = rootTsconfig.references;
+    rootTsconfig.references = [];
+
     for (const node of graph.nodes) {
         await syncPackageTsconfigs(graph, node);
+        rootTsconfig.references.push({ path: workspace.relative(node.pkg.path) });
     }
+
+    if (referencesChanged(originalReferences, rootTsconfig.references)) {
+        await workspace.writeJson("tsconfig.json", rootTsconfig);
+    }
+}
+
+function referencesChanged(originalReferences: unknown, newReferences: unknown) {
+    return JSON.stringify(originalReferences) !== JSON.stringify(newReferences);
 }
 
 export async function syncPackageTsconfigs(graph: Graph, node: Graph.Node) {
@@ -34,35 +48,22 @@ async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: stri
         return;
     }
 
-    let tsconfig;
-    try {
-        tsconfig = JSON.parse(await readFile(tsconfigPath, "utf-8"));
-    } catch (e) {
-        (e as Error).message = `Error loading ${tsconfigPath}: ${(e as Error).message}`;
-        throw e;
-    }
+    const tsconfig = await node.pkg.readJson(tsconfigPath);
 
     let refs = tsconfig.refs as undefined | { path: string }[];
-    let changed = false;
 
     if (refs === undefined) {
         refs = [];
     }
 
-    const existing = refs.map(ref => resolve(path, ref.path));
-
     const deps = node.dependencies.map(dep => dep.pkg.resolve("src")).filter(p => !p.match(/packages\/tools/));
 
     const desired = [...new Set([...deps, ...extraRefs])];
 
-    if (JSON.stringify(existing.sort()) !== JSON.stringify(desired.sort())) {
-        changed = true;
-        tsconfig.references = desired.map(ref => ({
-            path: relative(path, ref),
-        }));
-    }
+    const newReferences = desired.map(ref => ({ path: relative(path, ref) }));
 
-    if (changed) {
-        await writeFile(tsconfigPath, JSON.stringify(tsconfig, undefined, 4));
+    if (referencesChanged(tsconfig.references, newReferences)) {
+        tsconfig.references = newReferences;
+        await node.pkg.writeJson(tsconfigPath, tsconfig);
     }
 }

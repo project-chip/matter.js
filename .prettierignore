@@ -1,5 +1,6 @@
 **/dist/**
 **/build/**
+**/forwards/**
 models/src/chip.ts
 models/src/spec.ts
 packages/model/src/standard/elements/*

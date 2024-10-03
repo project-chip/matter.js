@@ -11,4 +11,5 @@ export * from "./testing/chip.js";
 export * from "./testing/mocharc.cjs";
 export * from "./util/docker.js";
 export * from "./util/package.js";
+export * from "./util/progress.js";
 export * from "./util/wtf.js";

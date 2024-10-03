@@ -1,17 +1,16 @@
 {
-    "extends": "../../tools/tsconfig.base.json",
+    "extends": "../../tools/tsc/tsconfig.app.json",
     "compilerOptions": {
-        "outDir": "../dist/esm",
         "types": [
             "node"
-        ],
-        "declaration": false,
-        "composite": false,
-        "declarationMap": false
+        ]
     },
     "references": [
         {
-            "path": "../../main/src"
+            "path": "..\\..\\main\\src"
+        },
+        {
+            "path": "..\\..\\tools\\src"
         }
     ]
 }

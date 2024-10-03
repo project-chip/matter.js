@@ -53,8 +53,7 @@
         "@matter.js/react-native": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "@matter.js/codegen": "*"
+        "@matter.js/tools": "*"
     },
     "files": [
         "dist/**/*",
@@ -110,42 +109,42 @@
         },
         "./clusters/*": {
             "import": {
-                "types": "./dist/esm/clusters/*.d.ts",
-                "default": "./dist/esm/clusters/*.js"
+                "types": "./dist/esm/forwards/clusters/*.d.ts",
+                "default": "./dist/esm/forwards/clusters/*.js"
             },
             "require": {
-                "types": "./dist/cjs/behaviors/*.d.ts",
-                "default": "./dist/cjs/behaviors/*.js"
+                "types": "./dist/cjs/forwards/cluster/*.d.ts",
+                "default": "./dist/cjs/forwards/clusters/*.js"
             }
         },
         "./behaviors/*": {
             "import": {
-                "types": "./dist/esm/behaviors/*.d.ts",
-                "default": "./dist/esm/behaviors/*.js"
+                "types": "./dist/esm/forwards/behaviors/*.d.ts",
+                "default": "./dist/esm/forwards/behaviors/*.js"
             },
             "require": {
-                "types": "./dist/cjs/behaviors/*.d.ts",
-                "default": "./dist/cjs/behaviors/*.js"
+                "types": "./dist/cjs/forwards/behaviors/*.d.ts",
+                "default": "./dist/cjs/forwards/behaviors/*.js"
             }
         },
         "./devices/*": {
             "import": {
-                "types": "./dist/esm/devices/*.d.ts",
-                "default": "./dist/esm/devices/*.js"
+                "types": "./dist/esm/forwards/devices/*.d.ts",
+                "default": "./dist/esm/forwards/devices/*.js"
             },
             "require": {
-                "types": "./dist/cjs/devices/*.d.ts",
-                "default": "./dist/cjs/devices/*.js"
+                "types": "./dist/cjs/forwards/devices/*.d.ts",
+                "default": "./dist/cjs/forwards/devices/*.js"
             }
         },
         "./endpoints/*": {
             "import": {
-                "types": "./dist/esm/endpoints/*.d.ts",
-                "default": "./dist/esm/endpoints/*.js"
+                "types": "./dist/esm/forwards/endpoints/*.d.ts",
+                "default": "./dist/esm/forwards/endpoints/*.js"
             },
             "require": {
-                "types": "./dist/cjs/endpoints/*/index.d.ts",
-                "default": "./dist/cjs/endpoints/*/index.js"
+                "types": "./dist/cjs/forwards/endpoints/*/index.d.ts",
+                "default": "./dist/cjs/forwards/endpoints/*/index.js"
             }
         },
         "./*": {

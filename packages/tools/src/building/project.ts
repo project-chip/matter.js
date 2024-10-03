@@ -4,18 +4,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Hash } from "crypto";
 import { build as esbuild, Format } from "esbuild";
-import { cp, mkdir, readFile, rm, symlink, writeFile } from "fs/promises";
+import { cp, mkdir, readFile, rm, stat, symlink, writeFile } from "fs/promises";
 import { glob } from "glob";
 import { platform } from "os";
-import { dirname } from "path";
+import { dirname, join, relative } from "path";
 import { ignoreError } from "../util/errors.js";
-import { CODEGEN_PATH, CONFIG_PATH, Package } from "../util/package.js";
+import { CONFIG_PATH, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
-import { Typescript } from "./typescript.js";
+
+export const BUILD_INFO_LOCATION = "build/info.json";
+
+export interface BuildInformation {
+    /**
+     * Time of last build.  Compared to source files to determine whether build is dirty.
+     */
+    timestamp?: string;
+
+    /**
+     * API signature.  Used by dependents to determine whether they need to rebuild after we do.
+     */
+    apiSha?: string;
+
+    /**
+     * API signature of each dependency.  Compared to apiSha of each dependency during dirty detection.
+     */
+    dependencyApiShas?: Record<string, string>;
+}
 
 export class Project {
     pkg: Package;
+    #config?: Project.Config;
+    #configured?: boolean;
 
     constructor(source: Package | string = ".") {
         if (typeof source === "string") {
@@ -31,9 +52,6 @@ export class Project {
 
     async buildSource(format: Format) {
         await this.#build(format, "src", `dist/${format}`);
-        if (this.pkg.hasCodegen) {
-            await this.#build(format, CODEGEN_PATH, `dist/${format}`);
-        }
         await this.#configureFormat("dist", format, true);
     }
 
@@ -70,41 +88,63 @@ export class Project {
         }
     }
 
-    async buildDeclarations(refreshCallback?: () => void) {
-        Typescript.emitDeclarations(this.pkg, refreshCallback);
-    }
+    /**
+     * Installs declaration files into specified directory.  Also computes SHA-1 hash for all files that we use to
+     * detect "public API changes".
+     *
+     * Note we use cp to traverse filesystem, detect changes, locate source maps and compute API SHA.  A little
+     * convoluted but works.  When you correct for a node 20/windows bug.
+     */
+    async installDeclarationFormats(formats: Iterable<string>, apiSha?: Hash) {
+        const srcMaps = Array<string>();
+        let firstPass = true;
 
-    async validateTypes(refreshCallback?: () => void) {
-        Typescript.validateTypes(this.pkg, refreshCallback);
-    }
+        const src = this.pkg.resolve("build/types/src");
 
-    async installDeclarationFormat(format: Format) {
-        const srcMaps = Array<[string, string]>();
-
-        await cp(this.pkg.resolve("build/types/src"), this.pkg.resolve(`dist/${format}`), {
-            recursive: true,
-            force: true,
-
-            filter: (source, dest) => {
-                // We process source maps below
-                if (source.endsWith(".d.ts.map")) {
-                    srcMaps.push([source, dest]);
-                    return false;
-                }
-                return true;
-            },
-        });
-
-        if (this.pkg.hasCodegen) {
-            await cp(this.pkg.resolve("build/types/build/src"), this.pkg.resolve(`dist/${format}`), {
+        for (const format of formats) {
+            await cp(src, this.pkg.resolve(`dist/${format}`), {
                 recursive: true,
                 force: true,
 
-                filter: source => {
-                    // Ignore source maps
-                    return !source.endsWith(".d.ts.map");
+                filter: async (source, destination) => {
+                    const sourceStat = await stat(source);
+                    if (!sourceStat.isFile()) {
+                        return true;
+                    }
+
+                    // Ignore files that are unchanged
+                    const destinationMtime = (await ignoreError("ENOENT", () => stat(destination)))?.mtimeMs;
+                    if (destinationMtime !== undefined) {
+                        const sourceMtime = sourceStat.mtimeMs;
+                        if (destinationMtime >= sourceMtime) {
+                            return false;
+                        }
+                    }
+
+                    // We process source maps below
+                    if (source.endsWith(".d.ts.map")) {
+                        if (firstPass) {
+                            if (source.startsWith("\\\\?\\")) {
+                                // Node 20 prefixes the path with above on Windows and relative() can't handle it;
+                                // just strip off
+                                source = source.slice(4);
+                            }
+                            srcMaps.push(source);
+                        }
+                        return false;
+                    }
+
+                    // Update hash if provided
+                    if (apiSha) {
+                        apiSha.update(await readFile(source));
+                    }
+
+                    return true;
                 },
             });
+
+            // Only need to collect source maps and update hash on first pass
+            firstPass = false;
         }
 
         // If you specify --sourceRoot, tsc just sticks whatever the string is directly into the file.  Not very useful
@@ -113,20 +153,17 @@ export class Project {
         // We distribute types for src one level higher than we generate them (dist/esm vs build/types/src) so the paths
         // end up incorrect.
         //
-        // The source maps for codegen files are off by two levels but we don't bother installing those since we don't
-        // distribute the source anyway.
-        //
         // So...  Rewrite the paths in all source maps under src/.  Do this directly on buffer for marginal performance
         // win.
-        for (const [source, dest] of srcMaps) {
+        for (const filename of srcMaps) {
             // Load map as binary
-            const map = await readFile(source);
+            let map = await readFile(filename);
 
             // Find key text
             let pos = map.indexOf('"sources":["../');
             if (pos === -1) {
                 throw new Error(
-                    `Could not find sources position in declaration map ${source}, format may have changed`,
+                    `Could not find sources position in declaration map ${filename}, format may have changed`,
                 );
             }
 
@@ -134,29 +171,43 @@ export class Project {
             pos += 12;
 
             // Shift everything left by three
-            map.copyWithin(pos, pos + 3);
+            map = map.copyWithin(pos, pos + 3).subarray(0, map.length - 3);
 
-            // Write to new location
-            await writeFile(dest, map.subarray(0, map.length - 3));
+            // Write to new locations
+            const pathRelativeToDest = relative(src, filename);
+            for (const format of formats) {
+                await writeFile(join(join(this.pkg.resolve(`dist/${format}`), pathRelativeToDest)), map);
+            }
         }
     }
 
-    async installDeclarations() {
+    get hasDeclarations() {
+        return this.pkg.hasDirectory("build/types");
+    }
+
+    async installDeclarations(apiSha?: Hash) {
         await mkdir(this.pkg.resolve("dist"), { recursive: true });
+        const formats = new Set<string>();
         if (this.pkg.supportsEsm) {
-            await this.installDeclarationFormat("esm");
+            formats.add("esm");
         }
         if (this.pkg.supportsCjs) {
-            await this.installDeclarationFormat("cjs");
+            formats.add("cjs");
         }
+        await this.installDeclarationFormats(formats, apiSha);
     }
 
-    async recordBuildTime() {
+    async recordBuildInfo(info: BuildInformation) {
         await mkdir(this.pkg.resolve("build"), { recursive: true });
-        await writeFile(this.pkg.resolve("build/timestamp"), "");
+        info.timestamp = new Date().toISOString();
+        await writeFile(this.pkg.resolve(BUILD_INFO_LOCATION), JSON.stringify(info, undefined, 4));
     }
 
-    async loadConfig() {
+    async configure(progress: Progress) {
+        if (this.#configured) {
+            return this.#config;
+        }
+
         if (!this.pkg.hasConfig) {
             return {};
         }
@@ -170,7 +221,17 @@ export class Project {
             sourcemap: true,
         });
 
-        return (await import(`file://${outfile}`)) as Project.Config;
+        this.#config = (await import(`file://${outfile}`)) as Project.Config | undefined;
+        this.#configured = true;
+
+        if (this.#config?.startup) {
+            await this.#config?.startup({
+                project: this,
+                progress,
+            });
+        }
+
+        return this.#config;
     }
 
     async #build(format: Format, indir: string, outdir: string) {
@@ -209,7 +270,7 @@ export class Project {
         // Build import map
         let { imports } = this.pkg.json;
         if (isDist && typeof imports === "object") {
-            imports = { ...imports } as Record<string, unknown>;
+            imports = { ...imports };
             for (const key in imports) {
                 const value = imports[key];
                 if (typeof value === "string") {
@@ -245,6 +306,7 @@ export namespace Project {
     }
 
     export interface Config {
+        startup?: (context: Context) => Promise<void>;
         before?: (context: Context) => Promise<void>;
         after?: (context: Context) => Promise<void>;
     }
