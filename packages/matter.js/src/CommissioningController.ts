@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicInformation } from "#clusters";
 import {
     Environment,
     ImplementationError,
@@ -14,7 +13,6 @@ import {
     Network,
     NoProviderError,
     StorageContext,
-    SupportedStorageTypes,
     SyncStorage,
     UdpInterface,
 } from "#general";
@@ -32,15 +30,12 @@ import {
     NodeDiscoveryType,
     PeerCommissioningOptions,
     ScannerSet,
-    SupportedAttributeClient,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
     DiscoveryCapabilitiesBitmap,
-    EndpointNumber,
     FabricId,
     FabricIndex,
-    GlobalAttributes,
     NodeId,
     TypeFromPartialBitSchema,
     VendorId,
@@ -138,7 +133,7 @@ export class CommissioningController extends MatterNode {
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
-    private connectedNodes = new Map<NodeId, PairedNode>();
+    private initializedNodes = new Map<NodeId, PairedNode>();
     private sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
 
     /**
@@ -248,7 +243,7 @@ export class CommissioningController extends MatterNode {
         const nodeId = await controller.commission(nodeOptions);
 
         if (connectNodeAfterCommissioning) {
-            await this.connectNode(nodeId, {
+            const node = await this.connectNode(nodeId, {
                 ...nodeOptions,
                 autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
                 subscribeMinIntervalFloorSeconds:
@@ -256,6 +251,7 @@ export class CommissioningController extends MatterNode {
                 subscribeMaxIntervalCeilingSeconds:
                     nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
             });
+            await node.events.initialized;
         }
 
         return nodeId;
@@ -286,7 +282,7 @@ export class CommissioningController extends MatterNode {
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
-        const node = this.connectedNodes.get(nodeId);
+        const node = this.initializedNodes.get(nodeId);
         if (tryDecommissioning) {
             try {
                 if (node == undefined) {
@@ -301,11 +297,11 @@ export class CommissioningController extends MatterNode {
             node.close();
         }
         await controller.removeNode(nodeId);
-        this.connectedNodes.delete(nodeId);
+        this.initializedNodes.delete(nodeId);
     }
 
     async disconnectNode(nodeId: NodeId) {
-        const node = this.connectedNodes.get(nodeId);
+        const node = this.initializedNodes.get(nodeId);
         if (node === undefined) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
@@ -323,7 +319,7 @@ export class CommissioningController extends MatterNode {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
-        const existingNode = this.connectedNodes.get(nodeId);
+        const existingNode = this.initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.isConnected) {
                 await existingNode.reconnect(connectOptions);
@@ -331,72 +327,21 @@ export class CommissioningController extends MatterNode {
             return existingNode;
         }
 
-        const pairedNode = await PairedNode.create(
+        const pairedNode = new PairedNode(
             nodeId,
             this,
             connectOptions,
+            this.controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
             async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
-        this.connectedNodes.set(nodeId, pairedNode);
+        this.initializedNodes.set(nodeId, pairedNode);
 
-        if (connectOptions?.autoSubscribe !== false) {
-            await this.enhanceDeviceDetailsFromCache(nodeId, pairedNode);
-        } else {
-            await this.enhanceDeviceDetailsFromRemote(nodeId, pairedNode);
-        }
+        pairedNode.events.initialized.on(
+            async deviceData => await controller.enhanceCommissionedNodeDetails(nodeId, deviceData),
+        );
 
         return pairedNode;
-    }
-
-    private async enhanceDeviceDetailsFromCache(nodeId: NodeId, pairedNode: PairedNode) {
-        const controller = this.assertControllerIsStarted();
-
-        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
-        const basicInformationClient = pairedNode.getRootClusterClient(BasicInformation.Cluster);
-        if (basicInformationClient === undefined) {
-            logger.info(`No basic information cluster found for node ${nodeId}`);
-            return;
-        }
-        const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-        for (const attributeName of Object.keys(basicInformationClient.attributes)) {
-            if (globalAttributeKeys.includes(attributeName)) {
-                continue;
-            }
-            const attribute = (basicInformationClient.attributes as any)[attributeName];
-            if (attribute instanceof SupportedAttributeClient) {
-                try {
-                    basicInformationData[attributeName] = await attribute.get();
-                } catch (error) {
-                    logger.info(`Error while getting attribute ${attributeName} for node ${nodeId}: ${error}`);
-                }
-            }
-        }
-        await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-    }
-
-    private async enhanceDeviceDetailsFromRemote(nodeId: NodeId, pairedNode: PairedNode) {
-        const controller = this.assertControllerIsStarted();
-
-        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
-        try {
-            const interactionClient = await pairedNode.getInteractionClient();
-            const basicInformationAttributes = await interactionClient.getMultipleAttributes({
-                attributes: [{ endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }],
-            });
-            const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-            for (const {
-                path: { attributeName },
-                value,
-            } of basicInformationAttributes) {
-                if (!globalAttributeKeys.includes(attributeName)) {
-                    basicInformationData[attributeName] = value;
-                }
-            }
-            await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-        } catch (error) {
-            logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
-        }
     }
 
     /**
@@ -415,7 +360,7 @@ export class CommissioningController extends MatterNode {
         for (const nodeId of controller.getCommissionedNodes()) {
             await this.connectNode(nodeId, connectOptions);
         }
-        return Array.from(this.connectedNodes.values());
+        return Array.from(this.initializedNodes.values());
     }
 
     /**
@@ -463,8 +408,8 @@ export class CommissioningController extends MatterNode {
     }
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */
-    getConnectedNode(nodeId: NodeId) {
-        return this.connectedNodes.get(nodeId);
+    getPairedNode(nodeId: NodeId) {
+        return this.initializedNodes.get(nodeId);
     }
 
     /** Returns an array with the Node Ids for all commissioned nodes. */
@@ -482,12 +427,12 @@ export class CommissioningController extends MatterNode {
 
     /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
     async close() {
-        for (const node of this.connectedNodes.values()) {
+        for (const node of this.initializedNodes.values()) {
             node.close();
         }
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
-        this.connectedNodes.clear();
+        this.initializedNodes.clear();
         this.ipv4Disabled = undefined;
         this.started = false;
     }

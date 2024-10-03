@@ -21,6 +21,7 @@ export * from "./Mutex.js";
 export * from "./NamedHandler.js";
 export * from "./Number.js";
 export * from "./Observable.js";
+export * from "./PromiseQueue.js";
 export * from "./Promises.js";
 export * from "./Set.js";
 export * from "./Singleton.js";

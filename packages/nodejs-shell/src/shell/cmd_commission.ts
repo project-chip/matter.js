@@ -127,7 +127,7 @@ export default function commands(theNode: MatterNode) {
 
                                     console.log("Commissioned Node:", commissionedNodeId);
 
-                                    const node = theNode.commissioningController.getConnectedNode(commissionedNodeId);
+                                    const node = theNode.commissioningController.getPairedNode(commissionedNodeId);
                                     if (node === undefined) {
                                         // Should not happen
                                         throw new MatterError("Node not found after commissioning.");

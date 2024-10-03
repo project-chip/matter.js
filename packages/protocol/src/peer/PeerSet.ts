@@ -20,6 +20,7 @@ import {
     NetInterfaceSet,
     NoResponseTimeoutError,
     ObservableSet,
+    PromiseQueue,
     ServerAddressIp,
     serverAddressToString,
     Time,
@@ -30,7 +31,7 @@ import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseClient, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
+import { AttributeId, ClusterId, EndpointNumber, EventNumber, SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
 import { ChannelManager, NoChannelError } from "../protocol/ChannelManager.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "../protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
@@ -42,6 +43,9 @@ const logger = Logger.get("PeerSet");
 
 const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
 const RETRANSMISSION_DISCOVERY_TIMEOUT_MS = 5_000;
+
+const CONCURRENT_QUEUED_INTERACTIONS = 4;
+const INTERACTION_QUEUE_DELAY_MS = 100;
 
 /**
  * Types of discovery that may be performed when connecting operationally.
@@ -87,6 +91,22 @@ export interface PeerSetContext {
     store: PeerStore;
 }
 
+// TODO Convert this into a proper persisted store
+export type NodeCachedData = {
+    attributeValues: Map<
+        string,
+        {
+            endpointId: EndpointNumber;
+            clusterId: ClusterId;
+            attributeId: AttributeId;
+            attributeName: string;
+            value: any;
+        }
+    >;
+    clusterDataVersions: Map<string, { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }>;
+    maxEventNumber?: EventNumber;
+};
+
 /**
  * Manages operational connections to peers on shared fabric.
  */
@@ -102,6 +122,8 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #runningPeerDiscoveries = new PeerAddressMap<RunningDiscovery>();
     readonly #construction: Construction<PeerSet>;
     readonly #store: PeerStore;
+    readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
+    readonly #nodeCachedData = new Map<PeerAddress, NodeCachedData>(); // Temporarily until we store it in new API
 
     constructor(context: PeerSetContext) {
         const { sessions, channels, exchanges, scanners, netInterfaces, store } = context;
@@ -205,6 +227,14 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             channel = await this.#resume(address, discoveryOptions);
         }
 
+        const cachedData =
+            this.#nodeCachedData.get(address) ??
+            ({
+                attributeValues: new Map(),
+                clusterDataVersions: new Map(),
+            } as NodeCachedData);
+        this.#nodeCachedData.set(address, cachedData);
+
         return new InteractionClient(
             new ExchangeProvider(this.#exchanges, channel, async () => {
                 if (!this.#channels.hasChannel(address)) {
@@ -234,6 +264,8 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                 return this.#channels.getChannel(address);
             }),
             address,
+            this.#interactionQueue,
+            cachedData,
         );
     }
 
@@ -284,6 +316,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             // This ends discovery without triggering promises
             mdnsScanner?.cancelOperationalDeviceDiscovery(this.#sessions.fabricFor(address), address.nodeId, false);
         }
+        this.#interactionQueue.close();
     }
 
     /**
@@ -542,12 +575,18 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             );
 
             try {
-                operationalSecureSession = await this.#caseClient.pair(
+                const { session, resumed } = await this.#caseClient.pair(
                     exchange,
                     this.#sessions.fabricFor(address),
                     address.nodeId,
                     expectedProcessingTimeMs,
                 );
+                operationalSecureSession = session;
+
+                if (!resumed) {
+                    // When the session was not resumed then most likely the device firmware got updated, so we clear the cache
+                    this.#nodeCachedData.delete(address);
+                }
             } catch (e) {
                 await exchange.close();
                 throw e;
@@ -616,6 +655,10 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     }
 
     #handleResubmissionStarted(session: Session) {
+        if (!session.isSecure) {
+            // For insecure sessions from CASE/PASE session establishments we do not need to do anything
+            return;
+        }
         const { associatedFabric: fabric, peerNodeId: nodeId } = session;
         if (fabric === undefined || nodeId === undefined) {
             return;
