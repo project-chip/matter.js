@@ -71,13 +71,15 @@ async function bootstrap() {
         await new Promise(resolve => {
             const proc = spawn(
                 esbuild,
-                ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning"],
+                ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning", "--sourcemap=inline"],
                 options,
             );
 
             proc.on("error", e => {
                 if (e.code === "ENOENT") {
-                    fatal('esbuild is not found.\nYou probably need to run "npm install" in the root of the repository');
+                    fatal(
+                        'esbuild is not found.\nYou probably need to run "npm install" in the root of the repository',
+                    );
                 }
                 fatal("an unexpected error occurred running esbuild", e);
             });

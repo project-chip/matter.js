@@ -1,7 +1,5 @@
 {
-    "compilerOptions": {
-        "outDir": "../build/test",
-        "types": ["mocha", "node", "@matter.js/tools"]
-    },
-    "references": [{ "path": "../../packages/matter.js-tools" }, { "path": "../src" }]
+    "compilerOptions": { "composite": true },
+    "files": [],
+    "references": [{ "path": "src" }, { "path": "test" }]
 }

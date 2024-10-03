@@ -14,4 +14,16 @@ export class BuildError extends Error {
     constructor(readonly diagnostics: string) {
         super();
     }
+
+    override get stack() {
+        return this.diagnostics;
+    }
+
+    override toString() {
+        return this.diagnostics;
+    }
+
+    inspect() {
+        return this.toString();
+    }
 }

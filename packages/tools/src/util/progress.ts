@@ -100,17 +100,17 @@ export class Progress {
         stdout.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
     }
 
-    startup(what: string, pkg?: Package) {
+    startup(what: string, pkgOrOverwrite?: Package | boolean) {
         if (process.stdout.isTTY) {
             this.#updateSpinner();
             this.#refreshInterval = setInterval(this.refresh.bind(this), SPINNER_INTERVAL);
         }
 
         this.status = Progress.Status.Startup;
-        if (pkg === undefined) {
-            writeStatus(what, true);
+        if (pkgOrOverwrite === undefined || typeof pkgOrOverwrite === "boolean") {
+            writeStatus(what, pkgOrOverwrite ?? true);
         } else {
-            writeStatus(`${what} ${packageIdentity(pkg)}`);
+            writeStatus(`${what} ${packageIdentity(pkgOrOverwrite)}`);
         }
     }
 
@@ -188,7 +188,12 @@ export class Progress {
 
     async run(what: string, fn: () => void | Promise<void>) {
         this.update(what);
-        await fn();
+        try {
+            await fn();
+        } catch (e) {
+            this.failure(what);
+            throw e;
+        }
         this.success(what);
     }
 
