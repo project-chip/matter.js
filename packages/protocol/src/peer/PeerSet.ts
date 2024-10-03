@@ -91,6 +91,7 @@ export interface PeerSetContext {
     store: PeerStore;
 }
 
+// TODO Convert this into a proper persisted store
 export type NodeCachedData = {
     attributeValues: Map<
         string,
