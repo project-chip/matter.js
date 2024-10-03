@@ -8,7 +8,11 @@ import { MaybePromise } from "../util/Promises.js";
 import { Storage, StorageError, StorageOperationResult } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
-export class StorageContext<S extends Storage = any> {
+export interface StorageContextFactory<S extends Storage = any> {
+    createContext(context: string): StorageContext<S>;
+}
+
+export class StorageContext<S extends Storage = any> implements StorageContextFactory<S> {
     constructor(
         private readonly storage: S,
         readonly thisContexts: string[],

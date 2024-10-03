@@ -19,7 +19,7 @@ import { Node } from "./Node.js";
 import { Nodes } from "./Nodes.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
-import { NodeStore } from "./storage/NodeStore.js";
+import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
 /**
  * Thrown when there is an error during factory reset.
@@ -99,10 +99,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
 
-        if (this.env.has(NodeStore)) {
-            const store = this.env.get(NodeStore);
+        if (this.env.has(ServerNodeStore)) {
+            const store = this.env.get(ServerNodeStore);
             await store.close();
-            this.env.delete(NodeStore, store);
+            this.env.delete(ServerNodeStore, store);
         }
     }
 
@@ -165,9 +165,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     protected override async initialize() {
-        const nodeStore = await NodeStore.create(this.env, this.id);
+        const nodeStore = await ServerNodeStore.create(this.env, this.id);
 
-        this.env.set(NodeStore, nodeStore);
+        this.env.set(ServerNodeStore, nodeStore);
         this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
         this.env.set(IdentityService, new IdentityService(this));
 
@@ -183,7 +183,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @see {@link MatterSpecification.v12.Core} § 13.4
      */
     protected async resetStorage() {
-        await this.env.get(NodeStore).erase();
+        await this.env.get(ServerNodeStore).erase();
     }
 
     /**

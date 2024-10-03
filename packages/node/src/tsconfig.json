@@ -1,6 +1,7 @@
 {
     "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
+        "allowJs": true,
         "types": [
             "@matter/tools",
             "globals"

@@ -7,39 +7,34 @@
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { ImplementationError, NotImplementedError } from "#general";
-import { FabricId, NodeId } from "@matter/types";
+import { PeerAddress } from "#protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
 import { ServerNode } from "./ServerNode.js";
+import { ClientNodeStore } from "./storage/ClientNodeStore.js";
 
 /**
  * A client-side Matter {@link Node}.
  */
 export class ClientNode extends Node {
-    #fabricId: FabricId;
-    #nodeId: NodeId;
+    #address: PeerAddress;
 
-    constructor(options: ClientNode.Options) {
+    constructor({ owner, store }: ClientNode.Options) {
+        const { address } = store;
         super({
-            id: `${options.fabricId}:${options.nodeId}`,
+            id: `${address.fabricIndex}:${address.nodeId.toString(16)}`,
             number: 0,
             type: Node.CommonRootEndpoint,
-            owner: options.owner,
+            owner,
         });
+        this.#address = store.address;
 
-        this.#fabricId = options.fabricId;
-        this.#nodeId = options.nodeId;
-
-        this.env.set(EndpointInitializer, new ClientEndpointInitializer());
+        this.env.set(EndpointInitializer, new ClientEndpointInitializer(store));
     }
 
-    get fabricId() {
-        return this.#fabricId;
-    }
-
-    get nodeId() {
-        return this.#nodeId;
+    get address() {
+        return this.#address;
     }
 
     override get lifecycle() {
@@ -73,7 +68,6 @@ export class ClientNode extends Node {
 export namespace ClientNode {
     export interface Options extends Node.Options {
         owner: ServerNode;
-        fabricId: FabricId;
-        nodeId: NodeId;
+        store: ClientNodeStore;
     }
 }

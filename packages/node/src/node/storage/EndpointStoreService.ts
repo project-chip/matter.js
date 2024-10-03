@@ -39,11 +39,8 @@ export abstract class EndpointStoreService {
      * Obtain the store for a single {@link Endpoint}.
      *
      * These stores are cached internally by ID.
-     *
-     * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
-     * somesuch
      */
-    abstract storeForPart(endpoint: Endpoint): EndpointStore;
+    abstract storeForEndpoint(endpoint: Endpoint): EndpointStore;
 }
 
 export class EndpointStoreFactory extends EndpointStoreService {
@@ -116,12 +113,12 @@ export class EndpointStoreFactory extends EndpointStoreService {
 
         this.#construction.assert();
 
-        const store = this.storeForPart(endpoint);
+        const store = this.storeForEndpoint(endpoint);
 
         if (endpoint.lifecycle.hasNumber) {
             // Reserve number
             if (this.#allocatedNumbers.has(endpoint.number)) {
-                if (this.storeForPart(endpoint).number !== endpoint.number) {
+                if (this.storeForEndpoint(endpoint).number !== endpoint.number) {
                     throw new IdentityConflictError(
                         `Endpoint ${endpoint.id} number ${endpoint.number} is allocated to another endpoint`,
                     );
@@ -160,14 +157,14 @@ export class EndpointStoreFactory extends EndpointStoreService {
         this.#persistNumber(endpoint);
     }
 
-    storeForPart(endpoint: Endpoint): EndpointStore {
+    storeForEndpoint(endpoint: Endpoint): EndpointStore {
         this.#construction.assert();
 
         if (!endpoint.lifecycle.hasId) {
             throw new InternalError("Endpoint storage access without assigned ID");
         }
         if (endpoint.owner) {
-            return this.storeForPart(endpoint.owner).childStoreFor(endpoint);
+            return this.storeForEndpoint(endpoint.owner).childStoreFor(endpoint);
         }
         if (endpoint.number !== 0) {
             throw new InternalError(
@@ -203,7 +200,7 @@ export class EndpointStoreFactory extends EndpointStoreService {
 
             this.#numbersToPersist = undefined;
             for (const endpoint of numbersToPersist) {
-                const store = this.storeForPart(endpoint);
+                const store = this.storeForEndpoint(endpoint);
                 await store.saveNumber();
             }
 

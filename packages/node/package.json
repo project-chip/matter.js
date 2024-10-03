@@ -71,6 +71,16 @@
                 "default": "./dist/cjs/index.js"
             }
         },
+        "./load": {
+            "import": {
+                "types": "./dist/esm/loader/load.d.ts",
+                "default": "./dist/esm/loader/load.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/loader/load.d.ts",
+                "default": "./dist/cjs/loader/load.cjs"
+            }
+        },
         "./behaviors": {
             "import": {
                 "types": "./dist/esm/behaviors/index.d.ts",

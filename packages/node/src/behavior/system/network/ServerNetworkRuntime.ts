@@ -15,8 +15,8 @@ import {
     UdpInterface,
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
+import { ServerNodeStore } from "#node/index.js";
 import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
-import { NodeStore } from "#node/storage/NodeStore.js";
 import {
     Ble,
     DeviceAdvertiser,
@@ -269,7 +269,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
-        const { sessionStorage, fabricStorage } = this.owner.env.get(NodeStore);
+        const { sessionStorage, fabricStorage } = this.owner.env.get(ServerNodeStore);
 
         // TODO - convert to using components directly, not via MatterDevice
         const matterDevice = await MatterDevice.create(

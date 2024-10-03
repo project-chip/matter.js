@@ -6,7 +6,7 @@
 
 import { camelize } from "#general";
 import { FieldValue } from "#model";
-import { NodeStore } from "#node/storage/NodeStore.js";
+import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { EventHandler } from "#protocol";
 import { Behavior } from "../Behavior.js";
 import { Val } from "../state/Val.js";
@@ -22,7 +22,9 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
     override get store() {
         if (!this.#store) {
-            this.#store = this.#serverStore.endpointStores.storeForPart(this.endpoint).storeForBehavior(this.type.id);
+            this.#store = this.#serverStore.endpointStores
+                .storeForEndpoint(this.endpoint)
+                .storeForBehavior(this.type.id);
         }
         return this.#store;
     }
@@ -53,7 +55,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     get #serverStore() {
-        return this.endpoint.env.get(NodeStore);
+        return this.endpoint.env.get(ServerNodeStore);
     }
 
     /**
