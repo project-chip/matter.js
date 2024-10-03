@@ -25,21 +25,14 @@ export class PromiseQueue {
     }
 
     /**
-     * Add a promise to the queue. It returns a promise that ca be awaited.
+     * Add a promise to the queue. It returns a promise that can be awaited.
      */
     add<T>(executor: () => Promise<T>): Promise<T> {
         const { promise, resolver, rejecter } = createPromise<T>();
 
         logger.debug("Add promise to queue on place", this.#queue.length + 1);
         this.#queue.push({
-            func: () =>
-                executor()
-                    .then(value => {
-                        resolver(value);
-                    })
-                    .catch(reason => {
-                        rejecter(reason);
-                    }),
+            func: () => executor().then(resolver).catch(rejecter),
             rejecter,
         });
         this.#run();
@@ -64,14 +57,18 @@ export class PromiseQueue {
         if (func !== undefined) {
             this.#runningCount++;
             func()
-                .catch(() => {}) // already catched internally, can not happen
+                .catch(error => {
+                    throw error;
+                }) // already catched internally, but rethrow if it happens to not hide it
                 .finally(() => {
                     logger.debug("Promise processed ... Still running:", this.#runningCount - 1);
                     if (this.#delay > 0) {
                         // Keep the queue blocked for the delay time
                         Time.sleep("Queue delay", this.#delay)
                             .then(() => this.#runNext())
-                            .catch(() => {}); // not relevant
+                            .catch(error => {
+                                throw error;
+                            }); // rethrow to not hide errors - but none should happen
                     } else {
                         this.#runNext();
                     }
