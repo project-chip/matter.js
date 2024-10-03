@@ -331,14 +331,14 @@ export class CommissioningController extends MatterNode {
             nodeId,
             this,
             connectOptions,
-            this.controllerInstance?.getCommissionedNodeDetails(nodeId) ?? {},
+            this.controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
             async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
         this.initializedNodes.set(nodeId, pairedNode);
 
         pairedNode.events.initialized.on(
-            async details => await controller.enhanceCommissionedNodeDetails(nodeId, { ...details }),
+            async deviceData => await controller.enhanceCommissionedNodeDetails(nodeId, deviceData),
         );
 
         return pairedNode;

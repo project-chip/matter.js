@@ -12,20 +12,20 @@
 
 import { GeneralCommissioning } from "#clusters";
 import { NodeCommissioningOptions } from "#CommissioningController.js";
+import { DeviceInformationData } from "#device/DeviceInformation.js";
 import {
-    CRYPTO_SYMMETRIC_KEY_LENGTH,
     ChannelType,
     Construction,
     Crypto,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
     ImplementationError,
     Logger,
     NetInterfaceSet,
     ServerAddressIp,
+    serverAddressToString,
     StorageBackendMemory,
     StorageContext,
     StorageManager,
-    SupportedStorageTypes,
-    serverAddressToString,
 } from "#general";
 import {
     ChannelManager,
@@ -62,28 +62,11 @@ import {
     VendorId,
 } from "#types";
 
-export const COMMISSIONED_NODE_DEVICE_DATA_REVISION = 1;
-
-export type CommissionedNodeDeviceData = {
-    threadConnected: boolean;
-    wifiConnected: boolean;
-    ethernetConnected: boolean;
-    rootEndpointServerList: number[];
-    isBatteryPowered: boolean;
-    isIntermittentlyConnected: boolean;
-    isThreadSleepyEndDevice: boolean;
-    dataRevision: number;
-};
-
-export type CommissionedNodeClusterDetails = {
-    basicInformationData?: Record<string, SupportedStorageTypes>;
-    deviceData?: CommissionedNodeDeviceData;
-};
-
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
     discoveryData?: DiscoveryData;
-} & CommissionedNodeClusterDetails;
+    deviceData?: DeviceInformationData;
+};
 
 const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
@@ -95,7 +78,7 @@ const CONTROLLER_MAX_PATHS_PER_INVOKE = 10;
 const logger = Logger.get("MatterController");
 
 // Operational peer extended with basic information as required for conversion to CommissionedNodeDetails
-type CommissionedPeer = OperationalPeer & CommissionedNodeClusterDetails;
+type CommissionedPeer = OperationalPeer & { deviceData?: DeviceInformationData };
 
 // Backward-compatible persistence record for nodes
 type StoredOperationalPeer = [NodeId, CommissionedNodeDetails];
@@ -423,14 +406,12 @@ export class MatterController {
 
     getCommissionedNodesDetails() {
         return this.peers.map(peer => {
-            const { address, operationalAddress, discoveryData, basicInformationData, deviceData } =
-                peer as CommissionedPeer;
+            const { address, operationalAddress, discoveryData, deviceData } = peer as CommissionedPeer;
             return {
                 nodeId: address.nodeId,
                 operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
                 advertisedName: discoveryData?.DN,
                 discoveryData,
-                basicInformationData,
                 deviceData,
             };
         });
@@ -441,23 +422,22 @@ export class MatterController {
         if (nodeDetails === undefined) {
             throw new Error(`Node ${nodeId} is not commissioned.`);
         }
-        const { address, operationalAddress, discoveryData, basicInformationData, deviceData } = nodeDetails;
+        const { address, operationalAddress, discoveryData, deviceData } = nodeDetails;
         return {
             nodeId: address.nodeId,
             operationalAddress: operationalAddress ? serverAddressToString(operationalAddress) : undefined,
             advertisedName: discoveryData?.DN,
             discoveryData,
-            basicInformationData,
             deviceData,
         };
     }
 
-    async enhanceCommissionedNodeDetails(nodeId: NodeId, data: CommissionedNodeClusterDetails) {
+    async enhanceCommissionedNodeDetails(nodeId: NodeId, deviceData: DeviceInformationData) {
         const nodeDetails = this.peers.get(this.fabric.addressOf(nodeId)) as CommissionedPeer;
         if (nodeDetails === undefined) {
             throw new Error(`Node ${nodeId} is not commissioned.`);
         }
-        Object.assign(nodeDetails, data);
+        nodeDetails.deviceData = deviceData;
         await this.nodesStore.save();
     }
 
@@ -519,12 +499,11 @@ class CommissionedNodeStore extends PeerStore {
 
         const commissionedNodes = await this.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
         return commissionedNodes.map(
-            ([nodeId, { operationalServerAddress, discoveryData, basicInformationData, deviceData }]) =>
+            ([nodeId, { operationalServerAddress, discoveryData, deviceData }]) =>
                 ({
                     address: this.fabric.addressOf(nodeId),
                     operationalAddress: operationalServerAddress,
                     discoveryData,
-                    basicInformationData,
                     deviceData,
                 }) satisfies CommissionedPeer,
         );
@@ -545,13 +524,12 @@ class CommissionedNodeStore extends PeerStore {
                 const {
                     address,
                     operationalAddress: operationalServerAddress,
-                    basicInformationData,
-                    deviceData,
                     discoveryData,
+                    deviceData,
                 } = peer as CommissionedPeer;
                 return [
                     address.nodeId,
-                    { operationalServerAddress, basicInformationData, discoveryData, deviceData },
+                    { operationalServerAddress, discoveryData, deviceData },
                 ] satisfies StoredOperationalPeer;
             }),
         );
