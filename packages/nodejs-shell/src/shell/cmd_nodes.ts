@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { decamelize, Logger } from "@matter.js/general";
+import { capitalize, decamelize, Logger } from "@matter.js/general";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
-
-function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 export function createDiagnosticCallbacks(): Partial<CommissioningControllerNodeOptions> {
     return {
@@ -238,7 +234,7 @@ export default function commands(theNode: MatterNode) {
                             } else {
                                 const basicInfo = node.basicInformation;
                                 console.log(
-                                    `Node ${nodeIdToProcess}: Node Status: ${capitalizeFirstLetter(decamelize(NodeStateInformation[node.nodeState], " "))}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
+                                    `Node ${nodeIdToProcess}: Node Status: ${capitalize(decamelize(NodeStateInformation[node.nodeState], " "))}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
                                 );
                             }
                         }

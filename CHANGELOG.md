@@ -25,7 +25,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: A new `ObserverGroup` class simplifies binding management for multiple observables
 
 -   @matter.js/main:
-    -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate
+    -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports packages above as appropriate
 
 -   @matter.js/model:
     -   Info: The Matter object model previously exported as `@project-chip/matter.js/model` now resides in `@matter.js/model`
@@ -42,11 +42,13 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter.js/nodejs-ble
     -   Info: The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
+    -   Info: The noble and bleno dependencies got updated to also support Ubuntu 24
 
 -   @matter.js/nodejs-shell:
     - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
     - Enhancement: Added option to specify if attributes are loaded from remote or locally
     - Enhancement: The shell now saves a 100 history of commands and restores this on startup
+    - Enhancement: Add a "nodes status" command to show the status of all nodes
 
 -   @matter.js/protocol:
     -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
@@ -61,6 +63,17 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter.js/types:
     -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
+
+-   matter.js Controller API:
+    -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
+    -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
+    -   Deprecation: The attributeChangedCallback, eventTriggeredCallback and nodeStateChangedCallbacks are deprecated and replaced by new events "attributeChanged", "eventTriggered" and "nodeStateChanged" and "structureChanged" on PairedNode
+    -   Feature: Some more data (like Network interfaces, PowerSources, Thread details) are collected and used when connecting to the nodes
+    -   Feature: Based on device type the minimum and maximum subscription interval is now automatically set based on certain best practices. When multiple nodes are subscribed all Thread based devices are initialized by a "4 in parallel queue" to limit the used thread bandwidth.
+    -   Feature: Subscribed attribute data are cached for each node and used on reconnects by utilizing dataVersionFilters on read and subscribes to reduce bandwidth on reconnects. The data are no (yet) persisted, so after Controller restart the data are collected anew.
+    -   Feature: Low level InteractionClient API allows to enrich the attribute data that are not returned because of dataVersionFilters.
+    -   Enhancement: Only recreate PairedNode internal objects when structure really changed also on reconnects.
+    -   Enhancement: Utilize more information (beside partList changes now also feature, serverList, attributeList, generatedCommandLists) as structure change to reinitialize objects.
 
 ## 0.10.4 (2024-09-16)
 

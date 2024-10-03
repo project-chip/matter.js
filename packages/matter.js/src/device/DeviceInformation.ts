@@ -308,9 +308,10 @@ export class DeviceInformation {
         }
     }
 
-    determineSubscriptionParameters(
-        options: { subscribeMinIntervalFloorSeconds?: number; subscribeMaxIntervalCeilingSeconds?: number } = {},
-    ) {
+    determineSubscriptionParameters(options: {
+        subscribeMinIntervalFloorSeconds?: number;
+        subscribeMaxIntervalCeilingSeconds?: number;
+    }) {
         let {
             subscribeMinIntervalFloorSeconds: minIntervalFloorSeconds,
             subscribeMaxIntervalCeilingSeconds: maxIntervalCeilingSeconds,

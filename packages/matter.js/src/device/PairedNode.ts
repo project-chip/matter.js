@@ -423,7 +423,7 @@ export class PairedNode {
         let { ignoreInitialTriggers = false } = options;
 
         const { minIntervalFloorSeconds, maxIntervalCeilingSeconds } =
-            this.#nodeDetails.determineSubscriptionParameters();
+            this.#nodeDetails.determineSubscriptionParameters(this.options);
         const { threadConnected } = this.#nodeDetails.meta ?? {};
 
         const maxKnownEventNumber = interactionClient.maxKnownEventNumber;
