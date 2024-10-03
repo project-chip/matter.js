@@ -58,7 +58,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: To simplify low-level configuration, many components in the protocol module now optionally retrieve dependencies from an Environment
     -   Enhancement: Limits the number of parallel exchanges to 5
     -   Enhancement: Uses the session timing details to calculate the timeout for subscription messages when received as client additionally to the subscription maxInterval
+    -   Enhancement: Internal restructuring of Controller logic and setup. Introducing "peers" (commissioned node on a shared fabric)
     -   Fix: When subscribing with keepSubscriptions === false the existing subscriptions need to be removed earlier in the flow
+    -   Fix: Clear resumption records also when fabric gets updated or deleted
 
 -   @matter.js/types:
     -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
