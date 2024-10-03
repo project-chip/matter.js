@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { existsSync } from "fs";
+import { existsSync, statSync } from "fs";
 import { Package } from "../util/package.js";
 
 export function listSupportFiles(format = "cjs") {
@@ -21,4 +21,15 @@ export function listSupportFiles(format = "cjs") {
     }
 
     return files;
+}
+
+export function maybeStatSync(path: string) {
+    try {
+        return statSync(path);
+    } catch (e) {
+        if (typeof e === "object" && e !== null && "code" in e && (e.code === "ENOENT" || e.code === "ENOTDIR")) {
+            return;
+        }
+        throw e;
+    }
 }

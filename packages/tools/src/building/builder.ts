@@ -5,9 +5,13 @@
  */
 
 import colors from "ansi-colors";
+import { createHash } from "crypto";
 import { Progress } from "../util/progress.js";
 import { BuildError } from "./error.js";
-import { Project } from "./project.js";
+import { Graph } from "./graph.js";
+import { BuildInformation, Project } from "./project.js";
+import { createTypescriptContext } from "./typescript.js";
+import { TypescriptContext } from "./typescript/context.js";
 
 export enum Target {
     clean = "clean",
@@ -19,6 +23,7 @@ export enum Target {
 export interface Options {
     targets?: Target[];
     clean?: boolean;
+    graph?: Graph;
 }
 
 /**
@@ -28,10 +33,30 @@ export interface Options {
  */
 export class Builder {
     unconditional: boolean;
+    tsContext?: TypescriptContext;
+    graph?: Graph;
 
     constructor(private options: Options = {}) {
         this.unconditional =
             options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
+    }
+
+    public async configure(project: Project) {
+        if (!project.pkg.hasConfig) {
+            return;
+        }
+
+        const progress = project.pkg.start("Configuring");
+
+        try {
+            await project.configure(progress);
+        } catch (e: any) {
+            progress.shutdown();
+            process.stderr.write(`${e.stack ?? e.message}\n\n`);
+            process.exit(1);
+        }
+
+        progress.shutdown();
     }
 
     public async build(project: Project) {
@@ -40,7 +65,6 @@ export class Builder {
         try {
             await this.#doBuild(project, progress);
         } catch (e: any) {
-            progress.failure(`Unexpected build error`);
             progress.shutdown();
             process.stderr.write(`${e.stack ?? e.message}\n\n`);
             process.exit(1);
@@ -60,23 +84,67 @@ export class Builder {
             return;
         }
 
-        const config = await project.loadConfig();
+        const info: BuildInformation = {};
 
-        await config.before?.({ project, progress });
+        const config = await project.configure(progress);
+
+        await config?.before?.({ project, progress });
+
+        // If available we use graph to access dependency API shas
+        const graph = this.graph ?? (await Graph.forProject(project.pkg.path));
+        let node: Graph.Node | undefined;
+        if (graph) {
+            node = graph.get(project.pkg.name);
+            for (const dep of node.dependencies) {
+                if (dep.info.apiSha !== undefined) {
+                    if (info.dependencyApiShas === undefined) {
+                        info.dependencyApiShas = {};
+                    }
+                    info.dependencyApiShas[dep.pkg.name] = dep.info.apiSha;
+                }
+            }
+        }
 
         if (targets.has(Target.types)) {
-            const refresh = progress.refresh.bind(progress);
             try {
+                // Obtain or initialize typescript solution builder
+                let context = this.tsContext;
+                if (context === undefined) {
+                    context = this.tsContext = await createTypescriptContext(
+                        project.pkg.workspace,
+                        graph,
+                        progress.refresh.bind(progress),
+                    );
+                }
+
                 if (project.pkg.isLibrary) {
+                    const apiSha = createHash("sha1");
+
+                    // Our API SHA changes if that of any dependency changes
+                    if (node) {
+                        for (const dep of node.dependencies) {
+                            if (dep.info.apiSha !== undefined) {
+                                apiSha.update(dep.info.apiSha);
+                            }
+                        }
+                    }
+
                     await progress.run(`Generate ${progress.emphasize("type declarations")}`, () =>
-                        project.buildDeclarations(refresh),
+                        context.build(project.pkg, "src"),
                     );
                     await progress.run(`Install ${progress.emphasize("type declarations")}`, () =>
-                        project.installDeclarations(),
+                        project.installDeclarations(apiSha),
                     );
+
+                    info.apiSha = apiSha.digest("hex");
                 } else {
-                    await progress.run(`Validating ${progress.emphasize("types")}`, () =>
-                        project.validateTypes(refresh),
+                    await progress.run(`Validate ${progress.emphasize("types")}`, () =>
+                        context.build(project.pkg, "src", false),
+                    );
+                }
+                if (project.pkg.hasTests) {
+                    await progress.run(`Validate ${progress.emphasize("test types")}`, () =>
+                        context.build(project.pkg, "test"),
                     );
                 }
             } catch (e) {
@@ -97,11 +165,14 @@ export class Builder {
             await this.#transpile(project, progress, Target.cjs);
         }
 
-        await config.after?.({ project, progress });
+        await config?.after?.({ project, progress });
 
-        // Only update timestamp when there are no explicit targets so we know it's a full build
+        // Only update build information when there are no explicit targets so we know it's a full build
         if (!this.options.targets?.length) {
-            await project.recordBuildTime();
+            await project.recordBuildInfo(info);
+            if (node) {
+                node.info = info;
+            }
         }
     }
 

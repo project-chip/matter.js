@@ -47,8 +47,8 @@ export async function main(argv = process.argv) {
         }
     }
 
-    function builder() {
-        return new Builder({ ...args, targets: [...targets] });
+    function builder(graph?: Graph) {
+        return new Builder({ ...args, targets: [...targets], graph });
     }
 
     switch (mode as Mode) {
@@ -63,7 +63,7 @@ export async function main(argv = process.argv) {
                 if (graph === undefined) {
                     throw new Error(`Cannot build with dependencies because ${args.prefix} is not in a workspace`);
                 }
-                await graph.build(builder());
+                await graph.build(builder(graph));
             }
             break;
 

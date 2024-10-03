@@ -1,7 +1,6 @@
 {
-    "extends": "../../tools/tsconfig.base.json",
+    "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
-        "outDir": "../dist/esm",
         "types": [
             "@matter.js/tools",
             "globals"
@@ -9,28 +8,28 @@
     },
     "references": [
         {
-            "path": "../../../codegen/src"
+            "path": "..\\..\\general\\src"
         },
         {
-            "path": "../../general/src"
+            "path": "..\\..\\model\\src"
         },
         {
-            "path": "../../model/src"
+            "path": "..\\..\\types\\src"
         },
         {
-            "path": "../../node/src"
+            "path": "..\\..\\protocol\\src"
         },
         {
-            "path": "../../nodejs/src"
+            "path": "..\\..\\node\\src"
         },
         {
-            "path": "../../protocol/src"
+            "path": "..\\..\\nodejs\\src"
         },
         {
-            "path": "../../react-native/src"
+            "path": "..\\..\\react-native\\src"
         },
         {
-            "path": "../../types/src"
+            "path": "..\\..\\tools\\src"
         }
     ]
 }

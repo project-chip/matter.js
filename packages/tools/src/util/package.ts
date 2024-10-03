@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFileSync, statSync } from "fs";
-import { readdir, stat, writeFile } from "fs/promises";
+import { existsSync, readFileSync, statSync } from "fs";
+import { readdir, readFile, stat, writeFile } from "fs/promises";
 import { glob } from "glob";
 import { dirname, join, relative, resolve } from "path";
+import { maybeStatSync } from "../testing/files.js";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
@@ -15,7 +16,9 @@ import { toolsPath } from "./tools-path.cjs";
 export class JsonNotFoundError extends Error {}
 
 export const CONFIG_PATH = `src/build.config.ts`;
-export const CODEGEN_PATH = `build/src`;
+export const CODEGEN_PATH = `codegen`;
+
+const packageForPath = {} as Record<string, Package | undefined | null>;
 
 function findJson(filename: string, path: string = ".", title?: string) {
     path = resolve(path);
@@ -49,6 +52,7 @@ export class Package {
     hasTests: boolean;
     hasConfig: boolean;
     isLibrary: boolean;
+    #aliases?: Record<string, string>;
 
     constructor({
         path = ".",
@@ -171,7 +175,7 @@ export class Package {
     }
 
     static findExport(name: string, type: "cjs" | "esm" = "esm") {
-        return this.workspace.findExport(name, type);
+        return this.workspace.resolveImport(name, type);
     }
 
     resolveExport(name: string, type: "cjs" | "esm" = "esm") {
@@ -199,7 +203,7 @@ export class Package {
         throw new Error(`Cannot resolve export ${name} in package ${this.name}`);
     }
 
-    findExport(name: string, type: "cjs" | "esm" = "esm") {
+    resolveImport(name: string, type: "cjs" | "esm" = "esm") {
         const segments = name.split("/");
         let subdir = segments.shift() as string;
         if (subdir.startsWith("@") && segments.length) {
@@ -218,7 +222,7 @@ export class Package {
             resolveIn = nextResolveIn;
         }
 
-        const pkg = new Package({ path: resolve(resolveIn, "node_modules", subdir) });
+        const pkg = Package.forPath(resolve(resolveIn, "node_modules", subdir));
         return pkg.resolveExport(segments.length ? segments.join("/") : ".", type);
     }
 
@@ -230,22 +234,88 @@ export class Package {
         return !!this.#maybeStat(path)?.isDirectory();
     }
 
+    async readFile(path: string) {
+        return readFile(this.resolve(path), "utf-8");
+    }
+
+    readFileSync(path: string) {
+        return readFileSync(this.resolve(path), "utf-8");
+    }
+
     async writeFile(path: string, contents: unknown) {
-        await writeFile(path, `${contents}`);
+        await writeFile(this.resolve(path), `${contents}`);
     }
 
     async save() {
         await this.writeFile(join(this.path, "package.json"), JSON.stringify(this.json, undefined, 4));
     }
 
+    async readJson(path: string) {
+        const text = await this.readFile(path);
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            if (!(e instanceof Error)) {
+                e = new Error(`${e}`);
+            }
+            (e as Error).message = `Error parsing "${this.resolve(path)}": ${(e as Error).message}`;
+        }
+        return JSON.parse(await this.readFile(path));
+    }
+
+    async writeJson(path: string, value: {}) {
+        await this.writeFile(path, JSON.stringify(value, undefined, 4));
+    }
+
+    static maybeForPath(path: string) {
+        function find(path: string): Package | null {
+            let result = packageForPath[path];
+            if (result === undefined) {
+                if (existsSync(join(path, "package.json"))) {
+                    result = new Package({ path });
+                } else {
+                    result = find(dirname(path));
+                }
+                packageForPath[path] = result;
+            }
+            return result;
+        }
+
+        const result = find(path);
+
+        return result ?? undefined;
+    }
+
+    static forPath(path: string) {
+        const result = this.maybeForPath(path);
+        if (result !== undefined) {
+            return result;
+        }
+        throw new Error(`Cannot find package.json for "${path}"`);
+    }
+
+    get aliases(): Record<string, string> {
+        if (this.#aliases !== undefined) {
+            return this.#aliases;
+        }
+
+        this.#aliases = {
+            ...Package.maybeForPath(dirname(this.path))?.aliases,
+            ...this.json.imports,
+        };
+
+        return this.#aliases;
+    }
+
     #maybeStat(path: string) {
-        return ignoreErrorSync("ENOENT", () => statSync(this.resolve(path)));
+        return maybeStatSync(this.resolve(path));
     }
 }
 
 export type PackageJson = {
     name: string;
     version: string;
+    imports: Record<string, string>;
     [key: string]: any;
 };
 
