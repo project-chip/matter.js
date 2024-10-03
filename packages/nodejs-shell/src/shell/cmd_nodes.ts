@@ -4,20 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
+import { decamelize, Logger } from "@matter.js/general";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 
-const NodeStateString = {
-    [NodeStateInformation.Connected]: "Connected",
-    [NodeStateInformation.Disconnected]: "Disconnected",
-    [NodeStateInformation.Reconnecting]: "Reconnecting",
-    [NodeStateInformation.WaitingForDeviceDiscovery]: "Waiting for device discovery",
-    [NodeStateInformation.StructureChanged]: "Structure changed",
-    [NodeStateInformation.Decommissioned]: "Decommissioned",
-};
+function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 export function createDiagnosticCallbacks(): Partial<CommissioningControllerNodeOptions> {
     return {
@@ -239,13 +234,11 @@ export default function commands(theNode: MatterNode) {
                         for (const nodeIdToProcess of nodeIds) {
                             const node = theNode.commissioningController.getPairedNode(nodeIdToProcess);
                             if (node === undefined) {
-                                console.log(
-                                    `Node ${nodeIdToProcess}: ${NodeStateString[NodeStateInformation.Disconnected]}`,
-                                );
+                                console.log(`Node ${nodeIdToProcess}: Not initialized`);
                             } else {
                                 const basicInfo = node.basicInformation;
                                 console.log(
-                                    `Node ${nodeIdToProcess}: Node Status: ${NodeStateString[node.nodeState]}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
+                                    `Node ${nodeIdToProcess}: Node Status: ${capitalizeFirstLetter(decamelize(NodeStateInformation[node.nodeState], " "))}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
                                 );
                             }
                         }
