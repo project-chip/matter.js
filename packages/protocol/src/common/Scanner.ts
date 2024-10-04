@@ -89,6 +89,9 @@ export type CommissionableDeviceIdentifiers =
     | {
           /** The vendor ID of the commissionable device, if devices from a special vendor should be discovered. */
           vendorId: VendorId;
+
+          /** Optionally the product ID of the commissionable device, if devices from a special vendor should be discovered. */
+          productId?: number;
       }
     | {
           /** The device type of the commissionable device, if devices of a special type should be discovered. */

@@ -66,6 +66,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
 
+-   Matter-Core functionality:
+    -   Enhancement: Allow to discover VendorId + ProductId together optionally
+
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
