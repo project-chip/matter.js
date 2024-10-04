@@ -9,13 +9,13 @@
     },
     "references": [
         {
-            "path": "..\\..\\general\\src"
+            "path": "../../general/src"
         },
         {
-            "path": "..\\..\\tools\\src"
+            "path": "../src"
         },
         {
-            "path": "..\\src"
+            "path": "../../tools/src"
         }
     ]
 }

@@ -7,13 +7,10 @@
     },
     "references": [
         {
-            "path": "..\\..\\general\\src"
+            "path": "../../general/src"
         },
         {
-            "path": "..\\..\\matter.js\\src"
-        },
-        {
-            "path": "..\\..\\tools\\src"
+            "path": "../../matter.js/src"
         }
     ]
 }

@@ -6,9 +6,5 @@
             "globals"
         ]
     },
-    "references": [
-        {
-            "path": "..\\..\\tools\\src"
-        }
-    ]
+    "references": []
 }

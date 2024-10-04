@@ -9,7 +9,7 @@
     },
     "references": [
         {
-            "path": "..\\src"
+            "path": "../src"
         }
     ]
 }

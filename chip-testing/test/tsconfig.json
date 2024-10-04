@@ -9,16 +9,16 @@
     },
     "references": [
         {
-            "path": "..\\..\\packages\\main\\src"
+            "path": "../../packages/main/src"
         },
         {
-            "path": "..\\..\\packages\\matter.js\\src"
+            "path": "../../packages/matter.js/src"
         },
         {
-            "path": "..\\..\\packages\\tools\\src"
+            "path": "../src"
         },
         {
-            "path": "..\\src"
+            "path": "../../packages/tools/src"
         }
     ]
 }

@@ -7,10 +7,7 @@
     },
     "references": [
         {
-            "path": "..\\..\\main\\src"
-        },
-        {
-            "path": "..\\..\\tools\\src"
+            "path": "../../main/src"
         }
     ]
 }

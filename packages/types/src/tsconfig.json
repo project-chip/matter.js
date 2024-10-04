@@ -8,13 +8,10 @@
     },
     "references": [
         {
-            "path": "..\\..\\general\\src"
+            "path": "../../general/src"
         },
         {
-            "path": "..\\..\\model\\src"
-        },
-        {
-            "path": "..\\..\\tools\\src"
+            "path": "../../model/src"
         }
     ]
 }

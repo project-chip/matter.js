@@ -2,43 +2,43 @@
     "files": [],
     "references": [
         {
-            "path": "packages\\tools"
+            "path": "packages/tools"
         },
         {
-            "path": "packages\\general"
+            "path": "packages/general"
         },
         {
-            "path": "packages\\model"
+            "path": "packages/model"
         },
         {
-            "path": "packages\\types"
+            "path": "packages/types"
         },
         {
-            "path": "packages\\protocol"
+            "path": "packages/protocol"
         },
         {
-            "path": "packages\\node"
+            "path": "packages/node"
         },
         {
-            "path": "packages\\nodejs"
+            "path": "packages/nodejs"
         },
         {
-            "path": "packages\\nodejs-ble"
+            "path": "packages/nodejs-ble"
         },
         {
-            "path": "packages\\main"
+            "path": "packages/main"
         },
         {
-            "path": "packages\\nodejs-shell"
+            "path": "packages/nodejs-shell"
         },
         {
-            "path": "packages\\examples"
+            "path": "packages/examples"
         },
         {
-            "path": "packages\\react-native"
+            "path": "packages/react-native"
         },
         {
-            "path": "packages\\matter.js"
+            "path": "packages/matter.js"
         },
         {
             "path": "models"
@@ -50,13 +50,13 @@
             "path": "chip-testing"
         },
         {
-            "path": "compat\\matter-node.js"
+            "path": "compat/matter-node.js"
         },
         {
-            "path": "compat\\matter-node-ble.js"
+            "path": "compat/matter-node-ble.js"
         },
         {
-            "path": "compat\\matter-node.js-examples"
+            "path": "compat/matter-node.js-examples"
         }
     ]
 }
