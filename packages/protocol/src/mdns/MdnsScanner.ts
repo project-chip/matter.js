@@ -416,6 +416,10 @@ export class MdnsScanner implements Scanner {
             foundRecords.push(...storedRecords.filter(({ D }) => D === identifier.longDiscriminator));
         } else if ("shortDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ SD }) => SD === identifier.shortDiscriminator));
+        } else if ("vendorId" in identifier && "productId" in identifier) {
+            foundRecords.push(
+                ...storedRecords.filter(({ V, P }) => V === identifier.vendorId && P === identifier.productId),
+            );
         } else if ("vendorId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ V }) => V === identifier.vendorId));
         } else if ("deviceType" in identifier) {
@@ -450,6 +454,9 @@ export class MdnsScanner implements Scanner {
             return getLongDiscriminatorQname(identifier.longDiscriminator);
         } else if ("shortDiscriminator" in identifier) {
             return getShortDiscriminatorQname(identifier.shortDiscriminator);
+        } else if ("vendorId" in identifier && "productId" in identifier) {
+            // Custom identifier because normally productId is only included in TXT record
+            return `_VP${identifier.vendorId}+${identifier.productId}`;
         } else if ("vendorId" in identifier) {
             return getVendorQname(identifier.vendorId);
         } else if ("deviceType" in identifier) {
@@ -493,6 +500,16 @@ export class MdnsScanner implements Scanner {
         const shortDiscriminatorQueryId = this.#buildCommissionableQueryIdentifier({ shortDiscriminator: record.SD });
         if (this.#activeAnnounceQueries.has(shortDiscriminatorQueryId)) {
             return shortDiscriminatorQueryId;
+        }
+
+        if (record.V !== undefined && record.P !== undefined) {
+            const vendorProductIdQueryId = this.#buildCommissionableQueryIdentifier({
+                vendorId: VendorId(record.V),
+                productId: record.P,
+            });
+            if (this.#activeAnnounceQueries.has(vendorProductIdQueryId)) {
+                return vendorProductIdQueryId;
+            }
         }
 
         if (record.V !== undefined) {
