@@ -5,16 +5,13 @@
     },
     "references": [
         {
-            "path": "..\\..\\nodejs\\src"
+            "path": "../../nodejs/src"
         },
         {
-            "path": "..\\..\\general\\src"
+            "path": "../../general/src"
         },
         {
-            "path": "..\\..\\protocol\\src"
-        },
-        {
-            "path": "..\\..\\tools\\src"
+            "path": "../../protocol/src"
         }
     ]
 }

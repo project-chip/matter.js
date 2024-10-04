@@ -7,10 +7,7 @@
     },
     "references": [
         {
-            "path": "..\\..\\packages\\tools\\src"
-        },
-        {
-            "path": "..\\..\\packages\\model\\src"
+            "path": "../../packages/model/src"
         }
     ]
 }

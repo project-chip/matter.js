@@ -7,10 +7,7 @@
     },
     "references": [
         {
-            "path": "..\\..\\..\\packages\\nodejs-ble\\src"
-        },
-        {
-            "path": "..\\..\\..\\packages\\tools\\src"
+            "path": "../../../packages/nodejs-ble/src"
         }
     ]
 }

@@ -8,22 +8,19 @@
     },
     "references": [
         {
-            "path": "..\\..\\general\\src"
+            "path": "../../general/src"
         },
         {
-            "path": "..\\..\\model\\src"
+            "path": "../../model/src"
         },
         {
-            "path": "..\\..\\types\\src"
+            "path": "../../types/src"
         },
         {
-            "path": "..\\..\\protocol\\src"
+            "path": "../../protocol/src"
         },
         {
-            "path": "..\\..\\node\\src"
-        },
-        {
-            "path": "..\\..\\tools\\src"
+            "path": "../../node/src"
         }
     ]
 }
