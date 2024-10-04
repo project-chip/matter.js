@@ -20,8 +20,8 @@ import {
     TypeFromSchema,
     VendorId,
 } from "#types";
+import { CertificateAuthority } from "../certificate/CertificateAuthority.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
-import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { TlvCertSigningRequest } from "../common/OperationalCredentialsTypes.js";
@@ -138,7 +138,7 @@ const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
  */
 export class ControllerCommissioningFlow {
     #interactionClient: InteractionClient;
-    readonly #certificateManager: RootCertificateManager;
+    readonly #certificateManager: CertificateAuthority;
     readonly #fabric: Fabric;
     readonly #transitionToCase: (peerAddress: PeerAddress) => Promise<InteractionClient | undefined>;
     readonly #commissioningOptions: ControllingCommissioningFlowOptions;
@@ -157,7 +157,7 @@ export class ControllerCommissioningFlow {
         interactionClient: InteractionClient,
 
         /** CertificateManager of the controller. */
-        certificateManager: RootCertificateManager,
+        certificateManager: CertificateAuthority,
 
         /** Fabric of the controller. */
         fabric: Fabric,

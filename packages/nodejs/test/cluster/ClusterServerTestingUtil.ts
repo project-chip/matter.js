@@ -5,10 +5,11 @@
  */
 
 import { PrivateKey } from "#general";
-import { Fabric, Message, SecureSession } from "#protocol";
-import { FabricId, FabricIndex, NodeId, StatusCode, VendorId } from "#types";
+import { Message, SecureSession } from "#protocol";
+import { NodeId, StatusCode } from "#types";
 import { asClusterServerInternal, ClusterServerObj, ClusterType } from "@project-chip/matter.js/cluster";
 import { Endpoint } from "@project-chip/matter.js/device";
+import { createTestFabric } from "../interaction/InteractionTestUtils.js";
 
 export const ZERO = new Uint8Array(1);
 const PRIVATE_KEY = new Uint8Array(32);
@@ -36,22 +37,9 @@ export async function callCommandOnClusterServer<T extends ClusterType>(
 }
 
 export async function createTestSessionWithFabric() {
-    const testFabric = new Fabric(
-        FabricIndex(1),
-        FabricId(BigInt(1)),
-        NodeId(BigInt(1)),
-        NodeId(BigInt(2)),
-        ZERO,
-        ZERO,
-        KEY,
-        VendorId(1),
-        ZERO,
-        ZERO,
-        ZERO,
-        ZERO,
-        ZERO,
-        "",
-    );
+    const ZERO = new Uint8Array(1);
+
+    const testFabric = createTestFabric();
 
     return await SecureSession.create({
         id: 1,

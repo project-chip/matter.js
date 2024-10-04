@@ -56,17 +56,17 @@ describe("FabricManager", () => {
 
             assert.deepEqual(fabricManager.getFabrics(), [fabric]);
 
-            assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.toStorageObject()]);
+            assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.config]);
         });
 
         it("restore a fabric from storage", async () => {
             const fabric = await buildFabric();
-            storage.set(["Context"], "fabrics", [fabric.toStorageObject()]);
+            storage.set(["Context"], "fabrics", [fabric.config]);
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
             await fabricManager.construction.ready;
             assert.equal(fabricManager.getFabrics().length, 1);
-            assert.deepEqual(fabricManager.getFabrics()[0].toStorageObject(), fabric.toStorageObject());
+            assert.deepEqual(fabricManager.getFabrics()[0].config, fabric.config);
         });
     });
 

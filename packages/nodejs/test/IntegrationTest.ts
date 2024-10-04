@@ -1185,10 +1185,10 @@ describe("Integration Test", () => {
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
 
-            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(Groups.Cluster.id);
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData?.get(Groups.Cluster.id);
             assert.ok(groupsClusterEndpointMap);
             assert.equal(groupsClusterEndpointMap.size, 1);
-            const groupsClusterData = groupsClusterEndpointMap.get("1");
+            const groupsClusterData = groupsClusterEndpointMap?.get("1");
             assert.ok(groupsClusterData instanceof Map);
             assert.equal(groupsClusterData.get(1), "Group 1");
 

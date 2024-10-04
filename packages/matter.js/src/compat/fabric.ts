@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { type Fabric } from "#protocol";
+
 export {
     Fabric,
     FabricAction,
@@ -17,7 +19,8 @@ export {
     type CommissionerInstanceData,
     type CommissioningModeInstanceData,
     type ExposedFabricInformation,
-    type FabricJsonObject,
     type InstanceBroadcaster,
     type OperationalInstanceData,
 } from "#protocol";
+
+export type FabricJsonObject = Fabric.Config;

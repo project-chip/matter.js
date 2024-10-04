@@ -16,7 +16,7 @@ export {
     NodeId_Matter,
     ProductId_Matter,
     RcacId_Matter,
-    RootCertificateManager,
+    CertificateAuthority as RootCertificateManager,
     TestCert_PAA_FFF1_Cert,
     TestCert_PAA_FFF1_PrivateKey,
     TestCert_PAA_FFF1_PublicKey,

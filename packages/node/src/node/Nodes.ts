@@ -28,7 +28,6 @@ export class Nodes extends EndpointContainer {
             const stores = await this.endpoint.env.get(ServerNodeStore).allPeerStores();
             for (const store of stores) {
                 this.add(
-                    // TODO - initialize endpoint correctly from the wire
                     new ClientNode({
                         owner,
                         store,
@@ -41,4 +40,6 @@ export class Nodes extends EndpointContainer {
     override get endpoint() {
         return super.endpoint as ServerNode;
     }
+
+    async commission() {}
 }

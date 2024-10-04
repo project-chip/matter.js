@@ -21,7 +21,7 @@ import {
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { FabricIndex } from "#types";
-import { Fabric, FabricJsonObject } from "./Fabric.js";
+import { Fabric } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
@@ -32,7 +32,6 @@ export enum FabricAction {
     Removed,
     Updated,
 }
-
 export class FabricManager {
     #nextFabricIndex = 1;
     readonly #fabrics = new Map<FabricIndex, Fabric>();
@@ -59,9 +58,9 @@ export class FabricManager {
                     return;
                 }
 
-                const fabrics = await this.#storage.get<FabricJsonObject[]>("fabrics", []);
-                for (const fabric of fabrics) {
-                    this.#addFabric(Fabric.createFromStorageObject(fabric));
+                const fabrics = await this.#storage.get<Fabric.Config[]>("fabrics", []);
+                for (const fabricConfig of fabrics) {
+                    this.#addFabric(new Fabric(fabricConfig));
                 }
 
                 this.#nextFabricIndex = await this.#storage.get("nextFabricIndex", this.#nextFabricIndex);
@@ -126,7 +125,7 @@ export class FabricManager {
 
         const storeResult = this.#storage.set(
             "fabrics",
-            Array.from(this.#fabrics.values()).map(fabric => fabric.toStorageObject()),
+            Array.from(this.#fabrics.values()).map(fabric => fabric.config),
         );
         if (MaybePromise.is(storeResult)) {
             return storeResult.then(() => this.#storage!.set("nextFabricIndex", this.#nextFabricIndex));

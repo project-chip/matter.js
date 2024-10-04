@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RootCertificateManager } from "#certificate/RootCertificateManager.js";
+import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, ScannerSet } from "#common/Scanner.js";
 import { Fabric } from "#fabric/Fabric.js";
@@ -97,7 +97,7 @@ export interface ControllerCommissionerContext {
     netInterfaces: NetInterfaceSet;
     sessions: SessionManager;
     exchanges: ExchangeManager;
-    certificates: RootCertificateManager;
+    authority: CertificateAuthority;
 }
 
 /**
@@ -119,12 +119,15 @@ export class ControllerCommissioner {
             netInterfaces: env.get(NetInterfaceSet),
             sessions: env.get(SessionManager),
             exchanges: env.get(ExchangeManager),
-            certificates: env.get(RootCertificateManager),
+            authority: env.get(CertificateAuthority),
         });
         env.set(ControllerCommissioner, instance);
         return instance;
     }
 
+    /**
+     * Commission a node.
+     */
     async commission(options: PeerCommissioningOptions): Promise<PeerAddress> {
         const {
             discovery: { timeoutSeconds = 30 },
@@ -330,7 +333,7 @@ export class ControllerCommissioner {
         const commissioningManager = new ControllerCommissioningFlow(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.#context.exchanges, paseSecureMessageChannel), address),
-            this.#context.certificates,
+            this.#context.authority,
             fabric,
             commissioningOptions,
             async address => {

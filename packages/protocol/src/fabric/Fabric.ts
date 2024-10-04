@@ -37,24 +37,6 @@ const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
 
 export class PublicKeyError extends MatterError {}
 
-export type FabricJsonObject = {
-    fabricIndex: FabricIndex;
-    fabricId: FabricId;
-    nodeId: NodeId;
-    rootNodeId: NodeId;
-    operationalId: Uint8Array;
-    rootPublicKey: Uint8Array;
-    keyPair: BinaryKeyPair;
-    rootVendorId: VendorId;
-    rootCert: Uint8Array;
-    identityProtectionKey: Uint8Array;
-    operationalIdentityProtectionKey: Uint8Array;
-    intermediateCACert: Uint8Array | undefined;
-    operationalCert: Uint8Array;
-    label: string;
-    scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
-};
-
 type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> & {
     operationalEpochKey0: Uint8Array;
     groupSessionId0: number | null;
@@ -103,36 +85,48 @@ export type ExposedFabricInformation = {
 };
 
 export class Fabric {
-    readonly #sessions = new Set<SecureSession>();
-    readonly #scopedClusterData: Map<number, any>;
+    readonly fabricIndex: FabricIndex;
+    readonly fabricId: FabricId;
+    readonly nodeId: NodeId;
+    readonly rootNodeId: NodeId;
+    readonly operationalId: Uint8Array;
+    readonly rootPublicKey: Uint8Array;
+    readonly rootVendorId: VendorId;
+    readonly rootCert: Uint8Array;
+    readonly identityProtectionKey: Uint8Array;
+    readonly operationalIdentityProtectionKey: Uint8Array;
+    readonly intermediateCACert: Uint8Array | undefined;
+    readonly operationalCert: Uint8Array;
 
+    readonly #scopedClusterData: Fabric.ScopedClusterData;
     readonly #keyPair: Key;
 
+    readonly #sessions = new Set<SecureSession>();
+
+    label: string;
     #removeCallbacks = new Array<() => MaybePromise<void>>();
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
 
-    constructor(
-        readonly fabricIndex: FabricIndex,
-        readonly fabricId: FabricId,
-        readonly nodeId: NodeId,
-        readonly rootNodeId: NodeId,
-        readonly operationalId: Uint8Array,
-        readonly rootPublicKey: Uint8Array,
-        keyPair: Key,
-        readonly rootVendorId: VendorId,
-        readonly rootCert: Uint8Array,
-        readonly identityProtectionKey: Uint8Array,
-        readonly operationalIdentityProtectionKey: Uint8Array,
-        readonly intermediateCACert: Uint8Array | undefined,
-        readonly operationalCert: Uint8Array,
-        public label: string,
-        scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
-    ) {
-        this.#keyPair = keyPair;
-        this.#scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
+    constructor(config: Fabric.Config) {
+        this.fabricIndex = config.fabricIndex;
+        this.fabricId = config.fabricId;
+        this.nodeId = config.nodeId;
+        this.rootNodeId = config.rootNodeId;
+        this.operationalId = config.operationalId;
+        this.rootPublicKey = config.rootPublicKey;
+        this.rootVendorId = config.rootVendorId;
+        this.rootCert = config.rootCert;
+        this.identityProtectionKey = config.identityProtectionKey;
+        this.operationalIdentityProtectionKey = config.operationalIdentityProtectionKey;
+        this.operationalCert = config.operationalCert;
+        this.label = config.label;
+
+        this.#keyPair = PrivateKey(config.keyPair);
+
+        this.#scopedClusterData = config.scopedClusterData ?? new Map();
     }
 
-    toStorageObject(): FabricJsonObject {
+    get config(): Fabric.Config {
         return {
             fabricIndex: this.fabricIndex,
             fabricId: this.fabricId,
@@ -150,26 +144,6 @@ export class Fabric {
             label: this.label,
             scopedClusterData: this.#scopedClusterData,
         };
-    }
-
-    static createFromStorageObject(fabricObject: FabricJsonObject): Fabric {
-        return new Fabric(
-            fabricObject.fabricIndex,
-            fabricObject.fabricId,
-            fabricObject.nodeId,
-            fabricObject.rootNodeId,
-            fabricObject.operationalId,
-            fabricObject.rootPublicKey,
-            PrivateKey(fabricObject.keyPair),
-            fabricObject.rootVendorId,
-            fabricObject.rootCert,
-            fabricObject.identityProtectionKey,
-            fabricObject.operationalIdentityProtectionKey,
-            fabricObject.intermediateCACert,
-            fabricObject.operationalCert,
-            fabricObject.label,
-            fabricObject.scopedClusterData,
-        );
     }
 
     async setLabel(label: string) {
@@ -270,14 +244,14 @@ export class Fabric {
         if (dataMap === undefined) {
             return undefined;
         }
-        return dataMap.get(clusterDataKey);
+        return dataMap.get(clusterDataKey) as T;
     }
 
     setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
         if (!this.#scopedClusterData.has(cluster.id)) {
             this.#scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
-        this.#scopedClusterData.get(cluster.id).set(clusterDataKey, value);
+        this.#scopedClusterData.get(cluster.id)!.set(clusterDataKey, value as SupportedStorageTypes);
         return this.persist(false);
     }
 
@@ -285,12 +259,12 @@ export class Fabric {
         if (!this.#scopedClusterData.has(cluster.id)) {
             return;
         }
-        this.#scopedClusterData.get(cluster.id).delete(clusterDataKey);
+        this.#scopedClusterData.get(cluster.id)!.delete(clusterDataKey);
         return this.persist(false);
     }
 
     hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        return this.#scopedClusterData.has(cluster.id) && this.#scopedClusterData.get(cluster.id).has(clusterDataKey);
+        return this.#scopedClusterData.has(cluster.id) && this.#scopedClusterData.get(cluster.id)!.has(clusterDataKey);
     }
 
     deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
@@ -302,7 +276,7 @@ export class Fabric {
         if (!this.#scopedClusterData.has(cluster.id)) {
             return [];
         }
-        return Array.from(this.#scopedClusterData.get(cluster.id).keys());
+        return Array.from(this.#scopedClusterData.get(cluster.id)!.keys());
     }
 
     getGroupKeySet(groupKeySetId: number) {
@@ -508,21 +482,47 @@ export class FabricBuilder {
             8,
         );
 
-        return new Fabric(
-            this.#fabricIndex,
-            this.#fabricId,
-            this.#nodeId,
-            this.#rootNodeId,
-            operationalId,
-            this.#rootPublicKey,
-            this.#keyPair,
-            this.#rootVendorId,
-            this.#rootCert,
-            this.#identityProtectionKey, // Epoch Key
-            await Crypto.hkdf(this.#identityProtectionKey, operationalId, GROUP_SECURITY_INFO),
-            this.#intermediateCACert,
-            this.#operationalCert,
-            this.#label,
-        );
+        return new Fabric({
+            fabricIndex: this.#fabricIndex,
+            fabricId: this.#fabricId,
+            nodeId: this.#nodeId,
+            rootNodeId: this.#rootNodeId,
+            operationalId: operationalId,
+            rootPublicKey: this.#rootPublicKey,
+            keyPair: this.#keyPair,
+            rootVendorId: this.#rootVendorId,
+            rootCert: this.#rootCert,
+            identityProtectionKey: this.#identityProtectionKey, // Epoch Key
+            operationalIdentityProtectionKey: await Crypto.hkdf(
+                this.#identityProtectionKey,
+                operationalId,
+                GROUP_SECURITY_INFO,
+            ),
+            intermediateCACert: this.#intermediateCACert,
+            operationalCert: this.#operationalCert,
+            label: this.#label,
+        });
     }
+}
+
+export namespace Fabric {
+    export interface ScopedClusterData extends Map<number, Map<string, SupportedStorageTypes>> {}
+
+    export type Config = {
+        fabricIndex: FabricIndex;
+        fabricId: FabricId;
+        nodeId: NodeId;
+        rootNodeId: NodeId;
+        operationalId: Uint8Array;
+        rootPublicKey: Uint8Array;
+        keyPair: BinaryKeyPair;
+        rootVendorId: VendorId;
+        rootCert: Uint8Array;
+        identityProtectionKey: Uint8Array;
+        operationalIdentityProtectionKey: Uint8Array;
+        intermediateCACert: Uint8Array | undefined;
+        operationalCert: Uint8Array;
+        label: string;
+        scopedClusterData?: ScopedClusterData;
+    };
 }
