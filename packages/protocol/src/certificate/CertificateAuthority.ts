@@ -68,11 +68,11 @@ export class CertificateAuthority {
                 this.rootKeyIdentifier = certValues.rootKeyIdentifier;
                 this.rootCertBytes = certValues.rootCertBytes;
                 this.nextCertificateId = BigInt(certValues.nextCertificateId);
-                logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
+                logger.debug(`Loaded stored credentials with ID ${this.rootCertId}`);
                 return;
             }
 
-            logger.debug(`Created new root certificate with ID ${this.rootCertId}`);
+            logger.debug(`Created new credentials with ID ${this.rootCertId}`);
 
             if (options instanceof StorageContext) {
                 await options.set({
@@ -86,7 +86,7 @@ export class CertificateAuthority {
         });
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const storage = env.get(StorageManager).createContext("certificates");
         const instance = new CertificateAuthority(storage);
         env.set(CertificateAuthority, instance);

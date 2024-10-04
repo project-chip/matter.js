@@ -80,7 +80,7 @@ export class FabricManager {
         await this.construction;
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new FabricManager(env.get(StorageManager).createContext("fabrics"));
         env.set(FabricManager, instance);
         return instance;
@@ -88,6 +88,13 @@ export class FabricManager {
 
     get events() {
         return this.#events;
+    }
+
+    async clear() {
+        await this.#construction;
+        this.#nextFabricIndex = 1;
+        this.#fabrics.clear();
+        await this.#storage?.clear();
     }
 
     for(address: FabricIndex | PeerAddress) {

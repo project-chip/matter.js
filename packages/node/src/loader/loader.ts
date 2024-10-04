@@ -9,7 +9,7 @@ import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { camelize, decamelize, ImplementationError, MaybePromise } from "#general";
 
 // Must load from public export so node selects the correct format
-import { load } from "@matter.js/node/load";
+import { load } from "@matter/node/load";
 
 const cache = {} as Record<string, {}>;
 

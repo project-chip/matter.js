@@ -19,21 +19,26 @@ import {
     TransportInterfaceSet,
     asyncNew,
 } from "#general";
-import { PeerAddress } from "#peer/PeerAddress.js";
-import { DeviceAdvertiser } from "#protocol/DeviceAdvertiser.js";
-import { CommissioningConfigProvider, DeviceCommissioner } from "#protocol/DeviceCommissioner.js";
+import {
+    ChannelManager,
+    CommissioningConfigProvider,
+    DeviceAdvertiser,
+    DeviceCommissioner,
+    ExchangeManager,
+    Fabric,
+    FabricAction,
+    FabricManager,
+    FailsafeContext,
+    InstanceBroadcaster,
+    PaseServer,
+    PeerAddress,
+    ProtocolHandler,
+    SecureChannelProtocol,
+    Session,
+    SessionManager,
+    SessionParameters,
+} from "#protocol";
 import { CommissioningOptions, FabricIndex } from "#types";
-import { FailsafeContext } from "./common/FailsafeContext.js";
-import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { Fabric } from "./fabric/Fabric.js";
-import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
-import { ChannelManager } from "./protocol/ChannelManager.js";
-import { ExchangeManager } from "./protocol/ExchangeManager.js";
-import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
-import { Session, SessionParameters } from "./session/Session.js";
-import { SessionManager } from "./session/SessionManager.js";
-import { PaseServer } from "./session/pase/PaseServer.js";
 
 export class MatterDevice {
     readonly #exchangeManager;

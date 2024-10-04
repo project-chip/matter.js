@@ -5,7 +5,8 @@
  */
 
 import { FabricManager } from "#fabric/FabricManager.js";
-import { AsyncObservable, Logger, MatterFlowError } from "#general";
+import { AsyncObservable, Environment, Environmental, Logger, MatterFlowError } from "#general";
+import { ExchangeManager } from "#protocol/ExchangeManager.js";
 import { SessionManager } from "#session/SessionManager.js";
 import {
     GeneralStatusCode,
@@ -98,6 +99,13 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
     constructor(sessions: SessionManager, fabrics: FabricManager) {
         super();
         this.#caseCommissioner = new CaseServer(sessions, fabrics);
+    }
+
+    static [Environmental.create](env: Environment) {
+        const instance = new SecureChannelProtocol(env.get(SessionManager), env.get(FabricManager));
+        env.get(ExchangeManager).addProtocolHandler(instance);
+        env.set(SecureChannelProtocol, instance);
+        return instance;
     }
 
     /**

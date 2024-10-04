@@ -24,9 +24,9 @@ export class ChannelManager {
         this.#caseSessionsPerFabricAndNode = caseSessionsPerFabricAndNode;
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new ChannelManager();
-        env.set(ChannelManager, this);
+        env.set(ChannelManager, instance);
         return instance;
     }
 

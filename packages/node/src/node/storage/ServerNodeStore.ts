@@ -15,7 +15,7 @@ import {
     StorageManager,
     StorageService,
 } from "#general";
-import { EventHandler, PeerAddress } from "#protocol";
+import { PeerAddress } from "#protocol";
 import { ClientNodeStore } from "./ClientNodeStore.js";
 import { NodeStore } from "./NodeStore.js";
 
@@ -26,14 +26,10 @@ const logger = Logger.get("ServerNodeStore");
  * nodes.
  */
 export class ServerNodeStore extends NodeStore implements Destructable {
-    #storageService: StorageService;
+    #env: Environment;
     #nodeId: string;
     #location: string;
     #storageManager?: StorageManager;
-    #sessionStorage?: StorageContext;
-    #eventHandler?: EventHandler;
-    #fabricStorage?: StorageContext;
-    #eventStorage?: StorageContext;
     #peerStorage?: StorageContext;
 
     constructor(environment: Environment, nodeId: string) {
@@ -48,43 +44,15 @@ export class ServerNodeStore extends NodeStore implements Destructable {
             },
         });
 
-        this.#storageService = environment.get(StorageService);
+        this.#env = environment;
         this.#nodeId = nodeId;
-        this.#location = this.#storageService.location ?? "(unknown location)";
+        this.#location = this.#env.get(StorageService).location ?? "(unknown location)";
 
         this.construction.start();
     }
 
     static async create(environment: Environment, nodeId: string) {
         return await asyncNew(this, environment, nodeId);
-    }
-
-    get eventStorage() {
-        if (!this.#eventStorage) {
-            this.#eventStorage = this.factory.createContext("events");
-        }
-        return this.#eventStorage;
-    }
-
-    get eventHandler() {
-        if (!this.#eventHandler) {
-            throw new ImplementationError("Event handler accessed prior to initialization");
-        }
-        return this.#eventHandler;
-    }
-
-    get sessionStorage() {
-        if (!this.#sessionStorage) {
-            this.#sessionStorage = this.factory.createContext("sessions");
-        }
-        return this.#sessionStorage;
-    }
-
-    get fabricStorage() {
-        if (!this.#fabricStorage) {
-            this.#fabricStorage = this.factory.createContext("fabrics");
-        }
-        return this.#fabricStorage;
     }
 
     allPeerStores() {
@@ -102,13 +70,6 @@ export class ServerNodeStore extends NodeStore implements Destructable {
         });
     }
 
-    override async erase() {
-        await this.#sessionStorage?.clearAll();
-        await this.#fabricStorage?.clearAll();
-        await this.#eventStorage?.clearAll();
-        await super.erase();
-    }
-
     get #peers() {
         if (!this.#peerStorage) {
             this.#peerStorage = this.factory.createContext("peer");
@@ -121,9 +82,8 @@ export class ServerNodeStore extends NodeStore implements Destructable {
     }
 
     override async initializeStorage() {
-        this.#storageManager = await this.#storageService.open(this.#nodeId);
-
-        this.#eventHandler = await EventHandler.create(this.eventStorage);
+        this.#storageManager = await this.#env.get(StorageService).open(this.#nodeId);
+        this.#env.set(StorageManager, this.#storageManager);
 
         await super.initializeStorage();
 

@@ -288,7 +288,7 @@ export class MatterController {
             netInterfaces: this.netInterfaces,
             exchanges: this.exchangeManager,
             sessions: this.sessionManager,
-            authority: this.ca,
+            ca: this.ca,
         });
 
         this.#construction = Construction(this, async () => {

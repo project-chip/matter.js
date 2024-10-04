@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { loader } from "@matter.js/node";
+import { loader } from "@matter/node";
 
 if (typeof window === "undefined") {
     describe("loader", () => {

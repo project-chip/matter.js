@@ -30,6 +30,7 @@ import {
     SyncStorage,
     UdpInterface,
 } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import { Specification } from "#model";
 import {
     AttestationCertificateManager,
@@ -44,7 +45,6 @@ import {
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
     InteractionEndpointStructure,
-    MatterDevice,
     MdnsBroadcaster,
     MdnsInstanceBroadcaster,
     MdnsScanner,

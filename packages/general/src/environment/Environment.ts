@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "#util/Promises.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import "../polyfills/disposable.js";
 import { Time } from "../time/Time.js";
-import { UnsupportedDependencyError } from "../util/Lifecycle.js";
+import { Destructable, UnsupportedDependencyError } from "../util/Lifecycle.js";
 import { Observable } from "../util/Observable.js";
 import { Environmental } from "./Environmental.js";
 import { RuntimeService } from "./RuntimeService.js";
@@ -53,7 +54,7 @@ export class Environment {
      * Access an environmental service.
      */
     get<T extends object>(type: abstract new (...args: any[]) => T): T {
-        let instance = this.#services?.get(type) ?? this.#parent?.get(type);
+        let instance = this.#services?.get(type) ?? this.#parent?.maybeGet(type);
 
         if (instance) {
             return instance as T;
@@ -65,6 +66,15 @@ export class Environment {
         }
 
         throw new UnsupportedDependencyError(`Required dependency ${type.name}`, "is not available");
+    }
+
+    /**
+     * Access an environmental service that may not exist.
+     */
+    maybeGet<T extends object>(type: abstract new (...args: any[]) => T): T | undefined {
+        if (this.has(type)) {
+            return this.get(type);
+        }
     }
 
     /**
@@ -85,6 +95,21 @@ export class Environment {
         const serviceEvents = this.#serviceEvents.get(type);
         if (serviceEvents) {
             serviceEvents.deleted.emit(instance);
+        }
+    }
+
+    /**
+     * Remove and close an environmental service.
+     */
+    close<T extends object>(
+        type: abstract new (...args: any[]) => T,
+    ): T extends { close: () => MaybePromise<void> } ? MaybePromise<void> : void {
+        const instance = this.maybeGet(type);
+        if (instance !== undefined) {
+            this.delete(type, instance);
+            return (instance as Partial<Destructable>).close?.() as T extends { close: () => MaybePromise<void> }
+                ? MaybePromise<void>
+                : void;
         }
     }
 

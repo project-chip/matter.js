@@ -11,7 +11,8 @@ import {
     GeneralCommissioningCluster,
 } from "#clusters";
 import { ImplementationError, Logger, MatterFlowError } from "#general";
-import { assertSecureSession, MatterDevice } from "#protocol";
+import { MatterDevice } from "#MatterDevice.js";
+import { assertSecureSession } from "#protocol";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { CommissioningServerFailsafeContext } from "./CommissioningServerFailsafeContext.js";
 

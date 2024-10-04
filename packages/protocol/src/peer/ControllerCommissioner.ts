@@ -97,7 +97,7 @@ export interface ControllerCommissionerContext {
     netInterfaces: NetInterfaceSet;
     sessions: SessionManager;
     exchanges: ExchangeManager;
-    authority: CertificateAuthority;
+    ca: CertificateAuthority;
 }
 
 /**
@@ -112,14 +112,14 @@ export class ControllerCommissioner {
         this.#paseClient = new PaseClient(context.sessions);
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new ControllerCommissioner({
             peers: env.get(PeerSet),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
             sessions: env.get(SessionManager),
             exchanges: env.get(ExchangeManager),
-            authority: env.get(CertificateAuthority),
+            ca: env.get(CertificateAuthority),
         });
         env.set(ControllerCommissioner, instance);
         return instance;
@@ -333,7 +333,7 @@ export class ControllerCommissioner {
         const commissioningManager = new ControllerCommissioningFlow(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.#context.exchanges, paseSecureMessageChannel), address),
-            this.#context.authority,
+            this.#context.ca,
             fabric,
             commissioningOptions,
             async address => {

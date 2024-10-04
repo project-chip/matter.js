@@ -14,6 +14,7 @@ import { EndpointServer } from "#endpoint/EndpointServer.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
+import { EventHandler, FabricManager, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { Nodes } from "./Nodes.js";
@@ -98,12 +99,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
-
-        if (this.env.has(ServerNodeStore)) {
-            const store = this.env.get(ServerNodeStore);
-            await store.close();
-            this.env.delete(ServerNodeStore, store);
-        }
+        this.env.close(FabricManager);
+        await this.env.close(SessionManager);
+        await this.env.close(ServerNodeStore);
     }
 
     override async reset() {
@@ -165,11 +163,14 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     protected override async initialize() {
-        const nodeStore = await ServerNodeStore.create(this.env, this.id);
-
-        this.env.set(ServerNodeStore, nodeStore);
+        // Install support services
+        this.env.set(ServerNodeStore, await ServerNodeStore.create(this.env, this.id));
         this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
         this.env.set(IdentityService, new IdentityService(this));
+
+        // Ensure these are fully initialized
+        await this.env.load(FabricManager);
+        await this.env.load(SessionManager);
 
         return super.initialize();
     }
@@ -183,6 +184,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @see {@link MatterSpecification.v12.Core} § 13.4
      */
     protected async resetStorage() {
+        await this.env.get(SessionManager).clear();
+        await this.env.get(FabricManager).clear();
+        await this.env.get(EventHandler).clear();
         await this.env.get(ServerNodeStore).erase();
     }
 

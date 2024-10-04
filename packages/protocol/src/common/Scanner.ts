@@ -180,7 +180,7 @@ export class ScannerSet extends BasicSet<Scanner> {
         );
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new ScannerSet();
         env.set(ScannerSet, instance);
         return instance;

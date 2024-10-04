@@ -13,6 +13,7 @@ import {
     Environment,
     Environmental,
     Logger,
+    MatterAggregateError,
     Mutex,
     ObserverGroup,
     Time,
@@ -79,7 +80,7 @@ export class DeviceAdvertiser {
         });
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new DeviceAdvertiser({
             fabrics: env.get(FabricManager),
             sessions: env.get(SessionManager),
@@ -187,9 +188,7 @@ export class DeviceAdvertiser {
     async close() {
         await this.#mutex;
         this.#observers.close();
-        for (const broadcaster of this.#broadcasters) {
-            await broadcaster.close();
-        }
+        await this.clearBroadcasters();
     }
 
     hasBroadcaster(broadcaster: InstanceBroadcaster) {
@@ -203,6 +202,18 @@ export class DeviceAdvertiser {
     async deleteBroadcaster(broadcaster: InstanceBroadcaster) {
         if (this.#broadcasters.delete(broadcaster)) {
             await broadcaster.expireAllAnnouncements();
+        }
+    }
+
+    async clearBroadcasters() {
+        const broadcasters = [...this.#broadcasters];
+        const closed = Promise.allSettled(broadcasters.map(b => b.close()));
+        this.#broadcasters.clear();
+        const errors = (await closed)
+            .map(status => (status.status === "rejected" ? status.reason : undefined))
+            .filter(reason => reason !== undefined);
+        if (errors.length) {
+            throw new MatterAggregateError(errors, "Error closing broadcasters");
         }
     }
 }

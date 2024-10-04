@@ -25,9 +25,9 @@ export function isNetworkInterface(obj: TransportInterface | NetInterface): obj 
  * A collection of {@link NetInterfaces} managed as a unit.
  */
 export class NetInterfaceSet extends TransportInterfaceSet<NetInterface> {
-    [Environmental.create](env: Environment) {
+    static override [Environmental.create](env: Environment) {
         const instance = new NetInterfaceSet();
-        env.set(NetInterfaceSet, this);
+        env.set(NetInterfaceSet, instance);
         return instance;
     }
 }

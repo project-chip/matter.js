@@ -12,7 +12,6 @@ export * from "./common/index.js";
 export * from "./endpoint/index.js";
 export * from "./fabric/index.js";
 export * from "./interaction/index.js";
-export * from "./MatterDevice.js";
 export * from "./mdns/index.js";
 export * from "./peer/index.js";
 export * from "./protocol/index.js";

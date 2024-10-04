@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment } from "#environment/Environment.js";
+import { Environmental } from "#environment/Environmental.js";
 import { BasicSet } from "#util/Set.js";
 import { Channel, ChannelType } from "./Channel.js";
 
@@ -29,6 +31,12 @@ export namespace TransportInterface {
 export class TransportInterfaceSet<T extends TransportInterface = TransportInterface> extends BasicSet<T> {
     constructor(...initialInterfaces: T[]) {
         super(...initialInterfaces);
+    }
+
+    static [Environmental.create](env: Environment) {
+        const instance = new TransportInterfaceSet();
+        env.set(TransportInterfaceSet, instance);
+        return instance;
     }
 
     /**
