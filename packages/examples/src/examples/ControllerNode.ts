@@ -13,19 +13,12 @@
 
 import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
 import { NodeJsBle } from "@matter/nodejs-ble";
-import { NodeId } from "@matter/types";
+import { Ble, ClusterClientObj } from "@matter/protocol";
+import { ManualPairingCodeCodec, NodeId } from "@matter/types";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/types/clusters";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
-import { Ble } from "@project-chip/matter.js/ble";
-import {
-    BasicInformationCluster,
-    ClusterClientObj,
-    DescriptorCluster,
-    GeneralCommissioning,
-    OnOff,
-} from "@project-chip/matter.js/cluster";
+import { NodeStateInformation } from "@project-chip/matter.js/device";
 import { CommissioningOptions } from "@project-chip/matter.js/protocol";
-import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
-import { NodeStateInformation } from "../../../matter.js/dist/esm/device/PairedNode.js";
 
 const logger = Logger.get("Controller");
 
