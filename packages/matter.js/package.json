@@ -33,27 +33,27 @@
         "embed-examples": "embedme **/README.md"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#types": "@matter.js/types",
-        "#clusters": "@matter.js/types/clusters",
-        "#protocol": "@matter.js/protocol",
-        "#node": "@matter.js/node",
-        "#behaviors/*": "@matter.js/node/behaviors/*",
-        "#devices/*": "@matter.js/node/devices/*",
-        "#endpoints/*": "@matter.js/node/endpoints/*",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#types": "@matter/types",
+        "#clusters": "@matter/types/clusters",
+        "#protocol": "@matter/protocol",
+        "#node": "@matter/node",
+        "#behaviors/*": "@matter/node/behaviors/*",
+        "#devices/*": "@matter/node/devices/*",
+        "#endpoints/*": "@matter/node/endpoints/*",
         "#*": "./src/*"
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/types": "*",
-        "@matter.js/protocol": "*",
-        "@matter.js/node": "*"
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/types": "*",
+        "@matter/protocol": "*",
+        "@matter/node": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/tools": "*"
     },
     "files": [
         "dist/**/*",

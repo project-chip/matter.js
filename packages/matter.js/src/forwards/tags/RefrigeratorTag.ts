@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { RefrigeratorTag } from "@matter.js/node";
+export { RefrigeratorTag } from "@matter/node";

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FieldElement } from "@matter.js/model";
+import { FieldElement } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
 // Spec lists "Time of Day" fields in prose so we must define manually

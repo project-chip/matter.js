@@ -52,7 +52,7 @@ Additionally, these two examples are not directly configurable by CLI and mainly
 ### From NPM
 
 ```bash
-npm i -g @matter.js/examples
+npm i -g @matter/examples
 ```
 
 ### Use from Cloned Matter.js Repository
@@ -262,7 +262,7 @@ The following parameters are available and used to initially commission a device
 
 ## Development on basis of the examples
 
-The code of the examples is written so that you can use them as basis for your own scripts also outside of this library in your own package. If you import from `@matter.js/main` then matter.js loads platform extensions such as those for node.js automatically.  If you import directly from our other packages then you should add a dependency on `@matter.js/nodejs`. The examples use `@matter.js/main` imports to ease adoption.
+The code of the examples is written so that you can use them as basis for your own scripts also outside of this library in your own package. If you import from `@matter/main` then matter.js loads platform extensions such as those for node.js automatically.  If you import directly from our other packages then you should add a dependency on `@matter/nodejs`. The examples use `@matter/main` imports to ease adoption.
 
 ### Development Device/Composed-device/Bridge
 

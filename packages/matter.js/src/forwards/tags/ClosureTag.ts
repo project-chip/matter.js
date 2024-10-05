@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { ClosureTag } from "@matter.js/node";
+export { ClosureTag } from "@matter/node";

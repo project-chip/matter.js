@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { NumberTag } from "@matter.js/node";
+export { NumberTag } from "@matter/node";

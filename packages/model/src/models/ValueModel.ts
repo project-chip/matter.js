@@ -14,7 +14,7 @@ import { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.
-import { camelize } from "@matter.js/general";
+import { camelize } from "@matter/general";
 import { DefaultValue } from "../logic/DefaultValue.js";
 import { Children } from "./Children.js";
 import { type ClusterModel } from "./ClusterModel.js";

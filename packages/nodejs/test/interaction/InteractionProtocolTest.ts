@@ -51,7 +51,7 @@ import {
     VendorId,
     WildcardPathFlagsBitmap,
 } from "#types";
-import { Specification } from "@matter.js/model";
+import { Specification } from "@matter/model";
 import {
     AccessControlCluster,
     AccessLevel,

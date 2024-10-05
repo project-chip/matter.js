@@ -14,7 +14,7 @@ import {
     Observable,
 } from "#general";
 import type { ClusterType } from "#types";
-import { assertSecureSession } from "@matter.js/protocol";
+import { assertSecureSession } from "@matter/protocol";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";

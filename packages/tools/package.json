@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/tools",
+    "name": "@matter/tools",
     "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "type": "module",

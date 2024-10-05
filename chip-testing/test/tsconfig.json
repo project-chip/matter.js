@@ -4,7 +4,7 @@
         "types": [
             "mocha",
             "node",
-            "@matter.js/tools"
+            "@matter/tools"
         ]
     },
     "references": [

@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "@matter.js/general";
+import { MatterError } from "@matter/general";
 
 export function requireMinNodeVersion(minVersion: number) {
     const version = process.versions.node;

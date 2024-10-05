@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/examples",
+    "name": "@matter/examples",
     "version": "0.0.0-git",
     "description": "Matter.js examples and reference implementations",
     "keywords": [
@@ -50,8 +50,8 @@
         "matter-controller": "dist/esm/examples/ControllerNode.js"
     },
     "dependencies": {
-        "@matter.js/main": "*",
-        "@matter.js/tools": "*",
+        "@matter/main": "*",
+        "@matter/tools": "*",
         "esbuild": "^0.24.0"
     },
     "engines": {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, ImplementationError } from "@matter.js/general";
+import { camelize, ImplementationError } from "@matter/general";
 import { AnyElement, BaseElement, ElementTag } from "../index.js";
 import { Model } from "./Model.js";
 

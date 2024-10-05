@@ -12,9 +12,9 @@ import {
     PowerSource,
     ThreadNetworkDiagnostics,
 } from "#clusters";
-import { Logger, SupportedStorageTypes } from "@matter.js/general";
-import { InteractionClient, SupportedAttributeClient } from "@matter.js/protocol";
-import { EndpointNumber, GlobalAttributes, NodeId, TypeFromPartialBitSchema, TypeFromSchema } from "@matter.js/types";
+import { Logger, SupportedStorageTypes } from "@matter/general";
+import { InteractionClient, SupportedAttributeClient } from "@matter/protocol";
+import { EndpointNumber, GlobalAttributes, NodeId, TypeFromPartialBitSchema, TypeFromSchema } from "@matter/types";
 import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("DeviceInformation");

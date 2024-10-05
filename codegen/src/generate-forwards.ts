@@ -6,7 +6,7 @@
 
 import { generateMatterjsMainForwards } from "#forwards/matterjs-main.js";
 import { generateProjectChipMatterjsForwards } from "#forwards/project-chip-matterjs.js";
-import { Progress } from "@matter.js/tools";
+import { Progress } from "@matter/tools";
 
 /**
  * Generate a "forward" file for each sub-module re-export.
@@ -17,6 +17,6 @@ progress.startup(`Generating ${progress.emphasize("sub-module forwards")}`, fals
 
 await progress.run("@project-chip/matter.js", generateProjectChipMatterjsForwards);
 
-await progress.run("@matter.js/main", generateMatterjsMainForwards);
+await progress.run("@matter/main", generateMatterjsMainForwards);
 
 progress.shutdown();

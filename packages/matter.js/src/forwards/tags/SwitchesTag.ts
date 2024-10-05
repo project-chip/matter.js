@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { SwitchesTag } from "@matter.js/node";
+export { SwitchesTag } from "@matter/node";

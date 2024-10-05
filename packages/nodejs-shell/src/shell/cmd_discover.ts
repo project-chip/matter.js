@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
+import { Logger } from "@matter/general";
 import { CommissionableDeviceIdentifiers } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";

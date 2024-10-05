@@ -67,6 +67,6 @@ export {
     type WriteResponse,
 } from "#protocol";
 export { DEFAULT_MAX_PATHS_PER_INVOKE, INTERACTION_PROTOCOL_ID, StatusResponseError } from "#types";
-export * from "@matter.js/types/protocol";
+export * from "@matter/types/protocol";
 
 export const INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;

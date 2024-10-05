@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, InternalError, Logger, Time, createPromise } from "@matter.js/general";
-import { require } from "@matter.js/nodejs-ble/require";
+import { Channel, InternalError, Logger, Time, createPromise } from "@matter/general";
+import { require } from "@matter/nodejs-ble/require";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,

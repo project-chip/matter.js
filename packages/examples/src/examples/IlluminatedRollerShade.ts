@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ServerNode } from "@matter.js/main";
-import { MovementDirection, MovementType, WindowCoveringServer } from "@matter.js/main/behaviors/window-covering";
-import { OnOffLightDevice, OnOffLightRequirements } from "@matter.js/main/devices/on-off-light";
-import { WindowCoveringDevice } from "@matter.js/main/devices/window-covering";
+import { ServerNode } from "@matter/main";
+import { MovementDirection, MovementType, WindowCoveringServer } from "@matter/main/behaviors/window-covering";
+import { OnOffLightDevice, OnOffLightRequirements } from "@matter/main/devices/on-off-light";
+import { WindowCoveringDevice } from "@matter/main/devices/window-covering";
 
 /**
  * This example demonstrates implementation of a "composed" device comprising multiple sub-devices

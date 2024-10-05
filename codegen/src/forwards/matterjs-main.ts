@@ -5,7 +5,7 @@
  */
 
 import { TsFile } from "#util/TsFile.js";
-import { Graph } from "@matter.js/tools";
+import { Graph } from "@matter/tools";
 import { generateForwards } from "./generate-forwards.js";
 
 /**
@@ -14,29 +14,29 @@ import { generateForwards } from "./generate-forwards.js";
 export async function generateMatterjsMainForwards() {
     const graph = await Graph.load();
 
-    const pkg = graph.get("@matter.js/main").pkg;
+    const pkg = graph.get("@matter/main").pkg;
 
-    const types = graph.get("@matter.js/types");
-    const node = graph.get("@matter.js/node");
+    const types = graph.get("@matter/types");
+    const node = graph.get("@matter/node");
 
     // Cluster definitions
     const clusters = await types.pkg.glob("src/clusters/*.ts");
-    generateForwards("@matter.js/types/clusters", clusters, pkg.resolve(`src/forwards/clusters`), generator);
+    generateForwards("@matter/types/clusters", clusters, pkg.resolve(`src/forwards/clusters`), generator);
 
     // Behaviors
     const behaviors = await node.pkg.glob("src/behaviors/*");
-    generateForwards("@matter.js/node/behaviors", behaviors, pkg.resolve(`src/forwards/behaviors`), generator);
+    generateForwards("@matter/node/behaviors", behaviors, pkg.resolve(`src/forwards/behaviors`), generator);
 
     // Device endpoint types
     const devices = await node.pkg.glob("src/devices/*");
-    generateForwards("@matter.js/node/devices", devices, pkg.resolve(`src/forwards/devices`), generator);
+    generateForwards("@matter/node/devices", devices, pkg.resolve(`src/forwards/devices`), generator);
 
     // System endpoint types
     const endpoints = await node.pkg.glob("src/endpoints/*");
-    generateForwards("@matter.js/node/endpoints", endpoints, pkg.resolve(`src/forwards/endpoints`), generator);
+    generateForwards("@matter/node/endpoints", endpoints, pkg.resolve(`src/forwards/endpoints`), generator);
 
     // Ensure each proxy bootstraps the platform
     function generator(file: TsFile) {
-        file.addImport("@matter.js/main/platform");
+        file.addImport("@matter/main/platform");
     }
 }

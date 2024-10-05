@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
-import { require } from "@matter.js/nodejs-ble/require";
+import { Logger } from "@matter/general";
+import { require } from "@matter/nodejs-ble/require";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
 import type { Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./NodeJsBle.js";

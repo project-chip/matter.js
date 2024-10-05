@@ -12,11 +12,11 @@
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
-import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter.js/main";
-import { OnOffLightDevice } from "@matter.js/main/devices/on-off-light";
-import { OnOffPlugInUnitDevice } from "@matter.js/main/devices/on-off-plug-in-unit";
-import { logEndpoint } from "@matter.js/protocol";
-import { DeviceTypeId, VendorId } from "@matter.js/types";
+import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter/main";
+import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
+import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
+import { logEndpoint } from "@matter/protocol";
+import { DeviceTypeId, VendorId } from "@matter/types";
 import { execSync } from "child_process";
 
 /** Initialize configuration values */

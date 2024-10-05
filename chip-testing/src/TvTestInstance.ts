@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Storage } from "@matter.js/general";
-import { Endpoint, Environment, ServerNode, StorageService } from "@matter.js/main";
-import { AdministratorCommissioningServer } from "@matter.js/main/behaviors/administrator-commissioning";
-import { ApplicationBasicServer } from "@matter.js/main/behaviors/application-basic";
-import { WakeOnLanServer } from "@matter.js/main/behaviors/wake-on-lan";
-import { AdministratorCommissioning, ApplicationBasic, BasicInformation } from "@matter.js/main/clusters";
-import { DimmableLightDevice } from "@matter.js/main/devices/dimmable-light";
-import { DeviceTypeId, EndpointNumber, VendorId } from "@matter.js/main/types";
+import { Bytes, Storage } from "@matter/general";
+import { Endpoint, Environment, ServerNode, StorageService } from "@matter/main";
+import { AdministratorCommissioningServer } from "@matter/main/behaviors/administrator-commissioning";
+import { ApplicationBasicServer } from "@matter/main/behaviors/application-basic";
+import { WakeOnLanServer } from "@matter/main/behaviors/wake-on-lan";
+import { AdministratorCommissioning, ApplicationBasic, BasicInformation } from "@matter/main/clusters";
+import { DimmableLightDevice } from "@matter/main/devices/dimmable-light";
+import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
 import { log, TestInstance } from "./GenericTestApp.js";
 import { TestLowPowerServer } from "./cluster/TestLowPowerServer.js";
 

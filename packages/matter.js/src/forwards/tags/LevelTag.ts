@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { LevelTag } from "@matter.js/node";
+export { LevelTag } from "@matter/node";

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger } from "@matter.js/general";
+import { ImplementationError, Logger } from "@matter/general";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import {

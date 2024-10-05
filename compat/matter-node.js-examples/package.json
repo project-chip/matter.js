@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/matter-node.js-examples",
+    "name": "@matter/matter-node.js-examples",
     "version": "0.0.0-git",
     "description": "Matter.js examples and reference implementations",
     "keywords": [
@@ -47,7 +47,7 @@
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/tools": "*"
     },
     "engines": {
         "node": ">=18.0.0"

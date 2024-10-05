@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/codegen",
+    "name": "@matter/codegen",
     "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "private": true,
@@ -32,10 +32,10 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/tools": "*",
-        "@matter.js/intermediate-models": "*"
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/tools": "*",
+        "@matter/intermediate-models": "*"
     },
     "devDependencies": {
         "@types/jsdom": "^21.1.6",
@@ -44,10 +44,10 @@
         "yargs": "^17.7.2"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#tools": "@matter.js/tools",
-        "#intermediate-models": "@matter.js/intermediate-models",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#tools": "@matter/tools",
+        "#intermediate-models": "@matter/intermediate-models",
         "#*": "./src/*"
     },
     "module": "dist/esm/index.js",

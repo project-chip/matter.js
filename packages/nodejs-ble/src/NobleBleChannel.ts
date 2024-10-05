@@ -14,7 +14,7 @@ import {
     Time,
     TransportInterface,
     createPromise,
-} from "@matter.js/general";
+} from "@matter/general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,

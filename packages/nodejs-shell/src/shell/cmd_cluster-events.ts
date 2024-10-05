@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
-import { ClusterModel, EventModel, MatterModel } from "@matter.js/model";
+import { Logger } from "@matter/general";
+import { ClusterModel, EventModel, MatterModel } from "@matter/model";
 import { SupportedEventClient } from "@project-chip/matter.js/cluster";
 import { ClusterId } from "@project-chip/matter.js/datatype";
 import type { Argv } from "yargs";

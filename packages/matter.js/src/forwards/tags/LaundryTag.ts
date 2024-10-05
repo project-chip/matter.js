@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { LaundryTag } from "@matter.js/node";
+export { LaundryTag } from "@matter/node";

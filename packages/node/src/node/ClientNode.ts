@@ -7,7 +7,7 @@
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { ImplementationError, NotImplementedError } from "#general";
-import { FabricId, NodeId } from "@matter.js/types";
+import { FabricId, NodeId } from "@matter/types";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";

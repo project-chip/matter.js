@@ -3,10 +3,10 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger } from "@matter.js/general";
-import { GeneralDiagnosticsServer } from "@matter.js/main/behaviors/general-diagnostics";
-import { StatusResponseError } from "@matter.js/main/types";
-import { Status } from "@matter.js/types";
+import { Logger } from "@matter/general";
+import { GeneralDiagnosticsServer } from "@matter/main/behaviors/general-diagnostics";
+import { StatusResponseError } from "@matter/main/types";
+import { Status } from "@matter/types";
 
 const logger = Logger.get("TestGeneralDiagnosticServer");
 

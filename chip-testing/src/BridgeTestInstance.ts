@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage } from "@matter.js/general";
-import { Endpoint, Environment, ServerNode, StorageService } from "@matter.js/main";
-import { AdministratorCommissioningServer } from "@matter.js/main/behaviors/administrator-commissioning";
-import { BridgedDeviceBasicInformationServer } from "@matter.js/main/behaviors/bridged-device-basic-information";
-import { NetworkCommissioningServer } from "@matter.js/main/behaviors/network-commissioning";
-import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@matter.js/main/clusters";
-import { DimmableLightDevice } from "@matter.js/main/devices/dimmable-light";
-import { AggregatorEndpoint } from "@matter.js/main/endpoints/aggregator";
-import { DeviceTypeId, VendorId } from "@matter.js/main/types";
+import { Storage } from "@matter/general";
+import { Endpoint, Environment, ServerNode, StorageService } from "@matter/main";
+import { AdministratorCommissioningServer } from "@matter/main/behaviors/administrator-commissioning";
+import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors/bridged-device-basic-information";
+import { NetworkCommissioningServer } from "@matter/main/behaviors/network-commissioning";
+import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@matter/main/clusters";
+import { DimmableLightDevice } from "@matter/main/devices/dimmable-light";
+import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
+import { DeviceTypeId, VendorId } from "@matter/main/types";
 import { log, TestInstance } from "./GenericTestApp.js";
 
 export class BridgeTestInstance implements TestInstance {

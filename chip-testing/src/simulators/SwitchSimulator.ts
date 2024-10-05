@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, Timer } from "@matter.js/general";
-import { Endpoint } from "@matter.js/main";
-import { SwitchServer } from "@matter.js/main/behaviors/switch";
-import { Switch } from "@matter.js/main/clusters/switch";
-import { BitFlag, BitmapSchema } from "@matter.js/main/types";
+import { Time, Timer } from "@matter/general";
+import { Endpoint } from "@matter/main";
+import { SwitchServer } from "@matter/main/behaviors/switch";
+import { Switch } from "@matter/main/clusters/switch";
+import { BitFlag, BitmapSchema } from "@matter/main/types";
 import { SimulateLongPressCommand, SimulateMultiPressCommand } from "../NamedPipeCommands.js";
 
 const NEUTRAL_SWITCH_POSITION = 0;

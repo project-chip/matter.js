@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { PositionTag } from "@matter.js/node";
+export { PositionTag } from "@matter/node";

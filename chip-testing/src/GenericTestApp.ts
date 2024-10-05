@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClassExtends, Environment } from "@matter.js/main";
-import { ValidationError } from "@matter.js/main/types";
+import { ClassExtends, Environment } from "@matter/main";
+import { ValidationError } from "@matter/main/types";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
 

@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { CompassLocationTag } from "@matter.js/node";
+export { CompassLocationTag } from "@matter/node";
