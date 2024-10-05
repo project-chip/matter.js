@@ -234,6 +234,22 @@ export class Project {
         return this.#config;
     }
 
+    /**
+     * Copy files into dist for supported formats.
+     */
+    async copyToDist(source: string, dest: string) {
+        const formats = Array<string>();
+        if (this.pkg.supportsEsm) {
+            formats.push("esm");
+        }
+        if (this.pkg.supportsCjs) {
+            formats.push("cjs");
+        }
+        for (const format of formats) {
+            await cp(this.pkg.resolve(source), this.pkg.resolve(join("dist", format, dest)));
+        }
+    }
+
     async #build(format: Format, indir: string, outdir: string) {
         const entryPoints = await this.#targetsOf(indir, outdir, "ts", "js");
 

@@ -23,7 +23,7 @@ export async function syncAllTsconfigs(graph: Graph) {
 
     for (const node of graph.nodes) {
         await syncPackageTsconfigs(graph, node);
-        rootTsconfig.references.push({ path: workspace.relative(node.pkg.path) });
+        rootTsconfig.references.push({ path: workspace.relative(node.pkg.path).replace(/\\/g, "/") });
     }
 
     if (referencesChanged(originalReferences, rootTsconfig.references)) {
