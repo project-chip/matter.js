@@ -1,5 +1,5 @@
 {
-    "name": "@matter/matter-node.js-examples",
+    "name": "@project-chip/matter-node.js-examples",
     "version": "0.0.0-git",
     "description": "Matter.js examples and reference implementations",
     "keywords": [

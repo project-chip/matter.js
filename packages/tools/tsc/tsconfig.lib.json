@@ -5,6 +5,7 @@
         "emitDeclarationOnly": true,
         "sourceMap": true,
         "declarationMap": true,
+        "tsBuildInfoFile": "${configDir}/../build/lib.tsbuildinfo",
 
         // TODO - switch to targeting types directly and get rid of rewrite
         "outDir": "${configDir}/../build/types/src",

@@ -20,18 +20,6 @@ export async function createSolutionBuilderContext(
     const host = createSolutionBuilderHost();
     host.reportDiagnostic = diagnostic => (diagnostics ??= []).push(diagnostic);
 
-    const createProgram = host.createProgram;
-    host.createProgram = (...args) => {
-        const result = createProgram(...args);
-        return result;
-    };
-
-    const readDirectory = host.readDirectory;
-    host.readDirectory = (...args) => {
-        const result = readDirectory?.(...args);
-        return result ?? [];
-    };
-
     const builder = createSolutionBuilder(host, [workspace.resolve("tsconfig.json")], {});
 
     TypescriptContext.diagnose(diagnostics);
