@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { ConcentrationMeasurement } from "#clusters/concentration-measurement.js";
+import { ConcentrationMeasurement } from "./concentration-measurement.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 

@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { LevelControl } from "#clusters/level-control.js";
+import { LevelControl } from "./level-control.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
