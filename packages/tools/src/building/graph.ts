@@ -76,9 +76,36 @@ export class Graph {
     async build(builder: Builder, showSkipped = true) {
         const toBuild = new Set(this.nodes);
 
-        // We configure each build before building so that any generated files are in place before we initiate the build
-        for (const node of this.nodes) {
-            await builder.configure(node.project);
+        const needsConfig = this.nodes.find(node => node.pkg.hasConfig);
+        if (builder.hasClean || needsConfig) {
+            const progress = Package.workspace.start("Prebuild");
+
+            try {
+                // We clean all packages before engaging typescript because otherwise it seems to get confused
+                if (builder.hasClean) {
+                    await progress.run("Clean", async () => {
+                        builder.clearClean();
+                        for (const node of this.nodes) {
+                            await node.project.clean();
+                        }
+                    });
+                }
+
+                // We configure each build before building so that any generated files are in place before we initiate the build
+                for (const node of this.nodes) {
+                    if (!node.pkg.hasConfig) {
+                        continue;
+                    }
+                    await progress.run(`Configure ${progress.emphasize(node.pkg.name)}`, async () => {
+                        await builder.configure(node.project, progress);
+                    });
+                }
+            } catch (e) {
+                progress.shutdown();
+                console.error("Terminating due to prebuild error:", e);
+            }
+
+            progress.shutdown();
         }
 
         while (toBuild.size) {

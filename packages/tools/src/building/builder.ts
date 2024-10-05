@@ -41,22 +41,24 @@ export class Builder {
             options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
     }
 
-    public async configure(project: Project) {
+    get hasClean() {
+        return this.options.clean;
+    }
+
+    clearClean() {
+        delete this.options.clean;
+    }
+
+    hasTargets() {
+        return this.options.targets && this.options.targets.length > 0;
+    }
+
+    public async configure(project: Project, progress: Progress) {
         if (!project.pkg.hasConfig) {
             return;
         }
 
-        const progress = project.pkg.start("Configuring");
-
-        try {
-            await project.configure(progress);
-        } catch (e: any) {
-            progress.shutdown();
-            process.stderr.write(`${e.stack ?? e.message}\n\n`);
-            process.exit(1);
-        }
-
-        progress.shutdown();
+        await project.configure(progress);
     }
 
     public async build(project: Project) {
