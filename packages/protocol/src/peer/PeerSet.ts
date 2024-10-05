@@ -29,7 +29,7 @@ import {
 import { InteractionClient } from "#interaction/InteractionClient.js";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
-import { CaseClient, Session } from "#session/index.js";
+import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { AttributeId, ClusterId, EndpointNumber, EventNumber, SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
 import { ChannelManager, NoChannelError } from "../protocol/ChannelManager.js";
@@ -655,8 +655,8 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     }
 
     #handleResubmissionStarted(session: Session) {
-        if (!session.isSecure) {
-            // For insecure sessions from CASE/PASE session establishments we do not need to do anything
+        if (!session.isSecure || (session as SecureSession).fabric === undefined) {
+            // For insecure sessions from CASE/PASE or not yet fabric bound session establishments we do not need to do anything
             return;
         }
         const { associatedFabric: fabric, peerNodeId: nodeId } = session;
