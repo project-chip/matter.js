@@ -30,12 +30,12 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "dependencies": {
-        "@matter.js/general": "*",
-        "@matter.js/nodejs": "*",
+        "@matter/general": "*",
+        "@matter/nodejs": "*",
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/tools": "*"
     },
     "engines": {
         "node": ">=18.0.0"

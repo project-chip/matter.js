@@ -33,17 +33,17 @@ import {
     VendorId,
     logLevelFromString,
     singleton,
-} from "@matter.js/main";
-import { NetworkCommissioningServer } from "@matter.js/main/behaviors/network-commissioning";
-import { OnOffServer } from "@matter.js/main/behaviors/on-off";
-import { GeneralDiagnostics, NetworkCommissioning } from "@matter.js/main/clusters";
-import { OnOffLightDevice } from "@matter.js/main/devices/on-off-light";
-import { OnOffPlugInUnitDevice } from "@matter.js/main/devices/on-off-plug-in-unit";
-import { RootRequirements } from "@matter.js/main/endpoints/root";
-import { Ble, FabricAction, logEndpoint } from "@matter.js/main/protocol";
-import { QrCode } from "@matter.js/main/types";
-import { createFileLogger } from "@matter.js/nodejs";
-import { NodeJsBle } from "@matter.js/nodejs-ble";
+} from "@matter/main";
+import { NetworkCommissioningServer } from "@matter/main/behaviors/network-commissioning";
+import { OnOffServer } from "@matter/main/behaviors/on-off";
+import { GeneralDiagnostics, NetworkCommissioning } from "@matter/main/clusters";
+import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
+import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
+import { RootRequirements } from "@matter/main/endpoints/root";
+import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
+import { QrCode } from "@matter/main/types";
+import { createFileLogger } from "@matter/nodejs";
+import { NodeJsBle } from "@matter/nodejs-ble";
 import { execSync } from "child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
 import { DummyWifiNetworkCommissioningServer } from "./cluster/DummyWifiNetworkCommissioningServer.js";

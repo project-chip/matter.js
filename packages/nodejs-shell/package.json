@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/shell.js",
+    "name": "@matter/shell.js",
     "version": "0.0.0-git",
     "description": "Shell app for Matter controller",
     "keywords": [
@@ -32,15 +32,15 @@
         "matter-shell": "dist/cjs/app.js"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#types": "@matter.js/types"
+        "#general": "@matter/general",
+        "#types": "@matter/types"
     },
     "dependencies": {
-        "@matter.js/nodejs-ble": "*",
-        "@matter.js/nodejs": "*",
-        "@matter.js/general": "*",
+        "@matter/nodejs-ble": "*",
+        "@matter/nodejs": "*",
+        "@matter/general": "*",
+        "@matter/tools": "*",
         "@project-chip/matter.js": "*",
-        "@matter.js/tools": "*",
         "yargs": "^17.7.2"
     },
     "engines": {

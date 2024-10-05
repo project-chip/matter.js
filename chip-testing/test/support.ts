@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Storage } from "@matter.js/main";
+import { InternalError, Storage } from "@matter/main";
 import { TestInstance } from "../src/GenericTestApp.js";
 import { StorageBackendSyncJsonFile } from "../src/storage/StorageBackendSyncJsonFile.js";
 

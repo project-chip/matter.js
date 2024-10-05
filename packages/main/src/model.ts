@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "@matter.js/main/platform";
-export * from "@matter.js/model";
+import "@matter/main/platform";
+export * from "@matter/model";

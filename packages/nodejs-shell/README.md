@@ -9,7 +9,7 @@ This project provides a light-weight node.js implementation of a Matter shell ap
 If you want to install just the shell app then you can do so by running:
 
 ```
-npm install @matter.js/nodejs-shell
+npm install @matter/nodejs-shell
 ```
 
 ## Run

@@ -14,7 +14,7 @@ import {
     EventElement as Event,
     FieldElement as Field,
     MatterElement as Matter,
-} from "@matter.js/model";
+} from "@matter/model";
 
 export const ChipMatter = Matter({
     name: "ChipMatter",

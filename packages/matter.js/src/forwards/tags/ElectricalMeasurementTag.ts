@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { ElectricalMeasurementTag } from "@matter.js/node";
+export { ElectricalMeasurementTag } from "@matter/node";

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Storage } from "@matter.js/general";
-import { Endpoint, Environment, NumberTag, ServerNode, StorageService } from "@matter.js/main";
+import { Bytes, Storage } from "@matter/general";
+import { Endpoint, Environment, NumberTag, ServerNode, StorageService } from "@matter/main";
 import {
     AdministratorCommissioningServer,
     AirQualityServer,
@@ -40,7 +40,7 @@ import {
     TotalVolatileOrganicCompoundsConcentrationMeasurementServer,
     UnitLocalizationServer,
     UserLabelServer,
-} from "@matter.js/main/behaviors";
+} from "@matter/main/behaviors";
 import {
     AdministratorCommissioning,
     AirQuality,
@@ -60,9 +60,9 @@ import {
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
     WindowCovering,
-} from "@matter.js/main/clusters";
-import { OnOffLightDevice } from "@matter.js/main/devices";
-import { DeviceTypeId, EndpointNumber, VendorId } from "@matter.js/main/types";
+} from "@matter/main/clusters";
+import { OnOffLightDevice } from "@matter/main/devices";
+import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";

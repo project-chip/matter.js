@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/react-native",
+    "name": "@matter/react-native",
     "version": "0.0.0-git",
     "description": "Experimental React Native support for matter.js",
     "keywords": [
@@ -29,16 +29,16 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#types": "@matter.js/types",
-        "#protocol": "@matter.js/protocol",
-        "#nodejs": "@matter.js/nodejs",
+        "#general": "@matter/general",
+        "#types": "@matter/types",
+        "#protocol": "@matter/protocol",
+        "#nodejs": "@matter/nodejs",
         "#*": "./src/*"
     },
     "dependencies": {
-        "@matter.js/nodejs": "*",
-        "@matter.js/general": "*",
-        "@matter.js/protocol": "*",
+        "@matter/nodejs": "*",
+        "@matter/general": "*",
+        "@matter/protocol": "*",
         "@react-native-async-storage/async-storage": "^2.0.0",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
@@ -50,7 +50,7 @@
         "react-native-udp": "^4.1.7"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/tools": "*"
     },
     "overrides": {
         "brorand": "npm:@matter.js/brorand@1.1.0"

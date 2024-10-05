@@ -6,7 +6,7 @@ Matter BLE support using bleno for Peripheral/Device side and noble (not impleme
 
 > This package supports all Node.js LTS versions starting with 18.x
 
-This package contains the specific Platform implementations for Bluetooth LE with Node.js. It is designed to be used in addition to the @matter.js/nodejs package to enable BLE specific functionality.
+This package contains the specific Platform implementations for Bluetooth LE with Node.js. It is designed to be used in addition to the @matter/nodejs package to enable BLE specific functionality.
 
 ## Prerequisites and Limitations
 
@@ -27,8 +27,8 @@ Add this package to your package dependencies and make sure it is exactly the sa
 
 In your code you register the BLE instance by using:
 ```javascript
-import { BleNode } from "@matter.js/nodejs-ble";
-import { Ble } from "@matter.js/protocol/ble";
+import { BleNode } from "@matter/nodejs-ble";
+import { Ble } from "@matter/protocol/ble";
 
 Ble.get = singleton(
     () =>

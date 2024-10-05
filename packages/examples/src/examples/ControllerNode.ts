@@ -11,9 +11,9 @@
  * because you need to adjust the code in any way depending on your use case.
  */
 
-import { Environment, Logger, singleton, StorageService, Time } from "@matter.js/main";
-import { NodeJsBle } from "@matter.js/nodejs-ble";
-import { NodeId } from "@matter.js/types";
+import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
+import { NodeJsBle } from "@matter/nodejs-ble";
+import { NodeId } from "@matter/types";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
 import { Ble } from "@project-chip/matter.js/ble";
 import {

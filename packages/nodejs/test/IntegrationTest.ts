@@ -16,8 +16,8 @@ import {
     StorageBackendMemory,
     StorageManager,
     Time,
-} from "@matter.js/general";
-import { Specification } from "@matter.js/model";
+} from "@matter/general";
+import { Specification } from "@matter/model";
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {

@@ -139,10 +139,10 @@ On Non-Windows platforms and having Python 3.12+ installed please also make sure
 
 ### To use matter.js in your own project
 
-To use matter.js you import `@matter.js/main` as dependency in your project. This package re-exports functionality from other packages, so it is not necessary to have multiple dependencies. If you need BLE support you can use `@matter.js/nodejs-ble` as additional dependency.
+To use matter.js you import `@matter/main` as dependency in your project. This package re-exports functionality from other packages, so it is not necessary to have multiple dependencies. If you need BLE support you can use `@matter/nodejs-ble` as additional dependency.
 
 ```bash
-npm install @matter.js/main --save
+npm install @matter/main --save
 ```
 
 If your project is not based on Node.js you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details.
@@ -152,10 +152,10 @@ If your project is not based on Node.js you need to implement the platform speci
 if you just want to try out the examples on Node.js you can use the following commands:
 
 ```bash
-npm install @matter.js/examples
+npm install @matter/examples
 ```
 
-Please refer to the Examples readme on how to use the examples: [@matter.js/examples](packages/examples/README.md)
+Please refer to the Examples readme on how to use the examples: [@matter/examples](packages/examples/README.md)
 
 ## Code style
 

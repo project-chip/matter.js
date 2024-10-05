@@ -1,5 +1,5 @@
-import { ServerNode } from "@matter.js/main";
-import { OnOffLightDevice } from "@matter.js/main/devices/on-off-light";
+import { ServerNode } from "@matter/main";
+import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 
 const node = await ServerNode.create();
 

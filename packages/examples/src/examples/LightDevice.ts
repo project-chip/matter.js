@@ -7,8 +7,8 @@
 
 // This demonstrates bringing a "light" device online with matter.js.
 
-import { ServerNode } from "@matter.js/main";
-import { OnOffLightDevice, OnOffLightRequirements } from "@matter.js/main/devices/on-off-light";
+import { ServerNode } from "@matter/main";
+import { OnOffLightDevice, OnOffLightRequirements } from "@matter/main/devices/on-off-light";
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.

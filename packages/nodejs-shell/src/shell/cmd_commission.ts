@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterError } from "@matter.js/general";
+import { Logger, MatterError } from "@matter/general";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
 import { NodeId } from "@project-chip/matter.js/datatype";

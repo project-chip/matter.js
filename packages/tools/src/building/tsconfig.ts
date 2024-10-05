@@ -37,7 +37,7 @@ function referencesChanged(originalReferences: unknown, newReferences: unknown) 
 
 export async function syncPackageTsconfigs(graph: Graph, node: Graph.Node) {
     await syncSubproject(node, "src");
-    await syncSubproject(node, "test", node.pkg.resolve("src"), graph.get("@matter.js/tools").pkg.resolve("src"));
+    await syncSubproject(node, "test", node.pkg.resolve("src"), graph.get("@matter/tools").pkg.resolve("src"));
 }
 
 async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: string[]) {

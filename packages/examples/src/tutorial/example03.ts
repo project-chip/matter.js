@@ -1,5 +1,5 @@
-import { ServerNode } from "@matter.js/main";
-import { OnOffLightDevice, OnOffLightRequirements } from "@matter.js/main/devices/on-off-light";
+import { ServerNode } from "@matter/main";
+import { OnOffLightDevice, OnOffLightRequirements } from "@matter/main/devices/on-off-light";
 
 class MyOnOffServer extends OnOffLightRequirements.OnOffServer {
     override on() {

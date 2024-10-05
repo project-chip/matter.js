@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { LocationTag } from "@matter.js/node";
+export { LocationTag } from "@matter/node";

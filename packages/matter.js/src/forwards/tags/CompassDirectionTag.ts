@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { CompassDirectionTag } from "@matter.js/node";
+export { CompassDirectionTag } from "@matter/node";

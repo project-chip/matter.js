@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/types",
+    "name": "@matter/types",
     "version": "0.0.0-git",
     "description": "Definitions for Matter application",
     "keywords": [
@@ -34,11 +34,11 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*",
-        "@matter.js/model": "*"
+        "@matter/general": "*",
+        "@matter/model": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/tools": "*"
     },
     "files": [
         "dist/**/*",
@@ -82,8 +82,8 @@
         }
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
         "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",

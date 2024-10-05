@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MaybePromise } from "@matter.js/general";
+import { MaybePromise } from "@matter/general";
 import { OperationalPeer } from "./OperationalPeer.js";
 import { PeerAddress } from "./PeerAddress.js";
 import type { PeerSet } from "./PeerSet.js";

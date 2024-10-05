@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { RoomAirConditionerTag } from "@matter.js/node";
+export { RoomAirConditionerTag } from "@matter/node";

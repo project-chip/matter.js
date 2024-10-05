@@ -6,4 +6,4 @@
 
 // This file is loaded on Node.js via export condition in package.json
 
-import "@matter.js/nodejs";
+import "@matter/nodejs";

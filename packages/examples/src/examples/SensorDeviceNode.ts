@@ -11,11 +11,11 @@
  * This example is CJS conform and do not use top level await's.
  */
 
-import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter.js/main";
-import { HumiditySensorDevice } from "@matter.js/main/devices/humidity-sensor";
-import { TemperatureSensorDevice } from "@matter.js/main/devices/temperature-sensor";
-import { logEndpoint } from "@matter.js/main/protocol";
-import { DeviceTypeId, VendorId } from "@matter.js/main/types";
+import { Endpoint, EndpointServer, Environment, ServerNode, StorageService, Time } from "@matter/main";
+import { HumiditySensorDevice } from "@matter/main/devices/humidity-sensor";
+import { TemperatureSensorDevice } from "@matter/main/devices/temperature-sensor";
+import { logEndpoint } from "@matter/main/protocol";
+import { DeviceTypeId, VendorId } from "@matter/main/types";
 import { execSync } from "child_process";
 
 async function main() {

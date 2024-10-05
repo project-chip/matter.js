@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "@matter.js/general";
+import { MatterError } from "@matter/general";
 import { createWriteStream, readFileSync } from "fs";
 import readline from "node:readline";
 import yargs from "yargs/yargs";

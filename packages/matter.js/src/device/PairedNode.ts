@@ -49,7 +49,7 @@ import {
     StatusResponseError,
     getClusterById,
 } from "#types";
-import { AcceptedCommandList, AttributeList, ClusterRevision, FeatureMap } from "@matter.js/model";
+import { AcceptedCommandList, AttributeList, ClusterRevision, FeatureMap } from "@matter/model";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { AttributeInitialValues, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
 import { CommissioningController } from "../CommissioningController.js";

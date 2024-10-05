@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { DirectionTag } from "@matter.js/node";
+export { DirectionTag } from "@matter/node";

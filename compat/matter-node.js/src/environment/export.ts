@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { NodeJsActionTracer, NodeJsEnvironment, ProcessManager } from "@matter.js/nodejs";
+export { NodeJsActionTracer, NodeJsEnvironment, ProcessManager } from "@matter/nodejs";

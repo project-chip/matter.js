@@ -11,47 +11,47 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
--   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter.js" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
+-   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
 
 -   Cross-module changes
     -   Info: Matter.js now uses aliases via `package.json` "imports" field.  This is an internal change that simplifies imports but should not affect consumers
     -   Info: Previously we used a mix of snake-case and CamelCase for sub-package exports.  We have now standardized on snake case.  Compatibility packages (see below) continue to support the original module names
 
--   @matter.js/general:
-    -   Info: General functionality that is not Matter specific previously resided in `@project-chip/matter.js`.  It now lives in `@matter.js/general`
+-   @matter/general:
+    -   Info: General functionality that is not Matter specific previously resided in `@project-chip/matter.js`.  It now lives in `@matter/general`
     -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
     -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
     -   Enhancement: Network transports can now self select which the protocols and addresses they support
     -   Feature: A new `ObserverGroup` class simplifies binding management for multiple observables
 
--   @matter.js/main:
+-   @matter/main:
     -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports packages above as appropriate
 
--   @matter.js/model:
-    -   Info: The Matter object model previously exported as `@project-chip/matter.js/model` now resides in `@matter.js/model`
+-   @matter/model:
+    -   Info: The Matter object model previously exported as `@project-chip/matter.js/model` now resides in `@matter/model`
     -   Info: Individual elements exported by name are now models (fully functional classes) rather than elements (raw JSON data).  This should be backwards compatible but makes them more useful operationally
 
--   @matter.js/node:
-    -   Info: The high-level APIs previously defined in `@project-chip/matter.js` now reside in `@matter.js/node`.  The Node API includes node management, behavior definitions and endpoint definitions
-    -   Info: We export behaviors under `@matter.js/node/behaviors` or individually (e.g. `@matter.js/node/behaviors/on-off`)
-    -   Info: We export device type definitions for system endpoints and devices under `@matter.js/node/endpoints` and `@matter.js/node/devices` respectively.  You may also import these via index or individually
+-   @matter/node:
+    -   Info: The high-level APIs previously defined in `@project-chip/matter.js` now reside in `@matter/node`.  The Node API includes node management, behavior definitions and endpoint definitions
+    -   Info: We export behaviors under `@matter/node/behaviors` or individually (e.g. `@matter/node/behaviors/on-off`)
+    -   Info: We export device type definitions for system endpoints and devices under `@matter/node/endpoints` and `@matter/node/devices` respectively.  You may also import these via index or individually
 
--   @matter.js/nodejs:
+-   @matter/nodejs:
     -   Info: Node.js specialization is moved here.  `@project-chip/matter-node.js` remains as a compatibility import.
     -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.
 
--   @matter.js/nodejs-ble
+-   @matter/nodejs-ble
     -   Info: The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
     -   Info: The noble and bleno dependencies got updated to also support Ubuntu 24
 
--   @matter.js/nodejs-shell:
+-   @matter/nodejs-shell:
     - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
     - Enhancement: Added option to specify if attributes are loaded from remote or locally
     - Enhancement: The shell now saves a 100 history of commands and restores this on startup
     - Enhancement: Add a "nodes status" command to show the status of all nodes
 
--   @matter.js/protocol:
-    -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
+-   @matter/protocol:
+    -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
     -   BREAKING: Various types that were previously specialized with template parameters are no longer generic.  This should be largely transparent to API consumers.  Compatibility exports still support the generic parameters in some, but not all, cases.
     -   BREAKING: We have done some reorganization of lower-level implementation classes to improve implementation flexibility.  You probably do not use these classes directly so will be unaffected.
     -   Feature: New functional components including `DeviceCommissioner`, `DeviceAdvertiser`, `NodeFinder` and `Subscription` now perform functions that previously were in the (deprecated) MatterDevice class
@@ -62,8 +62,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: When subscribing with keepSubscriptions === false the existing subscriptions need to be removed earlier in the flow
     -   Fix: Clear resumption records also when fabric gets updated or deleted
 
--   @matter.js/types:
-    -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
+-   @matter/types:
+    -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
 
 -   Matter-Core functionality:

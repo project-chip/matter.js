@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@matter.js/general";
-import { ValueModel } from "@matter.js/model";
+import { Bytes } from "@matter/general";
+import { ValueModel } from "@matter/model";
 import { ValidationDatatypeMismatchError } from "@project-chip/matter.js/common";
 import { camelize } from "./String";
 

@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "@matter.js/main/platform";
-export * from "@matter.js/types/clusters";
+import "@matter/main/platform";
+export * from "@matter/types/clusters";

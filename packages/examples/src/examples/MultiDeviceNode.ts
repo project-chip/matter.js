@@ -21,10 +21,10 @@ import {
     StorageService,
     Time,
     VendorId,
-} from "@matter.js/main";
-import { OnOffLightDevice } from "@matter.js/main/devices/on-off-light";
-import { OnOffPlugInUnitDevice } from "@matter.js/main/devices/on-off-plug-in-unit";
-import { logEndpoint } from "@matter.js/main/protocol";
+} from "@matter/main";
+import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
+import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
+import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "child_process";
 
 const devices = await getConfiguration();

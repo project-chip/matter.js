@@ -31,7 +31,7 @@ import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
-import { AttributeId, ClusterId, EndpointNumber, EventNumber, SECURE_CHANNEL_PROTOCOL_ID } from "@matter.js/types";
+import { AttributeId, ClusterId, EndpointNumber, EventNumber, SECURE_CHANNEL_PROTOCOL_ID } from "@matter/types";
 import { ChannelManager, NoChannelError } from "../protocol/ChannelManager.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "../protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";

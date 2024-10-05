@@ -6,4 +6,4 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export { PowerSourceTag } from "@matter.js/node";
+export { PowerSourceTag } from "@matter/node";

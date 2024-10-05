@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FeatureMap } from "@matter.js/model";
+import { FeatureMap } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({

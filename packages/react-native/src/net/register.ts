@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Network, NoProviderError, singleton } from "@matter.js/general";
+import { Network, NoProviderError, singleton } from "@matter/general";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
 // Check if Network singleton is already registered and auto register if not

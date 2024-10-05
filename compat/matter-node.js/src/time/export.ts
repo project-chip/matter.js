@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { Time as TimeNode } from "@matter.js/general";
+export { Time as TimeNode } from "@matter/general";
