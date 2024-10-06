@@ -66,6 +66,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
 
+-   @matter/examples:
+    -   Enhancement: Adds a new example to show a PlugIn-Socket with Energy and Power measurement 
+
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 
