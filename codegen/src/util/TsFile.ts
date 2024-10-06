@@ -733,7 +733,7 @@ export class TsFile extends Block {
             // alias of "#submodule"
             return filename.replace(/^@matter\/(?:[^/]+\/)/, "#");
         } else {
-            throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
+            throw new InternalError(`Absolute import of ${filename} must start with "@matter"`);
         }
 
         if (filename.match(/\.[a-z]+\.[a-z]+$/)) {

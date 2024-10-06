@@ -71,7 +71,7 @@ export async function main(argv = process.argv) {
             {
                 const graph = await Graph.load();
                 await syncAllTsconfigs(graph);
-                await graph.build(builder());
+                await graph.build(builder(graph));
             }
             break;
 

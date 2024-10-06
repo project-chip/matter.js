@@ -17,7 +17,7 @@ import { Package } from "../../util/package.js";
 import { BuildError } from "../error.js";
 
 export interface TypescriptContext {
-    build(pkg: Package, path: string, emit?: boolean): Promise<void>;
+    build(pkg: Package, path: string, refreshCallback: () => void, emit?: boolean): Promise<void>;
 }
 
 export namespace TypescriptContext {

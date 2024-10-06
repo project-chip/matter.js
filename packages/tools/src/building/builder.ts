@@ -37,6 +37,7 @@ export class Builder {
     graph?: Graph;
 
     constructor(private options: Options = {}) {
+        this.graph = options.graph;
         this.unconditional =
             options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
     }
@@ -112,12 +113,10 @@ export class Builder {
                 // Obtain or initialize typescript solution builder
                 let context = this.tsContext;
                 if (context === undefined) {
-                    context = this.tsContext = await createTypescriptContext(
-                        project.pkg.workspace,
-                        graph,
-                        progress.refresh.bind(progress),
-                    );
+                    context = this.tsContext = await createTypescriptContext(project.pkg.workspace, graph);
                 }
+
+                const refreshCallback = progress.refresh.bind(progress);
 
                 if (project.pkg.isLibrary) {
                     const apiSha = createHash("sha1");
@@ -131,22 +130,20 @@ export class Builder {
                         }
                     }
 
-                    await progress.run(`Generate ${progress.emphasize("type declarations")}`, () =>
-                        context.build(project.pkg, "src"),
-                    );
-                    await progress.run(`Install ${progress.emphasize("type declarations")}`, () =>
-                        project.installDeclarations(apiSha),
-                    );
+                    await progress.run(`Generate ${progress.emphasize("type declarations")}`, async () => {
+                        await context.build(project.pkg, "src", refreshCallback);
+                        await project.hashDeclarations(apiSha);
+                    });
 
                     info.apiSha = apiSha.digest("hex");
                 } else {
                     await progress.run(`Validate ${progress.emphasize("types")}`, () =>
-                        context.build(project.pkg, "src", false),
+                        context.build(project.pkg, "src", refreshCallback, false),
                     );
                 }
                 if (project.pkg.hasTests) {
                     await progress.run(`Validate ${progress.emphasize("test types")}`, () =>
-                        context.build(project.pkg, "test"),
+                        context.build(project.pkg, "test", refreshCallback),
                     );
                 }
             } catch (e) {
@@ -180,8 +177,9 @@ export class Builder {
 
     async #transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
         const fmt = format.toUpperCase();
-        await progress.run(`Transpile ${progress.emphasize("library")} to ${colors.bold(fmt)}`, () =>
-            project.buildSource(format),
+        await progress.run(
+            `Transpile ${progress.emphasize(project.pkg.isLibrary ? "library" : "app")} to ${colors.bold(fmt)}`,
+            () => project.buildSource(format),
         );
         if (project.pkg.hasTests) {
             await progress.run(`Transpile ${progress.emphasize("tests")} to ${colors.bold(fmt)}`, () =>

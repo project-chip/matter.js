@@ -71,8 +71,8 @@ export class Graph {
         return await this.#createGraph([...nodes]);
     }
 
-    // TODO - parallelization will be trivial except need to update Progress
-    // to support display of multiple simultaneous tasks
+    // TODO - parallelization will be trivial except need to update Progress to support display of multiple simultaneous
+    // tasks
     async build(builder: Builder, showSkipped = true) {
         const toBuild = new Set(this.nodes);
 
@@ -87,6 +87,7 @@ export class Graph {
                         builder.clearClean();
                         for (const node of this.nodes) {
                             await node.project.clean();
+                            node.info = {};
                         }
                     });
                 }
@@ -123,7 +124,6 @@ export class Graph {
             if (!node) {
                 throw new Error("Internal logic error: No unbuilt project has fully built dependencies");
             }
-
             if (node.isDirty || builder.unconditional) {
                 await builder.build(node.project);
                 node.info.timestamp = new Date().toISOString();
@@ -212,26 +212,6 @@ export class Graph {
                         )
                     );
                 },
-
-                // This version of dirty should only be used after building all dependencies.  If this project is
-                // unmodified and the SHA of the type definitions of the target project is also unmodified then we do
-                // not need to build
-                get prebuildDirty() {
-                    if (this.modifyTime > this.buildTime) {
-                        return true;
-                    }
-                    const depShas = this.info.dependencyApiShas;
-                    if (typeof depShas !== "object") {
-                        return this.isDirty;
-                    }
-                    for (const dep of this.dependencies) {
-                        const depSha = depShas[dep.pkg.name];
-                        if (depSha === undefined || depSha !== dep.info.apiSha) {
-                            return true;
-                        }
-                    }
-                    return false;
-                },
             };
         }
 
@@ -259,7 +239,6 @@ export namespace Graph {
         info: BuildInformation;
         modifyTime: number;
         isDirty: boolean;
-        prebuildDirty: boolean;
     }
 }
 
@@ -274,5 +253,5 @@ function formatTime(time: number | string) {
 }
 
 function formatDep(node: Graph.Node) {
-    return node.pkg.name.replace(/^@(?:project-chip|matter\.js)\//, "");
+    return node.pkg.name.replace(/^@matter\//, "");
 }

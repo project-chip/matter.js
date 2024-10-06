@@ -11,11 +11,8 @@ import { InternalBuildError } from "../error.js";
 import { Graph } from "../graph.js";
 import { TypescriptContext } from "./context.js";
 
-export function createIncrementalCompilerContext(
-    _workspace: Package,
-    _graph: Graph | undefined,
-    refreshCallback?: () => void,
-): TypescriptContext {
+// TODO - if we ever move back to this we need to copy type files which was previously handled separately
+export function createIncrementalCompilerContext(_workspace: Package, _graph: Graph | undefined): TypescriptContext {
     const baseOptions = {
         ...TypescriptContext.compilerOptionsFor(Package.tools.resolve("tsc/tsconfig.base.json")),
 
@@ -26,7 +23,7 @@ export function createIncrementalCompilerContext(
 
     return { build };
 
-    async function build(pkg: Package, path: string, emit?: boolean) {
+    async function build(pkg: Package, path: string, refreshCallback: () => void, emit?: boolean) {
         let options;
         if (emit) {
             options = {

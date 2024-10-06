@@ -56,11 +56,11 @@ async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: stri
         refs = [];
     }
 
-    const deps = node.dependencies.map(dep => dep.pkg.resolve("src")).filter(p => !p.match(/packages\/tools/));
+    const deps = node.dependencies.map(dep => dep.pkg.resolve("src")).filter(p => !p.match(/packages[\\/]tools/));
 
     const desired = [...new Set([...deps, ...extraRefs])];
 
-    const newReferences = desired.map(ref => ({ path: relative(path, ref) }));
+    const newReferences = desired.map(ref => ({ path: relative(path, ref).replace(/\\/g, "/") }));
 
     if (referencesChanged(tsconfig.references, newReferences)) {
         tsconfig.references = newReferences;

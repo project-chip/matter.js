@@ -1,5 +1,5 @@
 {
-    "name": "@matter/shell.js",
+    "name": "@matter/nodejs-shell",
     "version": "0.0.0-git",
     "description": "Shell app for Matter controller",
     "keywords": [
