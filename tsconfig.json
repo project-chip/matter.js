@@ -20,6 +20,9 @@
             "path": "packages/node"
         },
         {
+            "path": "packages/matter.js"
+        },
+        {
             "path": "packages/nodejs"
         },
         {
@@ -36,9 +39,6 @@
         },
         {
             "path": "packages/react-native"
-        },
-        {
-            "path": "packages/matter.js"
         },
         {
             "path": "models"

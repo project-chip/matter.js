@@ -29,6 +29,7 @@
         "build": "matter-build",
         "build-clean": "matter-build --clean",
         "matter-light": "matter-run src/examples/LightDevice.ts",
+        "matter-measuredsocket": "matter-run src/examples/MeasuredSocketDevice.ts",
         "matter-sensor": "matter-run src/examples/SensorDeviceNode.ts",
         "matter-excelsior1000": "matter-run src/examples/IlluminatedRollerShade.ts",
         "matter-device": "matter-run src/examples/DeviceNode.ts",
@@ -41,6 +42,7 @@
     },
     "bin": {
         "matter-light": "dist/esm/examples/LightDevice.ts",
+        "matter-measuredsocket": "dist/esm/examples/MeasuredSocketDevice.ts",
         "matter-excelsior1000": "dist/esm/examples/IlluminatedRollerShade.ts",
         "matter-sensor": "dist/esm/examples/SensorDeviceNode.js",
         "matter-device": "dist/esm/examples/DeviceNode.js",
@@ -51,8 +53,12 @@
     },
     "dependencies": {
         "@matter/main": "*",
+        "@matter/nodejs": "*",
         "@matter/tools": "*",
         "esbuild": "^0.24.0"
+    },
+    "optionalDependencies": {
+        "@matter/nodejs-ble": "*"
     },
     "engines": {
         "node": ">=18.0.0"

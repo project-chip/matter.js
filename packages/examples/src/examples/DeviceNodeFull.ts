@@ -34,12 +34,10 @@ import {
     logLevelFromString,
     singleton,
 } from "@matter/main";
-import { NetworkCommissioningServer } from "@matter/main/behaviors/network-commissioning";
-import { OnOffServer } from "@matter/main/behaviors/on-off";
+import { NetworkCommissioningServer, OnOffServer } from "@matter/main/behaviors";
 import { GeneralDiagnostics, NetworkCommissioning } from "@matter/main/clusters";
-import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
-import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
-import { RootRequirements } from "@matter/main/endpoints/root";
+import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
+import { RootRequirements } from "@matter/main/endpoints";
 import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
 import { QrCode } from "@matter/main/types";
 import { createFileLogger } from "@matter/nodejs";

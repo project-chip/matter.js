@@ -8,6 +8,12 @@
     "references": [
         {
             "path": "../../main/src"
+        },
+        {
+            "path": "../../nodejs/src"
+        },
+        {
+            "path": "../../nodejs-ble/src"
         }
     ]
 }

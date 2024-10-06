@@ -43,6 +43,7 @@ Additionally, all command line parameters now require to start with two dashes!
 Additionally, these two examples are not directly configurable by CLI and mainly show how to implement different combinations of devices:
 * **IlluminatedRollerShade**: This example implements the Window Covering cluster server logic and also overrides a OnOff cluster server to build a composed devices with a window covering nd a light.
 * **LightDevice**: This example shows how to run a Light device which is not configurable via CLI and only logs changes, so it is the most minimalistic example. It shows how to enhance the OnOff cluster server with own logic.
+* **MeasuredSocketDevice**: This example shows how to run a simple socket device that also includes a power and energy measurement. It is not configurable via CLI and only sets random energy and power values when turned on.
 
 ## Controller example
 * **ControllerNode**: This example shows basically how a controller could be implemented by showing pairing and connections to a paired device. When there is an OnOff Endpoint with ID 1 then this is controlled and toggled.

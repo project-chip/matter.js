@@ -66,9 +66,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter/types`.  This includes most TLV structures, cluster definitions, and various support types
     -   Info: Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
 
+-   @matter/examples:
+    -   Enhancement: Adds a new example to show a PlugIn-Socket with Energy and Power measurement 
+
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 
+-   Matter.js clusters:
+    -   Adds convenience helper method for ElectricalEnergyMeasurement cluster (usage see new example MeasuredSocketDevice) to set measurements and also trigger the needed events when imported and exported values changed in the measurement and events are required by specification
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"

@@ -143,8 +143,8 @@
                 "default": "./dist/esm/forwards/endpoints/*.js"
             },
             "require": {
-                "types": "./dist/cjs/forwards/endpoints/*/index.d.ts",
-                "default": "./dist/cjs/forwards/endpoints/*/index.js"
+                "types": "./dist/cjs/forwards/endpoints/*.d.ts",
+                "default": "./dist/cjs/forwards/endpoints/*.js"
             }
         },
         "./*": {
@@ -153,8 +153,8 @@
                 "default": "./dist/esm/*.js"
             },
             "require": {
-                "types": "./dist/cjs/*/index.d.ts",
-                "default": "./dist/cjs/*/index.js"
+                "types": "./dist/cjs/*.d.ts",
+                "default": "./dist/cjs/*.js"
             }
         }
     },
@@ -162,7 +162,7 @@
     "typesVersions": {
         "*": {
             ".": [
-                "/dist/cjs/export.d.ts"
+                "/dist/cjs/import.d.ts"
             ]
         }
     },
