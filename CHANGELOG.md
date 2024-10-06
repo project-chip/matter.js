@@ -72,6 +72,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 
+-   Matter.js clusters:
+    -   Adds convenience helper method for ElectricalEnergyMeasurement cluster (usage see new example MeasuredSocketDevice) to set measurements and also trigger the needed events when imported and exported values changed in the measurement and events are required by specification
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
