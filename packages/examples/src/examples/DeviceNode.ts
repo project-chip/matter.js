@@ -21,8 +21,7 @@ import {
     Time,
     VendorId,
 } from "@matter/main";
-import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
-import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
+import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { logEndpoint } from "@matter/main/protocol";
 import { execSync } from "child_process";
 

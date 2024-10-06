@@ -7,8 +7,8 @@
 import { Bytes } from "@matter/main";
 import { GeneralCommissioningBehavior } from "@matter/main/behaviors/general-commissioning";
 import { NetworkCommissioningBehavior } from "@matter/main/behaviors/network-commissioning";
+import { NetworkCommissioning } from "@matter/main/clusters/network-commissioning";
 import { DeviceAdvertiser, DeviceCommissioner } from "@matter/main/protocol";
-import { NetworkCommissioning } from "@matter/types/clusters/network-commissioning";
 
 const firstNetworkId = new Uint8Array(32);
 

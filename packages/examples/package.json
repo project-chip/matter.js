@@ -51,8 +51,12 @@
     },
     "dependencies": {
         "@matter/main": "*",
+        "@matter/nodejs": "*",
         "@matter/tools": "*",
         "esbuild": "^0.24.0"
+    },
+    "optionalDependencies": {
+        "@matter/nodejs-ble": "*"
     },
     "engines": {
         "node": ">=18.0.0"

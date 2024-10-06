@@ -12,10 +12,10 @@
  */
 
 import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/main/clusters";
+import { Ble, ClusterClientObj, ControllingCommissioningFlowOptions } from "@matter/main/protocol";
+import { ManualPairingCodeCodec, NodeId } from "@matter/main/types";
 import { NodeJsBle } from "@matter/nodejs-ble";
-import { Ble, ClusterClientObj, ControllingCommissioningFlowOptions } from "@matter/protocol";
-import { ManualPairingCodeCodec, NodeId } from "@matter/types";
-import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/types/clusters";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
 import { NodeStateInformation } from "@project-chip/matter.js/device";
 
