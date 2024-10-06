@@ -42,7 +42,7 @@ type AtomicElectricalEnergyMeasurement = {
 export class ElectricalEnergyMeasurementServerLogic extends ElectricalEnergyMeasurementServerBase {
     /**
      * Convenience method to set the measurement values for the cluster in an atomic way. This method updates the
-     * attributes and also sends the events for the imported and exported energy values.
+     * attributes with the provided data and also sends the events for the imported and exported energy values.
      */
     setMeasurement(measurement: AtomicElectricalEnergyMeasurement) {
         if (this.features.cumulativeEnergy) {

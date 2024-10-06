@@ -108,7 +108,8 @@ const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, as
             voltage: voltage * 1000,
             frequency: frequency * 1000,
         },
-        // For Energy Measurement the set could be done this way but then you need to take about needed events to be sent yourself!
+        // For Energy Measurement the set could be done this way but this would only update the values as provided.
+        // The required events needs to be triggered manually.
         /*
         electricalEnergyMeasurement: {
             cumulativeEnergyImported: {
