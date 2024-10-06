@@ -6,10 +6,10 @@
 
 import { Hash } from "crypto";
 import { build as esbuild, Format } from "esbuild";
-import { cp, mkdir, readFile, rm, stat, symlink, writeFile } from "fs/promises";
+import { cp, mkdir, readFile, rm, symlink, writeFile } from "fs/promises";
 import { glob } from "glob";
 import { platform } from "os";
-import { dirname, join, relative } from "path";
+import { dirname, join } from "path";
 import { ignoreError } from "../util/errors.js";
 import { CONFIG_PATH, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
@@ -88,113 +88,29 @@ export class Project {
         }
     }
 
-    /**
-     * Installs declaration files into specified directory.  Also computes SHA-1 hash for all files that we use to
-     * detect "public API changes".
-     *
-     * Note we use cp to traverse filesystem, detect changes, locate source maps and compute API SHA.  A little
-     * convoluted but works.  When you correct for a node 20/windows bug.
-     */
-    async installDeclarationFormats(formats: Iterable<string>, apiSha?: Hash) {
-        const srcMaps = Array<string>();
-        let firstPass = true;
-
-        const src = this.pkg.resolve("build/types/src");
-
-        for (const format of formats) {
-            await cp(src, this.pkg.resolve(`dist/${format}`), {
-                recursive: true,
-                force: true,
-
-                filter: async (source, destination) => {
-                    const sourceStat = await stat(source);
-                    if (!sourceStat.isFile()) {
-                        return true;
-                    }
-
-                    // Ignore files that are unchanged
-                    const destinationMtime = (await ignoreError("ENOENT", () => stat(destination)))?.mtimeMs;
-                    if (destinationMtime !== undefined) {
-                        const sourceMtime = sourceStat.mtimeMs;
-                        if (destinationMtime >= sourceMtime) {
-                            return false;
-                        }
-                    }
-
-                    // We process source maps below
-                    if (source.endsWith(".d.ts.map")) {
-                        if (firstPass) {
-                            if (source.startsWith("\\\\?\\")) {
-                                // Node 20 prefixes the path with above on Windows and relative() can't handle it;
-                                // just strip off
-                                source = source.slice(4);
-                            }
-                            srcMaps.push(source);
-                        }
-                        return false;
-                    }
-
-                    // Update hash if provided
-                    if (apiSha) {
-                        apiSha.update(await readFile(source));
-                    }
-
-                    return true;
-                },
-            });
-
-            // Only need to collect source maps and update hash on first pass
-            firstPass = false;
-        }
-
-        // If you specify --sourceRoot, tsc just sticks whatever the string is directly into the file.  Not very useful
-        // unless you have no hierarchy or use absolute paths...
-        //
-        // We distribute types for src one level higher than we generate them (dist/esm vs build/types/src) so the paths
-        // end up incorrect.
-        //
-        // So...  Rewrite the paths in all source maps under src/.  Do this directly on buffer for marginal performance
-        // win.
-        for (const filename of srcMaps) {
-            // Load map as binary
-            let map = await readFile(filename);
-
-            // Find key text
-            let pos = map.indexOf('"sources":["../');
-            if (pos === -1) {
-                throw new Error(
-                    `Could not find sources position in declaration map ${filename}, format may have changed`,
-                );
-            }
-
-            // move to ../
-            pos += 12;
-
-            // Shift everything left by three
-            map = map.copyWithin(pos, pos + 3).subarray(0, map.length - 3);
-
-            // Write to new locations
-            const pathRelativeToDest = relative(src, filename);
-            for (const format of formats) {
-                await writeFile(join(join(this.pkg.resolve(`dist/${format}`), pathRelativeToDest)), map);
-            }
-        }
-    }
-
     get hasDeclarations() {
         return this.pkg.hasDirectory("build/types");
     }
 
-    async installDeclarations(apiSha?: Hash) {
-        await mkdir(this.pkg.resolve("dist"), { recursive: true });
-        const formats = new Set<string>();
+    async hashDeclarations(apiSha: Hash) {
+        if (!this.pkg.isLibrary) {
+            return;
+        }
+
+        let path;
         if (this.pkg.supportsEsm) {
-            formats.add("esm");
+            path = "esm";
+        } else if (this.pkg.supportsCjs) {
+            path = "cjs";
+        } else {
+            return;
         }
-        if (this.pkg.supportsCjs) {
-            formats.add("cjs");
+
+        const declarations = (await this.pkg.glob(`dist/${path}/**/*.d.ts*`)).sort();
+        for (const file of declarations) {
+            apiSha.update(file);
+            apiSha.update(await readFile(file));
         }
-        await this.installDeclarationFormats(formats, apiSha);
     }
 
     async recordBuildInfo(info: BuildInformation) {

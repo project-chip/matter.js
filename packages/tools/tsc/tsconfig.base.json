@@ -28,6 +28,8 @@
         // Validating imports would be nice but is very slow; we can get by without
         "skipLibCheck": true,
 
+        "customConditions": [ "dev-types" ],
+
         // Enforce a subset of our code conventions
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": true,
