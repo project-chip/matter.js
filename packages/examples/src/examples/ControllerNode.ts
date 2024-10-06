@@ -13,19 +13,11 @@
 
 import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
 import { NodeJsBle } from "@matter/nodejs-ble";
-import { NodeId } from "@matter/types";
+import { Ble, ClusterClientObj, ControllingCommissioningFlowOptions } from "@matter/protocol";
+import { ManualPairingCodeCodec, NodeId } from "@matter/types";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/types/clusters";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
-import { Ble } from "@project-chip/matter.js/ble";
-import {
-    BasicInformationCluster,
-    ClusterClientObj,
-    DescriptorCluster,
-    GeneralCommissioning,
-    OnOff,
-} from "@project-chip/matter.js/cluster";
-import { CommissioningOptions } from "@project-chip/matter.js/protocol";
-import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
-import { NodeStateInformation } from "../../../matter.js/dist/esm/device/PairedNode.js";
+import { NodeStateInformation } from "@project-chip/matter.js/device";
 
 const logger = Logger.get("Controller");
 
@@ -97,7 +89,7 @@ class ControllerNode {
         }
 
         // Collect commissioning options from commandline parameters
-        const commissioningOptions: CommissioningOptions = {
+        const commissioningOptions: ControllingCommissioningFlowOptions = {
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
             regulatoryCountryCode: "XX",
         };
