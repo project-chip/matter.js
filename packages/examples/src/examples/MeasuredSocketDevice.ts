@@ -93,7 +93,7 @@ measuredSocketEndpoint.events.onOff.onOff$Changed.on(value => {
 // We will simulate the device sending measurements every 10 seconds.
 // When the device is turned off, the measurements will be zero, otherwise they will be random values.
 // Note: This is just example code. In a real device, you would set the data to 0 once the device is turned off.
-const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, () => {
+const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, async () => {
     const turnedOn = measuredSocketEndpoint.state.onOff.onOff;
     const power = turnedOn ? Math.round(Math.random() * 1000) : 0; // W
     const current = turnedOn ? Math.round(Math.random() * 32) : 0; // A
@@ -101,7 +101,7 @@ const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, ()
     const frequency = turnedOn ? 50 + Math.round(Math.random() * 5) : 0; // Hz
     const energy = turnedOn ? Math.round(Math.random() * 1000) : 0; // Wh
 
-    measuredSocketEndpoint.set({
+    await measuredSocketEndpoint.set({
         electricalPowerMeasurement: {
             activePower: power * 1000,
             activeCurrent: current * 1000,
