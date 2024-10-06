@@ -108,7 +108,7 @@ const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, as
             voltage: voltage * 1000,
             frequency: frequency * 1000,
         },
-        // Set could be done this way but then you need to take about needed events to be sent yourself!
+        // For Energy Measurement the set could be done this way but then you need to take about needed events to be sent yourself!
         /*
         electricalEnergyMeasurement: {
             cumulativeEnergyImported: {
@@ -117,7 +117,9 @@ const fakeMeasurementTimer = Time.getPeriodicTimer("fakeMeasurement", 10_000, as
         },
         */
     });
-    measuredSocketEndpoint.act(agent =>
+
+    // Or do this way then also events are sent
+    await measuredSocketEndpoint.act(agent =>
         agent.get(ElectricalEnergyMeasurementServer).setMeasurement({
             cumulativeEnergy: {
                 imported: {
