@@ -250,13 +250,10 @@ export class DeviceInformation {
                     case NetworkCommissioning.Cluster.id:
                         const networkEntry = networkData.get(endpointId) ?? {};
                         if (attributeId === NetworkCommissioning.Complete.attributes.featureMap.id) {
-                            logger.warn("FeatureMap", value);
                             networkEntry.type = value;
                         } else if (attributeId === NetworkCommissioning.Complete.attributes.interfaceEnabled.id) {
-                            logger.warn("InterfaceEnabled", value);
                             networkEntry.enabled = value;
                         } else if (attributeId === NetworkCommissioning.Complete.attributes.networks.id) {
-                            logger.warn("Networks", value);
                             networkEntry.connected = (
                                 value as TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[]
                             ).some(network => network.connected);
@@ -266,17 +263,14 @@ export class DeviceInformation {
                     case PowerSource.Cluster.id:
                         const powerSourceEntry = powerSourceData.get(endpointId) ?? {};
                         if (attributeId === PowerSource.Cluster.attributes.featureMap.id) {
-                            logger.warn("FeatureMap", value);
                             powerSourceEntry.features = value;
                         } else if (attributeId === PowerSource.Cluster.attributes.status.id) {
-                            logger.warn("Status", value);
                             powerSourceEntry.status = value;
                         }
                         powerSourceData.set(endpointId, powerSourceEntry);
                         break;
                     case ThreadNetworkDiagnostics.Cluster.id:
                         if (attributeId === ThreadNetworkDiagnostics.Cluster.attributes.routingRole.id) {
-                            logger.warn("RoutingRole", value);
                             if (value === ThreadNetworkDiagnostics.RoutingRole.SleepyEndDevice) {
                                 deviceData.isThreadSleepyEndDevice = true;
                             }
@@ -285,7 +279,6 @@ export class DeviceInformation {
                 }
             }
             for (const { type, enabled, connected } of networkData.values()) {
-                logger.warn("NetworkData", { type, enabled, connected });
                 if (!type || !enabled || !connected) return;
                 if (type.ethernetNetworkInterface) {
                     deviceData.ethernetConnected = true;
@@ -296,7 +289,6 @@ export class DeviceInformation {
                 }
             }
             for (const { features, status } of powerSourceData.values()) {
-                logger.warn("PowerSourceData", { features, status });
                 if (features?.battery && status === PowerSource.PowerSourceStatus.Active) {
                     deviceData.isBatteryPowered = true;
                 }
