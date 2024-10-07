@@ -6,6 +6,7 @@
 
 import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
 import { Construction } from "#general";
+import { CertificateAuthority } from "@matter/protocol";
 import { ClientNode } from "./ClientNode.js";
 import { type Node } from "./Node.js";
 import { ServerNode } from "./ServerNode.js";
@@ -41,5 +42,9 @@ export class Nodes extends EndpointContainer {
         return super.endpoint as ServerNode;
     }
 
-    async commission() {}
+    async commission() {
+        await this.#construction;
+
+        const ca = await this.endpoint.env.load(CertificateAuthority);
+    }
 }

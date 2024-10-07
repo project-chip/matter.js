@@ -20,7 +20,7 @@ import {
     ServerAddress,
 } from "#general";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
-import { ControllerCommissioningFlow, ControllingCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
+import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "#protocol/ExchangeManager.js";
 import { PaseClient } from "#session/index.js";
@@ -35,7 +35,7 @@ const logger = Logger.get("PeerCommissioner");
 /**
  * Options needed to commission a new node
  */
-export interface PeerCommissioningOptions extends Partial<ControllingCommissioningFlowOptions> {
+export interface PeerCommissioningOptions extends Partial<ControllerCommissioningFlowOptions> {
     /** The fabric into which to commission. */
     fabric: Fabric;
 
@@ -296,7 +296,7 @@ export class ControllerCommissioner {
      */
     async #commissionDiscoveredNode(
         paseSecureMessageChannel: MessageChannel,
-        commissioningOptions: PeerCommissioningOptions & ControllingCommissioningFlowOptions,
+        commissioningOptions: PeerCommissioningOptions & ControllerCommissioningFlowOptions,
         discoveryData?: DiscoveryData,
     ): Promise<PeerAddress> {
         const { fabric, performCaseCommissioning } = commissioningOptions;

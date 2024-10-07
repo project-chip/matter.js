@@ -34,7 +34,7 @@ const logger = Logger.get("ControllerCommissioner");
 /**
  * User specific options for the Commissioning process
  */
-export type ControllingCommissioningFlowOptions = {
+export type ControllerCommissioningFlowOptions = {
     /**
      * The regulatory location (indoor or outdoor) where the device is used.
      */
@@ -138,10 +138,10 @@ const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
  */
 export class ControllerCommissioningFlow {
     #interactionClient: InteractionClient;
-    readonly #certificateManager: CertificateAuthority;
+    readonly #ca: CertificateAuthority;
     readonly #fabric: Fabric;
     readonly #transitionToCase: (peerAddress: PeerAddress) => Promise<InteractionClient | undefined>;
-    readonly #commissioningOptions: ControllingCommissioningFlowOptions;
+    readonly #commissioningOptions: ControllerCommissioningFlowOptions;
     readonly #commissioningSteps = new Array<CommissioningStep>();
     readonly #commissioningStepResults = new Map<string, CommissioningStepResult>();
     readonly #clusterClients = new Map<ClusterId, ClusterClientObj>();
@@ -157,19 +157,19 @@ export class ControllerCommissioningFlow {
         interactionClient: InteractionClient,
 
         /** CertificateManager of the controller. */
-        certificateManager: CertificateAuthority,
+        ca: CertificateAuthority,
 
         /** Fabric of the controller. */
         fabric: Fabric,
 
         /** Commissioning options for the commissioning process. */
-        commissioningOptions: ControllingCommissioningFlowOptions,
+        commissioningOptions: ControllerCommissioningFlowOptions,
 
         /** Callback that establishes CASE connection or handles final commissioning */
         transitionToCase: (peerAddress: PeerAddress) => Promise<InteractionClient | undefined>,
     ) {
         this.#interactionClient = interactionClient;
-        this.#certificateManager = certificateManager;
+        this.#ca = ca;
         this.#fabric = fabric;
         this.#transitionToCase = transitionToCase;
         this.#commissioningOptions = commissioningOptions;
@@ -706,11 +706,11 @@ export class ControllerCommissioningFlow {
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
-                rootCaCertificate: this.#certificateManager.rootCert,
+                rootCaCertificate: this.#ca.rootCert,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerOperationalCert = this.#certificateManager.generateNoc(
+        const peerOperationalCert = this.#ca.generateNoc(
             operationalPublicKey,
             this.#fabric.fabricId,
             this.#interactionClient.address.nodeId,

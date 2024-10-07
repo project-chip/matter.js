@@ -33,6 +33,8 @@ import {
     ClusterClient,
     CommissioningError,
     ControllerCommissioner,
+    DEFAULT_ADMIN_VENDOR_ID,
+    DEFAULT_FABRIC_ID,
     DiscoveryData,
     DiscoveryOptions,
     ExchangeManager,
@@ -67,9 +69,7 @@ export type CommissionedNodeDetails = {
     deviceData?: DeviceInformationData;
 };
 
-const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
-const DEFAULT_FABRIC_ID = FabricId(1);
 
 const CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE = 3;
 const CONTROLLER_MAX_PATHS_PER_INVOKE = 10;
@@ -110,7 +110,7 @@ export class MatterController {
             caseAuthenticatedTags,
         } = options;
 
-        const certificateManager = await CertificateAuthority.create(caStorage);
+        const ca = await CertificateAuthority.create(caStorage);
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
@@ -122,7 +122,7 @@ export class MatterController {
                 nodesStorage,
                 scanners,
                 netInterfaces,
-                certificateManager,
+                certificateManager: ca,
                 fabric,
                 sessionClosedCallback,
             });
@@ -130,17 +130,12 @@ export class MatterController {
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
-                .setRootCert(certificateManager.rootCert)
+                .setRootCert(ca.rootCert)
                 .setRootNodeId(rootNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID);
             fabricBuilder.setOperationalCert(
-                certificateManager.generateNoc(
-                    fabricBuilder.publicKey,
-                    adminFabricId,
-                    rootNodeId,
-                    caseAuthenticatedTags,
-                ),
+                ca.generateNoc(fabricBuilder.publicKey, adminFabricId, rootNodeId, caseAuthenticatedTags),
             );
             const fabric = await fabricBuilder.build(adminFabricIndex);
 
@@ -150,7 +145,7 @@ export class MatterController {
                 nodesStorage,
                 scanners,
                 netInterfaces,
-                certificateManager,
+                certificateManager: ca,
                 fabric,
                 sessionClosedCallback,
             });

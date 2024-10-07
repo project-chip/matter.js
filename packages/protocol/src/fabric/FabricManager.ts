@@ -32,6 +32,7 @@ export enum FabricAction {
     Removed,
     Updated,
 }
+
 export class FabricManager {
     #nextFabricIndex = 1;
     readonly #fabrics = new Map<FabricIndex, Fabric>();
@@ -108,7 +109,7 @@ export class FabricManager {
         return fabric;
     }
 
-    getNextFabricIndex() {
+    allocateFabricIndex() {
         this.#construction.assert();
 
         for (let i = 0; i < 254; i++) {
@@ -176,6 +177,10 @@ export class FabricManager {
         this.#fabrics.delete(fabricIndex);
         await this.persistFabrics();
         this.#events.deleted.emit(fabric);
+    }
+
+    [Symbol.iterator]() {
+        return this.#fabrics.values();
     }
 
     getFabrics() {

@@ -131,7 +131,7 @@ export abstract class FailsafeContext {
     }
 
     getNextFabricIndex() {
-        return this.#fabrics.getNextFabricIndex();
+        return this.#fabrics.allocateFabricIndex();
     }
 
     async addFabric(fabric: Fabric) {
@@ -239,7 +239,7 @@ export abstract class FailsafeContext {
             .setRootVendorId(adminVendorId)
             .setIdentityProtectionKey(ipkValue)
             .setRootNodeId(caseAdminSubject)
-            .build(this.#fabrics.getNextFabricIndex());
+            .build(this.#fabrics.allocateFabricIndex());
     }
 
     async #failSafeExpired() {
