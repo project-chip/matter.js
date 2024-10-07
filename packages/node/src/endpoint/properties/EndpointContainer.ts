@@ -11,8 +11,8 @@ import { Endpoint } from "../Endpoint.js";
 /**
  * Manages parent-child relationships between endpoints.
  */
-export class EndpointContainer implements MutableSet<Endpoint, Endpoint>, ObservableSet<Endpoint> {
-    #children = new BasicSet<Endpoint>();
+export class EndpointContainer<T extends Endpoint = Endpoint> implements MutableSet<T, T>, ObservableSet<T> {
+    #children = new BasicSet<T>();
     #endpoint: Endpoint;
 
     constructor(endpoint: Endpoint) {
@@ -27,7 +27,7 @@ export class EndpointContainer implements MutableSet<Endpoint, Endpoint>, Observ
         }
     }
 
-    add(endpoint: Endpoint) {
+    add(endpoint: T) {
         if (endpoint.lifecycle.hasId) {
             this.assertIdAvailable(endpoint.id, endpoint);
         }
@@ -42,7 +42,7 @@ export class EndpointContainer implements MutableSet<Endpoint, Endpoint>, Observ
         this.#children.add(endpoint);
     }
 
-    delete(endpoint: Endpoint) {
+    delete(endpoint: T) {
         return this.#children.delete(endpoint);
     }
 
@@ -50,7 +50,7 @@ export class EndpointContainer implements MutableSet<Endpoint, Endpoint>, Observ
         this.#children.clear();
     }
 
-    has(endpoint: Endpoint) {
+    has(endpoint: T) {
         return this.#children.has(endpoint);
     }
 

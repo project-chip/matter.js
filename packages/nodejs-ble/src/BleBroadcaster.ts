@@ -12,6 +12,7 @@ import {
     CommissioningModeInstanceData,
     InstanceBroadcaster,
 } from "@project-chip/matter.js/fabric";
+import { CommissioningMode } from "../../protocol/src/common/InstanceBroadcaster.js";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");
@@ -35,7 +36,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         { name: deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData,
     ) {
         this.#assertOpen();
-        if (mode !== 1) {
+        if (mode !== CommissioningMode.Basic) {
             this.#advertise = false;
             logger.info(
                 `skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,

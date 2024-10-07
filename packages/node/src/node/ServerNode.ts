@@ -11,15 +11,13 @@ import { ProductDescriptionServer } from "#behavior/system/product-description/P
 import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointServer } from "#endpoint/EndpointServer.js";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
 import { EventHandler, FabricManager, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { Nodes } from "./Nodes.js";
-import { IdentityService } from "./server/IdentityService.js";
-import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
+import { ServerEnvironment } from "./server/ServerEnvironment.js";
 import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
 /**
@@ -99,9 +97,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
-        this.env.close(FabricManager);
-        await this.env.close(SessionManager);
-        await this.env.close(ServerNodeStore);
+        await ServerEnvironment.close(this);
     }
 
     override async reset() {
@@ -163,14 +159,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     protected override async initialize() {
-        // Install support services
-        this.env.set(ServerNodeStore, await ServerNodeStore.create(this.env, this.id));
-        this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
-        this.env.set(IdentityService, new IdentityService(this));
-
-        // Ensure these are fully initialized
-        await this.env.load(FabricManager);
-        await this.env.load(SessionManager);
+        await ServerEnvironment.initialize(this);
 
         return super.initialize();
     }

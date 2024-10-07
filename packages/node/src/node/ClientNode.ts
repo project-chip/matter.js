@@ -6,8 +6,8 @@
 
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
-import { ImplementationError, NotImplementedError } from "#general";
-import { PeerAddress } from "#protocol";
+import { ImplementationError, NotImplementedError, SupportedStorageTypes } from "#general";
+import { OperationalPeer, PeerAddress } from "#protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
@@ -19,6 +19,8 @@ import { ClientNodeStore } from "./storage/ClientNodeStore.js";
  */
 export class ClientNode extends Node {
     #address: PeerAddress;
+    #operationalAddress: Partial<OperationalPeer> = {};
+    #store: ClientNodeStore;
 
     constructor({ owner, store }: ClientNode.Options) {
         const { address } = store;
@@ -29,12 +31,35 @@ export class ClientNode extends Node {
             owner,
         });
         this.#address = store.address;
+        this.#store = store;
 
         this.env.set(EndpointInitializer, new ClientEndpointInitializer(store));
     }
 
+    override async initialize() {
+        await super.initialize();
+
+        const discovery = this.#store.discoveryStorage;
+        const operationalAddress = {} as Record<string, unknown>;
+        for (const key of await discovery.keys()) {
+            operationalAddress[key] = await discovery.get(key);
+        }
+        this.#operationalAddress = operationalAddress as Partial<OperationalPeer>;
+    }
+
     get address() {
         return this.#address;
+    }
+
+    get operationalAddress(): OperationalPeer {
+        return { ...this.#operationalAddress, address: this.#address };
+    }
+
+    updateOperationalAddress(operationalAddress: Partial<OperationalPeer>) {
+        operationalAddress = { ...operationalAddress };
+        delete operationalAddress.address;
+        this.#operationalAddress = operationalAddress;
+        return this.#store.discoveryStorage.set(operationalAddress as Record<string, SupportedStorageTypes>);
     }
 
     override get lifecycle() {
