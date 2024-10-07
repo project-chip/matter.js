@@ -78,18 +78,14 @@ export class Graph {
 
         const needsConfig = this.nodes.find(node => node.pkg.hasConfig);
         if (builder.hasClean || needsConfig) {
-            const progress = Package.workspace.start("Prebuild");
-
             try {
                 // We clean all packages before engaging typescript because otherwise it seems to get confused
                 if (builder.hasClean) {
-                    await progress.run("Clean", async () => {
-                        builder.clearClean();
-                        for (const node of this.nodes) {
-                            await node.project.clean();
-                            node.info = {};
-                        }
-                    });
+                    builder.clearClean();
+                    for (const node of this.nodes) {
+                        await node.project.clean();
+                        node.info = {};
+                    }
                 }
 
                 // We configure each build before building so that any generated files are in place before we initiate the build
@@ -97,16 +93,12 @@ export class Graph {
                     if (!node.pkg.hasConfig) {
                         continue;
                     }
-                    await progress.run(`Configure ${progress.emphasize(node.pkg.name)}`, async () => {
-                        await builder.configure(node.project, progress);
-                    });
+                    await builder.configure(node.project);
                 }
             } catch (e) {
-                progress.shutdown();
                 console.error("Terminating due to prebuild error:", e);
+                process.exit(1);
             }
-
-            progress.shutdown();
         }
 
         while (toBuild.size) {
