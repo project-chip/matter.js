@@ -10,10 +10,10 @@
             "path": "../../packages/general/src"
         },
         {
-            "path": "../../packages/model/src"
+            "path": "../../models/src"
         },
         {
-            "path": "../../models/src"
+            "path": "../../packages/model/src"
         }
     ]
 }

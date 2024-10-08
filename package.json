@@ -15,6 +15,7 @@
     "packages/nodejs-shell",
     "packages/examples",
     "packages/react-native",
+    "packages/cli-tool",
     "models",
     "codegen",
     "chip-testing",
@@ -40,7 +41,7 @@
     "matter-multidevice": "matter-run packages/examples/src/examples/MultiDeviceNode.ts",
     "matter-controller": "matter-run packages/examples/src/examples/ControllerNode.ts",
     "shell": "matter-run packages/nodejs-shell/src/app.ts"
-},
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.16.1",
     "@typescript-eslint/parser": "^7.18.0",

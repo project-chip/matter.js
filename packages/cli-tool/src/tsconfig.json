@@ -1,13 +1,18 @@
 {
-    "extends": "../../tools/tsc/tsconfig.lib.json",
+    "extends": "../../tools/tsc/tsconfig.app.json",
     "compilerOptions": {
+        "allowJs": true,
         "types": [
+            "globals",
             "node"
         ]
     },
     "references": [
         {
             "path": "../../general/src"
+        },
+        {
+            "path": "../../model/src"
         },
         {
             "path": "../../node/src"
@@ -17,12 +22,6 @@
         },
         {
             "path": "../../types/src"
-        },
-        {
-            "path": "../../matter.js/src"
-        },
-        {
-            "path": "../../model/src"
         }
     ]
 }

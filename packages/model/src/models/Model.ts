@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, ImplementationError, InternalError } from "#general";
+import { camelize, decamelize, ImplementationError, InternalError } from "#general";
 import { DefinitionError, ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Children } from "./Children.js";
+
+const inspect = Symbol.for("nodejs.util.inspect.custom");
 
 /**
  * A "model" is a class that implements runtime functionality associated with the corresponding element type.
@@ -500,6 +502,26 @@ export abstract class Model<T extends BaseElement = BaseElement> {
             },
         });
     }
+
+    [inspect](_depth: any, options: any, inspect: any) {
+        const json = this.valueOf() as Record<string, unknown>;
+        const props = {
+            name: json.name,
+        } as Record<string, unknown>;
+        if (json.id !== undefined) {
+            props.id = json.id;
+        }
+        for (const key in json) {
+            if (key === "id" || key === "name" || key === "tag") {
+                continue;
+            }
+            props[key] = json[key];
+        }
+        if (this.#children !== undefined && this.#children.length) {
+            props.children = this.#children.length;
+        }
+        return `${inspect(props, options)}`.replace("{", `${decamelize(this.tag)} {`);
+    }
 }
 
 export namespace Model {
@@ -554,6 +576,10 @@ export namespace Model {
                 return canonical;
             }
             return (this.instances[key] = new CrossReference(xref));
+        }
+
+        [inspect](_depth: any, options: any, inspect: any) {
+            return inspect(this.toString(), options);
         }
     }
 }

@@ -1,5 +1,5 @@
 {
     "compilerOptions": { "composite": true },
     "files": [],
-    "references": [{ "path": "./src" }, { "path": "./test" }, { "path": "./build/src" }]
+    "references": [{ "path": "./src" }, { "path": "./test" }]
 }

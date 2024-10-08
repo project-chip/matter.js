@@ -66,6 +66,14 @@ export class EndpointContainer<T extends Endpoint = Endpoint> implements Mutable
         return this.#children.size;
     }
 
+    map<T>(fn: (part: Endpoint) => T) {
+        return this.#children.map(fn);
+    }
+
+    filter(predicate: (part: Endpoint) => boolean) {
+        return this.#children.filter(predicate);
+    }
+
     [Symbol.iterator]() {
         return this.#children[Symbol.iterator]();
     }

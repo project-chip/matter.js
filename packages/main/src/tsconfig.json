@@ -14,13 +14,13 @@
             "path": "../../model/src"
         },
         {
-            "path": "../../types/src"
+            "path": "../../node/src"
         },
         {
             "path": "../../protocol/src"
         },
         {
-            "path": "../../node/src"
+            "path": "../../types/src"
         },
         {
             "path": "../../nodejs/src"

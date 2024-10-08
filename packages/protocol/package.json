@@ -40,10 +40,10 @@
         "#*": "./src/*"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
         "@matter/general": "*",
         "@matter/model": "*",
-        "@matter/types": "*"
+        "@matter/types": "*",
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
         "@matter/tools": "*"

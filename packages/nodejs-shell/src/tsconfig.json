@@ -7,13 +7,13 @@
     },
     "references": [
         {
-            "path": "../../nodejs-ble/src"
+            "path": "../../general/src"
         },
         {
             "path": "../../nodejs/src"
         },
         {
-            "path": "../../general/src"
+            "path": "../../nodejs-ble/src"
         },
         {
             "path": "../../matter.js/src"
