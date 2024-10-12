@@ -118,6 +118,7 @@ export class Fabric {
         this.rootCert = config.rootCert;
         this.identityProtectionKey = config.identityProtectionKey;
         this.operationalIdentityProtectionKey = config.operationalIdentityProtectionKey;
+        this.intermediateCACert = config.intermediateCACert;
         this.operationalCert = config.operationalCert;
         this.label = config.label;
 
