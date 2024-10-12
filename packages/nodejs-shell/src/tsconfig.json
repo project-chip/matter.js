@@ -10,13 +10,13 @@
             "path": "../../general/src"
         },
         {
-            "path": "../../nodejs/src"
+            "path": "../../matter.js/src"
         },
         {
             "path": "../../nodejs-ble/src"
         },
         {
-            "path": "../../matter.js/src"
+            "path": "../../nodejs/src"
         }
     ]
 }

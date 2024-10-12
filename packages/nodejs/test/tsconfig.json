@@ -12,25 +12,25 @@
             "path": "../../general/src"
         },
         {
-            "path": "../../node/src"
-        },
-        {
-            "path": "../../protocol/src"
-        },
-        {
-            "path": "../../types/src"
-        },
-        {
             "path": "../../matter.js/src"
         },
         {
             "path": "../../model/src"
         },
         {
-            "path": "../src"
+            "path": "../../node/src"
+        },
+        {
+            "path": "../../protocol/src"
         },
         {
             "path": "../../tools/src"
+        },
+        {
+            "path": "../../types/src"
+        },
+        {
+            "path": "../src"
         }
     ]
 }

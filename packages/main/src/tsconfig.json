@@ -17,16 +17,16 @@
             "path": "../../node/src"
         },
         {
-            "path": "../../protocol/src"
-        },
-        {
-            "path": "../../types/src"
-        },
-        {
             "path": "../../nodejs/src"
         },
         {
+            "path": "../../protocol/src"
+        },
+        {
             "path": "../../react-native/src"
+        },
+        {
+            "path": "../../types/src"
         }
     ]
 }

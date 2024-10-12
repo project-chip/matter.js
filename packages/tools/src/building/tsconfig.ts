@@ -60,7 +60,9 @@ async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: stri
 
     const desired = [...new Set([...deps, ...extraRefs])];
 
-    const newReferences = desired.map(ref => ({ path: relative(path, ref).replace(/\\/g, "/") }));
+    const newReferences = desired
+        .map(ref => ({ path: relative(path, ref).replace(/\\/g, "/") }))
+        .sort((ref1, ref2) => ref1.path.localeCompare(ref2.path));
 
     if (referencesChanged(tsconfig.references, newReferences)) {
         tsconfig.references = newReferences;

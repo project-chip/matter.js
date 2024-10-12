@@ -7,10 +7,10 @@
     },
     "references": [
         {
-            "path": "../../packages/general/src"
+            "path": "../../models/src"
         },
         {
-            "path": "../../models/src"
+            "path": "../../packages/general/src"
         },
         {
             "path": "../../packages/model/src"
