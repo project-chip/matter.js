@@ -82,7 +82,7 @@ function errorIndicatesIncomplete(e: any, input: string): e is SyntaxError {
         if (e.message.startsWith("Unexpected token") && (e as unknown as { pos: number }).pos === input.length) {
             return true;
         }
-        if (e.message.match(/$Unterminated (?:template literal|group|comment|regular expression|template)/)) {
+        if (e.message.match(/^Unterminated (?:template literal|group|comment|regular expression|template)/)) {
             return true;
         }
     }

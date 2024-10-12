@@ -47,7 +47,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 tag = "array";
             } else if (ArrayBuffer.isView(definition)) {
                 tag = "bytes";
-            } else if (definition && definition.constructor.name !== "Object") {
+            } else if (definition.constructor.name !== "Object") {
                 tag = definition.constructor.name;
             } else {
                 tag = "object";
