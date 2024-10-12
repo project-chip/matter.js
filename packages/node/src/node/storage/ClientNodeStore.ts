@@ -36,14 +36,15 @@ export class ClientNodeStore extends NodeStore {
         const stores = Array<ClientNodeStore>();
 
         for (const addrStr of addresses) {
-            const addrComponents = addrStr.match(/^([0-9]+)-([0-9a-f])/i);
-            if (!addrComponents) {
+            const addrComponents = addrStr.split("-");
+            const fabricIndex = FabricIndex(Number.parseInt(addrComponents[0]));
+            const nodeId = NodeId(Number.parseInt(addrComponents[1], 16));
+
+            if (addrComponents.length !== 2 || Number.isNaN(fabricIndex) || Number.isNaN(nodeId)) {
                 logger.warn(`Ignoring peer storage context "${addrStr}" due to invalid name format`);
                 continue;
             }
 
-            const fabricIndex = FabricIndex(Number.parseInt(addrComponents[1]));
-            const nodeId = NodeId(Number.parseInt(addrComponents[2], 16));
             const addr = PeerAddress({ fabricIndex, nodeId });
 
             stores.push(new ClientNodeStore(addr, peerStorage.createContext(addrStr)));

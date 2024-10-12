@@ -69,11 +69,18 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/examples:
     -   Enhancement: Adds a new example to show a PlugIn-Socket with Energy and Power measurement 
 
+-   @matter/cli-tool:
+    -   Feature: This new package offers a specialized JS environment for interacting with Matter and matter.js
+    -   The "matter" command supports standard JS syntax and a "shell" style syntax that emulates common shell commands
+    -   The virtual filesystem exposed by the tool allows you to navigate matter.js's packages and active subsystems
+    -   This is an alpha feature.  We'll add command line control and additional functionality over time
+
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 
 -   Matter.js clusters:
     -   Adds convenience helper method for ElectricalEnergyMeasurement cluster (usage see new example MeasuredSocketDevice) to set measurements and also trigger the needed events when imported and exported values changed in the measurement and events are required by specification
+    
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
