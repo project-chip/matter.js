@@ -76,8 +76,8 @@ OperationalCredentials.Cluster.commands = {
  * This is the default server implementation of OperationalCredentialsBehavior.
  *
  * TODO - currently "source of truth" for fabric data is persisted by FabricManager.  If we remove some legacy code
- * paths we can move source of truth to here.  Right now we just sync fabrics with MatterDevice.  This sync is only as
- * comprehensive as required by current use cases.  If fabrics are mutated directly on MatterDevice then this code will
+ * paths we can move source of truth to here.  Right now we just sync fabrics with FabricManager.  This sync is only as
+ * comprehensive as required by current use cases.  If fabrics are mutated directly on FabricManager then this code will
  * require update.
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
@@ -281,7 +281,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 );
             }
         } catch (e) {
-            // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
+            // Fabric insertion into FabricManager is not currently transactional so we need to remove manually
             await fabric.remove(this.session.id);
             throw e;
         }

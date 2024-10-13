@@ -193,7 +193,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         return this.#construction;
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new PeerSet({
             sessions: env.get(SessionManager),
             channels: env.get(ChannelManager),

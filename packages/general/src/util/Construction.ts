@@ -56,7 +56,7 @@ export interface Constructable<T = object> {
     readonly construction: Construction<T>;
 }
 
-export module Constructable {
+export namespace Constructable {
     /**
      * An {@link Constructable} that supports deferred construction.
      *

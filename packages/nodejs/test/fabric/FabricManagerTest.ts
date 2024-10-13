@@ -56,17 +56,17 @@ describe("FabricManager", () => {
 
             assert.deepEqual(fabricManager.getFabrics(), [fabric]);
 
-            assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.toStorageObject()]);
+            assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.config]);
         });
 
         it("restore a fabric from storage", async () => {
             const fabric = await buildFabric();
-            storage.set(["Context"], "fabrics", [fabric.toStorageObject()]);
+            storage.set(["Context"], "fabrics", [fabric.config]);
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
             await fabricManager.construction.ready;
             assert.equal(fabricManager.getFabrics().length, 1);
-            assert.deepEqual(fabricManager.getFabrics()[0].toStorageObject(), fabric.toStorageObject());
+            assert.deepEqual(fabricManager.getFabrics()[0].config, fabric.config);
         });
     });
 
@@ -89,70 +89,70 @@ describe("FabricManager", () => {
 
     describe("determine next FabricIndex", () => {
         it("get next fabric index initially", async () => {
-            assert.equal(fabricManager.getNextFabricIndex(), 1);
+            assert.equal(fabricManager.allocateFabricIndex(), 1);
         });
 
         it("get next fabric index after adding fabric", async () => {
-            const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+            const fabric = await buildFabric(fabricManager.allocateFabricIndex());
             fabricManager.addFabric(fabric);
 
-            assert.equal(fabricManager.getNextFabricIndex(), 2);
+            assert.equal(fabricManager.allocateFabricIndex(), 2);
         });
 
         it("get next fabric index after adding fabric and removing it", async () => {
-            const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+            const fabric = await buildFabric(fabricManager.allocateFabricIndex());
             fabricManager.addFabric(fabric);
             await fabricManager.removeFabric(fabric.fabricIndex);
 
-            assert.equal(fabricManager.getNextFabricIndex(), 2);
+            assert.equal(fabricManager.allocateFabricIndex(), 2);
         });
 
         it("get next fabric index after adding fabric and revoking it", async () => {
-            const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+            const fabric = await buildFabric(fabricManager.allocateFabricIndex());
             fabricManager.addFabric(fabric);
             await fabricManager.revokeFabric(fabric.fabricIndex);
 
-            assert.equal(fabricManager.getNextFabricIndex(), 2);
+            assert.equal(fabricManager.allocateFabricIndex(), 2);
         });
 
         it("get jumps over one fabric index after adding fabric and revoking it", async () => {
-            const fabric = await buildFabric(fabricManager.getNextFabricIndex()); // Index 1
+            const fabric = await buildFabric(fabricManager.allocateFabricIndex()); // Index 1
             fabricManager.addFabric(fabric);
-            const fabric2 = await buildFabric(fabricManager.getNextFabricIndex()); // Index 2
+            const fabric2 = await buildFabric(fabricManager.allocateFabricIndex()); // Index 2
             fabricManager.addFabric(fabric2);
             await fabricManager.revokeFabric(fabric.fabricIndex); // We do not remove the last generated Index
 
-            assert.equal(fabricManager.getNextFabricIndex(), 3); // So index now changed
+            assert.equal(fabricManager.allocateFabricIndex(), 3); // So index now changed
         });
 
         it("it find first open slot for next index", async () => {
             for (let i = 1; i < 255; i++) {
-                const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+                const fabric = await buildFabric(fabricManager.allocateFabricIndex());
                 fabricManager.addFabric(fabric);
             }
             await fabricManager.removeFabric(FabricIndex(100));
 
-            assert.equal(fabricManager.getNextFabricIndex(), 100);
+            assert.equal(fabricManager.allocateFabricIndex(), 100);
         });
 
         it("it find first open slot for next index id including overflow", async () => {
             for (let i = 1; i < 255; i++) {
-                const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+                const fabric = await buildFabric(fabricManager.allocateFabricIndex());
                 fabricManager.addFabric(fabric);
             }
             await fabricManager.removeFabric(FabricIndex(1));
 
-            assert.equal(fabricManager.getNextFabricIndex(), 1);
+            assert.equal(fabricManager.allocateFabricIndex(), 1);
         });
 
         it("throws when table is full", async () => {
             for (let i = 1; i < 255; i++) {
-                const fabric = await buildFabric(fabricManager.getNextFabricIndex());
+                const fabric = await buildFabric(fabricManager.allocateFabricIndex());
                 fabricManager.addFabric(fabric);
             }
 
             assert.throws(
-                () => fabricManager.getNextFabricIndex(),
+                () => fabricManager.allocateFabricIndex(),
                 new FabricTableFullError("No free fabric index available."),
             );
         });

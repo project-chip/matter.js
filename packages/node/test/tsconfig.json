@@ -15,16 +15,16 @@
             "path": "../../model/src"
         },
         {
-            "path": "../../types/src"
-        },
-        {
             "path": "../../protocol/src"
         },
         {
-            "path": "../src"
+            "path": "../../tools/src"
         },
         {
-            "path": "../../tools/src"
+            "path": "../../types/src"
+        },
+        {
+            "path": "../src"
         }
     ]
 }

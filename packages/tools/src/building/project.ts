@@ -12,7 +12,6 @@ import { platform } from "os";
 import { dirname, join } from "path";
 import { ignoreError } from "../util/errors.js";
 import { CONFIG_PATH, Package } from "../util/package.js";
-import { Progress } from "../util/progress.js";
 
 export const BUILD_INFO_LOCATION = "build/info.json";
 
@@ -119,7 +118,7 @@ export class Project {
         await writeFile(this.pkg.resolve(BUILD_INFO_LOCATION), JSON.stringify(info, undefined, 4));
     }
 
-    async configure(progress: Progress) {
+    async configure() {
         if (this.#configured) {
             return this.#config;
         }
@@ -143,7 +142,6 @@ export class Project {
         if (this.#config?.startup) {
             await this.#config?.startup({
                 project: this,
-                progress,
             });
         }
 
@@ -234,7 +232,6 @@ export class Project {
 export namespace Project {
     export interface Context {
         project: Project;
-        progress: Progress;
     }
 
     export interface Config {

@@ -114,7 +114,7 @@ export class SessionManager {
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
-    readonly #sessionParameters;
+    #sessionParameters;
     readonly #resubmissionStarted = new Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
@@ -132,7 +132,7 @@ export class SessionManager {
         this.#construction = Construction(this, () => this.#initialize());
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new SessionManager({
             storage: env.get(StorageManager).createContext("sessions"),
             fabrics: env.get(FabricManager),
@@ -167,8 +167,21 @@ export class SessionManager {
      * Our session parameters.  These are the parameters we provide during session negotiation.  The peer may specify
      * different parameters.
      */
-    get sessionParameters() {
+    get sessionParameters(): SessionParameters {
         return this.#sessionParameters;
+    }
+
+    /**
+     * Change session parameters.
+     *
+     * Parameters values you omit in {@link parameters} will retain their current values.  This only affects new
+     * sessions.
+     */
+    set sessionParameters(parameters: Partial<SessionParameters>) {
+        this.#sessionParameters = {
+            ...this.#sessionParameters,
+            ...parameters,
+        };
     }
 
     /**
@@ -527,6 +540,11 @@ export class SessionManager {
         for (const session of this.#insecureSessions.values()) {
             await session?.end();
         }
+    }
+
+    async clear() {
+        await this.close();
+        await this.#context.storage.clear();
     }
 
     updateAllSubscriptions() {

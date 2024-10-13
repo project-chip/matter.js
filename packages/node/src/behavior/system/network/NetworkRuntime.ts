@@ -56,8 +56,6 @@ export abstract class NetworkRuntime {
         await this.construction.close();
     }
 
-    abstract operationalPort: number;
-
     protected abstract start(): Promise<void>;
 
     protected abstract stop(): Promise<void>;

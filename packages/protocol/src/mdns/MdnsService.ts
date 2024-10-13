@@ -62,11 +62,11 @@ export class MdnsService {
     }
 
     get broadcaster() {
-        return this.#construction.assert("MDNS broadcaster", this.#broadcaster);
+        return this.#construction.assert("MDNS service", this.#broadcaster);
     }
 
     get scanner() {
-        return this.#construction.assert("MDNS scanner", this.#scanner);
+        return this.#construction.assert("MDNS service", this.#scanner);
     }
 
     get [Diagnostic.value]() {

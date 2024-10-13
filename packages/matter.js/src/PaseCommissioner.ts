@@ -5,14 +5,14 @@
  */
 import { Environment, ImplementationError, Logger } from "#general";
 import {
+    CertificateAuthority,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
     ControllerDiscovery,
     DiscoveryData,
-    FabricJsonObject,
+    Fabric,
     MdnsScanner,
     MdnsService,
-    RootCertificateManager,
     Scanner,
 } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "#types";
@@ -31,10 +31,10 @@ type PaseCommissionerOptions = Omit<CommissioningControllerOptions, "environment
     environment: ControllerEnvironmentOptions;
 
     /** The root certificate data for the controller. */
-    rootCertificateData: RootCertificateManager.Data;
+    certificateAuthorityConfig: CertificateAuthority.Configuration;
 
-    /** The fabric data of the controller. */
-    fabricData: FabricJsonObject;
+    /** The fabric config of the controller. */
+    fabricConfig: Fabric.Config;
 };
 
 /**
@@ -78,7 +78,7 @@ export class PaseCommissioner {
             return this.controllerInstance;
         }
 
-        const { rootCertificateData, fabricData } = this.options;
+        const { certificateAuthorityConfig: rootCertificateData, fabricConfig: fabricConfig } = this.options;
 
         let mdnsScanner: MdnsScanner | undefined;
         let ipv4Disabled = false;
@@ -98,8 +98,8 @@ export class PaseCommissioner {
         });
 
         return await MatterController.createAsPaseCommissioner({
-            rootCertificateData,
-            fabricData,
+            certificateAuthorityConfig: rootCertificateData,
+            fabricConfig: fabricConfig,
             scanners,
             netInterfaces,
         });

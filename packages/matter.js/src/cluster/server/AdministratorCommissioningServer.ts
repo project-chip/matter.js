@@ -6,8 +6,9 @@
 
 import { AdministratorCommissioning } from "#clusters";
 import { InternalError, Logger, Time, Timer } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import { AccessLevel } from "#model";
-import { AttributeServer, MatterDevice, PaseServer, Session } from "#protocol";
+import { AttributeServer, PaseServer, Session } from "#protocol";
 import {
     Command,
     FabricIndex,

@@ -11,15 +11,14 @@ import { ProductDescriptionServer } from "#behavior/system/product-description/P
 import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointServer } from "#endpoint/EndpointServer.js";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
+import { EventHandler, FabricManager, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { Nodes } from "./Nodes.js";
-import { IdentityService } from "./server/IdentityService.js";
-import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
-import { NodeStore } from "./storage/NodeStore.js";
+import { ServerEnvironment } from "./server/ServerEnvironment.js";
+import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
 /**
  * Thrown when there is an error during factory reset.
@@ -98,12 +97,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
-
-        if (this.env.has(NodeStore)) {
-            const store = this.env.get(NodeStore);
-            await store.close();
-            this.env.delete(NodeStore, store);
-        }
+        await ServerEnvironment.close(this);
     }
 
     override async reset() {
@@ -165,11 +159,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     protected override async initialize() {
-        const nodeStore = await NodeStore.create(this.env, this.id);
-
-        this.env.set(NodeStore, nodeStore);
-        this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
-        this.env.set(IdentityService, new IdentityService(this));
+        await ServerEnvironment.initialize(this);
 
         return super.initialize();
     }
@@ -183,7 +173,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @see {@link MatterSpecification.v12.Core} § 13.4
      */
     protected async resetStorage() {
-        await this.env.get(NodeStore).erase();
+        await this.env.get(SessionManager).clear();
+        await this.env.get(FabricManager).clear();
+        await this.env.get(EventHandler).clear();
+        await this.env.get(ServerNodeStore).erase();
     }
 
     /**

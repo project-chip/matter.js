@@ -339,17 +339,16 @@ function messageAndStackFor(error: any, parentStack?: string[]) {
     let message: string | undefined;
     let rawStack: string | undefined;
     if (error !== undefined && error !== null) {
-        if (error instanceof Error) {
-            message = error.message;
-            rawStack = error.stack;
+        if ("message" in error) {
+            ({ message, stack: rawStack } = error);
         } else if (error.message) {
             message = typeof error.message === "string" ? message : error.toString();
         }
     }
     if (message === undefined || message === null || message === "") {
-        if (error instanceof Error) {
+        if (error !== undefined && error !== null) {
             message = error.constructor.name;
-            if (message === "Error") {
+            if (!message || message === "Error") {
                 message = "(unknown error)";
             }
         } else {

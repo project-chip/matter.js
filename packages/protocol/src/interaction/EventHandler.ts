@@ -4,7 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Construction, Logger, MaybePromise, Storage, StorageContext, StorageOperationResult } from "#general";
+import {
+    Construction,
+    Environment,
+    Environmental,
+    Logger,
+    MaybePromise,
+    Storage,
+    StorageContext,
+    StorageManager,
+    StorageOperationResult,
+} from "#general";
 import {
     ClusterId,
     EndpointNumber,
@@ -42,13 +52,14 @@ export interface EventStorageData<T> extends EventData<T> {
 }
 
 /**
- * Class that collects all triggered events up to a certain limit of events and handle logic
- * to handle subscriptions (TBD)
+ * Class that collects all triggered events up to a certain limit of events and handle logic to handle subscriptions
+ * (TBD)
  */
 export class EventHandler<S extends Storage = any> {
-    private eventNumber = EventNumber(0);
-    private storedEventCount = 0;
-    private readonly events = {
+    #eventNumber = EventNumber(0);
+    #storedEventCount = 0;
+    #eventStorage: StorageContext;
+    readonly #events = {
         [EventPriority.Critical]: new Array<EventStorageData<any>>(),
         [EventPriority.Info]: new Array<EventStorageData<any>>(),
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
@@ -65,11 +76,28 @@ export class EventHandler<S extends Storage = any> {
         return handler;
     }
 
-    constructor(private readonly eventStorage: StorageContext<S>) {
+    static [Environmental.create](env: Environment) {
+        const instance = new EventHandler(env.get(StorageManager).createContext("events"));
+        env.set(EventHandler, instance);
+        return instance;
+    }
+
+    constructor(eventStorage: StorageContext<S>) {
+        this.#eventStorage = eventStorage;
         this.#construction = Construction(this, async () => {
-            this.eventNumber = await this.eventStorage.get("lastEventNumber", this.eventNumber);
-            logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
+            this.#eventNumber = await this.#eventStorage.get("lastEventNumber", this.#eventNumber);
+            logger.debug(`Set/Restore last event number: ${this.#eventNumber}`);
         });
+    }
+
+    async clear() {
+        await this.construction;
+        await this.#eventStorage.clear();
+        this.#eventNumber = EventNumber(0);
+        this.#storedEventCount = 0;
+        for (const list of Object.values(this.#events)) {
+            list.length = 0;
+        }
     }
 
     getEvents(
@@ -87,7 +115,7 @@ export class EventHandler<S extends Storage = any> {
         const events = new Array<EventStorageData<any>>();
         const { endpointId, clusterId, eventId } = eventPath;
         for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
-            const eventsToCheck = this.events[priority];
+            const eventsToCheck = this.#events[priority];
             for (const event of eventsToCheck) {
                 if (endpointId === event.endpointId && clusterId === event.clusterId && eventId === event.eventId) {
                     if (eventFilter(event)) {
@@ -109,13 +137,13 @@ export class EventHandler<S extends Storage = any> {
 
     pushEvent(event: EventData<any>) {
         const eventData = {
-            eventNumber: EventNumber(++this.eventNumber),
+            eventNumber: EventNumber(++this.#eventNumber),
             ...event,
         };
         logger.debug(`Received event: ${Logger.toJSON(eventData)}`);
-        this.events[event.priority].push(eventData);
-        this.storedEventCount++;
-        const setPromise = this.eventStorage.set("lastEventNumber", this.eventNumber);
+        this.#events[event.priority].push(eventData);
+        this.#storedEventCount++;
+        const setPromise = this.#eventStorage.set("lastEventNumber", this.#eventNumber);
         if (MaybePromise.is(setPromise)) {
             return setPromise.then(() => {
                 this.cleanUpEvents();
@@ -127,10 +155,10 @@ export class EventHandler<S extends Storage = any> {
     }
 
     cleanUpEvents() {
-        if (this.storedEventCount < MAX_EVENTS) return;
-        const eventsToDelete = this.storedEventCount - MAX_EVENTS; // should be always 1, but let's be sure
+        if (this.#storedEventCount < MAX_EVENTS) return;
+        const eventsToDelete = this.#storedEventCount - MAX_EVENTS; // should be always 1, but let's be sure
         for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
-            const events = this.events[priority];
+            const events = this.#events[priority];
             if (events.length > 0) {
                 const removedEvents = events.splice(0, events.length - eventsToDelete);
                 logger.debug(`Removed ${removedEvents.length} events from priority ${priority}`);

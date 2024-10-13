@@ -41,12 +41,12 @@
         "#*": "./src/*"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
         "@matter/general": "*",
         "@matter/model": "*",
-        "@matter/types": "*",
+        "@matter/node": "*",
         "@matter/protocol": "*",
-        "@matter/node": "*"
+        "@matter/types": "*",
+        "@noble/curves": "^1.5.0"
     },
     "optionalDependencies": {
         "@matter/nodejs": "*",

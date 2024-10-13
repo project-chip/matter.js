@@ -16,7 +16,7 @@ import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
 import { IdentityService } from "#node/server/IdentityService.js";
 import { EndpointStoreService } from "#node/storage/EndpointStoreService.js";
-import { NodeStore } from "#node/storage/NodeStore.js";
+import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { EndpointNumber } from "#types";
 
 export class MockPartInitializer extends EndpointInitializer {
@@ -53,7 +53,7 @@ class MockEndpointStoreService extends EndpointStoreService {
         endpoint.number = this.#nextNumber++;
     }
 
-    override storeForPart(endpoint: Endpoint<EndpointType.Empty>): EndpointStore {
+    override storeForEndpoint(endpoint: Endpoint<EndpointType.Empty>): EndpointStore {
         if (this.#stores[endpoint.number]) {
             return this.#stores[endpoint.number];
         }
@@ -62,7 +62,7 @@ class MockEndpointStoreService extends EndpointStoreService {
     }
 }
 
-export class MockServerStore extends NodeStore {
+export class MockServerStore extends ServerNodeStore {
     #endpointStores?: MockEndpointStoreService;
 
     override get endpointStores() {
@@ -93,7 +93,7 @@ export class MockNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoin
     override initialize() {
         this.env.set(StorageService, new StorageService(this.env, () => new StorageBackendMemory()));
         this.env.set(EndpointInitializer, new MockPartInitializer());
-        this.env.set(NodeStore, new MockServerStore(this.env, "test"));
+        this.env.set(ServerNodeStore, new MockServerStore(this.env, "test"));
         this.env.set(EndpointStoreService, new MockEndpointStoreService());
         this.env.set(IdentityService, new IdentityService(this));
         return super.initialize();

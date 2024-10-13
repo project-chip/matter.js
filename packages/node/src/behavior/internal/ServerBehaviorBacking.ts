@@ -6,8 +6,7 @@
 
 import { camelize } from "#general";
 import { FieldValue } from "#model";
-import { NodeStore } from "#node/storage/NodeStore.js";
-import { EventHandler } from "#protocol";
+import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { Behavior } from "../Behavior.js";
 import { Val } from "../state/Val.js";
 import { Datasource } from "../state/managed/Datasource.js";
@@ -18,20 +17,14 @@ import { BehaviorBacking } from "./BehaviorBacking.js";
  */
 export class ServerBehaviorBacking extends BehaviorBacking {
     #store?: Datasource.Store;
-    #eventHandler?: EventHandler;
 
     override get store() {
         if (!this.#store) {
-            this.#store = this.#serverStore.endpointStores.storeForPart(this.endpoint).storeForBehavior(this.type.id);
+            this.#store = this.#serverStore.endpointStores
+                .storeForEndpoint(this.endpoint)
+                .storeForBehavior(this.type.id);
         }
         return this.#store;
-    }
-
-    get eventHandler() {
-        if (!this.#eventHandler) {
-            this.#eventHandler = this.#serverStore.eventHandler;
-        }
-        return this.#eventHandler;
     }
 
     protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
@@ -53,7 +46,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     get #serverStore() {
-        return this.endpoint.env.get(NodeStore);
+        return this.endpoint.env.get(ServerNodeStore);
     }
 
     /**

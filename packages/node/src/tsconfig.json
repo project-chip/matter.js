@@ -1,6 +1,7 @@
 {
     "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
+        "allowJs": true,
         "types": [
             "@matter/tools",
             "globals"
@@ -14,10 +15,10 @@
             "path": "../../model/src"
         },
         {
-            "path": "../../types/src"
+            "path": "../../protocol/src"
         },
         {
-            "path": "../../protocol/src"
+            "path": "../../types/src"
         }
     ]
 }

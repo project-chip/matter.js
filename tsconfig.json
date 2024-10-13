@@ -41,6 +41,9 @@
             "path": "packages/react-native"
         },
         {
+            "path": "packages/cli-tool"
+        },
+        {
             "path": "models"
         },
         {

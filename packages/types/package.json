@@ -33,9 +33,9 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
         "@matter/general": "*",
-        "@matter/model": "*"
+        "@matter/model": "*",
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
         "@matter/tools": "*"

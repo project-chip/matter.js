@@ -97,7 +97,7 @@ export class DeviceCommissioner {
         });
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new DeviceCommissioner({
             fabrics: env.get(FabricManager),
             sessions: env.get(SessionManager),

@@ -7,10 +7,10 @@
     },
     "references": [
         {
-            "path": "../../matter-node-ble.js/src"
+            "path": "../../../packages/matter.js/src"
         },
         {
-            "path": "../../../packages/matter.js/src"
+            "path": "../../matter-node-ble.js/src"
         }
     ]
 }

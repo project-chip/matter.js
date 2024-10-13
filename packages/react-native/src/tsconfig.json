@@ -5,10 +5,10 @@
     },
     "references": [
         {
-            "path": "../../nodejs/src"
+            "path": "../../general/src"
         },
         {
-            "path": "../../general/src"
+            "path": "../../nodejs/src"
         },
         {
             "path": "../../protocol/src"

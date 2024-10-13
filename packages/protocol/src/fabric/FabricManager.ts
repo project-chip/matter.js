@@ -21,7 +21,7 @@ import {
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { FabricIndex } from "#types";
-import { Fabric, FabricJsonObject } from "./Fabric.js";
+import { Fabric } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
@@ -59,9 +59,9 @@ export class FabricManager {
                     return;
                 }
 
-                const fabrics = await this.#storage.get<FabricJsonObject[]>("fabrics", []);
-                for (const fabric of fabrics) {
-                    this.#addFabric(Fabric.createFromStorageObject(fabric));
+                const fabrics = await this.#storage.get<Fabric.Config[]>("fabrics", []);
+                for (const fabricConfig of fabrics) {
+                    this.#addFabric(new Fabric(fabricConfig));
                 }
 
                 this.#nextFabricIndex = await this.#storage.get("nextFabricIndex", this.#nextFabricIndex);
@@ -81,7 +81,7 @@ export class FabricManager {
         await this.construction;
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new FabricManager(env.get(StorageManager).createContext("fabrics"));
         env.set(FabricManager, instance);
         return instance;
@@ -89,6 +89,13 @@ export class FabricManager {
 
     get events() {
         return this.#events;
+    }
+
+    async clear() {
+        await this.#construction;
+        this.#nextFabricIndex = 1;
+        this.#fabrics.clear();
+        await this.#storage?.clear();
     }
 
     for(address: FabricIndex | PeerAddress) {
@@ -102,7 +109,7 @@ export class FabricManager {
         return fabric;
     }
 
-    getNextFabricIndex() {
+    allocateFabricIndex() {
         this.#construction.assert();
 
         for (let i = 0; i < 254; i++) {
@@ -126,7 +133,7 @@ export class FabricManager {
 
         const storeResult = this.#storage.set(
             "fabrics",
-            Array.from(this.#fabrics.values()).map(fabric => fabric.toStorageObject()),
+            Array.from(this.#fabrics.values()).map(fabric => fabric.config),
         );
         if (MaybePromise.is(storeResult)) {
             return storeResult.then(() => this.#storage!.set("nextFabricIndex", this.#nextFabricIndex));
@@ -170,6 +177,10 @@ export class FabricManager {
         this.#fabrics.delete(fabricIndex);
         await this.persistFabrics();
         this.#events.deleted.emit(fabric);
+    }
+
+    [Symbol.iterator]() {
+        return this.#fabrics.values();
     }
 
     getFabrics() {

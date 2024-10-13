@@ -15,19 +15,19 @@
             "path": "../../model/src"
         },
         {
-            "path": "../../types/src"
+            "path": "../../node/src"
         },
         {
             "path": "../../protocol/src"
         },
         {
-            "path": "../../node/src"
+            "path": "../../tools/src"
+        },
+        {
+            "path": "../../types/src"
         },
         {
             "path": "../src"
-        },
-        {
-            "path": "../../tools/src"
         }
     ]
 }

@@ -27,7 +27,7 @@ export {
     NoChannelError,
     PairRetransmissionLimitReachedError,
     UnexpectedMessageError,
-    type ControllingCommissioningFlowOptions as CommissioningOptions,
+    type ControllerCommissioningFlowOptions as CommissioningOptions,
     type ExchangeSendOptions,
     type ProtocolHandler,
 } from "#protocol";

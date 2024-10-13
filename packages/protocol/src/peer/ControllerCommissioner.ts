@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RootCertificateManager } from "#certificate/RootCertificateManager.js";
+import { CertificateAuthority } from "#certificate/CertificateAuthority.js";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, ScannerSet } from "#common/Scanner.js";
 import { Fabric } from "#fabric/Fabric.js";
@@ -20,7 +20,7 @@ import {
     ServerAddress,
 } from "#general";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
-import { ControllerCommissioningFlow, ControllingCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
+import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "#protocol/ExchangeManager.js";
 import { PaseClient } from "#session/index.js";
@@ -35,7 +35,7 @@ const logger = Logger.get("PeerCommissioner");
 /**
  * Options needed to commission a new node
  */
-export interface PeerCommissioningOptions extends Partial<ControllingCommissioningFlowOptions> {
+export interface PeerCommissioningOptions extends Partial<ControllerCommissioningFlowOptions> {
     /** The fabric into which to commission. */
     fabric: Fabric;
 
@@ -97,7 +97,7 @@ export interface ControllerCommissionerContext {
     netInterfaces: NetInterfaceSet;
     sessions: SessionManager;
     exchanges: ExchangeManager;
-    certificates: RootCertificateManager;
+    ca: CertificateAuthority;
 }
 
 /**
@@ -112,19 +112,22 @@ export class ControllerCommissioner {
         this.#paseClient = new PaseClient(context.sessions);
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new ControllerCommissioner({
             peers: env.get(PeerSet),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
             sessions: env.get(SessionManager),
             exchanges: env.get(ExchangeManager),
-            certificates: env.get(RootCertificateManager),
+            ca: env.get(CertificateAuthority),
         });
         env.set(ControllerCommissioner, instance);
         return instance;
     }
 
+    /**
+     * Commission a node.
+     */
     async commission(options: PeerCommissioningOptions): Promise<PeerAddress> {
         const {
             discovery: { timeoutSeconds = 30 },
@@ -293,7 +296,7 @@ export class ControllerCommissioner {
      */
     async #commissionDiscoveredNode(
         paseSecureMessageChannel: MessageChannel,
-        commissioningOptions: PeerCommissioningOptions & ControllingCommissioningFlowOptions,
+        commissioningOptions: PeerCommissioningOptions & ControllerCommissioningFlowOptions,
         discoveryData?: DiscoveryData,
     ): Promise<PeerAddress> {
         const { fabric, performCaseCommissioning } = commissioningOptions;
@@ -330,7 +333,7 @@ export class ControllerCommissioner {
         const commissioningManager = new ControllerCommissioningFlow(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.#context.exchanges, paseSecureMessageChannel), address),
-            this.#context.certificates,
+            this.#context.ca,
             fabric,
             commissioningOptions,
             async address => {

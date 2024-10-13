@@ -6,40 +6,60 @@
 
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
-import { ImplementationError, NotImplementedError } from "#general";
-import { FabricId, NodeId } from "@matter/types";
+import { ImplementationError, NotImplementedError, SupportedStorageTypes } from "#general";
+import { OperationalPeer, PeerAddress } from "#protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
 import { ServerNode } from "./ServerNode.js";
+import { ClientNodeStore } from "./storage/ClientNodeStore.js";
 
 /**
  * A client-side Matter {@link Node}.
  */
 export class ClientNode extends Node {
-    #fabricId: FabricId;
-    #nodeId: NodeId;
+    #address: PeerAddress;
+    #operationalAddress: Partial<OperationalPeer> = {};
+    #store: ClientNodeStore;
 
-    constructor(options: ClientNode.Options) {
+    constructor({ owner, store }: ClientNode.Options) {
+        const { address } = store;
         super({
-            id: `${options.fabricId}:${options.nodeId}`,
+            id: `${address.fabricIndex}:${address.nodeId.toString(16)}`,
             number: 0,
             type: Node.CommonRootEndpoint,
-            owner: options.owner,
+            owner,
         });
+        this.#address = store.address;
+        this.#store = store;
 
-        this.#fabricId = options.fabricId;
-        this.#nodeId = options.nodeId;
-
-        this.env.set(EndpointInitializer, new ClientEndpointInitializer());
+        this.env.set(EndpointInitializer, new ClientEndpointInitializer(store));
     }
 
-    get fabricId() {
-        return this.#fabricId;
+    override async initialize() {
+        await super.initialize();
+
+        const discovery = this.#store.discoveryStorage;
+        const operationalAddress = {} as Record<string, unknown>;
+        for (const key of await discovery.keys()) {
+            operationalAddress[key] = await discovery.get(key);
+        }
+        this.#operationalAddress = operationalAddress as Partial<OperationalPeer>;
     }
 
-    get nodeId() {
-        return this.#nodeId;
+    get address() {
+        return this.#address;
+    }
+
+    get operationalAddress(): OperationalPeer {
+        return { ...this.#operationalAddress, address: this.#address };
+    }
+
+    updateOperationalAddress(operationalAddress: Partial<OperationalPeer>) {
+        operationalAddress = { ...operationalAddress };
+        delete operationalAddress.address;
+        this.#operationalAddress = operationalAddress;
+        return this.#store.discoveryStorage.set(operationalAddress as Record<string, SupportedStorageTypes>);
     }
 
     override get lifecycle() {
@@ -73,7 +93,6 @@ export class ClientNode extends Node {
 export namespace ClientNode {
     export interface Options extends Node.Options {
         owner: ServerNode;
-        fabricId: FabricId;
-        nodeId: NodeId;
+        store: ClientNodeStore;
     }
 }

@@ -17,22 +17,22 @@ import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
 export function createTestFabric() {
-    return new Fabric(
-        FabricIndex(1),
-        FabricId(1),
-        NodeId(BigInt(1)),
-        NodeId(1),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        KEY,
-        VendorId(1),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        "",
-    );
+    return new Fabric({
+        fabricIndex: FabricIndex(1),
+        fabricId: FabricId(1n),
+        nodeId: NodeId(1n),
+        rootNodeId: NodeId(2n),
+        operationalId: Bytes.fromHex("00"),
+        keyPair: KEY,
+        rootPublicKey: Bytes.fromHex("00"),
+        rootVendorId: VendorId(1),
+        rootCert: Bytes.fromHex("00"),
+        identityProtectionKey: Bytes.fromHex("00"),
+        operationalIdentityProtectionKey: Bytes.fromHex("00"),
+        intermediateCACert: Bytes.fromHex("00"),
+        operationalCert: Bytes.fromHex("00"),
+        label: "",
+    });
 }
 
 class DummyMessageExchange {

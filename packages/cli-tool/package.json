@@ -1,0 +1,69 @@
+{
+    "name": "@matter/cli-tool",
+    "version": "0.0.0-git",
+    "description": "Command line tool for interacting with Matter",
+    "keywords": [
+        "iot",
+        "home automation",
+        "matter",
+        "smart device"
+    ],
+    "license": "Apache-2.0",
+    "author": "matter.js authors",
+    "contributors": [
+        "Greg Lauckhart <greg@lauckhart.com>"
+    ],
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/project-chip/matter.js.git"
+    },
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "matter": "matter-run bin/matter.js"
+    },
+    "bin": {
+        "matter": "bin/matter.js"
+    },
+    "imports": {
+        "#tools": "@matter/tools",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#types": "@matter/types",
+        "#protocol": "@matter/protocol",
+        "#node": "@matter/node",
+        "#*": "./src/*"
+    },
+    "dependencies": {
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/node": "*",
+        "@matter/protocol": "*",
+        "@matter/tools": "*",
+        "@matter/types": "*",
+        "@types/escodegen": "^0.0.10",
+        "acorn": "^8.12.1",
+        "ansi-colors": "^4.1.3",
+        "escodegen": "^2.1.0",
+        "yargs": "^17.7.2"
+    },
+    "devDependencies": {
+        "@matter/tools": "*",
+        "@types/yargs": "^17.0.33"
+    },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "LICENSE",
+        "README.md"
+    ],
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    }
+}

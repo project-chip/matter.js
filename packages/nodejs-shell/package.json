@@ -36,9 +36,9 @@
         "#types": "@matter/types"
     },
     "dependencies": {
-        "@matter/nodejs-ble": "*",
-        "@matter/nodejs": "*",
         "@matter/general": "*",
+        "@matter/nodejs": "*",
+        "@matter/nodejs-ble": "*",
         "@matter/tools": "*",
         "@project-chip/matter.js": "*",
         "yargs": "^17.7.2"

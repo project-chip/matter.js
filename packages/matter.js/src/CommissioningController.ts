@@ -149,13 +149,14 @@ export class CommissioningController extends MatterNode {
         return this.controllerInstance?.nodeId;
     }
 
-    get paseCommissionerData() {
+    get paseCommissionerConfig() {
         const controller = this.assertControllerIsStarted(
             "The CommissioningController needs to be started to get the PASE commissioner data.",
         );
+        const { caConfig, fabricConfig: fabricData } = controller;
         return {
-            rootCertificateData: controller.rootCertificateData,
-            fabricData: controller.fabricData,
+            caConfig,
+            fabricData,
         };
     }
 
@@ -213,7 +214,7 @@ export class CommissioningController extends MatterNode {
 
         return await MatterController.create({
             sessionStorage,
-            rootCertificateStorage,
+            caStorage: rootCertificateStorage,
             fabricStorage,
             nodesStorage,
             scanners,

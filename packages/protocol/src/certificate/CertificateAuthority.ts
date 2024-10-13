@@ -30,27 +30,30 @@ import {
     jsToMatterDate,
 } from "./CertificateManager.js";
 
-const logger = Logger.get("RootCertificateManager");
+const logger = Logger.get("CertificateAuthority");
 
-export class RootCertificateManager {
+/**
+ * Manages the root key pair for a fabric owned by a local node.
+ */
+export class CertificateAuthority {
     private rootCertId = BigInt(0);
     private rootKeyPair = Crypto.createKeyPair();
     private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
-    private rootCertBytes = this.generateRootCert();
+    private rootCertBytes = this.#generateRootCert();
     private nextCertificateId = BigInt(1);
-    #construction: Construction<RootCertificateManager>;
+    #construction: Construction<CertificateAuthority>;
 
     get construction() {
         return this.#construction;
     }
 
-    static async create(options: StorageContext | RootCertificateManager.Data) {
-        return asyncNew(RootCertificateManager, options);
+    static async create(options: StorageContext | CertificateAuthority.Configuration) {
+        return asyncNew(CertificateAuthority, options);
     }
 
-    constructor(options: StorageContext | RootCertificateManager.Data) {
+    constructor(options: StorageContext | CertificateAuthority.Configuration) {
         this.#construction = Construction(this, async () => {
-            // Use provided root certificate data or read from storage if we have them stored, else store the just generated data
+            // Use provided CA config or read from storage, otherwise initialize and store
             const certValues = options instanceof StorageContext ? await options.values() : options;
 
             if (
@@ -65,11 +68,11 @@ export class RootCertificateManager {
                 this.rootKeyIdentifier = certValues.rootKeyIdentifier;
                 this.rootCertBytes = certValues.rootCertBytes;
                 this.nextCertificateId = BigInt(certValues.nextCertificateId);
-                logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
+                logger.debug(`Loaded stored credentials with ID ${this.rootCertId}`);
                 return;
             }
 
-            logger.debug(`Created new root certificate with ID ${this.rootCertId}`);
+            logger.debug(`Created new credentials with ID ${this.rootCertId}`);
 
             if (options instanceof StorageContext) {
                 await options.set({
@@ -83,10 +86,10 @@ export class RootCertificateManager {
         });
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const storage = env.get(StorageManager).createContext("certificates");
-        const instance = new RootCertificateManager(storage);
-        env.set(RootCertificateManager, instance);
+        const instance = new CertificateAuthority(storage);
+        env.set(CertificateAuthority, instance);
         return instance;
     }
 
@@ -94,7 +97,7 @@ export class RootCertificateManager {
         return this.rootCertBytes;
     }
 
-    get data(): RootCertificateManager.Data {
+    get config(): CertificateAuthority.Configuration {
         return {
             rootCertId: this.rootCertId,
             rootKeyPair: this.rootKeyPair.keyPair,
@@ -104,7 +107,7 @@ export class RootCertificateManager {
         };
     }
 
-    private generateRootCert() {
+    #generateRootCert() {
         const now = Time.get().now();
         const unsignedCertificate: Unsigned<RootCertificate> = {
             serialNumber: Bytes.fromHex(toHex(this.rootCertId)),
@@ -168,8 +171,8 @@ export class RootCertificateManager {
     }
 }
 
-export namespace RootCertificateManager {
-    export type Data = {
+export namespace CertificateAuthority {
+    export type Configuration = {
         rootCertId: bigint;
         rootKeyPair: BinaryKeyPair;
         rootKeyIdentifier: Uint8Array;

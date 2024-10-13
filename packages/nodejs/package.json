@@ -45,9 +45,9 @@
     },
     "dependencies": {
         "@matter/general": "*",
-        "@matter/types": "*",
-        "@matter/protocol": "*",
         "@matter/node": "*",
+        "@matter/protocol": "*",
+        "@matter/types": "*",
         "@project-chip/matter.js": "*",
         "node-localstorage": "^3.0.5"
     },

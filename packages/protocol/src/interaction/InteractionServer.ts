@@ -223,7 +223,7 @@ export interface InteractionContext {
 }
 
 /**
- * Translates interactions from the Matter protocol to Matter.js APIs.
+ * Translates interactions from the Matter protocol to matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler, InteractionRecipient {
     #context: InteractionContext;

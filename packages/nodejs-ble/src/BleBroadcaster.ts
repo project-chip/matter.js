@@ -5,6 +5,7 @@
  */
 
 import { ImplementationError, Logger } from "@matter/general";
+import { CommissioningMode } from "@matter/protocol";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import {
@@ -35,7 +36,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         { name: deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData,
     ) {
         this.#assertOpen();
-        if (mode !== 1) {
+        if (mode !== CommissioningMode.Basic) {
             this.#advertise = false;
             logger.info(
                 `skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,

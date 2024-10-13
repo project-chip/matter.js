@@ -8,7 +8,6 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "console": "matter-run bin/repl.ts",
         "generate-spec": "matter-run bin/generate-spec.js",
         "generate-chip": "matter-run bin/generate-chip.js",
         "generate-model": "matter-run bin/generate-model.js",
@@ -33,9 +32,9 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
         "@matter/general": "*",
+        "@matter/intermediate-models": "*",
         "@matter/model": "*",
-        "@matter/tools": "*",
-        "@matter/intermediate-models": "*"
+        "@matter/tools": "*"
     },
     "devDependencies": {
         "@types/jsdom": "^21.1.6",

@@ -4,35 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    Construction,
-    Destructable,
-    Diagnostic,
-    Environment,
-    ImplementationError,
-    Logger,
-    StorageContext,
-    StorageManager,
-    StorageService,
-    asyncNew,
-} from "#general";
-import { EventHandler } from "#protocol";
+import { asyncNew, Construction, ImplementationError, StorageContextFactory } from "#general";
 import type { Node } from "../Node.js";
 import { EndpointStoreFactory, EndpointStoreService } from "./EndpointStoreService.js";
-
-const logger = Logger.get("ServerStore");
 
 /**
  * Non-volatile state management for a {@link Node}.
  */
-export class NodeStore implements Destructable {
-    #location: string;
-    #nodeId: string;
-    #storageManager?: StorageManager;
-    #eventHandler?: EventHandler;
-    #sessionStorage?: StorageContext;
-    #fabricStorage?: StorageContext;
-    #eventStorage?: StorageContext;
+export class NodeStore {
+    #factory: StorageContextFactory;
     #rootStore?: EndpointStoreFactory;
     #construction: Construction<NodeStore>;
 
@@ -40,78 +20,21 @@ export class NodeStore implements Destructable {
         return this.#construction;
     }
 
-    /**
-     * Create a new store.
-     */
-    constructor(environment: Environment, nodeId?: string) {
-        if (nodeId === undefined) {
-            throw new ImplementationError("ServerStore must be created with a nodeId");
-        }
-
-        const storage = environment.get(StorageService);
-        this.#location = storage.location ?? "(unknown location)";
-        this.#nodeId = nodeId;
-
-        const initializeStorage = async () => {
-            this.#storageManager = await storage.open(nodeId);
-
-            this.#rootStore = await asyncNew(EndpointStoreFactory, {
-                storage: this.#storageManager.createContext("root"),
-            });
-
-            this.#eventStorage = this.#storage.createContext("events");
-            this.#eventHandler = await EventHandler.create(this.eventStorage);
-
-            this.#logChange("Opened");
-        };
-
-        this.#construction = Construction(this, initializeStorage);
+    constructor(factory: StorageContextFactory) {
+        this.#factory = factory;
+        this.#construction = Construction(this);
     }
 
-    static async create(environment: Environment, nodeId: string) {
-        return await asyncNew(this, environment, nodeId);
+    toString() {
+        return "node store";
+    }
+
+    [Construction.construct]() {
+        return this.initializeStorage();
     }
 
     async erase() {
-        await this.#sessionStorage?.clearAll();
-        await this.#fabricStorage?.clearAll();
-        await this.#eventStorage?.clearAll();
         await this.#rootStore?.erase();
-    }
-
-    async close() {
-        await this.#construction.close(async () => {
-            await this.#storageManager?.close();
-            this.#logChange("Closed");
-        });
-    }
-
-    get eventStorage() {
-        if (!this.#eventStorage) {
-            throw new ImplementationError("Event storage accessed prior to initialization");
-        }
-        return this.#eventStorage;
-    }
-
-    get eventHandler() {
-        if (!this.#eventHandler) {
-            throw new ImplementationError("Event handler accessed prior to initialization");
-        }
-        return this.#eventHandler;
-    }
-
-    get sessionStorage() {
-        if (!this.#sessionStorage) {
-            this.#sessionStorage = this.#storage.createContext("sessions");
-        }
-        return this.#sessionStorage;
-    }
-
-    get fabricStorage() {
-        if (!this.#fabricStorage) {
-            this.#fabricStorage = this.#storage.createContext("fabrics");
-        }
-        return this.#fabricStorage;
     }
 
     get endpointStores(): EndpointStoreService {
@@ -121,14 +44,13 @@ export class NodeStore implements Destructable {
         return this.#rootStore;
     }
 
-    get #storage() {
-        if (this.#storageManager === undefined) {
-            throw new ImplementationError("Node storage accessed prior to initialization");
-        }
-        return this.#storageManager;
+    protected async initializeStorage() {
+        this.#rootStore = await asyncNew(EndpointStoreFactory, {
+            storage: this.factory.createContext("root"),
+        });
     }
 
-    #logChange(what: "Opened" | "Closed") {
-        logger.info(what, Diagnostic.strong(this.#nodeId ?? "node"), "storage at", `${this.#location}/${this.#nodeId}`);
+    protected get factory() {
+        return this.#factory;
     }
 }

@@ -137,7 +137,7 @@ export class ExchangeManager {
         });
     }
 
-    [Environmental.create](env: Environment) {
+    static [Environmental.create](env: Environment) {
         const instance = new ExchangeManager({
             transportInterfaces: env.get(TransportInterfaceSet),
             sessionManager: env.get(SessionManager),

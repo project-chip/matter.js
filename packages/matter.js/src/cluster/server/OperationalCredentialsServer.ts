@@ -8,13 +8,13 @@
 
 import { AccessControl, BasicInformation, OperationalCredentials } from "#clusters";
 import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import { AccessLevel } from "#model";
 import {
     assertSecureSession,
     CertificateError,
     DeviceCertification,
     FabricTableFullError,
-    MatterDevice,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
     PublicKeyError,

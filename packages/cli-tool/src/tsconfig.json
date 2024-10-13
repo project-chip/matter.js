@@ -1,0 +1,27 @@
+{
+    "extends": "../../tools/tsc/tsconfig.app.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "types": [
+            "globals",
+            "node"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../general/src"
+        },
+        {
+            "path": "../../model/src"
+        },
+        {
+            "path": "../../node/src"
+        },
+        {
+            "path": "../../protocol/src"
+        },
+        {
+            "path": "../../types/src"
+        }
+    ]
+}

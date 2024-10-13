@@ -54,12 +54,12 @@ export class Builder {
         return this.options.targets && this.options.targets.length > 0;
     }
 
-    public async configure(project: Project, progress: Progress) {
+    public async configure(project: Project) {
         if (!project.pkg.hasConfig) {
             return;
         }
 
-        await project.configure(progress);
+        await project.configure();
     }
 
     public async build(project: Project) {
@@ -89,9 +89,9 @@ export class Builder {
 
         const info: BuildInformation = {};
 
-        const config = await project.configure(progress);
+        const config = await project.configure();
 
-        await config?.before?.({ project, progress });
+        await config?.before?.({ project });
 
         // If available we use graph to access dependency API shas
         const graph = this.graph ?? (await Graph.forProject(project.pkg.path));
@@ -164,7 +164,7 @@ export class Builder {
             await this.#transpile(project, progress, Target.cjs);
         }
 
-        await config?.after?.({ project, progress });
+        await config?.after?.({ project });
 
         // Only update build information when there are no explicit targets so we know it's a full build
         if (!this.options.targets?.length) {

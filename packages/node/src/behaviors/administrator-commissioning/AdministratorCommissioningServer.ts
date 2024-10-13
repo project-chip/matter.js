@@ -62,7 +62,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     declare state: AdministratorCommissioningServer.State;
 
     /**
-     * This method opens an Enhanced Commissioning Window (A dynamic passcode is used which was provided by the caller).
+     * This method opens an Enhanced Commissioning Window (a dynamic passcode is used which was provided by the caller).
      */
     override async openCommissioningWindow({
         pakePasscodeVerifier,

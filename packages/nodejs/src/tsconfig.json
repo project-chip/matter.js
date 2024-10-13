@@ -10,19 +10,19 @@
             "path": "../../general/src"
         },
         {
-            "path": "../../types/src"
+            "path": "../../matter.js/src"
         },
         {
-            "path": "../../protocol/src"
+            "path": "../../model/src"
         },
         {
             "path": "../../node/src"
         },
         {
-            "path": "../../matter.js/src"
+            "path": "../../protocol/src"
         },
         {
-            "path": "../../model/src"
+            "path": "../../types/src"
         }
     ]
 }

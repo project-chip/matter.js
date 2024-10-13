@@ -13,6 +13,7 @@ import {
     ClusterServer,
     CommandServer,
     createAttributeServer as ConstructAttributeServer,
+    EventHandler,
     EventServer,
     FabricManager,
     Message,
@@ -141,7 +142,6 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
      * Create the {@link ClusterDatasource} that adapts the Behavior API to the AttributeServer API.
      */
     #createClusterDatasource(): ClusterDatasource {
-        const eventHandler = this.eventHandler;
         const datasource = this.datasource;
         const env = this.endpoint.env;
 
@@ -151,7 +151,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
             },
 
             get eventHandler() {
-                return eventHandler;
+                return env.get(EventHandler);
             },
 
             get fabrics() {
@@ -398,7 +398,7 @@ function createEventServer(name: string, definition: Event<any, any>, backing: C
     });
 
     server.assignToEndpoint(backing.server);
-    const promise = server.bindToEventHandler(backing.eventHandler);
+    const promise = server.bindToEventHandler(backing.endpoint.env.get(EventHandler));
     if (MaybePromise.is(promise)) {
         // Current code structure means this should never happen.  Refactor after removal of old API will resolve this
         throw new InternalError("Event handler binding returned a promise");
