@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { undefinedValue } from "#location.js";
 import { MaybePromise } from "@matter/general";
 
 /**
@@ -68,7 +69,7 @@ export namespace Stat {
     }
 
     /**
-     * Obtain an Inode for a JS value.
+     * Obtain a Stat for an arbitrary JS value.
      */
     export function of(definition: unknown): Stat {
         for (const provider of providers) {
@@ -87,8 +88,12 @@ export namespace Stat {
                 },
 
                 definitionAt(path: string) {
-                    if (path in definition) {
-                        return definition[path];
+                    if (Object.hasOwn(definition, path)) {
+                        const value = definition[path];
+                        if (value === undefined) {
+                            return undefinedValue;
+                        }
+                        return value;
                     }
                 },
             };

@@ -35,13 +35,11 @@ export class NotACommandError extends CliError {
     }
 }
 
-export class TooManyArgsError extends CliError {
-    constructor(what: string) {
-        super(`Too many arguments: ${what}`);
+export class ArgumentError extends CliError {
+    constructor(command: (...args: unknown[]) => unknown, message: string) {
+        super(`${command.name}: ${message}`);
     }
 }
-
-export class InvalidArgumentError extends CliError {}
 
 /**
  * Thrown when statement appears incomplete and REPL should wait for more input.

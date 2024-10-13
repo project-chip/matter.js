@@ -37,6 +37,7 @@
         "#types": "@matter/types",
         "#protocol": "@matter/protocol",
         "#node": "@matter/node",
+        "#package": "./package.json",
         "#*": "./src/*"
     },
     "dependencies": {
@@ -49,12 +50,10 @@
         "@types/escodegen": "^0.0.10",
         "acorn": "^8.12.1",
         "ansi-colors": "^4.1.3",
-        "escodegen": "^2.1.0",
-        "yargs": "^17.7.2"
+        "escodegen": "^2.1.0"
     },
     "devDependencies": {
-        "@matter/tools": "*",
-        "@types/yargs": "^17.0.33"
+        "@matter/tools": "*"
     },
     "files": [
         "dist/**/*",

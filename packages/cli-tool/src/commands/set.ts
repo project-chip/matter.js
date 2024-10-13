@@ -4,29 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InvalidArgumentError, TooManyArgsError } from "#errors.js";
-import { bin } from "#globals.js";
-import { Environment, VariableService } from "@matter/general";
+import { VariableService } from "#general";
+import { Command } from "./command.js";
 
-bin.set = function (keyOrAssignment: unknown, value: unknown) {
-    switch (arguments.length) {
-        case 0:
-            return Environment.default.vars.vars;
+Command({
+    usage: ["", "KEY=VALUE", "KEY VALUE"],
+    description:
+        'Set or display environment variables.  matter.js defines variables in a hierarchy with "." as a delimiter.',
+    maxArgs: 2,
 
-        case 1:
-            const assignment = `${keyOrAssignment}`;
-            const equalPos = assignment.indexOf("=");
-            if (equalPos === -1) {
-                throw new InvalidArgumentError(`Invalid argument: parameter must be of the form key=value`);
-            }
-            Environment.default.vars.set(assignment.slice(0, equalPos), assignment.slice(equalPos + 1));
-            break;
+    invoke: async function set(args) {
+        switch (args.length) {
+            case 0:
+                return this.env.vars.vars;
 
-        case 2:
-            Environment.default.vars.set(`${keyOrAssignment}`, value as VariableService.Value);
-            break;
+            case 1:
+                const assignment = `${args[0]}`;
+                const equalPos = assignment.indexOf("=");
+                if (equalPos === -1) {
+                    this.err("Invalid argument: parameter must be of the form key=value");
+                }
+                this.env.vars.set(assignment.slice(0, equalPos), assignment.slice(equalPos + 1));
+                break;
 
-        default:
-            throw new TooManyArgsError("set");
-    }
-};
+            case 2:
+                this.env.vars.set(`${args[0]}`, args[1] as VariableService.Value);
+                break;
+        }
+    },
+});

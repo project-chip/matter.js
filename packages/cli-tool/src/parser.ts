@@ -109,7 +109,7 @@ function parseCommand(command: string): Input {
     // We now know the command name
     const name = command.slice(nameStart, start);
 
-    // Extract arguments.  These are either unadorned text
+    // Extract arguments.  These are either unadorned text or a JS expression
     const args = Array<CommandArg>();
     while (command.trim().length) {
         while (start < command.length && command[start].match(/^\s/)) {
@@ -226,6 +226,7 @@ export namespace isCommand {
         "void",
         "true",
         "false",
+        "this",
     ];
 
     const IDENTIFIER = "[\\p{L}$_][\\p{L}$_0-9]*";
@@ -233,14 +234,13 @@ export namespace isCommand {
 
     const statementStarts = [...STATEMENT_KEYWORDS.map(kw => `${kw}${EOW}`), `${IDENTIFIER}\\s*=`];
 
+    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.?\\.?/)?${IDENTIFIER}(?:\\/(?:\\.?\\.|${IDENTIFIER}))*`];
+
     // If this regexp matches, input is NOT a command
     export const STATEMENT_DETECTOR = new RegExp(`^\\s*(?:${statementStarts.join("|")})`, "u");
 
     // If above regexp does not match but this one does then input IS a command
-    export const COMMAND_DETECTOR = new RegExp(
-        `^\\s*(?:\\.?/)?${IDENTIFIER}(?:\\/(?:\\.?\\.|${IDENTIFIER}))*${EOW}`,
-        "u",
-    );
+    export const COMMAND_DETECTOR = new RegExp(`^(?:${commandStarts.join("|")})${EOW}`, "u");
 }
 
 /**

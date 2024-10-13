@@ -5,22 +5,46 @@
  */
 
 import { BadCommandError, IncompleteError, NotACommandError, NotADirectoryError, NotFoundError } from "#errors.js";
-import { InternalError, MaybePromise } from "#general";
+import { Environment, InternalError, MaybePromise } from "#general";
 import { bin, globals as defaultGlobals } from "#globals.js";
-import { Location } from "#location.js";
+import { Location, undefinedValue } from "#location.js";
 import { parseInput } from "#parser.js";
 import { Directory } from "#stat.js";
+import colors from "ansi-colors";
+import { inspect } from "util";
 import { createContext, runInContext, RunningCodeOptions } from "vm";
 
-export interface Domain {
+export interface TextWriter {
+    (...text: string[]): void;
+}
+
+/**
+ * Interfaces {@link Domain} with other components.
+ *
+ * Note that this is not destructured internally so fields may be dynamic.
+ */
+export interface DomainContext {
+    description: string;
+    env: Environment;
+    out: TextWriter;
+    err: TextWriter;
+    terminalWidth: number;
+    colorize: boolean;
+}
+
+export interface Domain extends DomainContext {
+    isDomain: true;
     location: Location;
+    exitHandler?: () => MaybePromise;
     execute(input: string): Promise<unknown>;
+    searchPathFor(name: string): Promise<Location>;
+    inspect(what: unknown): string;
 }
 
 /**
  * Maintains state and executes commands.
  */
-export function Domain(): Domain {
+export function Domain(context: DomainContext): Domain {
     const hiddenGlobals = Object.keys(globalThis);
 
     const globals: Record<string, unknown> = Object.defineProperties(
@@ -28,13 +52,28 @@ export function Domain(): Domain {
         {
             ...Object.getOwnPropertyDescriptors(globalThis),
             ...Object.getOwnPropertyDescriptors(defaultGlobals),
-            bin: { value: { ...bin }, enumerable: true, writable: false, configurable: false },
+            bin: {
+                value: { ...bin },
+                enumerable: true,
+                writable: false,
+                configurable: false,
+            },
         },
     );
+
+    Object.defineProperty(globals.bin, "domain", {
+        get() {
+            return domain;
+        },
+
+        enumerable: false,
+    });
 
     globals.global = globals.globalThis = globals;
 
     const domain: Domain = {
+        isDomain: true,
+
         location: Location(
             "",
             globals,
@@ -52,7 +91,13 @@ export function Domain(): Domain {
                     if (path === "crypto") {
                         return globalThis.crypto;
                     }
-                    return globals[path];
+                    if (Object.hasOwn(globals, path)) {
+                        const result = globals[path];
+                        if (result === undefined) {
+                            return undefinedValue;
+                        }
+                        return result;
+                    }
                 },
             }),
             undefined,
@@ -80,25 +125,7 @@ export function Domain(): Domain {
 
             const { name, args } = input;
 
-            let location;
-            try {
-                location = await this.location.at(name);
-            } catch (e) {
-                if ((e instanceof NotFoundError || e instanceof NotADirectoryError) && name.indexOf("/") === -1) {
-                    // "path" search
-                    try {
-                        location = await this.location.at(Location.join("/bin", name));
-                    } catch (e2) {
-                        if (e instanceof NotFoundError || e instanceof NotADirectoryError) {
-                            // Throw original error
-                            throw e;
-                        }
-                        throw e2;
-                    }
-                } else {
-                    throw e;
-                }
-            }
+            const location = await this.searchPathFor(name);
 
             const fn = location?.definition;
 
@@ -121,49 +148,85 @@ export function Domain(): Domain {
                 });
             });
 
-            let scope = location.parent?.definition ?? globals;
-            if (scope === globals.bin) {
-                scope = this;
-            }
+            const scope = location.parent?.definition ?? globals;
 
             return fn.apply(scope, argvals);
         },
+
+        async searchPathFor(name: string) {
+            let location;
+            try {
+                location = await this.location.at(name);
+            } catch (e) {
+                if ((e instanceof NotFoundError || e instanceof NotADirectoryError) && name.indexOf("/") === -1) {
+                    // "path" search
+                    try {
+                        location = await this.location.at(Location.join("/bin", name));
+                    } catch (e2) {
+                        if (e instanceof NotFoundError || e instanceof NotADirectoryError) {
+                            // Throw original error
+                            throw e;
+                        }
+                        throw e2;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+            return location;
+        },
+
+        inspect(value: unknown) {
+            if (value === undefinedValue) {
+                return colors.dim("(undefined)");
+            }
+            return inspect(value, false, 1, this.colorize);
+        },
+
+        get description() {
+            return context.description;
+        },
+
+        get out() {
+            return context.out;
+        },
+
+        get err() {
+            return context.err;
+        },
+
+        get terminalWidth() {
+            return context.terminalWidth;
+        },
+
+        get colorize() {
+            return context.colorize;
+        },
+
+        get env() {
+            return context.env;
+        },
     };
 
-    const context = createContext(
+    const vmContext = createContext(
         new Proxy(
             {},
             {
                 get(_target, key, _receiver) {
-                    if (!(typeof key === "string")) {
-                        return;
-                    }
-                    const value = domain.location.maybeAt(key);
-
-                    if (MaybePromise.is(value)) {
-                        return value.then(value => {
-                            if (value === undefined) {
-                                return globals[key];
-                            }
-                            return value.definition;
-                        });
+                    if (key in (domain.location.definition as {})) {
+                        return (domain.location.definition as any)[key];
                     }
 
-                    if (value === undefined) {
-                        return globals[key];
-                    }
-
-                    return value.definition;
+                    return globals[key as any];
                 },
 
-                set(target, key, newValue, _receiver) {
+                set(_target, key, newValue, _receiver) {
                     const { definition } = domain.location;
                     if (definition === undefined || definition === null) {
                         // Shouldn't happen
                         return false;
                     }
-                    target = definition;
-                    (target as any)[key] = newValue;
+                    (definition as any)[key] = newValue;
                     return true;
                 },
 
@@ -192,17 +255,20 @@ export function Domain(): Domain {
                 },
 
                 ownKeys(_target) {
-                    return [
-                        ...new Set([...Reflect.ownKeys(globals), ...Reflect.ownKeys(domain.location.definition as {})]),
-                    ];
+                    return Reflect.ownKeys(domain.location.definition as {});
                 },
 
-                getOwnPropertyDescriptor(_target, p) {
-                    const descriptor = Reflect.getOwnPropertyDescriptor(domain.location.definition as {}, p);
-                    if (descriptor) {
-                        return descriptor;
+                getOwnPropertyDescriptor(target, p) {
+                    const result = Reflect.getOwnPropertyDescriptor(domain.location.definition as {}, p);
+                    if (result === undefined) {
+                        Reflect.deleteProperty(target, p);
+                    } else {
+                        // We can never report a property as configurable because it must match the result on the target
+                        // and we need to be able to configure target to align with other invariants
+                        result.configurable = true;
+                        Object.defineProperty(target, p, result);
+                        return result;
                     }
-                    return Reflect.getOwnPropertyDescriptor(globals, p);
                 },
             },
         ),
@@ -211,7 +277,7 @@ export function Domain(): Domain {
     return domain;
 
     function evaluate(js: string, options: RunningCodeOptions = {}) {
-        return runInContext(js, context, {
+        return runInContext(js, vmContext, {
             breakOnSigint: true,
             filename: "matter-cli-eval",
             displayErrors: false,

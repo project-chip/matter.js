@@ -14,6 +14,7 @@ export * from "./DataWriter.js";
 export * from "./DeepCopy.js";
 export * from "./DeepEqual.js";
 export * from "./Error.js";
+export * from "./FormattedText.js";
 export * from "./GeneratedClass.js";
 export * from "./Ip.js";
 export * from "./Lifecycle.js";

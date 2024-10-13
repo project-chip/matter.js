@@ -6,11 +6,14 @@
 
 import { Domain } from "#domain.js";
 import { IncompleteError } from "#errors.js";
-import { Diagnostic, LogFormat } from "#general";
+import { Diagnostic, Environment, LogFormat } from "#general";
+import { undefinedValue } from "#location.js";
 import { isCommand } from "#parser.js";
 import colors from "ansi-colors";
+import { readFile } from "fs/promises";
 import { homedir } from "os";
-import { join } from "path";
+import { dirname, join } from "path";
+import { env, exit, stderr, stdout } from "process";
 import { AsyncCompleter, CompleterResult } from "readline";
 import { Recoverable, REPLEval, REPLServer, start } from "repl";
 import "./commands/index.js";
@@ -21,7 +24,39 @@ import "./providers/index.js";
 const LINE_PROTECTOR_CHAR = "\u0001";
 
 export async function repl() {
-    const domain = Domain();
+    const description = `${colors.bold("matter.js")} ${await readPackageVersion()}`;
+
+    const domain = Domain({
+        description,
+
+        out(...text) {
+            stdout.write(text.join(""));
+        },
+
+        err(...text) {
+            let str = text.join("");
+            if (str.indexOf("\x1b") === -1) {
+                str = colors.red(str);
+            }
+            stdout.write(str);
+        },
+
+        get terminalWidth() {
+            return stdout.columns;
+        },
+
+        get colorize() {
+            return stdout.isTTY;
+        },
+
+        get env() {
+            return Environment.default;
+        },
+    });
+
+    domain.exitHandler = () => {
+        exit(0);
+    };
 
     let server: REPLServer | undefined = undefined;
 
@@ -38,6 +73,10 @@ export async function repl() {
 
         function handleSuccess(result: unknown) {
             server?.setPrompt(createPrompt());
+            if (result === undefinedValue) {
+                domain.out(domain.inspect(result));
+                cb(null, undefined);
+            }
             cb(null, result);
         }
 
@@ -83,24 +122,25 @@ export async function repl() {
             // Display the error ourselves so is pretty and captures all details
             const diagnostic = Diagnostic.error(error);
             const formatted = LogFormat[colors.enabled ? "ansi" : "plain"](diagnostic);
-            process.stderr.write(`${formatted}\n`);
+            stderr.write(`${formatted}\n`);
 
             // Do not report the error to node
             cb(null, undefined);
         }
     };
 
+    stdout.write(`Welcome to ${description}.  Type ${colors.bold('"help"')} for help.\n`);
     server = start({
         prompt: createPrompt(),
         eval: doEval,
         ignoreUndefined: true,
     });
 
-    const historyPath = process.env.MATTER_REPL_HISTORY || join(homedir(), ".matter-cli-history");
+    const historyPath = env.MATTER_REPL_HISTORY || join(homedir(), ".matter-cli-history");
     server.setupHistory(historyPath, error => {
         if (error) {
             console.error(error);
-            process.exit(1);
+            exit(1);
         }
     });
 
@@ -165,4 +205,25 @@ export async function repl() {
 
         return [completions.sort(), partial];
     }
+}
+
+async function readPackageVersion() {
+    let path = new URL(import.meta.url).pathname;
+    while (dirname(path) !== path) {
+        path = dirname(path);
+        try {
+            const pkg = await readFile(join(path, "package.json"));
+            const parsed = JSON.parse(pkg.toString());
+            if (typeof parsed.version === "string") {
+                return parsed.version;
+            }
+        } catch (e) {
+            if ((e as any).code === "ENOENT") {
+                continue;
+            }
+            throw e;
+        }
+    }
+
+    return "?";
 }

@@ -9,6 +9,11 @@ import { decamelize, MaybePromise } from "#general";
 import { Stat } from "#stat.js";
 
 /**
+ * Returned during location search to indicate "yes this exists but value is undefined".
+ */
+export const undefinedValue = Symbol("undefined-value");
+
+/**
  * We support a quick-and-dirty virtual "filesystem" for navigation of our object model.
  *
  * This is the interface to this filesystem.
@@ -24,8 +29,8 @@ export interface Location {
     parent?: Location;
     definition: unknown;
     paths: MaybePromise<string[]>;
-    at(path: string, searchedAs?: string): MaybePromise<Location>;
-    maybeAt(path: string, searchedAs?: string): MaybePromise<Location | undefined>;
+    at(path: string | number, searchedAs?: string): MaybePromise<Location>;
+    maybeAt(path: string | number, searchedAs?: string): MaybePromise<Location | undefined>;
 }
 
 function isClass(fn: {}) {
@@ -36,7 +41,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
     let { tag } = stat;
 
     if (tag === undefined) {
-        if (definition === undefined) {
+        if (definition === undefined || definition === undefinedValue) {
             tag = "undefined";
         } else if (typeof definition === "object") {
             if (definition === null) {
@@ -123,7 +128,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 return this;
             }
 
-            const segments = path.split("/");
+            const segments = path.toString().split("/");
 
             // Handle absolute path.  Does not happen on recursion
             if (segments[0] === "") {
