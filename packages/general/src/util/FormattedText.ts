@@ -80,7 +80,7 @@ type TextStructure = {
 };
 
 function extractPrefix(text: string) {
-    const match = text.match(/^(\S+)\s+(.*)$/);
+    const match = text.match(/^(\S+)\s+($|\S.*$)/);
     if (match) {
         return { prefix: match[1], text: match[2] };
     }
