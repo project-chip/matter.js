@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FormattedText } from "#general";
 import { Model } from "#model";
 import { Block } from "../../util/TsFile.js";
-import { camelize, serialize, wordWrap } from "../../util/string.js";
+import { camelize, serialize } from "../../util/string.js";
 
 export function generateElement(target: Block, importFrom: string, element: Model, prefix = "", suffix = "") {
     const factory = camelize(element.tag, true);
@@ -59,7 +60,7 @@ export function generateElement(target: Block, importFrom: string, element: Mode
 
     // Next row: Details
     if (element.details) {
-        const lines = wordWrap(element.details, 100);
+        const lines = FormattedText(element.details, 100);
         for (let i = 0; i < lines.length; i++) {
             const prefix = i ? "    " : "details: ";
             const suffix = i < lines.length - 1 ? " +" : "";

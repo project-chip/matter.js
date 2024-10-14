@@ -4,22 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InvalidArgumentError } from "#errors.js";
-import { bin } from "#globals.js";
 import { Location } from "#location.js";
+import { Command } from "./command.js";
 
-bin.rm = async function (...paths: unknown[]) {
-    const toDelete = Array<Location>();
+Command({
+    usage: "[PATH]...",
+    description: "Deletes the properties at the paths you specify.",
 
-    for (const path of paths) {
-        const location = await this.location.at(`${path}`);
-        if (!location.parent) {
-            throw new InvalidArgumentError(`Invalid argument: Can't delete ${location.path}`);
+    invoke: async function rm(...args: unknown[]) {
+        const toDelete = Array<Location>();
+
+        for (const path of args) {
+            const location = await this.location.at(`${path}`);
+            if (!location.parent) {
+                this.err(`Invalid argument: Can't delete ${location.path}`);
+                return;
+            }
+            toDelete.push(location);
         }
-        toDelete.push(location);
-    }
 
-    for (const location of toDelete) {
-        delete (location.parent!.definition as Record<string, unknown>)[location.basename];
-    }
-};
+        for (const location of toDelete) {
+            delete (location.parent!.definition as Record<string, unknown>)[location.basename];
+        }
+    },
+});

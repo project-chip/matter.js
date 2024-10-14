@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, serialize } from "#general";
+import { FormattedText, InternalError, serialize } from "#general";
 import { Specification } from "#model";
 import { Package } from "#tools";
 import { relative } from "path";
 import { absolute, readMatterFile, writeMatterFile } from "./file.js";
-import { asObjectKey, wordWrap } from "./string.js";
+import { asObjectKey } from "./string.js";
 
 const HEADER = `/**
  * @license
@@ -95,7 +95,7 @@ export abstract class Entry {
         }
 
         // Word wrap documentation
-        const lines = wordWrap(paragraphs.join("\n"), WRAP_WIDTH - 3 - linePrefix.length);
+        const lines = FormattedText(paragraphs.join("\n"), WRAP_WIDTH - 3 - linePrefix.length);
 
         // Add xref after wrapping so we can ensure it never wraps
         const spec = mapSpec(this.documentation?.xref);

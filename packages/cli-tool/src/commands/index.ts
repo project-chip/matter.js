@@ -6,8 +6,9 @@
 
 import "./cat.js";
 import "./cd.js";
-import "./cwd.js";
+import "./exit.js";
 import "./help.js";
 import "./ls.js";
+import "./pwd.js";
 import "./rm.js";
 import "./set.js";

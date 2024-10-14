@@ -4,16 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { bin } from "#globals.js";
-import { stdout } from "process";
-import { inspect } from "util";
+import { Command } from "./command.js";
 
-bin.cat = async function (...args: unknown[]) {
-    const locations = await Promise.all(args.map(arg => this.location.at(`${arg}`)));
-    for (const location of locations) {
-        stdout.write(inspect(location.definition, false, 1, stdout.isTTY));
-        stdout.write("\n");
-    }
-};
+Command({
+    usage: "[PATH]...",
+    description: "Inspect values in one or more paths.",
+    aliases: ["inspect"],
 
-bin.inspect = bin.cat;
+    invoke: async function cat(args) {
+        const locations = await Promise.all(args.map(path => this.location.at(`${path}`)));
+        for (const location of locations) {
+            this.out(this.inspect(location.definition), "\n");
+        }
+    },
+});
