@@ -35,6 +35,7 @@ export class Subscription {
         this.#id = id;
         this.#criteria = criteria;
 
+        // TODO Do not add to session but to node/peer
         this.#session.subscriptions.add(this);
         logger.debug(`Added subscription ${this.#id} to ${this.#session.name}`);
     }
