@@ -23,6 +23,7 @@ import {
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
     ControllerDiscovery,
+    DecodedAttributeReportValue,
     DiscoveryData,
     InteractionClient,
     MdnsBroadcaster,
@@ -336,6 +337,16 @@ export class CommissioningController extends MatterNode {
         );
 
         return pairedNode;
+    }
+
+    async collectStoredAttributeData(nodeId: NodeId): Promise<DecodedAttributeReportValue<any>[]> {
+        const controller = this.assertControllerIsStarted();
+        const storedDataVersions = await controller.getStoredClusterDataVersions(nodeId);
+        const result = new Array<DecodedAttributeReportValue<any>>();
+        for (const { endpointId, clusterId } of storedDataVersions) {
+            result.push(...(await controller.retrieveStoredAttributes(nodeId, endpointId, clusterId)));
+        }
+        return result;
     }
 
     /**

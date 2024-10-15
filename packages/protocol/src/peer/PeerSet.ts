@@ -17,6 +17,7 @@ import {
     ImplementationError,
     isIPv6,
     Logger,
+    MatterError,
     NetInterfaceSet,
     NoResponseTimeoutError,
     ObservableSet,
@@ -38,7 +39,7 @@ import { ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
 import { ControllerDiscovery, DiscoveryError, PairRetransmissionLimitReachedError } from "./ControllerDiscovery.js";
 import { OperationalPeer } from "./OperationalPeer.js";
-import { PeerStore } from "./PeerStore.js";
+import { PeerNodeStore, PeerStore } from "./PeerStore.js";
 
 const logger = Logger.get("PeerSet");
 
@@ -64,6 +65,9 @@ export enum NodeDiscoveryType {
     /** Full discovery means that the device is discovered until it is found, excluding known addresses. */
     FullDiscovery = 3,
 }
+
+/** Error when an unknown nod eis tried to be connected or any other action done with it. */
+export class UnknownNodeError extends MatterError {}
 
 /**
  * Configuration for discovering when establishing a peer connection.
@@ -92,22 +96,6 @@ export interface PeerSetContext {
     store: PeerStore;
 }
 
-// TODO Convert this into a proper persisted store
-export type NodeCachedData = {
-    attributeValues: Map<
-        string,
-        {
-            endpointId: EndpointNumber;
-            clusterId: ClusterId;
-            attributeId: AttributeId;
-            attributeName: string;
-            value: any;
-        }
-    >;
-    clusterDataVersions: Map<string, { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }>;
-    maxEventNumber?: EventNumber;
-};
-
 /**
  * Manages operational connections to peers on shared fabric.
  */
@@ -128,6 +116,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #construction: Construction<PeerSet>;
     readonly #store: PeerStore;
     readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
+    readonly #nodeCachedData = new PeerAddressMap<PeerNodeStore>(); // Temporarily until we store it in new API
     readonly #clients = new PeerAddressMap<InteractionClient>();
 
     constructor(context: PeerSetContext) {
@@ -318,7 +307,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             }),
             address,
             this.#interactionQueue,
-            cachedData,
+            nodeStore,
         );
         this.#clients.set(address, client);
         return client;
@@ -712,7 +701,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     ) {
         let peer = this.#peersByAddress.get(address);
         if (peer === undefined) {
-            peer = { address };
+            peer = { address, dataStore: await this.#store.createNodeStore(address) };
             this.#peers.add(peer);
         }
         peer.operationalAddress = operationalServerAddress;

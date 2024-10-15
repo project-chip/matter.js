@@ -6,6 +6,7 @@
 
 import { DiscoveryData } from "#common/Scanner.js";
 import { ServerAddressIp } from "#general";
+import { PeerNodeStore } from "#peer/PeerStore.js";
 import { PeerAddress } from "./PeerAddress.js";
 
 /**
@@ -28,4 +29,9 @@ export interface OperationalPeer {
      * Additional information collected while locating the peer.
      */
     discoveryData?: DiscoveryData;
+
+    /**
+     * The data store for the peer.
+     */
+    dataStore?: PeerNodeStore;
 }

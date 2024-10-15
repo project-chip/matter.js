@@ -12,6 +12,7 @@
 
 import { GeneralCommissioning } from "#clusters";
 import { NodeCommissioningOptions } from "#CommissioningController.js";
+import { CachedClientNodeStore } from "#device/CachedClientNodeStore.js";
 import { DeviceInformationData } from "#device/DeviceInformation.js";
 import {
     ChannelType,
@@ -33,6 +34,7 @@ import {
     ClusterClient,
     CommissioningError,
     ControllerCommissioner,
+    DecodedAttributeReportValue,
     DEFAULT_ADMIN_VENDOR_ID,
     DEFAULT_FABRIC_ID,
     DeviceAdvertiser,
@@ -45,17 +47,21 @@ import {
     InstanceBroadcaster,
     NodeDiscoveryType,
     OperationalPeer,
+    PeerAddress,
     PeerCommissioningOptions,
     PeerSet,
     PeerStore,
     ResumptionRecord,
     RetransmissionLimitReachedError,
     ScannerSet,
+    SecureChannelProtocol,
     SessionManager,
-    StatusReportOnlySecureChannelProtocol,
+    SubscriptionClient,
+    UnknownNodeError,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
+    ClusterId,
     DiscoveryCapabilitiesBitmap,
     EndpointNumber,
     FabricId,
@@ -474,6 +480,38 @@ export class MatterController {
     getActiveSessionInformation() {
         return this.sessionManager.getActiveSessionInformation();
     }
+
+    async getStoredClusterDataVersions(
+        nodeId: NodeId,
+        filterEndpointId?: EndpointNumber,
+        filterClusterId?: ClusterId,
+    ): Promise<{ endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[]> {
+        const peer = this.peers.get(this.fabric.addressOf(nodeId));
+        if (peer === undefined) {
+            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
+        }
+        if (peer.dataStore === undefined) {
+            return []; // We have no store, also also no data
+        }
+        await peer.dataStore.construction;
+        return peer.dataStore.getClusterDataVersions(filterEndpointId, filterClusterId);
+    }
+
+    async retrieveStoredAttributes(
+        nodeId: NodeId,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+    ): Promise<DecodedAttributeReportValue<any>[]> {
+        const peer = this.peers.get(this.fabric.addressOf(nodeId));
+        if (peer === undefined) {
+            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
+        }
+        if (peer.dataStore === undefined) {
+            return []; // We have no store, also also no data
+        }
+        await peer.dataStore.construction;
+        return peer.dataStore.retrieveAttributes(endpointId, clusterId);
+    }
 }
 
 class CommissionedNodeStore extends PeerStore {
@@ -497,23 +535,30 @@ class CommissionedNodeStore extends PeerStore {
             return [];
         }
 
-        const commissionedNodes = await this.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
-        return commissionedNodes.map(
-            ([nodeId, { operationalServerAddress, discoveryData, deviceData }]) =>
-                ({
-                    address: this.fabric.addressOf(nodeId),
-                    operationalAddress: operationalServerAddress,
-                    discoveryData,
-                    deviceData,
-                }) satisfies CommissionedPeer,
-        );
+        const commissionedNodes =
+            await this.#controllerStore.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
+
+        const nodes = new Array<CommissionedPeer>();
+
+        for (const [nodeId, { operationalServerAddress, discoveryData, deviceData }] of commissionedNodes) {
+            const address = this.fabric.addressOf(nodeId);
+            nodes.push({
+                address,
+                operationalAddress: operationalServerAddress,
+                discoveryData,
+                deviceData,
+                dataStore: await this.createNodeStore(address),
+            } satisfies CommissionedPeer);
+        }
+        return nodes;
     }
 
     async updatePeer() {
         return this.save();
     }
 
-    async deletePeer() {
+    async deletePeer(address: PeerAddress) {
+        await (await this.#controllerStore.clientNodeStore(address.nodeId.toString())).clearAll();
         return this.save();
     }
 

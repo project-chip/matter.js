@@ -14,6 +14,7 @@ import {
     OperationalPeer,
     PeerAddress,
     PeerCommissioningOptions,
+    PeerNodeStore,
     PeerStore,
 } from "#protocol";
 import { ClientNode } from "./ClientNode.js";
