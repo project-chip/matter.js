@@ -358,11 +358,15 @@ export class ControllerCommissioner {
                 }
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.#context.peers.connect(address, {
-                    discoveryType: NodeDiscoveryType.TimedDiscovery,
-                    timeoutSeconds: 120,
-                    discoveryData,
-                }); // Wait maximum 120s to find the operational device for commissioning process
+                return await this.#context.peers.connect(
+                    address,
+                    {
+                        discoveryType: NodeDiscoveryType.TimedDiscovery,
+                        timeoutSeconds: 120,
+                        discoveryData,
+                    },
+                    true,
+                ); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
