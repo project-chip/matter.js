@@ -46,7 +46,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: The noble and bleno dependencies got updated to also support Ubuntu 24
 
 -   @matter/nodejs-shell:
-    -   Breaking: The Shell Storage was moved to the new approach. Please use "--legacyStorage" on startup to connect with the old storage to get into your old shell history and commissioned devices   
+    -   Breaking: The Shell Storage was moved to the new approach.  Please use "--legacyStorage" on startup to connect with the old storage to get into your old shell history and commissioned devices.  Storage migration guide see in the [README.md](./packages/nodejs-shell/README.md#matterjs-v011-storage-adjustment).
     -   Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
     -   Enhancement: Added option to specify if attributes are loaded from remote or locally
     -   Enhancement: The shell now saves a 100 history of commands and restores this on startup
