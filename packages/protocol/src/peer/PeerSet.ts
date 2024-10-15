@@ -666,8 +666,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
 
             // Convert error
             throw new PairRetransmissionLimitReachedError(e.message);
+        } finally {
+            await unsecureSession.destroy();
         }
-        await unsecureSession.destroy();
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
         await this.#channels.setChannel(address, channel);
         return channel;
