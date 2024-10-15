@@ -278,18 +278,20 @@ export class CommissioningController extends MatterNode {
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
         const node = this.initializedNodes.get(nodeId);
+        let decommissionSuccess = false;
         if (tryDecommissioning) {
             try {
                 if (node == undefined) {
                     throw new ImplementationError(`Node ${nodeId} is not connected.`);
                 }
                 await node.decommission();
+                decommissionSuccess = true;
             } catch (error) {
                 logger.warn(`Decommissioning node ${nodeId} failed with error, remove node anyway: ${error}`);
             }
         }
         if (node !== undefined) {
-            node.close();
+            node.close(!decommissionSuccess);
         }
         await controller.removeNode(nodeId);
         this.initializedNodes.delete(nodeId);
@@ -316,23 +318,25 @@ export class CommissioningController extends MatterNode {
 
         const existingNode = this.initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
-            if (!existingNode.isConnected) {
+            if (!existingNode.initialized) {
                 await existingNode.reconnect(connectOptions);
             }
             return existingNode;
         }
 
-        const pairedNode = new PairedNode(
+        const pairedNode = await PairedNode.create(
             nodeId,
             this,
             connectOptions,
             this.controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
-            async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
+            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
+            async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
+            await this.collectStoredAttributeData(nodeId),
         );
         this.initializedNodes.set(nodeId, pairedNode);
 
-        pairedNode.events.initialized.on(
+        pairedNode.events.initializedFromRemote.on(
             async deviceData => await controller.enhanceCommissionedNodeDetails(nodeId, deviceData),
         );
 
@@ -407,8 +411,15 @@ export class CommissioningController extends MatterNode {
      * Creates and Return a new InteractionClient to communicate with a node. This is mainly used internally and should
      * not be used directly. See the PairedNode class for the public API.
      */
-    async createInteractionClient(nodeId: NodeId, discoveryType?: NodeDiscoveryType): Promise<InteractionClient> {
+    async createInteractionClient(
+        nodeId: NodeId,
+        discoveryType?: NodeDiscoveryType,
+        forcedConnection = true,
+    ): Promise<InteractionClient> {
         const controller = this.assertControllerIsStarted();
+        if (!forcedConnection) {
+            return controller.createInteractionClient(nodeId, { discoveryType });
+        }
         return controller.connect(nodeId, { discoveryType });
     }
 
