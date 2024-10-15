@@ -278,14 +278,20 @@ export class DeviceInformation {
                         break;
                 }
             }
-            for (const { type, enabled, connected } of networkData.values()) {
-                if (!type || !enabled || !connected) return;
-                if (type.ethernetNetworkInterface) {
-                    deviceData.ethernetConnected = true;
-                } else if (type.wiFiNetworkInterface) {
-                    deviceData.wifiConnected = true;
-                } else if (type.threadNetworkInterface) {
-                    deviceData.threadConnected = true;
+
+            if (networkData.size === 0) {
+                // No Network cluster, so Custom Network, assume ethernet for now
+                deviceData.ethernetConnected = true;
+            } else {
+                for (const { type, enabled, connected } of networkData.values()) {
+                    if (!type || !enabled || !connected) continue;
+                    if (type.ethernetNetworkInterface) {
+                        deviceData.ethernetConnected = true;
+                    } else if (type.wiFiNetworkInterface) {
+                        deviceData.wifiConnected = true;
+                    } else if (type.threadNetworkInterface) {
+                        deviceData.threadConnected = true;
+                    }
                 }
             }
             for (const { features, status } of powerSourceData.values()) {
