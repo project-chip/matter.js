@@ -86,20 +86,25 @@ async function main() {
                             type: "string",
                             default: undefined,
                         },
+                        legacyStorage: {
+                            description: "Use legacy storage structure (pre 0.11)",
+                            type: "boolean",
+                            default: false,
+                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile, legacyStorage } = argv;
 
-                theNode = new MatterNode(nodeNum, netInterface);
+                theNode = new MatterNode(nodeNum, netInterface, legacyStorage);
                 await theNode.initialize(factoryReset);
 
                 if (logfile !== undefined) {
                     await theNode.Store.set("LogFile", logfile);
                 }
-                if (theNode.Store.has("LogFile")) {
+                if (await theNode.Store.has("LogFile")) {
                     const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
                         Logger.addLogger("file", await createFileLogger(storedLogFileName), {
@@ -128,7 +133,7 @@ async function main() {
                 }
 
                 console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
-                theShell.start();
+                theShell.start(theNode.storageLocation);
             },
         )
         .version(false)

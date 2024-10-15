@@ -117,13 +117,13 @@ export default function commands(theNode: MatterNode) {
                     },
                 )
                 .command(
-                    "connect <node-id> [min-subscription-interval] [max-subscription-interval]",
+                    "connect [node-id] [min-subscription-interval] [max-subscription-interval]",
                     "Connects to one or all commissioned nodes",
                     yargs => {
                         return yargs
                             .positional("node-id", {
                                 describe: "node id to connect. Use 'all' to connect to all nodes.",
-                                default: undefined,
+                                default: "all",
                                 type: "string",
                                 demandOption: true,
                             })
@@ -166,14 +166,13 @@ export default function commands(theNode: MatterNode) {
                     },
                 )
                 .command(
-                    "disconnect <node-id>",
+                    "disconnect [node-id]",
                     "Disconnects from one or all nodes",
                     yargs => {
                         return yargs.positional("node-id", {
                             describe: "node id to disconnect. Use 'all' to disconnect from all nodes.",
-                            default: undefined,
+                            default: "all",
                             type: "string",
-                            demandOption: true,
                         });
                     },
                     async argv => {
@@ -203,15 +202,14 @@ export default function commands(theNode: MatterNode) {
                     },
                 )
                 .command(
-                    "status <node-ids>",
+                    "status [node-ids]",
                     "Logs the connection status for all or specified nodes",
                     yargs => {
                         return yargs.positional("node-ids", {
                             describe:
                                 "node ids to connect (comma separated list allowed). Use 'all' to log status for all nodes.",
-                            default: undefined,
+                            default: "all",
                             type: "string",
-                            demandOption: true,
                         });
                     },
                     async argv => {
