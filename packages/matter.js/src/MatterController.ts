@@ -488,6 +488,10 @@ class CommissionedNodeStore extends PeerStore {
         this.#controllerStore = controllerStore;
     }
 
+    async createNodeStore(address: PeerAddress, load = true) {
+        return new CachedClientNodeStore(await this.#controllerStore.clientNodeStore(address.nodeId.toString()), load);
+    }
+
     async loadPeers() {
         if (!(await this.#controllerStore.nodesStorage.has("commissionedNodes"))) {
             return [];

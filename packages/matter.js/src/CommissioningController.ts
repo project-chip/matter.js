@@ -132,6 +132,7 @@ export class CommissioningController extends MatterNode {
     private storage?: StorageContext;
 
     private mdnsScanner?: MdnsScanner;
+    private mdnsBroadcaster?: MdnsBroadcaster;
 
     private controllerInstance?: MatterController;
     private initializedNodes = new Map<NodeId, PairedNode>();
@@ -195,7 +196,7 @@ export class CommissioningController extends MatterNode {
         // TODO: clean this up when we really implement ControllerNode/ClientNode concepts in new API
         const controllerStore = environment?.get(ControllerStore) ?? new LegacyControllerStore(storage!);
 
-        const { netInterfaces, scanners } = await configureNetwork({
+        const { netInterfaces, scanners, port } = await configureNetwork({
             ipv4Disabled: this.ipv4Disabled,
             mdnsScanner,
             localPort,
@@ -219,6 +220,10 @@ export class CommissioningController extends MatterNode {
             adminFabricIndex,
             caseAuthenticatedTags,
         });
+        if (this.mdnsBroadcaster) {
+            controller.addBroadcaster(this.mdnsBroadcaster.createInstanceBroadcaster(port));
+        }
+        return controller;
     }
 
     /**
@@ -265,7 +270,7 @@ export class CommissioningController extends MatterNode {
 
     /**
      * Remove a Node id from the controller. This method should only be used if the decommission method on the
-     * PairedNode instance returns an error. By default it tries to decommission the node from the controller but will
+     * PairedNode instance returns an error. By default, it tries to decommission the node from the controller but will
      * remove it also in case of an error during decommissioning. Ideally try to decommission the node before and only
      * use this in case of an error.
      */
@@ -364,10 +369,10 @@ export class CommissioningController extends MatterNode {
     /**
      * Set the MDNS Broadcaster instance. Should be only used internally
      *
-     * @param _mdnsBroadcaster MdnsBroadcaster instance
+     * @param mdnsBroadcaster MdnsBroadcaster instance
      */
-    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
-        // not needed
+    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+        this.mdnsBroadcaster = mdnsBroadcaster;
     }
 
     /**
@@ -473,13 +478,15 @@ export class CommissioningController extends MatterNode {
             this.setMdnsScanner(mdnsService.scanner);
 
             this.environment = environment;
-            const runtime = environment.runtime;
+            const runtime = this.environment.runtime;
             runtime.add(this);
         }
+
         this.started = true;
         if (this.controllerInstance === undefined) {
             this.controllerInstance = await this.initializeController();
         }
+        await this.controllerInstance.announce();
         if (this.options.autoConnect !== false && this.controllerInstance.isCommissioned()) {
             await this.connect();
         }
@@ -545,9 +552,11 @@ export async function configureNetwork(options: {
     const netInterfaces = new NetInterfaceSet();
     const scanners = new ScannerSet();
 
-    netInterfaces.add(await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6));
+    const udpInterface = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
+    netInterfaces.add(udpInterface);
     if (!ipv4Disabled) {
-        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", localPort, listeningAddressIpv4));
+        // TODO: Add option to transport different ports to broadcaster
+        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4));
     }
     if (mdnsScanner) {
         scanners.add(mdnsScanner);
@@ -565,5 +574,5 @@ export async function configureNetwork(options: {
         }
     }
 
-    return { netInterfaces, scanners };
+    return { netInterfaces, scanners, port: udpInterface.port };
 }
