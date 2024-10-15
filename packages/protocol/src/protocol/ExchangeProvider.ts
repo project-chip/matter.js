@@ -1,0 +1,115 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { ChannelType, Observable } from "#general";
+import { INTERACTION_PROTOCOL_ID } from "#types";
+import { PeerAddress } from "../peer/PeerAddress.js";
+import { ChannelManager } from "../protocol/ChannelManager.js";
+import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
+import { MessageExchange } from "../protocol/MessageExchange.js";
+import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
+import { Session } from "../session/Session.js";
+
+export abstract class ExchangeProvider {
+    protected constructor(protected readonly exchangeManager: ExchangeManager) {}
+
+    hasProtocolHandler(protocolId: number) {
+        return this.exchangeManager.hasProtocolHandler(protocolId);
+    }
+
+    getProtocolHandler(protocolId: number) {
+        return this.exchangeManager.getProtocolHandler(protocolId);
+    }
+
+    addProtocolHandler(handler: ProtocolHandler) {
+        this.exchangeManager.addProtocolHandler(handler);
+    }
+
+    abstract initiateExchange(): Promise<MessageExchange>;
+    abstract reconnectChannel(): Promise<boolean>;
+    abstract session: Session;
+    abstract channelType: ChannelType;
+}
+
+export class DedicatedChannelExchangeProvider extends ExchangeProvider {
+    #channel: MessageChannel;
+
+    constructor(exchangeManager: ExchangeManager, channel: MessageChannel) {
+        super(exchangeManager);
+        this.#channel = channel;
+    }
+
+    async initiateExchange(): Promise<MessageExchange> {
+        return this.exchangeManager.initiateExchangeWithChannel(this.#channel, INTERACTION_PROTOCOL_ID);
+    }
+
+    async reconnectChannel() {
+        return false;
+    }
+
+    get session() {
+        return this.#channel.session;
+    }
+
+    get channelType() {
+        return this.#channel.type;
+    }
+}
+
+export class ReconnectableExchangeProvider extends ExchangeProvider {
+    readonly #address: PeerAddress;
+    readonly #reconnectChannelFunc: () => Promise<void>;
+    readonly #channelUpdated = Observable<[void]>();
+
+    constructor(
+        exchangeManager: ExchangeManager,
+        protected readonly channelManager: ChannelManager,
+        address: PeerAddress,
+        reconnectChannelFunc: () => Promise<void>,
+    ) {
+        super(exchangeManager);
+        this.#address = address;
+        this.#reconnectChannelFunc = reconnectChannelFunc;
+        channelManager.added.on(address => {
+            if (address === this.#address) {
+                this.#channelUpdated.emit();
+            }
+        });
+    }
+
+    get channelUpdated() {
+        return this.#channelUpdated;
+    }
+
+    async initiateExchange(): Promise<MessageExchange> {
+        if (!this.channelManager.hasChannel(this.#address)) {
+            await this.reconnectChannel();
+        }
+        if (!this.channelManager.hasChannel(this.#address)) {
+            throw new ChannelNotConnectedError("Channel not connected");
+        }
+        return this.exchangeManager.initiateExchange(this.#address, INTERACTION_PROTOCOL_ID);
+    }
+
+    async reconnectChannel() {
+        if (this.#reconnectChannelFunc === undefined) return false;
+        await this.#reconnectChannelFunc();
+        return true;
+    }
+
+    get session() {
+        if (!this.channelManager.hasChannel(this.#address)) {
+            throw new ChannelNotConnectedError("Channel not connected");
+        }
+        return this.channelManager.getChannel(this.#address).session;
+    }
+
+    get channelType() {
+        if (!this.channelManager.hasChannel(this.#address)) {
+            throw new ChannelNotConnectedError("Channel not connected");
+        }
+        return this.channelManager.getChannel(this.#address).type;
+    }
+}

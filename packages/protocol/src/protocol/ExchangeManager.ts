@@ -20,7 +20,7 @@ import {
     UdpInterface,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { INTERACTION_PROTOCOL_ID, NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureSession } from "../session/SecureSession.js";
@@ -451,43 +451,5 @@ export class ExchangeCounter {
             this.exchangeCounter = 0;
         }
         return this.exchangeCounter;
-    }
-}
-
-export class ExchangeProvider {
-    constructor(
-        private readonly exchangeManager: ExchangeManager,
-        private channel: MessageChannel,
-        private readonly reconnectChannelFunc?: () => Promise<MessageChannel>,
-    ) {}
-
-    hasProtocolHandler(protocolId: number) {
-        return this.exchangeManager.hasProtocolHandler(protocolId);
-    }
-
-    getProtocolHandler(protocolId: number) {
-        return this.exchangeManager.getProtocolHandler(protocolId);
-    }
-
-    addProtocolHandler(handler: ProtocolHandler) {
-        this.exchangeManager.addProtocolHandler(handler);
-    }
-
-    initiateExchange(): MessageExchange {
-        return this.exchangeManager.initiateExchangeWithChannel(this.channel, INTERACTION_PROTOCOL_ID);
-    }
-
-    async reconnectChannel() {
-        if (this.reconnectChannelFunc === undefined) return false;
-        this.channel = await this.reconnectChannelFunc();
-        return true;
-    }
-
-    get session() {
-        return this.channel.session;
-    }
-
-    get channelType() {
-        return this.channel.type;
     }
 }
