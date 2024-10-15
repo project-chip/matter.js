@@ -5,4 +5,5 @@
  */
 
 export * from "./StorageBackendDisk.js";
+export * from "./StorageBackendDiskAsync.js";
 export * from "./StorageBackendJsonFile.js";
