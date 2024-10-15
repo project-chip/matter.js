@@ -98,31 +98,24 @@ export class SubscriptionClient implements ProtocolHandler {
 
     async onNewExchange(exchange: MessageExchange) {
         const messenger = new IncomingInteractionClientMessenger(exchange);
-        const dataReport = await messenger.readDataReports(false);
-        const subscriptionId = dataReport.subscriptionId;
-        if (subscriptionId === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
-            throw new UnexpectedDataError("Invalid Data report without Subscription ID");
+
+        let dataReport: DataReport;
+        try {
+            // TODO Adjust this to getting packages as callback when received to handle error cases and checks outside
+            dataReport = await messenger.readDataReports([...this.subscriptionListeners.keys()]);
+        } finally {
+            messenger.close().catch(error => logger.error("Error closing client messenger", error));
         }
+        const subscriptionId = dataReport.subscriptionId as number; // this is checked in the messenger already because we hand over allowed list
+
         const listener = this.subscriptionListeners.get(subscriptionId);
         const timer = this.subscriptionUpdateTimers.get(subscriptionId);
-        if (listener === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
-            logger.info(`Received data for unknown subscription ID ${subscriptionId}. Cancel this subscription.`);
-            if (timer !== undefined) {
-                // Should not happen but let's make sure to clean up
-                this.removeSubscriptionUpdateTimer(subscriptionId);
-            }
-            await messenger.close();
-            return;
-        }
-        await messenger.sendStatus(StatusCode.Success);
-        await messenger.close();
 
         if (timer !== undefined) {
             timer.stop().start(); // Restart timer because we received data
         }
-        listener(dataReport);
+
+        await listener?.(dataReport);
     }
 
     async close() {
