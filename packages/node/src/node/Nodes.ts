@@ -132,6 +132,10 @@ export class Nodes extends EndpointContainer<ClientNode> {
                         nodes.delete(node);
                     }
                 }
+
+                async createNodeStore(): Promise<PeerNodeStore> {
+                    throw new InternalError("Node store creation not supported");
+                }
             })(),
         );
     }
