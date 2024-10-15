@@ -11,6 +11,7 @@ import {
     Environment,
     ImplementationError,
     Logger,
+    MaybePromise,
     StorageContext,
     StorageManager,
     StorageService,
@@ -26,12 +27,12 @@ const logger = Logger.get("ControllerStore");
  * However, this will change in the future, and other implementations may be
  * backed by asynchronous storage.  So the public API is asynchronous.
  */
-export class ControllerStore implements Destructable {
+export class ControllerStore implements Destructable, ControllerStoreInterface {
     #location: string;
     #nodeId: string;
     #storageManager?: StorageManager;
     #sessionStorage?: StorageContext;
-    #credentialsStorage?: StorageContext; // Root certificate and Fabric
+    #caStorage?: StorageContext; // Root certificate and Fabric
     #nodesStorage?: StorageContext; // Holds list of nodes in root level and then sub levels with data per client node?
     #construction: Construction<ControllerStore>;
 
@@ -44,7 +45,7 @@ export class ControllerStore implements Destructable {
      *
      * TODO - implement conversion from 0.7 format so people can change API seamlessly
      */
-    constructor(environment: Environment, nodeId?: string) {
+    constructor(nodeId: string, environment: Environment) {
         if (nodeId === undefined) {
             throw new ImplementationError("ServerStore must be created with a nodeId");
         }
@@ -62,13 +63,13 @@ export class ControllerStore implements Destructable {
         this.#construction = Construction(this, initializeStorage);
     }
 
-    static async create(environment: Environment, nodeId: string) {
-        return await asyncNew(this, environment, nodeId);
+    static async create(nodeId: string, environment = Environment.default) {
+        return await asyncNew(this, nodeId, environment);
     }
 
     async erase() {
         await this.#sessionStorage?.clearAll();
-        await this.#credentialsStorage?.clearAll();
+        await this.#caStorage?.clearAll();
         await this.#nodesStorage?.clearAll();
     }
 
@@ -86,11 +87,11 @@ export class ControllerStore implements Destructable {
         return this.#sessionStorage;
     }
 
-    get credentialsStorage() {
-        if (!this.#credentialsStorage) {
-            this.#credentialsStorage = this.storage.createContext("credentials");
+    get caStorage() {
+        if (!this.#caStorage) {
+            this.#caStorage = this.storage.createContext("credentials");
         }
-        return this.#credentialsStorage;
+        return this.#caStorage;
     }
 
     get nodesStorage() {
@@ -100,6 +101,10 @@ export class ControllerStore implements Destructable {
         return this.#nodesStorage;
     }
 
+    get fabricStorage() {
+        return this.caStorage;
+    }
+
     get storage() {
         if (this.#storageManager === undefined) {
             throw new ImplementationError("Node storage accessed prior to initialization");
@@ -107,7 +112,21 @@ export class ControllerStore implements Destructable {
         return this.#storageManager;
     }
 
+    async clientNodeStore(nodeId: string) {
+        return this.storage.createContext(`node-${nodeId}`);
+    }
+
     #logChange(what: "Opened" | "Closed") {
         logger.info(what, Diagnostic.strong(this.#nodeId ?? "node"), "storage at", `${this.#location}/${this.#nodeId}`);
     }
+}
+
+export abstract class ControllerStoreInterface {
+    abstract erase(): Promise<void>;
+    abstract close(): Promise<void>;
+    abstract get sessionStorage(): StorageContext;
+    abstract get caStorage(): StorageContext;
+    abstract get nodesStorage(): StorageContext;
+    abstract get fabricStorage(): StorageContext;
+    abstract clientNodeStore(nodeId: string): MaybePromise<StorageContext>;
 }

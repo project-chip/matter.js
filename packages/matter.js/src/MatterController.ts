@@ -24,9 +24,9 @@ import {
     ServerAddressIp,
     serverAddressToString,
     StorageBackendMemory,
-    StorageContext,
     StorageManager,
 } from "#general";
+import { LegacyControllerStore } from "#LegacyControllerStore.js";
 import {
     CertificateAuthority,
     ChannelManager,
@@ -64,6 +64,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
+import { ControllerStoreInterface } from "@matter/node";
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
@@ -86,10 +87,7 @@ type StoredOperationalPeer = [NodeId, CommissionedNodeDetails];
 
 export class MatterController {
     public static async create(options: {
-        sessionStorage: StorageContext;
-        caStorage: StorageContext;
-        fabricStorage: StorageContext;
-        nodesStorage: StorageContext;
+        controllerStore: ControllerStoreInterface;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
@@ -99,10 +97,7 @@ export class MatterController {
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }): Promise<MatterController> {
         const {
-            sessionStorage,
-            caStorage,
-            fabricStorage,
-            nodesStorage,
+            controllerStore,
             scanners,
             netInterfaces,
             sessionClosedCallback,
@@ -112,16 +107,16 @@ export class MatterController {
             caseAuthenticatedTags,
         } = options;
 
-        const ca = await CertificateAuthority.create(caStorage);
+        const ca = await CertificateAuthority.create(controllerStore.caStorage);
+        const fabricStorage = controllerStore.fabricStorage;
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (await fabricStorage.has("fabric")) {
             const fabric = new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
+            logger.info("Loaded existing fabric from storage");
             controller = new MatterController({
-                sessionStorage,
-                fabricStorage,
-                nodesStorage,
+                controllerStore,
                 scanners,
                 netInterfaces,
                 certificateManager: ca,
@@ -129,6 +124,7 @@ export class MatterController {
                 sessionClosedCallback,
             });
         } else {
+            logger.info("Creating new fabric");
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
@@ -142,9 +138,7 @@ export class MatterController {
             const fabric = await fabricBuilder.build(adminFabricIndex);
 
             controller = new MatterController({
-                sessionStorage,
-                fabricStorage,
-                nodesStorage,
+                controllerStore,
                 scanners,
                 netInterfaces,
                 certificateManager: ca,
@@ -180,14 +174,11 @@ export class MatterController {
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
-        const sessionStorage = storageManager.createContext("sessions");
-        const nodesStorage = storageManager.createContext("nodes");
 
         const fabric = new Fabric(fabricConfig);
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         const controller = new MatterController({
-            sessionStorage,
-            nodesStorage,
+            controllerStore: new LegacyControllerStore(storageManager.createContext("Commissioner")),
             scanners,
             netInterfaces,
             certificateManager,
@@ -206,8 +197,7 @@ export class MatterController {
     private readonly commissioner: ControllerCommissioner;
     #construction: Construction<MatterController>;
 
-    readonly sessionStorage: StorageContext;
-    readonly fabricStorage?: StorageContext;
+    #store: ControllerStoreInterface;
     readonly nodesStore: CommissionedNodeStore;
     private readonly scanners: ScannerSet;
     private readonly ca: CertificateAuthority;
@@ -220,27 +210,15 @@ export class MatterController {
     }
 
     constructor(options: {
-        sessionStorage: StorageContext;
-        fabricStorage?: StorageContext;
-        nodesStorage: StorageContext;
+        controllerStore: ControllerStoreInterface;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
         certificateManager: CertificateAuthority;
         fabric: Fabric;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
     }) {
-        const {
-            sessionStorage,
-            fabricStorage,
-            nodesStorage,
-            scanners,
-            netInterfaces,
-            certificateManager,
-            fabric,
-            sessionClosedCallback,
-        } = options;
-        this.sessionStorage = sessionStorage;
-        this.fabricStorage = fabricStorage;
+        const { controllerStore, scanners, netInterfaces, certificateManager, fabric, sessionClosedCallback } = options;
+        this.#store = controllerStore;
         this.scanners = scanners;
         this.netInterfaces = netInterfaces;
         this.ca = certificateManager;
@@ -252,7 +230,7 @@ export class MatterController {
 
         this.sessionManager = new SessionManager({
             fabrics: fabricManager,
-            storage: sessionStorage,
+            storage: controllerStore.sessionStorage,
             parameters: {
                 maxPathsPerInvoke: CONTROLLER_MAX_PATHS_PER_INVOKE,
             },
@@ -269,7 +247,7 @@ export class MatterController {
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
 
         // Adapts the historical storage format for MatterController to OperationalPeer objects
-        this.nodesStore = new CommissionedNodeStore(nodesStorage, fabric);
+        this.nodesStore = new CommissionedNodeStore(controllerStore, fabric);
 
         this.nodesStore.peers = this.peers = new PeerSet({
             sessions: this.sessionManager,
@@ -371,7 +349,7 @@ export class MatterController {
 
         const address = await this.commissioner.commission(commissioningOptions);
 
-        await this.fabricStorage?.set("fabric", this.fabric.config);
+        await this.#store.fabricStorage.set("fabric", this.fabric.config);
 
         return address.nodeId;
     }
@@ -407,7 +385,7 @@ export class MatterController {
             await this.peers.delete(this.fabric.addressOf(peerNodeId));
             throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
         }
-        await this.fabricStorage?.set("fabric", this.fabric.config);
+        await this.#store.fabricStorage.set("fabric", this.fabric.config);
     }
 
     isCommissioned() {
@@ -500,16 +478,18 @@ export class MatterController {
 
 class CommissionedNodeStore extends PeerStore {
     declare peers: PeerSet;
+    #controllerStore: ControllerStoreInterface;
 
     constructor(
-        private nodesStorage: StorageContext,
+        controllerStore: ControllerStoreInterface,
         private fabric: Fabric,
     ) {
         super();
+        this.#controllerStore = controllerStore;
     }
 
     async loadPeers() {
-        if (!(await this.nodesStorage.has("commissionedNodes"))) {
+        if (!(await this.#controllerStore.nodesStorage.has("commissionedNodes"))) {
             return [];
         }
 
@@ -534,7 +514,7 @@ class CommissionedNodeStore extends PeerStore {
     }
 
     async save() {
-        await this.nodesStorage.set(
+        await this.#controllerStore.nodesStorage.set(
             "commissionedNodes",
             this.peers.map(peer => {
                 const {

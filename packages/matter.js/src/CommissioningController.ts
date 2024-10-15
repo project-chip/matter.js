@@ -16,6 +16,7 @@ import {
     SyncStorage,
     UdpInterface,
 } from "#general";
+import { LegacyControllerStore } from "#LegacyControllerStore.js";
 import { ControllerStore } from "#node";
 import {
     Ble,
@@ -187,22 +188,12 @@ export class CommissioningController extends MatterNode {
         }
         const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
 
+        if (environment === undefined && storage === undefined) {
+            throw new ImplementationError("Storage not initialized correctly.");
+        }
         // Initialize the Storage in a compatible way for the legacy API and new style for new API
         // TODO: clean this up when we really implement ControllerNode/ClientNode concepts in new API
-        const environmentStore = environment !== undefined ? environment.get(ControllerStore) : undefined;
-        const sessionStorage = environmentStore?.sessionStorage ?? storage?.createContext("SessionManager");
-        const rootCertificateStorage =
-            environmentStore?.credentialsStorage ?? storage?.createContext("RootCertificateManager");
-        const fabricStorage = environmentStore?.credentialsStorage ?? storage?.createContext("MatterController");
-        const nodesStorage = environmentStore?.nodesStorage ?? storage?.createContext("MatterController");
-        if (
-            sessionStorage === undefined ||
-            rootCertificateStorage === undefined ||
-            fabricStorage === undefined ||
-            nodesStorage === undefined
-        ) {
-            throw new InternalError("Storage not initialized correctly."); // Should not happen
-        }
+        const controllerStore = environment?.get(ControllerStore) ?? new LegacyControllerStore(storage!);
 
         const { netInterfaces, scanners } = await configureNetwork({
             ipv4Disabled: this.ipv4Disabled,
@@ -212,11 +203,8 @@ export class CommissioningController extends MatterNode {
             listeningAddressIpv6: this.listeningAddressIpv6,
         });
 
-        return await MatterController.create({
-            sessionStorage,
-            caStorage: rootCertificateStorage,
-            fabricStorage,
-            nodesStorage,
+        const controller = await MatterController.create({
+            controllerStore,
             scanners,
             netInterfaces,
             sessionClosedCallback: peerNodeId => {
@@ -454,6 +442,17 @@ export class CommissioningController extends MatterNode {
         this.ipv4Disabled = ipv4Disabled;
     }
 
+    async initializeControllerStore() {
+        // This can only happen if "MatterServer" approach is not used
+        if (this.options.environment === undefined) {
+            throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+        }
+
+        const { environment, id } = this.options.environment;
+        const controllerStore = await ControllerStore.create(id, environment);
+        environment.set(ControllerStore, controllerStore);
+    }
+
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
         if (this.ipv4Disabled === undefined) {
@@ -461,11 +460,13 @@ export class CommissioningController extends MatterNode {
                 throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
             }
 
-            const { environment, id } = this.options.environment;
-            const controllerStore = await ControllerStore.create(environment, id);
+            const { environment } = this.options.environment;
 
-            environment.set(ControllerStore, controllerStore);
+            if (environment.get(ControllerStore) === undefined) {
+                await this.initializeControllerStore();
+            }
 
+            // Load the MDNS service from the environment and set onto the controller
             const mdnsService = await environment.load(MdnsService);
             this.ipv4Disabled = !mdnsService.enableIpv4;
             this.setMdnsBroadcaster(mdnsService.broadcaster);
