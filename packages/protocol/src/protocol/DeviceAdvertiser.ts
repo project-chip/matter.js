@@ -67,8 +67,8 @@ export class DeviceAdvertiser {
             }
         });
 
-        this.#observers.on(this.#context.sessions.resubmissionStarted, (nodeId?) => {
-            logger.debug(`Resubmission started, re-announce node ${nodeId}`);
+        this.#observers.on(this.#context.sessions.resubmissionStarted, (session?) => {
+            logger.debug(`Resubmission started, re-announce node ${session?.nodeId}`);
             this.advertise(true).catch(error => logger.warn("Error sending announcement:", error));
         });
 
@@ -188,6 +188,7 @@ export class DeviceAdvertiser {
     async close() {
         await this.#mutex;
         this.#observers.close();
+        this.#interval.stop();
         await this.clearBroadcasters();
     }
 
