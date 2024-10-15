@@ -35,12 +35,14 @@ import {
     ControllerCommissioner,
     DEFAULT_ADMIN_VENDOR_ID,
     DEFAULT_FABRIC_ID,
+    DeviceAdvertiser,
     DiscoveryData,
     DiscoveryOptions,
     ExchangeManager,
     Fabric,
     FabricBuilder,
     FabricManager,
+    InstanceBroadcaster,
     NodeDiscoveryType,
     OperationalPeer,
     PeerCommissioningOptions,
@@ -211,6 +213,7 @@ export class MatterController {
     private readonly ca: CertificateAuthority;
     private readonly fabric: Fabric;
     private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    #advertiser: DeviceAdvertiser;
 
     get construction() {
         return this.#construction;
@@ -286,6 +289,11 @@ export class MatterController {
             ca: this.ca,
         });
 
+        this.#advertiser = new DeviceAdvertiser({
+            fabrics: fabricManager,
+            sessions: this.sessionManager,
+        });
+
         this.#construction = Construction(this, async () => {
             await this.peers.construction.ready;
             await this.sessionManager.construction.ready;
@@ -306,6 +314,18 @@ export class MatterController {
 
     getFabrics() {
         return [this.fabric];
+    }
+
+    hasBroadcaster(broadcaster: InstanceBroadcaster) {
+        return this.#advertiser.hasBroadcaster(broadcaster);
+    }
+
+    addBroadcaster(broadcaster: InstanceBroadcaster) {
+        this.#advertiser.addBroadcaster(broadcaster);
+    }
+
+    async deleteBroadcaster(broadcaster: InstanceBroadcaster) {
+        await this.#advertiser.deleteBroadcaster(broadcaster);
     }
 
     public collectScanners(
@@ -460,7 +480,8 @@ export class MatterController {
     }
 
     announce() {
-        // nothing TODO maybe with UDC
+        // Announce the controller itself
+        return this.#advertiser.advertise();
     }
 
     async close() {
@@ -469,6 +490,7 @@ export class MatterController {
         await this.sessionManager.close();
         await this.channelManager.close();
         await this.netInterfaces.close();
+        await this.#advertiser.close();
     }
 
     getActiveSessionInformation() {
