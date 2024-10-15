@@ -20,9 +20,13 @@ interface StorageParticipant extends Participant {
  *
  * Performs read & write for non-volatile values for a single behavior via the {@link EndpointStore} interface.
  */
-export function DatasourceStore(endpointStore: EndpointStore, behaviorId: string): Datasource.Store {
+export function DatasourceStore(
+    endpointStore: EndpointStore,
+    behaviorId: string,
+    initialValues: Val.Struct | undefined,
+): Datasource.Store {
     return {
-        initialValues: endpointStore.initialValues[behaviorId],
+        initialValues,
 
         async set(transaction: Transaction, values: Val.Struct) {
             const participant = participantFor(transaction, endpointStore);

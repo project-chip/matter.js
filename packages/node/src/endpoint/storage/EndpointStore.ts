@@ -2,7 +2,7 @@ import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { DatasourceStore } from "#endpoint/storage/DatasourceStore.js";
-import { Construction, ImplementationError, StorageContext, SupportedStorageTypes } from "#general";
+import { Construction, ImplementationError, MaybePromise, StorageContext, SupportedStorageTypes } from "#general";
 
 const NUMBER_KEY = "__number__";
 
@@ -13,7 +13,7 @@ const NUMBER_KEY = "__number__";
  */
 export class EndpointStore {
     #storage: StorageContext;
-    #initialValues = {} as Record<string, Val.Struct>;
+    protected initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
     #construction: Construction<EndpointStore>;
 
@@ -31,13 +31,6 @@ export class EndpointStore {
 
     get construction() {
         return this.#construction;
-    }
-
-    /**
-     * Currently persisted values, keyed by {@link Behavior.id} then property name.
-     */
-    get initialValues() {
-        return this.#initialValues;
     }
 
     get number() {
@@ -73,7 +66,7 @@ export class EndpointStore {
         this.#knownBehaviors = new Set(await this.#storage.contexts());
 
         for (const behaviorId of this.#knownBehaviors) {
-            const behaviorValues = (this.#initialValues[behaviorId] = {} as Val.Struct);
+            const behaviorValues = (this.initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
             for (const key of await behaviorStorage.keys()) {
@@ -95,17 +88,21 @@ export class EndpointStore {
     storeForBehavior(behaviorId: string): Datasource.Store {
         this.#construction.assert();
 
-        return DatasourceStore(this, behaviorId);
+        const initialValues = this.initialValues[behaviorId];
+        if (initialValues !== undefined) {
+            delete this.initialValues[behaviorId];
+        }
+        return DatasourceStore(this, behaviorId, initialValues);
     }
 
     childStoreFor(endpoint: Endpoint): EndpointStore {
         if (!endpoint.lifecycle.hasId) {
             throw new ImplementationError("Cannot access endpoint storage because endpoint has no assigned ID");
         }
-        return this.#storeForPartId(endpoint.id);
+        return this.storeForPartId(endpoint.id);
     }
 
-    #storeForPartId(partId: string) {
+    protected storeForPartId(partId: string) {
         this.#construction.assert();
 
         let store = this.#childStores[partId];
