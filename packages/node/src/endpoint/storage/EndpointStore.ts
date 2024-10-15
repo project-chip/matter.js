@@ -143,14 +143,16 @@ export class EndpointStore {
                 this.#knownBehaviors.add(behaviorId);
             }
 
+            const promises = new Array<MaybePromise<void>>();
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
-                    await behaviorStorage.delete(key);
+                    promises.push(behaviorStorage.delete(key));
                 } else {
-                    await behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
+                    promises.push(behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes));
                 }
             }
+            await Promise.all(promises);
         }
     }
 
