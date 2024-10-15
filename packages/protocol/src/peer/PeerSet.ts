@@ -147,6 +147,14 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
 
         this.#sessions.resubmissionStarted.on(this.#handleResubmissionStarted.bind(this));
 
+        this.#channels.added.on((address, msgChannel) => {
+            const channelAddress = msgChannel.channel.networkAddress;
+            // Update the channel address if it has one
+            if (channelAddress !== undefined) {
+                return this.#addOrUpdatePeer(address, channelAddress);
+            }
+        });
+
         this.#construction = Construction(this, async () => {
             for (const peer of await this.#store.loadPeers()) {
                 this.#peers.add(peer);

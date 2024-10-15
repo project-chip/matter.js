@@ -3,6 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { ServerAddressIp } from "#net/ServerAddress.js";
 
 export enum ChannelType {
     UDP = "udp",
@@ -21,6 +22,8 @@ export interface Channel<T> {
     name: string;
 
     type: ChannelType;
+
+    networkAddress?: ServerAddressIp;
 
     /** Method to send data to the remote endpoint */
     send(data: T): Promise<void>;

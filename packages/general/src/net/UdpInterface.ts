@@ -7,7 +7,7 @@
 import { Channel, ChannelType } from "./Channel.js";
 import { NetInterface } from "./NetInterface.js";
 import { Network, NetworkError } from "./Network.js";
-import { ServerAddress } from "./ServerAddress.js";
+import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
 import { TransportInterface } from "./TransportInterface.js";
 import { UdpChannel } from "./UdpChannel.js";
 
@@ -67,6 +67,10 @@ class UdpConnection implements Channel<Uint8Array> {
 
     get name() {
         return `${this.type}://${this.peerAddress}:${this.peerPort}`;
+    }
+
+    get networkAddress(): ServerAddressIp {
+        return { type: "udp", ip: this.peerAddress, port: this.peerPort };
     }
 
     async close() {
