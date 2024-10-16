@@ -13,7 +13,7 @@ const NUMBER_KEY = "__number__";
  */
 export class EndpointStore {
     #storage: StorageContext;
-    #initialValues = {} as Record<string, Val.Struct>;
+    protected initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
     #construction: Construction<EndpointStore>;
 
@@ -31,13 +31,6 @@ export class EndpointStore {
 
     get construction() {
         return this.#construction;
-    }
-
-    /**
-     * Currently persisted values, keyed by {@link Behavior.id} then property name.
-     */
-    get initialValues() {
-        return this.#initialValues;
     }
 
     get number() {
@@ -73,7 +66,7 @@ export class EndpointStore {
         this.#knownBehaviors = new Set(await this.#storage.contexts());
 
         for (const behaviorId of this.#knownBehaviors) {
-            const behaviorValues = (this.#initialValues[behaviorId] = {} as Val.Struct);
+            const behaviorValues = (this.initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
             for (const key of await behaviorStorage.keys()) {
@@ -95,17 +88,21 @@ export class EndpointStore {
     storeForBehavior(behaviorId: string): Datasource.Store {
         this.#construction.assert();
 
-        return DatasourceStore(this, behaviorId);
+        const initialValues = this.initialValues[behaviorId];
+        if (initialValues !== undefined) {
+            delete this.initialValues[behaviorId];
+        }
+        return DatasourceStore(this, behaviorId, initialValues);
     }
 
     childStoreFor(endpoint: Endpoint): EndpointStore {
         if (!endpoint.lifecycle.hasId) {
             throw new ImplementationError("Cannot access endpoint storage because endpoint has no assigned ID");
         }
-        return this.#storeForPartId(endpoint.id);
+        return this.storeForPartId(endpoint.id);
     }
 
-    #storeForPartId(partId: string) {
+    protected storeForPartId(partId: string) {
         this.#construction.assert();
 
         let store = this.#childStores[partId];
@@ -146,13 +143,19 @@ export class EndpointStore {
                 this.#knownBehaviors.add(behaviorId);
             }
 
+            const toSave = {} as Record<string, SupportedStorageTypes>;
+            let keysToSave = 0;
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
                     await behaviorStorage.delete(key);
                 } else {
-                    await behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
+                    toSave[key] = value as SupportedStorageTypes;
+                    keysToSave++;
                 }
+            }
+            if (keysToSave > 0) {
+                await behaviorStorage.set(toSave);
             }
         }
     }

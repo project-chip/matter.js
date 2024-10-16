@@ -12,6 +12,7 @@
 
 import { GeneralCommissioning } from "#clusters";
 import { NodeCommissioningOptions } from "#CommissioningController.js";
+import { CachedClientNodeStore } from "#device/CachedClientNodeStore.js";
 import { DeviceInformationData } from "#device/DeviceInformation.js";
 import {
     ChannelType,
@@ -24,36 +25,43 @@ import {
     ServerAddressIp,
     serverAddressToString,
     StorageBackendMemory,
-    StorageContext,
     StorageManager,
 } from "#general";
+import { LegacyControllerStore } from "#LegacyControllerStore.js";
 import {
     CertificateAuthority,
     ChannelManager,
     ClusterClient,
     CommissioningError,
     ControllerCommissioner,
+    DecodedAttributeReportValue,
     DEFAULT_ADMIN_VENDOR_ID,
     DEFAULT_FABRIC_ID,
+    DeviceAdvertiser,
     DiscoveryData,
     DiscoveryOptions,
     ExchangeManager,
     Fabric,
     FabricBuilder,
     FabricManager,
+    InstanceBroadcaster,
     NodeDiscoveryType,
     OperationalPeer,
+    PeerAddress,
+    PeerAddressStore,
     PeerCommissioningOptions,
     PeerSet,
-    PeerStore,
     ResumptionRecord,
     RetransmissionLimitReachedError,
     ScannerSet,
+    SecureChannelProtocol,
     SessionManager,
-    StatusReportOnlySecureChannelProtocol,
+    SubscriptionClient,
+    UnknownNodeError,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
+    ClusterId,
     DiscoveryCapabilitiesBitmap,
     EndpointNumber,
     FabricId,
@@ -62,6 +70,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
+import { ControllerStoreInterface } from "@matter/node";
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
@@ -84,10 +93,7 @@ type StoredOperationalPeer = [NodeId, CommissionedNodeDetails];
 
 export class MatterController {
     public static async create(options: {
-        sessionStorage: StorageContext;
-        caStorage: StorageContext;
-        fabricStorage: StorageContext;
-        nodesStorage: StorageContext;
+        controllerStore: ControllerStoreInterface;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
@@ -97,10 +103,7 @@ export class MatterController {
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }): Promise<MatterController> {
         const {
-            sessionStorage,
-            caStorage,
-            fabricStorage,
-            nodesStorage,
+            controllerStore,
             scanners,
             netInterfaces,
             sessionClosedCallback,
@@ -110,16 +113,16 @@ export class MatterController {
             caseAuthenticatedTags,
         } = options;
 
-        const ca = await CertificateAuthority.create(caStorage);
+        const ca = await CertificateAuthority.create(controllerStore.caStorage);
+        const fabricStorage = controllerStore.fabricStorage;
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (await fabricStorage.has("fabric")) {
             const fabric = new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
+            logger.info("Loaded existing fabric from storage");
             controller = new MatterController({
-                sessionStorage,
-                fabricStorage,
-                nodesStorage,
+                controllerStore,
                 scanners,
                 netInterfaces,
                 certificateManager: ca,
@@ -127,6 +130,7 @@ export class MatterController {
                 sessionClosedCallback,
             });
         } else {
+            logger.info("Creating new fabric");
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
@@ -140,9 +144,7 @@ export class MatterController {
             const fabric = await fabricBuilder.build(adminFabricIndex);
 
             controller = new MatterController({
-                sessionStorage,
-                fabricStorage,
-                nodesStorage,
+                controllerStore,
                 scanners,
                 netInterfaces,
                 certificateManager: ca,
@@ -178,14 +180,11 @@ export class MatterController {
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
-        const sessionStorage = storageManager.createContext("sessions");
-        const nodesStorage = storageManager.createContext("nodes");
 
         const fabric = new Fabric(fabricConfig);
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         const controller = new MatterController({
-            sessionStorage,
-            nodesStorage,
+            controllerStore: new LegacyControllerStore(storageManager.createContext("Commissioner")),
             scanners,
             netInterfaces,
             certificateManager,
@@ -204,40 +203,28 @@ export class MatterController {
     private readonly commissioner: ControllerCommissioner;
     #construction: Construction<MatterController>;
 
-    readonly sessionStorage: StorageContext;
-    readonly fabricStorage?: StorageContext;
+    #store: ControllerStoreInterface;
     readonly nodesStore: CommissionedNodeStore;
     private readonly scanners: ScannerSet;
     private readonly ca: CertificateAuthority;
     private readonly fabric: Fabric;
     private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    #advertiser: DeviceAdvertiser;
 
     get construction() {
         return this.#construction;
     }
 
     constructor(options: {
-        sessionStorage: StorageContext;
-        fabricStorage?: StorageContext;
-        nodesStorage: StorageContext;
+        controllerStore: ControllerStoreInterface;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
         certificateManager: CertificateAuthority;
         fabric: Fabric;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
     }) {
-        const {
-            sessionStorage,
-            fabricStorage,
-            nodesStorage,
-            scanners,
-            netInterfaces,
-            certificateManager,
-            fabric,
-            sessionClosedCallback,
-        } = options;
-        this.sessionStorage = sessionStorage;
-        this.fabricStorage = fabricStorage;
+        const { controllerStore, scanners, netInterfaces, certificateManager, fabric, sessionClosedCallback } = options;
+        this.#store = controllerStore;
         this.scanners = scanners;
         this.netInterfaces = netInterfaces;
         this.ca = certificateManager;
@@ -249,7 +236,7 @@ export class MatterController {
 
         this.sessionManager = new SessionManager({
             fabrics: fabricManager,
-            storage: sessionStorage,
+            storage: controllerStore.sessionStorage,
             parameters: {
                 maxPathsPerInvoke: CONTROLLER_MAX_PATHS_PER_INVOKE,
             },
@@ -263,10 +250,11 @@ export class MatterController {
             channelManager: this.channelManager,
             transportInterfaces: this.netInterfaces,
         });
-        this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
+        this.exchangeManager.addProtocolHandler(new SecureChannelProtocol(this.sessionManager, fabricManager));
+        this.exchangeManager.addProtocolHandler(new SubscriptionClient());
 
         // Adapts the historical storage format for MatterController to OperationalPeer objects
-        this.nodesStore = new CommissionedNodeStore(nodesStorage, fabric);
+        this.nodesStore = new CommissionedNodeStore(controllerStore, fabric);
 
         this.nodesStore.peers = this.peers = new PeerSet({
             sessions: this.sessionManager,
@@ -284,6 +272,11 @@ export class MatterController {
             exchanges: this.exchangeManager,
             sessions: this.sessionManager,
             ca: this.ca,
+        });
+
+        this.#advertiser = new DeviceAdvertiser({
+            fabrics: fabricManager,
+            sessions: this.sessionManager,
         });
 
         this.#construction = Construction(this, async () => {
@@ -306,6 +299,18 @@ export class MatterController {
 
     getFabrics() {
         return [this.fabric];
+    }
+
+    hasBroadcaster(broadcaster: InstanceBroadcaster) {
+        return this.#advertiser.hasBroadcaster(broadcaster);
+    }
+
+    addBroadcaster(broadcaster: InstanceBroadcaster) {
+        this.#advertiser.addBroadcaster(broadcaster);
+    }
+
+    async deleteBroadcaster(broadcaster: InstanceBroadcaster) {
+        await this.#advertiser.deleteBroadcaster(broadcaster);
     }
 
     public collectScanners(
@@ -351,7 +356,7 @@ export class MatterController {
 
         const address = await this.commissioner.commission(commissioningOptions);
 
-        await this.fabricStorage?.set("fabric", this.fabric.config);
+        await this.#store.fabricStorage.set("fabric", this.fabric.config);
 
         return address.nodeId;
     }
@@ -369,11 +374,15 @@ export class MatterController {
      */
     async completeCommissioning(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
         // Look for the device broadcast over MDNS and do CASE pairing
-        const interactionClient = await this.connect(peerNodeId, {
-            discoveryType: NodeDiscoveryType.TimedDiscovery,
-            timeoutSeconds: 120,
-            discoveryData,
-        }); // Wait maximum 120s to find the operational device for commissioning process
+        const interactionClient = await this.connect(
+            peerNodeId,
+            {
+                discoveryType: NodeDiscoveryType.TimedDiscovery,
+                timeoutSeconds: 120,
+                discoveryData,
+            },
+            true,
+        ); // Wait maximum 120s to find the operational device for commissioning process
         const generalCommissioningClusterClient = ClusterClient(
             GeneralCommissioning.Cluster,
             EndpointNumber(0),
@@ -387,7 +396,7 @@ export class MatterController {
             await this.peers.delete(this.fabric.addressOf(peerNodeId));
             throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
         }
-        await this.fabricStorage?.set("fabric", this.fabric.config);
+        await this.#store.fabricStorage.set("fabric", this.fabric.config);
     }
 
     isCommissioned() {
@@ -439,8 +448,12 @@ export class MatterController {
      * Connect to the device by opening a channel and creating a new CASE session if necessary.
      * Returns a InteractionClient on success.
      */
-    async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
-        return this.peers.connect(this.fabric.addressOf(peerNodeId), discoveryOptions);
+    async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions, allowUnknownPeer?: boolean) {
+        return this.peers.connect(this.fabric.addressOf(peerNodeId), discoveryOptions, allowUnknownPeer);
+    }
+
+    createInteractionClient(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
+        return this.peers.initializeInteractionClient(this.fabric.addressOf(peerNodeId), discoveryOptions);
     }
 
     async getNextAvailableSessionId() {
@@ -460,7 +473,8 @@ export class MatterController {
     }
 
     announce() {
-        // nothing TODO maybe with UDC
+        // Announce the controller itself
+        return this.#advertiser.advertise();
     }
 
     async close() {
@@ -469,50 +483,96 @@ export class MatterController {
         await this.sessionManager.close();
         await this.channelManager.close();
         await this.netInterfaces.close();
+        await this.#advertiser.close();
     }
 
     getActiveSessionInformation() {
         return this.sessionManager.getActiveSessionInformation();
     }
+
+    async getStoredClusterDataVersions(
+        nodeId: NodeId,
+        filterEndpointId?: EndpointNumber,
+        filterClusterId?: ClusterId,
+    ): Promise<{ endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[]> {
+        const peer = this.peers.get(this.fabric.addressOf(nodeId));
+        if (peer === undefined) {
+            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
+        }
+        if (peer.dataStore === undefined) {
+            return []; // We have no store, also also no data
+        }
+        await peer.dataStore.construction;
+        return peer.dataStore.getClusterDataVersions(filterEndpointId, filterClusterId);
+    }
+
+    async retrieveStoredAttributes(
+        nodeId: NodeId,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+    ): Promise<DecodedAttributeReportValue<any>[]> {
+        const peer = this.peers.get(this.fabric.addressOf(nodeId));
+        if (peer === undefined) {
+            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
+        }
+        if (peer.dataStore === undefined) {
+            return []; // We have no store, also also no data
+        }
+        await peer.dataStore.construction;
+        return peer.dataStore.retrieveAttributes(endpointId, clusterId);
+    }
 }
 
-class CommissionedNodeStore extends PeerStore {
+class CommissionedNodeStore extends PeerAddressStore {
     declare peers: PeerSet;
+    #controllerStore: ControllerStoreInterface;
 
     constructor(
-        private nodesStorage: StorageContext,
+        controllerStore: ControllerStoreInterface,
         private fabric: Fabric,
     ) {
         super();
+        this.#controllerStore = controllerStore;
+    }
+
+    async createNodeStore(address: PeerAddress, load = true) {
+        return new CachedClientNodeStore(await this.#controllerStore.clientNodeStore(address.nodeId.toString()), load);
     }
 
     async loadPeers() {
-        if (!(await this.nodesStorage.has("commissionedNodes"))) {
+        if (!(await this.#controllerStore.nodesStorage.has("commissionedNodes"))) {
             return [];
         }
 
-        const commissionedNodes = await this.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
-        return commissionedNodes.map(
-            ([nodeId, { operationalServerAddress, discoveryData, deviceData }]) =>
-                ({
-                    address: this.fabric.addressOf(nodeId),
-                    operationalAddress: operationalServerAddress,
-                    discoveryData,
-                    deviceData,
-                }) satisfies CommissionedPeer,
-        );
+        const commissionedNodes =
+            await this.#controllerStore.nodesStorage.get<StoredOperationalPeer[]>("commissionedNodes");
+
+        const nodes = new Array<CommissionedPeer>();
+
+        for (const [nodeId, { operationalServerAddress, discoveryData, deviceData }] of commissionedNodes) {
+            const address = this.fabric.addressOf(nodeId);
+            nodes.push({
+                address,
+                operationalAddress: operationalServerAddress,
+                discoveryData,
+                deviceData,
+                dataStore: await this.createNodeStore(address),
+            } satisfies CommissionedPeer);
+        }
+        return nodes;
     }
 
     async updatePeer() {
         return this.save();
     }
 
-    async deletePeer() {
+    async deletePeer(address: PeerAddress) {
+        await (await this.#controllerStore.clientNodeStore(address.nodeId.toString())).clearAll();
         return this.save();
     }
 
     async save() {
-        await this.nodesStorage.set(
+        await this.#controllerStore.nodesStorage.set(
             "commissionedNodes",
             this.peers.map(peer => {
                 const {

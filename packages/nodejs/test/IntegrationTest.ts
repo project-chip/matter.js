@@ -331,7 +331,7 @@ describe("Integration Test", () => {
 
             assert.equal(nodeStateChangesController1Node1.length, 2);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node1[1].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10000);
@@ -719,7 +719,7 @@ describe("Integration Test", () => {
 
             await MockTime.advance(60);
             await MockTime.advance(60);
-            await promise;
+            assert.equal(await promise, "testLabel");
 
             // Local value because not yet updated from subscription
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel");
@@ -1384,7 +1384,7 @@ describe("Integration Test", () => {
 
             assert.equal(nodeStateChangesController1Node2.length, 2);
             assert.equal(nodeStateChangesController1Node2[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node2[1].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
@@ -1402,7 +1402,7 @@ describe("Integration Test", () => {
             assert.ok(sessionInfo[0].fabric);
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
 
@@ -1519,7 +1519,7 @@ describe("Integration Test", () => {
                     },
                     deviceMeta: {
                         dataRevision: 1,
-                        ethernetConnected: false,
+                        ethernetConnected: true,
                         isBatteryPowered: false,
                         isIntermittentlyConnected: false,
                         isThreadSleepyEndDevice: false,
@@ -1698,7 +1698,7 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer2.length, 1);
 
             assert.equal(nodeStateChangesController2Node1.length, 2);
-            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController2Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10_000);
 
@@ -1822,7 +1822,7 @@ describe("Integration Test", () => {
                     },
                     deviceMeta: {
                         dataRevision: 1,
-                        ethernetConnected: false,
+                        ethernetConnected: true,
                         isBatteryPowered: false,
                         isIntermittentlyConnected: false,
                         isThreadSleepyEndDevice: false,

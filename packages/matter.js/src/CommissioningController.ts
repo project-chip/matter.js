@@ -16,12 +16,14 @@ import {
     SyncStorage,
     UdpInterface,
 } from "#general";
+import { LegacyControllerStore } from "#LegacyControllerStore.js";
 import { ControllerStore } from "#node";
 import {
     Ble,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
     ControllerDiscovery,
+    DecodedAttributeReportValue,
     DiscoveryData,
     InteractionClient,
     MdnsBroadcaster,
@@ -131,6 +133,7 @@ export class CommissioningController extends MatterNode {
     private storage?: StorageContext;
 
     private mdnsScanner?: MdnsScanner;
+    private mdnsBroadcaster?: MdnsBroadcaster;
 
     private controllerInstance?: MatterController;
     private initializedNodes = new Map<NodeId, PairedNode>();
@@ -187,24 +190,14 @@ export class CommissioningController extends MatterNode {
         }
         const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
 
+        if (environment === undefined && storage === undefined) {
+            throw new ImplementationError("Storage not initialized correctly.");
+        }
         // Initialize the Storage in a compatible way for the legacy API and new style for new API
         // TODO: clean this up when we really implement ControllerNode/ClientNode concepts in new API
-        const environmentStore = environment !== undefined ? environment.get(ControllerStore) : undefined;
-        const sessionStorage = environmentStore?.sessionStorage ?? storage?.createContext("SessionManager");
-        const rootCertificateStorage =
-            environmentStore?.credentialsStorage ?? storage?.createContext("RootCertificateManager");
-        const fabricStorage = environmentStore?.credentialsStorage ?? storage?.createContext("MatterController");
-        const nodesStorage = environmentStore?.nodesStorage ?? storage?.createContext("MatterController");
-        if (
-            sessionStorage === undefined ||
-            rootCertificateStorage === undefined ||
-            fabricStorage === undefined ||
-            nodesStorage === undefined
-        ) {
-            throw new InternalError("Storage not initialized correctly."); // Should not happen
-        }
+        const controllerStore = environment?.get(ControllerStore) ?? new LegacyControllerStore(storage!);
 
-        const { netInterfaces, scanners } = await configureNetwork({
+        const { netInterfaces, scanners, port } = await configureNetwork({
             ipv4Disabled: this.ipv4Disabled,
             mdnsScanner,
             localPort,
@@ -212,11 +205,8 @@ export class CommissioningController extends MatterNode {
             listeningAddressIpv6: this.listeningAddressIpv6,
         });
 
-        return await MatterController.create({
-            sessionStorage,
-            caStorage: rootCertificateStorage,
-            fabricStorage,
-            nodesStorage,
+        const controller = await MatterController.create({
+            controllerStore,
             scanners,
             netInterfaces,
             sessionClosedCallback: peerNodeId => {
@@ -231,6 +221,10 @@ export class CommissioningController extends MatterNode {
             adminFabricIndex,
             caseAuthenticatedTags,
         });
+        if (this.mdnsBroadcaster) {
+            controller.addBroadcaster(this.mdnsBroadcaster.createInstanceBroadcaster(port));
+        }
+        return controller;
     }
 
     /**
@@ -277,25 +271,27 @@ export class CommissioningController extends MatterNode {
 
     /**
      * Remove a Node id from the controller. This method should only be used if the decommission method on the
-     * PairedNode instance returns an error. By default it tries to decommission the node from the controller but will
+     * PairedNode instance returns an error. By default, it tries to decommission the node from the controller but will
      * remove it also in case of an error during decommissioning. Ideally try to decommission the node before and only
      * use this in case of an error.
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
         const node = this.initializedNodes.get(nodeId);
+        let decommissionSuccess = false;
         if (tryDecommissioning) {
             try {
                 if (node == undefined) {
                     throw new ImplementationError(`Node ${nodeId} is not connected.`);
                 }
                 await node.decommission();
+                decommissionSuccess = true;
             } catch (error) {
                 logger.warn(`Decommissioning node ${nodeId} failed with error, remove node anyway: ${error}`);
             }
         }
         if (node !== undefined) {
-            node.close();
+            node.close(!decommissionSuccess);
         }
         await controller.removeNode(nodeId);
         this.initializedNodes.delete(nodeId);
@@ -322,27 +318,39 @@ export class CommissioningController extends MatterNode {
 
         const existingNode = this.initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
-            if (!existingNode.isConnected) {
+            if (!existingNode.initialized) {
                 await existingNode.reconnect(connectOptions);
             }
             return existingNode;
         }
 
-        const pairedNode = new PairedNode(
+        const pairedNode = await PairedNode.create(
             nodeId,
             this,
             connectOptions,
             this.controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
-            async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
+            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
+            async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
+            await this.collectStoredAttributeData(nodeId),
         );
         this.initializedNodes.set(nodeId, pairedNode);
 
-        pairedNode.events.initialized.on(
+        pairedNode.events.initializedFromRemote.on(
             async deviceData => await controller.enhanceCommissionedNodeDetails(nodeId, deviceData),
         );
 
         return pairedNode;
+    }
+
+    async collectStoredAttributeData(nodeId: NodeId): Promise<DecodedAttributeReportValue<any>[]> {
+        const controller = this.assertControllerIsStarted();
+        const storedDataVersions = await controller.getStoredClusterDataVersions(nodeId);
+        const result = new Array<DecodedAttributeReportValue<any>>();
+        for (const { endpointId, clusterId } of storedDataVersions) {
+            result.push(...(await controller.retrieveStoredAttributes(nodeId, endpointId, clusterId)));
+        }
+        return result;
     }
 
     /**
@@ -376,10 +384,10 @@ export class CommissioningController extends MatterNode {
     /**
      * Set the MDNS Broadcaster instance. Should be only used internally
      *
-     * @param _mdnsBroadcaster MdnsBroadcaster instance
+     * @param mdnsBroadcaster MdnsBroadcaster instance
      */
-    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
-        // not needed
+    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+        this.mdnsBroadcaster = mdnsBroadcaster;
     }
 
     /**
@@ -403,8 +411,15 @@ export class CommissioningController extends MatterNode {
      * Creates and Return a new InteractionClient to communicate with a node. This is mainly used internally and should
      * not be used directly. See the PairedNode class for the public API.
      */
-    async createInteractionClient(nodeId: NodeId, discoveryType?: NodeDiscoveryType): Promise<InteractionClient> {
+    async createInteractionClient(
+        nodeId: NodeId,
+        discoveryType?: NodeDiscoveryType,
+        forcedConnection = true,
+    ): Promise<InteractionClient> {
         const controller = this.assertControllerIsStarted();
+        if (!forcedConnection) {
+            return controller.createInteractionClient(nodeId, { discoveryType });
+        }
         return controller.connect(nodeId, { discoveryType });
     }
 
@@ -454,6 +469,17 @@ export class CommissioningController extends MatterNode {
         this.ipv4Disabled = ipv4Disabled;
     }
 
+    async initializeControllerStore() {
+        // This can only happen if "MatterServer" approach is not used
+        if (this.options.environment === undefined) {
+            throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+        }
+
+        const { environment, id } = this.options.environment;
+        const controllerStore = await ControllerStore.create(id, environment);
+        environment.set(ControllerStore, controllerStore);
+    }
+
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
         if (this.ipv4Disabled === undefined) {
@@ -461,24 +487,28 @@ export class CommissioningController extends MatterNode {
                 throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
             }
 
-            const { environment, id } = this.options.environment;
-            const controllerStore = await ControllerStore.create(environment, id);
+            const { environment } = this.options.environment;
 
-            environment.set(ControllerStore, controllerStore);
+            if (environment.get(ControllerStore) === undefined) {
+                await this.initializeControllerStore();
+            }
 
+            // Load the MDNS service from the environment and set onto the controller
             const mdnsService = await environment.load(MdnsService);
             this.ipv4Disabled = !mdnsService.enableIpv4;
             this.setMdnsBroadcaster(mdnsService.broadcaster);
             this.setMdnsScanner(mdnsService.scanner);
 
             this.environment = environment;
-            const runtime = environment.runtime;
+            const runtime = this.environment.runtime;
             runtime.add(this);
         }
+
         this.started = true;
         if (this.controllerInstance === undefined) {
             this.controllerInstance = await this.initializeController();
         }
+        await this.controllerInstance.announce();
         if (this.options.autoConnect !== false && this.controllerInstance.isCommissioned()) {
             await this.connect();
         }
@@ -544,9 +574,11 @@ export async function configureNetwork(options: {
     const netInterfaces = new NetInterfaceSet();
     const scanners = new ScannerSet();
 
-    netInterfaces.add(await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6));
+    const udpInterface = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
+    netInterfaces.add(udpInterface);
     if (!ipv4Disabled) {
-        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", localPort, listeningAddressIpv4));
+        // TODO: Add option to transport different ports to broadcaster
+        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4));
     }
     if (mdnsScanner) {
         scanners.add(mdnsScanner);
@@ -564,5 +596,5 @@ export async function configureNetwork(options: {
         }
     }
 
-    return { netInterfaces, scanners };
+    return { netInterfaces, scanners, port: udpInterface.port };
 }

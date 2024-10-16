@@ -23,6 +23,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
     -   Enhancement: Network transports can now self select which the protocols and addresses they support
     -   Feature: A new `ObserverGroup` class simplifies binding management for multiple observables
+    -   Feature: Introduced a new Async Disk key/Value-Storage compatible with the sync one driven by node-localstorage and uses it by default in new API and controller instances
 
 -   @matter/main:
     -   Info: This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports packages above as appropriate
@@ -45,10 +46,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Info: The noble and bleno dependencies got updated to also support Ubuntu 24
 
 -   @matter/nodejs-shell:
-    - Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
-    - Enhancement: Added option to specify if attributes are loaded from remote or locally
-    - Enhancement: The shell now saves a 100 history of commands and restores this on startup
-    - Enhancement: Add a "nodes status" command to show the status of all nodes
+    -   Breaking: The Shell Storage was moved to the new approach.  Please use "--legacyStorage" on startup to connect with the old storage to get into your old shell history and commissioned devices.  Storage migration guide see in the [README.md](./packages/nodejs-shell/README.md#matterjs-v011-storage-adjustment).
+    -   Feature: Added new shell command "tlv" with TLV decoding and structure logging tooling  
+    -   Enhancement: Added option to specify if attributes are loaded from remote or locally
+    -   Enhancement: The shell now saves a 100 history of commands and restores this on startup
+    -   Enhancement: Add a "nodes status" command to show the status of all nodes
 
 -   @matter/protocol:
     -   Info: Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
@@ -84,13 +86,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
-    -   Deprecation: The attributeChangedCallback, eventTriggeredCallback and nodeStateChangedCallbacks are deprecated and replaced by new events "attributeChanged", "eventTriggered" and "nodeStateChanged" and "structureChanged" on PairedNode
+    -   Deprecation: The attributeChangedCallback, eventTriggeredCallback and nodeStateChangedCallbacks are deprecated and replaced by new events "attributeChanged", "eventTriggered" and "nodeStateChanged", "structureChanged" and "decommissioned" on PairedNode
     -   Feature: Some more data (like Network interfaces, PowerSources, Thread details) are collected and used when connecting to the nodes
     -   Feature: Based on device type the minimum and maximum subscription interval is now automatically set based on certain best practices. When multiple nodes are subscribed all Thread based devices are initialized by a "4 in parallel queue" to limit the used thread bandwidth.
     -   Feature: Subscribed attribute data are cached for each node and used on reconnects by utilizing dataVersionFilters on read and subscribes to reduce bandwidth on reconnects. The data are no (yet) persisted, so after Controller restart the data are collected anew.
     -   Feature: Low level InteractionClient API allows to enrich the attribute data that are not returned because of dataVersionFilters.
+    -   Feature: Properly announces the controller node on start for devices to find the controller if needed and to utilize persisted subscriptions on device side 
     -   Enhancement: Only recreate PairedNode internal objects when structure really changed also on reconnects.
     -   Enhancement: Utilize more information (beside partList changes now also feature, serverList, attributeList, generatedCommandLists) as structure change to reinitialize objects.
+    -   Enhancement: Huge refactoring in internal logic, optimized reconnection and rediscovery
 
 ## 0.10.4 (2024-09-16)
 

@@ -22,11 +22,12 @@ import {
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
-import { ExchangeManager, ExchangeProvider, MessageChannel } from "#protocol/ExchangeManager.js";
 import { PaseClient } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
 import { InteractionClient } from "../interaction/InteractionClient.js";
+import { ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
+import { DedicatedChannelExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { PeerAddress } from "./PeerAddress.js";
 import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
 
@@ -332,7 +333,10 @@ export class ControllerCommissioner {
         const address = fabric.addressOf(commissioningOptions.nodeId ?? NodeId.randomOperationalNodeId());
         const commissioningManager = new ControllerCommissioningFlow(
             // Use the created secure session to do the commissioning
-            new InteractionClient(new ExchangeProvider(this.#context.exchanges, paseSecureMessageChannel), address),
+            new InteractionClient(
+                new DedicatedChannelExchangeProvider(this.#context.exchanges, paseSecureMessageChannel),
+                address,
+            ),
             this.#context.ca,
             fabric,
             commissioningOptions,
@@ -354,11 +358,15 @@ export class ControllerCommissioner {
                 }
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.#context.peers.connect(address, {
-                    discoveryType: NodeDiscoveryType.TimedDiscovery,
-                    timeoutSeconds: 120,
-                    discoveryData,
-                }); // Wait maximum 120s to find the operational device for commissioning process
+                return await this.#context.peers.connect(
+                    address,
+                    {
+                        discoveryType: NodeDiscoveryType.TimedDiscovery,
+                        timeoutSeconds: 120,
+                        discoveryData,
+                    },
+                    true,
+                ); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 

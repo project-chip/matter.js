@@ -253,17 +253,29 @@ export default function commands(theNode: MatterNode) {
                     "unpair <node-id>",
                     "Unpair/Decommission a node",
                     yargs => {
-                        return yargs.positional("node-id", {
-                            describe: "node id",
-                            type: "string",
-                            demandOption: true,
-                        });
+                        return yargs
+                            .positional("node-id", {
+                                describe: "node id",
+                                type: "string",
+                                demandOption: true,
+                            })
+                            .options({
+                                force: {
+                                    describe: "Force unpairing even if node is not online",
+                                    type: "boolean",
+                                    default: false,
+                                },
+                            });
                     },
                     async argv => {
                         await theNode.start();
-                        const { nodeId } = argv;
-                        const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
-                        await node.decommission();
+                        const { nodeId, force } = argv;
+                        if (force) {
+                            await theNode.controller.removeNode(NodeId(BigInt(nodeId)), !force);
+                        } else {
+                            const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
+                            await node.decommission();
+                        }
                     },
                 ),
         handler: async (argv: any) => {

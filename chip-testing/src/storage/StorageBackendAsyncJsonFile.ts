@@ -26,7 +26,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     override async initialize() {
         let data: any = {};
         try {
-            data = this.fromJson(await readFile(this.path, "utf-8"));
+            data = this.fromJson(await readFile(this.path, "utf8"));
         } catch (error: any) {
             // We accept that the file does not exist yet to initialize with an empty store.
             if (error.code !== "ENOENT") {
@@ -87,9 +87,9 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        if (!this.closed) return;
-        const json = this.toJson(this.store);
-        await writeFile(this.path, json, "utf-8");
+        if (this.closed) return;
+        const json = this.toJson(this.store.data);
+        await writeFile(this.path, json, "utf8");
     }
 
     override async close() {

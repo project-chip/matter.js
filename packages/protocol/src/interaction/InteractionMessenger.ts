@@ -29,7 +29,8 @@ import {
     TypeFromSchema,
 } from "#types";
 import { Message, SessionType } from "../codec/MessageCodec.js";
-import { ChannelNotConnectedError, ExchangeProvider } from "../protocol/ExchangeManager.js";
+import { ChannelNotConnectedError } from "../protocol/ExchangeManager.js";
+import { ExchangeProvider } from "../protocol/ExchangeProvider.js";
 import {
     ExchangeSendOptions,
     MessageExchange,
@@ -379,7 +380,9 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         }
         return message;
     }
-    async readDataReports(sendFinalAckMessage = true): Promise<DataReport> {
+
+    // TODO: Adjust to use callbacks or events to push put received data to allow parallel processing
+    async readDataReports(expectedSubscriptionIds?: number[]): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
@@ -387,6 +390,17 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         while (true) {
             const dataReportMessage = await this.waitFor(MessageType.ReportData);
             const report = TlvDataReport.decode(dataReportMessage.payload);
+            if (expectedSubscriptionIds !== undefined) {
+                if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
+                    await this.sendStatus(StatusCode.InvalidSubscription);
+                    throw new UnexpectedDataError(
+                        report.subscriptionId === undefined
+                            ? "Invalid Data report without Subscription ID"
+                            : `Invalid Data report with unexpected subscription ID ${report.subscriptionId}`,
+                    );
+                }
+            }
+
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
             } else if (
@@ -397,7 +411,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             }
 
             logger.debug(
-                `Received DataReport chunk with ${report.attributeReports?.length ?? 0} attributes and ${report.eventReports?.length ?? 0} events, suppressResponse: ${report.suppressResponse}, moreChunkedMessages: ${report.moreChunkedMessages}`,
+                `Received DataReport chunk with ${report.attributeReports?.length ?? 0} attributes and ${report.eventReports?.length ?? 0} events, suppressResponse: ${report.suppressResponse}, moreChunkedMessages: ${report.moreChunkedMessages}${report.subscriptionId !== undefined ? `, subscriptionId: ${report.subscriptionId}` : ""}`,
             );
 
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
@@ -407,8 +421,14 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 eventValues.push(...report.eventReports);
             }
 
-            if (report.moreChunkedMessages || (sendFinalAckMessage && !report.suppressResponse)) {
+            if (report.moreChunkedMessages) {
                 await this.sendStatus(StatusCode.Success);
+            } else if (!report.suppressResponse) {
+                // We received the last message and need to send a final Success, but we do not need to wait for it and
+                // also don't care if it fails
+                this.sendStatus(StatusCode.Success).catch(error =>
+                    logger.info("Error while sending final Success after receiving all DataReport chunks", error),
+                );
             }
 
             if (!report.moreChunkedMessages) {
@@ -421,8 +441,16 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
 }
 
 export class InteractionClientMessenger extends IncomingInteractionClientMessenger {
-    constructor(private readonly exchangeProvider: ExchangeProvider) {
-        super(exchangeProvider.initiateExchange());
+    static async create(exchangeProvider: ExchangeProvider) {
+        const exchange = await exchangeProvider.initiateExchange();
+        return new this(exchange, exchangeProvider);
+    }
+
+    constructor(
+        exchange: MessageExchange,
+        private readonly exchangeProvider: ExchangeProvider,
+    ) {
+        super(exchange);
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
@@ -437,12 +465,12 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             if (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) {
                 // When retransmission failed (most likely due to a lost connection or invalid session),
                 // try to reconnect if possible and resend the message once
-                logger.info(
+                logger.debug(
                     `${error instanceof RetransmissionLimitReachedError ? "Retransmission limit reached" : "Channel not connected"}, trying to reconnect and resend the message.`,
                 );
                 await this.exchange.close();
                 if (await this.exchangeProvider.reconnectChannel()) {
-                    this.exchange = this.exchangeProvider.initiateExchange();
+                    this.exchange = await this.exchangeProvider.initiateExchange();
                     return await this.exchange.send(messageType, payload, options);
                 }
             } else {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, Environment, Environmental, Logger, MatterError } from "#general";
+import { AsyncObservable, Channel, Environment, Environmental, Logger, MatterError } from "#general";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
@@ -18,6 +18,7 @@ export class ChannelManager {
     readonly #channels = new PeerAddressMap<MessageChannel[]>();
     readonly #paseChannels = new Map<Session, MessageChannel>();
     #caseSessionsPerFabricAndNode: number;
+    #added = AsyncObservable<[address: PeerAddress, channel: MessageChannel]>();
 
     // TODO evaluate with controller the effects of limiting the entries just for FabricIndex and not also NodeId
     constructor(caseSessionsPerFabricAndNode = 3) {
@@ -28,6 +29,10 @@ export class ChannelManager {
         const instance = new ChannelManager();
         env.set(ChannelManager, instance);
         return instance;
+    }
+
+    get added() {
+        return this.#added;
     }
 
     set caseSessionsPerFabricAndNode(count: number) {
@@ -49,6 +54,7 @@ export class ChannelManager {
         const currentChannels = this.#channels.get(address) ?? [];
         currentChannels.push(channel);
         this.#channels.set(address, currentChannels);
+        await this.#added.emit(address, channel);
         if (currentChannels.length > this.#caseSessionsPerFabricAndNode) {
             const oldestChannel = this.#findLeastActiveChannel(currentChannels);
 

@@ -53,31 +53,32 @@ export class Shell {
         public prompt: string,
     ) {}
 
-    start() {
+    start(storageBase?: string) {
         const history = new Array<string>();
-        const fileName = `.matter-shell-${this.nodeNum}.history`;
-        try {
-            const historyData = readFileSync(fileName, "utf8");
-            history.push(
-                ...historyData
-                    .split("\n")
-                    .map(line => line.trim())
-                    .filter(line => line.length),
-            );
-            history.splice(0, -MAX_HISTORY_SIZE);
-            console.log(`Loaded ${history.length} history entries from ${fileName}`);
-        } catch (e) {
-            if (e instanceof Error && "code" in e && e.code !== "ENOENT") {
-                process.stderr.write(`Error happened during history file read: ${e}\n`);
+        if (storageBase !== undefined) {
+            const fileName = `${storageBase}.history`;
+            try {
+                const historyData = readFileSync(fileName, "utf8");
+                history.push(
+                    ...historyData
+                        .split("\n")
+                        .map(line => line.trim())
+                        .filter(line => line.length),
+                );
+                history.splice(0, -MAX_HISTORY_SIZE);
+                console.log(`Loaded ${history.length} history entries from ${fileName}`);
+            } catch (e) {
+                if (e instanceof Error && "code" in e && e.code !== "ENOENT") {
+                    process.stderr.write(`Error happened during history file read: ${e}\n`);
+                }
+            }
+            try {
+                this.writeStream = createWriteStream(fileName, { flags: "w" });
+                this.writeStream.write(`${history.join("\n")}\n`);
+            } catch (e) {
+                process.stderr.write(`Error happened during history file write: ${e}\n`);
             }
         }
-        try {
-            this.writeStream = createWriteStream(fileName, { flags: "w" });
-            this.writeStream.write(`${history.join("\n")}\n`);
-        } catch (e) {
-            process.stderr.write(`Error happened during history file write: ${e}\n`);
-        }
-
         this.readline = readline.createInterface({
             input: process.stdin,
             output: process.stdout,
