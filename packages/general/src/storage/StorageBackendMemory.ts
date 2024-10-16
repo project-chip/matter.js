@@ -46,6 +46,10 @@ export class StorageBackendMemory extends SyncStorage {
         this.store = {};
     }
 
+    get data() {
+        return this.store;
+    }
+
     get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
