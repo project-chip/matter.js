@@ -14,26 +14,28 @@ import type { PeerSet } from "./PeerSet.js";
 /**
  * The interface {@link PeerSet} uses for persisting operational information.
  */
-export abstract class PeerStore {
+export abstract class PeerAddressStore {
     abstract loadPeers(): MaybePromise<Iterable<OperationalPeer>>;
     abstract updatePeer(peer: OperationalPeer): MaybePromise<void>;
     abstract deletePeer(address: PeerAddress): MaybePromise<void>;
-    abstract createNodeStore(address: PeerAddress): Promise<PeerNodeStore>;
+    abstract createNodeStore(address: PeerAddress): Promise<PeerDataStore>;
 }
 
-export abstract class PeerNodeStore {
-    abstract construction: Construction<PeerNodeStore>;
+export abstract class PeerDataStore {
+    abstract construction: Construction<PeerDataStore>;
 
     abstract maxEventNumber: EventNumber;
     abstract updateLastEventNumber(eventNumber: EventNumber): MaybePromise<void>;
 
+    abstract persistAttributes(attributes: DecodedAttributeReportValue<any>[]): MaybePromise<void>;
+
+    // TODO: Find a maybe better way to achieve this without functions
     abstract retrieveAttribute(
         endpointId: EndpointNumber,
         clusterId: ClusterId,
         attributeId: AttributeId,
     ): DecodedAttributeReportValue<any> | undefined;
     abstract retrieveAttributes(endpointId: EndpointNumber, clusterId: ClusterId): DecodedAttributeReportValue<any>[];
-    abstract persistAttributes(attributes: DecodedAttributeReportValue<any>[]): MaybePromise<void>;
     abstract getClusterDataVersion(endpointId: EndpointNumber, clusterId: ClusterId): number | undefined;
     abstract getClusterDataVersions(
         filterEndpointId?: EndpointNumber,

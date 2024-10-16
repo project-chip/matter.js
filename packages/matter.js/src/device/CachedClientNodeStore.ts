@@ -7,7 +7,7 @@
 import type { StorageContext } from "#general";
 import { Construction, Logger } from "#general";
 import { Val } from "#node";
-import { DecodedAttributeReportValue, PeerNodeStore } from "#protocol";
+import { DecodedAttributeReportValue, PeerDataStore } from "#protocol";
 import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "#types";
 import { ClientEndpointStore } from "./ClientEndpointStore.js";
 
@@ -21,7 +21,7 @@ type PersistedAttributeValue = {
     attributeName: string;
 };
 
-export class CachedClientNodeStore extends PeerNodeStore {
+export class CachedClientNodeStore extends PeerDataStore {
     #storage: StorageContext;
     #construction: Construction<CachedClientNodeStore>;
     #endpointStores = new Map<EndpointNumber, ClientEndpointStore>();

@@ -18,7 +18,7 @@ import {
 } from "#general";
 import { Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { PeerNodeStore } from "#peer/PeerStore.js";
+import { PeerDataStore } from "#peer/PeerAddressStore.js";
 import {
     Attribute,
     AttributeId,
@@ -130,7 +130,7 @@ export class SubscriptionClient implements ProtocolHandler {
 }
 
 export class InteractionClient {
-    readonly #nodeStore?: PeerNodeStore;
+    readonly #nodeStore?: PeerDataStore;
     readonly #ownSubscriptionIds = new Set<number>();
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
@@ -139,7 +139,7 @@ export class InteractionClient {
         private readonly exchangeProvider: ExchangeProvider,
         readonly address: PeerAddress,
         queue?: PromiseQueue,
-        nodeStore?: PeerNodeStore,
+        nodeStore?: PeerDataStore,
     ) {
         this.#nodeStore = nodeStore;
         this.#queue = queue;

@@ -13,9 +13,9 @@ import {
     FabricAuthorityConfigurationProvider,
     OperationalPeer,
     PeerAddress,
+    PeerAddressStore,
     PeerCommissioningOptions,
-    PeerNodeStore,
-    PeerStore,
+    PeerDataStore,
 } from "#protocol";
 import { ClientNode } from "./ClientNode.js";
 import { type Node } from "./Node.js";
@@ -113,8 +113,8 @@ export class Nodes extends EndpointContainer<ClientNode> {
         const nodes = this;
 
         owner.env.set(
-            PeerStore,
-            new (class extends PeerStore {
+            PeerAddressStore,
+            new (class extends PeerAddressStore {
                 async loadPeers() {
                     await nodes.construction;
                     return [...nodes].map(node => ({ address: node.address }));
@@ -134,7 +134,7 @@ export class Nodes extends EndpointContainer<ClientNode> {
                     }
                 }
 
-                async createNodeStore(): Promise<PeerNodeStore> {
+                async createNodeStore(): Promise<PeerDataStore> {
                     throw new InternalError("Node store creation not supported");
                 }
             })(),

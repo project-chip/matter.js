@@ -40,7 +40,7 @@ import { ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
 import { ControllerDiscovery, DiscoveryError, PairRetransmissionLimitReachedError } from "./ControllerDiscovery.js";
 import { OperationalPeer } from "./OperationalPeer.js";
-import { PeerNodeStore, PeerStore } from "./PeerStore.js";
+import { PeerAddressStore, PeerDataStore } from "./PeerAddressStore.js";
 
 const logger = Logger.get("PeerSet");
 
@@ -94,7 +94,7 @@ export interface PeerSetContext {
     exchanges: ExchangeManager;
     scanners: ScannerSet;
     netInterfaces: NetInterfaceSet;
-    store: PeerStore;
+    store: PeerAddressStore;
 }
 
 /**
@@ -115,9 +115,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         rejecter: (reason?: any) => void;
     }>();
     readonly #construction: Construction<PeerSet>;
-    readonly #store: PeerStore;
+    readonly #store: PeerAddressStore;
     readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
-    readonly #nodeCachedData = new PeerAddressMap<PeerNodeStore>(); // Temporarily until we store it in new API
+    readonly #nodeCachedData = new PeerAddressMap<PeerDataStore>(); // Temporarily until we store it in new API
     readonly #clients = new PeerAddressMap<InteractionClient>();
 
     constructor(context: PeerSetContext) {
@@ -202,7 +202,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             exchanges: env.get(ExchangeManager),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
-            store: env.get(PeerStore),
+            store: env.get(PeerAddressStore),
         });
         env.set(PeerSet, instance);
         return instance;

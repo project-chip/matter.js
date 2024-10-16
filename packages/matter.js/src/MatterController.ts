@@ -48,9 +48,9 @@ import {
     NodeDiscoveryType,
     OperationalPeer,
     PeerAddress,
+    PeerAddressStore,
     PeerCommissioningOptions,
     PeerSet,
-    PeerStore,
     ResumptionRecord,
     RetransmissionLimitReachedError,
     ScannerSet,
@@ -523,7 +523,7 @@ export class MatterController {
     }
 }
 
-class CommissionedNodeStore extends PeerStore {
+class CommissionedNodeStore extends PeerAddressStore {
     declare peers: PeerSet;
     #controllerStore: ControllerStoreInterface;
 

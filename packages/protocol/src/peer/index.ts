@@ -9,5 +9,5 @@ export * from "./ControllerCommissioningFlow.js";
 export * from "./ControllerDiscovery.js";
 export * from "./OperationalPeer.js";
 export * from "./PeerAddress.js";
+export * from "./PeerAddressStore.js";
 export * from "./PeerSet.js";
-export * from "./PeerStore.js";
