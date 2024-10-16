@@ -15,6 +15,7 @@ import {
     Environmental,
     ImmutableSet,
     ImplementationError,
+    isIpNetworkChannel,
     isIPv6,
     Logger,
     MatterError,
@@ -142,10 +143,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         this.#sessions.resubmissionStarted.on(this.#handleResubmissionStarted.bind(this));
 
         this.#channels.added.on((address, msgChannel) => {
-            const channelAddress = msgChannel.channel.networkAddress;
-            // Update the channel address if it has one
-            if (channelAddress !== undefined) {
-                return this.#addOrUpdatePeer(address, channelAddress);
+            if (isIpNetworkChannel(msgChannel.channel)) {
+                // Update the channel address if it has one
+                return this.#addOrUpdatePeer(address, msgChannel.channel.networkAddress);
             }
         });
 

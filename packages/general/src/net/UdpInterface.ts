@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, ChannelType } from "./Channel.js";
+import { Channel, ChannelType, IpNetworkChannel } from "./Channel.js";
 import { NetInterface } from "./NetInterface.js";
 import { Network, NetworkError } from "./Network.js";
 import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
@@ -47,7 +47,7 @@ export class UdpInterface implements NetInterface {
     }
 }
 
-class UdpConnection implements Channel<Uint8Array> {
+class UdpConnection implements IpNetworkChannel<Uint8Array> {
     readonly isReliable = false;
     readonly type = ChannelType.UDP;
 

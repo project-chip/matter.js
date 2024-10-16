@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ServerAddressIp } from "#net/ServerAddress.js";
+import { isObject } from "#util/Type.js";
 
 export enum ChannelType {
     UDP = "udp",
@@ -23,11 +24,17 @@ export interface Channel<T> {
 
     type: ChannelType;
 
-    networkAddress?: ServerAddressIp;
-
     /** Method to send data to the remote endpoint */
     send(data: T): Promise<void>;
 
     /** Method to close the channel */
     close(): Promise<void>;
+}
+
+export interface IpNetworkChannel<T> extends Channel<T> {
+    networkAddress: ServerAddressIp;
+}
+
+export function isIpNetworkChannel<T>(channel: Channel<T>): channel is IpNetworkChannel<T> {
+    return isObject((channel as IpNetworkChannel<T>).networkAddress);
 }
