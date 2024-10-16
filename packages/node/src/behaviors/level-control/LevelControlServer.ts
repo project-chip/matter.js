@@ -37,7 +37,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * following methods to natively use device features to correctly support the transition times. For this the default
  * implementation uses special protected methods which are used by the real commands and are only responsible for the
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
- * already done and you can focus on the actual hardware interaction:
+ * already done, and you can focus on the actual hardware interaction:
  * * {@link LevelControlServerLogic.moveToLevelLogic} Logic to move the value to a defined level with a transition time
  * * {@link LevelControlServerLogic.moveLogic} Logic to move the value up or down with a defined rate
  * * {@link LevelControlServerLogic.stepLogic} Logic to step the value up or down with a defined step size and transition
@@ -342,8 +342,8 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         return this.stopLogic(effectiveOptions);
     }
 
-    override stopWithOnOff() {
-        return this.stopLogic();
+    override stopWithOnOff(request: LevelControl.StopRequest) {
+        return this.stop(request);
     }
 
     /**
