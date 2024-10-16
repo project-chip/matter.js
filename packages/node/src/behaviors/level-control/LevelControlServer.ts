@@ -83,7 +83,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.internal.transitionIntervalTimer = Time.getPeriodicTimer(
                 "LevelControl.step/move",
                 1000,
-                this.callback(this.#stepIntervalTick),
+                this.callback(this.#stepIntervalTick, { lock: true }),
             );
         }
 
