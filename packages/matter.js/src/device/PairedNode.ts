@@ -859,6 +859,11 @@ export class PairedNode {
         const endpointUsages: { [key: EndpointNumber]: EndpointNumber[] } = {};
         Array.from(partLists.entries()).forEach(([parent, partsList]) =>
             partsList.forEach(endPoint => {
+                if (endPoint === parent) {
+                    // There could be more cases of invalid and cycling structures that never should happen ... so lets not over optimize to try to find all of them right now
+                    logger.warn(`Node ${this.nodeId}: Endpoint ${endPoint} is referencing itself!`);
+                    return;
+                }
                 endpointUsages[endPoint] = endpointUsages[endPoint] || [];
                 endpointUsages[endPoint].push(parent);
             }),
