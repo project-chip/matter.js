@@ -98,14 +98,14 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         value?: SupportedStorageTypes,
     ) {
         if (typeof keyOrValues === "string") {
-            return await this.#writeFile(this.buildStorageKey(contexts, keyOrValues), toJson(value));
+            return this.#writeFile(this.buildStorageKey(contexts, keyOrValues), toJson(value));
         }
 
         const promises = new Array<Promise<void>>();
         for (const [key, value] of Object.entries(keyOrValues)) {
             promises.push(this.#writeFile(this.buildStorageKey(contexts, key), toJson(value)));
         }
-        await Promise.all(promises);
+        await Promise.allSettled(promises);
     }
 
     /** According to Node.js documentation, writeFile is not atomic. This method ensures atomicity. */

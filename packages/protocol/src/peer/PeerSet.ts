@@ -67,7 +67,7 @@ export enum NodeDiscoveryType {
     FullDiscovery = 3,
 }
 
-/** Error when an unknown nod eis tried to be connected or any other action done with it. */
+/** Error when an unknown node is tried to be connected or any other action done with it. */
 export class UnknownNodeError extends MatterError {}
 
 /**

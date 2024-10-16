@@ -108,7 +108,7 @@ export class SubscriptionClient implements ProtocolHandler {
             // TODO Adjust this to getting packages as callback when received to handle error cases and checks outside
             dataReport = await messenger.readDataReports([...this.subscriptionListeners.keys()]);
         } finally {
-            messenger.close().catch(error => logger.error("Error closing client messenger", error));
+            messenger.close().catch(error => logger.info("Error closing client messenger", error));
         }
         const subscriptionId = dataReport.subscriptionId as number; // this is checked in the messenger already because we hand over allowed list
 
@@ -1158,7 +1158,7 @@ export class InteractionClient {
             result = await invoke(messenger);
         } finally {
             // No need to wait for closing and final ack message here, for us all is done
-            messenger.close().catch(error => logger.error(`Error closing messenger: ${error}`));
+            messenger.close().catch(error => logger.info(`Error closing messenger: ${error}`));
         }
         return result;
     }

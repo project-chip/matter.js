@@ -2,7 +2,7 @@ import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { DatasourceStore } from "#endpoint/storage/DatasourceStore.js";
-import { Construction, ImplementationError, MaybePromise, StorageContext, SupportedStorageTypes } from "#general";
+import { Construction, ImplementationError, StorageContext, SupportedStorageTypes } from "#general";
 
 const NUMBER_KEY = "__number__";
 
@@ -143,16 +143,20 @@ export class EndpointStore {
                 this.#knownBehaviors.add(behaviorId);
             }
 
-            const promises = new Array<MaybePromise<void>>();
+            const toSave = {} as Record<string, SupportedStorageTypes>;
+            let keysToSave = 0;
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
-                    promises.push(behaviorStorage.delete(key));
+                    await behaviorStorage.delete(key);
                 } else {
-                    promises.push(behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes));
+                    toSave[key] = value as SupportedStorageTypes;
+                    keysToSave++;
                 }
             }
-            await Promise.all(promises);
+            if (keysToSave > 0) {
+                await behaviorStorage.set(toSave);
+            }
         }
     }
 

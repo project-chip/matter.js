@@ -427,7 +427,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 // We received the last message and need to send a final Success, but we do not need to wait for it and
                 // also don't care if it fails
                 this.sendStatus(StatusCode.Success).catch(error =>
-                    logger.error("Error while sending final Success after receiving all DataReport chunks", error),
+                    logger.info("Error while sending final Success after receiving all DataReport chunks", error),
                 );
             }
 
