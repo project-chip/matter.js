@@ -35,7 +35,7 @@ export class IdentifyServer extends IdentifyBehavior {
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
             1000,
-            this.callback(this.#identifyTick),
+            this.callback(this.#identifyTick, { lock: true }),
         );
 
         // So whenever the attribute OR the identify command was invoked we react to it.

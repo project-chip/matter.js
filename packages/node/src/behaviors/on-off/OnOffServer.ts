@@ -148,7 +148,7 @@ export class OnOffServer extends Base {
             timer = this.internal.timedOnTimer = Time.getPeriodicTimer(
                 "Timed on",
                 100,
-                this.callback(this.#timedOnTick),
+                this.callback(this.#timedOnTick, { lock: true }),
             );
         }
         return timer;
@@ -171,7 +171,7 @@ export class OnOffServer extends Base {
             timer = this.internal.delayedOffTimer = Time.getTimer(
                 "Delayed off",
                 100,
-                this.callback(this.#delayedOffTick),
+                this.callback(this.#delayedOffTick, { lock: true }),
             );
         }
         return timer;
