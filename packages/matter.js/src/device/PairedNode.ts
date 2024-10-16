@@ -76,41 +76,68 @@ const RECONNECT_DELAY_AFTER_SHUTDOWN_MS = 30_000; // 30 seconds, to give device 
 
 const RECONNECT_MAX_DELAY_MS = 600_000; // 10 minutes
 
-export enum NodeStateInformation {
+export enum NodeStates {
     /**
      * Node seems active nd last communications were successful and subscription updates were received and all data is
      * up-to-date.
      */
-    Connected,
+    Connected = 0,
 
     /**
      * Node is disconnected. This means that the node was not connected so far or the developer disconnected it by API
      * call or the node is removed. A real disconnection can not be detected because the main Matter protocol uses UDP.
      * Data are stale and interactions will most likely return an error.
      */
-    Disconnected,
+    Disconnected = 1,
 
     /**
      * Node is reconnecting. This means that former communications failed, and we are trying to reach the device on
      * known addresses. Data are stale. It is yet unknown if the reconnection is successful. */
-    Reconnecting,
+    Reconnecting = 2,
 
     /**
      * The node seems offline because communication was not possible or is just initialized. The controller is now
      * waiting for a MDNS announcement and tries every 10 minutes to reconnect.
      */
-    WaitingForDeviceDiscovery,
+    WaitingForDeviceDiscovery = 3,
+}
+
+/** @deprecated */
+export enum NodeStateInformation {
+    /**
+     * Node seems active nd last communications were successful and subscription updates were received and all data is
+     * up-to-date.
+     */
+    Connected = 0,
+
+    /**
+     * Node is disconnected. This means that the node was not connected so far or the developer disconnected it by API
+     * call or the node is removed. A real disconnection can not be detected because the main Matter protocol uses UDP.
+     * Data are stale and interactions will most likely return an error.
+     */
+    Disconnected = 1,
+
+    /**
+     * Node is reconnecting. This means that former communications failed, and we are trying to reach the device on
+     * known addresses. Data are stale. It is yet unknown if the reconnection is successful. */
+    Reconnecting = 2,
+
+    /**
+     * The node seems offline because communication was not possible or is just initialized. The controller is now
+     * waiting for a MDNS announcement and tries every 10 minutes to reconnect.
+     */
+    WaitingForDeviceDiscovery = 3,
 
     /**
      * Node structure has changed (Endpoints got added or also removed). Data are up-to-date.
      * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
      */
-    StructureChanged,
+    StructureChanged = 4,
 
     /**
      * The node was just Decommissioned. This is a final state.
      */
-    Decommissioned,
+    Decommissioned = 5,
 }
 
 export type CommissioningControllerNodeOptions = {
@@ -152,7 +179,8 @@ export type CommissioningControllerNodeOptions = {
     /**
      * Optional callback method which is called when the state of the node changes. This can be used to detect when
      * the node goes offline or comes back online.
-     * @deprecated Please use the events.nodeStateChanged observable instead.
+     * @deprecated Please use the events.nodeStateChanged observable and the extra events for structureCHanged and
+     *  decomissioned instead.
      */
     readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
@@ -180,7 +208,7 @@ export class PairedNode {
         STRUCTURE_UPDATE_TIMEOUT_MS,
         async () => await this.updateEndpointStructure(),
     );
-    #connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
+    #connectionState: NodeStates = NodeStates.Disconnected;
     #reconnectionInProgress = false;
     #localInitializationDone = false;
     #remoteInitializationInProgress = false;
@@ -205,7 +233,7 @@ export class PairedNode {
         initializedFromRemote: AsyncObservable<[details: DeviceInformationData]>(),
 
         /** Emitted when the state of the node changes. */
-        nodeStateChanged: Observable<[nodeState: NodeStateInformation]>(),
+        nodeStateChanged: Observable<[nodeState: NodeStates]>(),
 
         /**
          * Emitted when an attribute value changes. If the oldValue is undefined then no former value was known.
@@ -217,6 +245,9 @@ export class PairedNode {
 
         /** Emitted when the structure of the node changes (Endpoints got added or also removed). */
         nodeStructureChanged: Observable<[void]>(),
+
+        /** Emitted when the node is decommissioned. */
+        decommissioned: Observable<[void]>(),
     };
 
     static async create(
@@ -259,10 +290,10 @@ export class PairedNode {
         assignDisconnectedHandler(async () => {
             logger.info(
                 `Node ${this.nodeId}: Session disconnected${
-                    this.#connectionState !== NodeStateInformation.Disconnected ? ", trying to reconnect ..." : ""
+                    this.#connectionState !== NodeStates.Disconnected ? ", trying to reconnect ..." : ""
                 }`,
             );
-            if (this.#connectionState === NodeStateInformation.Connected) {
+            if (this.#connectionState === NodeStates.Connected) {
                 this.scheduleReconnect();
             }
         });
@@ -274,12 +305,12 @@ export class PairedNode {
                 this.#reconnectDelayTimer?.isRunning &&
                 !this.#clientReconnectInProgress &&
                 !this.#reconnectionInProgress &&
-                this.#connectionState === NodeStateInformation.Reconnecting
+                this.#connectionState === NodeStates.Reconnecting
             ) {
                 logger.info(`Node ${this.nodeId}: Got a reconnect, so reconnection not needed anymore ...`);
                 this.#reconnectDelayTimer?.stop();
                 this.#reconnectDelayTimer = undefined;
-                this.setConnectionState(NodeStateInformation.Connected);
+                this.setConnectionState(NodeStates.Connected);
             }
         });
         this.#nodeDetails = new DeviceInformation(nodeId, knownNodeDetails);
@@ -294,8 +325,8 @@ export class PairedNode {
             // This kicks of the remote initialization and automatic reconnection handling if it can not be connected
             this.initialize().catch(error => {
                 logger.info(`Node ${nodeId}: Error during remote initialization`, error);
-                if (this.nodeState !== NodeStateInformation.Disconnected) {
-                    this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+                if (this.nodeState !== NodeStates.Disconnected) {
+                    this.setConnectionState(NodeStates.WaitingForDeviceDiscovery);
                     this.scheduleReconnect();
                 }
             });
@@ -307,7 +338,7 @@ export class PairedNode {
     }
 
     get isConnected() {
-        return this.#connectionState === NodeStateInformation.Connected;
+        return this.#connectionState === NodeStates.Connected;
     }
 
     get nodeState() {
@@ -330,17 +361,16 @@ export class PairedNode {
         return this.#remoteInitializationDone || this.#localInitializationDone;
     }
 
-    private setConnectionState(state: NodeStateInformation) {
+    private setConnectionState(state: NodeStates) {
         if (
             this.#connectionState === state ||
-            (this.#connectionState === NodeStateInformation.WaitingForDeviceDiscovery &&
-                state === NodeStateInformation.Reconnecting)
+            (this.#connectionState === NodeStates.WaitingForDeviceDiscovery && state === NodeStates.Reconnecting)
         )
             return;
         this.#connectionState = state;
-        this.options.stateInformationCallback?.(this.nodeId, state);
+        this.options.stateInformationCallback?.(this.nodeId, state as unknown as NodeStateInformation);
         this.events.nodeStateChanged.emit(state);
-        if (state === NodeStateInformation.Disconnected) {
+        if (state === NodeStates.Disconnected) {
             this.#reconnectDelayTimer?.stop();
             this.#reconnectDelayTimer = undefined;
         }
@@ -374,8 +404,8 @@ export class PairedNode {
         }
 
         this.#reconnectionInProgress = true;
-        if (this.#connectionState !== NodeStateInformation.WaitingForDeviceDiscovery) {
-            this.setConnectionState(NodeStateInformation.Reconnecting);
+        if (this.#connectionState !== NodeStates.WaitingForDeviceDiscovery) {
+            this.setConnectionState(NodeStates.Reconnecting);
 
             try {
                 // First try a reconnect to known addresses to see if the device is reachable
@@ -392,7 +422,7 @@ export class PairedNode {
             }
         }
 
-        this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+        this.setConnectionState(NodeStates.WaitingForDeviceDiscovery);
 
         try {
             await this.initialize();
@@ -400,9 +430,9 @@ export class PairedNode {
             MatterError.accept(error);
 
             if (error instanceof UnknownNodeError) {
-                logger.info(`Node ${this.nodeId}: Device not found, consider decommissioned.`);
-                this.setConnectionState(NodeStateInformation.Disconnected);
-            } else if (this.#connectionState === NodeStateInformation.Disconnected) {
+                logger.info(`Node ${this.nodeId}: Node is unknown by controller, we can not connect.`);
+                this.setConnectionState(NodeStates.Disconnected);
+            } else if (this.#connectionState === NodeStates.Disconnected) {
                 logger.info("No reconnection desired because requested status is Disconnected.");
             } else {
                 if (error instanceof ChannelStatusResponseError) {
@@ -421,23 +451,23 @@ export class PairedNode {
 
     /** Ensure that the node is connected by creating a new InteractionClient if needed. */
     private async ensureConnection(forceConnect = false): Promise<InteractionClient> {
-        if (this.#connectionState === NodeStateInformation.Disconnected) {
+        if (this.#connectionState === NodeStates.Disconnected) {
             // Disconnected and having an InteractionClient means we initialized with an Offline one, so we do
             // connection now on usage
-            this.setConnectionState(NodeStateInformation.Reconnecting);
+            this.setConnectionState(NodeStates.Reconnecting);
             return this.#interactionClient;
         }
-        if (this.#connectionState === NodeStateInformation.Connected && !forceConnect) {
+        if (this.#connectionState === NodeStates.Connected && !forceConnect) {
             return this.#interactionClient;
         }
 
         if (forceConnect) {
-            this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+            this.setConnectionState(NodeStates.WaitingForDeviceDiscovery);
         }
 
         await this.handleReconnect(NodeDiscoveryType.FullDiscovery);
         if (!forceConnect) {
-            this.setConnectionState(NodeStateInformation.Connected);
+            this.setConnectionState(NodeStates.Connected);
         }
         return this.#interactionClient;
     }
@@ -520,7 +550,7 @@ export class PairedNode {
                 await this.initializeEndpointStructure(allClusterAttributes, anyInitializationDone);
             }
             this.#reconnectErrorCount = 0;
-            this.setConnectionState(NodeStateInformation.Connected);
+            this.setConnectionState(NodeStates.Connected);
             await this.events.initializedFromRemote.emit(this.#nodeDetails.toStorageData());
             if (!this.#localInitializationDone) {
                 await this.events.initialized.emit(this.#nodeDetails.toStorageData());
@@ -644,11 +674,11 @@ export class PairedNode {
             },
             updateTimeoutHandler: async () => {
                 logger.info(`Node ${this.nodeId}: Subscription timed out ... trying to re-establish ...`);
-                this.setConnectionState(NodeStateInformation.Reconnecting);
+                this.setConnectionState(NodeStates.Reconnecting);
                 this.#reconnectionInProgress = true;
                 try {
                     await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
-                    this.setConnectionState(NodeStateInformation.Connected);
+                    this.setConnectionState(NodeStates.Connected);
                 } catch (error) {
                     logger.info(
                         `Node ${this.nodeId}: Error resubscribing to all attributes and events. Try to reconnect ...`,
@@ -660,14 +690,11 @@ export class PairedNode {
                 }
             },
             subscriptionAlive: () => {
-                if (
-                    this.#reconnectDelayTimer?.isRunning &&
-                    this.#connectionState === NodeStateInformation.Reconnecting
-                ) {
+                if (this.#reconnectDelayTimer?.isRunning && this.#connectionState === NodeStates.Reconnecting) {
                     logger.info(`Node ${this.nodeId}: Got subscription update, so reconnection not needed anymore ...`);
                     this.#reconnectDelayTimer.stop();
                     this.#reconnectDelayTimer = undefined;
-                    this.setConnectionState(NodeStateInformation.Connected);
+                    this.setConnectionState(NodeStates.Connected);
                 }
             },
         };
@@ -750,8 +777,8 @@ export class PairedNode {
     }
 
     private scheduleReconnect(delay?: number) {
-        if (this.nodeState !== NodeStateInformation.WaitingForDeviceDiscovery) {
-            this.setConnectionState(NodeStateInformation.Reconnecting);
+        if (this.nodeState !== NodeStates.WaitingForDeviceDiscovery) {
+            this.setConnectionState(NodeStates.Reconnecting);
         }
 
         if (!this.#reconnectDelayTimer?.isRunning) {
@@ -1027,7 +1054,7 @@ export class PairedNode {
                 `Removing node ${this.nodeId} failed with status ${result.statusCode} "${result.debugText}".`,
             );
         }
-        this.setConnectionState(NodeStateInformation.Disconnected);
+        this.setConnectionState(NodeStates.Disconnected);
         await this.commissioningController.removeNode(this.nodeId, false);
     }
 
@@ -1136,8 +1163,9 @@ export class PairedNode {
         this.#updateEndpointStructureTimer.stop();
         if (sendDecommissionedStatus) {
             this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.Decommissioned);
+            this.events.decommissioned.emit();
         }
-        this.setConnectionState(NodeStateInformation.Disconnected);
+        this.setConnectionState(NodeStates.Disconnected);
     }
 
     /**
