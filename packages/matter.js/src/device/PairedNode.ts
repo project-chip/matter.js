@@ -638,7 +638,6 @@ export class PairedNode {
 
                 asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
                 attributeChangedCallback?.(data, oldValue);
-                this.events.attributeChanged.emit(data, oldValue);
 
                 this.#checkAttributesForNeededStructureUpdate(endpointId, clusterId, attributeId);
             },
@@ -668,7 +667,6 @@ export class PairedNode {
                 asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
 
                 eventTriggeredCallback?.(data);
-                this.events.eventTriggered.emit(data);
 
                 this.#checkEventsForNeededStructureUpdate(endpointId, clusterId, eventId);
             },
