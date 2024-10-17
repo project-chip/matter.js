@@ -332,6 +332,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             return;
         }
 
+        this.#clients.get(address)?.removeAllSubscriptions();
         await this.#sessions.removeAllSessionsForNode(address, true);
         await this.#channels.removeAllNodeChannels(address);
     }

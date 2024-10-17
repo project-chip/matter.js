@@ -195,7 +195,9 @@ export class CommissioningController extends MatterNode {
         }
         // Initialize the Storage in a compatible way for the legacy API and new style for new API
         // TODO: clean this up when we really implement ControllerNode/ClientNode concepts in new API
-        const controllerStore = environment?.get(ControllerStore) ?? new LegacyControllerStore(storage!);
+        const controllerStore = environment?.has(ControllerStore)
+            ? environment.get(ControllerStore)
+            : new LegacyControllerStore(storage!);
 
         const { netInterfaces, scanners, port } = await configureNetwork({
             ipv4Disabled: this.ipv4Disabled,
@@ -489,7 +491,7 @@ export class CommissioningController extends MatterNode {
 
             const { environment } = this.options.environment;
 
-            if (environment.get(ControllerStore) === undefined) {
+            if (!environment.has(ControllerStore)) {
                 await this.initializeControllerStore();
             }
 

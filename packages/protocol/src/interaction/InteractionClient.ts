@@ -1184,10 +1184,14 @@ export class InteractionClient {
         this.#subscriptionClient.registerSubscriptionUpdateTimer(subscriptionId, timer);
     }
 
-    close() {
+    removeAllSubscriptions() {
         for (const subscriptionId of this.#ownSubscriptionIds) {
             this.removeSubscription(subscriptionId);
         }
+    }
+
+    close() {
+        this.removeAllSubscriptions();
     }
 
     get session() {

@@ -233,7 +233,7 @@ export class PairedNode {
         initializedFromRemote: AsyncObservable<[details: DeviceInformationData]>(),
 
         /** Emitted when the state of the node changes. */
-        nodeStateChanged: Observable<[nodeState: NodeStates]>(),
+        stateChanged: Observable<[nodeState: NodeStates]>(),
 
         /**
          * Emitted when an attribute value changes. If the oldValue is undefined then no former value was known.
@@ -244,7 +244,7 @@ export class PairedNode {
         eventTriggered: Observable<[DecodedEventReportValue<any>]>(),
 
         /** Emitted when the structure of the node changes (Endpoints got added or also removed). */
-        nodeStructureChanged: Observable<[void]>(),
+        structureChanged: Observable<[void]>(),
 
         /** Emitted when the node is decommissioned. */
         decommissioned: Observable<[void]>(),
@@ -325,7 +325,7 @@ export class PairedNode {
             // This kicks of the remote initialization and automatic reconnection handling if it can not be connected
             this.initialize().catch(error => {
                 logger.info(`Node ${nodeId}: Error during remote initialization`, error);
-                if (this.nodeState !== NodeStates.Disconnected) {
+                if (this.state !== NodeStates.Disconnected) {
                     this.setConnectionState(NodeStates.WaitingForDeviceDiscovery);
                     this.scheduleReconnect();
                 }
@@ -341,7 +341,7 @@ export class PairedNode {
         return this.#connectionState === NodeStates.Connected;
     }
 
-    get nodeState() {
+    get state() {
         return this.#connectionState;
     }
 
@@ -369,7 +369,7 @@ export class PairedNode {
             return;
         this.#connectionState = state;
         this.options.stateInformationCallback?.(this.nodeId, state as unknown as NodeStateInformation);
-        this.events.nodeStateChanged.emit(state);
+        this.events.stateChanged.emit(state);
         if (state === NodeStates.Disconnected) {
             this.#reconnectDelayTimer?.stop();
             this.#reconnectDelayTimer = undefined;
@@ -638,7 +638,6 @@ export class PairedNode {
 
                 asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
                 attributeChangedCallback?.(data, oldValue);
-                this.events.attributeChanged.emit(data, oldValue);
 
                 this.#checkAttributesForNeededStructureUpdate(endpointId, clusterId, attributeId);
             },
@@ -668,7 +667,6 @@ export class PairedNode {
                 asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
 
                 eventTriggeredCallback?.(data);
-                this.events.eventTriggered.emit(data);
 
                 this.#checkEventsForNeededStructureUpdate(endpointId, clusterId, eventId);
             },
@@ -777,7 +775,7 @@ export class PairedNode {
     }
 
     private scheduleReconnect(delay?: number) {
-        if (this.nodeState !== NodeStates.WaitingForDeviceDiscovery) {
+        if (this.state !== NodeStates.WaitingForDeviceDiscovery) {
             this.setConnectionState(NodeStates.Reconnecting);
         }
 
@@ -798,7 +796,7 @@ export class PairedNode {
         const allClusterAttributes = await this.readAllAttributes();
         await this.initializeEndpointStructure(allClusterAttributes, true);
         this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
-        this.events.nodeStructureChanged.emit();
+        this.events.structureChanged.emit();
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
