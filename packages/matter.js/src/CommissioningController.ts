@@ -489,7 +489,7 @@ export class CommissioningController extends MatterNode {
 
             const { environment } = this.options.environment;
 
-            if (environment.get(ControllerStore) === undefined) {
+            if (!environment.has(ControllerStore)) {
                 await this.initializeControllerStore();
             }
 
