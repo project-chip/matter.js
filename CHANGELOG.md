@@ -86,6 +86,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
+    -   Breaking: "nodeState" property on PairedNode got renamed to "state" 
     -   Deprecation: The attributeChangedCallback, eventTriggeredCallback and nodeStateChangedCallbacks are deprecated and replaced by new events "attributeChanged", "eventTriggered" and "stateChanged", "structureChanged" and "decommissioned" on PairedNode
     -   Feature: Some more data (like Network interfaces, PowerSources, Thread details) are collected and used when connecting to the nodes
     -   Feature: Based on device type the minimum and maximum subscription interval is now automatically set based on certain best practices. When multiple nodes are subscribed all Thread based devices are initialized by a "4 in parallel queue" to limit the used thread bandwidth.

@@ -325,7 +325,7 @@ export class PairedNode {
             // This kicks of the remote initialization and automatic reconnection handling if it can not be connected
             this.initialize().catch(error => {
                 logger.info(`Node ${nodeId}: Error during remote initialization`, error);
-                if (this.nodeState !== NodeStates.Disconnected) {
+                if (this.state !== NodeStates.Disconnected) {
                     this.setConnectionState(NodeStates.WaitingForDeviceDiscovery);
                     this.scheduleReconnect();
                 }
@@ -341,7 +341,7 @@ export class PairedNode {
         return this.#connectionState === NodeStates.Connected;
     }
 
-    get nodeState() {
+    get state() {
         return this.#connectionState;
     }
 
@@ -777,7 +777,7 @@ export class PairedNode {
     }
 
     private scheduleReconnect(delay?: number) {
-        if (this.nodeState !== NodeStates.WaitingForDeviceDiscovery) {
+        if (this.state !== NodeStates.WaitingForDeviceDiscovery) {
             this.setConnectionState(NodeStates.Reconnecting);
         }
 
