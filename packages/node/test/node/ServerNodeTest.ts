@@ -316,13 +316,15 @@ describe("ServerNode", () => {
         // Simulate receiving the response to the removeFabric request which normally closes the underlying session
         // delayed
         await contextOptions.exchange.session.destroy(false, false);
-
         // ...then go offline...
+        console.log(`Node Status after decommission: ${node.lifecycle.isOnline}`);
         if (node.lifecycle.isOnline) {
             await MockTime.resolve(node.lifecycle.offline);
+            console.log(`Node Status after offline: ${node.lifecycle.isOnline}`);
         }
         // ...then go back online
         await MockTime.resolve(node.lifecycle.online);
+        console.log(`Node Status after online: ${node.lifecycle.isOnline}`);
 
         await commission(node);
 
