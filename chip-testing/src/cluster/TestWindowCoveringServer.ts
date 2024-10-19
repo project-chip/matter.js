@@ -81,8 +81,8 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
                 typeName,
                 950,
                 MovementType.Lift === type
-                    ? this.callback(this.#handleLiftMovementTick, { lock: true })
-                    : this.callback(this.#handleTiltMovementTick, { lock: true }),
+                    ? this.callback(this.#handleLiftMovementTick)
+                    : this.callback(this.#handleTiltMovementTick),
             ),
         };
         this.internal.moveData[typeName]?.timer.start();

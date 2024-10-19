@@ -1697,27 +1697,27 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         this.internal.hueTransitionIntervalTimer = Time.getPeriodicTimer(
             "ColorControl.hue.transition",
             1000,
-            this.callback(this.#hueStepIntervalTick, { lock: true }),
+            this.callback(this.#hueStepIntervalTick),
         );
         this.internal.saturationTransitionIntervalTimer = Time.getPeriodicTimer(
             "ColorControl.saturation.transition",
             1000,
-            this.callback(this.#saturationStepIntervalTick, { lock: true }),
+            this.callback(this.#saturationStepIntervalTick),
         );
         this.internal.colorTemperatureTransitionIntervalTimer = Time.getPeriodicTimer(
             "ColorControl.colorTemperature.transition",
             1000,
-            this.callback(this.#colorTemperatureStepIntervalTick, { lock: true }),
+            this.callback(this.#colorTemperatureStepIntervalTick),
         );
         this.internal.xTransitionIntervalTimer = Time.getPeriodicTimer(
             "ColorControl.x.transition",
             1000,
-            this.callback(this.#xStepIntervalTick, { lock: true }),
+            this.callback(this.#xStepIntervalTick),
         );
         this.internal.yTransitionIntervalTimer = Time.getPeriodicTimer(
             "ColorControl.y.transition",
             1000,
-            this.callback(this.#yStepIntervalTick, { lock: true }),
+            this.callback(this.#yStepIntervalTick),
         );
     }
 
