@@ -55,7 +55,7 @@
         "express": "^4.19.2",
         "glob": "^10.4.5",
         "mocha": "^10.7.3",
-        "playwright": "^1.46.1",
+        "playwright": "^1.48.1",
         "trace-unhandled": "^2.0.1",
         "typescript": "~5.6.2",
         "wtfnode": "^0.9.3",
