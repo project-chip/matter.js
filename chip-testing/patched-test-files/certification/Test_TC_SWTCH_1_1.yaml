@@ -143,7 +143,7 @@ tests:
 
     - label: "Step 5a: TH reads from the DUT the EventList attribute."
       PICS:
-          "PICS_EVENT_LIST_ENABLED && !SWTCH.S.F00 && !SWTCH.S.F01 && !SWTCH.S.F02 && !SWTCH.S.F03 &&
+          " PICS_EVENT_LIST_ENABLED && !SWTCH.S.F00 && !SWTCH.S.F01 && !SWTCH.S.F02 && !SWTCH.S.F03 &&
           !SWTCH.S.F04 "
       command: "readAttribute"
       attribute: "EventList"
