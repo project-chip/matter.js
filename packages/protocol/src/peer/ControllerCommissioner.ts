@@ -331,6 +331,9 @@ export class ControllerCommissioner {
          */
 
         const address = fabric.addressOf(commissioningOptions.nodeId ?? NodeId.randomOperationalNodeId());
+        logger.info(
+            `Start commissioning of node ${address.nodeId} into fabric ${fabric.fabricId} (index ${address.fabricIndex})`,
+        );
         const commissioningManager = new ControllerCommissioningFlow(
             // Use the created secure session to do the commissioning
             new InteractionClient(
