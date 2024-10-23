@@ -22,7 +22,6 @@ import {
     TypeFromPartialBitSchema,
     TypeFromSchema,
     UnknownAttribute,
-    UnknownEvent,
 } from "#types";
 import { DecodedEventData } from "../../interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../interaction/InteractionClient.js";
@@ -91,14 +90,7 @@ export function ClusterClient<const T extends ClusterType>(
     }
 
     function addEventToResult(event: Event<any, any>, eventName: string) {
-        (events as any)[eventName] = createEventClient(
-            event,
-            eventName,
-            endpointId,
-            clusterId,
-            interactionClient,
-            !!globalAttributeValues?.eventList?.includes(event.id),
-        );
+        (events as any)[eventName] = createEventClient(event, eventName, endpointId, clusterId, interactionClient);
         eventToId[event.id] = eventName;
         const capitalizedEventName = capitalize(eventName);
         result[`get${capitalizedEventName}Event`] = async (
@@ -248,18 +240,6 @@ export function ClusterClient<const T extends ClusterType>(
             return !!globalAttributeValues?.attributeList?.includes(attribute.id);
         },
 
-        isEventSupported: (eventId: EventId) => {
-            return !!globalAttributeValues?.eventList?.includes(eventId);
-        },
-
-        isEventSupportedByName: (eventName: string) => {
-            const event = (events as any)[eventName];
-            if (event === undefined) {
-                return false;
-            }
-            return !!globalAttributeValues?.eventList?.includes(event.id);
-        },
-
         isCommandSupported: (commandId: CommandId) => {
             return !!globalAttributeValues?.acceptedCommandList?.includes(commandId);
         },
@@ -302,16 +282,6 @@ export function ClusterClient<const T extends ClusterType>(
     // add events
     for (const eventName in eventDef) {
         addEventToResult(eventDef[eventName], eventName);
-    }
-    if (globalAttributeValues?.eventList !== undefined) {
-        // Add accessors for potential unknown data
-        for (const eventId of globalAttributeValues.eventList) {
-            if (eventToId[eventId] === undefined) {
-                const event = UnknownEvent(eventId);
-                addEventToResult(event, `unknownEvent_${Diagnostic.hex(eventId)}`);
-                logger.info(`Added unknown event ${Diagnostic.hex(eventId)} to cluster ${Diagnostic.hex(clusterId)}.`);
-            }
-        }
     }
 
     const commandToId = <{ [key: CommandId]: string }>{};

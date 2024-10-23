@@ -535,18 +535,18 @@ describe("Integration Test", () => {
                 ],
             });
 
-            assert.equal(response.length, 45);
+            assert.equal(response.length, 42);
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) => endpointId === 0 && clusterId === Descriptor.Cluster.id,
                 ).length,
-                10,
+                9,
             );
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) => endpointId === 1 && clusterId === Descriptor.Cluster.id,
                 ).length,
-                10,
+                9,
             );
 
             const descriptorServerListData = response.find(
@@ -578,7 +578,7 @@ describe("Integration Test", () => {
                     ({ path: { endpointId, clusterId } }) =>
                         endpointId === 0 && clusterId === BasicInformation.Cluster.id,
                 ).length,
-                24,
+                23,
             );
             const softwareVersionStringData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
