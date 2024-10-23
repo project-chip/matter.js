@@ -471,7 +471,6 @@ describe("ClusterServer structure", () => {
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(2)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -505,7 +504,6 @@ describe("ClusterServer structure", () => {
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -539,7 +537,6 @@ describe("ClusterServer structure", () => {
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster without optional commands", () => {
@@ -692,7 +689,6 @@ describe("ClusterServer structure", () => {
                 CommandId(2),
                 CommandId(3),
             ]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("Missing Conditionals Log warnings", () => {

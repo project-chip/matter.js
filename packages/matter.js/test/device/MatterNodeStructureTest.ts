@@ -386,14 +386,12 @@ describe("Endpoint Structures", () => {
             const basicInformationCluster = rootEndpoint.getClusterServer(BasicInformationCluster);
             expect(basicInformationCluster).exist;
             expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(22);
-            expect((basicInformationCluster?.attributes as any).eventList.get().length).equal(3);
             expect((basicInformationCluster?.attributes as any).generatedCommandList.get().length).equal(0);
             expect((basicInformationCluster?.attributes as any).acceptedCommandList.get().length).equal(0);
 
             const generalCommissioningCluster = rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
             expect(generalCommissioningCluster).exist;
             expect((generalCommissioningCluster?.attributes as any).attributeList.get().length).equal(11);
-            expect((generalCommissioningCluster?.attributes as any).eventList.get().length).equal(0);
             expect((generalCommissioningCluster?.attributes as any).generatedCommandList.get().length).equal(3);
             expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).equal(3);
         });

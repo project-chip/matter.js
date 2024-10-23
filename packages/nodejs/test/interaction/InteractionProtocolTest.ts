@@ -869,7 +869,6 @@ const wildcardTestCases: {
         wildcardPathFilter: { skipAttributeList: true },
         count: 20,
     }, // 1 less
-    { testCase: "skipEventList", clusterId: ClusterId(0x28), wildcardPathFilter: { skipEventList: true }, count: 20 }, // 1 less
     {
         testCase: "skipCommandLists",
         clusterId: ClusterId(0x28),

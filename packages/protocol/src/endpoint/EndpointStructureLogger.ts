@@ -8,7 +8,6 @@ import { Diagnostic, Logger } from "#general";
 import { GlobalAttributes } from "#types";
 import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cluster/client/AttributeClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/client/EventClient.js";
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
@@ -218,13 +217,7 @@ function logClusterClient(
                 for (const eventName in clusterClient.events) {
                     const event = clusterClient.events[eventName];
                     if (event === undefined) continue;
-                    const supported = event instanceof SupportedEventClient;
-                    if (!supported && options.logNotSupportedClusterEvents === false) continue;
-                    const unknown = event instanceof UnknownSupportedEventClient;
-
                     let info = "";
-                    if (!supported) info += " (Not Supported)";
-                    if (unknown) info += " (Unknown)";
 
                     logger.info(`"${event.name}" (${Diagnostic.hex(event.id)})${info}`);
                 }

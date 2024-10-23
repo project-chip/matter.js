@@ -14,7 +14,6 @@ import {
     AttributeId,
     ClusterId,
     EndpointNumber,
-    EventId,
     TlvArray,
     TlvAttributeData,
     TlvAttributeReport,
@@ -758,17 +757,6 @@ describe("AttributeDataDecoder", () => {
                     path: {
                         endpointId: 0,
                         clusterId: 40,
-                        attributeId: 65530,
-                        attributeName: "eventList",
-                        nodeId: undefined,
-                    },
-                    version: 2020087125,
-                    value: [EventId(0), EventId(1), EventId(2)],
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
                         attributeId: 65531,
                         attributeName: "attributeList",
                         nodeId: undefined,
@@ -1355,17 +1343,6 @@ describe("AttributeDataDecoder", () => {
                     },
                     version: 2020087125,
                     value: [],
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65530,
-                        attributeName: "eventList",
-                        nodeId: undefined,
-                    },
-                    version: 2020087125,
-                    value: [0, 1, 2],
                 },
                 {
                     path: {

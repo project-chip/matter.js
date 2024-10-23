@@ -37,7 +37,6 @@ describe("WindowCoveringCluster", () => {
             currentPositionLiftPercent100ths: NONE,
             currentPositionLiftPercentage: OPTIONAL,
             endProductType: FIXED,
-            eventList: NONE,
             featureMap: NONE,
             generatedCommandList: NONE,
             mode: WRITABLE,
@@ -120,7 +119,6 @@ describe("WindowCoveringCluster", () => {
             },
             currentPositionLiftPercent100ths: 5000,
             endProductType: 4,
-            eventList: [],
             featureMap: {
                 lift: true,
                 tilt: false,
