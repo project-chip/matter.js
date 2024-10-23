@@ -57,7 +57,7 @@ export class CertificateAuthority {
             const certValues = options instanceof StorageContext ? await options.values() : options;
 
             if (
-                typeof certValues.rootCertId === "bigint" &&
+                (typeof certValues.rootCertId === "number" || typeof certValues.rootCertId === "bigint") &&
                 (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
                 ArrayBuffer.isView(certValues.rootKeyIdentifier) &&
                 ArrayBuffer.isView(certValues.rootCertBytes) &&
