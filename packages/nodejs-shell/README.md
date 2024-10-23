@@ -1,4 +1,4 @@
-# matter.js Node Shell
+# @matter/nodejs-shell - matter.js Node Shell
 
 This project provides a light-weight node.js implementation of a Matter shell application like the chip-tool from the official Matter-SDK.
 

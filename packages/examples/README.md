@@ -1,4 +1,4 @@
-# matter-node.js-examples
+# @matter/examples - Usage examples / Reference implementations
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE)
 
@@ -6,11 +6,9 @@ This project provides a set of reference implementations to show several types o
 
 > This package supports all Node.js LTS versions starting with 18.x
 
-# matter-node.js Usage examples / Reference implementations
-
 To better show how to use the library we provide some reference implementations in the examples directory. They are usable as CLI scripts without changes in the first place but are very simple. They are meant to be used as a starting point for your own implementation, or to experiment with Matter at all in a first place.
 
-For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-ble.js/README.md)  for prerequisites and limitations!
+For BLE usage please also see the [@matter/node-ble README.md](../nodejs-ble/README.md)  for prerequisites and limitations!
 
 ## Examples Overview
 The examples provided by this repository show different use cases demonstrating how to build different device types and show various ways to implement and interact with the matter.js structures. This section gives an overview regarding what the different examples demonstrate.

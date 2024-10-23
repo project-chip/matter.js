@@ -1,4 +1,4 @@
-# Matter Object Model
+# @matter/model - Matter Object Model
 
 This folder contains an object model that captures Matter semantics as precisely as possible. It also includes support
 logic related to model manipulation and runtime validation.
@@ -7,9 +7,9 @@ Other representations of the Matter data model in matter.js offer similar repres
 TLV models data with a focus on serialization and manipulation of instance values. The Cluster API models clusters in
 an operational form and in fact is partially generated from this model.
 
-All references to _Matter specification_ in the object model corpus refer collectively to [Matter 1.1 Core
-Specification](https://csa-iot.org/developer-resource/specifications-download-request/), [Matter 1.1 Application Cluster
-Specification](https://csa-iot.org/developer-resource/specifications-download-request/), and [Matter 1.1 Device Library
+All references to _Matter specification_ in the object model corpus refer collectively to [Matter 1.3 Core
+Specification](https://csa-iot.org/developer-resource/specifications-download-request/), [Matter 1.3 Application Cluster
+Specification](https://csa-iot.org/developer-resource/specifications-download-request/), and [Matter 1.3 Device Library
 Specification](https://csa-iot.org/developer-resource/specifications-download-request/).
 
 ## Code structure

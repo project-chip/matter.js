@@ -1,7 +1,6 @@
-# Matter.js Tooling
+# @matter/tools - Matter.js Tooling
 
-This package supports build, test and execution infrastructure for other
-matter.js packages.
+This package supports build, test and execution infrastructure for other matter.js packages.
 
 > This package supports all Node.js LTS versions starting with 18.x
 
