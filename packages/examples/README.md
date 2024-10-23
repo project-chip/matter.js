@@ -33,7 +33,7 @@ Additionally, all command line parameters now require to start with two dashes!
   * it shows how to enable BLE for a device node and tweaks the announcement so that BLE is only announced in the beginning. 
   * it includes a dummy WifiNetworkCommissioning and a dummy ThreadNetworkCommissioning implementation that simulates Wi-Fi/Thread logic for the commissioner and logs the Wi-Fi/Thread credentials the commissioner sends to the device. 
   * it enhances the GeneralDiagnostics and OnOff cluster to implement some commands with its own logic.
-  * it defines the ["My Fancy Functionality" custom cluster](./src/examples/cluster/MyFancyOwnFunctionality.ts) and adds this to the OnOff endpoint as additional cluster when the chosen vendorId is set to 0xfff4 (65524) 
+  * it defines the ["My Fancy Functionality" custom cluster](./src/examples/onoff-advanced-cli/cluster/MyFancyOwnFunctionality.ts) and adds this to the OnOff endpoint as additional cluster when the chosen vendorId is set to 0xfff4 (65524) 
   * it implements the callbacks where developers can get information on commissioning changes and session/connection changes to better know the status of the node.
 * **MultiDeviceNode**: This example shows how to start multiple Matter nodes on one MatterServer where each node is run on its own Port, but share a single MDNS broadcaster and scanner in order to optimize resources. Each node can be configured via CLI to be an onoff socket or a light. CLI. Options also allow specification of shell commands to be executed for on and off commands.
 * * **SensorDeviceNode**: This example shows how to build a simple Sensor device with a temperature (default) or humidity (`--type humidity`) sensor. The sensor values are updated by default every 60 seconds, or the number of seconds specified via the CLI parameter `--interval`. The value can be defined by the output of a CLI script provided via parameter `--value` or, if no command is specified, are randomly set in the interval -50..+50. To read the Temperature of a Raspberry Pi as example use `--value ="echo \$((\$(</sys/class/thermal/thermal_zone0/temp)/10))"` or to read temperature of your location `--value="curl -s 'wttr.in/?format=%t\&m' | sed 's/°C//'| awk '{print \$1*100}'"` (or use `?format=%h` for humidity).
@@ -89,7 +89,7 @@ The following CLI parameters are the same for all examples:
 
 ### Start a simple Matter Device Node
 
-> The code for this example is in [src/examples/DeviceNode.ts](./src/examples/DeviceNode.ts).
+> The code for this example is in [src/examples/onoff-cli/DeviceNode.ts](./src/examples/onoff-cli/DeviceNode.ts).
 
 To run from the build files:
 
@@ -143,7 +143,7 @@ Additionally, there are some Testing parameters:
 
 ### Start a Matter Bridge
 
-> The code for this example is in [src/examples/BridgedDevicesNode.ts](./src/examples/BridgedDevicesNode.ts).
+> The code for this example is in [src/examples/onoff-bridge-cli/BridgedDevicesNode.ts](./src/examples/onoff-bridge-cli/BridgedDevicesNode.ts).
 
 A Bridge is used to expose multiple devices at once.
 
@@ -174,7 +174,7 @@ The above command exposes two devices under the bridge, one as light, one as soc
 
 ### Start a Matter Composed Device
 
-> The code for this example is in [src/examples/ComposedDeviceNode.ts](./src/examples/ComposedDeviceNode.ts).
+> The code for this example is in [src/examples/onoff-composed-cli/ComposedDeviceNode.ts](./src/examples/onoff-composed-cli/ComposedDeviceNode.ts).
 
 A composed device is one device with multiple different device types combined. This is useful for devices that have multiple functions, e.g. a light bulb with a temperature sensor.
 
@@ -195,7 +195,7 @@ The above command exposes a composed device with a socket and a light device and
 
 ### Start multiple Matter Devices in one process
 
-> The code for this example is in [src/examples/MultiDeviceNode.ts](./src/examples/MultiDeviceNode.ts).
+> The code for this example is in [src/examples/onoff-multiple-devices-cli/MultiDeviceNode.ts](./src/examples/onoff-multiple-devices-cli/MultiDeviceNode.ts).
 
 matter.js also allows it to start multiple devices in one process. With this especially the MDNS functionalities are shared between these processes and it should use less resources. How many devices you acn add in one process depends on the load they produce and how many devices run in the single Node.js thread.
 
@@ -218,7 +218,7 @@ The above command exposes two single light devices (one socket and on light) and
 
 ### Start a Matter Controller
 
-> The code for this example is in [src/examples/ControllerNode.ts](./src/examples/ControllerNode.ts).
+> The code for this example is in [src/examples/controller-cli/ControllerNode.ts](./src/examples/controller-cli/ControllerNode.ts).
 
 **Experimental**
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
