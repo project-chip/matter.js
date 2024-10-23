@@ -757,6 +757,17 @@ describe("AttributeDataDecoder", () => {
                     path: {
                         endpointId: 0,
                         clusterId: 40,
+                        attributeId: 65530,
+                        attributeName: "Unknown (0xfffa)",
+                        nodeId: undefined,
+                    },
+                    version: 2020087125,
+                    value: [0, 1, 2],
+                },
+                {
+                    path: {
+                        endpointId: 0,
+                        clusterId: 40,
                         attributeId: 65531,
                         attributeName: "attributeList",
                         nodeId: undefined,

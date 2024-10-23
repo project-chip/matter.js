@@ -86,7 +86,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js Controller API:
     -   Breaking: PairedNode instances are now created and directly returned also when the node is not et connected. This do not block code flows anymore for offline devices
     -   Breaking: Because of this  "getConnectedNode()" got renamed to "getPairedNode()"
-    -   Breaking: "nodeState" property on PairedNode got renamed to "state" 
+    -   Breaking: "nodeState" property on PairedNode got renamed to "state"
+    -   Breaking: Removed SupportedEventClient and UnknownSupportedEventClient and replaced by EventClient because EventList is provisional and was removed now (was not working for many devices anyway)
+    -   Breaking: Removed ClusterClient methods isEventSupported and isEventSupportedByName because event lists are no longer available
     -   Deprecation: The attributeChangedCallback, eventTriggeredCallback and nodeStateChangedCallbacks are deprecated and replaced by new events "attributeChanged", "eventTriggered" and "stateChanged", "structureChanged" and "decommissioned" on PairedNode
     -   Feature: Some more data (like Network interfaces, PowerSources, Thread details) are collected and used when connecting to the nodes
     -   Feature: Based on device type the minimum and maximum subscription interval is now automatically set based on certain best practices. When multiple nodes are subscribed all Thread based devices are initialized by a "4 in parallel queue" to limit the used thread bandwidth.
@@ -96,6 +98,16 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Only recreate PairedNode internal objects when structure really changed also on reconnects.
     -   Enhancement: Utilize more information (beside partList changes now also feature, serverList, attributeList, generatedCommandLists) as structure change to reinitialize objects.
     -   Enhancement: Huge refactoring in internal logic, optimized reconnection and rediscovery
+
+## 0.10.6 (2024-09-21)
+
+-   Matter-Core functionality:
+    -   Fix: Excludes subscription based attribute change reads from acl check in all cases
+
+## 0.10.5 (2024-09-20)
+
+-   Matter-Core functionality:
+    -   Enhancement: Added some more logging for sessions and ACL failures
 
 ## 0.10.4 (2024-09-16)
 
