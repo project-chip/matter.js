@@ -5,7 +5,7 @@
  */
 
 import type { ClusterType, TypeFromSchema } from "#types";
-import { AttributeId, BitSchema, CommandId, EventId, TypeFromPartialBitSchema } from "#types";
+import { AttributeId, BitSchema, CommandId, TypeFromPartialBitSchema } from "#types";
 import type { Behavior } from "../Behavior.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";
 
@@ -27,7 +27,6 @@ export interface GlobalAttributeState {
     attributeList: AttributeId[];
     acceptedCommandList: CommandId[];
     generatedCommandList: CommandId[];
-    eventList: EventId[];
 }
 
 export namespace ClusterState {

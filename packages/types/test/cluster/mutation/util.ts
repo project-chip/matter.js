@@ -190,7 +190,7 @@ export const TestComposite = ClusterType({
 // General
 
 export function expectElementCounts(cluster: ClusterType, count: number) {
-    expect(Object.keys(cluster.attributes).length).equal(count + 6);
+    expect(Object.keys(cluster.attributes).length).equal(count + 5); // 5 Global attributes
     expect(Object.keys(cluster.commands).length).equal(count);
     expect(Object.keys(cluster.events).length).equal(count);
 }

@@ -24,7 +24,6 @@ import { AccessControl } from "../AccessControl.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
-import { GlobalAttributeState } from "../cluster/ClusterState.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
@@ -83,9 +82,6 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         const result = super.invokeInitializer(behavior, options);
 
         const createClusterServer = () => {
-            // Event list is optional because it is provisional so we must set the default value manually
-            (behavior.state as GlobalAttributeState).eventList = [];
-
             // Validate elements and determine which are applicable
             const elements = new ValidatedElements(this.type, behavior);
             elements.report();
@@ -116,7 +112,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
                 events,
                 clusterServer.events,
                 behavior,
-                ["eventList"],
+                undefined,
                 createEventServer,
             );
 
@@ -176,7 +172,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         definitions: Record<string, T>,
         servers: Record<string, S>,
         behavior: Behavior,
-        attributeNames: ["attributeList"] | ["acceptedCommandList", "generatedCommandList"] | ["eventList"],
+        attributeNames: ["attributeList"] | ["acceptedCommandList", "generatedCommandList"] | undefined,
         addServer: (
             name: string,
             definition: T,
@@ -185,20 +181,26 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         ) => { ids: number[]; server: S },
     ) {
         const collectedIds = Array<Set<number>>();
-        attributeNames.forEach(() => collectedIds.push(new Set()));
+        if (attributeNames !== undefined) {
+            attributeNames.forEach(() => collectedIds.push(new Set()));
+        }
 
         // Create a server for each supported element and record the ID
         for (const name of names) {
             const definition = definitions[name];
             const { ids, server } = addServer(name, definition, this, behavior);
-            ids.forEach((id, index) => collectedIds[index].add(id));
+            if (attributeNames !== undefined) {
+                ids.forEach((id, index) => collectedIds[index].add(id));
+            }
             servers[name] = server;
         }
 
-        // Set the global attribute detailing supported elements
-        attributeNames.forEach((attributeName, index) => {
-            (behavior.state as Record<string, number[]>)[attributeName] = [...collectedIds[index].values()];
-        });
+        if (attributeNames !== undefined) {
+            // Set the global attribute detailing supported elements
+            attributeNames.forEach((attributeName, index) => {
+                (behavior.state as Record<string, number[]>)[attributeName] = [...collectedIds[index].values()];
+            });
+        }
     }
 }
 
