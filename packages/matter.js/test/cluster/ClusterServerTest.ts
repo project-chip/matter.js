@@ -464,14 +464,12 @@ describe("ClusterServer structure", () => {
                 AttributeId(2),
                 AttributeId(65528),
                 AttributeId(65529),
-                AttributeId(65530),
                 AttributeId(65531),
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(2)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -498,14 +496,12 @@ describe("ClusterServer structure", () => {
                 AttributeId(1),
                 AttributeId(65528),
                 AttributeId(65529),
-                AttributeId(65530),
                 AttributeId(65531),
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -532,14 +528,12 @@ describe("ClusterServer structure", () => {
                 AttributeId(1),
                 AttributeId(65528),
                 AttributeId(65529),
-                AttributeId(65530),
                 AttributeId(65531),
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster without optional commands", () => {
@@ -563,7 +557,6 @@ describe("ClusterServer structure", () => {
                 AttributeId(1),
                 AttributeId(65528),
                 AttributeId(65529),
-                AttributeId(65530),
                 AttributeId(65531),
                 AttributeId(65532),
                 AttributeId(65533),
@@ -673,7 +666,6 @@ describe("ClusterServer structure", () => {
                 AttributeId(0),
                 AttributeId(65528),
                 AttributeId(65529),
-                AttributeId(65530),
                 AttributeId(65531),
                 AttributeId(65532),
                 AttributeId(65533),
@@ -692,7 +684,6 @@ describe("ClusterServer structure", () => {
                 CommandId(2),
                 CommandId(3),
             ]);
-            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("Missing Conditionals Log warnings", () => {
