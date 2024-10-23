@@ -217,9 +217,8 @@ function logClusterClient(
                 for (const eventName in clusterClient.events) {
                     const event = clusterClient.events[eventName];
                     if (event === undefined) continue;
-                    let info = "";
 
-                    logger.info(`"${event.name}" (${Diagnostic.hex(event.id)})${info}`);
+                    logger.info(`"${event.name}" (${Diagnostic.hex(event.id)})`);
                 }
             });
         });
