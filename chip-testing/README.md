@@ -1,11 +1,11 @@
 # Chip Tool Testing
 
 This package allows to run Chip tool certification tests and Python REPL tests against matter.js to validate the interoperability of
-the implementation. This is done by providing comparable "Apps" - currently a limited "All-Clusters-App" and a "Bridge-App" like the examplkes used in the Matter-SDK.
+the implementation. This is done by providing comparable "Apps" - currently a limited "All-Clusters-App" and a "Bridge-App" like the examples used in the Matter-SDK.
 
 The Available Tests in Chip tool are listed in the [Chip tool test catalog](https://github.com/project-chip/connectedhomeip/tree/master/src/app/tests/suites/certification).
 
-## Prerequisits
+## Prerequisites
 
 In order to execute the tests you need to have used the connectedhomeip repository and have build a "chip-tool" binary. This binary and a lot more from the matter SDK is needed to execute the tests. This is because we use the same Python based test runner and framework.
 

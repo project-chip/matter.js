@@ -4,7 +4,7 @@
 > The examples in this package are deprecated.  We will remove them in a future release when we remove the corresponding
 deprecated API surface area.
 
-Current examples are in [@matter/examples](../../packages/examples/README.md).
+The examples that use the most current API are in [@matter/examples](../../packages/examples/README.md).
 
 ### Legacy Device Examples
 These examples use the matter.js API up to 0.7, which is considered "Legacy" now because it will be replaced by a new API starting with 0.8. The functionality is still working, but should be considered deprecated and will be removed with a later release!

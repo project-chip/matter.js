@@ -35,11 +35,11 @@
     "lint-fix": "eslint --fix \"**/*.ts\"",
     "format": "prettier --write 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts' 'compat/**/*.ts'",
     "format-verify": "prettier --check 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts'",
-    "matter-device": "matter-run packages/examples/src/examples/DeviceNode.ts",
-    "matter-bridge": "matter-run packages/examples/src/examples/BridgedDevicesNode.ts",
-    "matter-composeddevice": "matter-run packages/examples/src/examples/ComposedDeviceNode.ts",
-    "matter-multidevice": "matter-run packages/examples/src/examples/MultiDeviceNode.ts",
-    "matter-controller": "matter-run packages/examples/src/examples/ControllerNode.ts",
+    "matter-device": "matter-run packages/examples/src/examples/onoff-cli/DeviceNode.ts",
+    "matter-bridge": "matter-run packages/examples/src/examples/onoff-bridge-cli/BridgedDevicesNode.ts",
+    "matter-composeddevice": "matter-run packages/examples/src/examples/onoff-composed-cli/ComposedDeviceNode.ts",
+    "matter-multidevice": "matter-run packages/examples/src/examples/onoff-multiple-devices-cli/MultiDeviceNode.ts",
+    "matter-controller": "matter-run packages/examples/src/examples/controller-cli/ControllerNode.ts",
     "shell": "matter-run packages/nodejs-shell/src/app.ts"
   },
   "devDependencies": {

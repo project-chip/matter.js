@@ -1,4 +1,4 @@
-# matter.js-react-native
+# @matter/react-native - Matter React Native specific functionality for Matter.js
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE)
 

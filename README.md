@@ -14,8 +14,8 @@ matter.js is a TypeScript/JavaScript implementation of the complete Matter proto
 
 Our main goal is to create a robust and compliant library that enables the seamless implementation of Matter-compatible devices, bridges, controllers, and a shell application. This effort is dedicated to improving Matter's accessibility for testers, smart home enthusiasts, and developers of OS-based IoT products. Fostering a second implementation of the Matter standard, aligned with the same specifications, not only expands the ecosystem but also contributes to the validation and increased robustness of the standard itself.
 
-matter.js consists of a [pure JavaScript base package](./packages/matter.js) without any native dependencies, implementing the Matter protocol and required interfaces in JavaScript, along with extensive typings for The Matter standard and the matter.js APIs.
-Further [packages with Node.js based native dependencies](./packages/matter-node.js) utilize the base package to implement platform-specific parts using Node.js for networking and other necessary native features or add [BLE support](./packages/matter-node-ble.js). [Node.js example scripts](./packages/matter-node.js-examples) implement example CLI scripts for Devices, Bridges or Controllers. A [Matter Shell](./packages/matter-node-shell.js) allow to interact with Matter devices as controller via a CLI interface.
+matter.js consists of a set of pure JavaScript base packages without any native dependencies, implementing the Matter protocol and required interfaces in JavaScript, along with extensive typings for The Matter standard and the matter.js APIs.
+Further [packages with Node.js based native dependencies](./packages/nodejs) utilize the base package to implement platform-specific parts using Node.js for networking and other necessary native features or add [BLE support](./packages/nodejs-ble). [Node.js example scripts](./packages/examples) implement example CLI scripts for Devices, Bridges or Controllers. A [Matter Shell](./packages/nodejs-shell) allow to interact with Matter devices as controller via a CLI interface.
 
 To use matter.js in your own Non-Node.js based projects you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details. If you do this please contact us to add your platform to the list of supported platforms.
 
@@ -30,8 +30,6 @@ matter.js serves various purposes and can be employed for:
 - **Developing Matter Controllers:**<br>Develop Matter controllers with JavaScript/TypeScript for OS-based IoT products. Post-commissioning (including BLE support), controllers can access all data from devices and control them. The API supports development with known typings of all clusters when endpoints and device types are known during development. It also allows generic programmatic access to all clusters and attributes. Typing information of custom clusters can be added to the controller or accessed generically with generic data parsing support. **If you plan to build/certify a controller based on matter.js please see note below.**
 
 - **Rapid Prototyping for Testing and Development:**<br>Enable rapid development of device or controller prototypes for testing and development purposes. JavaScript's nature and the convenient matter.js API make it easy to create prototypes. Testing different feature combinations or endpoint structures can be done quickly using JavaScript testing frameworks.
-
-- **Developing Bridges Between Matter and Other Ecosystems:**<br>Implement bridges between Matter and other ecosystems using JavaScript. Utilize the many available JavaScript libraries to easily bridge between ecosystems. **If you plan to certify a bridged device based on matter.js please see note below.**
 
 - **Using the Matter Shell Application as a Controller:**<br>Employ the Matter Shell application as a controller to interact with Matter devices via a CLI interface. Ideal for manual testing and development purposes.
 
@@ -86,13 +84,7 @@ Please report any outdated or newly discovered information on compatible ecosyst
 
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
-- **[matter.js](./packages/matter.js)**: the core Matter implementation in typescript which is JavaScript only and has no native dependencies. It is build and published as CommonJS and ES6 variants in one package.
-- **[matter-node.js](./packages/matter-node.js)**: Node.js specific platform implementations to enable running Matter devices or Controller with Node.js. This package is build and published as CommonJS and ES6 variants in one package and meant to be used together with the matter.js package.
-- **[matter-node-ble.js](./packages/matter-node-ble.js)**: Node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller). It is build and published as CommonJS and ES6 variants in one package and meant to be used together with the matter.js and the matter-node.js package.
-- **[matter-node-shell.js](./packages/matter-node-shell.js)**: a Node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface running on Node.js.
-- **[matter-node.js-examples](./packages/matter-node.js-examples)**: Reference implementations of several usage ready Matter devices and controller as CLI scripts running on Node.js.
-- **[matter.js-react-native](./packages/matter.js-react-native)**: An implementation of the platform specific parts needed for matter.js using react-native.
-- **[matter.js-tools](./packages/matter.js-tools)**: Tools used internally to build, test and run the project which incorporates on-the-fly Typescript building. You most likely do not need these tools for your projects but are free to use them.
+Please see the respective README files in the package directories for more information about their content.
 
 For each package the [API Documentation](./docs/README.md) is updated on each official release, but can also be built locally using `npm run build-doc`.
 
@@ -112,7 +104,7 @@ You can build and test the packages separately or all by using `npm run build` o
 To allow a simple use of the matter.js Monorepo based project in other projects, we publish all packages separately to NPM. There are two available release tags on NPM:
 
 - **latest**: This is the default NPM tag and contains official released versions of the packages. This is the recommended tag to use in your projects. Whenever we build a new official release also the docs are updated and available in the repository.
-- **dev**: This tag contains a nightly build of the project and is updated every night if there were changes in the repository. This is only for testing and development purposes and should not be used for real production use cases. Use e.g. `npm install @project-chip/matter-node.js@dev` to install the latest nightly build of matter-node.js.
+- **dev**: This tag contains a nightly build of the project and is updated every night if there were changes in the repository. This is only for testing and development purposes and should not be used for real production use cases. Use e.g. `npm install @matter/main@dev` to install the latest nightly build of @matter/main.
 
 ## Community communication
 
@@ -208,9 +200,9 @@ matter.js itself cannot be used directly in a project because some platform spec
 
 The following reference implementation and code references are available as basis for own platform implementations:
 
-- For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [matter-node.js](packages/matter-node.js/README.md) as reference. 
-- For BLE functionality you can use the Node.js implementations provided by [matter-node-ble.js](packages/matter-node-ble.js/README.md) as reference. 
-- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/matter-node.js-examples/src/examples/cluster/DummyWifiNetworkCommissioningServerLegacy.ts) which contains a static "testing only" (but API complete for Wifi) reference.
+- For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [@matter/nodejs](packages/nodejs/README.md) as reference. 
+- For BLE functionality you can use the Node.js implementations provided by [@matter/nodejs-ble](packages/nodejs-ble/README.md) as reference. 
+- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/examples/src/examples/cluster/DummyWifiNetworkCommissioningServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
 
 If you implement a specific platform we would be happy about a PR with the code, so that also other community members can benefit from it.
 
@@ -220,11 +212,12 @@ If you use a platform where Node.js 18+ is available then you can easily and dir
 
 matter.js is used at the core of those two projects currently:
 
-- [matter-node.js](packages/matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
-- [matter-node-shell.js](packages/matter-node-shell.js/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
-- [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red Node for devices and controllers
+- [@matter/nodejs](packages/nodejs/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
+- [@matter/nodejs-shell](packages/nodejs-shell/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+- [node-red-matter-bridge](https://github.com/sammachin/node-red-matter-bridge): a Node-Red node to expose a bridge
+- [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red node for devices and controllers (outdated)
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
 - [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
   - [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): a matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
   - [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): a matterbridge production-level plugin that expose all somfy tahoma screens to Matter
-  - ... and more
+  - ... and more plugins
