@@ -163,7 +163,7 @@ export class EndpointStore {
     /**
      * Remove all persisted information for the {@link Endpoint}
      */
-    async delete() {
+    async erase() {
         await this.#construction;
 
         await this.#storage.clearAll();

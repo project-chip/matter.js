@@ -18,6 +18,11 @@ export abstract class EndpointInitializer {
     initializeDescendant(_endpoint: Endpoint) {}
 
     /**
+     * Erase storage for a {@link Endpoint}.
+     */
+    abstract eraseDescendant(_endpoint: Endpoint): Promise<void>;
+
+    /**
      * Create backing for a behavior of a descendent.
      *
      * @param endpoint the {@link Endpoint} the behavior belongs to

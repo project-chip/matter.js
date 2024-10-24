@@ -16,6 +16,7 @@ import {
     DnsRecordClass,
     DnsRecordType,
     ImplementationError,
+    Lifespan,
     Logger,
     MAX_MDNS_MESSAGE_SIZE,
     Network,
@@ -52,23 +53,21 @@ import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from ".
 
 const logger = Logger.get("MdnsScanner");
 
-type MatterServerRecordWithExpire = ServerAddressIp & {
-    expires: number;
-};
+type MatterServerRecordWithExpire = ServerAddressIp & Lifespan;
 
-type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> & {
-    expires: number;
-    addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
-    instanceId: string; // instance ID
-    SD: number; // Additional Field for Short discriminator
-    V?: number; // Additional Field for Vendor ID
-    P?: number; // Additional Field for Product ID
-};
+type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> &
+    Lifespan & {
+        addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
+        instanceId: string; // instance ID
+        SD: number; // Additional Field for Short discriminator
+        V?: number; // Additional Field for Vendor ID
+        P?: number; // Additional Field for Product ID
+    };
 
-type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> & {
-    expires: number;
-    addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
-};
+type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
+    Lifespan & {
+        addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
+    };
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
@@ -614,12 +613,12 @@ export class MdnsScanner implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds = 900,
+        timeoutSeconds?: number,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
+        const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -643,9 +642,12 @@ export class MdnsScanner implements Scanner {
                 }
             });
 
-            const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
-            if (remainingTime <= 0) {
-                break;
+            let remainingTime;
+            if (discoveryEndTime !== undefined) {
+                const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
+                if (remainingTime <= 0) {
+                    break;
+                }
             }
             await this.#registerWaiterPromise(queryId, remainingTime, false);
         }
@@ -753,7 +755,8 @@ export class MdnsScanner implements Scanner {
         if (device !== undefined) {
             device = {
                 ...device,
-                expires: Time.nowMs() + ttl * 1000,
+                discoveredAt: Time.nowMs(),
+                ttl: ttl * 1000,
                 ...txtData,
             };
         } else {
@@ -764,7 +767,8 @@ export class MdnsScanner implements Scanner {
             device = {
                 deviceIdentifier: matterName,
                 addresses: new Map<string, MatterServerRecordWithExpire>(),
-                expires: Time.nowMs() + ttl * 1000,
+                discoveredAt: Time.nowMs(),
+                ttl: ttl * 1000,
                 ...txtData,
             };
         }
@@ -800,7 +804,8 @@ export class MdnsScanner implements Scanner {
         const device = this.#operationalDeviceRecords.get(matterName) ?? {
             deviceIdentifier: matterName,
             addresses: new Map<string, MatterServerRecordWithExpire>(),
-            expires: Time.nowMs() + ttl * 1000,
+            discoveredAt: Time.nowMs(),
+            ttl: ttl * 1000,
         };
         const { addresses } = device;
         if (ips.length > 0) {
@@ -812,8 +817,8 @@ export class MdnsScanner implements Scanner {
                     addresses.delete(ip);
                     continue;
                 }
-                const matterServer = addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
-                matterServer.expires = Time.nowMs() + ttl * 1000;
+                const matterServer = addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
+                matterServer.discoveredAt = Time.nowMs() + ttl * 1000;
 
                 addresses.set(matterServer.ip, matterServer);
             }
@@ -920,8 +925,10 @@ export class MdnsScanner implements Scanner {
                         storedRecord.addresses.delete(ip);
                         continue;
                     }
-                    const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
-                    matterServer.expires = Time.nowMs() + ttl * 1000;
+                    const matterServer =
+                        storedRecord.addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
+                    matterServer.discoveredAt = Time.nowMs();
+                    matterServer.ttl = ttl * 1000;
 
                     storedRecord.addresses.set(ip, matterServer);
                 }
@@ -1011,10 +1018,11 @@ export class MdnsScanner implements Scanner {
 
     #expire() {
         const now = Time.nowMs();
-        [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, expires }]) => {
+        [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
+            const expires = discoveredAt + ttl;
             if (now < expires) {
-                [...addresses.entries()].forEach(([key, { expires }]) => {
-                    if (now < expires) return;
+                [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
+                    if (now < discoveredAt + ttl) return;
                     addresses.delete(key);
                 });
             }
@@ -1022,11 +1030,12 @@ export class MdnsScanner implements Scanner {
                 this.#operationalDeviceRecords.delete(recordKey);
             }
         });
-        [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, expires }]) => {
+        [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
+            const expires = discoveredAt + ttl;
             if (now < expires) {
                 // Entry still ok but check addresses for expiry
-                [...addresses.entries()].forEach(([key, { expires }]) => {
-                    if (now < expires) return;
+                [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
+                    if (now < discoveredAt + ttl) return;
                     addresses.delete(key);
                 });
             }

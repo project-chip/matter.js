@@ -62,7 +62,7 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
      * This will not abort node initialization but it will terminate any active discoveries.  The discovery result will
      * be the same as if the discovery had timed out.
      */
-    cancel() {
+    override cancel() {
         if (this.#isCanceled) {
             return;
         }

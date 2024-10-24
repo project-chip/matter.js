@@ -9,16 +9,32 @@ import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { ClientBehaviorBacking } from "#behavior/internal/ClientBehaviorBacking.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
-import { ClientNode } from "#node/ClientNode.js";
+import type { ClientNode } from "#node/ClientNode.js";
 import { NodeStore } from "#node/storage/NodeStore.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 
 export class ClientEndpointInitializer extends EndpointInitializer {
+    #node: ClientNode;
     #store: NodeStore;
 
     constructor(node: ClientNode) {
         super();
+        this.#node = node;
         this.#store = node.env.get(ServerNodeStore).clientStores.storeForNode(node);
+    }
+
+    async eraseDescendant(endpoint: Endpoint) {
+        if (endpoint === this.#node) {
+            await this.#store.erase();
+            return;
+        }
+
+        if (!endpoint.lifecycle.hasId) {
+            return;
+        }
+
+        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
+        await store.erase();
     }
 
     get ready() {

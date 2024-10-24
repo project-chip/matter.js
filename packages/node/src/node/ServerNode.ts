@@ -115,7 +115,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     /**
      * Perform a factory reset of the node.
      */
-    async factoryReset() {
+    override async erase() {
         try {
             await this.construction;
 

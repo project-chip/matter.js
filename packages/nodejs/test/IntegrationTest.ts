@@ -1216,8 +1216,10 @@ describe("Integration Test", () => {
             assert.equal(nodeData.length, 1);
 
             // Remove variable fields before compare
-            expect(nodeData[0][1].discoveryData.expires).to.be.an("number");
-            delete nodeData[0][1].discoveryData.expires;
+            expect(nodeData[0][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData[0][1].discoveryData.discoveredAt;
+            expect(nodeData[0][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData[0][1].discoveryData.ttl;
             expect(nodeData[0][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData[0][1].discoveryData.deviceIdentifier;
             expect(nodeData[0][1].deviceData.basicInformation.serialNumber).to.be.an("string");
@@ -1486,8 +1488,10 @@ describe("Integration Test", () => {
             });
 
             // Remove variable fields before compare
-            expect(nodeData[1][1].discoveryData.expires).to.be.an("number");
-            delete nodeData[1][1].discoveryData.expires;
+            expect(nodeData[1][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData[1][1].discoveryData.discoveredAt;
+            expect(nodeData[1][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData[1][1].discoveryData.ttl;
             expect(nodeData[1][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData[1][1].discoveryData.deviceIdentifier;
             expect(nodeData[1][1].deviceData.basicInformation.serialNumber).to.be.an("string");
@@ -1860,8 +1864,10 @@ describe("Integration Test", () => {
             assert.equal(nodeData2.length, 1);
 
             // Remove variable fields before compare
-            expect(nodeData2[0][1].discoveryData.expires).to.be.an("number");
-            delete nodeData2[0][1].discoveryData.expires;
+            expect(nodeData2[0][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData2[0][1].discoveryData.discoveredAt;
+            expect(nodeData2[0][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData2[0][1].discoveryData.ttl;
             expect(nodeData2[0][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData2[0][1].discoveryData.deviceIdentifier;
             expect(nodeData2[0][1].deviceData.basicInformation.serialNumber).to.be.an("string");

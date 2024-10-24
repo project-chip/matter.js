@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, ChannelType, Environment, Environmental, ServerAddress, ServerAddressIp } from "#general";
+import { BasicSet, ChannelType, Environment, Environmental, Lifespan, ServerAddress, ServerAddressIp } from "#general";
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
@@ -47,10 +47,11 @@ export type DiscoveryData = {
     ICD?: number;
 };
 
-export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData & {
-    /** The device's addresses IP/port pairs */
-    addresses: SA[];
-};
+export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData &
+    Partial<Lifespan> & {
+        /** The device's addresses IP/port pairs */
+        addresses: SA[];
+    };
 
 export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> =
     D extends DiscoverableDevice<infer SA> ? SA : never;

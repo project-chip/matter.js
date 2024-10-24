@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "#behavior/Behavior.js";
-import { ImplementationError, NotImplementedError, ServerAddress } from "#general";
+import { ImplementationError, NotImplementedError, ServerAddress, Time } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
 import { Node } from "#node/Node.js";
@@ -39,6 +39,10 @@ export class CommissioningClient extends Behavior {
         const descriptor = options?.descriptor;
         if (descriptor) {
             this.descriptor = descriptor;
+        }
+
+        if (this.state.discoveredAt === undefined) {
+            this.state.discoveredAt = Time.nowMs();
         }
 
         this.reactTo((this.endpoint as Node).lifecycle.partsReady, this.#initializeNode);
@@ -170,6 +174,8 @@ export class CommissioningClient extends Behavior {
                     }),
                 ],
             }),
+            FieldElement({ name: "discoveredAt", type: "systime-ms", quality: "N", conformance: "M" }),
+            FieldElement({ name: "ttl", type: "number", quality: "N" }),
             FieldElement({ name: "deviceIdentifier", type: "string", quality: "N" }),
             FieldElement({ name: "discriminator", type: "uint16", quality: "N" }),
             FieldElement({ name: "commissioningMode", type: "uint8", quality: "N" }),
@@ -206,8 +212,20 @@ export namespace CommissioningClient {
         /**
          * Known network addresses for the device.  If this is undefined the node has not been located on any network
          * interface.
+         *
+         * TODO - track discovery time and TTL on individual addresses
          */
         addresses?: ServerAddress[];
+
+        /**
+         * Time at which the device was discovered.
+         */
+        discoveredAt: number = Time.nowMs();
+
+        /**
+         * The TTL of the discovery record if applicable.
+         */
+        ttl?: number;
 
         /**
          * The canonical global ID of the device.

@@ -45,6 +45,8 @@ export namespace RemoteDescriptor {
 
         const {
             addresses,
+            discoveredAt,
+            ttl,
             deviceIdentifier,
             discriminator,
             commissioningMode,
@@ -59,6 +61,14 @@ export namespace RemoteDescriptor {
             tcpSupport,
             longIdleTimeOperatingMode,
         } = long;
+
+        if (discoveredAt !== undefined) {
+            result.discoveredAt = discoveredAt;
+        }
+
+        if (ttl !== undefined) {
+            result.ttl = ttl;
+        }
 
         if (deviceIdentifier !== undefined) {
             result.deviceIdentifier = deviceIdentifier;
@@ -143,7 +153,16 @@ export namespace RemoteDescriptor {
             descriptor = {};
         }
 
-        const { addresses, deviceIdentifier, VP, DT, DN, RI, PH, PI, SII, SAI, SAT, T, ICD } = descriptor;
+        const { addresses, discoveredAt, ttl, deviceIdentifier, VP, DT, DN, RI, PH, PI, SII, SAI, SAT, T, ICD } =
+            descriptor;
+
+        if (discoveredAt !== undefined) {
+            long.discoveredAt = discoveredAt;
+        }
+
+        if (ttl !== undefined) {
+            long.ttl = ttl;
+        }
 
         if (addresses?.length) {
             long.addresses = addresses;

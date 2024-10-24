@@ -589,6 +589,22 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Perform "hard" reset of the endpoint, reverting all in-memory and persistent state to uninitialized.
+     */
+    async erase() {
+        await this.reset();
+        await this.env.get(EndpointInitializer).eraseDescendant(this);
+    }
+
+    /**
+     * Erase all persisted data and destroy the node.
+     */
+    async delete() {
+        await this.erase();
+        await this.close();
+    }
+
+    /**
      * Apply a depth-first visitor function to myself and all descendents.
      */
     visit<T extends void | PromiseLike<void>>(visitor: (endpoint: Endpoint) => T): T {

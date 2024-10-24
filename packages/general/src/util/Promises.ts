@@ -287,14 +287,20 @@ MaybePromise.toString = () => "MaybePromise";
  *
  * Behaviors like a normal promise but does not actually extend {@link Promise} because that makes extension a PITA.
  */
-export abstract class CancelablePromise<T> implements Promise<T> {
+export class CancelablePromise<T = void> implements Promise<T> {
     #promise: Promise<T>;
 
-    constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
+    constructor(
+        executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void,
+        onCancel?: () => void,
+    ) {
         this.#promise = new Promise(executor);
+        if (onCancel !== undefined) {
+            this.cancel = onCancel;
+        }
     }
 
-    abstract cancel(): void;
+    cancel() {}
 
     then<TResult1 = T, TResult2 = never>(
         onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CancelablePromise } from "#util/Promises.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
@@ -29,22 +30,46 @@ export class Time {
     }
     static readonly nowMs = (): number => Time.get().nowMs();
 
-    /** Returns a timer that will call callback after durationMs has passed. */
+    /**
+     * Create a timer that will call callback after durationMs has passed.
+     */
     getTimer(name: string, durationMs: number, callback: Timer.Callback): Timer {
         return new StandardTimer(name, durationMs, callback, false);
     }
     static readonly getTimer = (name: string, durationMs: number, callback: Timer.Callback): Timer =>
         Time.get().getTimer(name, durationMs, callback);
 
-    /** Returns a timer that will periodically call callback at intervalMs intervals. */
+    /**
+     * Create a timer that will periodically call callback at intervalMs intervals.
+     */
     getPeriodicTimer(name: string, intervalMs: number, callback: Timer.Callback): Timer {
         return new StandardTimer(name, intervalMs, callback, true);
     }
     static readonly getPeriodicTimer = (name: string, intervalMs: number, callback: Timer.Callback): Timer =>
         Time.get().getPeriodicTimer(name, intervalMs, callback);
 
-    static readonly sleep = async (name: string, durationMs: number): Promise<void> =>
-        new Promise(resolve => Time.get().getTimer(name, durationMs, resolve).start());
+    /**
+     * Create a promise that resolves after a specific interval or when canceled, whichever comes first.
+     */
+    sleep(name: string, durationMs: number): CancelablePromise {
+        let timer: Timer;
+        let resolver: () => void;
+        return new CancelablePromise(
+            resolve => {
+                resolver = resolve;
+                timer = Time.getTimer(name, durationMs, resolve);
+                timer.start();
+            },
+
+            () => {
+                timer.stop();
+                resolver();
+            },
+        );
+    }
+    static sleep(name: string, durationMs: number) {
+        return Time.get().sleep(name, durationMs);
+    }
 
     static register(timer: Timer) {
         timer.elapsed = Diagnostic.elapsed();

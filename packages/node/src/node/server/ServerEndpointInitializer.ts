@@ -33,6 +33,15 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         endpoint.behaviors.require(DescriptorServer);
     }
 
+    override async eraseDescendant(endpoint: Endpoint) {
+        if (!endpoint.lifecycle.hasId) {
+            return;
+        }
+
+        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
+        await store.erase();
+    }
+
     /**
      * If a {@link Endpoint} does not yet have a {@link EndpointServer}, create one now, then create a
      * {@link BehaviorBacking} for a specific {@link Behavior}.

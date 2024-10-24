@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningClient } from "#behavior/index.js";
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
 import { InternalError } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
@@ -43,11 +42,14 @@ export class NodePeerStore extends PeerAddressStore {
             return;
         }
 
-        const commissioning: CommissioningClient.State = {};
-        RemoteDescriptor.toLongForm(peer.discoveryData, commissioning);
-        commissioning.addresses = peer.operationalAddress ? [peer.operationalAddress] : undefined;
-
-        await node.set({ commissioning });
+        await node.act(agent => {
+            const state = agent.commissioning.state;
+            RemoteDescriptor.toLongForm(peer.discoveryData, state);
+            if (peer.operationalAddress) {
+                // TODO - modify lower tiers to pass along full set of operational addresses
+                state.addresses = [peer.operationalAddress];
+            }
+        });
     }
 
     async deletePeer(address: PeerAddress) {

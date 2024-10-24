@@ -341,7 +341,7 @@ describe("ServerNode", () => {
             await node.cancel();
         }
 
-        await node.factoryReset();
+        await node.erase();
 
         // Confirm previous online state is resumed
         expect(node.lifecycle.isOnline).equals(mode === "online");

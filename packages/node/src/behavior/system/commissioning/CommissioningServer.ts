@@ -151,9 +151,7 @@ export class CommissioningServer extends Behavior {
     }
 
     #triggerFactoryReset() {
-        this.env.runtime.add(
-            (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
-        );
+        this.env.runtime.add((this.endpoint as ServerNode).erase().then(this.callback(this.initiateCommissioning)));
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {
