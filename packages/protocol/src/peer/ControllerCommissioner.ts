@@ -53,7 +53,7 @@ export interface CommissioningOptions extends Partial<ControllerCommissioningFlo
      * This optional callback allows the caller to complete commissioning once PASE commissioning completes.  If it does
      * not throw, the commissioner considers commissioning complete.
      */
-    performCaseCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
+    finalizeCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
 }
 
 /**
@@ -341,7 +341,7 @@ export class ControllerCommissioner {
             ...options,
         };
 
-        const { fabric, performCaseCommissioning } = commissioningOptions;
+        const { fabric, finalizeCommissioning: performCaseCommissioning } = commissioningOptions;
 
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here

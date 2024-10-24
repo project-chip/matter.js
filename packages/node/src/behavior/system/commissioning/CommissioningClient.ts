@@ -58,7 +58,7 @@ export class CommissioningClient extends Behavior {
         if (typeof passcode !== "number" || Number.isNaN(passcode)) {
             passcode = Number.parseInt(passcode as unknown as string);
             if (Number.isNaN(passcode)) {
-                throw new ImplementationError(`You musts provide the numeric passcode to commission a node`);
+                throw new ImplementationError(`You must provide the numeric passcode to commission a node`);
             }
         }
 
@@ -103,8 +103,8 @@ export class CommissioningClient extends Behavior {
             discoveryData: this.descriptor,
         };
 
-        if (this.performCaseCommissioning !== CommissioningClient.prototype.performCaseCommissioning) {
-            commissioningOptions.performCaseCommissioning = this.performCaseCommissioning.bind(this);
+        if (this.finalizeCommissioning !== CommissioningClient.prototype.finalizeCommissioning) {
+            commissioningOptions.finalizeCommissioning = this.finalizeCommissioning.bind(this);
         }
 
         const address = await commissioner.commission(commissioningOptions);
@@ -115,8 +115,11 @@ export class CommissioningClient extends Behavior {
 
     /**
      * Override to implement CASE commissioning yourself.
+     *
+     * If you override, matter.js commissions to the point where over PASE is complete.  You must then complete
+     * commissioning yourself by connecting to the device and invokeint the "CommissioningComplete" command.
      */
-    protected async performCaseCommissioning(_address: PeerAddress, _discoveryData?: DiscoveryData) {
+    protected async finalizeCommissioning(_address: PeerAddress, _discoveryData?: DiscoveryData) {
         throw new NotImplementedError();
     }
 

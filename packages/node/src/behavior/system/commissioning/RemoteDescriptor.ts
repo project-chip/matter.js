@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeepReadonly } from "#general";
+import { Immutable } from "#general";
 import { CommissionableDevice, OperationalDevice, PeerAddress, SessionParameters } from "#protocol";
 import { DeviceTypeId, VendorId } from "#types";
 import type { CommissioningClient } from "./CommissioningClient.js";
@@ -40,7 +40,7 @@ export namespace RemoteDescriptor {
         return false;
     }
 
-    export function fromLongForm(long: DeepReadonly<Long>): RemoteDescriptor {
+    export function fromLongForm(long: Immutable<Long>): RemoteDescriptor {
         const result: RemoteDescriptor = {};
 
         const {
@@ -73,7 +73,7 @@ export namespace RemoteDescriptor {
         }
 
         if (deviceType !== undefined) {
-            result.DT = deviceType as DeviceTypeId;
+            result.DT = deviceType;
         }
 
         if (deviceName !== undefined) {

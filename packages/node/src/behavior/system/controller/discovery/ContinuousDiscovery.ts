@@ -6,14 +6,24 @@
 
 import { Observable } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
+import { ServerNode } from "#node/ServerNode.js";
 import { Discovery } from "./Discovery.js";
 
 /**
- * Finds all nodes possible within a time window.
+ * Finds all nodes possible within a time window or indefinitely until canceled.
+ *
+ * If you run without a timeout, the output array is always empty and you must add a listener to
+ * {@link ContinuousDiscover#discovered}.
  */
-export class TimedDiscovery extends Discovery<ClientNode[]> {
+export class ContinuousDiscovery extends Discovery<ClientNode[]> {
     #discovered = Observable<[ClientNode]>();
     #result = Array<ClientNode>();
+    #bounded: boolean;
+
+    constructor(owner: ServerNode, options?: Discovery.Options) {
+        super(owner, options);
+        this.#bounded = options?.timeoutSeconds !== undefined;
+    }
 
     /**
      * Emitted as discovery encounters new nodes.
@@ -23,7 +33,9 @@ export class TimedDiscovery extends Discovery<ClientNode[]> {
     }
 
     protected onDiscovered(node: ClientNode) {
-        this.#result.push(node);
+        if (this.#bounded) {
+            this.#result.push(node);
+        }
         this.#discovered.emit(node);
     }
 

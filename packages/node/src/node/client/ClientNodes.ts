@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningDiscovery, Discovery, InstanceDiscovery, TimedDiscovery } from "#behavior/index.js";
+import { CommissioningDiscovery, ContinuousDiscovery, Discovery, InstanceDiscovery } from "#behavior/index.js";
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
 import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
@@ -58,7 +58,7 @@ export class ClientNodes extends EndpointContainer<ClientNode> {
      * Employ discovery to find a set of commissionable nodes.
      */
     discover(options?: Discovery.Options) {
-        return new TimedDiscovery(this.owner, options);
+        return new ContinuousDiscovery(this.owner, options);
     }
 
     /**

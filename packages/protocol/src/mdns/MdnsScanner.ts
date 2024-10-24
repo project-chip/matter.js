@@ -322,7 +322,7 @@ export class MdnsScanner implements Scanner {
                 timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
             }${resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"}`,
         );
-        return { promise };
+        await promise;
     }
 
     /**
@@ -371,7 +371,7 @@ export class MdnsScanner implements Scanner {
 
         let storedDevice = ignoreExistingRecords ? undefined : this.#getOperationalDeviceRecords(deviceMatterQname);
         if (storedDevice === undefined) {
-            const { promise } = await this.#registerWaiterPromise(deviceMatterQname, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(deviceMatterQname, timeoutSeconds);
 
             this.#setQueryRecords(deviceMatterQname, [
                 {
@@ -593,7 +593,7 @@ export class MdnsScanner implements Scanner {
             : this.#getCommissionableDeviceRecords(identifier).filter(({ addresses }) => addresses.length > 0);
         if (storedRecords.length === 0) {
             const queryId = this.#buildCommissionableQueryIdentifier(identifier);
-            const { promise } = await this.#registerWaiterPromise(queryId, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(queryId, timeoutSeconds);
 
             this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -617,14 +617,24 @@ export class MdnsScanner implements Scanner {
         timeoutSeconds = 900,
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
-        const canceled = cancelSignal ? cancelSignal.then(() => true) : undefined;
         const discoveredDevices = new Set<string>();
 
         const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
-        while (true) {
+        let canceled = false;
+        cancelSignal?.then(
+            () => {
+                canceled = true;
+                this.#finishWaiter(queryId, true);
+            },
+            cause => {
+                logger.error("Unexpected error canceling commissioning", cause);
+            },
+        );
+
+        while (!canceled) {
             this.#getCommissionableDeviceRecords(identifier).forEach(device => {
                 const { deviceIdentifier } = device;
                 if (!discoveredDevices.has(deviceIdentifier)) {
@@ -637,16 +647,7 @@ export class MdnsScanner implements Scanner {
             if (remainingTime <= 0) {
                 break;
             }
-            const { promise } = await this.#registerWaiterPromise(queryId, remainingTime, false);
-
-            if (cancelSignal) {
-                const result = await Promise.race([promise, canceled]);
-                if (result) {
-                    break;
-                }
-            } else {
-                await promise;
-            }
+            await this.#registerWaiterPromise(queryId, remainingTime, false);
         }
         return this.#getCommissionableDeviceRecords(identifier);
     }
