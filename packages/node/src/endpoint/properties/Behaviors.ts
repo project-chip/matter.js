@@ -447,6 +447,13 @@ export class Behaviors {
     }
 
     /**
+     * Retrieve the options for a behavior type provided to the endpoint.
+     */
+    optionsFor(type: Behavior.Type) {
+        return this.#options[type.id];
+    }
+
+    /**
      * Access internal state for a {@link Behavior}.
      *
      * Internal state is not stable API and not intended for consumption outside of the behavior.  However it is not

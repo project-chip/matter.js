@@ -4,4 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./CommissioningBehavior.js";
+export * from "./CommissioningClient.js";
+export * from "./CommissioningServer.js";

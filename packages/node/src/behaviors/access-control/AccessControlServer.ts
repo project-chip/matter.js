@@ -55,7 +55,7 @@ export class AccessControlServer extends AccessControlBehavior {
     #online() {
         // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
         // so far by the controller
-        const fabrics = this.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         const acl = deepCopy(this.state.acl);
         const originalAclLength = acl.length;
         for (const fabric of fabrics) {

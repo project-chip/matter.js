@@ -16,8 +16,8 @@ import { BehaviorBacking } from "./BehaviorBacking.js";
 export class ClientBehaviorBacking extends BehaviorBacking {
     protected override store: Datasource.Store | undefined;
 
-    constructor(endpoint: Endpoint, behavior: Behavior.Type, endpointStore: EndpointStore) {
-        super(endpoint, behavior);
+    constructor(endpoint: Endpoint, behavior: Behavior.Type, endpointStore: EndpointStore, options?: Behavior.Options) {
+        super(endpoint, behavior, options);
 
         this.store = endpointStore.storeForBehavior(behavior.id);
     }

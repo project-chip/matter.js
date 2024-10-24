@@ -4,19 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, MutableSet, ObservableSet } from "#general";
+import { BasicSet, decamelize, Diagnostic, ImmutableSet, MutableSet, ObservableSet } from "#general";
 import { IdentityConflictError } from "#node/server/IdentityService.js";
 import { Endpoint } from "../Endpoint.js";
 
 /**
  * Manages parent-child relationships between endpoints.
  */
-export class EndpointContainer<T extends Endpoint = Endpoint> implements MutableSet<T, T>, ObservableSet<T> {
+export class EndpointContainer<T extends Endpoint = Endpoint>
+    implements ImmutableSet<T>, MutableSet<T, T>, ObservableSet<T>
+{
     #children = new BasicSet<T>();
-    #endpoint: Endpoint;
+    #owner: Endpoint;
 
     constructor(endpoint: Endpoint) {
-        this.#endpoint = endpoint;
+        this.#owner = endpoint;
     }
 
     get(id: string) {
@@ -33,7 +35,7 @@ export class EndpointContainer<T extends Endpoint = Endpoint> implements Mutable
         }
 
         this.#children.add(endpoint);
-        endpoint.owner = this.#endpoint;
+        endpoint.owner = this.#owner;
 
         endpoint.lifecycle.destroyed.once(() => {
             this.delete(endpoint);
@@ -66,12 +68,16 @@ export class EndpointContainer<T extends Endpoint = Endpoint> implements Mutable
         return this.#children.size;
     }
 
-    map<T>(fn: (part: Endpoint) => T) {
+    map<T2>(fn: (part: T) => T2) {
         return this.#children.map(fn);
     }
 
-    filter(predicate: (part: Endpoint) => boolean) {
+    filter(predicate: (part: T) => boolean) {
         return this.#children.filter(predicate);
+    }
+
+    find(predicate: (part: T) => boolean) {
+        return this.#children.find(predicate);
     }
 
     [Symbol.iterator]() {
@@ -97,10 +103,6 @@ export class EndpointContainer<T extends Endpoint = Endpoint> implements Mutable
     }
 
     /**
-     * Ensure the endpoint's identity is unique amongst siblings.
-     */
-
-    /**
      * Confirm availability of an ID amongst the endpoint's children.
      */
     assertIdAvailable(id: string, endpoint: Endpoint) {
@@ -110,7 +112,11 @@ export class EndpointContainer<T extends Endpoint = Endpoint> implements Mutable
         }
     }
 
-    protected get endpoint() {
-        return this.#endpoint;
+    protected get owner() {
+        return this.#owner;
+    }
+
+    get [Diagnostic.value]() {
+        return Diagnostic.list([decamelize(this.constructor.name), ...this]);
     }
 }

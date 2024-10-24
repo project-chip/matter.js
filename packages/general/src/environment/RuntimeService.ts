@@ -159,6 +159,19 @@ export class RuntimeService implements Multiplex {
     }
 
     /**
+     * Interrupt handler.  Triggered by e.g. on SIGINT on unixish systems.
+     *
+     * The default implementation cancels the runtime.
+     *
+     * @returns a boolean indicating whether to continue trapping interrupts
+     */
+    interrupt(): boolean {
+        this.cancel();
+
+        return false;
+    }
+
+    /**
      * Resolves when no workers are active.
      */
     get inactive() {

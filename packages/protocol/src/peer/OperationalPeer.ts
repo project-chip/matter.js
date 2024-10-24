@@ -7,6 +7,7 @@
 import { DiscoveryData } from "#common/Scanner.js";
 import { ServerAddressIp } from "#general";
 import { PeerDataStore } from "#peer/PeerAddressStore.js";
+import { SessionParameters } from "#session/Session.js";
 import { PeerAddress } from "./PeerAddress.js";
 
 /**
@@ -24,6 +25,11 @@ export interface OperationalPeer {
      * A physical address the peer may be accessed at, if known.
      */
     operationalAddress?: ServerAddressIp;
+
+    /**
+     * The peer's session parameters reported during discovery.
+     */
+    sessionParameters?: SessionParameters;
 
     /**
      * Additional information collected while locating the peer.

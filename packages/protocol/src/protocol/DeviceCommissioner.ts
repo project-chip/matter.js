@@ -89,7 +89,7 @@ export class DeviceCommissioner {
             // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper
             // layer and it would be not good to announce a commissionable device and then reset that again with the
             // factory reset
-            if (this.#context.fabrics.getFabrics().length > 0 || session.isPase || !existingSessionFabric) {
+            if (this.#context.fabrics.length > 0 || session.isPase || !existingSessionFabric) {
                 this.#context.advertiser
                     .startAdvertising()
                     .catch(error => logger.warn(`Error while announcing`, error));
@@ -159,7 +159,7 @@ export class DeviceCommissioner {
         this.#failsafeContext = failsafeContext;
 
         this.#context.fabrics.events.added.on(fabric => {
-            const fabrics = this.#context.fabrics.getFabrics();
+            const fabrics = this.#context.fabrics.fabrics;
             this.#context.advertiser
                 .advertiseFabrics(fabrics, true)
                 .catch(error =>
@@ -252,7 +252,7 @@ export class DeviceCommissioner {
         // Remove PASE responder when we close enhanced commissioning window or node is commissioned
         if (
             this.#windowStatus === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ||
-            this.#context.fabrics.getFabrics().length > 0
+            this.#context.fabrics.length > 0
         ) {
             this.#context.secureChannelProtocol.removePaseCommissioner();
         }

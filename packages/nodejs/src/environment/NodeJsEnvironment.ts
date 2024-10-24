@@ -14,6 +14,7 @@ import {
     VariableService,
 } from "#general";
 import { existsSync, readFileSync } from "fs";
+import { writeFile } from "fs/promises";
 import { resolve } from "path";
 import { NodeJsNetwork } from "../net/NodeJsNetwork.js";
 import { StorageBackendDiskAsync } from "../storage/StorageBackendDiskAsync.js";
@@ -86,11 +87,21 @@ function loadVariables(env: Environment) {
     vars.addArgvStyle(process.argv);
 
     // Load config files
-    vars.addConfigStyle(loadConfigFile(vars));
+    const { configPath, configVars } = loadConfigFile(vars);
+    vars.addConfigStyle(configVars);
 
     // Reload environment and argv so they override config
     vars.addUnixEnvStyle(process.env);
     vars.addArgvStyle(process.argv);
+
+    // Enable persistent configuration values
+    vars.persistConfigValue = async (name: string, value: VariableService.Value) => {
+        if (value === undefined) {
+            delete configVars[name];
+        }
+        configVars[name] = value;
+        await writeFile(configPath, JSON.stringify(configVars, undefined, 4));
+    };
 }
 
 function configureRuntime(env: Environment) {
@@ -114,27 +125,27 @@ function configureNetwork(env: Environment) {
 }
 
 export function loadConfigFile(vars: VariableService) {
-    const path = vars.get("path.config", "config.json");
+    const configPath = vars.get("path.config", "config.json");
 
-    if (!existsSync(path)) {
-        return {};
+    if (!existsSync(configPath)) {
+        return { configPath, configVars: {} };
     }
 
     let configJson;
     try {
-        configJson = readFileSync(path).toString();
+        configJson = readFileSync(configPath).toString();
     } catch (e) {
-        throw new ImplementationError(`Error reading configuration file ${path}: ${(e as Error).message}`);
+        throw new ImplementationError(`Error reading configuration file ${configPath}: ${(e as Error).message}`);
     }
 
     let configVars;
     try {
         configVars = JSON.parse(configJson);
     } catch (e) {
-        throw new ImplementationError(`Error parsing configuration file ${path}: ${(e as Error).message}`);
+        throw new ImplementationError(`Error parsing configuration file ${configPath}: ${(e as Error).message}`);
     }
 
-    return configVars;
+    return { configPath, configVars };
 }
 
 function getDefaultRoot(envName: string) {

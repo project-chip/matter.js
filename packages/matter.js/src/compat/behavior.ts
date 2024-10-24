@@ -8,7 +8,7 @@ export {
     AccessControl,
     Behavior,
     ClusterBehavior,
-    CommissioningBehavior,
+    CommissioningServer as CommissioningBehavior,
     NetworkBehavior,
     PartsBehavior,
     ProductDescriptionServer,

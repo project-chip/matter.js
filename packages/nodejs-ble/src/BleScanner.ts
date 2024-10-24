@@ -240,6 +240,7 @@ export class BleScanner implements Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds = 60,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
@@ -247,7 +248,18 @@ export class BleScanner implements Scanner {
         const queryKey = this.buildCommissionableQueryIdentifier(identifier);
         await this.nobleClient.startScanning();
 
-        while (true) {
+        let canceled = false;
+        cancelSignal?.then(
+            () => {
+                canceled = true;
+                this.finishWaiter(queryKey, true);
+            },
+            cause => {
+                logger.error("Unexpected error canceling commissioning", cause);
+            },
+        );
+
+        while (!canceled) {
             this.getCommissionableDevices(identifier).forEach(({ deviceData }) => {
                 const { deviceIdentifier } = deviceData;
                 if (!discoveredDevices.has(deviceIdentifier)) {
@@ -260,7 +272,9 @@ export class BleScanner implements Scanner {
             if (remainingTime <= 0) {
                 break;
             }
-            await this.registerWaiterPromise(queryKey, remainingTime, false);
+
+            const waiter = this.registerWaiterPromise(queryKey, remainingTime, false);
+            await waiter;
         }
         await this.nobleClient.stopScanning();
         return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);

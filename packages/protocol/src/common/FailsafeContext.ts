@@ -227,7 +227,7 @@ export abstract class FailsafeContext {
         }
 
         builder.setOperationalCert(nocValue, icacValue);
-        const fabricAlreadyExisting = this.#fabrics.getFabrics().find(fabric => builder.matchesToFabric(fabric));
+        const fabricAlreadyExisting = this.#fabrics.find(fabric => builder.matchesToFabric(fabric));
 
         if (fabricAlreadyExisting) {
             throw new MatterFabricConflictError(
@@ -264,7 +264,7 @@ export abstract class FailsafeContext {
         let fabric: Fabric | undefined = undefined;
         if (this.fabricIndex !== undefined) {
             const fabricIndex = this.fabricIndex;
-            fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
+            fabric = this.#fabrics.for(fabricIndex);
             if (fabric !== undefined) {
                 const session = this.#sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session !== undefined && session.isSecure) {
@@ -290,7 +290,7 @@ export abstract class FailsafeContext {
         if (!this.#forUpdateNoc && fabric !== undefined) {
             const fabricIndex = this.fabricIndex;
             if (fabricIndex !== undefined) {
-                const fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
+                const fabric = this.#fabrics.for(fabricIndex);
                 if (fabric !== undefined) {
                     await this.revokeFabric(fabric);
                 }

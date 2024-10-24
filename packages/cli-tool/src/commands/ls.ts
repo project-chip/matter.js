@@ -16,6 +16,7 @@ Command({
     flagArgs: {
         a: "show hidden properties",
         l: "use a long listing format",
+        d: "list directories themselves, not their contents",
     },
 
     invoke: async function ls(args, flags) {
@@ -30,7 +31,7 @@ Command({
 
         if (locations.length) {
             for (const location of locations) {
-                if (location.kind === "directory") {
+                if (location.kind === "directory" && !flags.d) {
                     dirs.push(location);
                 } else {
                     files.push(location);
@@ -169,6 +170,14 @@ function formatName(location: DisplayLocation) {
         return { name: `${colors.green(name)}*`, length: length + 1 };
     }
 
+    if (location.tag === "constructor") {
+        return { name: `${colors.green.bold(name)}*`, length: length + 1 };
+    }
+
+    if (location.tag === "event") {
+        return { name: `${colors.yellow(name)}=`, length: length + 1 };
+    }
+
     return { name, length };
 }
 
@@ -240,8 +249,14 @@ function DisplayLocation(location: Location, all: boolean, displayName?: string)
     function listPaths(paths: string[], definition: unknown) {
         const result = new Set(paths);
         if (all && typeof definition === "object" && definition !== null) {
-            for (const key of Object.getOwnPropertyNames(definition)) {
-                result.add(key);
+            for (
+                let obj = definition;
+                obj !== undefined && obj !== null && obj !== Object.prototype;
+                obj = Object.getPrototypeOf(obj)
+            ) {
+                for (const key of Object.getOwnPropertyNames(obj)) {
+                    result.add(key);
+                }
             }
         }
 

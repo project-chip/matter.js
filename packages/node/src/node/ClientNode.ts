@@ -4,80 +4,51 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
+import { Agent } from "#endpoint/Agent.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
-import { ImplementationError, NotImplementedError, SupportedStorageTypes } from "#general";
-import { OperationalPeer, PeerAddress } from "#protocol";
+import { Identity, Lifecycle, MaybePromise, NotImplementedError } from "#general";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
-import { ClientNodeLifecycle } from "./ClientNodeLifecycle.js";
 import { Node } from "./Node.js";
-import { ServerNode } from "./ServerNode.js";
-import { ClientNodeStore } from "./storage/ClientNodeStore.js";
+import type { ServerNode } from "./ServerNode.js";
 
 /**
- * A client-side Matter {@link Node}.
+ * A remote Matter {@link Node}.
+ *
+ * Client nodes may be peers (commissioned into a shared fabric) or commissionable, in which they are not usable until
+ * you invoke {@link commissioned}.
  */
-export class ClientNode extends Node {
-    #address: PeerAddress;
-    #operationalAddress: Partial<OperationalPeer> = {};
-    #store: ClientNodeStore;
-
-    constructor({ owner, store }: ClientNode.Options) {
-        const { address } = store;
-        super({
-            id: `${address.fabricIndex}:${address.nodeId.toString(16)}`,
+export class ClientNode extends Node<ClientNode.RootEndpoint> {
+    constructor(options: ClientNode.Options) {
+        const opts = {
+            ...options,
             number: 0,
-            type: Node.CommonRootEndpoint,
-            owner,
-        });
-        this.#address = store.address;
-        this.#store = store;
+            type: ClientNode.RootEndpoint,
+        };
 
-        this.env.set(EndpointInitializer, new ClientEndpointInitializer(store));
+        super(opts);
     }
 
     override async initialize() {
+        this.env.set(EndpointInitializer, await ClientEndpointInitializer.create(this));
+
         await super.initialize();
-
-        const discovery = this.#store.discoveryStorage;
-        const operationalAddress = {} as Record<string, unknown>;
-        for (const key of await discovery.keys()) {
-            operationalAddress[key] = await discovery.get(key);
-        }
-        this.#operationalAddress = operationalAddress as Partial<OperationalPeer>;
     }
 
-    get address() {
-        return this.#address;
+    override get owner(): ServerNode | undefined {
+        return super.owner as ServerNode | undefined;
     }
 
-    get operationalAddress(): OperationalPeer {
-        return { ...this.#operationalAddress, address: this.#address };
+    override set owner(owner: ServerNode) {
+        super.owner = owner;
     }
 
-    updateOperationalAddress(operationalAddress: Partial<OperationalPeer>) {
-        operationalAddress = { ...operationalAddress };
-        delete operationalAddress.address;
-        this.#operationalAddress = operationalAddress;
-        return this.#store.discoveryStorage.set(operationalAddress as Record<string, SupportedStorageTypes>);
+    async commission(options: CommissioningClient.CommissioningOptions) {
+        await this.act("commission", agent => agent.commissioning.commission(options));
     }
 
-    override get lifecycle() {
-        return super.lifecycle as ClientNodeLifecycle;
-    }
-
-    override get owner(): ServerNode {
-        return super.owner as ServerNode;
-    }
-
-    protected override set owner(node: ServerNode) {
-        if (!(node instanceof ServerNode)) {
-            throw new ImplementationError("Client node owner must be a server node");
-        }
-        super.owner = node;
-    }
-
-    createRuntime(): NetworkRuntime {
+    protected createRuntime(): NetworkRuntime {
         throw new NotImplementedError();
     }
 
@@ -85,14 +56,33 @@ export class ClientNode extends Node {
         return this.owner?.nodes;
     }
 
-    protected override createLifecycle() {
-        return new ClientNodeLifecycle(this);
+    override act<R>(
+        purpose: string,
+        actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+    ): MaybePromise<R>;
+
+    override act<R>(actor: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>): MaybePromise<R>;
+
+    override act<R>(
+        actorOrPurpose: string | ((agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>),
+        actor?: (agent: Agent.Instance<ClientNode.RootEndpoint>) => MaybePromise<R>,
+    ): MaybePromise<R> {
+        if (this.construction.status === Lifecycle.Status.Inactive) {
+            this.construction.start();
+        }
+
+        if (this.construction.status === Lifecycle.Status.Initializing) {
+            return this.construction.then(() => (super.act as any)(actorOrPurpose, actor));
+        }
+
+        return (super.act as any)(actorOrPurpose, actor);
     }
 }
 
 export namespace ClientNode {
-    export interface Options extends Node.Options {
-        owner: ServerNode;
-        store: ClientNodeStore;
-    }
+    export interface Options extends Node.Options<RootEndpoint> {}
+
+    export const RootEndpoint = Node.CommonRootEndpoint.with(CommissioningClient);
+
+    export interface RootEndpoint extends Identity<typeof RootEndpoint> {}
 }

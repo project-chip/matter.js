@@ -6,7 +6,7 @@
 
 import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { CommissioningBehavior } from "#behavior/system/commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl } from "#clusters/access-control";
@@ -360,9 +360,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const currentFabricIndex = fabric.fabricIndex;
         const fabrics = this.env.get(FabricManager);
-        const conflictingLabelFabric = fabrics
-            .getFabrics()
-            .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
+        const conflictingLabelFabric = fabrics.find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
         if (conflictingLabelFabric !== undefined) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.LabelConflict,
@@ -426,14 +424,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw error;
         }
 
-        const fabrics = this.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         const trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
         trustedRootCertificates.push(rootCaCertificate);
         this.state.trustedRootCertificates = trustedRootCertificates;
     }
 
     async #updateFabrics() {
-        const fabrics = this.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         this.state.fabrics = fabrics.map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,
@@ -471,17 +469,17 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
     async #handleAddedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Added);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Added);
     }
 
     async #handleUpdatedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Updated);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Updated);
     }
 
     async #handleRemovedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Removed);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Removed);
     }
 
     async #handleFailsafeClosed() {

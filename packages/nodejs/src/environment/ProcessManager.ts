@@ -102,8 +102,9 @@ export class ProcessManager implements Destructable {
     };
 
     protected interruptHandler = (signal: string) => {
-        process.off(signal, this.interruptHandler);
-        this.runtime.cancel();
+        if (this.runtime.interrupt()) {
+            process.on(signal, this.interruptHandler);
+        }
     };
 
     protected exitHandler = () => {

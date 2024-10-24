@@ -10,7 +10,7 @@ import { Command } from "./command.js";
 Command({
     usage: ["", "KEY=VALUE", "KEY VALUE"],
     description:
-        'Set or display environment variables.  matter.js defines variables in a hierarchy with "." as a delimiter.',
+        'Set or display environment variables.  matter.js defines variables in a hierarchy with "." as a delimiter.  Variables persist across restarts.',
     maxArgs: 2,
 
     invoke: async function set(args) {
@@ -24,11 +24,11 @@ Command({
                 if (equalPos === -1) {
                     this.err("Invalid argument: parameter must be of the form key=value");
                 }
-                this.env.vars.set(assignment.slice(0, equalPos), assignment.slice(equalPos + 1));
+                await this.env.vars.persist(assignment.slice(0, equalPos), assignment.slice(equalPos + 1));
                 break;
 
             case 2:
-                this.env.vars.set(`${args[0]}`, args[1] as VariableService.Value);
+                await this.env.vars.persist(`${args[0]}`, args[1] as VariableService.Value);
                 break;
         }
     },

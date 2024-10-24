@@ -9,12 +9,12 @@ import { Command } from "./command.js";
 
 Command({
     usage: "[PATH]",
-    description: "Change current working directory.  If you omit PATH changes to the root directory.",
+    description: "Change current working directory.  If you omit PATH changes to the last node entered.",
     maxArgs: 1,
 
     invoke: async function cd([path]) {
         if (path === undefined) {
-            path = "/";
+            path = this.env.vars.get("home", "/");
         } else {
             path = `${path}`;
         }
@@ -26,5 +26,7 @@ Command({
         }
 
         this.location = location;
+
+        await this.env.vars.persist("cwd", location.path);
     },
 });

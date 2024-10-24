@@ -33,8 +33,11 @@ export interface Location {
     maybeAt(path: string | number, searchedAs?: string): MaybePromise<Location | undefined>;
 }
 
-function isClass(fn: {}) {
-    return !Object.getOwnPropertyDescriptor(fn, "prototype")?.writable;
+/**
+ * Attempt to differentiate between functions and classes.  Not really possible so this is just a heuristic.
+ */
+function isConstructor(fn: {}) {
+    return fn.toString().startsWith("class");
 }
 
 export function Location(basename: string, definition: unknown, stat: Stat, parent: undefined | Location): Location {
@@ -54,11 +57,14 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 tag = "bytes";
             } else if (definition.constructor.name !== "Object") {
                 tag = definition.constructor.name;
+                if (tag === "BasicObservable") {
+                    tag = "event";
+                }
             } else {
                 tag = "object";
             }
         } else if (typeof definition === "function") {
-            if (isClass(definition)) {
+            if (isConstructor(definition)) {
                 tag = "constructor";
             } else {
                 tag = "function";
@@ -71,7 +77,7 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
     tag = decamelize(tag);
 
     return {
-        kind: typeof definition === "function" && !isClass(definition) ? "command" : stat.kind,
+        kind: typeof definition === "function" && !isConstructor(definition) ? "command" : stat.kind,
         basename,
         name: stat.name,
         summary: stat.summary,
@@ -155,7 +161,15 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
             }
 
             const subsearchedAs = searchedAs ? Location.join(searchedAs, segments[0]) : segments[0];
-            const definition = stat.definitionAt(decodeURIComponent(segments[0]));
+            const name = decodeURIComponent(segments[0]);
+            let definition = stat.definitionAt(decodeURIComponent(name));
+
+            if (definition === undefined && typeof this.definition === "object" && this.definition !== null) {
+                definition = (this.definition as Record<string, unknown>)[name];
+                if (definition === undefined && name in this.definition) {
+                    definition = undefinedValue;
+                }
+            }
 
             const accept = (definition: unknown) => {
                 if (definition === undefined || definition === null) {
@@ -173,11 +187,16 @@ export function Location(basename: string, definition: unknown, stat: Stat, pare
                 return sublocation.at(segments.slice(1).join("/"), subsearchedAs);
             };
 
-            if (MaybePromise.is(definition)) {
-                return definition.then(accept);
+            if (!MaybePromise.is(definition)) {
+                return accept(definition);
             }
 
-            return accept(definition);
+            // Do not await Construction or Observable
+            if ("emit" in definition || "change" in definition) {
+                return accept(definition);
+            }
+
+            return definition.then(accept);
         },
     };
 }

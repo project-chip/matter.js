@@ -6,6 +6,7 @@
 
 import "./cat.js";
 import "./cd.js";
+import "./clear.js";
 import "./exit.js";
 import "./help.js";
 import "./ls.js";

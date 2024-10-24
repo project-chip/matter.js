@@ -56,6 +56,16 @@ export function PeerAddress(address: PeerAddress): PeerAddress {
     return internedAddress;
 }
 
+export namespace PeerAddress {
+    export function is(addr1?: Readonly<PeerAddress>, addr2?: Readonly<PeerAddress>) {
+        if (addr1 === undefined || addr2 === undefined) {
+            return false;
+        }
+
+        return addr1.fabricIndex === addr2.fabricIndex && addr1.nodeId === addr2.nodeId;
+    }
+}
+
 /**
  * A collection of items keyed by logical address.
  */
