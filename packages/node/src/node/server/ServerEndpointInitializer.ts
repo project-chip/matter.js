@@ -23,7 +23,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         this.#store = environment.get(ServerNodeStore);
     }
 
-    override initializeDescendent(endpoint: Endpoint) {
+    override initializeDescendant(endpoint: Endpoint) {
         if (!endpoint.lifecycle.hasId) {
             endpoint.id = this.#identifyPart(endpoint);
         }

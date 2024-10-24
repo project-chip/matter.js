@@ -96,7 +96,7 @@ export class ControllerStore implements Destructable, ControllerStoreInterface {
 
     get nodesStorage() {
         if (this.#nodesStorage === undefined) {
-            this.#nodesStorage = this.storage.createContext("nodes");
+            this.#nodesStorage = this.storage.createContext("peers");
         }
         return this.#nodesStorage;
     }

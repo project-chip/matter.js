@@ -120,7 +120,8 @@ export namespace Stat {
             definition !== null &&
             !Array.isArray(definition) &&
             !ArrayBuffer.isView(definition) &&
-            !(definition instanceof Date)
+            !(definition instanceof Date) &&
+            !(definition.constructor.name === "BasicObservable")
         );
     }
 }

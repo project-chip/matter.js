@@ -5,6 +5,7 @@
  */
 
 import { repl } from "#repl.js";
+import "@matter/nodejs";
 import colors from "ansi-colors";
 import { stdout } from "process";
 import yargs from "yargs";

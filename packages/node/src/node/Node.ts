@@ -57,8 +57,6 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             this.number = 0;
         }
 
-        this.construction.start();
-
         this.lifecycle.online.on(() => {
             this.statusUpdate("is online");
         });

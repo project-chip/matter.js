@@ -29,7 +29,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
     constructor(endpoint: Endpoint) {
         super(endpoint);
 
-        const lifecycle = this.endpoint.lifecycle;
+        const lifecycle = this.owner.lifecycle;
         this.#bubbleChange = (type, endpoint) => lifecycle.bubble(type, endpoint);
     }
 
@@ -43,7 +43,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
 
         // Insertion validation is only possible in a fully configured node. If we are not yet installed then an
         // ancestor will handle validation when we installed
-        if (this.endpoint.lifecycle.isReady) {
+        if (this.owner.lifecycle.isReady) {
             this.#validateInsertion(endpoint, endpoint);
         }
 
@@ -52,7 +52,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
         endpoint.lifecycle.changed.on((type, endpoint) => this.#bubbleChange(type, endpoint));
 
         // If the part is already fully initialized we initialize the child now
-        if (this.endpoint.lifecycle.isPartsReady) {
+        if (this.owner.lifecycle.isPartsReady) {
             if (!endpoint.construction.isErrorHandled) {
                 endpoint.construction.onError(error => logger.error(`Error initializing ${endpoint}:`, error));
             }
@@ -80,7 +80,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
         const part = this.get(id);
 
         if (part === undefined) {
-            throw new PartNotFoundError(`Endpoint ${this.endpoint} has no part ${id}`);
+            throw new PartNotFoundError(`Endpoint ${this.owner} has no part ${id}`);
         }
 
         return part;
@@ -120,12 +120,12 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
      */
     initialize() {
         // Sanity check
-        if (!this.endpoint.lifecycle.isReady) {
+        if (!this.owner.lifecycle.isReady) {
             throw new ImplementationError(`Cannot initialize parts because endpoint is not ready`);
         }
 
         // Our only purpose is to initialize child parts
-        const onPartsReady = () => this.endpoint.lifecycle.change(EndpointLifecycle.Change.PartsReady);
+        const onPartsReady = () => this.owner.lifecycle.change(EndpointLifecycle.Change.PartsReady);
         if (!this.size) {
             onPartsReady();
             return;
@@ -169,7 +169,7 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
 
     #validateInsertion(forefather: Endpoint, endpoint: Endpoint, usedNumbers?: Set<number>) {
         if (endpoint.lifecycle.hasNumber) {
-            this.endpoint.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
+            this.owner.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
             if (usedNumbers?.has(endpoint.number)) {
                 throw new IdentityConflictError(
                     `Cannot add endpoint ${forefather} because descendents have conflicting definitions for endpoint number ${endpoint.number}`,
@@ -207,11 +207,11 @@ export class Parts extends EndpointContainer implements MutableSet<Endpoint, End
 
         if (!(child instanceof Endpoint)) {
             if ((child as any).type) {
-                (child as any).owner = this.endpoint;
+                (child as any).owner = this.owner;
             } else {
                 child = {
                     type: child as EndpointType,
-                    owner: this.endpoint,
+                    owner: this.owner,
                 };
             }
         }

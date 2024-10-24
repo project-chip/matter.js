@@ -143,3 +143,18 @@ export function isObject(it: unknown): it is Record<string, unknown> {
     return Object.prototype.toString.call(it) === "[object Object]"; // this code is 25% faster than below one
     // return it && typeof it === 'object' && !(it instanceof Array);
 }
+
+// See https://stackoverflow.com/questions/41879327/deepreadonly-object-typescript
+export type DeepReadonly<T> = T extends (infer R)[]
+    ? DeepReadonlyArray<R>
+    : T extends (...args: unknown[]) => unknown
+      ? T
+      : T extends object
+        ? DeepReadonlyObject<T>
+        : T;
+
+export interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
+
+export type DeepReadonlyObject<T> = {
+    readonly [P in keyof T]: DeepReadonly<T[P]>;
+};

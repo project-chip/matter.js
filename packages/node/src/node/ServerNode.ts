@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningBehavior } from "#behavior/system/commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
+import { ControllerBehavior } from "#behavior/system/controller/ControllerBehavior.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "#behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
@@ -16,7 +17,7 @@ import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorO
 import { EventHandler, FabricManager, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
-import { Nodes } from "./Nodes.js";
+import { ClientNodes } from "./client/ClientNodes.js";
 import { ServerEnvironment } from "./server/ServerEnvironment.js";
 import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
@@ -36,7 +37,7 @@ class FactoryResetError extends MatterError {
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
-    #nodes?: Nodes;
+    #nodes?: ClientNodes;
 
     /**
      * Construct a new ServerNode.
@@ -60,7 +61,11 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
 
+        this.env.set(ServerNode, this);
+
         DiagnosticSource.add(this);
+
+        this.construction.start();
     }
 
     /**
@@ -149,8 +154,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     get nodes() {
         if (!this.#nodes) {
-            this.#nodes = new Nodes(this);
+            this.#nodes = new ClientNodes(this);
+            this.#nodes.initialize();
         }
+
         return this.#nodes;
     }
 
@@ -161,7 +168,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     protected override async initialize() {
         await ServerEnvironment.initialize(this);
 
-        return super.initialize();
+        await super.initialize();
     }
 
     /**
@@ -188,10 +195,11 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
 export namespace ServerNode {
     export const RootEndpoint = BaseRootEndpoint.with(
-        CommissioningBehavior,
+        CommissioningServer,
         NetworkServer,
         ProductDescriptionServer,
         SessionsBehavior,
+        ControllerBehavior,
     );
 
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}

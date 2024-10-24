@@ -28,7 +28,7 @@ describe("FabricManager", () => {
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
 
-            assert.deepEqual(fabricManager.getFabrics(), [fabric]);
+            assert.deepEqual(fabricManager.fabrics, [fabric]);
 
             assert.deepEqual(storage.get(["Context"], "fabrics"), undefined);
         });
@@ -54,7 +54,7 @@ describe("FabricManager", () => {
             fabricManager.addFabric(fabric);
             await fabricManager.persistFabrics();
 
-            assert.deepEqual(fabricManager.getFabrics(), [fabric]);
+            assert.deepEqual(fabricManager.fabrics, [fabric]);
 
             assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.config]);
         });
@@ -65,8 +65,8 @@ describe("FabricManager", () => {
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
             await fabricManager.construction.ready;
-            assert.equal(fabricManager.getFabrics().length, 1);
-            assert.deepEqual(fabricManager.getFabrics()[0].config, fabric.config);
+            assert.equal(fabricManager.fabrics.length, 1);
+            assert.deepEqual(fabricManager.fabrics[0].config, fabric.config);
         });
     });
 
@@ -76,7 +76,7 @@ describe("FabricManager", () => {
             fabricManager.addFabric(fabric);
             await fabricManager.removeFabric(fabric.fabricIndex);
 
-            assert.deepEqual(fabricManager.getFabrics(), []);
+            assert.deepEqual(fabricManager.fabrics, []);
         });
 
         it("throws when removing a non-existent fabric", async () => {

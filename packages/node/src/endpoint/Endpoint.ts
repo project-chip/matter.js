@@ -663,7 +663,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     protected initialize() {
         // Configure the endpoint for the appropriate node type
-        this.env.get(EndpointInitializer).initializeDescendent(this);
+        this.env.get(EndpointInitializer).initializeDescendant(this);
 
         // Initialize behaviors.  Success brings endpoint to "ready" state
         let promise = this.behaviors.initialize();

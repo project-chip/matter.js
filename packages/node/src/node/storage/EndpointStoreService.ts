@@ -160,21 +160,17 @@ export class EndpointStoreFactory extends EndpointStoreService {
     storeForEndpoint(endpoint: Endpoint): EndpointStore {
         this.#construction.assert();
 
-        if (!endpoint.lifecycle.hasId) {
-            throw new InternalError("Endpoint storage access without assigned ID");
+        if (endpoint.maybeNumber === 0) {
+            return this.#construction.assert("root node store", this.#root);
         }
-        if (endpoint.owner) {
-            return this.storeForEndpoint(endpoint.owner).childStoreFor(endpoint);
-        }
-        if (endpoint.number !== 0) {
+
+        if (!endpoint.owner) {
             throw new InternalError(
                 "Endpoint storage inaccessible because endpoint is not a node and is not owned by another endpoint",
             );
         }
-        if (!this.#root) {
-            throw new InternalError("Endpoint storage accessed prior to initialization");
-        }
-        return this.#root;
+
+        return this.storeForEndpoint(endpoint.owner).childStoreFor(endpoint);
     }
 
     /**

@@ -180,13 +180,27 @@ export class FabricManager {
     }
 
     [Symbol.iterator]() {
+        this.#construction.assert();
+
         return this.#fabrics.values();
     }
 
-    getFabrics() {
+    get fabrics() {
         this.#construction.assert();
 
         return Array.from(this.#fabrics.values());
+    }
+
+    get length() {
+        return this.fabrics.length;
+    }
+
+    find(predicate: (fabric: Fabric) => boolean) {
+        return this.fabrics.find(predicate);
+    }
+
+    map<T>(translator: (fabric: Fabric) => T) {
+        return this.fabrics.map(translator);
     }
 
     findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {

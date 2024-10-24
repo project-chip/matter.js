@@ -47,6 +47,7 @@
         "@matter/protocol": "*",
         "@matter/tools": "*",
         "@matter/types": "*",
+        "@matter/nodejs": "*",
         "@types/escodegen": "^0.0.10",
         "acorn": "^8.13.0",
         "ansi-colors": "^4.1.3",

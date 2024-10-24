@@ -227,6 +227,8 @@ export namespace isCommand {
         "true",
         "false",
         "this",
+        "typeof",
+        "await",
     ];
 
     const IDENTIFIER = "[\\p{L}$_][\\p{L}$_0-9]*";

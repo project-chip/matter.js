@@ -269,11 +269,11 @@ export class MatterDevice {
     }
 
     getFabrics() {
-        return this.#fabricManager.getFabrics();
+        return this.#fabricManager.fabrics;
     }
 
     isCommissioned() {
-        return !!this.#fabricManager.getFabrics().length;
+        return !!this.#fabricManager.length;
     }
 
     async allowEnhancedCommissioning(

@@ -103,7 +103,6 @@ export type CommissionableDeviceIdentifiers =
       }
     | {
           /** Pass empty object to discover any commissionable device. */
-          [K in any]: never; // aka "empty object" for just discovering any commisionable device
       };
 
 export interface Scanner {
@@ -145,6 +144,7 @@ export interface Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds?: number,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]>;
 
     /** Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries. */

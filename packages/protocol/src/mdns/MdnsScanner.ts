@@ -450,24 +450,35 @@ export class MdnsScanner implements Scanner {
     #buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("instanceId" in identifier) {
             return getDeviceInstanceQname(identifier.instanceId);
-        } else if ("longDiscriminator" in identifier) {
+        }
+
+        if ("longDiscriminator" in identifier) {
             return getLongDiscriminatorQname(identifier.longDiscriminator);
-        } else if ("shortDiscriminator" in identifier) {
+        }
+
+        if ("shortDiscriminator" in identifier) {
             return getShortDiscriminatorQname(identifier.shortDiscriminator);
-        } else if ("vendorId" in identifier && "productId" in identifier) {
+        }
+
+        if ("vendorId" in identifier && "productId" in identifier) {
             // Custom identifier because normally productId is only included in TXT record
             return `_VP${identifier.vendorId}+${identifier.productId}`;
-        } else if ("vendorId" in identifier) {
+        }
+
+        if ("vendorId" in identifier) {
             return getVendorQname(identifier.vendorId);
-        } else if ("deviceType" in identifier) {
+        }
+
+        if ("deviceType" in identifier) {
             return getDeviceTypeQname(identifier.deviceType);
-        } else if ("productId" in identifier) {
+        }
+
+        if ("productId" in identifier) {
             // Custom identifier because normally productId is only included in TXT record
             return `_P${identifier.productId}`;
-        } else if (Object.keys(identifier).length === 0) {
-            return getCommissioningModeQname();
         }
-        throw new ImplementationError(`Invalid commissionable device identifier : ${Logger.toJSON(identifier)}`); // Should neven happen
+
+        return getCommissioningModeQname();
     }
 
     #extractInstanceId(instanceName: string) {
@@ -604,7 +615,9 @@ export class MdnsScanner implements Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds = 900,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
+        const canceled = cancelSignal ? cancelSignal.then(() => true) : undefined;
         const discoveredDevices = new Set<string>();
 
         const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
@@ -625,7 +638,15 @@ export class MdnsScanner implements Scanner {
                 break;
             }
             const { promise } = await this.#registerWaiterPromise(queryId, remainingTime, false);
-            await promise;
+
+            if (cancelSignal) {
+                const result = await Promise.race([promise, canceled]);
+                if (result) {
+                    break;
+                }
+            } else {
+                await promise;
+            }
         }
         return this.#getCommissionableDeviceRecords(identifier);
     }

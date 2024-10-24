@@ -19,6 +19,13 @@ export namespace CommissioningOptions {
 
     export interface Configuration {
         /**
+         * Allow commissioning of this device by one or more controllers.  This is enabled by default.
+         *
+         * It only makes sense for a device to be uncommissionable if it is itself a controller.
+         */
+        readonly enabled: boolean;
+
+        /**
          * Product details included in commissioning advertisements.
          */
         readonly productDescription: ProductDescription;

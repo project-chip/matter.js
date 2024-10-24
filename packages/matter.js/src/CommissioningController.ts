@@ -24,13 +24,13 @@ import {
     CommissionableDeviceIdentifiers,
     ControllerDiscovery,
     DecodedAttributeReportValue,
+    DiscoveryAndCommissioningOptions,
     DiscoveryData,
     InteractionClient,
     MdnsBroadcaster,
     MdnsScanner,
     MdnsService,
     NodeDiscoveryType,
-    PeerCommissioningOptions,
     ScannerSet,
 } from "#protocol";
 import {
@@ -117,8 +117,8 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
 
 /** Options needed to commission a new node */
 export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
-    commissioning: Omit<PeerCommissioningOptions, "fabric" | "discovery" | "passcode">;
-    discovery: PeerCommissioningOptions["discovery"];
+    commissioning: Omit<DiscoveryAndCommissioningOptions, "fabric" | "discovery" | "passcode">;
+    discovery: DiscoveryAndCommissioningOptions["discovery"];
     passcode: number;
 };
 

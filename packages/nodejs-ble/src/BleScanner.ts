@@ -240,7 +240,9 @@ export class BleScanner implements Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds = 60,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
+        const canceled = cancelSignal ? cancelSignal.then(() => true) : undefined;
         const discoveredDevices = new Set<string>();
 
         const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
@@ -260,7 +262,16 @@ export class BleScanner implements Scanner {
             if (remainingTime <= 0) {
                 break;
             }
-            await this.registerWaiterPromise(queryKey, remainingTime, false);
+
+            const waiter = this.registerWaiterPromise(queryKey, remainingTime, false);
+            if (canceled) {
+                const result = await Promise.race([waiter, canceled]);
+                if (result) {
+                    break;
+                }
+            } else {
+                await waiter;
+            }
         }
         await this.nobleClient.stopScanning();
         return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);

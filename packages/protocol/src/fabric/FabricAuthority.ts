@@ -15,7 +15,7 @@ import {
     Logger,
 } from "#general";
 import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId, VendorId } from "#types";
-import { FabricBuilder } from "./Fabric.js";
+import { Fabric, FabricBuilder } from "./Fabric.js";
 import { FabricManager } from "./FabricManager.js";
 
 const logger = Logger.get("FabricAuthority");
@@ -79,11 +79,14 @@ export class FabricAuthority {
      * List all controlled fabrics.
      */
     get fabrics() {
-        return Array.from(this.#fabrics).filter(fabric => {
-            if (Bytes.areEqual(fabric.rootCert, this.#ca.rootCert)) {
-                return true;
-            }
-        });
+        return Array.from(this.#fabrics).filter(this.hasControlOf.bind(this));
+    }
+
+    /**
+     * Determine whether a fabric belongs to this authority.
+     */
+    hasControlOf(fabric: Fabric) {
+        return Bytes.areEqual(fabric.rootCert, this.#ca.rootCert);
     }
 
     /**
