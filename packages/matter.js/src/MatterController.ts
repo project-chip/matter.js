@@ -15,6 +15,7 @@ import { NodeCommissioningOptions } from "#CommissioningController.js";
 import { CachedClientNodeStore } from "#device/CachedClientNodeStore.js";
 import { DeviceInformationData } from "#device/DeviceInformation.js";
 import {
+    Bytes,
     ChannelType,
     Construction,
     Crypto,
@@ -116,20 +117,30 @@ export class MatterController {
         const ca = await CertificateAuthority.create(controllerStore.caStorage);
         const fabricStorage = controllerStore.fabricStorage;
 
-        let controller: MatterController;
+        let controller: MatterController | undefined = undefined;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (await fabricStorage.has("fabric")) {
             const fabric = new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
-            logger.info("Loaded existing fabric from storage");
-            controller = new MatterController({
-                controllerStore,
-                scanners,
-                netInterfaces,
-                certificateManager: ca,
-                fabric,
-                sessionClosedCallback,
-            });
-        } else {
+            if (Bytes.areEqual(fabric.rootCert, ca.rootCert)) {
+                logger.info("Loaded existing fabric from storage");
+                controller = new MatterController({
+                    controllerStore,
+                    scanners,
+                    netInterfaces,
+                    certificateManager: ca,
+                    fabric,
+                    sessionClosedCallback,
+                });
+            } else {
+                logger.info("Fabric CA certificate changed ...");
+                if (await controllerStore.nodesStorage.has("commissionedNodes")) {
+                    throw new Error(
+                        "Fabric certificate changed, but commissioned nodes are still present. Please clear the storage.",
+                    );
+                }
+            }
+        }
+        if (controller === undefined) {
             logger.info("Creating new fabric");
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
