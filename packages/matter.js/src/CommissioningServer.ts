@@ -549,6 +549,7 @@ export class CommissioningServer extends MatterNode {
             this.storage.createContext("SessionManager"),
             this.storage.createContext("FabricManager"),
             () => ({
+                enabled: true,
                 productDescription: this.productDescription,
                 passcode: this.passcode,
                 discriminator: this.discriminator,

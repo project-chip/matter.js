@@ -139,13 +139,13 @@ export interface CommissioningModeInstanceData extends ProductDescription {
     /** Session Active Interval of the device for commissionable announcements. */
     sessionActiveInterval?: number;
 
-    /** Duration of time the node should stay Active after the last network activity. **/
+    /** Duration of time the node should stay active after the last network activity. **/
     sessionActiveThreshold?: number;
 
-    /** Pairing Hint of the device for commissionable announcements. */
+    /** Pairing hint of the device for commissionable announcements. */
     pairingHint?: TypeFromPartialBitSchema<typeof PairingHintBitmap>;
 
-    /** Pairing Instruction of the device for commissionable announcements. */
+    /** Pairing instruction of the device for commissionable announcements. */
     pairingInstructions?: string;
 }
 

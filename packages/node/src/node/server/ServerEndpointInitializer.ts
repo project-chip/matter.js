@@ -23,7 +23,7 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         this.#store = environment.get(ServerNodeStore);
     }
 
-    override initializeDescendent(endpoint: Endpoint) {
+    override initializeDescendant(endpoint: Endpoint) {
         if (!endpoint.lifecycle.hasId) {
             endpoint.id = this.#identifyPart(endpoint);
         }
@@ -31,6 +31,15 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         this.#store.endpointStores.assignNumber(endpoint);
 
         endpoint.behaviors.require(DescriptorServer);
+    }
+
+    override async eraseDescendant(endpoint: Endpoint) {
+        if (!endpoint.lifecycle.hasId) {
+            return;
+        }
+
+        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
+        await store.erase();
     }
 
     /**

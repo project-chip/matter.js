@@ -473,7 +473,7 @@ export class SessionManager {
                 } = {},
                 caseAuthenticatedTags,
             }) => {
-                const fabric = this.#context.fabrics.getFabrics().find(fabric => fabric.fabricId === fabricId);
+                const fabric = this.#context.fabrics.find(fabric => fabric.fabricId === fabricId);
                 logger.info(
                     "restoring resumption record for node",
                     nodeId,

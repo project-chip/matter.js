@@ -53,7 +53,7 @@ export class EndpointServer implements EndpointInterface {
 
             backing = new ClusterServerBacking(this, type as ClusterBehavior.Type);
         } else {
-            backing = new ServerBehaviorBacking(this.#endpoint, type);
+            backing = new ServerBehaviorBacking(this.#endpoint, type, this.#endpoint.behaviors.optionsFor(type));
         }
         return backing;
     }

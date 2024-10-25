@@ -5,8 +5,8 @@
  */
 
 import { Endpoint } from "#endpoint/Endpoint.js";
-import type { EndpointServer } from "#endpoint/EndpointServer.js";
 import {
+    AsyncObservable,
     Diagnostic,
     EventEmitter,
     ImplementationError,
@@ -40,16 +40,16 @@ import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 const logger = Logger.get("Commissioning");
 
 /**
- * Server functionality related to commissioning used by {@link EndpointServer}.
+ * Server behavior related to commissioning.
  *
- * Better name would be CommissioningServer but we already have one of those.
+ * Updates node state based on commissioning status.
  */
-export class CommissioningBehavior extends Behavior {
+export class CommissioningServer extends Behavior {
     static override readonly id = "commissioning";
 
-    declare state: CommissioningBehavior.State;
-    declare events: CommissioningBehavior.Events;
-    declare internal: CommissioningBehavior.Internal;
+    declare state: CommissioningServer.State;
+    declare events: CommissioningServer.Events;
+    declare internal: CommissioningServer.Internal;
 
     static override early = true;
 
@@ -98,7 +98,7 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
-        const fabrics = this.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         const commissioned = !!fabrics.length;
         if (fabricAction === FabricAction.Removed) {
             delete this.state.fabrics[fabricIndex];
@@ -151,9 +151,7 @@ export class CommissioningBehavior extends Behavior {
     }
 
     #triggerFactoryReset() {
-        this.env.runtime.add(
-            (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
-        );
+        this.env.runtime.add((this.endpoint as ServerNode).erase().then(this.callback(this.initiateCommissioning)));
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {
@@ -162,7 +160,7 @@ export class CommissioningBehavior extends Behavior {
         }
 
         // Callback that listens to the failsafe for destruction and triggers commissioning status update
-        const listener = this.callback(function (this: CommissioningBehavior, status: Lifecycle.Status) {
+        const listener = this.callback(function (this: CommissioningServer, status: Lifecycle.Status) {
             if (status === Lifecycle.Status.Destroyed) {
                 if (failsafe.fabricIndex !== undefined) {
                     this.handleFabricChange(
@@ -175,7 +173,7 @@ export class CommissioningBehavior extends Behavior {
         });
 
         // Callback that removes above listener
-        this.internal.unregisterFailsafeListener = this.callback(function (this: CommissioningBehavior) {
+        this.internal.unregisterFailsafeListener = this.callback(function (this: CommissioningServer) {
             failsafe.construction.change.off(listener);
             this.internal.unregisterFailsafeListener = undefined;
         });
@@ -185,7 +183,8 @@ export class CommissioningBehavior extends Behavior {
     }
 
     /**
-     * The server invokes this method when the node is active but not yet commissioned.
+     * The server invokes this method when the node is active but not yet commissioned unless you set
+     * {@link CommissioningServer.State#enabled} to false.
      *
      * An uncommissioned node is not yet associated with fabrics.  It cannot be used until commissioned by a controller.
      *
@@ -216,7 +215,7 @@ export class CommissioningBehavior extends Behavior {
      */
     static pairingCodesFor(node: Endpoint) {
         const bi = node.stateOf(BasicInformationBehavior);
-        const comm = node.stateOf(CommissioningBehavior);
+        const comm = node.stateOf(CommissioningServer);
         const net = node.stateOf(NetworkServer);
 
         const qrPairingCode = QrPairingCodeCodec.encode([
@@ -254,9 +253,11 @@ export class CommissioningBehavior extends Behavior {
     });
 
     #nodeOnline() {
-        const fabrics = this.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager).fabrics;
         if (!fabrics.length) {
-            this.initiateCommissioning();
+            if (this.state.enabled) {
+                this.initiateCommissioning();
+            }
         } else {
             const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
             fabrics.forEach(
@@ -272,7 +273,7 @@ export class CommissioningBehavior extends Behavior {
     }
 }
 
-export namespace CommissioningBehavior {
+export namespace CommissioningServer {
     export interface PairingCodes {
         manualPairingCode: string;
         qrPairingCode: string;
@@ -282,7 +283,8 @@ export namespace CommissioningBehavior {
         unregisterFailsafeListener?: () => void = undefined;
     }
 
-    export class State implements CommissioningOptions {
+    export class State {
+        enabled?: boolean;
         commissioned = false;
         fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
         passcode = -1;
@@ -294,15 +296,16 @@ export namespace CommissioningBehavior {
         [Val.properties](endpoint: Endpoint) {
             return {
                 get pairingCodes() {
-                    return CommissioningBehavior.pairingCodesFor(endpoint);
+                    return CommissioningServer.pairingCodesFor(endpoint);
                 },
             };
         }
     }
 
     export class Events extends EventEmitter {
-        commissioned = Observable<[session: ActionContext]>();
-        decommissioned = Observable<[session: ActionContext]>();
+        commissioned = Observable<[context: ActionContext]>();
+        decommissioned = Observable<[context: ActionContext]>();
         fabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
+        enabled$Changed = AsyncObservable<[context: ActionContext]>();
     }
 }

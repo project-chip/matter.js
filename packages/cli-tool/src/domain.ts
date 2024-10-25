@@ -5,11 +5,20 @@
  */
 
 import { BadCommandError, IncompleteError, NotACommandError, NotADirectoryError, NotFoundError } from "#errors.js";
-import { Environment, InternalError, MaybePromise } from "#general";
+import {
+    CancelablePromise,
+    Diagnostic,
+    Environment,
+    InternalError,
+    LogFormat,
+    MaybePromise,
+    Observable,
+} from "#general";
 import { bin, globals as defaultGlobals } from "#globals.js";
 import { Location, undefinedValue } from "#location.js";
 import { parseInput } from "#parser.js";
 import { Directory } from "#stat.js";
+import { ServerNode } from "@matter/node";
 import colors from "ansi-colors";
 import { inspect } from "util";
 import { createContext, runInContext, RunningCodeOptions } from "vm";
@@ -17,6 +26,19 @@ import { createContext, runInContext, RunningCodeOptions } from "vm";
 export interface TextWriter {
     (...text: string[]): void;
 }
+
+const GLOBALS: Record<string, string> = {
+    general: "@matter/general",
+    tools: "@matter/tools",
+    protocol: "@matter/protocol",
+    node: "@matter/node",
+    types: "@matter/types",
+    model: "@matter/model",
+    clusters: "@matter/types/clusters",
+    behaviors: "@matter/node/behaviors",
+    endpoints: "@matter/node/endpoints",
+    devices: "@matter/node/devices",
+};
 
 /**
  * Interfaces {@link Domain} with other components.
@@ -39,12 +61,18 @@ export interface Domain extends DomainContext {
     execute(input: string): Promise<unknown>;
     searchPathFor(name: string): Promise<Location>;
     inspect(what: unknown): string;
+    displayError(cause: unknown, prefix?: string): void;
+    displayHint(message: string): void;
+    interrupt(): void;
+    interrupted: Observable<[], false | void>;
+    globals: Record<string, unknown>;
+    globalsLoaded: Promise<void>;
 }
 
 /**
  * Maintains state and executes commands.
  */
-export function Domain(context: DomainContext): Domain {
+export async function Domain(context: DomainContext): Promise<Domain> {
     const hiddenGlobals = Object.keys(globalThis);
 
     const globals: Record<string, unknown> = Object.defineProperties(
@@ -61,6 +89,10 @@ export function Domain(context: DomainContext): Domain {
         },
     );
 
+    let softInterrupted = false;
+    let cancelEval: undefined | (() => void);
+    let discardEval: undefined | (() => void);
+
     Object.defineProperty(globals.bin, "domain", {
         get() {
             return domain;
@@ -70,6 +102,10 @@ export function Domain(context: DomainContext): Domain {
     });
 
     globals.global = globals.globalThis = globals;
+
+    const defaultNode = new ServerNode();
+    await defaultNode.construction;
+    globals[defaultNode.id] = defaultNode;
 
     const domain: Domain = {
         isDomain: true,
@@ -103,55 +139,7 @@ export function Domain(context: DomainContext): Domain {
             undefined,
         ),
 
-        async execute(inputStr: string) {
-            const input = parseInput(inputStr);
-
-            switch (input.kind) {
-                case "empty":
-                    return;
-
-                case "incomplete":
-                    throw new IncompleteError(input.error);
-
-                case "command":
-                    break;
-
-                case "statement":
-                    return await evaluate(input.js);
-
-                default:
-                    throw new InternalError(`Unknown internal command type ${(input as any).kind}`);
-            }
-
-            const { name, args } = input;
-
-            const location = await this.searchPathFor(name);
-
-            const fn = location?.definition;
-
-            if (location === undefined || fn === undefined) {
-                throw new NotACommandError(name);
-            }
-
-            if (typeof fn !== "function") {
-                if (args.length) {
-                    // If there are arguments it must be a call; otherwise it's just inspection
-                    throw new BadCommandError(name);
-                }
-                return fn;
-            }
-
-            const argvals = args.map(arg => {
-                return evaluate(arg.js, {
-                    lineOffset: arg.line - 1,
-                    columnOffset: arg.column,
-                });
-            });
-
-            const scope = location.parent?.definition ?? globals;
-
-            return fn.apply(scope, argvals);
-        },
+        execute,
 
         async searchPathFor(name: string) {
             let location;
@@ -180,7 +168,61 @@ export function Domain(context: DomainContext): Domain {
             if (value === undefinedValue) {
                 return colors.dim("(undefined)");
             }
+
+            if (
+                typeof value === "object" &&
+                value !== null &&
+                (Diagnostic.value in value || Diagnostic.presentation in value || value instanceof Error)
+            ) {
+                return LogFormat[colors.enabled ? "ansi" : "plain"](value);
+            }
+
             return inspect(value, false, 1, this.colorize);
+        },
+
+        displayError(cause: unknown, prefix?: string) {
+            const formatted = this.inspect(cause);
+
+            if (prefix) {
+                prefix = colors.dim(`${prefix}: `);
+            } else {
+                prefix = "";
+            }
+
+            this.err(`${prefix}${formatted}\n`);
+        },
+
+        displayHint(message: string) {
+            this.err(`${colors.dim(colors.whiteBright(message))}\n`);
+        },
+
+        interrupt() {
+            if (this.interrupted.emit() === false) {
+                softInterrupted = false;
+                return;
+            }
+
+            if (cancelEval) {
+                cancelEval();
+                cancelEval = undefined;
+                softInterrupted = false;
+            } else if (discardEval) {
+                discardEval();
+                discardEval = undefined;
+                softInterrupted = false;
+                this.displayHint("Ignoring your command (it may continue running)");
+            } else if (softInterrupted) {
+                if (this.exitHandler) {
+                    MaybePromise.catch(this.exitHandler.bind(this), cause =>
+                        this.displayError(cause, "Error triggered in exit handler"),
+                    );
+                } else {
+                    this.err(colors.red("Cannot abort process because there is no exit handler"));
+                }
+            } else {
+                this.displayHint("Press control-c again to exit");
+                softInterrupted = true;
+            }
         },
 
         get description() {
@@ -206,7 +248,18 @@ export function Domain(context: DomainContext): Domain {
         get env() {
             return context.env;
         },
+
+        interrupted: Observable(),
+
+        globals,
+        globalsLoaded: undefined as unknown as Promise<void>,
     };
+
+    domain.globalsLoaded = loadGlobals(domain);
+
+    if (!domain.env.vars.has("home")) {
+        domain.env.vars.set("home", `/${defaultNode.id}`);
+    }
 
     const vmContext = createContext(
         new Proxy(
@@ -214,7 +267,11 @@ export function Domain(context: DomainContext): Domain {
             {
                 get(_target, key, _receiver) {
                     if (key in (domain.location.definition as {})) {
-                        return (domain.location.definition as any)[key];
+                        let result = (domain.location.definition as any)[key];
+                        if (typeof result === "function") {
+                            result = result.bind(domain.location.definition);
+                        }
+                        return result;
                     }
 
                     return globals[key as any];
@@ -274,7 +331,114 @@ export function Domain(context: DomainContext): Domain {
         ),
     );
 
+    const cwd = domain.env.vars.string("cwd");
+    if (cwd !== undefined) {
+        try {
+            domain.location = await domain.location.at(cwd);
+        } catch (e) {
+            if (!(e instanceof NotFoundError) && !(e instanceof NotADirectoryError)) {
+                throw e;
+            }
+        }
+    }
+
+    domain.env.runtime.interrupt = () => {
+        domain.interrupt();
+        return true;
+    };
+
     return domain;
+
+    async function execute(inputStr: string) {
+        softInterrupted = false;
+
+        const input = parseInput(inputStr);
+
+        switch (input.kind) {
+            case "empty":
+                return;
+
+            case "incomplete":
+                throw new IncompleteError(input.error);
+
+            case "command":
+                break;
+
+            case "statement":
+                return await interruptablePromiseOf(evaluate(input.js));
+
+            default:
+                throw new InternalError(`Unknown internal command type ${(input as any).kind}`);
+        }
+
+        const { name, args } = input;
+
+        const location = await interruptablePromiseOf(domain.searchPathFor(name));
+
+        const fn = location?.definition;
+
+        if (location === undefined || fn === undefined) {
+            throw new NotACommandError(name);
+        }
+
+        if (typeof fn !== "function") {
+            if (args.length) {
+                // If there are arguments it must be a call; otherwise it's just inspection
+                throw new BadCommandError(name);
+            }
+            return fn;
+        }
+
+        const argvals = args.map(arg => {
+            return evaluate(arg.js, {
+                lineOffset: arg.line - 1,
+                columnOffset: arg.column,
+            });
+        });
+
+        const scope = location.parent?.definition ?? globals;
+
+        return await interruptablePromiseOf(fn.apply(scope, argvals));
+
+        async function interruptablePromiseOf<T>(result: MaybePromise<T>) {
+            if (!MaybePromise.is(result)) {
+                return result;
+            }
+
+            // Do not await Construction or Observable
+            if ("emit" in result || "change" in result) {
+                return result;
+            }
+
+            try {
+                if (CancelablePromise.is(result)) {
+                    cancelEval = result.cancel.bind(result);
+                }
+
+                let isDiscarded = false;
+                const discarded = new Promise<void>(resolve => {
+                    discardEval = () => {
+                        isDiscarded = true;
+                        resolve();
+                    };
+                });
+
+                const returnValue = await Promise.race([discarded, result]);
+
+                if (isDiscarded) {
+                    result.then(
+                        () => domain.displayHint("Ignored command has finished"),
+                        cause => domain.displayError(cause, "Ignored command crashed"),
+                    );
+                }
+
+                return returnValue;
+            } finally {
+                cancelEval = discardEval = undefined;
+                softInterrupted = false;
+            }
+        }
+    }
 
     function evaluate(js: string, options: RunningCodeOptions = {}) {
         return runInContext(js, vmContext, {
@@ -284,4 +448,22 @@ export function Domain(context: DomainContext): Domain {
             ...options,
         });
     }
+}
+
+/**
+ * We load the global packages dynamically, attempting to get interpreter to start faster.
+ */
+export async function loadGlobals(domain: Domain) {
+    const loads = Array<Promise<void>>();
+
+    for (const name in GLOBALS) {
+        loads.push(
+            import(GLOBALS[name]).then(
+                module => (domain.globals[name] = module),
+                error => domain.displayError(`Error loading ${GLOBALS[name]}: ${error.message}`),
+            ),
+        );
+    }
+
+    await Promise.allSettled(loads);
 }

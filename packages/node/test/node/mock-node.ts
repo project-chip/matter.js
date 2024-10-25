@@ -21,7 +21,8 @@ import { EndpointNumber } from "#types";
 
 export class MockPartInitializer extends EndpointInitializer {
     #nextId = 1;
-    override initializeDescendent(endpoint: Endpoint) {
+
+    override initializeDescendant(endpoint: Endpoint) {
         if (!endpoint.lifecycle.hasNumber) {
             endpoint.number = EndpointNumber(this.#nextId++);
         }
@@ -29,6 +30,8 @@ export class MockPartInitializer extends EndpointInitializer {
             endpoint.id = endpoint.number.toString();
         }
     }
+
+    async eraseDescendant(_endpoint: Endpoint) {}
 
     createBacking(endpoint: Endpoint, behavior: Behavior.Type) {
         return new ServerBehaviorBacking(endpoint, behavior);

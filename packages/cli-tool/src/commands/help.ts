@@ -26,9 +26,9 @@ Command({
 
         if (path === undefined) {
             const HELP = `This tool allows you to interact with matter.js and your local Matter environment.
-This tool understands both JavaScript and a shell-like syntax that maps "commands" to functions.  Type ${quote("ls bin")} to see commands you can always use.  Type ${quote("help <name>")} for help with a specific command.
+This tool understands both JavaScript and a shell-like syntax that maps "commands" to functions.  Type ${quote("ls /bin")} to see commands you can always use.  Type ${quote("help <name>")} for help with a specific command.
 The current path appears in the prompt.  This points to the object this tool uses to find commands.  It is also the "global" object for any JavaScript statements you enter.
-You can change the current path using ${quote("cd <path>")}.  Paths work like you would expect, including ${quote("/")}, ${quote(".")} and ${quote("..")}.`;
+You can change the current path using ${quote("cd <path>")}.  Paths work like you would expect, including ${quote("/")}, ${quote(".")} and ${quote("..")}.\n`;
 
             this.out(
                 "\nWelcome to ",
@@ -44,7 +44,7 @@ You can change the current path using ${quote("cd <path>")}.  Paths work like yo
         const what = await this.searchPathFor(pathStr);
 
         if (what.kind !== "command") {
-            this.out(`${path} is a ${what} but we can't tell you much more about it.`);
+            this.out(`${path} is a ${what} but we can't tell you much more about it.\n\n`);
             return;
         }
 
@@ -56,15 +56,23 @@ You can change the current path using ${quote("cd <path>")}.  Paths work like yo
 
         let ast;
         try {
-            ast = parse(`${what.definition}`, { ecmaVersion: "latest" }).body[0];
+            ast = parse(`${what.definition}`, { ecmaVersion: "latest", checkPrivateFields: false }).body[0];
         } catch (e) {
             if (!(e instanceof SyntaxError)) {
                 throw e;
             }
+            try {
+                ast = parse(`function ${what.definition}`, { ecmaVersion: "latest", checkPrivateFields: false })
+                    .body[0];
+            } catch (e) {
+                if (!(e instanceof SyntaxError)) {
+                    throw e;
+                }
+            }
         }
 
         if (ast?.type !== "FunctionDeclaration") {
-            this.out(`\nWell, ${colors.blue(pathStr)} is a function but we can't seem to parse it.`);
+            this.out(`\nWell, ${colors.blue(pathStr)} is a function but we can't seem to parse it.\n\n`);
             return;
         }
 
@@ -74,7 +82,7 @@ You can change the current path using ${quote("cd <path>")}.  Paths work like yo
         }
 
         this.out(
-            `\nUsage: ${usage.join(" ")}\n\n${colors.blue(pathStr)} is a function that does not provide additional usage details.\n`,
+            `\nUsage: ${usage.join(" ")}\n\n${colors.blue(pathStr)} is a function that does not provide additional usage details.\n\n`,
         );
     },
 });

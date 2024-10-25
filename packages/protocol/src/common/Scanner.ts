@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, ChannelType, Environment, Environmental, ServerAddress, ServerAddressIp } from "#general";
+import { BasicSet, ChannelType, Environment, Environmental, Lifespan, ServerAddress, ServerAddressIp } from "#general";
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
@@ -47,10 +47,11 @@ export type DiscoveryData = {
     ICD?: number;
 };
 
-export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData & {
-    /** The device's addresses IP/port pairs */
-    addresses: SA[];
-};
+export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData &
+    Partial<Lifespan> & {
+        /** The device's addresses IP/port pairs */
+        addresses: SA[];
+    };
 
 export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> =
     D extends DiscoverableDevice<infer SA> ? SA : never;
@@ -103,7 +104,6 @@ export type CommissionableDeviceIdentifiers =
       }
     | {
           /** Pass empty object to discover any commissionable device. */
-          [K in any]: never; // aka "empty object" for just discovering any commisionable device
       };
 
 export interface Scanner {
@@ -145,6 +145,7 @@ export interface Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds?: number,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]>;
 
     /** Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries. */

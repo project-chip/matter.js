@@ -18,6 +18,7 @@ import {
     NetInterfaceSet,
     NoResponseTimeoutError,
     ServerAddress,
+    serverAddressToString,
 } from "#general";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
@@ -34,15 +35,39 @@ import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
 const logger = Logger.get("PeerCommissioner");
 
 /**
- * Options needed to commission a new node
+ * General commissioning options.
  */
-export interface PeerCommissioningOptions extends Partial<ControllerCommissioningFlowOptions> {
+export interface CommissioningOptions extends Partial<ControllerCommissioningFlowOptions> {
     /** The fabric into which to commission. */
     fabric: Fabric;
 
     /** The node ID to assign (the commissioner assigns a random node ID if omitted) */
     nodeId?: NodeId;
 
+    /** Passcode to use for commissioning. */
+    passcode: number;
+
+    /**
+     * Commissioning completion callback
+     *
+     * This optional callback allows the caller to complete commissioning once PASE commissioning completes.  If it does
+     * not throw, the commissioner considers commissioning complete.
+     */
+    finalizeCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
+}
+
+/**
+ * Configuration for commissioning a previously discovered node.
+ */
+export interface LocatedNodeCommissioningOptions extends CommissioningOptions {
+    addresses: ServerAddress[];
+    discoveryData?: DiscoveryData;
+}
+
+/**
+ * Configuration for performing discovery + commissioning in one step.
+ */
+export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
     /** Discovery related options. */
     discovery: (
         | {
@@ -76,17 +101,6 @@ export interface PeerCommissioningOptions extends Partial<ControllerCommissionin
         /** Timeout in seconds for the discovery process. Default: 30 seconds */
         timeoutSeconds?: number;
     };
-
-    /** Passcode to use for commissioning. */
-    passcode: number;
-
-    /**
-     * Commissioning completion callback
-     *
-     * This optional callback allows the caller to complete commissioning once PASE commissioning completes.  If it does
-     * not throw, the commissioner considers commissioning complete.
-     */
-    performCaseCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
 }
 
 /**
@@ -127,19 +141,40 @@ export class ControllerCommissioner {
     }
 
     /**
-     * Commission a node.
+     * Commmission a previously discovered node.
      */
-    async commission(options: PeerCommissioningOptions): Promise<PeerAddress> {
+    async commission(options: LocatedNodeCommissioningOptions): Promise<PeerAddress> {
+        const { passcode, addresses, discoveryData } = options;
+
+        // Prioritize UDP
+        addresses.sort(a => (a.type === "udp" ? -1 : 1));
+
+        // Attempt a connection on each known address
+        let channel: MessageChannel | undefined;
+        for (const address of addresses) {
+            try {
+                channel = await this.#initializePaseSecureChannel(address, passcode, discoveryData);
+            } catch (e) {
+                NoResponseTimeoutError.accept(e);
+                console.warn(`Could not connect to ${serverAddressToString(address)}: ${e.message}`);
+            }
+        }
+
+        if (channel === undefined) {
+            throw new NoResponseTimeoutError("Could not connect to device");
+        }
+
+        return await this.#commissionConnectedNode(channel, options, discoveryData);
+    }
+
+    /**
+     * Commission a node with discovery.
+     */
+    async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
         const {
             discovery: { timeoutSeconds = 30 },
             passcode,
         } = options;
-
-        const commissioningOptions = {
-            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
-            regulatoryCountryCode: "XX",
-            ...options,
-        };
 
         const commissionableDevice =
             "commissionableDevice" in options.discovery ? options.discovery.commissionableDevice : undefined;
@@ -215,7 +250,7 @@ export class ControllerCommissioner {
             paseSecureChannel = result;
         }
 
-        return await this.#commissionDiscoveredNode(paseSecureChannel, commissioningOptions, discoveryData);
+        return await this.#commissionConnectedNode(paseSecureChannel, options, discoveryData);
     }
 
     /**
@@ -226,7 +261,7 @@ export class ControllerCommissioner {
     async #initializePaseSecureChannel(
         address: ServerAddress,
         passcode: number,
-        device?: CommissionableDevice,
+        device?: DiscoveryData,
     ): Promise<MessageChannel> {
         let paseChannel: Channel<Uint8Array>;
         if (device !== undefined) {
@@ -295,12 +330,18 @@ export class ControllerCommissioner {
      * Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
      * success.
      */
-    async #commissionDiscoveredNode(
+    async #commissionConnectedNode(
         paseSecureMessageChannel: MessageChannel,
-        commissioningOptions: PeerCommissioningOptions & ControllerCommissioningFlowOptions,
+        options: CommissioningOptions,
         discoveryData?: DiscoveryData,
     ): Promise<PeerAddress> {
-        const { fabric, performCaseCommissioning } = commissioningOptions;
+        const commissioningOptions = {
+            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+            regulatoryCountryCode: "XX",
+            ...options,
+        };
+
+        const { fabric, finalizeCommissioning: performCaseCommissioning } = commissioningOptions;
 
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here

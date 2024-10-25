@@ -61,7 +61,7 @@ export class DeviceAdvertiser {
         );
 
         this.#observers.on(this.#context.fabrics.events.deleted, async () => {
-            if (this.#context.fabrics.getFabrics().length === 0) {
+            if (this.#context.fabrics.length === 0) {
                 // Last fabric got removed, so expire all announcements
                 await this.#exitOperationalMode();
             }
@@ -148,7 +148,7 @@ export class DeviceAdvertiser {
             }
         }
 
-        const fabrics = this.#context.fabrics.getFabrics();
+        const fabrics = this.#context.fabrics;
 
         if (fabrics.length) {
             let fabricsWithoutSessions = 0;
@@ -160,7 +160,7 @@ export class DeviceAdvertiser {
                 }
             }
             for (const broadcaster of this.#broadcasters) {
-                await broadcaster.setFabrics(fabrics);
+                await broadcaster.setFabrics(fabrics.fabrics);
                 if (fabricsWithoutSessions > 0 || this.#commissioningMode !== CommissioningMode.NotCommissioning) {
                     await broadcaster.announce();
                 }

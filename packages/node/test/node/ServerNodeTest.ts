@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningBehavior } from "#behavior/system/commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { DescriptorBehavior } from "#behaviors/descriptor";
 import { PumpConfigurationAndControlServer } from "#behaviors/pump-configuration-and-control";
@@ -341,7 +341,7 @@ describe("ServerNode", () => {
             await node.cancel();
         }
 
-        await node.factoryReset();
+        await node.erase();
 
         // Confirm previous online state is resumed
         expect(node.lifecycle.isOnline).equals(mode === "online");
@@ -350,7 +350,7 @@ describe("ServerNode", () => {
         expect(node.stateOf(BasicInformationBehavior).vendorName).equals("Matter.js Test Vendor");
 
         // Confirm pairing codes are available
-        const pairingCodes = node.stateOf(CommissioningBehavior).pairingCodes;
+        const pairingCodes = node.stateOf(CommissioningServer).pairingCodes;
         expect(typeof pairingCodes).equals("object");
         expect(typeof pairingCodes.manualPairingCode).equals("string");
 
@@ -552,7 +552,7 @@ async function commission(existingNode?: MockServerNode, number = 0) {
     const { node } = await almostCommission(existingNode, number);
 
     // Do not reuse session from initial commissioning because we must now move from CASE to PASE
-    const fabric = node.env.get(FabricManager).getFabrics()[number];
+    const fabric = node.env.get(FabricManager).fabrics[number];
     const contextOptions = {
         exchange: await node.createExchange({
             fabric,

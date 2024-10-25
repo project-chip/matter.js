@@ -15,14 +15,18 @@ export abstract class EndpointInitializer {
     /**
      * Initialize a {@link Endpoint}.
      */
-    initializeDescendent(_endpoint: Endpoint) {}
+    initializeDescendant(_endpoint: Endpoint) {}
+
+    /**
+     * Erase storage for a {@link Endpoint}.
+     */
+    abstract eraseDescendant(_endpoint: Endpoint): Promise<void>;
 
     /**
      * Create backing for a behavior of a descendent.
      *
      * @param endpoint the {@link Endpoint} the behavior belongs to
      * @param type the {@link Behavior} type
-     * @param defaults default values for behavior state
      * @returns a new {@link BehaviorBacking}
      */
     abstract createBacking(endpoint: Endpoint, behavior: Behavior.Type): BehaviorBacking;

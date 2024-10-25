@@ -30,7 +30,8 @@ import {
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
-import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { CommissioningOptions } from "@matter/types";
+import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
@@ -271,27 +272,39 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
 
-        // Monitor CommissioningBehavior to end "uncommissioned" mode when we are commissioned
-        this.#observers.on(this.owner.eventsOf(CommissioningBehavior).commissioned, this.endUncommissionedMode);
+        // Monitor CommissioningServer to end "uncommissioned" mode when we are commissioned
+        this.#observers.on(this.owner.eventsOf(CommissioningServer).commissioned, this.endUncommissionedMode);
 
         // Ensure the environment will convey the commissioning configuration to the DeviceCommissioner
         if (!env.has(CommissioningConfigProvider)) {
+            // When first going online, enable commissioning by controllers unless we ourselves are configured as a
+            // controller
+            if (owner.state.commissioning.enabled === undefined) {
+                await owner.set({
+                    commissioning: { enabled: true },
+                });
+            }
+
+            // Configure the DeviceCommissioner
             env.set(
                 CommissioningConfigProvider,
                 new (class extends CommissioningConfigProvider {
                     get values() {
-                        return {
+                        const config = {
                             ...owner.state.commissioning,
                             productDescription: owner.state.productDescription,
                             ble: !!owner.state.network.ble,
                         };
+
+                        return config as CommissioningOptions.Configuration;
                     }
                 })(),
             );
         }
 
-        // Initialize the DeviceCommissioner
-        env.get(DeviceCommissioner);
+        // Ensure there is a device commissioner if (but only if) commissioning is enabled
+        await this.configureCommissioning();
+        this.#observers.on(this.owner.eventsOf(CommissioningServer).enabled$Changed, this.configureCommissioning);
 
         await this.openAdvertisementWindow();
     }
@@ -311,5 +324,15 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override blockNewActivity() {
         this.#interactionServer?.blockNewActivity();
+    }
+
+    protected async configureCommissioning() {
+        if (this.owner.state.commissioning.enabled) {
+            // Ensure a DeviceCommissioner is active
+            this.owner.env.get(DeviceCommissioner);
+        } else if (this.owner.env.has(DeviceCommissioner)) {
+            // Ensure no DeviceCommissioner is active
+            await this.owner.env.close(DeviceCommissioner);
+        }
     }
 }

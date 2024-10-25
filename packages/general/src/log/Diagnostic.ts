@@ -339,6 +339,9 @@ function messageAndStackFor(error: any, parentStack?: string[]) {
     let message: string | undefined;
     let rawStack: string | undefined;
     if (error !== undefined && error !== null) {
+        if (typeof error === "string" || typeof error === "number") {
+            return { message: `${error}` };
+        }
         if ("message" in error) {
             ({ message, stack: rawStack } = error);
         } else if (error.message) {

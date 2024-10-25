@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { MaybePromise } from "#general";
+import type { ClientNode } from "#node/ClientNode.js";
+import { ServerNode } from "#node/ServerNode.js";
+import { Discovery, DiscoveryError } from "./Discovery.js";
+
+/**
+ * Locates a single node and returns it.
+ *
+ * Throws an error if the node is not located.
+ */
+export class InstanceDiscovery extends Discovery<ClientNode> {
+    #result?: ClientNode;
+
+    constructor(owner: ServerNode, options?: Discovery.Options) {
+        super(owner, options);
+    }
+
+    protected onDiscovered(node: ClientNode) {
+        this.#result = node;
+        this.cancel();
+    }
+
+    protected onComplete(): MaybePromise<ClientNode> {
+        if (this.#result === undefined) {
+            throw new DiscoveryError(`${this} failed: Node not found`);
+        }
+        return this.#result;
+    }
+}
