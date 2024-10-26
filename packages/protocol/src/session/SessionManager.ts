@@ -545,6 +545,7 @@ export class SessionManager {
     async clear() {
         await this.close();
         await this.#context.storage.clear();
+        this.#resumptionRecords.clear();
     }
 
     updateAllSubscriptions() {
