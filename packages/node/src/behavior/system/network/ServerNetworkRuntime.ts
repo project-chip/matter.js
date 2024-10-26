@@ -318,8 +318,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.env.close(SecureChannelProtocol);
         await this.owner.env.close(TransportInterfaceSet);
 
-        await this.owner.prepareRuntimeShutdown();
-
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
     }
