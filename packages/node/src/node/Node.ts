@@ -64,6 +64,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         this.lifecycle.offline.on(() => {
             this.statusUpdate("is offline");
         });
+
+        this.lifecycle.goingOffline.on(() => {
+            this.statusUpdate("going offline");
+        });
     }
 
     override get env() {
@@ -123,7 +127,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             return;
         }
 
-        this.statusUpdate("going offline");
+        await this.act(agent => this.lifecycle.goingOffline.emit(agent.context));
         await this.#runtime?.close();
         this.#runtime = undefined;
     }

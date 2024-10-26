@@ -63,6 +63,9 @@ export class BasicInformationServer extends Base {
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);
         }
+        if (lifecycle.goingOffline !== undefined) {
+            this.reactTo(lifecycle.goingOffline, this.#goingOffline);
+        }
 
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
             // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
@@ -84,15 +87,15 @@ export class BasicInformationServer extends Base {
         }
     }
 
-    override [Symbol.asyncDispose]() {
-        this.events.shutDown?.emit(undefined, this.context);
-    }
-
     #online() {
         this.events.startUp.emit({ softwareVersion: this.state.softwareVersion }, this.context);
 
         const fabricManager = this.env.get(FabricManager);
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
+    }
+
+    #goingOffline() {
+        this.events.shutDown?.emit(undefined, this.context);
     }
 
     #emitReachableChange(reachable: boolean) {
