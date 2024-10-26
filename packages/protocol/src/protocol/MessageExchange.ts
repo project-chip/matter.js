@@ -645,7 +645,7 @@ export class MessageExchange {
             maxResubmissionTime += this.#getResubmissionBackOffTime(i);
         }
         this.#closeTimer = Time.getTimer(
-            "Message exchange cleanup",
+            `Message exchange cleanup ${this.session.name} / ${this.#exchangeId}`,
             maxResubmissionTime,
             async () => await this.#close(),
         ).start();
