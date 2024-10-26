@@ -170,140 +170,136 @@ export class DeviceInformation {
     }
 
     async enhanceDeviceDetailsFromRemote(interactionClient: InteractionClient) {
-        try {
-            const readData = await interactionClient.getMultipleAttributes({
-                attributes: [
-                    { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id },
-                    {
-                        endpointId: EndpointNumber(0),
-                        clusterId: Descriptor.Cluster.id,
-                        attributeId: Descriptor.Cluster.attributes.serverList.id,
-                    },
-                    {
-                        clusterId: NetworkCommissioning.Cluster.id,
-                        attributeId: NetworkCommissioning.Complete.attributes.featureMap.id,
-                    },
-                    {
-                        clusterId: NetworkCommissioning.Cluster.id,
-                        attributeId: NetworkCommissioning.Complete.attributes.networks.id,
-                    },
-                    {
-                        clusterId: NetworkCommissioning.Cluster.id,
-                        attributeId: NetworkCommissioning.Complete.attributes.interfaceEnabled.id,
-                    },
-                    {
-                        clusterId: PowerSource.Cluster.id,
-                        attributeId: PowerSource.Cluster.attributes.featureMap.id,
-                    },
-                    {
-                        clusterId: PowerSource.Cluster.id,
-                        attributeId: PowerSource.Cluster.attributes.status.id,
-                    },
-                    {
-                        endpointId: EndpointNumber(0),
-                        clusterId: ThreadNetworkDiagnostics.Cluster.id,
-                        attributeId: ThreadNetworkDiagnostics.Cluster.attributes.routingRole.id,
-                    },
-                ],
-            });
-            const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-            const deviceData: DeviceMetaInformation = {
-                ethernetConnected: false,
-                wifiConnected: false,
-                threadConnected: false,
-                rootEndpointServerList: [] as number[],
-                isBatteryPowered: false,
-                isIntermittentlyConnected: false,
-                isThreadSleepyEndDevice: false,
-                dataRevision: DEVICE_DATA_REVISION,
-            };
-            const networkData = new Map<
-                EndpointNumber,
+        const readData = await interactionClient.getMultipleAttributes({
+            attributes: [
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id },
                 {
-                    type?: TypeFromPartialBitSchema<typeof NetworkCommissioning.Complete.features>;
-                    enabled?: boolean;
-                    connected?: boolean;
-                }
-            >();
-            const powerSourceData = new Map<
-                EndpointNumber,
-                { features?: TypeFromPartialBitSchema<typeof PowerSource.Complete.features>; status?: number }
-            >();
-            for (const {
-                path: { endpointId, clusterId, attributeId, attributeName },
-                value,
-            } of readData) {
-                switch (clusterId) {
-                    case BasicInformation.Cluster.id:
-                        if (!GlobalAttributeKeys.includes(attributeName)) {
-                            basicInformationData[attributeName] = value;
-                        }
-                        break;
-                    case Descriptor.Cluster.id:
-                        if (attributeId === Descriptor.Cluster.attributes.serverList.id) {
-                            deviceData.rootEndpointServerList = value;
-                            if (value.includes(IcdManagement.Cluster.id)) {
-                                deviceData.isIntermittentlyConnected = true;
-                            }
-                        }
-                        break;
-                    case NetworkCommissioning.Cluster.id:
-                        const networkEntry = networkData.get(endpointId) ?? {};
-                        if (attributeId === NetworkCommissioning.Complete.attributes.featureMap.id) {
-                            networkEntry.type = value;
-                        } else if (attributeId === NetworkCommissioning.Complete.attributes.interfaceEnabled.id) {
-                            networkEntry.enabled = value;
-                        } else if (attributeId === NetworkCommissioning.Complete.attributes.networks.id) {
-                            networkEntry.connected = (
-                                value as TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[]
-                            ).some(network => network.connected);
-                        }
-                        networkData.set(endpointId, networkEntry);
-                        break;
-                    case PowerSource.Cluster.id:
-                        const powerSourceEntry = powerSourceData.get(endpointId) ?? {};
-                        if (attributeId === PowerSource.Cluster.attributes.featureMap.id) {
-                            powerSourceEntry.features = value;
-                        } else if (attributeId === PowerSource.Cluster.attributes.status.id) {
-                            powerSourceEntry.status = value;
-                        }
-                        powerSourceData.set(endpointId, powerSourceEntry);
-                        break;
-                    case ThreadNetworkDiagnostics.Cluster.id:
-                        if (attributeId === ThreadNetworkDiagnostics.Cluster.attributes.routingRole.id) {
-                            if (value === ThreadNetworkDiagnostics.RoutingRole.SleepyEndDevice) {
-                                deviceData.isThreadSleepyEndDevice = true;
-                            }
-                        }
-                        break;
-                }
+                    endpointId: EndpointNumber(0),
+                    clusterId: Descriptor.Cluster.id,
+                    attributeId: Descriptor.Cluster.attributes.serverList.id,
+                },
+                {
+                    clusterId: NetworkCommissioning.Cluster.id,
+                    attributeId: NetworkCommissioning.Complete.attributes.featureMap.id,
+                },
+                {
+                    clusterId: NetworkCommissioning.Cluster.id,
+                    attributeId: NetworkCommissioning.Complete.attributes.networks.id,
+                },
+                {
+                    clusterId: NetworkCommissioning.Cluster.id,
+                    attributeId: NetworkCommissioning.Complete.attributes.interfaceEnabled.id,
+                },
+                {
+                    clusterId: PowerSource.Cluster.id,
+                    attributeId: PowerSource.Cluster.attributes.featureMap.id,
+                },
+                {
+                    clusterId: PowerSource.Cluster.id,
+                    attributeId: PowerSource.Cluster.attributes.status.id,
+                },
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ThreadNetworkDiagnostics.Cluster.id,
+                    attributeId: ThreadNetworkDiagnostics.Cluster.attributes.routingRole.id,
+                },
+            ],
+        });
+        const basicInformationData = {} as Record<string, SupportedStorageTypes>;
+        const deviceData: DeviceMetaInformation = {
+            ethernetConnected: false,
+            wifiConnected: false,
+            threadConnected: false,
+            rootEndpointServerList: [] as number[],
+            isBatteryPowered: false,
+            isIntermittentlyConnected: false,
+            isThreadSleepyEndDevice: false,
+            dataRevision: DEVICE_DATA_REVISION,
+        };
+        const networkData = new Map<
+            EndpointNumber,
+            {
+                type?: TypeFromPartialBitSchema<typeof NetworkCommissioning.Complete.features>;
+                enabled?: boolean;
+                connected?: boolean;
             }
-
-            if (networkData.size === 0) {
-                // No Network cluster, so Custom Network, assume ethernet for now
-                deviceData.ethernetConnected = true;
-            } else {
-                for (const { type, enabled, connected } of networkData.values()) {
-                    if (!type || !enabled || !connected) continue;
-                    if (type.ethernetNetworkInterface) {
-                        deviceData.ethernetConnected = true;
-                    } else if (type.wiFiNetworkInterface) {
-                        deviceData.wifiConnected = true;
-                    } else if (type.threadNetworkInterface) {
-                        deviceData.threadConnected = true;
+        >();
+        const powerSourceData = new Map<
+            EndpointNumber,
+            { features?: TypeFromPartialBitSchema<typeof PowerSource.Complete.features>; status?: number }
+        >();
+        for (const {
+            path: { endpointId, clusterId, attributeId, attributeName },
+            value,
+        } of readData) {
+            switch (clusterId) {
+                case BasicInformation.Cluster.id:
+                    if (!GlobalAttributeKeys.includes(attributeName)) {
+                        basicInformationData[attributeName] = value;
                     }
-                }
+                    break;
+                case Descriptor.Cluster.id:
+                    if (attributeId === Descriptor.Cluster.attributes.serverList.id) {
+                        deviceData.rootEndpointServerList = value;
+                        if (value.includes(IcdManagement.Cluster.id)) {
+                            deviceData.isIntermittentlyConnected = true;
+                        }
+                    }
+                    break;
+                case NetworkCommissioning.Cluster.id:
+                    const networkEntry = networkData.get(endpointId) ?? {};
+                    if (attributeId === NetworkCommissioning.Complete.attributes.featureMap.id) {
+                        networkEntry.type = value;
+                    } else if (attributeId === NetworkCommissioning.Complete.attributes.interfaceEnabled.id) {
+                        networkEntry.enabled = value;
+                    } else if (attributeId === NetworkCommissioning.Complete.attributes.networks.id) {
+                        networkEntry.connected = (
+                            value as TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[]
+                        ).some(network => network.connected);
+                    }
+                    networkData.set(endpointId, networkEntry);
+                    break;
+                case PowerSource.Cluster.id:
+                    const powerSourceEntry = powerSourceData.get(endpointId) ?? {};
+                    if (attributeId === PowerSource.Cluster.attributes.featureMap.id) {
+                        powerSourceEntry.features = value;
+                    } else if (attributeId === PowerSource.Cluster.attributes.status.id) {
+                        powerSourceEntry.status = value;
+                    }
+                    powerSourceData.set(endpointId, powerSourceEntry);
+                    break;
+                case ThreadNetworkDiagnostics.Cluster.id:
+                    if (attributeId === ThreadNetworkDiagnostics.Cluster.attributes.routingRole.id) {
+                        if (value === ThreadNetworkDiagnostics.RoutingRole.SleepyEndDevice) {
+                            deviceData.isThreadSleepyEndDevice = true;
+                        }
+                    }
+                    break;
             }
-            for (const { features, status } of powerSourceData.values()) {
-                if (features?.battery && status === PowerSource.PowerSourceStatus.Active) {
-                    deviceData.isBatteryPowered = true;
-                }
-            }
-            this.#basicInformation = basicInformationData;
-            this.#deviceMeta = deviceData;
-        } catch (error) {
-            logger.info(`Error while enhancing basic information for node ${this.nodeId}: ${error}`);
         }
+
+        if (networkData.size === 0) {
+            // No Network cluster, so Custom Network, assume ethernet for now
+            deviceData.ethernetConnected = true;
+        } else {
+            for (const { type, enabled, connected } of networkData.values()) {
+                if (!type || !enabled || !connected) continue;
+                if (type.ethernetNetworkInterface) {
+                    deviceData.ethernetConnected = true;
+                } else if (type.wiFiNetworkInterface) {
+                    deviceData.wifiConnected = true;
+                } else if (type.threadNetworkInterface) {
+                    deviceData.threadConnected = true;
+                }
+            }
+        }
+        for (const { features, status } of powerSourceData.values()) {
+            if (features?.battery && status === PowerSource.PowerSourceStatus.Active) {
+                deviceData.isBatteryPowered = true;
+            }
+        }
+        this.#basicInformation = basicInformationData;
+        this.#deviceMeta = deviceData;
     }
 
     determineSubscriptionParameters(options: {
