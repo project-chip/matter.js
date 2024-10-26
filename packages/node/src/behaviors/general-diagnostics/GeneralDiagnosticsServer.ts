@@ -65,13 +65,8 @@ export class GeneralDiagnosticsServer extends Base {
         }
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
-
-        if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online, { lock: true });
-        }
-        if (lifecycle.goingOffline !== undefined) {
-            this.reactTo(lifecycle.goingOffline, this.#goingOffline, { lock: true });
-        }
+        this.reactTo(lifecycle.online, this.#online, { lock: true });
+        this.reactTo(lifecycle.goingOffline, this.#goingOffline, { lock: true });
 
         if (this.events.activeHardwareFaults$Changed !== undefined) {
             this.reactTo(this.events.activeHardwareFaults$Changed, this.#triggerActiveHardwareFaultsChangedEvent);

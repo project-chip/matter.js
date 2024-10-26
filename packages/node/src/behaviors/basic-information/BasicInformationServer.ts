@@ -60,12 +60,8 @@ export class BasicInformationServer extends Base {
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
-        if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online);
-        }
-        if (lifecycle.goingOffline !== undefined) {
-            this.reactTo(lifecycle.goingOffline, this.#goingOffline);
-        }
+        this.reactTo(lifecycle.online, this.#online);
+        this.reactTo(lifecycle.goingOffline, this.#goingOffline);
 
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
             // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
