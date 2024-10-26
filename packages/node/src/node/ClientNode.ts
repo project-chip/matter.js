@@ -52,6 +52,8 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         throw new NotImplementedError();
     }
 
+    async prepareRuntimeShutdown() {}
+
     protected override get container() {
         return this.owner?.nodes;
     }

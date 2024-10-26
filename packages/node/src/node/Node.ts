@@ -149,6 +149,8 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      */
     protected abstract createRuntime(): NetworkRuntime;
 
+    abstract prepareRuntimeShutdown(): Promise<void>;
+
     get [RuntimeService.label]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];
     }
