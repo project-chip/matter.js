@@ -288,7 +288,7 @@ export class InteractionClient {
         );
         if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
             logger.debug(
-                `Using data version filters: ${dataVersionFilters
+                `Using DataVersionFilters: ${dataVersionFilters
                     .map(({ endpointId, clusterId, dataVersion }) => `${endpointId}/${clusterId}=${dataVersion}`)
                     .join(", ")}`,
             );
@@ -834,7 +834,7 @@ export class InteractionClient {
         );
         if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
             logger.debug(
-                `Using data version filters: ${dataVersionFilters
+                `Using DataVersionFilters: ${dataVersionFilters
                     .map(({ endpointId, clusterId, dataVersion }) => `${endpointId}/${clusterId}=${dataVersion}`)
                     .join(", ")}`,
             );
@@ -942,6 +942,7 @@ export class InteractionClient {
         };
         this.registerSubscriptionListener(subscriptionId, async dataReport => {
             await subscriptionListener({
+                ...dataReport,
                 attributeReports:
                     dataReport.attributeReports !== undefined
                         ? normalizeAndDecodeReadAttributeReport(dataReport.attributeReports)
