@@ -18,6 +18,14 @@ The examples provided by this repository show different use cases demonstrating 
 
 The different examples and what they do is described in the relevant README.md files in the respective directories.
 
+### Device Examples
+
+All examples that have a name starting with `device-` are examples for different types of matter devices. They show how to implement a device with different features and how to interact with it.  These can be paired by any ecosystem or controller that supports test devices.
+
+### Controller Examples
+
+All examples that have a name starting with `controller-` are examples for different types of matter controllers. They show how to implement a controller. These can pair any matter device.
+
 ## Installation
 
 ### From NPM
