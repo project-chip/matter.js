@@ -46,10 +46,7 @@ export class AccessControlServer extends AccessControlBehavior {
         }
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
-
-        if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online);
-        }
+        this.reactTo(lifecycle.online, this.#online);
     }
 
     #online() {

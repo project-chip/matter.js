@@ -64,6 +64,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         this.lifecycle.offline.on(() => {
             this.statusUpdate("is offline");
         });
+
+        this.lifecycle.goingOffline.on(() => {
+            this.statusUpdate("going offline");
+        });
     }
 
     override get env() {
@@ -123,7 +127,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
             return;
         }
 
-        this.statusUpdate("going offline");
+        await this.act(agent => this.lifecycle.goingOffline.emit(agent.context));
         await this.#runtime?.close();
         this.#runtime = undefined;
     }
@@ -144,6 +148,8 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Create the network runtime.
      */
     protected abstract createRuntime(): NetworkRuntime;
+
+    abstract prepareRuntimeShutdown(): Promise<void>;
 
     get [RuntimeService.label]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];

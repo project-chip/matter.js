@@ -80,7 +80,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 
--   Matter.js clusters:
+-   matter.js clusters:
     -   Adds convenience helper method for ElectricalEnergyMeasurement cluster (usage see new example MeasuredSocketDevice) to set measurements and also trigger the needed events when imported and exported values changed in the measurement and events are required by specification
     
 -   matter.js Controller API:

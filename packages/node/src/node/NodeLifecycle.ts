@@ -14,6 +14,7 @@ import { AsyncObservable, Observable } from "#general";
  */
 export class NodeLifecycle extends EndpointLifecycle {
     #online = AsyncObservable<[context: ActionContext]>();
+    #goingOffline = AsyncObservable<[context: ActionContext]>();
     #offline = Observable<[context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
@@ -60,6 +61,13 @@ export class NodeLifecycle extends EndpointLifecycle {
      */
     get initialized() {
         return this.#initialized;
+    }
+
+    /**
+     * Emits when the node is going offline.
+     */
+    get goingOffline() {
+        return this.#goingOffline;
     }
 
     /**
