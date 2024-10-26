@@ -69,6 +69,9 @@ export class GeneralDiagnosticsServer extends Base {
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online, { lock: true });
         }
+        if (lifecycle.goingOffline !== undefined) {
+            this.reactTo(lifecycle.goingOffline, this.#goingOffline, { lock: true });
+        }
 
         if (this.events.activeHardwareFaults$Changed !== undefined) {
             this.reactTo(this.events.activeHardwareFaults$Changed, this.#triggerActiveHardwareFaultsChangedEvent);
@@ -294,6 +297,11 @@ export class GeneralDiagnosticsServer extends Base {
         await this.#updateNetworkList();
     }
 
+    #goingOffline() {
+        this.internal.lastTotalOperationalHoursTimer?.stop();
+        this.#updateTotalOperationalHoursCounter();
+    }
+
     #updateTotalOperationalHoursCounter() {
         const now = Time.nowMs();
         const elapsedTime = now - this.internal.lastTotalOperationalHoursCounterUpdateTime;
@@ -360,12 +368,6 @@ export class GeneralDiagnosticsServer extends Base {
                 iPv6Addresses: ipV6.slice(0, 8).map(ip => ipv4ToBytes(ip)),
                 type: type ?? networkType,
             }));
-    }
-
-    override async [Symbol.asyncDispose]() {
-        this.internal.lastTotalOperationalHoursTimer?.stop();
-        this.#updateTotalOperationalHoursCounter();
-        await super[Symbol.asyncDispose]?.();
     }
 }
 
