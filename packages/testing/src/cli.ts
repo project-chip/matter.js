@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "./global-definitions.js";
+// Must load first to shim crypto on node 18
 import "./util/node-shims.js";
+
+import "./global-definitions.js";
 
 import { Builder, Graph, Project } from "#tools";
 import yargs from "yargs";
