@@ -16,9 +16,9 @@ if (globalThis.crypto === undefined) {
 function mocharc(format = "cjs") {
     const { resolve } = require("path");
     const cli = require("mocha/lib/cli/cli");
-    const listSupportFiles = require("./files.js").listSupportFiles;
+    const listSupportFiles = require("./util/files.js").listSupportFiles;
 
-    const TOOLS = resolve(__dirname, "../../..");
+    const TOOLS = resolve(__dirname, "../../../tools");
 
     const testJs = `build/${format}/test`;
     const defaultSpec = `${testJs}/**/*Test.js`;
