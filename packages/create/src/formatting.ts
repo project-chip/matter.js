@@ -18,7 +18,6 @@ export const dim = formatter(2, 22);
 export const red = formatter(31, 39);
 export const green = formatter(32, 39);
 export const blue = formatter(34, 39);
-export const grey = formatter;
 
 export function visibleWidthOf(str: string) {
     let i = 0,

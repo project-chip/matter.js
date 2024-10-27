@@ -5,7 +5,7 @@
  */
 
 import { mkdir, writeFile } from "fs/promises";
-import { Session } from "inspector/promises";
+import type { Session } from "inspector/promises";
 import Mocha from "mocha";
 import { relative } from "path";
 import { adaptReporter, generalSetup } from "./mocha.js";
@@ -70,6 +70,14 @@ class Profiler {
 
     async start() {
         if (this.#session) {
+            return;
+        }
+
+        let Session;
+        try {
+            Session = (await import("inspector/promises")).Session;
+        } catch (e) {
+            console.error(`We don't support profiling on this version of Node.js: ${e}`);
             return;
         }
 
