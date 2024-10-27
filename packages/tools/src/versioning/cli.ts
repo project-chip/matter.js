@@ -18,14 +18,16 @@ interface Args {
 }
 
 export async function main(argv = process.argv) {
-    const args = commander("matter-version", "Manipulate monorepo package versions.")
+    const program = commander("matter-version", "Manipulate monorepo package versions.")
         .argument("[version]")
         .option("-p, --prefix <prefix>", "specify monorepo directory")
         .option("-s, --set", "sets the release version")
         .option("-a, --apply", "sets package versions to the release version")
         .option("-t, --tag", "adds git tag for release version")
-        .parse(argv)
-        .opts<Args>();
+        .parse(argv);
+
+    const args = program.opts<Args>();
+    args.version = program.args[0];
 
     const version = args.version;
     const pkg = new Package({ path: args.prefix });
