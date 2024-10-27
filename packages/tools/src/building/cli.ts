@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { commander } from "../util/commander.js";
 import { Builder, Target } from "./builder.js";
 import { Graph } from "./graph.js";
 import { Project } from "./project.js";
@@ -19,25 +18,73 @@ enum Mode {
     SyncTsconfigs,
 }
 
+interface Args {
+    prefix: string;
+    clean?: boolean;
+    workspaces?: boolean;
+    dependencies?: boolean;
+}
+
 export async function main(argv = process.argv) {
     const targets = Array<Target>();
     let mode = Mode.BuildProject;
 
-    const args = await yargs(hideBin(argv))
-        .usage("Builds packages adhering to matter.js standards.")
-        .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify build directory" })
-        .option("clean", { alias: "c", default: false, type: "boolean", describe: "clean before build" })
-        .option("workspaces", { alias: "w", default: false, type: "boolean", describe: "build all workspace packages" })
-        .option("dependencies", { alias: "d", default: false, type: "boolean", describe: "build dependencies" })
-        .command("*", "build types and both JS files", () => {})
-        .command("clean", "remove build and dist directories", () => targets.push(Target.clean))
-        .command("types", "build type definitions", () => targets.push(Target.types))
-        .command("esm", "build JS (ES6 modules)", () => targets.push(Target.esm))
-        .command("cjs", "build JS (CommonJS modules)", () => targets.push(Target.cjs))
-        .command("graph", "display the workspace graph", () => (mode = Mode.DisplayGraph))
-        .command("tsconfigs", "sync all tsconfigs with package.json", () => (mode = Mode.SyncTsconfigs))
-        .wrap(Math.min(process.stdout.columns, 80))
-        .strict().argv;
+    const program = commander("matter-build", "Builds packages adhering to matter.js standards.")
+        .option("-p, --prefix <path>", "specify build directory", ".")
+        .option("-c, --clean", "clean before build", false)
+        .option("-w, --workspaces", "build all workspace packages", false)
+        .option("-d, --dependencies", "build dependencies", false);
+
+    program
+        .command("build")
+        .description("(default) build JS and type definitions")
+        .action(() => {});
+
+    program
+        .command("clean")
+        .description("remove build and dist directories")
+        .action(() => {
+            targets.push(Target.clean);
+        });
+
+    program
+        .command("types")
+        .description("build type definitions")
+        .action(() => {
+            targets.push(Target.types);
+        });
+
+    program
+        .command("esm")
+        .description("build JS (ES6 modules)")
+        .action(() => {
+            targets.push(Target.esm);
+        });
+
+    program
+        .command("cjs")
+        .description("build JS (CommonJS modules)")
+        .action(() => {
+            targets.push(Target.cjs);
+        });
+
+    program
+        .command("graph")
+        .description("display the workspace graph")
+        .action(() => {
+            mode = Mode.DisplayGraph;
+        });
+
+    program
+        .command("tsconfigs")
+        .description("sync all tsconfigs with package.json")
+        .action(() => {
+            mode = Mode.SyncTsconfigs;
+        });
+
+    program.action(() => {});
+
+    const args = program.parse(argv).opts<Args>();
 
     if (mode === Mode.BuildProject) {
         if (args.workspaces) {

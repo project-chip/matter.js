@@ -17,8 +17,8 @@ export interface EndpointElement extends BaseElement {
     children: DeviceTypeElement[];
 }
 
-export function EndpointElement(definition: EndpointElement.Properties) {
-    return BaseElement(EndpointElement.Tag, definition) as EndpointElement;
+export function EndpointElement(definition: EndpointElement.Properties, ...children: DeviceTypeElement[]) {
+    return BaseElement(EndpointElement.Tag, definition, children) as EndpointElement;
 }
 
 export namespace EndpointElement {

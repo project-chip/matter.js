@@ -23,9 +23,6 @@
             "path": "../../protocol/src"
         },
         {
-            "path": "../../react-native/src"
-        },
-        {
             "path": "../../types/src"
         }
     ]

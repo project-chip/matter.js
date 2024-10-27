@@ -35,7 +35,8 @@
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter/tools": "*"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     },
     "engines": {
         "node": ">=18.0.0"

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Package } from "#tools";
 import { parse } from "path";
-import { Docker } from "../util/docker.js";
-import { Package } from "../util/package.js";
 import { PicsFile } from "./chip/pics-file.js";
 import { type TestRunner } from "./runner.js";
+import { Docker } from "./util/docker.js";
 
 /**
  * Path configuration.

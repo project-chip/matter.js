@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
 import { createHash } from "crypto";
 import { Progress } from "../util/progress.js";
 import { BuildError } from "./error.js";
@@ -149,19 +148,35 @@ export class Builder {
             } catch (e) {
                 if (e instanceof BuildError) {
                     progress.failure("Terminating due to type errors");
-                    process.stderr.write(e.diagnostics);
+                    process.stderr.write(`${e.diagnostics}\n`);
                     process.exit(1);
                 }
                 throw e;
             }
         }
 
+        const formats = Array<"esm" | "cjs">();
         if (targets.has(Target.esm)) {
-            await this.#transpile(project, progress, Target.esm);
+            formats.push("esm");
+        }
+        if (targets.has(Target.cjs)) {
+            formats.push("cjs");
         }
 
-        if (targets.has(Target.cjs)) {
-            await this.#transpile(project, progress, Target.cjs);
+        if (formats.length) {
+            const groups = [project.pkg.isLibrary ? "library" : "app"];
+            if (project.pkg.hasTests) {
+                groups.push("tests");
+            }
+
+            const formatDesc = formats.map(progress.emphasize).join("+");
+            const groupDesc = groups.map(progress.emphasize).join("+");
+
+            await progress.run(`Transpile ${groupDesc} to ${formatDesc}`, async () => {
+                for (const format of formats) {
+                    await this.#transpile(project, format);
+                }
+            });
         }
 
         await config?.after?.({ project });
@@ -175,16 +190,10 @@ export class Builder {
         }
     }
 
-    async #transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
-        const fmt = format.toUpperCase();
-        await progress.run(
-            `Transpile ${progress.emphasize(project.pkg.isLibrary ? "library" : "app")} to ${colors.bold(fmt)}`,
-            () => project.buildSource(format),
-        );
+    async #transpile(project: Project, format: "esm" | "cjs") {
+        await project.buildSource(format);
         if (project.pkg.hasTests) {
-            await progress.run(`Transpile ${progress.emphasize("tests")} to ${colors.bold(fmt)}`, () =>
-                project.buildTests(format),
-            );
+            await project.buildTests(format);
         }
     }
 

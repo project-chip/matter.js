@@ -5,6 +5,7 @@
  */
 
 import { mkdir, writeFile } from "fs/promises";
+import { Session } from "inspector/promises";
 import Mocha from "mocha";
 import { relative } from "path";
 import { adaptReporter, generalSetup } from "./mocha.js";
@@ -39,7 +40,7 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
 
     TestOptions.apply(mocha, runner.options);
 
-    const files = runner.loadFiles(format);
+    const files = await runner.loadFiles(format);
     files.forEach(path => {
         path = relative(process.cwd(), path);
         if (path[0] !== ".") {
@@ -64,51 +65,34 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
     }
 }
 
-// We use string concatenation to prevent TS from trying to find profiler library types.  It doesn't build on all
-// platforms we support and doesn't provide type declarations when it doesn't build
-//
-// This interface acts as a replacement for proper types
-export interface Profilerish {
-    setGenerateType(value: number): void;
-    startProfiling(): void;
-    stopProfiling(): {
-        export(callback: (error: any, result: string) => any): void;
-    };
-}
-
-// v8-profiler-next doesn't manage switching node versions well.  Load dynamically so it doesn't interfere if it's not
-// built and we're not profiling
 class Profiler {
-    #profiler?: Profilerish;
+    #session?: Session;
 
     async start() {
-        this.#profiler = (await import("" + "v8-profiler-next")).default as Profilerish;
-        this.#profiler.setGenerateType(1);
-        this.#profiler.startProfiling();
-    }
-
-    async stop(outputDir: string) {
-        if (!this.#profiler) {
+        if (this.#session) {
             return;
         }
 
-        const profile = this.#profiler.stopProfiling();
+        this.#session = new Session();
+        this.#session.connect();
+        await this.#session.post("Profiler.enable");
+        await this.#session.post("Profiler.start");
+    }
 
-        const result = await new Promise<string>((accept, reject) =>
-            profile.export((error, result) => {
-                if (error) {
-                    reject(error);
-                } else if (!result) {
-                    reject(new Error("No profile error or result"));
-                } else {
-                    accept(result);
-                }
-            }),
-        );
+    async stop(outputDir: string) {
+        if (!this.#session) {
+            return;
+        }
+
+        const { profile } = await this.#session.post("Profiler.stop");
+        await this.#session.post("Profiler.disable");
 
         await mkdir(outputDir, { recursive: true });
-        await writeFile(`${outputDir}/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`, result);
+        await writeFile(
+            `${outputDir}/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`,
+            JSON.stringify(profile),
+        );
 
-        this.#profiler = undefined;
+        this.#session = undefined;
     }
 }

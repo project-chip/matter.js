@@ -16,7 +16,6 @@ const inspect = Symbol.for("nodejs.util.inspect.custom");
  * A "model" is a class that implements runtime functionality associated with the corresponding element type.
  *
  * @template T the element type this model implements
- * @template C the type of children this model accepts
  */
 export abstract class Model<T extends BaseElement = BaseElement> {
     abstract readonly tag: ElementTag;
@@ -412,7 +411,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         return extension;
     }
 
-    constructor(definition: Model<T> | BaseElement.Properties<T>) {
+    constructor(definition: Model<T> | BaseElement.Properties<T>, ...children: Model.Definition<Model>[]) {
         if (typeof definition !== "object") {
             throw new ImplementationError(`Model definition must be an object, not "${typeof definition}"`);
         }
@@ -443,6 +442,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
             for (const child of definition.children) {
                 this.children.push(child.clone() as Model.ChildOf<typeof this>);
             }
+        }
+
+        if (children.length) {
+            this.children.push(...children);
         }
     }
 

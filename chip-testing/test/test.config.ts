@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Chip as ChipType } from "@matter/tools";
+import { Chip as ChipType } from "@matter/testing";
 import { log } from "../src/GenericTestApp.js";
 
 // Disable stdout output required when run within CHIP test harnesses

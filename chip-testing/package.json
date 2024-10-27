@@ -28,6 +28,6 @@
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter/tools": "*"
+        "@matter/testing": "*"
     }
 }

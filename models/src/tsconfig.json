@@ -8,6 +8,9 @@
     "references": [
         {
             "path": "../../packages/model/src"
+        },
+        {
+            "path": "../../packages/testing/src"
         }
     ]
 }

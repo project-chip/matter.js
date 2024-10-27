@@ -5,16 +5,15 @@
  */
 
 import { repl } from "#repl.js";
+import { commander } from "#tools";
 import "@matter/nodejs";
 import colors from "ansi-colors";
 import { stdout } from "process";
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
 
 export async function main(argv: string[]) {
     colors.enabled = stdout.isTTY;
 
-    await yargs(hideBin(argv)).usage("Interact with the local Matter environment.").strict().argv;
+    commander("matter", "Interact with the local Matter environment.").parse(argv);
 
     // TODO - REPL is enough for testing but need proper CLI
 

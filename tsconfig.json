@@ -5,6 +5,9 @@
             "path": "packages/tools"
         },
         {
+            "path": "packages/testing"
+        },
+        {
             "path": "packages/general"
         },
         {
@@ -36,6 +39,9 @@
         },
         {
             "path": "packages/examples"
+        },
+        {
+            "path": "packages/create"
         },
         {
             "path": "packages/react-native"

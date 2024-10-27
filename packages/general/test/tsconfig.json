@@ -4,10 +4,13 @@
         "types": [
             "mocha",
             "node",
-            "@matter/tools"
+            "@matter/testing"
         ]
     },
     "references": [
+        {
+            "path": "../../testing/src"
+        },
         {
             "path": "../../tools/src"
         },

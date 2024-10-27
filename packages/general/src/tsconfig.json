@@ -2,9 +2,13 @@
     "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
         "types": [
-            "@matter/tools",
+            "@matter/testing",
             "globals"
         ]
     },
-    "references": []
+    "references": [
+        {
+            "path": "../../testing/src"
+        }
+    ]
 }

@@ -54,7 +54,7 @@
         "escodegen": "^2.1.0"
     },
     "devDependencies": {
-        "@matter/tools": "*"
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",

@@ -18,8 +18,11 @@ export type SemanticNamespaceElement = BaseElement & {
     mfgCode?: number;
 };
 
-export function SemanticNamespaceElement(definition: SemanticNamespaceElement.Properties) {
-    return BaseElement(SemanticNamespaceElement.Tag, definition) as SemanticNamespaceElement;
+export function SemanticNamespaceElement(
+    definition: SemanticNamespaceElement.Properties,
+    ...children: SemanticTagElement[]
+) {
+    return BaseElement(SemanticNamespaceElement.Tag, definition, children) as SemanticNamespaceElement;
 }
 
 export namespace SemanticNamespaceElement {

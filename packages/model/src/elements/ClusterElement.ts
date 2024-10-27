@@ -43,12 +43,12 @@ export interface ClusterElement extends BaseElement {
     children?: ClusterElement.Child[];
 }
 
-export function ClusterElement(definition: ClusterElement.Properties) {
+export function ClusterElement(definition: ClusterElement.Properties, ...children: ClusterElement.Child[]) {
     if (definition.quality === "") {
         delete definition.quality;
     }
 
-    return BaseElement(ClusterElement.Tag, definition) as ClusterElement;
+    return BaseElement(ClusterElement.Tag, definition, children) as ClusterElement;
 }
 
 export namespace ClusterElement {

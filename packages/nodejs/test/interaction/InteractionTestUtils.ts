@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE } from "#general";
+import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey } from "#general";
 import {
     ExchangeSendOptions,
     Fabric,
@@ -14,7 +14,10 @@ import {
     SessionType,
 } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
-import { KEY } from "../cluster/ClusterServerTestingUtil.js";
+
+const PRIVATE_KEY = new Uint8Array(32);
+PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
+export const KEY = PrivateKey(PRIVATE_KEY);
 
 export function createTestFabric() {
     return new Fabric({

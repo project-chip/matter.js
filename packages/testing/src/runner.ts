@@ -4,18 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Package, Progress } from "#tools";
 import colors from "ansi-colors";
 import debug from "debug";
-import { glob } from "glob";
 import { relative } from "path";
-import { Package } from "../util/package.js";
-import { Progress } from "../util/progress.js";
 import { Chip } from "./chip.js";
 import { FailureDetail } from "./failure-detail.js";
-import { listSupportFiles } from "./files.js";
 import { testNode } from "./node.js";
 import { TestOptions } from "./options.js";
 import { ProgressReporter, Reporter } from "./reporter.js";
+import { listSupportFiles } from "./util/files.js";
 import { testWeb } from "./web.js";
 
 export class TestRunner {
@@ -61,7 +59,7 @@ export class TestRunner {
         await this.run(this.progress, () => testWeb(this, manual));
     }
 
-    loadFiles(format: "esm" | "cjs") {
+    async loadFiles(format: "esm" | "cjs") {
         const tests = [];
         for (let spec of this.spec) {
             spec = spec.replace(/\.ts$/, ".js");
@@ -69,12 +67,8 @@ export class TestRunner {
             if (!spec.startsWith(".") && !spec.startsWith("build/") && !spec.startsWith("dist/")) {
                 spec = `build/${format}/${spec}`;
             }
-            spec = this.pkg.resolve(spec);
 
-            // Glob only understands forward-slash as separator because reasons
-            spec = spec.replace(/\\/g, "/");
-
-            tests.push(...glob.sync(spec));
+            tests.push(...(await this.pkg.glob(spec)));
         }
 
         if (!tests.length) {

@@ -9,6 +9,9 @@
     "references": [
         {
             "path": "../../general/src"
+        },
+        {
+            "path": "../../testing/src"
         }
     ]
 }

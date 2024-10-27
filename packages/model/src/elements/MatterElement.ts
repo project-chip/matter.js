@@ -24,8 +24,8 @@ export type MatterElement = BaseElement & {
     children: MatterElement.Child[];
 };
 
-export function MatterElement(definition: MatterElement.Properties) {
-    return BaseElement(MatterElement.Tag, definition) as MatterElement;
+export function MatterElement(definition: MatterElement.Properties, ...children: MatterElement.Child[]) {
+    return BaseElement(MatterElement.Tag, definition, children) as MatterElement;
 }
 
 export namespace MatterElement {

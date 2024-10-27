@@ -35,6 +35,7 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "devDependencies": {
         "@matter/model": "*",
-        "@matter/tools": "*"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     }
 }
