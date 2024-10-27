@@ -55,6 +55,7 @@
         "@matter/model": "*",
         "@matter/protocol": "*",
         "@matter/tools": "*",
+        "@matter/testing": "*",
         "@types/bytebuffer": "^5.0.49",
         "@types/node-localstorage": "^1.3.3"
     },

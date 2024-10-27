@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Package } from "#tools";
 import { build } from "esbuild";
 import express from "express";
 import { writeFile } from "fs/promises";
@@ -11,13 +12,12 @@ import http from "http";
 import { AddressInfo } from "net";
 import { relative } from "path";
 import { Browser, chromium, ConsoleMessage, Page } from "playwright";
-import { Package } from "../util/package.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
 import type { TestRunner } from "./runner.js";
 
 export async function testWeb(runner: TestRunner, manual: boolean) {
-    const files = runner.loadFiles("esm");
+    const files = await runner.loadFiles("esm");
     const bundlePath = await bundle(files, runner.pkg);
 
     const server = await new Promise<http.Server>((resolve, reject) => {

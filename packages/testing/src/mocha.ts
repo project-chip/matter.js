@@ -6,11 +6,11 @@
 
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
-import { wtf } from "../util/wtf.js";
 import { FailureDetail } from "./failure-detail.js";
 import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
+import { wtf } from "./util/wtf.js";
 
 export function generalSetup(mocha: MochaType) {
     const Base = (mocha.constructor as typeof MochaType).reporters.Base;

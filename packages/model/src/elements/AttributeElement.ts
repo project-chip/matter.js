@@ -17,8 +17,8 @@ export interface AttributeElement extends ValueElement {
     id: Mei;
 }
 
-export function AttributeElement(definition: AttributeElement.Properties) {
-    return ValueElement(AttributeElement.Tag, definition) as AttributeElement;
+export function AttributeElement(definition: AttributeElement.Properties, ...children: ValueElement[]) {
+    return ValueElement(AttributeElement.Tag, definition, children) as AttributeElement;
 }
 
 export namespace AttributeElement {

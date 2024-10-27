@@ -49,8 +49,7 @@
         "@noble/curves": "^1.5.0"
     },
     "optionalDependencies": {
-        "@matter/nodejs": "*",
-        "@matter/react-native": "*"
+        "@matter/nodejs": "*"
     },
     "devDependencies": {
         "@matter/tools": "*"

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import mapWorkspaces from "@npmcli/map-workspaces";
 import colors from "ansi-colors";
 import { JsonNotFoundError, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
@@ -174,12 +173,12 @@ export class Graph {
     }
 
     static async #loadNodes(workspace: Package) {
-        const workspaces = await mapWorkspaces({ pkg: workspace.json, cwd: workspace.path });
+        const workspaces = workspace.json.workspaces;
 
         const nodeMap = {} as Record<string, Graph.Node>;
         const allDeps = {} as Record<string, string[]>;
         for (const path of workspaces.values()) {
-            const pkg = new Package({ path: path });
+            const pkg = new Package({ path: workspace.resolve(path) });
             allDeps[pkg.json.name] = pkg.dependencies;
             nodeMap[pkg.json.name] = {
                 pkg,

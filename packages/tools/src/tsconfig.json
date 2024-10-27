@@ -7,7 +7,6 @@
     },
     "include": [
         "**/*.ts",
-        "testing/mocharc.cjs",
         "util/tools-path.d.cts"
     ],
     "references": []

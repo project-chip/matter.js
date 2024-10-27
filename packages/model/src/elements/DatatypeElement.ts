@@ -31,8 +31,8 @@ export interface DatatypeElement extends ValueElement {
     children?: FieldElement[];
 }
 
-export function DatatypeElement(definition: DatatypeElement.Properties) {
-    return ValueElement(DatatypeElement.Tag, definition) as DatatypeElement;
+export function DatatypeElement(definition: DatatypeElement.Properties, ...children: ValueElement[]) {
+    return ValueElement(DatatypeElement.Tag, definition, children) as DatatypeElement;
 }
 
 export namespace DatatypeElement {

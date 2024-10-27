@@ -23,8 +23,8 @@ function mocharc(format = "cjs") {
     const testJs = `build/${format}/test`;
     const defaultSpec = `${testJs}/**/*Test.js`;
 
-    // Build.  Ideally we'd import build code but it's asynchronous so instead
-    // build in a separate process
+    // Build.  Ideally we'd import build code but it's asynchronous and mocharc isn't.  So instead build in a separate
+    // process
     const spawnSync = require("child_process").spawnSync;
     const result = spawnSync(`${TOOLS}/bin/build.js`, [format], { stdio: "inherit" });
     if (result.error) {

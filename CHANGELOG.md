@@ -77,6 +77,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   The virtual filesystem exposed by the tool allows you to navigate matter.js's packages and active subsystems
     -   This is an alpha feature.  We'll add command line control and additional functionality over time
 
+-   @matter/create
+    -   Feature: This new package bootstraps matter.js-based projects.
+    -   For usage run `npm init @matter help` anywhere you have Node.js installed
+
 -   Matter-Core functionality:
     -   Enhancement: Allow to discover VendorId + ProductId together optionally
 

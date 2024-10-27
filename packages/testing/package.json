@@ -1,0 +1,72 @@
+{
+    "name": "@matter/testing",
+    "version": "0.0.0-git",
+    "description": "Matter.js tooling",
+    "type": "module",
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "test": "matter-test"
+    },
+    "bin": {
+        "matter-test": "bin/test.js"
+    },
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/esm/index.d.ts",
+                "default": "./dist/esm/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/index.d.ts",
+                "default": "./dist/cjs/index.js"
+            }
+        }
+    },
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/project-chip/matter.js.git"
+    },
+    "author": "matter.js authors",
+    "contributors": [
+        "Greg Lauckhart <greg@lauckhart.com>"
+    ],
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js#readme",
+    "imports": {
+        "#tools": "@matter/tools"
+    },
+    "dependencies": {
+        "@matter/tools": "0.0.0-git",
+        "@types/express": "^4.17.21",
+        "chai": "^4.4.1",
+        "chai-as-promised": "^7.1.2",
+        "dockerode": "^4.0.2",
+        "express": "^4.19.2",
+        "mocha": "^10.7.3",
+        "playwright": "^1.48.1",
+        "trace-unhandled": "^2.0.1",
+        "wtfnode": "^0.9.3",
+        "yargs": "^17.7.2"
+    },
+    "devDependencies": {
+        "typescript": "~5.6.2",
+        "@types/dockerode": "^3.3.30",
+        "@types/chai": "^4.3.16",
+        "@types/chai-as-promised": "^7.1.8",
+        "@types/debug": "^4.1.12",
+        "@types/mocha": "^10.0.7",
+        "@types/wtfnode": "^0.7.3",
+        "@types/yargs": "^17.0.33"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

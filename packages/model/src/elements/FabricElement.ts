@@ -17,8 +17,8 @@ export interface FabricElement extends BaseElement {
     children: NodeElement[];
 }
 
-export function FabricElement(definition: FabricElement.Properties) {
-    return BaseElement(FabricElement.Tag, definition);
+export function FabricElement(definition: FabricElement.Properties, ...children: NodeElement[]) {
+    return BaseElement(FabricElement.Tag, definition, children);
 }
 
 export namespace FabricElement {

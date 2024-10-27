@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "packages/tools",
+    "packages/testing",
     "packages/general",
     "packages/model",
     "packages/types",
@@ -14,6 +15,7 @@
     "packages/main",
     "packages/nodejs-shell",
     "packages/examples",
+    "packages/create",
     "packages/react-native",
     "packages/cli-tool",
     "models",

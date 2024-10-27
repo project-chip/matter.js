@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Progress } from "#tools";
 import colors from "ansi-colors";
-import { Progress } from "../util/progress.js";
 import { FailureDetail } from "./failure-detail.js";
 
 export type Stats = {

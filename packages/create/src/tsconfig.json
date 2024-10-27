@@ -1,0 +1,11 @@
+{
+    "extends": "../../tools/tsc/tsconfig.lib.json",
+    "compilerOptions": {
+        "types": [
+            "@matter/tools",
+            "globals",
+            "node"
+        ]
+    },
+    "references": []
+}

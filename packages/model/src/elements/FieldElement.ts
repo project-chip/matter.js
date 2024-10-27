@@ -24,8 +24,8 @@ export interface FieldElement extends ValueElement {
     children?: FieldElement[];
 }
 
-export function FieldElement(definition: FieldElement.Properties) {
-    return ValueElement(FieldElement.Tag, definition) as FieldElement;
+export function FieldElement(definition: FieldElement.Properties, ...children: FieldElement[]) {
+    return ValueElement(FieldElement.Tag, definition, children) as FieldElement;
 }
 
 export namespace FieldElement {
