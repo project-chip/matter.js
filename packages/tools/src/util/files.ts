@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readdirSync, statSync } from "fs";
+import { readdirSync, readFileSync, statSync } from "fs";
 import { GLOBSTAR, Minimatch, ParseReturnFiltered } from "minimatch";
 import { resolve } from "path";
 
@@ -18,6 +18,21 @@ export function maybeStatSync(path: string) {
     } catch (e) {
         if (isNotFoundError(e)) {
             return;
+        }
+        throw e;
+    }
+}
+
+export function maybeReadJsonSync(path: string) {
+    try {
+        return JSON.parse(readFileSync(path, "utf-8"));
+    } catch (e) {
+        if (isNotFoundError(e)) {
+            return;
+        }
+        if (e instanceof SyntaxError) {
+            e.message = `Error parsing ${path}: ${e.message}`;
+            throw e;
         }
         throw e;
     }
