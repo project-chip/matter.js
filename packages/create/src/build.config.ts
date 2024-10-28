@@ -49,7 +49,10 @@ export async function before({ project }: Project.Context) {
         });
     }
 
-    const matterJsVersion = `~${await readFile(project.pkg.workspace.resolve("version.txt"), "utf-8")}`;
+    // We set the version after build so we don't know actual version.  Juse use placeholder.  We then replace with the
+    // "create" package version on init
+    const matterJsVersion = "latest";
+
     const typescriptVersion = project.pkg.findPackage("@matter/tools").json.dependencies.typescript;
 
     const config: Config = {
