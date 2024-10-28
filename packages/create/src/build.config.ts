@@ -49,9 +49,9 @@ export async function before({ project }: Project.Context) {
         });
     }
 
-    // We set the version after build so we don't know actual version.  Juse use placeholder.  We then replace with the
-    // "create" package version on init
-    const matterJsVersion = "latest";
+    // We set the version after build so we don't know actual version here.  This placeholder is just used in dev.  We
+    // then replace with the "create" package version on init if it's not a git build
+    const matterJsVersion = `~${await readFile(project.pkg.workspace.resolve("version.txt"), "utf-8")}`;
 
     const typescriptVersion = project.pkg.findPackage("@matter/tools").json.dependencies.typescript;
 
