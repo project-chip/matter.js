@@ -25,7 +25,7 @@ matter.js employs [code generation approaches](./codegen) to ensure a comprehens
 
 matter.js serves various purposes and is be employed for:
 
-- **Building commercial Matter devices and bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification. **If you plan to certify a device based on matter.js please see note below.**
+- **Building (commercial) Matter devices and bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification. **If you plan to certify a device based on matter.js please see note below.**
 
 - **Building Matter controllers:**<br>Develop Matter controllers with JavaScript/TypeScript for OS-based IoT products. Post-commissioning (including BLE support), controllers can access all data from devices and control them. The API supports development with known typings of all clusters when endpoints and device types are known during development. It also allows generic programmatic access to all clusters and attributes. Typing information of custom clusters can be added to the controller or accessed generically with generic data parsing support. **If you plan to build/certify a controller based on matter.js please see note below.**
 
