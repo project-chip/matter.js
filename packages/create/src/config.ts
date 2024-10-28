@@ -30,7 +30,9 @@ export async function Config() {
     }
 
     const packageJson = JSON.parse(await readFile(resolve(CREATE_DIR, "package.json"), "utf-8")) as { version: string };
-    config.matterJsVersion = `^${packageJson.version}`;
+    if (packageJson.version !== "0.0.0-git") {
+        config.matterJsVersion = `^${packageJson.version}`;
+    }
 
     return config;
 }

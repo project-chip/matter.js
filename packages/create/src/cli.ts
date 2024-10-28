@@ -92,5 +92,7 @@ async function init(templateName: string) {
         }
     }
 
-    notice(`${bold("Success!")} Run your new app using ${bold("npm run app")}.`);
+    const where = project.dest !== "." && project.dest !== process.cwd() ? ` in ${bold(project.dest)}` : "";
+
+    notice(`${bold("Success!")} Run your new app using ${bold("npm run app")}${where}.`);
 }

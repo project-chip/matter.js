@@ -142,5 +142,5 @@ async function installSources(project: NewProject) {
 }
 
 function build(this: NewProject) {
-    execSync(`npm -q install`, { stdio: "inherit", cwd: this.dest });
+    execSync(`npm install --silent`, { stdio: "inherit", cwd: this.dest });
 }
