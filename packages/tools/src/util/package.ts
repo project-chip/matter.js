@@ -8,7 +8,7 @@ import { existsSync, readFileSync, statSync } from "fs";
 import { readdir, readFile, stat, writeFile } from "fs/promises";
 import { dirname, join, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
-import { globSync, maybeStatSync } from "./files.js";
+import { globSync, maybeReadJsonSync, maybeStatSync } from "./files.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
@@ -70,6 +70,16 @@ export class Package {
 
         this.hasSrc = isDirectory(this.resolve("src"));
         this.hasTests = isDirectory(this.resolve("test"));
+
+        const refs = maybeReadJsonSync(this.resolve("tsconfig.json"))?.references as undefined | { path: string }[];
+        if (refs !== undefined) {
+            if (!refs.find(ref => this.resolve(ref.path) === this.resolve("src"))) {
+                this.hasSrc = false;
+            }
+            if (!refs.find(ref => this.resolve(ref.path) === this.resolve("test"))) {
+                this.hasTests = false;
+            }
+        }
 
         this.isLibrary = !!(this.json.main || this.json.module || this.json.exports);
 

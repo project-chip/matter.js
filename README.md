@@ -17,13 +17,13 @@ Our main goal is to create a robust and compliant library that enables the seaml
 matter.js consists of a set of pure JavaScript base packages without any native dependencies, implementing the Matter protocol and required interfaces in JavaScript, along with extensive typings for The Matter standard and the matter.js APIs.
 Further [packages with Node.js based native dependencies](./packages/nodejs) utilize the base package to implement platform-specific parts using Node.js for networking and other necessary native features or add [BLE support](./packages/nodejs-ble). [Node.js example scripts](./packages/examples) implement example CLI scripts for devices, bridges or controllers. A [Matter Shell](./packages/nodejs-shell) allow to interact with Matter devices as controller via a CLI interface.
 
-To use matter.js in your own non-Node.js based projects you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details. If you do this please contact us to add your platform to the list of supported platforms.
+To use matter.js in your own non-Node.js based projects you need to implement the platform specific parts. See [Using matter.js in unsupported JavaScript environments](#using-matterjs-in-unsupported-javascript-environments) for more details. If you do this please contact us to add your platform to the list of supported platforms.
 
-matter.js employs [code generation approaches](./codegen) to ensure a comprehensive model of all Matter Clusters and (soon) device types. This includes typing and documentation, readily available within developers' IDEs, facilitating easy accessibility and adherence to conformance information during coding. This approach allows for easy addition of new clusters and device types, ensuring synchronization with the Matter standard.
+matter.js employs [code generation](./codegen) to ensure a comprehensive model of all Matter Clusters and (soon) device types. This includes typing and documentation, readily available within developers' IDEs, facilitating easy accessibility and adherence to conformance information during coding. This approach allows for easy addition of new clusters and device types, ensuring synchronization with the Matter standard.
 
 ## How is matter.js used?
 
-matter.js serves various purposes and is be employed for:
+matter.js serves various purposes and is employed for:
 
 - **Building (commercial) Matter devices and bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification. **If you plan to certify a device based on matter.js please see note below.**
 
@@ -65,7 +65,7 @@ To use matter.js you import `@matter/main` as dependency in your project. This p
 npm install @matter/main --save
 ```
 
-If your project is not based on Node.js you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details.
+If your project is not based on Node.js you need to implement the platform specific parts. See [Using matter.js in unsupported JavaScript environments](#using-matterjs-in-unsupported-javascript-environments) for more details.
 
 ### Run the examples
 
@@ -200,10 +200,10 @@ You can use `npm run build-doc` on the root level to generate the API documentat
 We are about to complete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be built, but not with pre-defined cluster logic.
 See the [Roadmap](https://github.com/orgs/project-chip/projects/11/views/1) for status and next planned steps.
 
-## How to use matter.js in unsupported JavaScript environments
+## Using matter.js in unsupported JavaScript environments
 
-matter.js is fully functional in Node.js and we test some portions in web browsers.  For other environments you will
-need to implement a few platform-specific abstractions:
+matter.js is fully functional in Node.js.  We test some portions in web browsers and offer (WIP) experimental React
+Native support.  For other environments you will need to implement a few platform-specific abstractions:
 
 - **BigInt/UInt8Array**: matter.js relies on various ES6 JavaScript language features including BigInt and UInt8Array. If your platform does not support this you need to add a polyfill.
 - **Network**: The Network implementation needs to provide UDP server and client functionality. This is a core requirement. The [Network Interface](packages/general/src/net/Network.ts) needs to be implemented which includes methods to query network interfaces of the system and to use UDP sockets.
@@ -218,7 +218,7 @@ The following reference implementation and code references are available as basi
 
 - For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [@matter/nodejs](packages/nodejs/README.md) as reference. 
 - For BLE functionality you can use the Node.js implementations provided by [@matter/nodejs-ble](packages/nodejs-ble/README.md) as reference. 
-- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/examples/src/examples/cluster/DummyWifiNetworkCommissioningServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
+- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/examples/src/device-onoff-advanced-cli/cluster/DummyWifiNetworkCommissioningServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
 
 If you implement a specific platform we would be happy about a PR with the code, so that also other community members can benefit from it.
 

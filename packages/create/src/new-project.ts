@@ -24,6 +24,7 @@ const PACKAGE_JSON = {
         build: "tsc",
         app: "node --enable-source-maps dist/index.js",
         test: 'echo "Error: no test specified" && exit 1',
+        clean: "node -e 'fs.rmSync(\"dist\", { recursive: true, force: true })'",
     },
 };
 

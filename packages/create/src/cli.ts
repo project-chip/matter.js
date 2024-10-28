@@ -64,7 +64,7 @@ async function init(templateName: string) {
     }
 
     bigWelcome();
-    notice(`Initializing project from ${bold(project.template.name)} template...`);
+    notice(`Creating project from ${bold(project.template.name)} template...`);
 
     try {
         await project.create();
@@ -77,7 +77,7 @@ async function init(templateName: string) {
     }
 
     if (doBuild) {
-        notice(`Building project...`);
+        notice(`Initializing project...`);
 
         try {
             project.build();

@@ -44,7 +44,9 @@ export class Project {
         }
 
         if (!this.pkg.hasSrc) {
-            throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
+            throw new Error(
+                `Found package ${this.pkg.json.name} but src directory is not present or not referenced in tsconfig.json`,
+            );
         }
     }
 
