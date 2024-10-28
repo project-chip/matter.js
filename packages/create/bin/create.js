@@ -1,2 +1,2 @@
-#!/usr/bin/env matter-run
+#!/usr/bin/env node
 import "../dist/esm/cli.js";

@@ -9,6 +9,12 @@
         "build-clean": "matter-build --clean",
         "create": "matter-run src/cli.ts"
     },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "LICENSE",
+        "README.md"
+    ],
     "bin": {
         "matter-create": "bin/create.js"
     },
