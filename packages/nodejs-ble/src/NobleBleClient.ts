@@ -6,7 +6,7 @@
 
 import { Logger } from "@matter/general";
 import { require } from "@matter/nodejs-ble/require";
-import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
+import { BLE_MATTER_SERVICE_UUID } from "@matter/protocol";
 import type { Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./NodeJsBle.js";
 

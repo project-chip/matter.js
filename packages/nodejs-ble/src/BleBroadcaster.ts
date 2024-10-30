@@ -5,14 +5,14 @@
  */
 
 import { ImplementationError, Logger } from "@matter/general";
-import { CommissioningMode } from "@matter/protocol";
-import { BtpCodec } from "@project-chip/matter.js/codec";
-import { VendorId } from "@project-chip/matter.js/datatype";
 import {
+    BtpCodec,
     CommissionerInstanceData,
+    CommissioningMode,
     CommissioningModeInstanceData,
     InstanceBroadcaster,
-} from "@project-chip/matter.js/fabric";
+} from "@matter/protocol";
+import { VendorId } from "@matter/types";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");

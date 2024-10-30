@@ -5,10 +5,8 @@
  */
 
 import { Bytes, ChannelType, createPromise, Logger, Time, Timer } from "@matter/general";
-import { BleError } from "@project-chip/matter.js/ble";
-import { BtpCodec } from "@project-chip/matter.js/codec";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
-import { VendorId } from "@project-chip/matter.js/datatype";
+import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@matter/protocol";
+import { VendorId } from "@matter/types";
 import type { Peripheral } from "@stoprocent/noble";
 import { NobleBleClient } from "./NobleBleClient.js";
 

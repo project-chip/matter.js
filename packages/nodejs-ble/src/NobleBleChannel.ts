@@ -27,10 +27,10 @@ import {
     Ble,
     BleChannel,
     BleError,
+    BtpCodec,
     BtpFlowError,
     BtpSessionHandler,
-} from "@project-chip/matter.js/ble";
-import { BtpCodec } from "@project-chip/matter.js/codec";
+} from "@matter/protocol";
 import type { Characteristic, Peripheral } from "@stoprocent/noble";
 import { BleScanner } from "./BleScanner.js";
 

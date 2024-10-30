@@ -42,7 +42,8 @@
     "matter-composeddevice": "matter-run packages/examples/src/examples/device-onoff-composed-cli/ComposedDeviceNode.ts",
     "matter-multidevice": "matter-run packages/examples/src/examples/device-onoff-multiple-devices-cli/MultiDeviceNode.ts",
     "matter-controller": "matter-run packages/examples/src/examples/controller-cli/ControllerNode.ts",
-    "shell": "matter-run packages/nodejs-shell/src/app.ts"
+    "shell": "matter-run packages/nodejs-shell/src/app.ts",
+    "relock": "node -e \"fs.rmSync('package-lock.json', { force: true }); fs.rmSync('node_modules', { recursive: true, force: true });\" && npm install"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.16.1",

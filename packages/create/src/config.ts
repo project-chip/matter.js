@@ -12,13 +12,15 @@ export const TEMPLATE_DIR = resolve(CREATE_DIR, "dist/templates");
 
 export interface Template {
     name: string;
+    dependencies: Record<string, string>;
     description: string;
     entrypoint: string;
+    matterJsPackages?: string[];
 }
 
 export interface Config {
-    matterJsVersion: string;
     typescriptVersion: string;
+    nodeTypesVersion: string;
     templates: Template[];
 }
 
@@ -31,7 +33,13 @@ export async function Config() {
 
     const packageJson = JSON.parse(await readFile(resolve(CREATE_DIR, "package.json"), "utf-8")) as { version: string };
     if (packageJson.version !== "0.0.0-git") {
-        config.matterJsVersion = `^${packageJson.version}`;
+        for (const template of config.templates) {
+            for (const name in template.dependencies) {
+                if (name.startsWith("@matter/") || name.startsWith("@project-chip/")) {
+                    template.dependencies[name] = packageJson.version;
+                }
+            }
+        }
     }
 
     return config;

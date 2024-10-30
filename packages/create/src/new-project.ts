@@ -10,11 +10,10 @@ import { basename, resolve } from "path";
 import { Config, Template, TEMPLATE_DIR } from "./config.js";
 
 const PACKAGE_JSON = {
-    dependencies: {
-        "@matter/main": "*",
-    },
+    dependencies: {} as Record<string, string>,
     devDependencies: {
         typescript: "*",
+        "@types/node": "*",
     },
     name: "matter-app",
     version: "0.1.0",
@@ -98,8 +97,9 @@ async function createPackageJson(project: NewProject) {
     const entrypoint = `dist/${project.template.entrypoint.replace(/\.ts$/, ".js")}`;
     pkg.scripts.app = `node --enable-source-maps ${entrypoint}`;
 
-    pkg.dependencies["@matter/main"] = config.matterJsVersion;
+    pkg.dependencies = project.template.dependencies;
     pkg.devDependencies["typescript"] = config.typescriptVersion;
+    pkg.devDependencies["@types/node"] = config.nodeTypesVersion;
 
     (pkg as any).description = project.template.description;
 

@@ -48,7 +48,6 @@
         "@matter/node": "*",
         "@matter/protocol": "*",
         "@matter/types": "*",
-        "@project-chip/matter.js": "*",
         "node-localstorage": "^3.0.5"
     },
     "devDependencies": {
@@ -56,6 +55,7 @@
         "@matter/protocol": "*",
         "@matter/tools": "*",
         "@matter/testing": "*",
+        "@project-chip/matter.js": "*",
         "@types/bytebuffer": "^5.0.49",
         "@types/node-localstorage": "^1.3.3"
     },

@@ -16,8 +16,8 @@ import {
     BleError,
     BtpFlowError,
     BtpSessionHandler,
-} from "@project-chip/matter.js/ble";
-import { ChannelNotConnectedError } from "@project-chip/matter.js/protocol";
+    ChannelNotConnectedError,
+} from "@matter/protocol";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("BlenoBleServer");
