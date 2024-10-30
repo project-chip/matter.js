@@ -49,7 +49,7 @@ const VS_CODE_LAUNCH = {
             request: "launch",
             name: "Launch Program",
             skipFiles: ["<node_internals>/**"],
-            program: "${workspaceFolder}/dist/SensorDeviceNode.js",
+            program: "",
 
             // Never gotten it to work without this
             console: "integratedTerminal",
@@ -118,13 +118,16 @@ export async function create(this: NewProject) {
     await installSources(this);
 }
 
+function entrypointFor(project: NewProject) {
+    return "dist/" + project.template.entrypoint.replace(/\.ts$/, ".js");
+}
+
 async function createPackageJson(project: NewProject) {
     const pkg = PACKAGE_JSON;
 
     const config = await Config();
 
-    const entrypoint = `dist/${project.template.entrypoint.replace(/\.ts$/, ".js")}`;
-    pkg.scripts.app = `node --enable-source-maps ${entrypoint}`;
+    pkg.scripts.app = `node --enable-source-maps ${entrypointFor(project)}`;
 
     pkg.dependencies = project.template.dependencies;
     pkg.devDependencies["typescript"] = config.typescriptVersion;
@@ -171,6 +174,7 @@ async function createGitignore(project: NewProject) {
 async function createVsCodeProject(project: NewProject) {
     const root = resolve(project.dest, ".vscode");
     await mkdir(root);
+    VS_CODE_LAUNCH.configurations[0].program = `\${workspaceFolder}/${entrypointFor(project)}`;
     await writeFile(resolve(root, "launch.json"), JSON.stringify(VS_CODE_LAUNCH, undefined, 4));
 }
 
