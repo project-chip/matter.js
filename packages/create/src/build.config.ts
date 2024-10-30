@@ -5,7 +5,7 @@
  */
 
 import { Project } from "@matter/tools";
-import { cp, mkdir, readFile, writeFile } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { basename, dirname } from "path";
 import { Config, Template } from "./config.js";
 
@@ -18,6 +18,10 @@ export async function before({ project }: Project.Context) {
 
     await mkdir(createPkg.resolve("dist/templates"), { recursive: true });
 
+    // We set the version after build so we don't know actual version here.  This placeholder is just used in dev.  We
+    // then replace with the "create" package version on init if it's not a git build
+    const matterJsVersion = `~${await readFile(project.pkg.workspace.resolve("version.txt"), "utf-8")}`;
+
     const readmes = await examplesPkg.glob("src/*/README.md");
     const templates = Array<Template>();
     for (const readme of readmes) {
@@ -27,6 +31,8 @@ export async function before({ project }: Project.Context) {
             continue;
         }
 
+        const dependencies = {} as Record<string, string>;
+
         const baseLength = examplesPkg.resolve(`src/${name}`).length + 1;
         const sources = await examplesPkg.glob(`src/${name}/**/*.ts`);
         let entrypoint;
@@ -35,7 +41,27 @@ export async function before({ project }: Project.Context) {
             if (!entrypoint && filename.indexOf("/") === -1) {
                 entrypoint = filename;
             }
-            await cp(file, createPkg.resolve("dist/templates/", name, filename));
+            const source = await readFile(file, "utf-8");
+
+            for (const [, pkgName] of source.matchAll(/from "(@[^/"]+\/[^/"]+|[^/"]+)[^"]*"/g)) {
+                if (dependencies[pkgName]) {
+                    continue;
+                }
+
+                if (pkgName.startsWith("@matter/")) {
+                    dependencies[pkgName] = matterJsVersion;
+                    continue;
+                }
+
+                const version = examplesPkg.json.dependencies[pkgName];
+                if (version !== undefined) {
+                    dependencies[pkgName] = version;
+                }
+            }
+
+            const outFilename = createPkg.resolve("dist/templates", name, filename);
+            await mkdir(dirname(outFilename), { recursive: true });
+            await writeFile(outFilename, source);
         }
 
         if (!entrypoint) {
@@ -44,20 +70,19 @@ export async function before({ project }: Project.Context) {
 
         templates.push({
             name,
+            dependencies,
             description: match[1],
             entrypoint,
         });
     }
 
-    // We set the version after build so we don't know actual version here.  This placeholder is just used in dev.  We
-    // then replace with the "create" package version on init if it's not a git build
-    const matterJsVersion = `~${await readFile(project.pkg.workspace.resolve("version.txt"), "utf-8")}`;
-
-    const typescriptVersion = project.pkg.findPackage("@matter/tools").json.dependencies.typescript;
+    const tools = project.pkg.findPackage("@matter/tools").json;
+    const typescriptVersion = tools.dependencies.typescript;
+    const nodeTypesVersion = tools.devDependencies["@types/node"];
 
     const config: Config = {
-        matterJsVersion,
         typescriptVersion,
+        nodeTypesVersion,
         templates,
     };
 
