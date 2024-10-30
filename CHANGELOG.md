@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/create
+    - Fix: Project generator includes all required dependencies for controller and complex devices
+    - Feature: Project generator now includes .gitignore and VS Code launch configuration
+
 ## 0.11.0 (2024-10-29)
 
 -   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
