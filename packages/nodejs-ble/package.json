@@ -30,7 +30,8 @@
     },
     "dependencies": {
         "@matter/general": "*",
-        "@project-chip/matter.js": "*"
+        "@matter/types": "*",
+        "@matter/protocol": "*"
     },
     "devDependencies": {
         "@matter/tools": "*"

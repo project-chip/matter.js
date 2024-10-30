@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment } from "@project-chip/matter.js/environment";
+import { Environment } from "@matter/general";
 import { ReactNativeEnvironment } from "./ReactNativeEnvironment.js";
 
 // Mainly import TextEncoder and TextDecoder polyfill

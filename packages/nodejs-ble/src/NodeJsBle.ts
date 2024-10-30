@@ -5,8 +5,7 @@
  */
 
 import { NetInterface, TransportInterface } from "@matter/general";
-import { Ble } from "@project-chip/matter.js/ble";
-import { InstanceBroadcaster, Scanner } from "@project-chip/matter.js/common";
+import { Ble, InstanceBroadcaster, Scanner } from "@matter/protocol";
 import { BleBroadcaster } from "./BleBroadcaster.js";
 import { BlePeripheralInterface } from "./BlePeripheralInterface.js";
 import { BleScanner } from "./BleScanner.js";

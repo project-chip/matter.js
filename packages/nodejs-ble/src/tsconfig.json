@@ -10,7 +10,10 @@
             "path": "../../general/src"
         },
         {
-            "path": "../../matter.js/src"
+            "path": "../../protocol/src"
+        },
+        {
+            "path": "../../types/src"
         }
     ]
 }

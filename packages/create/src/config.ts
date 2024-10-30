@@ -35,7 +35,7 @@ export async function Config() {
     if (packageJson.version !== "0.0.0-git") {
         for (const template of config.templates) {
             for (const name in template.dependencies) {
-                if (name.startsWith("@matter/")) {
+                if (name.startsWith("@matter/") || name.startsWith("@project-chip/")) {
                     template.dependencies[name] = packageJson.version;
                 }
             }
