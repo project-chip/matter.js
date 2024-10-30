@@ -41,6 +41,33 @@ const TSCONFIG = {
     include: ["./src/**/*.ts"],
 };
 
+const VS_CODE_LAUNCH = {
+    version: "0.2.0",
+    configurations: [
+        {
+            type: "node",
+            request: "launch",
+            name: "Launch Program",
+            skipFiles: ["<node_internals>/**"],
+            program: "${workspaceFolder}/dist/SensorDeviceNode.js",
+
+            // Never gotten it to work without this
+            console: "integratedTerminal",
+
+            // Doesn't seem to work
+            //sourceMaps: true,
+
+            env: {
+                NODE_OPTIONS: "--enable-source-maps",
+            },
+            preLaunchTask: "tsc: build - tsconfig.json",
+            outFiles: ["${workspaceFolder}/dist/**/*.js"],
+        },
+    ],
+};
+
+const GITIGNORE = "node_modules/\ndist/\n";
+
 export class TemplateNotFoundError extends Error {}
 
 export interface NewProject {
@@ -86,6 +113,8 @@ export async function create(this: NewProject) {
 
     await createPackageJson(this);
     await createTsconfig(this);
+    await createGitignore(this);
+    await createVsCodeProject(this);
     await installSources(this);
 }
 
@@ -133,6 +162,16 @@ async function createPackageJson(project: NewProject) {
 
 async function createTsconfig(project: NewProject) {
     await writeFile(resolve(project.dest, "tsconfig.json"), JSON.stringify(TSCONFIG, undefined, 4));
+}
+
+async function createGitignore(project: NewProject) {
+    await writeFile(resolve(project.dest, ".gitignore"), GITIGNORE);
+}
+
+async function createVsCodeProject(project: NewProject) {
+    const root = resolve(project.dest, ".vscode");
+    await mkdir(root);
+    await writeFile(resolve(root, "launch.json"), JSON.stringify(VS_CODE_LAUNCH, undefined, 4));
 }
 
 async function installSources(project: NewProject) {
