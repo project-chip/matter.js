@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.1 (2024-10-31)
 
 -   @matter/create
     - Fix: Project generator includes all required dependencies for controller and complex devices
