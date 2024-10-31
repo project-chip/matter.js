@@ -11,7 +11,7 @@ import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
  * This is the default server implementation of {@link PowerSourceBehavior}.
  */
 export class PowerSourceServer extends PowerSourceBehavior {
-    override initialize() {
-        this.agent.get(DescriptorServer).addDeviceTypes("PowerSource");
+    override async initialize() {
+        (await this.agent.load(DescriptorServer)).addDeviceTypes("PowerSource");
     }
 }

@@ -761,7 +761,7 @@ export class MdnsScanner implements Scanner {
             };
         } else {
             logger.debug(
-                `Adding operational device ${matterName} in cache (interface ${netInterface}) with TXT data:`,
+                `Adding operational device ${matterName} in cache (interface ${netInterface}, ttl=${ttl}) with TXT data:`,
                 MdnsScanner.discoveryDataDiagnostics(txtData),
             );
             device = {

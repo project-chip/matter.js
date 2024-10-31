@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/node
+    - Fix: Ensures to fully load the Descriptor cluster before adding additional device types 
+
+
 ## 0.11.1 (2024-10-31)
 
 -   @matter/create
