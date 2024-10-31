@@ -62,7 +62,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
         }
 
         // Ensure endpoint is a bridged node
-        this.agent.get(DescriptorServer).addDeviceTypes("BridgedNode");
+        (await this.agent.load(DescriptorServer)).addDeviceTypes("BridgedNode");
     }
 }
 

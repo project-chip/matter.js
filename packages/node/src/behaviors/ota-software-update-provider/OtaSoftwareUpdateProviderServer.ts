@@ -11,7 +11,7 @@ import { OtaSoftwareUpdateProviderBehavior } from "./OtaSoftwareUpdateProviderBe
  * This is the default server implementation of {@link OtaSoftwareUpdateProviderBehavior}.
  */
 export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBehavior {
-    override initialize() {
-        this.agent.get(DescriptorServer).addDeviceTypes("OtaProvider");
+    override async initialize() {
+        (await this.agent.load(DescriptorServer)).addDeviceTypes("OtaProvider");
     }
 }
