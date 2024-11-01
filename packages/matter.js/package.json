@@ -27,7 +27,6 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.docs.json",
         "test": "matter-test -w",
         "coverage": "c8 matter-test esm",
         "embed-examples": "embedme **/README.md"
@@ -97,14 +96,14 @@
                 "default": "./dist/cjs/device/export.js"
             }
         },
-        "./behaviors/*": {
+        "./behavior/*": {
             "import": {
-                "types": "./dist/esm/compat/behaviors/*.d.ts",
-                "default": "./dist/esm/compat/behaviors/*.js"
+                "types": "./dist/esm/compat/behavior/*.d.ts",
+                "default": "./dist/esm/compat/behavior/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/behaviors/*.d.ts",
-                "default": "./dist/cjs/compat/behaviors/*.js"
+                "types": "./dist/cjs/compat/behavior/*.d.ts",
+                "default": "./dist/cjs/compat/behavior/*.js"
             }
         },
         "./behavior/definitions/*": {

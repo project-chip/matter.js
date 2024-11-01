@@ -40,8 +40,8 @@ format) and CJS (CommonJS module format).
 The [matter-build](./bin/build.js) script orchestrates TSC and esbuild.  It inspects `package.json` for the target
 module to determine whether to emit ESM, CJS or both.
 
-Use `matter-build --help` for command line usage.  `matter-build --workspaces` builds all workspace packages that have
-changed (or depend on other workspace packages that have changed) since the last build.
+Use `matter-build --help` for command line usage.  If you run `matter-build` in a monorepo root it builds all packages
+that have changed (or depend on other packages that have changed) since the last build.
 
 `matter-build` itself is implemented in TypeScript.  It uses `esbuild` to bootstrap itself in fresh installs.
 

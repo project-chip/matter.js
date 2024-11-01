@@ -134,6 +134,11 @@ export class Builder {
                         await project.hashDeclarations(apiSha);
                     });
 
+                    // Work-in-progress alternative doc generation implementation
+                    // await progress.run(`Extract ${progress.emphasize("api docs")}`, () =>
+                    //     emitApiDoc(project.pkg, program, progress),
+                    // );
+
                     info.apiSha = apiSha.digest("hex");
                 } else {
                     await progress.run(`Validate ${progress.emphasize("types")}`, () =>

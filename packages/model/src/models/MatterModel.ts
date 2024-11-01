@@ -88,7 +88,6 @@ export class MatterModel extends Model<MatterElement> implements MatterElement {
      * Create a new MatterModel.
      *
      * @param definition the MatterElement that defines the model
-     * @param globals predefined globals, usually tiehr
      */
     constructor(definition: MatterElement.Properties = { name: "Matter", children: [] }) {
         const children = [...(definition.children || [])];

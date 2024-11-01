@@ -8,7 +8,7 @@ import { existsSync, readFileSync, statSync } from "fs";
 import { readdir, readFile, stat, writeFile } from "fs/promises";
 import { dirname, join, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
-import { globSync, maybeReadJsonSync, maybeStatSync } from "./files.js";
+import { globSync, isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
@@ -90,6 +90,10 @@ export class Package {
         return this.json.name;
     }
 
+    get version() {
+        return this.json.version;
+    }
+
     get exports() {
         return this.json.exports;
     }
@@ -164,6 +168,21 @@ export class Package {
 
     get workspace() {
         return Package.workspaceFor(this.path);
+    }
+
+    get isWorkspace() {
+        return Array.isArray(this.json.workspaces);
+    }
+
+    get root(): Package {
+        try {
+            return this.workspace;
+        } catch (e) {
+            if (!(e instanceof JsonNotFoundError)) {
+                throw e;
+            }
+        }
+        return this;
     }
 
     static set workingDir(wd: string) {
@@ -326,6 +345,34 @@ export class Package {
         return this.#aliases;
     }
 
+    get modules() {
+        return this.listModules(false);
+    }
+
+    get sourceModules() {
+        return this.listModules(true);
+    }
+
+    /**
+     * Create a map of module name -> implementation file.  If "source" is true, searches source files rather than
+     * transpiled files.  We do this rather than finding transpilation files then mapping to source files so this works
+     * even if there isn't a build.
+     */
+    listModules(source: boolean, ...conditions: string[]) {
+        if (!conditions.length) {
+            conditions = [this.supportsEsm ? "import" : "require", "default"];
+        }
+
+        const modules = {} as Record<string, string>;
+
+        const exports = this.exports;
+        if (typeof exports === "object" && exports !== null) {
+            findModules(source, new Set(conditions), modules, this.name, this.path, exports);
+        }
+
+        return modules;
+    }
+
     #maybeStat(path: string) {
         return maybeStatSync(this.resolve(path));
     }
@@ -384,5 +431,91 @@ function findExportCondition(detail: Record<string, any>, type: "esm" | "cjs"): 
 
     if (typeof exp === "string") {
         return exp;
+    }
+}
+
+type Conditions = { [name: string]: Exports };
+
+type Exports = string | Conditions | Record<string, Conditions>;
+
+function findModules(
+    source: boolean,
+    conditions: Set<string>,
+    target: Record<string, string>,
+    prefix: string,
+    path: string,
+    exports: Exports,
+) {
+    if (typeof exports === "string") {
+        addModuleGlobs(source, target, prefix, path, exports);
+    } else if (Array.isArray(exports)) {
+        for (const entry of exports) {
+            findModules(source, conditions, target, prefix, path, entry);
+        }
+    } else if (typeof exports === "object" && exports !== null) {
+        let selectedCondition = false;
+        for (const key in exports) {
+            if (key.startsWith(".")) {
+                findModules(source, conditions, target, join(prefix, key), path, exports[key]);
+            } else if (!selectedCondition && conditions.has(key)) {
+                findModules(source, conditions, target, prefix, path, exports[key]);
+                selectedCondition = true;
+            }
+        }
+    } else {
+        throw new Error("Malformed exports field in package.json");
+    }
+}
+
+function addModuleGlobs(source: boolean, target: Record<string, string>, name: string, base: string, pattern: string) {
+    let path = join(base, pattern);
+    if (source) {
+        path = path.replace(/\/dist\/(?:esm|cjs)\//, "/src/");
+    }
+
+    if (name.includes("*")) {
+        // Wildcard
+        if (!name.endsWith("/*")) {
+            throw new Error(`Wildcard in module ${name} does not appear as final path segment`);
+        }
+
+        name = name.substring(0, name.length - 2);
+        const paths = globSync(source ? path.replace(/\.js$/, ".{ts,js,cjs,mjs}") : path);
+        if (!paths.length) {
+            throw new Error(`No match for module ${name} pattern ${pattern}`);
+        }
+
+        const [prefix, suffix] = path.split(/\*+/);
+        const prefixLength = prefix === undefined ? 0 : prefix.length;
+        const suffixLength = suffix === undefined ? 0 : suffix.length;
+
+        for (const thisPath of paths) {
+            const qualifier = thisPath.substring(prefixLength, thisPath.length - suffixLength);
+            const thisName = join(name, qualifier);
+            target[thisName] = thisPath;
+        }
+    } else if (path.includes("*")) {
+        // A wildcard path is only valid with wildcard name
+        throw new Error(`Wildcard in module path "${path}" but not in module "${name}"`);
+    } else {
+        // No wildcard -- remove directory
+        name = name.replace(/\/(?:export|index)$/, "");
+
+        // Look for source if file isn't present
+        let found = false;
+        if (isFile(path)) {
+            found = true;
+        } else if (source && path.endsWith(".js")) {
+            path = path.replace(/\.js$/, ".ts");
+            if (isFile(path)) {
+                found = true;
+            }
+        }
+
+        if (!found) {
+            throw new Error(`Module "${name}" path "${path}" not found`);
+        }
+
+        target[name] = path;
     }
 }

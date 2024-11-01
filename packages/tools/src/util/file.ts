@@ -7,6 +7,7 @@
 import { readdirSync, readFileSync, statSync } from "fs";
 import { GLOBSTAR, Minimatch, ParseReturnFiltered } from "minimatch";
 import { resolve } from "path";
+import { ignoreErrorSync } from "./errors.js";
 
 function isNotFoundError(e: unknown) {
     return typeof e === "object" && e !== null && "code" in e && (e.code === "ENOENT" || e.code === "ENOTDIR");
@@ -66,12 +67,17 @@ export function globSync(pattern: string | string[]) {
 function globOneSync(pattern: string) {
     // Parse the glob
     const mm = new Minimatch(pattern.replace(/\\/g, "/"), {});
-    if (mm.set.length > 1) {
-        throw new GlobError("Unsupported braces in glob pattern");
+    const results = new Set<string>();
+    for (const part of mm.set) {
+        for (const path of globOnePartSync(mm, part)) {
+            results.add(path);
+        }
     }
+    return results;
+}
 
+function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[]) {
     // Find the starting path
-    const segments = mm.set[0];
     let rootPath = "";
     let didOne = false;
     while (typeof segments[0] === "string") {
@@ -151,4 +157,12 @@ function globOneSync(pattern: string) {
     match(rootPath, segments);
 
     return results;
+}
+
+export function isDirectory(path: string) {
+    return !!ignoreErrorSync("ENOENT", () => statSync(path).isDirectory());
+}
+
+export function isFile(path: string) {
+    return !!ignoreErrorSync("ENOENT", () => statSync(path).isFile());
 }

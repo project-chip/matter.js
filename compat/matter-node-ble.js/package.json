@@ -25,8 +25,7 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
+        "build-clean": "matter-build --clean"
     },
     "dependencies": {
         "@matter/nodejs-ble": "*"
