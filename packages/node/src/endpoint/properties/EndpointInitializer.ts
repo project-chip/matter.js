@@ -29,5 +29,5 @@ export abstract class EndpointInitializer {
      * @param type the {@link Behavior} type
      * @returns a new {@link BehaviorBacking}
      */
-    abstract createBacking(endpoint: Endpoint, behavior: Behavior.Type): BehaviorBacking;
+    abstract createBacking(endpoint: Endpoint, type: Behavior.Type): BehaviorBacking;
 }

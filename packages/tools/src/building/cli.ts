@@ -5,7 +5,9 @@
  */
 
 import { commander } from "../util/commander.js";
+import { Package } from "../util/package.js";
 import { Builder, Target } from "./builder.js";
+import { buildDocs, mergeDocs } from "./docs.js";
 import { Graph } from "./graph.js";
 import { Project } from "./project.js";
 import { syncAllTsconfigs } from "./tsconfig.js";
@@ -15,6 +17,7 @@ enum Mode {
     BuildProjectWithDependencies,
     BuildWorkspace,
     DisplayGraph,
+    BuildDocs,
     SyncTsconfigs,
 }
 
@@ -32,7 +35,6 @@ export async function main(argv = process.argv) {
     const program = commander("matter-build", "Builds packages adhering to matter.js standards.")
         .option("-p, --prefix <path>", "specify build directory", ".")
         .option("-c, --clean", "clean before build", false)
-        .option("-w, --workspaces", "build all workspace packages", false)
         .option("-d, --dependencies", "build dependencies", false);
 
     program
@@ -82,12 +84,20 @@ export async function main(argv = process.argv) {
             mode = Mode.SyncTsconfigs;
         });
 
+    program
+        .command("docs")
+        .description("build workspace documentation")
+        .action(() => {
+            mode = Mode.BuildDocs;
+        });
+
     program.action(() => {});
 
     const args = program.parse(argv).opts<Args>();
 
+    const pkg = new Package({ path: args.prefix });
     if (mode === Mode.BuildProject) {
-        if (args.workspaces) {
+        if (pkg.isWorkspace) {
             mode = Mode.BuildWorkspace;
         } else if (args.dependencies) {
             mode = Mode.BuildProjectWithDependencies;
@@ -132,5 +142,21 @@ export async function main(argv = process.argv) {
                 await syncAllTsconfigs(graph);
             }
             break;
+
+        case Mode.BuildDocs: {
+            const progress = pkg.start("Documenting");
+            if (pkg.isWorkspace) {
+                const graph = await Graph.load();
+                for (const node of graph.nodes) {
+                    if (node.pkg.isLibrary) {
+                        await progress.run(node.pkg.name, () => buildDocs(node.pkg, progress));
+                    }
+                }
+                await mergeDocs(Package.workspace);
+            } else {
+                await progress.run(pkg.name, () => buildDocs(pkg, progress));
+            }
+            break;
+        }
     }
 }

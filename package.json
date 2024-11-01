@@ -27,11 +27,11 @@
   ],
   "scripts": {
     "prepare": "npm run build-clean",
-    "clean": "node packages/tools/bin/build.js --workspaces clean",
-    "build": "node packages/tools/bin/build.js --workspaces",
+    "clean": "node packages/tools/bin/build.js clean",
+    "build": "node packages/tools/bin/build.js",
     "version": "node packages/tools/bin/version.js",
-    "build-clean": "node packages/tools/bin/build.js --workspaces --clean",
-    "build-doc": "npm run build-doc --workspaces --if-present",
+    "build-clean": "node packages/tools/bin/build.js --clean",
+    "build-doc": "node packages/tools/bin/build.js docs",
     "test": "npm run -s test --workspaces --if-present",
     "lint": "eslint \"**/*.ts\"",
     "lint-fix": "eslint --fix \"**/*.ts\"",
@@ -56,9 +56,6 @@
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
     "semver": "^7.6.3",
-    "typedoc": "^0.26.10",
-    "typedoc-plugin-markdown": "^3.17.1",
-    "typedoc-plugin-missing-exports": "^3.0.0",
     "typescript": "~5.6.2"
   },
   "overrides": {
