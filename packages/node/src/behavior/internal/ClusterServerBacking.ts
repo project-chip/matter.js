@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Resource } from "#behavior/state/index.js";
 import type { EndpointServer } from "#endpoint/EndpointServer.js";
 import { camelize, Diagnostic, ImplementationError, InternalError, isObject, Logger, MaybePromise } from "#general";
 import { CommandModel, ElementTag } from "#model";
@@ -332,7 +333,28 @@ function createCommandServer(name: string, definition: Command<any, any, any>, b
         try {
             activity = behavior.context?.activity?.frame(`invoke ${name}`);
 
-            result = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[name](request);
+            const invoke = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[name].bind(behavior);
+
+            // Lock if necessary, then invoke
+            if ((behavior.constructor as ClusterBehavior.Type).lockOnInvoke) {
+                const tx = behavior.context.transaction;
+                if (Resource.isLocked(behavior)) {
+                    // Automatic locking with locked resource; requires async lock acquisition
+                    result = (async function invokeAsync() {
+                        await tx.addResources(behavior);
+                        await tx.begin();
+                        return invoke(request);
+                    })();
+                } else {
+                    // Automatic locking on unlocked resource; may proceed synchronously
+                    tx.addResourcesSync(behavior);
+                    tx.beginSync();
+                    result = invoke(request);
+                }
+            } else {
+                // Automatic locking disabled
+                result = invoke(request);
+            }
 
             if (MaybePromise.is(result)) {
                 isAsync = true;

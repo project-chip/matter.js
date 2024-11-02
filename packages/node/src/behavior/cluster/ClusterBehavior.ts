@@ -72,6 +72,11 @@ export class ClusterBehavior extends Behavior {
      */
     static override readonly dependencies = [NetworkBehavior];
 
+    /**
+     * Automatically lock state on command invoke.
+     */
+    static readonly lockOnInvoke = true;
+
     constructor(agent: Agent, backing: BehaviorBacking) {
         super(agent, backing);
 
@@ -221,6 +226,7 @@ export namespace ClusterBehavior {
         readonly dependencies?: Iterable<Behavior.Type>;
         supports: typeof ClusterBehavior.supports;
         readonly ExtensionInterface: ExtensionInterfaceOf<B>;
+        readonly lockOnInvoke: boolean;
 
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts
         // to ClusterType).  So we have to define the long way.

@@ -29,4 +29,11 @@ export interface Resource {
 
 export namespace Resource {
     export const reference = Symbol("reference");
+
+    export function isLocked(resource: Resource) {
+        while (resource[Resource.reference] !== undefined) {
+            resource = resource[Resource.reference];
+        }
+        return resource.lockedBy !== undefined;
+    }
 }
