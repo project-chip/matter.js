@@ -61,6 +61,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     declare internal: AdministratorCommissioningServer.Internal;
     declare state: AdministratorCommissioningServer.State;
 
+    static override lockOnInvoke = false;
+
     /**
      * This method opens an Enhanced Commissioning Window (a dynamic passcode is used which was provided by the caller).
      */
@@ -109,7 +111,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
                 iterations,
                 salt,
             }),
-            this.asyncCallback(this.#endCommissioning, { lock: true }),
+            this.callback(this.#endCommissioning),
         );
     }
 
@@ -126,7 +128,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
-        await commissioner.allowBasicCommissioning(this.asyncCallback(this.#endCommissioning, { lock: true }));
+        await commissioner.allowBasicCommissioning(this.callback(this.#endCommissioning));
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -178,7 +180,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
-        const removeCallback = this.asyncCallback(this.#fabricRemovedCallback, { lock: true });
+        const removeCallback = this.callback(this.#fabricRemovedCallback);
 
         this.internal.stopMonitoringFabricForRemoval = () => {
             adminFabric.deleteRemoveCallback(removeCallback);
