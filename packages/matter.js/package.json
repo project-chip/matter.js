@@ -106,7 +106,7 @@
                 "default": "./dist/cjs/compat/behavior/*.js"
             }
         },
-        "./behavior/definitions/*": {
+        "./behaviors/*": {
             "import": {
                 "types": "./dist/esm/forwards/behaviors/*.d.ts",
                 "default": "./dist/esm/forwards/behaviors/*.js"
@@ -161,19 +161,19 @@
     "typesVersions": {
         "*": {
             "device/*": [
-                "/dist/cjs/compat/device.d.ts"
+                "/dist/cjs/device/*.d.ts"
             ],
             "cluster/*": [
-                "/dist/cjs/compat/cluster.d.ts"
+                "/dist/cjs/cluster/export.d.ts"
             ],
             "devices/*": [
-                "/dist/cjs/compat/devices/*.d.ts"
+                "/dist/cjs/forwards/devices/*.d.ts"
             ],
             "endpoints/*": [
-                "/dist/cjs/compat/endpoints/system/*.d.ts"
+                "/dist/cjs/forwards/endpoints/*.d.ts"
             ],
             "behaviors/*": [
-                "/dist/cjs/compat/endpoints/system/*.d.ts"
+                "/dist/cjs/forwards/behaviors/*.d.ts"
             ],
             ".": [
                 "/dist/cjs/export.d.ts"
