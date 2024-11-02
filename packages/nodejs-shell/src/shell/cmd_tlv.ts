@@ -11,7 +11,7 @@ import type { Argv } from "yargs";
 const logger = Logger.get("tlv");
 
 const TlvTypeNames: { [key: number]: string } = {
-    [TlvType.Null]: "(Null)",
+    [TlvType.Null]: "Null(",
     [TlvType.Boolean]: "Boolean(",
     [TlvType.UnsignedInt]: "UnsignedInt(",
     [TlvType.SignedInt]: "SignedInt(",
