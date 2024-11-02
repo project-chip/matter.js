@@ -61,6 +61,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     declare internal: AdministratorCommissioningServer.Internal;
     declare state: AdministratorCommissioningServer.State;
 
+    static override lockOnInvoke = false;
+
     /**
      * This method opens an Enhanced Commissioning Window (a dynamic passcode is used which was provided by the caller).
      */
@@ -244,7 +246,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      * Closes the commissioning window per the matter specification.
      */
     async #closeCommissioningWindow() {
-        this.callback(this.#endCommissioning);
         await this.env.get(DeviceCommissioner).endCommissioning();
     }
 
