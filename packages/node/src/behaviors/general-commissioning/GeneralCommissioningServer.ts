@@ -23,6 +23,8 @@ const logger = Logger.get("GeneralCommissioningClusterHandler");
 export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     declare state: GeneralCommissioningServer.State;
 
+    static override lockOnInvoke = false;
+
     override initialize() {
         const bci = this.state.basicCommissioningInfo;
 
