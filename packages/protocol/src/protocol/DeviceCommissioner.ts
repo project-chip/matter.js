@@ -17,6 +17,7 @@ import {
     Lifecycle,
     Logger,
     MatterFlowError,
+    MaybePromise,
     ObserverGroup,
 } from "#general";
 import { SecureChannelProtocol } from "#securechannel/SecureChannelProtocol.js";
@@ -56,7 +57,7 @@ export class DeviceCommissioner {
     #failsafeContext?: FailsafeContext;
     #windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
     #activeDiscriminator?: number;
-    #activeCommissioningEndCallback?: () => void;
+    #activeCommissioningEndCallback?: () => MaybePromise;
     #observers = new ObserverGroup(this);
 
     constructor(context: DeviceCommissionerContext) {
@@ -117,7 +118,7 @@ export class DeviceCommissioner {
     async allowEnhancedCommissioning(
         discriminator: number,
         paseServer: PaseServer,
-        commissioningEndCallback: () => void,
+        commissioningEndCallback: () => MaybePromise,
     ) {
         if (this.#windowStatus === AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen) {
             throw new MatterFlowError(
@@ -133,7 +134,7 @@ export class DeviceCommissioner {
         );
     }
 
-    async allowBasicCommissioning(commissioningEndCallback?: () => void) {
+    async allowBasicCommissioning(commissioningEndCallback?: () => MaybePromise) {
         if (this.#windowStatus === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen) {
             throw new MatterFlowError(
                 "Enhanced commissioning window is already open! Cannot set Basic commissioning mode.",
@@ -217,7 +218,7 @@ export class DeviceCommissioner {
 
     async #becomeCommissionable(
         windowStatus: AdministratorCommissioning.CommissioningWindowStatus,
-        activeCommissioningEndCallback?: () => void,
+        activeCommissioningEndCallback?: () => MaybePromise,
         discriminator?: number,
     ) {
         if (
@@ -261,7 +262,7 @@ export class DeviceCommissioner {
         if (this.#activeCommissioningEndCallback !== undefined) {
             const activeCommissioningEndCallback = this.#activeCommissioningEndCallback;
             this.#activeCommissioningEndCallback = undefined;
-            activeCommissioningEndCallback();
+            await activeCommissioningEndCallback();
         }
 
         await this.#context.advertiser.exitCommissioningMode();

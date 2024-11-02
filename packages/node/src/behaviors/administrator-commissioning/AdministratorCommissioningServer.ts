@@ -109,7 +109,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
                 iterations,
                 salt,
             }),
-            this.callback(this.#endCommissioning),
+            this.asyncCallback(this.#endCommissioning, { lock: true }),
         );
     }
 
@@ -126,7 +126,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
-        await commissioner.allowBasicCommissioning(this.callback(this.#endCommissioning));
+        await commissioner.allowBasicCommissioning(this.asyncCallback(this.#endCommissioning, { lock: true }));
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -178,7 +178,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
-        const removeCallback = this.callback(this.#fabricRemovedCallback);
+        const removeCallback = this.asyncCallback(this.#fabricRemovedCallback, { lock: true });
 
         this.internal.stopMonitoringFabricForRemoval = () => {
             adminFabric.deleteRemoveCallback(removeCallback);
@@ -244,7 +244,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      * Closes the commissioning window per the matter specification.
      */
     async #closeCommissioningWindow() {
-        this.callback(this.#endCommissioning);
         await this.env.get(DeviceCommissioner).endCommissioning();
     }
 

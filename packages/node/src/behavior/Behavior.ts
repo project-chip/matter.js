@@ -6,6 +6,7 @@
 
 import { Agent, INSTALL_BEHAVIOR } from "#endpoint/Agent.js";
 import {
+    AsyncObservable,
     EventEmitter,
     GeneratedClass,
     ImplementationError,
@@ -233,6 +234,19 @@ export abstract class Behavior {
      */
     protected callback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
         const observable = Observable<A, R>();
+
+        this.reactTo(observable, reactor, options);
+
+        return (...args: A) => observable.emit(...args);
+    }
+
+    /**
+     * Create an async callback.
+     *
+     * @see {@link callback}
+     */
+    protected asyncCallback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
+        const observable = AsyncObservable<A, R>();
 
         this.reactTo(observable, reactor, options);
 

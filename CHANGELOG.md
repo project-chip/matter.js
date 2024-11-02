@@ -12,6 +12,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
+    - Feature: Automatically lock behavior state on invoke
     - Fix: Ensures to fully load the Descriptor cluster before adding additional device types 
 
 -   @project-chip/matter.js
