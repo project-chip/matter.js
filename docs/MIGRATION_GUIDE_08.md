@@ -23,7 +23,7 @@ too to see the differences between the APIs.
 
 ## TypeScript relevant settings
 
-Beside the TS module resolution settings already mentioned in the [matter.js README.md](../packages/matter.js/README.md), the new API also requires to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
+Beside the TS module resolution settings already mentioned in the [matter.js README.md](../packages/main/README.md#typescript-note), the new API also requires to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
 
 ## Components
 
@@ -41,11 +41,11 @@ The Environment to use can be provided in the configuration of the ServerNode in
 
 In fact this is all what they have in common, so the differences are:
 
--   The default storage is defined by the Environment which is initialized - in the case of the Node.js Environment it is the file based key value store "node-localstorage". To exchange the storage to something else you can implement/extend an own Environment class (see [NodeJsEnvironment](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts)) or just overwrite the storage factory (`Environment.default.get(StorageService).factory = (namespace: string) => createMyStorage(namespace);`)
--   Basic configuration can be provided via a config file, CLI parameters or also environment variables. Some defined configuration keys are used by the base environment or the Node.js environment (e.g. MDNS network interface and such), but also custom configuration can be added and access from within every place in the code by accessing the environment. So this also acts as central place to share configuration for the device implementation. Some variables and their usage is documented in the [Examples Readme](../packages/matter-node.js-examples/README.md). Else check the [Environment.ts](../packages/matter.js/src/environment/Environment.ts) and [NodeJsEnvironment.ts](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
+-   The default storage is defined by the Environment which is initialized - in the case of the Node.js Environment it is the file based key value store "node-localstorage". To exchange the storage to something else you can implement/extend an own Environment class (see [NodeJsEnvironment](../packages/nodejs/src/environment/NodeJsEnvironment.ts)) or just overwrite the storage factory (`Environment.default.get(StorageService).factory = (namespace: string) => createMyStorage(namespace);`)
+-   Basic configuration can be provided via a config file, CLI parameters or also environment variables. Some defined configuration keys are used by the base environment or the Node.js environment (e.g. MDNS network interface and such), but also custom configuration can be added and access from within every place in the code by accessing the environment. So this also acts as central place to share configuration for the device implementation. Some variables and their usage is documented in the [Examples Readme](../packages/examples/README.md). Else check the [Environment.ts](../packages/general/src/environment/Environment.ts) and [NodeJsEnvironment.ts](../packages/nodejs/src/environment/NodeJsEnvironment.ts).
 -   The "ProcessManager" of the environment will, in case of the Node.js environment, also register Process signal handlers to handle Shutdown (SIGINT, SIGTERM, exit) or to trigger logging diagnostic data (SIGUSR2). For other environments this needs to be implemented accordingly.
 -   The environment adds the concept of Workers that can execute tasks/jobs/logic and these workers are used to run Nodes and finish when they are ended. With this Matter Servers (old name CommissioningServer)/Server Nodes (new) are registered on the Environment as workers. The ServerNode (see below) has convenient methods to do that registration, so these Workers are ideally encapsulated and are not needed be used directly the developer, but could for own workloads. The Workers are all disposed/ended when the Environment is disposed.
--   The environment adds the concept "variables" that is a general configuration hierarchy. You may set variables via OS environment variables, command line arguments or configuration file. See [VariableService](../packages/matter.js/src/environment/VariableService.ts) and [EndpointVariableService](../packages/matter.js/src/endpoint/EndpointVariableService.ts) for usage details.
+-   The environment adds the concept "variables" that is a general configuration hierarchy. You may set variables via OS environment variables, command line arguments or configuration file. See [VariableService](../packages/general/src/environment/VariableService.ts) and [EndpointVariableService](../packages/node/src/endpoint/EndpointVariableService.ts) for usage details.
 -   Port numbers that were optionally managed by the MatterServer are now allocated instead by the operating system.
 
 This Environment component even more simplifies to build devices by making sure base components are handled centrally for all things needed.
@@ -57,7 +57,7 @@ The environment related classes are exported unter `matter(-node).js/environment
 The `new CommissioningServer()` is replaced by `await ServerNode.create()` in the new API and both represent one Matter Server node that starts on a provided port, announces itself as Device in the network to be paired with Controllers. The instance also represents the Matter Root-Endpoint with all mandatory Root clusters. The configuration is provided in a comparable way to the ServerNode as before too and can contain node specific configurations (network, productDescription and commissioning details) and also Root endpoint cluster configurations.
 The create() method takes one or two parameters:
 
--   The definition of the RootEndpoint as first parameter. It can be omitted when it is the default RootEndpoint, or it is the definition including all relevant adjusted clusters or needed features. Check out [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) or the [Testing Apps](../chip-testing/src/AllClustersTestInstance.ts) on how to extend the Root Cluster. See also details and examples below when we show the "Endpoint" component.
+-   The definition of the RootEndpoint as first parameter. It can be omitted when it is the default RootEndpoint, or it is the definition including all relevant adjusted clusters or needed features. Check out [DeviceNodeFull.ts](../packages/examples/src/device-onoff-advanced/DeviceNodeFull.ts) or the [Testing Apps](../chip-testing/src/AllClustersTestInstance.ts) on how to extend the Root Cluster. See also details and examples below when we show the "Endpoint" component.
 -   The configuration of the node as second (or if definition above is omitted as first) parameter. Provide the default configuration for all relevant clusters and such here. The configuration should also contain a unique id property for the Node.
 
 When the node is created you add "Endpoints" to it which is comparable (and re-uses the name, but hs a different implementation and interface!) to the Device instances added in the legacy API. Please make sure to use the correct Endpoint class depending on if aou use the Legacy API or the new API!
@@ -191,16 +191,16 @@ const endpoint = await serverNode.add(
 
 #### Override Cluster handlers and implementations
 
-Matter.js provides default implementations for several clusters. See the [Readme of matter.js project](../packages/matter.js/README.md#included-cluster-default-implementations) for a list of all available clusters, their default implementations and notes for it. The implemented functionality is also described in the cluster implementations themselves that can be found in the [behavior/definitions](../packages/matter.js/src/behavior/definitions) folder (check the \*Server.ts files).
+Matter.js provides [default implementations for several clusters](./CLUSTER_DEFAULT_IMPLEMENTATIONS.md). The implemented functionality is also described in the cluster implementations themselves that can be found in the [behaviors](../packages/node/src/behaviors) folder (check the *\*Server.ts files).
 
 You can override the matter commands directly as one option and implement the full required logic as defined by the specification. Most default implementations already do this and provide special logic methods to override to implement just the relevant device/hardware/platform specific logic. In these cases you only need to take care about this and can leave matter specific requirements aside because we already took care about them.
 
 Examples here are e.g.
 
--   [LevelControlServer](../packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts)
--   [OnOffServer](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts)
--   [ColorControl](../packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts)
--   [Window-Covering](../packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts)
+-   [LevelControlServer](../packages/node/src/behaviors/level-control/LevelControlServer.ts)
+-   [OnOffServer](../packages/node/src/behaviors/on-off/OnOffServer.ts)
+-   [ColorControl](../packages/node/src/behaviors/color-control/ColorControlServer.ts)
+-   [Window-Covering](../packages/node/src/behaviors/window-covering/WindowCoveringServer.ts)
 -   ... and several more :-)
 
 ### New:BridgedNodeEndpoint <--> Legacy:ComposedDevice
@@ -253,7 +253,7 @@ cleanup own cluster states.
 
 The new API uses `initialize()` to initialize and `async [Symbol.asyncDispose]()` to cleanup the cluster state.
 
-As an example you can check the [OnOffServer.ts](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts) implementation.
+As an example you can check the [OnOffServer.ts](../packages/node/src/behaviors/on-off/OnOffServer.ts) implementation.
 
 ### Dynamic Getter/Setter for cluster attributes
 
@@ -262,7 +262,7 @@ The Legacy API allowed to use nameAttributeGetterGetter and nameAttributeSetter 
 **Note**
 Because this type of attribute value determination is problematic when it comes to subscriptions and other cases please try to use this only if it is really needed and the values are not relevant to be subscribed. Ideally set the attribite value when it is changed to the new value.
 
-In order to create dynamic getter or setters in the new API you can overwrite the respective attributes in the Cluster state definition in the Server implementation as shown in [OperationalCredentialsServer.ts at the end of the file](../packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts):
+In order to create dynamic getter or setters in the new API you can overwrite the respective attributes in the Cluster state definition in the Server implementation as shown in [OperationalCredentialsServer.ts at the end of the file](../packages/node/src/behaviors/operational-credentials/OperationalCredentialsServer.ts):
 
 The following example shows how to define a dynamic getter and setter for the attribute "currentFabricIndex":
 
@@ -292,7 +292,7 @@ matter.js also allows to define and add additional clusters to the system. Todo 
 **Note**
 Currently the TLV-Schema and the Model definition is kind of duplicated code and needs to match in their respective formats. In the future we plan to use a json representation like it is already in use for all official clusters - and then offer code generators also for custom clusters which would create all the relevant code automatically. But the adjusted generators are not yet ready.
 
-The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packages/matter-node.js-examples/src/examples/cluster/MyFancyOwnFunctionality.ts) that shows how this can be built right now already (with a bit overhead as described). The code contained here in one file is normally split into several files in the generated code.
+The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packages/examples/src/device-onoff-advanced/cluster/MyFancyOwnFunctionality.ts) that shows how this can be built right now already (with a bit overhead as described). The code contained here in one file is normally split into several files in the generated code.
 
 ### React to change events on cluster attributes
 
@@ -439,7 +439,7 @@ endpoint.behaviors.require(BridgedDeviceBasicInformationServer, {
 
 ### More options?
 
-Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) example for more interaction points.
+Take a look at the [DeviceNodeFull.ts](../packages/examples/src/device-onoff-advanced/DeviceNodeFull.ts) example for more interaction points.
 
 ## FAQ
 
@@ -526,7 +526,7 @@ To just replace the factory you could use
 
 Your Storage need to implement the "Storage" interface of matter.js.
 
-Alternatively, create on complete own Environment like [NodeJsEnvironment](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
+Alternatively, create on complete own Environment like [NodeJsEnvironment](../packages/nodejs/src/environment/NodeJsEnvironment.ts).
 
 If needed (for logging purposes) you can also set a storage location to `storageService.location`.
 
