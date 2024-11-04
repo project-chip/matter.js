@@ -50,6 +50,7 @@ To have Typescript and your IDE know all the relevant exported functionality you
 ```json5
 {
     compilerOptions: {
+        "target": "es2022", // Matter.js most likely won't work with older versions of ES
         moduleResolution: "node16", // Required to support package.json exports
         module: "node16", // Required to make sure all imports are js
     },
