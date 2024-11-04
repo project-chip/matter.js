@@ -42,9 +42,21 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         this.isInitialized = true;
     }
 
+    async #finishAllWrites(filename?: string) {
+        // Let's try max up to 10 times to finish all writes out there, otherwise something is strange
+        for (let i = 0; i < 10; i++) {
+            await Promise.allSettled(
+                filename !== undefined ? [this.#writeFileBlocker.get(filename)] : this.#writeFileBlocker.values(),
+            );
+            if (!this.#writeFileBlocker.size) {
+                return;
+            }
+        }
+    }
+
     async close() {
         this.isInitialized = false;
-        await Promise.allSettled(this.#writeFileBlocker.values());
+        await this.#finishAllWrites();
     }
 
     filePath(fileName: string) {
@@ -52,6 +64,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
     }
 
     async clear() {
+        await this.#finishAllWrites();
         await rm(this.#path, { recursive: true, force: true });
         await mkdir(this.#path, { recursive: true });
     }
@@ -132,8 +145,10 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         return promise;
     }
 
-    delete(contexts: string[], key: string) {
-        return rm(this.filePath(this.buildStorageKey(contexts, key)), { force: true });
+    async delete(contexts: string[], key: string) {
+        const filename = this.buildStorageKey(contexts, key);
+        await this.#finishAllWrites(filename);
+        return rm(this.filePath(filename), { force: true });
     }
 
     /** Returns all keys of a storage context without keys of sub-contexts */
@@ -194,6 +209,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
     }
 
     async clearAll(contexts: string[]) {
+        await this.#finishAllWrites();
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
 
