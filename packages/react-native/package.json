@@ -45,7 +45,7 @@
         "jwk-to-pem": "^2.0.5",
         "react-native-ble-plx": "^3.2.1",
         "react-native-polyfill-globals": "^3.1.0",
-        "react-native-quick-crypto": "^0.7.4",
+        "react-native-quick-crypto": "^0.7.6",
         "react-native-udp": "^4.1.7"
     },
     "devDependencies": {
