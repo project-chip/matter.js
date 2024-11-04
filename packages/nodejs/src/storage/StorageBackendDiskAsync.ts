@@ -42,8 +42,9 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         this.isInitialized = true;
     }
 
-    close() {
+    async close() {
         this.isInitialized = false;
+        await Promise.allSettled(this.#writeFileBlocker.values());
     }
 
     filePath(fileName: string) {
@@ -160,7 +161,10 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         for (const key of await this.keys(contexts)) {
             promises.push(
                 (async () => {
-                    values[key] = await this.get(contexts, key);
+                    const value = await this.get(contexts, key);
+                    if (value !== undefined) {
+                        values[key] = value;
+                    }
                 })(),
             );
         }
