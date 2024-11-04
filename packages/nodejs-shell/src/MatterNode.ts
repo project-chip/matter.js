@@ -109,7 +109,7 @@ export class MatterNode {
 
     async closeStorage() {
         try {
-            this.storage?.close();
+            await this.storage?.close();
             process.exit(0);
         } catch {
             process.exit(1);

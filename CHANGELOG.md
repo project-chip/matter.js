@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+
+-   @matter/nodejs
+    - Fix: The MaybeAsyncStorage class close method is not async
+    - Fix: Makes sure that the Async storage waits that all writes are finished in some cases
+
 ## 0.11.2 (2024-11-02)
 
 -   @matter/node
