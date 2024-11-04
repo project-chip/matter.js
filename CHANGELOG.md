@@ -15,6 +15,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Automatically lock behavior state on invoke
     - Fix: Ensures to fully load the Descriptor cluster before adding additional device types 
 
+-   @matter/nodejs
+    - Fix: Makes sure that the Async storage waits that all writes are finished in some cases
+
 -   @project-chip/matter.js
     - Fix: Fixes some compatibility re-exports that got screwed up since 0.11.0
 
