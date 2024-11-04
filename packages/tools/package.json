@@ -49,7 +49,7 @@
         "minimatch": "^9.0.5",
         "typescript": "~5.6.2",
         "type-fest": "^4.24.0",
-        "typedoc": "^0.26.10",
+        "typedoc": "^0.26.11",
         "typedoc-material-theme": "^1.1.0",
         "@microsoft/tsdoc": "^0.15.0"
     },
