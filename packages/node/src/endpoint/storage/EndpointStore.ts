@@ -69,8 +69,11 @@ export class EndpointStore {
             const behaviorValues = (this.initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
-            for (const key of await behaviorStorage.keys()) {
-                behaviorValues[key] = await behaviorStorage.get(key);
+            const storedValues = await behaviorStorage.values();
+            for (const [key, value] of Object.entries(storedValues)) {
+                if (value !== undefined) {
+                    behaviorValues[key] = value;
+                }
             }
         }
 
