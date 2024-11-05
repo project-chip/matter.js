@@ -15,6 +15,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: The MaybeAsyncStorage class close method is not async
     - Fix: Makes sure that the Async storage waits that all writes are finished in some cases
 
+-   @matter/nodejs-ble
+    - Fix: When BLE scanning was not started we also do not need to stop it (and risk blocking issues)
+
 -   @project-chip/matter-node.js
     - Fix invalid import for compat package
 
