@@ -122,3 +122,17 @@ Matter.js based projects show up as "uncertified test devices" in the ecosystems
 
 Some ecosystems might not allow uncertified devices to be added. In this case you need to check the settings of the ecosystem to allow uncertified devices or contact the support of the ecosystem.
 
+### Bluetooth and macOS
+
+When pairing a Matter accessory over Bluetooth on macOS, you may encounter connectivity issues, such as an inability to connect to the device, problems with BLE scanning, or failure to receive responses from the peripheral. These issues may be caused by the absence of a required profile.
+
+To resolve this, it is necessary to install the [Bluetooth Central Matter Client Developer mode profile](https://developer.apple.com/services-account/download?path=/iOS/iOS_Logs/EnableBluetoothCentralMatterClientDeveloperMode.mobileconfig) on macOS:
+
+-   Download the Bluetooth Central Matter Client Developer Mode profile and
+    install it.
+
+    -   Profile can be installed via Settings->Privacy &
+        Security->Profiles
+
+-   Restart your system
+  
