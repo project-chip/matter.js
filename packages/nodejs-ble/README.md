@@ -17,6 +17,7 @@ The used packages have some limitations and prerequisites. Please check the Read
 * [noble](https://github.com/abandonware/noble#readme)
   * Consider Noble prerequisites for your platform: https://github.com/stoprocent/noble#prerequisites
   * For Linux: https://github.com/stoprocent/noble#running-without-rootsudo-linux-specific
+  * For macOS: Install [Bluetooth Central Matter Client Developer mode profile](../../docs/TROUBLESHOOTING.md#bluetooth-and-macos)
   * When using Device and Controller in parallel: https://github.com/stoprocent/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
   * Please also see common issues and solutions: https://github.com/stoprocent/noble#common-problems
 
