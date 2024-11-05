@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "#types";
+import { ValidationError } from "@matter/types";
 import { execSync } from "child_process";
 
 const commandArguments = process.argv.slice(2);
