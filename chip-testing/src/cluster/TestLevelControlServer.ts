@@ -3,9 +3,9 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger } from "@matter.js/main";
-import { LevelControlServer } from "@matter.js/main/behaviors/level-control";
-import { LevelControl } from "@matter.js/main/clusters/level-control";
+import { Logger } from "@matter/main";
+import { LevelControlServer } from "@matter/main/behaviors/level-control";
+import { LevelControl } from "@matter/main/clusters/level-control";
 
 const logger = Logger.get("TestLevelControlServer");
 

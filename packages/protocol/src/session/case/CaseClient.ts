@@ -5,11 +5,11 @@
  */
 
 import { Bytes, Crypto, Diagnostic, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { SessionManager } from "#session/SessionManager.js";
 import { NodeId } from "#types";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
-import { SessionContext } from "../Session.js";
 import {
     KDFSR1_KEY_INFO,
     KDFSR2_INFO,
@@ -28,24 +28,25 @@ import { CaseClientMessenger } from "./CaseMessenger.js";
 const logger = Logger.get("CaseClient");
 
 export class CaseClient {
-    async pair(
-        client: SessionContext,
-        exchange: MessageExchange,
-        fabric: Fabric,
-        peerNodeId: NodeId,
-        expectedProcessingTimeMs?: number,
-    ) {
+    #sessions: SessionManager;
+
+    constructor(sessions: SessionManager) {
+        this.#sessions = sessions;
+    }
+
+    async pair(exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId, expectedProcessingTimeMs?: number) {
         const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
 
         // Generate pairing info
         const initiatorRandom = Crypto.getRandom();
-        const initiatorSessionId = await client.sessionManager.getNextAvailableSessionId(); // Initiator Session Id
+        const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
         const { publicKey: initiatorEcdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
 
         // Send sigma1
         let sigma1Bytes;
-        let resumptionRecord = client.sessionManager.findResumptionRecordByNodeId(peerNodeId);
+        let resumed = false;
+        let resumptionRecord = this.#sessions.findResumptionRecordByAddress(fabric.addressOf(peerNodeId));
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
             const resumeKey = await Crypto.hkdf(
@@ -61,7 +62,7 @@ export class CaseClient {
                 initiatorRandom,
                 resumptionId,
                 initiatorResumeMic,
-                initiatorSessionParams: client.sessionParameters,
+                initiatorSessionParams: this.#sessions.sessionParameters,
             });
         } else {
             sigma1Bytes = await messenger.sendSigma1({
@@ -69,7 +70,7 @@ export class CaseClient {
                 destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
                 initiatorEcdhPublicKey,
                 initiatorRandom,
-                initiatorSessionParams: client.sessionParameters,
+                initiatorSessionParams: this.#sessions.sessionParameters,
             });
         }
 
@@ -92,7 +93,7 @@ export class CaseClient {
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = Bytes.concat(initiatorRandom, resumptionRecord.resumptionId);
-            secureSession = await client.sessionManager.createSecureSession({
+            secureSession = await this.#sessions.createSecureSession({
                 sessionId: initiatorSessionId,
                 fabric,
                 peerNodeId,
@@ -111,6 +112,7 @@ export class CaseClient {
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
             resumptionRecord.sessionParameters = secureSession.parameters; /* update mrpParams */
+            resumed = true;
         } else {
             // Process sigma2
             const {
@@ -201,7 +203,7 @@ export class CaseClient {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            secureSession = await client.sessionManager.createSecureSession({
+            secureSession = await this.#sessions.createSecureSession({
                 sessionId: initiatorSessionId,
                 fabric,
                 peerNodeId,
@@ -226,8 +228,8 @@ export class CaseClient {
         }
 
         await messenger.close();
-        await client.sessionManager.saveResumptionRecord(resumptionRecord);
+        await this.#sessions.saveResumptionRecord(resumptionRecord);
 
-        return secureSession;
+        return { session: secureSession, resumed };
     }
 }

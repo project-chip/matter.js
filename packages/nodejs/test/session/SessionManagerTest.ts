@@ -5,7 +5,7 @@
  */
 
 import { StorageBackendMemory, StorageContext } from "#general";
-import { SessionContext, SessionManager, SessionParameters } from "#protocol";
+import { FabricManager, SessionManager, SessionParameters } from "#protocol";
 import { NodeId } from "#types";
 import * as assert from "assert";
 
@@ -17,14 +17,18 @@ describe("SessionManager", () => {
         let storageContext: StorageContext;
         let sessionManager: SessionManager;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             storage = new StorageBackendMemory();
+            storage.initialize();
             storageContext = new StorageContext(storage, ["context"]);
 
-            sessionManager = new SessionManager(
-                { sessionParameters: {} as SessionParameters, handleResubmissionStarted: () => {} } as SessionContext,
-                storageContext,
-            );
+            sessionManager = new SessionManager({
+                parameters: {} as SessionParameters,
+                fabrics: new FabricManager(),
+                storage: storageContext,
+            });
+
+            await sessionManager.construction.ready;
         });
 
         it("next number is increasing", async () => {
@@ -78,7 +82,7 @@ describe("SessionManager", () => {
         it("verify that oldest session gets closed when no more ids are available", async () => {
             const first = await sessionManager.getNextAvailableSessionId();
             let firstClosed = false;
-            sessionManager.sessionClosed.on(() => {
+            sessionManager.sessions.deleted.on(() => {
                 firstClosed = true;
             });
             await sessionManager.createSecureSession({

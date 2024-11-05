@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterError } from "@matter.js/general";
+import { Logger, MatterError } from "@matter/general";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
 import { NodeId } from "@project-chip/matter.js/datatype";
@@ -127,7 +127,7 @@ export default function commands(theNode: MatterNode) {
 
                                     console.log("Commissioned Node:", commissionedNodeId);
 
-                                    const node = theNode.commissioningController.getConnectedNode(commissionedNodeId);
+                                    const node = theNode.commissioningController.getPairedNode(commissionedNodeId);
                                     if (node === undefined) {
                                         // Should not happen
                                         throw new MatterError("Node not found after commissioning.");
@@ -253,17 +253,29 @@ export default function commands(theNode: MatterNode) {
                     "unpair <node-id>",
                     "Unpair/Decommission a node",
                     yargs => {
-                        return yargs.positional("node-id", {
-                            describe: "node id",
-                            type: "string",
-                            demandOption: true,
-                        });
+                        return yargs
+                            .positional("node-id", {
+                                describe: "node id",
+                                type: "string",
+                                demandOption: true,
+                            })
+                            .options({
+                                force: {
+                                    describe: "Force unpairing even if node is not online",
+                                    type: "boolean",
+                                    default: false,
+                                },
+                            });
                     },
                     async argv => {
                         await theNode.start();
-                        const { nodeId } = argv;
-                        const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
-                        await node.decommission();
+                        const { nodeId, force } = argv;
+                        if (force) {
+                            await theNode.controller.removeNode(NodeId(BigInt(nodeId)), !force);
+                        } else {
+                            const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
+                            await node.decommission();
+                        }
                     },
                 ),
         handler: async (argv: any) => {

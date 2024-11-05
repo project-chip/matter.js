@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
+import { createHash } from "crypto";
 import { Progress } from "../util/progress.js";
 import { BuildError } from "./error.js";
-import { Project } from "./project.js";
+import { Graph } from "./graph.js";
+import { BuildInformation, Project } from "./project.js";
+import { createTypescriptContext } from "./typescript.js";
+import { TypescriptContext } from "./typescript/context.js";
 
 export enum Target {
     clean = "clean",
@@ -19,6 +22,7 @@ export enum Target {
 export interface Options {
     targets?: Target[];
     clean?: boolean;
+    graph?: Graph;
 }
 
 /**
@@ -28,10 +32,33 @@ export interface Options {
  */
 export class Builder {
     unconditional: boolean;
+    tsContext?: TypescriptContext;
+    graph?: Graph;
 
     constructor(private options: Options = {}) {
+        this.graph = options.graph;
         this.unconditional =
             options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
+    }
+
+    get hasClean() {
+        return this.options.clean;
+    }
+
+    clearClean() {
+        delete this.options.clean;
+    }
+
+    hasTargets() {
+        return this.options.targets && this.options.targets.length > 0;
+    }
+
+    public async configure(project: Project) {
+        if (!project.pkg.hasConfig) {
+            return;
+        }
+
+        await project.configure();
     }
 
     public async build(project: Project) {
@@ -40,7 +67,6 @@ export class Builder {
         try {
             await this.#doBuild(project, progress);
         } catch (e: any) {
-            progress.failure(`Unexpected build error`);
             progress.shutdown();
             process.stderr.write(`${e.stack ?? e.message}\n\n`);
             process.exit(1);
@@ -60,60 +86,119 @@ export class Builder {
             return;
         }
 
-        const config = await project.loadConfig();
+        const info: BuildInformation = {};
 
-        await config.before?.({ project, progress });
+        const config = await project.configure();
+
+        await config?.before?.({ project });
+
+        // If available we use graph to access dependency API shas
+        const graph = this.graph ?? (await Graph.forProject(project.pkg.path));
+        let node: Graph.Node | undefined;
+        if (graph) {
+            node = graph.get(project.pkg.name);
+            for (const dep of node.dependencies) {
+                if (dep.info.apiSha !== undefined) {
+                    if (info.dependencyApiShas === undefined) {
+                        info.dependencyApiShas = {};
+                    }
+                    info.dependencyApiShas[dep.pkg.name] = dep.info.apiSha;
+                }
+            }
+        }
 
         if (targets.has(Target.types)) {
-            const refresh = progress.refresh.bind(progress);
             try {
+                // Obtain or initialize typescript solution builder
+                let context = this.tsContext;
+                if (context === undefined) {
+                    context = this.tsContext = await createTypescriptContext(project.pkg.workspace, graph);
+                }
+
+                const refreshCallback = progress.refresh.bind(progress);
+
                 if (project.pkg.isLibrary) {
-                    await progress.run(`Generate ${progress.emphasize("type declarations")}`, () =>
-                        project.buildDeclarations(refresh),
-                    );
-                    await progress.run(`Install ${progress.emphasize("type declarations")}`, () =>
-                        project.installDeclarations(),
-                    );
+                    const apiSha = createHash("sha1");
+
+                    // Our API SHA changes if that of any dependency changes
+                    if (node) {
+                        for (const dep of node.dependencies) {
+                            if (dep.info.apiSha !== undefined) {
+                                apiSha.update(dep.info.apiSha);
+                            }
+                        }
+                    }
+
+                    await progress.run(`Generate ${progress.emphasize("type declarations")}`, async () => {
+                        await context.build(project.pkg, "src", refreshCallback);
+                        await project.hashDeclarations(apiSha);
+                    });
+
+                    // Work-in-progress alternative doc generation implementation
+                    // await progress.run(`Extract ${progress.emphasize("api docs")}`, () =>
+                    //     emitApiDoc(project.pkg, program, progress),
+                    // );
+
+                    info.apiSha = apiSha.digest("hex");
                 } else {
-                    await progress.run(`Validating ${progress.emphasize("types")}`, () =>
-                        project.validateTypes(refresh),
+                    await progress.run(`Validate ${progress.emphasize("types")}`, () =>
+                        context.build(project.pkg, "src", refreshCallback, false),
+                    );
+                }
+                if (project.pkg.hasTests) {
+                    await progress.run(`Validate ${progress.emphasize("test types")}`, () =>
+                        context.build(project.pkg, "test", refreshCallback),
                     );
                 }
             } catch (e) {
                 if (e instanceof BuildError) {
                     progress.failure("Terminating due to type errors");
-                    process.stderr.write(e.diagnostics);
+                    process.stderr.write(`${e.diagnostics}\n`);
                     process.exit(1);
                 }
                 throw e;
             }
         }
 
+        const formats = Array<"esm" | "cjs">();
         if (targets.has(Target.esm)) {
-            await this.#transpile(project, progress, Target.esm);
+            formats.push("esm");
         }
-
         if (targets.has(Target.cjs)) {
-            await this.#transpile(project, progress, Target.cjs);
+            formats.push("cjs");
         }
 
-        await config.after?.({ project, progress });
+        if (formats.length) {
+            const groups = [project.pkg.isLibrary ? "library" : "app"];
+            if (project.pkg.hasTests) {
+                groups.push("tests");
+            }
 
-        // Only update timestamp when there are no explicit targets so we know it's a full build
+            const formatDesc = formats.map(progress.emphasize).join("+");
+            const groupDesc = groups.map(progress.emphasize).join("+");
+
+            await progress.run(`Transpile ${groupDesc} to ${formatDesc}`, async () => {
+                for (const format of formats) {
+                    await this.#transpile(project, format);
+                }
+            });
+        }
+
+        await config?.after?.({ project });
+
+        // Only update build information when there are no explicit targets so we know it's a full build
         if (!this.options.targets?.length) {
-            await project.recordBuildTime();
+            await project.recordBuildInfo(info);
+            if (node) {
+                node.info = info;
+            }
         }
     }
 
-    async #transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
-        const fmt = format.toUpperCase();
-        await progress.run(`Transpile ${progress.emphasize("library")} to ${colors.bold(fmt)}`, () =>
-            project.buildSource(format),
-        );
+    async #transpile(project: Project, format: "esm" | "cjs") {
+        await project.buildSource(format);
         if (project.pkg.hasTests) {
-            await progress.run(`Transpile ${progress.emphasize("tests")} to ${colors.bold(fmt)}`, () =>
-                project.buildTests(format),
-            );
+            await project.buildTests(format);
         }
     }
 

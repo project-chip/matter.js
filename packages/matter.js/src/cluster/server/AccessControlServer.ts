@@ -6,6 +6,7 @@
 
 import { AccessControl, AccessControlCluster } from "#clusters";
 import { InternalError, isDeepEqual, Logger, SyncStorage } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import {
     AclExtensionEntry,
     assertSecureSession,
@@ -13,7 +14,6 @@ import {
     genericFabricScopedAttributeGetter,
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
-    MatterDevice,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
@@ -58,6 +58,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                 AccessControlCluster,
                 "acl",
                 new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntry>>(),
+                MatterDevice.of(session).getFabrics(),
             );
         },
 
@@ -248,6 +249,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                 AccessControlCluster,
                 "extension",
                 new Array<AclExtensionEntry>(),
+                MatterDevice.of(session).getFabrics(),
             );
         },
 

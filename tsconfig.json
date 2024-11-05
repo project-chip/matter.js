@@ -1,19 +1,71 @@
 {
     "files": [],
     "references": [
-        { "path": "packages/tools" },
-        { "path": "packages/general" },
-        { "path": "packages/model" },
-        { "path": "packages/transport" },
-        { "path": "packages/node" },
-        { "path": "packages/matter.js" },
-        { "path": "packages/nodejs" },
-        { "path": "packages/matter.js-react-native"},
-        { "path": "packages/matter-node-ble.js" },
-        { "path": "packages/matter-node-shell.js" },
-        { "path": "packages/matter-node.js-examples" },
-        { "path": "models" },
-        { "path": "codegen" },
-        { "path": "chip-testing" }
+        {
+            "path": "packages/tools"
+        },
+        {
+            "path": "packages/testing"
+        },
+        {
+            "path": "packages/general"
+        },
+        {
+            "path": "packages/model"
+        },
+        {
+            "path": "packages/types"
+        },
+        {
+            "path": "packages/protocol"
+        },
+        {
+            "path": "packages/node"
+        },
+        {
+            "path": "packages/matter.js"
+        },
+        {
+            "path": "packages/nodejs"
+        },
+        {
+            "path": "packages/nodejs-ble"
+        },
+        {
+            "path": "packages/main"
+        },
+        {
+            "path": "packages/nodejs-shell"
+        },
+        {
+            "path": "packages/examples"
+        },
+        {
+            "path": "packages/create"
+        },
+        {
+            "path": "packages/react-native"
+        },
+        {
+            "path": "packages/cli-tool"
+        },
+        {
+            "path": "models"
+        },
+        {
+            "path": "codegen"
+        },
+        {
+            "path": "chip-testing"
+        },
+        {
+            "path": "compat/matter-node.js"
+        },
+        {
+            "path": "compat/matter-node-ble.js"
+        },
+        {
+            "path": "compat/matter-node.js-examples"
+        }
     ]
 }

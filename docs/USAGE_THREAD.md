@@ -4,14 +4,19 @@ Beside Wi-Fi and Ethernet the Thread protocol is the third main communication pr
 
 Thread is a low-power, wireless mesh networking protocol that enables secure, scalable, and reliable communication among IoT devices. It is designed to support a wide variety of IoT devices in the home, including appliances, access points, sensors, and other devices. Thread is a mesh network, meaning that all Thread devices can communicate with each other, and that the network can be extended by simply adding more Thread devices. 
 
-In order to bring Thread devices into an operational IP based network a Thread Border Router (TBR) is required. The TBR is the device that bridges the Thread network to the IP network. The TBR is responsible for routing Thread packets to the IP network and vice versa. The TBR is also responsible for providing the Thread network with access to the internet.
+In order to bring Thread devices into an operational IP based network a **Thread Border Router (TBR)** is required. The TBR is the device that facilitates IPv6-based communication between Thread networks and the local IP network.  The TBR is also responsible for providing the Thread network with access to the internet.
 
-TBRs are available as standalone devices or as part of a larger device, such as a smart home hub or a Wi-Fi router. Please refer to the hub informations in the [README](README.md) to determine whether your hub supports thread. The thread networks from Apple or Google for instance are known to be very stable. Alternatively you can use a Raspberry Pi or a VM with a Thread USB stick/module as an [OpenThread Border Router](https://openthread.io) (see below).
+TBRs are available as standalone devices or as part of a larger device, such as a smart home hub or a Wi-Fi router. Please refer to the hub information in the [README](README.md) to determine whether your hub supports thread. The thread networks from Apple or Google for instance are known to be very stable. Alternatively you can use a Raspberry Pi or a VM with a Thread USB stick/module as an [OpenThread Border Router](https://openthread.io) (see below).
 
-Ideally you should have all your devices in the same Thread network. This is not strictly necessary but it is more efficent as it it allows devices to communicate directly with each other over thread without round-tripping through the TBR.  Matter groups and bindings (direct device connections) therefore benefit from a shared Thread network.
+Ideally you should have all your devices in the same Thread network. This is not strictly necessary but it is more efficient as it allows devices to communicate directly with each other over thread without round-tripping through the TBR.  Matter groups and bindings (direct device connections) therefore benefit from a shared Thread network.
+
+## IPv6 requirements when devices are already on IP network
+
+When a thread based device is already commissioned into an existing ecosystem, e.g. Apple, Google, Amazon or such, and so using their hubs as "Thread border router", then a proper IOv6 setup is important.
+This requires potentially [tweaking settings of hosts or VM](./TROUBLESHOOTING.md#enabling-ipv6-thread-connectivity-on-linux-hosts).
 
 ## How to gather Thread credentials needed for device commissioning?
-Depending on the hub you have you have, and until new (upcoming) Thread credential sharing options have hit the market, you have two options for connecting devices with the thread network.
+Depending on the hub you have, and until new (upcoming) Thread credential sharing options have hit the market, you have two options for connecting devices with the thread network.
 
 The way that always works is to use a hub to commission the device. During commissioning the hub provides the device with the necessary credentials to join the Thread network. The device and hub may then communicate via thread, Wifi or Ethernet.
 
@@ -23,7 +28,7 @@ Alternatively you can use a "trick" with a matter.js test device to gather the t
 This requires a Raspberry Pi with BLE available and Matter.js's `matter-node.js-examples` package installed (other hardware will work but here BLE support can be finicky). Then you use the `DeviceFull` example with these parameters:
 
 ```
-node node_modules/@matter.js/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202021 --discriminator=1234
+node node_modules/@matter/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202021 --discriminator=1234
 ```
 (In case of issues with BLE or such and you need to redo the pairing just slightly change the passcode or discriminator parameter.)
 
@@ -42,7 +47,7 @@ On the OTBR host use `sudo ot-ctl discover` to scan for Thread networks and sele
 Using these fields as additional parameters, your start command for the device looks like:
 
 ```
-node node_modules/@matter.js/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202438 --discriminator=1248 --ble-thread-panid=XXXX --ble-thread-extendedpanid=XXXXXXXXX --ble-thread-networkname=AMZN-Thread-XXXX --ble-thread-channel=XX --ble-thread-address=XXXXXXXXXXX
+node node_modules/@matter/examples/dist/esm/examples/DeviceNodeFull.js --storage-path=.thread --ble-enable --ble-thread-fake --passcode=20202438 --discriminator=1248 --ble-thread-panid=XXXX --ble-thread-extendedpanid=XXXXXXXXX --ble-thread-networkname=AMZN-Thread-XXXX --ble-thread-channel=XX --ble-thread-address=XXXXXXXXXXX
 ```
 
 When Amazon sends the scan command the device returns this network as "found" and Amazon will add the device to the network.  You can then view the operational credentials in the log at line "---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ..." as a hex-string.

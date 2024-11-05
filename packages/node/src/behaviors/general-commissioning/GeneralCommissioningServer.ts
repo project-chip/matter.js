@@ -9,8 +9,8 @@ import { BasicInformationServer } from "#behaviors/basic-information";
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Logger, MatterFlowError } from "#general";
-import type { Node } from "#node/Node.js";
-import { assertSecureSession, MatterDevice } from "#protocol";
+import { ServerNode } from "#node/ServerNode.js";
+import { assertSecureSession, DeviceCommissioner, FabricManager, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";
 
@@ -22,6 +22,8 @@ const logger = Logger.get("GeneralCommissioningClusterHandler");
  */
 export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     declare state: GeneralCommissioningServer.State;
+
+    static override lockOnInvoke = false;
 
     override initialize() {
         const bci = this.state.basicCommissioningInfo;
@@ -41,7 +43,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
     override async armFailSafe({ breadcrumb, expiryLengthSeconds }: GeneralCommissioning.ArmFailSafeRequest) {
         assertSecureSession(this.session, "armFailSafe can only be called on a secure session");
-        const device = MatterDevice.of(this.session);
+        const commissioner = this.env.get(DeviceCommissioner);
 
         try {
             // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
@@ -50,7 +52,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             // is done to allow commissioners, which use PASE connections, the opportunity to use the failsafe during
             // the relatively short commissioning window.
             if (
-                !device.isFailsafeArmed() &&
+                !commissioner.isFailsafeArmed &&
                 this.agent.get(AdministratorCommissioningServer).state.windowStatus !==
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
                 !this.session.isPase
@@ -58,17 +60,17 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
-            if (device.isFailsafeArmed()) {
-                await device.failsafeContext.extend(this.session.fabric, expiryLengthSeconds);
+            if (commissioner.isFailsafeArmed) {
+                await commissioner.failsafeContext.extend(this.session.fabric, expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
                 // to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(
-                    new ServerNodeFailsafeContext(this.endpoint as Node, {
-                        fabrics: device.fabricManager,
-                        sessions: device.sessionManager,
+                await commissioner.beginTimed(
+                    new ServerNodeFailsafeContext(this.endpoint as ServerNode, {
+                        fabrics: this.env.get(FabricManager),
+                        sessions: this.env.get(SessionManager),
                         expiryLengthSeconds,
                         maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
                         associatedFabric: this.session.fabric,
@@ -76,7 +78,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 );
             }
 
-            if (device.isFailsafeArmed()) {
+            if (commissioner.isFailsafeArmed) {
                 // If failsafe is armed after the command, set breadcrumb (not when expired)
                 this.state.breadcrumb = breadcrumb;
             }
@@ -180,11 +182,12 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
         const fabric = this.session.associatedFabric;
 
-        const device = MatterDevice.of(this.session);
-        if (!device.isFailsafeArmed()) {
+        const commissioner = this.env.get(DeviceCommissioner);
+
+        if (!commissioner.isFailsafeArmed) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }
-        const failsafeContext = device.failsafeContext;
+        const failsafeContext = commissioner.failsafeContext;
 
         assertSecureSession(this.session, "commissioningComplete can only be called on a secure session");
 

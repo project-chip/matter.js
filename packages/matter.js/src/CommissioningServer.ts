@@ -30,6 +30,7 @@ import {
     SyncStorage,
     UdpInterface,
 } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import { Specification } from "#model";
 import {
     AttestationCertificateManager,
@@ -44,7 +45,6 @@ import {
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
     InteractionEndpointStructure,
-    MatterDevice,
     MdnsBroadcaster,
     MdnsInstanceBroadcaster,
     MdnsScanner,
@@ -418,7 +418,9 @@ export class CommissioningServer extends MatterNode {
 
             for (const endpoint of this.endpointStructure.endpoints.values()) {
                 for (const cluster of (endpoint as Endpoint).getAllClusterServers()) {
-                    new CommissioningServerClusterDatasource(endpoint, cluster, this.storage, this.eventHandler);
+                    new CommissioningServerClusterDatasource(endpoint, cluster, this.storage, this.eventHandler, () =>
+                        this.deviceInstance!.getFabrics(),
+                    );
                 }
             }
         });
@@ -532,15 +534,7 @@ export class CommissioningServer extends MatterNode {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
-        this.interactionServer = new LegacyInteractionServer({
-            endpointStructure: this.endpointStructure,
-            subscriptionOptions: {
-                maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
-                minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
-                randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
-            },
-            maxPathsPerInvoke: basicInformation.getMaxPathsPerInvokeAttribute(),
-        });
+        const maxPathsPerInvoke = basicInformation.getMaxPathsPerInvokeAttribute();
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
@@ -555,6 +549,7 @@ export class CommissioningServer extends MatterNode {
             this.storage.createContext("SessionManager"),
             this.storage.createContext("FabricManager"),
             () => ({
+                enabled: true,
                 productDescription: this.productDescription,
                 passcode: this.passcode,
                 discriminator: this.discriminator,
@@ -587,13 +582,27 @@ export class CommissioningServer extends MatterNode {
                 }
             },
             (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
-            { maxPathsPerInvoke: this.interactionServer.maxPathsPerInvoke },
+            { maxPathsPerInvoke: maxPathsPerInvoke },
         );
         deviceInstance.addTransportInterface(
             await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),
         );
-        deviceInstance.addScanner(this.mdnsScanner);
+
+        this.interactionServer = new LegacyInteractionServer({
+            sessions: deviceInstance.sessionManager,
+            structure: this.endpointStructure,
+            subscriptionOptions: {
+                maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
+                minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
+                randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
+            },
+            maxPathsPerInvoke,
+            initiateExchange: (address, protocolId) => {
+                return deviceInstance.initiateExchange(address, protocolId);
+            },
+        });
         deviceInstance.addProtocolHandler(this.interactionServer);
+
         this.deviceInstance = deviceInstance;
         if (!this.ipv4Disabled) {
             deviceInstance.addTransportInterface(
@@ -985,16 +994,19 @@ class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStor
     #clusterDescription: string;
     #storage: StorageContext<SyncStorage>;
     #eventHandler: EventHandler;
+    #getFabrics: () => Fabric[];
 
     constructor(
         endpoint: EndpointInterface,
         cluster: ClusterServerObj,
         storage: StorageContext<SyncStorage>,
         eventHandler: EventHandler<SyncStorage>,
+        getFabrics: () => Fabric[],
     ) {
         this.#eventHandler = eventHandler;
         this.#clusterDescription = `cluster ${cluster.name} (${cluster.id})`;
         this.#storage = storage = storage.createContext(`Cluster-${endpoint.number}-${cluster.id}`);
+        this.#getFabrics = getFabrics;
 
         this.#version = cluster.datasource?.version ?? Crypto.getRandomUInt32();
 
@@ -1027,6 +1039,10 @@ class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStor
 
     get eventHandler() {
         return this.#eventHandler;
+    }
+
+    get fabrics() {
+        return this.#getFabrics();
     }
 
     increaseVersion(): number {

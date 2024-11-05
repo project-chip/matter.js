@@ -8,8 +8,7 @@ export {
     ChannelManager,
     ChannelNotConnectedError,
     CommissioningError,
-    CommissioningSuccessfullyFinished,
-    ControllerCommissioner,
+    ControllerCommissioningFlow as ControllerCommissioner,
     ControllerDiscovery,
     DiscoveryError,
     DuplicateMessageError,
@@ -28,7 +27,7 @@ export {
     NoChannelError,
     PairRetransmissionLimitReachedError,
     UnexpectedMessageError,
-    type ControllerCommissioningOptions as CommissioningOptions,
+    type ControllerCommissioningFlowOptions as CommissioningOptions,
     type ExchangeSendOptions,
     type ProtocolHandler,
 } from "#protocol";

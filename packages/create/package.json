@@ -1,0 +1,45 @@
+{
+    "name": "@matter/create",
+    "version": "0.0.0-git",
+    "description": "Matter.js skeleton project generator",
+    "type": "module",
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "create": "matter-run src/cli.ts"
+    },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "LICENSE",
+        "README.md"
+    ],
+    "bin": {
+        "matter-create": "bin/create.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/project-chip/matter.js.git"
+    },
+    "author": "matter.js authors",
+    "contributors": [
+        "Greg Lauckhart <greg@lauckhart.com>"
+    ],
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js#readme",
+    "devDependencies": {
+        "@matter/tools": "0.0.0-git",
+        "@types/node": "^22.8.7",
+        "@types/tar-stream": "^3.1.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

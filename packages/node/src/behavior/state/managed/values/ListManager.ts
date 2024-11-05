@@ -303,6 +303,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
                 // An iterator that skips inapplicable entries
                 return {
+                    ...iterator,
                     next() {
                         while (true) {
                             // Iterate through source

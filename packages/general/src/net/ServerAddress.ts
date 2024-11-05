@@ -15,7 +15,15 @@ export type ServerAddressBle = {
     peripheralAddress: string;
 };
 
-export type ServerAddress = ServerAddressIp | ServerAddressBle;
+export interface Lifespan {
+    /** Beginning of lifespan (system time in milliseconds) */
+    discoveredAt: number;
+
+    /** Length of lifespan, if known (milliseconds) */
+    ttl: number;
+}
+
+export type ServerAddress = (ServerAddressIp | ServerAddressBle) & Partial<Lifespan>;
 
 export function serverAddressToString(address: ServerAddress): string {
     return address.type === "udp" ? `udp://${address.ip}:${address.port}` : `ble://${address.peripheralAddress}`;

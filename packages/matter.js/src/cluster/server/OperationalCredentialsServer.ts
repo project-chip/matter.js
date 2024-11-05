@@ -8,14 +8,13 @@
 
 import { AccessControl, BasicInformation, OperationalCredentials } from "#clusters";
 import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { MatterDevice } from "#MatterDevice.js";
 import { AccessLevel } from "#model";
 import {
     assertSecureSession,
     CertificateError,
     DeviceCertification,
     FabricTableFullError,
-    FailsafeContext,
-    MatterDevice,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
     PublicKeyError,
@@ -65,10 +64,10 @@ OperationalCredentials.Cluster.commands = {
     ),
 };
 
-export const OperationalCredentialsClusterHandler: (
+export const OperationalCredentialsClusterHandler = (
     certificates: DeviceCertification.Definition,
     productDescription?: ProductDescription,
-) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = (certificates, productDescription) => {
+): ClusterServerHandlers<typeof OperationalCredentials.Cluster> => {
     let certification: DeviceCertification | undefined = undefined;
     const cert = () => {
         if (certification !== undefined) {
@@ -150,7 +149,7 @@ export const OperationalCredentialsClusterHandler: (
             if (!session.isSecure)
                 throw new MatterFlowError("addOperationalCert should be called on a secure session.");
 
-            const failsafeContext = FailsafeContext.of(session);
+            const failsafeContext = MatterDevice.of(session).failsafeContext;
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
@@ -180,7 +179,7 @@ export const OperationalCredentialsClusterHandler: (
                 );
             }
 
-            if (session.context.getFabrics().length === supportedFabrics.getLocal()) {
+            if (MatterDevice.of(session).getFabrics().length === supportedFabrics.getLocal()) {
                 return {
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
                     debugText: `No more fabrics can be added because limit ${supportedFabrics.getLocal()} reached.`,
@@ -281,7 +280,7 @@ export const OperationalCredentialsClusterHandler: (
 
         fabricsAttributeGetter: ({ session, isFabricFiltered }) => {
             if (session === undefined || !session.isSecure) return []; // ???
-            const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
+            const fabrics = isFabricFiltered ? [session.associatedFabric] : MatterDevice.of(session).getFabrics();
 
             return fabrics.map(fabric => ({
                 fabricId: fabric.fabricId,
@@ -300,7 +299,7 @@ export const OperationalCredentialsClusterHandler: (
 
         nocsAttributeGetter: ({ session, isFabricFiltered }) => {
             if (session === undefined || !session.isSecure) return []; // ???
-            const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
+            const fabrics = isFabricFiltered ? [session.associatedFabric] : MatterDevice.of(session).getFabrics();
             return fabrics.map(fabric => ({
                 noc: fabric.operationalCert,
                 icac: fabric.intermediateCACert ?? null,
@@ -315,7 +314,7 @@ export const OperationalCredentialsClusterHandler: (
 
         commissionedFabricsAttributeGetter: ({ session }) => {
             if (session === undefined || !session.isSecure) return 0; // ???
-            return session.context.getFabrics().length;
+            return MatterDevice.of(session).getFabrics().length;
         },
 
         trustedRootCertificatesAttributeGetter: ({ session }) => {
@@ -326,7 +325,9 @@ export const OperationalCredentialsClusterHandler: (
             if (!session.isSecure)
                 throw new MatterFlowError("addOperationalCert should be called on a secure session.");
 
-            const rootCerts = session.context.getFabrics().map(fabric => fabric.rootCert);
+            const rootCerts = MatterDevice.of(session)
+                .getFabrics()
+                .map(fabric => fabric.rootCert);
 
             const device = MatterDevice.of(session);
             if (device.isFailsafeArmed()) {
@@ -354,7 +355,7 @@ export const OperationalCredentialsClusterHandler: (
             // Assert associated fabric is present
             session.associatedFabric;
 
-            const failsafeContext = FailsafeContext.of(session);
+            const failsafeContext = MatterDevice.of(session).failsafeContext;
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
@@ -430,8 +431,7 @@ export const OperationalCredentialsClusterHandler: (
 
             const fabric = session.associatedFabric;
             const currentFabricIndex = fabric.fabricIndex;
-            const device = session.context;
-            const conflictingLabelFabric = device
+            const conflictingLabelFabric = MatterDevice.of(session)
                 .getFabrics()
                 .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
             if (conflictingLabelFabric !== undefined) {
@@ -487,7 +487,7 @@ export const OperationalCredentialsClusterHandler: (
         }) => {
             assertSecureSession(session);
 
-            const failsafeContext = FailsafeContext.of(session);
+            const failsafeContext = MatterDevice.of(session).failsafeContext;
 
             if (failsafeContext.hasRootCert) {
                 throw new StatusResponseError(

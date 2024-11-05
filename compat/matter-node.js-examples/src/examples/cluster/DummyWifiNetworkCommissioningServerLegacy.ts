@@ -5,6 +5,7 @@
  */
 
 import { getParameter } from "@project-chip/matter-node.js/util";
+import { MatterDevice } from "@project-chip/matter.js";
 import {
     ClusterServer,
     ClusterServerObj,
@@ -78,7 +79,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
                 `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(ssid)} ${Bytes.toHex(credentials)} ${breadcrumb}`,
             );
 
-            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            MatterDevice.of(session).assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
@@ -105,7 +106,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
                 `---> removeNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
             );
 
-            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            MatterDevice.of(session).assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
@@ -132,7 +133,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
                 `---> connectNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
             );
 
-            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            MatterDevice.of(session).assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful connection
             if (breadcrumb !== undefined) {
@@ -150,7 +151,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
             lastConnectErrorValue?.setLocal(null);
 
             // Announce operational in IP network
-            const device = session.context;
+            const device = MatterDevice.of(session);
             await device.startAnnouncement();
 
             return {

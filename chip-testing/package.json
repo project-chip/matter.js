@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/chip-testing",
+    "name": "@matter/chip-testing",
     "version": "0.0.0-git",
     "description": "Testing of matter.js with CHIP tool",
     "private": true,
@@ -24,10 +24,10 @@
         "wip-test": "matter-test esm"
     },
     "dependencies": {
-        "@matter.js/main": "*",
+        "@matter/main": "*",
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*"
+        "@matter/testing": "*"
     }
 }

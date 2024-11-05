@@ -126,6 +126,13 @@ export class VariableService {
         }
     }
 
+    async persist(name: string, value: VariableService.Value) {
+        this.set(name, value);
+        await this.persistConfigValue?.(name, value);
+    }
+
+    persistConfigValue?: (name: string, value: VariableService.Value) => Promise<void>;
+
     string(name: string) {
         const value = this.get(name);
         if (value === undefined) {

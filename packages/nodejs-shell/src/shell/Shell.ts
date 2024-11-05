@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "@matter.js/general";
-import readline from "readline";
-import type { Argv } from "yargs";
+import { MatterError } from "@matter/general";
+import { createWriteStream, readFileSync } from "fs";
+import readline from "node:readline";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";
 import { exit } from "../app";
@@ -22,6 +22,8 @@ import cmdNodes from "./cmd_nodes.js";
 import cmdSession from "./cmd_session.js";
 import cmdSubscribe from "./cmd_subscribe.js";
 import cmdTlv from "./cmd_tlv";
+
+const MAX_HISTORY_SIZE = 1000;
 
 function exitCommand() {
     return {
@@ -39,36 +41,68 @@ function exitCommand() {
  * Class to process and dispatch shell commands.
  */
 export class Shell {
-    configExecPassthrough = false;
     readline?: readline.Interface;
-    yargsInstance?: Argv;
+    writeStream?: NodeJS.WritableStream;
 
     /**
      * Construct a new Shell object.
-     *
-     * @param {MatterNode} theNode MatterNode object to use for all commands.
-     * @param {string} prompt Prompt string to use for each command line.
      */
     constructor(
         public theNode: MatterNode,
+        public nodeNum: number,
         public prompt: string,
     ) {}
 
-    start() {
+    start(storageBase?: string) {
+        const history = new Array<string>();
+        if (storageBase !== undefined) {
+            const fileName = `${storageBase}.history`;
+            try {
+                const historyData = readFileSync(fileName, "utf8");
+                history.push(
+                    ...historyData
+                        .split("\n")
+                        .map(line => line.trim())
+                        .filter(line => line.length),
+                );
+                history.splice(0, -MAX_HISTORY_SIZE);
+                console.log(`Loaded ${history.length} history entries from ${fileName}`);
+            } catch (e) {
+                if (e instanceof Error && "code" in e && e.code !== "ENOENT") {
+                    process.stderr.write(`Error happened during history file read: ${e}\n`);
+                }
+            }
+            try {
+                this.writeStream = createWriteStream(fileName, { flags: "w" });
+                this.writeStream.write(`${history.join("\n")}\n`);
+            } catch (e) {
+                process.stderr.write(`Error happened during history file write: ${e}\n`);
+            }
+        }
         this.readline = readline.createInterface({
             input: process.stdin,
             output: process.stdout,
             terminal: true,
             prompt: this.prompt,
+            history: history.reverse(),
+            historySize: MAX_HISTORY_SIZE,
         });
         this.readline
             .on("line", cmd => {
-                this.onReadLine(cmd.trim()).catch(e => {
-                    process.stderr.write(`Read error: ${e}\n`);
-                    process.exit(1);
-                });
+                cmd = cmd.trim();
+                this.onReadLine(cmd)
+                    .then(result => result && cmd.length && this.writeStream?.write(`${cmd}\n`))
+                    .catch(e => {
+                        process.stderr.write(`Read error: ${e}\n`);
+                        process.exit(1);
+                    });
             })
             .on("close", () => {
+                try {
+                    this.writeStream?.end();
+                } catch (e) {
+                    process.stderr.write(`Error happened during history file write: ${e}\n`);
+                }
                 exit()
                     .then(() => process.exit(0))
                     .catch(e => {
@@ -86,13 +120,14 @@ export class Shell {
      * @param {string} line
      */
     async onReadLine(line: string) {
+        let result = true;
         if (line) {
             let args;
             try {
                 args = commandlineParser(line);
             } catch (error) {
                 process.stderr.write(`Error happened during command parsing: ${error}\n`);
-                return;
+                return false;
             }
             const yargsInstance = yargs(args)
                 .command([
@@ -140,9 +175,11 @@ export class Shell {
                 }
                 if (!(error instanceof MatterError)) {
                     yargsInstance.showHelp();
+                    result = false;
                 }
             }
         }
         this.readline?.prompt();
+        return result;
     }
 }

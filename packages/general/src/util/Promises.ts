@@ -148,7 +148,12 @@ export const MaybePromise = {
      */
     is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
         // We cannot use isObject because this could collide with valid values here
-        return typeof value === "object" && value !== null && typeof (value as { then?: unknown }).then === "function";
+        return (
+            typeof value === "object" &&
+            value !== null &&
+            typeof (value as { then?: unknown }).then === "function" &&
+            value !== this
+        );
     },
 
     /**
@@ -276,3 +281,55 @@ export const MaybePromise = {
 };
 
 MaybePromise.toString = () => "MaybePromise";
+
+/**
+ * A "promise" that may be canceled.
+ *
+ * Behaviors like a normal promise but does not actually extend {@link Promise} because that makes extension a PITA.
+ */
+export class CancelablePromise<T = void> implements Promise<T> {
+    #promise: Promise<T>;
+
+    constructor(
+        executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void,
+        onCancel?: () => void,
+    ) {
+        this.#promise = new Promise(executor);
+        if (onCancel !== undefined) {
+            this.cancel = onCancel;
+        }
+    }
+
+    cancel() {}
+
+    then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): CancelablePromise<TResult1 | TResult2> {
+        const result = this.#promise.then(onfulfilled, onrejected) as CancelablePromise<TResult1 | TResult2>;
+        result.cancel = this.cancel.bind(this);
+        return result;
+    }
+
+    catch<TResult = never>(
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): CancelablePromise<T | TResult> {
+        return this.then(onrejected);
+    }
+
+    finally(onfinally?: (() => void) | undefined | null): CancelablePromise<T> {
+        const handler = (result: any) => {
+            onfinally?.();
+            return result;
+        };
+        return this.then(handler, handler);
+    }
+
+    get [Symbol.toStringTag]() {
+        return this.#promise[Symbol.toStringTag];
+    }
+
+    static is<T>(value: MaybePromise<T>): value is CancelablePromise<T> {
+        return MaybePromise.is(value) && typeof (value as CancelablePromise<T>).cancel === "function";
+    }
+}

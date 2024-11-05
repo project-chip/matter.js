@@ -72,7 +72,7 @@ export class NodeJsNetwork extends Network {
 
     private static readonly netInterfaces = new Cache<string | undefined>(
         "Network interface",
-        (ip: string) => this.getNetInterfaceForRemoveAddress(ip),
+        (ip: string) => this.getNetInterfaceForRemoteAddress(ip),
         5 * 60 * 1000 /* 5mn */,
     );
 
@@ -80,7 +80,7 @@ export class NodeJsNetwork extends Network {
         await NodeJsNetwork.netInterfaces.close();
     }
 
-    private static getNetInterfaceForRemoveAddress(ip: string) {
+    private static getNetInterfaceForRemoteAddress(ip: string) {
         if (ip.includes("%")) {
             // IPv6 address with scope
             return ip.split("%")[1];

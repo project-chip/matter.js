@@ -9,15 +9,19 @@ import {
     MaybeAsyncStorage,
     StorageBackendMemory,
     SupportedStorageTypes,
+    Time,
+    createPromise,
     fromJson,
     toJson,
-} from "@matter.js/general";
+} from "@matter/general";
 import { readFile, writeFile } from "fs/promises";
 
 export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
     private closed = false;
     private store?: StorageBackendMemory;
+    private currentStoreItPromise?: Promise<void>;
+    private lastStoredTime = 0;
 
     constructor(private readonly path: string) {
         super();
@@ -26,7 +30,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     override async initialize() {
         let data: any = {};
         try {
-            data = this.fromJson(await readFile(this.path, "utf-8"));
+            data = this.fromJson(await readFile(this.path, "utf8"));
         } catch (error: any) {
             // We accept that the file does not exist yet to initialize with an empty store.
             if (error.code !== "ENOENT") {
@@ -36,6 +40,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         }
         this.store = new StorageBackendMemory(data);
         this.store.initialize();
+        this.lastStoredTime = Time.nowMs();
     }
 
     get initialized() {
@@ -87,16 +92,41 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        if (!this.closed) return;
-        const json = this.toJson(this.store);
-        await writeFile(this.path, json, "utf-8");
+        if (this.closed) return;
+        if (this.currentStoreItPromise !== undefined) {
+            return;
+        }
+        await this.storeIt();
+    }
+
+    private async storeIt(forced = false) {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        if (this.closed) return;
+        if (!forced && this.lastStoredTime < Time.nowMs() - 1000) {
+            return;
+        }
+        if (this.currentStoreItPromise !== undefined) {
+            await this.currentStoreItPromise;
+        }
+
+        const { promise, rejecter, resolver } = createPromise<void>();
+        const json = this.toJson(this.store.data);
+        writeFile(this.path, json, "utf8")
+            .then(resolver, rejecter)
+            .finally(() => {
+                this.currentStoreItPromise = undefined;
+            });
+        this.currentStoreItPromise = promise;
+        return promise;
     }
 
     override async close() {
         if (this.store === undefined) {
             return;
         }
-        await this.commit();
+        await this.storeIt(true);
         this.closed = true;
         this.store.close();
     }
@@ -127,6 +157,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
             throw new InternalError("Storage not initialized.");
         }
         this.store.clearAll(contexts);
+        await this.commit();
     }
 
     private toJson(object: any) {

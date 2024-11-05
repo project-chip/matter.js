@@ -7,6 +7,7 @@
 import {
     Bytes,
     Channel,
+    ChannelType,
     InternalError,
     Logger,
     NetInterface,
@@ -150,6 +151,10 @@ export class ReactNativeBleCentralInterface implements NetInterface {
         for (const peripheral of this.openChannels.values()) {
             await peripheral.cancelConnection();
         }
+    }
+
+    supports(type: ChannelType) {
+        return type === ChannelType.BLE;
     }
 }
 

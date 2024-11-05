@@ -16,8 +16,8 @@ import {
     StorageBackendMemory,
     StorageManager,
     Time,
-} from "@matter.js/general";
-import { Specification } from "@matter.js/model";
+} from "@matter/general";
+import { Specification } from "@matter/model";
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
@@ -137,6 +137,8 @@ describe("Integration Test", () => {
             autoConnect: false,
             autoSubscribe: false,
             caseAuthenticatedTags: [CaseAuthenticatedTag(0x12345678), CaseAuthenticatedTag(0x56781234)],
+            subscribeMinIntervalFloorSeconds: 0,
+            subscribeMaxIntervalCeilingSeconds: 60,
         });
         await matterClient.addCommissioningController(commissioningController);
 
@@ -307,7 +309,7 @@ describe("Integration Test", () => {
                 stateInformationCallback: (nodeId: NodeId, nodeState: NodeStateInformation) =>
                     nodeStateChangesController1Node1.push({ nodeId, nodeState, time: MockTime.nowMs() }),
             });
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             expect(node).to.be.an.instanceOf(PairedNode);
 
             Time.get = () => mockTimeInstance;
@@ -329,7 +331,7 @@ describe("Integration Test", () => {
 
             assert.equal(nodeStateChangesController1Node1.length, 2);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node1[1].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10000);
@@ -353,7 +355,7 @@ describe("Integration Test", () => {
 
         it("Subscribe to all Attributes and bind updates to them", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const data = await node.subscribeAllAttributesAndEvents({ ignoreInitialTriggers: true });
 
@@ -372,7 +374,7 @@ describe("Integration Test", () => {
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const generalCommissioningCluster = node.getRootClusterClient(GeneralCommissioning.Cluster);
             assert.equal(
@@ -389,7 +391,7 @@ describe("Integration Test", () => {
         describe("Timed Invokes", () => {
             it("Timed interaction expired", async () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
-                const node = commissioningController.getConnectedNode(nodeId);
+                const node = commissioningController.getPairedNode(nodeId);
                 assert.ok(node);
                 const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
@@ -413,7 +415,7 @@ describe("Integration Test", () => {
 
             it("Custom timed interaction with short timeout expired", async () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
-                const node = commissioningController.getConnectedNode(nodeId);
+                const node = commissioningController.getPairedNode(nodeId);
                 assert.ok(node);
                 const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
@@ -431,7 +433,7 @@ describe("Integration Test", () => {
 
             it("Custom timed interaction with default timeout works", async () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
-                const node = commissioningController.getConnectedNode(nodeId);
+                const node = commissioningController.getPairedNode(nodeId);
                 assert.ok(node);
                 const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
@@ -446,7 +448,7 @@ describe("Integration Test", () => {
 
             it("Timed invoke ok", async () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
-                const node = commissioningController.getConnectedNode(nodeId);
+                const node = commissioningController.getPairedNode(nodeId);
                 assert.ok(node);
                 const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
@@ -467,7 +469,7 @@ describe("Integration Test", () => {
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
@@ -493,7 +495,7 @@ describe("Integration Test", () => {
 
         it("read one specific attribute including schema parsing", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
@@ -505,7 +507,7 @@ describe("Integration Test", () => {
 
         it("read all attributes and events", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const response = await (await node.getInteractionClient()).getAllAttributesAndEvents();
             assert.ok(response);
@@ -515,7 +517,7 @@ describe("Integration Test", () => {
 
         it("read multiple attributes", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
 
             const response = await (
@@ -533,18 +535,18 @@ describe("Integration Test", () => {
                 ],
             });
 
-            assert.equal(response.length, 45);
+            assert.equal(response.length, 42);
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) => endpointId === 0 && clusterId === Descriptor.Cluster.id,
                 ).length,
-                10,
+                9,
             );
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) => endpointId === 1 && clusterId === Descriptor.Cluster.id,
                 ).length,
-                10,
+                9,
             );
 
             const descriptorServerListData = response.find(
@@ -576,7 +578,7 @@ describe("Integration Test", () => {
                     ({ path: { endpointId, clusterId } }) =>
                         endpointId === 0 && clusterId === BasicInformation.Cluster.id,
                 ).length,
-                24,
+                23,
             );
             const softwareVersionStringData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
@@ -625,7 +627,7 @@ describe("Integration Test", () => {
 
         it("read events", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const response = await (
                 await node.getInteractionClient()
@@ -697,7 +699,7 @@ describe("Integration Test", () => {
     describe("write attributes", () => {
         it("write one attribute", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
@@ -717,7 +719,7 @@ describe("Integration Test", () => {
 
             await MockTime.advance(60);
             await MockTime.advance(60);
-            await promise;
+            assert.equal(await promise, "testLabel");
 
             // Local value because not yet updated from subscription
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel");
@@ -725,7 +727,7 @@ describe("Integration Test", () => {
 
         it("write one attribute with error", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
@@ -737,7 +739,7 @@ describe("Integration Test", () => {
 
         it("write multiple attributes", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const client = await node.getInteractionClient(); // We can also use a new Interaction clint
 
@@ -769,7 +771,7 @@ describe("Integration Test", () => {
 
         it("write multiple attributes with partial errors", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const response = await (
                 await node.getInteractionClient()
@@ -803,7 +805,7 @@ describe("Integration Test", () => {
 
         it("write multiple attributes with partial errors and suppressed response", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const response = await (
                 await node.getInteractionClient()
@@ -848,7 +850,7 @@ describe("Integration Test", () => {
     describe("Groups server fabric scoped storage", () => {
         it("add a group", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
@@ -871,7 +873,7 @@ describe("Integration Test", () => {
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             await (
                 await node.getInteractionClient()
@@ -929,7 +931,7 @@ describe("Integration Test", () => {
 
         it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
@@ -986,7 +988,7 @@ describe("Integration Test", () => {
         TODO Re-enable when Scenes are updated with Matter 1.3
         it("one more subscribe an attribute with getter that needs endpoint", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
@@ -1035,7 +1037,7 @@ describe("Integration Test", () => {
 
         it("subscription of an event sends initial data", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
@@ -1074,7 +1076,7 @@ describe("Integration Test", () => {
 
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
@@ -1154,7 +1156,7 @@ describe("Integration Test", () => {
     describe("Command Handler test", () => {
         it("Trigger identify command and trigger command handler", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
@@ -1183,10 +1185,10 @@ describe("Integration Test", () => {
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
 
-            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(Groups.Cluster.id);
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData?.get(Groups.Cluster.id);
             assert.ok(groupsClusterEndpointMap);
             assert.equal(groupsClusterEndpointMap.size, 1);
-            const groupsClusterData = groupsClusterEndpointMap.get("1");
+            const groupsClusterData = groupsClusterEndpointMap?.get("1");
             assert.ok(groupsClusterData instanceof Map);
             assert.equal(groupsClusterData.get(1), "Group 1");
 
@@ -1214,35 +1216,49 @@ describe("Integration Test", () => {
             assert.equal(nodeData.length, 1);
 
             // Remove variable fields before compare
-            expect(nodeData[0][1].discoveryData.expires).to.be.an("number");
-            delete nodeData[0][1].discoveryData.expires;
+            expect(nodeData[0][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData[0][1].discoveryData.discoveredAt;
+            expect(nodeData[0][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData[0][1].discoveryData.ttl;
             expect(nodeData[0][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData[0][1].discoveryData.deviceIdentifier;
-            expect(nodeData[0][1].basicInformationData.serialNumber).to.be.an("string");
-            delete nodeData[0][1].basicInformationData.serialNumber;
+            expect(nodeData[0][1].deviceData.basicInformation.serialNumber).to.be.an("string");
+            delete nodeData[0][1].deviceData.basicInformation.serialNumber;
 
             assert.deepEqual(nodeData[0][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "DE",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "345678",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: true,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "DE",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "345678",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: true,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: false,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 49, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: true,
+                    },
                 },
                 discoveryData: {
                     ICD: 0,
@@ -1259,8 +1275,8 @@ describe("Integration Test", () => {
                     ],
                 },
                 operationalServerAddress: {
-                    ip: SERVER_IPv6,
-                    port: matterPort,
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: 5540,
                     type: "udp",
                 },
             });
@@ -1352,7 +1368,7 @@ describe("Integration Test", () => {
                 stateInformationCallback: (nodeId: NodeId, nodeState: NodeStateInformation) =>
                     nodeStateChangesController1Node2.push({ nodeId, nodeState, time: MockTime.nowMs() }),
             });
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             expect(node).to.be.an.instanceOf(PairedNode);
 
             Time.get = () => mockTimeInstance;
@@ -1370,7 +1386,7 @@ describe("Integration Test", () => {
 
             assert.equal(nodeStateChangesController1Node2.length, 2);
             assert.equal(nodeStateChangesController1Node2[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node2[1].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
@@ -1388,13 +1404,13 @@ describe("Integration Test", () => {
             assert.ok(sessionInfo[0].fabric);
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
 
         it("Subscribe to all Attributes and bind updates to them for second device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[1];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const data = await node.subscribeAllAttributesAndEvents({ ignoreInitialTriggers: true });
 
@@ -1416,27 +1432,39 @@ describe("Integration Test", () => {
             assert.equal(nodeData.length, 2);
 
             assert.deepEqual(nodeData[0][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "DE",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "345678",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: true,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "DE",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "345678",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: true,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: false,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 49, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: true,
+                    },
                 },
                 discoveryData: {
                     ICD: 0,
@@ -1453,42 +1481,56 @@ describe("Integration Test", () => {
                     ],
                 },
                 operationalServerAddress: {
-                    ip: SERVER_IPv6,
-                    port: matterPort,
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: 5540,
                     type: "udp",
                 },
             });
 
             // Remove variable fields before compare
-            expect(nodeData[1][1].discoveryData.expires).to.be.an("number");
-            delete nodeData[1][1].discoveryData.expires;
+            expect(nodeData[1][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData[1][1].discoveryData.discoveredAt;
+            expect(nodeData[1][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData[1][1].discoveryData.ttl;
             expect(nodeData[1][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData[1][1].discoveryData.deviceIdentifier;
-            expect(nodeData[1][1].basicInformationData.serialNumber).to.be.an("string");
-            delete nodeData[1][1].basicInformationData.serialNumber;
+            expect(nodeData[1][1].deviceData.basicInformation.serialNumber).to.be.an("string");
+            delete nodeData[1][1].deviceData.basicInformation.serialNumber;
 
             assert.deepEqual(nodeData[1][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "US",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: true,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "US",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: true,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: true,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: false,
+                    },
                 },
                 discoveryData: {
                     ICD: 0,
@@ -1505,8 +1547,8 @@ describe("Integration Test", () => {
                     ],
                 },
                 operationalServerAddress: {
-                    ip: SERVER_IPv6,
-                    port: matterPort2,
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: 5541,
                     type: "udp",
                 },
             });
@@ -1514,7 +1556,7 @@ describe("Integration Test", () => {
 
         it("write one attribute on second device and check if updated", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[1];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
@@ -1541,7 +1583,7 @@ describe("Integration Test", () => {
 
             // Verify that first device is still on old value
             const firstNodeId = commissioningController.getCommissionedNodes()[0];
-            const firstNode = commissioningController.getConnectedNode(firstNodeId);
+            const firstNode = commissioningController.getPairedNode(firstNodeId);
             assert.ok(firstNode);
             const firstBasicInfoCluster = firstNode.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(firstBasicInfoCluster);
@@ -1566,7 +1608,7 @@ describe("Integration Test", () => {
 
         it("try to open a basic commissioning window which is not supported", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
 
             await assert.rejects(async () => await node.openBasicCommissioningWindow(), {
@@ -1576,7 +1618,7 @@ describe("Integration Test", () => {
 
         it("open an enhanced commissioning window and store values", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
 
             const commissioningData = await node.openEnhancedCommissioningWindow();
@@ -1622,6 +1664,8 @@ describe("Integration Test", () => {
                 adminFabricId: FabricId(1000),
                 adminFabricIndex: FabricIndex(1001),
                 adminVendorId: VendorId(0x1234),
+                subscribeMinIntervalFloorSeconds: 0,
+                subscribeMaxIntervalCeilingSeconds: 60,
             });
             await matterClient.addCommissioningController(commissioningController2, {
                 uniqueStorageKey: "another-second",
@@ -1658,7 +1702,7 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer2.length, 1);
 
             assert.equal(nodeStateChangesController2Node1.length, 2);
-            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.Reconnecting);
             assert.equal(nodeStateChangesController2Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10_000);
 
@@ -1702,27 +1746,39 @@ describe("Integration Test", () => {
             assert.ok(nodeData);
             assert.equal(nodeData.length, 2);
             assert.deepEqual(nodeData[0][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "DE",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "345678",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: true,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "DE",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "345678",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: true,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: false,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 49, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: true,
+                    },
                 },
                 discoveryData: {
                     ICD: 0,
@@ -1740,32 +1796,44 @@ describe("Integration Test", () => {
                 },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
-                    port: matterPort,
+                    port: 5540,
                     type: "udp",
                 },
             });
             assert.deepEqual(nodeData[1][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "US",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: true,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "US",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: true,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: true,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: false,
+                    },
                 },
                 discoveryData: {
                     ICD: 0,
@@ -1783,7 +1851,7 @@ describe("Integration Test", () => {
                 },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
-                    port: matterPort2,
+                    port: 5541,
                     type: "udp",
                 },
             });
@@ -1796,35 +1864,49 @@ describe("Integration Test", () => {
             assert.equal(nodeData2.length, 1);
 
             // Remove variable fields before compare
-            expect(nodeData2[0][1].discoveryData.expires).to.be.an("number");
-            delete nodeData2[0][1].discoveryData.expires;
+            expect(nodeData2[0][1].discoveryData.discoveredAt).to.be.an("number");
+            delete nodeData2[0][1].discoveryData.discoveredAt;
+            expect(nodeData2[0][1].discoveryData.ttl).to.be.an("number");
+            delete nodeData2[0][1].discoveryData.ttl;
             expect(nodeData2[0][1].discoveryData.deviceIdentifier).to.be.an("string");
             delete nodeData2[0][1].discoveryData.deviceIdentifier;
-            expect(nodeData2[0][1].basicInformationData.serialNumber).to.be.an("string");
-            delete nodeData2[0][1].basicInformationData.serialNumber;
+            expect(nodeData2[0][1].deviceData.basicInformation.serialNumber).to.be.an("string");
+            delete nodeData2[0][1].deviceData.basicInformation.serialNumber;
 
             assert.deepEqual(nodeData2[0][1], {
-                basicInformationData: {
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
+                deviceData: {
+                    basicInformation: {
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        dataModelRevision: Specification.DATA_MODEL_REVISION,
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        localConfigDisabled: false,
+                        location: "DE",
+                        maxPathsPerInvoke: 1,
+                        nodeLabel: "testLabel4",
+                        partNumber: "123456",
+                        productId: 32769,
+                        productName: "Matter end-to-end device",
+                        reachable: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        specificationVersion: Specification.SPECIFICATION_VERSION,
+                        vendorId: 65521,
+                        vendorName: "matter-node.js",
                     },
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    localConfigDisabled: false,
-                    location: "DE",
-                    maxPathsPerInvoke: 1,
-                    nodeLabel: "testLabel4",
-                    partNumber: "123456",
-                    productId: 32769,
-                    productName: "Matter end-to-end device",
-                    reachable: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    vendorId: 65521,
-                    vendorName: "matter-node.js",
+                    deviceMeta: {
+                        dataRevision: 1,
+                        ethernetConnected: false,
+                        isBatteryPowered: false,
+                        isIntermittentlyConnected: false,
+                        isThreadSleepyEndDevice: false,
+                        rootEndpointServerList: [29, 31, 40, 48, 49, 51, 60, 62, 63],
+                        threadConnected: false,
+                        wifiConnected: true,
+                    },
                 },
                 discoveryData: {
                     addresses: [
@@ -1837,7 +1919,7 @@ describe("Integration Test", () => {
                 },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
-                    port: matterPort,
+                    port: 5540,
                     type: "udp",
                 },
             });
@@ -1858,7 +1940,7 @@ describe("Integration Test", () => {
     describe("Do some interactions with the second controller", () => {
         it("read events", async () => {
             const nodeId = commissioningController2.getCommissionedNodes()[0];
-            const node = commissioningController2.getConnectedNode(nodeId);
+            const node = commissioningController2.getPairedNode(nodeId);
             assert.ok(node);
 
             let checked = false;
@@ -1942,7 +2024,7 @@ describe("Integration Test", () => {
     describe("remove one Fabric", () => {
         it("try to remove invalid fabric", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);
@@ -1956,7 +2038,7 @@ describe("Integration Test", () => {
         it("read and remove first node by removing fabric from device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const secondNodeId = commissioningController.getCommissionedNodes()[1];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             await assert.doesNotReject(async () => await node.decommission());
 
@@ -1975,7 +2057,7 @@ describe("Integration Test", () => {
         it("read and remove second node by removing fabric from device unplanned and doing factory reset", async () => {
             // We remove the node ourselves (should not be done that way), but for testing we do
             const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
+            const node = commissioningController.getPairedNode(nodeId);
             assert.ok(node);
             const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);

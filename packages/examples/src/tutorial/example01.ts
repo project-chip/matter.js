@@ -1,4 +1,4 @@
-import { ServerNode } from "@matter.js/main";
+import { ServerNode } from "@matter/main";
 
 const node = await ServerNode.create();
 

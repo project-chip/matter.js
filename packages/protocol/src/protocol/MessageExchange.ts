@@ -7,26 +7,24 @@
 import {
     AsyncObservable,
     CRYPTO_AEAD_MIC_LENGTH_BYTES,
+    DataReadQueue,
     Diagnostic,
     InternalError,
     Logger,
     MatterError,
     MatterFlowError,
     NoResponseTimeoutError,
-    Queue,
     Time,
     Timer,
     createPromise,
 } from "#general";
-import { NodeId, StatusCode, StatusResponseError } from "#types";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType, StatusCode, StatusResponseError } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "../securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
-    Session,
     SessionParameters,
 } from "../session/Session.js";
 import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
@@ -106,12 +104,22 @@ const PEER_RESPONSE_TIME_BUFFER_MS = 5_000;
  */
 export const MATTER_MESSAGE_OVERHEAD = 26 + 12 + CRYPTO_AEAD_MIC_LENGTH_BYTES;
 
+/**
+ * Interfaces {@link MessageExchange} with other components.
+ */
+export interface MessageExchangeContext {
+    channel: MessageChannel;
+    resubmissionStarted(): void;
+    localSessionParameters: SessionParameters;
+}
+
 export class MessageExchange {
-    static fromInitialMessage(channel: MessageChannel, initialMessage: Message) {
-        const { session } = channel;
+    static fromInitialMessage(context: MessageExchangeContext, initialMessage: Message) {
+        const {
+            channel: { session },
+        } = context;
         return new MessageExchange(
-            session,
-            channel,
+            context,
             false,
             session.id,
             initialMessage.packetHeader.destNodeId,
@@ -121,11 +129,12 @@ export class MessageExchange {
         );
     }
 
-    static initiate(channel: MessageChannel, exchangeId: number, protocolId: number) {
-        const { session } = channel;
+    static initiate(context: MessageExchangeContext, exchangeId: number, protocolId: number) {
+        const {
+            channel: { session },
+        } = context;
         return new MessageExchange(
-            session,
-            channel,
+            context,
             true,
             session.peerSessionId,
             session.nodeId,
@@ -139,7 +148,7 @@ export class MessageExchange {
     readonly #idleIntervalMs: number;
     readonly #activeThresholdMs: number;
     readonly #maxTransmissions: number;
-    readonly #messagesQueue = new Queue<Message>();
+    readonly #messagesQueue = new DataReadQueue<Message>();
     #receivedMessageToAck: Message | undefined;
     #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
         if (this.#receivedMessageToAck !== undefined) {
@@ -169,8 +178,7 @@ export class MessageExchange {
     readonly #useMRP: boolean;
 
     constructor(
-        readonly session: Session,
-        readonly channel: MessageChannel,
+        readonly context: MessageExchangeContext,
         readonly isInitiator: boolean,
         peerSessionId: number,
         nodeId: NodeId | undefined,
@@ -178,6 +186,8 @@ export class MessageExchange {
         exchangeId: number,
         protocolId: number,
     ) {
+        const { channel } = context;
+        const { session } = channel;
         this.#peerSessionId = peerSessionId;
         this.#nodeId = nodeId;
         this.#peerNodeId = peerNodeId;
@@ -220,6 +230,14 @@ export class MessageExchange {
 
     get id() {
         return this.#exchangeId;
+    }
+
+    get channel() {
+        return this.context.channel;
+    }
+
+    get session() {
+        return this.channel.session;
     }
 
     /**
@@ -302,7 +320,7 @@ export class MessageExchange {
                 this.#sentMessageToAck = undefined;
                 if (isStandaloneAck && this.#closeTimer !== undefined) {
                     // All resubmissions done and in closing, no need to wait further
-                    return this.closeInternal();
+                    return this.#close();
                 }
             }
         }
@@ -389,8 +407,8 @@ export class MessageExchange {
             this.#sentMessageToAck = message;
             this.#retransmissionTimer = Time.getTimer(
                 "Message retransmission",
-                this.getResubmissionBackOffTime(0),
-                () => this.retransmitMessage(message, expectedProcessingTimeMs),
+                this.#getResubmissionBackOffTime(0),
+                () => this.#retransmitMessage(message, expectedProcessingTimeMs),
             );
             const { promise, resolver, rejecter } = createPromise<Message>();
             ackPromise = promise;
@@ -452,7 +470,7 @@ export class MessageExchange {
      *
      * @see {@link MatterSpecification.v10.Core}, section 4.11.2.1
      */
-    private getResubmissionBackOffTime(retransmissionCount: number, sessionParameters?: SessionParameters) {
+    #getResubmissionBackOffTime(retransmissionCount: number, sessionParameters?: SessionParameters) {
         const { activeIntervalMs, idleIntervalMs } = sessionParameters ?? {
             activeIntervalMs: this.#activeIntervalMs,
             idleIntervalMs: this.#idleIntervalMs,
@@ -473,14 +491,14 @@ export class MessageExchange {
 
         // and then add the time the other side needs for a full resubmission cycle under the assumption we are active
         for (let i = 0; i < this.#maxTransmissions; i++) {
-            finalWaitTime += this.getResubmissionBackOffTime(i, this.session.context.sessionParameters);
+            finalWaitTime += this.#getResubmissionBackOffTime(i, this.context.localSessionParameters);
         }
 
         // TODO: Also add any network latency buffer, for now lets consider it's included in the processing time already
         return finalWaitTime;
     }
 
-    private retransmitMessage(message: Message, expectedProcessingTimeMs?: number) {
+    #retransmitMessage(message: Message, expectedProcessingTimeMs?: number) {
         this.#retransmissionCounter++;
         if (this.#retransmissionCounter >= this.#maxTransmissions) {
             // Ok all 4 resubmissions are done, but we need to wait a bit longer because of processing time and
@@ -498,7 +516,7 @@ export class MessageExchange {
                     this.#retransmissionTimer = Time.getTimer(
                         "Message wait time after resubmissions",
                         finalWaitTime,
-                        () => this.retransmitMessage(message),
+                        () => this.#retransmitMessage(message),
                     ).start();
                     return;
                 }
@@ -513,7 +531,7 @@ export class MessageExchange {
             }
             if (this.#closeTimer !== undefined) {
                 // All resubmissions done and in closing, no need to wait further
-                this.closeInternal().catch(error => logger.error("An error happened when closing the exchange", error));
+                this.#close().catch(error => logger.error("An error happened when closing the exchange", error));
             }
             return;
         }
@@ -521,31 +539,29 @@ export class MessageExchange {
         this.session.notifyActivity(false);
 
         if (this.#retransmissionCounter === 1) {
-            this.session.context.handleResubmissionStarted(this.session.nodeId);
+            this.context.resubmissionStarted();
         }
-        const resubmissionBackoffTime = this.getResubmissionBackOffTime(this.#retransmissionCounter);
+        const resubmissionBackoffTime = this.#getResubmissionBackOffTime(this.#retransmissionCounter);
         logger.debug(
             `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${this.#retransmissionCounter}, backoff time ${resubmissionBackoffTime}ms))`,
         );
 
         this.channel
             .send(message)
-            .then(() => this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs))
+            .then(() => this.#initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs))
             .catch(error => {
                 logger.error("An error happened when retransmitting a message", error);
                 if (error instanceof ChannelNotConnectedError) {
-                    this.closeInternal().catch(error =>
-                        logger.error("An error happened when closing the exchange", error),
-                    );
+                    this.#close().catch(error => logger.error("An error happened when closing the exchange", error));
                 } else {
-                    this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs);
+                    this.#initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs);
                 }
             });
     }
 
-    initializeResubmission(message: Message, resubmissionBackoffTime: number, expectedProcessingTimeMs?: number) {
+    #initializeResubmission(message: Message, resubmissionBackoffTime: number, expectedProcessingTimeMs?: number) {
         this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
-            this.retransmitMessage(message, expectedProcessingTimeMs),
+            this.#retransmitMessage(message, expectedProcessingTimeMs),
         ).start();
     }
 
@@ -560,7 +576,7 @@ export class MessageExchange {
                 logger.error("An error happened when closing the exchange", error);
             }
         }
-        await this.closeInternal();
+        await this.#close();
     }
 
     startTimedInteraction(timeoutMs: number) {
@@ -618,7 +634,7 @@ export class MessageExchange {
             }
         } else if (this.#sentMessageToAck === undefined) {
             // No message left that we need to ack and no sent message left that waits for an ack, close directly
-            return this.closeInternal();
+            return this.#close();
         }
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks.
@@ -626,16 +642,16 @@ export class MessageExchange {
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = 0;
         for (let i = this.#retransmissionCounter; i <= this.#maxTransmissions; i++) {
-            maxResubmissionTime += this.getResubmissionBackOffTime(i);
+            maxResubmissionTime += this.#getResubmissionBackOffTime(i);
         }
         this.#closeTimer = Time.getTimer(
-            "Message exchange cleanup",
+            `Message exchange cleanup ${this.session.name} / ${this.#exchangeId}`,
             maxResubmissionTime,
-            async () => await this.closeInternal(),
+            async () => await this.#close(),
         ).start();
     }
 
-    private async closeInternal() {
+    async #close() {
         this.#isClosing = true;
         this.#retransmissionTimer?.stop();
         this.#closeTimer?.stop();

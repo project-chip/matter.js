@@ -40,11 +40,7 @@ const writeStatus = (() => {
             }
 
             // Require a newline for status updates any time the cursor does not end at the beginning of a line
-            needNewline =
-                // Update ends in newline
-                payload[payload.length - 1] === "\n" &&
-                // Update ends in carriage return
-                payload[payload.length - 1] !== "\r";
+            needNewline = payload[payload.length - 1] !== "\n" && payload[payload.length - 1] !== "\r";
 
             return actualWrite.call(stream, payload, ...params);
         };
@@ -100,17 +96,17 @@ export class Progress {
         stdout.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
     }
 
-    startup(what: string, pkg?: Package) {
+    startup(what: string, pkgOrOverwrite?: Package | boolean) {
         if (process.stdout.isTTY) {
             this.#updateSpinner();
             this.#refreshInterval = setInterval(this.refresh.bind(this), SPINNER_INTERVAL);
         }
 
         this.status = Progress.Status.Startup;
-        if (pkg === undefined) {
-            writeStatus(what, true);
+        if (pkgOrOverwrite === undefined || typeof pkgOrOverwrite === "boolean") {
+            writeStatus(what, pkgOrOverwrite ?? true);
         } else {
-            writeStatus(`${what} ${packageIdentity(pkg)}`);
+            writeStatus(`${what} ${packageIdentity(pkgOrOverwrite)}`);
         }
     }
 
@@ -155,6 +151,10 @@ export class Progress {
         writeStatus(`  ${colors.dim("‣")} ${label}`);
     }
 
+    warn(text: string) {
+        stdout.write(`    ${colors.yellow("Warning:")} ${text}\n`);
+    }
+
     shutdown() {
         if (this.#refreshInterval) {
             clearInterval(this.#refreshInterval);
@@ -188,7 +188,12 @@ export class Progress {
 
     async run(what: string, fn: () => void | Promise<void>) {
         this.update(what);
-        await fn();
+        try {
+            await fn();
+        } catch (e) {
+            this.failure(what);
+            throw e;
+        }
         this.success(what);
     }
 

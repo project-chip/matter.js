@@ -11,7 +11,6 @@ import {
     EventClient,
     InteractionClient,
     SupportedAttributeClient,
-    SupportedEventClient,
     UnknownSupportedAttributeClient,
 } from "#protocol";
 import { AttributeId, EndpointNumber } from "#types";
@@ -61,17 +60,9 @@ describe("ClusterClient structure", () => {
     });
 
     it("correct event clients are used and exposed", () => {
-        const basicClusterClient = ClusterClient(BasicInformationCluster, EndpointNumber(0), {} as InteractionClient, {
-            eventList: [BasicInformationCluster.events.reachableChanged.id],
-        });
+        const basicClusterClient = ClusterClient(BasicInformationCluster, EndpointNumber(0), {} as InteractionClient);
 
-        expect(basicClusterClient.isEventSupported(BasicInformationCluster.events.reachableChanged.id)).equal(true);
-        expect(basicClusterClient.isEventSupportedByName("reachableChanged")).equal(true);
-        expect(basicClusterClient.events.reachableChanged instanceof SupportedEventClient).equal(true);
-
-        expect(basicClusterClient.isEventSupported(BasicInformationCluster.events.shutDown.id)).equal(false);
-        expect(basicClusterClient.isEventSupportedByName("shutDown")).equal(false);
-        expect(basicClusterClient.events.shutDown instanceof SupportedEventClient).equal(false);
+        expect(basicClusterClient.events.reachableChanged instanceof EventClient).equal(true);
         expect(basicClusterClient.events.shutDown instanceof EventClient).equal(true);
     });
 

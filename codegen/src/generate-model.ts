@@ -106,7 +106,7 @@ function generateModels(elements: Model[]) {
 }
 
 async function importModel(source: string) {
-    return (await import(`@matter.js/intermediate-models/v${args.revision}/${source}`))[
+    return (await import(`@matter/intermediate-models/v${args.revision}/${source}`))[
         `${camelize(source, true)}Matter`
     ] as MatterElement;
 }

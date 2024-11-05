@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/nodejs-ble",
+    "name": "@matter/nodejs-ble",
     "version": "0.0.0-git",
     "description": "Matter BLE support for node.js",
     "keywords": [
@@ -25,21 +25,19 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
-    },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "ts-node": "^10.9.2",
-        "typescript": "~5.5.3"
+        "build-clean": "matter-build --clean"
     },
     "dependencies": {
-        "@matter.js/general": "*",
-        "@project-chip/matter.js": "*"
+        "@matter/general": "*",
+        "@matter/types": "*",
+        "@matter/protocol": "*"
+    },
+    "devDependencies": {
+        "@matter/tools": "*"
     },
     "optionalDependencies": {
-        "@stoprocent/bleno": "^0.7.6",
-        "@stoprocent/noble": "^1.14.1"
+        "@stoprocent/bleno": "^0.8.1",
+        "@stoprocent/noble": "^1.15.1"
     },
     "engines": {
         "node": ">=18.0.0"

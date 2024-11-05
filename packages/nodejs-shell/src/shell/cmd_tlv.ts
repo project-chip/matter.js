@@ -5,14 +5,13 @@
  */
 
 import { Bytes, Logger, serialize, UnexpectedDataError } from "#general";
-import { TlvAny } from "#types";
-import { TlvArrayReader, TlvElement, TlvStream, TlvType } from "@matter.js/types";
+import { TlvAny, TlvArrayReader, TlvElement, TlvStream, TlvType } from "#types";
 import type { Argv } from "yargs";
 
 const logger = Logger.get("tlv");
 
 const TlvTypeNames: { [key: number]: string } = {
-    [TlvType.Null]: "(Null)",
+    [TlvType.Null]: "Null(",
     [TlvType.Boolean]: "Boolean(",
     [TlvType.UnsignedInt]: "UnsignedInt(",
     [TlvType.SignedInt]: "SignedInt(",

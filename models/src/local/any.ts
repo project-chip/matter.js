@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Metatype } from "@matter.js/model";
+import { Metatype } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
 // This is not an override but definition of the global "any" type.  Matter does not formally define this type but it

@@ -8,7 +8,8 @@ import { Crypto, StorageBackendMemory, StorageContext, StorageManager, SyncStora
 import {
     DataReportPayload,
     EventHandler,
-    INTERACTION_MODEL_REVISION,
+    FabricManager,
+    InteractionContext,
     InteractionEndpointStructure,
     InteractionServer,
     InteractionServerMessenger,
@@ -16,6 +17,7 @@ import {
     InvokeResponse,
     MessageType,
     ReadRequest,
+    SessionManager,
     SubscribeRequest,
     WriteRequest,
     WriteResponse,
@@ -49,7 +51,7 @@ import {
     VendorId,
     WildcardPathFlagsBitmap,
 } from "#types";
-import { Specification } from "@matter.js/model";
+import { Specification } from "@matter/model";
 import {
     AccessControlCluster,
     AccessLevel,
@@ -81,7 +83,7 @@ const DummyTestDevice = DeviceTypeDefinition({
 });
 
 const READ_REQUEST: ReadRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -102,7 +104,7 @@ const READ_REQUEST: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -125,7 +127,7 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -148,7 +150,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 };
 
 const READ_RESPONSE: DataReportPayload = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     attributeReportsPayload: [
         {
@@ -275,7 +277,7 @@ const READ_RESPONSE: DataReportPayload = {
 };
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     attributeReportsPayload: [
         {
@@ -357,7 +359,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
 };
 
 const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(2) },
@@ -373,7 +375,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 };
 
 const WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     timedRequest: false,
     writeRequests: [
@@ -410,7 +412,7 @@ const WRITE_REQUEST: WriteRequest = {
 };
 
 const WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -440,7 +442,7 @@ const WRITE_RESPONSE: WriteResponse = {
 };
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     timedRequest: false,
     writeRequests: [
@@ -454,7 +456,7 @@ const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
 };
 
 const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -464,7 +466,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
 };
 
 const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -474,7 +476,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
 };
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     timedRequest: false,
     writeRequests: [
@@ -498,7 +500,7 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
 };
 
 const MASS_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     timedRequest: false,
     writeRequests: [
@@ -512,7 +514,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 };
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -530,7 +532,7 @@ const TlvAclTestSchema = TlvObject({
 });
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     timedRequest: false,
     writeRequests: [
@@ -591,7 +593,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
 };
 
 const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
@@ -613,7 +615,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -629,7 +631,7 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -645,7 +647,7 @@ const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -658,7 +660,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -671,7 +673,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -682,7 +684,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -708,7 +710,7 @@ const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -722,7 +724,7 @@ const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -750,7 +752,7 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -761,7 +763,7 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -774,7 +776,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -787,7 +789,7 @@ const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -800,7 +802,7 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -853,7 +855,7 @@ const wildcardTestCases: {
     wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
     count: number;
 }[] = [
-    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 20 },
     { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
     {
         testCase: "skipGlobalAttributes",
@@ -865,38 +867,37 @@ const wildcardTestCases: {
         testCase: "skipAttributeList",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipAttributeList: true },
-        count: 20,
+        count: 19,
     }, // 1 less
-    { testCase: "skipEventList", clusterId: ClusterId(0x28), wildcardPathFilter: { skipEventList: true }, count: 20 }, // 1 less
     {
         testCase: "skipCommandLists",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipCommandLists: true },
-        count: 19,
+        count: 18,
     }, // 2 less
     {
         testCase: "skipFixedAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipFixedAttributes: true },
-        count: 8,
+        count: 7,
     }, // 13 less
     {
         testCase: "skipChangesOmittedAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipChangesOmittedAttributes: true },
-        count: 21,
+        count: 20,
     }, // nothing filtered
     {
         testCase: "no for WiFiDiag",
         clusterId: ClusterId(0x36),
         wildcardPathFilter: {},
-        count: 11,
+        count: 10,
     }, // nothing filtered
     {
         testCase: "skipChangesOmittedAttributes",
         clusterId: ClusterId(0x36),
         wildcardPathFilter: { skipChangesOmittedAttributes: true },
-        count: 10,
+        count: 9,
     }, // 1 filtered
     {
         testCase: "skipDiagnosticsClusters",
@@ -929,6 +930,22 @@ describe("InteractionProtocol", () => {
     let eventHandler: EventHandler;
     let basicInfoClusterServer: ClusterServerObj<BasicInformationCluster>;
 
+    function createInteractionServer(
+        structure: InteractionEndpointStructure,
+        storageManager: StorageManager,
+        options?: Partial<InteractionContext>,
+    ) {
+        return new InteractionServer({
+            sessions: new SessionManager({
+                fabrics: new FabricManager(),
+                storage: storageManager.createContext("sessions"),
+            }),
+            structure,
+            initiateExchange: (() => {}) as any,
+            ...options,
+        });
+    }
+
     function withClusters<T1 extends ClusterType, T2 extends ClusterType>(
         cluster?: ClusterServerObj<T1>,
         cluster2?: ClusterServerObj<T2>,
@@ -937,13 +954,9 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(cluster);
             let version = 0;
             cluster.datasource = {
-                get version() {
-                    return version;
-                },
-
-                get eventHandler() {
-                    return eventHandler;
-                },
+                fabrics: [],
+                version,
+                eventHandler,
 
                 increaseVersion() {
                     return ++version;
@@ -999,9 +1012,7 @@ describe("InteractionProtocol", () => {
         eventHandler = new EventHandler(storageContext.createContext("EventHandler"));
         endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
         endpointStructure = new InteractionEndpointStructure();
-        interactionProtocol = new InteractionServer({
-            endpointStructure: endpointStructure,
-        });
+        interactionProtocol = createInteractionServer(endpointStructure, storageManager);
     });
 
     describe("handleReadRequest", () => {
@@ -1071,7 +1082,7 @@ describe("InteractionProtocol", () => {
                 const result = await interactionProtocol.handleReadRequest(
                     await createDummyMessageExchange(),
                     {
-                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                         isFabricFiltered: true,
                         attributeRequests: [
                             {
@@ -1547,8 +1558,7 @@ describe("InteractionProtocol", () => {
             });
             let result = undefined;
 
-            interactionProtocol = new InteractionServer({
-                endpointStructure: endpointStructure,
+            interactionProtocol = createInteractionServer(endpointStructure, storageManager, {
                 maxPathsPerInvoke: 1,
             });
 
@@ -1647,8 +1657,7 @@ describe("InteractionProtocol", () => {
                 result.push(TlvInvokeResponse.decode(payload));
             });
 
-            interactionProtocol = new InteractionServer({
-                endpointStructure: endpointStructure,
+            interactionProtocol = createInteractionServer(endpointStructure, storageManager, {
                 maxPathsPerInvoke: 1000,
             });
 

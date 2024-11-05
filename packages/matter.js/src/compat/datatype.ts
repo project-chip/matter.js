@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@matter.js/types/datatype";
+export * from "@matter/types/datatype";

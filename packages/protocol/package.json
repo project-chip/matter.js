@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/protocol",
+    "name": "@matter/protocol",
     "version": "0.0.0-git",
     "description": "Low-level APIs for Matter interaction",
     "keywords": [
@@ -33,21 +33,21 @@
         "embed-examples": "embedme **/README.md"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#types": "@matter.js/types",
-        "#clusters/*": "@matter.js/types/clusters/*",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#types": "@matter/types",
+        "#clusters/*": "@matter/types/clusters/*",
         "#*": "./src/*"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/types": "*"
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/types": "*",
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",

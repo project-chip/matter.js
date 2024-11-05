@@ -47,7 +47,6 @@ const ENCRYPTED_BYTES = Bytes.fromHex(
 describe("SecureSession", () => {
     function secureSession() {
         return new SecureSession({
-            context: {} as any,
             id: 1,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
@@ -55,9 +54,6 @@ describe("SecureSession", () => {
             decryptKey: DECRYPT_KEY,
             encryptKey: ENCRYPT_KEY,
             attestationKey: Buffer.alloc(0),
-            closeCallback: async () => {
-                /* do nothing */
-            },
             isInitiator: true,
         });
     }

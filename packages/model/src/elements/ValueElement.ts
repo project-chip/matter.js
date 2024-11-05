@@ -58,7 +58,7 @@ export type ValueElement = BaseElement & {
     children?: ValueElement[];
 };
 
-export function ValueElement(tag: ElementTag, definition: ValueElement) {
+export function ValueElement(tag: ElementTag, definition: ValueElement, children: ValueElement[]) {
     definition = { ...definition };
 
     if (definition.constraint?.toString().toLowerCase() === "all") {
@@ -71,7 +71,7 @@ export function ValueElement(tag: ElementTag, definition: ValueElement) {
         }
     }
 
-    return BaseElement(tag, definition) as ValueElement;
+    return BaseElement(tag, definition, children) as ValueElement;
 }
 
 export namespace ValueElement {

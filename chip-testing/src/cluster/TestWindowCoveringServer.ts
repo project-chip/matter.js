@@ -3,9 +3,9 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, Time, Timer } from "@matter.js/main";
-import { MovementDirection, MovementType, WindowCoveringServer } from "@matter.js/main/behaviors/window-covering";
-import { WindowCovering } from "@matter.js/main/clusters/window-covering";
+import { Logger, Time, Timer } from "@matter/main";
+import { MovementDirection, MovementType, WindowCoveringServer } from "@matter/main/behaviors/window-covering";
+import { WindowCovering } from "@matter/main/clusters/window-covering";
 
 const logger = Logger.get("TestWindowCoveringServer");
 
@@ -81,8 +81,8 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
                 typeName,
                 950,
                 MovementType.Lift === type
-                    ? this.callback(this.#handleLiftMovementTick)
-                    : this.callback(this.#handleTiltMovementTick),
+                    ? this.callback(this.#handleLiftMovementTick, { lock: true })
+                    : this.callback(this.#handleTiltMovementTick, { lock: true }),
             ),
         };
         this.internal.moveData[typeName]?.timer.start();

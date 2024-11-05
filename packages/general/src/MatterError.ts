@@ -148,7 +148,7 @@ export class MatterAggregateError extends AggregateError {
     format = MatterError.prototype.format;
 
     // TODO - see comment on MatterError.  If that one is correct this is incorrect
-    static [Symbol.hasInstance](instance: unknown) {
+    static override [Symbol.hasInstance](instance: unknown) {
         if (instance instanceof MatterError) {
             return true;
         }

@@ -23,8 +23,11 @@ export interface DeviceTypeElement extends BaseElement {
     children?: (RequirementElement | FieldElement)[];
 }
 
-export function DeviceTypeElement(definition: DeviceTypeElement.Properties) {
-    return BaseElement(DeviceTypeElement.Tag, definition) as DeviceTypeElement;
+export function DeviceTypeElement(
+    definition: DeviceTypeElement.Properties,
+    ...children: (RequirementElement | FieldElement)[]
+) {
+    return BaseElement(DeviceTypeElement.Tag, definition, children) as DeviceTypeElement;
 }
 
 export namespace DeviceTypeElement {

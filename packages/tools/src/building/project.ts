@@ -4,18 +4,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Hash } from "crypto";
 import { build as esbuild, Format } from "esbuild";
 import { cp, mkdir, readFile, rm, symlink, writeFile } from "fs/promises";
-import { glob } from "glob";
 import { platform } from "os";
-import { dirname } from "path";
+import { dirname, join } from "path";
 import { ignoreError } from "../util/errors.js";
-import { CODEGEN_PATH, CONFIG_PATH, Package } from "../util/package.js";
-import { Progress } from "../util/progress.js";
-import { Typescript } from "./typescript.js";
+import { CONFIG_PATH, Package } from "../util/package.js";
+
+export const BUILD_INFO_LOCATION = "build/info.json";
+
+export interface BuildInformation {
+    /**
+     * Time of last build.  Compared to source files to determine whether build is dirty.
+     */
+    timestamp?: string;
+
+    /**
+     * API signature.  Used by dependents to determine whether they need to rebuild after we do.
+     */
+    apiSha?: string;
+
+    /**
+     * API signature of each dependency.  Compared to apiSha of each dependency during dirty detection.
+     */
+    dependencyApiShas?: Record<string, string>;
+}
 
 export class Project {
     pkg: Package;
+    #config?: Project.Config;
+    #configured?: boolean;
 
     constructor(source: Package | string = ".") {
         if (typeof source === "string") {
@@ -25,15 +44,14 @@ export class Project {
         }
 
         if (!this.pkg.hasSrc) {
-            throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
+            throw new Error(
+                `Found package ${this.pkg.json.name} but src directory is not present or not referenced in tsconfig.json`,
+            );
         }
     }
 
     async buildSource(format: Format) {
         await this.#build(format, "src", `dist/${format}`);
-        if (this.pkg.hasCodegen) {
-            await this.#build(format, CODEGEN_PATH, `dist/${format}`);
-        }
         await this.#configureFormat("dist", format, true);
     }
 
@@ -70,93 +88,42 @@ export class Project {
         }
     }
 
-    async buildDeclarations(refreshCallback?: () => void) {
-        Typescript.emitDeclarations(this.pkg, refreshCallback);
+    get hasDeclarations() {
+        return this.pkg.hasDirectory("build/types");
     }
 
-    async validateTypes(refreshCallback?: () => void) {
-        Typescript.validateTypes(this.pkg, refreshCallback);
-    }
-
-    async installDeclarationFormat(format: Format) {
-        const srcMaps = Array<[string, string]>();
-
-        await cp(this.pkg.resolve("build/types/src"), this.pkg.resolve(`dist/${format}`), {
-            recursive: true,
-            force: true,
-
-            filter: (source, dest) => {
-                // We process source maps below
-                if (source.endsWith(".d.ts.map")) {
-                    srcMaps.push([source, dest]);
-                    return false;
-                }
-                return true;
-            },
-        });
-
-        if (this.pkg.hasCodegen) {
-            await cp(this.pkg.resolve("build/types/build/src"), this.pkg.resolve(`dist/${format}`), {
-                recursive: true,
-                force: true,
-
-                filter: source => {
-                    // Ignore source maps
-                    return !source.endsWith(".d.ts.map");
-                },
-            });
+    async hashDeclarations(apiSha: Hash) {
+        if (!this.pkg.isLibrary) {
+            return;
         }
 
-        // If you specify --sourceRoot, tsc just sticks whatever the string is directly into the file.  Not very useful
-        // unless you have no hierarchy or use absolute paths...
-        //
-        // We distribute types for src one level higher than we generate them (dist/esm vs build/types/src) so the paths
-        // end up incorrect.
-        //
-        // The source maps for codegen files are off by two levels but we don't bother installing those since we don't
-        // distribute the source anyway.
-        //
-        // So...  Rewrite the paths in all source maps under src/.  Do this directly on buffer for marginal performance
-        // win.
-        for (const [source, dest] of srcMaps) {
-            // Load map as binary
-            const map = await readFile(source);
-
-            // Find key text
-            let pos = map.indexOf('"sources":["../');
-            if (pos === -1) {
-                throw new Error(
-                    `Could not find sources position in declaration map ${source}, format may have changed`,
-                );
-            }
-
-            // move to ../
-            pos += 12;
-
-            // Shift everything left by three
-            map.copyWithin(pos, pos + 3);
-
-            // Write to new location
-            await writeFile(dest, map.subarray(0, map.length - 3));
-        }
-    }
-
-    async installDeclarations() {
-        await mkdir(this.pkg.resolve("dist"), { recursive: true });
+        let path;
         if (this.pkg.supportsEsm) {
-            await this.installDeclarationFormat("esm");
+            path = "esm";
+        } else if (this.pkg.supportsCjs) {
+            path = "cjs";
+        } else {
+            return;
         }
-        if (this.pkg.supportsCjs) {
-            await this.installDeclarationFormat("cjs");
+
+        const declarations = (await this.pkg.glob(`dist/${path}/**/*.d.ts*`)).sort();
+        for (const file of declarations) {
+            apiSha.update(file);
+            apiSha.update(await readFile(file));
         }
     }
 
-    async recordBuildTime() {
+    async recordBuildInfo(info: BuildInformation) {
         await mkdir(this.pkg.resolve("build"), { recursive: true });
-        await writeFile(this.pkg.resolve("build/timestamp"), "");
+        info.timestamp = new Date().toISOString();
+        await writeFile(this.pkg.resolve(BUILD_INFO_LOCATION), JSON.stringify(info, undefined, 4));
     }
 
-    async loadConfig() {
+    async configure() {
+        if (this.#configured) {
+            return this.#config;
+        }
+
         if (!this.pkg.hasConfig) {
             return {};
         }
@@ -170,7 +137,35 @@ export class Project {
             sourcemap: true,
         });
 
-        return (await import(`file://${outfile}`)) as Project.Config;
+        this.#config = (await import(`file://${outfile}`)) as Project.Config | undefined;
+        this.#configured = true;
+
+        if (this.#config?.startup) {
+            await this.#config?.startup({
+                project: this,
+            });
+        }
+
+        return this.#config;
+    }
+
+    /**
+     * Copy files into dist for supported formats.
+     */
+    async copyToDist(source: string, dest: string) {
+        const formats = Array<string>();
+        if (this.pkg.supportsEsm) {
+            formats.push("esm");
+        }
+        if (this.pkg.supportsCjs) {
+            formats.push("cjs");
+        }
+        for (const format of formats) {
+            await cp(this.pkg.resolve(source), this.pkg.resolve(join("dist", format, dest)), {
+                recursive: true,
+                force: true,
+            });
+        }
     }
 
     async #build(format: Format, indir: string, outdir: string) {
@@ -209,7 +204,7 @@ export class Project {
         // Build import map
         let { imports } = this.pkg.json;
         if (isDist && typeof imports === "object") {
-            imports = { ...imports } as Record<string, unknown>;
+            imports = { ...imports };
             for (const key in imports) {
                 const value = imports[key];
                 if (typeof value === "string") {
@@ -228,12 +223,12 @@ export class Project {
     }
 
     async #targetsOf(indir: string, outdir: string, ...extensions: string[]) {
-        indir = this.pkg.resolve(indir).replace(/\\/g, "/");
+        const inputPrefixLength = this.pkg.resolve(indir).length + 1;
         outdir = this.pkg.resolve(outdir).replace(/\\/g, "/");
 
-        return (await glob(extensions.map(ext => `${indir}/**/*.${ext}`))).map(file => ({
+        return (await this.pkg.glob(extensions.map(ext => `${indir}/**/*.${ext}`))).map(file => ({
             in: file,
-            out: `${outdir}/${file.slice(indir.length + 1)}`,
+            out: `${outdir}/${file.slice(inputPrefixLength)}`,
         }));
     }
 }
@@ -241,10 +236,10 @@ export class Project {
 export namespace Project {
     export interface Context {
         project: Project;
-        progress: Progress;
     }
 
     export interface Config {
+        startup?: (context: Context) => Promise<void>;
         before?: (context: Context) => Promise<void>;
         after?: (context: Context) => Promise<void>;
     }

@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { NodeJsCrypto as CryptoNode } from "@matter.js/nodejs";
+export { NodeJsCrypto as CryptoNode } from "@matter/nodejs";

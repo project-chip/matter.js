@@ -5,7 +5,7 @@
  */
 
 import { createPromise } from "#general";
-import { Fabric, FabricJsonObject, Message, SecureSession, SessionType } from "#protocol";
+import { Fabric, Message, SecureSession, SessionType } from "#protocol";
 import { EndpointNumber, GroupId, StatusCode, ValidationOutOfBoundsError } from "#types";
 import {
     ClusterServer,
@@ -57,8 +57,8 @@ describe("Groups Server test", () => {
         });
 
         it("add new group and verify storage", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -84,8 +84,8 @@ describe("Groups Server test", () => {
         });
 
         it("add another new group and verify storage", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -122,8 +122,8 @@ describe("Groups Server test", () => {
         });
 
         it("add another new group on other endpoint and verify storage", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -246,8 +246,8 @@ describe("Groups Server test", () => {
         });
 
         it("delete group and verify storage", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -279,8 +279,8 @@ describe("Groups Server test", () => {
         });
 
         it("delete all groups and verify storage", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -361,8 +361,8 @@ describe("Groups Server test", () => {
         });
 
         it("add group while identifying", async () => {
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<Fabric.Config>();
+            testFabric!.persistCallback = () => firstResolver(testFabric!.config);
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,

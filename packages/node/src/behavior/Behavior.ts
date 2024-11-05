@@ -6,6 +6,7 @@
 
 import { Agent, INSTALL_BEHAVIOR } from "#endpoint/Agent.js";
 import {
+    AsyncObservable,
     EventEmitter,
     GeneratedClass,
     ImplementationError,
@@ -14,7 +15,7 @@ import {
     Observable,
 } from "#general";
 import type { ClusterType } from "#types";
-import { assertDeviceSession } from "@matter.js/protocol";
+import { assertSecureSession } from "@matter/protocol";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";
@@ -99,6 +100,13 @@ export abstract class Behavior {
     }
 
     /**
+     * The endpoint's environment.
+     */
+    get env() {
+        return this.endpoint.env;
+    }
+
+    /**
      * The session in which the behavior has been invoked.
      */
     get session() {
@@ -108,7 +116,7 @@ export abstract class Behavior {
         }
 
         // TODO - would a behavior ever need access to an insecure session?
-        assertDeviceSession(session);
+        assertSecureSession(session);
 
         return session;
     }
@@ -226,6 +234,19 @@ export abstract class Behavior {
      */
     protected callback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
         const observable = Observable<A, R>();
+
+        this.reactTo(observable, reactor, options);
+
+        return (...args: A) => observable.emit(...args);
+    }
+
+    /**
+     * Create an async callback.
+     *
+     * @see {@link callback}
+     */
+    protected asyncCallback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
+        const observable = AsyncObservable<A, R>();
 
         this.reactTo(observable, reactor, options);
 

@@ -4,35 +4,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicSet, Construction, ImplementationError, Lifecycle, Logger, MutableSet, ObservableSet } from "#general";
+import { Construction, ImplementationError, Lifecycle, Logger, MutableSet } from "#general";
 import { IdentityConflictError, IdentityService } from "#node/server/IdentityService.js";
 import { Agent } from "../Agent.js";
 import { Endpoint } from "../Endpoint.js";
 import { EndpointPartsError, PartNotFoundError } from "../errors.js";
 import { EndpointType } from "../type/EndpointType.js";
+import { EndpointContainer } from "./EndpointContainer.js";
 import { EndpointLifecycle } from "./EndpointLifecycle.js";
 
 const logger = Logger.get("Parts");
 
 /**
- * Manages parent-child relationship between endpoints.
+ * Manages the parent-child relationship between endpoints as defined by the "Parts" attribute of the Basic Information
+ * cluster.
  *
  * You can manipulate child parts using {@link MutableSet} interface.
  *
  * Notifications of structural change bubble via {@link Endpoint.lifecycle.changed}.
  */
-export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, ObservableSet<Endpoint> {
+export class Parts extends EndpointContainer implements MutableSet<Endpoint, Endpoint | Agent> {
     #bubbleChange: (type: EndpointLifecycle.Change, endpoint: Endpoint) => void;
-    #children = new BasicSet<Endpoint>();
-    #endpoint: Endpoint;
 
     constructor(endpoint: Endpoint) {
-        this.#endpoint = endpoint;
-        const lifecycle = this.#endpoint.lifecycle;
+        super(endpoint);
+
+        const lifecycle = this.owner.lifecycle;
         this.#bubbleChange = (type, endpoint) => lifecycle.bubble(type, endpoint);
     }
 
-    add(child: Endpoint.Definition | Agent) {
+    override add(child: Endpoint.Definition | Agent) {
         const endpoint = this.#endpointFor(child);
 
         // Setting endpoint.owner also invokes add() so make sure we don't recurse
@@ -40,28 +41,20 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
             return;
         }
 
-        if (endpoint.lifecycle.hasId) {
-            this.assertIdAvailable(endpoint.id, endpoint);
-        }
-
         // Insertion validation is only possible in a fully configured node. If we are not yet installed then an
         // ancestor will handle validation when we installed
-        if (this.#endpoint.lifecycle.isReady) {
+        if (this.owner.lifecycle.isReady) {
             this.#validateInsertion(endpoint, endpoint);
         }
 
-        this.#children.add(endpoint);
-        endpoint.owner = this.#endpoint;
+        super.add(endpoint);
 
         endpoint.lifecycle.changed.on((type, endpoint) => this.#bubbleChange(type, endpoint));
-        endpoint.lifecycle.destroyed.once(() => {
-            this.delete(endpoint);
-        });
 
         // If the part is already fully initialized we initialize the child now
-        if (this.#endpoint.lifecycle.isPartsReady) {
+        if (this.owner.lifecycle.isPartsReady) {
             if (!endpoint.construction.isErrorHandled) {
-                endpoint.construction.onError(error => logger.error(`Error initializing ${this.#endpoint}:`, error));
+                endpoint.construction.onError(error => logger.error(`Error initializing ${endpoint}:`, error));
             }
 
             endpoint.construction.start();
@@ -70,54 +63,32 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         return endpoint;
     }
 
-    delete(child: Endpoint | Agent) {
+    override delete(child: Endpoint | Agent) {
         const endpoint = this.#endpointFor(child);
 
-        if (!this.#children.delete(this.#endpointFor(child))) {
+        if (!super.delete(this.#endpointFor(child))) {
             return false;
         }
 
         const childLifeCycle = endpoint.lifecycle;
         childLifeCycle.changed.off(this.#bubbleChange);
 
-        this.#children.delete(endpoint);
-
         return true;
-    }
-
-    clear() {
-        this.#children.clear();
-    }
-
-    get(id: string) {
-        for (const child of this.#children) {
-            if (child.maybeId === id) {
-                return child;
-            }
-        }
     }
 
     require(id: string) {
         const part = this.get(id);
 
         if (part === undefined) {
-            throw new PartNotFoundError(`Endpoint ${this.#endpoint} has no part ${id}`);
+            throw new PartNotFoundError(`Endpoint ${this.owner} has no part ${id}`);
         }
 
         return part;
     }
 
-    #get(id: string) {
-        for (const child of this.#children) {
-            if (child.maybeId === id) {
-                return child;
-            }
-        }
-    }
-
-    has(identity: string | Endpoint | Agent) {
+    override has(identity: string | Endpoint | Agent) {
         if (typeof identity === "string") {
-            for (const child of this.#children) {
+            for (const child of this) {
                 if (child.maybeId === identity) {
                     return true;
                 }
@@ -125,14 +96,14 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
             return false;
         }
 
-        return this.#children.has(this.#endpointFor(identity));
+        return super.has(this.#endpointFor(identity));
     }
 
     indexOf(child: Endpoint | Agent) {
         const endpoint = this.#endpointFor(child);
         let index = 0;
 
-        for (const other of this.#children) {
+        for (const other of this) {
             if (endpoint === other) {
                 return index;
             }
@@ -142,32 +113,6 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         return -1;
     }
 
-    get added() {
-        return this.#children.added;
-    }
-
-    get deleted() {
-        return this.#children.deleted;
-    }
-
-    get size() {
-        return this.#children.size;
-    }
-
-    [Symbol.iterator]() {
-        return this.#children[Symbol.iterator]();
-    }
-
-    /**
-     * Confirm availability of an ID amongst the endpoint's children.
-     */
-    assertIdAvailable(id: string, endpoint: Endpoint) {
-        const other = this.#get(id);
-        if (other && other !== endpoint) {
-            throw new IdentityConflictError(`${other} is already defined; endpoint IDs must be unique within parent`);
-        }
-    }
-
     /**
      * Initialize all uninitialized Parts.
      *
@@ -175,12 +120,12 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
      */
     initialize() {
         // Sanity check
-        if (!this.#endpoint.lifecycle.isReady) {
+        if (!this.owner.lifecycle.isReady) {
             throw new ImplementationError(`Cannot initialize parts because endpoint is not ready`);
         }
 
         // Our only purpose is to initialize child parts
-        const onPartsReady = () => this.#endpoint.lifecycle.change(EndpointLifecycle.Change.PartsReady);
+        const onPartsReady = () => this.owner.lifecycle.change(EndpointLifecycle.Change.PartsReady);
         if (!this.size) {
             onPartsReady();
             return;
@@ -222,27 +167,9 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         return promise;
     }
 
-    /**
-     * Soft-reset all parts.  Invoked automatically by the owner on reset.
-     */
-    async reset() {
-        for (const endpoint of this) {
-            await endpoint.reset();
-        }
-    }
-
-    /**
-     * Destroy all parts.  Invoked automatically by the owner on destroy.
-     */
-    async close() {
-        for (const endpoint of this) {
-            await endpoint.close();
-        }
-    }
-
     #validateInsertion(forefather: Endpoint, endpoint: Endpoint, usedNumbers?: Set<number>) {
         if (endpoint.lifecycle.hasNumber) {
-            this.#endpoint.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
+            this.owner.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
             if (usedNumbers?.has(endpoint.number)) {
                 throw new IdentityConflictError(
                     `Cannot add endpoint ${forefather} because descendents have conflicting definitions for endpoint number ${endpoint.number}`,
@@ -280,11 +207,11 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
 
         if (!(child instanceof Endpoint)) {
             if ((child as any).type) {
-                (child as any).owner = this.#endpoint;
+                (child as any).owner = this.owner;
             } else {
                 child = {
                     type: child as EndpointType,
-                    owner: this.#endpoint,
+                    owner: this.owner,
                 };
             }
         }

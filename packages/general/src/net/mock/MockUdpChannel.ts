@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ChannelType } from "#net/Channel.js";
 import { NetworkError } from "../Network.js";
 import { TransportInterface } from "../TransportInterface.js";
 import { MAX_UDP_MESSAGE_SIZE, UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
@@ -20,7 +21,7 @@ export class MockUdpChannel implements UdpChannel {
         if (localAddress === undefined) {
             throw new NetworkError("No matching IP on the specified interface");
         }
-        return new MockUdpChannel(localAddress, listeningAddress, listeningPort);
+        return new MockUdpChannel(type, localAddress, listeningAddress, listeningPort);
     }
 
     private readonly netListeners = new Array<TransportInterface.Listener>();
@@ -29,6 +30,7 @@ export class MockUdpChannel implements UdpChannel {
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
+        readonly type: "udp4" | "udp6",
         private readonly localAddress: string,
         private readonly listeningAddress: string | undefined,
         listeningPort?: number,
@@ -59,5 +61,9 @@ export class MockUdpChannel implements UdpChannel {
 
     get port() {
         return this.listeningPort;
+    }
+
+    supports(type: ChannelType, _address: string) {
+        return type === ChannelType.UDP;
     }
 }

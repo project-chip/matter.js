@@ -10,7 +10,6 @@ import {
     AttributeList,
     AttributeModel,
     ClusterModel,
-    EventList,
     GeneratedCommandList,
     MatterModel,
 } from "#model";
@@ -54,7 +53,7 @@ import {
  * @see {@link MatterSpecification.v13.Core} §8.2.1.7
  */
 const GLOBAL_COMMANDLIST_IDS = [GeneratedCommandList.id, AcceptedCommandList.id];
-const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, EventList.id, AttributeList.id];
+const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, AttributeList.id];
 
 // Build a list of cluster IDs that are used for diagnostics to not always filter through model
 // TODO Find a way to also incorporate custom clusters here
@@ -306,9 +305,6 @@ export class InteractionEndpointStructure {
                 return true;
             }
             if (wildcardPathFlags.skipAttributeList && attributeId === AttributeList.id) {
-                return true;
-            }
-            if (wildcardPathFlags.skipEventList && attributeId === EventList.id) {
                 return true;
             }
             if (wildcardPathFlags.skipCommandLists && GLOBAL_COMMANDLIST_IDS.includes(attributeId)) {

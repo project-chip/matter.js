@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
-import { ClusterModel, EventModel, MatterModel } from "@matter.js/model";
-import { SupportedEventClient } from "@project-chip/matter.js/cluster";
+import { Logger } from "@matter/general";
+import { ClusterModel, EventModel, MatterModel } from "@matter/model";
 import { ClusterId } from "@project-chip/matter.js/datatype";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
@@ -74,12 +73,6 @@ function generateEventHandler(
                 return;
             }
             const eventClient = clusterClient.events[eventName];
-            if (!(eventClient instanceof SupportedEventClient)) {
-                console.log(
-                    `ERROR: Event ${node.nodeId.toString()}/${endpointId}/${clusterId}/${event.id} not supported.`,
-                );
-                return;
-            }
             console.log(
                 `Event value for ${eventName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${event.id}: ${Logger.toJSON(await eventClient.get())}`,
             );

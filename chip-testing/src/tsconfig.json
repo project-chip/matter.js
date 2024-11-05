@@ -1,7 +1,20 @@
 {
-    "extends": "../../packages/tools/tsconfig.base.json",
+    "extends": "../../packages/tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
         "outDir": "../dist/cjs",
-        "types": ["node"]
-    }
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../packages/main/src"
+        },
+        {
+            "path": "../../packages/matter.js/src"
+        },
+        {
+            "path": "../../packages/testing/src"
+        }
+    ]
 }

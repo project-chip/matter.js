@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
+import { capitalize, decamelize, Logger } from "@matter/general";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
@@ -78,18 +78,20 @@ export default function commands(theNode: MatterNode) {
                         switch (status) {
                             case "commissioned": {
                                 const details = theNode.commissioningController.getCommissionedNodesDetails();
-                                console.log(
-                                    details.map(detail => ({
+                                details
+                                    .map(detail => ({
                                         ...detail,
                                         nodeId: detail.nodeId.toString(),
-                                    })),
-                                );
+                                    }))
+                                    .forEach(detail => {
+                                        console.log(detail);
+                                    });
                                 break;
                             }
                             case "connected": {
                                 const nodeIds = theNode.commissioningController
                                     .getCommissionedNodes()
-                                    .filter(nodeId => !!theNode.commissioningController?.getConnectedNode(nodeId));
+                                    .filter(nodeId => !!theNode.commissioningController?.getPairedNode(nodeId));
                                 console.log(nodeIds.map(nodeId => nodeId.toString()));
                                 break;
                             }
@@ -115,13 +117,13 @@ export default function commands(theNode: MatterNode) {
                     },
                 )
                 .command(
-                    "connect <node-id> [min-subscription-interval] [max-subscription-interval]",
+                    "connect [node-id] [min-subscription-interval] [max-subscription-interval]",
                     "Connects to one or all commissioned nodes",
                     yargs => {
                         return yargs
                             .positional("node-id", {
                                 describe: "node id to connect. Use 'all' to connect to all nodes.",
-                                default: undefined,
+                                default: "all",
                                 type: "string",
                                 demandOption: true,
                             })
@@ -132,7 +134,7 @@ export default function commands(theNode: MatterNode) {
                             })
                             .positional("max-subscription-interval", {
                                 describe:
-                                    "Maximum subscription interval in seconds. If minimum interval is set and this not this is set to 30 seconds.",
+                                    "Maximum subscription interval in seconds. If minimum interval is set and this not it will be determined automatically.",
                                 type: "number",
                             });
                     },
@@ -157,23 +159,20 @@ export default function commands(theNode: MatterNode) {
                             await theNode.commissioningController.connectNode(nodeIdToProcess, {
                                 autoSubscribe,
                                 subscribeMinIntervalFloorSeconds: autoSubscribe ? minSubscriptionInterval : undefined,
-                                subscribeMaxIntervalCeilingSeconds: autoSubscribe
-                                    ? (maxSubscriptionInterval ?? 30)
-                                    : undefined,
+                                subscribeMaxIntervalCeilingSeconds: autoSubscribe ? maxSubscriptionInterval : undefined,
                                 ...createDiagnosticCallbacks(),
                             });
                         }
                     },
                 )
                 .command(
-                    "disconnect <node-id>",
+                    "disconnect [node-id]",
                     "Disconnects from one or all nodes",
                     yargs => {
                         return yargs.positional("node-id", {
                             describe: "node id to disconnect. Use 'all' to disconnect from all nodes.",
-                            default: undefined,
+                            default: "all",
                             type: "string",
-                            demandOption: true,
                         });
                     },
                     async argv => {
@@ -193,12 +192,51 @@ export default function commands(theNode: MatterNode) {
                         }
 
                         for (const nodeIdToProcess of nodeIds) {
-                            const node = theNode.commissioningController.getConnectedNode(nodeIdToProcess);
+                            const node = theNode.commissioningController.getPairedNode(nodeIdToProcess);
                             if (node === undefined) {
                                 console.log(`Node ${nodeIdToProcess} not connected`);
                                 continue;
                             }
                             await node.disconnect();
+                        }
+                    },
+                )
+                .command(
+                    "status [node-ids]",
+                    "Logs the connection status for all or specified nodes",
+                    yargs => {
+                        return yargs.positional("node-ids", {
+                            describe:
+                                "node ids to connect (comma separated list allowed). Use 'all' to log status for all nodes.",
+                            default: "all",
+                            type: "string",
+                        });
+                    },
+                    async argv => {
+                        const { nodeIds: nodeIdStr } = argv;
+                        await theNode.start();
+                        if (theNode.commissioningController === undefined) {
+                            throw new Error("CommissioningController not initialized");
+                        }
+                        let nodeIds = theNode.commissioningController.getCommissionedNodes();
+                        if (nodeIdStr !== "all") {
+                            const nodeIdList = nodeIdStr.split(",").map(nodeId => NodeId(BigInt(nodeId)));
+                            nodeIds = nodeIds.filter(nodeId => nodeIdList.includes(nodeId));
+                            if (!nodeIds.length) {
+                                throw new Error(`Node ${nodeIdStr} not commissioned`);
+                            }
+                        }
+
+                        for (const nodeIdToProcess of nodeIds) {
+                            const node = theNode.commissioningController.getPairedNode(nodeIdToProcess);
+                            if (node === undefined) {
+                                console.log(`Node ${nodeIdToProcess}: Not initialized`);
+                            } else {
+                                const basicInfo = node.basicInformation;
+                                console.log(
+                                    `Node ${nodeIdToProcess}: Node Status: ${capitalize(decamelize(NodeStateInformation[node.state], " "))}${basicInfo !== undefined ? ` (${basicInfo.vendorName} ${basicInfo.productName})` : ""}`,
+                                );
+                            }
                         }
                     },
                 ),

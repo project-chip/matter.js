@@ -20,8 +20,8 @@ export interface EventElement extends ValueElement {
     priority?: `${EventElement.Priority}`;
 }
 
-export function EventElement(definition: EventElement.Properties) {
-    return ValueElement(EventElement.Tag, definition) as EventElement;
+export function EventElement(definition: EventElement.Properties, ...children: ValueElement[]) {
+    return ValueElement(EventElement.Tag, definition, children) as EventElement;
 }
 
 export namespace EventElement {

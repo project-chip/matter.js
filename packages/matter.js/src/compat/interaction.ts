@@ -4,19 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Specification } from "#model";
+
 export {
-    DEFAULT_MAX_PATHS_PER_INVOKE,
-    EventHandler,
-    INTERACTION_MODEL_REVISION,
-    INTERACTION_PROTOCOL_ID,
-    IncomingInteractionClientMessenger,
-    InteractionClient,
-    InteractionClientMessenger,
-    InteractionEndpointStructure,
-    InteractionServer,
-    MessageType,
-    SubscriptionHandler,
-    SubscriptionOptions,
     attributePathToId,
     canAttributePayloadBeChunked,
     chunkAttributePayload,
@@ -29,9 +19,16 @@ export {
     decodeUnknownEventValue,
     encodeAttributePayload,
     encodeEventPayload,
+    EventHandler,
     eventPathToId,
     expandPathsInAttributeData,
     genericElementPathToId,
+    IncomingInteractionClientMessenger,
+    InteractionClient,
+    InteractionClientMessenger,
+    InteractionEndpointStructure,
+    InteractionServer,
+    MessageType,
     normalizeAndDecodeAttributeData,
     normalizeAndDecodeEventData,
     normalizeAndDecodeReadAttributeReport,
@@ -40,6 +37,8 @@ export {
     normalizeEventData,
     sortAttributeDataByPath,
     structureReadAttributeDataToClusterObject,
+    ServerSubscription as SubscriptionHandler,
+    ServerSubscriptionConfig as SubscriptionOptions,
     validateReadAttributesPath,
     validateReadEventPath,
     type AttributePath,
@@ -67,5 +66,7 @@ export {
     type WriteRequest,
     type WriteResponse,
 } from "#protocol";
-export { StatusResponseError } from "@matter.js/types";
-export * from "@matter.js/types/protocol";
+export { DEFAULT_MAX_PATHS_PER_INVOKE, INTERACTION_PROTOCOL_ID, StatusResponseError } from "#types";
+export * from "@matter/types/protocol";
+
+export const INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;

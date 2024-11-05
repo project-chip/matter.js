@@ -25,19 +25,13 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
-    },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "build-clean": "matter-build --clean"
     },
     "dependencies": {
-        "@matter.js/nodejs-ble": "*"
+        "@matter/nodejs-ble": "*"
     },
-    "optionalDependencies": {
-        "@stoprocent/bleno": "^0.7.6",
-        "@stoprocent/noble": "^1.14.1"
+    "devDependencies": {
+        "@matter/tools": "*"
     },
     "engines": {
         "node": ">=18.0.0"

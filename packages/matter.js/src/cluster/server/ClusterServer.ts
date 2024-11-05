@@ -121,6 +121,10 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
             return datasource?.eventHandler;
         },
 
+        get fabrics() {
+            return datasource?.fabrics ?? [];
+        },
+
         increaseVersion() {
             return datasource?.increaseVersion() ?? 0;
         },
@@ -199,7 +203,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
         },
 
         isEventSupported: (eventId: EventId) => {
-            return (attributes as any).eventList.getLocal().includes(eventId);
+            return eventList.includes(eventId);
         },
 
         isEventSupportedByName: (eventName: string) => {
@@ -223,7 +227,6 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
         attributeList: new Array<AttributeId>(),
         acceptedCommandList: new Array<CommandId>(),
         generatedCommandList: new Array<CommandId>(),
-        eventList: new Array<EventId>(),
     };
 
     const attributeList = new Array<AttributeId>();
@@ -507,7 +510,6 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
             eventList.push(id);
         }
     }
-    (attributes as any).eventList.setLocal(eventList.sort((a, b) => a - b));
 
     return result as ClusterServerObj<T>;
 }

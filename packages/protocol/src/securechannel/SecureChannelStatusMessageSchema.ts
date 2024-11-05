@@ -5,8 +5,7 @@
  */
 
 import { DataReader, DataWriter, Endian } from "#general";
-import { Schema } from "#types";
-import { GeneralStatusCode, ProtocolStatusCode } from "./SecureChannelMessages.js";
+import { GeneralStatusCode, ProtocolStatusCode, Schema } from "#types";
 
 export type StatusMessage = {
     generalStatus: GeneralStatusCode;

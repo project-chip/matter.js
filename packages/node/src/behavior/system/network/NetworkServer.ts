@@ -5,9 +5,9 @@
  */
 
 import { ImplementationError, Logger } from "#general";
-import { Ble, SubscriptionOptions } from "#protocol";
+import { Ble, ServerSubscriptionConfig } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "#types";
-import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
 
@@ -48,7 +48,7 @@ export class NetworkServer extends NetworkBehavior {
             discoveryCaps.onIpNetwork = true;
         }
 
-        this.reactTo(this.agent.get(CommissioningBehavior).events.commissioned, this.#endUncommissionedMode);
+        this.reactTo(this.agent.get(CommissioningServer).events.commissioned, this.#endUncommissionedMode);
 
         return super.initialize();
     }
@@ -57,8 +57,8 @@ export class NetworkServer extends NetworkBehavior {
      * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
      * advertising, the advertisement timeout resets.
      *
-     * If the node is uncommissioned it announces as commissionable on all available transports. Commissioned devices
-     * only advertise for operational discovery via DNS-SD.
+     * If the node is uncommissioned and commissioning is enabled, announces as commissionable on all available
+     * transports. Commissioned devices only advertise for operational discovery via DNS-SD.
      *
      * Advertisement begins at startup.
      */
@@ -79,13 +79,7 @@ export class NetworkServer extends NetworkBehavior {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.endpoint.env.runtime.add(this.internal.runtime.announceNow());
-    }
-
-    async endCommissioning() {
-        if (this.internal.runtime) {
-            return this.internal.runtime.endCommissioning();
-        }
+        this.env.runtime.add(this.internal.runtime.advertiseNow());
     }
 
     #endUncommissionedMode() {
@@ -108,6 +102,6 @@ export namespace NetworkServer {
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };
-        subscriptionOptions?: SubscriptionOptions = undefined;
+        subscriptionOptions?: ServerSubscriptionConfig = undefined;
     }
 }

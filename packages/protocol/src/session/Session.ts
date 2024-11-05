@@ -10,7 +10,7 @@ import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/Message
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
-import { SessionManager } from "./SessionManager.js";
+import { type SessionManager } from "./SessionManager.js";
 
 /**
  * Minimum amount of time between sender retries when the destination node is Active. This SHALL be greater than or
@@ -57,23 +57,10 @@ export interface SessionParameters {
 
 export type SessionParameterOptions = Partial<SessionParameters>;
 
-export interface SessionContext {
-    /** Own session parameters. */
-    sessionParameters: SessionParameters;
-
-    /** The manager that owns this session */
-    sessionManager: SessionManager;
-
-    /** This method is called when a message is resubmitted the first time and can handle announcements or discoveries. */
-    handleResubmissionStarted(nodeId?: NodeId): void;
-
-    /** Obtain a list of known fabrics */
-    getFabrics(): Fabric[];
-}
-
 export abstract class Session {
     abstract get name(): string;
     abstract get closingAfterExchangeFinished(): boolean;
+    #manager?: SessionManager;
     timestamp = Time.nowMs();
     activeTimestamp = 0;
     protected readonly idleIntervalMs: number;
@@ -83,21 +70,27 @@ export abstract class Session {
     protected readonly interactionModelRevision: number;
     protected readonly specificationVersion: number;
     protected readonly maxPathsPerInvoke: number;
-    protected readonly closeCallback: () => Promise<void>;
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState: MessageReceptionState;
 
+    /**
+     * If the ExchangeManager performs async work to clean up a session it sets this promise.  This is because
+     * historically we didn't return from destroy() until ExchangeManager was complete.  Not sure if this is entirely
+     * necessary but it makes sense so this allows us to maintain the old behavior.
+     */
+    closer?: Promise<void>;
+
     constructor(args: {
+        manager?: SessionManager;
         messageCounter: MessageCounter;
         messageReceptionState: MessageReceptionState;
-        closeCallback: () => Promise<void>;
         sessionParameters?: SessionParameterOptions;
         setActiveTimestamp: boolean;
     }) {
         const {
+            manager,
             messageCounter,
             messageReceptionState,
-            closeCallback,
             sessionParameters: {
                 idleIntervalMs = SESSION_IDLE_INTERVAL_MS,
                 activeIntervalMs = SESSION_ACTIVE_INTERVAL_MS,
@@ -109,9 +102,9 @@ export abstract class Session {
             } = {},
             setActiveTimestamp,
         } = args;
+        this.#manager = manager;
         this.messageCounter = messageCounter;
         this.messageReceptionState = messageReceptionState;
-        this.closeCallback = closeCallback;
         this.idleIntervalMs = idleIntervalMs;
         this.activeIntervalMs = activeIntervalMs;
         this.activeThresholdMs = activeThresholdMs;
@@ -170,7 +163,6 @@ export abstract class Session {
 
     abstract isSecure: boolean;
     abstract isPase: boolean;
-    abstract context: SessionContext;
     abstract id: number;
     abstract peerSessionId: number;
     abstract nodeId: NodeId | undefined;
@@ -182,4 +174,15 @@ export abstract class Session {
     abstract encode(message: Message): Packet;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
+
+    protected get manager() {
+        return this.#manager;
+    }
+
+    /**
+     * @deprecated
+     */
+    get owner() {
+        return this.#manager?.owner;
+    }
 }

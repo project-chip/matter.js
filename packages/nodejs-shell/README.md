@@ -1,4 +1,4 @@
-# matter.js Node Shell
+# @matter/nodejs-shell - matter.js Node Shell
 
 This project provides a light-weight node.js implementation of a Matter shell application like the chip-tool from the official Matter-SDK.
 
@@ -9,7 +9,7 @@ This project provides a light-weight node.js implementation of a Matter shell ap
 If you want to install just the shell app then you can do so by running:
 
 ```
-npm install @matter.js/nodejs-shell
+npm install @matter/nodejs-shell
 ```
 
 ## Run
@@ -22,6 +22,22 @@ npm shell <nodenum>
 ```
 
 There are other parameters available to enable BLE and define the HCI device to use. See `npm shell -- --help` for more details.
+Please note the extra `--` to separate the npm parameters from the shell parameters!
+
+## matter.js v0.11 Storage adjustment!
+In matter.js 0.11 we adjusted the storage to the new environment based one. This means that by default the storage is in the user directory in .matter/shell-XX where XX is the nodeBum you provided as parameter. You can adjust the storage base location with "--storage-path=..." as parameter.
+
+To use a former storage you can use "--legacyStorage" and the storage will be in the .matter-shell-XX directory in the local directory as before.
+To manually convert a storage you can follow the following steps. The described steps assume ./.matter-shell-XX is the old storage and ~/.matter/shell-XX is the new storage location.
+
+* Stop the shell
+* Copy ./.matter-shell-XX/0.RootCertificateManager.* to ~/.matter/shell-XX/credentials.*
+* Copy ./.matter-shell-XX/0.MatterController.fabric to ~/.matter/shell-XX/credentials.fabric
+* Copy ./.matter-shell-XX/0.MatterController.commissionedNodes to ~/.matter/shell-XX/nodes.commissionedNodes
+* Copy ./.matter-shell-XX/0.SessionManager.* to ~/.matter/shell-XX/sessions.*
+* Copy ./.matter-shell-XX/Node.* to ~/.matter/shell-XX/Node.*
+
+All "0.MatterController.node-*" files from the old storage are not needed to be copied, if existing. They are automatically regenerated on next start.
 
 ## General usage
 

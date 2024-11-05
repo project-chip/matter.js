@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import mapWorkspaces from "@npmcli/map-workspaces";
 import colors from "ansi-colors";
 import { JsonNotFoundError, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
 import { Builder } from "./builder.js";
 import { InternalBuildError } from "./error.js";
-import { Project } from "./project.js";
+import { BUILD_INFO_LOCATION, BuildInformation, Project } from "./project.js";
 
 /**
  * Graph of dependencies for workspace packages.
@@ -71,17 +70,42 @@ export class Graph {
         return await this.#createGraph([...nodes]);
     }
 
-    // TODO - parallelization will be trivial except need to update Progress
-    // to support display of multiple simultaneous tasks
+    // TODO - parallelization will be trivial except need to update Progress to support display of multiple simultaneous
+    // tasks
     async build(builder: Builder, showSkipped = true) {
         const toBuild = new Set(this.nodes);
+
+        const needsConfig = this.nodes.find(node => node.pkg.hasConfig);
+        if (builder.hasClean || needsConfig) {
+            try {
+                // We clean all packages before engaging typescript because otherwise it seems to get confused
+                if (builder.hasClean) {
+                    builder.clearClean();
+                    for (const node of this.nodes) {
+                        await node.project.clean();
+                        node.info = {};
+                    }
+                }
+
+                // We configure each build before building so that any generated files are in place before we initiate the build
+                for (const node of this.nodes) {
+                    if (!node.pkg.hasConfig) {
+                        continue;
+                    }
+                    await builder.configure(node.project);
+                }
+            } catch (e) {
+                console.error("Terminating due to prebuild error:", e);
+                process.exit(1);
+            }
+        }
 
         while (toBuild.size) {
             let node;
 
             nodes: for (node of toBuild) {
                 for (const dep of node.dependencies) {
-                    if (dep.dirty) {
+                    if (dep.isDirty) {
                         continue nodes;
                     }
                 }
@@ -91,10 +115,9 @@ export class Graph {
             if (!node) {
                 throw new Error("Internal logic error: No unbuilt project has fully built dependencies");
             }
-
-            if (node.dirty || builder.unconditional) {
-                await builder.build(new Project(node.pkg));
-                node.buildTime = Date.now();
+            if (node.isDirty || builder.unconditional) {
+                await builder.build(node.project);
+                node.info.timestamp = new Date().toISOString();
             } else if (showSkipped) {
                 new Progress().skip("Up to date", node.pkg);
             }
@@ -108,8 +131,8 @@ export class Graph {
             const progress = node.pkg.start("Node");
             progress.info("path", node.pkg.path);
             progress.info("modified", formatTime(node.modifyTime));
-            progress.info("built", formatTime(node.buildTime));
-            progress.info("dirty", node.dirty ? colors.dim.red("yes") : colors.dim.green("no"));
+            progress.info("built", formatTime(node.info.timestamp ?? 0));
+            progress.info("dirty", node.isDirty ? colors.dim.red("yes") : colors.dim.green("no"));
             progress.info("dependencies", node.dependencies.map(formatDep).join(", "));
             progress.shutdown();
         }
@@ -120,7 +143,9 @@ export class Graph {
 
         await Promise.all(
             graph.nodes.map(async node => {
-                node.buildTime = await node.pkg.lastModified("build/timestamp");
+                if (node.pkg.hasFile(BUILD_INFO_LOCATION)) {
+                    node.info = await node.pkg.readJson(BUILD_INFO_LOCATION);
+                }
 
                 node.modifyTime = await node.pkg.lastModified("package.json", "src", "test");
 
@@ -148,23 +173,34 @@ export class Graph {
     }
 
     static async #loadNodes(workspace: Package) {
-        const workspaces = await mapWorkspaces({ pkg: workspace.json, cwd: workspace.path });
+        const workspaces = workspace.json.workspaces;
 
         const nodeMap = {} as Record<string, Graph.Node>;
         const allDeps = {} as Record<string, string[]>;
         for (const path of workspaces.values()) {
-            const pkg = new Package({ path: path });
+            const pkg = new Package({ path: workspace.resolve(path) });
             allDeps[pkg.json.name] = pkg.dependencies;
             nodeMap[pkg.json.name] = {
                 pkg,
+                project: new Project(pkg),
                 dependencies: [],
-                buildTime: 0,
+                info: {},
                 modifyTime: 0,
 
-                get dirty() {
+                get buildTime() {
+                    return this.info.timestamp ? new Date(this.info.timestamp).getTime() : 0;
+                },
+
+                get isDirty() {
                     return (
                         this.modifyTime > this.buildTime ||
-                        !!this.dependencies.find(d => d.dirty || d.buildTime > this.buildTime)
+                        !!this.dependencies.find(
+                            dep =>
+                                dep.isDirty ||
+                                (dep.buildTime > this.buildTime &&
+                                    (dep.info.apiSha === undefined ||
+                                        dep.info.apiSha !== this.info.dependencyApiShas?.[dep.pkg.name])),
+                        )
                     );
                 },
             };
@@ -188,20 +224,25 @@ export class Graph {
 export namespace Graph {
     export interface Node {
         pkg: Package;
+        project: Project;
         dependencies: Node[];
         buildTime: number;
+        info: BuildInformation;
         modifyTime: number;
-        dirty: boolean;
+        isDirty: boolean;
     }
 }
 
-function formatTime(time: number) {
+function formatTime(time: number | string) {
     if (!time) {
         return colors.dim.red("never");
+    }
+    if (typeof time === "string") {
+        time = new Date(time).getTime();
     }
     return new Date(time - new Date().getTimezoneOffset()).toISOString().split(".")[0].replace("T", " ");
 }
 
 function formatDep(node: Graph.Node) {
-    return node.pkg.name.replace(/^@(?:project-chip|matter\.js)\//, "");
+    return node.pkg.name.replace(/^@matter\//, "");
 }

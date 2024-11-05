@@ -1,16 +1,19 @@
 {
-    "extends": "../../tools/tsconfig.base.json",
+    "extends": "../../tools/tsc/tsconfig.app.json",
     "compilerOptions": {
-        "outDir": "../dist/esm",
-        "types": ["node"],
-
-        // See https://github.com/microsoft/TypeScript/issues/47663#issuecomment-1519138189
-        // r.e. error TS2742
-        // Probably referencing matter.js project directly would also solve but there's no reason for us to emit
-        // declarations anyway
-        "declaration": false,
-        "composite": false,
-        "declarationMap": false,
+        "types": [
+            "node"
+        ]
     },
-    "references": [{ "path": "../../matter-node.js/src" }, { "path": "../../matter-node-ble.js/src" }]
+    "references": [
+        {
+            "path": "../../main/src"
+        },
+        {
+            "path": "../../nodejs-ble/src"
+        },
+        {
+            "path": "../../nodejs/src"
+        }
+    ]
 }

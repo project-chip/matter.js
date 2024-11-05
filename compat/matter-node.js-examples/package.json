@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/matter-node.js-examples",
+    "name": "@project-chip/matter-node.js-examples",
     "version": "0.0.0-git",
     "description": "Matter.js examples and reference implementations",
     "keywords": [
@@ -42,13 +42,12 @@
         "matter-controller-legacy": "dist/esm/examples/ControllerNodeLegacy.js",
         "matter-legacystorageconverter": "dist/esm/examples/LegacyStorageConverter.js"
     },
-    "devDependencies": {
-        "typescript": "~5.5.3",
-        "@matter.js/tools": "*"
-    },
     "dependencies": {
         "@project-chip/matter-node-ble.js": "*",
         "@project-chip/matter.js": "*"
+    },
+    "devDependencies": {
+        "@matter/tools": "*"
     },
     "engines": {
         "node": ">=18.0.0"

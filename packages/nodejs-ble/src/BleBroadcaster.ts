@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger } from "@matter.js/general";
-import { BtpCodec } from "@project-chip/matter.js/codec";
-import { VendorId } from "@project-chip/matter.js/datatype";
+import { ImplementationError, Logger } from "@matter/general";
 import {
+    BtpCodec,
     CommissionerInstanceData,
+    CommissioningMode,
     CommissioningModeInstanceData,
     InstanceBroadcaster,
-} from "@project-chip/matter.js/fabric";
+} from "@matter/protocol";
+import { VendorId } from "@matter/types";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");
@@ -35,7 +36,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         { name: deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData,
     ) {
         this.#assertOpen();
-        if (mode !== 1) {
+        if (mode !== CommissioningMode.Basic) {
             this.#advertise = false;
             logger.info(
                 `skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,

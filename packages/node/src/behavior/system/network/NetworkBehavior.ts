@@ -20,7 +20,7 @@ export class NetworkBehavior extends Behavior {
     declare internal: NetworkBehavior.Internal;
     declare state: NetworkBehavior.State;
 
-    [Symbol.asyncDispose]() {
+    override [Symbol.asyncDispose]() {
         return this.internal.runtime?.close();
     }
 }

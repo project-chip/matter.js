@@ -121,6 +121,10 @@ export class Agent {
         return this.#behaviors[type.id] !== undefined;
     }
 
+    get env() {
+        return this.#endpoint.env;
+    }
+
     toString() {
         return this.#endpoint.toString();
     }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isObject } from "@matter.js/general";
+import { isObject } from "@matter/general";
 import { Aspect } from "./Aspect.js";
 
 /**

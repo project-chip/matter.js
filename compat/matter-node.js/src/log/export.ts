@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { LogFormat, Logger, LogLevel } from "@matter.js/general";
-export { createFileLogger } from "@matter.js/nodejs";
+export { LogFormat, LogLevel, Logger } from "@matter/general";
+export { createFileLogger } from "@matter/nodejs";

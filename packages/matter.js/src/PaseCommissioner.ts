@@ -3,21 +3,22 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Environment, ImplementationError, Logger, Network, UdpInterface } from "#general";
+import { Environment, ImplementationError, Logger } from "#general";
 import {
+    CertificateAuthority,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
     ControllerDiscovery,
     DiscoveryData,
-    FabricJsonObject,
+    Fabric,
     MdnsScanner,
     MdnsService,
-    RootCertificateManager,
     Scanner,
 } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "#types";
 import {
     CommissioningControllerOptions,
+    configureNetwork as configureControllerNetwork,
     ControllerEnvironmentOptions,
     NodeCommissioningOptions,
 } from "./CommissioningController.js";
@@ -30,10 +31,10 @@ type PaseCommissionerOptions = Omit<CommissioningControllerOptions, "environment
     environment: ControllerEnvironmentOptions;
 
     /** The root certificate data for the controller. */
-    rootCertificateData: RootCertificateManager.Data;
+    certificateAuthorityConfig: CertificateAuthority.Configuration;
 
-    /** The fabric data of the controller. */
-    fabricData: FabricJsonObject;
+    /** The fabric config of the controller. */
+    fabricConfig: Fabric.Config;
 };
 
 /**
@@ -77,31 +78,30 @@ export class PaseCommissioner {
             return this.controllerInstance;
         }
 
-        const { localPort, listeningAddressIpv4, listeningAddressIpv6, rootCertificateData, fabricData } = this.options;
+        const { certificateAuthorityConfig: rootCertificateData, fabricConfig: fabricConfig } = this.options;
 
         let mdnsScanner: MdnsScanner | undefined;
         let ipv4Disabled = false;
-        let netInterfaceIpv4: UdpInterface | undefined;
-        let netInterfaceIpv6: UdpInterface | undefined;
 
         try {
             const mdnsService = await this.environment.load(MdnsService);
             ipv4Disabled = !mdnsService.enableIpv4;
             mdnsScanner = mdnsService.scanner;
-            if (!ipv4Disabled) {
-                netInterfaceIpv4 = await UdpInterface.create(Network.get(), "udp4", localPort, listeningAddressIpv4);
-            }
-            netInterfaceIpv6 = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
         } catch {
             logger.debug("No networking available, using only BLE");
         }
 
-        return await MatterController.createAsPaseCommissioner({
-            rootCertificateData,
-            fabricData,
-            netInterfaceIpv4,
-            netInterfaceIpv6,
+        const { scanners, netInterfaces } = await configureControllerNetwork({
             mdnsScanner,
+            ipv4Disabled,
+            ...this.options,
+        });
+
+        return await MatterController.createAsPaseCommissioner({
+            certificateAuthorityConfig: rootCertificateData,
+            fabricConfig: fabricConfig,
+            scanners,
+            netInterfaces,
         });
     }
 

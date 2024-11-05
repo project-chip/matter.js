@@ -6,6 +6,7 @@
 
 import {
     Channel,
+    ChannelType,
     InternalError,
     Logger,
     NetInterface,
@@ -13,7 +14,7 @@ import {
     Time,
     TransportInterface,
     createPromise,
-} from "@matter.js/general";
+} from "@matter/general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -26,10 +27,10 @@ import {
     Ble,
     BleChannel,
     BleError,
+    BtpCodec,
     BtpFlowError,
     BtpSessionHandler,
-} from "@project-chip/matter.js/ble";
-import { BtpCodec } from "@project-chip/matter.js/codec";
+} from "@matter/protocol";
 import type { Characteristic, Peripheral } from "@stoprocent/noble";
 import { BleScanner } from "./BleScanner.js";
 
@@ -210,6 +211,13 @@ export class NobleBleCentralInterface implements NetInterface {
         for (const peripheral of this.openChannels.values()) {
             await peripheral.disconnectAsync();
         }
+    }
+
+    supports(type: ChannelType, _address?: string) {
+        if (type !== ChannelType.BLE) {
+            return false;
+        }
+        return true;
     }
 }
 

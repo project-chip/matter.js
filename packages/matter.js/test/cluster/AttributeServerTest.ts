@@ -20,10 +20,17 @@ import {
 import { AttributeId, FabricId, FabricIndex, NodeId, TlvSchema, TlvUInt8, VendorId } from "#types";
 import { DUMMY_KEY } from "../support/mock-keys.js";
 
-const ZERO = new Uint8Array(1);
-
 class MockClusterDatasource implements ClusterDatasource {
     #version = 0;
+    #fabrics: Fabric[];
+
+    constructor(fabric?: Fabric) {
+        if (fabric) {
+            this.#fabrics = [fabric];
+        } else {
+            this.#fabrics = [];
+        }
+    }
 
     get version() {
         return this.#version;
@@ -34,6 +41,10 @@ class MockClusterDatasource implements ClusterDatasource {
     }
 
     changed() {}
+
+    get fabrics() {
+        return this.#fabrics;
+    }
 }
 
 interface CreateOptions<T> {
@@ -53,7 +64,7 @@ interface CreateOptions<T> {
     validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void;
 }
 
-function withDefaults(options: Partial<CreateOptions<number>>) {
+function withDefaults(options: Partial<CreateOptions<number>>, fabric?: Fabric) {
     return {
         id: AttributeId(1),
         name: "test",
@@ -63,7 +74,7 @@ function withDefaults(options: Partial<CreateOptions<number>>) {
         requiresTimedInteraction: false,
         initValue: 3,
         defaultValue: 4,
-        datasource: new MockClusterDatasource(),
+        datasource: new MockClusterDatasource(fabric),
         ...options,
     } as CreateOptions<number>;
 }
@@ -427,24 +438,26 @@ describe("AttributeServerTest", () => {
         let datasource: ClusterDatasource;
 
         function create(options: Partial<CreateOptions<number>> = {}) {
-            testFabric = new Fabric(
-                FabricIndex(1),
-                FabricId(BigInt(1)),
-                NodeId(BigInt(1)),
-                NodeId(BigInt(2)),
-                ZERO,
-                ZERO,
-                DUMMY_KEY,
-                VendorId(1),
-                ZERO,
-                ZERO,
-                ZERO,
-                ZERO,
-                ZERO,
-                "",
-            );
+            const ZERO = new Uint8Array(1);
 
-            const config = withDefaults(options);
+            testFabric = new Fabric({
+                fabricIndex: FabricIndex(1),
+                fabricId: FabricId(1n),
+                nodeId: NodeId(1n),
+                rootNodeId: NodeId(2n),
+                operationalId: ZERO,
+                keyPair: DUMMY_KEY,
+                rootPublicKey: DUMMY_KEY.publicKey,
+                rootVendorId: VendorId(1),
+                rootCert: ZERO,
+                identityProtectionKey: ZERO,
+                operationalIdentityProtectionKey: ZERO,
+                intermediateCACert: ZERO,
+                operationalCert: ZERO,
+                label: "",
+            });
+
+            const config = withDefaults(options, testFabric);
             datasource = config.datasource;
 
             return new FabricScopedAttributeServer(

@@ -5,5 +5,4 @@
  */
 
 export * from "./ServerEndpointInitializer.js";
-export * from "./storage/index.js";
 export * from "./TransactionalInteractionServer.js";

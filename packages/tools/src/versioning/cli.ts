@@ -4,23 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { commander } from "../util/commander.js";
 import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
 import { Versioner } from "./versioner.js";
 
-export async function main(argv = process.argv) {
-    const args = await yargs(hideBin(argv))
-        .command("$0 [ver]", "Manipulate monorepo package versions.")
-        .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify monorepo directory" })
-        .option("set", { alias: "s", type: "boolean", describe: "Sets the release version" })
-        .option("apply", { alias: "a", type: "boolean", describe: "Sets package versions to the release version" })
-        .option("tag", { alias: "t", type: "boolean", describe: "Adds git tag for release version" })
-        .wrap(Math.min(process.stdout.columns, 80))
-        .strict().argv;
+interface Args {
+    version?: string;
+    prefix?: string;
+    set?: boolean;
+    apply?: boolean;
+    tag?: boolean;
+}
 
-    const version = args.ver as string | undefined;
+export async function main(argv = process.argv) {
+    const program = commander("matter-version", "Manipulate monorepo package versions.")
+        .argument("[version]")
+        .option("-p, --prefix <prefix>", "specify monorepo directory")
+        .option("-s, --set", "sets the release version")
+        .option("-a, --apply", "sets package versions to the release version")
+        .option("-t, --tag", "adds git tag for release version")
+        .parse(argv);
+
+    const args = program.opts<Args>();
+    args.version = program.args[0];
+
+    const version = args.version;
     const pkg = new Package({ path: args.prefix });
     const versioner = new Versioner(pkg, version);
 

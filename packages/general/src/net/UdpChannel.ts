@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ChannelType } from "./Channel.js";
 import { TransportInterface } from "./TransportInterface.js";
 
 /** @see {@link MatterSpecification.v12.Core} § 4.4.4 */
@@ -25,4 +26,5 @@ export interface UdpChannel {
     send(host: string, port: number, data: Uint8Array): Promise<void>;
     close(): void;
     get port(): number;
+    supports(type: ChannelType, address?: string): boolean;
 }

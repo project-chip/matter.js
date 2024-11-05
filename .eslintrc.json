@@ -18,7 +18,7 @@
     "env": {
         "node": true
     },
-    "ignorePatterns": ["*/node_modules/**/*", "*/dist/**/*", "*/build/**/*", "packages/*/dist/**/*", "packages/*/build/**/*", "models/*/**/*"],
+    "ignorePatterns": ["*/node_modules/**/*", "*/dist/**/*", "*/build/**/*", "packages/*/dist/**/*", "packages/*/build/**/*", "models/*/**/*", "**/forwards/**/*"],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [

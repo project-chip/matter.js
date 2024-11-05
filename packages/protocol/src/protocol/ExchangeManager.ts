@@ -7,25 +7,27 @@
 import {
     Channel,
     Crypto,
+    Environment,
+    Environmental,
     ImplementationError,
     Logger,
     MatterError,
     MatterFlowError,
     NotImplementedError,
+    ObserverGroup,
     TransportInterface,
+    TransportInterfaceSet,
     UdpInterface,
 } from "#general";
-import { NodeId } from "#types";
+import { PeerAddress } from "#peer/PeerAddress.js";
+import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { Fabric } from "../fabric/Fabric.js";
-import { INTERACTION_PROTOCOL_ID } from "../interaction/InteractionServer.js";
-import { SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "../securechannel/SecureChannelMessages.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
-import { MessageExchange } from "./MessageExchange.js";
+import { MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
 
@@ -95,77 +97,95 @@ export class MessageChannel implements Channel<Message> {
     }
 }
 
+/**
+ * Interfaces {@link ExchangeManager} with other components.
+ */
+export interface ExchangeManagerContext {
+    transportInterfaces: TransportInterfaceSet;
+    sessionManager: SessionManager;
+    channelManager: ChannelManager;
+}
+
 export class ExchangeManager {
-    private readonly exchangeCounter = new ExchangeCounter();
-    private readonly exchanges = new Map<number, MessageExchange>();
-    private readonly protocols = new Map<number, ProtocolHandler>();
-    private readonly transportListeners = new Array<TransportInterface.Listener>();
-    private readonly closingSessions = new Set<number>();
+    readonly #transportInterfaces: TransportInterfaceSet;
+    readonly #sessionManager: SessionManager;
+    readonly #channelManager: ChannelManager;
+    readonly #exchangeCounter = new ExchangeCounter();
+    readonly #exchanges = new Map<number, MessageExchange>();
+    readonly #protocols = new Map<number, ProtocolHandler>();
+    readonly #listeners = new Map<TransportInterface, TransportInterface.Listener>();
+    readonly #closers = new Set<Promise<void>>();
+    readonly #observers = new ObserverGroup(this);
 
-    constructor(
-        private readonly sessionManager: SessionManager,
-        private readonly channelManager: ChannelManager,
-    ) {}
+    constructor(context: ExchangeManagerContext) {
+        this.#transportInterfaces = context.transportInterfaces;
+        this.#sessionManager = context.sessionManager;
+        this.#channelManager = context.channelManager;
 
-    addTransportInterface(netInterface: TransportInterface) {
-        const udpInterface = netInterface instanceof UdpInterface;
-        this.transportListeners.push(
-            netInterface.onData((socket, data) => {
-                if (udpInterface && data.length > socket.maxPayloadSize) {
-                    logger.warn(
-                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
-                    );
-                    return;
-                }
+        for (const transportInterface of this.#transportInterfaces) {
+            this.#addListener(transportInterface);
+        }
 
-                try {
-                    this.onMessage(socket, data).catch(error => logger.error(error));
-                } catch (error) {
-                    logger.warn("Ignoring UDP message with error", error);
-                }
-            }),
-        );
+        this.#observers.on(this.#transportInterfaces.added, this.#addListener);
+        this.#observers.on(this.#transportInterfaces.deleted, this.#deleteListener);
+
+        this.#observers.on(this.#sessionManager.sessions.deleted, session => {
+            if (!session.closingAfterExchangeFinished) {
+                // Delayed closing is executed when exchange is closed
+                session.closer = this.#closeSession(session);
+            }
+        });
+    }
+
+    static [Environmental.create](env: Environment) {
+        const instance = new ExchangeManager({
+            transportInterfaces: env.get(TransportInterfaceSet),
+            sessionManager: env.get(SessionManager),
+            channelManager: env.get(ChannelManager),
+        });
+        env.set(ExchangeManager, instance);
+        return instance;
     }
 
     hasProtocolHandler(protocolId: number) {
-        return this.protocols.has(protocolId);
+        return this.#protocols.has(protocolId);
     }
 
     getProtocolHandler(protocolId: number) {
-        return this.protocols.get(protocolId);
+        return this.#protocols.get(protocolId);
     }
 
     addProtocolHandler(protocol: ProtocolHandler) {
         if (this.hasProtocolHandler(protocol.getId())) {
             throw new ImplementationError(`Handler for protocol ${protocol.getId()} already registered.`);
         }
-        this.protocols.set(protocol.getId(), protocol);
+        this.#protocols.set(protocol.getId(), protocol);
     }
 
-    initiateExchange(fabric: Fabric, nodeId: NodeId, protocolId: number) {
-        return this.initiateExchangeWithChannel(this.channelManager.getChannel(fabric, nodeId), protocolId);
+    initiateExchange(address: PeerAddress, protocolId: number) {
+        return this.initiateExchangeWithChannel(this.#channelManager.getChannel(address), protocolId);
     }
 
     initiateExchangeWithChannel(channel: MessageChannel, protocolId: number) {
-        const exchangeId = this.exchangeCounter.getIncrementedCounter();
+        const exchangeId = this.#exchangeCounter.getIncrementedCounter();
         const exchangeIndex = exchangeId | 0x10000; // Ensure initiated and received exchange index are different, since the exchangeID can be the same
-        const exchange = MessageExchange.initiate(channel, exchangeId, protocolId);
+        const exchange = MessageExchange.initiate(this.#messageExchangeContextFor(channel), exchangeId, protocolId);
         this.#addExchange(exchangeIndex, exchange);
         return exchange;
     }
 
     async close() {
-        for (const protocol of this.protocols.values()) {
+        for (const protocol of this.#protocols.values()) {
             await protocol.close();
         }
-        for (const netListener of this.transportListeners) {
-            await netListener.close();
+        for (const listeners of this.#listeners.keys()) {
+            this.#deleteListener(listeners);
         }
-        this.transportListeners.length = 0;
-        for (const exchange of this.exchanges.values()) {
+        await Promise.allSettled(this.#closers);
+        for (const exchange of this.#exchanges.values()) {
             await exchange.destroy();
         }
-        this.exchanges.clear();
+        this.#exchanges.clear();
     }
 
     private async onMessage(channel: Channel<Uint8Array>, messageBytes: Uint8Array) {
@@ -179,12 +199,12 @@ export class ExchangeManager {
             if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
                 const initiatorNodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
                 session =
-                    this.sessionManager.getUnsecureSession(initiatorNodeId) ??
-                    this.sessionManager.createUnsecureSession({
+                    this.#sessionManager.getUnsecureSession(initiatorNodeId) ??
+                    this.#sessionManager.createInsecureSession({
                         initiatorNodeId,
                     });
             } else {
-                session = this.sessionManager.getSession(packet.header.sessionId);
+                session = this.#sessionManager.getSession(packet.header.sessionId);
             }
         } else if (packet.header.sessionType === SessionType.Group) {
             if (packet.header.sourceNodeId !== undefined) {
@@ -217,7 +237,7 @@ export class ExchangeManager {
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
             ? message.payloadHeader.exchangeId
             : message.payloadHeader.exchangeId | 0x10000;
-        let exchange = this.exchanges.get(exchangeIndex);
+        let exchange = this.#exchanges.get(exchangeIndex);
 
         if (
             exchange !== undefined &&
@@ -235,7 +255,7 @@ export class ExchangeManager {
                 );
             }
 
-            const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
+            const protocolHandler = this.#protocols.get(message.payloadHeader.protocolId);
 
             if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
                 if (
@@ -249,7 +269,7 @@ export class ExchangeManager {
                 }
 
                 const exchange = MessageExchange.fromInitialMessage(
-                    await this.channelManager.getOrCreateChannel(channel, session),
+                    this.#messageExchangeContextFor(await this.#channelManager.getOrCreateChannel(channel, session)),
                     message,
                 );
                 this.#addExchange(exchangeIndex, exchange);
@@ -257,7 +277,7 @@ export class ExchangeManager {
                 await protocolHandler.onNewExchange(exchange, message);
             } else if (message.payloadHeader.requiresAck) {
                 const exchange = MessageExchange.fromInitialMessage(
-                    await this.channelManager.getOrCreateChannel(channel, session),
+                    this.#messageExchangeContextFor(await this.#channelManager.getOrCreateChannel(channel, session)),
                     message,
                 );
                 this.#addExchange(exchangeIndex, exchange);
@@ -289,7 +309,7 @@ export class ExchangeManager {
     }
 
     async deleteExchange(exchangeIndex: number) {
-        const exchange = this.exchanges.get(exchangeIndex);
+        const exchange = this.#exchanges.get(exchangeIndex);
         if (exchange === undefined) {
             logger.info(`Exchange with index ${exchangeIndex} to delete not found or already deleted.`);
             return;
@@ -300,32 +320,32 @@ export class ExchangeManager {
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
             try {
-                await this.closeSession(session as SecureSession);
+                await this.#closeSession(session as SecureSession);
             } catch (error) {
                 logger.error(`Error closing session ${session.name}. Ignoring.`, error);
             }
         }
-        this.exchanges.delete(exchangeIndex);
+        this.#exchanges.delete(exchangeIndex);
     }
 
-    async closeSession(session: SecureSession) {
+    async #closeSession(session: SecureSession) {
         const sessionId = session.id;
         const sessionName = session.name;
-        if (this.sessionManager.getSession(sessionId) === undefined) {
+
+        const asExchangeSession = session as { closedByExchange?: boolean };
+        if (asExchangeSession.closedByExchange) {
             // Session already removed, so we do not need to close again
             return;
         }
-        if (this.closingSessions.has(sessionId)) {
-            return;
-        }
-        this.closingSessions.add(sessionId);
-        for (const [_exchangeIndex, exchange] of this.exchanges.entries()) {
+        asExchangeSession.closedByExchange = true;
+
+        for (const [_exchangeIndex, exchange] of this.#exchanges.entries()) {
             if (exchange.session.id === sessionId) {
                 await exchange.destroy();
             }
         }
         if (session.sendCloseMessageWhenClosing) {
-            const channel = this.channelManager.getChannelForSession(session);
+            const channel = this.#channelManager.getChannelForSession(session);
             logger.debug(`Channel for session ${session.name} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
@@ -349,13 +369,11 @@ export class ExchangeManager {
         if (session.closingAfterExchangeFinished) {
             await session.destroy(false, false);
         }
-        this.sessionManager.removeSession(sessionId);
-        this.closingSessions.delete(sessionId);
     }
 
     #addExchange(exchangeIndex: number, exchange: MessageExchange) {
         exchange.closed.on(() => this.deleteExchange(exchangeIndex));
-        this.exchanges.set(exchangeIndex, exchange);
+        this.#exchanges.set(exchangeIndex, exchange);
 
         // A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
         // to prevent a node from exhausting the message counter window of the peer node.
@@ -364,7 +382,11 @@ export class ExchangeManager {
     }
 
     #cleanupSessionExchanges(sessionId: number) {
-        const sessionExchanges = Array.from(this.exchanges.values()).filter(
+        if (sessionId === UNICAST_UNSECURE_SESSION_ID) {
+            // PASE/CASE exchanges are not relevant for this limit
+            return;
+        }
+        const sessionExchanges = Array.from(this.#exchanges.values()).filter(
             exchange => exchange.session.id === sessionId && !exchange.isClosing,
         );
         if (sessionExchanges.length <= MAXIMUM_CONCURRENT_EXCHANGES_PER_SESSION) {
@@ -374,6 +396,49 @@ export class ExchangeManager {
         const exchangeToClose = sessionExchanges[0];
         logger.debug(`Closing oldest exchange ${exchangeToClose.id} for session ${sessionId}`);
         exchangeToClose.close().catch(error => logger.error("Error closing exchange", error)); // TODO Promise??
+    }
+
+    #messageExchangeContextFor(channel: MessageChannel): MessageExchangeContext {
+        return {
+            channel,
+            localSessionParameters: this.#sessionManager.sessionParameters,
+            resubmissionStarted: () => this.#sessionManager.resubmissionStarted.emit(channel.session),
+        };
+    }
+
+    #addListener(transportInterface: TransportInterface) {
+        const udpInterface = transportInterface instanceof UdpInterface;
+        this.#listeners.set(
+            transportInterface,
+            transportInterface.onData((socket, data) => {
+                if (udpInterface && data.length > socket.maxPayloadSize) {
+                    logger.warn(
+                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
+                    );
+                    return;
+                }
+
+                try {
+                    this.onMessage(socket, data).catch(error => logger.error(error));
+                } catch (error) {
+                    logger.warn("Ignoring UDP message with error", error);
+                }
+            }),
+        );
+    }
+
+    #deleteListener(transportInterface: TransportInterface) {
+        const listener = this.#listeners.get(transportInterface);
+        if (listener === undefined) {
+            return;
+        }
+        this.#listeners.delete(transportInterface);
+
+        const closer = listener
+            .close()
+            .catch(e => logger.error("Error closing network listener", e))
+            .finally(() => this.#closers.delete(closer));
+        this.#closers.add(closer);
     }
 }
 
@@ -386,43 +451,5 @@ export class ExchangeCounter {
             this.exchangeCounter = 0;
         }
         return this.exchangeCounter;
-    }
-}
-
-export class ExchangeProvider {
-    constructor(
-        private readonly exchangeManager: ExchangeManager,
-        private channel: MessageChannel,
-        private readonly reconnectChannelFunc?: () => Promise<MessageChannel>,
-    ) {}
-
-    hasProtocolHandler(protocolId: number) {
-        return this.exchangeManager.hasProtocolHandler(protocolId);
-    }
-
-    getProtocolHandler(protocolId: number) {
-        return this.exchangeManager.getProtocolHandler(protocolId);
-    }
-
-    addProtocolHandler(handler: ProtocolHandler) {
-        this.exchangeManager.addProtocolHandler(handler);
-    }
-
-    initiateExchange(): MessageExchange {
-        return this.exchangeManager.initiateExchangeWithChannel(this.channel, INTERACTION_PROTOCOL_ID);
-    }
-
-    async reconnectChannel() {
-        if (this.reconnectChannelFunc === undefined) return false;
-        this.channel = await this.reconnectChannelFunc();
-        return true;
-    }
-
-    get session() {
-        return this.channel.session;
-    }
-
-    get channelType() {
-        return this.channel.type;
     }
 }

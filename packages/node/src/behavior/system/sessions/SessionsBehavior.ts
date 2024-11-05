@@ -20,7 +20,7 @@ export class SessionsBehavior extends Behavior {
     declare events: SessionsBehavior.Events;
 
     override initialize() {
-        const env = this.endpoint.env;
+        const env = this.env;
         if (env.has(SessionManager)) {
             this.#enterOnlineMode(env.get(SessionManager));
         }
@@ -39,14 +39,14 @@ export class SessionsBehavior extends Behavior {
             isPeerActive: session.isPeerActive(),
             lastInteractionTimestamp: session.timestamp,
             lastActiveTimestamp: session.activeTimestamp,
-            numberOfActiveSubscriptions: session.numberOfActiveSubscriptions,
+            numberOfActiveSubscriptions: session.subscriptions.size,
         };
     }
 
     #enterOnlineMode(sessions: SessionManager) {
-        this.reactTo(sessions.sessionOpened, this.#sessionOpened);
+        this.reactTo(sessions.sessions.added, this.#sessionOpened);
 
-        this.reactTo(sessions.sessionClosed, this.#sessionClosed);
+        this.reactTo(sessions.sessions.deleted, this.#sessionClosed);
 
         this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged);
     }
@@ -78,7 +78,7 @@ export class SessionsBehavior extends Behavior {
             return;
         }
 
-        sessionEntry.numberOfActiveSubscriptions = session.numberOfActiveSubscriptions;
+        sessionEntry.numberOfActiveSubscriptions = session.subscriptions.size;
         this.state.sessions[session.id] = sessionEntry;
         this.events.subscriptionsChanged.emit(sessionEntry);
     }

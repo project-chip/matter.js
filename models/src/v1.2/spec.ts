@@ -16,7 +16,7 @@ import {
     FieldElement as Field,
     MatterElement as Matter,
     RequirementElement as Requirement,
-} from "@matter.js/model";
+} from "@matter/model";
 
 export const SpecMatter = Matter({
     name: "SpecMatter",

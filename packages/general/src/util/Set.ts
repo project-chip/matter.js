@@ -13,6 +13,8 @@ export interface ImmutableSet<T> {
     [Symbol.iterator]: () => Iterator<T, undefined>;
     has(item: T): boolean;
     get size(): number;
+    find(predicate: (item: T) => boolean | undefined): T | undefined;
+    filter(predicate: (item: T) => boolean | undefined): T[];
 }
 
 /**
@@ -52,12 +54,40 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         [field in keyof T]?: Map<any, T>;
     };
 
+    constructor(...initialItems: AddT[]) {
+        for (const item of initialItems) {
+            this.add(item);
+        }
+    }
+
     [Symbol.iterator]() {
         return this.#entries[Symbol.iterator]();
     }
 
     get size() {
         return this.#entries.size;
+    }
+
+    map<R>(mapper: (item: T) => R) {
+        return [...this].map(mapper);
+    }
+
+    find(predicate: (item: T) => boolean | undefined) {
+        for (const item of this) {
+            if (predicate(item)) {
+                return item;
+            }
+        }
+    }
+
+    filter(predicate: (item: T) => boolean | undefined) {
+        const result = new Array<T>();
+        for (const item of this) {
+            if (predicate(item)) {
+                result.push(item);
+            }
+        }
+        return result;
     }
 
     has(item: T) {

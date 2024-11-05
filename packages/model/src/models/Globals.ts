@@ -16,13 +16,13 @@ import * as TheGlobals from "../standard/elements/models.js";
  * This means, depending on you use case you may also access these elements directly:
  *
  * ```typescript
- * import uint16 from "@matter.js/model";
+ * import uint16 from "@matter/model";
  * ```
  *
  * Or operationally:
  *
  * ```typescript
- * import { Matter } from "@matter.js/model";
+ * import { Matter } from "@matter/model";
  *
  * const uint16 = Matter.get(DatatypeModel, "uint16");
  * ```

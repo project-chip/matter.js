@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ServerAddress, ServerAddressIp } from "#general";
-import { NodeId, VendorId } from "#types";
+import { BasicSet, ChannelType, Environment, Environmental, Lifespan, ServerAddress, ServerAddressIp } from "#general";
+import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema, VendorId } from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 
 /**
@@ -47,10 +47,11 @@ export type DiscoveryData = {
     ICD?: number;
 };
 
-export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData & {
-    /** The device's addresses IP/port pairs */
-    addresses: SA[];
-};
+export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData &
+    Partial<Lifespan> & {
+        /** The device's addresses IP/port pairs */
+        addresses: SA[];
+    };
 
 export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> =
     D extends DiscoverableDevice<infer SA> ? SA : never;
@@ -89,6 +90,9 @@ export type CommissionableDeviceIdentifiers =
     | {
           /** The vendor ID of the commissionable device, if devices from a special vendor should be discovered. */
           vendorId: VendorId;
+
+          /** Optionally the product ID of the commissionable device, if devices from a special vendor should be discovered. */
+          productId?: number;
       }
     | {
           /** The device type of the commissionable device, if devices of a special type should be discovered. */
@@ -100,10 +104,11 @@ export type CommissionableDeviceIdentifiers =
       }
     | {
           /** Pass empty object to discover any commissionable device. */
-          [K in any]: never; // aka "empty object" for just discovering any commisionable device
       };
 
 export interface Scanner {
+    type: ChannelType;
+
     /**
      * Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
      * and return them.
@@ -140,6 +145,7 @@ export interface Scanner {
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
         timeoutSeconds?: number,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]>;
 
     /** Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries. */
@@ -153,4 +159,31 @@ export interface Scanner {
 
     /** Close the scanner server and free resources. */
     close(): void;
+}
+
+export class ScannerSet extends BasicSet<Scanner> {
+    scannerFor(type: ChannelType) {
+        return this.find(scanner => scanner.type === type);
+    }
+
+    hasScannerFor(type: ChannelType) {
+        return this.scannerFor(type) !== undefined;
+    }
+
+    /**
+     * Select a set of scanners based on discovery capabilities.
+     */
+    public select(discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
+        // Note we always scan via MDNS if available
+        return this.filter(
+            scanner =>
+                scanner.type === ChannelType.UDP || (discoveryCapabilities?.ble && scanner.type === ChannelType.BLE),
+        );
+    }
+
+    static [Environmental.create](env: Environment) {
+        const instance = new ScannerSet();
+        env.set(ScannerSet, instance);
+        return instance;
+    }
 }

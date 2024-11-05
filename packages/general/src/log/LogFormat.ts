@@ -354,8 +354,7 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
         return ansiEscape(...codes);
     }
 
-    // Apply style codes.  Maintains color state (via escapes) so values must
-    // be rendered sequentially as they appear
+    // Apply style codes.  Maintains color state (via escapes) so values must be rendered sequentially as they appear
     function style(style: StyleName, text: string) {
         if (text === "") {
             return text;

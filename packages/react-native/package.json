@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/react-native",
+    "name": "@matter/react-native",
     "version": "0.0.0-git",
     "description": "Experimental React Native support for matter.js",
     "keywords": [
@@ -25,34 +25,31 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
+        "build-clean": "matter-build --clean"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#types": "@matter.js/types",
-        "#protocol": "@matter.js/protocol",
-        "#nodejs": "@matter.js/nodejs",
+        "#general": "@matter/general",
+        "#types": "@matter/types",
+        "#protocol": "@matter/protocol",
+        "#nodejs": "@matter/nodejs",
         "#*": "./src/*"
     },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "ts-node": "^10.9.2",
-        "typescript": "~5.5.3"
-    },
     "dependencies": {
-        "@matter.js/nodejs": "*",
-        "@matter.js/general": "*",
-        "@matter.js/protocol": "*",
+        "@matter/general": "*",
+        "@matter/nodejs": "*",
+        "@matter/protocol": "*",
         "@react-native-async-storage/async-storage": "^2.0.0",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
-        "@types/node": "^22.5.2",
+        "@types/node": "^22.8.7",
         "jwk-to-pem": "^2.0.5",
         "react-native-ble-plx": "^3.2.1",
         "react-native-polyfill-globals": "^3.1.0",
-        "react-native-quick-crypto": "^0.7.4",
+        "react-native-quick-crypto": "^0.7.6",
         "react-native-udp": "^4.1.7"
+    },
+    "devDependencies": {
+        "@matter/tools": "*"
     },
     "overrides": {
         "brorand": "npm:@matter.js/brorand@1.1.0"

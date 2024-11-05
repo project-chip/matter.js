@@ -649,6 +649,7 @@ export function genericFabricScopedAttributeGetter<T>(
     cluster: Cluster<any, any, any, any, any>,
     attributeName: string,
     defaultValue: T,
+    fabrics: Fabric[],
 ) {
     if (session === undefined) {
         throw new FabricScopeError(`Session is required for fabric scoped attribute ${attributeName}`);
@@ -663,7 +664,6 @@ export function genericFabricScopedAttributeGetter<T>(
             defaultValue,
         );
     } else {
-        const fabrics = session.context.getFabrics();
         const values = new Array<any>();
         for (const fabric of fabrics) {
             const value = genericFabricScopedAttributeGetterFromFabric(fabric, cluster, attributeName, defaultValue);
@@ -761,9 +761,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     assertSecureSession(session);
                     return this.getLocalForFabric(session.associatedFabric);
                 } else {
-                    const fabrics = session.context.getFabrics();
                     const values = new Array<any>();
-                    for (const fabric of fabrics) {
+                    for (const fabric of datasource.fabrics) {
                         const value = this.getLocalForFabric(fabric);
                         if (!Array.isArray(value)) {
                             throw new FabricScopeError(

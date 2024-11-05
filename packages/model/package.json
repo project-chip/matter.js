@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/model",
+    "name": "@matter/model",
     "version": "0.0.0-git",
     "description": "Matter data model",
     "keywords": [
@@ -33,12 +33,12 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*"
+        "@matter/general": "*",
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",
@@ -62,8 +62,8 @@
         }
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
         "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",

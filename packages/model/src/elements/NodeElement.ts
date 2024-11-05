@@ -17,8 +17,8 @@ export type NodeElement = BaseElement & {
     children?: EndpointElement[];
 };
 
-export function NodeElement(definition: NodeElement.Properties) {
-    return BaseElement(NodeElement.Tag, definition) as NodeElement;
+export function NodeElement(definition: NodeElement.Properties, ...children: EndpointElement[]) {
+    return BaseElement(NodeElement.Tag, definition, children) as NodeElement;
 }
 
 export namespace NodeElement {

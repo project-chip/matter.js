@@ -461,3 +461,90 @@ export class ObservableProxy extends BasicObservable {
 
     override emit: (...payload: any) => any | undefined;
 }
+
+/**
+ * A collection of observers managed as a unit.  This makes it convenient to deregister multiple observers when an
+ * object closes.
+ */
+export class ObserverGroup {
+    #defaultTarget?: {};
+    #observers = new Map<Observable<any[]> | AsyncObservable<any>, Observer<any[]>[]>();
+    #boundObservers = new Map<Observer<any[]>, Map<{}, Observer<any[]>>>();
+
+    constructor(target?: {}) {
+        this.#defaultTarget = target;
+    }
+
+    /**
+     * Add an observer.
+     *
+     * @param observable the observable to observe
+     * @param observer the observer function
+     * @param target optional "this" to bind the observer
+     */
+    on<T extends any[]>(
+        observable: Observable<T> | AsyncObservable<T>,
+        observer: Observer<NoInfer<T>>,
+        target = this.#defaultTarget,
+    ) {
+        if (target !== undefined) {
+            observer = observer.bind(target);
+        }
+        observable.on(observer);
+        const observers = this.#observers.get(observable);
+        if (observers === undefined) {
+            this.#observers.set(observable, [observer]);
+        } else {
+            observers.push(observer);
+        }
+    }
+
+    /**
+     * Remove a single observer.
+     *
+     * @param observable the observable to observe
+     * @param observer the observer function
+     * @param target if the observer was bound in {@link on} this must match the bound target
+     */
+    off<T extends any[]>(
+        observable: Observable<T> | AsyncObservable<T>,
+        observer: Observer<NoInfer<T>>,
+        target = this.#defaultTarget,
+    ) {
+        if (target) {
+            const observers = this.#boundObservers.get(observer);
+            if (observers === undefined) {
+                return;
+            }
+            const bound = observers.get(target);
+            if (bound === undefined) {
+                return;
+            }
+            observers.delete(target);
+            if (observers.size === 0) {
+                this.#boundObservers.delete(observer);
+            }
+        }
+        const observers = this.#observers.get(observable);
+        if (observers) {
+            const index = observers.indexOf(observer);
+            if (index !== -1) {
+                observers?.splice(index, 1);
+            }
+        }
+        observable.off(observer);
+    }
+
+    /**
+     * Remove all observers.
+     */
+    close() {
+        for (const [observable, observers] of this.#observers.entries()) {
+            for (const observer of observers) {
+                observable.off(observer);
+            }
+        }
+        this.#observers.clear();
+        this.#boundObservers.clear();
+    }
+}

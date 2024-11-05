@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter.js/general";
-import { require } from "@matter.js/nodejs-ble/require";
-import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
+import { Logger } from "@matter/general";
+import { require } from "@matter/nodejs-ble/require";
+import { BLE_MATTER_SERVICE_UUID } from "@matter/protocol";
 import type { Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./NodeJsBle.js";
 
@@ -38,7 +38,7 @@ export class NobleBleClient {
 
     constructor(options?: BleOptions) {
         loadNoble(options?.hciId);
-        try {
+        /*try {
             noble.reset();
         } catch (error: any) {
             logger.debug(
@@ -46,7 +46,7 @@ export class NobleBleClient {
                     (error as unknown as Error).message
                 }`,
             );
-        }
+        }*/
         noble.on("stateChange", state => {
             this.nobleState = state;
             logger.debug(`Noble state changed to ${state}`);

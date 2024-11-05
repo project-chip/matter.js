@@ -49,14 +49,13 @@ export abstract class NetworkRuntime {
         } finally {
             this.#owner.behaviors.internalsOf(NetworkBehavior).runtime = undefined;
         }
+        await this.owner.prepareRuntimeShutdown();
         await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
     }
 
     async close() {
         await this.construction.close();
     }
-
-    abstract operationalPort: number;
 
     protected abstract start(): Promise<void>;
 

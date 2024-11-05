@@ -5,6 +5,7 @@
  */
 
 import {
+    BasicSet,
     Bytes,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Crypto,
@@ -14,13 +15,15 @@ import {
     Logger,
     MatterFlowError,
 } from "#general";
-import { CaseAuthenticatedTag, NodeId, StatusCode, StatusResponseError } from "#types";
+import { Subscription } from "#interaction/Subscription.js";
+import { PeerAddress } from "#peer/PeerAddress.js";
+import { CaseAuthenticatedTag, FabricIndex, NodeId, StatusCode, StatusResponseError } from "#types";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { SubscriptionHandler } from "../interaction/SubscriptionHandler.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
-import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
+import { Session, SessionParameterOptions } from "./Session.js";
+import { type SessionManager } from "./SessionManager.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -34,10 +37,9 @@ export class NoAssociatedFabricError extends StatusResponseError {
 }
 
 export class SecureSession extends Session {
-    readonly #subscriptions = new Array<SubscriptionHandler>();
+    readonly #subscriptions = new BasicSet<Subscription>();
     #closingAfterExchangeFinished = false;
     #sendCloseMessageWhenClosing = true;
-    readonly #context: SessionContext;
     readonly #id: number;
     #fabric: Fabric | undefined;
     readonly #peerNodeId: NodeId;
@@ -45,12 +47,12 @@ export class SecureSession extends Session {
     readonly #decryptKey: Uint8Array;
     readonly #encryptKey: Uint8Array;
     readonly #attestationKey: Uint8Array;
-    readonly #subscriptionChangedCallback: () => void;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
+    #isClosing = false;
     readonly supportsMRP = true;
 
-    static async create<T extends SessionContext>(args: {
-        context: T;
+    static async create(args: {
+        manager?: SessionManager;
         id: number;
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
@@ -59,13 +61,11 @@ export class SecureSession extends Session {
         salt: Uint8Array;
         isInitiator: boolean;
         isResumption: boolean;
-        closeCallback: () => Promise<void>;
-        subscriptionChangedCallback?: () => void;
         peerSessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
-            context,
+            manager,
             id,
             fabric,
             peerNodeId,
@@ -74,10 +74,8 @@ export class SecureSession extends Session {
             salt,
             isInitiator,
             isResumption,
-            closeCallback,
             peerSessionParameters,
             caseAuthenticatedTags,
-            subscriptionChangedCallback,
         } = args;
         const keys = await Crypto.hkdf(
             sharedSecret,
@@ -89,7 +87,7 @@ export class SecureSession extends Session {
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
         return new SecureSession({
-            context,
+            manager,
             id,
             fabric,
             peerNodeId,
@@ -97,8 +95,6 @@ export class SecureSession extends Session {
             decryptKey,
             encryptKey,
             attestationKey,
-            closeCallback,
-            subscriptionChangedCallback,
             sessionParameters: peerSessionParameters,
             isInitiator,
             caseAuthenticatedTags,
@@ -106,7 +102,7 @@ export class SecureSession extends Session {
     }
 
     constructor(args: {
-        context: SessionContext;
+        manager?: SessionManager;
         id: number;
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
@@ -114,8 +110,6 @@ export class SecureSession extends Session {
         decryptKey: Uint8Array;
         encryptKey: Uint8Array;
         attestationKey: Uint8Array;
-        closeCallback: () => Promise<void>;
-        subscriptionChangedCallback?: () => void;
         sessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
         isInitiator: boolean;
@@ -132,7 +126,7 @@ export class SecureSession extends Session {
             messageReceptionState: new MessageReceptionStateEncryptedWithoutRollover(),
         });
         const {
-            context,
+            manager,
             id,
             fabric,
             peerNodeId,
@@ -140,11 +134,9 @@ export class SecureSession extends Session {
             decryptKey,
             encryptKey,
             attestationKey,
-            subscriptionChangedCallback = () => {},
             caseAuthenticatedTags,
         } = args;
 
-        this.#context = context;
         this.#id = id;
         this.#fabric = fabric;
         this.#peerNodeId = peerNodeId;
@@ -152,9 +144,9 @@ export class SecureSession extends Session {
         this.#decryptKey = decryptKey;
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
-        this.#subscriptionChangedCallback = subscriptionChangedCallback;
         this.#caseAuthenticatedTags = caseAuthenticatedTags ?? [];
 
+        manager?.sessions.add(this);
         fabric?.addSession(this);
 
         logger.debug(
@@ -168,6 +160,7 @@ export class SecureSession extends Session {
                 interactionModelRevision: this.interactionModelRevision,
                 specificationVersion: this.specificationVersion,
                 maxPathsPerInvoke: this.maxPathsPerInvoke,
+                caseAuthenticatedTags: this.#caseAuthenticatedTags,
             }),
         );
     }
@@ -190,6 +183,14 @@ export class SecureSession extends Session {
 
     get isPase(): boolean {
         return this.#peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
+    }
+
+    get subscriptions() {
+        return this.#subscriptions;
+    }
+
+    get isClosing() {
+        return this.#isClosing;
     }
 
     async close(closeAfterExchangeFinished?: boolean) {
@@ -255,10 +256,6 @@ export class SecureSession extends Session {
         return `secure/${this.#id}`;
     }
 
-    get context() {
-        return this.#context;
-    }
-
     get peerSessionId(): number {
         return this.#peerSessionId;
     }
@@ -271,10 +268,6 @@ export class SecureSession extends Session {
         return this.#peerNodeId;
     }
 
-    get numberOfActiveSubscriptions() {
-        return this.#subscriptions.length;
-    }
-
     get associatedFabric(): Fabric {
         if (this.#fabric === undefined) {
             throw new NoAssociatedFabricError(
@@ -284,27 +277,11 @@ export class SecureSession extends Session {
         return this.#fabric;
     }
 
-    addSubscription(subscription: SubscriptionHandler) {
-        this.#subscriptions.push(subscription);
-        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}`);
-        this.#subscriptionChangedCallback();
-    }
-
-    removeSubscription(subscriptionId: number) {
-        const index = this.#subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
-        if (index !== -1) {
-            this.#subscriptions.splice(index, 1);
-            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}`);
-            this.#subscriptionChangedCallback();
-        }
-    }
-
     async clearSubscriptions(flushSubscriptions = false) {
         const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
         for (const subscription of subscriptions) {
-            await subscription.cancel(flushSubscriptions);
+            await subscription.close(flushSubscriptions);
         }
-        this.#subscriptions.length = 0;
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
@@ -322,11 +299,38 @@ export class SecureSession extends Session {
         }
 
         if (closeAfterExchangeFinished) {
-            logger.info(`Register Session ${this.name} to send a close when exchange is ended.`);
+            logger.info(`Register Session ${this.name} to close when exchange is ended.`);
             this.#closingAfterExchangeFinished = true;
         } else {
-            await this.closeCallback();
+            this.#isClosing = true;
+            logger.info(`End ${this.isPase ? "PASE" : "CASE"} session ${this.name}`);
+            this.manager?.sessions.delete(this);
+
+            // Wait for the exchange to finish closing
+            if (this.closer) {
+                await this.closer;
+            }
         }
+    }
+
+    /**
+     * The peer node's address.
+     */
+    get peerAddress() {
+        return PeerAddress({
+            fabricIndex: this.#fabric?.fabricIndex ?? FabricIndex.NO_FABRIC,
+            nodeId: this.#peerNodeId,
+        });
+    }
+
+    /**
+     * Indicates whether a peer matches a specific address.
+     */
+    peerIs(address: PeerAddress) {
+        return (
+            (this.#fabric?.fabricIndex ?? FabricIndex.NO_FABRIC) === address.fabricIndex &&
+            this.#peerNodeId === address.nodeId
+        );
     }
 
     private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {

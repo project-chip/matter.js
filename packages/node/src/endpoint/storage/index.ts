@@ -5,4 +5,4 @@
  */
 
 export * from "./DatasourceStore.js";
-export * from "./PartStore.js";
+export * from "./EndpointStore.js";

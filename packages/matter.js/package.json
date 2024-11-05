@@ -27,41 +27,33 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.docs.json",
         "test": "matter-test -w",
         "coverage": "c8 matter-test esm",
         "embed-examples": "embedme **/README.md"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#types": "@matter.js/types",
-        "#clusters": "@matter.js/types/clusters",
-        "#protocol": "@matter.js/protocol",
-        "#node": "@matter.js/node",
-        "#behaviors/*": "@matter.js/node/behaviors/*",
-        "#devices/*": "@matter.js/node/devices/*",
-        "#endpoints/*": "@matter.js/node/endpoints/*",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#types": "@matter/types",
+        "#clusters": "@matter/types/clusters",
+        "#protocol": "@matter/protocol",
+        "#node": "@matter/node",
+        "#behaviors/*": "@matter/node/behaviors/*",
+        "#devices/*": "@matter/node/devices/*",
+        "#endpoints/*": "@matter/node/endpoints/*",
         "#*": "./src/*"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/types": "*",
-        "@matter.js/protocol": "*",
-        "@matter.js/node": "*"
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/node": "*",
+        "@matter/protocol": "*",
+        "@matter/types": "*",
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "@matter.js/codegen": "*",
-        "@types/chai": "^4.3.16",
-        "@types/mocha": "^10.0.7",
-        "@types/wtfnode": "^0.7.3",
-        "chai": "^4.4.1",
-        "embedme": "^1.22.1",
-        "mocha": "^10.7.3",
-        "typescript": "~5.5.3"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",
@@ -104,54 +96,54 @@
                 "default": "./dist/cjs/device/export.js"
             }
         },
-        "./behaviors/*": {
+        "./behavior/*": {
             "import": {
-                "types": "./dist/esm/compat/behaviors/*.d.ts",
-                "default": "./dist/esm/compat/behaviors/*.js"
+                "types": "./dist/esm/compat/behavior/*.d.ts",
+                "default": "./dist/esm/compat/behavior/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/behaviors/*.d.ts",
-                "default": "./dist/cjs/compat/behaviors/*.js"
+                "types": "./dist/cjs/compat/behavior/*.d.ts",
+                "default": "./dist/cjs/compat/behavior/*.js"
             }
         },
-        "./behavior/definitions/*": {
+        "./behaviors/*": {
             "import": {
-                "types": "./dist/esm/compat/behaviors/*.d.ts",
-                "default": "./dist/esm/compat/behaviors/*.js"
+                "types": "./dist/esm/forwards/behaviors/*.d.ts",
+                "default": "./dist/esm/forwards/behaviors/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/behaviors/*.d.ts",
-                "default": "./dist/cjs/compat/behaviors/*.js"
+                "types": "./dist/cjs/forwards/behaviors/*.d.ts",
+                "default": "./dist/cjs/forwards/behaviors/*.js"
             }
         },
         "./tags/*": {
             "import": {
-                "types": "./dist/esm/compat/tags/*.d.ts",
-                "default": "./dist/esm/compat/tags/*.js"
+                "types": "./dist/esm/forwards/tags/*.d.ts",
+                "default": "./dist/esm/forwards/tags/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/tags/*.d.ts",
-                "default": "./dist/cjs/compat/tags/*.js"
+                "types": "./dist/cjs/forwards/tags/*.d.ts",
+                "default": "./dist/cjs/forwards/tags/*.js"
             }
         },
         "./devices/*": {
             "import": {
-                "types": "./dist/esm/compat/devices/*.d.ts",
-                "default": "./dist/esm/compat/devices/*.js"
+                "types": "./dist/esm/forwards/devices/*.d.ts",
+                "default": "./dist/esm/forwards/devices/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/devices/*.d.ts",
-                "default": "./dist/cjs/compat/devices/*.js"
+                "types": "./dist/cjs/forwards/devices/*.d.ts",
+                "default": "./dist/cjs/forwards/devices/*.js"
             }
         },
         "./endpoints/*": {
             "import": {
-                "types": "./dist/esm/compat/endpoints/*.d.ts",
-                "default": "./dist/esm/compat/endpoints/*.js"
+                "types": "./dist/esm/forwards/endpoints/*.d.ts",
+                "default": "./dist/esm/forwards/endpoints/*.js"
             },
             "require": {
-                "types": "./dist/cjs/compat/endpoints/*.d.ts",
-                "default": "./dist/cjs/compat/endpoints/*.js"
+                "types": "./dist/cjs/forwards/endpoints/*.d.ts",
+                "default": "./dist/cjs/forwards/endpoints/*.js"
             }
         },
         "./*": {
@@ -169,19 +161,19 @@
     "typesVersions": {
         "*": {
             "device/*": [
-                "/dist/cjs/compat/device.d.ts"
+                "/dist/cjs/device/*.d.ts"
             ],
             "cluster/*": [
-                "/dist/cjs/compat/cluster.d.ts"
+                "/dist/cjs/cluster/export.d.ts"
             ],
             "devices/*": [
-                "/dist/cjs/compat/devices/*.d.ts"
+                "/dist/cjs/forwards/devices/*.d.ts"
             ],
             "endpoints/*": [
-                "/dist/cjs/compat/endpoints/system/*.d.ts"
+                "/dist/cjs/forwards/endpoints/*.d.ts"
             ],
             "behaviors/*": [
-                "/dist/cjs/compat/endpoints/system/*.d.ts"
+                "/dist/cjs/forwards/behaviors/*.d.ts"
             ],
             ".": [
                 "/dist/cjs/export.d.ts"

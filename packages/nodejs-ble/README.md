@@ -1,4 +1,4 @@
-# matter-node-ble.js
+# @matter/nodejs-ble - Node.js based platform specific functionality for Matter.js
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE) 
 
@@ -6,19 +6,19 @@ Matter BLE support using bleno for Peripheral/Device side and noble (not impleme
 
 > This package supports all Node.js LTS versions starting with 18.x
 
-This package contains the specific Platform implementations for Bluetooth LE with Node.js. It is designed to be used in addition to the @matter.js/nodejs package to enable BLE specific functionality.
+This package contains the specific Platform implementations for Bluetooth LE with Node.js. It is designed to be used in addition to the @matter/nodejs package to enable BLE specific functionality.
 
 ## Prerequisites and Limitations
 
 The used packages have some limitations and prerequisites. Please check the Readme's of the packages for more details:
 * [bleno](https://github.com/abandonware/bleno#readme)
-  * For Linux: also consider https://github.com/abandonware/bleno#running-on-linux
+  * For Linux: also consider https://github.com/stoprocent/bleno#running-on-linux
   * Bleno is currently not working on macOS because it cannot announce the proper data because of macOS limitations!
 * [noble](https://github.com/abandonware/noble#readme)
-  * Consider Noble prerequisites for your platform: https://github.com/abandonware/noble#prerequisites
-  * For Linux: https://github.com/abandonware/noble#running-without-rootsudo-linux-specific
-  * When using Device and Controller in parallel: https://github.com/abandonware/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
-  * Please also see common issues and solutions: https://github.com/abandonware/noble#common-problems
+  * Consider Noble prerequisites for your platform: https://github.com/stoprocent/noble#prerequisites
+  * For Linux: https://github.com/stoprocent/noble#running-without-rootsudo-linux-specific
+  * When using Device and Controller in parallel: https://github.com/stoprocent/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
+  * Please also see common issues and solutions: https://github.com/stoprocent/noble#common-problems
 
 ## How to use this package
 This package is designed to be used in addition to matter.ja and matter-node.js to enable BLE support. It is not intended to be used standalone.
@@ -27,8 +27,8 @@ Add this package to your package dependencies and make sure it is exactly the sa
 
 In your code you register the BLE instance by using:
 ```javascript
-import { BleNode } from "@matter.js/nodejs-ble";
-import { Ble } from "@matter.js/protocol/ble";
+import { BleNode } from "@matter/nodejs-ble";
+import { Ble } from "@matter/main";
 
 Ble.get = singleton(
     () =>

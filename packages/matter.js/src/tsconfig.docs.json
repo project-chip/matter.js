@@ -2,7 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "outDir": "../dist/esm",
-        "types": ["@matter.js/tools", "globals", "node"],
+        "types": ["@matter/tools", "globals", "node"],
         "resolveJsonModule": true, // needed for globals package
     },
     "typedocOptions": {

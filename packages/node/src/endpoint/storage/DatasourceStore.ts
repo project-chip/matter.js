@@ -9,7 +9,7 @@ import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Participant } from "#behavior/state/transaction/Participant.js";
 import { Transaction } from "#behavior/state/transaction/Transaction.js";
 import { MaybePromise } from "#general";
-import type { PartStore } from "./PartStore.js";
+import type { EndpointStore } from "./EndpointStore.js";
 
 interface StorageParticipant extends Participant {
     mutations?: Record<string, Val.Struct>;
@@ -18,14 +18,18 @@ interface StorageParticipant extends Participant {
 /**
  * Factory function for the default implementation of {@link Datasource.Store}.
  *
- * Performs read & write for non-volatile values for a single behavior via the {@link PartStore} interface.
+ * Performs read & write for non-volatile values for a single behavior via the {@link EndpointStore} interface.
  */
-export function DatasourceStore(partStore: PartStore, behaviorId: string): Datasource.Store {
+export function DatasourceStore(
+    endpointStore: EndpointStore,
+    behaviorId: string,
+    initialValues: Val.Struct | undefined,
+): Datasource.Store {
     return {
-        initialValues: partStore.initialValues[behaviorId],
+        initialValues,
 
         async set(transaction: Transaction, values: Val.Struct) {
-            const participant = participantFor(transaction, partStore);
+            const participant = participantFor(transaction, endpointStore);
             if (!participant.mutations) {
                 participant.mutations = {};
             }
@@ -43,19 +47,19 @@ export function DatasourceStore(partStore: PartStore, behaviorId: string): Datas
  * We create a single participant per storage/transaction pair.  This function handles setup and retrieval of this
  * participant.
  */
-function participantFor(transaction: Transaction, partStore: PartStore) {
-    let participant = transaction.getParticipant(partStore) as StorageParticipant | undefined;
+function participantFor(transaction: Transaction, endpointStore: EndpointStore) {
+    let participant = transaction.getParticipant(endpointStore) as StorageParticipant | undefined;
     if (participant) {
         return participant;
     }
 
     participant = {
-        role: partStore,
+        role: endpointStore,
 
         mutations: undefined,
 
         toString() {
-            return partStore.toString();
+            return endpointStore.toString();
         },
 
         commit1(): MaybePromise {
@@ -65,7 +69,7 @@ function participantFor(transaction: Transaction, partStore: PartStore) {
 
         async commit2() {
             if (this.mutations) {
-                await partStore.set(this.mutations);
+                await endpointStore.set(this.mutations);
             }
         },
 

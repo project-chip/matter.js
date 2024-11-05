@@ -1,8 +1,27 @@
 {
-    "extends": "../../packages/tools/tsconfig.base.json",
+    "extends": "../../packages/tools/tsc/tsconfig.test.json",
     "compilerOptions": {
-        "outDir": "../build/test",
-        "types": ["mocha", "node", "@matter.js/tools"]
+        "types": [
+            "mocha",
+            "node",
+            "@matter/tools"
+        ]
     },
-    "references": [{ "path": "../../packages/tools" }, { "path": "../src" }]
+    "references": [
+        {
+            "path": "../../packages/main/src"
+        },
+        {
+            "path": "../../packages/matter.js/src"
+        },
+        {
+            "path": "../../packages/testing/src"
+        },
+        {
+            "path": "../../packages/tools/src"
+        },
+        {
+            "path": "../src"
+        }
+    ]
 }

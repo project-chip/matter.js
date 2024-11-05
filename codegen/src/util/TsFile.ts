@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, serialize } from "#general";
+import { FormattedText, InternalError, serialize } from "#general";
 import { Specification } from "#model";
 import { Package } from "#tools";
 import { relative } from "path";
 import { absolute, readMatterFile, writeMatterFile } from "./file.js";
-import { asObjectKey, wordWrap } from "./string.js";
+import { asObjectKey } from "./string.js";
 
 const HEADER = `/**
  * @license
@@ -95,7 +95,7 @@ export abstract class Entry {
         }
 
         // Word wrap documentation
-        const lines = wordWrap(paragraphs.join("\n"), WRAP_WIDTH - 3 - linePrefix.length);
+        const lines = FormattedText(paragraphs.join("\n"), WRAP_WIDTH - 3 - linePrefix.length);
 
         // Add xref after wrapping so we can ensure it never wraps
         const spec = mapSpec(this.documentation?.xref);
@@ -728,12 +728,12 @@ export class TsFile extends Block {
             throw new InternalError(`Local import of ${filename} must start with "!", "#" or "."`);
         } else if (filename.startsWith("@project-chip/")) {
             return filename.replace(/^@project-chip\/matter-/, "#");
-        } else if (filename.startsWith("@matter.js/")) {
-            // For @matter.js/package we assume an alias of "#package"; for "@matter.js/package/submodule" we assume an
+        } else if (filename.startsWith("@matter/")) {
+            // For @matter/package we assume an alias of "#package"; for "@matter/package/submodule" we assume an
             // alias of "#submodule"
-            return filename.replace(/^@matter\.js\/(?:[^/]+\/)/, "#");
+            return filename.replace(/^@matter\/(?:[^/]+\/)/, "#");
         } else {
-            throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
+            throw new InternalError(`Absolute import of ${filename} must start with "@matter"`);
         }
 
         if (filename.match(/\.[a-z]+\.[a-z]+$/)) {

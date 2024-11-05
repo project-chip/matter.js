@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/codegen",
+    "name": "@matter/codegen",
     "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "private": true,
@@ -8,14 +8,14 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "console": "matter-run bin/repl.ts",
         "generate-spec": "matter-run bin/generate-spec.js",
         "generate-chip": "matter-run bin/generate-chip.js",
         "generate-model": "matter-run bin/generate-model.js",
         "generate-clusters": "matter-run bin/generate-clusters.js",
         "generate-endpoints": "matter-run bin/generate-endpoints.js",
+        "generate-forwards": "matter-run bin/generate-forwards.js",
         "dump-model-names": "matter-build esm --prefix=../models && matter-run bin/dump-model-names.ts",
-        "generate": "npm run generate-model && npm run generate-clusters && npm run generate-endpoints"
+        "generate": "npm run generate-model && npm run generate-clusters && npm run generate-endpoints && npm run generate-forwards"
     },
     "repository": {
         "type": "git",
@@ -31,16 +31,22 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/tools": "*",
-        "@matter.js/intermediate-models": "*"
+        "@matter/general": "*",
+        "@matter/intermediate-models": "*",
+        "@matter/model": "*",
+        "@matter/tools": "*"
+    },
+    "devDependencies": {
+        "@types/jsdom": "^21.1.6",
+        "jsdom": "^25.0.0",
+        "word-list": "^4.0.0",
+        "yargs": "^17.7.2"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#tools": "@matter.js/tools",
-        "#intermediate-models": "@matter.js/intermediate-models",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#tools": "@matter/tools",
+        "#intermediate-models": "@matter/intermediate-models",
         "#*": "./src/*"
     },
     "module": "dist/esm/index.js",
@@ -54,13 +60,5 @@
     },
     "engines": {
         "node": ">=18.0.0"
-    },
-    "devDependencies": {
-        "@matter.js/tools": "*",
-        "@types/jsdom": "^21.1.6",
-        "jsdom": "^25.0.0",
-        "typescript": "~5.5.3",
-        "word-list": "^4.0.0",
-        "yargs": "^17.7.2"
     }
 }

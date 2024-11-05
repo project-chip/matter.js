@@ -75,11 +75,18 @@ export interface BaseElement {
     until?: Specification.Revision;
 }
 
-export function BaseElement(tag: ElementTag, definition: BaseElement) {
+export function BaseElement(tag: ElementTag, definition: BaseElement, children: BaseElement[]) {
     const result: any = { tag: tag };
     for (const [k, v] of Object.entries(definition)) {
         if (v !== undefined) {
             result[k] = v;
+        }
+    }
+    if (children.length) {
+        if (!result.children) {
+            result.children = children;
+        } else {
+            result.children.push(...children);
         }
     }
     return result as BaseElement;

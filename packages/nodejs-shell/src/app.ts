@@ -5,15 +5,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogFormat, LogLevel, Logger, singleton } from "@matter.js/general";
-import { createFileLogger } from "@matter.js/nodejs";
-import { NodeJsBle } from "@matter.js/nodejs-ble";
-import { Ble } from "@matter.js/protocol";
+import { LogFormat, LogLevel, Logger, singleton } from "@matter/general";
+import { createFileLogger } from "@matter/nodejs";
+import { NodeJsBle } from "@matter/nodejs-ble";
+import { Ble } from "@matter/protocol";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
 
-const PROMPT = "matter-node> ";
+const PROMPT = "matter> ";
 const logger = Logger.get("Shell");
 if (process.stdin?.isTTY) Logger.format = LogFormat.ANSI;
 
@@ -86,20 +86,25 @@ async function main() {
                             type: "string",
                             default: undefined,
                         },
+                        legacyStorage: {
+                            description: "Use legacy storage structure (pre 0.11)",
+                            type: "boolean",
+                            default: false,
+                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile, legacyStorage } = argv;
 
-                theNode = new MatterNode(nodeNum, netInterface);
+                theNode = new MatterNode(nodeNum, netInterface, legacyStorage);
                 await theNode.initialize(factoryReset);
 
                 if (logfile !== undefined) {
                     await theNode.Store.set("LogFile", logfile);
                 }
-                if (theNode.Store.has("LogFile")) {
+                if (await theNode.Store.has("LogFile")) {
                     const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
                         Logger.addLogger("file", await createFileLogger(storedLogFileName), {
@@ -110,7 +115,7 @@ async function main() {
                 }
                 setLogLevel("default", await theNode.Store.get<string>("LogLevel", "info"));
 
-                const theShell = new Shell(theNode, PROMPT);
+                const theShell = new Shell(theNode, nodeNum, PROMPT);
 
                 if (bleHciId !== undefined) {
                     await theNode.Store.set("BleHciId", bleHciId);
@@ -128,7 +133,7 @@ async function main() {
                 }
 
                 console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
-                theShell.start();
+                theShell.start(theNode.storageLocation);
             },
         )
         .version(false)

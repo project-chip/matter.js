@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./util/generate-submodule-proxy.js";
+export * from "./forwards/generate-forwards.js";
 export * from "./util/TsFile.js";

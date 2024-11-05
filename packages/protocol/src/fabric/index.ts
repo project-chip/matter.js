@@ -5,4 +5,5 @@
  */
 
 export * from "./Fabric.js";
+export * from "./FabricAuthority.js";
 export * from "./FabricManager.js";

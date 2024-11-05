@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, MAX_UDP_MESSAGE_SIZE, Queue } from "#general";
+import { Bytes, DataReadQueue, MAX_UDP_MESSAGE_SIZE, PrivateKey } from "#general";
 import {
     ExchangeSendOptions,
     Fabric,
@@ -14,29 +14,32 @@ import {
     SessionType,
 } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
-import { KEY } from "../cluster/ClusterServerTestingUtil.js";
+
+const PRIVATE_KEY = new Uint8Array(32);
+PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
+export const KEY = PrivateKey(PRIVATE_KEY);
 
 export function createTestFabric() {
-    return new Fabric(
-        FabricIndex(1),
-        FabricId(1),
-        NodeId(BigInt(1)),
-        NodeId(1),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        KEY,
-        VendorId(1),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        Bytes.fromHex("00"),
-        "",
-    );
+    return new Fabric({
+        fabricIndex: FabricIndex(1),
+        fabricId: FabricId(1n),
+        nodeId: NodeId(1n),
+        rootNodeId: NodeId(2n),
+        operationalId: Bytes.fromHex("00"),
+        keyPair: KEY,
+        rootPublicKey: Bytes.fromHex("00"),
+        rootVendorId: VendorId(1),
+        rootCert: Bytes.fromHex("00"),
+        identityProtectionKey: Bytes.fromHex("00"),
+        operationalIdentityProtectionKey: Bytes.fromHex("00"),
+        intermediateCACert: Bytes.fromHex("00"),
+        operationalCert: Bytes.fromHex("00"),
+        label: "",
+    });
 }
 
 class DummyMessageExchange {
-    messagesQueue = new Queue<Message>();
+    messagesQueue = new DataReadQueue<Message>();
     channel = { name: "test" };
     maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
 
@@ -102,10 +105,6 @@ export async function createDummyMessageExchange(
     closeCallback?: () => void,
 ) {
     const session = await SecureSession.create({
-        context: {
-            getFabrics: () => [],
-            _mockDevice: true,
-        } as any,
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),
@@ -114,9 +113,6 @@ export async function createDummyMessageExchange(
         salt: Bytes.fromHex("00"),
         isInitiator: false,
         isResumption: false,
-        closeCallback: async () => {
-            /* */
-        },
         peerSessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
     });
     return new DummyMessageExchange(

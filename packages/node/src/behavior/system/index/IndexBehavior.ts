@@ -73,7 +73,7 @@ export class IndexBehavior extends Behavior {
     #add(endpoint: Endpoint) {
         // This assertion is a sanity check; if there is a conflict then state is already corrupted
         if (endpoint.lifecycle.hasNumber) {
-            this.endpoint.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
+            this.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
             this.internal.partsByNumber[endpoint.number] = endpoint;
         }
 

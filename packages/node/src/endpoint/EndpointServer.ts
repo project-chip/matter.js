@@ -8,14 +8,14 @@ import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { ClusterServerBacking } from "#behavior/internal/ClusterServerBacking.js";
-import { ServerBehaviorBacking } from "#behavior/internal/ServerBacking.js";
+import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
 import { ImplementationError, InternalError, NotImplementedError } from "#general";
 import { ClusterClientObj, ClusterServer, EndpointInterface } from "#protocol";
 import { ClusterId, ClusterType, EndpointNumber } from "#types";
 import { Endpoint } from "./Endpoint.js";
 
 const SERVER = Symbol("server");
-interface ServerPart extends Endpoint {
+interface ServerEndpoint extends Endpoint {
     [SERVER]?: EndpointServer;
 }
 
@@ -36,7 +36,7 @@ export class EndpointServer implements EndpointInterface {
     }
 
     constructor(endpoint: Endpoint) {
-        (endpoint as ServerPart)[SERVER] = this;
+        (endpoint as ServerEndpoint)[SERVER] = this;
         this.#endpoint = endpoint;
         this.#name = endpoint.type.name;
     }
@@ -53,7 +53,7 @@ export class EndpointServer implements EndpointInterface {
 
             backing = new ClusterServerBacking(this, type as ClusterBehavior.Type);
         } else {
-            backing = new ServerBehaviorBacking(this.#endpoint, type);
+            backing = new ServerBehaviorBacking(this.#endpoint, type, this.#endpoint.behaviors.optionsFor(type));
         }
         return backing;
     }
@@ -105,9 +105,9 @@ export class EndpointServer implements EndpointInterface {
     async [Symbol.asyncDispose]() {
         // I believe the cluster servers are effectively disposed when the structure is emptied
         this.#clusterServers.clear();
-        delete (this.#endpoint as ServerPart)[SERVER];
+        delete (this.#endpoint as ServerEndpoint)[SERVER];
         for (const endpoint of this.#endpoint.parts) {
-            const server = (endpoint as ServerPart)[SERVER];
+            const server = (endpoint as ServerEndpoint)[SERVER];
             if (server) {
                 await server[Symbol.asyncDispose]();
             }
@@ -177,9 +177,9 @@ export class EndpointServer implements EndpointInterface {
      * Retrieve the server for an endpoint.
      */
     static forEndpoint(endpoint: Endpoint) {
-        let server = (endpoint as ServerPart)[SERVER];
+        let server = (endpoint as ServerEndpoint)[SERVER];
         if (!server) {
-            server = (endpoint as ServerPart)[SERVER] = new EndpointServer(endpoint);
+            server = (endpoint as ServerEndpoint)[SERVER] = new EndpointServer(endpoint);
         }
         return server;
     }

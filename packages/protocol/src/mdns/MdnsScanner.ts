@@ -6,6 +6,7 @@
 
 import {
     Bytes,
+    ChannelType,
     Diagnostic,
     DnsCodec,
     DnsMessagePartiallyPreEncoded,
@@ -15,6 +16,7 @@ import {
     DnsRecordClass,
     DnsRecordType,
     ImplementationError,
+    Lifespan,
     Logger,
     MAX_MDNS_MESSAGE_SIZE,
     Network,
@@ -51,23 +53,21 @@ import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from ".
 
 const logger = Logger.get("MdnsScanner");
 
-type MatterServerRecordWithExpire = ServerAddressIp & {
-    expires: number;
-};
+type MatterServerRecordWithExpire = ServerAddressIp & Lifespan;
 
-type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> & {
-    expires: number;
-    addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
-    instanceId: string; // instance ID
-    SD: number; // Additional Field for Short discriminator
-    V?: number; // Additional Field for Vendor ID
-    P?: number; // Additional Field for Product ID
-};
+type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> &
+    Lifespan & {
+        addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
+        instanceId: string; // instance ID
+        SD: number; // Additional Field for Short discriminator
+        V?: number; // Additional Field for Vendor ID
+        P?: number; // Additional Field for Product ID
+    };
 
-type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> & {
-    expires: number;
-    addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
-};
+type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
+    Lifespan & {
+        addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
+    };
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
@@ -77,6 +77,10 @@ const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
  * It sends out queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
+    get type() {
+        return ChannelType.UDP;
+    }
+
     static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4, netInterface } = options ?? {};
         return new MdnsScanner(
@@ -317,7 +321,7 @@ export class MdnsScanner implements Scanner {
                 timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
             }${resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"}`,
         );
-        return { promise };
+        await promise;
     }
 
     /**
@@ -366,7 +370,7 @@ export class MdnsScanner implements Scanner {
 
         let storedDevice = ignoreExistingRecords ? undefined : this.#getOperationalDeviceRecords(deviceMatterQname);
         if (storedDevice === undefined) {
-            const { promise } = await this.#registerWaiterPromise(deviceMatterQname, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(deviceMatterQname, timeoutSeconds);
 
             this.#setQueryRecords(deviceMatterQname, [
                 {
@@ -411,6 +415,10 @@ export class MdnsScanner implements Scanner {
             foundRecords.push(...storedRecords.filter(({ D }) => D === identifier.longDiscriminator));
         } else if ("shortDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ SD }) => SD === identifier.shortDiscriminator));
+        } else if ("vendorId" in identifier && "productId" in identifier) {
+            foundRecords.push(
+                ...storedRecords.filter(({ V, P }) => V === identifier.vendorId && P === identifier.productId),
+            );
         } else if ("vendorId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ V }) => V === identifier.vendorId));
         } else if ("deviceType" in identifier) {
@@ -441,21 +449,35 @@ export class MdnsScanner implements Scanner {
     #buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("instanceId" in identifier) {
             return getDeviceInstanceQname(identifier.instanceId);
-        } else if ("longDiscriminator" in identifier) {
+        }
+
+        if ("longDiscriminator" in identifier) {
             return getLongDiscriminatorQname(identifier.longDiscriminator);
-        } else if ("shortDiscriminator" in identifier) {
+        }
+
+        if ("shortDiscriminator" in identifier) {
             return getShortDiscriminatorQname(identifier.shortDiscriminator);
-        } else if ("vendorId" in identifier) {
+        }
+
+        if ("vendorId" in identifier && "productId" in identifier) {
+            // Custom identifier because normally productId is only included in TXT record
+            return `_VP${identifier.vendorId}+${identifier.productId}`;
+        }
+
+        if ("vendorId" in identifier) {
             return getVendorQname(identifier.vendorId);
-        } else if ("deviceType" in identifier) {
+        }
+
+        if ("deviceType" in identifier) {
             return getDeviceTypeQname(identifier.deviceType);
-        } else if ("productId" in identifier) {
+        }
+
+        if ("productId" in identifier) {
             // Custom identifier because normally productId is only included in TXT record
             return `_P${identifier.productId}`;
-        } else if (Object.keys(identifier).length === 0) {
-            return getCommissioningModeQname();
         }
-        throw new ImplementationError(`Invalid commissionable device identifier : ${Logger.toJSON(identifier)}`); // Should neven happen
+
+        return getCommissioningModeQname();
     }
 
     #extractInstanceId(instanceName: string) {
@@ -488,6 +510,16 @@ export class MdnsScanner implements Scanner {
         const shortDiscriminatorQueryId = this.#buildCommissionableQueryIdentifier({ shortDiscriminator: record.SD });
         if (this.#activeAnnounceQueries.has(shortDiscriminatorQueryId)) {
             return shortDiscriminatorQueryId;
+        }
+
+        if (record.V !== undefined && record.P !== undefined) {
+            const vendorProductIdQueryId = this.#buildCommissionableQueryIdentifier({
+                vendorId: VendorId(record.V),
+                productId: record.P,
+            });
+            if (this.#activeAnnounceQueries.has(vendorProductIdQueryId)) {
+                return vendorProductIdQueryId;
+            }
         }
 
         if (record.V !== undefined) {
@@ -560,7 +592,7 @@ export class MdnsScanner implements Scanner {
             : this.#getCommissionableDeviceRecords(identifier).filter(({ addresses }) => addresses.length > 0);
         if (storedRecords.length === 0) {
             const queryId = this.#buildCommissionableQueryIdentifier(identifier);
-            const { promise } = await this.#registerWaiterPromise(queryId, timeoutSeconds);
+            const promise = this.#registerWaiterPromise(queryId, timeoutSeconds);
 
             this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -581,15 +613,27 @@ export class MdnsScanner implements Scanner {
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
         callback: (device: CommissionableDevice) => void,
-        timeoutSeconds = 900,
+        timeoutSeconds?: number,
+        cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
 
-        const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
+        const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
-        while (true) {
+        let canceled = false;
+        cancelSignal?.then(
+            () => {
+                canceled = true;
+                this.#finishWaiter(queryId, true);
+            },
+            cause => {
+                logger.error("Unexpected error canceling commissioning", cause);
+            },
+        );
+
+        while (!canceled) {
             this.#getCommissionableDeviceRecords(identifier).forEach(device => {
                 const { deviceIdentifier } = device;
                 if (!discoveredDevices.has(deviceIdentifier)) {
@@ -598,12 +642,14 @@ export class MdnsScanner implements Scanner {
                 }
             });
 
-            const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
-            if (remainingTime <= 0) {
-                break;
+            let remainingTime;
+            if (discoveryEndTime !== undefined) {
+                const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
+                if (remainingTime <= 0) {
+                    break;
+                }
             }
-            const { promise } = await this.#registerWaiterPromise(queryId, remainingTime, false);
-            await promise;
+            await this.#registerWaiterPromise(queryId, remainingTime, false);
         }
         return this.#getCommissionableDeviceRecords(identifier);
     }
@@ -709,18 +755,20 @@ export class MdnsScanner implements Scanner {
         if (device !== undefined) {
             device = {
                 ...device,
-                expires: Time.nowMs() + ttl * 1000,
+                discoveredAt: Time.nowMs(),
+                ttl: ttl * 1000,
                 ...txtData,
             };
         } else {
             logger.debug(
-                `Adding operational device ${matterName} in cache (interface ${netInterface}) with TXT data:`,
+                `Adding operational device ${matterName} in cache (interface ${netInterface}, ttl=${ttl}) with TXT data:`,
                 MdnsScanner.discoveryDataDiagnostics(txtData),
             );
             device = {
                 deviceIdentifier: matterName,
                 addresses: new Map<string, MatterServerRecordWithExpire>(),
-                expires: Time.nowMs() + ttl * 1000,
+                discoveredAt: Time.nowMs(),
+                ttl: ttl * 1000,
                 ...txtData,
             };
         }
@@ -756,7 +804,8 @@ export class MdnsScanner implements Scanner {
         const device = this.#operationalDeviceRecords.get(matterName) ?? {
             deviceIdentifier: matterName,
             addresses: new Map<string, MatterServerRecordWithExpire>(),
-            expires: Time.nowMs() + ttl * 1000,
+            discoveredAt: Time.nowMs(),
+            ttl: ttl * 1000,
         };
         const { addresses } = device;
         if (ips.length > 0) {
@@ -768,8 +817,8 @@ export class MdnsScanner implements Scanner {
                     addresses.delete(ip);
                     continue;
                 }
-                const matterServer = addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
-                matterServer.expires = Time.nowMs() + ttl * 1000;
+                const matterServer = addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
+                matterServer.discoveredAt = Time.nowMs() + ttl * 1000;
 
                 addresses.set(matterServer.ip, matterServer);
             }
@@ -876,8 +925,10 @@ export class MdnsScanner implements Scanner {
                         storedRecord.addresses.delete(ip);
                         continue;
                     }
-                    const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
-                    matterServer.expires = Time.nowMs() + ttl * 1000;
+                    const matterServer =
+                        storedRecord.addresses.get(ip) ?? ({ ip, port, type: "udp" } as MatterServerRecordWithExpire);
+                    matterServer.discoveredAt = Time.nowMs();
+                    matterServer.ttl = ttl * 1000;
 
                     storedRecord.addresses.set(ip, matterServer);
                 }
@@ -967,10 +1018,11 @@ export class MdnsScanner implements Scanner {
 
     #expire() {
         const now = Time.nowMs();
-        [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, expires }]) => {
+        [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
+            const expires = discoveredAt + ttl;
             if (now < expires) {
-                [...addresses.entries()].forEach(([key, { expires }]) => {
-                    if (now < expires) return;
+                [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
+                    if (now < discoveredAt + ttl) return;
                     addresses.delete(key);
                 });
             }
@@ -978,11 +1030,12 @@ export class MdnsScanner implements Scanner {
                 this.#operationalDeviceRecords.delete(recordKey);
             }
         });
-        [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, expires }]) => {
+        [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
+            const expires = discoveredAt + ttl;
             if (now < expires) {
                 // Entry still ok but check addresses for expiry
-                [...addresses.entries()].forEach(([key, { expires }]) => {
-                    if (now < expires) return;
+                [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
+                    if (now < discoveredAt + ttl) return;
                     addresses.delete(key);
                 });
             }

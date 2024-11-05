@@ -20,6 +20,7 @@ import {
     EventPath,
     EventStorageData,
     FabricScopedAttributeServer,
+    InteractionContext,
     InteractionEndpointStructure,
     InteractionServer,
     Message,
@@ -40,10 +41,9 @@ export class LegacyInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #aclManager?: AccessControlManager;
 
-    constructor(config: InteractionServer.Configuration) {
-        const { endpointStructure } = config;
-        super(config);
-        this.#endpointStructure = endpointStructure;
+    constructor(context: InteractionContext) {
+        super(context);
+        this.#endpointStructure = context.structure;
     }
 
     #getAclManager(session: Session) {
@@ -92,8 +92,12 @@ export class LegacyInteractionServer extends InteractionServer {
         isFabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
+        offline = false,
     ) {
-        this.#assertAccess(path, exchange, attribute.readAcl);
+        // Offline read do not require ACL checks
+        if (!offline) {
+            this.#assertAccess(path, exchange, attribute.readAcl);
+        }
         const data = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
         if (attribute instanceof FabricScopedAttributeServer && !isFabricFiltered) {
             const { value, version } = data;

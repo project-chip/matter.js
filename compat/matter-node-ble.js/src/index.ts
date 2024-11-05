@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@matter.js/nodejs-ble";
-export { NodeJsBle as BleNode } from "@matter.js/nodejs-ble";
+export * from "@matter/nodejs-ble";
+export { NodeJsBle as BleNode } from "@matter/nodejs-ble";

@@ -4,12 +4,13 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import "@matter.js/nodejs";
+import "@matter/nodejs";
 import { startTestApp } from "./GenericTestApp.js";
 import { TvTestInstance } from "./TvTestInstance.js";
+import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 
 console.log("Start TvApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp("TvApp", TvTestInstance).catch(console.error);
+startTestApp("TvApp", TvTestInstance, StorageBackendAsyncJsonFile).catch(console.error);

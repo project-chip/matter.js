@@ -5,7 +5,17 @@
  */
 import dgram from "react-native-udp";
 
-import { Diagnostic, Logger, MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "#general";
+import {
+    ChannelType,
+    Diagnostic,
+    isIPv4,
+    isIPv6,
+    Logger,
+    MAX_UDP_MESSAGE_SIZE,
+    NetworkError,
+    UdpChannel,
+    UdpChannelOptions,
+} from "#general";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
 const logger = Logger.get("UdpChannelNode");
@@ -137,12 +147,13 @@ export class UdpChannelReactNative implements UdpChannel {
                 }
             }
         }
-        return new UdpChannelReactNative(socket, netInterfaceZone);
+        return new UdpChannelReactNative(type, socket, netInterfaceZone);
     }
 
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
+        private readonly type: "udp4" | "udp6",
         private readonly socket: Socket,
         private readonly netInterface?: string,
     ) {}
@@ -188,5 +199,21 @@ export class UdpChannelReactNative implements UdpChannel {
 
     get port() {
         return this.socket.address().port;
+    }
+
+    supports(type: ChannelType, address?: string) {
+        if (type !== ChannelType.UDP) {
+            return false;
+        }
+
+        if (address === undefined) {
+            return true;
+        }
+
+        if (this.type === "udp4") {
+            return isIPv4(address);
+        }
+
+        return isIPv6(address);
     }
 }

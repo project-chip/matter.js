@@ -5,16 +5,19 @@
  */
 
 import { Crypto, Diagnostic, InternalError, Logger, MatterFlowError } from "#general";
-import { MatterDevice } from "#MatterDevice.js";
 import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel, Specification } from "#model";
+import { PeerAddress } from "#peer/PeerAddress.js";
+import { SessionManager } from "#session/SessionManager.js";
 import {
     ArraySchema,
     AttributeId,
     ClusterId,
     CommandId,
+    DEFAULT_MAX_PATHS_PER_INVOKE,
     EndpointNumber,
     EventId,
     EventNumber,
+    INTERACTION_PROTOCOL_ID,
     NodeId,
     StatusCode,
     StatusResponseError,
@@ -58,17 +61,8 @@ import {
     WriteRequest,
     WriteResponse,
 } from "./InteractionMessenger.js";
-import { SubscriptionHandler } from "./SubscriptionHandler.js";
-import { SubscriptionOptions } from "./SubscriptionOptions.js";
-
-/** Protocol ID for the Interaction Protocol as per Matter specification. */
-export const INTERACTION_PROTOCOL_ID = 0x0001;
-
-/** Backward compatible re-export for Interaction Model version we support currently. */
-export const INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
-
-/** We use 10 as max to show that we support more then 1. Once we get a better real-world maximum we can change that. */
-export const DEFAULT_MAX_PATHS_PER_INVOKE = 10;
+import { ServerSubscription, ServerSubscriptionContext } from "./ServerSubscription.js";
+import { ServerSubscriptionConfig } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("InteractionServer");
 
@@ -218,29 +212,34 @@ function getMatterModelClusterCommand(clusterId: ClusterId, commandId: CommandId
 }
 
 /**
- * Translates interactions from the Matter protocol to Matter.js APIs.
+ * Interfaces {@link InteractionServer} with other components.
+ */
+export interface InteractionContext {
+    readonly sessions: SessionManager;
+    readonly structure: InteractionEndpointStructure;
+    readonly subscriptionOptions?: Partial<ServerSubscriptionConfig>;
+    readonly maxPathsPerInvoke?: number;
+    initiateExchange(address: PeerAddress, protocolId: number): MessageExchange;
+}
+
+/**
+ * Translates interactions from the Matter protocol to matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler, InteractionRecipient {
-    readonly #endpointStructure;
+    #context: InteractionContext;
     #nextSubscriptionId = Crypto.getRandomUInt32();
-    readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
     #isClosing = false;
-    readonly #subscriptionConfig: SubscriptionOptions.Configuration;
+    readonly #subscriptionConfig: ServerSubscriptionConfig;
     readonly #maxPathsPerInvoke;
 
-    constructor({
-        subscriptionOptions,
-        endpointStructure,
-        maxPathsPerInvoke = DEFAULT_MAX_PATHS_PER_INVOKE,
-    }: InteractionServer.Configuration) {
-        this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
-        this.#endpointStructure = endpointStructure;
-        this.#maxPathsPerInvoke = maxPathsPerInvoke;
+    constructor(context: InteractionContext) {
+        this.#context = context;
 
-        this.#endpointStructure.change.on(async () => {
-            for (const subscription of this.#subscriptionMap.values()) {
-                await subscription.updateSubscription();
-            }
+        this.#subscriptionConfig = ServerSubscriptionConfig.of(context.subscriptionOptions);
+        this.#maxPathsPerInvoke = context.maxPathsPerInvoke ?? DEFAULT_MAX_PATHS_PER_INVOKE;
+
+        this.#context.structure.change.on(async () => {
+            this.#context.sessions.updateAllSubscriptions();
         });
     }
 
@@ -283,9 +282,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             } isFabricFiltered=${isFabricFiltered}`,
         );
 
-        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
             );
         }
         if (attributeRequests === undefined && eventRequests === undefined) {
@@ -552,7 +551,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         }
 
         return {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             suppressResponse: true,
             attributeReportsPayload,
             eventReportsPayload,
@@ -566,8 +565,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         isFabricFiltered: boolean,
         message: Message,
         _endpoint: EndpointInterface,
+        offline = false,
     ) {
-        return attribute.getWithVersion(exchange.session, isFabricFiltered, message);
+        return attribute.getWithVersion(exchange.session, isFabricFiltered, offline ? undefined : message);
     }
 
     protected async readEvent(
@@ -601,9 +601,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -877,7 +877,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         );
 
         const response = {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             writeResponses: writeResults.map(({ path, statusCode, clusterStatusCode }) => ({
                 path,
                 status: { status: statusCode, clusterStatus: clusterStatusCode },
@@ -932,9 +932,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             `Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`,
         );
 
-        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -953,6 +953,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 "Subscriptions are only implemented after a fabric has been assigned",
                 StatusCode.InvalidAction,
             );
+
+        if (!keepSubscriptions) {
+            logger.debug(
+                `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
+            );
+            await this.#context.sessions.clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
+        }
 
         if (
             (!Array.isArray(attributeRequests) || attributeRequests.length === 0) &&
@@ -1007,25 +1014,14 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
 
-        // TODO: Interpret specs:
-        // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
-
         if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
         const subscriptionId = this.#nextSubscriptionId++;
-        const subscriptionHandler = new SubscriptionHandler({
-            subscriptionId,
+
+        const context: ServerSubscriptionContext = {
             session,
-            endpointStructure: this.#endpointStructure,
-            attributeRequests,
-            dataVersionFilters,
-            eventRequests,
-            eventFilters,
-            isFabricFiltered,
-            minIntervalFloor: minIntervalFloorSeconds,
-            maxIntervalCeiling: maxIntervalCeilingSeconds,
-            cancelCallback: () => this.#subscriptionMap.delete(subscriptionId),
-            subscriptionOptions: this.#subscriptionConfig,
-            readAttribute: (path, attribute) =>
+            structure: this.#endpointStructure,
+
+            readAttribute: (path, attribute, offline) =>
                 this.readAttribute(
                     path,
                     attribute,
@@ -1033,7 +1029,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     isFabricFiltered,
                     message,
                     this.#endpointStructure.getEndpoint(path.endpointId)!,
+                    offline,
                 ),
+
             readEvent: (path, event, eventFilters) =>
                 this.readEvent(
                     path,
@@ -1044,17 +1042,34 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     message,
                     this.#endpointStructure.getEndpoint(path.endpointId)!,
                 ),
+
+            initiateExchange: (address: PeerAddress, protocolId) => this.#context.initiateExchange(address, protocolId),
+        };
+
+        const subscription = new ServerSubscription({
+            id: subscriptionId,
+            context,
+            criteria: {
+                attributeRequests,
+                dataVersionFilters,
+                eventRequests,
+                eventFilters,
+                isFabricFiltered,
+            },
+            minIntervalFloor: minIntervalFloorSeconds,
+            maxIntervalCeiling: maxIntervalCeilingSeconds,
+            subscriptionOptions: this.#subscriptionConfig,
         });
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger);
+            await subscription.sendInitialReport(messenger);
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
                 error,
             );
-            await subscriptionHandler.cancel(); // Cleanup
+            await subscription.close(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 await messenger.sendStatus(error.code);
@@ -1063,18 +1078,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             return; // Make sure to not bubble up the exception
         }
 
-        if (!keepSubscriptions) {
-            logger.debug(
-                `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
-            );
-            await MatterDevice.of(session).clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
-        }
-
-        const maxInterval = subscriptionHandler.maxInterval;
+        const maxInterval = subscription.maxInterval;
         logger.info(
             `Successfully created subscription ${subscriptionId} for Session ${
                 session.id
-            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.sendInterval} seconds)`,
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
@@ -1082,14 +1090,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             TlvSubscribeResponse.encode({
                 subscriptionId,
                 maxInterval,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             }),
         );
 
         // When an error occurs while sending the response, the subscription is not yet active and will be cleaned up by GC
-        this.#subscriptionMap.set(subscriptionId, subscriptionHandler);
-        session.addSubscription(subscriptionHandler);
-        subscriptionHandler.activateSendingUpdates();
+        subscription.activateSendingUpdates();
     }
 
     async handleInvokeRequest(
@@ -1106,9 +1112,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
 
-        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -1169,7 +1175,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
         const invokeResponseMessage: TypeFromSchema<typeof TlvInvokeResponseForSend> = {
             suppressResponse: false, // Deprecated but must be present
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             invokeResponses: [],
             moreChunkedMessages: invokeRequests.length > 1, // Assume for now we have multiple responses when having multiple invokes
         };
@@ -1403,9 +1409,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     handleTimedRequest(exchange: MessageExchange, { timeout, interactionModelRevision }: TimedRequest) {
         logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
 
-        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
             logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -1414,16 +1420,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     async close() {
         this.#isClosing = true;
-        for (const subscription of this.#subscriptionMap.values()) {
-            await subscription.cancel(true);
-        }
     }
-}
 
-export namespace InteractionServer {
-    export interface Configuration {
-        readonly subscriptionOptions?: SubscriptionOptions;
-        readonly endpointStructure: InteractionEndpointStructure;
-        readonly maxPathsPerInvoke?: number;
+    get #endpointStructure() {
+        return this.#context.structure;
     }
 }

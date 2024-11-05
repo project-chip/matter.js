@@ -43,7 +43,7 @@ function assertExpectedText(text: string, { truncatedStack, ansi }: { truncatedS
     try {
         const iterator = text.split("\n")[Symbol.iterator]();
 
-        let current = iterator.next().value as string | undefined;
+        let current = iterator.next().value;
 
         let stackShouldTruncate = false;
 

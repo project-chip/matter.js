@@ -1,0 +1,12 @@
+{
+    "extends": "../../tools/tsc/tsconfig.lib.json",
+    "compilerOptions": {
+        "types": [
+            "node"
+        ]
+    },
+    "include": [
+        "**/*.ts"
+    ],
+    "references": []
+}

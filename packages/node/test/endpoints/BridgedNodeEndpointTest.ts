@@ -63,6 +63,7 @@ describe("BridgedNodeEndpointTest", () => {
                 type: BridgedLightDevice,
                 id: "light",
             });
+            await MockTime.yield();
 
             expectBridgedLight(bridge);
 

@@ -25,6 +25,7 @@ import { EndpointNumber } from "#types";
 import { RootEndpoint } from "../endpoints/root.js";
 import { Agent } from "./Agent.js";
 import { Behaviors } from "./properties/Behaviors.js";
+import { EndpointContainer } from "./properties/EndpointContainer.js";
 import { EndpointInitializer } from "./properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "./properties/EndpointLifecycle.js";
 import { Parts } from "./properties/Parts.js";
@@ -102,7 +103,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * The owner of the endpoint.
      *
-     * Every endpoint but the root endpoint (the "node") is owned by another endpoint.
+     * Every endpoint but the root endpoint (the "server node") is owned by another endpoint.
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
@@ -259,8 +260,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to
      * construct and initialize an {@link Endpoint} in one step.
-     *
-     * @param config
      */
     constructor(config: Endpoint.Configuration<T> | T);
 
@@ -269,8 +268,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to
      * construct and initialize an {@link Endpoint} in one step.
-     *
-     * @param config
      */
     constructor(type: T, options?: Endpoint.Options<T>);
 
@@ -323,12 +320,16 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             throw new ImplementationError('Endpoint ID may not include "."');
         }
 
-        if (this.lifecycle.isInstalled && this.owner instanceof Endpoint) {
-            this.owner.parts.assertIdAvailable(id, this);
+        if (this.lifecycle.isInstalled) {
+            this.#container.assertIdAvailable(id, this);
         }
 
         this.#id = id;
         this.lifecycle.change(EndpointLifecycle.Change.IdAssigned);
+    }
+
+    protected get container(): undefined | EndpointContainer {
+        return this.owner?.parts;
     }
 
     set number(number: number) {
@@ -386,9 +387,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         this.#owner = owner;
 
         try {
-            owner.parts.add(this);
+            this.#container.add(this);
         } catch (e) {
-            owner.parts.delete(this);
+            this.#container.delete(this);
             this.#owner = undefined;
             throw e;
         }
@@ -584,6 +585,22 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Perform "hard" reset of the endpoint, reverting all in-memory and persistent state to uninitialized.
+     */
+    async erase() {
+        await this.reset();
+        await this.env.get(EndpointInitializer).eraseDescendant(this);
+    }
+
+    /**
+     * Erase all persisted data and destroy the node.
+     */
+    async delete() {
+        await this.erase();
+        await this.close();
+    }
+
+    /**
      * Apply a depth-first visitor function to myself and all descendents.
      */
     visit<T extends void | PromiseLike<void>>(visitor: (endpoint: Endpoint) => T): T {
@@ -658,7 +675,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     protected initialize() {
         // Configure the endpoint for the appropriate node type
-        this.env.get(EndpointInitializer).initializeDescendent(this);
+        this.env.get(EndpointInitializer).initializeDescendant(this);
 
         // Initialize behaviors.  Success brings endpoint to "ready" state
         let promise = this.behaviors.initialize();
@@ -732,6 +749,16 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             "endpoint#": this.number,
             type: `${this.type.name} (0x${this.type.deviceType.toString(16)})`,
         };
+    }
+
+    get #container() {
+        const container = this.container;
+
+        if (container === undefined) {
+            throw new ImplementationError(`No container for installed endpoint ${this}`);
+        }
+
+        return container;
     }
 }
 

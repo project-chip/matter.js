@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@matter.js/general";
-import { AttributeModel, ClusterModel, MatterModel } from "@matter.js/model";
+import { Diagnostic, Logger } from "@matter/general";
+import { AttributeModel, ClusterModel, MatterModel } from "@matter/model";
 import { SupportedAttributeClient } from "@project-chip/matter.js/cluster";
 import { ValidationError } from "@project-chip/matter.js/common";
 import { AttributeId, ClusterId, EndpointNumber } from "@project-chip/matter.js/datatype";

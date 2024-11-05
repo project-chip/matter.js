@@ -26,9 +26,8 @@ export namespace AttributePath {
     export type Nested = ({ field: FieldAddress } | { entry: EntryIndex })[];
 
     /**
-     * Addresses attribute data for read operations.  Note that if you
-     * specify the attribute you must also specify the cluster except for
-     * global attributes.
+     * Addresses attribute data for read operations.  Note that if you specify the attribute you must also specify the
+     * cluster except for global attributes.
      *
      * @see {@link MatterSpecification.v11.Core} § 8.9.2.1 & 8.9.2.3
      */

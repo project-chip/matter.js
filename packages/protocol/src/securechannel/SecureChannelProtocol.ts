@@ -4,20 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterFlowError } from "#general";
-import { StatusCode, StatusResponseError } from "#types";
+import { FabricManager } from "#fabric/FabricManager.js";
+import { AsyncObservable, Environment, Environmental, Logger, MatterFlowError } from "#general";
+import { ExchangeManager } from "#protocol/ExchangeManager.js";
+import { SessionManager } from "#session/SessionManager.js";
+import {
+    GeneralStatusCode,
+    ProtocolStatusCode,
+    SECURE_CHANNEL_PROTOCOL_ID,
+    SecureMessageType,
+    StatusCode,
+    StatusResponseError,
+} from "#types";
 import { Message } from "../codec/MessageCodec.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
 import { assertSecureSession } from "../session/SecureSession.js";
 import { CaseServer } from "../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../session/pase/PaseServer.js";
-import {
-    GeneralStatusCode,
-    ProtocolStatusCode,
-    SECURE_CHANNEL_PROTOCOL_ID,
-    SecureMessageType,
-} from "./SecureChannelMessages.js";
 import { ChannelStatusResponseError, SecureChannelMessenger } from "./SecureChannelMessenger.js";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
 
@@ -88,19 +92,35 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
 }
 
 export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol {
-    private paseCommissioner: PaseServer | undefined;
-    private readonly caseCommissioner = new CaseServer();
+    #paseCommissioner: PaseServer | undefined;
+    readonly #caseCommissioner: CaseServer;
+    readonly #tooManyPaseErrors = AsyncObservable<[]>();
 
-    constructor(private commissioningCancelledCallback: () => Promise<void>) {
+    constructor(sessions: SessionManager, fabrics: FabricManager) {
         super();
+        this.#caseCommissioner = new CaseServer(sessions, fabrics);
+    }
+
+    static [Environmental.create](env: Environment) {
+        const instance = new SecureChannelProtocol(env.get(SessionManager), env.get(FabricManager));
+        env.get(ExchangeManager).addProtocolHandler(instance);
+        env.set(SecureChannelProtocol, instance);
+        return instance;
+    }
+
+    /**
+     * Emitted when the active PASE session hits the maximum error threshold.
+     */
+    get tooManyPaseErrors() {
+        return this.#tooManyPaseErrors;
     }
 
     setPaseCommissioner(paseServer: PaseServer) {
-        this.paseCommissioner = paseServer;
+        this.#paseCommissioner = paseServer;
     }
 
     removePaseCommissioner() {
-        this.paseCommissioner = undefined;
+        this.#paseCommissioner = undefined;
     }
 
     override async onNewExchange(exchange: MessageExchange, message: Message) {
@@ -108,7 +128,7 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
 
         switch (messageType) {
             case SecureMessageType.PbkdfParamRequest:
-                if (this.paseCommissioner === undefined) {
+                if (this.#paseCommissioner === undefined) {
                     // Cleaner to return an error (ok for chip-tool as it seems)?
                     // Formally we should not respond at all which leads to retries and such
                     const messenger = new SecureChannelMessenger(exchange);
@@ -117,16 +137,15 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                     return;
                 }
                 try {
-                    await this.paseCommissioner.onNewExchange(exchange);
+                    await this.#paseCommissioner.onNewExchange(exchange);
                 } catch (error) {
                     MaximumPasePairingErrorsReachedError.accept(error);
 
-                    logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
-                    await this.commissioningCancelledCallback();
+                    await this.#tooManyPaseErrors.emit();
                 }
                 break;
             case SecureMessageType.Sigma1:
-                await this.caseCommissioner.onNewExchange(exchange);
+                await this.#caseCommissioner.onNewExchange(exchange);
                 break;
             default:
                 await super.onNewExchange(exchange, message);

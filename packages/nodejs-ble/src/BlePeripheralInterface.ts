@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, TransportInterface } from "@matter.js/general";
+import { Channel, ChannelType, TransportInterface } from "@matter/general";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 export class BlePeripheralInterface implements TransportInterface {
@@ -20,5 +20,17 @@ export class BlePeripheralInterface implements TransportInterface {
 
     async close() {
         await this.blenoServer.close();
+    }
+
+    supports(type: ChannelType, address?: string) {
+        if (type === ChannelType.BLE) {
+            return true;
+        }
+
+        if (address === undefined) {
+            return true;
+        }
+
+        return this.blenoServer.clientAddress === address;
     }
 }

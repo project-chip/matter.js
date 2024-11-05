@@ -9,7 +9,7 @@ import { AccessLevel } from "#model";
 import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
-import { EventId, TlvEventId } from "../datatype/EventId.js";
+import { EventId } from "../datatype/EventId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvArray } from "../tlv/TlvArray.js";
@@ -834,9 +834,6 @@ export type GlobalAttributes<F extends BitSchema> = {
     /** List of the attribute IDs of the attributes supported by the cluster instance. */
     attributeList: Attribute<AttributeId[], never>;
 
-    /** List of the event IDs of the events supported by the cluster instance. */
-    eventList: Attribute<EventId[], never>;
-
     /** List of client generated commands which are supported by this cluster server instance. */
     acceptedCommandList: Attribute<CommandId[], never>;
 
@@ -849,7 +846,6 @@ export const GlobalAttributes = <F extends BitSchema>(features: F) =>
         clusterRevision: Attribute(0xfffd, TlvUInt16),
         featureMap: Attribute(0xfffc, TlvBitmap(TlvUInt32, features)),
         attributeList: Attribute(0xfffb, TlvArray(TlvAttributeId)),
-        eventList: Attribute(0xfffa, TlvArray(TlvEventId)),
         acceptedCommandList: Attribute(0xfff9, TlvArray(TlvCommandId)),
         generatedCommandList: Attribute(0xfff8, TlvArray(TlvCommandId)),
     }) as GlobalAttributes<F>;

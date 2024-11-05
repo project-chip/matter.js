@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, StorageBackendMemory, SupportedStorageTypes, toJson } from "@matter.js/general";
+import { fromJson, StorageBackendMemory, SupportedStorageTypes, toJson } from "@matter/general";
 import { readFileSync, writeFileSync } from "fs";
 
 export class StorageBackendSyncJsonFile extends StorageBackendMemory {

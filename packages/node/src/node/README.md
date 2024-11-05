@@ -123,7 +123,7 @@ Here is how you instantiate a node and bring it online:
 ```ts
 // ../../../matter-node.js-examples/src/tutorial/example01.ts
 
-import { ServerNode } from "@matter.js/main";
+import { ServerNode } from "@matter/main";
 
 const node = await ServerNode.create();
 
@@ -159,8 +159,8 @@ You can add an endpoint to a node by supplying the endpoint's DeviceType to the 
 ```ts
 // ../../../matter-node.js-examples/src/tutorial/example02.ts
 
-import { OnOffLightDevice } from "@matter.js/main/devices/OnOffLightDevice";
-import { ServerNode } from "@matter.js/main";
+import { OnOffLightDevice } from "@matter/main/devices/OnOffLightDevice";
+import { ServerNode } from "@matter/main";
 
 const node = await ServerNode.create();
 
@@ -187,8 +187,8 @@ The following example extends [OnOffServer](../behavior/definitions/on-off/OnOff
 ```ts
 // ../../../matter-node.js-examples/src/tutorial/example03.ts
 
-import { OnOffLightDevice, OnOffLightRequirements } from "@matter.js/main/devices/OnOffLightDevice";
-import { ServerNode } from "@matter.js/main";
+import { OnOffLightDevice, OnOffLightRequirements } from "@matter/main/devices/OnOffLightDevice";
+import { ServerNode } from "@matter/main";
 
 class MyOnOffServer extends OnOffLightRequirements.OnOffServer {
     override on() {
@@ -241,8 +241,8 @@ In this example we use events and state to customize [OnOffServer](../behavior/d
 ```ts
 // ../../../matter-node.js-examples/src/tutorial/example04.ts
 
-import { OnOffLightDevice } from "@matter.js/main/devices/OnOffLightDevice";
-import { ServerNode } from "@matter.js/main";
+import { OnOffLightDevice } from "@matter/main/devices/OnOffLightDevice";
+import { ServerNode } from "@matter/main";
 
 const node = await ServerNode.create();
 
@@ -290,8 +290,8 @@ results:
 ```ts
 // ../../../matter-node.js-examples/src/tutorial/example05.ts
 
-import { OnOffLightDevice } from "@matter.js/main/devices/on-off-light-device";
-import { ServerNode } from "@matter.js/main";
+import { OnOffLightDevice } from "@matter/main/devices/on-off-light-device";
+import { ServerNode } from "@matter/main";
 
 const node = await ServerNode.create();
 

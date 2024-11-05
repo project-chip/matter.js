@@ -31,9 +31,7 @@ export {
     FabricSensitiveEventServer,
     FixedAttributeServer,
     SupportedAttributeClient,
-    SupportedEventClient,
     UnknownSupportedAttributeClient,
-    UnknownSupportedEventClient,
     createAttributeClient,
     createAttributeServer,
     createEventClient,
@@ -44,5 +42,5 @@ export {
     type ClusterDatasource,
 } from "#protocol";
 export { Status } from "#types";
-export * from "@matter.js/types/cluster";
-export * from "@matter.js/types/clusters";
+export * from "@matter/types/cluster";
+export * from "@matter/types/clusters";

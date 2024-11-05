@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Resource } from "#behavior/state/index.js";
 import type { EndpointServer } from "#endpoint/EndpointServer.js";
 import { camelize, Diagnostic, ImplementationError, InternalError, isObject, Logger, MaybePromise } from "#general";
 import { CommandModel, ElementTag } from "#model";
@@ -13,7 +14,9 @@ import {
     ClusterServer,
     CommandServer,
     createAttributeServer as ConstructAttributeServer,
+    EventHandler,
     EventServer,
+    FabricManager,
     Message,
     SecureSession,
 } from "#protocol";
@@ -22,13 +25,12 @@ import { AccessControl } from "../AccessControl.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
-import { GlobalAttributeState } from "../cluster/ClusterState.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { ServerBehaviorBacking } from "./ServerBacking.js";
+import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 
 const logger = Logger.get("Behavior");
 
@@ -81,9 +83,6 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         const result = super.invokeInitializer(behavior, options);
 
         const createClusterServer = () => {
-            // Event list is optional because it is provisional so we must set the default value manually
-            (behavior.state as GlobalAttributeState).eventList = [];
-
             // Validate elements and determine which are applicable
             const elements = new ValidatedElements(this.type, behavior);
             elements.report();
@@ -114,7 +113,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
                 events,
                 clusterServer.events,
                 behavior,
-                ["eventList"],
+                undefined,
                 createEventServer,
             );
 
@@ -140,8 +139,8 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
      * Create the {@link ClusterDatasource} that adapts the Behavior API to the AttributeServer API.
      */
     #createClusterDatasource(): ClusterDatasource {
-        const eventHandler = this.eventHandler;
         const datasource = this.datasource;
+        const env = this.endpoint.env;
 
         return {
             get version() {
@@ -149,7 +148,11 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
             },
 
             get eventHandler() {
-                return eventHandler;
+                return env.get(EventHandler);
+            },
+
+            get fabrics() {
+                return env.get(FabricManager).fabrics;
             },
 
             // We handle change management ourselves
@@ -170,7 +173,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         definitions: Record<string, T>,
         servers: Record<string, S>,
         behavior: Behavior,
-        attributeNames: ["attributeList"] | ["acceptedCommandList", "generatedCommandList"] | ["eventList"],
+        attributeNames: ["attributeList"] | ["acceptedCommandList", "generatedCommandList"] | undefined,
         addServer: (
             name: string,
             definition: T,
@@ -179,20 +182,26 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         ) => { ids: number[]; server: S },
     ) {
         const collectedIds = Array<Set<number>>();
-        attributeNames.forEach(() => collectedIds.push(new Set()));
+        if (attributeNames !== undefined) {
+            attributeNames.forEach(() => collectedIds.push(new Set()));
+        }
 
         // Create a server for each supported element and record the ID
         for (const name of names) {
             const definition = definitions[name];
             const { ids, server } = addServer(name, definition, this, behavior);
-            ids.forEach((id, index) => collectedIds[index].add(id));
+            if (attributeNames !== undefined) {
+                ids.forEach((id, index) => collectedIds[index].add(id));
+            }
             servers[name] = server;
         }
 
-        // Set the global attribute detailing supported elements
-        attributeNames.forEach((attributeName, index) => {
-            (behavior.state as Record<string, number[]>)[attributeName] = [...collectedIds[index].values()];
-        });
+        if (attributeNames !== undefined) {
+            // Set the global attribute detailing supported elements
+            attributeNames.forEach((attributeName, index) => {
+                (behavior.state as Record<string, number[]>)[attributeName] = [...collectedIds[index].values()];
+            });
+        }
     }
 }
 
@@ -324,7 +333,28 @@ function createCommandServer(name: string, definition: Command<any, any, any>, b
         try {
             activity = behavior.context?.activity?.frame(`invoke ${name}`);
 
-            result = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[name](request);
+            const invoke = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[name].bind(behavior);
+
+            // Lock if necessary, then invoke
+            if ((behavior.constructor as ClusterBehavior.Type).lockOnInvoke) {
+                const tx = behavior.context.transaction;
+                if (Resource.isLocked(behavior)) {
+                    // Automatic locking with locked resource; requires async lock acquisition
+                    result = (async function invokeAsync() {
+                        await tx.addResources(behavior);
+                        await tx.begin();
+                        return invoke(request);
+                    })();
+                } else {
+                    // Automatic locking on unlocked resource; may proceed synchronously
+                    tx.addResourcesSync(behavior);
+                    tx.beginSync();
+                    result = invoke(request);
+                }
+            } else {
+                // Automatic locking disabled
+                result = invoke(request);
+            }
 
             if (MaybePromise.is(result)) {
                 isAsync = true;
@@ -392,7 +422,7 @@ function createEventServer(name: string, definition: Event<any, any>, backing: C
     });
 
     server.assignToEndpoint(backing.server);
-    const promise = server.bindToEventHandler(backing.eventHandler);
+    const promise = server.bindToEventHandler(backing.endpoint.env.get(EventHandler));
     if (MaybePromise.is(promise)) {
         // Current code structure means this should never happen.  Refactor after removal of old API will resolve this
         throw new InternalError("Event handler binding returned a promise");

@@ -1007,6 +1007,7 @@ describe("SwitchServer", () => {
             ]);
 
             await MockTime.advance(160);
+            await MockTime.yield3();
 
             expect(events).deep.equals([
                 {
@@ -1075,6 +1076,7 @@ describe("SwitchServer", () => {
             });
 
             await MockTime.advance(160);
+            await MockTime.yield3();
 
             expect(events).deep.equals([
                 {
@@ -1188,6 +1190,7 @@ describe("SwitchServer", () => {
             });
 
             await MockTime.advance(160);
+            await MockTime.yield3();
 
             expect(events).deep.equals([
                 {
@@ -1335,6 +1338,7 @@ describe("SwitchServer", () => {
             });
 
             await MockTime.advance(160);
+            await MockTime.yield3();
 
             expect(events).deep.equals([
                 {
@@ -1475,6 +1479,7 @@ describe("SwitchServer", () => {
             });
 
             await MockTime.advance(160);
+            await MockTime.yield3();
 
             expect(events).deep.equals([
                 {

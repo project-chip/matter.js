@@ -4,21 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningBehavior } from "#behavior/system/commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
+import { ControllerBehavior } from "#behavior/system/controller/ControllerBehavior.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "#behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointServer } from "#endpoint/EndpointServer.js";
-import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
+import { EventHandler, FabricManager, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
-import { IdentityService } from "./server/IdentityService.js";
-import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
-import { ServerStore } from "./server/storage/ServerStore.js";
+import { ClientNodes } from "./client/ClientNodes.js";
+import { ServerEnvironment } from "./server/ServerEnvironment.js";
+import { ServerNodeStore } from "./storage/ServerNodeStore.js";
 
 /**
  * Thrown when there is an error during factory reset.
@@ -36,6 +37,8 @@ class FactoryResetError extends MatterError {
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
+    #nodes?: ClientNodes;
+
     /**
      * Construct a new ServerNode.
      *
@@ -58,7 +61,11 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
 
+        this.env.set(ServerNode, this);
+
         DiagnosticSource.add(this);
+
+        this.construction.start();
     }
 
     /**
@@ -95,12 +102,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     override async [Construction.destruct]() {
         await super[Construction.destruct]();
-
-        if (this.env.has(ServerStore)) {
-            const store = this.env.get(ServerStore);
-            await store.close();
-            this.env.delete(ServerStore, store);
-        }
+        await ServerEnvironment.close(this);
     }
 
     override async reset() {
@@ -110,10 +112,15 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await EndpointServer.forEndpoint(this)[Symbol.asyncDispose]();
     }
 
+    override async prepareRuntimeShutdown() {
+        const sessions = this.env.get(SessionManager);
+        await sessions.close();
+    }
+
     /**
      * Perform a factory reset of the node.
      */
-    async factoryReset() {
+    override async erase() {
         try {
             await this.construction;
 
@@ -147,21 +154,26 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         }
     }
 
+    /**
+     * Access other nodes on the fabric.
+     */
+    get nodes() {
+        if (!this.#nodes) {
+            this.#nodes = new ClientNodes(this);
+            this.#nodes.initialize();
+        }
+
+        return this.#nodes;
+    }
+
     async advertiseNow() {
         await this.act(`advertiseNow<${this}>`, agent => agent.get(NetworkServer).advertiseNow());
     }
 
     protected override async initialize() {
-        // Load the environment with node-specific services
-        const serverStore = await ServerStore.create(this.env, this.id);
+        await ServerEnvironment.initialize(this);
 
-        this.env.set(ServerStore, serverStore);
-
-        this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
-
-        this.env.set(IdentityService, new IdentityService(this));
-
-        return super.initialize();
+        await super.initialize();
     }
 
     /**
@@ -173,16 +185,26 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @see {@link MatterSpecification.v12.Core} § 13.4
      */
     protected async resetStorage() {
-        await this.env.get(ServerStore).erase();
+        await this.env.get(SessionManager).clear();
+        await this.env.get(FabricManager).clear();
+        await this.env.get(EventHandler).clear();
+        await this.env.get(ServerNodeStore).erase();
     }
+
+    /**
+     * Normal endpoints must have an owner to complete construction but server nodes have no such precondition for
+     * construction.
+     */
+    protected override assertConstructable() {}
 }
 
 export namespace ServerNode {
     export const RootEndpoint = BaseRootEndpoint.with(
-        CommissioningBehavior,
+        CommissioningServer,
         NetworkServer,
         ProductDescriptionServer,
         SessionsBehavior,
+        ControllerBehavior,
     );
 
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}

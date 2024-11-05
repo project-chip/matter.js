@@ -27,9 +27,9 @@ const PowerTopologyBase = PowerTopologyBehavior.with(
  * the SetTopology and DynamicPowerFlow features are used.
  */
 export class PowerTopologyServerLogic extends PowerTopologyBase {
-    override initialize(): void {
+    override async initialize() {
         if (this.agent.has(ElectricalPowerMeasurementBehavior) || this.agent.has(ElectricalEnergyMeasurementBehavior)) {
-            this.agent.get(DescriptorServer).addDeviceTypes("ElectricalSensor");
+            (await this.agent.load(DescriptorServer)).addDeviceTypes("ElectricalSensor");
         }
 
         if (this.state.activeEndpoints !== undefined) {

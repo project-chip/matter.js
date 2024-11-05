@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/examples",
+    "name": "@matter/examples",
     "version": "0.0.0-git",
     "description": "Matter.js examples and reference implementations",
     "keywords": [
@@ -28,45 +28,37 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "matter-light": "matter-run src/examples/LightDevice.ts",
-        "matter-sensor": "matter-run src/examples/SensorDeviceNode.ts",
-        "matter-excelsior1000": "matter-run src/examples/IlluminatedRollerShade.ts",
-        "matter-device": "matter-run src/examples/DeviceNode.ts",
-        "matter-bridge": "matter-run src/examples/BridgedDevicesNode.ts",
-        "matter-composeddevice": "matter-run src/examples/ComposedDeviceNode.ts",
-        "matter-multidevice": "matter-run src/examples/MultiDeviceNode.ts",
-        "matter-controller": "matter-run src/examples/ControllerNode.ts",
-        "matter-device-legacy": "matter-run src/examples/DeviceNodeLegacy.ts",
-        "matter-bridge-legacy": "matter-run src/examples/BridgedDevicesNodeLegacy.ts",
-        "matter-composeddevice-legacy": "matter-run src/examples/ComposedDeviceNodeLegacy.ts",
-        "matter-multidevice-legacy": "matter-run src/examples/MultiDeviceNodeLegacy.ts",
-        "matter-controller-legacy": "matter-run src/examples/ControllerNodeLegacy.ts",
-        "matter-legacystorageconverter": "matter-run src/examples/LegacyStorageConverter.ts",
-        "bundle-device": "esbuild src/examples/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/bleno --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.cjs",
+        "matter-light": "matter-run src/device-onoff-light/LightDevice.ts",
+        "matter-measuredsocket": "matter-run src/device-measuring-socket/MeasuredSocketDevice.ts",
+        "matter-sensor": "matter-run src/device-sensor/SensorDeviceNode.ts",
+        "matter-excelsior1000": "matter-run src/device-composed-wc-light/IlluminatedRollerShade.ts",
+        "matter-device": "matter-run src/device-onoff/DeviceNode.ts",
+        "matter-bridge": "matter-run src/device-bridge-onoff/BridgedDevicesNode.ts",
+        "matter-composeddevice": "matter-run src/device-composed-onoff/ComposedDeviceNode.ts",
+        "matter-multidevice": "matter-run src/device-multiple-onoff/MultiDeviceNode.ts",
+        "matter-controller": "matter-run src/controller/ControllerNode.ts",
+        "bundle-device": "esbuild src/device-onoff/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/bleno --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.cjs",
         "matter-device-bundled": "node --enable-source-maps build/bundle/DeviceNode.cjs"
     },
     "bin": {
-        "matter-light": "dist/esm/examples/LightDevice.ts",
-        "matter-excelsior1000": "dist/esm/examples/IlluminatedRollerShade.ts",
-        "matter-sensor": "dist/esm/examples/SensorDeviceNode.js",
-        "matter-device": "dist/esm/examples/DeviceNode.js",
-        "matter-bridge": "dist/esm/examples/BridgedDevicesNode.js",
-        "matter-composeddevice": "dist/esm/examples/ComposedDeviceNode.js",
-        "matter-multidevice": "dist/esm/examples/MultiDeviceNode.js",
-        "matter-controller": "dist/esm/examples/ControllerNode.js",
-        "matter-device-legacy": "dist/esm/examples/DeviceNodeLegacy.js",
-        "matter-bridge-legacy": "dist/esm/examples/BridgedDevicesNodeLegacy.js",
-        "matter-composeddevice-legacy": "dist/esm/examples/ComposedDeviceNodeLegacy.js",
-        "matter-multidevice-legacy": "dist/esm/examples/MultiDeviceNodeLegacy.js",
-        "matter-controller-legacy": "dist/esm/examples/ControllerNodeLegacy.js",
-        "matter-legacystorageconverter": "dist/esm/examples/LegacyStorageConverter.js"
-    },
-    "devDependencies": {
-        "typescript": "~5.5.3",
-        "@matter.js/tools": "*"
+        "matter-light": "dist/esm/device-onoff-light/LightDevice.ts",
+        "matter-measuredsocket": "dist/esm/device-measuring-socket/MeasuredSocketDevice.ts",
+        "matter-excelsior1000": "dist/esm/device-composed-wc-light/IlluminatedRollerShade.ts",
+        "matter-sensor": "dist/esm/device-sensor/SensorDeviceNode.js",
+        "matter-device": "dist/esm/device-onoff/DeviceNode.js",
+        "matter-bridge": "dist/esm/device-bridge-onoff/BridgedDevicesNode.js",
+        "matter-composeddevice": "dist/esm/device-composed-onoff/ComposedDeviceNode.js",
+        "matter-multidevice": "dist/esm/device-multiple-onoff/MultiDeviceNode.js",
+        "matter-controller": "dist/esm/controller/ControllerNode.js"
     },
     "dependencies": {
-        "@matter.js/main": "*"
+        "@matter/main": "*",
+        "@matter/nodejs": "*",
+        "@matter/tools": "*",
+        "esbuild": "^0.24.0"
+    },
+    "optionalDependencies": {
+        "@matter/nodejs-ble": "*"
     },
     "engines": {
         "node": ">=18.0.0"

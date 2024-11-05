@@ -1,8 +1,14 @@
 {
-    "extends": "../../tools/tsconfig.base.json",
+    "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
-        "outDir": "../dist/esm",
-        "types": ["@matter.js/tools", "globals"]
+        "types": [
+            "@matter/testing",
+            "globals"
+        ]
     },
-    "references": [{ "path": "../../tools/src" }]
+    "references": [
+        {
+            "path": "../../testing/src"
+        }
+    ]
 }

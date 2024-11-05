@@ -6,9 +6,9 @@
 
 import { MaybePromise } from "../util/Promises.js";
 import { Storage, StorageError } from "./Storage.js";
-import { StorageContext } from "./StorageContext.js";
+import { StorageContext, StorageContextFactory } from "./StorageContext.js";
 
-export class StorageManager<S extends Storage = any> {
+export class StorageManager<S extends Storage = any> implements StorageContextFactory<S> {
     private initialized = false;
 
     constructor(private storage: S) {}

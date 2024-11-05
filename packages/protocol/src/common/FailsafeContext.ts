@@ -5,8 +5,6 @@
  */
 
 import { AsyncObservable, Construction, Logger, MatterFlowError, UnexpectedDataError } from "#general";
-import { MatterDevice } from "#MatterDevice.js";
-import { Session } from "#session/Session.js";
 import { CaseAuthenticatedTag, NodeId, ValidationError, VendorId } from "#types";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
@@ -61,10 +59,6 @@ export abstract class FailsafeContext {
             );
             logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
         });
-    }
-
-    static of(session: Session) {
-        return MatterDevice.of(session).failsafeContext;
     }
 
     async extend(fabric: Fabric | undefined, expiryLengthSeconds: number) {
@@ -137,7 +131,7 @@ export abstract class FailsafeContext {
     }
 
     getNextFabricIndex() {
-        return this.#fabrics.getNextFabricIndex();
+        return this.#fabrics.allocateFabricIndex();
     }
 
     async addFabric(fabric: Fabric) {
@@ -150,7 +144,7 @@ export abstract class FailsafeContext {
 
     async updateFabric(fabric: Fabric) {
         await this.#fabrics.updateFabric(fabric);
-        await this.#sessions.updateFabricForResumptionRecords(fabric);
+        await this.#sessions.deleteResumptionRecordsForFabric(fabric);
     }
 
     /**
@@ -233,7 +227,7 @@ export abstract class FailsafeContext {
         }
 
         builder.setOperationalCert(nocValue, icacValue);
-        const fabricAlreadyExisting = this.#fabrics.getFabrics().find(fabric => builder.matchesToFabric(fabric));
+        const fabricAlreadyExisting = this.#fabrics.find(fabric => builder.matchesToFabric(fabric));
 
         if (fabricAlreadyExisting) {
             throw new MatterFabricConflictError(
@@ -245,7 +239,7 @@ export abstract class FailsafeContext {
             .setRootVendorId(adminVendorId)
             .setIdentityProtectionKey(ipkValue)
             .setRootNodeId(caseAdminSubject)
-            .build(this.#fabrics.getNextFabricIndex());
+            .build(this.#fabrics.allocateFabricIndex());
     }
 
     async #failSafeExpired() {
@@ -270,9 +264,9 @@ export abstract class FailsafeContext {
         let fabric: Fabric | undefined = undefined;
         if (this.fabricIndex !== undefined) {
             const fabricIndex = this.fabricIndex;
-            fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
+            fabric = this.#fabrics.for(fabricIndex);
             if (fabric !== undefined) {
-                const session = this.#sessions.getSessionForNode(fabric, fabric.rootNodeId);
+                const session = this.#sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session !== undefined && session.isSecure) {
                     await session.close(false);
                 }
@@ -296,7 +290,7 @@ export abstract class FailsafeContext {
         if (!this.#forUpdateNoc && fabric !== undefined) {
             const fabricIndex = this.fabricIndex;
             if (fabricIndex !== undefined) {
-                const fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
+                const fabric = this.#fabrics.for(fabricIndex);
                 if (fabric !== undefined) {
                     await this.revokeFabric(fabric);
                 }

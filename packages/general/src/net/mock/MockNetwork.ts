@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ChannelType } from "#net/Channel.js";
 import { isIPv4 } from "../../util/Ip.js";
 import { Network, NetworkInterface, NetworkInterfaceDetails } from "../Network.js";
 import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
@@ -33,5 +34,9 @@ export class MockNetwork extends Network {
 
     override createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel> {
         return MockUdpChannel.create(this, options);
+    }
+
+    supports(type: ChannelType, _address: string) {
+        return type === ChannelType.UDP;
     }
 }

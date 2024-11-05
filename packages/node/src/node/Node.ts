@@ -5,14 +5,18 @@
  */
 
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
+import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
+import { PartsBehavior } from "#behavior/system/parts/PartsBehavior.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
+import { MutableEndpoint } from "#endpoint/index.js";
 import { EndpointType } from "#endpoint/type/EndpointType.js";
 import {
     Construction,
     Diagnostic,
     DiagnosticSource,
     Environment,
+    Identity,
     ImplementationError,
     Logger,
     RuntimeService,
@@ -27,12 +31,12 @@ const logger = Logger.get("Node");
  *
  * In Matter, a "node" is an individually addressable top-level network resource.
  */
-export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
+export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> extends Endpoint<T> {
     #environment: Environment;
     #runtime?: NetworkRuntime;
 
     constructor(config: Node.Configuration<T>) {
-        const parentEnvironment = config.environment ?? Environment.default;
+        const parentEnvironment = config.environment ?? config.owner?.env ?? Environment.default;
 
         if (config.id === undefined) {
             config.id = `node${parentEnvironment.vars.increment("node.nextFallbackId")}`;
@@ -53,8 +57,6 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
             this.number = 0;
         }
 
-        this.construction.start();
-
         this.lifecycle.online.on(() => {
             this.statusUpdate("is online");
         });
@@ -62,16 +64,17 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
         this.lifecycle.offline.on(() => {
             this.statusUpdate("is offline");
         });
+
+        this.lifecycle.goingOffline.on(() => {
+            this.statusUpdate("going offline");
+        });
     }
 
     override get env() {
         return this.#environment;
     }
 
-    /**
-     * Lifecycle information.
-     */
-    override createLifecycle(): NodeLifecycle {
+    protected override createLifecycle(): NodeLifecycle {
         return new NodeLifecycle(this);
     }
 
@@ -124,7 +127,7 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
             return;
         }
 
-        this.statusUpdate("going offline");
+        await this.act(agent => this.lifecycle.goingOffline.emit(agent.context));
         await this.#runtime?.close();
         this.#runtime = undefined;
     }
@@ -146,11 +149,13 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
      */
     protected abstract createRuntime(): NetworkRuntime;
 
+    abstract prepareRuntimeShutdown(): Promise<void>;
+
     get [RuntimeService.label]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];
     }
 
-    get [Diagnostic.value](): unknown {
+    override get [Diagnostic.value](): unknown {
         const nodeActivity = this.#environment.get(NodeActivity);
         using _activity = nodeActivity.begin("diagnostics");
         return Diagnostic.node("🧩", this.id, {
@@ -164,7 +169,6 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
     }
 
     override get lifecycle(): NodeLifecycle {
-        // We only have to override the lifecycle getter so
         return super.lifecycle as NodeLifecycle;
     }
 
@@ -177,12 +181,6 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
         await super[Construction.destruct]();
         DiagnosticSource.delete(this);
     }
-
-    /**
-     * Normal endpoints must have an owner to complete construction but Nodes have no such precondition for
-     * construction.
-     */
-    protected override assertConstructable() {}
 }
 
 export namespace Node {
@@ -190,9 +188,12 @@ export namespace Node {
         environment?: Environment;
     }
 
-    export type Options<T extends RootEndpoint = RootEndpoint> = Endpoint.Options<T, NodeOptions>;
+    export type Options<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> = Endpoint.Options<T, NodeOptions>;
 
-    export type Configuration<T extends RootEndpoint = RootEndpoint> = Endpoint.Configuration<T, NodeOptions>;
+    export type Configuration<T extends Node.CommonRootEndpoint = Node.CommonRootEndpoint> = Endpoint.Configuration<
+        T,
+        NodeOptions
+    >;
 
     export function nodeConfigFor<T extends RootEndpoint>(
         defaultType: T,
@@ -219,4 +220,21 @@ export namespace Node {
             ...configuration,
         } as Endpoint.Configuration<T>;
     }
+
+    /**
+     * Common root endpoint definition for all nodes.
+     */
+    export const CommonRootEndpoint = MutableEndpoint({
+        name: RootEndpoint.name,
+        deviceType: RootEndpoint.deviceType,
+        deviceRevision: RootEndpoint.deviceRevision,
+        deviceClass: RootEndpoint.deviceClass,
+        requirements: RootEndpoint.requirements,
+        behaviors: {
+            parts: PartsBehavior,
+            index: IndexBehavior,
+        },
+    });
+
+    export interface CommonRootEndpoint extends Identity<typeof CommonRootEndpoint> {}
 }

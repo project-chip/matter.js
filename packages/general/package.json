@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/general",
+    "name": "@matter/general",
     "version": "0.0.0-git",
     "description": "Non-Matter support for Matter.js",
     "keywords": [
@@ -36,8 +36,7 @@
         "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",

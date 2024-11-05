@@ -1,8 +1,22 @@
 {
-    "extends": "../../tools/tsconfig.base.json",
+    "extends": "../../tools/tsc/tsconfig.app.json",
     "compilerOptions": {
-        "outDir": "../dist/cjs",
-        "types": ["node"]
+        "types": [
+            "node"
+        ]
     },
-    "references": [{ "path": "../../matter-node.js/src" }, { "path": "../../matter-node-ble.js/src" }]
+    "references": [
+        {
+            "path": "../../general/src"
+        },
+        {
+            "path": "../../matter.js/src"
+        },
+        {
+            "path": "../../nodejs-ble/src"
+        },
+        {
+            "path": "../../nodejs/src"
+        }
+    ]
 }

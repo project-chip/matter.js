@@ -7,3 +7,5 @@ packages/node/src/devices/* linguist-generated=true
 packages/node/src/behaviors/*/index.ts linguist-generated=true
 packages/node/src/behaviors/*/*Behavior.ts linguist-generated=true
 packages/node/src/behaviors/*/*Interface.ts linguist-generated=true
+packages/main/src/forwards/* linguist-generated=true
+packages/matter.js/src/forwards/* linguist-generated=true

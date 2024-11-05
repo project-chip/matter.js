@@ -79,7 +79,7 @@ export function writeMatterFile(path: string, body: any) {
         body = body.toString();
     }
 
-    // Compilation is slowest part of our toolchain so it's worth the expense to compare and old and new files so we can
+    // Compilation is slowest part of our toolchain so it's worth the expense to compare old and new files so we can
     // avoid updating timestamps
     const newHash = createHash("md5").update(body).digest("hex");
     if (currentHash === newHash) {

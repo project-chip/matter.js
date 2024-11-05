@@ -28,9 +28,12 @@ export type RequirementElement = BaseElement & {
     children?: (RequirementElement | FieldElement)[];
 };
 
-export function RequirementElement(definition: RequirementElement.Properties) {
+export function RequirementElement(
+    definition: RequirementElement.Properties,
+    ...children: (RequirementElement | FieldElement)[]
+) {
     return {
-        ...BaseElement(RequirementElement.Tag, definition),
+        ...BaseElement(RequirementElement.Tag, definition, children),
         tag: RequirementElement.Tag,
     } as RequirementElement;
 }

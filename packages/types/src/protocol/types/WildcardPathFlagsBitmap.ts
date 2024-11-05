@@ -18,8 +18,7 @@ export const WildcardPathFlagsBitmap = {
     /** Skip the AttributeList global attribute during wildcard expansion. */
     skipAttributeList: BitFlag(2),
 
-    /** Skip the EventList global attribute during wildcard expansion. */
-    skipEventList: BitFlag(3),
+    reserved1: BitFlag(3), // removed, so bit reserved
 
     /** Skip the AcceptedCommandList and GeneratedCommandList global attributes during wildcard expansion. */
     skipCommandLists: BitFlag(4),

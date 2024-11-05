@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual, serialize } from "@matter.js/general";
+import { isDeepEqual, serialize } from "@matter/general";
 import { DefinitionError } from "../common/DefinitionError.js";
 
 /**

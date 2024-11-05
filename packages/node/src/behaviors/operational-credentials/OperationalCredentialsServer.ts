@@ -6,7 +6,7 @@
 
 import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { CommissioningBehavior } from "#behavior/system/commissioning/CommissioningBehavior.js";
+import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
 import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl } from "#clusters/access-control";
@@ -19,12 +19,11 @@ import {
     assertSecureSession,
     CertificateError,
     DeviceCertification,
+    DeviceCommissioner,
     Fabric,
     FabricAction,
     FabricManager,
     FabricTableFullError,
-    FailsafeContext,
-    MatterDevice,
     MatterFabricConflictError,
     MatterFabricInvalidAdminSubjectError,
     PublicKeyError,
@@ -77,8 +76,8 @@ OperationalCredentials.Cluster.commands = {
  * This is the default server implementation of OperationalCredentialsBehavior.
  *
  * TODO - currently "source of truth" for fabric data is persisted by FabricManager.  If we remove some legacy code
- * paths we can move source of truth to here.  Right now we just sync fabrics with MatterDevice.  This sync is only as
- * comprehensive as required by current use cases.  If fabrics are mutated directly on MatterDevice then this code will
+ * paths we can move source of truth to here.  Right now we just sync fabrics with FabricManager.  This sync is only as
+ * comprehensive as required by current use cases.  If fabrics are mutated directly on FabricManager then this code will
  * require update.
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
@@ -125,7 +124,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        const failsafeContext = FailsafeContext.of(this.session);
+        const commissioner = this.env.get(DeviceCommissioner);
+        const failsafeContext = commissioner.failsafeContext;
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
                 `csrRequest received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
@@ -201,7 +201,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         caseAdminSubject,
         adminVendorId,
     }: OperationalCredentials.AddNocRequest) {
-        const failsafeContext = MatterDevice.of(this.session).failsafeContext;
+        const failsafeContext = this.#failsafeContext;
 
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -281,7 +281,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 );
             }
         } catch (e) {
-            // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
+            // Fabric insertion into FabricManager is not currently transactional so we need to remove manually
             await fabric.remove(this.session.id);
             throw e;
         }
@@ -304,7 +304,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     override async updateNoc({ nocValue, icacValue }: OperationalCredentials.UpdateNocRequest) {
         assertSecureSession(this.session);
 
-        const timedOp = FailsafeContext.of(this.session);
+        const timedOp = this.#failsafeContext;
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -359,10 +359,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const fabric = this.session.associatedFabric;
 
         const currentFabricIndex = fabric.fabricIndex;
-        const device = this.session.context;
-        const conflictingLabelFabric = device
-            .getFabrics()
-            .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
+        const fabrics = this.env.get(FabricManager);
+        const conflictingLabelFabric = fabrics.find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
         if (conflictingLabelFabric !== undefined) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.LabelConflict,
@@ -376,7 +374,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async removeFabric({ fabricIndex }: OperationalCredentials.RemoveFabricRequest) {
-        const fabric = MatterDevice.of(this.session).getFabricByIndex(fabricIndex);
+        const fabric = this.env.get(FabricManager).findByIndex(fabricIndex);
 
         if (fabric === undefined) {
             return {
@@ -395,7 +393,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override addTrustedRootCertificate({ rootCaCertificate }: OperationalCredentials.AddTrustedRootCertificateRequest) {
-        const failsafeContext = FailsafeContext.of(this.session);
+        const failsafeContext = this.#failsafeContext;
 
         if (failsafeContext.hasRootCert) {
             throw new StatusResponseError(
@@ -426,14 +424,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw error;
         }
 
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         const trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
         trustedRootCertificates.push(rootCaCertificate);
         this.state.trustedRootCertificates = trustedRootCertificates;
     }
 
     async #updateFabrics() {
-        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const fabrics = this.env.get(FabricManager);
         this.state.fabrics = fabrics.map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,
@@ -471,17 +469,17 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
     async #handleAddedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Added);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Added);
     }
 
     async #handleUpdatedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Updated);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Updated);
     }
 
     async #handleRemovedFabric({ fabricIndex }: Fabric) {
         await this.#updateFabrics();
-        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Removed);
+        this.agent.get(CommissioningServer).handleFabricChange(fabricIndex, FabricAction.Removed);
     }
 
     async #handleFailsafeClosed() {
@@ -489,12 +487,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     async #nodeOnline() {
-        const fabricManager = this.endpoint.env.get(FabricManager);
+        const fabricManager = this.env.get(FabricManager);
         this.reactTo(fabricManager.events.added, this.#handleAddedFabric, { lock: true });
         this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric, { lock: true });
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric, { lock: true });
         this.reactTo(fabricManager.events.failsafeClosed, this.#handleFailsafeClosed, { lock: true });
         await this.#updateFabrics();
+    }
+
+    get #failsafeContext() {
+        return this.env.get(DeviceCommissioner).failsafeContext;
     }
 }
 

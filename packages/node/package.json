@@ -1,5 +1,5 @@
 {
-    "name": "@matter.js/node",
+    "name": "@matter/node",
     "version": "0.0.0-git",
     "description": "API for building Matter nodes",
     "keywords": [
@@ -31,11 +31,11 @@
         "embed-examples": "embedme **/README.md"
     },
     "imports": {
-        "#general": "@matter.js/general",
-        "#model": "@matter.js/model",
-        "#types": "@matter.js/types",
-        "#protocol": "@matter.js/protocol",
-        "#clusters/*": "@matter.js/types/clusters/*",
+        "#general": "@matter/general",
+        "#model": "@matter/model",
+        "#types": "@matter/types",
+        "#protocol": "@matter/protocol",
+        "#clusters/*": "@matter/types/clusters/*",
         "#behaviors/*": "./src/behaviors/*/index.js",
         "#endpoints/*": "./src/endpoints/*.js",
         "#devices/*": "./src/devices/*.js",
@@ -43,14 +43,14 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@matter.js/general": "*",
-        "@matter.js/model": "*",
-        "@matter.js/types": "*",
-        "@matter.js/protocol": "*"
+        "@matter/general": "*",
+        "@matter/model": "*",
+        "@matter/types": "*",
+        "@matter/protocol": "*"
     },
     "devDependencies": {
-        "@matter.js/tools": "*",
-        "typescript": "~5.5.3"
+        "@matter/tools": "*",
+        "@matter/testing": "*"
     },
     "files": [
         "dist/**/*",
@@ -70,6 +70,16 @@
             "require": {
                 "types": "./dist/cjs/index.d.ts",
                 "default": "./dist/cjs/index.js"
+            }
+        },
+        "./load": {
+            "import": {
+                "types": "./dist/esm/loader/load.d.ts",
+                "default": "./dist/esm/loader/load.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/loader/load.d.ts",
+                "default": "./dist/cjs/loader/load.cjs"
             }
         },
         "./behaviors": {

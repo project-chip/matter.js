@@ -5,8 +5,7 @@
  */
 
 import { Bytes } from "#general";
-import { TypeFromSchema } from "#types";
-import { SecureMessageType } from "../../securechannel/SecureChannelMessages.js";
+import { SecureMessageType, TypeFromSchema } from "#types";
 import {
     DEFAULT_NORMAL_PROCESSING_TIME_MS,
     SecureChannelMessenger,

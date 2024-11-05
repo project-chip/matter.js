@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterElement } from "@matter.js/model";
+import { MatterElement } from "@matter/model";
 
 /**
  * This is a partial Matter model that adds elements and properties unavailable

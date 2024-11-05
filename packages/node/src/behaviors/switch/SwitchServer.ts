@@ -88,7 +88,7 @@ export class SwitchServerLogic extends SwitchServerBase {
             this.internal.debounceTimer = Time.getTimer(
                 "debounce",
                 this.state.debounceDelay,
-                this.callback(this.#setCurrentPositionAfterDebounce),
+                this.callback(this.#setCurrentPositionAfterDebounce, { lock: true }),
             ).start();
         } else {
             this.state.currentPosition = newPosition;
@@ -143,7 +143,7 @@ export class SwitchServerLogic extends SwitchServerBase {
                 this.internal.longPressTimer = Time.getTimer(
                     "longPress",
                     this.state.longPressDelay,
-                    this.callback(this.#handleLongPress),
+                    this.callback(this.#handleLongPress, { lock: true }),
                 ).start();
             }
         } else if (this.features.momentarySwitchRelease && newPosition === this.state.momentaryNeutralPosition) {
@@ -178,7 +178,7 @@ export class SwitchServerLogic extends SwitchServerBase {
             this.internal.multiPressTimer = Time.getTimer(
                 "multiPress",
                 this.state.multiPressDelay,
-                this.callback(this.#handleMultiPressComplete),
+                this.callback(this.#handleMultiPressComplete, { lock: true }),
             ).start();
             if (this.internal.previouslyReportedPosition !== this.state.momentaryNeutralPosition) {
                 this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;

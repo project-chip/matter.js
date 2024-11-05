@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, InternalError, Logger, Time, createPromise } from "@matter.js/general";
-import { require } from "@matter.js/nodejs-ble/require";
+import { Channel, InternalError, Logger, Time, createPromise } from "@matter/general";
+import { require } from "@matter/nodejs-ble/require";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -16,8 +16,8 @@ import {
     BleError,
     BtpFlowError,
     BtpSessionHandler,
-} from "@project-chip/matter.js/ble";
-import { ChannelNotConnectedError } from "@project-chip/matter.js/protocol";
+    ChannelNotConnectedError,
+} from "@matter/protocol";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("BlenoBleServer");
@@ -135,7 +135,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
-    private clientAddress: string | undefined;
+    public clientAddress: string | undefined;
     private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
         this.btpHandshakeTimeoutTriggered(),
     );

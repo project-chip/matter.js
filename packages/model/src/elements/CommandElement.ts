@@ -22,8 +22,8 @@ export interface CommandElement extends ValueElement {
     response?: string;
 }
 
-export function CommandElement(definition: CommandElement.Properties) {
-    return ValueElement(CommandElement.Tag, definition) as CommandElement;
+export function CommandElement(definition: CommandElement.Properties, ...children: ValueElement[]) {
+    return ValueElement(CommandElement.Tag, definition, children) as CommandElement;
 }
 
 export namespace CommandElement {

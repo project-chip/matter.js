@@ -17,7 +17,7 @@ export type SemanticTagElement = BaseElement & {
 };
 
 export function SemanticTagElement(definition: SemanticTagElement.Properties) {
-    return BaseElement(SemanticTagElement.Tag, definition) as SemanticTagElement;
+    return BaseElement(SemanticTagElement.Tag, definition, []) as SemanticTagElement;
 }
 
 export namespace SemanticTagElement {

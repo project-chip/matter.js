@@ -1,0 +1,248 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { CommissioningDiscovery, ContinuousDiscovery, Discovery, InstanceDiscovery } from "#behavior/index.js";
+import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
+import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
+import { CancelablePromise, Lifespan, Time } from "#general";
+import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
+import { PeerAddress, PeerAddressStore } from "#protocol";
+import { ClientNode } from "../ClientNode.js";
+import type { ServerNode } from "../ServerNode.js";
+import { ClientNodeFactory } from "./ClientNodeFactory.js";
+import { NodePeerStore } from "./NodePeerStore.js";
+
+const DEFAULT_TTL = 900 * 1000;
+const EXPIRATION_INTERVAL = 60 * 1000;
+
+/**
+ * Manages the set of known remote nodes.
+ *
+ * Remote nodes are either peers (commissioned into a fabric we share) or commissionable.
+ */
+export class ClientNodes extends EndpointContainer<ClientNode> {
+    #expirationInterval: CancelablePromise | undefined;
+
+    constructor(owner: ServerNode) {
+        super(owner);
+
+        if (!owner.env.has(ClientNodeFactory)) {
+            owner.env.set(ClientNodeFactory, new Factory(this));
+        }
+
+        this.owner.env.set(PeerAddressStore, new NodePeerStore(owner));
+
+        this.added.on(this.#manageExpiration.bind(this));
+        this.deleted.on(this.#manageExpiration.bind(this));
+    }
+
+    /**
+     * Load nodes.  Invoked automatically by owner.
+     */
+    initialize() {
+        const factory = this.owner.env.get(ClientNodeFactory);
+
+        const clientStores = this.owner.env.get(ServerNodeStore).clientStores;
+        for (const id of clientStores.knownIds) {
+            this.add(
+                factory.create({
+                    id,
+                    owner: this.owner,
+                }),
+            );
+        }
+    }
+
+    /**
+     * Find a specific commissionable node.
+     */
+    locate(options?: Discovery.Options) {
+        return new InstanceDiscovery(this.owner, options);
+    }
+
+    /**
+     * Employ discovery to find a set of commissionable nodes.
+     *
+     * If you do not provide a timeout value, will search until canceled and you need to add a listener to
+     * {@link Discovery#discovered} or {@link added} to receive discovered nodes.
+     */
+    discover(options?: Discovery.Options) {
+        return new ContinuousDiscovery(this.owner, options);
+    }
+
+    /**
+     * Find a specific commissionable node and commission.
+     */
+    commission(passcode: number, discriminator?: number): Promise<ClientNode>;
+
+    /**
+     * Find a specific commissionable node and commission.
+     */
+    commission(options: CommissioningDiscovery.Options): Promise<ClientNode>;
+
+    commission(optionsOrPasscode: CommissioningDiscovery.Options | number, discriminator?: number) {
+        if (typeof optionsOrPasscode !== "object") {
+            optionsOrPasscode = { passcode: optionsOrPasscode };
+        }
+
+        if (discriminator !== undefined) {
+            (optionsOrPasscode as { longDiscriminator: number }).longDiscriminator = discriminator;
+        }
+
+        return new CommissioningDiscovery(this.owner, optionsOrPasscode);
+    }
+
+    override get(id: string | PeerAddress) {
+        if (typeof id !== "string") {
+            const address = PeerAddress(id);
+            for (const node of this) {
+                const nodeAddress = node.state.commissioning.peerAddress;
+                if (nodeAddress && PeerAddress(nodeAddress) === address) {
+                    return node;
+                }
+            }
+            return undefined;
+        }
+
+        return super.get(id);
+    }
+
+    override get owner() {
+        return super.owner as ServerNode;
+    }
+
+    override add(node: ClientNode) {
+        node.owner = this.owner;
+
+        super.add(node);
+    }
+
+    override async close() {
+        this.#cancelExpiration();
+        await super.close();
+    }
+
+    #cancelExpiration() {
+        if (this.#expirationInterval) {
+            this.#expirationInterval.cancel();
+            this.#expirationInterval = undefined;
+        }
+    }
+
+    #manageExpiration() {
+        if (this.#expirationInterval) {
+            if (!this.size) {
+                this.#cancelExpiration();
+            }
+            return;
+        }
+
+        if (!this.size) {
+            return;
+        }
+
+        this.#expirationInterval = Time.sleep("client node expiration", EXPIRATION_INTERVAL).then(async () => {
+            this.#expirationInterval = undefined;
+            try {
+                await this.#cullExpiredNodesAndAddresses();
+            } finally {
+                this.#manageExpiration();
+            }
+        });
+    }
+
+    async #cullExpiredNodesAndAddresses() {
+        const now = Time.nowMs();
+
+        for (const node of this) {
+            const state = node.state.commissioning;
+            const { addresses } = state;
+            const isCommissioned = state.peerAddress !== undefined;
+
+            // Shortcut for conditions we know no change is possible
+            if (addresses === undefined || (isCommissioned && addresses.length === 1)) {
+                return;
+            }
+
+            // Remove expired addresses
+            let newAddresses = addresses.filter(addr => {
+                const exp = expirationOf(addr);
+                if (exp === undefined) {
+                    return true;
+                }
+
+                return exp > now;
+            });
+
+            // Cull commissionable nodes that have expired
+            if (!isCommissioned) {
+                if (!newAddresses?.length || expirationOf(state) <= now) {
+                    await node.delete();
+                    continue;
+                }
+            }
+
+            // If the node is commissioned, do not remove the last address.  Instead keep the "least expired" addresses
+            if (isCommissioned && addresses.length && !newAddresses.length) {
+                if (addresses.length === 1) {
+                    return;
+                }
+                const freshestExp = addresses.reduce((freshestExp, addr) => {
+                    return Math.max(freshestExp, expirationOf(addr)!);
+                }, 0);
+
+                newAddresses = addresses.filter(addr => expirationOf(addr) === freshestExp);
+            }
+
+            // Apply new addresses if changed
+            if (addresses.length !== newAddresses.length) {
+                await node.set({ commissioning: { addresses } });
+            }
+        }
+    }
+}
+
+class Factory extends ClientNodeFactory {
+    #owner: ClientNodes;
+
+    constructor(owner: ClientNodes) {
+        super();
+        this.#owner = owner;
+    }
+
+    create(options: ClientNode.Options) {
+        if (options.id === undefined) {
+            options.id = this.#owner.owner.env.get(ServerNodeStore).clientStores.allocateId();
+        }
+        const node = new ClientNode({
+            ...options,
+            owner: this.#owner.owner,
+        });
+        node.construction.start();
+        return node;
+    }
+
+    find(descriptor: RemoteDescriptor) {
+        for (const node of this.#owner) {
+            if (RemoteDescriptor.is(node.state.commissioning, descriptor)) {
+                return node;
+            }
+        }
+    }
+
+    get nodes() {
+        return this.#owner;
+    }
+}
+
+function expirationOf<T extends Partial<Lifespan>>(
+    lifespan: T,
+): T extends { discoveredAt: number } ? number : number | undefined {
+    if (lifespan.discoveredAt !== undefined) {
+        return lifespan.discoveredAt + (lifespan.ttl ?? DEFAULT_TTL);
+    }
+    return undefined as unknown as number;
+}
