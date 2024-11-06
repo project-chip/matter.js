@@ -31,6 +31,7 @@
     "dependencies": {
         "@matter/general": "*",
         "@matter/nodejs": "*",
+        "@matter/types": "*",
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {

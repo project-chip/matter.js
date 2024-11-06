@@ -776,8 +776,8 @@ export class InteractionClient {
     }
 
     async subscribeMultipleAttributesAndEvents(options: {
-        attributes: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
-        events: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId; isUrgent?: boolean }[];
+        attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+        events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId; isUrgent?: boolean }[];
         minIntervalFloorSeconds: number;
         maxIntervalCeilingSeconds: number;
         keepSubscriptions?: boolean;
@@ -795,8 +795,8 @@ export class InteractionClient {
         eventReports?: DecodedEventReportValue<any>[];
     }> {
         const {
-            attributes: attributeRequests,
-            events: eventRequests,
+            attributes: attributeRequests = [],
+            events: eventRequests = [],
             executeQueued,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
