@@ -84,8 +84,10 @@ export class NobleBleClient {
 
     public async stopScanning() {
         this.shouldScan = false;
-        logger.debug("Stop BLE scanning for Matter Services ...");
-        await noble.stopScanningAsync();
+        if (this.isScanning) {
+            logger.debug("Stop BLE scanning for Matter Services ...");
+            await noble.stopScanningAsync();
+        }
     }
 
     private handleDiscoveredDevice(peripheral: Peripheral) {
