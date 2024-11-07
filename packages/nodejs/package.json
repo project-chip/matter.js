@@ -78,6 +78,17 @@
                 "types": "./dist/cjs/index.d.ts",
                 "default": "./dist/cjs/index.js"
             }
+        },
+
+        "./config": {
+            "import": {
+                "types": "./dist/esm/config.d.ts",
+                "default": "./dist/esm/config.js"
+            },
+            "require": {
+                "types": "./dist/cjs/config.d.ts",
+                "default": "./dist/cjs/config.js"
+            }
         }
     },
     "types": "dist/esm/index.d.ts",

@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/nodejs
+    - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
+
 ## 0.11.4 (2024-11-07)
 
 -   Matter cluster definitions and implementations
