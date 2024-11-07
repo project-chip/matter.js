@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.4 (2024-11-07)
 
 -   Matter cluster definitions and implementations
     - Fix: Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
