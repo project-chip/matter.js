@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node.js",
-    "version": "0.10.6",
+    "version": "0.10.7",
     "description": "Matter protocol for node.js",
     "keywords": [
         "iot",
@@ -31,14 +31,14 @@
         "test": "matter-test"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.6",
+        "@project-chip/matter.js-tools": "0.10.7",
         "@types/bytebuffer": "^5.0.49",
         "@types/node-localstorage": "^1.3.3",
         "ts-node": "^10.9.2",
         "typescript": "~5.5.3"
     },
     "dependencies": {
-        "@project-chip/matter.js": "0.10.6",
+        "@project-chip/matter.js": "0.10.7",
         "node-localstorage": "^3.0.5"
     },
     "engines": {
