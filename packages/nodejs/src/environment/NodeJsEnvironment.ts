@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { config } from "#config.js";
 import {
     Environment,
     ImplementationError,
@@ -32,7 +33,9 @@ import { ProcessManager } from "./ProcessManager.js";
  *
  * You can modify this behavior:
  *
- *   - Via configuration
+ *   - Explicitly (see {@link config})
+ *
+ *   - Via configuration (file, command line or system environment variables)
  *
  *   - By modifying {@link Environment.default}
  *
@@ -73,6 +76,8 @@ export function NodeJsEnvironment() {
 
     NodeJsActionTracer.configure(env);
 
+    config.isInitialized = true;
+
     return env;
 }
 
@@ -83,16 +88,26 @@ function loadVariables(env: Environment) {
     vars.addConfigStyle(getDefaults(vars));
 
     // Preload environment and argv so we can use it to find config file
-    vars.addUnixEnvStyle(process.env);
-    vars.addArgvStyle(process.argv);
+    if (config.loadProcessArgv) {
+        vars.addUnixEnvStyle(process.env);
+    }
+    if (config.loadProcessEnv) {
+        vars.addArgvStyle(process.argv);
+    }
 
     // Load config files
     const { configPath, configVars } = loadConfigFile(vars);
-    vars.addConfigStyle(configVars);
+    if (config.loadConfigFile) {
+        vars.addConfigStyle(configVars);
+    }
 
     // Reload environment and argv so they override config
-    vars.addUnixEnvStyle(process.env);
-    vars.addArgvStyle(process.argv);
+    if (config.loadProcessArgv) {
+        vars.addUnixEnvStyle(process.env);
+    }
+    if (config.loadProcessEnv) {
+        vars.addArgvStyle(process.argv);
+    }
 
     // Enable persistent configuration values
     vars.persistConfigValue = async (name: string, value: VariableService.Value) => {
@@ -110,6 +125,10 @@ function configureRuntime(env: Environment) {
 }
 
 function configureStorage(env: Environment) {
+    if (!config.initializeStorage) {
+        return;
+    }
+
     const service = env.get(StorageService);
 
     env.vars.use(() => {
@@ -149,6 +168,9 @@ export function loadConfigFile(vars: VariableService) {
 }
 
 function getDefaultRoot(envName: string) {
+    if (config.defaultStoragePath !== undefined) {
+        return config.defaultStoragePath;
+    }
     let matterDir;
     if (process.platform === "win32") {
         matterDir = resolve(process.env.APPDATA ?? ".", "matter");
@@ -164,9 +186,9 @@ function getDefaultRoot(envName: string) {
 }
 
 export function getDefaults(vars: VariableService) {
-    const envName = vars.get("environment", "default");
+    const envName = vars.get("environment", config.defaultEnvironmentName);
     const rootPath = vars.get("path.root", getDefaultRoot(envName));
-    const configPath = resolve(rootPath, vars.get("path.config", "config.json"));
+    const configPath = resolve(rootPath, vars.get("path.config", config.defaultConfigFilePath));
 
     return {
         environment: envName,
@@ -175,8 +197,9 @@ export function getDefaults(vars: VariableService) {
             config: configPath,
         },
         runtime: {
-            signals: true,
-            exitcode: true,
+            signals: config.trapProcessSignals,
+            exitcode: config.setProcessExitCodeOnError,
+            unhandlederrors: config.trapUnhandledErrors,
         },
     };
 }
