@@ -224,9 +224,9 @@ export const LevelControl = Cluster({
             children: [
                 Field({ name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" }),
                 Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" }),
-                Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
+                Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "O", constraint: "desc", default: 0 }),
                 Field({
-                    name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0
+                    name: "OptionsOverride", id: 0x3, type: "Options", conformance: "O", constraint: "desc", default: 0
                 })
             ]
         }),
