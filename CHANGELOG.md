@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter cluster definitions and implementations
+    - Fix: Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
+
 ### 0.11.3 (2024-11-06)
 
 -   @matter/nodejs
