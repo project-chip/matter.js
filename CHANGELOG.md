@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter cluster definitions and implementations
+    - Fix: Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
+
 ## 0.10.6 (2024-09-21)
 
 -   Matter-Core functionality:
@@ -36,9 +41,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Matter-Core functionality:
     -   Enhancement: Added an "expected processing time" for interactions to be executed by the peer
     -   Enhancement: Added additional wait time after last resubmission was done to allow a full resubmission cycle from the peer
-    -   Enhancement: Optimized PASE/CASE message timing comparable to chip sdk (expects 30s processing time for crypto related calls)
+    -   Enhancement: Optimized PASE/CASE message timing comparable to chip sdk (expects e.g. 30s processing time for crypto related calls)
+    -   Fix: Optimized exchange handling for cases where retransmissions were all sent but no ack was received
+    -   Fix: Makes sure that Retransmissions happen in all error cases
 -   matter.js New API:
     -   Fix: Optimized some special cases in the ColorControl cluster default implementation
+-   matter.js Controller API:
+    -   Breaking: Adjusted some method signatures slightly (e.g. connect()) to summarize singe parameters into an options object
+    -   Enhancement: Restructured Paired Node connection handling to make sure NodeStatus is correct and commands return in case of error. Reconnections are handled in the background.
+    -   Enhancement: Takes over new connection options when a node is connected again after disconnect with different options
 
 ## 0.10.0 (2024-08-31)
 
