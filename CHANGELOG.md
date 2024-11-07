@@ -135,6 +135,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Utilize more information (beside partList changes now also feature, serverList, attributeList, generatedCommandLists) as structure change to reinitialize objects.
     -   Enhancement: Huge refactoring in internal logic, optimized reconnection and rediscovery
 
+## 0.10.7 (2024-11-07)
+
+-   Matter cluster definitions and implementations
+    - Fix: (Backport from 0.11.4) Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
+
 ## 0.10.6 (2024-09-21)
 
 -   Matter-Core functionality:
