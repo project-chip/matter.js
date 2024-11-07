@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-chip-testing",
-    "version": "0.10.6",
+    "version": "0.10.7",
     "description": "Testing of matter.js with CHIP tool",
     "private": true,
     "license": "Apache-2.0",
@@ -20,8 +20,8 @@
         "build-clean": "matter-build --clean"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "0.10.6",
-        "@project-chip/matter.js": "0.10.6",
-        "@project-chip/matter.js-tools": "0.10.6"
+        "@project-chip/matter-node.js": "0.10.7",
+        "@project-chip/matter.js": "0.10.7",
+        "@project-chip/matter.js-tools": "0.10.7"
     }
 }

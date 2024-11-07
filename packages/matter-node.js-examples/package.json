@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node.js-examples",
-    "version": "0.10.6",
+    "version": "0.10.7",
     "description": "CLI/Reference implementation scripts for Matter protocol for node.js",
     "keywords": [
         "iot",
@@ -64,10 +64,10 @@
         "typescript": "~5.5.3"
     },
     "dependencies": {
-        "@project-chip/matter-node-ble.js": "0.10.6",
-        "@project-chip/matter-node.js": "0.10.6",
-        "@project-chip/matter.js": "0.10.6",
-        "@project-chip/matter.js-tools": "0.10.6"
+        "@project-chip/matter-node-ble.js": "0.10.7",
+        "@project-chip/matter-node.js": "0.10.7",
+        "@project-chip/matter.js": "0.10.7",
+        "@project-chip/matter.js-tools": "0.10.7"
     },
     "engines": {
         "node": ">=18.0.0"
