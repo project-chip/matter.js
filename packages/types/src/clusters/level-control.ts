@@ -18,7 +18,7 @@ import {
 import { TlvUInt16, TlvUInt8, TlvBitmap, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { AccessLevel } from "#model";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { ClusterType } from "../cluster/ClusterType.js";
@@ -112,8 +112,8 @@ export namespace LevelControl {
     export const TlvMoveToLevelRequest = TlvObject({
         level: TlvField(0, TlvUInt8.bound({ max: 254 })),
         transitionTime: TlvField(1, TlvNullable(TlvUInt16)),
-        optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
-        optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
+        optionsMask: TlvOptionalField(2, TlvBitmap(TlvUInt8, Options)),
+        optionsOverride: TlvOptionalField(3, TlvBitmap(TlvUInt8, Options))
     });
 
     /**
