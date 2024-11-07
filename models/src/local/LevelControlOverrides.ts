@@ -17,8 +17,8 @@ LocalMatter.children.push({
         { tag: "command", id: 6, name: "StepWithOnOff", type: "Step" },
         { tag: "command", id: 7, name: "StopWithOnOff", type: "Stop" },
 
-        // Temporarily declare OptionsMask as optional fields because current Google Firmwares do not send them.
-        // Will be adjusted back once fixed by Google
+        // Temporarily declare OptionsMask as optional fields because current matter sdk implementation handles
+        // them optionally. Might be adjusted back once clarified in detail
         {
             tag: "command",
             id: 0,
