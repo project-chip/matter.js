@@ -25,6 +25,11 @@ export interface MutableEndpoint extends EndpointType {
     /**
      * Define an endpoint like this one with additional and/or replacement server behaviors.
      */
+    withBehaviors(...behaviors: SupportedBehaviors.List): MutableEndpoint;
+
+    /**
+     * Alias for {@link withBehaviors}.
+     */
     with(...behaviors: SupportedBehaviors.List): MutableEndpoint;
 }
 
@@ -95,6 +100,13 @@ export namespace MutableEndpoint {
 
         /**
          * Define an endpoint like this one with additional and/or replacement server behaviors.
+         */
+        withBehaviors<const BL extends SupportedBehaviors.List>(
+            ...behaviors: BL
+        ): With<B, SupportedBehaviors.With<SB, BL>>;
+
+        /**
+         * Alias for {@link withBehaviors}.
          */
         with<const BL extends SupportedBehaviors.List>(...behaviors: BL): With<B, SupportedBehaviors.With<SB, BL>>;
     };
