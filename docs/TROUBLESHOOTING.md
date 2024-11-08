@@ -112,7 +112,7 @@ Matter is using MDNS, a UDP based protocol, to discover devices. This can be blo
 
 For all ecosystems that use a Hub (basically everything beside Tuya currently) you need to make sure that the host with the matter.js device is reachable from the network of your mobile device AND the network from the hub. Usually the commissioning process happens from the app, but the communication afterwards is done by the hub. So the hub needs to be able to reach the matter.js device. This includes all requirements for UDP packages as mentioned above.
 
-If you have issues with pairing, please check if your network allows UDP traffic on port 5540, which is the default port.
+If you have issues with pairing or experience connectivity problems (e.g., mDNS not working properly), check if your network allows UDP traffic on port 5540, the default port for pairing. Additionally, verify your firewall settings or network filters, and ensure exceptions are added for the Node.js application and/or the mDNS port (5353).
 
 Matter **requires** IPv6, but optionally also allows IPv4. If you have issues with pairing, please check if your network allows IPv6 traffic.
 
