@@ -9,7 +9,7 @@ import "./util/node-shims.js";
 
 import "./global-definitions.js";
 
-import { Builder, Graph, Project } from "#tools";
+import { Builder, Graph, Package, Project } from "#tools";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { TestRunner } from "./runner.js";
@@ -74,49 +74,64 @@ export async function main(argv = process.argv) {
         packageLocation = firstSpec;
     }
 
-    const project = new Project(packageLocation);
-
-    process.chdir(project.pkg.path);
-
-    // If no test types are specified explicitly, run all enabled types
-    if (!testTypes.size) {
-        if (project.pkg.supportsEsm) {
-            testTypes.add(TestType.esm);
-        }
-        if (project.pkg.supportsCjs) {
-            testTypes.add(TestType.cjs);
-        }
-        if (args.web) {
-            testTypes.add(TestType.web);
-        }
-    }
-
+    // If the location is a workspace, test all packages with test
     const builder = new Builder();
-    const dependencies = await Graph.forProject(packageLocation);
-    if (dependencies) {
-        await dependencies.build(builder, false);
+    const pkg = new Package({ path: packageLocation });
+    if (pkg.isWorkspace) {
+        const graph = await Graph.load(pkg);
+        await graph.build(builder, false);
+        for (const node of graph.nodes) {
+            if (!node.pkg.hasTests || node.pkg.json.matter?.test === false) {
+                continue;
+            }
+
+            await test(node.pkg);
+        }
     } else {
-        await builder.build(project);
+        const graph = await Graph.forProject(pkg.path);
+        if (graph) {
+            await graph.build(builder, false);
+        } else {
+            await builder.build(new Project(pkg));
+        }
+        await test(pkg);
     }
 
-    const progress = project.pkg.start("Testing");
-    const runner = new TestRunner(project.pkg, progress, args);
+    async function test(pkg: Package) {
+        process.chdir(pkg.path);
 
-    if (testTypes.has(TestType.esm)) {
-        await runner.runNode("esm");
-    }
+        // If no test types are specified explicitly, run all enabled types
+        if (!testTypes.size) {
+            if (pkg.supportsEsm) {
+                testTypes.add(TestType.esm);
+            }
+            if (pkg.supportsCjs) {
+                testTypes.add(TestType.cjs);
+            }
+            if (args.web) {
+                testTypes.add(TestType.web);
+            }
+        }
 
-    if (testTypes.has(TestType.cjs)) {
-        await runner.runNode("cjs");
-    }
+        const progress = pkg.start("Testing");
+        const runner = new TestRunner(pkg, progress, args);
 
-    if (testTypes.has(TestType.web)) {
-        await runner.runWeb(manual);
-    }
+        if (testTypes.has(TestType.esm)) {
+            await runner.runNode("esm");
+        }
 
-    progress.shutdown();
+        if (testTypes.has(TestType.cjs)) {
+            await runner.runNode("cjs");
+        }
 
-    if (args.forceExit) {
-        process.exit(0);
+        if (testTypes.has(TestType.web)) {
+            await runner.runWeb(manual);
+        }
+
+        progress.shutdown();
+
+        if (args.forceExit) {
+            process.exit(0);
+        }
     }
 }

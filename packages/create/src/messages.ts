@@ -5,7 +5,7 @@
  */
 
 import { stderr, stdout } from "process";
-import { bold, dim, green, red, visibleWidthOf } from "./formatting.js";
+import { bold, dim, fittedTextOf, green, red, visibleWidthOf, yellow } from "./formatting.js";
 
 const WELCOME_TO = "🎉 Welcome to";
 
@@ -26,11 +26,19 @@ function join(parts: unknown[]) {
 }
 
 export function error(...parts: unknown[]) {
-    stderr.write(`${red(bold("Error:"))} ${join(parts)}\n\n`);
+    stderr.write(fittedTextOf(`${red(bold("Error:"))} ${join(parts)}\n\n`));
 }
 
 export function notice(...parts: unknown[]) {
-    stdout.write(`${green(join(parts))}\n\n`);
+    stdout.write(fittedTextOf(`${green(join(parts))}\n\n`));
+}
+
+export function warning(...parts: unknown[]) {
+    stdout.write(fittedTextOf(`${yellow(bold("Warning:"))} ${join(parts)}\n\n`));
+}
+
+export function info(...parts: unknown[]) {
+    stdout.write(fittedTextOf(`${join(parts)}\n\n`));
 }
 
 export function welcome() {

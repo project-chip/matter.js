@@ -26,6 +26,7 @@ import {
     Environment,
     Key,
     MockUdpChannel,
+    NetworkSimulator,
     PrivateKey,
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
@@ -153,7 +154,9 @@ describe("ServerNode", () => {
     });
 
     it("announces and expires correctly", async () => {
-        const scannerChannel = await MockUdpChannel.create(MockServerNode.createNetwork(2), {
+        const simulator = new NetworkSimulator();
+
+        const scannerChannel = new MockUdpChannel(simulator.addHost(2), {
             listeningPort: 5353,
             listeningAddress: "ff02::fb",
             type: "udp6",
@@ -170,6 +173,7 @@ describe("ServerNode", () => {
                 commissioning: { discriminator: 2002 },
                 basicInformation: { vendorId: 65501 },
             },
+            simulator,
         });
 
         const operationalPort = node.state.network.operationalPort;

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Boot } from "#util/Boot.js";
 import * as mod from "@noble/curves/abstract/modular";
 import * as utils from "@noble/curves/abstract/utils";
 import { p256 } from "@noble/curves/p256";
@@ -30,9 +31,7 @@ export type CryptoDsaEncoding = "ieee-p1363" | "der";
 export class CryptoVerifyError extends MatterError {}
 
 export abstract class Crypto {
-    static get: () => Crypto = () => {
-        throw new NoProviderError("No provider configured");
-    };
+    static get: () => Crypto;
 
     abstract encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array;
     static readonly encrypt = (key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array =>
@@ -130,7 +129,13 @@ export abstract class Crypto {
     static readonly createKeyPair = (): PrivateKey => Crypto.get().createKeyPair();
 }
 
-// Hook for testing frameworks
-if (typeof MatterHooks !== "undefined") {
-    MatterHooks.cryptoSetup?.(Crypto);
-}
+Boot.init(() => {
+    Crypto.get = () => {
+        throw new NoProviderError("No provider configured");
+    };
+
+    // Hook for testing frameworks
+    if (typeof MatterHooks !== "undefined") {
+        MatterHooks.cryptoSetup?.(Crypto);
+    }
+});

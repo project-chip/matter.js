@@ -32,7 +32,7 @@
     "version": "node packages/tools/bin/version.js",
     "build-clean": "node packages/tools/bin/build.js --clean",
     "build-doc": "node packages/tools/bin/build.js docs",
-    "test": "npm run -s test --workspaces --if-present",
+    "test": "matter-test",
     "lint": "eslint \"**/*.ts\"",
     "lint-fix": "eslint --fix \"**/*.ts\"",
     "format": "prettier --write 'packages/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts' 'compat/**/*.ts'",

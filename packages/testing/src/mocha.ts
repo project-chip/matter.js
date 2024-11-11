@@ -7,6 +7,7 @@
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
 import { FailureDetail } from "./failure-detail.js";
+import { Boot } from "./mocks/boot.js";
 import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
@@ -57,19 +58,14 @@ export function generalSetup(mocha: MochaType) {
     filterLogs("beforeEach");
     filterLogs("afterEach");
 
-    // Reset mocks before each suite.  Suites could conceivably have callbacks that occur across tests.  If individual
-    // tests need a reset the suite needs to handle itself.
-    const actualBeforeAll = mocha.suite.beforeAll;
-    mocha.suite.beforeAll = function (this: Mocha.Context, ...args: any) {
-        MockTime.reset();
-        return actualBeforeAll.apply(this, args);
-    };
+    for (const suite of mocha.suite.suites) {
+        suite.beforeAll(beforeEachFile);
 
-    mocha.suite.beforeEach(() => {
-        for (const hook of LoggerHooks.beforeEach) {
-            hook(mocha);
-        }
-    });
+        // Move our beforeAll hook so it runs before the suite's beforeAll hooks
+        const hooks = (suite as any)._beforeAll as unknown[];
+        const myHook = hooks.pop();
+        hooks.unshift(myHook);
+    }
 
     mocha.suite.afterEach(() => {
         for (const hook of LoggerHooks.afterEach) {
@@ -78,6 +74,12 @@ export function generalSetup(mocha: MochaType) {
     });
 
     FailureDetail.diff = Base.generateDiff.bind(Base);
+}
+
+// Reset mocks before each file.  Suites could conceivably have callbacks that occur across tests.  If individual tests
+// need a reset the suite needs to handle itself.
+function beforeEachFile() {
+    Boot.reboot();
 }
 
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {

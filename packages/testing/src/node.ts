@@ -23,45 +23,57 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
     //
     // So we must add our own unhandledRejection handler, but only process exceptions if Mocha's handler is not
     // installed, because the code that Mocha uses to determine if an error is a "mocha" error is not exported.
-    process.on("unhandledRejection", e => {
+    function unhandledRejection(e: any) {
         if (process.listenerCount("unhandledRejection") === 1) {
             const error = new Error("Unhandled rejection (ignored by mocha)");
             error.cause = e;
             runner.reporter.failRun(FailureDetail(error));
         }
-    });
-
-    const mocha = new Mocha({
-        inlineDiffs: true,
-        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
-    });
-
-    generalSetup(mocha);
-
-    TestOptions.apply(mocha, runner.options);
-
-    const files = await runner.loadFiles(format);
-    files.forEach(path => {
-        path = relative(process.cwd(), path);
-        if (path[0] !== ".") {
-            path = `./${path}`;
-        }
-        mocha.addFile(path);
-    });
-
-    await mocha.loadFilesAsync();
-
-    const profiler = new Profiler();
-    if (runner.options.profile) {
-        await profiler.start();
     }
 
-    await new Promise<Mocha.Runner>(resolve => {
-        const runner = mocha.run(() => resolve(runner));
-    });
+    process.on("unhandledRejection", unhandledRejection);
+    try {
+        const mocha = new Mocha({
+            inlineDiffs: true,
+            reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
+        });
 
-    if (runner.options.profile) {
-        await profiler.stop(runner.pkg.resolve("build/profiles"));
+        generalSetup(mocha);
+
+        TestOptions.apply(mocha, runner.options);
+
+        const files = await runner.loadFiles(format);
+        files.forEach(path => {
+            path = relative(process.cwd(), path);
+            if (path[0] !== ".") {
+                path = `./${path}`;
+            }
+            mocha.addFile(path);
+        });
+
+        await mocha.loadFilesAsync();
+
+        const profiler = new Profiler();
+        if (runner.options.profile) {
+            await profiler.start();
+        }
+
+        await new Promise<Mocha.Runner>(resolve => {
+            const runner = mocha.run(() => resolve(runner));
+        });
+
+        if (runner.options.profile) {
+            await profiler.stop(runner.pkg.resolve("build/profiles"));
+        }
+    } finally {
+        process.off("unhandledRejection", unhandledRejection);
+
+        // Mocha leaks listeners so just remove them all
+        for (const name of ["unhandledRejection", "uncaughtException"]) {
+            for (const listener of process.listeners(name as any)) {
+                process.off(name, listener);
+            }
+        }
     }
 }
 

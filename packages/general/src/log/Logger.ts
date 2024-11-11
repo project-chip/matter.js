@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Boot } from "#util/Boot.js";
 import { ImplementationError, NotImplementedError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
 import { Bytes } from "../util/Bytes.js";
@@ -93,14 +94,8 @@ type LoggerDefinition = {
  *   - Logger.setDefaultLoglevelForLogger("loggerName", Level.DEBUG)
  */
 export class Logger {
-    static logger = new Array<LoggerDefinition>({
-        logIdentifier: "default",
-        logFormatter: LogFormat.plain,
-        log: consoleLogger,
-        defaultLogLevel: LogLevel.DEBUG,
-        logLevels: {},
-    });
-    static nestingLevel = 0;
+    static logger: Array<LoggerDefinition>;
+    static nestingLevel: number;
 
     /** Add additional logger to the list of loggers including the default configuration. */
     public static addLogger(
@@ -461,14 +456,25 @@ export class Logger {
     }
 }
 
-// Hook for testing frameworks
-if (typeof MatterHooks !== "undefined") {
-    MatterHooks.loggerSetup?.(Logger);
-}
-
 function nestingPrefix() {
     if (Logger.nestingLevel) {
         return "⎸".padEnd(Logger.nestingLevel * 2);
     }
     return "";
 }
+
+Boot.init(() => {
+    Logger.logger = new Array<LoggerDefinition>({
+        logIdentifier: "default",
+        logFormatter: LogFormat.plain,
+        log: consoleLogger,
+        defaultLogLevel: LogLevel.DEBUG,
+        logLevels: {},
+    });
+    Logger.nestingLevel = 0;
+
+    // Hook for testing frameworks
+    if (typeof MatterHooks !== "undefined") {
+        MatterHooks.loggerSetup?.(Logger);
+    }
+});
