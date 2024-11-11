@@ -275,16 +275,16 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         // Monitor CommissioningServer to end "uncommissioned" mode when we are commissioned
         this.#observers.on(this.owner.eventsOf(CommissioningServer).commissioned, this.endUncommissionedMode);
 
+        // When first going online, enable commissioning by controllers unless we ourselves are configured as a
+        // controller
+        if (owner.state.commissioning.enabled === undefined) {
+            await owner.set({
+                commissioning: { enabled: true },
+            });
+        }
+
         // Ensure the environment will convey the commissioning configuration to the DeviceCommissioner
         if (!env.has(CommissioningConfigProvider)) {
-            // When first going online, enable commissioning by controllers unless we ourselves are configured as a
-            // controller
-            if (owner.state.commissioning.enabled === undefined) {
-                await owner.set({
-                    commissioning: { enabled: true },
-                });
-            }
-
             // Configure the DeviceCommissioner
             env.set(
                 CommissioningConfigProvider,
