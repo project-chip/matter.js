@@ -11,6 +11,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Enhancement: The `with` functions on endpoint and cluster behavior types now alias to `withBehaviors` and `withFeatures` respectively to make their function more explicit
+
 -   @matter/nodejs
     - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
 
