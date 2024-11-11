@@ -382,6 +382,9 @@ export type PackageJson = {
     name: string;
     version: string;
     imports: Record<string, string>;
+    matter?: {
+        test?: boolean;
+    };
     [key: string]: any;
 };
 

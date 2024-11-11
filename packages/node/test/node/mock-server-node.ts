@@ -14,8 +14,8 @@ import {
     Environment,
     Key,
     MaybePromise,
-    MockNetwork,
     Network,
+    NetworkSimulator,
     PrivateKey,
     StorageBackendMemory,
     StorageService,
@@ -44,9 +44,11 @@ Crypto.get().hkdf = async () => {
 };
 
 export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
-    constructor(type?: T, options?: Node.Options<T>);
+    #simulator = new NetworkSimulator();
+
+    constructor(type?: T, options?: Node.Options<T>, simulator?: NetworkSimulator);
     constructor(config: Partial<Node.Configuration<T>>);
-    constructor(definition: T | Node.Configuration<T>, options?: Node.Options<T>) {
+    constructor(definition: T | Node.Configuration<T>, options?: Node.Options<T>, simulator?: NetworkSimulator) {
         const config = Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options);
 
         const environment = config.environment ?? new Environment("test");
@@ -55,11 +57,16 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         storage.location = "(memory)";
         storage.factory = () => new StorageBackendMemory();
 
-        environment.set(Network, MockServerNode.createNetwork(1));
-
         config.environment = environment;
 
         super(config as any);
+
+        this.#simulator = simulator ?? new NetworkSimulator();
+        environment.set(Network, this.#simulator.addHost(1));
+    }
+
+    get simulator() {
+        return this.#simulator;
     }
 
     /**
@@ -81,7 +88,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
     }
 
     static async createOnline<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
-        options?: MockServerNode.Options<T>,
+        options?: MockServerNode.Options<T> & { simulator?: NetworkSimulator },
     ) {
         let { config, device } = options ?? {};
 
@@ -89,7 +96,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             config = { type: ServerNode.RootEndpoint as T } as Node.Configuration<T>;
         }
 
-        const node = new MockServerNode<ServerNode.RootEndpoint>(config.type, config);
+        const node = new MockServerNode<ServerNode.RootEndpoint>(config.type, config, options?.simulator);
 
         if (device === undefined && options && !("device" in options)) {
             device = OnOffLightDevice;
@@ -111,14 +118,6 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         }
 
         return node;
-    }
-
-    static createNetwork(lastIdentifierByte: number) {
-        const byte = lastIdentifierByte.toString(16).padStart(2, "0");
-        return new MockNetwork(`00:11:22:33:44:${byte}`, [
-            `1111:2222:3333:4444:5555:6666:7777:88${byte}`,
-            `10.10.10.${lastIdentifierByte}`,
-        ]);
     }
 
     async createSession(options?: Partial<Parameters<SessionManager["createSecureSession"]>[0]>) {

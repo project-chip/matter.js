@@ -9,6 +9,7 @@ import { exit } from "process";
 import { Builder } from "../building/builder.js";
 import { Graph } from "../building/graph.js";
 import { Project } from "../building/project.js";
+import { Package } from "../util/package.js";
 import { executeNode } from "./execute.js";
 
 /**
@@ -44,12 +45,14 @@ export async function main(argv = process.argv) {
         dir = dirname(script);
     }
 
-    const project = new Project(dir);
+    const pkg = Package.forPath(dir);
 
-    let format: "esm" | "cjs";
-    if (project.pkg.supportsEsm) {
+    let format: "esm" | "cjs" | "none";
+    if (!pkg.hasSrc) {
+        format = "none";
+    } else if (pkg.supportsEsm) {
         format = "esm";
-    } else if (project.pkg.supportsCjs) {
+    } else if (pkg.supportsCjs) {
         format = "cjs";
     } else {
         console.error("Error: Could not identify project format");
@@ -58,7 +61,7 @@ export async function main(argv = process.argv) {
 
     // In development we currently build package and dependencies unconditionally before running
     const isDevelopment = !dir.match(/[\\/]node_modules[\\/]/);
-    if (isDevelopment) {
+    if (isDevelopment && format !== "none") {
         const builder = new Builder();
         const dependencies = await Graph.forProject(dir);
         if (dependencies) {
@@ -66,17 +69,20 @@ export async function main(argv = process.argv) {
             await dependencies.build(builder, false);
         } else {
             // Project is not in a workspace; only build the project
+            const project = new Project(pkg);
             await builder.build(project);
         }
     }
 
     // Determine the actual script to run
-    script = project.pkg.resolve(
-        project.pkg
-            .relative(script)
-            .replace(/\.ts$/, ".js")
-            .replace(/^src[\\/]/, `dist/${format}/`),
-    );
+    if (format !== "none") {
+        script = pkg.resolve(
+            pkg
+                .relative(script)
+                .replace(/\.ts$/, ".js")
+                .replace(/^src[\\/]/, `dist/${format}/`),
+        );
+    }
 
     // If we run in the same process we cannot enable source maps so default mode is to fork.  However for development
     // purposes it can be useful to avoid the intermediary process.  In this case you can set "--enable-source-maps"

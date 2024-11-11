@@ -29,5 +29,8 @@
     },
     "devDependencies": {
         "@matter/testing": "*"
+    },
+    "matter": {
+        "test": false
     }
 }

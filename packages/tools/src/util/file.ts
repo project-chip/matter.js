@@ -103,24 +103,24 @@ function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[]) {
     // Walk filesystem and apply glob
     const results = new Set<string>();
 
-    function match(path: string, filter: ParseReturnFiltered[]) {
+    function match(path: string, segments: ParseReturnFiltered[]) {
         // If the filter is empty then match current path
-        if (!filter.length) {
+        if (!segments.length) {
             results.add(path);
             return;
         }
 
         // If filter starts without magic then just stat that one path
-        if (typeof filter[0] === "string") {
-            const subpath = resolve(path, filter[0]);
-            if (maybeStatSync(resolve(path, filter[0]))) {
-                match(subpath, filter.slice(1));
+        if (typeof segments[0] === "string") {
+            const subpath = resolve(path, segments[0]);
+            if (maybeStatSync(resolve(path, segments[0]))) {
+                match(subpath, segments.slice(1));
                 return;
             }
         }
 
         // If filter is just GLOBSTAR then all paths match but search continues
-        if (filter.length === 1 && filter[0] === GLOBSTAR) {
+        if (segments.length === 1 && segments[0] === GLOBSTAR) {
             results.add(path);
         }
 

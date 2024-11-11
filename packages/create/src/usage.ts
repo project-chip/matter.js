@@ -13,7 +13,14 @@ export const DEFAULT_TEMPLATE = "device-simple";
 
 export async function usage() {
     welcome();
-    const templates = (await Config()).templates;
+    const templates = (await Config()).templates.map(({ name, description }) => ({ name, description }));
+
+    templates.push({
+        name: "contributor",
+        description: "bootstrap local project for working on matter.js itself (requires git)",
+    });
+
+    templates.sort((a, b) => a.name.localeCompare(b.name, "en", { sensitivity: "base" }));
 
     const sections = {
         Usage: {
@@ -23,8 +30,9 @@ export async function usage() {
         },
 
         Options: {
-            [bold("--prefix=<path>")]: `initialize in directory ${bold("path")}`,
             [bold("--no-build")]: `do not build newly generated project`,
+            [bold("--prefix=<path>")]: `initialize in directory ${bold("path")}`,
+            [bold("--verbose")]: `show NPM messages during build`,
         },
 
         Templates: Object.fromEntries(templates.map(t => [blue(t.name), t.description])),

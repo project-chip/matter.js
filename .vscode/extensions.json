@@ -1,0 +1,7 @@
+{
+    "recommended": [
+        "rioj7.command-variable",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+    ]
+}

@@ -11,8 +11,21 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Enhancement: The `with` functions on endpoint and cluster behavior types now alias to `withBehaviors` and `withFeatures` respectively to make their function more explicit
+
 -   @matter/nodejs
     - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
+
+-   @matter/create
+    - Feature: Add command line option "--verbose" to enable informational NPM messages during initialization
+    - Feature: Add template "contributor" to bootstrap dev environment for working on matter.js itself
+
+-   @matter/tools
+    - Multi-project test runs now use a single process to improve performance
+
+-   matter.js git repository
+    - Feature: We've added project configuration for VS code including recommended extensions, code snippets and launch configurations
 
 ## 0.11.4 (2024-11-07)
 
