@@ -137,7 +137,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevelWithOnOff}.
      */
     override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: LevelControl.MoveToLevelRequest) {
-        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask ?? {}, optionsOverride ?? {});
+        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
         }

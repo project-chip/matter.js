@@ -16,17 +16,5 @@ LocalMatter.children.push({
         { tag: "command", id: 5, name: "MoveWithOnOff", type: "Move" },
         { tag: "command", id: 6, name: "StepWithOnOff", type: "Step" },
         { tag: "command", id: 7, name: "StopWithOnOff", type: "Stop" },
-
-        // Temporarily declare OptionsMask as optional fields because current matter sdk implementation handles
-        // them optionally. Might be adjusted back once clarified in detail
-        {
-            tag: "command",
-            id: 0,
-            name: "MoveToLevel",
-            children: [
-                { tag: "field", id: 2, name: "OptionsMask", conformance: "O" },
-                { tag: "field", id: 3, name: "OptionsOverride", conformance: "O" },
-            ],
-        },
     ],
 });
