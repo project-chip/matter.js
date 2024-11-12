@@ -83,6 +83,8 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
         } else if (definition !== undefined && definition !== null) {
             this.set(Array.from(Access.parse(this, definition)));
         }
+
+        this.freeze();
     }
 
     /**

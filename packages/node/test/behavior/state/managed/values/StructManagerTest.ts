@@ -75,7 +75,7 @@ async function testDuality(life: boolean, actor: (struct: { alive?: boolean }) =
         schema.supportedFeatures = new FeatureSet("LF");
     }
 
-    const supervisor = new RootSupervisor(schema);
+    const supervisor = RootSupervisor.for(schema);
 
     const datasource = Datasource({ type: SchrödingersCatsState, supervisor, path: DataModelPath(0) });
 

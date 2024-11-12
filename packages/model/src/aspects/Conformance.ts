@@ -55,6 +55,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
             ast = definition.ast;
         }
         this.ast = ast;
+        this.freeze();
     }
 
     validateReferences(lookup: Conformance.ReferenceResolver<boolean>) {
@@ -104,7 +105,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
         return Conformance.serialize(this.ast);
     }
 
-    override freeze() {
+    protected override freeze() {
         freezeAst(this.ast);
         super.freeze();
     }

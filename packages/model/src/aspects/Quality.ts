@@ -40,6 +40,8 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
         } else {
             Object.assign(this, definition);
         }
+
+        this.freeze();
     }
 
     private parse(quality: Quality, definition: string) {

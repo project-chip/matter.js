@@ -70,12 +70,12 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     const cluster = new ClusterModel({
         name: "Test",
 
-        children: [features ? features.clone() : FeatureMap.clone(), ...fields],
+        children: [features ? features.clone() : FeatureMap.clone(), ...fields.map(field => field.clone())],
     });
     cluster.supportedFeatures = supports;
 
     // Obtain a manager
-    const root = new RootSupervisor(cluster);
+    const root = RootSupervisor.for(cluster);
     const manager = root.get(cluster);
 
     // Perform validation
