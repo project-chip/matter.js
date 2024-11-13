@@ -12,6 +12,7 @@ import { ActionContext } from "#behavior/context/ActionContext.js";
 import { BasicInformationBehavior, BasicInformationServer } from "#behaviors/basic-information";
 import { BasicInformation } from "#clusters/basic-information";
 import { AsyncObservable, EventEmitter, MaybePromise, Observable } from "#general";
+import { AccessControl } from "#index.js";
 import { ClusterType } from "#types";
 import { MyCluster, MySchema } from "./cluster-behavior-test-util.js";
 
@@ -45,7 +46,10 @@ describe("ClusterEvents", () => {
 
         it("includes required", () => {
             ({}) as Ep satisfies EventEmitter & {
-                reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext], MaybePromise>;
+                reqAttr$Changed: Observable<
+                    [value: string, oldValue: string, context?: AccessControl.Subject],
+                    MaybePromise
+                >;
 
                 reqEv: Observable<[payload: string, context?: ActionContext]>;
             };
@@ -103,7 +107,10 @@ describe("ClusterEvents", () => {
 
         it("requires mandatory", () => {
             ({}) as Ei satisfies {
-                reqAttr$Changed: Observable<[value: string, oldValue: string, context: ActionContext], MaybePromise>;
+                reqAttr$Changed: Observable<
+                    [value: string, oldValue: string, context: AccessControl.Subject],
+                    MaybePromise
+                >;
 
                 reqEv: Observable<[payload: string, context: ActionContext]>;
             };

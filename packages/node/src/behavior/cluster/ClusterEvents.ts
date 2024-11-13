@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessControl } from "#behavior/AccessControl.js";
 import type { AsyncObservable, Observable } from "#general";
 import type { ClusterType, TypeFromSchema } from "#types";
 import type { Behavior } from "../Behavior.js";
@@ -27,18 +28,18 @@ export namespace ClusterEvents {
     /**
      * Properties the cluster contributes to Events.
      */
-    export type Properties<C> = AttributeObservables<ClusterType.AttributesOf<C>, "Changing"> &
-        AttributeObservables<ClusterType.AttributesOf<C>, "Changed"> &
+    export type Properties<C> = AttributeObservables<ClusterType.AttributesOf<C>, "Changing", ActionContext> &
+        AttributeObservables<ClusterType.AttributesOf<C>, "Changed", AccessControl.Subject> &
         EventObservables<ClusterType.EventsOf<C>>;
 
-    export type AttributeObservables<A extends Record<string, ClusterType.Attribute>, N extends string> = {
+    export type AttributeObservables<A extends Record<string, ClusterType.Attribute>, N extends string, C> = {
         [K in keyof A as string extends K
             ? never
             : K extends string
               ? A[K] extends { optional: true }
                   ? never
                   : `${K}$${N}`
-              : never]: AttributeObservable<A[K]>;
+              : never]: AttributeObservable<A[K], C>;
     } & {
         [K in keyof A as string extends K
             ? never
@@ -46,12 +47,13 @@ export namespace ClusterEvents {
               ? A[K] extends { optional: true }
                   ? `${K}$${N}`
                   : never
-              : never]?: AttributeObservable<A[K]>;
+              : never]?: AttributeObservable<A[K], C>;
     };
 
-    export type AttributeObservable<A extends ClusterType.Attribute = ClusterType.Attribute> = AsyncObservable<
-        [value: TypeFromSchema<A["schema"]>, oldValue: TypeFromSchema<A["schema"]>, context: ActionContext]
-    >;
+    export type AttributeObservable<
+        A extends ClusterType.Attribute = ClusterType.Attribute,
+        C = unknown,
+    > = AsyncObservable<[value: TypeFromSchema<A["schema"]>, oldValue: TypeFromSchema<A["schema"]>, context: C]>;
 
     export type EventObservables<E extends Record<string, ClusterType.Event>> = {
         [K in keyof E as string extends K

@@ -14,7 +14,8 @@ import { FinalizationError } from "#behavior/state/transaction/Errors.js";
 import { BehaviorSupervisor } from "#behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { AsyncObservable, MaybePromise, Observable } from "#general";
+import { AsyncObservable, createPromise, MaybePromise, Observable } from "#general";
+import { AccessControl } from "#index.js";
 import { DataModelPath, DatatypeModel, FieldElement, FieldModel } from "#model";
 
 class MyState {
@@ -326,11 +327,7 @@ describe("Datasource", () => {
                 }),
             );
 
-            let actualContext: ActionContext | undefined;
-
             await withDatasourceAndReference({ events }, async ({ context, state }) => {
-                actualContext = context;
-
                 await context.transaction.commit();
 
                 expect(changed).false;
@@ -344,7 +341,49 @@ describe("Datasource", () => {
 
             expect(changed).true;
 
-            await expect(result).eventually.deep.equal(["BAR", "bar", actualContext]);
+            await expect(result).eventually.deep.equal([
+                "BAR",
+                "bar",
+                { fabric: undefined, subject: undefined, offline: true },
+            ]);
+        });
+
+        it("support chained commit", async () => {
+            const events = {
+                foo$Changed: Observable<[newValue: boolean, oldValue: boolean, cx: ActionContext]>(),
+            };
+            const ds1 = createDatasource({ type: MyState, events });
+
+            class State2 {
+                bar = false;
+            }
+            const ds2 = Datasource({
+                path: DataModelPath("TestDatasource2"),
+                type: State2,
+                supervisor: BehaviorSupervisor({ id: "state2", State: State2 }),
+            });
+
+            const { promise, resolver } = createPromise<void>();
+
+            let subject: AccessControl.Subject | undefined;
+            events.foo$Changed.on(async (_v1, _v2, subj) => {
+                subject = subj;
+
+                await withReference(ds2, ref => {
+                    ref.state.bar = true;
+                });
+
+                resolver();
+            });
+
+            await withReference(ds1, ({ state }) => {
+                state.foo = "hello";
+            });
+
+            await promise;
+
+            expect(ds2.view.bar).true;
+            expect(subject).deep.equals({ fabric: undefined, subject: undefined, offline: true });
         });
     });
 

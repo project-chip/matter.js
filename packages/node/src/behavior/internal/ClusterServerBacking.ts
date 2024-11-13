@@ -18,7 +18,6 @@ import {
     EventServer,
     FabricManager,
     Message,
-    SecureSession,
 } from "#protocol";
 import { Attribute, Command, Event, TlvNoResponse } from "#types";
 import { AccessControl } from "../AccessControl.js";
@@ -274,13 +273,16 @@ function createAttributeServer(
     // Wire events (FixedAttributeServer is not an AttributeServer so we skip that)
     if (server instanceof AttributeServer) {
         const observable = (backing.events as any)[`${name}$Changed`] as ClusterEvents.AttributeObservable | undefined;
-        observable?.on((_value, _oldValue, context) => {
-            const session = context.session;
-            if (session instanceof SecureSession) {
-                server.updated(session);
-            } else {
-                server.updatedLocal();
-            }
+        observable?.on(() => {
+            // We no longer have a session in $Changed handlers.  I think it's OK to use updatedLocal instead of
+            // updated as our use of listeners is limited.  And updated() will actually notify listeners of fabric
+            // filtered result which probably isn't correct anyway
+            // const session = context.session;
+            // if (session instanceof SecureSession) {
+            //     server.updated(session);
+            // } else {
+            server.updatedLocal();
+            // }
         });
     }
 

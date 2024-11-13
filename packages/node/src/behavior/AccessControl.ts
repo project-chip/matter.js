@@ -122,14 +122,9 @@ export namespace AccessControl {
     }
 
     /**
-     * Authorization metadata that varies with session.
+     * Information about the subject that triggered a change.
      */
-    export interface Session {
-        /**
-         * Checks if the authorized client has a certain Access Privilege granted.
-         */
-        authorizedFor(desiredAccessLevel: AccessLevel, location?: Location): boolean;
-
+    export interface Subject {
         /**
          * The fabric of the authorized client.
          */
@@ -139,6 +134,25 @@ export namespace AccessControl {
          * The authenticated {@link SubjectId} for online sessions.
          */
         readonly subject?: SubjectId;
+
+        /**
+         * Indicates the action was triggered locally, not by a remote subject.
+         *
+         * If true, access levels are not enforced and all values are read/write.  Datatypes are still enforced.
+         *
+         * Tracks "offline" rather than "online" because this makes the safer mode (full enforcement) the default.
+         */
+        offline?: boolean;
+    }
+
+    /**
+     * Authorization metadata that varies with session.
+     */
+    export interface Session extends Subject {
+        /**
+         * Checks if the authorized client has a certain Access Privilege granted.
+         */
+        authorizedFor(desiredAccessLevel: AccessLevel, location?: Location): boolean;
 
         /**
          * If this is true, fabric-scoped lists are filtered to the accessing
@@ -156,14 +170,6 @@ export namespace AccessControl {
          * active.
          */
         readonly command?: boolean;
-
-        /**
-         * If this is true then access levels are not enforced and all values are read/write.  Datatypes are still
-         * enforced.
-         *
-         * Tracks "offline" rather than "online" because this makes the safer mode (full enforcement) the default.
-         */
-        offline?: boolean;
     }
 }
 

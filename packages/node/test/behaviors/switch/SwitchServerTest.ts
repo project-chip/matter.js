@@ -6,6 +6,7 @@
 
 import { SwitchServer } from "#behaviors/switch";
 import { Switch } from "#clusters/switch";
+import { createPromise } from "#general";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 
 function createEventCatcher(device: MockEndpoint<any>) {
@@ -138,7 +139,7 @@ describe("SwitchServer", () => {
             await device.set({ switch: { debounceDelay: 50 } });
         });
 
-        it("set currentState is immediately", async () => {
+        it("set currentState is immediate", async () => {
             const events = createEventCatcher(device);
 
             await device.set({
@@ -160,8 +161,12 @@ describe("SwitchServer", () => {
             ]);
         });
 
-        it("set rawPosition with debounceDelay=0 is immediately", async () => {
+        it("set rawPosition with debounceDelay=0 is immediate", async () => {
             await device.set({ switch: { debounceDelay: 0 } });
+
+            const { promise, resolver } = createPromise();
+
+            (device.events as any).switch.currentPosition$Changed.on(resolver);
 
             const events = createEventCatcher(device);
 
@@ -170,6 +175,9 @@ describe("SwitchServer", () => {
                     rawPosition: 1,
                 },
             });
+
+            // Actual event is deferred but should trigger without advancing time
+            await promise;
 
             expect(events).deep.equals([
                 {

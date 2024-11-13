@@ -20,6 +20,7 @@ import {
     MaybePromise,
     Observable,
 } from "#general";
+import { AccessControl } from "#index.js";
 import { AttributeElement, ClusterModel } from "#model";
 import {
     Attribute,
@@ -106,7 +107,9 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: AsyncObservable<
+                        [value: string, oldValue: string, context?: AccessControl.Subject]
+                    >;
                 };
             };
 
