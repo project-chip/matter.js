@@ -58,8 +58,8 @@ export class Conformance extends Aspect<Conformance.Definition> {
         this.freeze();
     }
 
-    validateReferences(lookup: Conformance.ReferenceResolver<boolean>) {
-        return Conformance.validateReferences(this, this.ast, lookup);
+    validateReferences(errorTarget: Conformance.ErrorTarget, lookup: Conformance.ReferenceResolver<boolean>) {
+        return Conformance.validateReferences(this, this.ast, errorTarget, lookup);
     }
 
     /**
@@ -263,6 +263,7 @@ export namespace Conformance {
         | "z";
 
     export type ReferenceResolver<T> = (name: string) => T;
+    export type ErrorTarget = { error(code: string, message: string): void };
 
     /**
      * Supported ways of expressing conformance (conceptually union should include Flag but that is covered by string).
@@ -281,7 +282,12 @@ export namespace Conformance {
         return serialized;
     }
 
-    export function validateReferences(conformance: Conformance, ast: Ast, resolver: ReferenceResolver<boolean>) {
+    export function validateReferences(
+        conformance: Conformance,
+        ast: Ast,
+        errorTarget: ErrorTarget,
+        resolver: ReferenceResolver<boolean>,
+    ) {
         switch (ast.type) {
             case Operator.OR:
             case Operator.XOR:
@@ -292,23 +298,23 @@ export namespace Conformance {
             case Operator.LT:
             case Operator.GTE:
             case Operator.LTE:
-                validateReferences(conformance, ast.param.lhs, resolver);
-                validateReferences(conformance, ast.param.rhs, resolver);
+                validateReferences(conformance, ast.param.lhs, errorTarget, resolver);
+                validateReferences(conformance, ast.param.rhs, errorTarget, resolver);
                 break;
 
             case Operator.NOT:
-                validateReferences(conformance, ast.param, resolver);
+                validateReferences(conformance, ast.param, errorTarget, resolver);
                 break;
 
             case Special.Group:
                 for (const a of ast.param) {
-                    validateReferences(conformance, a, resolver);
+                    validateReferences(conformance, a, errorTarget, resolver);
                 }
                 break;
 
             case Special.Name:
                 if (!resolver(ast.param)) {
-                    conformance.error(
+                    errorTarget.error(
                         `UNRESOLVED_CONFORMANCE_${ast.type.toUpperCase()}`,
                         `Conformance ${ast.type} reference "${ast.param}" does not resolve`,
                     );
