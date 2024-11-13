@@ -16,6 +16,7 @@ import {
     ClusterId,
     DeviceTypeId,
     EndpointNumber,
+    FabricIndex,
     GroupId,
     NodeId,
     StatusCode,
@@ -190,67 +191,21 @@ export class AccessControlServer extends AccessControlBehavior {
         }
     }
 
+    /**
+     * Emit ACL change events.  Matter spec really only contemplates changes to ACLs in the context of a specific fabric
+     * but this logic supports multi-fabric changes just for completeness.
+     */
     #handleAccessControlListChange(
         value: AccessControlTypes.AccessControlEntry[],
         oldValue: AccessControlTypes.AccessControlEntry[],
+        actor: AccessControl.Actor,
     ) {
         if (this.internal.aclManager === undefined) {
             return; // Too early to send events
         }
-        const { session } = this.context;
 
-        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
-        //  different which would lead to missing events
-        const relevantFabricIndex = session?.associatedFabric.fabricIndex;
-
-        if (relevantFabricIndex === undefined || this.events.accessControlEntryChanged === undefined) {
-            return;
-        }
-        const adminPasscodeId = session === undefined || session?.isPase ? 0 : null;
-        const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
-        if (adminNodeId === undefined) {
-            // Should never happen
-            return;
-        }
-        const fabricAcls = value.filter(entry => entry.fabricIndex === relevantFabricIndex);
-        const oldFabricAcls = oldValue.filter(entry => entry.fabricIndex === relevantFabricIndex);
-
-        let i = 0;
-        for (; i < fabricAcls.length; i++) {
-            if (!isDeepEqual(fabricAcls[i], oldFabricAcls[i])) {
-                const changeType =
-                    oldFabricAcls[i] === undefined
-                        ? AccessControlTypes.ChangeType.Added
-                        : fabricAcls[i] === undefined
-                          ? AccessControlTypes.ChangeType.Removed
-                          : AccessControlTypes.ChangeType.Changed;
-                this.events.accessControlEntryChanged.emit(
-                    {
-                        changeType,
-                        adminNodeId,
-                        adminPasscodeId,
-                        latestValue:
-                            (changeType === AccessControlTypes.ChangeType.Removed ? oldFabricAcls[i] : fabricAcls[i]) ??
-                            null,
-                        fabricIndex: relevantFabricIndex,
-                    },
-                    this.context,
-                );
-            }
-        }
-        if (oldFabricAcls.length > i) {
-            for (let j = oldFabricAcls.length - 1; j >= i; j--) {
-                this.events.accessControlEntryChanged.emit(
-                    {
-                        changeType: AccessControlTypes.ChangeType.Removed,
-                        adminNodeId,
-                        adminPasscodeId,
-                        latestValue: oldValue[j],
-                        fabricIndex: relevantFabricIndex,
-                    },
-                    this.context,
-                );
-            }
+        for (const change of computeAclChanges(actor, oldValue, value)) {
+            this.events.accessControlEntryChanged.emit(change, this.context);
         }
     }
 
@@ -279,9 +234,14 @@ export class AccessControlServer extends AccessControlBehavior {
     #handleAccessControlExtensionChange(
         value: AccessControlTypes.AccessControlExtension[],
         oldValue: AccessControlTypes.AccessControlExtension[],
+        actor: AccessControl.Actor,
     ) {
         if (this.internal.aclManager === undefined) {
             return; // Too early to send events
+        }
+
+        for (const change of computeAclChanges(actor, oldValue, value)) {
+            this.events.accessControlExtensionChanged.emit(change, this.context);
         }
         const { session } = this.context;
 
@@ -456,5 +416,88 @@ export namespace AccessControlServer {
 
         /** Latest delayed data of acl */
         delayedAclData?: AccessControlTypes.AccessControlEntry[];
+    }
+}
+
+/**
+ * Spec indicates there should be notifications for "add", "remove" and "change".  It does not specify how to match
+ * entries across lists.  Based on how CHIP typically works we just match entries based on index in the fabric-filtered
+ * list.
+ */
+function* computeAclChanges<T extends { fabricIndex: FabricIndex }>(
+    actor: AccessControl.Actor,
+    oldEntries: T[],
+    newEntries: T[],
+) {
+    const fabricLists = {} as FabricLists<T>;
+    groupByFabrics(fabricLists, "old", oldEntries);
+    groupByFabrics(fabricLists, "new", newEntries);
+
+    for (const fabricIndex in fabricLists) {
+        const entry = fabricLists[fabricIndex as unknown as FabricIndex];
+        yield* computeFabricAclChanges(actor, fabricIndex as unknown as FabricIndex, entry.old, entry.new);
+    }
+}
+
+function* computeFabricAclChanges<T>(
+    actor: AccessControl.Actor,
+    fabricIndex: FabricIndex,
+    oldEntries: T[],
+    newEntries: T[],
+) {
+    const maxIndex = Math.max(oldEntries.length, newEntries.length);
+    for (let i = 0; i < maxIndex; i++) {
+        let changeType: AccessControlTypes.ChangeType;
+        if (oldEntries[i] === undefined) {
+            changeType = AccessControlTypes.ChangeType.Added;
+        } else if (newEntries[i] === undefined) {
+            changeType = AccessControlTypes.ChangeType.Removed;
+        } else if (isDeepEqual(oldEntries[i], newEntries[i])) {
+            continue;
+        } else {
+            changeType = AccessControlTypes.ChangeType.Changed;
+        }
+
+        let adminNodeId: NodeId | null, adminPasscodeId: number | null;
+        if (actor.fabric === fabricIndex && actor.subject !== undefined) {
+            adminNodeId = actor.subject;
+            adminPasscodeId = null;
+        } else {
+            // In theory the local node could mutate its lists.  Matter spec only contemplates changes via remote
+            // sessions so we just treat as a PASE change
+            if (actor.fabric !== undefined) {
+                // This is likely a bug but is theoretically possible with a custom cluster.  We also treat this as a
+                // PASE change
+                logger.warn(`Reporting change of ${fabricIndex} ACLs made by fabric ${actor.fabric}`);
+            }
+            adminNodeId = null;
+            adminPasscodeId = 0;
+        }
+
+        yield {
+            adminNodeId,
+            adminPasscodeId,
+            changeType,
+            latestValue: newEntries[i] ?? null,
+            fabricIndex,
+        };
+    }
+}
+
+type FabricLists<T extends { fabricIndex: FabricIndex }> = Record<FabricIndex, { new: T[]; old: T[] }>;
+
+function groupByFabrics<T extends { fabricIndex: FabricIndex }>(
+    target: FabricLists<T>,
+    type: "new" | "old",
+    entries: T[],
+) {
+    for (const entry of entries) {
+        let fabricList;
+        if (entry.fabricIndex in target) {
+            fabricList = target[entry.fabricIndex];
+        } else {
+            fabricList = target[entry.fabricIndex] = { new: [], old: [] };
+        }
+        fabricList[type].push(entry);
     }
 }

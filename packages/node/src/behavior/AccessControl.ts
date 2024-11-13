@@ -124,7 +124,7 @@ export namespace AccessControl {
     /**
      * Information about the subject that triggered a change.
      */
-    export interface Subject {
+    export interface Actor {
         /**
          * The fabric of the authorized client.
          */
@@ -148,7 +148,7 @@ export namespace AccessControl {
     /**
      * Authorization metadata that varies with session.
      */
-    export interface Session extends Subject {
+    export interface Session extends Actor {
         /**
          * Checks if the authorized client has a certain Access Privilege granted.
          */

@@ -107,9 +107,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Changed: AsyncObservable<
-                        [value: string, oldValue: string, context?: AccessControl.Subject]
-                    >;
+                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: AccessControl.Actor]>;
                 };
             };
 

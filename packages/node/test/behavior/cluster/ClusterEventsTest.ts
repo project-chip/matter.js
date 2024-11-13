@@ -47,7 +47,7 @@ describe("ClusterEvents", () => {
         it("includes required", () => {
             ({}) as Ep satisfies EventEmitter & {
                 reqAttr$Changed: Observable<
-                    [value: string, oldValue: string, context?: AccessControl.Subject],
+                    [value: string, oldValue: string, context?: AccessControl.Actor],
                     MaybePromise
                 >;
 
@@ -108,7 +108,7 @@ describe("ClusterEvents", () => {
         it("requires mandatory", () => {
             ({}) as Ei satisfies {
                 reqAttr$Changed: Observable<
-                    [value: string, oldValue: string, context: AccessControl.Subject],
+                    [value: string, oldValue: string, context: AccessControl.Actor],
                     MaybePromise
                 >;
 

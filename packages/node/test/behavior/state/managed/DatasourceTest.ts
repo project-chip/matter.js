@@ -365,9 +365,9 @@ describe("Datasource", () => {
 
             const { promise, resolver } = createPromise<void>();
 
-            let subject: AccessControl.Subject | undefined;
+            let actor: AccessControl.Actor | undefined;
             events.foo$Changed.on(async (_v1, _v2, subj) => {
-                subject = subj;
+                actor = subj;
 
                 await withReference(ds2, ref => {
                     ref.state.bar = true;
@@ -383,7 +383,7 @@ describe("Datasource", () => {
             await promise;
 
             expect(ds2.view.bar).true;
-            expect(subject).deep.equals({ fabric: undefined, subject: undefined, offline: true });
+            expect(actor).deep.equals({ fabric: undefined, subject: undefined, offline: true });
         });
     });
 

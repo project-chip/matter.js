@@ -29,7 +29,7 @@ export namespace ClusterEvents {
      * Properties the cluster contributes to Events.
      */
     export type Properties<C> = AttributeObservables<ClusterType.AttributesOf<C>, "Changing", ActionContext> &
-        AttributeObservables<ClusterType.AttributesOf<C>, "Changed", AccessControl.Subject> &
+        AttributeObservables<ClusterType.AttributesOf<C>, "Changed", AccessControl.Actor> &
         EventObservables<ClusterType.EventsOf<C>>;
 
     export type AttributeObservables<A extends Record<string, ClusterType.Attribute>, N extends string, C> = {
