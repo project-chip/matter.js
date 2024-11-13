@@ -5,7 +5,7 @@
  */
 
 import { camelize, InternalError } from "#general";
-import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, ValueModel } from "#model";
+import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, ValueModel } from "#model";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";
@@ -14,6 +14,17 @@ import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";
 import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { Schema } from "./Schema.js";
 import { ValueSupervisor } from "./ValueSupervisor.js";
+
+/**
+ * Global attributes repeat for every cluster and for those where metadata does not change we cache supervision methods
+ * for reuse.
+ */
+const GlobalAttributeSupervisors = {} as Record<number, ValueSupervisor>;
+
+/**
+ * We assume schema is immutable so we can cache supervisors.
+ */
+const cache = new WeakMap<Schema, RootSupervisor>();
 
 /**
  * A RootSupervisor is a {@link ValueSupervisor} that supervises a specific root {@link Schema}.  It acts as a factory
@@ -44,6 +55,8 @@ export class RootSupervisor implements ValueSupervisor {
      * @param schema the {@link Schema} for the supervised data
      */
     constructor(schema: Schema) {
+        schema.freeze();
+
         if (schema instanceof ClusterModel) {
             this.#featureMap = schema.featureMap;
             this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
@@ -54,6 +67,18 @@ export class RootSupervisor implements ValueSupervisor {
         this.#members = new Set(schema.activeMembers);
 
         this.#root = this.#createValueSupervisor(schema);
+    }
+
+    /**
+     * Obtain the supervisor for schema.  The result is cached.
+     */
+    static for(schema: Schema) {
+        if (cache.has(schema)) {
+            return cache.get(schema)!;
+        }
+        const supervisor = new RootSupervisor(schema);
+        cache.set(schema, supervisor);
+        return supervisor;
     }
 
     get owner() {
@@ -142,14 +167,22 @@ export class RootSupervisor implements ValueSupervisor {
      * @returns the I/O implementation
      */
     get(schema: Schema): ValueSupervisor {
-        // #root isn't set whilc we generate root schema so guard against this.#root === undefined
+        // #root isn't set while we generate root schema so guard against this.#root === undefined
         if (schema === this.#root?.schema) {
             return this;
         }
 
         let supervisor = this.#cache.get(schema);
         if (supervisor === undefined) {
-            supervisor = this.#createValueSupervisor(schema);
+            if (schema.tag === "attribute" && schema.id !== undefined && schema.id in GlobalAttributeSupervisors) {
+                supervisor = {
+                    ...GlobalAttributeSupervisors[schema.id],
+                    owner: this,
+                    schema,
+                };
+            } else {
+                supervisor = this.#createValueSupervisor(schema);
+            }
             this.#cache.set(schema, supervisor);
         }
 
@@ -224,4 +257,22 @@ export class RootSupervisor implements ValueSupervisor {
     #isGenerating(schema: Schema) {
         return this.#generating.has(schema);
     }
+}
+
+const PrototypicalCluster = new ClusterModel({ name: "Prototype" });
+for (const attribute of Matter.all(AttributeModel)) {
+    if (attribute.id === undefined) {
+        continue;
+    }
+
+    PrototypicalCluster.children.push(attribute.clone());
+}
+
+const GlobalSupervisor = new RootSupervisor(PrototypicalCluster);
+for (const attribute of PrototypicalCluster.children) {
+    if (attribute.id === undefined || attribute.id === FeatureMap.id) {
+        continue;
+    }
+
+    GlobalAttributeSupervisors[attribute.id] = GlobalSupervisor.get(attribute);
 }

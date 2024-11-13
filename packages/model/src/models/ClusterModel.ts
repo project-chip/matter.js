@@ -202,11 +202,6 @@ export class ClusterModel extends Model<ClusterElement> implements ClusterElemen
         return result as ClusterElement;
     }
 
-    override freeze() {
-        this.quality.freeze();
-        super.freeze();
-    }
-
     constructor(definition: ClusterElement.Properties) {
         super(definition);
 

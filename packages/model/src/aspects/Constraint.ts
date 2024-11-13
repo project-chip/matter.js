@@ -80,6 +80,8 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         if (ast.parts !== undefined) {
             this.parts = ast.parts.map(p => new Constraint(p));
         }
+
+        this.freeze();
     }
 
     /**
@@ -150,7 +152,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         return Constraint.serialize(this);
     }
 
-    override freeze() {
+    protected override freeze() {
         if (this.parts) {
             Object.freeze(this.parts);
         }

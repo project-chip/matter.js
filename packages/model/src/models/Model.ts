@@ -32,6 +32,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
 
     #id?: number = undefined;
     #name: string;
+    #frozen?: boolean;
 
     /**
      * Indicates that an element may have type definitions as children.
@@ -44,13 +45,19 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     isType?: boolean;
 
     /**
-     * Normally {@link base} performs lookup based on {@link type}.  If instead a model is installed it is used as the
-     * base.
+     * Normally {@link base} performs lookup based on {@link type}.  Setting this field short circuits this resolution.
      *
      * The operational base also enables resolution from the operational base's tree.  This enables resolution on
      * operational models that are not installed in a parent hierarchy.
+     *
+     * We set the operational base when freezing the model.
      */
-    operationalBase?: Model;
+    operationalBase?: Model | null;
+
+    /**
+     * This is like {@link operationalBase} except for the element's shadow.
+     */
+    operationalShadow?: Model | null;
 
     #children?: Children<Model>;
     #parent?: Model;
@@ -224,14 +231,20 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     /**
      * Get a model for my base type as defined by {@link type}, if any.
      */
-    get base() {
+    get base(): Model | undefined {
+        if (this.operationalBase !== undefined) {
+            return this.operationalBase ?? undefined;
+        }
         return new ModelTraversal().findBase(this);
     }
 
     /**
      * Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
      */
-    get shadow() {
+    get shadow(): Model | undefined {
+        if (this.operationalShadow !== undefined) {
+            return this.operationalShadow ?? undefined;
+        }
         return new ModelTraversal().findShadow(this);
     }
 
@@ -453,14 +466,22 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      * Freeze the model hierarchy rooted at this model.
      *
      * When using a model as operational schema we implement various optimizations that assume the schema is immutable.
-     * This function enforces that assumption.
+     * This function enforces that assumption and caches a few values that only make sense with frozen schema.
      *
      * To make changes to a frozen model use {@link clone}.
      */
     freeze() {
+        if (this.#frozen) {
+            return;
+        }
+
+        const base = this.operationalBase ?? (this.operationalBase = this.base ?? null);
+        const shadow = this.operationalShadow ?? (this.operationalShadow = this.shadow ?? null);
+        this.#frozen = true;
         Object.freeze(this);
         this.children.freeze();
-        this.base?.freeze();
+        base?.freeze();
+        shadow?.freeze();
     }
 
     toString() {

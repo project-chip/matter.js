@@ -28,12 +28,10 @@ import { Schema } from "./Schema.js";
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
     const logical = options.schema ?? Schema.empty;
 
-    const schema = logical.extend({ name: `${camelize(options.id, true)}$State` });
-
     // Add fields for programmatic extensions
-    addExtensionFields(schema, new options.State());
+    const schema = addExtensionFields(logical, new options.State());
 
-    return new RootSupervisor(schema);
+    return RootSupervisor.for(schema);
 }
 
 export namespace BehaviorSupervisor {
@@ -44,6 +42,8 @@ export namespace BehaviorSupervisor {
     }
 }
 
+const extendedSchemaCache = new Map<Schema, Record<string, Schema>>();
+
 /**
  * Adds a field for every property in state that isn't defined in the schema.
  *
@@ -53,13 +53,19 @@ export namespace BehaviorSupervisor {
  * we instead search the prototype chain for read/write descriptors.
  *
  * Note 3: We can't do anything with types either.  This means e.g. writing to subfields won't behave as expected.
- * Really to do things correctly behavior authors should hand-craft schema.  Or maybe we do something with decorators?.
+ * Really to do things correctly behavior authors should hand-craft schema.  Once we can configure with decorators this
+ * will be more straightforward.
+ *
+ * Note 4: We cache the combination of schema + extension fields.  This is a small win but primarily to enable caching
+ * of other tiers that use the schema as a cache key.
  */
 function addExtensionFields(schema: Schema, defaultState: Val.Struct) {
     const props = new Set<string>();
     for (const field of schema.activeMembers) {
         props.add(camelize(field.name));
     }
+
+    let newProperties: Record<string, boolean> | undefined;
 
     function addProperties(object: null | Val.Struct) {
         if (!object || object === Object.prototype) {
@@ -76,22 +82,13 @@ function addExtensionFields(schema: Schema, defaultState: Val.Struct) {
             if (!props.has(name)) {
                 props.add(name);
 
-                const field = new FieldModel({
-                    name,
-                    type: "any",
-
-                    access: new Access({
-                        readPriv: Access.Privilege.View,
-                        writePriv: Access.Privilege.Operate,
-                    }),
-                });
-
                 const descriptor = descriptors[name];
-                if (!descriptor.writable && !descriptor.set) {
-                    field.quality = "F";
-                }
+                const fixed = !descriptor.writable && !descriptor.set;
 
-                schema.children.push(field);
+                if (newProperties === undefined) {
+                    newProperties = {};
+                }
+                newProperties[name] = fixed;
             }
         }
 
@@ -99,4 +96,44 @@ function addExtensionFields(schema: Schema, defaultState: Val.Struct) {
     }
 
     addProperties(defaultState);
+
+    if (newProperties === undefined) {
+        return schema;
+    }
+
+    // The secondary cache key is formed from the fields we are adding
+    const cacheKey = Object.entries(newProperties)
+        .map(([name, fixed]) => `${name}/${fixed}`)
+        .join(",");
+    let cacheBucket = extendedSchemaCache.get(schema);
+    if (cacheBucket === undefined) {
+        extendedSchemaCache.set(schema, (cacheBucket = {}));
+    } else if (cacheKey in cacheBucket) {
+        return cacheBucket[cacheKey];
+    }
+
+    // Create the extension
+    schema = schema.extend();
+
+    for (const name in newProperties) {
+        const field = new FieldModel({
+            name,
+            type: "any",
+
+            access: new Access({
+                readPriv: Access.Privilege.View,
+                writePriv: Access.Privilege.Operate,
+            }),
+        });
+
+        if (newProperties[name]) {
+            field.quality = "F";
+        }
+
+        schema.children.push(field);
+    }
+
+    cacheBucket[cacheKey] = schema;
+
+    return schema;
 }

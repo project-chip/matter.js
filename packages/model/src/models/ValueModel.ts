@@ -304,14 +304,6 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
         return result as T;
     }
 
-    override freeze() {
-        this.constraint.freeze();
-        this.conformance.freeze();
-        this.access.freeze();
-        this.quality.freeze();
-        super.freeze();
-    }
-
     constructor(definition: BaseElement.Properties<T>) {
         super(definition);
 

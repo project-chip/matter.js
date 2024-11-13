@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access, Conformance, Constraint, Quality } from "../../aspects/index.js";
+import { Access, Aspect, Conformance, Constraint, Quality } from "../../aspects/index.js";
 import { DefinitionError, FieldValue, Metatype } from "../../common/index.js";
 import { ClusterModel, Globals, ValueModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
@@ -23,7 +23,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         this.validateProperty({ name: "quality", type: Quality });
         this.validateProperty({ name: "metatype", type: Metatype });
 
-        this.model.conformance.validateReferences(name => {
+        this.validateAspect("conformance");
+        this.model.conformance.validateReferences(this, name => {
             // Features are all caps, other names are field references
             if (name.match(/^[A-Z0-9_$]+$/)) {
                 // Feature lookup
@@ -35,7 +36,6 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             }
         });
 
-        this.validateAspect("conformance");
         this.validateAspect("constraint");
         this.validateAspect("access");
         this.validateAspect("quality");
@@ -47,7 +47,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
     }
 
     private validateAspect(name: string) {
-        const aspect = (this.model as any)[name];
+        const aspect = (this.model as any)[name] as Aspect;
         if (aspect?.errors) {
             aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, e.message));
         }
