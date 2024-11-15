@@ -28,6 +28,8 @@ import { ReadOnlyTransaction } from "../transaction/Tx.js";
 
 const logger = Logger.get("Datasource");
 
+const FEATURES_KEY = "__features__";
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
@@ -206,6 +208,7 @@ interface Internals extends Datasource.Options {
     values: Val.Struct;
     version: number;
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
+    featuresKey?: string;
     interactionObserver(): MaybePromise<void>;
 }
 
@@ -223,10 +226,27 @@ interface CommitChanges {
 function configure(options: Datasource.Options): Internals {
     const values = new options.type() as Val.Struct;
 
+    let storedValues = options.store?.initialValues;
+
+    let featuresKey: undefined | string;
+    if (options.supervisor.featureMap.children.length) {
+        featuresKey = [...options.supervisor.supportedFeatures].join(",");
+        if (storedValues?.[FEATURES_KEY] !== undefined && storedValues[FEATURES_KEY] !== featuresKey) {
+            logger.warn(
+                `Ignoring persisted values for ${options.path} because features changed from "${values.featuresKey}" to "${featuresKey}"`,
+            );
+            storedValues = undefined;
+        }
+    }
+
     const initialValues = {
         ...options.defaults,
-        ...options.store?.initialValues,
+        ...storedValues,
     };
+
+    if (FEATURES_KEY in initialValues) {
+        delete initialValues[FEATURES_KEY];
+    }
 
     for (const key in initialValues) {
         values[key] = initialValues[key];
@@ -236,6 +256,7 @@ function configure(options: Datasource.Options): Internals {
         ...options,
         version: Crypto.getRandomUInt32(),
         values: values,
+        featuresKey,
 
         interactionObserver() {
             function handleObserverError(error: any) {
@@ -565,6 +586,10 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         const persistent = changes?.persistent;
         if (!persistent) {
             return;
+        }
+
+        if (internals.featuresKey !== undefined) {
+            persistent[FEATURES_KEY] = internals.featuresKey;
         }
 
         return internals.store?.set(session.transaction, persistent);

@@ -28,6 +28,10 @@ const OPERATION_DEPTH_LIMIT = 20;
 
 let memos: Memos | undefined;
 
+// Member caches.  Only populated for frozen models
+const activeMemberCache = new WeakMap<Model, ValueModel[]>();
+const conformantMemberCache = new WeakMap<Model, ValueModel[]>();
+
 /**
  * This class performs lookups of models in the scope of a specific model.  We use a class so the lookup can maintain
  * state and guard against circular references.
@@ -526,12 +530,21 @@ export class ModelTraversal {
      *
      *   - If there are multiple applicable members based on conformance the definitions conflict and throw an error
      *
+     * If the model is frozen we cache the return value.
+     *
      * Note that "active" in this case does not imply the member is conformant, only that conflicts are resolved.
      *
      * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
      * will probably never be necessary and would require an entirely different (more complicated) structure.
      */
     findActiveMembers(scope: Model & { members: PropertyModel[] }, conformantOnly: boolean, cluster?: ClusterModel) {
+        const cache = Object.isFrozen(scope) ? (conformantOnly ? conformantMemberCache : activeMemberCache) : undefined;
+
+        const cached = cache?.get(scope);
+        if (cached) {
+            return cached;
+        }
+
         const features = cluster?.featureNames ?? new FeatureSet();
         const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
 
@@ -564,7 +577,13 @@ export class ModelTraversal {
             selectedMembers[member.name] = member;
         }
 
-        return Object.values(selectedMembers);
+        const result = Object.values(selectedMembers);
+
+        if (cache) {
+            cache.set(scope, result);
+        }
+
+        return result;
     }
 
     /**
