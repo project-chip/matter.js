@@ -231,9 +231,10 @@ function configure(options: Datasource.Options): Internals {
     let featuresKey: undefined | string;
     if (options.supervisor.featureMap.children.length) {
         featuresKey = [...options.supervisor.supportedFeatures].join(",");
-        if (storedValues?.[FEATURES_KEY] !== undefined && storedValues[FEATURES_KEY] !== featuresKey) {
+        const storedFeaturesKey = storedValues?.[FEATURES_KEY];
+        if (storedFeaturesKey !== undefined && storedFeaturesKey !== featuresKey) {
             logger.warn(
-                `Ignoring persisted values for ${options.path} because features changed from "${values.featuresKey}" to "${featuresKey}"`,
+                `Ignoring persisted values for ${options.path} because features changed from "${storedFeaturesKey}" to "${featuresKey}"`,
             );
             storedValues = undefined;
         }
