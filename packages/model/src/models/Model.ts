@@ -339,7 +339,11 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      * Convert model to JSON.
      */
     toJSON() {
-        return this.valueOf();
+        const fields = this.valueOf();
+        if (this.children.length) {
+            fields.children = this.children.map(child => child.toJSON());
+        }
+        return fields;
     }
 
     /**

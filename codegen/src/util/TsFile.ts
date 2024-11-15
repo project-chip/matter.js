@@ -7,7 +7,7 @@
 import { FormattedText, InternalError, serialize } from "#general";
 import { Specification } from "#model";
 import { Package } from "#tools";
-import { relative } from "path";
+import { posix, relative, sep } from "path";
 import { absolute, readMatterFile, writeMatterFile } from "./file.js";
 import { asObjectKey } from "./string.js";
 
@@ -751,6 +751,9 @@ export class TsFile extends Block {
 
             const from = absolute(this.name.replace(/\/[^/]+$/, ""));
             filename = relative(from, to);
+
+            // On Windows, convert all "\\" to "/"
+            filename = filename.replaceAll(sep, posix.sep);
 
             if (!filename.startsWith(".")) {
                 filename = `./${filename}`;

@@ -59,6 +59,10 @@ addTest({ name: "All tests" });
 addTest({ name: "Test current file", args: ["--spec", "${input:testFile}", "--all-logs", "esm"] });
 addRun({ name: "Run current file", args: ["${file}"] });
 
+// Generate tool launchers
+addRun({ name: "Run shell", cwd: Package.workspace.relative("packages/nodejs-shell"), args: ["dist/cjs/app.js"] });
+addRun({ name: "Run CLI tool", cwd: Package.workspace.relative("packages/cli-tool"), args: ["bin/matter.js"] });
+
 // Generate launches for each project that has tests
 const graph = await Graph.load();
 for (const node of graph.nodes) {
