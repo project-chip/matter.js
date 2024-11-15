@@ -1,7 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
-        { 
+        {
             "type": "node",
             "request": "launch",
             "skipFiles": [
@@ -70,6 +70,56 @@
             "name": "Run current file",
             "args": [
                 "${file}"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run shell",
+            "cwd": "${workspaceFolder}/packages/nodejs-shell",
+            "args": [
+                "dist/cjs/app.js"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run CLI tool",
+            "cwd": "${workspaceFolder}/packages/cli-tool",
+            "args": [
+                "bin/matter.js"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
         },
