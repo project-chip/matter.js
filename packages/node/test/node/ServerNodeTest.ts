@@ -10,6 +10,8 @@ import { DescriptorBehavior } from "#behaviors/descriptor";
 import { PumpConfigurationAndControlServer } from "#behaviors/pump-configuration-and-control";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { PumpConfigurationAndControl } from "#clusters/pump-configuration-and-control";
+import { ColorTemperatureLightDevice } from "#devices/color-temperature-light";
+import { ExtendedColorLightDevice } from "#devices/extended-color-light";
 import { LightSensorDevice } from "#devices/light-sensor";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { PumpDevice } from "#devices/pump";
@@ -28,6 +30,9 @@ import {
     MockUdpChannel,
     NetworkSimulator,
     PrivateKey,
+    StorageBackendMemory,
+    StorageManager,
+    StorageService,
 } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { AttestationCertificateManager, CertificationDeclarationManager, FabricManager } from "#protocol";
@@ -491,6 +496,55 @@ describe("ServerNode", () => {
                 );
             });
         });
+    });
+
+    it("is resilient to conformance changes that affect persisted data", async () => {
+        const environment = new Environment("test");
+        const service = environment.get(StorageService);
+
+        // Configure storage that will survive node replacement
+        const storage = new StorageManager(new StorageBackendMemory());
+        storage.close = () => {};
+        await storage.initialize();
+        service.open = () => Promise.resolve(storage);
+
+        // Initialize a node with extended color light, ensure levelX persists
+        {
+            const node = new MockServerNode({ id: "node0", environment });
+
+            await node.construction.ready;
+
+            const originalEndpoint = await node.add(ExtendedColorLightDevice, {
+                id: "foo",
+                number: 1,
+                colorControl: {
+                    startUpColorTemperatureMireds: 0,
+                    coupleColorTempToLevelMinMireds: 0,
+                },
+            });
+
+            await originalEndpoint.set({ colorControl: { currentX: 12 } });
+
+            await node.close();
+        }
+
+        // Initialize a node with color temp light, levelX won't be supported
+        {
+            const node = new MockServerNode({ id: "node0", environment });
+
+            await node.construction.ready;
+
+            await node.add(ColorTemperatureLightDevice, {
+                id: "foo",
+                number: 1,
+                colorControl: {
+                    startUpColorTemperatureMireds: 0,
+                    coupleColorTempToLevelMinMireds: 0,
+                },
+            });
+
+            await node.close();
+        }
     });
 });
 
