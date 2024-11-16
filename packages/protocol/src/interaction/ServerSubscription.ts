@@ -7,6 +7,7 @@
 import {
     InternalError,
     Logger,
+    MatterError,
     MaybePromise,
     NetworkError,
     NoResponseTimeoutError,
@@ -570,7 +571,7 @@ export class ServerSubscription extends Subscription {
             this.sendUpdateErrorCounter++;
             logger.info(
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
-                error,
+                error instanceof MatterError ? error.message : error,
             );
             if (this.sendUpdateErrorCounter <= 2) {
                 // fill the data back in the queue to resend with next try

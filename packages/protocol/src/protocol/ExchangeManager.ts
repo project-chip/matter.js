@@ -419,9 +419,14 @@ export class ExchangeManager {
                 }
 
                 try {
-                    this.onMessage(socket, data).catch(error => logger.error(error));
+                    this.onMessage(socket, data).catch(error =>
+                        logger.info(error instanceof MatterError ? error.message : error),
+                    );
                 } catch (error) {
-                    logger.warn("Ignoring UDP message with error", error);
+                    logger.info(
+                        "Ignoring UDP message with error",
+                        error instanceof MatterError ? error.message : error,
+                    );
                 }
             }),
         );
