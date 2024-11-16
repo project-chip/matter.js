@@ -568,7 +568,7 @@ export class ServerSubscription extends Subscription {
             }
 
             this.sendUpdateErrorCounter++;
-            logger.error(
+            logger.info(
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
                 error,
             );
@@ -585,7 +585,7 @@ export class ServerSubscription extends Subscription {
                     this.#outstandingEventUpdates.add(update),
                 );
             } else {
-                logger.error(
+                logger.info(
                     `Sending update failed 3 times in a row, canceling subscription ${this.id} and let controller subscribe again.`,
                 );
                 this.sendNextUpdateImmediately = false;
