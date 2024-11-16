@@ -349,6 +349,10 @@ export class PairedNode {
         return this.#nodeDetails.basicInformation;
     }
 
+    get deviceInformation() {
+        return this.#nodeDetails.meta;
+    }
+
     get localInitializationDone() {
         return this.#localInitializationDone;
     }

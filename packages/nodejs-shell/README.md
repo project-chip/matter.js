@@ -18,10 +18,18 @@ There are three ways to start matter-node-shell. The `nodenum` parameter provide
 The shell currently just supports Controller side and so the port is not used and the node is always by default a "controller".
 
 ```
-npm shell <nodenum>
+npx matter-shell <nodenum>
 ```
 
-There are other parameters available to enable BLE and define the HCI device to use. See `npm shell -- --help` for more details.
+
+Alternatively you can use
+
+```
+cd node_modules/@matter/nodejs-shell
+npm run shell <nodenum>
+```
+
+There are other parameters available to enable BLE and define the HCI device to use. See `npx matter-shell -- --help` for more details.
 Please note the extra `--` to separate the npm parameters from the shell parameters!
 
 ## matter.js v0.11 Storage adjustment!
@@ -167,10 +175,10 @@ The matter shell app uses the `node-localstorage` package to persistently store 
 
 ```
 # From matter-node-shell top-level
-npm shell 1
+npm run shell 1
 
 # In different terminal
-npm shell 2
+npm run shell 2
 ```
 
 To delete node state, i.e. factory reset, just delete the `.matter-shell-#` directory of the node:
