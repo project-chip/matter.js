@@ -264,8 +264,8 @@ export abstract class FailsafeContext {
         let fabric: Fabric | undefined = undefined;
         if (this.fabricIndex !== undefined) {
             const fabricIndex = this.fabricIndex;
-            fabric = this.#fabrics.for(fabricIndex);
-            if (fabric !== undefined) {
+            if (this.#fabrics.has(fabricIndex)) {
+                fabric = this.#fabrics.for(fabricIndex);
                 const session = this.#sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session !== undefined && session.isSecure) {
                     await session.close(false);
@@ -289,11 +289,8 @@ export abstract class FailsafeContext {
         // 7. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any entry in the Fabrics attribute.
         if (!this.#forUpdateNoc && fabric !== undefined) {
             const fabricIndex = this.fabricIndex;
-            if (fabricIndex !== undefined) {
-                const fabric = this.#fabrics.for(fabricIndex);
-                if (fabric !== undefined) {
-                    await this.revokeFabric(fabric);
-                }
+            if (fabricIndex !== undefined && this.#fabrics.has(fabricIndex)) {
+                await this.revokeFabric(this.#fabrics.for(fabricIndex));
             }
         }
 
