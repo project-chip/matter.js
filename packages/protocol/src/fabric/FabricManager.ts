@@ -98,6 +98,13 @@ export class FabricManager {
         await this.#storage?.clear();
     }
 
+    has(address: FabricIndex | PeerAddress) {
+        if (typeof address === "object") {
+            address = address.fabricIndex;
+        }
+        return this.#fabrics.has(address);
+    }
+
     for(address: FabricIndex | PeerAddress) {
         if (typeof address === "object") {
             address = address.fabricIndex;
