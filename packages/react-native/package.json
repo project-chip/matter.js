@@ -38,7 +38,7 @@
         "@matter/general": "*",
         "@matter/nodejs": "*",
         "@matter/protocol": "*",
-        "@react-native-async-storage/async-storage": "^2.0.0",
+        "@react-native-async-storage/async-storage": "^2.1.0",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
         "@types/node": "^22.9.0",
