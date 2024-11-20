@@ -229,7 +229,7 @@ export function xyToRgb(x: number, y: number): [number, number, number] {
  * @returns color temp in Kelvins
  */
 export function miredsToKelvin(mireds: number): number {
-    return 1_000_000 / mireds;
+    return Math.round(1_000_000 / mireds);
 }
 
 /**
@@ -263,7 +263,7 @@ export function xyToMireds(x: number, y: number): number {
  */
 export function miredsToXy(mireds: number): [number, number] | undefined {
     const kelvin = miredsToKelvin(mireds);
-    const detailedValue = kelvinToXyLookup(Math.round(kelvin));
+    const detailedValue = kelvinToXyLookup(kelvin);
     if (detailedValue !== undefined) {
         return [detailedValue.x, detailedValue.y];
     }
