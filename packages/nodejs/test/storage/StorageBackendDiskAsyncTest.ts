@@ -79,10 +79,35 @@ describe("StorageBackendDiskAsync", () => {
         assert.equal(keyContent.toString(), `"value"`);
     });
 
+    it("write and read success with multiple context levels and special chars", async () => {
+        const location = [...CONTEXTx3, "it'a/slash"];
+        await storage.set(location, "key", "value");
+
+        const value = await storage.get(location, "key");
+        assert.equal(value, "value");
+
+        const dirStat = await stat(TEST_STORAGE_LOCATION);
+        assert.ok(dirStat.isDirectory());
+        const KeyFileStat = await stat(TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.it%27a%2Fslash.key");
+        assert.ok(KeyFileStat.isFile());
+        const keyContent = await readFile(
+            TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.it%27a%2Fslash.key",
+        );
+        assert.equal(keyContent.toString(), `"value"`);
+    });
+
     it("return keys with storage values", async () => {
         await storage.set(CONTEXTx3, "key", "value");
 
         const value = await storage.keys(CONTEXTx3);
+        expect(value).deep.equal(["key"]);
+    });
+
+    it("return keys with storage values and special chars", async () => {
+        const location = [...CONTEXTx3, "it'a/slash"];
+        await storage.set(location, "key", "value");
+
+        const value = await storage.keys(location);
         expect(value).deep.equal(["key"]);
     });
 
@@ -103,6 +128,20 @@ describe("StorageBackendDiskAsync", () => {
         expect(await storage.contexts(CONTEXTx2)).deep.equal(["subsubcontext"]);
         expect(await storage.contexts(CONTEXTx1)).deep.equal(["subcontext", "subcontext2"]);
         expect(await storage.contexts([])).deep.equal(CONTEXTx1);
+    });
+
+    it("return contexts with subcontexts with special chars", async () => {
+        await storage.set(CONTEXTx2, "key", "value");
+        await storage.set(["context", "sub's/fun"], "key", "value");
+        await storage.set(CONTEXTx3, "key", "value");
+
+        const storageRead = new StorageBackendDiskAsync(TEST_STORAGE_LOCATION);
+        await storageRead.initialize();
+
+        expect(await storageRead.contexts(CONTEXTx3)).deep.equal([]);
+        expect(await storageRead.contexts(CONTEXTx2)).deep.equal(["subsubcontext"]);
+        expect(await storageRead.contexts(CONTEXTx1)).deep.equal(["sub's/fun", "subcontext"]);
+        expect(await storageRead.contexts([])).deep.equal(CONTEXTx1);
     });
 
     it("clear all keys with multiple contextes", async () => {

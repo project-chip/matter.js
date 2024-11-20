@@ -88,6 +88,25 @@ describe("Storage node-localstorage", () => {
         assert.equal(keyContent.toString(), `"value"`);
     });
 
+    it("write and read success with multiple context levels and special chars", async () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        const location = [...CONTEXTx3, "it'a/slash"];
+        storage.set(location, "key", "value");
+
+        const value = storage.get(location, "key");
+        assert.equal(value, "value");
+
+        const dirStat = await stat(TEST_STORAGE_LOCATION);
+        assert.ok(dirStat.isDirectory());
+        const KeyFileStat = await stat(TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.it%27a%2Fslash.key");
+        assert.ok(KeyFileStat.isFile());
+        const keyContent = await readFile(
+            TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.it%27a%2Fslash.key",
+        );
+        assert.equal(keyContent.toString(), `"value"`);
+    });
+
     it("return keys with storage values", () => {
         const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
 
@@ -118,6 +137,21 @@ describe("Storage node-localstorage", () => {
         expect(storage.contexts(CONTEXTx2)).deep.equal(["subsubcontext"]);
         expect(storage.contexts(CONTEXTx1)).deep.equal(["subcontext", "subcontext2"]);
         expect(storage.contexts([])).deep.equal(CONTEXTx1);
+    });
+
+    it("return contexts with subcontexts with special chars", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(CONTEXTx2, "key", "value");
+        storage.set(["context", "sub's/fun"], "key", "value");
+        storage.set(CONTEXTx3, "key", "value");
+
+        const storageRead = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        expect(storageRead.contexts(CONTEXTx3)).deep.equal([]);
+        expect(storageRead.contexts(CONTEXTx2)).deep.equal(["subsubcontext"]);
+        expect(storageRead.contexts(CONTEXTx1)).deep.equal(["subcontext", "sub's/fun"]);
+        expect(storageRead.contexts([])).deep.equal(CONTEXTx1);
     });
 
     it("clear all keys with multiple contextes", () => {
