@@ -1425,11 +1425,7 @@ export namespace Thermostat {
             controlSequenceOfOperation: WritableAttribute(
                 0x1b,
                 TlvEnum<ControlSequenceOfOperation>(),
-                {
-                    persistent: true,
-                    default: ControlSequenceOfOperation.CoolingAndHeating,
-                    writeAcl: AccessLevel.Manage
-                }
+                { persistent: true, writeAcl: AccessLevel.Manage }
             ),
 
             /**
