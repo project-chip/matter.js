@@ -15,6 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: The `with` functions on endpoint and cluster behavior types now alias to `withBehaviors` and `withFeatures` respectively to make their function more explicit
     - Enhancement: Endpoints now ignore persisted values for clusters when features change across restarts.  This allows for startup when persisted values become invalid due to conformance rules
     - Fix: Triggers CommissioningServer#initiateCommissioning when server restarts outside of factory reset
+    - Fix: Ensures to initialize all known endpoint numbers to prevent dpuplicate number assignment edge cases
 
 -   @matter/nodejs
     - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
