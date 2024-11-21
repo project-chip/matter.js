@@ -232,6 +232,7 @@ The following projects are available on any platform with access to Node.js 18+:
 - [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red node for devices and controllers (outdated)
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
 - [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
-  - [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): a matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
-  - [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): a matterbridge production-level plugin that expose all somfy tahoma screens to Matter
+  - [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
+  - [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): matterbridge production-level plugin that expose all somfy tahoma screens to Matter
+  - [matterbridge-shelly](https://github.com/Luligu/matterbridge-shelly): matterbridge production-level plugin that expose all Shelly Gen 1, 2, 3, BLU devices to Matter
   - ... and more plugins
