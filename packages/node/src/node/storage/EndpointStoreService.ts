@@ -80,6 +80,14 @@ export class EndpointStoreFactory extends EndpointStoreService {
 
         // Preload stores so we can access synchronously going forward
         this.#root = await asyncNew(EndpointStore, this.#storage);
+
+        // Ensure all known numbers are allocated.  This protects them when unknown endpoints initialize before known
+        // endpoints and #nextNumber is somehow invalid
+        this.#root.visit(({ number }) => {
+            if (number !== undefined) {
+                this.#allocatedNumbers.add(number);
+            }
+        });
     }
 
     async erase() {

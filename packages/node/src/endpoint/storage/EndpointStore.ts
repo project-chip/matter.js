@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
@@ -83,6 +89,16 @@ export class EndpointStore {
         }
 
         await this.#loadSubparts();
+    }
+
+    /**
+     * Invoke a function on this store and the stores of descendant parts.
+     */
+    visit(fn: (store: EndpointStore) => void) {
+        fn(this);
+        for (const child of Object.values(this.#childStores)) {
+            child.visit(fn);
+        }
     }
 
     /**
