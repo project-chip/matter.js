@@ -101,7 +101,8 @@ export class EndpointStoreFactory extends EndpointStoreService {
         this.#construction.start();
 
         this.#allocatedNumbers = new Set();
-        this.#persistedNextNumber = this.#nextNumber = (this.#defaultNextNumber ?? 1) % 0xffff;
+        this.#nextNumber = (this.#defaultNextNumber ?? 1) % 0xffff;
+        this.#persistedNextNumber = undefined;
         this.#root = new EndpointStore(this.#storage, false);
 
         await this.construction;
