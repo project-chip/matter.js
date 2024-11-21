@@ -13,6 +13,7 @@ import { ignoreError } from "../util/errors.js";
 import { CONFIG_PATH, Package } from "../util/package.js";
 
 export const BUILD_INFO_LOCATION = "build/info.json";
+export const COMPILED_CONFIG_PATH = "build/build.config.js";
 
 export interface BuildInformation {
     /**
@@ -129,8 +130,8 @@ export class Project {
         }
 
         const configPath = this.pkg.resolve(CONFIG_PATH);
+        const outfile = this.pkg.resolve(COMPILED_CONFIG_PATH).replaceAll("\\", "/");
 
-        const outfile = configPath.replace(/\\/g, "/").replace("/src/", "/build/").replace(/\.ts$/, ".js");
         await esbuild({
             entryPoints: [configPath],
             outfile,

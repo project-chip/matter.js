@@ -1,0 +1,31 @@
+{
+	"license": {
+		"scope": "javascript,typescript",
+		"prefix": "@license",
+		"body": [
+			"/**",
+			" * @license",
+			" * Copyright 2022-2023 Project CHIP Authors",
+			" * SPDX-License-Identifier: Apache-2.0",
+			" */",
+			"",
+			""
+		]
+	},
+
+	"core": {
+		"scope": "javascript,typescript",
+		"prefix": "@core",
+		"body": [
+			"@see {@link MatterSpecification.v13.Core} § "
+		]
+	},
+
+    "cluster": {
+        "scope": "javascript,typescript",
+        "prefix: "@cluster",
+        "body": [
+            "@see {@link MatterSpecification.v13.Cluster} § "
+        ]
+    }
+}

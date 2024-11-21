@@ -43,7 +43,7 @@ matter.js successfully passed certification already. There are still thinks to c
 
 ## How to use matter.js
 
-### Creat a new project based on matter.js
+### Create a new project based on matter.js
 
 We provide templates for various matter.js use cases.  You can bootstrap a new project in Node.js using `npm init`:
 

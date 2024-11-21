@@ -12,6 +12,7 @@ import {
     Crypto,
     MockNetwork,
     Network,
+    NetworkSimulator,
     singleton,
     StorageBackendMemory,
     StorageManager,
@@ -63,8 +64,9 @@ const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
 //const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new MockNetwork(SERVER_MAC, [SERVER_IPv6]);
-const clientNetwork = new MockNetwork(CLIENT_MAC, [CLIENT_IPv6]);
+const simulator = new NetworkSimulator();
+const serverNetwork = new MockNetwork(simulator, SERVER_MAC, [SERVER_IPv6]);
+const clientNetwork = new MockNetwork(simulator, CLIENT_MAC, [CLIENT_IPv6]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = DeviceTypeId(257); /* Dimmable bulb */
@@ -227,9 +229,9 @@ describe("Integration Test", () => {
         assert.equal(commissioningServer.getPort(), matterPort);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        serverMdnsScanner = await MdnsScanner.create(Network.get(), { enableIpv4: false, netInterface: SERVER_IPv6 });
+        serverMdnsScanner = await MdnsScanner.create(serverNetwork, { enableIpv4: false, netInterface: SERVER_IPv6 });
         commissioningServer.setMdnsScanner(serverMdnsScanner);
-        mdnsBroadcaster = await MdnsBroadcaster.create(Network.get(), {
+        mdnsBroadcaster = await MdnsBroadcaster.create(serverNetwork, {
             enableIpv4: false,
             multicastInterface: SERVER_IPv6,
         });

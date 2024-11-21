@@ -86,7 +86,10 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
             throw new StorageError("Key must not be an empty string.");
         }
         const contextKey = this.getContextBaseKey(contexts);
-        return `${contextKey}.${key}`;
+        const rawName = `${contextKey}.${key}`;
+        return encodeURIComponent(rawName)
+            .replace(/[!'()]/g, escape)
+            .replace(/\*/g, "%2A");
     }
 
     async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
@@ -161,8 +164,9 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         const files = await readdir(this.#path);
 
         for (const key of files) {
-            if (key.startsWith(contextKeyStart) && !key.includes(".", len)) {
-                keys.push(key.substring(len));
+            const decodedKey = decodeURIComponent(key);
+            if (decodedKey.startsWith(contextKeyStart) && !decodedKey.includes(".", len)) {
+                keys.push(decodedKey.substring(len));
             }
         }
         return keys;
@@ -196,8 +200,9 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         const files = await readdir(this.#path);
 
         for (const key of files) {
-            if (key.startsWith(startContextKey)) {
-                const subKeys = key.substring(len).split(".");
+            const decodedKey = decodeURIComponent(key);
+            if (decodedKey.startsWith(startContextKey)) {
+                const subKeys = decodedKey.substring(len).split(".");
                 if (subKeys.length === 1) continue; // found leaf key
                 const context = subKeys[0];
                 if (!foundContexts.includes(context)) {
@@ -217,7 +222,8 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
 
         const promises = new Array<Promise<void>>();
         for (const key of files) {
-            if (key.startsWith(startContextKey)) {
+            const decodedKey = decodeURIComponent(key);
+            if (decodedKey.startsWith(startContextKey)) {
                 promises.push(rm(this.filePath(key), { force: true }));
             }
         }

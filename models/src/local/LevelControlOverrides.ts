@@ -11,7 +11,7 @@ LocalMatter.children.push({
     name: "LevelControl",
 
     children: [
-        // Docmentation for "on/off" variants is in prose.  They have the same structure as non-on/off commands
+        // Documentation for "on/off" variants is in prose.  They have the same structure as non-on/off commands
         { tag: "command", id: 4, name: "MoveToLevelWithOnOff", type: "MoveToLevel" },
         { tag: "command", id: 5, name: "MoveWithOnOff", type: "Move" },
         { tag: "command", id: 6, name: "StepWithOnOff", type: "Step" },

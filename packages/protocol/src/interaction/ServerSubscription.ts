@@ -7,6 +7,7 @@
 import {
     InternalError,
     Logger,
+    MatterError,
     MaybePromise,
     NetworkError,
     NoResponseTimeoutError,
@@ -568,9 +569,9 @@ export class ServerSubscription extends Subscription {
             }
 
             this.sendUpdateErrorCounter++;
-            logger.error(
+            logger.info(
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
-                error,
+                error instanceof MatterError ? error.message : error,
             );
             if (this.sendUpdateErrorCounter <= 2) {
                 // fill the data back in the queue to resend with next try
@@ -585,7 +586,7 @@ export class ServerSubscription extends Subscription {
                     this.#outstandingEventUpdates.add(update),
                 );
             } else {
-                logger.error(
+                logger.info(
                     `Sending update failed 3 times in a row, canceling subscription ${this.id} and let controller subscribe again.`,
                 );
                 this.sendNextUpdateImmediately = false;

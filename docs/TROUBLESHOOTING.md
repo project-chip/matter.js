@@ -104,25 +104,15 @@ noipv6
 noipv6rs
 ```
 
-## Pairing issues
+## General Bluetooth Troubleshooting
 
-### Network considerations
+In general please first refer to the information available at https://github.com/project-chip/matter.js/blob/main/packages/nodejs-ble/README.md#prerequisites-and-limitations for your operating system.
 
-Matter is using MDNS, a UDP based protocol, to discover devices. This can be blocked by firewalls or network settings. Also, different network segments can be a problem because routers normally do not route UDP packages between them. If you have such a setup please make sure everything is configured to route UDP packages.
+If you get an error while building matter.js with BLE support erroring because of the absence of "setuptools" python library then you have two options:
+* make sure that nothing refers to a node-gyp version < 10 and check node-gyp version in error message. If you use an old Node.js or npm version, then update to a newer version of npm together with Node.js. (recommended way)
+* Install the python setuptools library with `pip install setuptools`
 
-For all ecosystems that use a Hub (basically everything beside Tuya currently) you need to make sure that the host with the matter.js device is reachable from the network of your mobile device AND the network from the hub. Usually the commissioning process happens from the app, but the communication afterwards is done by the hub. So the hub needs to be able to reach the matter.js device. This includes all requirements for UDP packages as mentioned above.
-
-If you have issues with pairing, please check if your network allows UDP traffic on port 5540, which is the default port.
-
-Matter **requires** IPv6, but optionally also allows IPv4. If you have issues with pairing, please check if your network allows IPv6 traffic.
-
-### "Uncertified device"
-
-Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./ECOSYSTEMS.md#pairing-and-usage-information) for more details.
-
-Some ecosystems might not allow uncertified devices to be added. In this case you need to check the settings of the ecosystem to allow uncertified devices or contact the support of the ecosystem.
-
-### Bluetooth and macOS
+### Additional macOS Bluetooth information
 
 When pairing a Matter accessory over Bluetooth on macOS, you may encounter connectivity issues, such as an inability to connect to the device, problems with BLE scanning, or failure to receive responses from the peripheral. These issues may be caused by the absence of a required profile.
 
@@ -135,4 +125,26 @@ To resolve this, it is necessary to install the [Bluetooth Central Matter Client
         Security->Profiles
 
 -   Restart your system
-  
+
+### Additional Windows Bluetooth information
+
+It is currently not possible to use Bluetooth on Windows with matter.js as Controller to pair devices due to https://github.com/stoprocent/noble/issues/11. This is a known issue and there is no workaround at the moment.
+
+## Pairing issues
+
+### Network considerations
+
+Matter is using MDNS, a UDP based protocol, to discover devices. This can be blocked by firewalls or network settings. Also, different network segments can be a problem because routers normally do not route UDP packages between them. If you have such a setup please make sure everything is configured to route UDP packages.
+
+For all ecosystems that use a Hub (basically everything beside Tuya currently) you need to make sure that the host with the matter.js device is reachable from the network of your mobile device AND the network from the hub. Usually the commissioning process happens from the app, but the communication afterwards is done by the hub. So the hub needs to be able to reach the matter.js device. This includes all requirements for UDP packages as mentioned above.
+
+If you have issues with pairing or experience connectivity problems (e.g., mDNS not working properly), check if your network allows UDP traffic on port 5540, the default port for pairing. Additionally, verify your firewall settings or network filters, and ensure exceptions are added for the Node.js application and/or the mDNS port (5353).
+
+Matter **requires** IPv6, but optionally also allows IPv4. If you have issues with pairing, please check if your network allows IPv6 traffic.
+
+### "Uncertified device"
+
+Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./ECOSYSTEMS.md#pairing-and-usage-information) for more details.
+
+Some ecosystems might not allow uncertified devices to be added. In this case you need to check the settings of the ecosystem to allow uncertified devices or contact the support of the ecosystem.
+

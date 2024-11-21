@@ -9,6 +9,35 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/node
+    - Enhancement: The `with` functions on endpoint and cluster behavior types now alias to `withBehaviors` and `withFeatures` respectively to make their function more explicit
+    - Enhancement: Endpoints now ignore persisted values for clusters when features change across restarts.  This allows for startup when persisted values become invalid due to conformance rules
+    - Fix: Triggers CommissioningServer#initiateCommissioning when server restarts outside of factory reset
+    - Fix: Ensures to initialize all known endpoint numbers to prevent dpuplicate number assignment edge cases
+
+-   @matter/nodejs
+    - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
+
+-   @matter/create
+    - Feature: Added command line option "--verbose" to enable informational NPM messages during initialization
+    - Feature: Added template "contributor" to bootstrap dev environment for working on matter.js itself
+
+-   @matter/tools
+    - Multi-project test runs now use a single process to improve performance
+
+-   Matter cluster definitions and implementations
+    - Fix: Reverts MoveToLevel workaround from 0.11.4
+
+-   matter.js git repository
+    - Feature: We've added project configuration for VS code including recommended extensions, code snippets and launch configurations
+
+## 0.11.4 (2024-11-07)
+
+-   Matter cluster definitions and implementations
+    - Fix: Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
+
 ### 0.11.3 (2024-11-06)
 
 -   @matter/nodejs
@@ -129,6 +158,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Only recreate PairedNode internal objects when structure really changed also on reconnects.
     -   Enhancement: Utilize more information (beside partList changes now also feature, serverList, attributeList, generatedCommandLists) as structure change to reinitialize objects.
     -   Enhancement: Huge refactoring in internal logic, optimized reconnection and rediscovery
+
+## 0.10.7 (2024-11-07)
+
+-   Matter cluster definitions and implementations
+    - Fix: (Backport from 0.11.4) Adjusted levelControl cluster command MoveToLevel implementation to temporarily declare optionsMask/optionsOverride fields optional
 
 ## 0.10.6 (2024-09-21)
 

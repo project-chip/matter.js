@@ -28,6 +28,10 @@ const OPERATION_DEPTH_LIMIT = 20;
 
 let memos: Memos | undefined;
 
+// Member caches.  Only populated for frozen models
+const activeMemberCache = new WeakMap<Model, ValueModel[]>();
+const conformantMemberCache = new WeakMap<Model, ValueModel[]>();
+
 /**
  * This class performs lookups of models in the scope of a specific model.  We use a class so the lookup can maintain
  * state and guard against circular references.
@@ -97,7 +101,7 @@ export class ModelTraversal {
             return "struct";
         }
 
-        return this.operation(() => {
+        const getTypeNameOp = () => {
             let result: string | undefined;
             const name = model.name;
             this.visitInheritance(this.findParent(model), ancestor => {
@@ -134,7 +138,9 @@ export class ModelTraversal {
             });
 
             return result;
-        });
+        };
+
+        return this.operation(getTypeNameOp);
     }
 
     /**
@@ -166,7 +172,7 @@ export class ModelTraversal {
             return memos.bases.get(model);
         }
 
-        const base = this.operationWithDismissal(model, () => {
+        const findBaseOp = () => {
             // If I override another element (same identity and tag in parent's inheritance hierarchy) then I implicitly
             // inherit from the shadow.
             //
@@ -208,7 +214,9 @@ export class ModelTraversal {
                     return found;
                 }
             }
-        });
+        };
+
+        const base = this.operationWithDismissal(model, findBaseOp);
 
         memos?.bases.set(model, base);
 
@@ -224,12 +232,14 @@ export class ModelTraversal {
         }
         let result: Model | undefined;
 
-        this.visitInheritance(model, model => {
+        const globalBaseSearchOp = (model: Model) => {
             if (model.isGlobal) {
                 result = model;
                 return false;
             }
-        });
+        };
+
+        this.visitInheritance(model, globalBaseSearchOp);
 
         return result;
     }
@@ -296,13 +306,17 @@ export class ModelTraversal {
             return undefined;
         }
 
+        if (model.operationalShadow !== undefined) {
+            return model.operationalShadow ?? undefined;
+        }
+
         if (memos?.shadows.has(model)) {
             return memos.shadows.get(model);
         }
 
         let shadow: Model | undefined;
 
-        this.operationWithDismissal(model, () => {
+        const shadowSearchOp = () => {
             this.visitInheritance(this.findBase(this.findParent(model)), parent => {
                 if (model.id !== undefined && model.tag !== ElementTag.Command) {
                     shadow = parent.children.select(model.id, [model.tag], this.#dismissed);
@@ -315,7 +329,9 @@ export class ModelTraversal {
                     return false;
                 }
             });
-        });
+        };
+
+        this.operationWithDismissal(model, shadowSearchOp);
 
         memos?.shadows.set(model, shadow);
 
@@ -332,7 +348,7 @@ export class ModelTraversal {
             return;
         }
 
-        return this.operation(() => {
+        const findAspectOp = () => {
             let aspect = (model as any)[symbol] as Aspect<any> | undefined;
 
             const inheritedAspect = this.findAspect(this.findBase(model), symbol);
@@ -345,7 +361,8 @@ export class ModelTraversal {
             }
 
             return aspect;
-        });
+        };
+        return this.operation(findAspectOp);
     }
 
     /**
@@ -460,7 +477,7 @@ export class ModelTraversal {
         const defined = {} as Record<string, number | undefined>;
 
         let level = 0;
-        this.visitInheritance(scope, model => {
+        const childSearchVisitor = (model: Model) => {
             level++;
             for (const child of model.children) {
                 if (!tags.includes(child.tag)) {
@@ -493,7 +510,8 @@ export class ModelTraversal {
                 // Found a member
                 members.push(child);
             }
-        });
+        };
+        this.visitInheritance(scope, childSearchVisitor);
 
         return members;
     }
@@ -512,12 +530,21 @@ export class ModelTraversal {
      *
      *   - If there are multiple applicable members based on conformance the definitions conflict and throw an error
      *
+     * If the model is frozen we cache the return value.
+     *
      * Note that "active" in this case does not imply the member is conformant, only that conflicts are resolved.
      *
      * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
      * will probably never be necessary and would require an entirely different (more complicated) structure.
      */
     findActiveMembers(scope: Model & { members: PropertyModel[] }, conformantOnly: boolean, cluster?: ClusterModel) {
+        const cache = Object.isFrozen(scope) ? (conformantOnly ? conformantMemberCache : activeMemberCache) : undefined;
+
+        const cached = cache?.get(scope);
+        if (cached) {
+            return cached;
+        }
+
         const features = cluster?.featureNames ?? new FeatureSet();
         const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
 
@@ -550,7 +577,13 @@ export class ModelTraversal {
             selectedMembers[member.name] = member;
         }
 
-        return Object.values(selectedMembers);
+        const result = Object.values(selectedMembers);
+
+        if (cache) {
+            cache.set(scope, result);
+        }
+
+        return result;
     }
 
     /**
@@ -593,7 +626,7 @@ export class ModelTraversal {
             return memosForScope[memoKey];
         }
 
-        const type = this.operation(() => {
+        const findTypeOp = () => {
             const queue = Array<Model>(scope as Model);
             for (scope = queue.shift(); scope; scope = queue.shift()) {
                 if (scope.isTypeScope) {
@@ -615,7 +648,8 @@ export class ModelTraversal {
                     queue.push(parent);
                 }
             }
-        });
+        };
+        const type = this.operation(findTypeOp);
 
         if (memos) {
             const memosForScope = memos.types.get(scope);
@@ -845,7 +879,7 @@ export class ModelTraversal {
 
         // Next, search operational base hierarchy
         if (model.operationalBase) {
-            return this.operationWithDismissal(model, () => this.findScope(model.operationalBase));
+            return this.operationWithDismissal(model, () => this.findScope(model.operationalBase ?? undefined));
         }
 
         // Finally, fall back to the canonical MatterModel

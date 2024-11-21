@@ -40,8 +40,9 @@ const NODE_ID = NodeId(BigInt(1));
 ].forEach(({ serverHasIpv4Addresses, testIpv4Enabled }) => {
     const serverIps = serverHasIpv4Addresses ? [SERVER_IPv4, SERVER_IPv6] : [SERVER_IPv6];
     const clientIps = testIpv4Enabled ? [CLIENT_IPv4] : [CLIENT_IPv6];
-    const serverNetwork = new MockNetwork(SERVER_MAC, serverIps);
-    const clientNetwork = new MockNetwork(CLIENT_MAC, clientIps);
+    const simulator = new NetworkSimulator();
+    const serverNetwork = new MockNetwork(simulator, SERVER_MAC, serverIps);
+    const clientNetwork = new MockNetwork(simulator, CLIENT_MAC, clientIps);
 
     const IPDnsRecords = [
         {
@@ -64,8 +65,8 @@ const NODE_ID = NodeId(BigInt(1));
         });
     }
 
-    const IPIntegrationResultsPort1 = [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }];
-    const IPIntegrationResultsPort2 = [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }];
+    const IPIntegrationResultsPort1 = [{ ip: `${SERVER_IPv6}%fake0`, port: PORT, type: "udp" }];
+    const IPIntegrationResultsPort2 = [{ ip: `${SERVER_IPv6}%fake0`, port: PORT2, type: "udp" }];
     if (testIpv4Enabled && serverHasIpv4Addresses) {
         IPIntegrationResultsPort1.push({ ip: SERVER_IPv4, port: PORT, type: "udp" });
         IPIntegrationResultsPort2.push({ ip: SERVER_IPv4, port: PORT2, type: "udp" });
@@ -83,9 +84,9 @@ const NODE_ID = NodeId(BigInt(1));
             Network.get = () => clientNetwork;
             scanner = await MdnsScanner.create(Network.get(), {
                 enableIpv4: testIpv4Enabled,
-                netInterface: NetworkSimulator.INTERFACE_NAME,
+                netInterface: "fake0",
             });
-            scannerChannel = await MockUdpChannel.create(serverNetwork, {
+            scannerChannel = new MockUdpChannel(serverNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
                 type: testIpv4Enabled ? "udp4" : "udp6",
@@ -94,9 +95,9 @@ const NODE_ID = NodeId(BigInt(1));
             Network.get = () => serverNetwork;
             broadcaster = await MdnsBroadcaster.create(Network.get(), {
                 enableIpv4: testIpv4Enabled,
-                multicastInterface: NetworkSimulator.INTERFACE_NAME,
+                multicastInterface: "fake0",
             });
-            broadcasterChannel = await MockUdpChannel.create(clientNetwork, {
+            broadcasterChannel = new MockUdpChannel(clientNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
                 type: testIpv4Enabled ? "udp4" : "udp6",

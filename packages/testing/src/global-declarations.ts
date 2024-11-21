@@ -6,6 +6,7 @@
 
 import type Chai from "chai";
 import "chai-as-promised";
+import { Boot } from "./mocks/boot.js";
 import type { MockLogger } from "./mocks/logging.js";
 import type { MockTime } from "./mocks/time.js";
 
@@ -20,13 +21,17 @@ declare global {
     let MockLogger: MockLogger;
 
     /**
-     * If present, the following hooks are engaged by matter.js packages to
-     * enable mocking.  We use globals rather than imports so we can hook the
-     * modules regardless of whether they're loaded as CommonJS or ESM.
+     * If present, the following hooks are engaged by matter.js packages to enable mocking.  We use globals rather than
+     * imports so we can hook the modules regardless of whether they're loaded as CommonJS or ESM.
      */
     let MatterHooks:
         | undefined
         | {
+              /**
+               * Set boot manager.
+               */
+              bootSetup(boot: Boot): void;
+
               /**
                * Configure time.
                */
@@ -43,7 +48,7 @@ declare global {
               cryptoSetup?: (Crypto: any) => void;
 
               /**
-               * Receive intercepted log messages.  The logging mocks
+               * Receive intercepted log messages.
                */
               loggerSink?: (level: number, message: string) => void;
           };

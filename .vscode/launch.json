@@ -1,0 +1,745 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "All tests",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test current file",
+            "args": [
+                "--spec",
+                "${input:testFile}",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run current file",
+            "args": [
+                "${file}"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run shell",
+            "cwd": "${workspaceFolder}/packages/nodejs-shell",
+            "args": [
+                "dist/cjs/app.js"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run CLI tool",
+            "cwd": "${workspaceFolder}/packages/cli-tool",
+            "args": [
+                "bin/matter.js"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/testing",
+            "cwd": "${workspaceFolder}/packages/testing",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/general",
+            "cwd": "${workspaceFolder}/packages/general",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/model",
+            "cwd": "${workspaceFolder}/packages/model",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/types",
+            "cwd": "${workspaceFolder}/packages/types",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/protocol",
+            "cwd": "${workspaceFolder}/packages/protocol",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/node",
+            "cwd": "${workspaceFolder}/packages/node",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @project-chip/matter.js",
+            "cwd": "${workspaceFolder}/packages/matter.js",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/nodejs",
+            "cwd": "${workspaceFolder}/packages/nodejs",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test @matter/chip-testing",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run ControllerNode",
+            "args": [
+                "packages/examples/src/controller/ControllerNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run BridgedDevicesNode",
+            "args": [
+                "packages/examples/src/device-bridge-onoff/BridgedDevicesNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run ComposedDeviceNode",
+            "args": [
+                "packages/examples/src/device-composed-onoff/ComposedDeviceNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run IlluminatedRollerShade",
+            "args": [
+                "packages/examples/src/device-composed-wc-light/IlluminatedRollerShade.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run MeasuredSocketDevice",
+            "args": [
+                "packages/examples/src/device-measuring-socket/MeasuredSocketDevice.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run MultiDeviceNode",
+            "args": [
+                "packages/examples/src/device-multiple-onoff/MultiDeviceNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run DeviceNode",
+            "args": [
+                "packages/examples/src/device-onoff/DeviceNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run DeviceNodeFull",
+            "args": [
+                "packages/examples/src/device-onoff-advanced/DeviceNodeFull.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run LightDevice",
+            "args": [
+                "packages/examples/src/device-onoff-light/LightDevice.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Run SensorDeviceNode",
+            "args": [
+                "packages/examples/src/device-sensor/SensorDeviceNode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate chip",
+            "args": [
+                "codegen/src/generate-chip.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate clusters",
+            "args": [
+                "codegen/src/generate-clusters.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate endpoints",
+            "args": [
+                "codegen/src/generate-endpoints.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate forwards",
+            "args": [
+                "codegen/src/generate-forwards.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate model",
+            "args": [
+                "codegen/src/generate-model.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate spec",
+            "args": [
+                "codegen/src/generate-spec.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Generate vscode",
+            "args": [
+                "codegen/src/generate-vscode.ts"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "testFile",
+            "type": "command",
+            "command": "extension.commandvariable.transform",
+            "args": {
+                "text": "${file}",
+                "find": "/src/(.*)\\.([a-z]+)",
+                "replace": "/test/$1Test.$2"
+            }
+        }
+    ]
+}

@@ -11,7 +11,7 @@ import { DefinitionError } from "../common/DefinitionError.js";
  * An "aspect" is metadata about a Matter element that affects implementation behavior.  Aspects are mostly "qualities"
  * in the Matter specification except for "constraint" which is not formally described as a quality.
  */
-export abstract class Aspect<D> {
+export abstract class Aspect<D = any> {
     definition: D;
     declare errors?: DefinitionError[];
 
@@ -78,7 +78,7 @@ export abstract class Aspect<D> {
         return new constructor(definition) as This;
     }
 
-    freeze() {
+    protected freeze() {
         Object.freeze(this);
     }
 }

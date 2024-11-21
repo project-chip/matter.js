@@ -111,6 +111,11 @@ export class InteractionEndpointStructure {
 
         endpoint.verifyRequiredClusters();
 
+        const endpointId = endpoint.number;
+        if (this.endpoints.has(endpoint.number)) {
+            throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
+        }
+
         for (const cluster of endpoint.getAllClusterServers()) {
             const {
                 id: clusterId,
@@ -122,7 +127,7 @@ export class InteractionEndpointStructure {
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];
-                const path = { endpointId: endpoint.number, clusterId, attributeId: attribute.id };
+                const path = { endpointId, clusterId, attributeId: attribute.id };
                 this.attributes.set(attributePathToId(path), attribute);
                 this.attributePaths.push(path);
             }
@@ -130,7 +135,7 @@ export class InteractionEndpointStructure {
             // Add events
             for (const name in clusterEvents) {
                 const event = clusterEvents[name];
-                const path = { endpointId: endpoint.number, clusterId, eventId: event.id };
+                const path = { endpointId, clusterId, eventId: event.id };
                 this.events.set(eventPathToId(path), event);
                 this.eventPaths.push(path);
             }
@@ -138,16 +143,13 @@ export class InteractionEndpointStructure {
             // Add commands
             for (const name in clusterCommands) {
                 const command = clusterCommands[name];
-                const path = { endpointId: endpoint.number, clusterId, commandId: command.invokeId };
+                const path = { endpointId, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
             }
         }
 
-        if (this.endpoints.has(endpoint.number))
-            throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
-
-        this.endpoints.set(endpoint.number, endpoint);
+        this.endpoints.set(endpointId, endpoint);
     }
 
     toHex(value: number | bigint | undefined) {

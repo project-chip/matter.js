@@ -3,10 +3,12 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { argv, exit, stderr, stdout } from "process";
+import { argv, exit, stdout } from "process";
+import { ConsumerProject } from "./consumer-project.js";
+import { ContributorProject } from "./contributor-project.js";
 import { bold } from "./formatting.js";
-import { bigWelcome, error, notice } from "./messages.js";
-import { NewProject, ProjectError, TemplateNotFoundError } from "./new-project.js";
+import { bigWelcome, error } from "./messages.js";
+import { ProjectError } from "./new-project.js";
 import { DEFAULT_TEMPLATE, usage } from "./usage.js";
 
 const PATH_ARG = "--prefix=";
@@ -21,9 +23,15 @@ if (pathPos !== -1) {
 }
 
 const noBuildPos = args.findIndex(arg => arg === "--no-build");
-const doBuild = noBuildPos === -1;
-if (!doBuild) {
+const performInstall = noBuildPos === -1;
+if (!performInstall) {
     args.splice(noBuildPos, 1);
+}
+
+const verbosePos = args.findIndex(arg => arg === "--verbose");
+const verbose = verbosePos !== -1;
+if (verbose) {
+    args.splice(verbosePos, 1);
 }
 
 stdout.write("\n");
@@ -50,49 +58,29 @@ if (args.length > 1) {
 await init(option);
 
 async function init(templateName: string) {
-    let project;
-    try {
-        project = await NewProject(templateName, path);
-    } catch (e) {
-        if (e instanceof TemplateNotFoundError) {
-            error(`Invalid template ${bold(templateName)}`);
-            await usage();
-            exit(1);
-        }
-
-        throw e;
-    }
-
     bigWelcome();
-    notice(`Creating project from ${bold(project.template.name)} template...`);
 
     try {
-        await project.create();
+        let project;
+        if (templateName === "contributor") {
+            project = ContributorProject({ dest: path, performInstall });
+        } else {
+            project = await ConsumerProject({ name: templateName, dest: path, performInstall, verbose });
+        }
+
+        await project.setup();
     } catch (e) {
-        if (e instanceof ProjectError) {
-            error(e);
-            exit(1);
+        if (!(e instanceof ProjectError)) {
+            // Internal error
+            throw e;
         }
-        throw e;
-    }
 
-    if (doBuild) {
-        notice(`Initializing project...`);
+        error(e);
 
-        try {
-            project.build();
-        } catch (e) {
-            stderr.write("\n");
-            error("Error building project:", e);
-
-            stdout.write(
-                `We couldn't build your new project, but you may be able to using ${bold("npm install")}.\n\n`,
-            );
-            exit(1);
+        if (e.showUsage) {
+            await usage();
         }
+
+        exit(1);
     }
-
-    const where = project.dest !== "." && project.dest !== process.cwd() ? ` in ${bold(project.dest)}` : "";
-
-    notice(`${bold("Success!")} Run your new app using ${bold("npm run app")}${where}.`);
 }

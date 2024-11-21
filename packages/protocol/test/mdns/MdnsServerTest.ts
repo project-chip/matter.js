@@ -25,10 +25,12 @@ const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 const PORT = 1234;
 const DUMMY_IP = "1.2.3.4";
 const DUMMY_QNAME = "a.b.c.d";
+const INTERFACE_NAME = "fake0";
 
 describe("MdnsServer", () => {
     const clientIps = [CLIENT_IPv4];
-    const clientNetwork = new MockNetwork(CLIENT_MAC, clientIps);
+    const simulator = new NetworkSimulator();
+    const clientNetwork = new MockNetwork(simulator, CLIENT_MAC, clientIps);
 
     let send: (message: Uint8Array, remoteIp: string, netInterface: string) => void;
     let onResponse: (message: Uint8Array, netInterface?: string, unicastTarget?: string) => Promise<void>;
@@ -44,7 +46,7 @@ describe("MdnsServer", () => {
 
     beforeEach(async () => {
         await MockTime.advance(130_000); // More then 2 minutes in the future for the difference calculation vs 120s ttl
-        mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, NetworkSimulator.INTERFACE_NAME);
+        mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, INTERFACE_NAME);
 
         await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, async () => [
             PtrRecord(DUMMY_QNAME, "abcd"),
@@ -73,7 +75,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -92,7 +94,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -116,7 +118,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -135,7 +137,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -159,7 +161,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -174,7 +176,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -198,7 +200,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -213,7 +215,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -240,7 +242,7 @@ describe("MdnsServer", () => {
                     answers: [PtrRecord(DUMMY_QNAME, "abcd")],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -258,7 +260,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -283,7 +285,7 @@ describe("MdnsServer", () => {
                     answers: [TxtRecord(DUMMY_QNAME, [`A=1`, `B=2`]), PtrRecord(DUMMY_QNAME, "abcd")],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -298,7 +300,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -328,7 +330,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -353,7 +355,7 @@ describe("MdnsServer", () => {
                     answers: [ARecord("abcd.local", DUMMY_IP)],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -379,7 +381,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -398,7 +400,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -417,7 +419,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -441,7 +443,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -460,7 +462,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -480,7 +482,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -504,7 +506,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             const EXPEECTED_RESPONSE = [
@@ -521,7 +523,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ];
@@ -545,7 +547,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -571,7 +573,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -590,7 +592,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -609,7 +611,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -633,7 +635,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -648,7 +650,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -667,7 +669,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -686,7 +688,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -719,7 +721,7 @@ describe("MdnsServer", () => {
                 authorities: [],
                 queries: [],
             },
-            netInterface: NetworkSimulator.INTERFACE_NAME,
+            netInterface: INTERFACE_NAME,
         };
 
         it("server responds to an ANY query as unicast if requested as multicast if query never sent as multicast", async () => {
@@ -728,7 +730,7 @@ describe("MdnsServer", () => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -741,12 +743,12 @@ describe("MdnsServer", () => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
             await MockTime.advance(29_000); // less than 1/4 of ttl
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -762,12 +764,12 @@ describe("MdnsServer", () => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
             await MockTime.advance(31_000); // less than 1/4 of ttl
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -819,7 +821,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -834,7 +836,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -880,7 +882,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                NetworkSimulator.INTERFACE_NAME,
+                INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -895,7 +897,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
                 {
@@ -907,7 +909,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: NetworkSimulator.INTERFACE_NAME,
+                    netInterface: INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);

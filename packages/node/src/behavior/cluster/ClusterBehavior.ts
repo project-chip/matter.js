@@ -106,7 +106,7 @@ export class ClusterBehavior extends Behavior {
     /**
      * Create a new behavior with different cluster features.
      */
-    static with<
+    static withFeatures<
         This extends ClusterBehavior.Type,
         const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
     >(this: This, ...features: FeaturesT) {
@@ -115,6 +115,16 @@ export class ClusterBehavior extends Behavior {
             FeaturesT
         >;
         return this.for(newCluster);
+    }
+
+    /**
+     * Alias for {@link withFeatures}.
+     */
+    static with<
+        This extends ClusterBehavior.Type,
+        const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
+    >(this: This, ...features: FeaturesT) {
+        return this.withFeatures<This, FeaturesT>(...features);
     }
 
     /**
@@ -231,21 +241,44 @@ export namespace ClusterBehavior {
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts
         // to ClusterType).  So we have to define the long way.
         //
-        // This also means intellisense doesn't work unless we copy comments here (or move here and cast ClusterBehavior
-        // to ClusterBehavior.Type).
-        //
         // - for: typeof ClusterBehavior.for;
         // - with: typeof ClusterBehavior.with;
         // - alter: typeof ClusterBehavior.alter;
         // - set: typeof ClusterBehavior.set;
         // - enable: typeof ClusterBehavior.enable;
+        //
+        // This also means intellisense doesn't work unless we copy comments here (or move here and cast ClusterBehavior
+        // to ClusterBehavior.Type).  Currently we do the former.
 
+        /**
+         * Create a new behavior for a specific {@link ClusterType}.
+         *
+         * If you invoke directly on {@link ClusterBehavior} you will receive a new implementation that reports all commands
+         * as unimplemented.
+         *
+         * If you invoke on an existing subclass, you will receive a new implementation with the cluster in the subclass
+         * replaced.  You should generally only do this with a {@link ClusterType} with the same ID.
+         */
         for<This extends ClusterBehavior.Type, const ClusterT extends ClusterType>(
             this: This,
             cluster: ClusterT,
             schema?: Schema,
         ): ClusterBehavior.Type<ClusterT, This>;
 
+        /**
+         * Create a new behavior with different cluster features.
+         */
+        withFeatures<
+            This extends ClusterBehavior.Type,
+            const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
+        >(
+            this: This,
+            ...features: FeaturesT
+        ): ClusterBehavior.Type<ClusterComposer.WithFeatures<This["cluster"], FeaturesT>, This>;
+
+        /**
+         * Alias for {@link withFeatures}.
+         */
         with<
             This extends ClusterBehavior.Type,
             const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
@@ -254,6 +287,9 @@ export namespace ClusterBehavior {
             ...features: FeaturesT
         ): ClusterBehavior.Type<ClusterComposer.WithFeatures<This["cluster"], FeaturesT>, This>;
 
+        /**
+         * Create a new behavior with modified cluster elements.
+         */
         alter<
             This extends ClusterBehavior.Type,
             const AlterationsT extends ElementModifier.Alterations<This["cluster"]>,

@@ -79,7 +79,7 @@ const LifecycleIcons = {
     [Lifecycle.Status.Unknown]: "?",
     [Lifecycle.Status.Inactive]: "💤",
     [Lifecycle.Status.Initializing]: "⌛",
-    [Lifecycle.Status.Active]: "✔",
+    [Lifecycle.Status.Active]: "✓",
     [Lifecycle.Status.Crashed]: "✗",
     [Lifecycle.Status.Destroying]: "☠︎",
     [Lifecycle.Status.Destroyed]: "☠︎",

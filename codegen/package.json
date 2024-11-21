@@ -14,6 +14,7 @@
         "generate-clusters": "matter-run bin/generate-clusters.js",
         "generate-endpoints": "matter-run bin/generate-endpoints.js",
         "generate-forwards": "matter-run bin/generate-forwards.js",
+        "generate-vscode": "matter-run bin/generate-vscode.js",
         "dump-model-names": "matter-build esm --prefix=../models && matter-run bin/dump-model-names.ts",
         "generate": "npm run generate-model && npm run generate-clusters && npm run generate-endpoints && npm run generate-forwards"
     },

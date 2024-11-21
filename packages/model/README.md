@@ -39,7 +39,7 @@ Obtain a working instance of the model:
 
 ```ts
 import { MatterModel } from "@matter/model";
-const matter = new MatterModel();
+const matter = MatterModel.standard;
 ```
 
 Retrieve standard definitions from the model:
@@ -60,9 +60,9 @@ for (const attribute of OnOffCluster.attributes) {
 
 ## Implementation
 
-The base model includes [global datatypes](elements/Globals.ts) defined by the Matter specification. We generate other
-elements of the [standard model](standard/Matter.ts) by merging models in the [top-level models
-package](../../../../models).
+The base model includes [global datatypes](src/models/Globals.ts) defined by the Matter specification. We generate other
+elements of the [standard model](src/standard/MatterDefinition.ts) by merging models in the
+[top-level models package](../../models/README.md).
 
 To recreate the standard model files:
 
@@ -73,12 +73,12 @@ npm run generate-model
 
 ### Spec data model
 
-Input model _[spec.ts](../../../../models/src/spec.ts)_ is the data model defined by the Matter specification.
+Input model _[spec.ts](../../models/src/v1.3/spec.ts)_ is the data model defined by the Matter specification.
 
-We generate [spec.ts](../../../../models/src/spec.ts) from the Matter specification documents. This ensures our
+We generate [spec.ts](../../models/src/v1.3/spec.ts) from the Matter specification documents. This ensures our
 definitions align with the specification and gives us detailed information unavailable elsewhere.
 
-The spec generator is [generate-spec.ts](../../../../codegen/generate-spec.ts).
+The spec generator is [generate-spec.ts](../../codegen/src/generate-spec.ts).
 To run:
 
 ```sh
@@ -90,34 +90,35 @@ Details we extract from the specification include standard element names, types 
 cross references to specification documents. We also extract DSL-based definitions of Matter concepts such as
 conformance, constraints, etc.
 
+### Local data model
+
+Input model _[local.ts](../../models/src/local.ts)_ defines elements that are unavailable (or incorrect) in the
+other models. This partial model is the result of editorial decisions by matter.js contributors.
+
 ### CHIP data model
 
-Input model [chip.ts](../../../../models/src/chip.ts) is the CHIP data model. _CHIP_ is [Project CHIP's connectedhomeip
-repository](https://github.com/project-chip/connectedhomeip/). At the time of this writing this is the most robust
-open-source programmatic definition of Matter elements and serves as a defacto standard for Matter definitions.
+Model [chip.ts](../../models/src/v1.1/chip.ts) is the CHIP data model. _CHIP_ is [Project CHIP's connectedhomeip
+repository](https://github.com/project-chip/connectedhomeip/). Originally this was the most robust
+open-source programmatic definition of Matter elements.
 
-We generate [chip.ts](../../../../models/src/chip.ts) from [CHIP
-definitions](https://github.com/project-chip/connectedhomeip/tree/master/src/app/zap-templates/zcl/data-model). This
+We generate [chip.ts](../../models/src/v1.1/chip.ts) from
+[CHIP definitions](https://github.com/project-chip/connectedhomeip/tree/master/src/app/zap-templates/zcl/data-model). This
 ensures our definitions align with CHIP's.
 
-The CHIP generator is [generate-chip](../../../../codegen/generate-chip.ts). To run:
+The CHIP generator is [generate-chip](../../codegen/src/generate-chip.ts). To run:
 
 ```sh
 cd matter.js/codegen
 npm run generate-chip
 ```
-
-### Local data model
-
-Input model _[local.ts](../../../../models/src/local.ts)_ defines elements that are unavailable (or incorrect) in the
-other models. This partial model is the result of editorial decisions by matter.js contributors.
+We still include the CHIP generator and model in our repository but no longer use it as input for the matter.js model.
 
 ### Standard (final) data model
 
 Unlike above data models, the _standard data model_ in [src/model/standard](./standard) is part of the matter.js public
 API. This represents our best attempt at a complete Matter data model.
 
-[generate-model.ts](../../../../codegen/generate-model.ts) creates this model by analyzing and combining elements from
+[generate-model.ts](../../codegen/src/generate-model.ts) creates this model by analyzing and combining elements from
 the models above.
 
 To update the standard model:
@@ -132,7 +133,7 @@ npm run generate-model
 One of the ways we use the Matter Object Model is to generate cluster
 implementations.
 
-The cluster generator is [generate-cluster.ts](../../../../codegen/generate-clusters.ts).
+The cluster generator is [generate-cluster.ts](../../codegen/src/generate-clusters.ts).
 To run:
 
 ```sh
@@ -161,6 +162,6 @@ information about the state of every element in the model.
 Each validation error is associated with an error code. If there are errors, a summary of the errors is printed at the
 end of validation.
 
-The final model is also validated during testing by [MatterTest](../../test/model/standard/MatterTest.ts).
+The final model is also validated during testing by [MatterTest](test/MatterTest.ts).
 
 Automatic validation can't find every semantic error but it does ensure the resulting model is functional.

@@ -272,7 +272,7 @@ function schemaForCluster(cluster: ClusterType) {
 
     for (const child of Matter.children) {
         if (child.tag === ElementTag.Cluster && child.id === cluster.id) {
-            schema = new ClusterModel(child);
+            schema = child;
             break;
         }
     }
@@ -285,6 +285,12 @@ function schemaForCluster(cluster: ClusterType) {
 }
 
 /**
+ * We cache schema for clusters configured for certain features.  This in turn enables the RootSupervisor cache which
+ * keys off of the schema.
+ */
+const configuredSchemaCache = new Map<Schema, Record<string, Schema>>();
+
+/**
  * Ensure the supported features enumerated by schema align with a cluster definition.
  */
 function syncFeatures(schema: Schema, cluster: ClusterType) {
@@ -292,12 +298,31 @@ function syncFeatures(schema: Schema, cluster: ClusterType) {
         return schema;
     }
 
+    // If features are unchanged, return original schema
     const incomingFeatures = new FeatureSet(cluster.supportedFeatures);
     if (new FeatureSet(cluster.supportedFeatures).is(schema.supportedFeatures)) {
         return schema;
     }
+
+    // If we have cached this version of the cluster, return the cached schema
+    const featureKey = [...incomingFeatures].sort().join(",");
+    let schemaBucket = configuredSchemaCache.get(schema);
+    if (schemaBucket === undefined) {
+        schemaBucket = {};
+        configuredSchemaCache.set(schema, schemaBucket);
+    } else {
+        if (featureKey in schemaBucket) {
+            return schemaBucket[featureKey];
+        }
+    }
+
+    // New schema
     schema = schema.clone();
     schema.supportedFeatures = incomingFeatures;
+
+    // Cache
+    schemaBucket[featureKey] = schema;
+
     return schema;
 }
 

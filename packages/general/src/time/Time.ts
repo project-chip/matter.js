@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Boot } from "#util/Boot.js";
 import { CancelablePromise } from "#util/Promises.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
@@ -18,7 +19,7 @@ const registry = new Set<Timer>();
  * environment.
  */
 export class Time {
-    static get = () => time;
+    static get: () => Time;
 
     now() {
         return new Date();
@@ -182,11 +183,6 @@ export class StandardTimer implements Timer {
     }
 }
 
-// Hook for testing frameworks
-if (typeof MatterHooks !== "undefined") {
-    MatterHooks.timeSetup?.(Time);
-}
-
 DiagnosticSource.add({
     get [Diagnostic.value]() {
         return Diagnostic.node("⏱", "Timers", {
@@ -201,4 +197,13 @@ DiagnosticSource.add({
             ]),
         });
     },
+});
+
+Boot.init(() => {
+    Time.get = () => time;
+
+    // Hook for testing frameworks
+    if (typeof MatterHooks !== "undefined") {
+        MatterHooks?.timeSetup?.(Time);
+    }
 });

@@ -68,7 +68,7 @@ class TestState {}
  * Utility for creating a managed struct via a datasource.
  */
 export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
-    const supervisor = new RootSupervisor(new FieldModel(structOf(fields)));
+    const supervisor = RootSupervisor.for(new FieldModel(structOf(fields)));
 
     const notifies: { index: string | undefined; oldValue: Val; newValue: Val }[] = [];
 
