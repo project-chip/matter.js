@@ -60,7 +60,7 @@ export const GeneralDiagnosticsClusterHandler: () => Promise<
                     .filter(({ mac }) => mac !== "00:00:00:00:00:00")
                     .slice(0, 8)
                     .map(({ name, mac, ipV4, ipV6, type }) => ({
-                        name,
+                        name: name.substring(0, 32),
                         isOperational: true,
                         offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                         offPremiseServicesReachableIPv6: null, // null means unknown or not supported
