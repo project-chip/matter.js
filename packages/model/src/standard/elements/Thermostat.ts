@@ -340,7 +340,7 @@ export const Thermostat = Cluster({
 
         Attribute({
             name: "ControlSequenceOfOperation", id: 0x1b, type: "ControlSequenceOfOperationEnum",
-            access: "RW VM", conformance: "M", constraint: "desc", default: 4, quality: "N",
+            access: "RW VM", conformance: "M", constraint: "desc", quality: "N",
             details: "Indicates the overall operating environment of the thermostat, and thus the possible system modes " +
                 "that the thermostat can operate in.",
             xref: { document: "cluster", section: "4.3.9.24" }

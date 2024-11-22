@@ -19,6 +19,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs
     - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
+    - Fix: Restores backward compatibility to sync storages from matter.js <0.11 in case ideas used special characters (uncommon)
 
 -   @matter/create
     - Feature: Added command line option "--verbose" to enable informational NPM messages during initialization
@@ -28,7 +29,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Multi-project test runs now use a single process to improve performance
 
 -   Matter cluster definitions and implementations
+    - Enhancement: Removes default value from attribute ControlSequenceOfOperation of Thermostat cluster because feature specific enum value was used
     - Fix: Reverts MoveToLevel workaround from 0.11.4
+    - Fix: ColorControl: Round calculated Kelvin values when calculated from Mireds
+    - Fix: GeneralDiagnostics: Network interface names are now correctly shortened to 32 characters
 
 -   matter.js git repository
     - Feature: We've added project configuration for VS code including recommended extensions, code snippets and launch configurations

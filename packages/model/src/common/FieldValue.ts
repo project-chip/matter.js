@@ -23,7 +23,8 @@ export type FieldValue =
     | FieldValue.Reference
     | FieldValue.Percent
     | FieldValue.Celsius
-    | FieldValue.Bytes;
+    | FieldValue.Bytes
+    | FieldValue.None;
 
 export namespace FieldValue {
     // Typing with constants should be just as type safe as using an enum but simplifies type definitions
@@ -43,10 +44,13 @@ export namespace FieldValue {
     export const bytes = "bytes";
     export type bytes = typeof bytes;
 
+    export const none = "none";
+    export type none = typeof none;
+
     /**
      * If a field value isn't a primitive type, it's an object with a type field indicating one of these types.
      */
-    export type Type = percent | celsius | reference | properties | bytes;
+    export type Type = percent | celsius | reference | properties | bytes | none;
 
     /**
      * Test for one of the special placeholder types.
@@ -61,6 +65,17 @@ export namespace FieldValue {
      */
     export const Invalid: unique symbol = Symbol("invalid");
     export type Invalid = typeof Invalid;
+
+    /**
+     * Flag for an "Undefined"/No value. Can be used in overrides to reset fields
+     */
+    export type None = {
+        type: none;
+    };
+
+    export const None: None = {
+        type: none,
+    };
 
     /**
      * Reference to a named field
@@ -124,6 +139,9 @@ export namespace FieldValue {
     export function serialize(value: FieldValue): string {
         if (value === null) {
             return "null";
+        }
+        if (is(value, none)) {
+            return "";
         }
         if (is(value, reference)) {
             return (value as Reference).name;
@@ -203,6 +221,9 @@ export namespace FieldValue {
             case "reference":
                 // This needs to be handled at a higher level
                 return;
+
+            case "none":
+                return; // undefined
 
             case "percent":
             case "celsius":

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FieldValue } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
@@ -18,6 +19,12 @@ LocalMatter.children.push({
             tag: "datatype",
             name: "OccupancyBitmap",
             type: "OccupancySensing.OccupancyBitmap",
+        },
+        {
+            tag: "attribute",
+            id: 0x1b,
+            name: "ControlSequenceOfOperation",
+            default: FieldValue.None,
         },
     ],
 });
