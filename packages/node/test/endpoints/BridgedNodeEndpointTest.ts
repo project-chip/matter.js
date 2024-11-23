@@ -10,8 +10,7 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { BridgedNodeEndpoint } from "#endpoints/bridged-node";
-import { StorageBackendMemory } from "#general";
-import { Environment, StorageService } from "@matter/general";
+import { Environment, StorageBackendMemory, StorageService } from "#general";
 import assert from "assert";
 import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 import { MockServerNode } from "../node/mock-server-node.js";
@@ -22,7 +21,7 @@ async function createBridge<T extends AggregatorEndpoint>(
     definition: T | Endpoint.Configuration<T>,
     options?: MockEndpoint.Options<T>,
 ): Promise<MockEndpoint<T>> {
-    // @ts-ignore
+    // @ts-expect-error had no luck to find that typing issue here, but because just tests I will ignore it
     const bridge = await MockEndpoint.create(definition, options);
 
     const node = bridge.owner as MockServerNode;
