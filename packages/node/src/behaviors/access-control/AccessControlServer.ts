@@ -434,8 +434,9 @@ function* computeAclChanges<T extends { fabricIndex: FabricIndex }>(
     groupByFabrics(fabricLists, "new", newEntries);
 
     for (const fabricIndex in fabricLists) {
-        const entry = fabricLists[fabricIndex as unknown as FabricIndex];
-        yield* computeFabricAclChanges(actor, fabricIndex as unknown as FabricIndex, entry.old, entry.new);
+        const numericIndex = FabricIndex(Number.parseInt(fabricIndex));
+        const entry = fabricLists[numericIndex];
+        yield* computeFabricAclChanges(actor, numericIndex, entry.old, entry.new);
     }
 }
 
