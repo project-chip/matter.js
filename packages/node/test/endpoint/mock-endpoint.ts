@@ -52,6 +52,7 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
 
         if (!("owner" in config)) {
             config.owner = new MockServerNode(MockServerNode.RootEndpoint, {
+                id: "node0",
                 environment: config.environment as Environment | undefined,
             });
         }

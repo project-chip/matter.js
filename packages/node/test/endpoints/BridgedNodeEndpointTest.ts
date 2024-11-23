@@ -10,6 +10,9 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { BridgedNodeEndpoint } from "#endpoints/bridged-node";
+import { StorageBackendMemory } from "#general";
+import { Environment, StorageService } from "@matter/general";
+import assert from "assert";
 import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 
@@ -17,13 +20,15 @@ const BridgedLightDevice = OnOffLightDevice.with(BridgedDeviceBasicInformationSe
 
 async function createBridge<T extends AggregatorEndpoint>(
     definition: T | Endpoint.Configuration<T>,
+    options?: MockEndpoint.Options<T>,
 ): Promise<MockEndpoint<T>> {
-    const bridge = await MockEndpoint.create(definition);
+    // @ts-ignore
+    const bridge = await MockEndpoint.create(definition, options);
 
     const node = bridge.owner as MockServerNode;
     await node.start();
 
-    return bridge;
+    return bridge as MockEndpoint<T>;
 }
 
 function expectBridgedLight(bridge: Endpoint) {
@@ -68,6 +73,90 @@ describe("BridgedNodeEndpointTest", () => {
             expectBridgedLight(bridge);
 
             await bridge.owner?.close();
+        });
+
+        it("dynamically multiple endpoints in different re-init order", async () => {
+            const environment = new Environment("test");
+            const storages = new Map<string, StorageBackendMemory>();
+            const storage = environment.get(StorageService);
+            storage.location = "(memory-for-test)";
+            storage.factory = namespace => {
+                const existing = storages.get(namespace);
+                if (existing) {
+                    return existing;
+                }
+                const store = new StorageBackendMemory();
+                storages.set(namespace, store);
+                return store;
+            };
+
+            // Have a bridge with 4 endpoints
+            const bridge = await createBridge(AggregatorEndpoint, { environment });
+
+            await bridge.add({
+                type: BridgedLightDevice,
+                id: "light1",
+            });
+            await MockTime.yield();
+
+            await bridge.add({
+                type: BridgedLightDevice,
+                id: "light2",
+            });
+            await MockTime.yield();
+
+            await bridge.add({
+                type: BridgedLightDevice,
+                id: "light2-1",
+            });
+            await MockTime.yield();
+
+            await bridge.add({
+                type: BridgedLightDevice,
+                id: "light3",
+            });
+            await MockTime.yield();
+
+            // Store their numbers
+            const light1 = bridge.parts.require("light1").number;
+            const light2 = bridge.parts.require("light2").number;
+            const light3 = bridge.parts.require("light3").number;
+
+            await bridge.owner?.close();
+
+            // Initialize second bridge with same storage
+            const bridge2 = await createBridge(AggregatorEndpoint, { environment });
+
+            // Initialize the bridges in a different order, leave one out and add one more
+            await bridge2.add({
+                type: BridgedLightDevice,
+                id: "light3",
+            });
+            await MockTime.yield();
+
+            await bridge2.add({
+                type: BridgedLightDevice,
+                id: "light1",
+            });
+            await MockTime.yield();
+
+            await bridge2.add({
+                type: BridgedLightDevice,
+                id: "light2",
+            });
+            await MockTime.yield();
+
+            await bridge2.add({
+                type: BridgedLightDevice,
+                id: "light4",
+            });
+            await MockTime.yield();
+
+            // Verify that the endpoint numbers are preserved and new ones are allocated
+            assert.strictEqual(bridge2.parts.require("light1").number, light1);
+            assert.strictEqual(bridge2.parts.require("light2").number, light2);
+            assert.strictEqual(bridge2.parts.require("light3").number, light3);
+            assert.strictEqual(bridge2.parts.require("light4").number, light3 + 1);
         });
     });
 });
