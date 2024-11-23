@@ -11,6 +11,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/create
+    - Feature: Added command line option "--verbose" to enable informational NPM messages during initialization
+    - Feature: Added template "contributor" to bootstrap dev environment for working on matter.js itself
+
 -   @matter/node
     - Enhancement: The `with` functions on endpoint and cluster behavior types now alias to `withBehaviors` and `withFeatures` respectively to make their function more explicit
     - Enhancement: Endpoints now ignore persisted values for clusters when features change across restarts.  This allows for startup when persisted values become invalid due to conformance rules
@@ -21,9 +25,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: New export @matter/nodejs/config allows for fine-grained configuration of Node.js bootstrap logic
     - Fix: Restores backward compatibility to sync storages from matter.js <0.11 in case ideas used special characters (uncommon)
 
--   @matter/create
-    - Feature: Added command line option "--verbose" to enable informational NPM messages during initialization
-    - Feature: Added template "contributor" to bootstrap dev environment for working on matter.js itself
+-   @matter/protocol
+    - Fix: Corrects the DataVersion Filter shortening logic to ensure maximum message size is not exceeded 
 
 -   @matter/tools
     - Multi-project test runs now use a single process to improve performance

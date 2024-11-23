@@ -38,7 +38,7 @@ export function createTestFabric() {
     });
 }
 
-class DummyMessageExchange {
+export class DummyMessageExchange {
     messagesQueue = new DataReadQueue<Message>();
     channel = { name: "test" };
     maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
@@ -51,7 +51,7 @@ class DummyMessageExchange {
             messageType: number,
             payload: Uint8Array,
             options?: ExchangeSendOptions,
-        ) => Uint8Array | void,
+        ) => { payload: Uint8Array; messageType: number } | void,
         public clearTimedInteractionCallback?: () => void,
         public closeCallback?: () => void,
     ) {}
@@ -61,11 +61,13 @@ class DummyMessageExchange {
     }
 
     async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
-        const response = this.writeCallback?.(messageType, payload, options);
-        if (response) {
+        const { payload: responsePayload, messageType: responseMessageType } =
+            this.writeCallback?.(messageType, payload, options) ?? {};
+        if (payload) {
             return this.messagesQueue.write({
                 packetHeader: { sessionType: SessionType.Unicast },
-                payload: response,
+                payloadHeader: { messageType: responseMessageType },
+                payload: responsePayload,
             } as Message);
         }
     }
@@ -100,7 +102,11 @@ export const testFabric = createTestFabric();
 export async function createDummyMessageExchange(
     hasTimedInteraction = false,
     timedInteractionExpired = false,
-    writeCallback?: (messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) => Uint8Array | void,
+    writeCallback?: (
+        messageType: number,
+        payload: Uint8Array,
+        options?: ExchangeSendOptions,
+    ) => { payload: Uint8Array; messageType: number } | void,
     clearTimedInteractionCallback?: () => void,
     closeCallback?: () => void,
 ) {
