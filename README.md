@@ -80,7 +80,7 @@ Please refer to the Examples readme on how to use the examples: [@matter/example
 
 ### Extending and contributing to matter.js
 
-We welcome contributions!  If you have Node.js installed, prepare your development envirnment as follows:
+We welcome contributions!  If you have Node.js installed, prepare your development environment as follows:
 
 ```bash
 git clone https://github.com/project-chip/matter.js
@@ -218,7 +218,7 @@ The following reference implementation and code references are available as basi
 
 - For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [@matter/nodejs](packages/nodejs/README.md) as reference. 
 - For BLE functionality you can use the Node.js implementations provided by [@matter/nodejs-ble](packages/nodejs-ble/README.md) as reference. 
-- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/examples/src/device-onoff-advanced-cli/cluster/DummyWifiNetworkCommissioningServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
+- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/examples/src/device-onoff-advanced/cluster/DummyWifiNetworkCommissioningServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
 
 If you implement a specific platform we would be happy about a PR with the code, so that also other community members can benefit from it.
 
