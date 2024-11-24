@@ -23,7 +23,7 @@ export abstract class EndpointInitializer {
     abstract eraseDescendant(_endpoint: Endpoint): Promise<void>;
 
     /**
-     * Close storage a {@link Endpoint}.
+     * Deactivate the storage for a {@link Endpoint}. This mainly manages internal state to deactivate the endpoint number assignment
      */
     abstract deactivateDescendant(_endpoint: Endpoint): Promise<void>;
 
