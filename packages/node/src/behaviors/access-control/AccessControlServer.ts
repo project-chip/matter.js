@@ -243,45 +243,6 @@ export class AccessControlServer extends AccessControlBehavior {
         for (const change of computeAclChanges(actor, oldValue, value)) {
             this.events.accessControlExtensionChanged.emit(change, this.context);
         }
-        const { session } = this.context;
-
-        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
-        //  different which would lead to missing events of the relevant entries
-        const relevantFabricIndex = session?.associatedFabric.fabricIndex;
-
-        if (relevantFabricIndex === undefined || this.events.accessControlExtensionChanged === undefined) {
-            return;
-        }
-        const adminPasscodeId = session === undefined || session?.isPase ? 0 : null;
-        const adminNodeId = adminPasscodeId === null ? session?.associatedFabric.rootNodeId : null;
-        if (adminNodeId === undefined) {
-            // Should never happen
-            return;
-        }
-
-        const fabricExtensions = value.filter(entry => entry.fabricIndex === relevantFabricIndex);
-        const oldFabricExtensions = oldValue.filter(entry => entry.fabricIndex === relevantFabricIndex);
-
-        const changeType =
-            fabricExtensions.length > oldFabricExtensions.length
-                ? AccessControlTypes.ChangeType.Added
-                : fabricExtensions.length < oldFabricExtensions.length
-                  ? AccessControlTypes.ChangeType.Removed
-                  : AccessControlTypes.ChangeType.Changed;
-
-        this.events.accessControlExtensionChanged.emit(
-            {
-                changeType,
-                adminNodeId,
-                adminPasscodeId,
-                latestValue:
-                    (changeType === AccessControlTypes.ChangeType.Removed
-                        ? oldFabricExtensions[0]
-                        : fabricExtensions[0]) ?? null,
-                fabricIndex: relevantFabricIndex,
-            },
-            this.context,
-        );
     }
 
     /**
