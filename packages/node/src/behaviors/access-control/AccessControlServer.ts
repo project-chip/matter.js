@@ -440,7 +440,11 @@ function* computeFabricAclChanges<T>(
             adminNodeId,
             adminPasscodeId,
             changeType,
-            latestValue: newEntries[i] ?? null,
+            latestValue:
+                newEntries[i] ??
+                // Unclear why this field is nullable but cert tests fail unless this value is set to "current value
+                // or latest value before deletion"
+                oldEntries[i],
             fabricIndex,
         };
     }
