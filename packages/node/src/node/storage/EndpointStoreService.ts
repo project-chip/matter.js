@@ -143,6 +143,7 @@ export class EndpointStoreFactory extends EndpointStoreService {
                     logger.warn(`Stored number ${knownNumber} is already allocated to another endpoint, ignoring`);
                 } else {
                     this.#preAllocatedNumbers.delete(knownNumber);
+                    this.#allocatedNumbers.add(knownNumber);
                     endpoint.number = knownNumber;
                     return;
                 }
