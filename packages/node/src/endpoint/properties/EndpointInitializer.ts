@@ -23,6 +23,11 @@ export abstract class EndpointInitializer {
     abstract eraseDescendant(_endpoint: Endpoint): Promise<void>;
 
     /**
+     * Close storage a {@link Endpoint}.
+     */
+    abstract deactivateDescendant(_endpoint: Endpoint): Promise<void>;
+
+    /**
      * Create backing for a behavior of a descendent.
      *
      * @param endpoint the {@link Endpoint} the behavior belongs to

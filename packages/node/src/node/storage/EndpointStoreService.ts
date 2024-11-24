@@ -41,6 +41,16 @@ export abstract class EndpointStoreService {
      * These stores are cached internally by ID.
      */
     abstract storeForEndpoint(endpoint: Endpoint): EndpointStore;
+
+    /**
+     * Deactivate the store for a single {@link Endpoint}. This puts the endpoint number back into pre-allocated state
+     */
+    abstract deactivateStoreForEndpoint(endpoint: Endpoint): void;
+
+    /**
+     * Erase storage for a single {@link Endpoint}.
+     */
+    abstract eraseStoreForEndpoint(endpoint: Endpoint): Promise<void>;
 }
 
 export class EndpointStoreFactory extends EndpointStoreService {
@@ -187,6 +197,30 @@ export class EndpointStoreFactory extends EndpointStoreService {
         }
 
         return this.storeForEndpoint(endpoint.owner).childStoreFor(endpoint);
+    }
+
+    deactivateStoreForEndpoint(endpoint: Endpoint) {
+        this.#construction.assert();
+
+        if (endpoint.maybeNumber === 0) {
+            throw new InternalError("Cannot deactivate root node store");
+        }
+
+        if (!this.#allocatedNumbers.has(endpoint.number)) {
+            return;
+        }
+        this.#allocatedNumbers.delete(endpoint.number);
+        this.#preAllocatedNumbers.add(endpoint.number);
+    }
+
+    async eraseStoreForEndpoint(endpoint: Endpoint) {
+        this.#construction.assert();
+
+        const store = this.storeForEndpoint(endpoint);
+        await store.erase();
+
+        this.#allocatedNumbers.delete(endpoint.number);
+        this.#preAllocatedNumbers.delete(endpoint.number);
     }
 
     /**

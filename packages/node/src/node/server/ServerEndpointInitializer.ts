@@ -33,13 +33,20 @@ export class ServerEndpointInitializer extends EndpointInitializer {
         endpoint.behaviors.require(DescriptorServer);
     }
 
-    override async eraseDescendant(endpoint: Endpoint) {
+    async eraseDescendant(endpoint: Endpoint) {
         if (!endpoint.lifecycle.hasId) {
             return;
         }
 
-        const store = this.#store.endpointStores.storeForEndpoint(endpoint);
-        await store.erase();
+        await this.#store.endpointStores.eraseStoreForEndpoint(endpoint);
+    }
+
+    async deactivateDescendant(endpoint: Endpoint) {
+        if (!endpoint.lifecycle.hasId || endpoint.number === 0) {
+            return;
+        }
+
+        this.#store.endpointStores.deactivateStoreForEndpoint(endpoint);
     }
 
     /**
