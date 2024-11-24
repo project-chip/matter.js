@@ -21,13 +21,13 @@ async function createBridge<T extends AggregatorEndpoint>(
     definition: T | Endpoint.Configuration<T>,
     options?: MockEndpoint.Options<T>,
 ): Promise<MockEndpoint<T>> {
-    // @ts-expect-error had no luck to find that typing issue here, but because just tests I will ignore it
-    const bridge = await MockEndpoint.create(definition, options);
+    const config = Endpoint.configurationFor(definition, options);
+    const bridge = await MockEndpoint.create(config);
 
     const node = bridge.owner as MockServerNode;
     await node.start();
 
-    return bridge as MockEndpoint<T>;
+    return bridge;
 }
 
 function expectBridgedLight(bridge: Endpoint) {
@@ -74,7 +74,7 @@ describe("BridgedNodeEndpointTest", () => {
             await bridge.owner?.close();
         });
 
-        it("dynamically multiple endpoints in different re-init order", async () => {
+        it("with multiple dynamic endpoints in different re-init order", async () => {
             const environment = new Environment("test");
             const storages = new Map<string, StorageBackendMemory>();
             const storage = environment.get(StorageService);
