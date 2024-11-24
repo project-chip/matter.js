@@ -480,51 +480,67 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     async sendReadRequest(readRequest: ReadRequest) {
-        await this.send(MessageType.ReadRequest, TlvReadRequest.encode(readRequest));
+        await this.send(MessageType.ReadRequest, this.#encodeReadingRequest(TlvReadRequest, readRequest));
 
         return this.readDataReports();
     }
 
-    #encodeSubscribeRequest(subscribeRequest: SubscribeRequest) {
-        const request = TlvSubscribeRequest.encode(subscribeRequest);
-
-        if (request.length <= this.exchange.maxPayloadSize) {
-            return request;
+    #encodeReadingRequest<T extends TlvSchema<any>>(schema: T, request: TypeFromSchema<T>) {
+        const encoded = schema.encode(request);
+        if (encoded.length <= this.exchange.maxPayloadSize) {
+            return encoded;
         }
 
-        const dataVersionFilters = subscribeRequest.dataVersionFilters ?? [];
-        subscribeRequest.dataVersionFilters = [];
-        const requestWithoutDataVersionFilters = TlvSubscribeRequest.encode(subscribeRequest);
+        const originalDataVersionFilters = [...(request.dataVersionFilters ?? [])];
+
+        const requestWithoutDataVersionFilters = schema.encode({
+            ...request,
+            dataVersionFilters: [],
+        });
         if (requestWithoutDataVersionFilters.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `SubscribeRequest is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
-                    subscribeRequest,
-                )}`,
+                `Request is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(request)}`,
             );
         }
-        let remainingBytes = this.exchange.maxPayloadSize - requestWithoutDataVersionFilters.length;
-        while (remainingBytes > 0 && dataVersionFilters.length > 0) {
-            const dataVersionFilter = dataVersionFilters.shift();
+
+        return schema.encode({
+            ...request,
+            dataVersionFilters: this.#shortenDataVersionFilters(
+                originalDataVersionFilters,
+                this.exchange.maxPayloadSize - requestWithoutDataVersionFilters.length,
+            ),
+        });
+    }
+
+    #shortenDataVersionFilters(
+        originalDataVersionFilters: TypeFromSchema<typeof TlvDataVersionFilter>[],
+        availableBytes: number,
+    ) {
+        const dataVersionFilters = new Array<TypeFromSchema<typeof TlvDataVersionFilter>>();
+
+        while (availableBytes > 0 && originalDataVersionFilters.length > 0) {
+            const dataVersionFilter = originalDataVersionFilters.shift();
             if (dataVersionFilter === undefined) {
                 break;
             }
-            const encodedDataVersionFilter = TlvDataVersionFilter.encodeTlv(dataVersionFilter);
+            const encodedDataVersionFilter = TlvDataVersionFilter.encode(dataVersionFilter);
             const encodedDataVersionFilterLength = encodedDataVersionFilter.length;
-            if (encodedDataVersionFilterLength > remainingBytes) {
-                dataVersionFilters.unshift(dataVersionFilter);
+            if (encodedDataVersionFilterLength > availableBytes) {
+                originalDataVersionFilters.unshift(dataVersionFilter);
                 break;
             }
-            subscribeRequest.dataVersionFilters.push(dataVersionFilter);
-            remainingBytes -= encodedDataVersionFilterLength;
+            dataVersionFilters.push(dataVersionFilter);
+            availableBytes -= encodedDataVersionFilterLength;
         }
         logger.debug(
-            `Removed ${dataVersionFilters.length} DataVersionFilters from SubscribeRequest to fit into a single message`,
+            `Removed ${originalDataVersionFilters.length} DataVersionFilters from Request to fit into a single message`,
         );
-        return TlvSubscribeRequest.encode(subscribeRequest);
+
+        return dataVersionFilters;
     }
 
     async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
-        const request = this.#encodeSubscribeRequest(subscribeRequest);
+        const request = this.#encodeReadingRequest(TlvSubscribeRequest, subscribeRequest);
         await this.send(MessageType.SubscribeRequest, request);
 
         const report = await this.readDataReports();

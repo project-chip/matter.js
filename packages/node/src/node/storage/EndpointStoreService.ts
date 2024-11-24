@@ -46,6 +46,7 @@ export abstract class EndpointStoreService {
 export class EndpointStoreFactory extends EndpointStoreService {
     #storage: StorageContext;
     #allocatedNumbers = new Set<number>();
+    #preAllocatedNumbers = new Set<number>();
     #construction: Construction<EndpointStoreFactory>;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
@@ -85,7 +86,7 @@ export class EndpointStoreFactory extends EndpointStoreService {
         // endpoints and #nextNumber is somehow invalid
         this.#root.visit(({ number }) => {
             if (number !== undefined) {
-                this.#allocatedNumbers.add(number);
+                this.#preAllocatedNumbers.add(number);
             }
         });
     }
@@ -141,6 +142,7 @@ export class EndpointStoreFactory extends EndpointStoreService {
                 if (this.#allocatedNumbers.has(knownNumber)) {
                     logger.warn(`Stored number ${knownNumber} is already allocated to another endpoint, ignoring`);
                 } else {
+                    this.#preAllocatedNumbers.delete(knownNumber);
                     endpoint.number = knownNumber;
                     return;
                 }
@@ -148,7 +150,11 @@ export class EndpointStoreFactory extends EndpointStoreService {
 
             const startNumber = this.#nextNumber;
 
-            while (this.#nextNumber < 1 || this.#allocatedNumbers.has(this.#nextNumber)) {
+            while (
+                this.#nextNumber < 1 ||
+                this.#allocatedNumbers.has(this.#nextNumber) ||
+                this.#preAllocatedNumbers.has(this.#nextNumber)
+            ) {
                 this.#nextNumber = (this.#nextNumber + 1) % 0xffff;
                 if (this.#nextNumber === startNumber) {
                     throw new ImplementationError(
