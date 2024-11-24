@@ -51,11 +51,15 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
     constructor(definition: T | Node.Configuration<T>, options?: Node.Options<T>, simulator?: NetworkSimulator) {
         const config = Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options);
 
-        const environment = config.environment ?? new Environment("test");
-
+        let environment = config.environment;
+        if (!environment) {
+            environment = new Environment("test");
+        }
         const storage = environment.get(StorageService);
-        storage.location = "(memory)";
-        storage.factory = () => new StorageBackendMemory();
+        if (storage.location !== "(memory-for-test)") {
+            storage.location = "(memory-for-test)";
+            storage.factory = () => new StorageBackendMemory();
+        }
 
         config.environment = environment;
 
