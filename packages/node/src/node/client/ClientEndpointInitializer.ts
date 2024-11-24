@@ -37,6 +37,10 @@ export class ClientEndpointInitializer extends EndpointInitializer {
         await store.erase();
     }
 
+    async deactivateDescendant(_endpoint: Endpoint) {
+        // nothing to do
+    }
+
     get ready() {
         return this.#store.construction.ready;
     }

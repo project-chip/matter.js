@@ -32,6 +32,7 @@ export class MockPartInitializer extends EndpointInitializer {
     }
 
     async eraseDescendant(_endpoint: Endpoint) {}
+    async deactivateDescendant(_endpoint: Endpoint) {}
 
     createBacking(endpoint: Endpoint, behavior: Behavior.Type) {
         return new ServerBehaviorBacking(endpoint, behavior);
@@ -52,16 +53,22 @@ class MockEndpointStoreService extends EndpointStoreService {
     #stores = Array<MockEndpointStore>();
     #nextNumber = 1;
 
-    override assignNumber(endpoint: Endpoint<EndpointType.Empty>): void {
+    assignNumber(endpoint: Endpoint<EndpointType.Empty>): void {
         endpoint.number = this.#nextNumber++;
     }
 
-    override storeForEndpoint(endpoint: Endpoint<EndpointType.Empty>): EndpointStore {
+    storeForEndpoint(endpoint: Endpoint<EndpointType.Empty>): EndpointStore {
         if (this.#stores[endpoint.number]) {
             return this.#stores[endpoint.number];
         }
 
         return (this.#stores[endpoint.number] = new MockEndpointStore(endpoint));
+    }
+
+    deactivateStoreForEndpoint(_endpoint: Endpoint<EndpointType.Empty>) {}
+
+    async eraseStoreForEndpoint(endpoint: Endpoint<EndpointType.Empty>) {
+        delete this.#stores[endpoint.number];
     }
 }
 
