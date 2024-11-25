@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.5 (2024-11-25)
 
 -   @matter/create
     - Feature: Added command line option "--verbose" to enable informational NPM messages during initialization
