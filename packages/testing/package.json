@@ -53,7 +53,7 @@
         "mocha": "^10.7.3",
         "playwright": "^1.48.1",
         "trace-unhandled": "^2.0.1",
-        "wtfnode": "^0.9.3",
+        "wtfnode": "^0.9.4",
         "yargs": "^17.7.2"
     },
     "devDependencies": {
