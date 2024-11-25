@@ -51,7 +51,7 @@
         "type-fest": "^4.27.0",
         "typedoc": "^0.26.11",
         "typedoc-material-theme": "^1.1.0",
-        "@microsoft/tsdoc": "^0.15.0"
+        "@microsoft/tsdoc": "^0.15.1"
     },
     "optionalDependencies": {
         "@esbuild/linux-x64": "^0.24.0"
