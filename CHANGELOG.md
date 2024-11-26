@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/nodejs
+    - Fix: Fixes a typo and crash case on network closing when ending the matter.js process
+
 ## 0.11.5 (2024-11-25)
 
 -   @matter/create
