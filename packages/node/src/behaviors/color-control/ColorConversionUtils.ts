@@ -239,7 +239,7 @@ export function miredsToKelvin(mireds: number): number {
  * @returns color temp in mireds
  */
 export function kelvinToMireds(kelvin: number): number {
-    return 1_000_000 / kelvin;
+    return Math.round(1_000_000 / kelvin);
 }
 
 /**
