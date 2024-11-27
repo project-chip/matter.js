@@ -940,7 +940,7 @@ export class PairedNode {
                 logger.info(
                     `NodeId ${this.nodeId}: Device type with code ${deviceType} not known, use generic replacement.`,
                 );
-                return UnknownDeviceType(deviceType);
+                return UnknownDeviceType(deviceType, revision);
             }
             if (deviceTypeDefinition.revision < revision) {
                 logger.debug(

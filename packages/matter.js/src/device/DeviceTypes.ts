@@ -959,12 +959,12 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     }),
 };
 
-export const UnknownDeviceType = (code: number) =>
+export const UnknownDeviceType = (code: number, revision: number) =>
     DeviceTypeDefinition({
         code,
         name: `Unknown Device Type ${code}`,
         deviceClass: DeviceClasses.Simple,
-        revision: 0,
+        revision,
         unknown: true,
     });
 
