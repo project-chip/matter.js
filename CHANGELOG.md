@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.6 (2024-11-27)
 
 -   @matter/general
     - Fix: Fixes a potential recursion in parsing DnsQNames
