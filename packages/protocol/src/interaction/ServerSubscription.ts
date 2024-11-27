@@ -416,7 +416,7 @@ export class ServerSubscription extends Subscription {
     /**
      * Update the session after an endpoint structure change. The method will initialize all missing new attributes and
      * events and will remove listeners no longer needed.
-     * Newly added attributes are then treated ad "changed values" and will be sent as subscription data update to the
+     * Newly added attributes are then treated as "changed values" and will be sent as subscription data update to the
      * controller. The data of newly added events are not sent automatically.
      */
     async updateSubscription() {
@@ -491,6 +491,12 @@ export class ServerSubscription extends Subscription {
         this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.prepareDataUpdate(),
         ).start();
+        this.#structure.change.on(() => {
+            // TODO When change is AsyncObservable can be simplified
+            this.updateSubscription().catch(error =>
+                logger.error("Error updating subscription after structure change:", error),
+            );
+        });
     }
 
     /**
