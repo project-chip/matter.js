@@ -31,7 +31,7 @@ export class SecureChannelStatusMessageSchema extends Schema<StatusMessage, Uint
         const generalStatus = reader.readUInt16();
         const protocolId = reader.readUInt32();
         const protocolStatus = reader.readUInt16();
-        const remainingBytes = reader.getRemainingBytesCount() > 0 ? reader.getRemainingBytes() : undefined;
+        const remainingBytes = reader.remainingBytesCount > 0 ? reader.remainingBytes : undefined;
 
         return { generalStatus, protocolId, protocolStatus, remainingBytes };
     }
