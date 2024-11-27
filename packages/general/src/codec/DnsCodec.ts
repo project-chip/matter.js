@@ -175,18 +175,32 @@ export class DnsCodec {
         return { name, recordType, recordClass, ttl, value, flushCache };
     }
 
-    private static decodeQName(reader: DataReader<Endian.Big>, message: Uint8Array) {
+    static decodeQName(reader: DataReader<Endian.Big>, message: Uint8Array, visited = new Set<number>()): string {
+        if (visited.has(reader.offset)) {
+            throw new UnexpectedDataError(`QNAME pointer loop detected. Index ${reader.offset} visited twice.`);
+        }
+        visited.add(reader.offset);
+
         const messageReader = new DataReader(message, Endian.Big);
         const qNameItems = new Array<string>();
         while (true) {
             const itemLength = reader.readUInt8();
             if (itemLength === 0) break;
             if ((itemLength & 0xc0) !== 0) {
+                if (reader.remainingBytesCount < 1) {
+                    throw new UnexpectedDataError("QNAME pointer exceeds remaining bytes.");
+                }
                 // Compressed Qname
                 const indexInMessage = reader.readUInt8() | ((itemLength & 0x3f) << 8);
-                messageReader.setOffset(indexInMessage);
-                qNameItems.push(this.decodeQName(messageReader, message));
+                if (indexInMessage >= message.length) {
+                    throw new UnexpectedDataError("Invalid compressed QNAME pointer pointing to out of bounds index.");
+                }
+                messageReader.offset = indexInMessage;
+                qNameItems.push(this.decodeQName(messageReader, message, visited));
                 break;
+            } else if (reader.remainingBytesCount < itemLength + 1) {
+                //  There needs to be a string end 0x00 at the end, so + 1
+                throw new UnexpectedDataError(`QNAME item length ${itemLength} exceeds remaining bytes.`);
             }
             qNameItems.push(reader.readUtf8String(itemLength));
         }
