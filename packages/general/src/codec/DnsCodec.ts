@@ -153,7 +153,7 @@ export class DnsCodec {
         }
     }
 
-    private static decodeQuery(reader: DataReader<Endian.Big>, message: Uint8Array): DnsQuery {
+    static decodeQuery(reader: DataReader<Endian.Big>, message: Uint8Array): DnsQuery {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
         const classInt = reader.readUInt16();
@@ -162,7 +162,7 @@ export class DnsCodec {
         return { name, recordType, recordClass, uniCastResponse };
     }
 
-    private static decodeRecord(reader: DataReader<Endian.Big>, message: Uint8Array): DnsRecord<any> {
+    static decodeRecord(reader: DataReader<Endian.Big>, message: Uint8Array): DnsRecord<any> {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
         const classInt = reader.readUInt16();
@@ -225,7 +225,7 @@ export class DnsCodec {
         }
     }
 
-    private static decodeSrvRecord(valueBytes: Uint8Array, message: Uint8Array): SrvRecordValue {
+    static decodeSrvRecord(valueBytes: Uint8Array, message: Uint8Array): SrvRecordValue {
         const reader = new DataReader(valueBytes, Endian.Big);
         const priority = reader.readUInt16();
         const weight = reader.readUInt16();
@@ -234,7 +234,7 @@ export class DnsCodec {
         return { priority, weight, port, target };
     }
 
-    private static decodeTxtRecord(valueBytes: Uint8Array): string[] {
+    static decodeTxtRecord(valueBytes: Uint8Array): string[] {
         const reader = new DataReader(valueBytes, Endian.Big);
         const result = new Array<string>();
         let bytesRead = 0;
@@ -246,7 +246,7 @@ export class DnsCodec {
         return result;
     }
 
-    private static decodeAaaaRecord(valueBytes: Uint8Array): string {
+    static decodeAaaaRecord(valueBytes: Uint8Array): string {
         const reader = new DataReader(valueBytes, Endian.Big);
         const ipItems = new Array<string>();
         for (let i = 0; i < 8; i++) {
@@ -272,7 +272,7 @@ export class DnsCodec {
         return ipItems.join(":");
     }
 
-    private static decodeARecord(valueBytes: Uint8Array): string {
+    static decodeARecord(valueBytes: Uint8Array): string {
         const reader = new DataReader(valueBytes, Endian.Big);
         const ipItems = new Array<string>();
         for (let i = 0; i < 4; i++) {
@@ -348,7 +348,7 @@ export class DnsCodec {
         }
     }
 
-    private static encodeARecord(ip: string) {
+    static encodeARecord(ip: string) {
         if (!isIPv4(ip)) throw new UnexpectedDataError(`Invalid A Record value: ${ip}`);
         const writer = new DataWriter(Endian.Big);
         ip.split(".").forEach(part => {
@@ -357,7 +357,7 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeAaaaRecord(ip: string) {
+    static encodeAaaaRecord(ip: string) {
         if (!isIPv6(ip)) throw new UnexpectedDataError(`Invalid AAAA Record value: ${ip}`);
         const writer = new DataWriter(Endian.Big);
         const parts = ip.split(":");
@@ -373,7 +373,7 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeTxtRecord(entries: string[]) {
+    static encodeTxtRecord(entries: string[]) {
         const writer = new DataWriter(Endian.Big);
         entries.forEach(entry => {
             const entryData = Bytes.fromString(entry);
@@ -383,7 +383,7 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeSrvRecord({ priority, weight, port, target }: SrvRecordValue) {
+    static encodeSrvRecord({ priority, weight, port, target }: SrvRecordValue) {
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt16(priority);
         writer.writeUInt16(weight);
@@ -392,9 +392,10 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeQName(qname: string) {
+    static encodeQName(qname: string) {
         const writer = new DataWriter(Endian.Big);
         if (qname.length > 0) {
+            // TODO: Implement compression
             qname.split(".").forEach(label => {
                 const labelData = Bytes.fromString(label);
                 writer.writeUInt8(labelData.length);
