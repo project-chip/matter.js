@@ -37,7 +37,7 @@ export const UnknownCluster = (clusterId: ClusterId) =>
     Cluster({
         id: clusterId,
         name: `Unknown cluster ${toHex(clusterId)}`,
-        revision: 1,
+        revision: 0,
         unknown: true,
     });
 
