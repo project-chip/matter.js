@@ -22,7 +22,7 @@ Boot.init(() => {
 
         closeNetwork = () => {
             void Network.get().close();
-            process.off("beforeExit", close);
+            process.off("beforeExit", closeNetwork!);
         };
 
         // Ensure network gets cleaned up on exit
