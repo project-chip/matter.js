@@ -964,7 +964,7 @@ export const UnknownDeviceType = (code: number) =>
         code,
         name: `Unknown Device Type ${code}`,
         deviceClass: DeviceClasses.Simple,
-        revision: 0,
+        revision: 1,
         unknown: true,
     });
 

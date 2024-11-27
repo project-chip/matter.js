@@ -296,7 +296,7 @@ export namespace ClusterType {
      */
     export const Unknown = ClusterType({
         id: 0,
-        revision: 0,
+        revision: 1,
         name: "Unknown",
 
         attributes: {},

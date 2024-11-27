@@ -20,6 +20,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/protocol
     - Fix: Adds missing subscription update when endpoint structure changes
 
+-   @matter/types
+    - Fix: Do not use revisions of 0 for Unknown fallbacks
 
 ## 0.11.5 (2024-11-25)
 
