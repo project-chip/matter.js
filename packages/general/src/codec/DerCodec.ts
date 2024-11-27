@@ -277,7 +277,7 @@ export class DerCodec {
         if ((tag & CONSTRUCTED) === 0) return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes };
         const elementsReader = new DataReader(bytes, Endian.Big);
         const elements: DerNode[] = [];
-        while (elementsReader.getRemainingBytesCount() > 0) {
+        while (elementsReader.remainingBytesCount > 0) {
             elements.push(this.decodeRec(elementsReader));
         }
         return { [DerKey.TagId]: tag, [DerKey.Bytes]: bytes, [DerKey.Elements]: elements };

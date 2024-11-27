@@ -14,6 +14,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/nodejs
     - Fix: Fixes a typo and crash case on network closing when ending the matter.js process
 
+-   @matter/general
+    - Fix: Fixes a potential recursion in parsing DnsQNames
+
 ## 0.11.5 (2024-11-25)
 
 -   @matter/create

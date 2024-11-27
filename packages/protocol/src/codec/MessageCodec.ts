@@ -95,7 +95,7 @@ export class MessageCodec {
             messageExtension = reader.readByteArray(extensionLength);
         }
 
-        const applicationPayload = reader.getRemainingBytes();
+        const applicationPayload = reader.remainingBytes;
         return {
             header,
             messageExtension,
@@ -115,7 +115,7 @@ export class MessageCodec {
             packetHeader: header,
             payloadHeader,
             securityExtension,
-            payload: reader.getRemainingBytes(),
+            payload: reader.remainingBytes,
         };
     }
 

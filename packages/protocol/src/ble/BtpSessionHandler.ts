@@ -331,12 +331,12 @@ export class BtpSessionHandler {
 
         while (this.queuedOutgoingMatterMessages.length > 0) {
             const currentProcessedMessage = this.queuedOutgoingMatterMessages[0];
-            const remainingMessageLength = currentProcessedMessage.getRemainingBytesCount();
+            const remainingMessageLength = currentProcessedMessage.remainingBytesCount;
 
             logger.debug(
                 "Sending BTP fragment: ",
                 Diagnostic.dict({
-                    fullMessageLength: currentProcessedMessage.getLength(),
+                    fullMessageLength: currentProcessedMessage.length,
                     remainingLengthInBytes: remainingMessageLength,
                 }),
             );
@@ -348,7 +348,7 @@ export class BtpSessionHandler {
                 this.sendAckTimer.stop();
             }
 
-            const isBeginningSegment = remainingMessageLength === currentProcessedMessage.getLength();
+            const isBeginningSegment = remainingMessageLength === currentProcessedMessage.length;
 
             // Calculate Header Size - faster than encoding and checking length
             const btpHeaderLength = 2 + (isBeginningSegment ? 2 : 0) + (hasAckNumber ? 1 : 0); // 2(flags, sequenceNumber) + 2(beginning) + 1(ackNumber)

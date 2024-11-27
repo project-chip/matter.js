@@ -117,7 +117,7 @@ export class BtpCodec {
         const ackNumber = hasAckNumber ? reader.readUInt8() : undefined;
         const sequenceNumber = reader.readUInt8();
         const messageLength = isBeginningSegment ? reader.readUInt16() : undefined;
-        const segmentPayload = reader.getRemainingBytes();
+        const segmentPayload = reader.remainingBytes;
 
         return { ackNumber, sequenceNumber, messageLength, segmentPayload };
     }
@@ -315,7 +315,7 @@ export class BtpCodec {
             throw new BleError("Invalid BLE advertisement data");
         }
         const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } =
-            this.decodeBleAdvertisementServiceData(reader.getRemainingBytes());
+            this.decodeBleAdvertisementServiceData(reader.remainingBytes);
         return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
     }
 
