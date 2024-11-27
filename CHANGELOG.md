@@ -11,11 +11,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/general
+    - Fix: Fixes a potential recursion in parsing DnsQNames
+
 -   @matter/nodejs
     - Fix: Fixes a typo and crash case on network closing when ending the matter.js process
 
--   @matter/general
-    - Fix: Fixes a potential recursion in parsing DnsQNames
+-   @matter/protocol
+    - Fix: Adds missing subscription update when endpoint structure changes
+
 
 ## 0.11.5 (2024-11-25)
 
