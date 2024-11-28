@@ -411,6 +411,11 @@ export class AccessControlServer extends AccessControlBehavior {
         }
     }
 
+    resetDelayedAccessControlList() {
+        this.internal.delayedAclData = undefined;
+        this.aclUpdateDelayed = false;
+    }
+
     /**
      * If set to true, the ACL will not be updated immediately when it changes, but only when the `aclUpdateDelayed`
      * property is set to false again.
