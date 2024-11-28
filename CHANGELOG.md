@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/node
+    - Fix: Fixes race condition that can partially destroy ACL entries when concurrent writes happen in parallel to ACL writes
+
+
 ## 0.11.6 (2024-11-27)
 
 -   @matter/general

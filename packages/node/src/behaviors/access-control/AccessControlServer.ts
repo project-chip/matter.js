@@ -411,6 +411,11 @@ export class AccessControlServer extends AccessControlBehavior {
         }
     }
 
+    resetDelayedAccessControlList() {
+        this.internal.delayedAclData = undefined;
+        this.aclUpdateDelayed = false;
+    }
+
     /**
      * If set to true, the ACL will not be updated immediately when it changes, but only when the `aclUpdateDelayed`
      * property is set to false again.
@@ -428,9 +433,11 @@ export class AccessControlServer extends AccessControlBehavior {
      * removed again once we somehow handle relevant sub transactions.
      */
     set aclUpdateDelayed(value: boolean) {
-        logger.info("Setting ACL update delayed to", value);
         if (!value) {
+            logger.info("Committing delayed ACL update");
             this.#updateDelayedAccessControlList();
+        } else if (!this.internal.aclUpdateDelayed) {
+            logger.info("Register ACL update to be delayed");
         }
         this.internal.aclUpdateDelayed = value;
     }
