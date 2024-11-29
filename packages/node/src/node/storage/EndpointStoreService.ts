@@ -216,8 +216,13 @@ export class EndpointStoreFactory extends EndpointStoreService {
     async eraseStoreForEndpoint(endpoint: Endpoint) {
         this.#construction.assert();
 
-        const store = this.storeForEndpoint(endpoint);
-        await store.erase();
+        if (!endpoint.owner) {
+            throw new InternalError(
+                "Endpoint storage inaccessible because endpoint is not a node and is not owned by another endpoint",
+            );
+        }
+
+        await this.storeForEndpoint(endpoint.owner).eraseChildStoreFor(endpoint);
 
         this.#allocatedNumbers.delete(endpoint.number);
         this.#preAllocatedNumbers.delete(endpoint.number);

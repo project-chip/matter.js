@@ -11,6 +11,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Fix: Ensures to completely remove all stored endpoint data when endpoint is deleted 
+
 -   Matter cluster definitions and implementations
     - Fix: Fixes LevelControl cluster extension point definitions and adds a missing parameter
 
@@ -18,7 +21,6 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Fix: Fixes race condition that can partially destroy ACL entries when concurrent writes happen in parallel to ACL writes
-
 
 ## 0.11.6 (2024-11-27)
 
