@@ -188,6 +188,18 @@ export class EndpointStore {
         await this.#storage.clearAll();
     }
 
+    /**
+     * Erase the child storage for one part
+     */
+    async eraseChildStoreFor(endpoint: Endpoint) {
+        await this.#construction;
+
+        const partId = endpoint.id;
+        const store = this.#childStores[partId];
+        await store.erase();
+        delete this.#childStores[partId];
+    }
+
     async #loadSubparts() {
         const knownParts = await this.#childStorage.contexts();
         for (const partId of knownParts) {
