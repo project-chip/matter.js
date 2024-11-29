@@ -771,7 +771,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         listIndex === undefined
                             ? decodeAttributeValueWithSchema(schema, [writeRequest], defaultValue)
                             : decodeListAttributeValueWithSchema(
-                                  schema,
+                                  schema as ArraySchema<any>,
                                   [writeRequest],
                                   (
                                       await this.readAttribute(

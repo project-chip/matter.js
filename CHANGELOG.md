@@ -11,6 +11,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/protocol
+    - Fix: Correctly parse DataReports with duplicate non-Array data entries
+
 -   @matter/node
     - Fix: Ensures to completely remove all stored endpoint data when endpoint is deleted 
 
