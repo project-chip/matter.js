@@ -575,16 +575,31 @@ export namespace LevelControlServerLogic {
     }
 
     export declare const ExtensionInterface: {
-        moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean): MaybePromise<void>;
-        moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean): MaybePromise<void>;
+        moveToLevelLogic(
+            level: number,
+            transitionTime: number | null,
+            withOnOff: boolean,
+            options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
+        ): MaybePromise<void>;
+        moveLogic(
+            moveMode: LevelControl.MoveMode,
+            rate: number | null,
+            withOnOff: boolean,
+            options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
+        ): MaybePromise<void>;
         stepLogic(
             stepMode: LevelControl.StepMode,
             stepSize: number,
             transitionTime: number | null,
             withOnOff: boolean,
+            options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
         ): MaybePromise<void>;
-        stopLogic(): MaybePromise<void>;
-        setLevel(level: number, withOnOff: boolean): MaybePromise<void>;
+        stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
+        setLevel(
+            level: number,
+            withOnOff: boolean,
+            options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
+        ): MaybePromise<void>;
         setRemainingTime(remainingTime: number): void;
         handleOnOffChange(onOff: boolean): void;
     };

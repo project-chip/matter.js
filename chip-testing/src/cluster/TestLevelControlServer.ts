@@ -6,6 +6,7 @@
 import { Logger } from "@matter/main";
 import { LevelControlServer } from "@matter/main/behaviors/level-control";
 import { LevelControl } from "@matter/main/clusters/level-control";
+import { TypeFromPartialBitSchema } from "@matter/main/types";
 
 const logger = Logger.get("TestLevelControlServer");
 
@@ -20,8 +21,13 @@ export class TestLevelControlServer extends LevelControlServer {
         return super.moveToLevel(request);
     }
 
-    override moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean) {
+    override moveToLevelLogic(
+        level: number,
+        transitionTime: number | null,
+        withOnOff: boolean,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
+    ) {
         logger.info(`TestLevelControlServer move level to ${level} LOGIC`);
-        return super.moveToLevelLogic(level, transitionTime, withOnOff);
+        return super.moveToLevelLogic(level, transitionTime, withOnOff, options);
     }
 }
