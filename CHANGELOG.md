@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.8 (2024-11-29)
 
 -   @matter/protocol
     - Fix: Correctly parse DataReports with duplicate non-Array data entries
