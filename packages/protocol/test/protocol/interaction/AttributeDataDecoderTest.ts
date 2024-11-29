@@ -17,6 +17,7 @@ import {
     TlvArray,
     TlvAttributeData,
     TlvAttributeReport,
+    TlvBoolean,
     TlvDataReport,
     TlvField,
     TlvNullable,
@@ -903,6 +904,46 @@ describe("AttributeDataDecoder", () => {
                 { "1": 1, "2": 2, "3": null, "4": null },
                 { "1": 2, "2": 2, "3": null, "4": 6 },
             ]);
+        });
+    });
+
+    describe("decode duplicate non list values", () => {
+        it("decode chunked array with two elements", () => {
+            const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
+                {
+                    attributeData: {
+                        path: {
+                            endpointId: EndpointNumber(0),
+                            clusterId: ClusterId(6),
+                            attributeId: AttributeId(0),
+                        },
+                        data: TlvBoolean.encodeTlv(true),
+                        dataVersion: 12345,
+                    },
+                },
+                {
+                    attributeData: {
+                        path: {
+                            endpointId: EndpointNumber(0),
+                            clusterId: ClusterId(6),
+                            attributeId: AttributeId(0),
+                        },
+                        data: TlvBoolean.encodeTlv(false),
+                        dataVersion: 23456,
+                    },
+                },
+            ];
+            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
+                attributeId: AttributeId(0),
+                attributeName: "onOff",
+                clusterId: ClusterId(6),
+                endpointId: EndpointNumber(0),
+                nodeId: undefined,
+            });
+            expect(normalizedData[0].value).deep.equal(false);
         });
     });
 
