@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/node
+    - Fix: Ensures to completely remove all stored endpoint data when endpoint is deleted 
+
+
 ## 0.11.7 (2024-11-28)
 
 -   @matter/node
