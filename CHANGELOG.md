@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter cluster definitions and implementations
+    - Fix: Fixes LevelControl cluster extension point definitions and adds a missing parameter
+
 ## 0.11.7 (2024-11-28)
 
 -   @matter/node
