@@ -151,7 +151,7 @@ Home Assistant's official Matter integration is in Beta-stage however it is full
 
 Flic offers a Matter controller with their Hub products, that allows the flic buttons to control Matter devices.
 
-Their implementation is interesting as it exposes a lower level of Matter detail than most other platform, they have basic configuration for Lights and Plug In units allowing features such as on/off dimming etc.
+Their implementation is interesting as it exposes a lower level of Matter detail than most other platform, they have basic configuration for Lights and Plug In units allowing features such as on/off, dimming etc.
 However for all other devices they have a generic matter control which then lists the clusters with commands and attributes on each. This means that they can offer control of any device type without having to build their own UI for each, but it does require a but more understanding of the protocol.
 
 When it comes to sensor devices however there are no commands or attributes to update so the flic method doesn't really work for these devices, all you can do with a temperature sensor for example is turn on & off the identify, there is no way to get the value into the flic app.
