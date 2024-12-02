@@ -73,7 +73,7 @@ Table Legend:
 | 13.5             | Dishwasher <br>(ID: 0x0075)                         |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
 
 (1) See the section below on Composed devices and Alexa
-(2) See not on Flic sensors
+(2) See note on Flic sensors
 
 ## Pairing and Usage Information
 
