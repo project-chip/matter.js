@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FieldValue } from "@matter/model";
 import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
@@ -25,6 +26,14 @@ LocalMatter.children.push({
             id: 0x7,
             name: "ColorTemperatureMireds",
             constraint: "ColorTempPhysicalMinMireds to ColorTempPhysicalMaxMireds",
+        },
+
+        // Remove the default of mandatory color mode field which points to (feature specific) color mode XY
+        {
+            tag: "attribute",
+            id: 0x8,
+            name: "ColorMode",
+            default: FieldValue.None,
         },
 
         // Override primary conformance using our ">" extension to conformance syntax

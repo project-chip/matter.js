@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter cluster definitions and implementations
+    - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
+
 ## 0.11.8 (2024-11-29)
 
 -   @matter/protocol

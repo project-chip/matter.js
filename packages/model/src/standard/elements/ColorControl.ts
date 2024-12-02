@@ -166,7 +166,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "ColorMode", id: 0x8, type: "enum8", access: "R V", conformance: "M", constraint: "0 to 2",
-            default: 1, quality: "N",
+            quality: "N",
 
             details: "The ColorMode attribute indicates which attributes are currently determining the color of the " +
                 "device." +
