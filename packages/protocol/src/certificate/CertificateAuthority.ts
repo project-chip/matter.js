@@ -38,8 +38,8 @@ const logger = Logger.get("CertificateAuthority");
 export class CertificateAuthority {
     private rootCertId = BigInt(0);
     private rootKeyPair = Crypto.createKeyPair();
-    private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
-    private rootCertBytes = this.#generateRootCert();
+    private rootKeyIdentifier: Uint8Array<ArrayBufferLike> = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
+    private rootCertBytes: Uint8Array<ArrayBufferLike> = this.#generateRootCert();
     private nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
