@@ -100,12 +100,7 @@ If you have issues please use the GitHub "[Issues](https://github.com/project-ch
 Additionally, our "Matter Integrators" Discord server is great place to discuss matter.js, the Matter protocol and how to implement Matter in various environments -- not just JavaScript/Typescript! You can join it here: https://discord.gg/ujmRNrhDuW .
 
 ## Compatibility with the Matter standard
-
-The Matter standard evolves continuously and delivers two updates per year. matter.js tries to follow the standard as closely as possible. The following list provides an overview which matter.js version is implementing which Matter standard version:
-- **Matter 1.0**: matter.js up to 0.7.x
-- **Matter 1.1**: matter.js 0.8.x - 0.9.x
-- **Matter 1.2**: skipped
-- **Matter 1.3**: matter.js 0.10.x and higher
+See [here](./docs/MATTER_COMPATIBILITY.md).
 
 ## Compatibility with popular ecosystems 
 
@@ -130,7 +125,7 @@ Each ecosystem have their own specialities, see [Pairing and Usage Information](
 
 When you plan to use matter.js as controller with Thread based devices please see [How to use Thread based devices with matter.js Controller/Shell](./docs/USAGE_THREAD.md) for more details.
 
-We also collected some [Troubleshooting information](./docs/TROUBLESHOOTING.md) to help you with common issues.
+If you face issues using matter.js or for Matter in general please checkout [Troubleshooting information](./docs/TROUBLESHOOTING.md).
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](./docs/KNOWN_ISSUES.md).
 
