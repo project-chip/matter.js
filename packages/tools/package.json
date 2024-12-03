@@ -47,7 +47,7 @@
         "commander": "^12.1.0",
         "esbuild": "^0.24.0",
         "minimatch": "^9.0.5",
-        "typescript": "~5.6.2",
+        "typescript": "~5.7.2",
         "type-fest": "^4.29.1",
         "typedoc": "^0.27.2",
         "typedoc-material-theme": "^1.1.0",
