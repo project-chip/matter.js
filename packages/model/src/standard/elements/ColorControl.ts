@@ -166,7 +166,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "ColorMode", id: 0x8, type: "enum8", access: "R V", conformance: "M", constraint: "0 to 2",
-            default: 1, quality: "N",
+            quality: "N",
 
             details: "The ColorMode attribute indicates which attributes are currently determining the color of the " +
                 "device." +
@@ -178,9 +178,9 @@ export const ColorControl = Cluster({
 
             xref: { document: "cluster", section: "3.2.7.10" },
             children: [
-                Field({ name: "CurrentHueAndCurrentSaturation", id: 0x0 }),
-                Field({ name: "CurrentXAndCurrentY", id: 0x1 }),
-                Field({ name: "ColorTemperatureMireds", id: 0x2 })
+                Field({ name: "CurrentHueAndCurrentSaturation", id: 0x0, conformance: "HS" }),
+                Field({ name: "CurrentXAndCurrentY", id: 0x1, conformance: "XY" }),
+                Field({ name: "ColorTemperatureMireds", id: 0x2, conformance: "CT" })
             ]
         }),
 
