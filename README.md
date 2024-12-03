@@ -117,7 +117,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 - **flic**: Fully working
 
-Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md##pairing-and-usage-information) for more details.
+Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md#pairing-and-usage-information) for more details.
 
 We also collected a [list of tested device types on ecosystem](./docs/ECOSYSTEMS.md#device-types-tested-on-various-ecosystems).This is a compilation of published information by the ecosystems and own community tests.
 
@@ -125,7 +125,7 @@ Each ecosystem have their own specialities, see [Pairing and Usage Information](
 
 When you plan to use matter.js as controller with Thread based devices please see [How to use Thread based devices with matter.js Controller/Shell](./docs/USAGE_THREAD.md) for more details.
 
-If you face issues using matter.js or for Matter in general please checkout [Troubleshooting information](./docs/TROUBLESHOOTING.md).
+If you face issues using matter.js or for Matter in general please checkout our [Troubleshooting information](./docs/TROUBLESHOOTING.md).
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](./docs/KNOWN_ISSUES.md).
 
