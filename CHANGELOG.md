@@ -9,6 +9,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/node
+    - Enhancement: Enhances the number assertations to only allow finite numbers
+
+-   Matter cluster definitions and implementations
+    - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
+    - Fix: Do not try to convert color mode details if they are not defined
+
 ## 0.11.8 (2024-11-29)
 
 -   @matter/protocol
