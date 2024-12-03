@@ -100,12 +100,7 @@ If you have issues please use the GitHub "[Issues](https://github.com/project-ch
 Additionally, our "Matter Integrators" Discord server is great place to discuss matter.js, the Matter protocol and how to implement Matter in various environments -- not just JavaScript/Typescript! You can join it here: https://discord.gg/ujmRNrhDuW .
 
 ## Compatibility with the Matter standard
-
-The Matter standard evolves continuously and delivers two updates per year. matter.js tries to follow the standard as closely as possible. The following list provides an overview which matter.js version is implementing which Matter standard version:
-- **Matter 1.0**: matter.js up to 0.7.x
-- **Matter 1.1**: matter.js 0.8.x - 0.9.x
-- **Matter 1.2**: skipped
-- **Matter 1.3**: matter.js 0.10.x and higher
+See [here](./docs/MATTER_COMPATIBILITY.md).
 
 ## Compatibility with popular ecosystems 
 
@@ -122,7 +117,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 - **flic**: Fully working
 
-Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md##pairing-and-usage-information) for more details.
+Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md#pairing-and-usage-information) for more details.
 
 We also collected a [list of tested device types on ecosystem](./docs/ECOSYSTEMS.md#device-types-tested-on-various-ecosystems).This is a compilation of published information by the ecosystems and own community tests.
 
@@ -130,7 +125,7 @@ Each ecosystem have their own specialities, see [Pairing and Usage Information](
 
 When you plan to use matter.js as controller with Thread based devices please see [How to use Thread based devices with matter.js Controller/Shell](./docs/USAGE_THREAD.md) for more details.
 
-We also collected some [Troubleshooting information](./docs/TROUBLESHOOTING.md) to help you with common issues.
+If you face issues using matter.js or for Matter in general please checkout our [Troubleshooting information](./docs/TROUBLESHOOTING.md).
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](./docs/KNOWN_ISSUES.md).
 
