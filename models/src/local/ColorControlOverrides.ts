@@ -34,6 +34,11 @@ LocalMatter.children.push({
             id: 0x8,
             name: "ColorMode",
             default: FieldValue.None,
+            children: [
+                { tag: "field", name: "CurrentHueAndCurrentSaturation", id: 0x0, conformance: "HS" },
+                { tag: "field", name: "CurrentXAndCurrentY", id: 0x1, conformance: "XY" },
+                { tag: "field", name: "ColorTemperatureMireds", id: 0x2, conformance: "CT" },
+            ],
         },
 
         // Override primary conformance using our ">" extension to conformance syntax
