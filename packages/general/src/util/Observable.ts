@@ -468,8 +468,8 @@ export class ObservableProxy extends BasicObservable {
  */
 export class ObserverGroup {
     #defaultTarget?: {};
-    #observers = new Map<Observable<any[]> | AsyncObservable<any>, Observer<any[]>[]>();
-    #boundObservers = new Map<Observer<any[]>, Map<{}, Observer<any[]>>>();
+    #observers = new Map<Observable<any[], any> | AsyncObservable<any>, Observer<any[], any>[]>();
+    #boundObservers = new Map<Observer<any[], any>, Map<{}, Observer<any[]>>>();
 
     constructor(target?: {}) {
         this.#defaultTarget = target;
@@ -482,15 +482,15 @@ export class ObserverGroup {
      * @param observer the observer function
      * @param target optional "this" to bind the observer
      */
-    on<T extends any[]>(
-        observable: Observable<T> | AsyncObservable<T>,
-        observer: Observer<NoInfer<T>>,
+    on<T extends any[], R>(
+        observable: Observable<T, R> | AsyncObservable<T, R>,
+        observer: Observer<ObserverGroup.VarArgs<NoInfer<T>>, NoInfer<R>>,
         target = this.#defaultTarget,
     ) {
         if (target !== undefined) {
             observer = observer.bind(target);
         }
-        observable.on(observer);
+        observable.on(observer as Observer<T, R>);
         const observers = this.#observers.get(observable);
         if (observers === undefined) {
             this.#observers.set(observable, [observer]);
@@ -547,4 +547,12 @@ export class ObserverGroup {
         this.#observers.clear();
         this.#boundObservers.clear();
     }
+}
+
+export namespace ObserverGroup {
+    /**
+     * This is a workaround for a TS bug, without this the observer must provide a full argument set even if it does not
+     * use all arguments.
+     */
+    export type VarArgs<T extends any[]> = T extends [...infer R, infer A] ? [...R, A] : T extends [infer A] ? A : [];
 }
