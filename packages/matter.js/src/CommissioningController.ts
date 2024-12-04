@@ -283,8 +283,8 @@ export class CommissioningController extends MatterNode {
         let decommissionSuccess = false;
         if (tryDecommissioning) {
             try {
-                if (node == undefined) {
-                    throw new ImplementationError(`Node ${nodeId} is not connected.`);
+                if (node === undefined) {
+                    throw new ImplementationError(`Node ${nodeId} is not initialized.`);
                 }
                 await node.decommission();
                 decommissionSuccess = true;
