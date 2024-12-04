@@ -57,6 +57,10 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/This attribute shall be null/, "Null")
         .replace(/The following tags are defined in this namespace\./, "")
         .replace(/This section contains the (.*) as part of the semantic tag feature\./i, "")
+        .replace(
+            /The table below lists the changes relative to the Mode Base Cluster for the fields of the ModeOptionStruct type\./,
+            "",
+        )
         .trim();
 }
 

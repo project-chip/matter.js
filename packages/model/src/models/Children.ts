@@ -55,6 +55,11 @@ export interface Children<T extends Model = Model> extends Array<T> {
     selectAll(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model.ChildOf<T>[];
 
     /**
+     * Create a new child or patch existing children.
+     */
+    patchOrPush<C extends Model.Definition<T>>(child: C): void;
+
+    /**
      * Models invoke this when their ID changes so we can update internal bookkeeping.
      */
     updateId(child: Model, oldId: number | undefined): void;
@@ -245,7 +250,7 @@ export function Children<T extends Model = Model>(
     }
 
     /**
-     * Add a child of the model.  Adopts the mdodel and adds to any applicable indices.
+     * Add a child of the model.  Adopts the model and adds to any applicable indices.
      */
     function addChild(child: Model) {
         if ((child.parent?.children as unknown) === children) {
@@ -428,6 +433,21 @@ export function Children<T extends Model = Model>(
         return results;
     }
 
+    function patchOrPush(child: Model.Definition<T>) {
+        validateChild(child);
+
+        const existing = selectAll.call(self, child.name, [child.tag as ElementTag]);
+        if (existing.length) {
+            // Patch
+            for (const toPatch of existing) {
+                toPatch.patch(child);
+            }
+        } else {
+            // Push
+            self.push(child);
+        }
+    }
+
     function updateId(child: Model, oldId: number | undefined) {
         if (!indices) {
             return;
@@ -540,6 +560,9 @@ export function Children<T extends Model = Model>(
 
                 case "selectAll":
                     return selectAll;
+
+                case "patchOrPush":
+                    return patchOrPush;
 
                 case "updateId":
                     return updateId;

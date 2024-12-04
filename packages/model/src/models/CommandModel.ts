@@ -36,6 +36,10 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
         return this.direction ?? (new ModelTraversal().findShadow(this) as CommandModel | undefined)?.direction;
     }
 
+    override get requiredFields() {
+        return { ...super.requiredFields, id: this.id };
+    }
+
     /**
      * Commands may re-use the ID for request and response so identification requires the ID in conjunction with the
      * direction.

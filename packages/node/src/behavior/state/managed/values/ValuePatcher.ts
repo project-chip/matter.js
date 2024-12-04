@@ -15,16 +15,16 @@ import { Val } from "../../Val.js";
 /**
  * Obtain a {@link ValueSupervisor.Patch} function for the given schema.
  */
-export function ValuePatcher(schema: Schema, owner: RootSupervisor) {
+export function ValuePatcher(schema: Schema, supervisor: RootSupervisor) {
     switch (schema.effectiveMetatype) {
         // "any" means the schema defines no type.  Assume it's an object since ValuePatcher is only invoked where
         // an object is expected naturally
         case Metatype.any:
         case Metatype.object:
-            return StructPatcher(schema as ValueModel, owner);
+            return StructPatcher(schema as ValueModel, supervisor);
 
         case Metatype.array:
-            return ListPatcher(schema as ValueModel, owner);
+            return ListPatcher(schema as ValueModel, supervisor);
 
         default:
             return PrimitivePatcher();
@@ -36,13 +36,13 @@ const defaultsCache = new WeakMap<Schema, Val.Struct>();
 /**
  * Obtain default values for a struct.
  */
-function getDefaults(schema: Schema): Val.Struct {
+function getDefaults(supervisor: RootSupervisor, schema: Schema): Val.Struct {
     if (defaultsCache.has(schema)) {
         return defaultsCache.get(schema) as Val.Struct;
     }
 
     const defaults = {} as Val.Struct;
-    for (const member of schema.activeMembers) {
+    for (const member of supervisor.membersOf(schema)) {
         if (member.default !== undefined) {
             defaults[camelize(member.name)] = member.default;
             continue;
@@ -64,7 +64,7 @@ function getDefaults(schema: Schema): Val.Struct {
 /**
  * Create a function that takes a patch object and applies it to a target object.
  */
-function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor.Patch {
+function StructPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Patch {
     // An object mapping name to a patch function for sub-collections and undefined otherwise
     const memberPatchers = {} as Record<string, ValueSupervisor.Patch | undefined>;
 
@@ -74,12 +74,12 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
     // An object mapping name to true iff member is an array
     const memberArrays = {} as Record<string, boolean>;
 
-    for (const member of schema.activeMembers) {
+    for (const member of supervisor.membersOf(schema)) {
         const metatype = member.effectiveMetatype;
 
         let handler: ValueSupervisor.Patch | undefined;
         if (metatype === Metatype.object || metatype === Metatype.array) {
-            handler = owner.get(member).patch;
+            handler = supervisor.get(member).patch;
         }
 
         const key = camelize(member.name);
@@ -87,7 +87,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
         memberPatchers[key] = handler;
 
         if (metatype === Metatype.object) {
-            memberDefaults[key] = getDefaults(member);
+            memberDefaults[key] = getDefaults(supervisor, member);
         }
 
         if (metatype === Metatype.array) {
@@ -150,7 +150,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
 /**
  * Creates a function that takes a patch object and applies it to a target array.
  */
-function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor.Patch {
+function ListPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Patch {
     const entry = schema.listEntry;
     if (entry === undefined) {
         throw new SchemaImplementationError(DataModelPath(schema.path), "List schema has no entry definition");
@@ -160,12 +160,12 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
 
     let patchEntry: ValueSupervisor.Patch | undefined;
     if (entryMetatype === Metatype.object || entryMetatype === Metatype.array) {
-        patchEntry = owner.get(entry).patch;
+        patchEntry = supervisor.get(entry).patch;
     }
 
     let entryDefaults: Val.Struct | undefined;
     if (entryMetatype === Metatype.object) {
-        entryDefaults = getDefaults(entry);
+        entryDefaults = getDefaults(supervisor, entry);
     }
 
     return (changes, target, path) => {

@@ -321,7 +321,6 @@ export abstract class ModelVariantTraversal<S = void> {
             // For each applicable child of this variant, associated it with a slot
             for (let i = 0; i < variant.children.length; i++) {
                 const child = variant.children[i];
-
                 if (!child.appliesTo(this.revision)) {
                     continue;
                 }

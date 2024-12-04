@@ -14,7 +14,7 @@ import {
     OptionalWritableAttribute,
     Command
 } from "../cluster/Cluster.js";
-import { TlvUInt8, TlvUInt16, TlvEnum } from "../tlv/TlvNumber.js";
+import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvArray } from "../tlv/TlvArray.js";
@@ -43,12 +43,84 @@ export namespace ModeBase {
         OnOff = "OnOff"
     }
 
+    export enum ModeTag {
+        /**
+         * The device decides which options, features and setting values to use.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Auto = 0,
+
+        /**
+         * The mode of the device is optimizing for faster completion.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Quick = 1,
+
+        /**
+         * The device is silent or barely audible while in this mode.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Quiet = 2,
+
+        /**
+         * Either the mode is inherently low noise or the device optimizes for that.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        LowNoise = 3,
+
+        /**
+         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        LowEnergy = 4,
+
+        /**
+         * A mode suitable for use during vacations or other extended absences.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Vacation = 5,
+
+        /**
+         * The mode uses the lowest available setting value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Min = 6,
+
+        /**
+         * The mode uses the highest available setting value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Max = 7,
+
+        /**
+         * The mode is recommended or suitable for use during night time.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Night = 8,
+
+        /**
+         * The mode is recommended or suitable for use during day time.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Day = 9
+    }
+
     /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
      */
-    export const TlvModeTag = TlvObject({
+    export const TlvModeTagStruct = TlvObject({
         /**
          * If the MfgCode field exists, the Value field shall be in the manufacturer-specific value range (see Section
          * 1.10.8, “Mode Namespace”).
@@ -70,7 +142,7 @@ export namespace ModeBase {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
          */
-        value: TlvField(1, TlvUInt16)
+        value: TlvField(1, TlvEnum<ModeTag>())
     });
 
     /**
@@ -78,7 +150,7 @@ export namespace ModeBase {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
      */
-    export interface ModeTag extends TypeFromSchema<typeof TlvModeTag> {}
+    export interface ModeTagStruct extends TypeFromSchema<typeof TlvModeTagStruct> {}
 
     /**
      * This is a struct representing a possible mode of the server.
@@ -138,7 +210,7 @@ export namespace ModeBase {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.3
          */
-        modeTags: TlvField(2, TlvArray(TlvModeTag, { maxLength: 8 }))
+        modeTags: TlvField(2, TlvArray(TlvModeTagStruct, { maxLength: 8 }))
     });
 
     /**
@@ -241,78 +313,6 @@ export namespace ModeBase {
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
          */
         InvalidInMode = 3
-    }
-
-    export enum ModeTagEnum {
-        /**
-         * The device decides which options, features and setting values to use.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Auto = 0,
-
-        /**
-         * The mode of the device is optimizing for faster completion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quick = 1,
-
-        /**
-         * The device is silent or barely audible while in this mode.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quiet = 2,
-
-        /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowNoise = 3,
-
-        /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowEnergy = 4,
-
-        /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Vacation = 5,
-
-        /**
-         * The mode uses the lowest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Min = 6,
-
-        /**
-         * The mode uses the highest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Max = 7,
-
-        /**
-         * The mode is recommended or suitable for use during night time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Night = 8,
-
-        /**
-         * The mode is recommended or suitable for use during day time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Day = 9
     }
 
     /**

@@ -32,7 +32,7 @@ interface Wrapper extends Val.Struct, Internal.Collection {
 /**
  * For bitmaps we generate a class with accessors for each bitmap value or range.
  */
-export function BitmapManager(_owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
+export function BitmapManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
 
     const byteSize = (schema as ValueModel).metabase?.byteSize;
@@ -41,7 +41,7 @@ export function BitmapManager(_owner: RootSupervisor, schema: Schema): ValueSupe
     }
     const maxBit = byteSize * 8;
 
-    for (const member of schema.activeMembers) {
+    for (const member of owner.membersOf(schema)) {
         if (member.isDeprecated) {
             continue;
         }

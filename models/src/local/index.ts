@@ -13,6 +13,7 @@
 // matching.
 
 import "./AdministratorCommissioningOverrides.js";
+import "./any.js";
 import "./BasicInformationOverrides.js";
 import "./ChannelOverrides.js";
 import "./ColorControlOverrides.js";
@@ -24,19 +25,20 @@ import "./GroupsOverrides.js";
 import "./IlluminanceMeasurementOverrides.js";
 import "./LevelControlOverrides.js";
 import "./LocalizationConfigurationOverrides.js";
+import "./ModeBaseOverrides.js";
 import "./ModeSelectOverrides.js";
+import "./namespace.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";
+import "./semtag.js";
+import "./subject-id.js";
+import "./tag.js";
 import "./TemperatureMeasurementOverrides.js";
 import "./ThermostatOverrides.js";
 import "./TimeFormatLocalizationOverrides.js";
 import "./TimeSynchronizationOverrides.js";
-import "./UserLabelOverrides.js";
-import "./WindowCoveringOverrides.js";
-import "./any.js";
-import "./namespace.js";
-import "./semtag.js";
-import "./subject-id.js";
-import "./tag.js";
 import "./todOverrides.js";
+import "./UserLabelOverrides.js";
+import "./WildcardPathFlagsBitmap.js";
+import "./WindowCoveringOverrides.js";

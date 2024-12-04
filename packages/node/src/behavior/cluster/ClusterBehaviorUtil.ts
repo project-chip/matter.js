@@ -5,7 +5,17 @@
  */
 
 import { AsyncObservable, camelize, GeneratedClass, ImplementationError } from "#general";
-import { ClusterModel, ElementTag, FeatureMap, FeatureSet, Matter, Metatype, ValueModel } from "#model";
+import {
+    ClusterModel,
+    DefaultValue,
+    ElementTag,
+    FeatureMap,
+    FeatureSet,
+    Matter,
+    Metatype,
+    Scope,
+    ValueModel,
+} from "#model";
 import { Attribute, ClusterType } from "#types";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
@@ -118,6 +128,8 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
         throw new ImplementationError(`No state class defined for behavior class ${base.name}`);
     }
 
+    const scope = Scope(schema);
+
     const oldDefaults = new BaseState() as Record<string, any>;
     let knownDefaults = (BaseState as HasKnownDefaults)[KNOWN_DEFAULTS];
 
@@ -134,7 +146,7 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
 
     // Index schema members by name
     const props = {} as Record<string, ValueModel[]>;
-    for (const member of schema.activeMembers) {
+    for (const member of scope.membersOf(schema, { conformance: "deconflicted" })) {
         const name = camelize(member.name);
         if (props[name]) {
             props[name].push(member);
@@ -190,6 +202,7 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
 
         // Make sure a default value is present
         defaults[name] = selectDefaultValue(
+            scope,
             oldDefaults[name] === undefined ? knownDefaults?.[name] : oldDefaults[name],
             attribute,
             propSchema,
@@ -342,7 +355,7 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
     return result;
 }
 
-function selectDefaultValue(oldDefault: Val, clusterAttr?: Attribute<any, any>, schemaProp?: ValueModel) {
+function selectDefaultValue(scope: Scope, oldDefault: Val, clusterAttr?: Attribute<any, any>, schemaProp?: ValueModel) {
     if (oldDefault !== undefined) {
         return oldDefault;
     }
@@ -366,7 +379,7 @@ function selectDefaultValue(oldDefault: Val, clusterAttr?: Attribute<any, any>, 
         return null;
     }
 
-    const effectiveDefault = schemaProp.effectiveDefault;
+    const effectiveDefault = DefaultValue(scope, schemaProp);
     if (effectiveDefault) {
         return effectiveDefault;
     }

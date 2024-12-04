@@ -35,11 +35,6 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     #frozen?: boolean;
 
     /**
-     * Indicates that an element may have type definitions as children.
-     */
-    isTypeScope?: boolean;
-
-    /**
      * Indicates that an element defines a datatype.
      */
     isType?: boolean;
@@ -59,7 +54,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      */
     operationalShadow?: Model | null;
 
-    #children?: Children<Model>;
+    #children?: Children;
     #parent?: Model;
 
     /**
@@ -270,6 +265,15 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     }
 
     /**
+     * Update a subset of fields.
+     */
+    patch(values: Partial<T>) {
+        for (const [k, v] of Object.entries(values.valueOf())) {
+            this[k as keyof this] = v;
+        }
+    }
+
+    /**
      * Determine whether this element applies to a specific revision.
      */
     appliesTo(revision: Specification.Revision) {
@@ -357,9 +361,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
             switch (key) {
                 case "parent":
                 case "errors":
-                case "isTypeScope":
+                case "scope":
                 case "isType":
                 case "operationalBase":
+                case "isScope":
                     continue;
 
                 default:
@@ -377,6 +382,13 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      */
     visit(visitor: (model: Model) => boolean | void) {
         return new ModelTraversal().visit(this, visitor);
+    }
+
+    /**
+     * Visit this model and each of its ancestors.
+     */
+    forEachAncestor(fn: (model: Model) => boolean | void) {
+        new ModelTraversal().visitInheritance(this, fn);
     }
 
     /**
@@ -412,10 +424,14 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      * Create an operational extension of the model.  This creates a new model that inherits from this model for
      * operational purposes.
      */
-    extend<This extends Model>(this: This, properties?: Partial<BaseElement.Properties<T>>): This {
+    extend<This extends Model>(
+        this: This,
+        properties?: Partial<BaseElement.Properties<T>>,
+        ...children: Model.Definition<Model>[]
+    ): This {
         const constructor = this.constructor as new (properties: unknown) => This;
 
-        const extension = new constructor({
+        const definition = {
             id: this.id,
             name: this.name,
 
@@ -423,14 +439,24 @@ export abstract class Model<T extends BaseElement = BaseElement> {
 
             tag: this.tag,
             operationalBase: this,
-        });
+        };
+
+        if (children.length) {
+            if (definition.children) {
+                definition.children = [...definition.children, ...children];
+            } else {
+                definition.children = children;
+            }
+        }
+
+        const extension = new constructor(definition);
 
         return extension;
     }
 
     constructor(definition: Model<T> | BaseElement.Properties<T>, ...children: Model.Definition<Model>[]) {
         if (typeof definition !== "object") {
-            throw new ImplementationError(`Model definition must be an object, not "${typeof definition}"`);
+            throw new ImplementationError(`Model definition must be an object, not ${typeof definition}`);
         }
 
         const isClone = definition instanceof Model;
@@ -556,7 +582,7 @@ export namespace Model {
     /**
      * Obtain the element type of a model type.
      */
-    export type ElementOf<T> = T extends Model<infer E extends AnyElement> ? E : never;
+    export type ElementOf<T> = T extends Model<infer E extends AnyElement> ? E : AnyElement;
 
     /**
      * Obtain the child type of a model type.

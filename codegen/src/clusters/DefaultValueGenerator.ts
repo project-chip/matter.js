@@ -5,7 +5,7 @@
  */
 
 import { InternalError, Properties } from "#general";
-import { DefaultValue, Metatype, ValueModel } from "#model";
+import { DefaultValue, Metatype, Scope, ValueModel } from "#model";
 import { camelize, serialize } from "../util/string.js";
 import { SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
 import { TlvGenerator } from "./TlvGenerator.js";
@@ -14,9 +14,15 @@ import { TlvGenerator } from "./TlvGenerator.js";
  * Generates a default value for fields based on model definitions.
  */
 export class DefaultValueGenerator {
-    constructor(private tlv: TlvGenerator) {}
+    #tlv: TlvGenerator;
+    #scope: Scope;
 
-    create(model: ValueModel, defaultValue = DefaultValue(model, true)) {
+    constructor(tlv: TlvGenerator) {
+        this.#tlv = tlv;
+        this.#scope = tlv.scope.scope;
+    }
+
+    create(model: ValueModel, defaultValue = DefaultValue(this.#scope, model, true)) {
         // We can't express "this field should default to the value of another field" in clusters so that isn't
         // contemplated here.  We do support that in the Behavior API but it runs directly off the model
 
@@ -27,16 +33,16 @@ export class DefaultValueGenerator {
         switch (model.effectiveMetatype) {
             case Metatype.integer:
             case Metatype.float:
-                return this.createNumeric(defaultValue, model);
+                return this.#createNumeric(defaultValue, model);
 
             case Metatype.enum:
-                return this.createEnum(defaultValue, model);
+                return this.#createEnum(defaultValue, model);
 
             case Metatype.bitmap:
-                return this.createBitmap(defaultValue, model);
+                return this.#createBitmap(defaultValue, model);
 
             case Metatype.object:
-                return this.createObject(defaultValue, model);
+                return this.#createObject(defaultValue, model);
 
             default:
                 return defaultValue;
@@ -46,7 +52,7 @@ export class DefaultValueGenerator {
     /**
      * Simple numbers serialize either as one of our "wrapped ID" things or just as a numeric literal.
      */
-    private createNumeric(defaultValue: any, model: ValueModel) {
+    #createNumeric(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue !== "number" && typeof defaultValue !== "bigint") return;
         const type = specializedNumberTypeFor(model);
         if (type && SpecializedNumbers[type.name]?.category === "datatype") {
@@ -55,7 +61,7 @@ export class DefaultValueGenerator {
                 throw new Error(`Unable to ascertain constructor for wrapped ID type ${type}`);
             }
             const constructor = specialized.type.replace("Tlv", "");
-            this.tlv.importTlv(specialized.category, constructor);
+            this.#tlv.importTlv(specialized.category, constructor);
             return serialize.asIs(`${constructor}(${defaultValue})`);
         }
         return defaultValue;
@@ -64,11 +70,11 @@ export class DefaultValueGenerator {
     /**
      * For enums, translate ID or string into an enum constant.
      */
-    private createEnum(defaultValue: any, model: ValueModel) {
+    #createEnum(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue === "number" || typeof defaultValue === "string") {
             const value = model.member(defaultValue);
             if (value?.parent) {
-                const enumName = this.tlv.file.reference(value.parent);
+                const enumName = this.#tlv.file.reference(value.parent);
                 if (enumName) {
                     return serialize.asIs(`${enumName}.${value.name}`);
                 }
@@ -80,12 +86,13 @@ export class DefaultValueGenerator {
      * Bitmaps are more complicated.  Input is an object of bit fields.  We generate a value for each field depending on
      * the field type.
      */
-    private createBitmap(defaultValue: any, model: ValueModel) {
+    #createBitmap(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue !== "object" || defaultValue === null) {
             return;
         }
 
-        const fields = model.fields;
+        const members = this.#scope.membersOf(model);
+        const fields = Object.fromEntries(members.map(member => [camelize(member.name), member]));
 
         const properties = {} as { [name: string]: boolean | number | string };
         for (const name in defaultValue) {
@@ -103,7 +110,7 @@ export class DefaultValueGenerator {
                 const defining = field.definingModel;
                 const enumValue = defining?.member(bits);
                 if (defining && enumValue) {
-                    valueName = serialize.asIs(`${this.tlv.file.reference(defining)}.${enumValue.name}`);
+                    valueName = serialize.asIs(`${this.#tlv.file.reference(defining)}.${enumValue.name}`);
                 }
                 properties[name] = valueName ?? bits;
             }
@@ -118,14 +125,14 @@ export class DefaultValueGenerator {
             throw new InternalError(`No defining model for ${model}`);
         }
 
-        this.tlv.file.addImport("!types/schema/BitmapSchema.js", "BitsFromPartial");
-        return serialize.asIs(`BitsFromPartial(${this.tlv.file.reference(defining)}, ${serialize(properties)})`);
+        this.#tlv.file.addImport("!types/schema/BitmapSchema.js", "BitsFromPartial");
+        return serialize.asIs(`BitsFromPartial(${this.#tlv.file.reference(defining)}, ${serialize(properties)})`);
     }
 
     /**
      * For objects, we need to recurse into each property.
      */
-    private createObject(defaultValue: any, model: ValueModel) {
+    #createObject(defaultValue: any, model: ValueModel) {
         // Neither of these should be true, this is more for TS's benefit
         if (typeof defaultValue !== "object" || defaultValue === undefined || defaultValue === null) {
             return;
@@ -133,7 +140,7 @@ export class DefaultValueGenerator {
 
         const alreadyProcessed = new Set<string>();
         let result: Properties | undefined;
-        for (const member of model.activeMembers) {
+        for (const member of this.#scope.membersOf(model, { conformance: "deconflicted" })) {
             const name = camelize(member.name);
 
             // Members are listed with overrides first so we ignore subsequent definitions for the same name

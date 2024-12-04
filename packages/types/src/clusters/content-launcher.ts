@@ -451,7 +451,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.3
      */
-    export enum ParameterEnum {
+    export enum Parameter {
         /**
          * Actor represents an actor credited in video media content; for example, “Gaby Hoffman”
          */
@@ -580,13 +580,13 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6
      */
-    export const TlvParameter = TlvObject({
+    export const TlvParameterStruct = TlvObject({
         /**
          * This field shall indicate the entity type.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6.1
          */
-        type: TlvField(0, TlvEnum<ParameterEnum>()),
+        type: TlvField(0, TlvEnum<Parameter>()),
 
         /**
          * This field shall indicate the entity value, which is a search string, ex. “Manchester by the Sea”.
@@ -608,7 +608,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6
      */
-    export interface Parameter extends TypeFromSchema<typeof TlvParameter> {}
+    export interface ParameterStruct extends TypeFromSchema<typeof TlvParameterStruct> {}
 
     /**
      * This object defines inputs to a search for content for display or playback.
@@ -623,7 +623,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.7.1
          */
-        parameterList: TlvField(0, TlvArray(TlvParameter))
+        parameterList: TlvField(0, TlvArray(TlvParameterStruct))
     });
 
     /**

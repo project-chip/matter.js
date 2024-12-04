@@ -13,5 +13,6 @@ export * from "./ClusterVariance.js";
 export * from "./DefaultValue.js";
 export * from "./MergedModel.js";
 export * from "./ModelVariantTraversal.js";
+export * from "./Scope.js";
 export * from "./ValidateModel.js";
 import "./definition-validation/index.js";

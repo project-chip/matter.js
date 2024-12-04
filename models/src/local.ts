@@ -14,5 +14,4 @@ export const LocalMatter = MatterElement({
     name: "LocalMatter",
     description: "Matter.js Matter overrides",
     revision: "1.1",
-    children: [],
 });

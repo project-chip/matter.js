@@ -6,11 +6,9 @@
 
 import { InternalError } from "@matter/general";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
-import { SchemaImplementationError } from "../common/errors.js";
-import { ElementTag, FeatureSet, FieldValue, Metatype } from "../common/index.js";
+import { ElementTag, FieldValue, Metatype } from "../common/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Children } from "../models/Children.js";
-import { PropertyModel, type ClusterModel, type CommandModel, type Model, type ValueModel } from "../models/index.js";
 import {
     enum16,
     enum8,
@@ -24,13 +22,12 @@ import {
     uint8,
 } from "../standard/elements/definitions.js";
 
+// These must be types to avoid circular references
+import type { CommandModel, Model, ScopeModel, ValueModel } from "../models/index.js";
+
 const OPERATION_DEPTH_LIMIT = 20;
 
 let memos: Memos | undefined;
-
-// Member caches.  Only populated for frozen models
-const activeMemberCache = new WeakMap<Model, ValueModel[]>();
-const conformantMemberCache = new WeakMap<Model, ValueModel[]>();
 
 /**
  * This class performs lookups of models in the scope of a specific model.  We use a class so the lookup can maintain
@@ -173,11 +170,8 @@ export class ModelTraversal {
         }
 
         const findBaseOp = () => {
-            // If I override another element (same identity and tag in parent's inheritance hierarchy) then I implicitly
-            // inherit from the shadow.
-            //
-            // Semantics would be wonky if the model designates a different type than the shadow, but we support this by
-            // ignoring the shadow in this case.
+            // If I override another element (same identity and tag in parent's inheritance hierarchy) and don't specify
+            // a type then I implicitly inherit from the shadow.
             const shadow = this.findShadow(model);
             if (
                 shadow !== undefined &&
@@ -467,126 +461,6 @@ export class ModelTraversal {
     }
 
     /**
-     * Retrieve all children of a specific type, including those inherited from the base or a shadow.  Does not include
-     * members overridden by a deeper member.
-     */
-    findChildren(scope: Model, tags: ElementTag[]) {
-        const members = Array<Model>();
-
-        // This is a map of identity (based on tag + id/name + discriminator) to a priority based on inheritance depth
-        const defined = {} as Record<string, number | undefined>;
-
-        let level = 0;
-        const childSearchVisitor = (model: Model) => {
-            level++;
-            for (const child of model.children) {
-                if (!tags.includes(child.tag)) {
-                    continue;
-                }
-
-                // Identify and skip shadows based on ID
-                let numericIdentity;
-                if (child.id !== undefined) {
-                    numericIdentity = `i␜${child.tag}␜${child.id}␜${child.discriminator ?? ""}`;
-                    const numericLevel = defined[numericIdentity];
-                    if (numericLevel !== undefined && numericLevel < level) {
-                        continue;
-                    }
-                }
-
-                // Identify and skip shadows based on name
-                const nameIdentity = `s␜${child.tag}␜${child.name}␜${child.discriminator ?? ""}`;
-                const nameLevel = defined[nameIdentity];
-                if (nameLevel !== undefined && nameLevel < level) {
-                    continue;
-                }
-
-                // Mark the level in which we saw these members
-                if (numericIdentity) {
-                    defined[numericIdentity] = level;
-                }
-                defined[nameIdentity] = level;
-
-                // Found a member
-                members.push(child);
-            }
-        };
-        this.visitInheritance(scope, childSearchVisitor);
-
-        return members;
-    }
-
-    /**
-     * Filter a model's members as follows:
-     *
-     *   - If the member is deprecated, ignore it
-     *
-     *   - If there is only a single member of a given name, select that member
-     *
-     *   - If there are multiple members with the same name but there is no cluster throw an error
-     *
-     *   - If there are multiple members with the same name, use conformance to select the member that is applicable
-     *     based on active features in the provided cluster
-     *
-     *   - If there are multiple applicable members based on conformance the definitions conflict and throw an error
-     *
-     * If the model is frozen we cache the return value.
-     *
-     * Note that "active" in this case does not imply the member is conformant, only that conflicts are resolved.
-     *
-     * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
-     * will probably never be necessary and would require an entirely different (more complicated) structure.
-     */
-    findActiveMembers(scope: Model & { members: PropertyModel[] }, conformantOnly: boolean, cluster?: ClusterModel) {
-        const cache = Object.isFrozen(scope) ? (conformantOnly ? conformantMemberCache : activeMemberCache) : undefined;
-
-        const cached = cache?.get(scope);
-        if (cached) {
-            return cached;
-        }
-
-        const features = cluster?.featureNames ?? new FeatureSet();
-        const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
-
-        const selectedMembers = {} as Record<string, ValueModel>;
-        for (const member of scope.members) {
-            if (member.isDeprecated) {
-                continue;
-            }
-
-            if (conformantOnly && !member.conformance.isApplicable(features, supportedFeatures)) {
-                continue;
-            }
-
-            const other = selectedMembers[member.name];
-            if (other !== undefined) {
-                if (!conformantOnly && !member.conformance.isApplicable(features, supportedFeatures)) {
-                    continue;
-                }
-
-                if (other.conformance.isApplicable(features, supportedFeatures)) {
-                    throw new SchemaImplementationError(
-                        scope,
-                        `There are multiple definitions of "${member.name}" that cannot be differentiated by conformance`,
-                    );
-                }
-
-                // This member takes precedence and will overwrite below
-            }
-
-            selectedMembers[member.name] = member;
-        }
-
-        const result = Object.values(selectedMembers);
-
-        if (cache) {
-            cache.set(scope, result);
-        }
-
-        return result;
-    }
-
-    /**
      * Search inherited scope for a bit definition.
      */
     findBitDefinition(scope: Model | undefined, bit: number) {
@@ -615,21 +489,21 @@ export class ModelTraversal {
     /**
      * Search inherited and structural type scope for a named type.
      */
-    findType(scope: Model | undefined, name: string, tag: ElementTag): Model | undefined {
-        if (!scope) {
+    findType(owner: Model | undefined, name: string, tag: ElementTag): Model | undefined {
+        if (!owner) {
             return;
         }
 
         const memoKey = `${name} ${tag}`;
-        const memosForScope = memos?.types.get(scope);
+        const memosForScope = memos?.types.get(owner);
         if (memosForScope && memoKey in memosForScope) {
             return memosForScope[memoKey];
         }
 
         const findTypeOp = () => {
-            const queue = Array<Model>(scope as Model);
-            for (scope = queue.shift(); scope; scope = queue.shift()) {
-                if (scope.isTypeScope) {
+            const queue = Array<Model>(owner);
+            for (let scope = queue.shift(); scope; scope = queue.shift()) {
+                if ((scope as ScopeModel).isScope) {
                     const result = scope.children.select(name, tag, this.#dismissed);
                     if (result) {
                         return result;
@@ -648,15 +522,22 @@ export class ModelTraversal {
                     queue.push(parent);
                 }
             }
+
+            // If the model is not part of a MatterModel hierarchy, findBase and findParent will use the fallback model for
+            // resolution.  However, if the model is part of an incomplete MatterModel hierarchy, that logic is not
+            // triggered.  So handle the case where a global type is missing here
+            if (ModelTraversal.fallbackScope && owner !== ModelTraversal.fallbackScope) {
+                return this.findType(ModelTraversal.fallbackScope, name, tag);
+            }
         };
         const type = this.operation(findTypeOp);
 
         if (memos) {
-            const memosForScope = memos.types.get(scope);
+            const memosForScope = memos.types.get(owner);
             if (memosForScope) {
                 memosForScope[memoKey] = type;
             } else {
-                memos.types.set(scope, { [memoKey]: type });
+                memos.types.set(owner, { [memoKey]: type });
             }
         }
 
@@ -666,8 +547,8 @@ export class ModelTraversal {
     /**
      * Similar to findType but operates with a qualified type name.
      *
-     * Unlike findType, a qualified type may reference an element parented by any other, not just those with
-     * parent.isTypeScope === true.
+     * Unlike findType, a qualified type may reference an element parented by any other, not just those within
+     * ScopeModels.
      *
      * This is quite complicated and would be painfully slow except in practice we don't use many qualified types and
      * those we do use resolve with few failing branches in the search once the root qualifier of the name matches.
@@ -835,7 +716,7 @@ export class ModelTraversal {
                 return false;
             }
             const base = this.findBase(model);
-            this.visitInheritance(base, visitor);
+            return this.visitInheritance(base, visitor);
         });
     }
 
@@ -863,15 +744,15 @@ export class ModelTraversal {
     /**
      * Find an owner that defines type scope for a model.
      */
-    findScope(model?: Model): Model | undefined {
+    findScope(model?: Model): ScopeModel | undefined {
         if (model === undefined) {
             return;
         }
 
         // First, examine parents
         if (model.parent) {
-            if (model.parent.isTypeScope) {
-                return model.parent;
+            if ((model.parent as ScopeModel).isScope) {
+                return model.parent as ScopeModel;
             }
 
             return this.operationWithDismissal(model, () => this.findScope(model.parent));
@@ -890,7 +771,7 @@ export class ModelTraversal {
      * If a model is not owned by a MatterModel, global resolution won't work.  This model acts as a fallback to work
      * around this.
      */
-    static fallbackScope: Model | undefined;
+    static fallbackScope: ScopeModel | undefined;
 
     /**
      * This is a cheap hack to optimize analysis of large static models.  It temporarily memoizes key operations.

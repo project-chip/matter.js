@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { camelize } from "#general";
 import { Conformance, DataModelPath, FeatureSet, FieldValue, Metatype, ValueModel } from "#model";
 import { AccessControl } from "../../AccessControl.js";
@@ -49,13 +50,12 @@ import { ValidationLocation } from "./location.js";
  *   - "runtime" means conformance depends on sibling fields in an object. These result in a {@link RuntimeNode} with
  *     additional logic that applies to operational state.
  */
-export function astToFunction(
-    schema: ValueModel,
-    featureMap: ValueModel,
-    supportedFeatures: FeatureSet,
-): ValueSupervisor.Validate | undefined {
+export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Validate | undefined {
     const ast = schema.conformance.ast;
-    const { featuresAvailable, featuresSupported } = FeatureSet.normalize(featureMap, supportedFeatures);
+    const { featuresAvailable, featuresSupported } = FeatureSet.normalize(
+        supervisor.featureMap,
+        supervisor.supportedFeatures,
+    );
 
     // Compile the AST
     const compiledNode = compile(ast);
@@ -537,7 +537,7 @@ export function astToFunction(
         mainValidator: ValueSupervisor.Validate | undefined,
     ): ValueSupervisor.Validate | undefined {
         // If there are no members we can't enforce anything
-        const members = schema.activeMembers;
+        const members = supervisor.membersOf(schema);
         if (!members.length) {
             return mainValidator;
         }

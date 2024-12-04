@@ -27,5 +27,3 @@ export class DatatypeModel extends ValueModel<DatatypeElement> implements Dataty
         Model.types[DatatypeElement.Tag] = this;
     }
 }
-const x = {} as DatatypeModel;
-x.children;

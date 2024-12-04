@@ -21,11 +21,55 @@ import { AccessLevel } from "#model";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { BasicInformation } from "./basic-information.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace BridgedDeviceBasicInformation {
+    /**
+     * Body of the BridgedDeviceBasicInformation startUp event
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.13.5
+     */
+    export const TlvStartUpEvent = TlvObject({
+        /**
+         * This field shall be set to the same value as the one available in the SoftwareVersion attribute.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.1.6.1.1
+         */
+        softwareVersion: TlvField(0, TlvUInt32)
+    });
+
+    /**
+     * Body of the BridgedDeviceBasicInformation startUp event
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.13.5
+     */
+    export interface StartUpEvent extends TypeFromSchema<typeof TlvStartUpEvent> {}
+
+    /**
+     * Body of the BridgedDeviceBasicInformation reachableChanged event
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.13.5.2
+     */
+    export const TlvReachableChangedEvent = TlvObject({
+        /**
+         * This field shall indicate the value of the Reachable attribute after it was changed.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.1.6.4.1
+         */
+        reachableNewValue: TlvField(0, TlvBoolean)
+    });
+
+    /**
+     * Body of the BridgedDeviceBasicInformation reachableChanged event
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.13.5.2
+     */
+    export interface ReachableChangedEvent extends TypeFromSchema<typeof TlvReachableChangedEvent> {}
+
     /**
      * @see {@link Cluster}
      */
@@ -124,7 +168,7 @@ export namespace BridgedDeviceBasicInformation {
             /**
              * @see {@link MatterSpecification.v13.Core} § 9.13.5
              */
-            startUp: OptionalEvent(0x0, EventPriority.Critical, BasicInformation.TlvStartUpEvent),
+            startUp: OptionalEvent(0x0, EventPriority.Critical, TlvStartUpEvent),
 
             /**
              * @see {@link MatterSpecification.v13.Core} § 9.13.5
@@ -154,7 +198,7 @@ export namespace BridgedDeviceBasicInformation {
              *
              * @see {@link MatterSpecification.v13.Core} § 9.13.5.2
              */
-            reachableChanged: Event(0x3, EventPriority.Critical, BasicInformation.TlvReachableChangedEvent)
+            reachableChanged: Event(0x3, EventPriority.Critical, TlvReachableChangedEvent)
         }
     });
 

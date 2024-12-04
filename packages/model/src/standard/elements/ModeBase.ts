@@ -204,7 +204,7 @@ export const ModeBase = Cluster({
                 }),
 
                 Field({
-                    name: "Value", id: 0x1, type: "enum16", conformance: "M",
+                    name: "Value", id: 0x1, type: "ModeTag", conformance: "M",
                     details: "This field shall indicate the mode tag within a mode tag namespace which is either manufacturer " +
                         "specific or standard.",
                     xref: { document: "cluster", section: "1.10.5.1.2" }

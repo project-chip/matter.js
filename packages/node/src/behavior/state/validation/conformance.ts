@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FeatureSet, ValueModel } from "#model";
+import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
+import { ValueModel } from "#model";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { astToFunction } from "./conformance-compiler.js";
 
@@ -16,11 +17,10 @@ import { astToFunction } from "./conformance-compiler.js";
  */
 export function createConformanceValidator(
     schema: ValueModel,
-    featureMap: ValueModel,
-    supportedFeatures: FeatureSet,
+    supervisor: RootSupervisor,
     nextValidator?: ValueSupervisor.Validate,
 ): ValueSupervisor.Validate | undefined {
-    const validate = astToFunction(schema, featureMap, supportedFeatures);
+    const validate = astToFunction(schema, supervisor);
 
     if (!validate && !nextValidator) {
         return undefined;

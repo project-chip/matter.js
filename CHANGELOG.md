@@ -23,6 +23,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @project-chip/matter.js
     - Enhancement: Considers a node in reconnection state that should be decommissioned as already factory reset
+    - Fix: Do not try to convert color mode details if they are not defined
+    - Fix: Clusters generated for extensions of base clusters such as Alarm Base and Mode Base now include full details of extended types; in particular extended enums such as Mode Tag were previously insufficiently defined
+    - BREAKING: In `ContentLauncher` cluster `ParameterEnum` is renamed to `Parameter` and `Parameter` is renamed to `ParameterStruct`
+
+-   @matter/model
+    - Feature: New `Scope` component analyzes scope of a model, caches analysis results, and implements algorithms that require analysis to perform efficiently
+    - Enhancement: Models that define datatypes now inherit from common `ScopeModel` base class
+    - Fix: Extended enums and other types now report the full set of members via `Scope#membersOf`
+    - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
 
 ## 0.11.8 (2024-11-29)
 

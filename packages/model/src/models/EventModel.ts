@@ -22,6 +22,10 @@ export class EventModel extends ValueModel<EventElement> implements EventElement
         return this.effectiveAccess.fabricSensitive;
     }
 
+    override get requiredFields() {
+        return { ...super.requiredFields, id: this.id };
+    }
+
     static {
         Model.types[EventElement.Tag] = this;
     }

@@ -28,10 +28,7 @@ export const WildcardPathFlagsBitmap = Datatype({
             name: "WildcardSkipAttributeList", constraint: "2",
             description: "Skip the AttributeList global attribute during wildcard expansion."
         }),
-        Field({
-            name: "WildcardSkipEventList", constraint: "3",
-            description: "Skip the EventList global attribute during wildcard expansion."
-        }),
+        Field({ name: "Reserved", constraint: "3", description: "Reserved" }),
         Field({
             name: "WildcardSkipCommandLists", constraint: "4",
             description: "Skip the AcceptedCommandList and GeneratedCommandList global attributes during wildcard expansion."
