@@ -30,7 +30,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
     let hasFabricIndex = false;
 
     // Scan the schema and configure each member (field or attribute) as a property
-    for (const member of schema.activeMembers) {
+    for (const member of owner.membersOf(schema)) {
         const name = camelize(member.name);
 
         const { access, descriptor } = configureProperty(owner, member);

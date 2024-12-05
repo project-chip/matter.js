@@ -14,10 +14,8 @@ import { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.
-import { camelize } from "@matter/general";
-import { DefaultValue } from "../logic/DefaultValue.js";
+import { Scope } from "#logic/Scope.js";
 import { Children } from "./Children.js";
-import { type ClusterModel } from "./ClusterModel.js";
 import { type FieldModel } from "./FieldModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
@@ -136,14 +134,6 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
     }
 
     /**
-     * The value to use as a default.  The "default" field has a manually supplied value but this property decodes the
-     * default and/or generates a default from subfields.
-     */
-    get effectiveDefault() {
-        return DefaultValue(this);
-    }
-
-    /**
      * Get the first derived ancestor with children, if any.
      */
     get definingModel() {
@@ -176,34 +166,10 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
     }
 
     /**
-     * All {@link FieldModel} children}.
+     * All {@link FieldModel} children in the context of the model's containing scope.
      */
     get members(): PropertyModel[] {
-        return new ModelTraversal().findChildren(this, [ElementTag.Field]) as PropertyModel[];
-    }
-
-    /**
-     * A subset of {@link members} with conflicts resolved by conformance.
-     */
-    get activeMembers() {
-        const cluster = this.owner(Model.types[ElementTag.Cluster]) as ClusterModel | undefined;
-        return new ModelTraversal().findActiveMembers(this, false, cluster);
-    }
-
-    /**
-     * The subset of {@link members} that are conformant.
-     */
-    get conformantMembers() {
-        const cluster = this.owner(Model.types[ElementTag.Cluster]) as ClusterModel | undefined;
-        return new ModelTraversal().findActiveMembers(this, true, cluster);
-    }
-
-    /**
-     * Active members keyed by property name.
-     */
-    get fields() {
-        const members = this.activeMembers;
-        return Object.fromEntries(members.map(member => [camelize(member.name), member]));
+        return Scope(this).membersOf(this) as PropertyModel[];
     }
 
     /**
@@ -290,6 +256,18 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
         return new ModelTraversal().findBitDefinition(this, bit);
     }
 
+    /**
+     * Clone the model with minimum metadata required to ensure model is valid.
+     */
+    cloneAsReference<This extends ValueModel>(this: This): This {
+        const Type = this.constructor as new (definition: T) => This;
+        return new Type(this.requiredFields as T);
+    }
+
+    get requiredFields() {
+        return { name: this.name } as T;
+    }
+
     override valueOf() {
         const result = super.valueOf() as any;
         for (const k of ["conformance", "access", "quality", "constraint"]) {
@@ -304,8 +282,8 @@ export abstract class ValueModel<T extends ValueElement = ValueElement> extends 
         return result as T;
     }
 
-    constructor(definition: BaseElement.Properties<T>) {
-        super(definition);
+    constructor(definition: BaseElement.Properties<T>, ...children: Model.Definition<FieldModel>[]) {
+        super(definition, ...children);
 
         const match = this.type?.match(/^list\[(.*)\]$/);
         if (match) {

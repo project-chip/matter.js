@@ -2124,7 +2124,87 @@ export namespace DoorLock {
         pinCodeChanged: BitFlag(1),
         pinAdded: BitFlag(2),
         pinCleared: BitFlag(3),
-        pinChanged: BitFlag(4)
+        pinChanged: BitFlag(4),
+
+        /**
+         * State of bit 0
+         */
+        bit0: BitFlag(0),
+
+        /**
+         * State of bit 1
+         */
+        bit1: BitFlag(1),
+
+        /**
+         * State of bit 2
+         */
+        bit2: BitFlag(2),
+
+        /**
+         * State of bit 3
+         */
+        bit3: BitFlag(3),
+
+        /**
+         * State of bit 4
+         */
+        bit4: BitFlag(4),
+
+        /**
+         * State of bit 5
+         */
+        bit5: BitFlag(5),
+
+        /**
+         * State of bit 6
+         */
+        bit6: BitFlag(6),
+
+        /**
+         * State of bit 7
+         */
+        bit7: BitFlag(7),
+
+        /**
+         * State of bit 8
+         */
+        bit8: BitFlag(8),
+
+        /**
+         * State of bit 9
+         */
+        bit9: BitFlag(9),
+
+        /**
+         * State of bit 10
+         */
+        bit10: BitFlag(10),
+
+        /**
+         * State of bit 11
+         */
+        bit11: BitFlag(11),
+
+        /**
+         * State of bit 12
+         */
+        bit12: BitFlag(12),
+
+        /**
+         * State of bit 13
+         */
+        bit13: BitFlag(13),
+
+        /**
+         * State of bit 14
+         */
+        bit14: BitFlag(14),
+
+        /**
+         * State of bit 15
+         */
+        bit15: BitFlag(15)
     };
 
     /**
@@ -2138,7 +2218,87 @@ export namespace DoorLock {
         pinCleared: BitFlag(3),
         pinChanged: BitFlag(4),
         rfidCodeAdded: BitFlag(5),
-        rfidCodeCleared: BitFlag(6)
+        rfidCodeCleared: BitFlag(6),
+
+        /**
+         * State of bit 0
+         */
+        bit0: BitFlag(0),
+
+        /**
+         * State of bit 1
+         */
+        bit1: BitFlag(1),
+
+        /**
+         * State of bit 2
+         */
+        bit2: BitFlag(2),
+
+        /**
+         * State of bit 3
+         */
+        bit3: BitFlag(3),
+
+        /**
+         * State of bit 4
+         */
+        bit4: BitFlag(4),
+
+        /**
+         * State of bit 5
+         */
+        bit5: BitFlag(5),
+
+        /**
+         * State of bit 6
+         */
+        bit6: BitFlag(6),
+
+        /**
+         * State of bit 7
+         */
+        bit7: BitFlag(7),
+
+        /**
+         * State of bit 8
+         */
+        bit8: BitFlag(8),
+
+        /**
+         * State of bit 9
+         */
+        bit9: BitFlag(9),
+
+        /**
+         * State of bit 10
+         */
+        bit10: BitFlag(10),
+
+        /**
+         * State of bit 11
+         */
+        bit11: BitFlag(11),
+
+        /**
+         * State of bit 12
+         */
+        bit12: BitFlag(12),
+
+        /**
+         * State of bit 13
+         */
+        bit13: BitFlag(13),
+
+        /**
+         * State of bit 14
+         */
+        bit14: BitFlag(14),
+
+        /**
+         * State of bit 15
+         */
+        bit15: BitFlag(15)
     };
 
     /**
@@ -2146,7 +2306,91 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.47
      */
-    export const RfidProgrammingEventMask = { unknown: BitFlag(0), idAdded: BitFlag(5), idCleared: BitFlag(6) };
+    export const RfidProgrammingEventMask = {
+        unknown: BitFlag(0),
+        idAdded: BitFlag(5),
+        idCleared: BitFlag(6),
+
+        /**
+         * State of bit 0
+         */
+        bit0: BitFlag(0),
+
+        /**
+         * State of bit 1
+         */
+        bit1: BitFlag(1),
+
+        /**
+         * State of bit 2
+         */
+        bit2: BitFlag(2),
+
+        /**
+         * State of bit 3
+         */
+        bit3: BitFlag(3),
+
+        /**
+         * State of bit 4
+         */
+        bit4: BitFlag(4),
+
+        /**
+         * State of bit 5
+         */
+        bit5: BitFlag(5),
+
+        /**
+         * State of bit 6
+         */
+        bit6: BitFlag(6),
+
+        /**
+         * State of bit 7
+         */
+        bit7: BitFlag(7),
+
+        /**
+         * State of bit 8
+         */
+        bit8: BitFlag(8),
+
+        /**
+         * State of bit 9
+         */
+        bit9: BitFlag(9),
+
+        /**
+         * State of bit 10
+         */
+        bit10: BitFlag(10),
+
+        /**
+         * State of bit 11
+         */
+        bit11: BitFlag(11),
+
+        /**
+         * State of bit 12
+         */
+        bit12: BitFlag(12),
+
+        /**
+         * State of bit 13
+         */
+        bit13: BitFlag(13),
+
+        /**
+         * State of bit 14
+         */
+        bit14: BitFlag(14),
+
+        /**
+         * State of bit 15
+         */
+        bit15: BitFlag(15)
+    };
 
     /**
      * Input to the DoorLock setUserStatus command

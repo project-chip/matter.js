@@ -209,10 +209,13 @@ LocalMatter.children.push(
                 tag: "datatype",
                 name: "OperationalStatusBitmap",
 
+                // The type is correct but need to set here so model logic knows to use the constraint for matching
+                type: "map8",
+
                 children: [
-                    { tag: "field", name: "Global", type: "MovementStatus" },
-                    { tag: "field", name: "Lift", type: "MovementStatus" },
-                    { tag: "field", name: "Tilt", type: "MovementStatus" },
+                    { tag: "field", name: "Global", type: "MovementStatus", constraint: "0 to 2" },
+                    { tag: "field", name: "Lift", type: "MovementStatus", constraint: "2 to 4" },
+                    { tag: "field", name: "Tilt", type: "MovementStatus", constraint: "4 to 6" },
                 ],
             },
 

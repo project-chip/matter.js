@@ -5,7 +5,7 @@
  */
 
 import { camelize, InternalError } from "#general";
-import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, ValueModel } from "#model";
+import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, Model, Scope, ValueModel } from "#model";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";
@@ -44,6 +44,7 @@ export class RootSupervisor implements ValueSupervisor {
     #cache = new WeakMap<Schema, ValueSupervisor>();
     #featureMap: ValueModel;
     #supportedFeatures: FeatureSet;
+    #scope: Scope;
     #members: Set<ValueModel>;
     #root: ValueSupervisor;
     #memberNames?: Set<string>;
@@ -57,6 +58,8 @@ export class RootSupervisor implements ValueSupervisor {
     constructor(schema: Schema) {
         schema.freeze();
 
+        this.#scope = Scope(schema, { forceCache: true, forceOwner: true });
+
         if (schema instanceof ClusterModel) {
             this.#featureMap = schema.featureMap;
             this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
@@ -64,7 +67,7 @@ export class RootSupervisor implements ValueSupervisor {
             this.#featureMap = new AttributeModel(FeatureMap);
             this.#supportedFeatures = new FeatureSet();
         }
-        this.#members = new Set(schema.activeMembers);
+        this.#members = new Set(this.membersOf(schema));
 
         this.#root = this.#createValueSupervisor(schema);
     }
@@ -87,6 +90,10 @@ export class RootSupervisor implements ValueSupervisor {
 
     get schema() {
         return this.#root.schema;
+    }
+
+    get scope() {
+        return this.#scope;
     }
 
     get access() {
@@ -147,6 +154,18 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     /**
+     * Retrieve members for schema in {@link scope}.
+     *
+     * The {@link Scope.ConformanceMode} defaults to "deconflicted" if you do not override.
+     */
+    membersOf<T extends Schema>(schema: T, options: Scope.MemberOptions = {}): Model.ChildOf<T>[] {
+        if (options.conformance === undefined) {
+            options = { ...options, conformance: "deconflicted" };
+        }
+        return this.#scope.membersOf(schema, options);
+    }
+
+    /**
      * All available features defined in the schema.
      */
     get featureMap() {
@@ -173,6 +192,7 @@ export class RootSupervisor implements ValueSupervisor {
         }
 
         let supervisor = this.#cache.get(schema);
+
         if (supervisor === undefined) {
             if (schema.tag === "attribute" && schema.id !== undefined && schema.id in GlobalAttributeSupervisors) {
                 supervisor = {
@@ -183,6 +203,7 @@ export class RootSupervisor implements ValueSupervisor {
             } else {
                 supervisor = this.#createValueSupervisor(schema);
             }
+
             this.#cache.set(schema, supervisor);
         }
 
@@ -261,7 +282,7 @@ export class RootSupervisor implements ValueSupervisor {
 
 const PrototypicalCluster = new ClusterModel({ name: "Prototype" });
 for (const attribute of Matter.all(AttributeModel)) {
-    if (attribute.id === undefined) {
+    if (attribute.id === undefined || attribute.name === "FeatureMap") {
         continue;
     }
 

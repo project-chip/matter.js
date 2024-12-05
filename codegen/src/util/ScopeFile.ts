@@ -6,29 +6,29 @@
 
 import { decamelize, InternalError } from "#general";
 import { ClusterModel, DatatypeModel, Model } from "#model";
-import { Scope } from "../clusters/Scope.js";
+import { GeneratorScope } from "../clusters/GeneratorScope.js";
 import { TsFile } from "./TsFile.js";
 import { camelize } from "./string.js";
 
 /**
- * A TS file that understands {@link Scope} semantics.
+ * A TS file that understands {@link GeneratorScope} semantics.
  */
 export class ScopeFile extends TsFile {
     #definesScope: boolean;
-    #scope: Scope;
+    #scope: GeneratorScope;
 
     constructor(options: ScopeFile.Options) {
         let filename: string;
-        let scope: Scope | undefined;
+        let scope: GeneratorScope | undefined;
         let definesScope: boolean;
 
         if (options.name === undefined) {
             definesScope = true;
-            scope = Scope(options.scope);
+            scope = GeneratorScope(options.scope);
             filename = ScopeFile.filenameFor(scope.owner).replace(/.js$/, "");
         } else {
             definesScope = false;
-            scope = options.scope && Scope(options.scope);
+            scope = options.scope && GeneratorScope(options.scope);
             filename = options.name;
         }
 
@@ -70,7 +70,7 @@ export class ScopeFile extends TsFile {
         }
 
         if (sourceScope === undefined) {
-            sourceScope = Scope(model);
+            sourceScope = GeneratorScope(model);
         }
 
         // Cluster definitions are namespaced so we must import the namespace.  Otherwise there is no namespace so we
@@ -123,6 +123,7 @@ export class ScopeFile extends TsFile {
         if (model instanceof ClusterModel) {
             return `!clusters/${decamelize(name)}.js`;
         }
+
         if (model instanceof DatatypeModel) {
             name = name.replace(/(?:Struct|Enum|Bitmap)$/, "");
 
@@ -157,7 +158,7 @@ export namespace ScopeFile {
      */
     interface ScopeDefinitionOptions {
         name?: undefined;
-        scope: Scope | Model;
+        scope: GeneratorScope | Model;
         editable?: boolean;
     }
 
@@ -168,7 +169,7 @@ export namespace ScopeFile {
      */
     interface ScopeAwareOptions {
         name: string;
-        scope: Scope | Model;
+        scope: GeneratorScope | Model;
         editable?: boolean;
     }
 

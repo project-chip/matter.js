@@ -22,14 +22,14 @@ import {
 import { ScopeFile } from "../util/ScopeFile.js";
 import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";
+import { GeneratorScope } from "./GeneratorScope.js";
 import { NumericRanges, SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
-import { Scope } from "./Scope.js";
 
 /**
  * Adds TLV structures for ValueModels to a ClusterFile
  **/
 export class TlvGenerator {
-    #scope: Scope;
+    #scope: GeneratorScope;
     #file: ScopeFile;
     #definitions: Block;
     #definedDatatypes = new Set<Model>();
@@ -42,6 +42,10 @@ export class TlvGenerator {
 
     get owner() {
         return this.#scope.owner;
+    }
+
+    get scope() {
+        return this.#scope;
     }
 
     get file() {
@@ -256,7 +260,7 @@ export class TlvGenerator {
         const enumBlock = this.definitions.expressions(`export enum ${name} {`, "}");
 
         this.definitions.insertingBefore(enumBlock, () => {
-            model.children.forEach(child => {
+            model.members.forEach(child => {
                 let name = child.name;
                 if (name.match(/^\d+$/)) {
                     // Typescript doesn't allow numeric enum keys
@@ -272,7 +276,7 @@ export class TlvGenerator {
     #defineStruct(name: string, model: ValueModel) {
         const struct = this.definitions.expressions(`export const ${name} = TlvObject({`, "})");
         this.definitions.insertingBefore(struct, () => {
-            model.children.forEach(field => {
+            model.members.forEach(field => {
                 if (field.isDisallowed || field.isDeprecated) {
                     return;
                 }
@@ -309,7 +313,7 @@ export class TlvGenerator {
     #defineBitmap(name: string, model: ValueModel) {
         const bitmap = this.definitions.expressions(`export const ${name} = {`, "}");
 
-        for (const child of model.children) {
+        for (const child of model.members) {
             let type: string | undefined;
 
             const constraint = child.effectiveConstraint;
@@ -347,7 +351,7 @@ export class TlvGenerator {
 
     defineDatatype(model: ValueModel) {
         // Obtain the defining model.  This is the actual datatype definition
-        const defining = model.definingModel;
+        const defining = this.#scope.definingModelFor(model);
         if (defining) {
             model = defining;
         } else {
@@ -358,7 +362,7 @@ export class TlvGenerator {
 
         // Special case for status codes.  "Status code" in door lock cluster seems to be the global status codes
         // instead of the local one.  So always reference the global one until we see something different
-        if (this.owner !== model && defining.isGlobal && defining.name === status.name) {
+        if (model.isGlobal && model.name === status.name && this.file.scope.owner !== model) {
             let as;
             if (this.owner?.get(DatatypeModel, "Status")) {
                 // Status would conflict with local type so import as an alias

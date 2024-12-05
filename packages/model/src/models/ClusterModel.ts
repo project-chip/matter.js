@@ -11,7 +11,6 @@ import { SchemaImplementationError } from "../common/errors.js";
 import { ElementTag, FeatureSet, Metatype } from "../common/index.js";
 import { Mei } from "../common/Mei.js";
 import { ClusterElement } from "../elements/index.js";
-import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
 import { FeatureMap } from "../standard/elements/FeatureMap.js";
 import { Aspects } from "./Aspects.js";
@@ -22,16 +21,15 @@ import { DatatypeModel } from "./DatatypeModel.js";
 import { EventModel } from "./EventModel.js";
 import type { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
-import { PropertyModel } from "./PropertyModel.js";
+import { ScopeModel } from "./ScopeModel.js";
 
 const QUALITY = Symbol("quality");
 
-export class ClusterModel extends Model<ClusterElement> implements ClusterElement {
+export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     declare id: Mei;
     declare classification?: ClusterElement.Classification;
     declare pics?: string;
-    override isTypeScope = true;
 
     override get children(): Children<ClusterModel.Child> {
         return super.children as Children<ClusterModel.Child>;
@@ -71,53 +69,15 @@ export class ClusterModel extends Model<ClusterElement> implements ClusterElemen
         return this.all(DatatypeModel);
     }
 
-    get members(): PropertyModel[] {
-        const traversal = new ModelTraversal();
-
-        // Formally a field element cannot be a cluster child but we allow it for metadata control when a field should
-        // not be published
-        const members = traversal.findChildren(this, [ElementTag.Field, ElementTag.Attribute]) as PropertyModel[];
-
-        // We consider the standard set of "global" attributes members of all clusters
-        const missingGlobalIds = new Set(AttributeModel.globalIds);
-        for (const m of members) {
-            if (m instanceof AttributeModel && m.id) {
-                missingGlobalIds.delete(m.id);
-            }
-        }
-
-        if (missingGlobalIds.size) {
-            const root = traversal.findRoot(this);
-            if (root) {
-                for (const id of missingGlobalIds) {
-                    const global = root.get(AttributeModel, id);
-                    if (global) {
-                        members.push(global);
-                    }
-                }
-            }
-        }
-
-        return members;
-    }
-
-    get activeMembers() {
-        return new ModelTraversal().findActiveMembers(this, false, this);
-    }
-
-    get conformantMembers() {
-        return new ModelTraversal().findActiveMembers(this, true, this);
-    }
-
     /**
      * Get attributes, commands and events whether inherited or defined directly in this model.
      */
     get allAces() {
-        return new ModelTraversal().findChildren(this, [
-            ElementTag.Attribute,
-            ElementTag.Command,
-            ElementTag.Event,
-        ]) as (AttributeModel | CommandModel | EventModel)[];
+        return this.scope.membersOf(this, { tags: [ElementTag.Attribute, ElementTag.Command, ElementTag.Event] }) as (
+            | AttributeModel
+            | CommandModel
+            | EventModel
+        )[];
     }
 
     get revision() {
@@ -202,8 +162,8 @@ export class ClusterModel extends Model<ClusterElement> implements ClusterElemen
         return result as ClusterElement;
     }
 
-    constructor(definition: ClusterElement.Properties) {
-        super(definition);
+    constructor(definition: ClusterModel.Definition, ...children: Model.Definition<ClusterModel.Child>[]) {
+        super(definition, ...children);
 
         if (definition instanceof Model) {
             Aspects.cloneAspects(definition, this, QUALITY);
@@ -218,13 +178,14 @@ export class ClusterModel extends Model<ClusterElement> implements ClusterElemen
 }
 
 export namespace ClusterModel {
+    export type Definition = ClusterElement.Properties & { supportedFeatures?: FeatureSet.Definition };
+
     export type Child =
         | DatatypeModel
         | AttributeModel
         | CommandModel
         | EventModel
 
-        // Fields are not cluster children in canonical schema but we allow
-        // them as private values in operational schema
+        // Fields are not cluster children in canonical schema but we allow them as private values in operational schema
         | FieldModel;
 }

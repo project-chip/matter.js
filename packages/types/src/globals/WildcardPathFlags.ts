@@ -58,5 +58,5 @@ export const WildcardPathFlags = {
     /**
      * Skip all clusters with the Diagnostics (K) quality during wildcard expansion.
      */
-    wildcardSkipDiagnosticsClusters: BitFlag(8),
+    wildcardSkipDiagnosticsClusters: BitFlag(8)
 };

@@ -18,9 +18,11 @@ import {
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvUInt8, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { OperationalState as OperationalStateNamespace } from "./operational-state.js";
+import { TlvUInt8, TlvUInt32, TlvEnum } from "../tlv/TlvNumber.js";
+import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { OperationalState as OperationalStateNamespace } from "./operational-state.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -61,6 +63,36 @@ export namespace RvcOperationalState {
          */
         Docked = 66
     }
+
+    /**
+     * The OperationalStateStruct is used to indicate a possible state of the device.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2
+     */
+    export const TlvOperationalStateStruct = TlvObject({
+        /**
+         * This shall be populated with a value from the OperationalStateEnum.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2.1
+         */
+        operationalStateId: TlvField(0, TlvEnum<OperationalState>()),
+
+        /**
+         * This field shall be present if the OperationalStateID is from the set reserved for Manufacturer Specific
+         * States, otherwise it shall NOT be present. If present, this shall contain a human-readable description of
+         * the operational state.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2.2
+         */
+        operationalStateLabel: TlvOptionalField(1, TlvString.bound({ maxLength: 64 }))
+    });
+
+    /**
+     * The OperationalStateStruct is used to indicate a possible state of the device.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2
+     */
+    export interface OperationalStateStruct extends TypeFromSchema<typeof TlvOperationalStateStruct> {}
 
     /**
      * The values defined herein are applicable to this derived cluster of Operational State only and are additional to
@@ -109,6 +141,79 @@ export namespace RvcOperationalState {
          */
         MopCleaningPadMissing = 71
     }
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
+     */
+    export const TlvErrorStateStruct = TlvObject({
+        /**
+         * This shall be populated with a value from the ErrorStateEnum.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4.1
+         */
+        errorStateId: TlvField(0, TlvEnum<ErrorState>()),
+
+        /**
+         * This field shall be present if the ErrorStateID is from the set reserved for Manufacturer Specific Errors,
+         * otherwise it shall NOT be present. If present, this shall contain a human-readable description of the
+         * ErrorStateID; e.g. for a manufacturer specific ErrorStateID of "0x80" the ErrorStateLabel may contain "My
+         * special error".
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4.2
+         */
+        errorStateLabel: TlvOptionalField(1, TlvString.bound({ maxLength: 64 })),
+
+        /**
+         * This shall be a human-readable string that provides details about the error condition. As an example, if the
+         * ErrorStateID indicates that the device is a Robotic Vacuum that is stuck, the ErrorStateDetails contains
+         * "left wheel blocked".
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4.3
+         */
+        errorStateDetails: TlvOptionalField(2, TlvString.bound({ maxLength: 64 }))
+    });
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
+     */
+    export interface ErrorStateStruct extends TypeFromSchema<typeof TlvErrorStateStruct> {}
+
+    /**
+     * Input to the RvcOperationalState operationalCommandResponse command
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 7.4.5
+     */
+    export const TlvOperationalCommandResponse = TlvObject({
+        /**
+         * This shall indicate the success or otherwise of the attempted command invocation. On a successful invocation
+         * of the attempted command, the ErrorStateID shall be populated with NoError. Please see the individual
+         * command sections for additional specific requirements on population.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.5.1
+         */
+        commandResponseState: TlvField(0, TlvErrorStateStruct)
+    });
+
+    /**
+     * Input to the RvcOperationalState operationalCommandResponse command
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 7.4.5
+     */
+    export interface OperationalCommandResponse extends TypeFromSchema<typeof TlvOperationalCommandResponse> {}
+
+    /**
+     * Body of the RvcOperationalState operationalError event
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.1
+     */
+    export const TlvOperationalErrorEvent = TlvObject({ errorState: TlvField(0, TlvErrorStateStruct) });
+
+    /**
+     * Body of the RvcOperationalState operationalError event
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.1
+     */
+    export interface OperationalErrorEvent extends TypeFromSchema<typeof TlvOperationalErrorEvent> {}
 
     /**
      * @see {@link Cluster}
@@ -176,11 +281,7 @@ export namespace RvcOperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.4
              */
-            operationalStateList: Attribute(
-                0x3,
-                TlvArray(OperationalStateNamespace.TlvOperationalStateStruct),
-                { default: [] }
-            ),
+            operationalStateList: Attribute(0x3, TlvArray(TlvOperationalStateStruct), { default: [] }),
 
             /**
              * This attribute specifies the current operational state of a device. This shall be populated with a valid
@@ -188,7 +289,7 @@ export namespace RvcOperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.5
              */
-            operationalState: Attribute(0x4, TlvUInt8),
+            operationalState: Attribute(0x4, TlvEnum<OperationalState>()),
 
             /**
              * This attribute shall specify the details of any current error condition being experienced on the device
@@ -199,7 +300,7 @@ export namespace RvcOperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.6
              */
-            operationalError: Attribute(0x5, OperationalStateNamespace.TlvErrorState)
+            operationalError: Attribute(0x5, TlvErrorStateStruct)
         },
 
         commands: {
@@ -223,7 +324,7 @@ export namespace RvcOperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 7.4.5.1
              */
-            goHome: OptionalCommand(0x80, TlvNoArguments, 0x4, OperationalStateNamespace.TlvOperationalCommandResponse)
+            goHome: OptionalCommand(0x80, TlvNoArguments, 0x4, TlvOperationalCommandResponse)
         },
 
         events: {
@@ -235,7 +336,7 @@ export namespace RvcOperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.1
              */
-            operationalError: Event(0x0, EventPriority.Critical, OperationalStateNamespace.TlvOperationalErrorEvent),
+            operationalError: Event(0x0, EventPriority.Critical, TlvOperationalErrorEvent),
 
             /**
              * This event is generated when the overall operation ends, successfully or otherwise. For example, the

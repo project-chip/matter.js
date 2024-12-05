@@ -16,14 +16,14 @@ import { FabricModel } from "./FabricModel.js";
 import { FieldModel } from "./FieldModel.js";
 import { Globals } from "./Globals.js";
 import { Model } from "./Model.js";
+import { ScopeModel } from "./ScopeModel.js";
 import { SemanticNamespaceModel } from "./SemanticNamespaceModel.js";
 
 /**
  * The root of a Matter model.  This is the parent for global models.
  */
-export class MatterModel extends Model<MatterElement> implements MatterElement {
+export class MatterModel extends ScopeModel<MatterElement> implements MatterElement {
     override tag: MatterElement.Tag = MatterElement.Tag;
-    override isTypeScope = true;
     declare revision?: Specification.Revision;
 
     override get children(): Children<MatterModel.Child> {
@@ -89,9 +89,10 @@ export class MatterModel extends Model<MatterElement> implements MatterElement {
      *
      * @param definition the MatterElement that defines the model
      */
-    constructor(definition: MatterElement.Properties = { name: "Matter", children: [] }) {
-        const children = [...(definition.children || [])];
-        super({ ...definition, name: definition.name, children });
+    constructor(definition: MatterElement.Definition, ...children: Model.Definition<MatterModel.Child>[]) {
+        const name = definition.name ?? "Matter";
+        const definitionChildren = [...(definition.children || [])];
+        super({ ...definition, name, children: definitionChildren }, ...children);
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 
 import { camelize } from "#general";
-import { Access, FieldModel } from "#model";
+import { Access, FieldModel, Scope } from "#model";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
 import type { Val } from "../state/Val.js";
@@ -61,7 +61,8 @@ const extendedSchemaCache = new Map<Schema, Record<string, Schema>>();
  */
 function addExtensionFields(schema: Schema, defaultState: Val.Struct) {
     const props = new Set<string>();
-    for (const field of schema.activeMembers) {
+    const scope = Scope(schema, { forceOwner: true });
+    for (const field of scope.membersOf(schema, { conformance: "deconflicted" })) {
         props.add(camelize(field.name));
     }
 

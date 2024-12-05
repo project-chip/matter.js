@@ -15,6 +15,7 @@ import {
     MatterModel,
     Metatype,
     Model,
+    Scope,
     ValueModel,
 } from "#model";
 import { camelize } from "../util/string.js";
@@ -27,11 +28,16 @@ import { camelize } from "../util/string.js";
  *
  * We do not worry about Tlv* prefixed names as these are not prone to collision.
  */
-export interface Scope {
+export interface GeneratorScope {
     /**
      * The model that defines this scope.
      */
     owner: Model;
+
+    /**
+     * The associated model scope.
+     */
+    scope: Scope;
 
     /**
      * Obtain the name to use for an in-scope model.
@@ -50,10 +56,23 @@ export interface Scope {
      *
      * @param model the model whose location we load
      */
-    locationOf(model: Model): Scope.Location;
+    locationOf(model: Model): GeneratorScope.Location;
+
+    /**
+     * Obtain the canonical model for a definition.
+     *
+     * This is the input model unless the model is redefined in a derived scope in which case it is the override.
+     */
+    canonicalModelFor<T extends Model>(model: T): T;
+
+    /**
+     * Given a model, find the canonical model that defines fields for the model.  This will be the generated model we
+     * need to reference.
+     */
+    definingModelFor(model: ValueModel): ValueModel | undefined;
 }
 
-export namespace Scope {
+export namespace GeneratorScope {
     /**
      * The canonical location of a model.
      */
@@ -80,44 +99,45 @@ export namespace Scope {
     }
 }
 
-const modelScopes = new WeakMap<Model, Scope>();
+const cache = new WeakMap<Scope, GeneratorScope>();
 
 /**
- * Obtain the scope for a model.
+ * Obtain the codegen scope for a model.
  *
  * Scopes are cached so this should not be used with models that may mutate.
  */
-export function Scope(model: Model | Scope): Scope {
+export function GeneratorScope(model: Model | GeneratorScope): GeneratorScope {
     if (!(model instanceof Model)) {
         return model;
     }
 
-    let definition = model;
-    while (!definition.isGlobal) {
-        if (!definition.parent) {
-            throw new InternalError(`Cannot identify scope for ${model} as there is no global owner`);
-        }
-        definition = definition.parent;
+    let rootModel = model;
+    while (rootModel.parent && rootModel.parent.tag !== ElementTag.Matter) {
+        rootModel = rootModel.parent;
     }
 
-    let scope = modelScopes.get(definition);
-    if (scope === undefined) {
-        modelScopes.set(definition, (scope = allocateScope(definition)));
+    const owner = Scope(rootModel, { forceOwner: true, forceCache: true });
+
+    let result = cache.get(owner);
+    if (result === undefined) {
+        cache.set(owner, (result = allocateScope(owner)));
     }
-    return scope;
+    return result;
 }
 
-function allocateScope(definition: Model): Scope {
-    const { locations, names } = assignNames(definition);
+function allocateScope(scope: Scope): GeneratorScope {
+    const { locations, names } = assignNames(scope);
+    const { owner } = scope;
 
     return {
-        owner: definition,
+        owner,
+        scope,
 
         nameFor(model: Model, tlv: boolean) {
             const { definition: definer } = this.locationOf(model);
             const name = names.get(definer);
             if (name === undefined) {
-                throw new InternalError(`No name assigned to ${model} in scope ${definition}`);
+                throw new InternalError(`No name assigned to ${model} in scope ${owner}`);
             }
             if (tlv) {
                 return `Tlv${name}`;
@@ -128,17 +148,35 @@ function allocateScope(definition: Model): Scope {
         locationOf(model: Model) {
             const location = locations.get(model);
             if (location === undefined) {
-                throw new InternalError(`No location identified for ${model} from scope ${definition}`);
+                throw new InternalError(`No location identified for ${model} from scope ${owner}`);
             }
             return location;
+        },
+
+        canonicalModelFor<T extends Model>(model: T) {
+            return scope.extensionOf(model) ?? model;
+        },
+
+        definingModelFor(model: ValueModel): ValueModel | undefined {
+            let result: ValueModel | undefined;
+            model.forEachAncestor(model => {
+                if (model instanceof ValueModel) {
+                    result = this.canonicalModelFor(model).definingModel;
+                    if (result) {
+                        result = this.canonicalModelFor(result);
+                        return false;
+                    }
+                }
+            });
+            return result;
         },
     };
 }
 
 enum Priority {
     LocalNamespace,
-    Struct,
     Enum,
+    Struct,
     Bitmap,
     OtherNamespace,
     Global,
@@ -148,7 +186,7 @@ enum Priority {
 }
 
 type ModelsByPriority = Array<Set<Model> | undefined>;
-class Locations extends Map<Model, Scope.Location> {}
+class Locations extends Map<Model, GeneratorScope.Location> {}
 type Names = Map<Model, string>;
 
 interface BackingData {
@@ -156,24 +194,25 @@ interface BackingData {
     locations: Locations;
 }
 
-function assignNames(namespace: Model): BackingData {
-    const locations = identifyNamedModels(namespace);
+function assignNames(scope: Scope): BackingData {
+    const locations = identifyNamedModels(scope);
     const priorities = assignPriorities(locations);
     const names = assignNamesByPriority(priorities);
     return { names, locations };
 }
 
-function identifyNamedModels(rootScope: Model): Locations {
+function identifyNamedModels(scope: Scope): Locations {
     const locations = new Locations();
+    const { owner } = scope;
 
-    locations.set(rootScope, {
-        definition: rootScope,
-        scope: rootScope,
+    locations.set(scope.owner, {
+        definition: owner,
+        scope: owner,
         isLocal: true,
         isGlobal: true,
     });
 
-    const base = rootScope.base;
+    const base = owner.base;
     if (base instanceof ClusterModel || (base instanceof ValueModel && !base.metatype)) {
         locations.set(base, {
             definition: base,
@@ -183,6 +222,26 @@ function identifyNamedModels(rootScope: Model): Locations {
         });
     }
 
+    // Visit all direct descendents and identify locations
+    owner.visit(define);
+
+    // For clusters, also visit inherited attributes, commands and events
+    if (owner instanceof ClusterModel) {
+        const aces = owner.allAces;
+        for (const ace of aces) {
+            if (ace.parent === owner) {
+                continue;
+            }
+
+            ace.visit(define);
+        }
+    }
+
+    return locations;
+
+    /**
+     * Set the location for a model and, if the model is not local, its scope
+     */
     function define(model: Model) {
         if (!(model instanceof ValueModel)) {
             return;
@@ -208,49 +267,93 @@ function identifyNamedModels(rootScope: Model): Locations {
                 return;
         }
 
-        const definer = model.definingModel;
+        let definer = model.definingModel;
         if (!definer) {
+            // Not a reference
             return;
         }
 
-        const scope = definer.owner(ClusterModel) ?? definer.owner(MatterModel);
-        if (scope === undefined) {
+        const extension = scope.extensionOf(definer);
+        if (extension === model) {
+            // The model is the definer even if it doesn't provide fields of its own
+            definer = model;
+        } else if (extension) {
+            // Only the extension appears in the file
+            define(extension);
+            return;
+        }
+
+        if (locations.has(definer)) {
+            // Already defined
+            return;
+        }
+
+        let modelScope: Model | undefined = definer.owner(ClusterModel) ?? definer.owner(MatterModel);
+        if (modelScope === undefined) {
             throw new InternalError(`Model ${definer} does not appear to be part of a proper hierarchy`);
         }
 
-        locations.set(definer, {
+        const location: GeneratorScope.Location = {
             definition: definer,
-            scope,
-            isLocal: scope === rootScope || definer === rootScope,
-            isGlobal: scope.tag === ElementTag.Matter,
-        });
+            scope: modelScope,
+            isLocal: modelScope === owner,
+            isGlobal: modelScope.tag === ElementTag.Matter,
+        };
 
-        if (scope instanceof ClusterModel && scope !== rootScope) {
-            locations.set(scope, {
-                definition: scope,
-                scope,
+        locations.set(definer, location);
+
+        // The model is not defined locally but we need to import any subtree that references shadowed elements.
+        if (definer instanceof ValueModel && referencesShadows(definer)) {
+            location.isLocal = true;
+            modelScope = owner;
+
+            // Now localize any sub-references
+            definer.members.forEach(define);
+        }
+
+        if (modelScope instanceof ClusterModel && modelScope !== owner) {
+            locations.set(modelScope, {
+                definition: modelScope,
+                scope: modelScope,
                 isLocal: false,
                 isGlobal: true,
             });
         }
     }
 
-    // Visit all direct descendents and assign names
-    rootScope.visit(define);
+    /**
+     * Search the model's structure for references to elements that shadow elements defined in the target scope.  If
+     * this occurs then we must import types for the subtree so we can redefine them.
+     */
+    function referencesShadows(model: Model) {
+        const visited = new Set();
+        return (
+            model.visit(descendent => {
+                // Avoid revisiting models
+                if (visited.has(descendent)) {
+                    return;
+                }
+                visited.add(descendent);
 
-    // For clusters, also visit inherited attributes, commands and events
-    if (rootScope instanceof ClusterModel) {
-        const aces = rootScope.allAces;
-        for (const ace of aces) {
-            if (ace.parent === rootScope) {
-                continue;
-            }
+                // If the descendent is a shadow then we've found a shadow reference.  Only consider for independent
+                // datatypes for now
+                if (scope.isShadow(descendent)) {
+                    return false;
+                }
 
-            ace.visit(define);
-        }
+                // Not a reference if there is no base
+                const base = descendent.base;
+                if (!base) {
+                    return;
+                }
+
+                // Check the base's subtree
+                if (referencesShadows(base)) {
+                    return false;
+                }
+            }) === false
+        );
     }
-
-    return locations;
 }
 
 function assignPriorities(locations: Locations): ModelsByPriority {
@@ -384,7 +487,7 @@ function assignNamesByPriority(priorities: ModelsByPriority): Names {
             let next = 2;
             while (true) {
                 const candidate = `${name}${next}`;
-                if (assigned.has(name)) {
+                if (assigned.has(candidate)) {
                     next++;
                 } else {
                     name = candidate;

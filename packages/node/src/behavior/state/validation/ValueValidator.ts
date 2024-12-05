@@ -30,22 +30,22 @@ import { ValidationLocation } from "./location.js";
  * Generate a function that performs data validation.
  *
  * @param schema the schema against which we validate
- * @param factory used to retrieve validators for sub-properties
+ * @param supervisor used to retrieve validators for sub-properties
  */
-export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
+export function ValueValidator(schema: Schema, supervisor: RootSupervisor): ValueSupervisor.Validate | undefined {
     if (schema instanceof ClusterModel) {
-        return createStructValidator(schema, factory) ?? (() => {});
+        return createStructValidator(schema, supervisor);
     }
 
     let validator: ValueSupervisor.Validate | undefined;
     const metatype = schema.effectiveMetatype;
     switch (metatype) {
         case Metatype.enum:
-            validator = createEnumValidator(schema);
+            validator = createEnumValidator(schema, supervisor);
             break;
 
         case Metatype.bitmap:
-            validator = createBitmapValidator(schema);
+            validator = createBitmapValidator(schema, supervisor);
             break;
 
         case Metatype.integer:
@@ -66,11 +66,11 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             break;
 
         case Metatype.object:
-            validator = createStructValidator(schema, factory);
+            validator = createStructValidator(schema, supervisor);
             break;
 
         case Metatype.array:
-            validator = createListValidator(schema, factory);
+            validator = createListValidator(schema, supervisor);
             break;
 
         case Metatype.date:
@@ -101,7 +101,7 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
     validator = createNullValidator(schema, validator);
 
-    validator = createConformanceValidator(schema, factory.featureMap, factory.supportedFeatures, validator);
+    validator = createConformanceValidator(schema, supervisor, validator);
 
     return validator;
 }
@@ -122,8 +122,13 @@ function createNullValidator(
     return nextValidator;
 }
 
-function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
-    const valid = new Set(schema.activeMembers.map(member => member.id).filter(e => e !== undefined));
+function createEnumValidator(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Validate | undefined {
+    const valid = new Set(
+        supervisor
+            .membersOf(schema)
+            .map(member => member.id)
+            .filter(e => e !== undefined),
+    );
 
     const constraint = schema.effectiveConstraint;
     const constraintValidator = constraint.in
@@ -140,10 +145,10 @@ function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | und
     };
 }
 
-function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
+function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Validate | undefined {
     const fields = {} as Record<string, { schema: ValueModel; max: number }>;
 
-    for (const field of schema.activeMembers) {
+    for (const field of supervisor.membersOf(schema)) {
         const constraint = field.effectiveConstraint;
         let max;
         if (typeof constraint.min === "number" && typeof constraint.max === "number") {
@@ -210,15 +215,15 @@ function createSimpleValidator(
     };
 }
 
-function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
+function createStructValidator(schema: Schema, supervisor: RootSupervisor): ValueSupervisor.Validate {
     const validators = {} as Record<string, ValueSupervisor.Validate>;
 
-    for (const field of schema.activeMembers) {
+    for (const field of supervisor.membersOf(schema)) {
         // Skip deprecated, and global attributes we currently handle in lower levels
         if (field.isDeprecated || AttributeModel.isGlobal(field)) {
             continue;
         }
-        const validate = factory.get(field).validate;
+        const validate = supervisor.get(field).validate;
         if (validate) {
             validators[camelize(field.name)] = validate;
         }
