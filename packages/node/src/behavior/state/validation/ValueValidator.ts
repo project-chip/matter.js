@@ -80,7 +80,7 @@ export function ValueValidator(schema: Schema, supervisor: RootSupervisor): Valu
         case undefined:
             const type = schema.effectiveType;
             if (type === undefined) {
-                if (schema.isDisallowed) {
+                if (schema.isDisallowed || (schema.isDeprecated && !schema.type)) {
                     // We do not need to validate types for disallowed members and the specification may not include
                     // them
                     break;
@@ -220,7 +220,7 @@ function createStructValidator(schema: Schema, supervisor: RootSupervisor): Valu
 
     for (const field of supervisor.membersOf(schema)) {
         // Skip deprecated, and global attributes we currently handle in lower levels
-        if (AttributeModel.isGlobal(field)) {
+        if (AttributeModel.isGlobal(field) || (field.isDeprecated && !field.type)) {
             continue;
         }
         const validate = supervisor.get(field).validate;
