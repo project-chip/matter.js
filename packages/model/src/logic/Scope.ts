@@ -352,11 +352,7 @@ function filterWithConformance(
 
     const selectedMembers = {} as Record<string, Model>;
     for (const member of members) {
-        const { isDeprecated, conformance } = member as ValueModel;
-
-        if (isDeprecated) {
-            continue;
-        }
+        const { conformance } = member as ValueModel;
 
         if (!conformance) {
             throw new ImplementationError(

@@ -403,7 +403,7 @@ export const WindowCovering = Cluster({
                     name: "LiftPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
                     constraint: "desc"
                 }),
-                Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "D", constraint: "desc" })
+                Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "X", constraint: "desc" })
             ]
         }),
 
@@ -447,7 +447,7 @@ export const WindowCovering = Cluster({
                     name: "TiltPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
                     constraint: "desc"
                 }),
-                Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "D", constraint: "desc" })
+                Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "X", constraint: "desc" })
             ]
         }),
 

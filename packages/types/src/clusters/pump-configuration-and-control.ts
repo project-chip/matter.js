@@ -787,7 +787,13 @@ export namespace PumpConfigurationAndControl {
                 0x21,
                 TlvEnum<ControlMode>(),
                 { persistent: true, default: ControlMode.ConstantSpeed, writeAcl: AccessLevel.Manage }
-            )
+            ),
+
+            /**
+             * @see {@link MatterSpecification.v13.Cluster} § 4.2.7
+             * @deprecated
+             */
+            alarmMask: OptionalAttribute(0x22, TlvUInt16, { persistent: true, default: 0 })
         },
 
         events: {

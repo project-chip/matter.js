@@ -277,7 +277,7 @@ export class TlvGenerator {
         const struct = this.definitions.expressions(`export const ${name} = TlvObject({`, "})");
         this.definitions.insertingBefore(struct, () => {
             model.members.forEach(field => {
-                if (field.isDisallowed || field.isDeprecated) {
+                if (field.isDisallowed || (field.isDeprecated && !field.type)) {
                     return;
                 }
 

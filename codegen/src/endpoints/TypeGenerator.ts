@@ -80,7 +80,7 @@ export class TypeGenerator {
         }
 
         for (const child of model.children) {
-            if (child.isDeprecated || child.isDisallowed) {
+            if (child.isDisallowed || (child.isDeprecated && !child.type)) {
                 continue;
             }
             return false;

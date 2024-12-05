@@ -33,10 +33,6 @@ export function ValueCaster(schema: Schema, owner: RootSupervisor) {
 function StructCaster(schema: ValueModel | ClusterModel, owner: RootSupervisor) {
     const memberConfigs = {} as Record<string, { name: string; cast: ValueSupervisor.Cast }>;
     for (const member of owner.membersOf(schema)) {
-        if (member.isDeprecated) {
-            continue;
-        }
-
         const config = { name: camelize(member.name), cast: owner.get(member).cast };
 
         // Correct case has priority

@@ -19,6 +19,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
 
 -   @matter/types
+    - Enhancement: Deprecated fields are now also usable and just flagged as deprecated on generated code
     - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
 
 -   @project-chip/matter.js

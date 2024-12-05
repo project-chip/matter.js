@@ -388,26 +388,10 @@ export const PumpConfigurationAndControl = Cluster({
         }),
 
         Attribute({
-            name: "AlarmMask", id: 0x1d, type: "map16", access: "R V", conformance: "D", constraint: "desc",
+            name: "AlarmMask", id: 0x22, type: "uint16", access: "R V", conformance: "D", constraint: "desc",
             default: 0, quality: "N",
-            xref: { document: "cluster", section: "4.2.7" },
-
-            children: [
-                Field({
-                    name: "InitializationFailure", constraint: "0",
-                    details: "The device failed to complete initialization at powerup"
-                }),
-                Field({
-                    name: "HardwareFailure", constraint: "1",
-                    details: "The device has detected a hardware fault"
-                }),
-                Field({
-                    name: "SelfCalibrationFailure", constraint: "2",
-                    details: "The device was unable to complete self calibration"
-                })
-            ]
+            xref: { document: "cluster", section: "4.2.7" }
         }),
-
         Event({
             name: "SupplyVoltageLow", id: 0x0, access: "V", conformance: "O", priority: "info",
             xref: { document: "cluster", section: "4.2.8" }
