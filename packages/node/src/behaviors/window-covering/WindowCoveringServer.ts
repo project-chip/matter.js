@@ -78,6 +78,8 @@ const WC_PERCENT100THS_COEFFICIENT = 100;
  *
  *   * supportsMaintenanceMode (default true): Set to false if the device has no maintenance mode
  *
+ *   * disableOperationalModeHandling (default false): Set to true if you want to handle the operational status yourself
+ *
  * When developing for specific hardware you should extend {@link WindowCoveringServer} and implement the following
  * methods to map movement to your device. The default implementation maps Matter commands to these methods. The benefit
  * of this structure is that basic data validations and option checks are already done and you can focus on the actual
@@ -145,16 +147,18 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
             this.state.targetPositionLiftPercent100ths = this.state.currentPositionLiftPercent100ths;
         }
 
-        // Keep position attributes (percentage and also absolute position) and operational state in sync
-        this.reactTo(this.events.currentPositionLiftPercent100ths$Changing, this.#syncLiftCurrentPositions);
-        this.reactTo(this.events.currentPositionTiltPercent100ths$Changing, this.#syncTiltCurrentPositions);
+        if (!this.state.disableOperationalModeHandling) {
+            // Keep position attributes (percentage and also absolute position) and operational state in sync
+            this.reactTo(this.events.currentPositionLiftPercent100ths$Changing, this.#syncLiftCurrentPositions);
+            this.reactTo(this.events.currentPositionTiltPercent100ths$Changing, this.#syncTiltCurrentPositions);
 
-        // Update operational state when target position changes
-        this.reactTo(this.events.targetPositionLiftPercent100ths$Changing, this.#handleLiftTargetPositionChanging);
-        this.reactTo(this.events.targetPositionTiltPercent100ths$Changing, this.#handleTiltTargetPositionChanging);
+            // Update operational state when target position changes
+            this.reactTo(this.events.targetPositionLiftPercent100ths$Changing, this.#handleLiftTargetPositionChanging);
+            this.reactTo(this.events.targetPositionTiltPercent100ths$Changing, this.#handleTiltTargetPositionChanging);
 
-        // Update the global operational status when lift or tilt status changes
-        this.reactTo(this.events.operationalStatus$Changing, this.#handleOperationalStatusChanging);
+            // Update the global operational status when lift or tilt status changes
+            this.reactTo(this.events.operationalStatus$Changing, this.#handleOperationalStatusChanging);
+        }
     }
 
     /**
@@ -344,6 +348,9 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
         direction: MovementDirection,
         targetPercent100ths?: number,
     ) {
+        if (this.state.disableOperationalModeHandling) {
+            return;
+        }
         switch (type) {
             case MovementType.Lift:
                 if (this.features.positionAwareLift) {
@@ -403,7 +410,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                             ? MovementDirection.Close
                             : MovementDirection.Open;
                 }
-                if (direction !== MovementDirection.DefinedByPosition) {
+                if (!this.state.disableOperationalModeHandling && direction !== MovementDirection.DefinedByPosition) {
                     this.state.operationalStatus.lift =
                         direction === MovementDirection.Close
                             ? WindowCovering.MovementStatus.Closing
@@ -424,7 +431,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                             ? MovementDirection.Close
                             : MovementDirection.Open;
                 }
-                if (direction !== MovementDirection.DefinedByPosition) {
+                if (!this.state.disableOperationalModeHandling && direction !== MovementDirection.DefinedByPosition) {
                     this.state.operationalStatus.tilt =
                         direction === MovementDirection.Close
                             ? WindowCovering.MovementStatus.Closing
@@ -464,6 +471,9 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      * @protected
      */
     protected handleStopMovement(): MaybePromise {
+        if (this.state.disableOperationalModeHandling) {
+            return;
+        }
         if (this.features.positionAwareLift) {
             this.state.targetPositionLiftPercent100ths = this.state.currentPositionLiftPercent100ths;
         }
@@ -713,6 +723,13 @@ export namespace WindowCoveringServerLogic {
 
         /** Does the device supports maintenance mode? */
         supportsMaintenanceMode: boolean = true;
+
+        /**
+         * Disable OperationalMode and position value management.
+         * This requires the device developer to set all these states (operationalMode, percentage and
+         * absolute values according to the feature set) according to the Matter specification!
+         */
+        disableOperationalModeHandling: boolean = false;
     }
 
     export declare const ExtensionInterface: {

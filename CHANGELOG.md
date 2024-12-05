@@ -13,6 +13,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Enhancement: Enhances the number assertations to only allow finite numbers
+    - Enhancement: WindowCovering: Adds a flag to disable the operational state and value management by the default implementation to allow device to handle this themselves
     - Fix: ColorControl: Do not try to convert color mode details if they are not defined
 
 -   @matter/protocol
