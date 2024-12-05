@@ -12,21 +12,21 @@ import {
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
-export const DirectionNs = SemanticNamespace({
-    name: "Direction", id: 0x4,
-    details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
-        "association with a movement in a certain direction relative to the device. Note the difference with " +
-        "Chapter 9, Common Position Semantic Tag Namespace.",
-    xref: { document: "namespace", section: "5" },
+export const DirectionNs = SemanticNamespace(
+    {
+        name: "Direction", id: 0x4,
+        details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+            "association with a movement in a certain direction relative to the device. Note the difference with " +
+            "Chapter 9, Common Position Semantic Tag Namespace.",
+        xref: { document: "namespace", section: "5" }
+    },
 
-    children: [
-        SemanticTag({ name: "Upward", id: 0x0 }),
-        SemanticTag({ name: "Downward", id: 0x1 }),
-        SemanticTag({ name: "Leftward", id: 0x2 }),
-        SemanticTag({ name: "Rightward", id: 0x3 }),
-        SemanticTag({ name: "Forward", id: 0x4 }),
-        SemanticTag({ name: "Backward", id: 0x5 })
-    ]
-});
+    SemanticTag({ name: "Upward", id: 0x0 }),
+    SemanticTag({ name: "Downward", id: 0x1 }),
+    SemanticTag({ name: "Leftward", id: 0x2 }),
+    SemanticTag({ name: "Rightward", id: 0x3 }),
+    SemanticTag({ name: "Forward", id: 0x4 }),
+    SemanticTag({ name: "Backward", id: 0x5 })
+);
 
 MatterDefinition.children.push(DirectionNs);

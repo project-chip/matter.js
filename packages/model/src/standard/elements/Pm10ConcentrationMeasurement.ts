@@ -9,7 +9,7 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
-export const Pm10ConcentrationMeasurement = Cluster({
-    name: "Pm10ConcentrationMeasurement", id: 0x42d, type: "ConcentrationMeasurement", pics: "PMKCONC"
-});
+export const Pm10ConcentrationMeasurement = Cluster(
+    { name: "Pm10ConcentrationMeasurement", id: 0x42d, type: "ConcentrationMeasurement", pics: "PMKCONC" }
+);
 MatterDefinition.children.push(Pm10ConcentrationMeasurement);

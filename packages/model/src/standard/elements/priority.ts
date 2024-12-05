@@ -9,24 +9,24 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
-export const priority = Datatype({
-    name: "priority", type: "enum8", description: "Priority", isSeed: true,
-    details: "This is an enumeration of priority used to tag events and possibly other data. The data type does " +
-        "not define any particular ordering among the values. Specific uses of the data type may assign " +
-        "semantics to the values that imply an ordering relationship.",
-    xref: { document: "core", section: "7.18.2.17" },
+export const priority = Datatype(
+    {
+        name: "priority", type: "enum8", description: "Priority", isSeed: true,
+        details: "This is an enumeration of priority used to tag events and possibly other data. The data type does " +
+            "not define any particular ordering among the values. Specific uses of the data type may assign " +
+            "semantics to the values that imply an ordering relationship.",
+        xref: { document: "core", section: "7.18.2.17" }
+    },
 
-    children: [
-        Field({ name: "Debug", id: 0x0, description: "Information for engineering debugging/troubleshooting" }),
-        Field({
-            name: "Info", id: 0x1,
-            description: "Information that either drives customer facing features or provides insights into device functions that are used to drive analytics use cases"
-        }),
-        Field({
-            name: "Critical", id: 0x2,
-            description: "Information or notification that impacts safety, a critical function, or ongoing reliable operation of the node or application supported on an endpoint."
-        })
-    ]
-});
+    Field({ name: "Debug", id: 0x0, description: "Information for engineering debugging/troubleshooting" }),
+    Field({
+        name: "Info", id: 0x1,
+        description: "Information that either drives customer facing features or provides insights into device functions that are used to drive analytics use cases"
+    }),
+    Field({
+        name: "Critical", id: 0x2,
+        description: "Information or notification that impacts safety, a critical function, or ongoing reliable operation of the node or application supported on an endpoint."
+    })
+);
 
 MatterDefinition.children.push(priority);

@@ -12,7 +12,8 @@ import { camelize, serialize } from "../../util/string.js";
 export function generateElement(target: Block, importFrom: string, element: Model, prefix = "", suffix = "") {
     const factory = camelize(element.tag, true);
     target.file.addImport(importFrom, `${factory}Element as ${factory}`);
-    const block = target.expressions(`${prefix}${factory}({`, `})${suffix}`);
+    const expr = target.expressions(`${prefix}${factory}(`, `)${suffix}`);
+    const head = expr.expressions("{", "}");
 
     const fields = element.valueOf() as { [name: string]: any };
 
@@ -47,7 +48,7 @@ export function generateElement(target: Block, importFrom: string, element: Mode
     for (const property of properties) {
         length += property.length + (length ? 2 : 0);
         if (row.length && length >= 100) {
-            block.atom(row.join(", "));
+            head.atom(row.join(", "));
             row = [property];
             length = property.length;
         } else {
@@ -55,7 +56,7 @@ export function generateElement(target: Block, importFrom: string, element: Mode
         }
     }
     if (row.length) {
-        block.atom(row.join(", "));
+        head.atom(row.join(", "));
     }
 
     // Next row: Details
@@ -68,20 +69,19 @@ export function generateElement(target: Block, importFrom: string, element: Mode
         }
         const text = lines.join("\n");
         if (text) {
-            block.atom(text);
+            head.atom(text);
         }
     }
 
     // Next row: Cross reference
     if (element.xref) {
-        block.atom("xref", serialize(element.xref));
+        head.atom("xref", serialize(element.xref));
     }
 
     // Children
     if (element.children?.length) {
-        const childBlock = block.expressions(`children: [`, "]");
         for (const child of element.children) {
-            generateElement(childBlock, importFrom, child);
+            generateElement(expr, importFrom, child);
         }
     }
 }

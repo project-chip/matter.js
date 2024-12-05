@@ -9,7 +9,7 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
-export const HepaFilterMonitoring = Cluster({
-    name: "HepaFilterMonitoring", id: 0x71, type: "ResourceMonitoring", pics: "HEPAFREMON"
-});
+export const HepaFilterMonitoring = Cluster(
+    { name: "HepaFilterMonitoring", id: 0x71, type: "ResourceMonitoring", pics: "HEPAFREMON" }
+);
 MatterDefinition.children.push(HepaFilterMonitoring);

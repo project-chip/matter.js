@@ -16,73 +16,68 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-export const ContentControl = Cluster({
-    name: "ContentControl", id: 0x50f, classification: "application", pics: "CONCON",
+export const ContentControl = Cluster(
+    {
+        name: "ContentControl", id: 0x50f, classification: "application", pics: "CONCON",
 
-    details: "This cluster is used for managing the content control (including \"parental control\") settings on a" +
-        "\n" +
-        "media device such as a TV, or Set-top Box." +
-        "\n" +
-        "This cluster allows to configure content control settings by clients with the Management privilege. " +
-        "It is responsibility of the end product to enforce appropriate right access (for example, to " +
-        "prevent a child from disabling this feature)." +
-        "\n" +
-        "NOTE Support for Content Control cluster is provisional.",
+        details: "This cluster is used for managing the content control (including \"parental control\") settings on a" +
+            "\n" +
+            "media device such as a TV, or Set-top Box." +
+            "\n" +
+            "This cluster allows to configure content control settings by clients with the Management privilege. " +
+            "It is responsibility of the end product to enforce appropriate right access (for example, to " +
+            "prevent a child from disabling this feature)." +
+            "\n" +
+            "NOTE Support for Content Control cluster is provisional.",
 
-    xref: { document: "cluster", section: "6.13" },
+        xref: { document: "cluster", section: "6.13" }
+    },
 
-    children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        Attribute({
-            name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "cluster", section: "6.13.4" },
-
-            children: [
-                Field({
-                    name: "ST", constraint: "0", description: "ScreenTime",
-                    details: "Supports managing screen time limits."
-                }),
-                Field({
-                    name: "PM", constraint: "1", description: "PinManagement",
-                    details: "Supports managing a PIN code which is used for restricting access to configuration of this feature."
-                }),
-                Field({
-                    name: "BU", constraint: "2", description: "BlockUnrated",
-                    details: "Supports managing content controls for unrated content."
-                }),
-                Field({
-                    name: "OCR", constraint: "3", description: "OnDemandContentRating",
-                    details: "Supports managing content controls based upon rating threshold for on demand content."
-                }),
-                Field({
-                    name: "SCR", constraint: "4", description: "ScheduledContentRating",
-                    details: "Supports managing content controls based upon rating threshold for scheduled content."
-                }),
-                Field({
-                    name: "BC", constraint: "5", description: "BlockChannels",
-                    details: "Supports managing a set of channels that are prohibited."
-                }),
-                Field({
-                    name: "BA", constraint: "6", description: "BlockApplications",
-                    details: "Supports managing a set of applications that are prohibited."
-                }),
-                Field({
-                    name: "BTW", constraint: "7", description: "BlockContentTimeWindow",
-                    details: "Supports managing content controls based upon setting time window in which all contents and " +
-                        "applications SHALL be blocked."
-                })
-            ]
+    Attribute(
+        { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "cluster", section: "6.13.4" } },
+        Field({ name: "ST", constraint: "0", description: "ScreenTime", details: "Supports managing screen time limits." }),
+        Field({
+            name: "PM", constraint: "1", description: "PinManagement",
+            details: "Supports managing a PIN code which is used for restricting access to configuration of this feature."
         }),
-
-        Attribute({
-            name: "Enabled", id: 0x0, type: "bool", access: "R V", conformance: "M",
-            details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) " +
-                "or turned on (TRUE).",
-            xref: { document: "cluster", section: "6.13.7.1" }
+        Field({
+            name: "BU", constraint: "2", description: "BlockUnrated",
+            details: "Supports managing content controls for unrated content."
         }),
+        Field({
+            name: "OCR", constraint: "3", description: "OnDemandContentRating",
+            details: "Supports managing content controls based upon rating threshold for on demand content."
+        }),
+        Field({
+            name: "SCR", constraint: "4", description: "ScheduledContentRating",
+            details: "Supports managing content controls based upon rating threshold for scheduled content."
+        }),
+        Field({
+            name: "BC", constraint: "5", description: "BlockChannels",
+            details: "Supports managing a set of channels that are prohibited."
+        }),
+        Field({
+            name: "BA", constraint: "6", description: "BlockApplications",
+            details: "Supports managing a set of applications that are prohibited."
+        }),
+        Field({
+            name: "BTW", constraint: "7", description: "BlockContentTimeWindow",
+            details: "Supports managing content controls based upon setting time window in which all contents and " +
+                "applications SHALL be blocked."
+        })
+    ),
 
-        Attribute({
+    Attribute({
+        name: "Enabled", id: 0x0, type: "bool", access: "R V", conformance: "M",
+        details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) " +
+            "or turned on (TRUE).",
+        xref: { document: "cluster", section: "6.13.7.1" }
+    }),
+
+    Attribute(
+        {
             name: "OnDemandRatings", id: 0x1, type: "list", access: "R V", conformance: "OCR",
 
             details: "This attribute shall provide the collection of ratings that are currently valid for this media " +
@@ -97,30 +92,33 @@ export const ContentControl = Cluster({
                 "The ratings in this collection shall be in order from a rating for the youngest viewers to the one " +
                 "for the oldest viewers. Each rating in the list shall be unique.",
 
-            xref: { document: "cluster", section: "6.13.7.2" },
-            children: [Field({ name: "entry", type: "RatingNameStruct" })]
-        }),
+            xref: { document: "cluster", section: "6.13.7.2" }
+        },
 
-        Attribute({
-            name: "OnDemandRatingThreshold", id: 0x2, type: "string", access: "R V", conformance: "OCR",
-            constraint: "max 8",
+        Field({ name: "entry", type: "RatingNameStruct" })
+    ),
 
-            details: "Indicates a threshold rating as a content filter which is compared with the rating for on-demand " +
-                "content. For example, if the on-demand content rating is greater than or equal to " +
-                "OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher viewer " +
-                "age, then on-demand content is not appropriate for the User and the Node shall prevent the playback " +
-                "of content." +
-                "\n" +
-                "This attribute shall be set to one of the values present in the OnDemandRatings attribute." +
-                "\n" +
-                "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
-                "For example, if the feature does not control content within apps, then the device should make this " +
-                "clear to the user when the attribute changes.",
+    Attribute({
+        name: "OnDemandRatingThreshold", id: 0x2, type: "string", access: "R V", conformance: "OCR",
+        constraint: "max 8",
 
-            xref: { document: "cluster", section: "6.13.7.3" }
-        }),
+        details: "Indicates a threshold rating as a content filter which is compared with the rating for on-demand " +
+            "content. For example, if the on-demand content rating is greater than or equal to " +
+            "OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher viewer " +
+            "age, then on-demand content is not appropriate for the User and the Node shall prevent the playback " +
+            "of content." +
+            "\n" +
+            "This attribute shall be set to one of the values present in the OnDemandRatings attribute." +
+            "\n" +
+            "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
+            "For example, if the feature does not control content within apps, then the device should make this " +
+            "clear to the user when the attribute changes.",
 
-        Attribute({
+        xref: { document: "cluster", section: "6.13.7.3" }
+    }),
+
+    Attribute(
+        {
             name: "ScheduledContentRatings", id: 0x3, type: "list", access: "R V", conformance: "SCR",
 
             details: "Indicates a collection of ratings which ScheduledContentRatingThreshold can be set to. The items " +
@@ -134,80 +132,87 @@ export const ContentControl = Cluster({
                 "The ratings in this collection shall be in order from a rating for the youngest viewers to the one " +
                 "for the oldest viewers. Each rating in the list shall be unique.",
 
-            xref: { document: "cluster", section: "6.13.7.4" },
-            children: [Field({ name: "entry", type: "RatingNameStruct" })]
-        }),
+            xref: { document: "cluster", section: "6.13.7.4" }
+        },
 
-        Attribute({
-            name: "ScheduledContentRatingThreshold", id: 0x4, type: "string", access: "R V", conformance: "SCR",
-            constraint: "max 8",
+        Field({ name: "entry", type: "RatingNameStruct" })
+    ),
 
-            details: "Indicates a threshold rating as a content filter which is used to compare with the rating for " +
-                "scheduled content. For example, if the scheduled content rating is greater than or equal to " +
-                "ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age to higher " +
-                "viewer age, then the scheduled content is not appropriate for the User and shall be blocked." +
-                "\n" +
-                "This attribute shall be set to one of the values present in the ScheduledContentRatings attribute." +
-                "\n" +
-                "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
-                "For example, if the feature does not control content within apps, then the device should make this " +
-                "clear to the user when the attribute changes.",
+    Attribute({
+        name: "ScheduledContentRatingThreshold", id: 0x4, type: "string", access: "R V", conformance: "SCR",
+        constraint: "max 8",
 
-            xref: { document: "cluster", section: "6.13.7.5" }
-        }),
+        details: "Indicates a threshold rating as a content filter which is used to compare with the rating for " +
+            "scheduled content. For example, if the scheduled content rating is greater than or equal to " +
+            "ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age to higher " +
+            "viewer age, then the scheduled content is not appropriate for the User and shall be blocked." +
+            "\n" +
+            "This attribute shall be set to one of the values present in the ScheduledContentRatings attribute." +
+            "\n" +
+            "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
+            "For example, if the feature does not control content within apps, then the device should make this " +
+            "clear to the user when the attribute changes.",
 
-        Attribute({
-            name: "ScreenDailyTime", id: 0x5, type: "elapsed-s", access: "R V", conformance: "ST",
-            constraint: "max 86400",
-            details: "Indicates the amount of time (in seconds) which the User is allowed to spend watching TV within one " +
-                "day when the Content Control feature is activated.",
-            xref: { document: "cluster", section: "6.13.7.6" }
-        }),
+        xref: { document: "cluster", section: "6.13.7.5" }
+    }),
 
-        Attribute({
-            name: "RemainingScreenTime", id: 0x6, type: "elapsed-s", access: "R V", conformance: "ST",
-            constraint: "max 86400",
+    Attribute({
+        name: "ScreenDailyTime", id: 0x5, type: "elapsed-s", access: "R V", conformance: "ST",
+        constraint: "max 86400",
+        details: "Indicates the amount of time (in seconds) which the User is allowed to spend watching TV within one " +
+            "day when the Content Control feature is activated.",
+        xref: { document: "cluster", section: "6.13.7.6" }
+    }),
 
-            details: "Indicates the remaining screen time (in seconds) which the User is allowed to spend watching TV for " +
-                "the current day when the Content Control feature is activated. When this value equals 0, the media " +
-                "device shall terminate the playback of content." +
-                "\n" +
-                "This attribute shall be updated when the AddBonusTime command is received and processed " +
-                "successfully (with the correct PIN).",
+    Attribute({
+        name: "RemainingScreenTime", id: 0x6, type: "elapsed-s", access: "R V", conformance: "ST",
+        constraint: "max 86400",
 
-            xref: { document: "cluster", section: "6.13.7.7" }
-        }),
+        details: "Indicates the remaining screen time (in seconds) which the User is allowed to spend watching TV for " +
+            "the current day when the Content Control feature is activated. When this value equals 0, the media " +
+            "device shall terminate the playback of content." +
+            "\n" +
+            "This attribute shall be updated when the AddBonusTime command is received and processed " +
+            "successfully (with the correct PIN).",
 
-        Attribute({
-            name: "BlockUnrated", id: 0x7, type: "bool", access: "R V", conformance: "BU",
+        xref: { document: "cluster", section: "6.13.7.7" }
+    }),
 
-            details: "Indicates whether the playback of unrated content is allowed when the Content Control feature is " +
-                "activated. If this attribute equals FALSE, then playback of unrated content" +
-                "\n" +
-                "shall be permitted. Otherwise, the media device shall prevent the playback of unrated content." +
-                "\n" +
-                "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
-                "For example, if the feature does not control content within apps, then the device should make this " +
-                "clear to the user when the attribute changes.",
+    Attribute({
+        name: "BlockUnrated", id: 0x7, type: "bool", access: "R V", conformance: "BU",
 
-            xref: { document: "cluster", section: "6.13.7.8" }
-        }),
+        details: "Indicates whether the playback of unrated content is allowed when the Content Control feature is " +
+            "activated. If this attribute equals FALSE, then playback of unrated content" +
+            "\n" +
+            "shall be permitted. Otherwise, the media device shall prevent the playback of unrated content." +
+            "\n" +
+            "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
+            "For example, if the feature does not control content within apps, then the device should make this " +
+            "clear to the user when the attribute changes.",
 
-        Attribute({
+        xref: { document: "cluster", section: "6.13.7.8" }
+    }),
+
+    Attribute(
+        {
             name: "BlockChannelList", id: 0x8, type: "list", access: "R V", conformance: "BC",
             details: "Indicates a set of channels that shall be blocked when the Content Control feature is activated.",
-            xref: { document: "cluster", section: "6.13.7.9" },
-            children: [Field({ name: "entry", type: "BlockChannelStruct" })]
-        }),
+            xref: { document: "cluster", section: "6.13.7.9" }
+        },
+        Field({ name: "entry", type: "BlockChannelStruct" })
+    ),
 
-        Attribute({
+    Attribute(
+        {
             name: "BlockApplicationList", id: 0x9, type: "list", access: "R V", conformance: "BA",
             details: "Indicates a set of applications that shall be blocked when the Content Control feature is activated.",
-            xref: { document: "cluster", section: "6.13.7.10" },
-            children: [Field({ name: "entry", type: "AppInfoStruct" })]
-        }),
+            xref: { document: "cluster", section: "6.13.7.10" }
+        },
+        Field({ name: "entry", type: "AppInfoStruct" })
+    ),
 
-        Attribute({
+    Attribute(
+        {
             name: "BlockContentTimeWindow", id: 0xa, type: "list", access: "R V", conformance: "BTW",
             constraint: "max 7",
 
@@ -218,24 +223,27 @@ export const ContentControl = Cluster({
                 "EnteringBlockContentTimeWindow. There shall not be multiple entries in this attribute list for the " +
                 "same day of week.",
 
-            xref: { document: "cluster", section: "6.13.7.11" },
-            children: [Field({ name: "entry", type: "TimeWindowStruct" })]
-        }),
+            xref: { document: "cluster", section: "6.13.7.11" }
+        },
 
-        Event({
-            name: "RemainingScreenTimeExpired", id: 0x0, access: "V", conformance: "ST", priority: "info",
-            details: "This event shall be generated when the RemainingScreenTime equals 0.",
-            xref: { document: "cluster", section: "6.13.9.1" }
-        }),
+        Field({ name: "entry", type: "TimeWindowStruct" })
+    ),
 
-        Event({
-            name: "EnteringBlockContentTimeWindow", id: 0x1, access: "V", conformance: "BTW", priority: "info",
-            details: "This event shall be generated when entering a period of blocked content as configured in the " +
-                "BlockContentTimeWindow attribute.",
-            xref: { document: "cluster", section: "6.13.9.2" }
-        }),
+    Event({
+        name: "RemainingScreenTimeExpired", id: 0x0, access: "V", conformance: "ST", priority: "info",
+        details: "This event shall be generated when the RemainingScreenTime equals 0.",
+        xref: { document: "cluster", section: "6.13.9.1" }
+    }),
 
-        Command({
+    Event({
+        name: "EnteringBlockContentTimeWindow", id: 0x1, access: "V", conformance: "BTW", priority: "info",
+        details: "This event shall be generated when entering a period of blocked content as configured in the " +
+            "BlockContentTimeWindow attribute.",
+        xref: { document: "cluster", section: "6.13.9.2" }
+    }),
+
+    Command(
+        {
             name: "UpdatePin", id: 0x0, access: "M T", conformance: "PM", direction: "request",
             response: "status",
 
@@ -255,62 +263,64 @@ export const ContentControl = Cluster({
                 "value when performing configuration of the Content Control settings exposed by this cluster. The " +
                 "ResetPIN command can also be used to obtain the default PIN.",
 
-            xref: { document: "cluster", section: "6.13.8.1" },
+            xref: { document: "cluster", section: "6.13.8.1" }
+        },
 
-            children: [
-                Field({
-                    name: "OldPin", id: 0x0, type: "string", conformance: "M", constraint: "max 6",
-                    details: "This field shall specify the original PIN. Once the UpdatePIN command is performed successfully, it " +
-                        "shall be invalid.",
-                    xref: { document: "cluster", section: "6.13.8.1.1" }
-                }),
-
-                Field({
-                    name: "NewPin", id: 0x1, type: "string", conformance: "M", constraint: "max 6",
-                    details: "This field shall indicate a new PIN for the Content Control feature.",
-                    xref: { document: "cluster", section: "6.13.8.1.2" }
-                })
-            ]
+        Field({
+            name: "OldPin", id: 0x0, type: "string", conformance: "M", constraint: "max 6",
+            details: "This field shall specify the original PIN. Once the UpdatePIN command is performed successfully, it " +
+                "shall be invalid.",
+            xref: { document: "cluster", section: "6.13.8.1.1" }
         }),
 
-        Command({
-            name: "ResetPin", id: 0x1, access: "A T", conformance: "PM", direction: "request",
-            response: "ResetPinResponse",
-            details: "The purpose of this command is to reset the PIN." +
-                "\n" +
-                "If this command is executed successfully, a ResetPINResponse command with a new PIN shall be " +
-                "returned.",
-            xref: { document: "cluster", section: "6.13.8.2" }
-        }),
+        Field({
+            name: "NewPin", id: 0x1, type: "string", conformance: "M", constraint: "max 6",
+            details: "This field shall indicate a new PIN for the Content Control feature.",
+            xref: { document: "cluster", section: "6.13.8.1.2" }
+        })
+    ),
 
-        Command({
+    Command({
+        name: "ResetPin", id: 0x1, access: "A T", conformance: "PM", direction: "request",
+        response: "ResetPinResponse",
+        details: "The purpose of this command is to reset the PIN." +
+            "\n" +
+            "If this command is executed successfully, a ResetPINResponse command with a new PIN shall be " +
+            "returned.",
+        xref: { document: "cluster", section: "6.13.8.2" }
+    }),
+
+    Command(
+        {
             name: "ResetPinResponse", id: 0x2, conformance: "PM", direction: "response",
             details: "This command shall be generated in response to a ResetPIN command.",
-            xref: { document: "cluster", section: "6.13.8.3" },
-            children: [Field({
-                name: "PinCode", id: 0x0, type: "string", conformance: "M", constraint: "max 6",
-                details: "This field shall indicate a new PIN of the Content Control feature.",
-                xref: { document: "cluster", section: "6.13.8.3.1" }
-            })]
-        }),
+            xref: { document: "cluster", section: "6.13.8.3" }
+        },
+        Field({
+            name: "PinCode", id: 0x0, type: "string", conformance: "M", constraint: "max 6",
+            details: "This field shall indicate a new PIN of the Content Control feature.",
+            xref: { document: "cluster", section: "6.13.8.3.1" }
+        })
+    ),
 
-        Command({
-            name: "Enable", id: 0x3, access: "M T", conformance: "M", direction: "request", response: "status",
-            details: "The purpose of this command is to turn on the Content Control feature on a media device." +
-                "\n" +
-                "Upon receipt of the Enable command, the media device shall set the Enabled attribute to TRUE.",
-            xref: { document: "cluster", section: "6.13.8.4" }
-        }),
+    Command({
+        name: "Enable", id: 0x3, access: "M T", conformance: "M", direction: "request", response: "status",
+        details: "The purpose of this command is to turn on the Content Control feature on a media device." +
+            "\n" +
+            "Upon receipt of the Enable command, the media device shall set the Enabled attribute to TRUE.",
+        xref: { document: "cluster", section: "6.13.8.4" }
+    }),
 
-        Command({
-            name: "Disable", id: 0x4, access: "M T", conformance: "M", direction: "request", response: "status",
-            details: "The purpose of this command is to turn off the Content Control feature on a media device." +
-                "\n" +
-                "On receipt of the Disable command, the media device shall set the Enabled attribute to FALSE.",
-            xref: { document: "cluster", section: "6.13.8.5" }
-        }),
+    Command({
+        name: "Disable", id: 0x4, access: "M T", conformance: "M", direction: "request", response: "status",
+        details: "The purpose of this command is to turn off the Content Control feature on a media device." +
+            "\n" +
+            "On receipt of the Disable command, the media device shall set the Enabled attribute to FALSE.",
+        xref: { document: "cluster", section: "6.13.8.5" }
+    }),
 
-        Command({
+    Command(
+        {
             name: "AddBonusTime", id: 0x5, access: "O", conformance: "ST", direction: "request",
             response: "status",
 
@@ -335,72 +345,74 @@ export const ContentControl = Cluster({
                 "\n" +
                 "  • The client has provided a PINCode that matches the expected PIN value.",
 
-            xref: { document: "cluster", section: "6.13.8.6" },
+            xref: { document: "cluster", section: "6.13.8.6" }
+        },
 
-            children: [
-                Field({
-                    name: "PinCode", id: 0x0, type: "string", conformance: "O", constraint: "max 6",
+        Field({
+            name: "PinCode", id: 0x0, type: "string", conformance: "O", constraint: "max 6",
 
-                    details: "This field shall indicate the PIN." +
-                        "\n" +
-                        "This field shall be optional for clients with Manage or greater privilege but shall be mandatory " +
-                        "for clients with Operate privilege. The PIN provided in this field shall be used to guarantee that " +
-                        "a client with Operate permission is allowed to invoke this command only if the PIN passed in this " +
-                        "command is equal to the current PIN value.",
+            details: "This field shall indicate the PIN." +
+                "\n" +
+                "This field shall be optional for clients with Manage or greater privilege but shall be mandatory " +
+                "for clients with Operate privilege. The PIN provided in this field shall be used to guarantee that " +
+                "a client with Operate permission is allowed to invoke this command only if the PIN passed in this " +
+                "command is equal to the current PIN value.",
 
-                    xref: { document: "cluster", section: "6.13.8.6.1" }
-                }),
-
-                Field({
-                    name: "BonusTime", id: 0x1, type: "elapsed-s", conformance: "M", constraint: "desc", default: 300,
-                    details: "This field shall indicate the amount of extra time (in seconds) to increase RemainingScreenTime. " +
-                        "This field shall not exceed the remaining time of this day.",
-                    xref: { document: "cluster", section: "6.13.8.6.2" }
-                })
-            ]
+            xref: { document: "cluster", section: "6.13.8.6.1" }
         }),
 
-        Command({
+        Field({
+            name: "BonusTime", id: 0x1, type: "elapsed-s", conformance: "M", constraint: "desc", default: 300,
+            details: "This field shall indicate the amount of extra time (in seconds) to increase RemainingScreenTime. " +
+                "This field shall not exceed the remaining time of this day.",
+            xref: { document: "cluster", section: "6.13.8.6.2" }
+        })
+    ),
+
+    Command(
+        {
             name: "SetScreenDailyTime", id: 0x6, access: "M", conformance: "ST", direction: "request",
             response: "status",
             details: "The purpose of this command is to set the ScreenDailyTime attribute." +
                 "\n" +
                 "Upon receipt of the SetScreenDailyTime command, the media device shall set the ScreenDailyTime " +
                 "attribute to the ScreenTime value.",
-            xref: { document: "cluster", section: "6.13.8.7" },
+            xref: { document: "cluster", section: "6.13.8.7" }
+        },
 
-            children: [Field({
-                name: "ScreenTime", id: 0x0, type: "elapsed-s", conformance: "M", constraint: "max 86400",
-                details: "This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on" +
-                    "\n" +
-                    "this media device within one day.",
-                xref: { document: "cluster", section: "6.13.8.7.1" }
-            })]
-        }),
-
-        Command({
-            name: "BlockUnratedContent", id: 0x7, access: "M", conformance: "BU", direction: "request",
-            response: "status",
-            details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
-                "by this media device." +
+        Field({
+            name: "ScreenTime", id: 0x0, type: "elapsed-s", conformance: "M", constraint: "max 86400",
+            details: "This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on" +
                 "\n" +
-                "Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated " +
-                "attribute to TRUE.",
-            xref: { document: "cluster", section: "6.13.8.8" }
-        }),
+                "this media device within one day.",
+            xref: { document: "cluster", section: "6.13.8.7.1" }
+        })
+    ),
 
-        Command({
-            name: "UnblockUnratedContent", id: 0x8, access: "M", conformance: "BU", direction: "request",
-            response: "status",
-            details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
-                "by this media device." +
-                "\n" +
-                "Upon receipt of the UnblockUnratedContent command, the media device shall set the BlockUnrated " +
-                "attribute to FALSE.",
-            xref: { document: "cluster", section: "6.13.8.9" }
-        }),
+    Command({
+        name: "BlockUnratedContent", id: 0x7, access: "M", conformance: "BU", direction: "request",
+        response: "status",
+        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
+            "by this media device." +
+            "\n" +
+            "Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated " +
+            "attribute to TRUE.",
+        xref: { document: "cluster", section: "6.13.8.8" }
+    }),
 
-        Command({
+    Command({
+        name: "UnblockUnratedContent", id: 0x8, access: "M", conformance: "BU", direction: "request",
+        response: "status",
+        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
+            "by this media device." +
+            "\n" +
+            "Upon receipt of the UnblockUnratedContent command, the media device shall set the BlockUnrated " +
+            "attribute to FALSE.",
+        xref: { document: "cluster", section: "6.13.8.9" }
+    }),
+
+    Command(
+        {
             name: "SetOnDemandRatingThreshold", id: 0x9, access: "M", conformance: "OCR", direction: "request",
             response: "status",
             details: "The purpose of this command is to set the OnDemandRatingThreshold attribute." +
@@ -408,17 +420,19 @@ export const ContentControl = Cluster({
                 "Upon receipt of the SetOnDemandRatingThreshold command, the media device shall check if the Rating " +
                 "field is one of values present in the OnDemandRatings attribute. If not, then a response with " +
                 "InvalidRating error status shall be returned.",
-            xref: { document: "cluster", section: "6.13.8.10" },
+            xref: { document: "cluster", section: "6.13.8.10" }
+        },
 
-            children: [Field({
-                name: "Rating", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
-                details: "This field indicates a threshold rating for filtering on-demand content. This field shall be set to " +
-                    "one of the values present in the OnDemandRatings attribute",
-                xref: { document: "cluster", section: "6.13.8.10.1" }
-            })]
-        }),
+        Field({
+            name: "Rating", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
+            details: "This field indicates a threshold rating for filtering on-demand content. This field shall be set to " +
+                "one of the values present in the OnDemandRatings attribute",
+            xref: { document: "cluster", section: "6.13.8.10.1" }
+        })
+    ),
 
-        Command({
+    Command(
+        {
             name: "SetScheduledContentRatingThreshold", id: 0xa, access: "M", conformance: "SCR",
             direction: "request", response: "status",
             details: "The purpose of this command is to set ScheduledContentRatingThreshold attribute." +
@@ -426,19 +440,21 @@ export const ContentControl = Cluster({
                 "Upon receipt of the SetScheduledContentRatingThreshold command, the media device shall check if the " +
                 "Rating field is one of values present in the ScheduledContentRatings attribute. If not, then a " +
                 "response with InvalidRating error status shall be returned.",
-            xref: { document: "cluster", section: "6.13.8.11" },
+            xref: { document: "cluster", section: "6.13.8.11" }
+        },
 
-            children: [Field({
-                name: "Rating", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
-                details: "This field indicates a threshold rating for filtering scheduled content. This field shall be set to " +
-                    "one" +
-                    "\n" +
-                    "of the values present in the ScheduledContentRatings attribute.",
-                xref: { document: "cluster", section: "6.13.8.11.1" }
-            })]
-        }),
+        Field({
+            name: "Rating", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
+            details: "This field indicates a threshold rating for filtering scheduled content. This field shall be set to " +
+                "one" +
+                "\n" +
+                "of the values present in the ScheduledContentRatings attribute.",
+            xref: { document: "cluster", section: "6.13.8.11.1" }
+        })
+    ),
 
-        Command({
+    Command(
+        {
             name: "AddBlockChannels", id: 0xb, access: "M", conformance: "BC", direction: "request",
             response: "status",
 
@@ -456,19 +472,24 @@ export const ContentControl = Cluster({
                 "If all channels in Channel field already exist in the BlockChannelList attribute, then a response " +
                 "with ChannelAlreadyExist error Status shall be returned.",
 
-            xref: { document: "cluster", section: "6.13.8.12" },
+            xref: { document: "cluster", section: "6.13.8.12" }
+        },
 
-            children: [Field({
+        Field(
+            {
                 name: "Channels", id: 0x0, type: "list", conformance: "M",
                 details: "This field indicates a set of channels that shall be blocked when the Content Control feature is " +
                     "activated. This field shall be set to values present in ChannelList attribute in the Channel " +
                     "cluster. The BlockChannelIndex field passed in this command shall be NULL.",
-                xref: { document: "cluster", section: "6.13.8.12.1" },
-                children: [Field({ name: "entry", type: "BlockChannelStruct" })]
-            })]
-        }),
+                xref: { document: "cluster", section: "6.13.8.12.1" }
+            },
 
-        Command({
+            Field({ name: "entry", type: "BlockChannelStruct" })
+        )
+    ),
+
+    Command(
+        {
             name: "RemoveBlockChannels", id: 0xc, access: "M", conformance: "BC", direction: "request",
             response: "status",
 
@@ -479,18 +500,23 @@ export const ContentControl = Cluster({
                 "one or more channels indicated by ChannelIndexes passed in this command field are not present in " +
                 "the BlockChannelList attribute, then a response with ChannelNotExist error Status shall be returned.",
 
-            xref: { document: "cluster", section: "6.13.8.13" },
+            xref: { document: "cluster", section: "6.13.8.13" }
+        },
 
-            children: [Field({
+        Field(
+            {
                 name: "ChannelIndexes", id: 0x0, type: "list", conformance: "M",
                 details: "This field shall specify a set of indexes indicating Which channels shall be removed from the " +
                     "BlockChannelList attribute.",
-                xref: { document: "cluster", section: "6.13.8.13.1" },
-                children: [Field({ name: "entry", type: "uint16" })]
-            })]
-        }),
+                xref: { document: "cluster", section: "6.13.8.13.1" }
+            },
 
-        Command({
+            Field({ name: "entry", type: "uint16" })
+        )
+    ),
+
+    Command(
+        {
             name: "AddBlockApplications", id: 0xd, access: "M", conformance: "BA", direction: "request",
             response: "status",
 
@@ -508,18 +534,23 @@ export const ContentControl = Cluster({
                 "If all applications in Applications field are already present in BlockApplicationList attribute, " +
                 "then a response with ApplicationAlreadyExist error Status shall be returned.",
 
-            xref: { document: "cluster", section: "6.13.8.14" },
+            xref: { document: "cluster", section: "6.13.8.14" }
+        },
 
-            children: [Field({
+        Field(
+            {
                 name: "Applications", id: 0x0, type: "list", conformance: "M",
                 details: "This field indicates a set of applications that shall be blocked when the Content Control feature " +
                     "is activated.",
-                xref: { document: "cluster", section: "6.13.8.14.1" },
-                children: [Field({ name: "entry", type: "AppInfoStruct" })]
-            })]
-        }),
+                xref: { document: "cluster", section: "6.13.8.14.1" }
+            },
 
-        Command({
+            Field({ name: "entry", type: "AppInfoStruct" })
+        )
+    ),
+
+    Command(
+        {
             name: "RemoveBlockApplications", id: 0xe, access: "M", conformance: "BA", direction: "request",
             response: "status",
 
@@ -530,18 +561,23 @@ export const ContentControl = Cluster({
                 "applications in Applications field which are not present in the BlockApplicationList attribute, " +
                 "then a response with ApplicationNotExist error Status shall be returned.",
 
-            xref: { document: "cluster", section: "6.13.8.15" },
+            xref: { document: "cluster", section: "6.13.8.15" }
+        },
 
-            children: [Field({
+        Field(
+            {
                 name: "Applications", id: 0x0, type: "list", conformance: "M",
                 details: "This field indicates a set of applications which shall be removed from BlockApplicationList " +
                     "attribute.",
-                xref: { document: "cluster", section: "6.13.8.15.1" },
-                children: [Field({ name: "entry", type: "AppInfoStruct" })]
-            })]
-        }),
+                xref: { document: "cluster", section: "6.13.8.15.1" }
+            },
 
-        Command({
+            Field({ name: "entry", type: "AppInfoStruct" })
+        )
+    ),
+
+    Command(
+        {
             name: "SetBlockContentTimeWindow", id: 0xf, access: "M", conformance: "BTW", direction: "request",
             response: "status",
 
@@ -558,15 +594,18 @@ export const ContentControl = Cluster({
                 "If the TimeWindowIndex field is not NULL and presents in the BlockContentTimeWindow attribute, the " +
                 "media device shall replace the original time window with the new time window passed in this command.",
 
-            xref: { document: "cluster", section: "6.13.8.16" },
-            children: [Field({
-                name: "TimeWindow", id: 0x0, type: "TimeWindowStruct", conformance: "M",
-                details: "This field shall indicate a time window requested to set to the BlockContentTimeWindow attribute.",
-                xref: { document: "cluster", section: "6.13.8.16.1" }
-            })]
-        }),
+            xref: { document: "cluster", section: "6.13.8.16" }
+        },
 
-        Command({
+        Field({
+            name: "TimeWindow", id: 0x0, type: "TimeWindowStruct", conformance: "M",
+            details: "This field shall indicate a time window requested to set to the BlockContentTimeWindow attribute.",
+            xref: { document: "cluster", section: "6.13.8.16.1" }
+        })
+    ),
+
+    Command(
+        {
             name: "RemoveBlockContentTimeWindow", id: 0x10, access: "M", conformance: "BTW",
             direction: "request", response: "status",
 
@@ -579,214 +618,192 @@ export const ContentControl = Cluster({
                 "If one or more time window indexes passed in this command are not present in BlockContentTimeWindow " +
                 "attribute, then a response with TimeWindowNotExist error status shall be returned.",
 
-            xref: { document: "cluster", section: "6.13.8.17" },
+            xref: { document: "cluster", section: "6.13.8.17" }
+        },
 
-            children: [Field({
+        Field(
+            {
                 name: "TimeWindowIndexes", id: 0x0, type: "list", conformance: "M",
                 details: "This field shall specify a set of time window indexes indicating which time windows will be removed " +
                     "from the BlockContentTimeWindow attribute.",
-                xref: { document: "cluster", section: "6.13.8.17.1" },
-                children: [Field({ name: "entry", type: "uint16" })]
-            })]
+                xref: { document: "cluster", section: "6.13.8.17.1" }
+            },
+
+            Field({ name: "entry", type: "uint16" })
+        )
+    ),
+
+    Datatype(
+        { name: "RatingNameStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.1" } },
+
+        Field({
+            name: "RatingName", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
+            details: "This field shall indicate the name of the rating level of the applied rating system. The applied " +
+                "rating system is dependent upon the region or country where the Node has been provisioned, and may " +
+                "vary from one country to another.",
+            xref: { document: "cluster", section: "6.13.5.1.1" }
         }),
 
-        Datatype({
-            name: "RatingNameStruct", type: "struct",
-            xref: { document: "cluster", section: "6.13.5.1" },
+        Field({
+            name: "RatingNameDesc", id: 0x1, type: "string", conformance: "O", constraint: "max 64",
+            details: "This field shall specify a human readable (displayable) description for RatingName.",
+            xref: { document: "cluster", section: "6.13.5.1.2" }
+        })
+    ),
 
-            children: [
-                Field({
-                    name: "RatingName", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
-                    details: "This field shall indicate the name of the rating level of the applied rating system. The applied " +
-                        "rating system is dependent upon the region or country where the Node has been provisioned, and may " +
-                        "vary from one country to another.",
-                    xref: { document: "cluster", section: "6.13.5.1.1" }
-                }),
-
-                Field({
-                    name: "RatingNameDesc", id: 0x1, type: "string", conformance: "O", constraint: "max 64",
-                    details: "This field shall specify a human readable (displayable) description for RatingName.",
-                    xref: { document: "cluster", section: "6.13.5.1.2" }
-                })
-            ]
-        }),
-
-        Datatype({
+    Datatype(
+        {
             name: "BlockChannelStruct", type: "struct",
             details: "[options=\"header\",valign=\"middle\"]b",
-            xref: { document: "cluster", section: "6.13.5.2" },
+            xref: { document: "cluster", section: "6.13.5.2" }
+        },
 
-            children: [
-                Field({
-                    name: "BlockChannelIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
-                    details: "This field shall indicate a unique index value for a blocked channel. This value may be used to " +
-                        "indicate one selected channel which will be removed from BlockChannelList attribute.",
-                    xref: { document: "cluster", section: "6.13.5.2.1" }
-                }),
-
-                Field({
-                    name: "MajorNumber", id: 0x1, type: "uint16", conformance: "M",
-                    details: "This field shall indicate the channel major number value (for example, using ATSC format). When the " +
-                        "channel number is expressed as a string, such as \"13.1\" or \"256\", the major number would be 13 or " +
-                        "256, respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
-                        "channels that are not represented by a major or minor number.",
-                    xref: { document: "cluster", section: "6.13.5.2.2" }
-                }),
-
-                Field({
-                    name: "MinorNumber", id: 0x2, type: "uint16", conformance: "M",
-                    details: "This field shall indicate the channel minor number value (for example, using ATSC format). When the " +
-                        "channel number is expressed as a string, such as \"13.1\" or \"256\", the minor number would be 1 or 0, " +
-                        "respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
-                        "channels that are not represented by a major or minor number.",
-                    xref: { document: "cluster", section: "6.13.5.2.3" }
-                }),
-
-                Field({
-                    name: "Identifier", id: 0x3, type: "string", conformance: "O",
-                    details: "This field shall indicate the unique identifier for a specific channel. This field is optional, but " +
-                        "SHOULD be provided when MajorNumber and MinorNumber are not available.",
-                    xref: { document: "cluster", section: "6.13.5.2.4" }
-                })
-            ]
+        Field({
+            name: "BlockChannelIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
+            details: "This field shall indicate a unique index value for a blocked channel. This value may be used to " +
+                "indicate one selected channel which will be removed from BlockChannelList attribute.",
+            xref: { document: "cluster", section: "6.13.5.2.1" }
         }),
 
-        Datatype({
-            name: "AppInfoStruct", type: "struct",
-            xref: { document: "cluster", section: "6.13.5.3" },
-
-            children: [
-                Field({
-                    name: "CatalogVendorId", id: 0x0, type: "uint16", conformance: "M",
-                    details: "This field shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use " +
-                        "value 0x0000." +
-                        "\n" +
-                        "Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) " +
-                        "and will assign an ApplicationID to each Content App.",
-                    xref: { document: "cluster", section: "6.13.5.3.1" }
-                }),
-
-                Field({
-                    name: "ApplicationId", id: 0x1, type: "string", conformance: "M",
-                    details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" " +
-                        "or \"Company X\". This field shall be unique within a catalog.",
-                    xref: { document: "cluster", section: "6.13.5.3.2" }
-                })
-            ]
+        Field({
+            name: "MajorNumber", id: 0x1, type: "uint16", conformance: "M",
+            details: "This field shall indicate the channel major number value (for example, using ATSC format). When the " +
+                "channel number is expressed as a string, such as \"13.1\" or \"256\", the major number would be 13 or " +
+                "256, respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
+                "channels that are not represented by a major or minor number.",
+            xref: { document: "cluster", section: "6.13.5.2.2" }
         }),
 
-        Datatype({
-            name: "TimeWindowStruct", type: "struct",
-            xref: { document: "cluster", section: "6.13.5.4" },
-
-            children: [
-                Field({
-                    name: "TimeWindowIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
-                    details: "This field shall indicate a unique index of a specific time window. This value may be used to " +
-                        "indicate a selected time window which will be removed from the BlockContentTimeWindow attribute.",
-                    xref: { document: "cluster", section: "6.13.5.4.1" }
-                }),
-
-                Field({
-                    name: "DayOfWeek", id: 0x1, type: "DayOfWeekBitmap", conformance: "M", constraint: "desc",
-                    details: "This field shall indicate a day of week.",
-                    xref: { document: "cluster", section: "6.13.5.4.2" }
-                }),
-
-                Field({
-                    name: "TimePeriod", id: 0x2, type: "list", conformance: "M", constraint: "desc",
-                    details: "This field shall indicate one or more discrete time periods.",
-                    xref: { document: "cluster", section: "6.13.5.4.3" },
-                    children: [Field({ name: "entry", type: "TimePeriodStruct" })]
-                })
-            ]
+        Field({
+            name: "MinorNumber", id: 0x2, type: "uint16", conformance: "M",
+            details: "This field shall indicate the channel minor number value (for example, using ATSC format). When the " +
+                "channel number is expressed as a string, such as \"13.1\" or \"256\", the minor number would be 1 or 0, " +
+                "respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
+                "channels that are not represented by a major or minor number.",
+            xref: { document: "cluster", section: "6.13.5.2.3" }
         }),
 
-        Datatype({
-            name: "DayOfWeekBitmap", type: "enum8",
-            xref: { document: "cluster", section: "6.13.5.5" },
-
-            children: [
-                Field({ name: "Sunday", id: 0x0, description: "Sunday" }),
-                Field({ name: "Monday", id: 0x1, description: "Monday" }),
-                Field({ name: "Tuesday", id: 0x2, description: "Tuesday" }),
-                Field({ name: "Wednesday", id: 0x3, description: "Wednesday" }),
-                Field({ name: "Thursday", id: 0x4, description: "Thursday" }),
-                Field({ name: "Friday", id: 0x5, description: "Friday" }),
-                Field({ name: "Saturday", id: 0x6, description: "Saturday" })
-            ]
-        }),
-
-        Datatype({
-            name: "TimePeriodStruct", type: "struct",
-            xref: { document: "cluster", section: "6.13.5.6" },
-
-            children: [
-                Field({
-                    name: "StartHour", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 23",
-                    details: "This field shall indicate the starting hour.",
-                    xref: { document: "cluster", section: "6.13.5.6.1" }
-                }),
-                Field({
-                    name: "StartMinute", id: 0x1, type: "uint8", conformance: "M", constraint: "0 to 59",
-                    details: "This field shall indicate the starting minute.",
-                    xref: { document: "cluster", section: "6.13.5.6.2" }
-                }),
-                Field({
-                    name: "EndHour", id: 0x2, type: "uint8", conformance: "M", constraint: "0 to 23",
-                    details: "This field shall indicate the ending hour. EndHour shall be equal to or greater than StartHour",
-                    xref: { document: "cluster", section: "6.13.5.6.3" }
-                }),
-
-                Field({
-                    name: "EndMinute", id: 0x3, type: "uint8", conformance: "M", constraint: "0 to 59",
-                    details: "This field shall indicate the ending minute. If EndHour is equal to StartHour then EndMinute shall " +
-                        "be greater than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all " +
-                        "contents shall be blocked until 23:59:59.",
-                    xref: { document: "cluster", section: "6.13.5.6.4" }
-                })
-            ]
-        }),
-
-        Datatype({
-            name: "StatusCodeEnum", type: "enum8",
-            xref: { document: "cluster", section: "6.13.6.1" },
-
-            children: [
-                Field({
-                    name: "InvalidPinCode", id: 0x2,
-                    description: "Provided PIN Code does not match the current PIN code."
-                }),
-                Field({
-                    name: "InvalidRating", id: 0x3,
-                    description: "Provided Rating is out of scope of the corresponding Rating list."
-                }),
-                Field({ name: "InvalidChannel", id: 0x4, description: "Provided Channel(s) is invalid." }),
-                Field({ name: "ChannelAlreadyExist", id: 0x5, description: "Provided Channel(s) already exists." }),
-                Field({
-                    name: "ChannelNotExist", id: 0x6,
-                    description: "Provided Channel(s) doesn’t exist in BlockChannelList attribute."
-                }),
-                Field({
-                    name: "UnidentifiableApplication", id: 0x7,
-                    description: "Provided Application(s) is not identified."
-                }),
-                Field({ name: "ApplicationAlreadyExist", id: 0x8, description: "Provided Application(s) already exists." }),
-                Field({
-                    name: "ApplicationNotExist", id: 0x9,
-                    description: "Provided Application(s) doesn’t exist in BlockApplicationList attribute."
-                }),
-                Field({
-                    name: "TimeWindowAlreadyExist", id: 0xa,
-                    description: "Provided time Window already exists in BlockContentTimeWindow attribute."
-                }),
-                Field({
-                    name: "TimeWindowNotExist", id: 0xb,
-                    description: "Provided time window doesn’t exist in BlockContentTimeWindow attribute."
-                })
-            ]
+        Field({
+            name: "Identifier", id: 0x3, type: "string", conformance: "O",
+            details: "This field shall indicate the unique identifier for a specific channel. This field is optional, but " +
+                "SHOULD be provided when MajorNumber and MinorNumber are not available.",
+            xref: { document: "cluster", section: "6.13.5.2.4" }
         })
-    ]
-});
+    ),
+
+    Datatype(
+        { name: "AppInfoStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.3" } },
+
+        Field({
+            name: "CatalogVendorId", id: 0x0, type: "uint16", conformance: "M",
+            details: "This field shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use " +
+                "value 0x0000." +
+                "\n" +
+                "Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) " +
+                "and will assign an ApplicationID to each Content App.",
+            xref: { document: "cluster", section: "6.13.5.3.1" }
+        }),
+
+        Field({
+            name: "ApplicationId", id: 0x1, type: "string", conformance: "M",
+            details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" " +
+                "or \"Company X\". This field shall be unique within a catalog.",
+            xref: { document: "cluster", section: "6.13.5.3.2" }
+        })
+    ),
+
+    Datatype(
+        { name: "TimeWindowStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.4" } },
+
+        Field({
+            name: "TimeWindowIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
+            details: "This field shall indicate a unique index of a specific time window. This value may be used to " +
+                "indicate a selected time window which will be removed from the BlockContentTimeWindow attribute.",
+            xref: { document: "cluster", section: "6.13.5.4.1" }
+        }),
+
+        Field({
+            name: "DayOfWeek", id: 0x1, type: "DayOfWeekBitmap", conformance: "M", constraint: "desc",
+            details: "This field shall indicate a day of week.",
+            xref: { document: "cluster", section: "6.13.5.4.2" }
+        }),
+
+        Field(
+            {
+                name: "TimePeriod", id: 0x2, type: "list", conformance: "M", constraint: "desc",
+                details: "This field shall indicate one or more discrete time periods.",
+                xref: { document: "cluster", section: "6.13.5.4.3" }
+            },
+            Field({ name: "entry", type: "TimePeriodStruct" })
+        )
+    ),
+
+    Datatype(
+        { name: "DayOfWeekBitmap", type: "enum8", xref: { document: "cluster", section: "6.13.5.5" } },
+        Field({ name: "Sunday", id: 0x0, description: "Sunday" }),
+        Field({ name: "Monday", id: 0x1, description: "Monday" }),
+        Field({ name: "Tuesday", id: 0x2, description: "Tuesday" }),
+        Field({ name: "Wednesday", id: 0x3, description: "Wednesday" }),
+        Field({ name: "Thursday", id: 0x4, description: "Thursday" }),
+        Field({ name: "Friday", id: 0x5, description: "Friday" }),
+        Field({ name: "Saturday", id: 0x6, description: "Saturday" })
+    ),
+
+    Datatype(
+        { name: "TimePeriodStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.6" } },
+        Field({
+            name: "StartHour", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 23",
+            details: "This field shall indicate the starting hour.",
+            xref: { document: "cluster", section: "6.13.5.6.1" }
+        }),
+        Field({
+            name: "StartMinute", id: 0x1, type: "uint8", conformance: "M", constraint: "0 to 59",
+            details: "This field shall indicate the starting minute.",
+            xref: { document: "cluster", section: "6.13.5.6.2" }
+        }),
+        Field({
+            name: "EndHour", id: 0x2, type: "uint8", conformance: "M", constraint: "0 to 23",
+            details: "This field shall indicate the ending hour. EndHour shall be equal to or greater than StartHour",
+            xref: { document: "cluster", section: "6.13.5.6.3" }
+        }),
+
+        Field({
+            name: "EndMinute", id: 0x3, type: "uint8", conformance: "M", constraint: "0 to 59",
+            details: "This field shall indicate the ending minute. If EndHour is equal to StartHour then EndMinute shall " +
+                "be greater than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all " +
+                "contents shall be blocked until 23:59:59.",
+            xref: { document: "cluster", section: "6.13.5.6.4" }
+        })
+    ),
+
+    Datatype(
+        { name: "StatusCodeEnum", type: "enum8", xref: { document: "cluster", section: "6.13.6.1" } },
+        Field({ name: "InvalidPinCode", id: 0x2, description: "Provided PIN Code does not match the current PIN code." }),
+        Field({
+            name: "InvalidRating", id: 0x3,
+            description: "Provided Rating is out of scope of the corresponding Rating list."
+        }),
+        Field({ name: "InvalidChannel", id: 0x4, description: "Provided Channel(s) is invalid." }),
+        Field({ name: "ChannelAlreadyExist", id: 0x5, description: "Provided Channel(s) already exists." }),
+        Field({
+            name: "ChannelNotExist", id: 0x6,
+            description: "Provided Channel(s) doesn’t exist in BlockChannelList attribute."
+        }),
+        Field({ name: "UnidentifiableApplication", id: 0x7, description: "Provided Application(s) is not identified." }),
+        Field({ name: "ApplicationAlreadyExist", id: 0x8, description: "Provided Application(s) already exists." }),
+        Field({
+            name: "ApplicationNotExist", id: 0x9,
+            description: "Provided Application(s) doesn’t exist in BlockApplicationList attribute."
+        }),
+        Field({
+            name: "TimeWindowAlreadyExist", id: 0xa,
+            description: "Provided time Window already exists in BlockContentTimeWindow attribute."
+        }),
+        Field({
+            name: "TimeWindowNotExist", id: 0xb,
+            description: "Provided time window doesn’t exist in BlockContentTimeWindow attribute."
+        })
+    )
+);
 
 MatterDefinition.children.push(ContentControl);
