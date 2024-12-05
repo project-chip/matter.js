@@ -29,6 +29,7 @@ export type Documentation = {
     description?: string;
     details?: string;
     xref?: Specification.CrossReference;
+    isDeprecated?: boolean;
 };
 
 function mapSpec(xref?: Specification.CrossReference) {
@@ -59,6 +60,7 @@ export abstract class Entry {
             this.documentation?.description ||
             this.documentation?.details ||
             this.documentation?.xref ||
+            this.documentation?.isDeprecated ||
             this.docText
         );
     }
@@ -104,6 +106,13 @@ export abstract class Entry {
                 lines.push("");
             }
             lines.push(`@see {@link ${spec}} § ${this.documentation?.xref?.section}`);
+        }
+
+        if (this.documentation?.isDeprecated) {
+            if (lines.length) {
+                lines.push("");
+            }
+            lines.push("@deprecated");
         }
 
         if (lines.length) {

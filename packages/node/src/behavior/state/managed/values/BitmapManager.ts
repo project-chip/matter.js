@@ -42,10 +42,6 @@ export function BitmapManager(owner: RootSupervisor, schema: Schema): ValueSuper
     const maxBit = byteSize * 8;
 
     for (const member of owner.membersOf(schema)) {
-        if (member.isDeprecated) {
-            continue;
-        }
-
         let name;
         if (schema.id === FeatureMap.id) {
             // We require special casing for feature maps because the spec code uses "feature" field from spec as name

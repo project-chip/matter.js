@@ -230,7 +230,7 @@ function decodeBitmap(model: ValueModel, value: number | bigint) {
         }
 
         const definition = model.bitDefinition(bit);
-        if (!definition || definition.isDeprecated) {
+        if (!definition) {
             continue;
         }
 

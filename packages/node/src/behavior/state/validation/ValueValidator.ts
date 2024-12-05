@@ -220,7 +220,7 @@ function createStructValidator(schema: Schema, supervisor: RootSupervisor): Valu
 
     for (const field of supervisor.membersOf(schema)) {
         // Skip deprecated, and global attributes we currently handle in lower levels
-        if (field.isDeprecated || AttributeModel.isGlobal(field)) {
+        if (AttributeModel.isGlobal(field)) {
             continue;
         }
         const validate = supervisor.get(field).validate;
