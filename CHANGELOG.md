@@ -14,6 +14,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/node
     - Enhancement: Enhances the number assertations to only allow finite numbers
 
+-   @project-chip/matter.js
+    - Enhancement: Considers a node in reconnection state that should be decommissioned as already factory reset
+
 -   Matter cluster definitions and implementations
     - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
     - Fix: Do not try to convert color mode details if they are not defined

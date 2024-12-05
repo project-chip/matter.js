@@ -1045,6 +1045,14 @@ export class PairedNode {
         if (!this.commissioningController.isNodeCommissioned(this.nodeId)) {
             throw new ImplementationError(`This Node ${this.nodeId} is not commissioned.`);
         }
+        if (
+            this.#connectionState === NodeStates.Reconnecting ||
+            this.#connectionState === NodeStates.WaitingForDeviceDiscovery
+        ) {
+            throw new ImplementationError(
+                `This Node ${this.nodeId} is currently in a reconnect state, decommissioning is not possible.`,
+            );
+        }
         const operationalCredentialsCluster = this.getRootClusterClient(OperationalCredentials.Cluster);
 
         if (operationalCredentialsCluster === undefined) {
