@@ -146,7 +146,7 @@ function allocateScope(scope: Scope): GeneratorScope {
         },
 
         locationOf(model: Model) {
-            const location = locations.get(model);
+            const location = locations.get(scope.modelFor(model));
             if (location === undefined) {
                 throw new InternalError(`No location identified for ${model} from scope ${owner}`);
             }

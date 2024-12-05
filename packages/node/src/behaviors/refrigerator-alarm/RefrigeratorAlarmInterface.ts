@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "#general";
-import { AlarmBase } from "#clusters/alarm-base";
+import { RefrigeratorAlarm } from "#clusters/refrigerator-alarm";
 
 export namespace RefrigeratorAlarmInterface {
     export interface Reset {
@@ -17,7 +17,7 @@ export namespace RefrigeratorAlarmInterface {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
          */
-        reset(request: AlarmBase.ResetRequest): MaybePromise;
+        reset(request: RefrigeratorAlarm.ResetRequest): MaybePromise;
     }
 }
 
