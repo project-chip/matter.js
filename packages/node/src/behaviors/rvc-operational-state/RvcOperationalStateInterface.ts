@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "#general";
-import { OperationalState as OperationalStateNamespace } from "#clusters/operational-state";
+import { RvcOperationalState } from "#clusters/rvc-operational-state";
 
 export namespace RvcOperationalStateInterface {
     export interface Base {
@@ -31,7 +31,7 @@ export namespace RvcOperationalStateInterface {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 7.4.5.1
          */
-        goHome(): MaybePromise<OperationalStateNamespace.OperationalCommandResponse>;
+        goHome(): MaybePromise<RvcOperationalState.OperationalCommandResponse>;
     }
 }
 
