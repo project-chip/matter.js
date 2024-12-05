@@ -23,6 +23,7 @@ import {
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
+import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { PaseClient } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
@@ -156,7 +157,7 @@ export class ControllerCommissioner {
                 channel = await this.#initializePaseSecureChannel(address, passcode, discoveryData);
             } catch (e) {
                 NoResponseTimeoutError.accept(e);
-                console.warn(`Could not connect to ${serverAddressToString(address)}: ${e.message}`);
+                logger.warn(`Could not connect to ${serverAddressToString(address)}: ${e.message}`);
             }
         }
 
@@ -319,6 +320,11 @@ export class ControllerCommissioner {
         } catch (e) {
             // Close the exchange and rethrow
             await paseExchange.close();
+            if (e instanceof ChannelStatusResponseError) {
+                throw new NoResponseTimeoutError(
+                    `Establishing PASE channel failed with channel status response error ${e.message}`,
+                );
+            }
             throw e;
         }
 
