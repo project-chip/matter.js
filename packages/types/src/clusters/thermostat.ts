@@ -339,6 +339,71 @@ export namespace Thermostat {
     export interface GetWeeklyScheduleResponse extends TypeFromSchema<typeof TlvGetWeeklyScheduleResponse> {}
 
     /**
+     * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6
+     */
+    export const HvacSystemType = {
+        /**
+         * Stage of cooling the HVAC system is using.
+         *
+         * These bits shall indicate what stage of cooling the HVAC system is using.
+         *
+         *   • 00 = Cool Stage 1
+         *
+         *   • 01 = Cool Stage 2
+         *
+         *   • 10 = Cool Stage 3
+         *
+         *   • 11 = Reserved
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.1
+         */
+        coolingStage: BitField(0, 2),
+
+        /**
+         * Stage of heating the HVAC system is using.
+         *
+         * These bits shall indicate what stage of heating the HVAC system is using.
+         *
+         *   • 00 = Heat Stage 1
+         *
+         *   • 01 = Heat Stage 2
+         *
+         *   • 10 = Heat Stage 3
+         *
+         *   • 11 = Reserved
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.2
+         */
+        heatingStage: BitField(2, 2),
+
+        /**
+         * Is the heating type Heat Pump.
+         *
+         * This bit shall indicate whether the HVAC system is conventional or a heat pump.
+         *
+         *   • 0 = Conventional
+         *
+         *   • 1 = Heat Pump
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.3
+         */
+        heatingIsHeatPump: BitFlag(4),
+
+        /**
+         * Does the HVAC system use fuel.
+         *
+         * This bit shall indicate whether the HVAC system uses fuel.
+         *
+         *   • 0 = Does not use fuel
+         *
+         *   • 1 = Uses fuel
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.4
+         */
+        heatingUsesFuel: BitFlag(5)
+    };
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.9
      */
     export const RemoteSensing = {
@@ -748,71 +813,6 @@ export namespace Thermostat {
          * Self-calibration failure
          */
         selfCalibration: BitFlag(2)
-    };
-
-    /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6
-     */
-    export const HvacSystemType = {
-        /**
-         * Stage of cooling the HVAC system is using.
-         *
-         * These bits shall indicate what stage of cooling the HVAC system is using.
-         *
-         *   • 00 = Cool Stage 1
-         *
-         *   • 01 = Cool Stage 2
-         *
-         *   • 10 = Cool Stage 3
-         *
-         *   • 11 = Reserved
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.1
-         */
-        coolingStage: BitField(0, 2),
-
-        /**
-         * Stage of heating the HVAC system is using.
-         *
-         * These bits shall indicate what stage of heating the HVAC system is using.
-         *
-         *   • 00 = Heat Stage 1
-         *
-         *   • 01 = Heat Stage 2
-         *
-         *   • 10 = Heat Stage 3
-         *
-         *   • 11 = Reserved
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.2
-         */
-        heatingStage: BitField(2, 2),
-
-        /**
-         * Is the heating type Heat Pump.
-         *
-         * This bit shall indicate whether the HVAC system is conventional or a heat pump.
-         *
-         *   • 0 = Conventional
-         *
-         *   • 1 = Heat Pump
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.3
-         */
-        heatingIsHeatPump: BitFlag(4),
-
-        /**
-         * Does the HVAC system use fuel.
-         *
-         * This bit shall indicate whether the HVAC system uses fuel.
-         *
-         *   • 0 = Does not use fuel
-         *
-         *   • 1 = Uses fuel
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.4
-         */
-        heatingUsesFuel: BitFlag(5)
     };
 
     /**
@@ -1397,6 +1397,21 @@ export namespace Thermostat {
              * @see {@link MatterSpecification.v13.Cluster} § 4.3.9.4
              */
             outdoorTemperature: OptionalAttribute(0x1, TlvNullable(TlvInt16), { default: null }),
+
+            /**
+             * Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP
+             * switches to set these parameters, this information shall be available read-only from the DIP switches.
+             * If these parameters are set via software, there shall be read/write access in order to provide remote
+             * programming capability.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.3.9.12
+             * @deprecated
+             */
+            hvacSystemTypeConfiguration: OptionalWritableAttribute(
+                0x9,
+                TlvBitmap(TlvUInt8, HvacSystemType),
+                { persistent: true, writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * Indicates when the local temperature, outdoor temperature and occupancy are being sensed by remote

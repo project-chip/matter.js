@@ -213,6 +213,9 @@ export namespace FanControl {
          */
         High = 3,
 
+        /**
+         * @deprecated
+         */
         On = 4,
 
         /**
@@ -222,6 +225,8 @@ export namespace FanControl {
 
         /**
          * Fan is using smart mode
+         *
+         * @deprecated
          */
         Smart = 6
     }
