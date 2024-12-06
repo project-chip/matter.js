@@ -9,37 +9,34 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const FanDt = DeviceType({
-    name: "Fan", id: 0x2b, category: "HVAC", classification: "simple",
-    details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air " +
-        "in a room.",
-    xref: { document: "device", section: "9.2" },
+export const FanDt = DeviceType(
+    {
+        name: "Fan", id: 0x2b, category: "HVAC", classification: "simple",
+        details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air " +
+            "in a room.",
+        xref: { document: "device", section: "9.2" }
+    },
 
-    children: [
-        Requirement({
-            name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 43, revision: 2 } ], element: "attribute" })
-            ]
-        }),
+    Requirement(
+        { name: "Descriptor", id: 0x1d, element: "serverCluster" },
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 43, revision: 2 } ], element: "attribute" })
+    ),
+    Requirement({
+        name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
+        xref: { document: "device", section: "9.2.5" }
+    }),
+    Requirement({
+        name: "Groups", id: 0x4, conformance: "M", element: "serverCluster",
+        xref: { document: "device", section: "9.2.5" }
+    }),
 
-        Requirement({
-            name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "9.2.5" }
-        }),
-        Requirement({
-            name: "Groups", id: 0x4, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "9.2.5" }
-        }),
-
-        Requirement({
+    Requirement(
+        {
             name: "FanControl", id: 0x202, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "9.2.5" },
-            children: [
-                Requirement({ name: "FanModeSequence", access: "R V", conformance: "Matter", element: "attribute" })
-            ]
-        })
-    ]
-});
+            xref: { document: "device", section: "9.2.5" }
+        },
+        Requirement({ name: "FanModeSequence", access: "R V", conformance: "Matter", element: "attribute" })
+    )
+);
 
 MatterDefinition.children.push(FanDt);

@@ -9,8 +9,7 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
-export const CarbonMonoxideConcentrationMeasurement = Cluster({
-    name: "CarbonMonoxideConcentrationMeasurement", id: 0x40c, type: "ConcentrationMeasurement",
-    pics: "CMOCONC"
-});
+export const CarbonMonoxideConcentrationMeasurement = Cluster(
+    { name: "CarbonMonoxideConcentrationMeasurement", id: 0x40c, type: "ConcentrationMeasurement", pics: "CMOCONC" }
+);
 MatterDefinition.children.push(CarbonMonoxideConcentrationMeasurement);

@@ -9,48 +9,50 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const LaundryDryerDt = DeviceType({
-    name: "LaundryDryer", id: 0x7c, category: "Appliances", classification: "simple",
-    details: "A Laundry Dryer represents a device that is capable of drying laundry items.",
-    xref: { document: "device", section: "13.6" },
+export const LaundryDryerDt = DeviceType(
+    {
+        name: "LaundryDryer", id: 0x7c, category: "Appliances", classification: "simple",
+        details: "A Laundry Dryer represents a device that is capable of drying laundry items.",
+        xref: { document: "device", section: "13.6" }
+    },
+    Requirement(
+        { name: "Descriptor", id: 0x1d, element: "serverCluster" },
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 124, revision: 1 } ], element: "attribute" })
+    ),
+    Requirement({
+        name: "Identify", id: 0x3, conformance: "O", element: "serverCluster",
+        xref: { document: "device", section: "13.6.4" }
+    }),
 
-    children: [
-        Requirement({
-            name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 124, revision: 1 } ], element: "attribute" })]
-        }),
-        Requirement({
-            name: "Identify", id: 0x3, conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "13.6.4" }
-        }),
-
-        Requirement({
+    Requirement(
+        {
             name: "LaundryWasherMode", id: 0x51, conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "13.6.4" },
-            children: [
-                Requirement({ name: "StartUpMode", conformance: "X", element: "attribute" }),
-                Requirement({ name: "ONOFF", conformance: "X", element: "feature" })
-            ]
-        }),
+            xref: { document: "device", section: "13.6.4" }
+        },
+        Requirement({ name: "StartUpMode", conformance: "X", element: "attribute" }),
+        Requirement({ name: "ONOFF", conformance: "X", element: "feature" })
+    ),
 
-        Requirement({
+    Requirement(
+        {
             name: "OnOff", id: 0x6, conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "13.6.4" },
-            children: [Requirement({ name: "DEADFRONTBEHAVIOR", conformance: "M", element: "feature" })]
-        }),
-        Requirement({
-            name: "LaundryDryerControls", id: 0x4a, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "13.6.4" }
-        }),
-        Requirement({
-            name: "TemperatureControl", id: 0x56, conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "13.6.4" }
-        }),
-        Requirement({
-            name: "OperationalState", id: 0x60, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "13.6.4" }
-        })
-    ]
-});
+        },
+        Requirement({ name: "DEADFRONTBEHAVIOR", conformance: "M", element: "feature" })
+    ),
+
+    Requirement({
+        name: "LaundryDryerControls", id: 0x4a, conformance: "O", element: "serverCluster",
+        xref: { document: "device", section: "13.6.4" }
+    }),
+    Requirement({
+        name: "TemperatureControl", id: 0x56, conformance: "O", element: "serverCluster",
+        xref: { document: "device", section: "13.6.4" }
+    }),
+    Requirement({
+        name: "OperationalState", id: 0x60, conformance: "M", element: "serverCluster",
+        xref: { document: "device", section: "13.6.4" }
+    })
+);
 
 MatterDefinition.children.push(LaundryDryerDt);

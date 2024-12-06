@@ -12,12 +12,16 @@ import {
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
-export const RefrigeratorNs = SemanticNamespace({
-    name: "Refrigerator", id: 0x41,
-    details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall " +
-        "NOT be used in any other domain or context.",
-    xref: { document: "namespace", section: "13" },
-    children: [SemanticTag({ name: "Refrigerator", id: 0x0 }), SemanticTag({ name: "Freezer", id: 0x1 })]
-});
+export const RefrigeratorNs = SemanticNamespace(
+    {
+        name: "Refrigerator", id: 0x41,
+        details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall " +
+            "NOT be used in any other domain or context.",
+        xref: { document: "namespace", section: "13" }
+    },
+
+    SemanticTag({ name: "Refrigerator", id: 0x0 }),
+    SemanticTag({ name: "Freezer", id: 0x1 })
+);
 
 MatterDefinition.children.push(RefrigeratorNs);

@@ -15,87 +15,89 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-export const GeneralCommissioning = Cluster({
-    name: "GeneralCommissioning", id: 0x30, classification: "node", pics: "CGEN",
-    details: "This cluster is used to manage basic commissioning lifecycle." +
-        "\n" +
-        "This cluster also represents responsibilities related to commissioning that don’t well fit other " +
-        "commissioning clusters, like Section 11.9, “Network Commissioning Cluster”. It also hosts " +
-        "functionalities those other clusters may depend on.",
-    xref: { document: "core", section: "11.10" },
+export const GeneralCommissioning = Cluster(
+    {
+        name: "GeneralCommissioning", id: 0x30, classification: "node", pics: "CGEN",
+        details: "This cluster is used to manage basic commissioning lifecycle." +
+            "\n" +
+            "This cluster also represents responsibilities related to commissioning that don’t well fit other " +
+            "commissioning clusters, like Section 11.9, “Network Commissioning Cluster”. It also hosts " +
+            "functionalities those other clusters may depend on.",
+        xref: { document: "core", section: "11.10" }
+    },
 
-    children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        Attribute({
-            name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M", default: 0,
+    Attribute({
+        name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M", default: 0,
 
-            details: "This attribute allows for the storage of a client-provided small payload which Administrators and " +
-                "Commissioners may write and then subsequently read, to keep track of their own progress. This may " +
-                "be used by the Commissioner to avoid repeating already-executed actions upon re-establishing a " +
-                "commissioning link after an error." +
-                "\n" +
-                "On start/restart of the server, such as when a device is power-cycled, this attribute shall be " +
-                "reset to zero." +
-                "\n" +
-                "Some commands related to commissioning also have a side-effect of updating or resetting this " +
-                "attribute and this is specified in their respective functional descriptions." +
-                "\n" +
-                "The format of the value within this attribute is unspecified and its value is not otherwise used by " +
-                "the functioning of any cluster, other than being set as a side-effect of commands where this " +
-                "behavior is described.",
+        details: "This attribute allows for the storage of a client-provided small payload which Administrators and " +
+            "Commissioners may write and then subsequently read, to keep track of their own progress. This may " +
+            "be used by the Commissioner to avoid repeating already-executed actions upon re-establishing a " +
+            "commissioning link after an error." +
+            "\n" +
+            "On start/restart of the server, such as when a device is power-cycled, this attribute shall be " +
+            "reset to zero." +
+            "\n" +
+            "Some commands related to commissioning also have a side-effect of updating or resetting this " +
+            "attribute and this is specified in their respective functional descriptions." +
+            "\n" +
+            "The format of the value within this attribute is unspecified and its value is not otherwise used by " +
+            "the functioning of any cluster, other than being set as a side-effect of commands where this " +
+            "behavior is described.",
 
-            xref: { document: "core", section: "11.10.5.1" }
-        }),
+        xref: { document: "core", section: "11.10.5.1" }
+    }),
 
-        Attribute({
-            name: "BasicCommissioningInfo", id: 0x1, type: "BasicCommissioningInfo", access: "R V",
-            conformance: "M", constraint: "desc", quality: "F",
-            details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. " +
-                "See BasicCommissioningInfo for more information.",
-            xref: { document: "core", section: "11.10.5.2" }
-        }),
+    Attribute({
+        name: "BasicCommissioningInfo", id: 0x1, type: "BasicCommissioningInfo", access: "R V",
+        conformance: "M", constraint: "desc", quality: "F",
+        details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. " +
+            "See BasicCommissioningInfo for more information.",
+        xref: { document: "core", section: "11.10.5.2" }
+    }),
 
-        Attribute({
-            name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum", access: "R V",
-            conformance: "M", default: { type: "reference", name: "LocationCapability" },
-            details: "Indicates the regulatory configuration for the product." +
-                "\n" +
-                "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
-                "RegulatoryConfig attribute.",
-            xref: { document: "core", section: "11.10.5.3" }
-        }),
+    Attribute({
+        name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum", access: "R V",
+        conformance: "M", default: { type: "reference", name: "LocationCapability" },
+        details: "Indicates the regulatory configuration for the product." +
+            "\n" +
+            "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
+            "RegulatoryConfig attribute.",
+        xref: { document: "core", section: "11.10.5.3" }
+    }),
 
-        Attribute({
-            name: "LocationCapability", id: 0x3, type: "RegulatoryLocationTypeEnum", access: "R V",
-            conformance: "M", default: 2, quality: "F",
+    Attribute({
+        name: "LocationCapability", id: 0x3, type: "RegulatoryLocationTypeEnum", access: "R V",
+        conformance: "M", default: 2, quality: "F",
 
-            details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be " +
-                "told an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified " +
-                "for outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
-                "whether the device will be used inside or outside. However a device which states its capability is " +
-                "\"Indoor/Outdoor\" means it would like clarification if possible." +
-                "\n" +
-                "For Nodes without radio network interfaces (e.g. Ethernet-only devices), the value IndoorOutdoor " +
-                "shall always be used." +
-                "\n" +
-                "The default value of the RegulatoryConfig attribute is the value of LocationCapability attribute. " +
-                "This means devices always have a safe default value, and Commissioners which choose to implement " +
-                "smarter handling can.",
+        details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be " +
+            "told an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified " +
+            "for outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
+            "whether the device will be used inside or outside. However a device which states its capability is " +
+            "\"Indoor/Outdoor\" means it would like clarification if possible." +
+            "\n" +
+            "For Nodes without radio network interfaces (e.g. Ethernet-only devices), the value IndoorOutdoor " +
+            "shall always be used." +
+            "\n" +
+            "The default value of the RegulatoryConfig attribute is the value of LocationCapability attribute. " +
+            "This means devices always have a safe default value, and Commissioners which choose to implement " +
+            "smarter handling can.",
 
-            xref: { document: "core", section: "11.10.5.4" }
-        }),
+        xref: { document: "core", section: "11.10.5.4" }
+    }),
 
-        Attribute({
-            name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
-            default: true, quality: "F",
-            details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
-                "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
-                "mode.",
-            xref: { document: "core", section: "11.10.5.5" }
-        }),
+    Attribute({
+        name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
+        default: true, quality: "F",
+        details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
+            "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
+            "mode.",
+        xref: { document: "core", section: "11.10.5.5" }
+    }),
 
-        Command({
+    Command(
+        {
             name: "ArmFailSafe", id: 0x0, access: "A", conformance: "M", direction: "request",
             response: "ArmFailSafeResponse",
 
@@ -229,34 +231,35 @@ export const GeneralCommissioning = Cluster({
                 "\n" +
                 "Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
 
-            xref: { document: "core", section: "11.10.6.2" },
-            children: [
-                Field({ name: "ExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M", default: 900 }),
-                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "M" })
-            ]
-        }),
+            xref: { document: "core", section: "11.10.6.2" }
+        },
 
-        Command({
+        Field({ name: "ExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M", default: 900 }),
+        Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "M" })
+    ),
+
+    Command(
+        {
             name: "ArmFailSafeResponse", id: 0x1, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.3" },
+            xref: { document: "core", section: "11.10.6.3" }
+        },
 
-            children: [
-                Field({
-                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
-                    details: "This field shall contain the result of the operation, based on the behavior specified in the " +
-                        "functional description of the ArmFailSafe command.",
-                    xref: { document: "core", section: "11.10.6.3.1" }
-                }),
-
-                Field({
-                    name: "DebugText", id: 0x1, type: "string", conformance: "M", constraint: "max 128", default: "",
-                    details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-                    xref: { document: "core", section: "11.10.6.3.2" }
-                })
-            ]
+        Field({
+            name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                "functional description of the ArmFailSafe command.",
+            xref: { document: "core", section: "11.10.6.3.1" }
         }),
 
-        Command({
+        Field({
+            name: "DebugText", id: 0x1, type: "string", conformance: "M", constraint: "max 128", default: "",
+            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.6.3.2" }
+        })
+    ),
+
+    Command(
+        {
             name: "SetRegulatoryConfig", id: 0x2, access: "A", conformance: "M", direction: "request",
             response: "SetRegulatoryConfigResponse",
 
@@ -291,188 +294,187 @@ export const GeneralCommissioning = Cluster({
                 "command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, " +
                 "the Breadcrumb attribute shall be left unchanged.",
 
-            xref: { document: "core", section: "11.10.6.4" },
-            children: [
-                Field({ name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum", conformance: "M" }),
-                Field({ name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2" }),
-                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "M" })
-            ]
-        }),
+            xref: { document: "core", section: "11.10.6.4" }
+        },
 
-        Command({
+        Field({ name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum", conformance: "M" }),
+        Field({ name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2" }),
+        Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "M" })
+    ),
+
+    Command(
+        {
             name: "SetRegulatoryConfigResponse", id: 0x3, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.5" },
+            xref: { document: "core", section: "11.10.6.5" }
+        },
 
-            children: [
-                Field({
-                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
-                    details: "This field shall contain the result of the operation, based on the behavior specified in the " +
-                        "functional description of the SetRegulatoryConfig command.",
-                    xref: { document: "core", section: "11.10.6.5.1" }
-                }),
-
-                Field({
-                    name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
-                    details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-                    xref: { document: "core", section: "11.10.6.5.2" }
-                })
-            ]
+        Field({
+            name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                "functional description of the SetRegulatoryConfig command.",
+            xref: { document: "core", section: "11.10.6.5.1" }
         }),
 
-        Command({
-            name: "CommissioningComplete", id: 0x4, access: "F A", conformance: "M", direction: "request",
-            response: "CommissioningCompleteResponse",
+        Field({
+            name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
+            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.6.5.2" }
+        })
+    ),
 
-            details: "This command has no data." +
-                "\n" +
-                "Success or failure of this command shall be communicated by the CommissioningCompleteResponse " +
-                "command, unless some data model validations caused a failure status code to be issued during the " +
-                "processing of the command." +
-                "\n" +
-                "This command signals the Server that the Commissioner or Administrator has successfully completed " +
-                "all steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, " +
-                "“Commissioning Flows”) or other Administrator operations requiring usage of the Fail Safe timer. It " +
-                "ensures that the Server is configured in a state such that it still has all necessary elements to " +
-                "be fully operable within a Fabric, such as ACL entries (see Access Control Cluster) and operational " +
-                "credentials (see Section 6.4, “Node Operational Credentials Specification”), and that the Node is " +
-                "reach" +
-                "\n" +
-                "able using CASE (see Section 4.14.2, “Certificate Authenticated Session Establishment (CASE)”) over " +
-                "an operational network." +
-                "\n" +
-                "An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command " +
-                "was received when no Fail-Safe context exists." +
-                "\n" +
-                "This command is fabric-scoped, so cannot be issued over a session that does not have an associated " +
-                "fabric, i.e. over PASE session prior to an AddNOC command. In addition, this command is only " +
-                "permitted over CASE and must be issued by a node associated with the ongoing Fail-Safe context. An " +
-                "ErrorCode of InvalidAuthentication shall be responded to the invoker if the CommissioningComplete " +
-                "command was received outside a CASE session (e.g., over Group messaging, or PASE session after " +
-                "AddNOC), or if the accessing fabric is not the one associated with the ongoing Fail-Safe context." +
-                "\n" +
-                "This command shall only result in success with an ErrorCode value of OK in the " +
-                "CommissioningCompleteResponse if received over a CASE session and the accessing fabric index " +
-                "matches the Fabric Index associated with the current Fail-Safe context. In other words:" +
-                "\n" +
-                "  • If no AddNOC command had been successfully invoked, the CommissioningComplete command must " +
-                "    originate from the Fabric that initiated the Fail-Safe context." +
-                "\n" +
-                "  • After an AddNOC command has been successfully invoked, the CommissioningComplete command must " +
-                "    originate from the Fabric which was joined through the execution of that command, which updated " +
-                "    the Fail-Safe context’s Fabric Index." +
-                "\n" +
-                "On successful execution of the CommissioningComplete command, where the " +
-                "CommissioningCompleteResponse has an ErrorCode of OK, the following actions shall be undertaken on " +
-                "the Server:" +
-                "\n" +
-                "  1. The Fail-Safe timer associated with the current Fail-Safe context shall be disarmed." +
-                "\n" +
-                "  2. The commissioning window at the Server shall be closed." +
-                "\n" +
-                "  3. Any temporary administrative privileges automatically granted to any open PASE session shall " +
-                "     be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”)." +
-                "\n" +
-                "  4. The Secure Session Context of any PASE session still established at the Server shall be " +
-                "     cleared." +
-                "\n" +
-                "  5. The Breadcrumb attribute shall be reset to zero." +
-                "\n" +
-                "After receipt of a CommissioningCompleteResponse with an ErrorCode value of OK, a client cannot " +
-                "expect any previously established PASE session to still be usable, due to the server having cleared " +
-                "such sessions.",
+    Command({
+        name: "CommissioningComplete", id: 0x4, access: "F A", conformance: "M", direction: "request",
+        response: "CommissioningCompleteResponse",
 
-            xref: { document: "core", section: "11.10.6.6" }
-        }),
+        details: "This command has no data." +
+            "\n" +
+            "Success or failure of this command shall be communicated by the CommissioningCompleteResponse " +
+            "command, unless some data model validations caused a failure status code to be issued during the " +
+            "processing of the command." +
+            "\n" +
+            "This command signals the Server that the Commissioner or Administrator has successfully completed " +
+            "all steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, " +
+            "“Commissioning Flows”) or other Administrator operations requiring usage of the Fail Safe timer. It " +
+            "ensures that the Server is configured in a state such that it still has all necessary elements to " +
+            "be fully operable within a Fabric, such as ACL entries (see Access Control Cluster) and operational " +
+            "credentials (see Section 6.4, “Node Operational Credentials Specification”), and that the Node is " +
+            "reach" +
+            "\n" +
+            "able using CASE (see Section 4.14.2, “Certificate Authenticated Session Establishment (CASE)”) over " +
+            "an operational network." +
+            "\n" +
+            "An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command " +
+            "was received when no Fail-Safe context exists." +
+            "\n" +
+            "This command is fabric-scoped, so cannot be issued over a session that does not have an associated " +
+            "fabric, i.e. over PASE session prior to an AddNOC command. In addition, this command is only " +
+            "permitted over CASE and must be issued by a node associated with the ongoing Fail-Safe context. An " +
+            "ErrorCode of InvalidAuthentication shall be responded to the invoker if the CommissioningComplete " +
+            "command was received outside a CASE session (e.g., over Group messaging, or PASE session after " +
+            "AddNOC), or if the accessing fabric is not the one associated with the ongoing Fail-Safe context." +
+            "\n" +
+            "This command shall only result in success with an ErrorCode value of OK in the " +
+            "CommissioningCompleteResponse if received over a CASE session and the accessing fabric index " +
+            "matches the Fabric Index associated with the current Fail-Safe context. In other words:" +
+            "\n" +
+            "  • If no AddNOC command had been successfully invoked, the CommissioningComplete command must " +
+            "    originate from the Fabric that initiated the Fail-Safe context." +
+            "\n" +
+            "  • After an AddNOC command has been successfully invoked, the CommissioningComplete command must " +
+            "    originate from the Fabric which was joined through the execution of that command, which updated " +
+            "    the Fail-Safe context’s Fabric Index." +
+            "\n" +
+            "On successful execution of the CommissioningComplete command, where the " +
+            "CommissioningCompleteResponse has an ErrorCode of OK, the following actions shall be undertaken on " +
+            "the Server:" +
+            "\n" +
+            "  1. The Fail-Safe timer associated with the current Fail-Safe context shall be disarmed." +
+            "\n" +
+            "  2. The commissioning window at the Server shall be closed." +
+            "\n" +
+            "  3. Any temporary administrative privileges automatically granted to any open PASE session shall " +
+            "     be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”)." +
+            "\n" +
+            "  4. The Secure Session Context of any PASE session still established at the Server shall be " +
+            "     cleared." +
+            "\n" +
+            "  5. The Breadcrumb attribute shall be reset to zero." +
+            "\n" +
+            "After receipt of a CommissioningCompleteResponse with an ErrorCode value of OK, a client cannot " +
+            "expect any previously established PASE session to still be usable, due to the server having cleared " +
+            "such sessions.",
 
-        Command({
+        xref: { document: "core", section: "11.10.6.6" }
+    }),
+
+    Command(
+        {
             name: "CommissioningCompleteResponse", id: 0x5, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.7" },
+            xref: { document: "core", section: "11.10.6.7" }
+        },
 
-            children: [
-                Field({
-                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
-                    details: "This field shall contain the result of the operation, based on the behavior specified in the " +
-                        "functional description of the CommissioningComplete command.",
-                    xref: { document: "core", section: "11.10.6.7.1" }
-                }),
-
-                Field({
-                    name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
-                    details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-                    xref: { document: "core", section: "11.10.6.7.2" }
-                })
-            ]
+        Field({
+            name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                "functional description of the CommissioningComplete command.",
+            xref: { document: "core", section: "11.10.6.7.1" }
         }),
 
-        Datatype({
+        Field({
+            name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
+            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.6.7.2" }
+        })
+    ),
+
+    Datatype(
+        {
             name: "CommissioningErrorEnum", type: "enum8",
             details: "This enumeration is used by several response commands in this cluster to indicate particular errors.",
-            xref: { document: "core", section: "11.10.4.1" },
-
-            children: [
-                Field({ name: "Ok", id: 0x0, conformance: "M", description: "No error" }),
-                Field({
-                    name: "ValueOutsideRange", id: 0x1, conformance: "M",
-                    description: "Attempting to set regulatory configuration to a region or indoor/outdoor mode for which the server does not have proper configuration."
-                }),
-                Field({
-                    name: "InvalidAuthentication", id: 0x2, conformance: "M",
-                    description: "Executed CommissioningComplete outside CASE session."
-                }),
-                Field({
-                    name: "NoFailSafe", id: 0x3, conformance: "M",
-                    description: "Executed CommissioningComplete when there was no active Fail-Safe context."
-                }),
-                Field({
-                    name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
-                    description: "Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated with the current fail- safe context."
-                })
-            ]
+            xref: { document: "core", section: "11.10.4.1" }
+        },
+        Field({ name: "Ok", id: 0x0, conformance: "M", description: "No error" }),
+        Field({
+            name: "ValueOutsideRange", id: 0x1, conformance: "M",
+            description: "Attempting to set regulatory configuration to a region or indoor/outdoor mode for which the server does not have proper configuration."
         }),
+        Field({
+            name: "InvalidAuthentication", id: 0x2, conformance: "M",
+            description: "Executed CommissioningComplete outside CASE session."
+        }),
+        Field({
+            name: "NoFailSafe", id: 0x3, conformance: "M",
+            description: "Executed CommissioningComplete when there was no active Fail-Safe context."
+        }),
+        Field({
+            name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
+            description: "Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated with the current fail- safe context."
+        })
+    ),
 
-        Datatype({
+    Datatype(
+        {
             name: "RegulatoryLocationTypeEnum", type: "enum8",
             details: "This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate " +
                 "possible radio usage.",
-            xref: { document: "core", section: "11.10.4.2" },
-            children: [
-                Field({ name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" }),
-                Field({ name: "Outdoor", id: 0x1, conformance: "M", description: "Outdoor only" }),
-                Field({ name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor" })
-            ]
-        }),
+            xref: { document: "core", section: "11.10.4.2" }
+        },
 
-        Datatype({
+        Field({ name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" }),
+        Field({ name: "Outdoor", id: 0x1, conformance: "M", description: "Outdoor only" }),
+        Field({ name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor" })
+    ),
+
+    Datatype(
+        {
             name: "BasicCommissioningInfo", type: "struct",
             details: "This structure provides some constant values that may be of use to all commissioners.",
-            xref: { document: "core", section: "11.10.4.3" },
+            xref: { document: "core", section: "11.10.4.3" }
+        },
 
-            children: [
-                Field({
-                    name: "FailSafeExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
-                    details: "This field shall contain a conservative initial duration (in seconds) to set in the FailSafe for " +
-                        "the commissioning flow to complete successfully. This may vary depending on the speed or sleepiness " +
-                        "of the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field " +
-                        "SHOULD allow a Commissioner to proceed with a nominal commissioning without having to-rearm the " +
-                        "fail-safe, with some margin.",
-                    xref: { document: "core", section: "11.10.4.3.1" }
-                }),
+        Field({
+            name: "FailSafeExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
+            details: "This field shall contain a conservative initial duration (in seconds) to set in the FailSafe for " +
+                "the commissioning flow to complete successfully. This may vary depending on the speed or sleepiness " +
+                "of the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field " +
+                "SHOULD allow a Commissioner to proceed with a nominal commissioning without having to-rearm the " +
+                "fail-safe, with some margin.",
+            xref: { document: "core", section: "11.10.4.3.1" }
+        }),
 
-                Field({
-                    name: "MaxCumulativeFailsafeSeconds", id: 0x1, type: "uint16", conformance: "M", constraint: "desc",
+        Field({
+            name: "MaxCumulativeFailsafeSeconds", id: 0x1, type: "uint16", conformance: "M", constraint: "desc",
 
-                    details: "This field shall contain a conservative value in seconds denoting the maximum total duration for " +
-                        "which a fail safe timer can be re-armed. See Section 11.10.6.2.1, “Fail Safe Context”." +
-                        "\n" +
-                        "The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent " +
-                        "additional guidelines, it is recommended that the value of this field be aligned with the initial " +
-                        "Announcement Duration and default to 900 seconds.",
+            details: "This field shall contain a conservative value in seconds denoting the maximum total duration for " +
+                "which a fail safe timer can be re-armed. See Section 11.10.6.2.1, “Fail Safe Context”." +
+                "\n" +
+                "The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent " +
+                "additional guidelines, it is recommended that the value of this field be aligned with the initial " +
+                "Announcement Duration and default to 900 seconds.",
 
-                    xref: { document: "core", section: "11.10.4.3.2" }
-                })
-            ]
+            xref: { document: "core", section: "11.10.4.3.2" }
         })
-    ]
-});
+    )
+);
 
 MatterDefinition.children.push(GeneralCommissioning);

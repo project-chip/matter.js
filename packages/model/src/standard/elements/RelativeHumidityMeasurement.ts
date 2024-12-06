@@ -9,17 +9,19 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
-export const RelativeHumidityMeasurement = Cluster({
-    name: "RelativeHumidityMeasurement", id: 0x405, classification: "application", pics: "RH",
-    details: "This is a base cluster. The server cluster provides an interface to water content measurement " +
-        "functionality. The measurement is reportable and may be configured for reporting. Water content " +
-        "measurements currently is, but are not limited to relative humidity.",
-    xref: { document: "cluster", section: "2.6" },
+export const RelativeHumidityMeasurement = Cluster(
+    {
+        name: "RelativeHumidityMeasurement", id: 0x405, classification: "application", pics: "RH",
+        details: "This is a base cluster. The server cluster provides an interface to water content measurement " +
+            "functionality. The measurement is reportable and may be configured for reporting. Water content " +
+            "measurements currently is, but are not limited to relative humidity.",
+        xref: { document: "cluster", section: "2.6" }
+    },
 
-    children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
-        Attribute({
+    Attribute(
+        {
             name: "MeasuredValue", id: 0x0, type: "uint16", access: "R V", conformance: "M",
             constraint: "minMeasuredValue to maxMeasuredValue", quality: "X P",
 
@@ -38,31 +40,31 @@ export const RelativeHumidityMeasurement = Cluster({
                 "MeasuredValue is updated continuously as new measurements are made.",
 
             xref: { document: "cluster", section: "2.6.4.1" }
-        }),
+        }
+    ),
 
-        Attribute({
-            name: "MinMeasuredValue", id: 0x1, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to maxMeasuredValue1", quality: "X",
-            details: "The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. " +
-                "The null value means this attribute is not defined. See Measured Value for more details.",
-            xref: { document: "cluster", section: "2.6.4.2" }
-        }),
+    Attribute({
+        name: "MinMeasuredValue", id: 0x1, type: "uint16", access: "R V", conformance: "M",
+        constraint: "0 to maxMeasuredValue1", quality: "X",
+        details: "The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. " +
+            "The null value means this attribute is not defined. See Measured Value for more details.",
+        xref: { document: "cluster", section: "2.6.4.2" }
+    }),
 
-        Attribute({
-            name: "MaxMeasuredValue", id: 0x2, type: "uint16", access: "R V", conformance: "M",
-            constraint: "minMeasuredValue1 to 10000", quality: "X",
-            details: "The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. " +
-                "The null value means this attribute is not defined. See Measured Value for more details.",
-            xref: { document: "cluster", section: "2.6.4.3" }
-        }),
+    Attribute({
+        name: "MaxMeasuredValue", id: 0x2, type: "uint16", access: "R V", conformance: "M",
+        constraint: "minMeasuredValue1 to 10000", quality: "X",
+        details: "The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. " +
+            "The null value means this attribute is not defined. See Measured Value for more details.",
+        xref: { document: "cluster", section: "2.6.4.3" }
+    }),
 
-        Attribute({
-            name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O",
-            constraint: "0 to 2048",
-            details: "See Measured Value.",
-            xref: { document: "cluster", section: "2.6.4.4" }
-        })
-    ]
-});
+    Attribute({
+        name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O",
+        constraint: "0 to 2048",
+        details: "See Measured Value.",
+        xref: { document: "cluster", section: "2.6.4.4" }
+    })
+);
 
 MatterDefinition.children.push(RelativeHumidityMeasurement);

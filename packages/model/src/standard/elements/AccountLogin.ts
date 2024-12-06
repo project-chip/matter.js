@@ -15,56 +15,60 @@ import {
     CommandElement as Command
 } from "../../elements/index.js";
 
-export const AccountLogin = Cluster({
-    name: "AccountLogin", id: 0x50e, classification: "application", pics: "ALOGIN",
+export const AccountLogin = Cluster(
+    {
+        name: "AccountLogin", id: 0x50e, classification: "application", pics: "ALOGIN",
 
-    details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
-        "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
-        "Device Type Library document), can use this cluster to help make the user account on the Content " +
-        "App match the user account on the Client." +
-        "\n" +
-        "Often a fabric administrator will facilitate commissioning of a Client (such as a Casting Video " +
-        "Client), and invoke commands on the AccountLogin cluster on the Content App associated with that " +
-        "client. Specifically:" +
-        "\n" +
-        "  1. GetSetupPIN in order to attempt to obtain the Passcode for commissioning." +
-        "\n" +
-        "  2. Login in order to let the Content App know that commissioning has completed. The Content App " +
-        "     can use information provided in this command in order to determine the user account associated " +
-        "     with the client, and potentially assume that user account." +
-        "\n" +
-        "  3. Logout in order to let the Content App know that client access has been removed, and " +
-        "     potentially clear the current user account." +
-        "\n" +
-        "The cluster server for this cluster may be supported on each endpoint that represents a Content App " +
-        "on a Video Player device." +
-        "\n" +
-        "See Device Type Library document for details of how a Content App, represented as an endpoint on" +
-        "\n" +
-        "the Video Player device, may implement the cluster server for this cluster to simplify account " +
-        "login for its users.",
+        details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
+            "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
+            "Device Type Library document), can use this cluster to help make the user account on the Content " +
+            "App match the user account on the Client." +
+            "\n" +
+            "Often a fabric administrator will facilitate commissioning of a Client (such as a Casting Video " +
+            "Client), and invoke commands on the AccountLogin cluster on the Content App associated with that " +
+            "client. Specifically:" +
+            "\n" +
+            "  1. GetSetupPIN in order to attempt to obtain the Passcode for commissioning." +
+            "\n" +
+            "  2. Login in order to let the Content App know that commissioning has completed. The Content App " +
+            "     can use information provided in this command in order to determine the user account associated " +
+            "     with the client, and potentially assume that user account." +
+            "\n" +
+            "  3. Logout in order to let the Content App know that client access has been removed, and " +
+            "     potentially clear the current user account." +
+            "\n" +
+            "The cluster server for this cluster may be supported on each endpoint that represents a Content App " +
+            "on a Video Player device." +
+            "\n" +
+            "See Device Type Library document for details of how a Content App, represented as an endpoint on" +
+            "\n" +
+            "the Video Player device, may implement the cluster server for this cluster to simplify account " +
+            "login for its users.",
 
-    xref: { document: "cluster", section: "6.2" },
+        xref: { document: "cluster", section: "6.2" }
+    },
 
-    children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
-        Event({
+    Event(
+        {
             name: "LoggedOut", id: 0x0, access: "S A", conformance: "O", priority: "critical",
             details: "This event can be used by the Content App to indicate that the current user has logged out. In " +
                 "response to this event, the Fabric Admin shall remove access to this Content App by the specified " +
                 "Node. If no Node is provided, then the Fabric Admin shall remove access to all non-Admin Nodes.",
-            xref: { document: "cluster", section: "6.2.5.1" },
+            xref: { document: "cluster", section: "6.2.5.1" }
+        },
 
-            children: [Field({
-                name: "Node", id: 0x0, type: "node-id", conformance: "O",
-                details: "This field shall provide the Node ID corresponding to the user account that has logged out, if that " +
-                    "Node ID is available. If it is NOT available, this field shall NOT be present in the event.",
-                xref: { document: "cluster", section: "6.2.5.1.1" }
-            })]
-        }),
+        Field({
+            name: "Node", id: 0x0, type: "node-id", conformance: "O",
+            details: "This field shall provide the Node ID corresponding to the user account that has logged out, if that " +
+                "Node ID is available. If it is NOT available, this field shall NOT be present in the event.",
+            xref: { document: "cluster", section: "6.2.5.1.1" }
+        })
+    ),
 
-        Command({
+    Command(
+        {
             name: "GetSetupPin", id: 0x0, access: "F A T", conformance: "M", direction: "request",
             response: "GetSetupPinResponse",
 
@@ -115,39 +119,43 @@ export const AccountLogin = Cluster({
                 "A Content App that supports this command shall ensure that the Temporary Account Identifier used by " +
                 "its clients is not valid for more than 10 minutes.",
 
-            xref: { document: "cluster", section: "6.2.4.1" },
+            xref: { document: "cluster", section: "6.2.4.1" }
+        },
 
-            children: [Field({
-                name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
-                details: "This field shall specify the client’s Temporary Account Identifier. The length of this field shall " +
-                    "be at least 16 characters to protect the account holder against password guessing attacks.",
-                xref: { document: "cluster", section: "6.2.4.1.1" }
-            })]
-        }),
+        Field({
+            name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
+            details: "This field shall specify the client’s Temporary Account Identifier. The length of this field shall " +
+                "be at least 16 characters to protect the account holder against password guessing attacks.",
+            xref: { document: "cluster", section: "6.2.4.1.1" }
+        })
+    ),
 
-        Command({
+    Command(
+        {
             name: "GetSetupPinResponse", id: 0x1, access: "F", conformance: "M", direction: "response",
             details: "This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or " +
                 "null when the account identified in the request does not match the active account of the running " +
                 "Content App.",
-            xref: { document: "cluster", section: "6.2.4.2" },
+            xref: { document: "cluster", section: "6.2.4.2" }
+        },
 
-            children: [Field({
-                name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "desc",
+        Field({
+            name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "desc",
 
-                details: "This field shall provide the setup PIN code as a text string at least 8 characters in length or " +
-                    "empty string to indicate that the accounts do not match." +
-                    "\n" +
-                    "NOTE" +
-                    "\n" +
-                    "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
-                    "minimum length.",
+            details: "This field shall provide the setup PIN code as a text string at least 8 characters in length or " +
+                "empty string to indicate that the accounts do not match." +
+                "\n" +
+                "NOTE" +
+                "\n" +
+                "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                "minimum length.",
 
-                xref: { document: "cluster", section: "6.2.4.2.1" }
-            })]
-        }),
+            xref: { document: "cluster", section: "6.2.4.2.1" }
+        })
+    ),
 
-        Command({
+    Command(
+        {
             name: "Login", id: 0x2, access: "F A T", conformance: "M", direction: "request", response: "status",
 
             details: "The purpose of this command is to allow the Content App to assume the user account of a given " +
@@ -190,53 +198,53 @@ export const AccountLogin = Cluster({
                 "that supports this command shall ensure that the Temporary Account Identifier used by its clients " +
                 "is not valid for more than 10 minutes.",
 
-            xref: { document: "cluster", section: "6.2.4.3" },
+            xref: { document: "cluster", section: "6.2.4.3" }
+        },
 
-            children: [
-                Field({
-                    name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
-                    details: "This field shall specify the client’s temporary account identifier.",
-                    xref: { document: "cluster", section: "6.2.4.3.1" }
-                }),
-
-                Field({
-                    name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 8",
-
-                    details: "This field shall provide the setup PIN code as a text string at least 8 characters in length." +
-                        "\n" +
-                        "NOTE" +
-                        "\n" +
-                        "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
-                        "minimum length.",
-
-                    xref: { document: "cluster", section: "6.2.4.3.2" }
-                }),
-
-                Field({
-                    name: "Node", id: 0x2, type: "node-id", conformance: "O",
-                    details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content " +
-                        "App to keep track of Nodes which currently have access to it.",
-                    xref: { document: "cluster", section: "6.2.4.3.3" }
-                })
-            ]
+        Field({
+            name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
+            details: "This field shall specify the client’s temporary account identifier.",
+            xref: { document: "cluster", section: "6.2.4.3.1" }
         }),
 
-        Command({
+        Field({
+            name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 8",
+
+            details: "This field shall provide the setup PIN code as a text string at least 8 characters in length." +
+                "\n" +
+                "NOTE" +
+                "\n" +
+                "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                "minimum length.",
+
+            xref: { document: "cluster", section: "6.2.4.3.2" }
+        }),
+
+        Field({
+            name: "Node", id: 0x2, type: "node-id", conformance: "O",
+            details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content " +
+                "App to keep track of Nodes which currently have access to it.",
+            xref: { document: "cluster", section: "6.2.4.3.3" }
+        })
+    ),
+
+    Command(
+        {
             name: "Logout", id: 0x3, access: "F O T", conformance: "M", direction: "request",
             response: "status",
             details: "The purpose of this command is to instruct the Content App to clear the current user account. This " +
                 "command SHOULD be used by clients of a Content App to indicate the end of a user session.",
-            xref: { document: "cluster", section: "6.2.4.4" },
+            xref: { document: "cluster", section: "6.2.4.4" }
+        },
 
-            children: [Field({
-                name: "Node", id: 0x0, type: "node-id", conformance: "O",
-                details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content" +
-                    "\n" +
-                    "App to keep track of Nodes which currently have access to it.",
-                xref: { document: "cluster", section: "6.2.4.4.1" }
-            })]
+        Field({
+            name: "Node", id: 0x0, type: "node-id", conformance: "O",
+            details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content" +
+                "\n" +
+                "App to keep track of Nodes which currently have access to it.",
+            xref: { document: "cluster", section: "6.2.4.4.1" }
         })
-    ]
-});
+    )
+);
 
 MatterDefinition.children.push(AccountLogin);

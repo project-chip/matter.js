@@ -13,17 +13,19 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-export const PowerSourceConfiguration = Cluster({
-    name: "PowerSourceConfiguration", id: 0x2e, classification: "node", pics: "PSCFG",
-    details: "This cluster is used to describe the configuration and capabilities of a Device’s power system. It " +
-        "provides an ordering overview as well as linking to the one or more endpoints each supporting a " +
-        "Power Source cluster.",
-    xref: { document: "core", section: "11.6" },
+export const PowerSourceConfiguration = Cluster(
+    {
+        name: "PowerSourceConfiguration", id: 0x2e, classification: "node", pics: "PSCFG",
+        details: "This cluster is used to describe the configuration and capabilities of a Device’s power system. It " +
+            "provides an ordering overview as well as linking to the one or more endpoints each supporting a " +
+            "Power Source cluster.",
+        xref: { document: "core", section: "11.6" }
+    },
 
-    children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        Attribute({
+    Attribute(
+        {
             name: "Sources", id: 0x0, type: "list", access: "R V", conformance: "M", constraint: "max 6",
             quality: "N",
 
@@ -37,10 +39,11 @@ export const PowerSourceConfiguration = Cluster({
                 "an entry with a lower order shall have a lower index than any entry with a higher order. Multiple " +
                 "entries may have the same order, there are no restrictions on their relative sorting.",
 
-            xref: { document: "core", section: "11.6.4.1" },
-            children: [Field({ name: "entry", type: "endpoint-no" })]
-        })
-    ]
-});
+            xref: { document: "core", section: "11.6.4.1" }
+        },
+
+        Field({ name: "entry", type: "endpoint-no" })
+    )
+);
 
 MatterDefinition.children.push(PowerSourceConfiguration);

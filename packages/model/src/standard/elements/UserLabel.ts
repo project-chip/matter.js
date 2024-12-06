@@ -13,19 +13,24 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-export const UserLabel = Cluster({
-    name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", pics: "ULABEL",
-    details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
-    xref: { document: "core", section: "9.9" },
+export const UserLabel = Cluster(
+    {
+        name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", pics: "ULABEL",
+        details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
+        xref: { document: "core", section: "9.9" }
+    },
 
-    children: [Attribute({
-        name: "LabelList", id: 0x0, type: "list", access: "RW VM", conformance: "M", constraint: "min 0",
-        default: [], quality: "N",
-        details: "An implementation shall support at least 4 list entries per node for all User Label cluster " +
-            "instances on the node.",
-        xref: { document: "core", section: "9.9.4.1" },
-        children: [Field({ name: "entry", type: "LabelStruct" })]
-    })]
-});
+    Attribute(
+        {
+            name: "LabelList", id: 0x0, type: "list", access: "RW VM", conformance: "M", constraint: "min 0",
+            default: [], quality: "N",
+            details: "An implementation shall support at least 4 list entries per node for all User Label cluster " +
+                "instances on the node.",
+            xref: { document: "core", section: "9.9.4.1" }
+        },
+
+        Field({ name: "entry", type: "LabelStruct" })
+    )
+);
 
 MatterDefinition.children.push(UserLabel);

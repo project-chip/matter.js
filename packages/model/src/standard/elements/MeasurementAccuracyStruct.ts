@@ -9,31 +9,33 @@
 import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
-export const MeasurementAccuracyStruct = Datatype({
-    name: "MeasurementAccuracyStruct", type: "struct",
-    details: "This struct represents the set of accuracy ranges for a given measurement, the maximum and minimum " +
-        "values for the measurement, and whether the measurement is directly measured or just estimated from " +
-        "other information.",
-    xref: { document: "cluster", section: "2.1.4.4" },
+export const MeasurementAccuracyStruct = Datatype(
+    {
+        name: "MeasurementAccuracyStruct", type: "struct",
+        details: "This struct represents the set of accuracy ranges for a given measurement, the maximum and minimum " +
+            "values for the measurement, and whether the measurement is directly measured or just estimated from " +
+            "other information.",
+        xref: { document: "cluster", section: "2.1.4.4" }
+    },
 
-    children: [
-        Field({
-            name: "MeasurementType", id: 0x0, type: "MeasurementTypeEnum", conformance: "M", quality: "F",
-            details: "This field shall indicate the type of measurement for the accuracy provided.",
-            xref: { document: "cluster", section: "2.1.4.4.1" }
-        }),
+    Field({
+        name: "MeasurementType", id: 0x0, type: "MeasurementTypeEnum", conformance: "M", quality: "F",
+        details: "This field shall indicate the type of measurement for the accuracy provided.",
+        xref: { document: "cluster", section: "2.1.4.4.1" }
+    }),
 
-        Field({
-            name: "Measured", id: 0x1, type: "bool", conformance: "M", default: false, quality: "F",
-            details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
-                "is not set to true, then the associated measurement was estimated.",
-            xref: { document: "cluster", section: "2.1.4.4.2" }
-        }),
+    Field({
+        name: "Measured", id: 0x1, type: "bool", conformance: "M", default: false, quality: "F",
+        details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
+            "is not set to true, then the associated measurement was estimated.",
+        xref: { document: "cluster", section: "2.1.4.4.2" }
+    }),
 
-        Field({ name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", quality: "F" }),
-        Field({ name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", quality: "F" }),
+    Field({ name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", quality: "F" }),
+    Field({ name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", quality: "F" }),
 
-        Field({
+    Field(
+        {
             name: "AccuracyRanges", id: 0x4, type: "list", conformance: "M", constraint: "min 1", quality: "F",
 
             details: "This field shall indicate a list of measurement ranges and their associated accuracies." +
@@ -49,10 +51,11 @@ export const MeasurementAccuracyStruct = Datatype({
                 "MeasurementAccuracyRangeStruct in this list (i.e. there shall be no gaps in the accuracy ranges, " +
                 "and the ranges shall be in increasing order).",
 
-            xref: { document: "cluster", section: "2.1.4.4.5" },
-            children: [Field({ name: "entry", type: "MeasurementAccuracyRangeStruct" })]
-        })
-    ]
-});
+            xref: { document: "cluster", section: "2.1.4.4.5" }
+        },
+
+        Field({ name: "entry", type: "MeasurementAccuracyRangeStruct" })
+    )
+);
 
 MatterDefinition.children.push(MeasurementAccuracyStruct);
