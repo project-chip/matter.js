@@ -675,7 +675,6 @@ export class AllClustersTestInstance implements TestInstance {
                     physicalClosedLimitTilt: 0,
                     installedOpenLimitLift: 0,
                     installedOpenLimitTilt: 0,
-                    supportsCalibration: false,
                 },
             },
         );
