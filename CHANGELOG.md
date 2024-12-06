@@ -13,7 +13,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Enhancement: Enhances the number assertations to only allow finite numbers
+    - Enhancement: WindowCovering: Adds an internal property to disable the operational state and value management by the default implementation to allow device to handle this themselves
+    - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
     - Fix: ColorControl: Do not try to convert color mode details if they are not defined
+    - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
