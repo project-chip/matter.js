@@ -45,7 +45,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
     async setup() {
         try {
             await this.storageManager.initialize(); // hacky but works
-            this.matterServer = new MatterServer(this.storageManager, { mdnsInterface: "en0" });
+            this.matterServer = new MatterServer(this.storageManager /*, { mdnsInterface: "en0" } */);
 
             this.commissioningServer = await this.setupCommissioningServer();
             await this.matterServer.addCommissioningServer(this.commissioningServer);
