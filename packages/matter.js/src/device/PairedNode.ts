@@ -402,9 +402,12 @@ export class PairedNode {
         if (connectOptions !== undefined) {
             this.options = connectOptions;
         }
-        if (this.#reconnectionInProgress) {
-            logger.debug("Reconnection already in progress ...");
+        if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
+            logger.debug("Reconnection or initialization already in progress ...");
             return;
+        }
+        if (this.#reconnectDelayTimer?.isRunning) {
+            this.#reconnectDelayTimer.stop();
         }
 
         this.#reconnectionInProgress = true;
@@ -418,11 +421,15 @@ export class PairedNode {
                 await this.initialize();
                 return;
             } catch (error) {
-                MatterError.accept(error);
-                logger.info(
-                    `Node ${this.nodeId}: Simple re-establishing session did not worked. Reconnect ... `,
-                    error,
-                );
+                if (error instanceof MatterError) {
+                    logger.info(
+                        `Node ${this.nodeId}: Simple re-establishing session did not worked. Reconnect ... `,
+                        error,
+                    );
+                } else {
+                    this.#reconnectionInProgress = false;
+                    throw error;
+                }
             }
         }
 
@@ -449,8 +456,9 @@ export class PairedNode {
                 this.#reconnectErrorCount++;
                 this.scheduleReconnect();
             }
+        } finally {
+            this.#reconnectionInProgress = false;
         }
-        this.#reconnectionInProgress = false;
     }
 
     /** Ensure that the node is connected by creating a new InteractionClient if needed. */

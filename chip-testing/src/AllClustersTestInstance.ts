@@ -121,10 +121,8 @@ export class AllClustersTestInstance implements TestInstance {
     async start() {
         if (!this.serverNode) throw new Error("serverNode not initialized on start");
 
-        /*
         const env = Environment.default;
         env.vars.set("mdns.networkInterface", "en0");
-        */
 
         try {
             await this.serverNode.start();
