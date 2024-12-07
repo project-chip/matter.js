@@ -26,6 +26,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
 
 -   @project-chip/matter.js
+    - Feature: Introduces PairedNode#triggerReconnect() method to trigger a reconnection
     - Enhancement: Considers a node in reconnection state that should be decommissioned as already factory reset
     - Enhancement: Optimizes reconnection handling in Controller API
     - Fix: Do not try to convert color mode details if they are not defined
