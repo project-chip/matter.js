@@ -187,7 +187,7 @@ export namespace Datasource {
     }
 
     export interface ValueObserver {
-        (value: Val, oldValue: Val, context?: ValueSupervisor.Session): void;
+        (value: Val, oldValue: Val, context?: unknown): void;
     }
 }
 
@@ -218,6 +218,7 @@ interface Internals extends Datasource.Options {
 interface CommitChanges {
     persistent?: Val.Struct;
     notifications: Array<{
+        name: string;
         event: Observable<any[], MaybePromise>;
         params: Parameters<Datasource.ValueObserver>;
     }>;
@@ -563,8 +564,13 @@ function createSessionContext(resource: Resource, internals: Internals, session:
                 const event = internals.events?.[`${name}$Changed`];
                 if (event?.isObserved) {
                     changes.notifications.push({
+                        name,
                         event,
-                        params: [values[name], internals.values[name], session],
+                        params: [
+                            values[name],
+                            internals.values[name],
+                            { fabric: session.fabric, subject: session.subject, offline: session.offline },
+                        ],
                     });
                 }
             }
@@ -632,25 +638,24 @@ function createSessionContext(resource: Resource, internals: Internals, session:
             return;
         }
 
-        // Emit is optionally async so we must iterate manually
-        const iterator = changes.notifications[Symbol.iterator]();
-
-        function emitChanged(): MaybePromise<void> {
-            while (true) {
-                const n = iterator.next();
-                if (n.done) {
-                    return;
+        // Changed events do not participate in logical flow of the original change.  We allow them to run in parallel
+        // and log errors independently
+        for (const { name, event, params } of changes.notifications) {
+            try {
+                const promise = event.emit(...params);
+                if (MaybePromise.is(promise)) {
+                    // Currently we do not track this promise, so it is up to higher-level logic (such as for reactors)
+                    // to track.  Could add a registration system if necessary
+                    promise.then(undefined, e => unhandled(name, e));
                 }
-
-                const { event, params } = n.value;
-                const result = event.emit(...params);
-                if (MaybePromise.is(result)) {
-                    return Promise.resolve(result).then(emitChanged);
-                }
+            } catch (e) {
+                unhandled(name, e);
             }
         }
 
-        return emitChanged();
+        function unhandled(fieldName: string, error: unknown) {
+            logger.error(`Unhandled error in ${fieldName}$Changed handler of ${internals.path}:`, error);
+        }
     }
 
     /**
