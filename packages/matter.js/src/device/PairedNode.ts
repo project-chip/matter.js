@@ -401,7 +401,9 @@ export class PairedNode {
      */
     triggerReconnect() {
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
-            logger.debug("Reconnection or initialization already in progress ...");
+            logger.info(
+                `Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+            );
             return;
         }
         this.#scheduleReconnect(0);
@@ -419,7 +421,9 @@ export class PairedNode {
             this.options = connectOptions;
         }
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
-            logger.debug("Reconnection or initialization already in progress ...");
+            logger.debug(
+                `Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+            );
             return;
         }
         if (this.#reconnectDelayTimer?.isRunning) {
