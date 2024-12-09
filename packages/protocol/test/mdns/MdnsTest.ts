@@ -1079,7 +1079,8 @@ const NODE_ID = NodeId(BigInt(1));
                         VP: "1+32768",
                         addresses: IPIntegrationResultsPort1,
                         deviceIdentifier: "0000000000000000",
-                        expires: undefined,
+                        discoveredAt: undefined,
+                        ttl: undefined,
                         instanceId: "0000000000000000",
                     },
                 ]);

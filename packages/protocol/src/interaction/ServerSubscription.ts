@@ -653,7 +653,11 @@ export class ServerSubscription extends Subscription {
 
                 attributes.push({ path, value, version, schema: attribute.schema, attribute });
             } catch (error) {
-                logger.error(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
+                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                    logger.error(`Permission denied reading attribute ${this.#structure.resolveAttributeName(path)}`);
+                } else {
+                    logger.error(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
+                }
             }
         }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
@@ -845,14 +849,16 @@ export class ServerSubscription extends Subscription {
         );
         const exchange = this.#context.initiateExchange(this.peerAddress, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
-        logger.debug(
-            `Sending subscription changes for ID ${this.id}: ${attributes
-                .map(
-                    ({ path, value, version }) =>
-                        `${this.#structure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`,
-                )
-                .join(", ")}`,
-        ); // TODO Format path better using endpoint structure
+        if (attributes.length) {
+            logger.debug(
+                `Subscription attribute changes for ID ${this.id}: ${attributes
+                    .map(
+                        ({ path, value, version }) =>
+                            `${this.#structure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`,
+                    )
+                    .join(", ")}`,
+            ); // TODO Format path better using endpoint structure
+        }
         const messenger = new InteractionServerMessenger(exchange);
 
         try {
