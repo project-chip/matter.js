@@ -20,7 +20,6 @@ import {
     Logger,
     MAX_MDNS_MESSAGE_SIZE,
     Network,
-    ServerAddress,
     ServerAddressIp,
     SrvRecordValue,
     Time,
@@ -53,7 +52,7 @@ import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from ".
 
 const logger = Logger.get("MdnsScanner");
 
-const MDNS_EXPIRY_GRACE_PERIOD = 60 * 1000; // 1 minute
+const MDNS_EXPIRY_GRACE_PERIOD_FACTOR = 1.05;
 
 type MatterServerRecordWithExpire = ServerAddressIp & Lifespan;
 
@@ -126,6 +125,10 @@ export class MdnsScanner implements Scanner {
         this.#periodicTimer = Time.getPeriodicTimer("Discovered node expiration", 60 * 1000 /* 1 mn */, () =>
             this.#expire(),
         ).start();
+    }
+
+    #effectiveTTL(ttl: number) {
+        return Math.ceil(ttl * MDNS_EXPIRY_GRACE_PERIOD_FACTOR);
     }
 
     /**
@@ -431,17 +434,20 @@ export class MdnsScanner implements Scanner {
             foundRecords.push(...storedRecords.filter(({ CM }) => CM === 1 || CM === 2));
         }
 
-        return foundRecords.map(record => {
-            return {
-                ...record,
-                addresses: this.#sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({
-                    ip,
-                    port,
-                    type: "udp",
-                })) as ServerAddressIp[],
-                expires: undefined,
-            };
-        });
+        return foundRecords
+            .filter(({ addresses }) => addresses.size > 0)
+            .map(record => {
+                return {
+                    ...record,
+                    addresses: this.#sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({
+                        ip,
+                        port,
+                        type: "udp",
+                    })) as ServerAddressIp[],
+                    discoveredAt: undefined,
+                    ttl: undefined,
+                };
+            });
     }
 
     /**
@@ -875,10 +881,14 @@ export class MdnsScanner implements Scanner {
                 }
                 continue;
             }
-            const parsedRecord = this.#parseCommissionableTxtRecord(record);
-            if (parsedRecord === undefined) continue;
-            parsedRecord.instanceId = this.#extractInstanceId(name);
-            parsedRecord.deviceIdentifier = parsedRecord.instanceId;
+            const txtRecord = this.#parseCommissionableTxtRecord(record);
+            if (txtRecord === undefined) continue;
+            const instanceId = this.#extractInstanceId(name);
+            const parsedRecord = {
+                ...txtRecord,
+                instanceId,
+                deviceIdentifier: instanceId,
+            } as CommissionableDeviceRecordWithExpire;
             if (parsedRecord.D !== undefined && parsedRecord.SD === undefined) {
                 parsedRecord.SD = (parsedRecord.D >> 8) & 0x0f;
             }
@@ -979,7 +989,7 @@ export class MdnsScanner implements Scanner {
         }
     }
 
-    #parseTxtRecord(record: DnsRecord<any>): DiscoveryData | undefined {
+    #parseTxtRecord(record: DnsRecord<any>): (DiscoveryData & { D?: number; CM?: number }) | undefined {
         const { value } = record as DnsRecord<string[]>;
         const result = {} as any;
         if (Array.isArray(value)) {
@@ -1010,48 +1020,49 @@ export class MdnsScanner implements Scanner {
         return result;
     }
 
-    #parseCommissionableTxtRecord(record: DnsRecord<any>): CommissionableDeviceRecordWithExpire | undefined {
+    #parseCommissionableTxtRecord(record: DnsRecord<any>): Partial<CommissionableDeviceRecordWithExpire> | undefined {
         const { value, ttl } = record as DnsRecord<string[]>;
         if (!Array.isArray(value)) return undefined;
-        const result = {
-            addresses: new Map<string, ServerAddress>(),
-            expires: Time.nowMs() + ttl * 1000,
-            ...this.#parseTxtRecord(record),
-        } as any;
-        if (result.D === undefined || result.CM === undefined) return undefined; // Required data fields need to be existing
-        return result as CommissionableDeviceRecordWithExpire;
+        const txtRecord = this.#parseTxtRecord(record);
+        if (txtRecord === undefined || txtRecord.D === undefined || txtRecord.CM === undefined) {
+            // Required data fields need to be existing
+            return undefined;
+        }
+        return {
+            addresses: new Map<string, MatterServerRecordWithExpire>(),
+            discoveredAt: Time.nowMs(),
+            ttl: ttl * 1000,
+            ...txtRecord,
+        };
     }
 
     #expire() {
         const now = Time.nowMs();
         [...this.#operationalDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = discoveredAt + ttl + MDNS_EXPIRY_GRACE_PERIOD;
+            const expires = discoveredAt + this.#effectiveTTL(ttl);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < discoveredAt + ttl + MDNS_EXPIRY_GRACE_PERIOD) return; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
                     addresses.delete(key);
-                    console.log("Delete address", recordKey, key);
                 });
             }
-            console.log("Check operational device", recordKey, now, expires, addresses.size);
-            if (now > expires || addresses.size === 0) {
-                // device expired or no IPs left
+            if (now > expires && !addresses.size) {
+                // device expired and also has no adresses anymore
                 this.#operationalDeviceRecords.delete(recordKey);
-                console.log("Delete operational device", recordKey);
             }
         });
         [...this.#commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, discoveredAt, ttl }]) => {
-            const expires = discoveredAt + ttl + MDNS_EXPIRY_GRACE_PERIOD;
+            const expires = discoveredAt + this.#effectiveTTL(ttl);
             if (now <= expires) {
                 // Only check expired IPs if not device itself has expired
                 [...addresses.entries()].forEach(([key, { discoveredAt, ttl }]) => {
-                    if (now < discoveredAt + ttl + MDNS_EXPIRY_GRACE_PERIOD) return; // not expired yet
+                    if (now < discoveredAt + this.#effectiveTTL(ttl)) return; // not expired yet
                     addresses.delete(key);
                 });
             }
-            if (now > expires || addresses.size === 0) {
-                // device expired or no IPs left
+            if (now > expires && !addresses.size) {
+                // device expired and also has no adresses anymore
                 this.#commissionableDeviceRecords.delete(recordKey);
             }
         });
