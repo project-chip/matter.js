@@ -20,6 +20,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
+    - Fix: Do not remove MDNS entries to early from the cache
 
 -   @matter/types
     - Enhancement: Deprecated fields are now also usable and just flagged as deprecated on generated code
