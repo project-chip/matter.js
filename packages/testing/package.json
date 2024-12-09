@@ -50,7 +50,7 @@
         "chai-as-promised": "^7.1.2",
         "dockerode": "^4.0.2",
         "express": "^4.19.2",
-        "mocha": "^10.7.3",
+        "mocha": "^11.0.1",
         "playwright": "^1.48.1",
         "trace-unhandled": "^2.0.1",
         "wtfnode": "^0.9.4",
