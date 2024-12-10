@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+if docker buildx inspect matter.js-chip > /dev/null 2>&1; then
+    docker buildx rm matter.js-chip
+fi
+
+source ./build
