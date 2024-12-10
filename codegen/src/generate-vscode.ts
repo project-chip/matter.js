@@ -111,7 +111,14 @@ function add(launch: LaunchOptions) {
     launchJson.configurations.push(config);
 }
 
+function injectClear<T extends { args?: string[] }>(options: T): T {
+    options.args = ["--clear", ...(options.args ?? [])];
+    return options;
+}
+
 function addTest(options: Partial<LaunchOptions> & { name: string }) {
+    injectClear(options);
+
     add({
         ...CONFIG_TEMPLATE,
         ...options,
@@ -120,6 +127,8 @@ function addTest(options: Partial<LaunchOptions> & { name: string }) {
 }
 
 function addRun(options: Partial<LaunchOptions> & { name: string; args: string[] }) {
+    injectClear(options);
+
     const result: LaunchOptions = {
         ...CONFIG_TEMPLATE,
         ...options,
