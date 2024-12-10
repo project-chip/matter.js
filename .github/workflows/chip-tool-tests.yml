@@ -331,10 +331,12 @@ jobs:
           echo -n "" >/tmp/test_env.yaml
           echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
           echo "CHIP_LOCK_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
-          echo "ENERGY_MANAGEMENT_APP: not_available" >> /tmp/test_env.yaml
-          echo "LIT_ICD_APP: not_available" >> /tmp/test_env.yaml
-          echo "CHIP_MICROWAVE_OVEN_APP: not_available" >> /tmp/test_env.yaml
-          echo "CHIP_RVC_APP: not_available" >> /tmp/test_env.yaml
+          echo "ENERGY_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "LIT_ICD_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "CHIP_MICROWAVE_OVEN_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "CHIP_RVC_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "NETWORK_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "LIGHTING_APP_NO_UNIQUE_ID: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
           echo "TRACE_APP: out/trace_data/app-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
@@ -390,10 +392,12 @@ jobs:
           echo -n "" >/tmp/test_env.yaml
           echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
           echo "CHIP_LOCK_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "ENERGY_MANAGEMENT_APP: not_available" >> /tmp/test_env.yaml
-          echo "LIT_ICD_APP: not_available" >> /tmp/test_env.yaml
-          echo "CHIP_MICROWAVE_OVEN_APP: not_available" >> /tmp/test_env.yaml
-          echo "CHIP_RVC_APP: not_available" >> /tmp/test_env.yaml
+          echo "ENERGY_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
+          echo "LIT_ICD_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
+          echo "CHIP_MICROWAVE_OVEN_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
+          echo "CHIP_RVC_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
+          echo "NETWORK_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
+          echo "LIGHTING_APP_NO_UNIQUE_ID: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
           echo "TRACE_APP: out/trace_data/app-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
