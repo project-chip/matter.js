@@ -91,5 +91,12 @@ export namespace Constants {
     /**
      * Default arguments provided to the Python runner.
      */
-    export const PythonRunnerArgs = ["--PICS", ContainerPaths.matterJsPics];
+    export const PythonRunnerArgs = [
+        "--PICS",
+        ContainerPaths.matterJsPics,
+
+        // Our PID is meaningless within the container but Python uses in the name of the command pipe
+        "--app-pid",
+        "1",
+    ];
 }

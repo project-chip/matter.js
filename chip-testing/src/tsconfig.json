@@ -1,7 +1,6 @@
 {
     "extends": "../../packages/tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
-        "outDir": "../dist/cjs",
         "types": [
             "node"
         ]

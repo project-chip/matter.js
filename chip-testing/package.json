@@ -21,7 +21,9 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "wip-test": "matter-test esm"
+        "ci-test": "matter-test",
+        "ci-test-fast": "matter-test",
+        "ci-test-slow": "matter-test"
     },
     "dependencies": {
         "@matter/main": "*",

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage } from "@matter/general";
 import { Endpoint, Environment, ServerNode, StorageService } from "@matter/main";
 import { AdministratorCommissioningServer } from "@matter/main/behaviors/administrator-commissioning";
 import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors/bridged-device-basic-information";
@@ -13,79 +12,15 @@ import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } fr
 import { DimmableLightDevice } from "@matter/main/devices/dimmable-light";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
 import { DeviceTypeId, VendorId } from "@matter/main/types";
-import { log, TestInstance } from "./GenericTestApp.js";
+import { NodeTestInstance } from "./NodeTestInstance.js";
 
-export class BridgeTestInstance implements TestInstance {
+export class BridgeTestInstance extends NodeTestInstance {
+    static override id = "bridgeford-6100";
+
     serverNode: ServerNode | undefined;
-    //storageManager: StorageManager;
-    protected appName: string;
-
-    constructor(
-        public storage: Storage,
-        protected options: {
-            appName: string;
-            discriminator?: number;
-            passcode?: number;
-        },
-    ) {
-        //this.storageManager = new StorageManager(storage);
-        this.appName = options.appName;
-    }
-
-    /** Set up the test instance MatterServer. */
-    async setup() {
-        try {
-            //await this.storageManager.initialize(); // hacky but works
-
-            this.serverNode = await this.setupServer();
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
-            log.error((error as Error).stack);
-            throw error;
-        }
-        log.directive(`======> ${this.appName}: Setup done`);
-    }
-
-    /** Start the test instance MatterServer with the included device. */
-    async start() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on start");
-
-        /*
-        const env = Environment.default;
-        env.vars.set("mdns.networkInterface", "en0");
-         */
-
-        try {
-            await this.serverNode.start();
-            const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
-            // Magic logging chip testing waits for
-            log.directive(`SetupQRCode: [${qrPairingCode}]`);
-            log.directive();
-            // Magic logging chip testing waits for
-            log.directive("mDNS service published:");
-            log.directive();
-
-            log.directive(`======> ${this.appName}: Instance started`);
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
-        }
-        log.directive("=====>>> STARTED");
-    }
-
-    /** Stop the test instance MatterServer and the device. */
-    async stop() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on close");
-        await this.serverNode.close();
-        //this.serverNode.cancel();
-        //await this.serverNode.lifecycle.act;
-        this.serverNode = undefined;
-        log.directive(`======> ${this.appName}: Instance stopped`);
-    }
 
     async setupServer(): Promise<ServerNode> {
-        Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
+        Environment.default.get(StorageService).factory = (_namespace: string) => this.config.storage;
 
         const networkId = new Uint8Array(32);
 
@@ -97,14 +32,15 @@ export class BridgeTestInstance implements TestInstance {
                 NetworkCommissioningServer.with("EthernetNetworkInterface"),
             ),
             {
-                id: "binford-6100",
+                id: this.id,
+                environment: this.env,
                 network: {
                     port: 5540,
                     //advertiseOnStartup: false,
                 },
                 commissioning: {
-                    passcode: this.options.passcode ?? 20202021,
-                    discriminator: this.options.discriminator ?? 3840,
+                    passcode: this.config.passcode ?? 20202021,
+                    discriminator: this.config.discriminator ?? 3840,
                 },
                 productDescription: {
                     name: this.appName,

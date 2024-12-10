@@ -37,6 +37,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
     - Fix: ColorControl: Do not try to convert color mode details if they are not defined
     - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
+    - Enhancement: EventsBehavior allows for configuration of event buffering
+    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
@@ -59,6 +61,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Models that define datatypes now inherit from common `ScopeModel` base class
     - Fix: Extended enums and other types now report the full set of members via `Scope#membersOf`
     - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
+
+-   @matter/protocol
+    - Feature: The algorithm that chooses event occurrences to discard when the buffer overflows is now smarter and configurable
+    - Feature: Event occurrence buffering now offers optional persistence
+
+-   @matter/testing
+    - Feature: New test harness supports simplified management of Matter certification tests
+    - Feature: Build system for lightweight (relatively speaking) Docker image with chip-tool and CHIP certification tests available at https://github.com/matter-js/matter.js-chip
 
 ## 0.11.8 (2024-11-29)
 

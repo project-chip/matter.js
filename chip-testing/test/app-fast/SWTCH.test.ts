@@ -1,0 +1,10 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+describe("SWTCH", () => {
+    // There's an unnumbered python SWTCH test with multiple steps
+    chip("SWTCH/*", "SWTCH*");
+});

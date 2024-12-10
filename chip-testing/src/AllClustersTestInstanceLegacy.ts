@@ -6,7 +6,7 @@
 
 import { CommissioningServer, MatterServer } from "@project-chip/matter.js";
 
-import { Storage, StorageManager } from "@matter/general";
+import { StorageManager } from "@matter/general";
 
 import {
     AdministratorCommissioning,
@@ -18,31 +18,23 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { TestInstance } from "./GenericTestApp.js";
+import { TestInstance, TestInstanceConfig } from "./GenericTestApp.js";
 
-export class AllClustersTestInstanceLegacy implements TestInstance {
+export class AllClustersTestInstanceLegacy extends TestInstance {
     matterServer: MatterServer | undefined;
     storageManager: StorageManager;
     commissioningServer: CommissioningServer | undefined;
-    protected appName: string;
     onOffDeviceEndpoint1: OnOffLightDevice = new OnOffLightDevice(undefined, {
         endpointId: EndpointNumber(1),
     });
 
-    constructor(
-        storage: Storage,
-        protected options: {
-            appName: string;
-            discriminator?: number;
-            passcode?: number;
-        },
-    ) {
-        this.storageManager = new StorageManager(storage);
-        this.appName = options.appName;
+    constructor(config: TestInstanceConfig) {
+        super(config);
+        this.storageManager = new StorageManager(config.storage);
     }
 
     /** Set up the test instance MatterServer. */
-    async setup() {
+    async initialize() {
         try {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager /*, { mdnsInterface: "en0" } */);
@@ -83,7 +75,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
     }
 
     /** Stop the test instance MatterServer and the device. */
-    async stop() {
+    override async close() {
         if (!this.matterServer) throw new Error("serverNode not initialized on close");
         await this.matterServer.close();
         this.matterServer = undefined;
@@ -95,8 +87,8 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             port: 5540,
             deviceName: this.appName,
             deviceType: DeviceTypeId(0x0101),
-            passcode: this.options.passcode ?? 20202021,
-            discriminator: this.options.discriminator ?? 3840,
+            passcode: this.config.passcode ?? 20202021,
+            discriminator: this.config.discriminator ?? 3840,
             basicInformation: {
                 vendorName: "Binford",
                 vendorId: VendorId(0xfff1),
