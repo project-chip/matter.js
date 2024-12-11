@@ -66,6 +66,21 @@ export class Mutex implements PromiseLike<unknown> {
     }
 
     /**
+     * Enqueue work with an awaitable result.
+     */
+    produce<T>(task: () => PromiseLike<T>, cancel?: () => void): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            this.run(async () => {
+                try {
+                    resolve(await task());
+                } catch (e) {
+                    reject(e);
+                }
+            }, cancel);
+        });
+    }
+
+    /**
      * Cancel remaining work and perform one last task with the Mutex held.
      */
     terminate(cleanup?: () => PromiseLike<void>) {

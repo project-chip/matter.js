@@ -7,7 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
-import { AsyncObservable, Observable } from "#general";
+import { AsyncObservable, Mutex, Observable } from "#general";
 
 /**
  * Extended lifecycle information that only applies to root endpoints.
@@ -21,9 +21,12 @@ export class NodeLifecycle extends EndpointLifecycle {
     #initialized = Observable<[isCommissioned: boolean]>();
     #isOnline = false;
     #isCommissioned = false;
+    #mutex: Mutex;
 
     constructor(endpoint: Endpoint) {
         super(endpoint);
+
+        this.#mutex = new Mutex(endpoint);
 
         this.#online.on(() => {
             this.#isOnline = true;
@@ -96,5 +99,18 @@ export class NodeLifecycle extends EndpointLifecycle {
      */
     get decommissioned() {
         return this.#decommissioned;
+    }
+
+    /**
+     * Mutex for protecting node lifecycle transitions.
+     *
+     * Methods that implement complex async lifecycle transitions use this mutex to ensure conflicting operations cannot
+     * intermingle.
+     *
+     * Generally methods that hold this mutex have a protected "*WithMutex" variant.  This allows for nesting of logic
+     * that requires the mutex without causing deadlock.
+     */
+    get mutex() {
+        return this.#mutex;
     }
 }

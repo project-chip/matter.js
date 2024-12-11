@@ -114,20 +114,24 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * Perform a factory reset of the node.
      */
     override async erase() {
+        await this.lifecycle.mutex.produce(this.eraseWithMutex.bind(this));
+    }
+
+    protected async eraseWithMutex() {
         try {
             await this.construction;
 
             // Go offline before performing reset
             const isOnline = this.lifecycle.isOnline;
             if (isOnline) {
-                await this.cancel();
+                await this.cancelWithMutex();
             }
 
             // Inform user
             this.statusUpdate("resetting to factory defaults");
 
             // Reset in-memory state
-            await this.reset();
+            await this.resetWithMutex();
 
             // Reset persistent state
             await this.resetStorage();
@@ -137,7 +141,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
             // Go back online if we were online at time of reset, otherwise just await reinitialization
             if (isOnline) {
-                await this.start();
+                await this.startWithMutex();
             } else {
                 await this.construction.ready;
             }

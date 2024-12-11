@@ -82,6 +82,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Bring the node online.
      */
     async start() {
+        await this.lifecycle.mutex.produce(this.startWithMutex.bind(this));
+    }
+
+    protected async startWithMutex() {
         this.env.runtime.add(this);
 
         try {
@@ -123,6 +127,10 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      * Once the node is offline you may use {@link start} to bring the node online again.
      */
     async cancel() {
+        await this.lifecycle.mutex.produce(this.cancelWithMutex.bind(this));
+    }
+
+    protected async cancelWithMutex() {
         if (!this.#runtime) {
             return;
         }
@@ -133,15 +141,25 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     }
 
     override async close() {
+        await this.lifecycle.mutex.produce(this.closeWithMutex.bind(this));
+    }
+
+    protected async closeWithMutex() {
         // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
         // actual close
-        //
-        // TODO - this should probably block other functions like start()
         if (this.#runtime) {
-            await this.cancel();
+            await this.cancelWithMutex();
         }
 
         await super.close();
+    }
+
+    override async reset() {
+        await this.lifecycle.mutex.produce(this.resetWithMutex.bind(this));
+    }
+
+    protected async resetWithMutex() {
+        return super.reset();
     }
 
     /**
@@ -177,7 +195,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     }
 
     override async [Construction.destruct]() {
-        await this.cancel();
+        await this.cancelWithMutex();
         await super[Construction.destruct]();
         DiagnosticSource.delete(this);
     }
