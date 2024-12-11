@@ -8,8 +8,8 @@ import { EndpointInitializer } from "#endpoint/index.js";
 import { ServerNode } from "#node/ServerNode.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
+import { ServerEndpointInitializer } from "../../endpoint/server/ServerEndpointInitializer.js";
 import { IdentityService } from "./IdentityService.js";
-import { ServerEndpointInitializer } from "./ServerEndpointInitializer.js";
 
 /**
  * Manages the environment of a server.

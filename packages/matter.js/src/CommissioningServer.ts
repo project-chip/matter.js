@@ -40,7 +40,6 @@ import {
     ClusterDatasource,
     DeviceCertification,
     EndpointInterface,
-    EventHandler,
     Fabric,
     genericFabricScopedAttributeGetterFromFabric,
     genericFabricScopedAttributeSetterForFabric,
@@ -48,7 +47,9 @@ import {
     MdnsBroadcaster,
     MdnsInstanceBroadcaster,
     MdnsScanner,
+    OccurrenceManager,
     PaseClient,
+    VolatileEventStore,
 } from "#protocol";
 import {
     ClusterType,
@@ -228,7 +229,7 @@ export class CommissioningServer extends MatterNode {
     private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
 
     private deviceInstance?: MatterDevice;
-    private eventHandler?: EventHandler;
+    private eventHandler?: OccurrenceManager;
     private endpointStructure: InteractionEndpointStructure;
     private interactionServer?: LegacyInteractionServer;
 
@@ -839,7 +840,9 @@ export class CommissioningServer extends MatterNode {
     async setStorage(storage: StorageContext<SyncStorage>) {
         this.storage = storage;
         this.endpointStructureStorage = this.storage.createContext("EndpointStructure");
-        this.eventHandler = await EventHandler.create(this.storage.createContext("EventHandler"));
+        this.eventHandler = await OccurrenceManager.create({
+            store: new VolatileEventStore(this.storage.createContext("EventHandler")),
+        });
     }
 
     /**
@@ -989,18 +992,18 @@ export class CommissioningServer extends MatterNode {
     }
 }
 
-class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStorage> {
+class CommissioningServerClusterDatasource implements ClusterDatasource {
     #version: number;
     #clusterDescription: string;
     #storage: StorageContext<SyncStorage>;
-    #eventHandler: EventHandler;
+    #eventHandler: OccurrenceManager;
     #getFabrics: () => Fabric[];
 
     constructor(
         endpoint: EndpointInterface,
         cluster: ClusterServerObj,
         storage: StorageContext<SyncStorage>,
-        eventHandler: EventHandler<SyncStorage>,
+        eventHandler: OccurrenceManager,
         getFabrics: () => Fabric[],
     ) {
         this.#eventHandler = eventHandler;

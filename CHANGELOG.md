@@ -12,6 +12,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
+    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
+
+-   @matter/protocol
+    - Feature: Rework Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
+
+## 0.11.9 (2024-12-11)
+
+-   @matter/node
     - Enhancement: Enhances the number assertations to only allow finite numbers
     - Enhancement: WindowCovering: Adds an internal property to disable the operational state and value management by the default implementation to allow device to handle this themselves
     - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property

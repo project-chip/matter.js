@@ -12,8 +12,8 @@ import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
 import { AccessControlCluster } from "#clusters/access-control";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointServer } from "#endpoint/EndpointServer.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
+import { EndpointServer } from "#endpoint/server/EndpointServer.js";
 import { Diagnostic, InternalError, Logger, MaybePromise } from "#general";
 import {
     AccessDeniedError,
@@ -25,7 +25,6 @@ import {
     CommandServer,
     EndpointInterface,
     EventPath,
-    EventStorageData,
     ExchangeManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -33,6 +32,7 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
+    NumberedOccurrence,
     SessionManager,
     WriteRequest,
     WriteResponse,
@@ -66,7 +66,7 @@ const AclAttributeId = AccessControlCluster.attributes.acl.id;
  */
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
-    #changeListener: (type: EndpointLifecycle.Change) => void;
+    #changeListener: (type: EndpointLifecycle.Change, endpoint: Endpoint) => void;
     #endpoint: Endpoint<ServerNode.RootEndpoint>;
     #activity: NodeActivity;
     #newActivityBlocked = false;
@@ -98,11 +98,15 @@ export class TransactionalInteractionServer extends InteractionServer {
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();
-        this.#changeListener = type => {
+        this.#changeListener = (type, endpoint) => {
             switch (type) {
+                case EndpointLifecycle.Change.ServersChanged:
+                    EndpointServer.forEndpoint(endpoint).updateServers();
+                    this.#updateStructure();
+                    break;
+
                 case EndpointLifecycle.Change.PartsReady:
                 case EndpointLifecycle.Change.ClientsChanged:
-                case EndpointLifecycle.Change.ServersChanged:
                 case EndpointLifecycle.Change.Destroyed:
                     this.#updateStructure();
                     break;
@@ -116,6 +120,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         this.#endpoint.lifecycle.changed.off(this.#changeListener);
         await this.close();
         this.#endpointStructure.close();
+        await EndpointServer.forEndpoint(this.#endpoint)[Symbol.asyncDispose]();
     }
 
     blockNewActivity() {
@@ -187,7 +192,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         fabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
-    ): Promise<EventStorageData<any>[]> {
+    ): Promise<NumberedOccurrence[]> {
         const readEvent = (context: ActionContext) => {
             if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
                 throw new AccessDeniedError(
@@ -330,7 +335,8 @@ export class TransactionalInteractionServer extends InteractionServer {
 
     #updateStructure() {
         if (this.#endpoint.lifecycle.isPartsReady) {
-            this.#endpointStructure.initializeFromEndpoint(EndpointServer.forEndpoint(this.#endpoint));
+            const server = EndpointServer.forEndpoint(this.#endpoint);
+            this.#endpointStructure.initializeFromEndpoint(server);
         }
     }
 }
