@@ -194,6 +194,7 @@ export class MdnsBroadcaster {
             AnnouncementType.Commissionable,
             async netInterface => {
                 const ipMac = await this.#network.getIpMac(netInterface);
+
                 if (ipMac === undefined) return [];
                 const { mac, ipV4, ipV6 } = ipMac;
                 const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";

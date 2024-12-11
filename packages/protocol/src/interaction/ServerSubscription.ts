@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NumberedOccurrence } from "#events/Occurrence.js";
 import {
     InternalError,
     Logger,
@@ -36,7 +37,6 @@ import { AnyAttributeServer, FabricScopedAttributeServer } from "../cluster/serv
 import { AnyEventServer, FabricSensitiveEventServer } from "../cluster/server/EventServer.js";
 import { NoChannelError } from "../protocol/ChannelManager.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
-import { EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
@@ -119,7 +119,7 @@ interface EventPathWithEventData<T> {
     path: TypeFromSchema<typeof TlvEventPath>;
     event: AnyEventServer<any, any>;
     schema: TlvSchema<T>;
-    data: EventStorageData<T>;
+    data: NumberedOccurrence;
 }
 
 /**
@@ -137,7 +137,7 @@ export interface ServerSubscriptionContext {
         path: EventPath,
         event: AnyEventServer<any, any>,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-    ): Promise<EventStorageData<unknown>[]>;
+    ): Promise<NumberedOccurrence[]>;
     initiateExchange(address: PeerAddress, protocolId: number): MessageExchange;
 }
 
@@ -164,7 +164,7 @@ export class ServerSubscription extends Subscription {
         string,
         {
             event: AnyEventServer<any, any>;
-            listener?: (newEvent: EventStorageData<any>) => void;
+            listener?: (newEvent: NumberedOccurrence) => void;
         }
     >();
     #sendUpdatesActivated = false;
@@ -334,7 +334,7 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    private registerNewEvents() {
+    #registerNewEvents() {
         const newEvents = new Array<EventWithPath>();
         const eventErrors = new Array<TypeFromSchema<typeof TlvEventStatus>>();
         const formerEvents = new Set<string>(this.#eventListeners.keys());
@@ -385,7 +385,7 @@ export class ServerSubscription extends Subscription {
                             return; // Event is already registered and unchanged
                         }
                     }
-                    const listener = (newEvent: EventStorageData<any>) =>
+                    const listener = (newEvent: NumberedOccurrence) =>
                         this.eventChangeListener(path, event.schema, newEvent);
                     event.addListener(listener);
                     newEvents.push({ path, event });
@@ -437,36 +437,44 @@ export class ServerSubscription extends Subscription {
             });
         }
 
-        const { newEvents } = this.registerNewEvents();
-        newEvents
-            .flatMap(({ path, event }): EventPathWithEventData<any>[] => {
-                // But we use eventFilters because we do not want to send all events to the controller
-                const { schema } = event;
-                const matchingEvents = event.get(
-                    this.session,
-                    this.criteria.isFabricFiltered,
-                    undefined,
-                    this.criteria.eventFilters,
-                );
-                return matchingEvents.map(data => ({
+        const { newEvents } = this.#registerNewEvents();
+        const occurrences = Array<EventPathWithEventData<any>>();
+        for (const { path, event } of newEvents) {
+            const { schema } = event;
+            let eventOccurrences = event.get(
+                this.session,
+                this.criteria.isFabricFiltered,
+                undefined,
+                this.criteria.eventFilters,
+            );
+            if (MaybePromise.is(eventOccurrences)) {
+                eventOccurrences = await eventOccurrences;
+            }
+            occurrences.push(
+                ...eventOccurrences.map(data => ({
                     event,
                     schema,
                     path,
                     data,
-                }));
-            })
-            .sort((a, b) => {
-                const eventNumberA = a.data?.eventNumber ?? EventNumber(0);
-                const eventNumberB = b.data?.eventNumber ?? EventNumber(0);
-                if (eventNumberA > eventNumberB) {
-                    return 1;
-                } else if (eventNumberA < eventNumberB) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            })
-            .forEach(event => this.#outstandingEventUpdates.add(event));
+                })),
+            );
+        }
+
+        occurrences.sort((a, b) => {
+            const eventNumberA = a.data?.number ?? EventNumber(0);
+            const eventNumberB = b.data?.number ?? EventNumber(0);
+            if (eventNumberA > eventNumberB) {
+                return 1;
+            } else if (eventNumberA < eventNumberB) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        for (const occurrence of occurrences) {
+            this.#outstandingEventUpdates.add(occurrence);
+        }
 
         this.prepareDataUpdate();
     }
@@ -678,7 +686,7 @@ export class ServerSubscription extends Subscription {
             }),
         );
 
-        const { newEvents, eventErrors } = this.registerNewEvents();
+        const { newEvents, eventErrors } = this.#registerNewEvents();
 
         let eventsFiltered = false;
         const eventReportsPayload = new Array<EventReportPayload>();
@@ -689,15 +697,15 @@ export class ServerSubscription extends Subscription {
                 if (matchingEvents.length === 0) {
                     eventsFiltered = true;
                 } else {
-                    matchingEvents.forEach(({ eventNumber, priority, epochTimestamp, data }) => {
+                    matchingEvents.forEach(({ number, priority, epochTimestamp, payload }) => {
                         eventReportsPayload.push({
                             hasFabricSensitiveData: event.hasFabricSensitiveData,
                             eventData: {
                                 path,
-                                eventNumber,
+                                eventNumber: number,
                                 priority,
                                 epochTimestamp,
-                                payload: data,
+                                payload,
                                 schema,
                             },
                         });
@@ -794,14 +802,18 @@ export class ServerSubscription extends Subscription {
         this.prepareDataUpdate();
     }
 
-    eventChangeListener<T>(path: EventPath, schema: TlvSchema<T>, newEvent: EventStorageData<T>) {
+    eventChangeListener<T>(path: EventPath, schema: TlvSchema<T>, newEvent: NumberedOccurrence) {
         const eventListenerData = this.#eventListeners.get(eventPathToId(path));
         if (eventListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
         const { event } = eventListenerData;
         if (event instanceof FabricSensitiveEventServer) {
-            const { data } = newEvent;
-            if (isObject(data) && "fabricIndex" in data && data.fabricIndex !== this.session.fabric?.fabricIndex) {
+            const { payload } = newEvent;
+            if (
+                isObject(payload) &&
+                "fabricIndex" in payload &&
+                payload.fabricIndex !== this.session.fabric?.fabricIndex
+            ) {
                 // Ignore events from different fabrics because events are kind of always fabric filtered
                 return;
             }
@@ -887,12 +899,12 @@ export class ServerSubscription extends Subscription {
                             },
                         })),
                         eventReportsPayload: events.map(({ path, schema, event, data }) => {
-                            const { eventNumber, priority, epochTimestamp, data: payload } = data;
+                            const { number, priority, epochTimestamp, payload } = data;
                             return {
                                 hasFabricSensitiveData: event.hasFabricSensitiveData,
                                 eventData: {
                                     path,
-                                    eventNumber,
+                                    eventNumber: number,
                                     priority,
                                     epochTimestamp,
                                     schema,
