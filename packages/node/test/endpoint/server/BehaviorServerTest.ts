@@ -231,7 +231,7 @@ async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
     });
 }
 
-describe("ClusterServerBacking", () => {
+describe("BehaviorServer", () => {
     beforeEach(() => {
         MockTime.reset(676698400000);
     });

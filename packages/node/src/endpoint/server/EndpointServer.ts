@@ -6,13 +6,11 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
-import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
-import { ClusterServerBacking } from "#behavior/internal/ClusterServerBacking.js";
-import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
 import { ImplementationError, InternalError, NotImplementedError } from "#general";
 import { ClusterClientObj, ClusterServer, EndpointInterface } from "#protocol";
 import { ClusterId, ClusterType, EndpointNumber } from "#types";
-import { Endpoint } from "./Endpoint.js";
+import { Endpoint } from "../Endpoint.js";
+import { BehaviorServer } from "./BehaviorServer.js";
 
 const SERVER = Symbol("server");
 interface ServerEndpoint extends Endpoint {
@@ -25,7 +23,7 @@ interface ServerEndpoint extends Endpoint {
 export class EndpointServer implements EndpointInterface {
     #endpoint: Endpoint;
     #name = "";
-    readonly #clusterServers = new Map<ClusterId, ClusterServer>();
+    readonly #clusterServers = new Map<ClusterId, BehaviorServer>();
 
     get endpoint() {
         return this.#endpoint;
@@ -36,26 +34,24 @@ export class EndpointServer implements EndpointInterface {
     }
 
     constructor(endpoint: Endpoint) {
-        (endpoint as ServerEndpoint)[SERVER] = this;
+        // Sanity checks
+        if ((endpoint as ServerEndpoint)[SERVER] !== undefined) {
+            throw new InternalError(`Endpoint ${endpoint} cluster server is already initialized`);
+        }
+        endpoint.construction.assert();
+
         this.#endpoint = endpoint;
         this.#name = endpoint.type.name;
-    }
 
-    createBacking(type: Behavior.Type): BehaviorBacking {
-        let backing: BehaviorBacking;
-        if (type.prototype instanceof ClusterBehavior) {
-            const cluster = (type as ClusterBehavior.Type).cluster;
+        (endpoint as ServerEndpoint)[SERVER] = this;
 
-            // Sanity check
-            if (this.#clusterServers.has(cluster.id)) {
-                throw new InternalError(`${this.#endpoint}.${cluster.id} initialized multiple times`);
+        for (const type of Object.values(endpoint.behaviors.supported)) {
+            if (!(type.prototype instanceof ClusterBehavior)) {
+                continue;
             }
 
-            backing = new ClusterServerBacking(this, type as ClusterBehavior.Type);
-        } else {
-            backing = new ServerBehaviorBacking(this.#endpoint, type, this.#endpoint.behaviors.optionsFor(type));
+            this.#serve(type);
         }
-        return backing;
     }
 
     get number() {
@@ -64,6 +60,20 @@ export class EndpointServer implements EndpointInterface {
 
     get name() {
         return this.#name;
+    }
+
+    updateServers() {
+        for (const type of Object.values(this.#endpoint.behaviors.supported)) {
+            if (!(type.prototype instanceof ClusterBehavior)) {
+                continue;
+            }
+
+            if (this.#clusterServers.has((type as ClusterBehavior.Type).cluster?.id)) {
+                continue;
+            }
+
+            this.#serve(type);
+        }
     }
 
     getNumber(): EndpointNumber {
@@ -103,7 +113,9 @@ export class EndpointServer implements EndpointInterface {
     }
 
     async [Symbol.asyncDispose]() {
-        // I believe the cluster servers are effectively disposed when the structure is emptied
+        for (const server of this.#clusterServers.values()) {
+            server.close();
+        }
         this.#clusterServers.clear();
         delete (this.#endpoint as ServerEndpoint)[SERVER];
         for (const endpoint of this.#endpoint.parts) {
@@ -118,7 +130,7 @@ export class EndpointServer implements EndpointInterface {
         // Unused, should move out of EndpointInterface
     }
 
-    addClusterServer(server: ClusterServer): void {
+    addClusterServer(server: BehaviorServer): void {
         this.#clusterServers.set(server.id, server);
     }
 
@@ -171,6 +183,24 @@ export class EndpointServer implements EndpointInterface {
                 return EndpointServer.forEndpoint(endpoint);
             }
         }
+    }
+
+    /**
+     * Install a ClusterServer for a behavior.
+     */
+    #serve(type: Behavior.Type) {
+        // Sanity checks
+        const { cluster } = type as ClusterBehavior.Type;
+        if (cluster === undefined) {
+            throw new InternalError(`Cannot serve ${this.endpoint} behavior ${type.id}} because it is not a cluster`);
+        }
+        if (this.#clusterServers.has(cluster.id)) {
+            throw new ImplementationError(`Duplicate behaviors for ${this.endpoint} define cluster ${cluster.id}`);
+        }
+
+        // Create ClusterServer
+        const clusterServer = BehaviorServer(this, type as ClusterBehavior.Type);
+        this.#clusterServers.set(cluster.id, clusterServer);
     }
 
     /**

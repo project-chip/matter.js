@@ -310,6 +310,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     protected override async stop() {
+        this.blockNewActivity();
+
         this.#observers.close();
 
         await this.owner.env.close(DeviceCommissioner);
@@ -320,6 +322,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
+
+        // DeviceAdvertiser does this but we do so here just in case DeviceAdvertiser did not initialize for some reason
+        await this.#mdnsBroadcaster?.close();
+        this.#mdnsBroadcaster = undefined;
     }
 
     protected override blockNewActivity() {
