@@ -75,6 +75,10 @@ export function MutableEndpoint<const T extends EndpointType.Options>(options: T
                 behaviors: SupportedBehaviors.extend(this.behaviors, behaviors),
             });
         },
+
+        withBehaviors(this: MutableEndpoint, ...behaviors: Behavior.Type[]) {
+            return this.with(...behaviors);
+        },
     } as unknown as MutableEndpoint.With<
         EndpointType.For<T>,
         T["behaviors"] extends SupportedBehaviors ? T["behaviors"] : {}
