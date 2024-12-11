@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.11.9 (2024-12-11)
 
 -   @matter/node
     - Enhancement: Enhances the number assertations to only allow finite numbers
