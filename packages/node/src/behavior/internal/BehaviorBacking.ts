@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { type Agent } from "#endpoint/Agent.js";
+import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "#endpoint/errors.js";
+import type { SupportedElements } from "#endpoint/properties/Behaviors.js";
 import { Construction, EventEmitter, ImplementationError, Lifecycle, Logger, MaybePromise, Observable } from "#general";
+import type { ClusterId } from "@matter/types";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
@@ -166,6 +168,7 @@ export abstract class BehaviorBacking {
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
             owner: this.#endpoint,
+            cluster: this.type.schema?.tag === "cluster" ? (this.type.schema.id as ClusterId) : undefined,
         };
     }
 
@@ -208,6 +211,11 @@ export abstract class BehaviorBacking {
     get stateView() {
         return this.#datasource?.view ?? {};
     }
+
+    /**
+     * Supported elements.
+     */
+    abstract readonly elements: SupportedElements | undefined;
 
     /**
      * Install a reactor.

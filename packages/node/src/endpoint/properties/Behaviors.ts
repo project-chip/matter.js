@@ -6,7 +6,6 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import type { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
-import { ValidatedElements } from "#behavior/cluster/ValidatedElements.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
@@ -21,12 +20,10 @@ import {
     Diagnostic,
     EventEmitter,
     ImplementationError,
-    InternalError,
     Lifecycle,
     Logger,
     MaybePromise,
     ReadOnlyError,
-    UninitializedDependencyError,
 } from "#general";
 import { FeatureSet } from "#model";
 import { ClusterType } from "#types";
@@ -40,6 +37,12 @@ import { EndpointLifecycle } from "./EndpointLifecycle.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 
 const logger = Logger.get("Behaviors");
+
+export interface SupportedElements {
+    attributes: Set<string>;
+    commands: Set<string>;
+    events: Set<string>;
+}
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Endpoint}.
@@ -80,9 +83,8 @@ export class Behaviors {
                 return result;
             }
 
+            const elements = this.elementsOf(type);
             const elementDiagnostic = Array<unknown>();
-
-            const elements = new ValidatedElements(type as ClusterBehavior.Type);
 
             const features = new FeatureSet(cluster.supportedFeatures);
             if (features.size) {
@@ -148,7 +150,7 @@ export class Behaviors {
         }
 
         // Initialization action.  We initialize all behaviors in the same transaction
-        const initializeBehaviors = (context: ActionContext) => {
+        const initializeBehaviors = (context: ActionContext): MaybePromise => {
             const agent = context.agentFor(this.#endpoint);
 
             // Activate behaviors
@@ -161,7 +163,7 @@ export class Behaviors {
             }
 
             // Wait for all behaviors to initialize
-            return Construction.all(
+            let promise = Construction.all(
                 {
                     [Symbol.iterator]: () => {
                         return Object.values(this.#backings)[Symbol.iterator]();
@@ -170,6 +172,16 @@ export class Behaviors {
 
                 causes => new EndpointBehaviorsError(causes),
             );
+
+            // Notify other components that participate in initialization
+            const endpointInitializer = this.#endpoint.env.get(EndpointInitializer);
+            if (promise) {
+                promise = promise.then(() => endpointInitializer.behaviorsInitialized(agent));
+            } else {
+                promise = endpointInitializer.behaviorsInitialized(agent);
+            }
+
+            return promise;
         };
 
         // Initialize instrumentation
@@ -463,15 +475,34 @@ export class Behaviors {
      * does access to {@link Behavior.State} and {@link Behavior.Events}.
      */
     internalsOf<T extends Behavior.Type>(type: T) {
-        let backing = this.#backings[type.id];
-        if (!backing) {
-            this.#activateLate(type);
-            backing = this.#backings[type.id];
-            if (backing === undefined) {
-                throw new InternalError(`Behavior ${this.#endpoint}.${type.id} late activation did not create backing`);
-            }
-        }
+        const backing = this.#backingFor(type);
         return backing.getInternal() as InstanceType<T["Internal"]>;
+    }
+
+    /**
+     * Obtain current data version of behavior.
+     */
+    versionOf(type: Behavior.Type) {
+        const backing = this.#backingFor(type);
+        return backing.datasource.version;
+    }
+
+    /**
+     * Access elements supported by a behavior.
+     */
+    elementsOf(type: Behavior.Type): SupportedElements {
+        if (!this.has(type)) {
+            throw new ImplementationError(`Endpoint ${this.#endpoint} does not support behavior ${type.id}`);
+        }
+
+        const elements = this.#backingFor(type).elements;
+        if (elements === undefined) {
+            throw new ImplementationError(
+                `Endpoint ${this.#endpoint} behavior ${type.id} elements accessed before initialization`,
+            );
+        }
+
+        return elements;
     }
 
     #activateLate(type: Behavior.Type) {
@@ -495,29 +526,26 @@ export class Behaviors {
     }
 
     /**
-     * Obtain a backing for an endpoint shortcut.
+     * Obtain a backing for a behavior.
      */
-    #backingFor(container: string, type: Behavior.Type) {
+    #backingFor(type: Behavior.Type) {
+        // Crash if endpoint is not initialized
         if (this.#endpoint.construction.status !== Lifecycle.Status.Initializing) {
             this.#endpoint.construction.assert(this.#endpoint.toString(), `behavior ${type.id}`);
         }
 
+        // Obtain backing
         let backing = this.#backings[type.id];
+
+        // If backing is not already initialized, attempt late initialization
         if (!backing) {
-            try {
-                this.#activateLate(type);
-            } catch (e) {
-                logger.warn(`Cannot initialize ${container}.${type.id} until node is initialized: ${e}`);
-                throw new UninitializedDependencyError(
-                    `${container}.${type.id}`,
-                    "is not available until node is initialized, you may await node.construction to avoid this error",
-                );
-            }
+            this.#activateLate(type);
             backing = this.#backings[type.id];
             if (backing === undefined) {
-                throw new InternalError(`Behavior ${this.#endpoint}.${type.id} late activation did not create backing`);
+                throw new BehaviorInitializationError(`${this.#endpoint}.${type.id}`, "initialization failed");
             }
         }
+
         return backing;
     }
 
@@ -556,7 +584,7 @@ export class Behaviors {
     #augmentEndpoint(type: Behavior.Type) {
         Object.defineProperty(this.#endpoint.state, type.id, {
             get: () => {
-                return this.#backingFor("state", type).stateView;
+                return this.#backingFor(type).stateView;
             },
 
             set() {
