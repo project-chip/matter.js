@@ -350,7 +350,7 @@ describe("ServerNode", () => {
             await node.cancel();
         }
 
-        await node.erase();
+        await MockTime.resolve(node.erase());
 
         // Confirm previous online state is resumed
         expect(node.lifecycle.isOnline).equals(mode === "online");
