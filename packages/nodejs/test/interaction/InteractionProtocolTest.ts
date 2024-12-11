@@ -689,22 +689,32 @@ const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
     timedRequest: false,
     invokeRequests: [
         {
-            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandPath: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(6),
+                commandId: CommandId(1),
+            },
+            commandRef: 0,
         },
         {
             commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(0) },
+            commandRef: 1,
         },
         {
             commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(99) },
+            commandRef: 2,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
+            commandRef: 3,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(90), commandId: CommandId(1) },
+            commandRef: 4,
         },
         {
             commandPath: { endpointId: EndpointNumber(99), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 5,
         },
     ],
 };
@@ -716,9 +726,11 @@ const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 0,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 1,
         },
     ],
 };
@@ -1521,7 +1533,7 @@ describe("InteractionProtocol", () => {
                         DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Wildcard paths are not supported in multi-command invoke requests",
+                    message: "(128) Illegal wildcard path in batch invoke",
                 },
             );
             assert.equal(result, undefined);
@@ -1711,7 +1723,7 @@ describe("InteractionProtocol", () => {
                         DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Duplicate command paths (0/6/1) are not allowed in multi-command invoke requests",
+                    message: "(128) Duplicate command path (0/6/1) in batch invoke",
                 },
             );
 
