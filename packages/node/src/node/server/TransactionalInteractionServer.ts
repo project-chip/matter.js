@@ -25,7 +25,6 @@ import {
     CommandServer,
     EndpointInterface,
     EventPath,
-    EventStorageData,
     ExchangeManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -33,6 +32,7 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
+    NumberedOccurrence,
     SessionManager,
     WriteRequest,
     WriteResponse,
@@ -192,7 +192,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         fabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
-    ): Promise<EventStorageData<any>[]> {
+    ): Promise<NumberedOccurrence[]> {
         const readEvent = (context: ActionContext) => {
             if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
                 throw new AccessDeniedError(

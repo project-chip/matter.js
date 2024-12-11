@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "#general";
+import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#general";
 import {
     DataReportPayload,
-    EventHandler,
     FabricManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -16,9 +15,11 @@ import {
     InvokeRequest,
     InvokeResponse,
     MessageType,
+    OccurrenceManager,
     ReadRequest,
     SessionManager,
     SubscribeRequest,
+    VolatileEventStore,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
@@ -58,7 +59,6 @@ import {
     AdministratorCommissioning,
     BasicInformation,
     BasicInformationCluster,
-    ClusterDatasource,
     ClusterServer,
     ClusterServerObj,
     ClusterType,
@@ -927,7 +927,7 @@ describe("InteractionProtocol", () => {
     let endpoint: Endpoint;
     let endpointStructure: InteractionEndpointStructure;
     let interactionProtocol: InteractionServer;
-    let eventHandler: EventHandler;
+    let eventManger: OccurrenceManager;
     let basicInfoClusterServer: ClusterServerObj<BasicInformationCluster>;
 
     function createInteractionServer(
@@ -956,14 +956,14 @@ describe("InteractionProtocol", () => {
             cluster.datasource = {
                 fabrics: [],
                 version,
-                eventHandler,
+                eventHandler: eventManger,
 
                 increaseVersion() {
                     return ++version;
                 },
 
                 changed() {},
-            } as ClusterDatasource<SyncStorage>;
+            };
         }
 
         if (cluster) {
@@ -1009,7 +1009,9 @@ describe("InteractionProtocol", () => {
         storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
         storageContext = storageManager.createContext("test");
-        eventHandler = new EventHandler(storageContext.createContext("EventHandler"));
+        eventManger = new OccurrenceManager({
+            store: new VolatileEventStore(storageContext.createContext("EventHandler")),
+        });
         endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
         endpointStructure = new InteractionEndpointStructure();
         interactionProtocol = createInteractionServer(endpointStructure, storageManager);

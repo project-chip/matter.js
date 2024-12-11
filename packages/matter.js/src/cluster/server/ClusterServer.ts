@@ -146,7 +146,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
             return datasource;
         },
 
-        set datasource(newDatasource: ClusterDatasource<any> | undefined) {
+        set datasource(newDatasource: ClusterDatasource | undefined) {
             // This is not legal but TS requires setters to accept getter type
             if (newDatasource === undefined) {
                 throw new InternalError("Cluster datasource cannot be unset");
