@@ -287,7 +287,8 @@ export const MockTime = {
 
 let reinstallTime: undefined | (() => void);
 
-export function timeSetup(Time: { get(): unknown }) {
+export function timeSetup(Time: { startup: { systemMs: number; processMs: number }; get(): unknown }) {
+    Time.startup.systemMs = Time.startup.processMs = 0;
     real = Time.get();
     (MockTime as any).sleep = (real as any).sleep;
     reinstallTime = () => (Time.get = () => MockTime.activeImplementation);

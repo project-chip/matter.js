@@ -8,6 +8,7 @@ import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
+import { TimeSynchronizationBehavior } from "#behaviors/time-synchronization";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
@@ -102,9 +103,20 @@ export class GeneralDiagnosticsServer extends Base {
 
     override timeSnapshot() {
         const time = Time.nowMs();
+
+        // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded poorly
+        // but my read of "SHALL only if" is "may not unless" and not "SHALL if and only if".  But conforming to tests
+        // for now
+        const posixTimeMs =
+            this.agent.has(TimeSynchronizationBehavior) &&
+            this.agent.get(TimeSynchronizationBehavior).state.utcTime !== null
+                ? time
+                : null;
+
         return {
-            systemTimeMs: time - this.internal.bootUpTime,
-            posixTimeMs: time,
+            systemTimeMs: time - Time.startup.systemMs,
+
+            posixTimeMs,
         };
     }
 
@@ -280,7 +292,6 @@ export class GeneralDiagnosticsServer extends Base {
         );
 
         // Update the timestamps now that node is really online.
-        this.internal.bootUpTime = Time.nowMs();
         this.internal.lastTotalOperationalHoursCounterUpdateTime = Time.nowMs();
 
         this.internal.lastTotalOperationalHoursTimer = Time.getPeriodicTimer(
@@ -368,9 +379,6 @@ export class GeneralDiagnosticsServer extends Base {
 
 export namespace GeneralDiagnosticsServer {
     export class Internal {
-        /** Remember the bootUp time for the device. */
-        bootUpTime: number = Time.nowMs();
-
         /** Last time the total operational hours counter was updated. */
         lastTotalOperationalHoursCounterUpdateTime: number = Time.nowMs();
 
@@ -388,12 +396,11 @@ export namespace GeneralDiagnosticsServer {
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {
                 /**
-                 * Dynamically calculate the upTime. This is ok because the attribute is not send out via subscriptions
+                 * Dynamically calculate the upTime. This is ok because the attribute is not sent via subscriptions
                  * anyway.
                  */
                 get upTime() {
-                    const bootUpTime = endpoint.behaviors.internalsOf(GeneralDiagnosticsServer).bootUpTime;
-                    return Math.round((Time.nowMs() - bootUpTime) / 1000);
+                    return Math.round((Time.nowMs() - Time.startup.systemMs) / 1000);
                 },
 
                 /**
