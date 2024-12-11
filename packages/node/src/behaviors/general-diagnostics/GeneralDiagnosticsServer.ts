@@ -103,8 +103,11 @@ export class GeneralDiagnosticsServer extends Base {
     override timeSnapshot() {
         const time = Time.nowMs();
         return {
-            systemTimeMs: time - this.internal.bootUpTime,
-            posixTimeMs: time,
+            systemTimeMs: time - Time.startup.systemMs,
+
+            // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded
+            // poorly but my read of "SHALL only if" is not the same as "SHALL if".  But conforming to tests for now
+            posixTimeMs: null, //time,
         };
     }
 
@@ -280,7 +283,6 @@ export class GeneralDiagnosticsServer extends Base {
         );
 
         // Update the timestamps now that node is really online.
-        this.internal.bootUpTime = Time.nowMs();
         this.internal.lastTotalOperationalHoursCounterUpdateTime = Time.nowMs();
 
         this.internal.lastTotalOperationalHoursTimer = Time.getPeriodicTimer(
@@ -368,9 +370,6 @@ export class GeneralDiagnosticsServer extends Base {
 
 export namespace GeneralDiagnosticsServer {
     export class Internal {
-        /** Remember the bootUp time for the device. */
-        bootUpTime: number = Time.nowMs();
-
         /** Last time the total operational hours counter was updated. */
         lastTotalOperationalHoursCounterUpdateTime: number = Time.nowMs();
 
@@ -388,12 +387,11 @@ export namespace GeneralDiagnosticsServer {
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {
                 /**
-                 * Dynamically calculate the upTime. This is ok because the attribute is not send out via subscriptions
+                 * Dynamically calculate the upTime. This is ok because the attribute is not sent via subscriptions
                  * anyway.
                  */
                 get upTime() {
-                    const bootUpTime = endpoint.behaviors.internalsOf(GeneralDiagnosticsServer).bootUpTime;
-                    return Math.round((Time.nowMs() - bootUpTime) / 1000);
+                    return Math.round((Time.nowMs() - Time.startup.systemMs) / 1000);
                 },
 
                 /**

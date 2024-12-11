@@ -21,6 +21,11 @@ const registry = new Set<Timer>();
 export class Time {
     static get: () => Time;
 
+    static startup = {
+        systemMs: 0,
+        processMs: 0,
+    };
+
     now() {
         return new Date();
     }
@@ -83,6 +88,8 @@ export class Time {
 }
 
 const time = new Time();
+
+Time.startup.systemMs = Time.startup.processMs = time.nowMs();
 
 export interface Timer {
     /** Name (diagnostics) */

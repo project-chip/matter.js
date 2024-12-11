@@ -19,7 +19,7 @@ import { RetransmissionLimitReachedError } from "#protocol";
 import * as dgram from "dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
 
-const logger = Logger.get("UdpChannelNode");
+const logger = Logger.get("NodejsChannel");
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
@@ -28,7 +28,7 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
             try {
                 socket.close();
             } catch (error) {
-                logger.debug("Error on closing socket", error);
+                logger.debug("Error closing socket", error);
             }
             reject(error);
         };
