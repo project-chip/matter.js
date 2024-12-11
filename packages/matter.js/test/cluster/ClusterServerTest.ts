@@ -17,9 +17,9 @@ import {
 } from "#clusters";
 import { DeviceTypes } from "#device/DeviceTypes.js";
 import { Endpoint } from "#device/Endpoint.js";
-import { ImplementationError, LogLevel, Logger, StorageBackendMemory, StorageManager, SyncStorage } from "#general";
+import { ImplementationError, LogLevel, Logger, StorageBackendMemory, StorageManager } from "#general";
 import { Specification } from "#model";
-import { AttributeServer, ClusterDatasource, Fabric, FixedAttributeServer } from "#protocol";
+import { AttributeServer, Fabric, FixedAttributeServer } from "#protocol";
 import { AttributeId, Cluster, ClusterExtend, CommandId, EndpointNumber, FabricIndex, VendorId } from "#types";
 
 describe("ClusterServer structure", () => {
@@ -606,7 +606,7 @@ describe("ClusterServer structure", () => {
                 get fabrics() {
                     return [];
                 },
-            } as ClusterDatasource<SyncStorage>;
+            };
             expect(initCalled).true;
 
             asClusterServerInternal(server)._close();

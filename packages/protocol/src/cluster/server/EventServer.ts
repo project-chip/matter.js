@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NumberedOccurrence, Occurrence } from "#events/Occurrence.js";
+import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import {
     ImplementationError,
     InternalError,
@@ -32,7 +34,6 @@ import {
 } from "#types";
 import { Message } from "../../codec/MessageCodec.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { EventData, EventHandler, EventStorageData } from "../../interaction/EventHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 
@@ -69,10 +70,10 @@ export function createEventServer<
 }
 
 export class EventServer<T = any, S extends Storage = any> {
-    private eventList = new Array<EventData<T>>();
-    private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
+    private eventList = new Array<Occurrence>();
+    private readonly listeners = new Array<(event: NumberedOccurrence) => void>();
     protected endpoint?: EndpointInterface;
-    protected eventHandler?: EventHandler;
+    protected eventHandler?: OccurrenceManager;
     #readAcl: AccessLevel | undefined;
     hasFabricSensitiveData = false;
 
@@ -97,12 +98,12 @@ export class EventServer<T = any, S extends Storage = any> {
 
     // TODO Try to get rid of that late binding and simply things again
     //      potentially with refactoring out MatterDevice and MatterController
-    bindToEventHandler(eventHandler: EventHandler<S>) {
+    bindToEventHandler(eventHandler: OccurrenceManager) {
         this.eventHandler = eventHandler;
         // Send all stored events to the new listener
         const promises = new Array<PromiseLike<void>>();
         for (const event of this.eventList) {
-            const finalEvent = this.eventHandler.pushEvent(event);
+            const finalEvent = this.eventHandler.add(event);
             if (finalEvent !== undefined && MaybePromise.is(finalEvent)) {
                 promises.push(finalEvent.then(e => this.listeners.forEach(listener => listener(e))));
             } else {
@@ -120,19 +121,19 @@ export class EventServer<T = any, S extends Storage = any> {
         if (this.endpoint === undefined || this.endpoint.number === undefined) {
             throw new InternalError("Endpoint not assigned");
         }
-        const event: EventData<T> = {
+        const occurrence: Occurrence = {
             eventId: this.id,
             clusterId: this.clusterId,
             endpointId: this.endpoint.number,
             epochTimestamp: Time.nowMs(),
             priority: this.priority,
-            data,
+            payload: data,
         };
         if (this.eventHandler === undefined) {
-            // As long as we have no eventManager, we store the events
-            this.eventList.push(event);
+            // As long as we have no occurrence manager, we store the events
+            this.eventList.push(occurrence);
         } else {
-            const finalEvent = this.eventHandler.pushEvent(event);
+            const finalEvent = this.eventHandler.add(occurrence);
             return MaybePromise.then(finalEvent, e => {
                 this.listeners.forEach(listener => listener(e));
             }) as StorageOperationResult<S>;
@@ -140,11 +141,11 @@ export class EventServer<T = any, S extends Storage = any> {
         return undefined as StorageOperationResult<S>;
     }
 
-    addListener(listener: (event: EventStorageData<T>) => void) {
+    addListener(listener: (event: NumberedOccurrence) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (event: EventStorageData<T>) => void) {
+    removeListener(listener: (event: NumberedOccurrence) => void) {
         const entryIndex = this.listeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.listeners.splice(entryIndex, 1);
@@ -158,13 +159,13 @@ export class EventServer<T = any, S extends Storage = any> {
         filters?: TypeFromSchema<typeof TlvEventFilter>[],
     ) {
         if (this.eventHandler === undefined) {
-            throw new InternalError("EventServer not bound to EventHandler");
+            throw new InternalError("EventServer not bound to OccurrenceManager");
         }
         if (this.endpoint === undefined) {
             throw new InternalError("EventServer not bound to Endpoint");
         }
 
-        return this.eventHandler.getEvents(
+        return this.eventHandler.query(
             { endpointId: this.endpoint.number, clusterId: this.clusterId, eventId: this.id },
             filters,
             // When request is fabric filtered or the event is Fabric sensitive then filter the events for the fabrics

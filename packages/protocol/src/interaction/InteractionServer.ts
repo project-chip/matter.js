@@ -503,14 +503,14 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         );
                         const { schema } = event;
                         reportsForPath.push(
-                            ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                            ...matchingEvents.map(({ number, priority, epochTimestamp, payload }) => ({
                                 hasFabricSensitiveData: event.hasFabricSensitiveData,
                                 eventData: {
                                     path,
-                                    eventNumber,
+                                    eventNumber: number,
                                     priority,
                                     epochTimestamp,
-                                    payload: data,
+                                    payload,
                                     schema,
                                 },
                             })),
@@ -1152,23 +1152,39 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         // Validate all commandPaths before proceeding to make sure not to have executed partial commands
         invokeRequests.forEach(({ commandPath }) => validateCommandPath(commandPath));
 
+        // Perform additional cross-command validation required for batch invoke
         if (invokeRequests.length > 1) {
-            const invokeUniqueSet = new Set<string>();
-            invokeRequests.forEach(({ commandPath }) => {
+            const pathsUsed = new Set<string>();
+            const commandRefsUsed = new Set<number>();
+            invokeRequests.forEach(({ commandPath, commandRef }) => {
                 if (!isConcreteCommandPath(commandPath)) {
-                    throw new StatusResponseError(
-                        "Wildcard paths are not supported in multi-command invoke requests",
-                        StatusCode.InvalidAction,
-                    );
+                    throw new StatusResponseError("Illegal wildcard path in batch invoke", StatusCode.InvalidAction);
                 }
+
                 const commandPathId = commandPathToId(commandPath);
-                if (invokeUniqueSet.has(commandPathId)) {
+                if (pathsUsed.has(commandPathId)) {
                     throw new StatusResponseError(
-                        `Duplicate command paths (${commandPathId}) are not allowed in multi-command invoke requests`,
+                        `Duplicate command path (${commandPathId}) in batch invoke`,
                         StatusCode.InvalidAction,
                     );
                 }
-                invokeUniqueSet.add(commandPathId);
+
+                if (commandRef === undefined) {
+                    throw new StatusResponseError(
+                        `Command reference missing in batch invoke of ${commandPathId}`,
+                        StatusCode.InvalidAction,
+                    );
+                }
+
+                if (commandRefsUsed.has(commandRef)) {
+                    throw new StatusResponseError(
+                        `Duplicate command reference ${commandRef} in invoke of ${commandPathId}`,
+                        StatusCode.InvalidAction,
+                    );
+                }
+
+                pathsUsed.add(commandPathId);
+                commandRefsUsed.add(commandRef);
             });
         }
 
@@ -1218,7 +1234,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         MessageType.InvokeResponse,
                         TlvInvokeResponseForSend.encode({
                             ...invokeResponseMessage,
-                            moreChunkedMessages: invokeResultsProcessed < invokeRequests.length ? true : undefined,
+                            moreChunkedMessages: lastMessageProcessed ? undefined : true,
                         }),
                     );
                     invokeResponseMessage.invokeResponses = [];

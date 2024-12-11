@@ -30,10 +30,10 @@ import {
     ClusterServer,
     CommandServer,
     createAttributeServer as ConstructAttributeServer,
-    EventHandler,
     EventServer,
     FabricManager,
     Message,
+    OccurrenceManager,
     SecureSession,
 } from "#protocol";
 import { Attribute, Command, Event } from "#types";
@@ -126,7 +126,7 @@ function createClusterDatasource(endpoint: Endpoint, type: Behavior.Type): Clust
         },
 
         get eventHandler() {
-            return env.get(EventHandler);
+            return env.get(OccurrenceManager);
         },
 
         get fabrics() {
@@ -366,7 +366,7 @@ function createEventServer(
         });
     }
 
-    const promise = server.bindToEventHandler(endpoint.env.get(EventHandler));
+    const promise = server.bindToEventHandler(endpoint.env.get(OccurrenceManager));
     if (MaybePromise.is(promise)) {
         // Current code structure means this should never happen.  Refactor after removal of old API will resolve this
         throw new InternalError("Event handler binding returned a promise");

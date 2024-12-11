@@ -18,13 +18,13 @@ import {
     CommandServer,
     EndpointInterface,
     EventPath,
-    EventStorageData,
     FabricScopedAttributeServer,
     InteractionContext,
     InteractionEndpointStructure,
     InteractionServer,
     Message,
     MessageExchange,
+    NumberedOccurrence,
     SecureSession,
     Session,
 } from "#protocol";
@@ -117,7 +117,7 @@ export class LegacyInteractionServer extends InteractionServer {
         isFabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
-    ): Promise<EventStorageData<any>[]> {
+    ): Promise<NumberedOccurrence[]> {
         this.#assertAccess(path, exchange, event.readAcl);
         return super.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message, endpoint);
     }

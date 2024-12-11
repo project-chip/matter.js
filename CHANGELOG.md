@@ -14,6 +14,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/node
     - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
 
+-   @matter/protocol
+    - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
+    - Fix: Corrects some Batch invoke checks and logic
+
 ## 0.11.9 (2024-12-11)
 
 -   @matter/node

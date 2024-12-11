@@ -74,8 +74,8 @@ type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
 
 /**
- * This class implements the Scanner interface for a MDNS scanner via UDP messages in a IP based network.
- * It sends out queries to discover various types of Matter device types and listens for announcements.
+ * This class implements the Scanner interface for a MDNS scanner via UDP messages in a IP based network. It sends out
+ * queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
     get type() {
