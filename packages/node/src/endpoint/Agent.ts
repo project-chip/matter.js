@@ -101,7 +101,7 @@ export class Agent {
     /**
      * Trigger initialization of a supported {@link Behavior.Type}.
      *
-     * Functionally identical to {@link load} but has no return value and errors are logged rathjer than thrown.
+     * Functionally identical to {@link load} but has no return value and errors are logged rather than thrown.
      */
     activate(type: Behavior.Type) {
         this.#endpoint.behaviors.activate(type, this);

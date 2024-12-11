@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Behavior } from "#behavior/Behavior.js";
-import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
-import { Endpoint } from "../Endpoint.js";
+import type { Behavior } from "#behavior/Behavior.js";
+import type { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
+import type { Agent } from "#endpoint/Agent.js";
+import type { Endpoint } from "../Endpoint.js";
 
 /**
  * Base class for {@link Endpoint} initialization services.
@@ -35,4 +36,9 @@ export abstract class EndpointInitializer {
      * @returns a new {@link BehaviorBacking}
      */
     abstract createBacking(endpoint: Endpoint, type: Behavior.Type): BehaviorBacking;
+
+    /**
+     * Invoked after behaviors are initialized but before the initialization transaction commits.
+     */
+    behaviorsInitialized(_agent: Agent) {}
 }

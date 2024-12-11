@@ -24,6 +24,11 @@
                 "types": "./dist/cjs/index.d.ts",
                 "default": "./dist/cjs/index.js"
             }
+        },
+        "./bootstrap": {
+            "import": {
+                "default": "./src/util/bootstrap.mjs"
+            }
         }
     },
     "main": "dist/cjs/index.js",
