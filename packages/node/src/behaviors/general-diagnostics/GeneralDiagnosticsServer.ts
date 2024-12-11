@@ -8,6 +8,7 @@ import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
+import { TimeSynchronizationBehavior } from "#behaviors/time-synchronization";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
@@ -102,12 +103,20 @@ export class GeneralDiagnosticsServer extends Base {
 
     override timeSnapshot() {
         const time = Time.nowMs();
+
+        // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded poorly
+        // but my read of "SHALL only if" is "may not unless" and not "SHALL if and only if".  But conforming to tests
+        // for now
+        const posixTimeMs =
+            this.agent.has(TimeSynchronizationBehavior) &&
+            this.agent.get(TimeSynchronizationBehavior).state.utcTime !== null
+                ? time
+                : null;
+
         return {
             systemTimeMs: time - Time.startup.systemMs,
 
-            // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded
-            // poorly but my read of "SHALL only if" is not the same as "SHALL if".  But conforming to tests for now
-            posixTimeMs: null, //time,
+            posixTimeMs,
         };
     }
 
