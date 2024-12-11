@@ -20,6 +20,9 @@
                 "clear": true
             },
             "name": "All tests",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -42,6 +45,7 @@
             },
             "name": "Test current file",
             "args": [
+                "--clear",
                 "--spec",
                 "${input:testFile}",
                 "--all-logs",
@@ -69,6 +73,7 @@
             },
             "name": "Run current file",
             "args": [
+                "--clear",
                 "${file}"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -92,8 +97,9 @@
                 "clear": true
             },
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/codegen/packages/nodejs-shell",
             "args": [
+                "--clear",
                 "dist/cjs/app.js"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -117,8 +123,9 @@
                 "clear": true
             },
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/packages/cli-tool",
+            "cwd": "${workspaceFolder}/codegen/packages/cli-tool",
             "args": [
+                "--clear",
                 "bin/matter.js"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -143,6 +150,9 @@
             },
             "name": "Test @matter/testing",
             "cwd": "${workspaceFolder}/packages/testing",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -165,6 +175,9 @@
             },
             "name": "Test @matter/general",
             "cwd": "${workspaceFolder}/packages/general",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -187,6 +200,9 @@
             },
             "name": "Test @matter/model",
             "cwd": "${workspaceFolder}/packages/model",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -209,6 +225,9 @@
             },
             "name": "Test @matter/types",
             "cwd": "${workspaceFolder}/packages/types",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -231,6 +250,9 @@
             },
             "name": "Test @matter/protocol",
             "cwd": "${workspaceFolder}/packages/protocol",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -253,6 +275,9 @@
             },
             "name": "Test @matter/node",
             "cwd": "${workspaceFolder}/packages/node",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -275,6 +300,9 @@
             },
             "name": "Test @project-chip/matter.js",
             "cwd": "${workspaceFolder}/packages/matter.js",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -297,6 +325,9 @@
             },
             "name": "Test @matter/nodejs",
             "cwd": "${workspaceFolder}/packages/nodejs",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -319,6 +350,9 @@
             },
             "name": "Test @matter/chip-testing",
             "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear"
+            ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },
         {
@@ -341,6 +375,7 @@
             },
             "name": "Run ControllerNode",
             "args": [
+                "--clear",
                 "packages/examples/src/controller/ControllerNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -365,6 +400,7 @@
             },
             "name": "Run BridgedDevicesNode",
             "args": [
+                "--clear",
                 "packages/examples/src/device-bridge-onoff/BridgedDevicesNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -389,6 +425,7 @@
             },
             "name": "Run ComposedDeviceNode",
             "args": [
+                "--clear",
                 "packages/examples/src/device-composed-onoff/ComposedDeviceNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -413,6 +450,7 @@
             },
             "name": "Run IlluminatedRollerShade",
             "args": [
+                "--clear",
                 "packages/examples/src/device-composed-wc-light/IlluminatedRollerShade.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -437,6 +475,7 @@
             },
             "name": "Run MeasuredSocketDevice",
             "args": [
+                "--clear",
                 "packages/examples/src/device-measuring-socket/MeasuredSocketDevice.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -461,6 +500,7 @@
             },
             "name": "Run MultiDeviceNode",
             "args": [
+                "--clear",
                 "packages/examples/src/device-multiple-onoff/MultiDeviceNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -485,6 +525,7 @@
             },
             "name": "Run DeviceNode",
             "args": [
+                "--clear",
                 "packages/examples/src/device-onoff/DeviceNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -509,6 +550,7 @@
             },
             "name": "Run DeviceNodeFull",
             "args": [
+                "--clear",
                 "packages/examples/src/device-onoff-advanced/DeviceNodeFull.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -533,6 +575,7 @@
             },
             "name": "Run LightDevice",
             "args": [
+                "--clear",
                 "packages/examples/src/device-onoff-light/LightDevice.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -557,6 +600,7 @@
             },
             "name": "Run SensorDeviceNode",
             "args": [
+                "--clear",
                 "packages/examples/src/device-sensor/SensorDeviceNode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -581,6 +625,7 @@
             },
             "name": "Generate chip",
             "args": [
+                "--clear",
                 "codegen/src/generate-chip.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -605,6 +650,7 @@
             },
             "name": "Generate clusters",
             "args": [
+                "--clear",
                 "codegen/src/generate-clusters.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -629,6 +675,7 @@
             },
             "name": "Generate endpoints",
             "args": [
+                "--clear",
                 "codegen/src/generate-endpoints.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -653,6 +700,7 @@
             },
             "name": "Generate forwards",
             "args": [
+                "--clear",
                 "codegen/src/generate-forwards.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -677,6 +725,7 @@
             },
             "name": "Generate model",
             "args": [
+                "--clear",
                 "codegen/src/generate-model.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -701,6 +750,7 @@
             },
             "name": "Generate spec",
             "args": [
+                "--clear",
                 "codegen/src/generate-spec.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
@@ -725,6 +775,7 @@
             },
             "name": "Generate vscode",
             "args": [
+                "--clear",
                 "codegen/src/generate-vscode.ts"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
