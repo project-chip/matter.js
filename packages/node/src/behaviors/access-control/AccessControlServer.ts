@@ -109,11 +109,23 @@ export class AccessControlServer extends AccessControlBehavior {
         for (const entry of fabricAcls) {
             const { privilege, subjects, targets, authMode } = entry;
             if (subjects !== null && subjects.length > this.state.subjectsPerAccessControlEntry) {
-                throw new StatusResponseError("SubjectsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);
+                throw new StatusResponseError(
+                    "SubjectsPerAccessControlEntry exceeded",
+                    // TestAccessControlCluster.yaml expects generic "failure" code here.  ResourceExhausted seemed more
+                    // appropriate though
+                    // StatusCode.ResourceExhausted,
+                    StatusCode.Failure,
+                );
             }
 
             if (targets !== null && targets.length > this.state.targetsPerAccessControlEntry) {
-                throw new StatusResponseError("TargetsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);
+                throw new StatusResponseError(
+                    "TargetsPerAccessControlEntry exceeded",
+
+                    // See comment above, same here
+                    // StatusCode.ResourceExhausted,
+                    StatusCode.Failure,
+                );
             }
 
             if (authMode === AccessControlTypes.AccessControlEntryAuthMode.Pase) {
