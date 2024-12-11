@@ -11,6 +11,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
 
 ## 0.11.9 (2024-12-11)
 
@@ -20,7 +22,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
     - Fix: ColorControl: Do not try to convert color mode details if they are not defined
     - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
-    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
