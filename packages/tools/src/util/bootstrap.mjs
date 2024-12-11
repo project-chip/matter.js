@@ -25,13 +25,15 @@ function fatal(why, error) {
 async function findFile(name) {
     let dir = dirname(fileURLToPath(import.meta.url));
     while (true) {
-        const path = resolve(dir, name);
-        try {
-            await stat(path);
-            return path;
-        } catch (e) {
-            if (e.code !== "ENOENT") {
-                fatal("there was an unexpected error searching the filesystem", e);
+        if (!dir.endsWith("/dist/esm")) {
+            const path = resolve(dir, name);
+            try {
+                await stat(path);
+                return path;
+            } catch (e) {
+                if (e.code !== "ENOENT") {
+                    fatal("there was an unexpected error searching the filesystem", e);
+                }
             }
         }
 
@@ -88,7 +90,7 @@ async function bootstrap() {
                 if (code === 0) {
                     resolve();
                 } else {
-                    fatal(`esbuild existing with code ${code}`);
+                    fatal(`esbuild exited with code ${code}`);
                 }
             });
         });

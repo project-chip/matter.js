@@ -81,6 +81,7 @@ export class Progress {
     #refreshInterval?: ReturnType<typeof setInterval>;
     #spinnerPosition = 0;
     #spinnerWindow?: number;
+    #subtasks = Array<string>();
 
     constructor() {}
 
@@ -129,7 +130,11 @@ export class Progress {
             return;
         }
 
-        writeStatus(`  ${colors.yellow(this.#spinner)} ${this.#ongoingText}`, true);
+        const subtask = this.#subtasks.length
+            ? colors.dim(` (${colors.dim(this.#subtasks[this.#subtasks.length - 1])})`)
+            : "";
+
+        writeStatus(`  ${colors.yellow(this.#spinner)} ${this.#ongoingText}${subtask}`, true);
     }
 
     success(text: string) {
@@ -169,6 +174,16 @@ export class Progress {
         }
     }
 
+    async subtask(text: string, fn: () => Promise<void>) {
+        this.#subtasks.push(text);
+
+        try {
+            await fn();
+        } finally {
+            this.#subtasks.pop();
+        }
+    }
+
     #updateSpinner() {
         if (!stdout.isTTY) {
             return false;
@@ -186,15 +201,17 @@ export class Progress {
         return true;
     }
 
-    async run(what: string, fn: () => void | Promise<void>) {
+    async run<T>(what: string, fn: () => T | Promise<T>) {
         this.update(what);
+        let result: T;
         try {
-            await fn();
+            result = await fn();
         } catch (e) {
             this.failure(what);
             throw e;
         }
         this.success(what);
+        return result;
     }
 
     get #duration() {
