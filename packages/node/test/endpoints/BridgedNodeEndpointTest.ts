@@ -11,7 +11,6 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { BridgedNodeEndpoint } from "#endpoints/bridged-node";
 import { Environment, StorageBackendMemory, StorageService } from "#general";
-import assert from "assert";
 import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 
@@ -152,10 +151,10 @@ describe("BridgedNodeEndpointTest", () => {
             await MockTime.yield();
 
             // Verify that the endpoint numbers are preserved and new ones are allocated
-            assert.strictEqual(bridge2.parts.require("light1").number, light1);
-            assert.strictEqual(bridge2.parts.require("light2").number, light2);
-            assert.strictEqual(bridge2.parts.require("light3").number, light3);
-            assert.strictEqual(bridge2.parts.require("light4").number, light3 + 1);
+            expect(bridge2.parts.require("light1").number).equals(light1);
+            expect(bridge2.parts.require("light2").number).equals(light2);
+            expect(bridge2.parts.require("light3").number).equals(light3);
+            expect(bridge2.parts.require("light4").number).equals(light3 + 1);
 
             await bridge2.owner?.close();
         });
@@ -212,7 +211,7 @@ describe("BridgedNodeEndpointTest", () => {
 
             const store = storages.get("node0")!;
             store.initialize();
-            assert.deepEqual(store.get(["root"], "__nextNumber__"), 6);
+            expect(store.get(["root"], "__nextNumber__")).equals(6);
             store.delete(["root"], "__nextNumber__");
             store.close();
 
@@ -245,24 +244,24 @@ describe("BridgedNodeEndpointTest", () => {
             await MockTime.yield();
 
             // Verify that the endpoint numbers are preserved and new ones are allocated
-            assert.strictEqual(bridge2.parts.require("light1").number, light1);
-            assert.strictEqual(bridge2.parts.require("light2").number, light2);
-            assert.strictEqual(bridge2.parts.require("light3").number, light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light1);
-            assert.deepEqual(store.get(["root.parts.part0.parts.light2"], "__number__"), light2);
-            assert.deepEqual(store.get(["root.parts.part0.parts.light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root.parts.part0.parts.light2-1"], "__number__"), light21);
-            assert.deepEqual(store.get(["root.parts.part0.parts.light4"], "__number__"), light3 + 1);
+            expect(bridge2.parts.require("light1").number).equals(light1);
+            expect(bridge2.parts.require("light2").number).equals(light2);
+            expect(bridge2.parts.require("light3").number).equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light1);
+            expect(store.get(["root.parts.part0.parts.light2"], "__number__")).deep.equals(light2);
+            expect(store.get(["root.parts.part0.parts.light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root.parts.part0.parts.light2-1"], "__number__")).deep.equals(light21);
+            expect(store.get(["root.parts.part0.parts.light4"], "__number__")).deep.equals(light3 + 1);
 
             await bridge2.owner?.close();
 
             store.initialize();
 
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), light2);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2-1"], "__number__"), light21);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), light3 + 1);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(light2);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light2-1"], "__number__")).deep.equals(light21);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(light3 + 1);
         });
 
         it("closing and re-adding dynamic endpoints during runtime", async () => {
@@ -300,7 +299,7 @@ describe("BridgedNodeEndpointTest", () => {
             await MockTime.yield();
 
             // Numbers are reused
-            assert.strictEqual(bridge.parts.require("light2").number, light2);
+            expect(bridge.parts.require("light2").number).equals(light2);
 
             await bridge.owner?.close();
         });
@@ -354,10 +353,10 @@ describe("BridgedNodeEndpointTest", () => {
 
             // Verify data are still existing in storage
             const store = storages.get("node0")!;
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), light2);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(light2);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(undefined);
 
             // Add one endpoint again
             await bridge.add({
@@ -374,18 +373,18 @@ describe("BridgedNodeEndpointTest", () => {
             await MockTime.yield();
 
             // Verify that the endpoint numbers are preserved and new ones are allocated
-            assert.strictEqual(bridge.parts.require("light1").number, light1);
-            assert.strictEqual(bridge.parts.require("light3").number, light3);
-            assert.strictEqual(bridge.parts.require("light4").number, light3 + 1);
+            expect(bridge.parts.require("light1").number).equals(light1);
+            expect(bridge.parts.require("light3").number).equals(light3);
+            expect(bridge.parts.require("light4").number).equals(light3 + 1);
 
             await bridge.owner?.close();
 
             store.initialize();
 
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), light2);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), light3 + 1);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(light2);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(light3 + 1);
         });
 
         it("with multiple dynamic endpoints delete and re-add during runtime", async () => {
@@ -431,9 +430,9 @@ describe("BridgedNodeEndpointTest", () => {
 
             // Verify the entries are existing in storage
             const store = storages.get("node0")!;
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), light2);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(light2);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
 
             // Close 2 endpoints
             await endpoint2.delete();
@@ -442,9 +441,9 @@ describe("BridgedNodeEndpointTest", () => {
             await MockTime.yield();
 
             // Verify the entries are deleted in storage
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), undefined);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), undefined);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
 
             // Add one endpoint again
             await bridge.add({
@@ -460,29 +459,29 @@ describe("BridgedNodeEndpointTest", () => {
             });
             await MockTime.yield();
 
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light3 + 1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), undefined);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), light3 + 2);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light3 + 1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(light3 + 2);
 
             // Verify that the endpoint numbers are preserved and new ones are allocated
-            assert.strictEqual(bridge.parts.require("light1").number, light3 + 1);
-            assert.strictEqual(bridge.parts.require("light3").number, light3);
-            assert.strictEqual(bridge.parts.require("light4").number, light3 + 2);
+            expect(bridge.parts.require("light1").number).equals(light3 + 1);
+            expect(bridge.parts.require("light3").number).equals(light3);
+            expect(bridge.parts.require("light4").number).equals(light3 + 2);
 
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light3 + 1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), undefined);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), light3 + 2);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light3 + 1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(light3 + 2);
 
             await bridge.owner?.close();
 
             store.initialize();
 
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light1"], "__number__"), light3 + 1);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light2"], "__number__"), undefined);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light3"], "__number__"), light3);
-            assert.deepEqual(store.get(["root", "parts", "part0", "parts", "light4"], "__number__"), light3 + 2);
+            expect(store.get(["root", "parts", "part0", "parts", "light1"], "__number__")).deep.equals(light3 + 1);
+            expect(store.get(["root", "parts", "part0", "parts", "light2"], "__number__")).deep.equals(undefined);
+            expect(store.get(["root", "parts", "part0", "parts", "light3"], "__number__")).deep.equals(light3);
+            expect(store.get(["root", "parts", "part0", "parts", "light4"], "__number__")).deep.equals(light3 + 2);
         });
     });
 });

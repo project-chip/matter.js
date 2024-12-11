@@ -5,11 +5,8 @@
  */
 
 import { dirname, resolve } from "path";
-import { exit } from "process";
-import { Builder } from "../building/builder.js";
-import { Graph } from "../building/graph.js";
-import { Project } from "../building/project.js";
-import { Package } from "../util/package.js";
+import { exit, stderr, stdout } from "process";
+import { ensureCompiled } from "./ensure-compiled.js";
 import { executeNode } from "./execute.js";
 
 /**
@@ -25,8 +22,38 @@ import { executeNode } from "./execute.js";
  * this by setting the environment variable MATTER_DIRECT_EXEC.
  */
 export async function main(argv = process.argv) {
-    let script = argv[2];
-    argv = argv.slice(3);
+    let directExec = !!process.env.MATTER_DIRECT_EXEC;
+
+    // Drop node and matter-run
+    argv = argv.slice(2);
+
+    // Process arguments to matter-run itself (very simple as of yet so just processing manually)
+    while (argv[0][0] === "-") {
+        const option = argv.shift();
+
+        switch (option) {
+            case "--clear":
+                console.clear();
+                break;
+
+            case "--direct":
+                directExec = true;
+                break;
+
+            default:
+                stderr.write(`Unrecognized option ${option}`);
+                break;
+
+            case "--help":
+                stdout.write(
+                    "Usage: matter-run [--clear] [--direct] <SCRIPT> [ARG]...\nRun a Node.js script with source map support and automatic transpilation of TypeScript.",
+                );
+                break;
+        }
+    }
+
+    // Extract script name.  argv is then the script's args
+    let script = argv.shift();
 
     if (script === undefined || script === "") {
         console.error("Error: Script name required");
@@ -45,34 +72,7 @@ export async function main(argv = process.argv) {
         dir = dirname(script);
     }
 
-    const pkg = Package.forPath(dir);
-
-    let format: "esm" | "cjs" | "none";
-    if (!pkg.hasSrc) {
-        format = "none";
-    } else if (pkg.supportsEsm) {
-        format = "esm";
-    } else if (pkg.supportsCjs) {
-        format = "cjs";
-    } else {
-        console.error("Error: Could not identify project format");
-        exit(2);
-    }
-
-    // In development we currently build package and dependencies unconditionally before running
-    const isDevelopment = !dir.match(/[\\/]node_modules[\\/]/);
-    if (isDevelopment && format !== "none") {
-        const builder = new Builder();
-        const dependencies = await Graph.forProject(dir);
-        if (dependencies) {
-            // Project is in a workspace; build along with dependencies from the same workspace
-            await dependencies.build(builder, false);
-        } else {
-            // Project is not in a workspace; only build the project
-            const project = new Project(pkg);
-            await builder.build(project);
-        }
-    }
+    const { format, pkg } = await ensureCompiled(dir);
 
     // Determine the actual script to run
     if (format !== "none") {
@@ -87,7 +87,7 @@ export async function main(argv = process.argv) {
     // If we run in the same process we cannot enable source maps so default mode is to fork.  However for development
     // purposes it can be useful to avoid the intermediary process.  In this case you can set "--enable-source-maps"
     // manually then set MATTER_DIRECT_EXEC
-    if (process.env.MATTER_DIRECT_EXEC) {
+    if (directExec) {
         // This will not transpile properly to commonjs but we only use this module from ESM so that's OK
         await import(script);
     } else {

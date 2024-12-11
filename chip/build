@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+if ! docker buildx inspect matter.js-chip > /dev/null 2>&1; then
+    docker buildx create --name matter.js-chip
+fi
+
+docker buildx build . \
+    --builder matter.js-chip \
+    --load \
+    -t ghcr.io/matter-js/chip \
+    --label org.opencontainers.image.revision=$(git rev-parse HEAD) \
+    --platform linux/amd64 \
+    $*

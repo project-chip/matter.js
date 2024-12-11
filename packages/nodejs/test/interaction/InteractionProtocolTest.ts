@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "#general";
+import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#general";
 import {
     DataReportPayload,
-    EventHandler,
     FabricManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -16,9 +15,11 @@ import {
     InvokeRequest,
     InvokeResponse,
     MessageType,
+    OccurrenceManager,
     ReadRequest,
     SessionManager,
     SubscribeRequest,
+    VolatileEventStore,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
@@ -58,7 +59,6 @@ import {
     AdministratorCommissioning,
     BasicInformation,
     BasicInformationCluster,
-    ClusterDatasource,
     ClusterServer,
     ClusterServerObj,
     ClusterType,
@@ -689,22 +689,32 @@ const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
     timedRequest: false,
     invokeRequests: [
         {
-            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandPath: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(6),
+                commandId: CommandId(1),
+            },
+            commandRef: 0,
         },
         {
             commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(0) },
+            commandRef: 1,
         },
         {
             commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(99) },
+            commandRef: 2,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
+            commandRef: 3,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(90), commandId: CommandId(1) },
+            commandRef: 4,
         },
         {
             commandPath: { endpointId: EndpointNumber(99), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 5,
         },
     ],
 };
@@ -716,9 +726,11 @@ const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 0,
         },
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+            commandRef: 1,
         },
     ],
 };
@@ -927,7 +939,7 @@ describe("InteractionProtocol", () => {
     let endpoint: Endpoint;
     let endpointStructure: InteractionEndpointStructure;
     let interactionProtocol: InteractionServer;
-    let eventHandler: EventHandler;
+    let eventManger: OccurrenceManager;
     let basicInfoClusterServer: ClusterServerObj<BasicInformationCluster>;
 
     function createInteractionServer(
@@ -956,14 +968,14 @@ describe("InteractionProtocol", () => {
             cluster.datasource = {
                 fabrics: [],
                 version,
-                eventHandler,
+                eventHandler: eventManger,
 
                 increaseVersion() {
                     return ++version;
                 },
 
                 changed() {},
-            } as ClusterDatasource<SyncStorage>;
+            };
         }
 
         if (cluster) {
@@ -1009,7 +1021,9 @@ describe("InteractionProtocol", () => {
         storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
         storageContext = storageManager.createContext("test");
-        eventHandler = new EventHandler(storageContext.createContext("EventHandler"));
+        eventManger = new OccurrenceManager({
+            store: new VolatileEventStore(storageContext.createContext("EventHandler")),
+        });
         endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
         endpointStructure = new InteractionEndpointStructure();
         interactionProtocol = createInteractionServer(endpointStructure, storageManager);
@@ -1521,7 +1535,7 @@ describe("InteractionProtocol", () => {
                         DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Wildcard paths are not supported in multi-command invoke requests",
+                    message: "(128) Illegal wildcard path in batch invoke",
                 },
             );
             assert.equal(result, undefined);
@@ -1711,7 +1725,7 @@ describe("InteractionProtocol", () => {
                         DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Duplicate command paths (0/6/1) are not allowed in multi-command invoke requests",
+                    message: "(128) Duplicate command path (0/6/1) in batch invoke",
                 },
             );
 

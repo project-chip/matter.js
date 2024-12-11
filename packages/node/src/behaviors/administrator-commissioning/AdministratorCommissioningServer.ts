@@ -201,16 +201,16 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             );
         }
 
-        if (commissioningTimeout > MAXIMUM_COMMISSIONING_TIMEOUT_S) {
+        if (commissioningTimeout > this.internal.maximumCommissioningTimeoutS) {
             throw new StatusResponseError(
-                `Commissioning timeout must not exceed ${MAXIMUM_COMMISSIONING_TIMEOUT_S} seconds.`,
+                `Commissioning timeout must not exceed ${this.internal.maximumCommissioningTimeoutS} seconds.`,
                 StatusCode.InvalidCommand,
             );
         }
 
-        if (commissioningTimeout < MINIMUM_COMMISSIONING_TIMEOUT_S) {
+        if (commissioningTimeout < this.internal.minimumCommissioningTimeoutS) {
             throw new StatusResponseError(
-                `Commissioning timeout must not be lower then ${MINIMUM_COMMISSIONING_TIMEOUT_S} seconds.`,
+                `Commissioning timeout must not be lower then ${this.internal.minimumCommissioningTimeoutS} seconds.`,
                 StatusCode.InvalidCommand,
             );
         }
@@ -279,6 +279,16 @@ export namespace AdministratorCommissioningServer {
     export class Internal {
         commissioningWindowTimeout?: Timer;
         stopMonitoringFabricForRemoval?: () => void;
+
+        /**
+         * Mandated by spec; should only be modified in testing.
+         */
+        minimumCommissioningTimeoutS = MINIMUM_COMMISSIONING_TIMEOUT_S;
+
+        /**
+         * Mandated by spec; should only be modified in testing.
+         */
+        maximumCommissioningTimeoutS = MAXIMUM_COMMISSIONING_TIMEOUT_S;
     }
 
     export class State extends AdministratorCommissioningBehavior.State {

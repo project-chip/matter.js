@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { Fabric } from "#fabric/Fabric.js";
-import { Storage, SupportedStorageTypes } from "#general";
-import { EventHandler } from "../../interaction/EventHandler.js";
+import { SupportedStorageTypes } from "#general";
 
-export interface ClusterDatasource<S extends Storage = any> {
+export interface ClusterDatasource {
     readonly version: number;
-    readonly eventHandler?: EventHandler<S>;
+    readonly eventHandler?: OccurrenceManager;
     readonly fabrics: Fabric[];
     increaseVersion(): number;
     changed(key: string, value: SupportedStorageTypes): void;
