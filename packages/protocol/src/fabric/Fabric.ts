@@ -368,10 +368,6 @@ export class FabricBuilder {
         return this.#rootCert;
     }
 
-    hasRootCert() {
-        return this.#rootCert !== undefined;
-    }
-
     setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
             intermediateCACert = undefined;
