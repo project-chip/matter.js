@@ -119,7 +119,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (isForUpdateNoc && this.session.isPase) {
             throw new StatusResponseError(
-                "csrRequest for UpdateNoc received on a PASE session.",
+                "csrRequest for UpdateNoc received on a PASE session",
                 StatusCode.InvalidCommand,
             );
         }
@@ -128,7 +128,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const failsafeContext = commissioner.failsafeContext;
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `csrRequest received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `csrRequest received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked`,
                 StatusCode.ConstraintError,
             );
         }
@@ -205,7 +205,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `addNoc received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `AddNoc is illegal after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} in the same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
@@ -213,20 +213,20 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         if (!failsafeContext.hasRootCert) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
-                debugText: "Root certificate not found.",
+                debugText: "Root certificate not found",
             };
         }
 
         if (failsafeContext.csrSessionId !== this.session.id) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
-                debugText: "CSR not found in failsafe context.",
+                debugText: "CSR not found in failsafe context",
             };
         }
 
         if (failsafeContext.forUpdateNoc) {
             throw new StatusResponseError(
-                `addNoc received after csr request was invoked for UpdateNOC.`,
+                `AddNoc is illegal after CsrRequest for UpdateNOC in same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
@@ -235,7 +235,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         if (state.commissionedFabrics >= state.supportedFabrics) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
-                debugText: `No more fabrics can be added because limit ${state.supportedFabrics} reached.`,
+                debugText: `No more fabrics can be added because limit ${state.supportedFabrics} reached`,
             };
         }
 
@@ -268,7 +268,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         try {
             if (this.session.isPase) {
-                logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}.`);
+                logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}`);
                 this.session.addAssociatedFabric(fabric);
             }
 
@@ -277,7 +277,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             const existingNocIndex = this.state.nocs.findIndex(n => n.fabricIndex === fabric.fabricIndex);
             if (existingFabricIndex !== -1 || existingNocIndex !== -1) {
                 throw new MatterFlowError(
-                    `FabricIndex ${fabric.fabricIndex} already exists in state. This should not happen.`,
+                    `FabricIndex ${fabric.fabricIndex} already exists in state. This should not happen`,
                 );
             }
         } catch (e) {
@@ -308,32 +308,35 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `updateNoc received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `UpdateNoc is illegal after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} in same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (timedOp.forUpdateNoc) {
+        if (timedOp.forUpdateNoc === false) {
             throw new StatusResponseError(
-                `addNoc received after csr request was invoked for UpdateNOC.`,
+                "UpdateNoc is illegal after CsrRequest for AddNOC in same failsafe context",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (timedOp.hasRootCert) {
+        if (timedOp.rootCertSet) {
             throw new StatusResponseError(
-                "Trusted root certificate added in this session which is now allowed for UpdateNOC.",
+                "UpdateNoc is illegal after AddTrustedRootCertificate in same failsafe context",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!timedOp.forUpdateNoc) {
-            throw new StatusResponseError("csrRequest not invoked for UpdateNOC.", StatusCode.ConstraintError);
+        if (timedOp.forUpdateNoc === undefined) {
+            throw new StatusResponseError(
+                "UpdateNoc is illegal before CsrRequest in same failsafe context",
+                StatusCode.ConstraintError,
+            );
         }
 
         if (this.session.associatedFabric.fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
             throw new StatusResponseError(
-                "Fabric of this session and the failsafe context do not match.",
+                "Fabric of this session and the failsafe context do not match",
                 StatusCode.ConstraintError,
             );
         }
@@ -395,16 +398,19 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     override addTrustedRootCertificate({ rootCaCertificate }: OperationalCredentials.AddTrustedRootCertificateRequest) {
         const failsafeContext = this.#failsafeContext;
 
-        if (failsafeContext.hasRootCert) {
+        // TC_OPCREDS_3_4 fails if we don't allow set of the root certificate in updates, even though that's illegal and
+        // UpdateNoc will subsequently fail.  So we can't just test for presence of root certificate; we actually need
+        // to test if it's been set
+        if (failsafeContext.rootCertSet) {
             throw new StatusResponseError(
-                "Trusted root certificate already added in this FailSafe context.",
+                "Trusted root certificate already added in this FailSafe context",
                 StatusCode.ConstraintError,
             );
         }
 
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `Cannot add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                `Cannot add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}`,
                 StatusCode.ConstraintError,
             );
         }
