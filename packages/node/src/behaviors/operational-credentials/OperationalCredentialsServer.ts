@@ -205,7 +205,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `AddNoc received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked`,
+                `AddNoc is illegal after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} in the same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
@@ -226,7 +226,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (failsafeContext.forUpdateNoc) {
             throw new StatusResponseError(
-                `addNoc received after csr request was invoked for UpdateNOC`,
+                `AddNoc is illegal after CsrRequest for UpdateNOC in same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
@@ -308,34 +308,30 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `updateNoc received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked`,
+                `UpdateNoc is illegal after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} in same failsafe context`,
                 StatusCode.ConstraintError,
             );
         }
 
         if (timedOp.forUpdateNoc === false) {
             throw new StatusResponseError(
-                `UpdateNoc received after csr request was invoked for AddNOC`,
+                "UpdateNoc is illegal after CsrRequest for AddNOC in same failsafe context",
                 StatusCode.ConstraintError,
             );
         }
 
         if (timedOp.rootCertSet) {
-            return {
-                // TC_OPCREDS_3_4 expects MissingCsr here...  Previously we used InvalidNoc which seems like it makes
-                // more sense
-                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
-                fabricIndex: this.session.fabric?.fabricIndex,
-                debugText: "Trusted root certificate added in this session which is not allowed for UpdateNOC",
-            };
+            throw new StatusResponseError(
+                "UpdateNoc is illegal after AddTrustedRootCertificate in same failsafe context",
+                StatusCode.ConstraintError,
+            );
         }
 
-        if (!timedOp.forUpdateNoc) {
-            return {
-                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
-                fabricIndex: this.session.fabric?.fabricIndex,
-                debugText: "csrRequest not invoked for UpdateNOC",
-            };
+        if (timedOp.forUpdateNoc === undefined) {
+            throw new StatusResponseError(
+                "UpdateNoc is illegal before CsrRequest in same failsafe context",
+                StatusCode.ConstraintError,
+            );
         }
 
         if (this.session.associatedFabric.fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
