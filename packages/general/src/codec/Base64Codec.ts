@@ -77,7 +77,7 @@ export namespace Base64 {
             }
         }
 
-        return new TextDecoder("iso-8859-1").decode(out);
+        return new TextDecoder().decode(out);
     }
 
     /**
