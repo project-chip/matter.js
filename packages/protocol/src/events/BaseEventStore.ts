@@ -51,9 +51,13 @@ export abstract class BaseEventStore implements EventStore {
         let reservationEnd;
         if (await this.#storage.has(BaseEventStore.LAST_RESERVED_NUMBER_KEY)) {
             reservationEnd = await this.#storage.get<bigint>(BaseEventStore.LAST_RESERVED_NUMBER_KEY);
-            if (reservationEnd !== undefined && !Number.isInteger(reservationEnd)) {
-                logger.warn("Ignoring invalid value for last persisted event number");
-                reservationEnd = undefined;
+            if (reservationEnd !== undefined) {
+                try {
+                    reservationEnd = BigInt(reservationEnd);
+                } catch (e) {
+                    logger.warn(`Ignoring invalid value for last persisted event number: ${e}`);
+                    reservationEnd = undefined;
+                }
             }
         }
         let nextNumber = reservationEnd;
