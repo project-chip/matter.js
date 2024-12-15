@@ -31,8 +31,8 @@ const schema = SwitchServerBase.schema!.extend({
 /**
  * This is the default server implementation of {@link SwitchBehavior}.
  *
- * This implementation includes all features of {@link WindowCovering.Cluster} and implements all mandatory commands.
- * You should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation
+ * This implementation includes all features of {@link Switch.Cluster} and implements all mandatory commands.
+ * You should use {@link SwitchServer.with} to specialize the class for the features your implementation
  * supports.
  *
  * To support all features and events the implementation adds some custom state attributes that can - or are required
