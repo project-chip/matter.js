@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { MatterError } from "../MatterError.js";
+import { ImplementationError, MatterError } from "../MatterError.js";
 import { MaybePromise } from "../util/Promises.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
@@ -24,6 +24,25 @@ export interface Storage {
     values(contexts: string[]): MaybePromise<Record<string, SupportedStorageTypes>>;
     contexts(contexts: string[]): MaybePromise<string[]>;
     clearAll(contexts: string[]): MaybePromise<void>;
+}
+
+/**
+ * Extended interface for storage that supports snapshotting.
+ */
+export interface CloneableStorage {
+    clone(): MaybePromise<Storage>;
+}
+
+export namespace CloneableStorage {
+    export function is<T extends {}>(storage: T): storage is T & CloneableStorage {
+        return "clone" in storage && typeof storage.clone === "function";
+    }
+
+    export function assert<T extends {}>(storage: T): asserts storage is T & CloneableStorage {
+        if (!is(storage)) {
+            throw new ImplementationError("Storage does not support required snapshotting function");
+        }
+    }
 }
 
 // This extra class is needed because of https://github.com/microsoft/TypeScript/issues/57905 in order
