@@ -71,7 +71,7 @@ export function camelize(name: string, upperFirst = false) {
         .join("");
 
     // Special case so "100ths" doesn't become "100Ths" which is formally correct but goofy
-    result = result.replace(/(\d+)Ths/i, "$1ths");
+    result = result.replace(/(\d)Ths/i, "$1ths");
 
     return result;
 }

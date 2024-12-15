@@ -14,18 +14,13 @@ export namespace Environmental {
     /**
      * An "environmental service" is an object available via {@link Environment.get}.
      *
-     * Any object may be an environmental service.  This methods in this interface are optional.
+     * Any object may be an environmental service.  The methods in this interface are optional.
      */
     export interface Service {
         /**
          * Asynchronous construction, respected by {@link Environment.load}.
          */
         construction?: Promise<any>;
-
-        /**
-         * Asynchronous destruction.  Invoked by the environment when it is destroyed.
-         */
-        [Symbol.asyncDispose]?: () => Promise<any>;
 
         /**
          * Standard diagnostic presentation.
