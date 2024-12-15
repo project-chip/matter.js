@@ -18,7 +18,7 @@ export class EventsBehavior extends Behavior {
 
     declare state: EventsBehavior.State;
 
-    override initialize() {
+    override async initialize() {
         const storage = this.env.get(StorageManager).createContext("events");
         let store;
         if (this.state.nonvolatile) {
@@ -27,7 +27,9 @@ export class EventsBehavior extends Behavior {
             store = new VolatileEventStore(storage, this.state.numberBlockSize);
         }
 
-        this.env.set(OccurrenceManager, new OccurrenceManager({ store, bufferConfig: this.state.buffers }));
+        const events = new OccurrenceManager({ store, bufferConfig: this.state.buffers });
+        this.env.set(OccurrenceManager, events);
+        await events.construction;
     }
 
     static override schema = new DatatypeModel(
