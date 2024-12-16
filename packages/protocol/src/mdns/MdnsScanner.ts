@@ -720,24 +720,27 @@ export class MdnsScanner implements Scanner {
     #handleOperationalRecords(answers: DnsRecord<any>[], formerAnswers: DnsRecord<any>[], netInterface: string) {
         let recordsHandled = false;
         // Does the message contain data for an operational service?
-        const operationalTxtRecord = answers.find(
+        const operationalTxtRecords = answers.filter(
             ({ name, recordType }) => recordType === DnsRecordType.TXT && name.endsWith(MATTER_SERVICE_QNAME),
         );
-        if (operationalTxtRecord !== undefined) {
-            this.#handleOperationalTxtRecord(operationalTxtRecord, netInterface);
+        if (operationalTxtRecords.length) {
+            operationalTxtRecords.forEach(record => this.#handleOperationalTxtRecord(record, netInterface));
             recordsHandled = true;
         }
 
-        const operationalSrvRecord =
-            answers.find(
-                ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
-            ) ??
-            formerAnswers.find(
+        let operationalSrvRecords = answers.filter(
+            ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
+        );
+        if (!operationalSrvRecords.length) {
+            operationalSrvRecords = formerAnswers.filter(
                 ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
             );
+        }
 
-        if (operationalSrvRecord !== undefined) {
-            this.#handleOperationalSrvRecord(operationalSrvRecord, answers, formerAnswers, netInterface);
+        if (operationalSrvRecords.length) {
+            operationalSrvRecords.forEach(record =>
+                this.#handleOperationalSrvRecord(record, answers, formerAnswers, netInterface),
+            );
             recordsHandled = true;
         }
         return recordsHandled;

@@ -45,7 +45,7 @@ import { PeerAddressStore, PeerDataStore } from "./PeerAddressStore.js";
 const logger = Logger.get("PeerSet");
 
 const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
-const RETRANSMISSION_DISCOVERY_TIMEOUT_MS = 5_000;
+const RETRANSMISSION_DISCOVERY_TIMEOUT_S = 5;
 
 const CONCURRENT_QUEUED_INTERACTIONS = 4;
 const INTERACTION_QUEUE_DELAY_MS = 100;
@@ -736,7 +736,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         this.#runningPeerDiscoveries.set(address, { type: NodeDiscoveryType.RetransmissionDiscovery });
         this.#scanners
             .scannerFor(ChannelType.UDP)
-            ?.findOperationalDevice(fabric, nodeId, RETRANSMISSION_DISCOVERY_TIMEOUT_MS, true)
+            ?.findOperationalDevice(fabric, nodeId, RETRANSMISSION_DISCOVERY_TIMEOUT_S, true)
             .catch(error => {
                 logger.error(`Failed to discover ${address} after resubmission started.`, error);
             })

@@ -158,7 +158,7 @@ export abstract class FailsafeContext {
      */
     createCertificateSigningRequest(isForUpdateNoc: boolean, sessionId: number) {
         if (this.#fabrics.findByKeypair(this.#fabricBuilder.keyPair)) {
-            throw new MatterFlowError("Key pair already exists."); // becomes Failure as StateResponse
+            throw new MatterFlowError("Key pair already exists."); // becomes Failure as StatusResponse
         }
 
         const result = this.#fabricBuilder.createCertificateSigningRequest();
