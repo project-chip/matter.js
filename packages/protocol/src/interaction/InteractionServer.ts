@@ -659,7 +659,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         const clusterDataVersionInfo = new Map<string, number>();
         const inaccessiblePaths = new Set<string>();
 
-        // TODO Add handling for moreChunkedMessages here when adopting for Matter 1.3
+        // TODO Add handling for moreChunkedMessages here when adopting for Matter 1.4
 
         for (const writeRequest of writeData) {
             const { path: writePath, dataVersion } = writeRequest;
