@@ -58,7 +58,7 @@
     },
     "devDependencies": {
         "typescript": "~5.7.2",
-        "@types/dockerode": "^3.3.30",
+        "@types/dockerode": "^3.3.32",
         "@types/chai": "^4.3.16",
         "@types/chai-as-promised": "^7.1.8",
         "@types/debug": "^4.1.12",
