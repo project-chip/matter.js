@@ -18,6 +18,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Fix: Corrects some Batch invoke checks and logic
+    - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
+    - Fix: process all TXT/SRV records in MDNS response and not just the first one
 
 ## 0.11.9 (2024-12-11)
 
