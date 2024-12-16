@@ -1911,6 +1911,11 @@ describe("Integration Test", () => {
                     },
                 },
                 discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
                     addresses: [
                         {
                             ip: SERVER_IPv6,
