@@ -93,6 +93,11 @@ export class PromiseQueue {
         this.#queue.length = 0;
     }
 
+    /** Get the number of promises in the queue. */
+    get count() {
+        return this.#queue.length;
+    }
+
     /**
      * Close the queue and remove all outstanding promises (but do not reject them).
      */
