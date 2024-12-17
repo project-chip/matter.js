@@ -233,6 +233,7 @@ export function Construction<const T extends Constructable>(
     let closedReject: undefined | ((error: any) => void);
 
     let error: undefined | Error;
+    let errorForDependencies: undefined | CrashedDependencyError;
     let primaryCauseHandled = false;
     let status = Lifecycle.Status.Inactive;
     let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
@@ -473,12 +474,12 @@ export function Construction<const T extends Constructable>(
                 case Lifecycle.Status.Inactive:
                     awaiterPromise = closedPromise = undefined;
                     primaryCauseHandled = false;
-                    error = undefined;
+                    error = errorForDependencies = undefined;
                     break;
 
                 case Lifecycle.Status.Active:
                     awaiterPromise = closedPromise = undefined;
-                    error = undefined;
+                    error = errorForDependencies = undefined;
                     break;
 
                 default:
@@ -590,6 +591,10 @@ export function Construction<const T extends Constructable>(
             return error;
         }
 
+        if (errorForDependencies) {
+            return errorForDependencies;
+        }
+
         let what;
         if (subject.toString === Object.prototype.toString) {
             what = subject.constructor.name;
@@ -597,9 +602,10 @@ export function Construction<const T extends Constructable>(
             what = subject.toString();
         }
 
-        const crashError = new CrashedDependencyError(what, "unavailable due to initialization error");
-        crashError.subject = subject;
-        return crashError;
+        errorForDependencies = new CrashedDependencyError(what, "unavailable due to initialization error");
+        errorForDependencies.subject = subject;
+        errorForDependencies.cause = error;
+        return errorForDependencies;
     }
 
     function setStatus(newStatus: Lifecycle.Status) {

@@ -10,6 +10,7 @@ import "./util/node-shims.js";
 import "./global-definitions.js";
 
 import { Builder, Graph, Package, Project } from "#tools";
+import { clear } from "console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { TestRunner } from "./runner.js";
@@ -57,6 +58,7 @@ export async function main(argv = process.argv) {
         .option("profile", { type: "boolean", describe: "Write profiling data to build/profiles (node only)" })
         .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
+        .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -77,9 +79,15 @@ export async function main(argv = process.argv) {
     // If the location is a workspace, test all packages with test
     const builder = new Builder();
     const pkg = new Package({ path: packageLocation });
+
     if (pkg.isWorkspace) {
         const graph = await Graph.load(pkg);
         await graph.build(builder, false);
+
+        if (args.clear) {
+            clear();
+        }
+
         for (const node of graph.nodes) {
             if (!node.pkg.hasTests || node.pkg.json.matter?.test === false) {
                 continue;
@@ -94,6 +102,11 @@ export async function main(argv = process.argv) {
         } else {
             await builder.build(new Project(pkg));
         }
+
+        if (args.clear) {
+            clear();
+        }
+
         await test(pkg);
     }
 

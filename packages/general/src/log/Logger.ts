@@ -67,6 +67,7 @@ type LoggerDefinition = {
     log: (level: LogLevel, formattedLog: string) => void;
     defaultLogLevel: LogLevel;
     logLevels: { [facility: string]: LogLevel };
+    context?: Diagnostic.Context;
 };
 
 /**
@@ -96,6 +97,7 @@ type LoggerDefinition = {
 export class Logger {
     static logger: Array<LoggerDefinition>;
     static nestingLevel: number;
+    readonly #name: string;
 
     /** Add additional logger to the list of loggers including the default configuration. */
     public static addLogger(
@@ -439,20 +441,31 @@ export class Logger {
         }
     }
 
-    constructor(private readonly name: string) {}
+    constructor(name: string) {
+        this.#name = name;
+    }
 
-    debug = (...values: any[]) => this.log(LogLevel.DEBUG, values);
-    info = (...values: any[]) => this.log(LogLevel.INFO, values);
-    notice = (...values: any[]) => this.log(LogLevel.NOTICE, values);
-    warn = (...values: any[]) => this.log(LogLevel.WARN, values);
-    error = (...values: any[]) => this.log(LogLevel.ERROR, values);
-    fatal = (...values: any[]) => this.log(LogLevel.FATAL, values);
+    debug = (...values: any[]) => this.#log(LogLevel.DEBUG, values);
+    info = (...values: any[]) => this.#log(LogLevel.INFO, values);
+    notice = (...values: any[]) => this.#log(LogLevel.NOTICE, values);
+    warn = (...values: any[]) => this.#log(LogLevel.WARN, values);
+    error = (...values: any[]) => this.#log(LogLevel.ERROR, values);
+    fatal = (...values: any[]) => this.#log(LogLevel.FATAL, values);
 
-    private log(level: LogLevel, values: any[]) {
-        Logger.logger.forEach(logger => {
-            if (level < (logger.logLevels[this.name] ?? logger.defaultLogLevel)) return;
-            logger.log(level, logger.logFormatter(Time.now(), level, this.name, nestingPrefix(), values));
-        });
+    #log(level: LogLevel, values: any[]) {
+        for (const logger of Logger.logger) {
+            if (level < (logger.logLevels[this.#name] ?? logger.defaultLogLevel)) {
+                return;
+            }
+
+            if (!logger.context) {
+                logger.context = Diagnostic.Context();
+            }
+
+            logger.context.run(() =>
+                logger.log(level, logger.logFormatter(Time.now(), level, this.#name, nestingPrefix(), values)),
+            );
+        }
     }
 }
 

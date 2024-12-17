@@ -387,6 +387,37 @@ describe("Logger", () => {
         });
     });
 
+    describe("error reporting", () => {
+        it("logs stack trace on first report but not second", () => {
+            const error = new Error("Oops my bad");
+            error.stack = "at someRandomFunction (some-random-file.ts:10:1)";
+
+            const message1 = captureOne(() => logger.error("Oh no:", error));
+            expect(message1.message).match(/Oops my bad/);
+            expect(message1.message).match(/someRandomFunction/);
+
+            const message2 = captureOne(() => logger.error("Let's make sure you get this", error));
+            expect(message2.message).match(/Oops my bad/);
+            expect(message2.message).not.match(/someRandomFunction/);
+        });
+
+        it("logs stack trace on first report but not second as cause", () => {
+            const error = new Error("Oops my bad");
+            error.stack = "at someRandomFunction (some-random-file.ts:10:1)";
+            const message1 = captureOne(() => logger.error("Oh no:", error));
+            expect(message1.message).match(/Oops my bad/);
+            expect(message1.message).match(/someRandomFunction/);
+
+            const error2 = new Error("Crap sorry about this too", { cause: error });
+            error2.stack = "at someOtherFunction (some-other-function.ts:10:1)";
+            const message2 = captureOne(() => logger.error("And then this happened:", error2));
+            expect(message2.message).match(/Crap sorry/);
+            expect(message2.message).match(/someOtherFunction/);
+            expect(message2.message).match(/Oops my bad/);
+            expect(message2.message).not.match(/someRandomFunction/);
+        });
+    });
+
     function itUsesCorrectConsoleMethod(sourceName: string, sinkName: string = sourceName) {
         it(`maps logger.${sourceName} to console.${sinkName}`, () => {
             const actualLogger = Logger.log;

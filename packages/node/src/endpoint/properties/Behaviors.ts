@@ -506,9 +506,13 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context =>
-            this.activate(type, context.agentFor(this.#endpoint)),
-        );
+        const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context => {
+            this.activate(type, context.agentFor(this.#endpoint));
+
+            // Agent must remain active until backing is initialized
+            const backing = this.#backingFor(type);
+            return backing.construction.ready;
+        });
 
         if (MaybePromise.is(result)) {
             result.then(undefined, error => {
@@ -516,10 +520,12 @@ export class Behaviors {
                 // backing.  If there's no backing then there shouldn't be a promise so this is effectively an internal
                 // error
                 const backing = this.#backings[type.id];
-                if (backing) {
-                    logger.error(`Error initializing ${backing}`, error);
+                if (error instanceof BehaviorInitializationError) {
+                    logger.error(error);
+                } else if (backing) {
+                    logger.error(`Error initializing ${backing}:`, error);
                 } else {
-                    logger.error(`Unexpected rejection initializing ${type.name}`, error);
+                    logger.error(`Unexpected rejection initializing ${type.name}:`, error);
                 }
             });
         }

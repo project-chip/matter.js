@@ -45,7 +45,11 @@ export abstract class BehaviorBacking {
             // The endpoint reports errors during initialization.  For errors occurring later we report the error
             // ourselves
             if (endpoint.lifecycle.isReady) {
-                logger.error(`Error initializing ${this}:`, error);
+                if (error instanceof BehaviorInitializationError) {
+                    logger.error(error);
+                } else {
+                    logger.error(`Error initializing ${this}:`, error);
+                }
             }
         });
     }
@@ -64,8 +68,12 @@ export abstract class BehaviorBacking {
      * Initiated via {@link Construction#start} by Behaviors class once the backing is installed.
      */
     [Construction.construct](agent: Agent) {
+        let crashError: undefined | BehaviorInitializationError;
         const crash = (cause: unknown) => {
-            throw new BehaviorInitializationError(`Error initializing ${this}`, cause);
+            if (!crashError) {
+                crashError = new BehaviorInitializationError(`Error initializing ${this}`, cause);
+            }
+            throw crashError;
         };
 
         try {
