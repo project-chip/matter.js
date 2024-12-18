@@ -6,6 +6,7 @@
 
 import { SupportedBehaviors } from "#endpoint/properties/SupportedBehaviors.js";
 import { MutableEndpoint } from "#endpoint/type/MutableEndpoint.js";
+import { RootEndpoint } from "#endpoints/root";
 import { DeviceClassification } from "#model";
 import { DeviceTypeId } from "#types";
 import { MockBehavior1, MockBehavior2 } from "../mock-endpoint.js";
@@ -91,6 +92,17 @@ describe("MutableEndpoint", () => {
     it("extends with two behaviors", () => {
         const Type = MutableEndpoint(Identity).with(MockBehavior1, MockBehavior2);
         expectIdentityWithBehaviors(Type);
+    });
+
+    it("supports withBehavior alias", () => {
+        const Type = MutableEndpoint(Identity).withBehaviors(MockBehavior1, MockBehavior2);
+        expectIdentityWithBehaviors(Type);
+    });
+
+    it("RootEndpoint supports withBehavior", () => {
+        const Type = RootEndpoint.withBehaviors(MockBehavior1, MockBehavior2);
+        expect(Type.behaviors.one).not.undefined;
+        expect(Type.behaviors.two).not.undefined;
     });
 
     it("extends with one behavior twice", () => {

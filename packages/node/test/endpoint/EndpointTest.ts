@@ -6,16 +6,21 @@
 
 import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
 import { BasicInformationServer } from "#behaviors/basic-information";
+import { OnOffBehavior, OnOffServer } from "#behaviors/on-off";
+import { PowerSourceServer } from "#behaviors/power-source";
 import { WindowCoveringServer } from "#behaviors/window-covering";
 import { AccessControl } from "#clusters/access-control";
 import { BasicInformation } from "#clusters/basic-information";
 import { WindowCoveringCluster } from "#clusters/window-covering";
+import { OnOffLightDevice } from "#devices/on-off-light";
 import { TemperatureSensorDevice } from "#devices/temperature-sensor";
 import { WindowCoveringDevice } from "#devices/window-covering";
 import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
+import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { RootEndpoint } from "#endpoints/root";
 import { MockNode } from "../node/mock-node.js";
+import { MockServerNode } from "../node/mock-server-node.js";
 
 const WindowCoveringLiftDevice = WindowCoveringDevice.with(
     WindowCoveringServer.for(WindowCoveringCluster.with("Lift", "PositionAwareLift", "AbsolutePosition")),
@@ -167,6 +172,57 @@ describe("Endpoint", () => {
                     targets: null,
                 },
             ]);
+        });
+    });
+
+    describe("accepts new behaviors", () => {
+        it("before endpoint installation", async () => {
+            const endpoint = new Endpoint(WindowCoveringLiftDevice);
+            endpoint.behaviors.require(OnOffServer);
+            const node = new MockServerNode();
+            await node.add(endpoint);
+            await node.construction;
+            expect(endpoint.stateOf(OnOffBehavior).onOff).false;
+        });
+
+        it("after endpoint installation", async () => {
+            const endpoint = new Endpoint(WindowCoveringLiftDevice);
+            const node = new MockServerNode();
+            await node.add(endpoint);
+            endpoint.behaviors.require(OnOffServer);
+            node.parts.add(endpoint);
+            await node.construction;
+            expect(endpoint.stateOf(OnOffBehavior).onOff).false;
+        });
+
+        it("after node initialization", async () => {
+            const endpoint = new Endpoint(WindowCoveringLiftDevice);
+            const node = new MockServerNode();
+            await node.add(endpoint);
+            node.parts.add(endpoint);
+            await node.construction;
+            endpoint.behaviors.require(OnOffServer);
+            expect(endpoint.stateOf(OnOffBehavior).onOff).false;
+        });
+
+        it("after node start", async () => {
+            const endpoint = new Endpoint(WindowCoveringLiftDevice);
+            const node = new MockServerNode();
+            await node.add(endpoint);
+            node.parts.add(endpoint);
+            await node.start();
+            endpoint.behaviors.require(OnOffServer);
+            expect(endpoint.stateOf(OnOffBehavior).onOff).false;
+            await node.close();
+        });
+
+        it("with powersource on a bridged node", async () => {
+            const node = new MockServerNode();
+            const bridge = new Endpoint(AggregatorEndpoint);
+            await node.add(bridge);
+            const bridgedNode = new Endpoint(OnOffLightDevice);
+            await bridge.add(bridgedNode);
+            bridgedNode.behaviors.require(PowerSourceServer);
         });
     });
 });

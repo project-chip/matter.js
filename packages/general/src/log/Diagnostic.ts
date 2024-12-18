@@ -7,6 +7,8 @@
 import type { Lifecycle } from "../util/Lifecycle.js";
 import { LogLevel } from "./LogLevel.js";
 
+let errorCollector: undefined | ((error: {}) => boolean);
+
 /**
  * Logged values may implement this interface to customize presentation.
  *
@@ -72,6 +74,57 @@ export namespace Diagnostic {
          * Path, resource or session identifier.
          */
         Via = "via",
+    }
+
+    export interface Context {
+        run<T>(fn: () => T): T;
+    }
+
+    /**
+     * Diagnostic context provides contextual information that affects formatting.
+     */
+    export function Context(): Context {
+        let errorsCollected: undefined | {}[];
+        const errorsReported = new WeakSet<{}>();
+
+        const thisErrorCollector = (error: {}) => {
+            // Indicate to caller this error is already reported
+            if (errorsReported.has(error)) {
+                return true;
+            }
+
+            // Collect the error so it can be marked as reported if a contextual operation succeeds
+            if (errorsCollected) {
+                errorsCollected.push(error);
+            } else {
+                errorsCollected = [error];
+            }
+
+            // Indicate to caller this error is as yet unreported
+            return false;
+        };
+
+        return {
+            run(fn) {
+                const originalErrorCollector = errorCollector;
+                try {
+                    errorCollector = thisErrorCollector;
+
+                    const result = fn();
+
+                    if (errorsCollected) {
+                        for (const error of errorsCollected) {
+                            errorsReported.add(error);
+                        }
+                        errorsCollected = undefined;
+                    }
+
+                    return result;
+                } finally {
+                    errorCollector = originalErrorCollector;
+                }
+            },
+        };
     }
 
     export const presentation = Symbol("presentation");
@@ -282,7 +335,7 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
     const { messagePrefix, parentStack } = options;
 
     const messageAndStack = messageAndStackFor(error, parentStack);
-    const { stack, stackLines } = messageAndStack;
+    let { stack, stackLines } = messageAndStack;
 
     let { message } = messageAndStack;
     if (messagePrefix) {
@@ -296,12 +349,20 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
         ({ cause, errors } = error);
     }
 
+    // Report the error to context.  If return value is true, stack is already reported in this context so omit
+    if (errorCollector?.(error)) {
+        stack = stackLines = undefined;
+    }
+
     if (stack === undefined && cause === undefined && errors === undefined) {
         return message;
     }
 
     const list: Array<string | Diagnostic> = [message];
-    if (stack !== undefined) {
+    if (stack === undefined) {
+        // Ensure line break in case of no stack
+        list.push(Diagnostic(Diagnostic.Presentation.List, []));
+    } else {
         list.push(Diagnostic(Diagnostic.Presentation.List, stack));
     }
 
