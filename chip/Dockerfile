@@ -107,9 +107,6 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     apt-get -qq update && \
     apt-get -qq -y install avahi-daemon avahi-utils iproute2 less vim wget
 
-RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && \
-    chmod +x /usr/bin/yq
-
 LABEL org.opencontainers.image.title="matter.js CHIP tooling build"
 LABEL org.opencontainers.image.url=https://github.com/matter-js/matter.js-chip
 LABEL org.opencontainers.image.source=https://github.com/project-chip/matter.js/tree/main/packages/testing/chip
@@ -161,3 +158,7 @@ COPY --from=build /connectedhomeip/credentials/development/paa-root-certs /crede
 COPY --from=build /connectedhomeip/credentials/development/cd-certs /credentials/development/cd-certs
 
 RUN mkdir /run/dbus
+
+# Summarize tests for efficient metadata load at runtime
+COPY generate-test-descriptor /bin/generate-test-descriptor
+RUN generate-test-descriptor > /lib/test-descriptor.json
