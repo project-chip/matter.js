@@ -45,7 +45,7 @@ const schema = Base.schema!.extend({
  * Endpoint gets initialized.
  */
 export class GeneralDiagnosticsServer extends Base {
-    protected declare internal: GeneralDiagnosticsServer.Internal;
+    declare protected internal: GeneralDiagnosticsServer.Internal;
     declare state: GeneralDiagnosticsServer.State;
     schema = schema;
 

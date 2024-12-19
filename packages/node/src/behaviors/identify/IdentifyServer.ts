@@ -23,7 +23,7 @@ import { IdentifyBehavior } from "./IdentifyBehavior.js";
  * * `stopIdentifying` - Emitted when the device stops identifying.
  */
 export class IdentifyServer extends IdentifyBehavior {
-    protected declare internal: IdentifyServer.Internal;
+    declare protected internal: IdentifyServer.Internal;
     declare state: IdentifyServer.State;
     declare events: IdentifyServer.Events;
 

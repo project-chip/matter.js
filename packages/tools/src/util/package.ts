@@ -8,7 +8,8 @@ import { existsSync, readFileSync, statSync } from "fs";
 import { readdir, readFile, stat, writeFile } from "fs/promises";
 import { dirname, join, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
-import { globSync, isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
+import { isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
+import { globSync } from "./glob.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
@@ -25,6 +26,7 @@ function findJson(filename: string, path: string = ".", title?: string) {
         const json = ignoreErrorSync(["ENOENT", "ENOTDIR"], () =>
             JSON.parse(readFileSync(resolve(path, filename)).toString()),
         );
+
         if (json) {
             if (title === undefined || json.name === title) {
                 return { root: path, json };

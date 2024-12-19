@@ -51,7 +51,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * All overridable methods except setRemainingTime can be implemented sync or async by returning a Promise.
  */
 export class LevelControlServerLogic extends LevelControlLogicBase {
-    protected declare internal: LevelControlServerLogic.Internal;
+    declare protected internal: LevelControlServerLogic.Internal;
     declare state: LevelControlServerLogic.State;
 
     /** Returns the minimum level, including feature specific fallback value handling. */

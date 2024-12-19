@@ -5,7 +5,6 @@
  */
 
 import { readdirSync, readFileSync, statSync } from "fs";
-import { GLOBSTAR, Minimatch, ParseReturnFiltered } from "minimatch";
 import { resolve } from "path";
 import { ignoreErrorSync } from "./errors.js";
 
@@ -49,120 +48,53 @@ export function maybeReaddirSync(path: string) {
     }
 }
 
-export class GlobError extends Error {}
-
-export function globSync(pattern: string | string[]) {
-    if (typeof pattern === "string") {
-        return [...globOneSync(pattern)];
-    }
-
-    const result = Array<string>();
-    for (const p of pattern) {
-        result.push(...globOneSync(p));
-    }
-
-    return result;
-}
-
-function globOneSync(pattern: string) {
-    // Parse the glob
-    const mm = new Minimatch(pattern.replace(/\\/g, "/"), {});
-    const results = new Set<string>();
-    for (const part of mm.set) {
-        for (const path of globOnePartSync(mm, part)) {
-            results.add(path);
-        }
-    }
-    return results;
-}
-
-function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[]) {
-    // Find the starting path
-    let rootPath = "";
-    let didOne = false;
-    while (typeof segments[0] === "string") {
-        if (didOne) {
-            rootPath += "/";
-        } else {
-            didOne = true;
-        }
-        rootPath += segments.shift() as string;
-    }
-
-    // If we are out of segments, this is not a glob.  Just check for presence
-    if (!segments.length) {
-        const stat = maybeStatSync(rootPath);
-
-        if (stat?.[rootPath.endsWith("/") ? "isDirectory" : "isFile"]()) {
-            return [rootPath];
-        }
-
-        return [];
-    }
-
-    // Walk filesystem and apply glob
-    const results = new Set<string>();
-
-    function match(path: string, segments: ParseReturnFiltered[]) {
-        // If the filter is empty then match current path
-        if (!segments.length) {
-            results.add(path);
-            return;
-        }
-
-        // If filter starts without magic then just stat that one path
-        if (typeof segments[0] === "string") {
-            const subpath = resolve(path, segments[0]);
-            if (maybeStatSync(resolve(path, segments[0]))) {
-                match(subpath, segments.slice(1));
-                return;
-            }
-        }
-
-        // If filter is just GLOBSTAR then all paths match but search continues
-        if (segments.length === 1 && segments[0] === GLOBSTAR) {
-            results.add(path);
-        }
-
-        // Filter starts with magic so load directory entries to match
-        const subnames = maybeReaddirSync(path);
-        if (!subnames) {
-            return;
-        }
-
-        // Test each directory entry
-        for (const subname of subnames) {
-            const subpath = resolve(path, subname);
-
-            // Anything but GLOBSTAR is 1:1 subname/segment match
-            if (segments[0] !== GLOBSTAR) {
-                if (mm.matchOne([subname], segments, true)) {
-                    match(subpath, segments.slice(1));
-                }
-                continue;
-            }
-
-            // GLOBSTAR matches nothing so test second segment
-            if (segments.length > 1) {
-                if (mm.matchOne([subname], segments.slice(1), true)) {
-                    match(subpath, segments.slice(2));
-                }
-            }
-
-            // GLOBSTAR matches everything
-            match(subpath, segments);
-        }
-    }
-
-    match(rootPath, segments);
-
-    return results;
-}
-
 export function isDirectory(path: string) {
     return !!ignoreErrorSync("ENOENT", () => statSync(path).isDirectory());
 }
 
 export function isFile(path: string) {
     return !!ignoreErrorSync("ENOENT", () => statSync(path).isFile());
+}
+
+/**
+ * Tiny virtual filesystem driver.  Currently used only for processing globs.
+ */
+export interface FilesystemSync<T extends FilesystemSync.Stat = FilesystemSync.Stat> {
+    resolve(...segments: string[]): string;
+    readdir(path: string): string[] | undefined;
+    stat(path: string): T | undefined;
+}
+
+export function FilesystemSync(): FilesystemSync<FilesystemSync.Stat> {
+    return {
+        resolve(...segments) {
+            return resolve(...segments);
+        },
+
+        readdir(path) {
+            return maybeReaddirSync(path);
+        },
+
+        stat(path) {
+            const stats = maybeStatSync(path);
+            if (stats) {
+                return {
+                    get isFile() {
+                        return stats.isFile();
+                    },
+
+                    get isDirectory() {
+                        return stats.isDirectory();
+                    },
+                };
+            }
+        },
+    };
+}
+
+export namespace FilesystemSync {
+    export interface Stat {
+        isDirectory?: boolean;
+        isFile?: boolean;
+    }
 }
