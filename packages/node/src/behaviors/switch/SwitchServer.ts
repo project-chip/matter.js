@@ -51,7 +51,7 @@ const schema = SwitchServerBase.schema!.extend({
  *  Switch (MS) feature is used.
  */
 export class SwitchServerLogic extends SwitchServerBase {
-    protected declare internal: SwitchServerLogic.Internal;
+    declare protected internal: SwitchServerLogic.Internal;
     declare state: SwitchServerLogic.State;
     declare events: SwitchServerLogic.Events;
     schema = schema;

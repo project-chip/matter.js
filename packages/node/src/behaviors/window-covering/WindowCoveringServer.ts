@@ -110,7 +110,7 @@ const WC_PERCENT100THS_COEFFICIENT = 100;
  * implementation.
  */
 export class WindowCoveringServerLogic extends WindowCoveringServerBase {
-    protected declare internal: WindowCoveringServerLogic.Internal;
+    declare protected internal: WindowCoveringServerLogic.Internal;
     declare state: WindowCoveringServerLogic.State;
 
     override initialize() {
