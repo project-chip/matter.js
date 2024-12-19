@@ -23,6 +23,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
     - Fix: Prevents multi message interactions from trying to continue on new exchange
     - Fix: Fixes the timed node polling during discovery
+    - Fix: Fixes commissionable devices discovery with timeout
 
 -   @project-chip/matter.js
     - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions 

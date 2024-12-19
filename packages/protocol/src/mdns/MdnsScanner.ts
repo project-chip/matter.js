@@ -635,9 +635,8 @@ export class MdnsScanner implements Scanner {
         cancelSignal?: Promise<void>,
     ): Promise<CommissionableDevice[]> {
         const discoveredDevices = new Set<string>();
-        const now = Time.nowMs();
 
-        const discoveryEndTime = timeoutSeconds ? now + timeoutSeconds * 1000 : undefined;
+        const discoveryEndTime = timeoutSeconds ? Time.nowMs() + timeoutSeconds * 1000 : undefined;
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
@@ -663,7 +662,7 @@ export class MdnsScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                const remainingTime = Math.ceil((discoveryEndTime - now) / 1000);
+                remainingTime = discoveryEndTime - Time.nowMs();
                 if (remainingTime <= 0) {
                     break;
                 }
