@@ -8,6 +8,7 @@ import { AdministratorCommissioning, BasicInformation, DescriptorCluster, Operat
 import {
     AsyncObservable,
     AtLeastOne,
+    BasicSet,
     Construction,
     Crypto,
     Diagnostic,
@@ -31,6 +32,7 @@ import {
     InteractionClient,
     NodeDiscoveryType,
     PaseClient,
+    SecureSession,
     UnknownNodeError,
     logEndpoint,
     structureReadAttributeDataToClusterObject,
@@ -74,7 +76,14 @@ const RECONNECT_DELAY_MS = 15_000; // 15 seconds
 /** Delay after a shutdown event to try to reconnect to the device */
 const RECONNECT_DELAY_AFTER_SHUTDOWN_MS = 30_000; // 30 seconds, to give device time to restart and maybe inform us about
 
+/** Maximum delay after a disconnect to try to reconnect to the device */
 const RECONNECT_MAX_DELAY_MS = 600_000; // 10 minutes
+
+/**
+ * Delay after a new session was opened by the device while in discovery state.
+ * This usually happens for devices that support persisted subscriptions.
+ */
+const NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY = 5_000;
 
 export enum NodeStates {
     /**
@@ -258,6 +267,7 @@ export class PairedNode {
         interactionClient: InteractionClient,
         reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
+        sessions: BasicSet<SecureSession, SecureSession>,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ): Promise<PairedNode> {
         const node = new PairedNode(
@@ -268,6 +278,7 @@ export class PairedNode {
             interactionClient,
             reconnectFunc,
             assignDisconnectedHandler,
+            sessions,
             storedAttributeData,
         );
         await node.construction;
@@ -285,6 +296,7 @@ export class PairedNode {
             noForcedConnection?: boolean,
         ) => Promise<void>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
+        sessions: BasicSet<SecureSession, SecureSession>,
         storedAttributeData?: DecodedAttributeReportValue<any>[],
     ) {
         assignDisconnectedHandler(async () => {
@@ -315,6 +327,18 @@ export class PairedNode {
         });
         this.#nodeDetails = new DeviceInformation(nodeId, knownNodeDetails);
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, this.#nodeDetails.meta);
+
+        sessions.added.on(session => {
+            if (session.peerNodeId !== this.nodeId) return;
+            if (this.state === NodeStates.WaitingForDeviceDiscovery) {
+                logger.info(
+                    `Session for peer node ${session.peerNodeId} connected while node is in discovery mode ...`,
+                );
+                // Try last known address first to speed up reconnection
+                this.#setConnectionState(NodeStates.Reconnecting);
+                this.#scheduleReconnect(NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY);
+            }
+        });
 
         this.#construction = Construction(this, async () => {
             // We try to initialize from stored data already

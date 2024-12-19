@@ -17,9 +17,17 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
+    - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
-    - Fix: process all TXT/SRV records in MDNS response and not just the first one
+    - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
+    - Fix: Prevents multi message interactions from trying to continue on new exchange
+    - Fix: Fixes the timed node polling during discovery
+    - Fix: Fixes commissionable devices discovery with timeout
+    - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
+
+-   @project-chip/matter.js
+    - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions 
 
 ## 0.11.9 (2024-12-11)
 

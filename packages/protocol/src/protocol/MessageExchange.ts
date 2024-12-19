@@ -50,6 +50,12 @@ export type ExchangeSendOptions = {
     expectAckOnly?: boolean;
 
     /**
+     * If the message is part of a multiple message interaction, this flag indicates that it is not allowed
+     * to establish a new exchange
+     */
+    multipleMessageInteraction?: boolean;
+
+    /**
      * Defined an expected processing time by the responder for the message. This is used to calculate the final
      * timeout for responses together with the normal retransmission logic when MRP is used.
      */

@@ -68,11 +68,11 @@ export class CertificateAuthority {
                 this.rootKeyIdentifier = certValues.rootKeyIdentifier;
                 this.rootCertBytes = certValues.rootCertBytes;
                 this.nextCertificateId = BigInt(certValues.nextCertificateId);
-                logger.debug(`Loaded stored credentials with ID ${this.rootCertId}`);
+                logger.info(`Loaded stored credentials with ID ${this.rootCertId}`);
                 return;
             }
 
-            logger.debug(`Created new credentials with ID ${this.rootCertId}`);
+            logger.info(`Created new credentials with ID ${this.rootCertId}`);
 
             if (options instanceof StorageContext) {
                 await options.set({

@@ -81,10 +81,11 @@ class InteractionMessenger {
         return this.exchange.send(messageType, payload, options);
     }
 
-    sendStatus(status: StatusCode) {
+    sendStatus(status: StatusCode, options?: ExchangeSendOptions) {
         return this.send(
             MessageType.StatusResponse,
             TlvStatusResponse.encode({ status, interactionModelRevision: Specification.INTERACTION_MODEL_REVISION }),
+            options,
         );
     }
 
@@ -392,7 +393,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
-                    await this.sendStatus(StatusCode.InvalidSubscription);
+                    await this.sendStatus(StatusCode.InvalidSubscription, { multipleMessageInteraction: true });
                     throw new UnexpectedDataError(
                         report.subscriptionId === undefined
                             ? "Invalid Data report without Subscription ID"
@@ -422,11 +423,11 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             }
 
             if (report.moreChunkedMessages) {
-                await this.sendStatus(StatusCode.Success);
+                await this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true });
             } else if (!report.suppressResponse) {
                 // We received the last message and need to send a final Success, but we do not need to wait for it and
                 // also don't care if it fails
-                this.sendStatus(StatusCode.Success).catch(error =>
+                this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true }).catch(error =>
                     logger.info("Error while sending final Success after receiving all DataReport chunks", error),
                 );
             }
@@ -462,7 +463,10 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
-            if (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) {
+            if (
+                (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) &&
+                !options?.multipleMessageInteraction
+            ) {
                 // When retransmission failed (most likely due to a lost connection or invalid session),
                 // try to reconnect if possible and resend the message once
                 logger.debug(

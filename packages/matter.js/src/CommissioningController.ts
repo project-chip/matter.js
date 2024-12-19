@@ -334,6 +334,7 @@ export class CommissioningController extends MatterNode {
             await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
             async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
+            controller.sessions,
             await this.collectStoredAttributeData(nodeId),
         );
         this.initializedNodes.set(nodeId, pairedNode);
