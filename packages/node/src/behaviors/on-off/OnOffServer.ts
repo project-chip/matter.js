@@ -26,7 +26,7 @@ const Base = OnOffBehavior.with(OnOff.Feature.Lighting);
  * specific, so this needs to be implemented by the device implementor as needed.
  */
 export class OnOffServer extends Base {
-    protected declare internal: OnOffServer.Internal;
+    declare protected internal: OnOffServer.Internal;
 
     override initialize() {
         if (this.features.lighting && this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {

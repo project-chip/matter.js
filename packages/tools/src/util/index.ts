@@ -7,4 +7,5 @@
 export * from "./commander.js";
 export * from "./errors.js";
 export * from "./file.js";
+export * from "./glob.js";
 export * from "./package.js";

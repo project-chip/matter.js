@@ -24,7 +24,7 @@ import { Graph } from "./graph.js";
 // NOTE - this is a "best attempt" at doc generation via typescript.  The result is not all that great; typedoc is too
 // limited for our complex API so we're going to need something custom to do it right
 
-const PLUGINS = ["typedoc-material-theme"] as string[];
+const PLUGINS = ["typedoc-github-theme"] as string[];
 
 // Double "docs" directories so top-level directory can be a GH repository with pages configured under "docs"
 const OUTPUT_PATH = "build/docs/docs";

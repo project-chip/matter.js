@@ -117,7 +117,7 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * data ranges.
  */
 export class ColorControlServerLogic extends ColorControlServerBase {
-    protected declare internal: ColorControlServerLogic.Internal;
+    declare protected internal: ColorControlServerLogic.Internal;
     declare state: ColorControlServerLogic.State;
 
     /*

@@ -30,7 +30,7 @@ type MoveData = {
  * waiting 1s.
  */
 export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
-    protected declare internal: TestWindowCoveringServer.Internal;
+    declare protected internal: TestWindowCoveringServer.Internal;
 
     override initialize() {
         logger.info("TestWindowCoveringServer initialized");
