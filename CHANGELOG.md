@@ -24,6 +24,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Prevents multi message interactions from trying to continue on new exchange
     - Fix: Fixes the timed node polling during discovery
     - Fix: Fixes commissionable devices discovery with timeout
+    - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
 
 -   @project-chip/matter.js
     - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions 

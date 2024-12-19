@@ -114,6 +114,7 @@ export class MdnsScanner implements Scanner {
             resolver: () => void;
             timer?: Timer;
             resolveOnUpdatedRecords: boolean;
+            cancelResolver?: (value: void) => void;
         }
     >();
     readonly #periodicTimer: Timer;
@@ -324,13 +325,21 @@ export class MdnsScanner implements Scanner {
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
-    async #registerWaiterPromise(queryId: string, timeoutSeconds?: number, resolveOnUpdatedRecords = true) {
+    async #registerWaiterPromise(
+        queryId: string,
+        timeoutSeconds?: number,
+        resolveOnUpdatedRecords = true,
+        cancelResolver?: (value: void) => void,
+    ) {
         const { promise, resolver } = createPromise<void>();
         const timer =
             timeoutSeconds !== undefined
-                ? Time.getTimer("MDNS timeout", timeoutSeconds * 1000, () => this.#finishWaiter(queryId, true)).start()
+                ? Time.getTimer("MDNS timeout", timeoutSeconds * 1000, () => {
+                      cancelResolver?.();
+                      this.#finishWaiter(queryId, true);
+                  }).start()
                 : undefined;
-        this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
+        this.#recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords, cancelResolver });
         logger.debug(
             `Registered waiter for query ${queryId} with ${
                 timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
@@ -409,6 +418,9 @@ export class MdnsScanner implements Scanner {
 
     cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise = true) {
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
+        const { cancelResolver } = this.#recordWaiters.get(queryId) ?? {};
+        // Mark as cancelled to not loop further in discovery, if cancel resolver is used
+        cancelResolver?.();
         this.#finishWaiter(queryId, resolvePromise);
     }
 
@@ -623,10 +635,8 @@ export class MdnsScanner implements Scanner {
     }
 
     /**
-     * Discovers commissionable devices based on a defined identifier and returns the first found entries. If already a
-     * @param identifier
-     * @param callback
-     * @param timeoutSeconds
+     * Discovers commissionable devices based on a defined identifier and returns the first found entries.
+     * If an own cancelSignal promise is used the discovery can only be cancelled via this signal!
      */
     async findCommissionableDevicesContinuously(
         identifier: CommissionableDeviceIdentifiers,
@@ -640,11 +650,21 @@ export class MdnsScanner implements Scanner {
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
         this.#setQueryRecords(queryId, this.#getCommissionableQueryRecords(identifier));
 
+        let queryResolver: ((value: void) => void) | undefined;
+        if (cancelSignal === undefined) {
+            const { promise, resolver } = createPromise<void>();
+            cancelSignal = promise;
+            queryResolver = resolver;
+        }
+
         let canceled = false;
         cancelSignal?.then(
             () => {
                 canceled = true;
-                this.#finishWaiter(queryId, true);
+                if (queryResolver === undefined) {
+                    // Always finish when cancelSignal parameter was used, else cancelling is done separately
+                    this.#finishWaiter(queryId, true);
+                }
             },
             cause => {
                 logger.error("Unexpected error canceling commissioning", cause);
@@ -667,7 +687,7 @@ export class MdnsScanner implements Scanner {
                     break;
                 }
             }
-            await this.#registerWaiterPromise(queryId, remainingTime, false);
+            await this.#registerWaiterPromise(queryId, remainingTime, false, queryResolver);
         }
         return this.#getCommissionableDeviceRecords(identifier);
     }
