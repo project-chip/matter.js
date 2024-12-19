@@ -74,6 +74,10 @@ jobs:
               - "packages/node/src/behaviors/operational-credentials/**"
               - "packages/protocol/src/session/pase/**"
               - "packages/protocol/src/session/case/**"
+              - "packages/protocol/src/mdns/**
+              - "packages/protocol/src/interaction/**
+              - "packages/protocol/src/fabric/**
+              - "packages/protocol/src/securechannel/**
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
