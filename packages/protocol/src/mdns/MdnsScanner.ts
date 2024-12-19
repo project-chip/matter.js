@@ -70,6 +70,12 @@ type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
         addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
     };
 
+type StructuredDnsAnswers = {
+    operational?: Record<number, DnsRecord<any>[]>; // Operational Matter device records by recordType
+    commissionable?: Record<number, DnsRecord<any>[]>; // Commissionable Matter device records by recordType
+    addresses?: Record<string, DnsRecord<any>[]>; // IP Address records by name
+};
+
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
 
@@ -96,7 +102,7 @@ export class MdnsScanner implements Scanner {
         );
     }
 
-    readonly #activeAnnounceQueries = new Map<string, { queries: DnsQuery[]; answers: DnsRecord<any>[] }>();
+    readonly #activeAnnounceQueries = new Map<string, { queries: DnsQuery[]; answers: StructuredDnsAnswers }>();
     #queryTimer?: Timer;
     #nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
 
@@ -141,7 +147,9 @@ export class MdnsScanner implements Scanner {
         this.#queryTimer?.stop();
         const allQueries = Array.from(this.#activeAnnounceQueries.values());
         const queries = allQueries.flatMap(({ queries }) => queries);
-        const answers = allQueries.flatMap(({ answers }) => answers);
+        const answers = allQueries.flatMap(({ answers }) =>
+            Object.values(answers).flatMap(answer => Object.values(answer).flatMap(records => records)),
+        );
 
         this.#queryTimer = Time.getTimer("MDNS discovery", this.#nextAnnounceIntervalSeconds * 1000, () =>
             this.#sendQueries(),
@@ -210,7 +218,7 @@ export class MdnsScanner implements Scanner {
      * Set new DnsQuery records to the list of active queries to discover devices in the network and start sending them
      * out. When entry already exists the query is overwritten and answers are always added.
      */
-    #setQueryRecords(queryId: string, queries: DnsQuery[], answers: DnsRecord<any>[] = []) {
+    #setQueryRecords(queryId: string, queries: DnsQuery[], answers: StructuredDnsAnswers = {}) {
         const activeExistingQuery = this.#activeAnnounceQueries.get(queryId);
         if (activeExistingQuery) {
             const { queries: existingQueries } = activeExistingQuery;
@@ -231,7 +239,7 @@ export class MdnsScanner implements Scanner {
                 return;
             }
             queries = [...newQueries, ...existingQueries];
-            answers = [...activeExistingQuery.answers, ...answers];
+            answers = this.#combineStructuredAnswers(activeExistingQuery.answers, answers);
         }
         this.#activeAnnounceQueries.set(queryId, { queries, answers });
         logger.debug(`Set ${queries.length} query records for query ${queryId}: ${Logger.toJSON(queries)}`);
@@ -241,7 +249,9 @@ export class MdnsScanner implements Scanner {
     }
 
     #getActiveQueryEarlierAnswers() {
-        return Array.from(this.#activeAnnounceQueries.values()).flatMap(({ answers }) => answers);
+        return this.#combineStructuredAnswers(
+            ...[...this.#activeAnnounceQueries.values()].map(({ answers }) => answers),
+        );
     }
 
     /**
@@ -681,6 +691,99 @@ export class MdnsScanner implements Scanner {
         );
     }
 
+    /** Converts the discovery data into a structured format for performant access. */
+    #structureAnswers(...answersList: DnsRecord<any>[][]): StructuredDnsAnswers {
+        const structuredAnswers: StructuredDnsAnswers = {};
+
+        answersList.forEach(answers =>
+            answers.forEach(answer => {
+                const { name, recordType } = answer;
+                if (name.endsWith(MATTER_SERVICE_QNAME)) {
+                    structuredAnswers.operational = structuredAnswers.operational ?? {};
+                    structuredAnswers.operational[recordType] = structuredAnswers.operational[recordType] ?? [];
+                    structuredAnswers.operational[recordType].push(answer);
+                } else if (name.endsWith(MATTER_COMMISSION_SERVICE_QNAME)) {
+                    structuredAnswers.commissionable = structuredAnswers.commissionable ?? {};
+                    structuredAnswers.commissionable[recordType] = structuredAnswers.commissionable[recordType] ?? [];
+                    structuredAnswers.commissionable[recordType].push(answer);
+                } else if (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA) {
+                    structuredAnswers.addresses = structuredAnswers.addresses ?? {};
+                    structuredAnswers.addresses[name] = structuredAnswers.addresses[name] ?? [];
+                    structuredAnswers.addresses[name].push(answer);
+                }
+            }),
+        );
+
+        return structuredAnswers;
+    }
+
+    #combineStructuredAnswers(...answersList: StructuredDnsAnswers[]): StructuredDnsAnswers {
+        const combinedAnswers: {
+            operational?: Record<number, Map<string, DnsRecord<any>>>;
+            commissionable?: Record<number, Map<string, DnsRecord<any>>>;
+            addresses?: Record<string, DnsRecord<any>[]>;
+        } = {};
+
+        for (const answers of answersList) {
+            if (answers.operational) {
+                combinedAnswers.operational = combinedAnswers.operational ?? {};
+                for (const [recordType, records] of Object.entries(answers.operational) as unknown as [
+                    number,
+                    DnsRecord<any>[],
+                ][]) {
+                    combinedAnswers.operational[recordType] = combinedAnswers.operational[recordType] ?? new Map();
+                    records.forEach(record => {
+                        combinedAnswers.operational![recordType].set(record.name, record);
+                    });
+                }
+            }
+            if (answers.commissionable) {
+                combinedAnswers.commissionable = combinedAnswers.commissionable ?? {};
+                for (const [recordType, records] of Object.entries(answers.commissionable) as unknown as [
+                    number,
+                    DnsRecord<any>[],
+                ][]) {
+                    combinedAnswers.commissionable[recordType] =
+                        combinedAnswers.commissionable[recordType] ?? new Map();
+                    records.forEach(record => {
+                        combinedAnswers.commissionable![recordType].set(record.name, record);
+                    });
+                }
+            }
+            if (answers.addresses) {
+                combinedAnswers.addresses = combinedAnswers.addresses ?? {};
+                for (const [name, records] of Object.entries(answers.addresses) as unknown as [
+                    string,
+                    DnsRecord<any>[],
+                ][]) {
+                    combinedAnswers.addresses[name] = combinedAnswers.addresses[name] ?? [];
+                    // IP address consolidation happens when they are selected for a device
+                    combinedAnswers.addresses[name].push(...records);
+                }
+            }
+        }
+
+        return {
+            operational: combinedAnswers.operational
+                ? Object.fromEntries(
+                      Object.entries(combinedAnswers.operational).map(([recordType, records]) => [
+                          recordType,
+                          Array.from(records.values()),
+                      ]),
+                  )
+                : undefined,
+            commissionable: combinedAnswers.commissionable
+                ? Object.fromEntries(
+                      Object.entries(combinedAnswers.commissionable).map(([recordType, records]) => [
+                          recordType,
+                          Array.from(records.values()),
+                      ]),
+                  )
+                : undefined,
+            addresses: combinedAnswers.addresses,
+        };
+    }
+
     /**
      * Main method to handle all incoming DNS messages.
      * It will parse the message and check if it contains relevant discovery records.
@@ -692,58 +795,62 @@ export class MdnsScanner implements Scanner {
         if (message.messageType !== DnsMessageType.Response && message.messageType !== DnsMessageType.TruncatedResponse)
             return;
 
-        const answers = [...message.answers, ...message.additionalRecords];
+        const answers = this.#structureAnswers([...message.answers, ...message.additionalRecords]);
 
+        const formerAnswers = this.#getActiveQueryEarlierAnswers();
         // Check if we got operational discovery records and handle them
-        if (this.#handleOperationalRecords(answers, this.#getActiveQueryEarlierAnswers(), netInterface)) return;
+        this.#handleOperationalRecords(answers, formerAnswers, netInterface);
 
         // Else check if we got commissionable discovery records and handle them
-        this.#handleCommissionableRecords(answers, this.#getActiveQueryEarlierAnswers(), netInterface);
+        this.#handleCommissionableRecords(answers, formerAnswers, netInterface);
     }
 
     #handleIpRecords(
-        answers: DnsRecord<any>[],
+        answers: StructuredDnsAnswers[],
         target: string,
         netInterface: string,
     ): { value: string; ttl: number }[] {
-        const ipRecords = answers.filter(
-            ({ name, recordType }) =>
-                ((recordType === DnsRecordType.A && this.#enableIpv4) || recordType === DnsRecordType.AAAA) &&
-                name === target,
-        );
-        return (ipRecords as DnsRecord<string>[]).map(({ value, ttl }) => ({
-            value: value.startsWith("fe80::") ? `${value}%${netInterface}` : value,
-            ttl,
-        }));
+        const ipRecords = answers
+            .flatMap(answer => answer.addresses?.[target] ?? [])
+            .filter(
+                ({ recordType }) =>
+                    recordType === DnsRecordType.AAAA || (recordType === DnsRecordType.A && this.#enableIpv4),
+            );
+
+        // If an IP is included multiple times we only keep the latest record
+        const collectedIps = new Map<string, { value: string; ttl: number }>();
+        ipRecords.forEach(record => {
+            const { value, ttl } = record as DnsRecord<string>;
+            if (value.startsWith("fe80::")) {
+                collectedIps.set(value, { value: `${value}%${netInterface}`, ttl });
+            } else {
+                collectedIps.set(value, { value, ttl });
+            }
+        });
+        return [...collectedIps.values()];
     }
 
-    #handleOperationalRecords(answers: DnsRecord<any>[], formerAnswers: DnsRecord<any>[], netInterface: string) {
-        let recordsHandled = false;
+    #handleOperationalRecords(
+        answers: StructuredDnsAnswers,
+        formerAnswers: StructuredDnsAnswers,
+        netInterface: string,
+    ) {
         // Does the message contain data for an operational service?
-        const operationalTxtRecords = answers.filter(
-            ({ name, recordType }) => recordType === DnsRecordType.TXT && name.endsWith(MATTER_SERVICE_QNAME),
-        );
-        if (operationalTxtRecords.length) {
-            operationalTxtRecords.forEach(record => this.#handleOperationalTxtRecord(record, netInterface));
-            recordsHandled = true;
-        }
+        if (!answers.operational) return;
 
-        let operationalSrvRecords = answers.filter(
-            ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
-        );
-        if (!operationalSrvRecords.length) {
-            operationalSrvRecords = formerAnswers.filter(
-                ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
-            );
+        const operationalTxtRecords = answers.operational[DnsRecordType.TXT] ?? [];
+        operationalTxtRecords.forEach(record => this.#handleOperationalTxtRecord(record, netInterface));
+
+        let operationalSrvRecords = answers.operational[DnsRecordType.SRV] ?? [];
+        if (!operationalSrvRecords.length && formerAnswers.operational) {
+            operationalSrvRecords = formerAnswers.operational[DnsRecordType.SRV] ?? [];
         }
 
         if (operationalSrvRecords.length) {
             operationalSrvRecords.forEach(record =>
                 this.#handleOperationalSrvRecord(record, answers, formerAnswers, netInterface),
             );
-            recordsHandled = true;
         }
-        return recordsHandled;
     }
 
     #handleOperationalTxtRecord(record: DnsRecord<any>, netInterface: string) {
@@ -791,8 +898,8 @@ export class MdnsScanner implements Scanner {
 
     #handleOperationalSrvRecord(
         record: DnsRecord<any>,
-        answers: DnsRecord<any>[],
-        formerAnswers: DnsRecord<any>[],
+        answers: StructuredDnsAnswers,
+        formerAnswers: StructuredDnsAnswers,
         netInterface: string,
     ) {
         const {
@@ -813,7 +920,7 @@ export class MdnsScanner implements Scanner {
             return true;
         }
 
-        const ips = this.#handleIpRecords([...answers, ...formerAnswers], target, netInterface);
+        const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
         const deviceExisted = this.#operationalDeviceRecords.has(matterName);
         const device = this.#operationalDeviceRecords.get(matterName) ?? {
             deviceIdentifier: matterName,
@@ -861,18 +968,23 @@ export class MdnsScanner implements Scanner {
         return true;
     }
 
-    #handleCommissionableRecords(answers: DnsRecord<any>[], formerAnswers: DnsRecord<any>[], netInterface: string) {
+    #handleCommissionableRecords(
+        answers: StructuredDnsAnswers,
+        formerAnswers: StructuredDnsAnswers,
+        netInterface: string,
+    ) {
         // Does the message contain a SRV record for an operational service we are interested in?
-        let commissionableRecords = answers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
-        if (!commissionableRecords.length) {
-            commissionableRecords = formerAnswers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
-            if (!commissionableRecords.length) return;
+        let commissionableRecords = answers.commissionable ?? {};
+        if (!commissionableRecords[DnsRecordType.SRV]?.length && !commissionableRecords[DnsRecordType.TXT]?.length) {
+            commissionableRecords = formerAnswers.commissionable ?? {};
+            if (!commissionableRecords[DnsRecordType.SRV]?.length && !commissionableRecords[DnsRecordType.TXT]?.length)
+                return;
         }
 
         const queryMissingDataForInstances = new Set<string>();
 
         // First process the TXT records
-        const txtRecords = commissionableRecords.filter(({ recordType }) => recordType === DnsRecordType.TXT);
+        const txtRecords = commissionableRecords[DnsRecordType.TXT] ?? [];
         for (const record of txtRecords) {
             const { name, ttl } = record;
             if (ttl === 0) {
@@ -916,7 +1028,7 @@ export class MdnsScanner implements Scanner {
         }
 
         // We got SRV records for the instance ID, so we know the host name now and can collect the IP addresses
-        const srvRecords = commissionableRecords.filter(({ recordType }) => recordType === DnsRecordType.SRV);
+        const srvRecords = commissionableRecords[DnsRecordType.SRV] ?? [];
         for (const record of srvRecords) {
             const storedRecord = this.#commissionableDeviceRecords.get(record.name);
             if (storedRecord === undefined) continue;
@@ -934,7 +1046,7 @@ export class MdnsScanner implements Scanner {
 
             const recordExisting = storedRecord.addresses.size > 0;
 
-            const ips = this.#handleIpRecords([...answers, ...formerAnswers], target, netInterface);
+            const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
             if (ips.length > 0) {
                 for (const { value: ip, ttl } of ips) {
                     if (ttl === 0) {
