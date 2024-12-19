@@ -726,6 +726,16 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             };
         }
         await this.#store.updatePeer(peer);
+
+        // If we got a new channel and have a running discovery we can end it
+        if (this.#runningPeerDiscoveries.has(address)) {
+            logger.info(`Found ${address} during discovery, cancel discovery.`);
+            // We are currently discovering this node, so we need to update the discovery data
+            const { mdnsScanner } = this.#runningPeerDiscoveries.get(address) ?? {};
+
+            // This ends discovery and triggers the promises
+            mdnsScanner?.cancelOperationalDeviceDiscovery(this.#sessions.fabricFor(address), address.nodeId, true);
+        }
     }
 
     #getLastOperationalAddress(address: PeerAddress) {
