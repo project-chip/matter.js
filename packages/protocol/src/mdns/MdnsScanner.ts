@@ -782,25 +782,28 @@ export class MdnsScanner implements Scanner {
             }
         }
 
-        return {
-            operational: combinedAnswers.operational
-                ? Object.fromEntries(
-                      Object.entries(combinedAnswers.operational).map(([recordType, records]) => [
-                          recordType,
-                          Array.from(records.values()),
-                      ]),
-                  )
-                : undefined,
-            commissionable: combinedAnswers.commissionable
-                ? Object.fromEntries(
-                      Object.entries(combinedAnswers.commissionable).map(([recordType, records]) => [
-                          recordType,
-                          Array.from(records.values()),
-                      ]),
-                  )
-                : undefined,
-            addresses: combinedAnswers.addresses,
-        };
+        const result: StructuredDnsAnswers = {};
+        if (combinedAnswers.operational) {
+            result.operational = Object.fromEntries(
+                Object.entries(combinedAnswers.operational).map(([recordType, records]) => [
+                    recordType,
+                    Array.from(records.values()),
+                ]),
+            );
+        }
+        if (combinedAnswers.commissionable) {
+            result.commissionable = Object.fromEntries(
+                Object.entries(combinedAnswers.commissionable).map(([recordType, records]) => [
+                    recordType,
+                    Array.from(records.values()),
+                ]),
+            );
+        }
+        if (combinedAnswers.addresses) {
+            result.addresses = combinedAnswers.addresses;
+        }
+
+        return result;
     }
 
     /**
