@@ -6,9 +6,10 @@
 
 import type Chai from "chai";
 import "chai-as-promised";
-import { Boot } from "./mocks/boot.js";
+import type { Boot } from "./mocks/boot.js";
 import type { MockLogger } from "./mocks/logging.js";
 import type { MockTime } from "./mocks/time.js";
+import type { TestDescriptor } from "./test-descriptor.js";
 
 declare global {
     // Expose Chai globally
@@ -52,4 +53,14 @@ declare global {
                */
               loggerSink?: (level: number, message: string) => void;
           };
+
+    namespace Mocha {
+        interface Suite {
+            readonly descriptor: TestDescriptor;
+        }
+
+        interface Test {
+            descriptor: TestDescriptor;
+        }
+    }
 }

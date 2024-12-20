@@ -8,9 +8,9 @@ import { Package, Progress } from "#tools";
 import colors from "ansi-colors";
 import debug from "debug";
 import { relative } from "path";
-import { Chip } from "./chip.js";
+import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
-import { testNode } from "./node.js";
+import { testNodejs } from "./nodejs.js";
 import { TestOptions } from "./options.js";
 import { ProgressReporter, Reporter } from "./reporter.js";
 import { listSupportFiles } from "./util/files.js";
@@ -25,7 +25,7 @@ export class TestRunner {
         readonly progress: Progress,
         readonly options: TestOptions,
     ) {
-        Chip.config = { runner: this };
+        chip.runner = this;
 
         this.reporter = new (class extends ProgressReporter {
             constructor() {
@@ -52,7 +52,7 @@ export class TestRunner {
     }
 
     async runNode(format: "esm" | "cjs" = "esm") {
-        await this.run(this.progress, () => testNode(this, format));
+        await this.run(this.progress, () => testNodejs(this, format));
     }
 
     async runWeb(manual = false) {

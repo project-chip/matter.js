@@ -5,7 +5,8 @@
  */
 
 import "./global-declarations.js";
-export * from "./chip.js";
+export * from "./chip/index.js";
+export * from "./device/index.js";
 export * from "./docker/index.js";
 export * from "./mocharc.cjs";
 export * from "./util/wtf.js";

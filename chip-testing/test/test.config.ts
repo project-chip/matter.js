@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Chip as ChipType } from "@matter/testing";
+import { chip, Chip } from "@matter/testing";
 import { log } from "../src/GenericTestApp.js";
 
 // Disable stdout output required when run within CHIP test harnesses
@@ -16,8 +16,10 @@ MockTime.disable();
 
 // Expose Chip testing API as a global
 declare global {
-    const Chip: ChipType;
+    const chip: Chip;
 }
-Object.assign(globalThis, { Chip: ChipType });
+Object.assign(globalThis, { chip });
 
-await Chip.initialize();
+await chip.initialize();
+
+await import("./support.js");
