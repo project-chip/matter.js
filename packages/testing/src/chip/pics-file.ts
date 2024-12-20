@@ -6,16 +6,12 @@
 
 import { readFileSync, writeFileSync } from "fs";
 
-function readValue(line: string) {
-    const valueMatch = line.match(/^(\S+)=(.*)$/);
-    if (valueMatch) {
-        return { key: valueMatch[1], value: valueMatch[2] };
-    }
-    return { key: undefined, value: undefined };
-}
-
 /**
  * Manages Matter PICS files.
+ *
+ * Supports extended syntax for defining ranges of values of the form "NAMExx..yy=*" where xx and yy are hexadecimal
+ * numbers specifying the start and end of a range (inclusive).  These are expanded in {@link patch} which modifies the
+ * values in the target PICS file with values from another PICS file.
  *
  * Note that we sometimes use ".properties" extension for PICS files so we get syntax highlighting, but PICS only
  * supports a subset of the actual Java properties file format.
@@ -39,33 +35,91 @@ export class PicsFile {
         if (!this.#values) {
             const values = {} as Record<string, string>;
             for (const line of this.lines) {
-                const { key, value } = readValue(line);
-                if (key !== undefined) {
-                    values[key] = value;
-                }
+                parseLine(line, values);
             }
             this.#values = values;
         }
         return this.#values;
     }
 
+    toString() {
+        return this.#lines.join("\n") + "\n";
+    }
+
     patch(other: PicsFile) {
-        this.#lines = this.lines.map(line => {
-            const { key } = readValue(line);
-            if (key === undefined) {
-                return line;
+        const newValues = { ...other.values };
+
+        const newLines = new Array<string>();
+        for (const line of this.lines) {
+            const lineValues = {} as Record<string, string>;
+            if (!parseLine(line, lineValues)) {
+                newLines.push(line);
+                continue;
             }
 
-            const otherValue = other.values[key];
-            if (otherValue === undefined) {
-                return line;
+            for (const key in lineValues) {
+                const newValue = newValues[key];
+                if (newValue !== undefined) {
+                    newLines.push(`${key}=${newValue}`);
+                    delete newValues[key];
+                } else {
+                    newLines.push(`${key}=${lineValues[key]}`);
+                }
             }
+        }
 
-            return `${key}=${otherValue}`;
-        });
+        for (const key in newValues) {
+            newLines.push(`${key}=${newValues[key]}`);
+        }
+
+        this.#values = undefined;
+        this.#lines = newLines;
     }
 
     save(path: string) {
-        writeFileSync(path, this.lines.join("\n"));
+        writeFileSync(path, this.toString());
     }
+}
+
+function parseLine(line: string, values: Record<string, string>): boolean {
+    line = line.trim();
+    if (line.startsWith("#")) {
+        return false;
+    }
+
+    const valueMatch = line.match(/^(\S+)=(.*)$/);
+    if (!valueMatch) {
+        return false;
+    }
+
+    const [, key, value] = valueMatch;
+    const rangeMatch = key.match(/^(\S+)\.\.([\da-f]+)$/i);
+    if (!rangeMatch) {
+        values[key] = value;
+        return true;
+    }
+
+    const [, base, rangeTo] = rangeMatch;
+    const rangePrefix = base.slice(0, base.length - rangeTo.length);
+    const rangeFrom = base.slice(rangePrefix.length);
+
+    const rangeFromNum = Number.parseInt(rangeFrom, 16);
+    if (Number.isNaN(rangeFromNum)) {
+        throw new Error(`Invalid PICS: Range start in ${key} is invalid`);
+    }
+
+    const rangeToNum = Number.parseInt(rangeTo, 16);
+    if (Number.isNaN(rangeToNum)) {
+        throw new Error(`Invalid PICS: Range end in ${key} is invalid`);
+    }
+
+    if (rangeToNum < rangeFromNum) {
+        throw new Error(`Invalid PICS: Range end ${rangeToNum} is greater than range start ${rangeFromNum}`);
+    }
+
+    for (let i = rangeFromNum; i <= rangeToNum; i++) {
+        values[rangePrefix + i.toString().padStart(rangeTo.length, "0")] = value;
+    }
+
+    return true;
 }

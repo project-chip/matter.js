@@ -22,7 +22,7 @@ export const TheMockLogger: MockLogger = {
 };
 
 function formatExternalMessage(source: string, text: string) {
-    return `    ${colors.bgCyan.black.bold(` ${source} `)} ${colors.dim(text)}`;
+    return `${colors.bgCyan.black.bold(` ${source} `)} ${colors.dim(text)}`;
 }
 
 /**
