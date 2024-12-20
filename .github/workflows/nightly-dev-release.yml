@@ -16,7 +16,11 @@ on:
           - prepatch
           - preminor
           - premajor
-
+      skipChipTests:
+        description: 'Skip chip tests'
+        required: false
+        default: false
+        type: boolean
 jobs:
   publish-config:
     if: github.repository == 'project-chip/matter.js'
@@ -60,13 +64,13 @@ jobs:
       run: npm run test
 
     - name: Prepare chip tests
-      if: steps.changes.outputs.result == 'ok'
+      if: ${{ steps.changes.outputs.result == 'ok' && !inputs.skipChipTests }}
       uses: ./.github/actions/prepare-chip-testing
       with:
         build-matter-js: "false"
 
     - name: chip-tool-test execution
-      if: steps.changes.outputs.result == 'ok'
+      if: ${{ steps.changes.outputs.result == 'ok' && !inputs.skipChipTests }}
       id: test-execution
       shell: bash
       run: |
@@ -86,7 +90,7 @@ jobs:
           '
 
     - name: Cleanup chip tests
-      if: steps.changes.outputs.result == 'ok'
+      if: ${{ steps.changes.outputs.result == 'ok' && !inputs.skipChipTests }}
       id: cleanup-chip-tests
       shell: bash
       run: |
