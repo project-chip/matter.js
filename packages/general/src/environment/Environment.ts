@@ -145,6 +145,10 @@ export class Environment {
         return this.#name;
     }
 
+    get root(): Environment {
+        return this.#parent?.root ?? this;
+    }
+
     /**
      * Emits on service add.
      *
