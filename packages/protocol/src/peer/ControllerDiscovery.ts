@@ -193,7 +193,7 @@ export class ControllerDiscovery {
         while (true) {
             logger.debug(
                 `Server addresses to try: ${Array.from(addresses)
-                    .map(([addressString, { device }]) => `${device?.DN}: ${addressString}`)
+                    .map(([addressString, { device }]) => `${addressString}${device?.DN ? ` (${device.DN})` : ""}`)
                     .join(",")}`,
             );
 

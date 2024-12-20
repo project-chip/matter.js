@@ -308,6 +308,10 @@ export class MatterController {
         return this.fabric.config;
     }
 
+    get sessions() {
+        return this.sessionManager.sessions;
+    }
+
     getFabrics() {
         return [this.fabric];
     }
