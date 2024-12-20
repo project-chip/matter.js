@@ -61,6 +61,7 @@ export class MdnsServer {
         15 * 60 * 1000 /* 15mn - also matches maximum commissioning window time. */,
     );
     readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
+    readonly #recordLastSentAsUnicastAnswer = new Map<string, number>();
 
     readonly #network: Network;
     readonly #multicastServer: UdpMulticastServer;
@@ -75,8 +76,8 @@ export class MdnsServer {
         this.#netInterface = netInterface;
     }
 
-    buildDnsRecordKey(record: DnsRecord<any>, netInterface?: string) {
-        return `${record.name}-${record.recordClass}-${record.recordType}-${netInterface}`;
+    buildDnsRecordKey(record: DnsRecord<any>, netInterface?: string, unicastTarget?: string) {
+        return `${record.name}-${record.recordClass}-${record.recordType}-${netInterface}-${unicastTarget}`;
     }
 
     buildTypePortKey(type: AnnouncementType, port: number) {
@@ -128,29 +129,41 @@ export class MdnsServer {
 
             const now = Time.nowMs();
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
-            const answersTimeSinceLastMultiCast = answers.map(answer => ({
+            const answersTimeSinceLastSent = answers.map(answer => ({
                 timeSinceLastMultiCast:
                     now -
                     (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, netInterface)) ?? 0),
+                timeSinceLastUniCast:
+                    now -
+                    (this.#recordLastSentAsUnicastAnswer.get(this.buildDnsRecordKey(answer, netInterface, remoteIp)) ??
+                        0),
                 ttl: answer.ttl,
             }));
             if (
                 uniCastResponse &&
-                answersTimeSinceLastMultiCast.filter(
+                answersTimeSinceLastSent.some(
                     ({ timeSinceLastMultiCast, ttl }) => timeSinceLastMultiCast > (ttl / 4) * 1000,
-                ).length > 0
+                )
             ) {
                 // If the query is for unicast response, still send as multicast if they were last sent as multicast longer then 1/4 of their ttl
                 uniCastResponse = false;
             }
             if (!uniCastResponse) {
-                answers = answers.filter(
-                    (_, index) => answersTimeSinceLastMultiCast[index].timeSinceLastMultiCast > 1000,
-                );
+                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastMultiCast > 1000);
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
                     this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, netInterface), now),
+                );
+            } else {
+                answers = answers.filter((_, index) => answersTimeSinceLastSent[index].timeSinceLastUniCast > 1000);
+                if (answers.length === 0) continue; // Nothing to send
+
+                answers.forEach(answer =>
+                    this.#recordLastSentAsUnicastAnswer.set(
+                        this.buildDnsRecordKey(answer, netInterface, remoteIp),
+                        now,
+                    ),
                 );
             }
 
@@ -290,6 +303,7 @@ export class MdnsServer {
         );
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
+        this.#recordLastSentAsUnicastAnswer.clear();
     }
 
     async setRecordsGenerator(
@@ -299,12 +313,14 @@ export class MdnsServer {
     ) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
+        this.#recordLastSentAsUnicastAnswer.clear();
         this.#recordsGenerator.set(this.buildTypePortKey(type, hostPort), generator);
     }
 
     async close() {
         await this.#records.close();
         this.#recordLastSentAsMulticastAnswer.clear();
+        this.#recordLastSentAsUnicastAnswer.clear();
         await this.#multicastServer.close();
     }
 
