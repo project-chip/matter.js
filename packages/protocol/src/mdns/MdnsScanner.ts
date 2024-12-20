@@ -682,7 +682,7 @@ export class MdnsScanner implements Scanner {
 
             let remainingTime;
             if (discoveryEndTime !== undefined) {
-                remainingTime = discoveryEndTime - Time.nowMs();
+                remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
                 if (remainingTime <= 0) {
                     break;
                 }
