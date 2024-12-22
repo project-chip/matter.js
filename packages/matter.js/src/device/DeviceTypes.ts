@@ -6,6 +6,8 @@
 
 import * as MatterClusters from "#clusters";
 import { ClusterId, DeviceTypeId } from "#types";
+import { capitalize } from "@matter/general";
+import { MatterModel } from "@matter/model";
 
 /**
  * General device classification categories.
@@ -209,9 +211,9 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     AGGREGATOR: DeviceTypeDefinition({
         name: "MA-aggregator",
         code: 0x000e,
-        deviceClass: DeviceClasses.Dynamic, // ???
+        deviceClass: DeviceClasses.Utility,
         revision: 1,
-        optionalServerClusters: [MatterClusters.ActionsCluster.id],
+        optionalServerClusters: [MatterClusters.ActionsCluster.id, MatterClusters.IdentifyCluster.id],
     }),
 
     /**
@@ -959,6 +961,9 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     }),
 };
 
+/** Cache of all device types dynamically generated from model. */
+const DynamicDeviceType: { [key: string]: DeviceTypeDefinition } = {};
+
 export const UnknownDeviceType = (code: number, revision: number) =>
     DeviceTypeDefinition({
         code,
@@ -968,6 +973,7 @@ export const UnknownDeviceType = (code: number, revision: number) =>
         unknown: true,
     });
 
+/** @deprecated */
 export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinition | undefined {
     for (const key in DeviceTypes) {
         if (DeviceTypes[key].code === code) {
@@ -975,4 +981,68 @@ export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinitio
         }
     }
     return undefined;
+}
+
+export function getDeviceTypeDefinitionFromModelByCode(code: number): DeviceTypeDefinition | undefined {
+    if (DynamicDeviceType[code] !== undefined) {
+        return DynamicDeviceType[code];
+    }
+
+    const device = MatterModel.standard.deviceTypes.find(d => d.id === code);
+    if (device === undefined) {
+        return undefined;
+    }
+
+    const deviceDetails = {
+        name: `MA-${device.name.toLowerCase()}`,
+        revision: 0,
+        code: device.id,
+        deviceClass: capitalize(device.classification) as DeviceClasses,
+        superSet: device.type
+            ?.replace(/([A-Z])/g, "_$1")
+            .substring(1)
+            .toUpperCase(),
+        requiredServerClusters: new Array<ClusterId>(),
+        optionalServerClusters: new Array<ClusterId>(),
+        requiredClientClusters: new Array<ClusterId>(),
+        optionalClientClusters: new Array<ClusterId>(),
+    };
+
+    device.requirements.forEach(req => {
+        if (req.id === undefined) {
+            return;
+        }
+        if (req.name === "Descriptor") {
+            const deviceTypeList = req.requirements.find(r => r.element === "attribute" && r.name === "DeviceTypeList");
+            if (deviceTypeList) {
+                deviceDetails.revision = deviceTypeList.default[0].revision;
+            }
+        } else if (req.element === "serverCluster") {
+            if (req.isMandatory) {
+                deviceDetails.requiredServerClusters.push(ClusterId(req.id));
+            } else {
+                deviceDetails.optionalServerClusters.push(ClusterId(req.id));
+            }
+        } else if (req.element === "clientCluster") {
+            if (req.isMandatory) {
+                deviceDetails.requiredClientClusters.push(ClusterId(req.id));
+            } else {
+                deviceDetails.optionalClientClusters.push(ClusterId(req.id));
+            }
+        }
+    });
+
+    if (
+        deviceDetails.revision === 0 ||
+        (deviceDetails.requiredClientClusters.length === 0 &&
+            deviceDetails.requiredServerClusters.length === 0 &&
+            deviceDetails.optionalClientClusters.length === 0 &&
+            deviceDetails.optionalServerClusters.length === 0)
+    ) {
+        return undefined;
+    }
+
+    DynamicDeviceType[code] = DeviceTypeDefinition(deviceDetails);
+
+    return DynamicDeviceType[code];
 }

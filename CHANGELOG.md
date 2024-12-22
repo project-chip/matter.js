@@ -27,7 +27,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
 
 -   @project-chip/matter.js
-    - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions 
+    - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions
+    - Enhancement: Use data type definitions from Model for Controller Device type definitions
 
 ## 0.11.9 (2024-12-11)
 
