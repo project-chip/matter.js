@@ -59,7 +59,7 @@
         "@microsoft/tsdoc": "^0.15.1"
     },
     "optionalDependencies": {
-        "@esbuild/linux-x64": "^0.24.0"
+        "@esbuild/linux-x64": "^0.24.2"
     },
     "devDependencies": {
         "@types/minimatch": "^5.1.2",
