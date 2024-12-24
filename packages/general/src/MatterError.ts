@@ -15,7 +15,7 @@ export class MatterError extends Error {
     /**
      * Convert the error to formatted text.
      *
-     * Matter encodes errors with modern JS features including {@link Error#cause} and {@link AggregateError#errors}
+     * matter.js encodes errors with modern JS features including {@link Error#cause} and {@link AggregateError#errors}
      * subfields.  You can use this function to ensure all error details are presented regardless of environment.
      */
     format(format: "plain" | "ansi" | "html" = "plain", indents = 0) {
@@ -142,10 +142,10 @@ export class MatterAggregateError extends AggregateError {
     constructor(causes: Iterable<unknown>, message?: string) {
         causes = [...causes].map(errorOf);
         super(causes, message);
-    }
 
-    [inspect] = MatterError.prototype[inspect];
-    format = MatterError.prototype.format;
+        Object.defineProperty(MatterAggregateError.prototype, inspect, { enumerable: false });
+        Object.defineProperty(MatterAggregateError.prototype, "format", { enumerable: false });
+    }
 
     // TODO - see comment on MatterError.  If that one is correct this is incorrect
     static override [Symbol.hasInstance](instance: unknown) {
@@ -155,6 +155,11 @@ export class MatterAggregateError extends AggregateError {
         return AggregateError[Symbol.hasInstance](instance);
     }
 }
+
+Object.assign(MatterAggregateError, {
+    [inspect]: MatterError.prototype[inspect],
+    format: MatterError.prototype.format,
+});
 
 /**
  * It's never reasonable to fail to present error information so we include this rudimentary fallback error formatter.
