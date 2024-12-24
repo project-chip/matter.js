@@ -14,4 +14,4 @@ console.log("Start BridgeApp-Legacy");
 console.log(process.pid);
 console.log(process.argv);
 
-await startTestApp("BridgeApp-Legacy", BridgeTestInstanceLegacy).catch(console.error);
+await startTestApp(BridgeTestInstanceLegacy).catch(console.error);

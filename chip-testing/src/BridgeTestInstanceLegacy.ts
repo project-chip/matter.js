@@ -28,8 +28,8 @@ export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
             port: 5540,
             deviceName: this.appName,
             deviceType: DeviceTypeId(0x0101),
-            passcode: this.options.passcode ?? 20202021,
-            discriminator: this.options.discriminator ?? 3840,
+            passcode: this.config.passcode ?? 20202021,
+            discriminator: this.config.discriminator ?? 3840,
             basicInformation: {
                 vendorName: "Vendorname",
                 vendorId: VendorId(0xfff1),

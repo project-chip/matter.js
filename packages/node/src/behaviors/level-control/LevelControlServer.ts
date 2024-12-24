@@ -246,10 +246,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
     ) {
+        if (rate === 0) {
+            throw new StatusResponseError(`Illegal move rate of 0`, StatusCode.InvalidCommand);
+        }
+
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
         if (!this.state.managedTransitionTimeHandling || effectiveRate === null || effectiveRate === 0) {
             // If null rate is requested and also no default rate is set, we should move as fast as possible, so we set
-            // to min/max value directly. If rate 0 is requested no change on level should be done.
+            // to min/max value directly. If effectiveRate is 0 then defaultMoveRate is and we just ignore the command.
             const level =
                 effectiveRate === 0
                     ? this.currentLevel

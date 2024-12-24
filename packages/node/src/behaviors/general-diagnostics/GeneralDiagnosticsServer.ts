@@ -115,7 +115,6 @@ export class GeneralDiagnosticsServer extends Base {
 
         return {
             systemTimeMs: time - Time.startup.systemMs,
-
             posixTimeMs,
         };
     }

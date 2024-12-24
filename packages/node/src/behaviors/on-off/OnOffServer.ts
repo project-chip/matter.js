@@ -53,6 +53,7 @@ export class OnOffServer extends Base {
     override on(): MaybePromise<void> {
         this.state.onOff = true;
         if (this.features.lighting) {
+            this.state.globalSceneControl = true;
             if (!this.timedOnTimer.isRunning) {
                 if (this.delayedOffTimer.isRunning) {
                     this.delayedOffTimer.stop();
@@ -71,7 +72,7 @@ export class OnOffServer extends Base {
                     this.delayedOffTimer.start();
                 }
             }
-            this.state.onTime = 0;
+            this.state.onTime = this.state.offWaitTime = 0;
         }
     }
 

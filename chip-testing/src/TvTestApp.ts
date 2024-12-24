@@ -13,4 +13,4 @@ console.log("Start TvApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp("TvApp", TvTestInstance, StorageBackendAsyncJsonFile).catch(console.error);
+startTestApp(TvTestInstance, StorageBackendAsyncJsonFile).catch(console.error);

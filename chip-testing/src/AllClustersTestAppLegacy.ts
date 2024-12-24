@@ -12,4 +12,4 @@ console.log("Start AllClustersApp-Legacy");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp("AllClustersApp-Legacy", AllClustersTestInstanceLegacy).catch(console.error);
+startTestApp(AllClustersTestInstanceLegacy).catch(console.error);

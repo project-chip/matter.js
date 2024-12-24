@@ -4,47 +4,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Storage } from "@matter/main";
-import { TestInstance } from "../src/GenericTestApp.js";
-import { StorageBackendSyncJsonFile } from "../src/storage/StorageBackendSyncJsonFile.js";
+import { Environment, RuntimeService, StorageBackendMemory } from "@matter/main";
+import { Subject } from "@matter/testing";
+import { AllClustersTestInstance } from "../src/AllClustersTestInstance.js";
+import { BridgeTestInstance } from "../src/BridgeTestInstance.js";
+import { TestInstanceConstructor } from "../src/GenericTestApp.js";
+import { NodeTestInstance } from "../src/NodeTestInstance.js";
+import { TvTestInstance } from "../src/TvTestInstance.js";
 
-export type AppImplementation = new (
-    storage: Storage,
-    options: {
-        appName: string;
-        discriminator?: number;
-        passcode?: number;
-    },
-) => TestInstance;
+chip.onClose(async () => {
+    // Terminate and/or wait for any long-running services such as MdnsService
+    await Environment.default.maybeGet(RuntimeService)?.close();
+});
 
-export function App(implementation: AppImplementation): TestInstance {
-    let app: undefined | TestInstance;
+NodeTestInstance.forceFastTimeouts = true;
+NodeTestInstance.nonvolatileEvents = true;
+NodeTestInstance.testEnableKey = "000102030405060708090a0b0c0d0e0f";
 
-    return {
-        async setup() {
-            const storage = new StorageBackendSyncJsonFile("/tmp/chip_kvs");
-
-            app = new implementation(storage, {
-                appName: "TestApp",
-                discriminator: 1234,
-                passcode: 20202021,
-            });
-
-            await app.setup();
-        },
-
-        async start() {
-            if (app === undefined) {
-                throw new InternalError("App start before setup");
-            }
-            await app.start();
-        },
-
-        async stop() {
-            if (app === undefined) {
-                throw new InternalError("App stop before setup");
-            }
-            await app.stop();
-        },
+export function App(implementation: TestInstanceConstructor<NodeTestInstance>): (domain: string) => Subject {
+    return (domain: string) => {
+        return new implementation({
+            domain,
+            storage: new StorageBackendMemory(),
+            async commandPipeFactory(_subject, name) {
+                await chip.openPipe(name);
+            },
+            discriminator: 3840,
+            passcode: 20202021,
+        });
     };
 }
+
+export const AllClustersApp = App(AllClustersTestInstance);
+export const BridgeApp = App(BridgeTestInstance);
+export const TvApp = App(TvTestInstance);
+
+chip.defaultSubject = AllClustersApp;

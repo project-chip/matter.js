@@ -87,7 +87,7 @@ function parseLine(line: string, values: Record<string, string>): boolean {
         return false;
     }
 
-    const valueMatch = line.match(/^([^=\S]+)=(.*)$/);
+    const valueMatch = line.match(/^([^=\s]+)=(.*)$/);
     if (!valueMatch) {
         return false;
     }
