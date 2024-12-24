@@ -61,7 +61,12 @@ import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
 import { DeviceInformation, DeviceInformationData } from "./DeviceInformation.js";
-import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
+import {
+    DeviceTypeDefinition,
+    DeviceTypes,
+    UnknownDeviceType,
+    getDeviceTypeDefinitionFromModelByCode,
+} from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
 import { asClusterClientInternal, isClusterClient } from "./TypeHelpers.js";
 
@@ -990,7 +995,7 @@ export class PairedNode {
         const descriptorData = data[DescriptorCluster.id] as AttributeClientValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
-            const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
+            const deviceTypeDefinition = getDeviceTypeDefinitionFromModelByCode(deviceType);
             if (deviceTypeDefinition === undefined) {
                 logger.info(
                     `NodeId ${this.nodeId}: Device type with code ${deviceType} not known, use generic replacement.`,
