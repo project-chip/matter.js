@@ -15,6 +15,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
     - Fix: Fixes withBehaviors() method on endpoints
 
+-   @matter/nodejs-ble
+    - Fix: Adds support for advanced manufacturer data on Windows (Noble update)
+    
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
