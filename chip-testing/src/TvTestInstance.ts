@@ -4,103 +4,38 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Storage } from "@matter/general";
-import { Endpoint, Environment, ServerNode, StorageService } from "@matter/main";
+import { Bytes } from "@matter/general";
+import { Endpoint, ServerNode } from "@matter/main";
 import { AdministratorCommissioningServer } from "@matter/main/behaviors/administrator-commissioning";
 import { ApplicationBasicServer } from "@matter/main/behaviors/application-basic";
 import { WakeOnLanServer } from "@matter/main/behaviors/wake-on-lan";
 import { AdministratorCommissioning, ApplicationBasic, BasicInformation } from "@matter/main/clusters";
 import { DimmableLightDevice } from "@matter/main/devices/dimmable-light";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
-import { log, TestInstance } from "./GenericTestApp.js";
+import { NodeTestInstance } from "./NodeTestInstance.js";
 import { TestLowPowerServer } from "./cluster/TestLowPowerServer.js";
 
-export class TvTestInstance implements TestInstance {
+export class TvTestInstance extends NodeTestInstance {
+    static override id = "bingeford-6100";
+
     serverNode: ServerNode | undefined;
-    //storageManager: StorageManager;
-    protected appName: string;
-
-    constructor(
-        public storage: Storage,
-        protected options: {
-            appName: string;
-            discriminator?: number;
-            passcode?: number;
-        },
-    ) {
-        //this.storageManager = new StorageManager(storage);
-        this.appName = options.appName;
-    }
-
-    /** Set up the test instance MatterServer. */
-    async setup() {
-        try {
-            //await this.storageManager.initialize(); // hacky but works
-
-            this.serverNode = await this.setupServer();
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
-            log.error((error as Error).stack);
-            throw error;
-        }
-        log.directive(`======> ${this.appName}: Setup done`);
-    }
-
-    /** Start the test instance MatterServer with the included device. */
-    async start() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on start");
-
-        /*
-        const env = Environment.default;
-        env.vars.set("mdns.networkInterface", "en0");
-         */
-
-        try {
-            await this.serverNode.start();
-            const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
-            // Magic logging chip testing waits for
-            log.directive(`SetupQRCode: [${qrPairingCode}]`);
-            log.directive();
-            // Magic logging chip testing waits for
-            log.directive("mDNS service published:");
-            log.directive();
-
-            log.directive(`======> ${this.appName}: Instance started`);
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
-        }
-        log.directive("=====>>> STARTED");
-    }
-
-    /** Stop the test instance MatterServer and the device. */
-    async stop() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on close");
-        await this.serverNode.close();
-        //this.serverNode.cancel();
-        //await this.serverNode.lifecycle.act;
-        this.serverNode = undefined;
-        log.directive(`======> ${this.appName}: Instance stopped`);
-    }
 
     async setupServer(): Promise<ServerNode> {
-        Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
-
         const serverNode = await ServerNode.create(
             ServerNode.RootEndpoint.with(
                 // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
                 AdministratorCommissioningServer.with("Basic"),
             ),
             {
-                id: "binford-6100",
+                id: this.id,
+                environment: this.env,
                 network: {
                     port: 5540,
                     //advertiseOnStartup: false,
                 },
                 commissioning: {
-                    passcode: this.options.passcode ?? 20202021,
-                    discriminator: this.options.discriminator ?? 3840,
+                    passcode: this.config.passcode ?? 20202021,
+                    discriminator: this.config.discriminator ?? 3840,
                 },
                 productDescription: {
                     name: this.appName,

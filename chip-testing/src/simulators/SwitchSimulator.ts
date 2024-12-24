@@ -9,7 +9,7 @@ import { Endpoint } from "@matter/main";
 import { SwitchServer } from "@matter/main/behaviors/switch";
 import { Switch } from "@matter/main/clusters/switch";
 import { BitFlag, BitmapSchema } from "@matter/main/types";
-import { SimulateLongPressCommand, SimulateMultiPressCommand } from "../NamedPipeCommands.js";
+import { BackchannelCommand } from "@matter/testing";
 
 const NEUTRAL_SWITCH_POSITION = 0;
 
@@ -71,15 +71,15 @@ export class SwitchSimulator {
      *   - "LongPressDelayMillis": Time in milliseconds before the LongPress
      *   - "LongPressDurationMillis": Total duration in milliseconds from start of the press to LongRelease
      */
-    static async simulateLongPress(endpoint: Endpoint, command: SimulateLongPressCommand) {
+    static async simulateLongPress(endpoint: Endpoint, command: BackchannelCommand.SimulateLongPress) {
         const simulator = new SwitchSimulator(endpoint);
 
         // Configure cluster according to tests
-        await endpoint.setStateOf(SwitchServer, { longPressDelay: command.LongPressDelayMillis });
+        await endpoint.setStateOf(SwitchServer, { longPressDelay: command.longPressDelayMillis });
 
         // Execute tests
         simulator.executeActions([
-            { position: command.ButtonId, delay: command.LongPressDurationMillis }, // LongPressDelayMillis is ignored because just used to send the LogPress event?
+            { position: command.buttonId, delay: command.longPressDurationMillis }, // LongPressDelayMillis is ignored because just used to send the LogPress event?
             { position: NEUTRAL_SWITCH_POSITION },
         ]);
     }
@@ -101,13 +101,13 @@ export class SwitchSimulator {
      *   - "FeatureMap":  The feature map to simulate
      *   - "MultiPressMax": max number of presses (from attribute).
      */
-    static async simulateMultiPress(endpoint: Endpoint, command: SimulateMultiPressCommand) {
+    static async simulateMultiPress(endpoint: Endpoint, command: BackchannelCommand.SimulateMultiPress) {
         const simulator = new SwitchSimulator(endpoint);
 
         const features = BitmapSchema({
             ...Switch.Complete.features,
             actionSwitch: BitFlag(5), // new Matter 1.4 feature, tweak in here already
-        }).decode(command.FeatureMap);
+        }).decode(command.featureMap);
         if (features.actionSwitch) {
             // NOT SUPPPORTED
             /*simulator.executeActions([
@@ -122,20 +122,20 @@ export class SwitchSimulator {
             throw new Error("ActionSwitch not supported, so should never be called for now.");
         } else {
             // Configure cluster according to tests
-            await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.MultiPressReleasedTimeMillis + 500 });
+            await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.multiPressReleasedTimeMillis + 500 });
 
             // Collect test steps
             const actions: { position: number; delay?: number }[] = [];
 
-            for (let i = 0; i < command.MultiPressNumPresses; i++) {
+            for (let i = 0; i < command.multiPressNumPresses; i++) {
                 actions.push({
-                    position: command.ButtonId,
-                    delay: command.MultiPressPressedTimeMillis,
+                    position: command.buttonId,
+                    delay: command.multiPressPressedTimeMillis,
                 });
-                if (i < command.MultiPressNumPresses - 1) {
+                if (i < command.multiPressNumPresses - 1) {
                     actions.push({
                         position: NEUTRAL_SWITCH_POSITION,
-                        delay: command.MultiPressReleasedTimeMillis,
+                        delay: command.multiPressReleasedTimeMillis,
                     });
                 }
             }

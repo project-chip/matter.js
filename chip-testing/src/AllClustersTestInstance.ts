@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Storage } from "@matter/general";
-import { Endpoint, Environment, NumberTag, ServerNode, StorageService } from "@matter/main";
+import { Bytes, InternalError } from "@matter/general";
+import { Endpoint, NumberTag, ServerNode } from "@matter/main";
 import {
     AdministratorCommissioningServer,
     AirQualityServer,
@@ -50,7 +50,6 @@ import {
     Descriptor,
     LevelControl,
     ModeSelect,
-    NetworkCommissioning,
     OccupancySensing,
     PowerSource,
     PowerTopology,
@@ -63,108 +62,77 @@ import {
 } from "@matter/main/clusters";
 import { OnOffLightDevice } from "@matter/main/devices";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
+import { BackchannelCommand } from "@matter/testing";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
-import { log, TestInstance } from "./GenericTestApp.js";
-import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
+import { TestInstanceConfig } from "./GenericTestApp.js";
+import { NodeTestInstance } from "./NodeTestInstance.js";
+import { SwitchSimulator } from "./simulators/SwitchSimulator.js";
 
-export class AllClustersTestInstance implements TestInstance {
-    serverNode?: ServerNode;
-    protected appName: string;
-    #namedPipeHandler?: NamedPipeCommandHandler;
+export class AllClustersTestInstance extends NodeTestInstance {
+    static override id = "binford-6100";
 
-    constructor(
-        public storage: Storage,
-        protected options: {
-            appName: string;
-            discriminator?: number;
-            passcode?: number;
-        },
-    ) {
-        this.appName = options.appName;
-    }
-
-    async #setupNamedPipe() {
-        if (this.serverNode === undefined) {
-            throw new Error("ServerNode not initialized, cannot setup NamedPipeCommandHandler.");
-        }
-        try {
-            this.#namedPipeHandler = new NamedPipeCommandHandler(
-                `/tmp/chip_all_clusters_fifo_${process.pid}`,
-                this.serverNode,
-            );
-            await this.#namedPipeHandler.listen();
-        } catch (error) {
-            log.error("Error creating named pipe:", error);
-        }
+    constructor(config: TestInstanceConfig) {
+        super(config);
     }
 
     /** Set up the test instance MatterServer. */
-    async setup() {
-        try {
-            this.serverNode = await this.setupServer();
-            await this.#setupNamedPipe();
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
-            log.error((error as Error).stack);
-            throw error;
-        }
-        log.directive(`======> ${this.appName}: Setup done`);
+    override async initialize() {
+        await this.activateCommandPipe("all_clusters");
+        await super.initialize();
     }
 
-    /** Start the test instance MatterServer with the included device. */
-    async start() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on start");
+    /** Process a backchannel command */
+    override async backchannel(command: BackchannelCommand) {
+        const name = command.name;
 
-        /*
-        const env = Environment.default;
-        env.vars.set("mdns.networkInterface", "en0");
-        */
-
-        try {
-            await this.serverNode.start();
-            const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
-            // Magic logging chip testing waits for
-            log.directive(`SetupQRCode: [${qrPairingCode}]`);
-            log.directive();
-            // Magic logging chip testing waits for
-            log.directive("mDNS service published:");
-            log.directive();
-
-            log.directive(`======> ${this.appName}: Instance started`);
-        } catch (error) {
-            // Catch and log error, else the test framework hides issues here
-            log.error(error);
+        const endpointId = "endpointId" in command ? command.endpointId : undefined;
+        let endpoint: Endpoint | undefined;
+        if (endpointId !== undefined) {
+            // Find the endpoint instance if an EndpointId is set
+            this.node?.visit(visitedEndpoint => {
+                if (visitedEndpoint.number === endpointId) {
+                    if (endpoint !== undefined) {
+                        throw new InternalError("Duplicate endpoint number? Should never happen");
+                    }
+                    endpoint = visitedEndpoint;
+                }
+            });
         }
-        log.directive("=====>>> STARTED");
-    }
 
-    /** Stop the test instance MatterServer and the device. */
-    async stop() {
-        if (!this.serverNode) throw new Error("serverNode not initialized on close");
-        await this.serverNode.close();
-        //this.serverNode.cancel();
-        //await this.serverNode.lifecycle.act;
-        this.serverNode = undefined;
-        try {
-            await this.#namedPipeHandler?.close();
-        } catch (error) {
-            log.error("Error closing named pipe:", error);
+        switch (name) {
+            case "simulateLongPress":
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not existing`);
+                }
+                await SwitchSimulator.simulateLongPress(endpoint, command);
+                break;
+            case "simulateMultiPress":
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not existing`);
+                }
+                await SwitchSimulator.simulateMultiPress(endpoint, command);
+                break;
+            case "simulateLatchPosition":
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not existing`);
+                }
+                await endpoint.setStateOf(SwitchServer, { currentPosition: command.positionId });
+                break;
+            default:
+                await super.backchannel(command);
         }
-        log.directive(`======> ${this.appName}: Instance stopped`);
     }
 
     async setupServer(): Promise<ServerNode> {
-        Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
+        // Network ID is string "eth-app" in TC_CNET_4_3
+        const networkId = Bytes.fromHex("6574682D617070");
 
-        const networkId = new Uint8Array(32);
-
-        let deviceTestEnableKey = Bytes.fromHex("00112233445566778899aabbccddeeff");
+        let deviceTestEnableKey = Bytes.fromHex(NodeTestInstance.testEnableKey);
         const argsEnableKeyIndex = process.argv.indexOf("--enable-key");
         if (argsEnableKeyIndex !== -1) {
             deviceTestEnableKey = Bytes.fromHex(process.argv[argsEnableKeyIndex + 1]);
@@ -186,14 +154,18 @@ export class AllClustersTestInstance implements TestInstance {
                 UserLabelServer,
             ),
             {
-                id: "binford-6100",
+                id: this.id,
+                environment: this.env,
+                events: {
+                    nonvolatile: NodeTestInstance.nonvolatileEvents,
+                },
                 network: {
                     port: 5540,
                     //advertiseOnStartup: false,
                 },
                 commissioning: {
-                    passcode: this.options.passcode ?? 20202021,
-                    discriminator: this.options.discriminator ?? 3840,
+                    passcode: this.config.passcode ?? 20202021,
+                    discriminator: this.config.discriminator ?? 3840,
                 },
                 productDescription: {
                     name: this.appName,
@@ -239,10 +211,12 @@ export class AllClustersTestInstance implements TestInstance {
                 networkCommissioning: {
                     maxNetworks: 1,
                     interfaceEnabled: true,
-                    lastConnectErrorValue: 0,
-                    lastNetworkId: networkId,
-                    lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: networkId, connected: true }],
+
+                    // We fail TC_CNET_4_3 with these
+                    //lastConnectErrorValue: 0,
+                    //lastNetworkId: networkId,
+                    //lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 },
                 timeFormatLocalization: {
                     hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
@@ -346,7 +320,14 @@ export class AllClustersTestInstance implements TestInstance {
                 PowerSourceServer.with(PowerSource.Feature.Battery),
                 PowerTopologyServer.with(PowerTopology.Feature.SetTopology, PowerTopology.Feature.DynamicPowerFlow),
                 PressureMeasurementServer,
-                PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
+                PumpConfigurationAndControlServer.with(
+                    PumpConfigurationAndControl.Feature.ConstantPressure,
+
+                    // PCC_2_1 doesn't specify proper PICS for attributes associated with these features so requires
+                    // them event though we don't enable the feature
+                    PumpConfigurationAndControl.Feature.ConstantFlow,
+                    PumpConfigurationAndControl.Feature.ConstantTemperature,
+                ),
                 RadonConcentrationMeasurementServer.with(
                     ConcentrationMeasurement.Feature.LevelIndication,
                     ConcentrationMeasurement.Feature.MediumLevel,

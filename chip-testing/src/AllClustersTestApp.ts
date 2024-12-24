@@ -4,6 +4,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import "@matter/nodejs";
 
 import { AllClustersTestInstance } from "./AllClustersTestInstance.js";
@@ -14,4 +15,4 @@ console.log("Start AllClustersApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp("AllClustersApp", AllClustersTestInstance, StorageBackendAsyncJsonFile).catch(console.error);
+startTestApp(AllClustersTestInstance, StorageBackendAsyncJsonFile).catch(console.error);

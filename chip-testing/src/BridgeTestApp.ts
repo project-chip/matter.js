@@ -12,4 +12,4 @@ console.log("Start BridgeApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp("BridgeApp", BridgeTestInstance).catch(console.error);
+startTestApp(BridgeTestInstance).catch(console.error);
