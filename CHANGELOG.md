@@ -30,6 +30,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
 
 -   @project-chip/matter.js
+    - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
+        including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
+        connection 
     - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
 
