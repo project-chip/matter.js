@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Package } from "#tools";
-import { resolve } from "path";
 import { env } from "process";
 
 /**
@@ -54,8 +52,7 @@ export namespace Constants {
     export const initTimeout = 60_000;
     export const defaultTimeoutMs = 60_000;
 
-    export const matterJsRoot = Package.workspace.path;
-    export const localPicsOverrideFile = resolve(matterJsRoot, "packages/testing/src/chip/matter-js-pics.properties");
+    export const localPicsOverrideFile = "src/chip/matter-js-pics.properties";
 
     /**
      * We set the commissioning timeout value very low because this timeout is tested and waiting the default 180s.
