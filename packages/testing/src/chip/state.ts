@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Package } from "#tools";
 import { BackchannelCommand } from "../device/backchannel.js";
 import { Subject } from "../device/subject.js";
 import { Test } from "../device/test.js";
@@ -408,7 +409,8 @@ async function configurePics() {
     const ciPics = await State.container.read(ContainerPaths.chipPics);
     const pics = new PicsFile(ciPics, true);
 
-    const overrides = new PicsFile(Constants.localPicsOverrideFile);
+    const testing = Package.tools.findPackage("@matter/testing");
+    const overrides = new PicsFile(testing.resolve(Constants.localPicsOverrideFile));
     pics.patch(overrides);
 
     Values.maybePics = pics;
