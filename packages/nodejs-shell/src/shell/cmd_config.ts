@@ -90,6 +90,36 @@ export default function commands(theNode: MatterNode) {
                         );
                 })
 
+                // LogFile name
+                .command("fabricLabel", "Manage Controller Fabric Label", yargs => {
+                    return yargs
+                        .command(
+                            "* [action]",
+                            "get Controller fabric label",
+                            yargs => {
+                                return yargs.positional("action", {
+                                    describe: "get",
+                                    choices: ["get"] as const,
+                                    default: "get",
+                                    type: "string",
+                                });
+                            },
+                            async argv => doControllerFabricLabel(theNode, argv),
+                        )
+                        .command(
+                            "set <value>",
+                            "set Controller fabric label",
+                            yargs => {
+                                return yargs.positional("value", {
+                                    describe: "Controller fabric label",
+                                    type: "string",
+                                    demandOption: true,
+                                });
+                            },
+                            async argv => doControllerFabricLabel(theNode, { action: "set", ...argv }),
+                        );
+                })
+
                 // BLE HCI number (Linux)
                 .command("ble-hci", "Manage BLE HCI ID (Linux)", yargs => {
                     return yargs
@@ -247,11 +277,42 @@ async function doLogfilePath(
                 return;
             }
             await theNode.Store.set("LogFile", value);
-            console.log(`New LogFile path:" ${value}". Please restart the shell for teh changes to take effect.`);
+            console.log(`New LogFile path:" ${value}". Please restart the shell for the changes to take effect.`);
             break;
         case "delete":
             await theNode.Store.delete("LogFile");
             console.log(`LogFile path removed. Please restart the shell for teh changes to take effect.`);
+            break;
+    }
+}
+
+async function doControllerFabricLabel(
+    theNode: MatterNode,
+    args: {
+        action: string;
+        value?: string;
+    },
+) {
+    const { action, value } = args;
+    switch (action) {
+        case "get":
+            console.log(
+                `Current ControllerFabricLabel: ${await theNode.Store.get<string>("ControllerFabricLabel", "matter.js Shell")}`,
+            );
+            break;
+        case "set":
+            if (value === undefined) {
+                console.log(`Cannot change Controller Fabric Label: new value not provided`);
+                return;
+            }
+            if (value.length === 0 || value.length > 32) {
+                console.log(`Cannot change Controller Fabric Label: value must be between 1 and 32 characters`);
+                return;
+            }
+            await theNode.Store.set("ControllerFabricLabel", value);
+            console.log(
+                `New Controller Fabric Label:" ${value}". Please restart the shell for the changes to take effect.`,
+            );
             break;
     }
 }
