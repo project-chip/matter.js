@@ -115,6 +115,10 @@ class ControllerNode {
         const controllerStorage = storageManager.createContext("Controller");
         const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : getParameter("ip");
         const port = controllerStorage.has("port") ? controllerStorage.get<number>("port") : getIntParameter("port");
+        const adminFabricLabel = controllerStorage.has("fabricLabel")
+            ? controllerStorage.get<string>("fabricLabel")
+            : "matter.js Controller";
+        controllerStorage.set("fabricLabel", adminFabricLabel);
 
         const pairingCode = getParameter("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -181,6 +185,7 @@ class ControllerNode {
         const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
             autoConnect: false,
+            adminFabricLabel,
         });
         await matterServer.addCommissioningController(commissioningController);
 

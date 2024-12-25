@@ -66,6 +66,10 @@ class ControllerNode {
             ? await controllerStorage.get<string>("uniqueid")
             : (environment.vars.string("uniqueid") ?? Time.nowMs().toString());
         await controllerStorage.set("uniqueid", uniqueId);
+        const adminFabricLabel = (await controllerStorage.has("fabriclabel"))
+            ? await controllerStorage.get<string>("fabriclabel")
+            : (environment.vars.string("fabriclabel") ?? "matter.js Controller");
+        await controllerStorage.set("fabriclabel", adminFabricLabel);
 
         const pairingCode = environment.vars.string("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -136,6 +140,7 @@ class ControllerNode {
                 id: uniqueId,
             },
             autoConnect: false,
+            adminFabricLabel,
         });
 
         /**
