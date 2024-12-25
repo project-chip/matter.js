@@ -10,7 +10,7 @@ import { AdministratorCommissioning } from "#clusters/administrator-commissionin
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Logger, MatterFlowError } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
-import { assertSecureSession, DeviceCommissioner, FabricManager, SessionManager } from "#protocol";
+import { assertSecureSession, DeviceCommissioner, FabricManager, SecureSession, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";
 
@@ -39,10 +39,25 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         }
 
         this.state.breadcrumb = 0;
+
+        const sessionManager = this.env.get(SessionManager);
+        this.reactTo(sessionManager.sessions.added, this.#handleAddedPaseSessions);
     }
 
-    override async armFailSafe({ breadcrumb, expiryLengthSeconds }: GeneralCommissioning.ArmFailSafeRequest) {
-        assertSecureSession(this.session, "armFailSafe can only be called on a secure session");
+    /** As required by Commissioning Flows any new PASE session needs to arm the failsafe for 60s. */
+    async #handleAddedPaseSessions(session: SecureSession) {
+        if (!session.isPase) {
+            return;
+        }
+        logger.debug(`New PASE session added: ${session.id}. Arming Failsafe for 60s.`);
+        await this.#armFailSafe({ breadcrumb: this.state.breadcrumb, expiryLengthSeconds: 60 }, session);
+    }
+
+    async #armFailSafe(
+        { breadcrumb, expiryLengthSeconds }: GeneralCommissioning.ArmFailSafeRequest,
+        session: SecureSession,
+    ) {
+        assertSecureSession(session, "armFailSafe can only be called on a secure session");
         const commissioner = this.env.get(DeviceCommissioner);
 
         try {
@@ -55,13 +70,13 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 !commissioner.isFailsafeArmed &&
                 this.agent.get(AdministratorCommissioningServer).state.windowStatus !==
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
-                !this.session.isPase
+                !session.isPase
             ) {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
             if (commissioner.isFailsafeArmed) {
-                await commissioner.failsafeContext.extend(this.session.fabric, expiryLengthSeconds);
+                await commissioner.failsafeContext.extend(session.fabric, expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
                 // to a success response with no side effect against the fail-safe context.
@@ -73,7 +88,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                         sessions: this.env.get(SessionManager),
                         expiryLengthSeconds,
                         maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
-                        associatedFabric: this.session.fabric,
+                        associatedFabric: session.fabric,
                     }),
                 );
             }
@@ -93,6 +108,10 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         }
 
         return SuccessResponse;
+    }
+
+    override armFailSafe(request: GeneralCommissioning.ArmFailSafeRequest) {
+        return this.#armFailSafe(request, this.session);
     }
 
     override async setRegulatoryConfig({
