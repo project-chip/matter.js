@@ -102,6 +102,7 @@ export class MatterController {
         adminFabricId?: FabricId;
         adminFabricIndex?: FabricIndex;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
+        adminFabricLabel: string;
     }): Promise<MatterController> {
         const {
             controllerStore,
@@ -112,6 +113,7 @@ export class MatterController {
             adminFabricId = FabricId(DEFAULT_FABRIC_ID),
             adminFabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
             caseAuthenticatedTags,
+            adminFabricLabel,
         } = options;
 
         const ca = await CertificateAuthority.create(controllerStore.caStorage);
@@ -129,6 +131,7 @@ export class MatterController {
                     netInterfaces,
                     certificateManager: ca,
                     fabric,
+                    adminFabricLabel,
                     sessionClosedCallback,
                 });
             } else {
@@ -148,7 +151,8 @@ export class MatterController {
                 .setRootCert(ca.rootCert)
                 .setRootNodeId(rootNodeId)
                 .setIdentityProtectionKey(ipkValue)
-                .setRootVendorId(adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID);
+                .setRootVendorId(adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
+                .setLabel(adminFabricLabel);
             fabricBuilder.setOperationalCert(
                 ca.generateNoc(fabricBuilder.publicKey, adminFabricId, rootNodeId, caseAuthenticatedTags),
             );
@@ -160,6 +164,7 @@ export class MatterController {
                 netInterfaces,
                 certificateManager: ca,
                 fabric,
+                adminFabricLabel,
                 sessionClosedCallback,
             });
         }
@@ -172,9 +177,17 @@ export class MatterController {
         fabricConfig: Fabric.Config;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
+        adminFabricLabel: string;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
     }): Promise<MatterController> {
-        const { certificateAuthorityConfig, fabricConfig, scanners, netInterfaces, sessionClosedCallback } = options;
+        const {
+            certificateAuthorityConfig,
+            fabricConfig,
+            adminFabricLabel,
+            scanners,
+            netInterfaces,
+            sessionClosedCallback,
+        } = options;
 
         // Verify an appropriate network interface is available
         if (!netInterfaces.hasInterfaceFor(ChannelType.BLE)) {
@@ -200,6 +213,7 @@ export class MatterController {
             netInterfaces,
             certificateManager,
             fabric,
+            adminFabricLabel,
             sessionClosedCallback,
         });
         await controller.construction;
@@ -232,9 +246,18 @@ export class MatterController {
         netInterfaces: NetInterfaceSet;
         certificateManager: CertificateAuthority;
         fabric: Fabric;
+        adminFabricLabel: string;
         sessionClosedCallback?: (peerNodeId: NodeId) => void;
     }) {
-        const { controllerStore, scanners, netInterfaces, certificateManager, fabric, sessionClosedCallback } = options;
+        const {
+            controllerStore,
+            scanners,
+            netInterfaces,
+            certificateManager,
+            fabric,
+            sessionClosedCallback,
+            adminFabricLabel,
+        } = options;
         this.#store = controllerStore;
         this.scanners = scanners;
         this.netInterfaces = netInterfaces;
@@ -244,6 +267,10 @@ export class MatterController {
 
         const fabricManager = new FabricManager();
         fabricManager.addFabric(fabric);
+        // Overwrite the persist callback and store fabric when needed
+        fabric.persistCallback = async () => {
+            await this.#store.fabricStorage.set("fabric", this.fabric.config);
+        };
 
         this.sessionManager = new SessionManager({
             fabrics: fabricManager,
@@ -293,6 +320,9 @@ export class MatterController {
         this.#construction = Construction(this, async () => {
             await this.peers.construction.ready;
             await this.sessionManager.construction.ready;
+            if (this.fabric.label !== adminFabricLabel) {
+                await fabric.setLabel(adminFabricLabel);
+            }
         });
     }
 
@@ -371,7 +401,7 @@ export class MatterController {
 
         const address = await this.commissioner.commissionWithDiscovery(commissioningOptions);
 
-        await this.#store.fabricStorage.set("fabric", this.fabric.config);
+        await this.fabric.persist();
 
         return address.nodeId;
     }
@@ -411,7 +441,7 @@ export class MatterController {
             await this.peers.delete(this.fabric.addressOf(peerNodeId));
             throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
         }
-        await this.#store.fabricStorage.set("fabric", this.fabric.config);
+        await this.fabric.persist();
     }
 
     isCommissioned() {
