@@ -102,6 +102,7 @@ export class PaseCommissioner {
             fabricConfig: fabricConfig,
             scanners,
             netInterfaces,
+            adminFabricLabel: this.options.fabricConfig.label,
         });
     }
 

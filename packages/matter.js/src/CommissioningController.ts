@@ -109,6 +109,13 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
     readonly caseAuthenticatedTags?: CaseAuthenticatedTag[];
 
     /**
+     * The Fabric Label to set for the commissioned devices. The #label is used for users to identify the admin.
+     * The maximum length are 32 characters!
+     * The value will automatically be checked on connection to a node and updated if necessary.
+     */
+    readonly adminFabricLabel: string;
+
+    /**
      * When used with the new API Environment set the environment here and the CommissioningServer will self-register
      * on the environment when you call start().
      */
@@ -188,7 +195,8 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
         }
-        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
+        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags, adminFabricLabel } =
+            this.options;
 
         if (environment === undefined && storage === undefined) {
             throw new ImplementationError("Storage not initialized correctly.");
@@ -222,6 +230,7 @@ export class CommissioningController extends MatterNode {
             adminFabricId,
             adminFabricIndex,
             caseAuthenticatedTags,
+            adminFabricLabel,
         });
         if (this.mdnsBroadcaster) {
             controller.addBroadcaster(this.mdnsBroadcaster.createInstanceBroadcaster(port));
