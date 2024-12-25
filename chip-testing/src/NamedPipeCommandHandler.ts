@@ -56,9 +56,8 @@ export class NamedPipeCommandHandler extends CommandPipe {
     override async close() {
         this.#stopping = true;
         try {
-            // Note - this leaks the socket which will prevent process exit.  Not fixing because we only use when
-            // running standalone
             await this.#namedPipe?.close();
+            this.#namedPipeSocket?.destroy();
         } catch (error) {
             console.log("Error closing named pipe:", error);
         }
