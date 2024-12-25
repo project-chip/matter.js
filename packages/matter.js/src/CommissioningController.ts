@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { OperationalCredentials } from "#clusters";
 import {
     Environment,
     ImplementationError,
@@ -15,6 +16,7 @@ import {
     StorageContext,
     SyncStorage,
     UdpInterface,
+    UnexpectedDataError,
 } from "#general";
 import { LegacyControllerStore } from "#LegacyControllerStore.js";
 import { ControllerStore } from "#node";
@@ -571,6 +573,34 @@ export class CommissioningController extends MatterNode {
     /** Returns active session information for all connected nodes. */
     getActiveSessionInformation() {
         return this.controllerInstance?.getActiveSessionInformation() ?? [];
+    }
+
+    async validateAndUpdateFabricLabel(nodeId: NodeId) {
+        const controller = this.assertControllerIsStarted();
+        const node = this.initializedNodes.get(nodeId);
+        if (node === undefined) {
+            throw new ImplementationError(`Node ${nodeId} is not connected!`);
+        }
+        const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
+        if (operationalCredentialsCluster === undefined) {
+            throw new UnexpectedDataError("Operational Credentials Cluster not available!");
+        }
+        const fabrics = await operationalCredentialsCluster.getFabricsAttribute(false, true);
+        if (fabrics.length !== 1) {
+            logger.info(`Node ${this.nodeId}: Invalid fabrics returned from node ${nodeId}.`, fabrics);
+            return;
+        }
+        const label = controller.fabricConfig.label;
+        const fabric = fabrics[0];
+        if (fabric.label !== label) {
+            logger.info(
+                `Node ${this.nodeId}: Fabric label "${fabric.label}" does not match requested admin fabricLabel "${label}". Updating...`,
+            );
+            await operationalCredentialsCluster.updateFabricLabel({
+                label,
+                fabricIndex: fabric.fabricIndex,
+            });
+        }
     }
 }
 
