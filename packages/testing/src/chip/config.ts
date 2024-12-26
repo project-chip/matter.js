@@ -92,8 +92,9 @@ export namespace Constants {
         "--PICS",
         ContainerPaths.matterJsPics,
 
-        // Our PID is meaningless within the container but Python uses in the name of the command pipe
+        // Our PID is meaningless within the container but Python uses in the name of the command pipe.  We pass in our
+        // actual PID to ensure no collision if multiple instances run
         "--app-pid",
-        "1",
+        process.pid.toString(),
     ];
 }

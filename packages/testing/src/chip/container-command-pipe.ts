@@ -66,7 +66,7 @@ export class ContainerCommandPipe extends CommandPipe {
             }
         } finally {
             try {
-                await this.#container.delete(this.filename);
+                await this.#container.delete(this.filename, { force: true });
             } catch (e) {
                 console.warn(`Error deleting FIFO ${this.filename}:`, e);
             }

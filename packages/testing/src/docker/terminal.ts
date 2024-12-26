@@ -83,6 +83,12 @@ export namespace Terminal {
                 }
 
                 await promisify(stream.end).bind(stream)();
+
+                // In the case of an exec socket closing one side is insufficient for Dockerode to terminate the stream;
+                // need to actually destroy it to ensure close
+                if ("destroy" in stream && typeof stream.destroy === "function") {
+                    stream.destroy();
+                }
             },
 
             async consume(): Promise<Uint8Array> {
