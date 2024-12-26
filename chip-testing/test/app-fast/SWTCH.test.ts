@@ -5,6 +5,10 @@
  */
 
 describe("SWTCH", () => {
-    // There's an unnumbered python SWTCH test with multiple steps
-    chip("SWTCH/*", "SWTCH*");
+    chip(
+        "SWTCH/*",
+
+        // There's an unnumbered python SWTCH test with multiple runs
+        "SWTCH*",
+    );
 });

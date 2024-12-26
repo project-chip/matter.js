@@ -107,21 +107,27 @@ export class AllClustersTestInstance extends NodeTestInstance {
         switch (name) {
             case "simulateLongPress":
                 if (endpoint === undefined) {
-                    throw new Error(`Endpoint ${endpointId} not existing`);
+                    throw new Error(`Endpoint ${endpointId} not found`);
                 }
                 await SwitchSimulator.simulateLongPress(endpoint, command);
                 break;
             case "simulateMultiPress":
                 if (endpoint === undefined) {
-                    throw new Error(`Endpoint ${endpointId} not existing`);
+                    throw new Error(`Endpoint ${endpointId} not found`);
                 }
                 await SwitchSimulator.simulateMultiPress(endpoint, command);
                 break;
             case "simulateLatchPosition":
                 if (endpoint === undefined) {
-                    throw new Error(`Endpoint ${endpointId} not existing`);
+                    throw new Error(`Endpoint ${endpointId} not found`);
                 }
                 await endpoint.setStateOf(SwitchServer, { currentPosition: command.positionId });
+                break;
+            case "simulateSwitchIdle":
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not found`);
+                }
+                await endpoint.setStateOf(SwitchServer, { currentPosition: 0 });
                 break;
             default:
                 await super.backchannel(command);
