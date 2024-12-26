@@ -33,7 +33,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
         including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
         connection 
-    - Enhancement: Improves Reconnection Handling for devices that use Persisted Subscriptions
+    - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
+    - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
 
 ## 0.11.9 (2024-12-11)
