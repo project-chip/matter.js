@@ -73,7 +73,7 @@ import { asClusterClientInternal, isClusterClient } from "./TypeHelpers.js";
 const logger = Logger.get("PairedNode");
 
 /** Delay after receiving a changed partList  from a device to update the device structure */
-const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
+const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds
 
 /** Delay after a disconnect to try to reconnect to the device */
 const RECONNECT_DELAY_MS = 15_000; // 15 seconds
@@ -88,7 +88,7 @@ const RECONNECT_MAX_DELAY_MS = 600_000; // 10 minutes
  * Delay after a new session was opened by the device while in discovery state.
  * This usually happens for devices that support persisted subscriptions.
  */
-const NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY = 5_000;
+const NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY_MS = 5_000;
 
 export enum NodeStates {
     /**
@@ -216,6 +216,23 @@ export class PairedNode {
     readonly #endpoints = new Map<EndpointNumber, Endpoint>();
     #interactionClient: InteractionClient;
     #reconnectDelayTimer?: Timer;
+    #newChannelReconnectDelayTimer = Time.getTimer(
+        "New Channel Reconnect Delay",
+        NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY_MS,
+        () => {
+            if (
+                this.#connectionState === NodeStates.WaitingForDeviceDiscovery ||
+                this.#connectionState === NodeStates.Reconnecting
+            ) {
+                logger.info(
+                    `Node ${this.nodeId}: Still not connected after new session establishment, trying to reconnect ...`,
+                );
+                // Try last known address first to speed up reconnection
+                this.#setConnectionState(NodeStates.Reconnecting);
+                this.#scheduleReconnect(0);
+            }
+        },
+    );
     #reconnectErrorCount = 0;
     readonly #updateEndpointStructureTimer = Time.getTimer(
         "Endpoint structure update",
@@ -334,15 +351,8 @@ export class PairedNode {
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, this.#nodeDetails.meta);
 
         sessions.added.on(session => {
-            if (session.peerNodeId !== this.nodeId) return;
-            if (this.state === NodeStates.WaitingForDeviceDiscovery) {
-                logger.info(
-                    `Session for peer node ${session.peerNodeId} connected while node is in discovery mode ...`,
-                );
-                // Try last known address first to speed up reconnection
-                this.#setConnectionState(NodeStates.Reconnecting);
-                this.#scheduleReconnect(NEW_SESSION_WHILE_DISCOVERY_RECONNECT_DELAY);
-            }
+            if (session.peerNodeId !== this.nodeId || this.state !== NodeStates.WaitingForDeviceDiscovery) return;
+            this.#newChannelReconnectDelayTimer.stop().start();
         });
 
         this.#construction = Construction(this, async () => {
@@ -1233,6 +1243,7 @@ export class PairedNode {
     }
 
     close(sendDecommissionedStatus = false) {
+        this.#newChannelReconnectDelayTimer.stop();
         this.#reconnectDelayTimer?.stop();
         this.#reconnectDelayTimer = undefined;
         this.#updateEndpointStructureTimer.stop();
