@@ -156,6 +156,9 @@ export class Fabric {
         if (label.length === 0 || label.length > 32) {
             throw new ImplementationError("Fabric label must be between 1 and 32 characters long.");
         }
+        if (this.#label === label) {
+            return;
+        }
         this.#label = label;
         await this.persist();
     }
