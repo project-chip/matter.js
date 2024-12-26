@@ -10,7 +10,8 @@
 export type BackchannelCommand =
     | BackchannelCommand.SimulateLongPress
     | BackchannelCommand.SimulateMultiPress
-    | BackchannelCommand.SimulateLatchedPosition
+    | BackchannelCommand.SimulateLatchPosition
+    | BackchannelCommand.SimulateSwitchIdle
     | BackchannelCommand.NoParameters;
 
 export namespace BackchannelCommand {
@@ -37,7 +38,12 @@ export namespace BackchannelCommand {
         multiPressMax: number;
     };
 
-    export type SimulateLatchedPosition = {
+    export type SimulateSwitchIdle = {
+        name: "simulateSwitchIdle";
+        endpointId: number;
+    };
+
+    export type SimulateLatchPosition = {
         name: "simulateLatchPosition";
         endpointId: number;
         positionId: number;

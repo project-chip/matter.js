@@ -34,7 +34,7 @@ export class NamedPipeCommandHandler extends CommandPipe {
         this.#namedPipeSocket = new Socket({ fd: this.#namedPipe.fd });
         console.log(`Named pipe opened: ${this.filename}`);
 
-        this.#namedPipeSocket.on("data", this.onData);
+        this.#namedPipeSocket.on("data", this.onData.bind(this));
 
         this.#namedPipeSocket.on("error", err => {
             console.log("Named pipe error:", err);
