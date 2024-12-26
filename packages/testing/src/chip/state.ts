@@ -216,8 +216,13 @@ export const State = {
 
         const pipe = new ContainerCommandPipe(State.container, this, name);
 
+        await pipe.initialize();
+
+        Values.activePipes.add(name);
+
         State.onClose(async () => {
             await pipe.close();
+            Values.activePipes.delete(name);
         });
     },
 
@@ -269,7 +274,7 @@ export const State = {
         const { progress } = State.runner;
 
         await progress.subtask("activating subject", async () => {
-            await State.container.exec(["bash", "-c", "rm -rf /tmp/*"]);
+            await State.container.exec(["bash", "-c", 'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*']);
 
             if (!startCommissioned) {
                 // Initialize single-use subject
