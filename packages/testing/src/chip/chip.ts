@@ -333,11 +333,11 @@ Object.defineProperties(chipFn, {
         get: () => State.pics,
     },
 
-    initialize: { value: State.initialize },
-    close: { value: State.close },
-    openPipe: { value: State.openPipe },
-    onClose: { value: State.onClose },
-    testFor: { value: State.testFor },
+    initialize: { value: State.initialize.bind(State) },
+    close: { value: State.close.bind(State) },
+    openPipe: { value: State.openPipe.bind(State) },
+    onClose: { value: State.onClose.bind(State) },
+    testFor: { value: State.testFor.bind(State) },
 });
 
 export const chip = chipFn as Chip;
