@@ -176,4 +176,8 @@ export class MatterNode {
             }
         }
     }
+
+    updateFabricLabel(label: string) {
+        return this.commissioningController?.updateFabricLabel(label);
+    }
 }

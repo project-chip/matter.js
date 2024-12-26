@@ -310,9 +310,8 @@ async function doControllerFabricLabel(
                 return;
             }
             await theNode.Store.set("ControllerFabricLabel", value);
-            console.log(
-                `New Controller Fabric Label:" ${value}". Please restart the shell for the changes to take effect.`,
-            );
+            console.log(`New Controller Fabric Label:" ${value}".`);
+            await theNode.updateFabricLabel(value);
             break;
     }
 }
