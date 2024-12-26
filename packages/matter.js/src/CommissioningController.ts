@@ -44,7 +44,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
-import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
+import { CommissioningControllerNodeOptions, NodeStates, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
 import { MatterNode } from "./MatterNode.js";
 
@@ -146,6 +146,7 @@ export class CommissioningController extends MatterNode {
 
     private controllerInstance?: MatterController;
     private initializedNodes = new Map<NodeId, PairedNode>();
+    private nodeUpdateLabelHandlers = new Map<NodeId, (nodeState: NodeStates) => Promise<void>>();
     private sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
 
     /**
@@ -583,23 +584,68 @@ export class CommissioningController extends MatterNode {
         }
         const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
         if (operationalCredentialsCluster === undefined) {
-            throw new UnexpectedDataError("Operational Credentials Cluster not available!");
+            throw new UnexpectedDataError(`Node ${nodeId}: Operational Credentials Cluster not available!`);
         }
         const fabrics = await operationalCredentialsCluster.getFabricsAttribute(false, true);
         if (fabrics.length !== 1) {
-            logger.info(`Node ${this.nodeId}: Invalid fabrics returned from node ${nodeId}.`, fabrics);
+            logger.info(`Invalid fabrics returned from node ${nodeId}.`, fabrics);
             return;
         }
         const label = controller.fabricConfig.label;
         const fabric = fabrics[0];
         if (fabric.label !== label) {
             logger.info(
-                `Node ${this.nodeId}: Fabric label "${fabric.label}" does not match requested admin fabricLabel "${label}". Updating...`,
+                `Node ${nodeId}: Fabric label "${fabric.label}" does not match requested admin fabric Label "${label}". Updating...`,
             );
             await operationalCredentialsCluster.updateFabricLabel({
                 label,
                 fabricIndex: fabric.fabricIndex,
             });
+        }
+    }
+
+    async updateFabricLabel(label: string) {
+        const controller = this.assertControllerIsStarted();
+        if (controller.fabricConfig.label === label) {
+            return;
+        }
+        await controller.updateFabricLabel(label);
+
+        for (const node of this.initializedNodes.values()) {
+            if (node.isConnected) {
+                // When Node is connected, update the fabric label on the node directly
+                try {
+                    await this.validateAndUpdateFabricLabel(node.nodeId);
+                    return;
+                } catch (error) {
+                    logger.warn(`Error updating fabric label on node ${node.nodeId}:`, error);
+                }
+            }
+            if (!node.remoteInitializationDone) {
+                // Node not online and was also not yet initialized, means update happens
+                // automatically when node connects
+                logger.info(`Node ${node.nodeId} is offline. Fabric label will be updated on next connection.`);
+                return;
+            }
+            logger.info(
+                `Node ${node.nodeId} is reconnecting. Delaying fabric label update to when node is back online.`,
+            );
+
+            // If no update handler is registered, register one
+            // TODO: Convert this next to a task system for node tasks and also better handle error cases
+            if (!this.nodeUpdateLabelHandlers.has(node.nodeId)) {
+                const updateOnReconnect = (nodeState: NodeStates) => {
+                    if (nodeState === NodeStates.Connected) {
+                        this.validateAndUpdateFabricLabel(node.nodeId)
+                            .catch(error => logger.warn(`Error updating fabric label on node ${node.nodeId}:`, error))
+                            .finally(() => {
+                                node.events.stateChanged.off(updateOnReconnect);
+                                this.nodeUpdateLabelHandlers.delete(node.nodeId);
+                            });
+                    }
+                };
+                node.events.stateChanged.on(updateOnReconnect);
+            }
         }
     }
 }

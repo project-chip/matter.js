@@ -566,6 +566,10 @@ export class MatterController {
         await peer.dataStore.construction;
         return peer.dataStore.retrieveAttributes(endpointId, clusterId);
     }
+
+    async updateFabricLabel(label: string) {
+        await this.fabric.setLabel(label);
+    }
 }
 
 class CommissionedNodeStore extends PeerAddressStore {
