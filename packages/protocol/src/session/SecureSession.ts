@@ -41,6 +41,7 @@ export class SecureSession extends Session {
     #closingAfterExchangeFinished = false;
     #sendCloseMessageWhenClosing = true;
     readonly #id: number;
+    readonly #isInitiator: boolean;
     #fabric: Fabric | undefined;
     readonly #peerNodeId: NodeId;
     readonly #peerSessionId: number;
@@ -135,6 +136,7 @@ export class SecureSession extends Session {
             encryptKey,
             attestationKey,
             caseAuthenticatedTags,
+            isInitiator,
         } = args;
 
         this.#id = id;
@@ -145,6 +147,7 @@ export class SecureSession extends Session {
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
         this.#caseAuthenticatedTags = caseAuthenticatedTags ?? [];
+        this.#isInitiator = isInitiator;
 
         manager?.sessions.add(this);
         fabric?.addSession(this);
@@ -187,6 +190,10 @@ export class SecureSession extends Session {
 
     get subscriptions() {
         return this.#subscriptions;
+    }
+
+    get isInitiator() {
+        return this.#isInitiator;
     }
 
     get isClosing() {

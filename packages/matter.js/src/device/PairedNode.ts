@@ -351,7 +351,13 @@ export class PairedNode {
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, this.#nodeDetails.meta);
 
         sessions.added.on(session => {
-            if (session.peerNodeId !== this.nodeId || this.state !== NodeStates.WaitingForDeviceDiscovery) return;
+            if (
+                session.isInitiator || // If we initiated the session we do not need to react on it
+                session.peerNodeId !== this.nodeId || // no session for this node
+                this.state !== NodeStates.WaitingForDeviceDiscovery
+            ) {
+                return;
+            }
             this.#newChannelReconnectDelayTimer.stop().start();
         });
 
