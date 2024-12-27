@@ -185,23 +185,34 @@ export namespace Terminal {
 
     export function Line(docker: Docker, stream: NodeJS.ReadWriteStream, exited: Promise<void>): Terminal<string> {
         const raw = Raw(docker, stream, exited);
-
-        return {
-            write(content: string | Uint8Array) {
-                return raw.write(content);
-            },
-
-            close() {
-                return raw.close();
-            },
-
-            consume() {
-                return raw.consume().then(textOf);
-            },
-
-            [Symbol.asyncIterator]() {
-                return asyncLinesOf(raw);
-            },
-        };
+        return createLineTerminal(raw);
     }
+
+    export function StdoutLine(docker: Docker, stream: NodeJS.ReadWriteStream, exited: Promise<void>) {
+        const raw = Raw(docker, stream, exited);
+        return createLineTerminal(raw, chunk => (chunk.source === "stdout" ? chunk : undefined));
+    }
+}
+
+function createLineTerminal(
+    raw: Terminal<Terminal.Chunk>,
+    filter?: (chunk: Terminal.Chunk) => Terminal.Chunk | undefined,
+): Terminal<string> {
+    return {
+        write(content: string | Uint8Array) {
+            return raw.write(content);
+        },
+
+        close() {
+            return raw.close();
+        },
+
+        consume() {
+            return raw.consume().then(textOf);
+        },
+
+        [Symbol.asyncIterator]() {
+            return asyncLinesOf(raw, filter);
+        },
+    };
 }

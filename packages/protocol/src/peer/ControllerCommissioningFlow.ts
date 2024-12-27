@@ -15,6 +15,7 @@ import {
     ClusterId,
     ClusterType,
     EndpointNumber,
+    FabricIndex,
     StatusResponseError,
     TypeFromPartialBitSchema,
     TypeFromSchema,
@@ -123,6 +124,7 @@ type CollectedCommissioningData = {
     productId?: number;
     supportsConcurrentConnection?: boolean;
     successfullyConnectedToNetwork?: boolean;
+    fabricIndex?: FabricIndex;
 };
 
 /** Error that throws when Commissioning fails and process cannot be continued. */
@@ -284,18 +286,23 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Initialize commissioning steps and add them in the default order
+     * Initialize commissioning steps and add them in the default order as defined by
+     * @see {@link MatterSpecification.v13.Core} § 5.5
      */
     #initializeCommissioningSteps() {
         this.#commissioningSteps.push({
-            stepNumber: 0,
+            stepNumber: 0, // Preparation
             subStepNumber: 1,
             name: "GetInitialData",
             stepLogic: () => this.#getInitialData(),
         });
 
+        // Step 1: is outside of this class and requires to have relevant information needed by next steps
+        // Step 2: is about discovery which is already done before this starts here
+        // Step 3: is the PASE session establishment which is done before this starts here
+
         this.#commissioningSteps.push({
-            stepNumber: 3,
+            stepNumber: 4,
             subStepNumber: 1,
             name: "GeneralCommissioning.ArmFailsafe",
             stepLogic: () => this.#armFailsafe(),
@@ -323,14 +330,23 @@ export class ControllerCommissioningFlow {
         });
 
         this.#commissioningSteps.push({
-            stepNumber: 7,
+            stepNumber: 7, // includes 7-9
             subStepNumber: 1,
             name: "OperationalCredentials.Certificates",
             stepLogic: () => this.#certificates(),
         });
 
         this.#commissioningSteps.push({
-            stepNumber: 10,
+            stepNumber: 9,
+            subStepNumber: 2,
+            name: "OperationalCredentials.UpdateFabricLabel",
+            stepLogic: () => this.#updateFabricLabel(),
+        });
+
+        // TODO Step 10: TimeSynchronization.SetTrustedTimeSource if supported
+
+        this.#commissioningSteps.push({
+            stepNumber: 11,
             subStepNumber: 1,
             name: "AccessControl",
             stepLogic: () => this.#configureAccessControlLists(),
@@ -339,14 +355,14 @@ export class ControllerCommissioningFlow {
         // Care about Network commissioning only when we are on BLE, because else we are already on IP network
         if (this.#interactionClient.channelType === ChannelType.BLE) {
             this.#commissioningSteps.push({
-                stepNumber: 11,
+                stepNumber: 12,
                 subStepNumber: 1,
                 name: "NetworkCommissioning.Validate",
                 stepLogic: () => this.#validateNetwork(),
             });
             if (this.#commissioningOptions.wifiNetwork !== undefined) {
                 this.#commissioningSteps.push({
-                    stepNumber: 11,
+                    stepNumber: 12, // includes step 13
                     subStepNumber: 2,
                     name: "NetworkCommissioning.Wifi",
                     stepLogic: () => this.#configureNetworkWifi(),
@@ -354,7 +370,7 @@ export class ControllerCommissioningFlow {
             }
             if (this.#commissioningOptions.threadNetwork !== undefined) {
                 this.#commissioningSteps.push({
-                    stepNumber: 11,
+                    stepNumber: 12, // includes step 13
                     subStepNumber: 3,
                     name: "NetworkCommissioning.Thread",
                     stepLogic: () => this.#configureNetworkThread(),
@@ -367,14 +383,14 @@ export class ControllerCommissioningFlow {
         }
 
         this.#commissioningSteps.push({
-            stepNumber: 12,
+            stepNumber: 14, // includes step 15 (CASE connection)
             subStepNumber: 1,
             name: "Reconnect",
             stepLogic: () => this.#reconnectWithDevice(),
         });
 
         this.#commissioningSteps.push({
-            stepNumber: 15,
+            stepNumber: 16,
             subStepNumber: 1,
             name: "GeneralCommissioning.Complete",
             stepLogic: () => this.#completeCommissioning(),
@@ -490,13 +506,13 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 3
-     * Upon completion of PASE session establishment, the Commissionee SHALL autonomously arm the Fail-safe timer for a
-     * timeout of 60 seconds. This is to guard against the Commissioner aborting the Commissioning process without
-     * arming the fail-safe, which may leave the device unable to accept additional connections.
-     * A Commissioner MAY obtain device information including guidance on the fail-safe value from the Commissionee by
-     * reading BasicCommissioningInfo attribute (see Section 11.9.5.2, “BasicCommissioningInfo Attribute”) prior to
-     * invoking the ArmFailSafe command.
+     * Step 4
+     * Commissioner SHALL re-arm the Fail-safe timer on the Commissionee to the desired commissioning
+     * timeout within 60 seconds of the completion of PASE session establishment, using the
+     * ArmFailSafe command (see Section 11.10.6.2, “ArmFailSafe Command”). A Commissioner MAY
+     * obtain device information including guidance on the fail-safe value from the Commissionee by
+     * reading BasicCommissioningInfo attribute (see Section 11.10.5.2, “BasicCommissioningInfo
+     * Attribute”) prior to invoking the ArmFailSafe command.
      */
     async #armFailsafe() {
         const client = this.#getClusterClient(GeneralCommissioning.Cluster);
@@ -524,12 +540,14 @@ export class ControllerCommissioningFlow {
     }
 
     async #resetFailsafeTimer() {
+        if (this.#lastFailSafeTime === undefined) return;
         try {
             const client = this.#getClusterClient(GeneralCommissioning.Cluster);
             await client.armFailSafe({
                 breadcrumb: this.#lastBreadcrumb,
                 expiryLengthSeconds: 0,
             });
+            this.#lastFailSafeTime = undefined; // No failsafe active anymore
         } catch (error) {
             logger.error(`Error while resetting failsafe timer`, error);
         }
@@ -537,11 +555,10 @@ export class ControllerCommissioningFlow {
 
     /**
      * Step 5 - 1
-     * Commissioner SHALL configure regulatory information in the Commissionee if it has at least one instance of
-     * Network Commissioning cluster on any endpoint with either the WI (i.e. Wi-Fi) or TH (i.e. Thread) feature flags
-     * set in its FeatureMap.
-     * The regulatory information is configured using SetRegulatoryConfig (see Section 11.9.6.4,
-     * “SetRegulatoryConfig Command”).
+     * Commissioner SHALL configure regulatory information if the Commissionee has at least one instance of
+     * the Network Commissioning cluster on any endpoint with either the WI (i.e. Wi-Fi) or TH (i.e. Thread)
+     * feature flags set in its FeatureMap, Commissioner SHALL configure regulatory information in the
+     * Commissionee using the SetRegulatoryConfig command.
      */
     async #configureRegulatoryInformation() {
         if (this.#collectedCommissioningData.networkFeatures === undefined) {
@@ -609,11 +626,12 @@ export class ControllerCommissioningFlow {
 
     /**
      * Step 5 - 2
-     * Commissioner SHOULD configure UTC time, timezone, and DST offset, if the Commissionee supports the time cluster.
-     * The order of configuration of this information is not critical. The UTC time is configured using SetUtcTime
-     * command (see Section 11.16.9.1, “SetUtcTime Command”) while timezone and DST offset are set through TimeZone
-     * (see Section 11.16.8.6, “TimeZone Attribute”) and DstOffset attribute (see Section 11.16.8.7,
-     * “DSTOffset Attribute”), respectively.
+     * Commissioner SHOULD configure UTC time, timezone, and DST offset, if the Commissionee supports the
+     * time synchronization cluster.
+     * ▪ The Commissioner SHOULD configure UTC time using the SetUTCTime command.
+     * ▪ The Commissioner SHOULD set the time zone using the SetTimeZone command, if the TimeZone Feature is supported.
+     * ▪ The Commissioner SHOULD set the DST offsets using the SetDSTOffset command if the TimeZone Feature is supported, and the SetTimeZoneResponse from the Commissionee had the DSTOffsetsRequired field set to True.
+     * ▪ The Commissioner SHOULD set a Default NTP server using the SetDefaultNTP command if the NTPClient Feature is supported and the DefaultNTP attribute is null. If the current value is non-null, Commissioners MAY opt to overwrite the current value.
      */
     async #synchronizeTime() {
         if (
@@ -633,8 +651,8 @@ export class ControllerCommissioningFlow {
 
     /**
      * Step 6
-     * Commissioner SHALL establish the authenticity of the Commissionee as a certified Matter device (see Section
-     * 6.2.3, “Device Attestation Procedure”).
+     * Commissioner SHALL establish the authenticity of the Commissionee as a certified Matter device
+     * (see Section 6.2.3, “Device Attestation Procedure”).
      */
     async #deviceAttestation() {
         const operationalCredentialsClusterClient = this.#getClusterClient(OperationalCredentials.Cluster);
@@ -686,8 +704,12 @@ export class ControllerCommissioningFlow {
      * 8: Commissioner SHALL generate or otherwise obtain an Operational Certificate containing Operational ID after
      * receiving the CSRResponse command from the Commissionee (see Section 11.17.6.5, “CSRRequest Command”), using
      * implementation-specific means.
-     * 9: Commissioner SHALL install operational credentials (see Figure 38, “Node Operational Credentials flow”) on
-     * the Commissionee using the AddTrustedRootCertificate and AddNOC commands.
+     * 9: Commissioner SHALL install operational credentials (see Figure 40, “Node Operational Credentials
+     * flow”) on the Commissionee using the AddTrustedRootCertificate and AddNOC commands,
+     * and SHALL use the UpdateFabricLabel command to set a string that the user can recognize and
+     * relate to this Commissioner/Administrator.
+     * The AdminVendorId field of the AddNOC command SHALL be set to a value for which the Vendor Schema in
+     * DCL contains the name and other information of the Commissioner’s manufacturer.
      */
     async #certificates() {
         const operationalCredentialsClusterClient = this.#getClusterClient(OperationalCredentials.Cluster);
@@ -715,19 +737,22 @@ export class ControllerCommissioningFlow {
             this.#fabric.fabricId,
             this.#interactionClient.address.nodeId,
         );
-        this.#ensureOperationalCredentialsSuccess(
-            "addNoc",
-            await operationalCredentialsClusterClient.addNoc(
-                {
-                    nocValue: peerOperationalCert,
-                    icacValue: new Uint8Array(0),
-                    ipkValue: this.#fabric.identityProtectionKey,
-                    adminVendorId: this.#fabric.rootVendorId,
-                    caseAdminSubject: this.#fabric.rootNodeId,
-                },
-                { useExtendedFailSafeMessageResponseTimeout: true },
-            ),
+
+        const addNocResponse = await operationalCredentialsClusterClient.addNoc(
+            {
+                nocValue: peerOperationalCert,
+                icacValue: new Uint8Array(0),
+                ipkValue: this.#fabric.identityProtectionKey,
+                adminVendorId: this.#fabric.rootVendorId,
+                caseAdminSubject: this.#fabric.rootNodeId,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
         );
+
+        this.#ensureOperationalCredentialsSuccess("addNoc", addNocResponse);
+
+        const { fabricIndex } = addNocResponse;
+        this.#collectedCommissioningData.fabricIndex = fabricIndex;
 
         return {
             code: CommissioningStepResultCode.Success,
@@ -736,7 +761,46 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 10
+     * Step 9 - 2
+     * The Administrator having established a CASE session with the Commissionee over the operational network in the
+     * previous steps SHALL invoke the CommissioningComplete command (see Section 11.9.6.6,
+     * “CommissioningComplete Command”). A success response after invocation of the CommissioningComplete command ends
+     * the commissioning process.
+     */
+    async #updateFabricLabel() {
+        const { fabricIndex } = this.#collectedCommissioningData;
+        if (fabricIndex === undefined) {
+            logger.error("No fabric index available after addNoc. This should never happen.");
+            return {
+                code: CommissioningStepResultCode.Failure,
+                breadcrumb: this.#lastBreadcrumb,
+            };
+        }
+        const operationalCredentialCluster = this.#getClusterClient(OperationalCredentials.Cluster);
+        try {
+            this.#ensureOperationalCredentialsSuccess(
+                "updateFabricLabel",
+                await operationalCredentialCluster.updateFabricLabel({
+                    label: this.#fabric.label,
+                    fabricIndex,
+                }),
+            );
+        } catch (error) {
+            CommissioningError.accept(error);
+            return {
+                code: CommissioningStepResultCode.Failure,
+                breadcrumb: this.#lastBreadcrumb,
+            };
+        }
+
+        return {
+            code: CommissioningStepResultCode.Success,
+            breadcrumb: this.#lastBreadcrumb,
+        };
+    }
+
+    /**
+     * Step 11
      * Commissioner MAY configure the Access Control List (see Access Control Cluster) on the Commissionee in any way
      * it sees fit, if the singular entry added by the AddNOC command in the previous step granting Administer
      * privilege over CASE authentication type for the Node ID provided with the command is not sufficient to express
@@ -752,15 +816,15 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 11-12
-     * 11: If the Commissionee both supports it and requires it, the Commissioner SHALL configure the operational network
+     * Step 12-13
+     * 12: If the Commissionee both supports it and requires it, the Commissioner SHALL configure the operational network
      * at the Commissionee using commands such as AddOrUpdateWiFiNetwork (see Section 11.8.7.3, “AddOrUpdateWiFiNetwork
      * Command”) and AddOrUpdateThreadNetwork (see Section 11.8.7.4, “AddOrUpdateThreadNetwork Command”).
      * A Commissionee requires network commissioning if it is not already on the desired operational network.
      * A Commissionee supports network commissioning if it has any NetworkCommissioning cluster instances.
      * A Commissioner MAY learn about the networks visible to the Commissionee using ScanNetworks command
      * (see Section 11.8.7.1, “ScanNetworks Command”).
-     * 12: The Commissioner SHALL trigger the Commissionee to connect to the operational network using ConnectNetwork
+     * 13: The Commissioner SHALL trigger the Commissionee to connect to the operational network using ConnectNetwork
      * command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissionee is already on the desired operational network.
      */
     async #validateNetwork() {
@@ -1072,11 +1136,11 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 13-14
-     * 13: Finalization of the Commissioning process begins. An Administrator configured in the ACL of the Commissionee
+     * Step 14-15
+     * 14: Finalization of the Commissioning process begins. An Administrator configured in the ACL of the Commissionee
      * by the Commissioner SHALL use Operational Discovery to discover the Commissionee. This Administrator MAY be
      * the Commissioner itself, or another Node to which the Commissioner has delegated the task.
-     * 14: The Administrator SHALL open a CASE (see Section 4.13.2, “Certificate Authenticated Session Establishment
+     * 15: The Administrator SHALL open a CASE (see Section 4.13.2, “Certificate Authenticated Session Establishment
      * (CASE)”) session with the Commissionee over the operational network.
      *
      */
@@ -1104,7 +1168,7 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 15
+     * Step 16
      * The Administrator having established a CASE session with the Commissionee over the operational network in the
      * previous steps SHALL invoke the CommissioningComplete command (see Section 11.9.6.6,
      * “CommissioningComplete Command”). A success response after invocation of the CommissioningComplete command ends
@@ -1118,6 +1182,7 @@ export class ControllerCommissioningFlow {
                 useExtendedFailSafeMessageResponseTimeout: true,
             }),
         );
+        this.#lastFailSafeTime = undefined; // gets deactivated when successful
 
         return {
             code: CommissioningStepResultCode.Success,

@@ -6,6 +6,7 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
+import { ImplementationError } from "#general";
 import {
     Ble,
     FabricAuthority,
@@ -34,6 +35,11 @@ export class ControllerBehavior extends Behavior {
     declare state: ControllerBehavior.State;
 
     override async initialize() {
+        if (this.state.adminFabricLabel === undefined) {
+            throw new ImplementationError("adminFabricLabel must be set for ControllerBehavior.");
+        }
+        const adminFabricLabel = this.state.adminFabricLabel;
+
         // Configure discovery transports
         if (this.state.ip === undefined) {
             this.state.ip = true;
@@ -57,6 +63,10 @@ export class ControllerBehavior extends Behavior {
                 new (class extends FabricAuthorityConfigurationProvider {
                     get vendorId() {
                         return biState.vendorId;
+                    }
+
+                    override get adminFabricLabel() {
+                        return adminFabricLabel;
                     }
                 })(),
             );
@@ -101,5 +111,10 @@ export namespace ControllerBehavior {
          * By default the controller always scans on IP networks.
          */
         ip?: boolean = undefined;
+
+        /**
+         * Contains the label of the admin fabric which is set for all commissioned devices
+         */
+        adminFabricLabel!: string;
     }
 }

@@ -28,12 +28,17 @@ interface FabricAuthorityConfiguration {
     fabricIndex?: FabricIndex;
     fabricId?: FabricId;
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
+    adminFabricLabel: string;
 }
 
 /**
  * Concrete {@link FabricAuthorityConfiguration} for environmental configuration.
  */
-export class FabricAuthorityConfigurationProvider implements FabricAuthorityConfiguration {}
+export class FabricAuthorityConfigurationProvider implements FabricAuthorityConfiguration {
+    get adminFabricLabel(): string {
+        throw new ImplementationError("Admin Fabric Label must be set for FabricAuthorityConfigurationProvider.");
+    }
+}
 
 /**
  * Interfaces FabricAuthority with other components.
@@ -68,6 +73,9 @@ export class FabricAuthority {
         // First search for a fabric associated with the CA's root certificate
         const fabric = this.fabrics[0];
         if (fabric !== undefined) {
+            if (fabric.label !== this.#config.adminFabricLabel) {
+                await fabric.setLabel(this.#config.adminFabricLabel);
+            }
             return fabric;
         }
 
@@ -106,7 +114,8 @@ export class FabricAuthority {
             .setRootCert(this.#ca.rootCert)
             .setRootNodeId(rootNodeId)
             .setIdentityProtectionKey(ipkValue)
-            .setRootVendorId(this.#config.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID);
+            .setRootVendorId(this.#config.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
+            .setLabel(this.#config.adminFabricLabel);
 
         fabricBuilder.setOperationalCert(
             this.#ca.generateNoc(

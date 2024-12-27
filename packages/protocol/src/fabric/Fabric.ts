@@ -17,6 +17,7 @@ import {
     Crypto,
     DataWriter,
     Endian,
+    ImplementationError,
     InternalError,
     Key,
     Logger,
@@ -103,7 +104,7 @@ export class Fabric {
 
     readonly #sessions = new Set<SecureSession>();
 
-    label: string;
+    #label: string;
     #removeCallbacks = new Array<() => MaybePromise<void>>();
     #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
 
@@ -120,7 +121,7 @@ export class Fabric {
         this.operationalIdentityProtectionKey = config.operationalIdentityProtectionKey;
         this.intermediateCACert = config.intermediateCACert;
         this.operationalCert = config.operationalCert;
-        this.label = config.label;
+        this.#label = config.label;
 
         this.#keyPair = PrivateKey(config.keyPair);
 
@@ -142,13 +143,23 @@ export class Fabric {
             operationalIdentityProtectionKey: this.operationalIdentityProtectionKey,
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
-            label: this.label,
+            label: this.#label,
             scopedClusterData: this.#scopedClusterData,
         };
     }
 
+    get label() {
+        return this.#label;
+    }
+
     async setLabel(label: string) {
-        this.label = label;
+        if (label.length === 0 || label.length > 32) {
+            throw new ImplementationError("Fabric label must be between 1 and 32 characters long.");
+        }
+        if (this.#label === label) {
+            return;
+        }
+        this.#label = label;
         await this.persist();
     }
 
@@ -320,7 +331,7 @@ export class Fabric {
             nodeId: this.nodeId,
             rootNodeId: this.rootNodeId,
             rootVendorId: this.rootVendorId,
-            label: this.label,
+            label: this.#label,
         };
     }
 
@@ -428,6 +439,14 @@ export class FabricBuilder {
 
     setIdentityProtectionKey(key: Uint8Array) {
         this.#identityProtectionKey = key;
+        return this;
+    }
+
+    setLabel(label: string) {
+        if (label.length === 0 || label.length > 32) {
+            throw new ImplementationError("Fabric label must be between 1 and 32 characters long.");
+        }
+        this.#label = label;
         return this;
     }
 

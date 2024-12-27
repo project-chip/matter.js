@@ -29,10 +29,14 @@ export abstract class CommandPipe {
     abstract initialize(): Promise<void>;
     abstract close(): Promise<void>;
 
-    protected onData(dataBuf: Uint8Array) {
+    protected onData(line: string | Uint8Array) {
+        if (typeof line !== "string") {
+            line = utf8.decode(line);
+        }
+
         let data: Record<string, unknown>;
         try {
-            data = JSON.parse(utf8.decode(dataBuf));
+            data = JSON.parse(line);
         } catch (error) {
             console.error("Error parsing pipe command:", error);
             return;
