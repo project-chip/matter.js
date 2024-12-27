@@ -132,18 +132,22 @@ export class NodeJsUdpChannel implements UdpChannel {
 
     async send(host: string, port: number, data: Uint8Array) {
         return new Promise<void>((resolve, reject) => {
-            this.socket.send(data, port, host, error => {
-                if (error !== null) {
-                    const netError =
-                        error instanceof Error && "code" in error && error.code === "EHOSTUNREACH"
-                            ? new RetransmissionLimitReachedError(error.message)
-                            : new NetworkError(error.message);
-                    netError.stack = error.stack;
-                    reject(netError);
-                    return;
-                }
-                resolve();
-            });
+            try {
+                this.socket.send(data, port, host, error => {
+                    if (error !== null) {
+                        const netError =
+                            error instanceof Error && "code" in error && error.code === "EHOSTUNREACH"
+                                ? new RetransmissionLimitReachedError(error.message)
+                                : new NetworkError(error.message);
+                        netError.stack = error.stack;
+                        reject(netError);
+                        return;
+                    }
+                    resolve();
+                });
+            } catch (error) {
+                reject(new NetworkError((error as Error).message));
+            }
         });
     }
 
