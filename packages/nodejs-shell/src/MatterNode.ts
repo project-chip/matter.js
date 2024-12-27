@@ -50,6 +50,12 @@ export class MatterNode {
          */
 
         if (this.#environment) {
+            const controllerStore = this.#environment.get(ControllerStore);
+            if (resetStorage) {
+                await controllerStore.erase();
+            }
+            this.storageContext = controllerStore.storage.createContext("Node");
+
             if (this.netInterface !== undefined) {
                 this.#environment.vars.set("mdns.networkinterface", this.netInterface);
             }
@@ -64,12 +70,6 @@ export class MatterNode {
                 adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
             });
             await this.commissioningController.initializeControllerStore();
-
-            const controllerStore = this.#environment.get(ControllerStore);
-            if (resetStorage) {
-                await controllerStore.erase();
-            }
-            this.storageContext = controllerStore.storage.createContext("Node");
 
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
