@@ -22,10 +22,14 @@ export function base64Of(input: string | Uint8Array) {
     return Buffer.from(input).toString("base64");
 }
 
-export async function* asyncLinesOf(input: AsyncIterable<unknown>) {
+export async function* asyncLinesOf<C, T extends AsyncIterable<C>>(input: T, filter?: (chunk: C) => C | undefined) {
     let partial: undefined | string;
 
-    for await (const chunk of input) {
+    for await (let chunk of input) {
+        if (filter) {
+            chunk = filter(chunk) as C;
+        }
+
         if (chunk === undefined || chunk === null) {
             continue;
         }

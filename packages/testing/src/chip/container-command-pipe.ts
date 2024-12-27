@@ -37,34 +37,42 @@ export class ContainerCommandPipe extends CommandPipe {
     }
 
     async #processCommands() {
+        let terminal: Terminal<string> | undefined;
         try {
+            terminal = await this.#container.follow(this.filename);
+
+            const iterator = terminal[Symbol.asyncIterator]();
+
             while (true) {
                 let deactivator;
                 const deactivated = new Promise<void>(resolve => {
                     deactivator = this.#deactivate = resolve;
                 });
 
-                const terminal = await this.#container.read(this.filename, Terminal.Raw);
+                const iteration = iterator.next().then(result => result.value as undefined | string);
+
                 try {
-                    const result = await Promise.race([deactivated, terminal.consume()]);
-                    if (result === undefined) {
+                    const line = await Promise.race([deactivated, iteration]);
+                    if (line === undefined) {
                         break;
                     }
 
-                    this.onData(result);
+                    this.onData(line);
                 } finally {
                     if (this.#deactivate === deactivator) {
                         this.#deactivate = undefined;
                     }
-
-                    try {
-                        await terminal.close();
-                    } catch (e) {
-                        console.warn(`Error closing FIFO listener for ${this.filename}:`, e);
-                    }
                 }
             }
         } finally {
+            if (terminal) {
+                try {
+                    await terminal.close();
+                } catch (e) {
+                    console.warn(`Error closing FIFO listener for ${this.filename}:`, e);
+                }
+            }
+
             try {
                 await this.#container.delete(this.filename, { force: true });
             } catch (e) {
