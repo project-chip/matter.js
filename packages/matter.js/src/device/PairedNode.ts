@@ -629,6 +629,13 @@ export class PairedNode {
                 const allClusterAttributes = await this.readAllAttributes();
                 await this.#initializeEndpointStructure(allClusterAttributes, anyInitializationDone);
             }
+            if (!this.#remoteInitializationDone) {
+                try {
+                    await this.commissioningController.validateAndUpdateFabricLabel(this.nodeId);
+                } catch (error) {
+                    logger.info(`Node ${this.nodeId}: Error updating fabric label`, error);
+                }
+            }
             this.#reconnectErrorCount = 0;
             this.#setConnectionState(NodeStates.Connected);
             await this.events.initializedFromRemote.emit(this.#nodeDetails.toStorageData());

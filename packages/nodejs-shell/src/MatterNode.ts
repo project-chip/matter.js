@@ -61,6 +61,7 @@ export class MatterNode {
                     id,
                 },
                 autoConnect: false,
+                adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
             });
             await this.commissioningController.initializeControllerStore();
 
@@ -90,6 +91,7 @@ export class MatterNode {
             this.matterController = new MatterServer(this.storageManager, { mdnsInterface: this.netInterface });
             this.commissioningController = new CommissioningController({
                 autoConnect: false,
+                adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
             });
             await this.matterController.addCommissioningController(this.commissioningController);
         }
@@ -173,5 +175,9 @@ export class MatterNode {
                 await callback(device, node);
             }
         }
+    }
+
+    updateFabricLabel(label: string) {
+        return this.commissioningController?.updateFabricLabel(label);
     }
 }
