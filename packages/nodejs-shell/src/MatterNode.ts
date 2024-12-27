@@ -50,12 +50,6 @@ export class MatterNode {
          */
 
         if (this.#environment) {
-            const controllerStore = this.#environment.get(ControllerStore);
-            if (resetStorage) {
-                await controllerStore.erase();
-            }
-            this.storageContext = controllerStore.storage.createContext("Node");
-
             if (this.netInterface !== undefined) {
                 this.#environment.vars.set("mdns.networkinterface", this.netInterface);
             }
@@ -67,9 +61,21 @@ export class MatterNode {
                     id,
                 },
                 autoConnect: false,
-                adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                adminFabricLabel: "matter.js Shell",
             });
             await this.commissioningController.initializeControllerStore();
+
+            const controllerStore = this.#environment.get(ControllerStore);
+            if (resetStorage) {
+                await controllerStore.erase();
+            }
+            this.storageContext = controllerStore.storage.createContext("Node");
+
+            if (await this.Store.has("ControllerFabricLabel")) {
+                await this.commissioningController.updateFabricLabel(
+                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                );
+            }
 
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
