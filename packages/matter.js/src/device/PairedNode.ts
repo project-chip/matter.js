@@ -432,8 +432,6 @@ export class PairedNode {
         if (state === NodeStates.Disconnected) {
             this.#reconnectDelayTimer?.stop();
             this.#reconnectDelayTimer = undefined;
-
-            this.#invalidateSubscriptionHandler();
         }
     }
 
