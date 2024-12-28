@@ -37,17 +37,18 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
     - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
+    - Fix: When a paired node gets disconnected (or decommissioned) invalidate subscription handlers to prevent reconnection tries
 
 ## 0.11.9 (2024-12-11)
 
 -   @matter/node
+    - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
     - Enhancement: Enhances the number assertations to only allow finite numbers
     - Enhancement: WindowCovering: Adds an internal property to disable the operational state and value management by the default implementation to allow device to handle this themselves
-    - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
-    - Fix: ColorControl: Do not try to convert color mode details if they are not defined
-    - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
     - Enhancement: EventsBehavior allows for configuration of event buffering
     - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
+    - Fix: ColorControl: Do not try to convert color mode details if they are not defined
+    - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
@@ -58,18 +59,18 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
 
 -   @project-chip/matter.js
+    - BREAKING: In `ContentLauncher` cluster `ParameterEnum` is renamed to `Parameter` and `Parameter` is renamed to `ParameterStruct`
     - Feature: Introduces PairedNode#triggerReconnect() method to trigger a reconnection
     - Enhancement: Considers a node in reconnection state that should be decommissioned as already factory reset
     - Enhancement: Optimizes reconnection handling in Controller API
     - Fix: Do not try to convert color mode details if they are not defined
     - Fix: Clusters generated for extensions of base clusters such as Alarm Base and Mode Base now include full details of extended types; in particular extended enums such as Mode Tag were previously insufficiently defined
-    - BREAKING: In `ContentLauncher` cluster `ParameterEnum` is renamed to `Parameter` and `Parameter` is renamed to `ParameterStruct`
 
 -   @matter/model
+    - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
     - Feature: New `Scope` component analyzes scope of a model, caches analysis results, and implements algorithms that require analysis to perform efficiently
     - Enhancement: Models that define datatypes now inherit from common `ScopeModel` base class
     - Fix: Extended enums and other types now report the full set of members via `Scope#membersOf`
-    - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
 
 -   @matter/protocol
     - Feature: The algorithm that chooses event occurrences to discard when the buffer overflows is now smarter and configurable
