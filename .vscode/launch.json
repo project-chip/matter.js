@@ -97,7 +97,7 @@
                 "clear": true
             },
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/codegen/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/packages/nodejs-shell",
             "args": [
                 "--clear",
                 "dist/cjs/app.js"
@@ -123,7 +123,7 @@
                 "clear": true
             },
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/codegen/packages/cli-tool",
+            "cwd": "${workspaceFolder}/packages/cli-tool",
             "args": [
                 "--clear",
                 "bin/matter.js"

@@ -410,6 +410,16 @@ export class PairedNode {
         return this.#remoteInitializationDone || this.#localInitializationDone;
     }
 
+    #invalidateSubscriptionHandler() {
+        if (this.#currentSubscriptionHandler !== undefined) {
+            // Make sure the former handlers do not trigger anymore
+            this.#currentSubscriptionHandler.attributeListener = () => {};
+            this.#currentSubscriptionHandler.eventListener = () => {};
+            this.#currentSubscriptionHandler.updateTimeoutHandler = () => {};
+            this.#currentSubscriptionHandler.subscriptionAlive = () => {};
+        }
+    }
+
     #setConnectionState(state: NodeStates) {
         if (
             this.#connectionState === state ||
@@ -684,13 +694,7 @@ export class PairedNode {
             this.#nodeDetails.determineSubscriptionParameters(this.options);
         const { threadConnected } = this.#nodeDetails.meta ?? {};
 
-        if (this.#currentSubscriptionHandler !== undefined) {
-            // Make sure the former handlers do not trigger anymore
-            this.#currentSubscriptionHandler.attributeListener = () => {};
-            this.#currentSubscriptionHandler.eventListener = () => {};
-            this.#currentSubscriptionHandler.updateTimeoutHandler = () => {};
-            this.#currentSubscriptionHandler.subscriptionAlive = () => {};
-        }
+        this.#invalidateSubscriptionHandler();
 
         const subscriptionHandler: SubscriptionHandlerCallbacks = {
             attributeListener: (data, changed, oldValue) => {

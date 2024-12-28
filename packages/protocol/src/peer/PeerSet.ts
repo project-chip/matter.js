@@ -327,14 +327,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     /**
      * Terminate any active peer connection.
      */
-    async disconnect(peer: PeerAddress | OperationalPeer) {
-        const address = this.get(peer)?.address;
-        if (address === undefined) {
-            return;
-        }
-
+    async disconnect(address: PeerAddress, sendSessionClose = true) {
         this.#clients.get(address)?.removeAllSubscriptions();
-        await this.#sessions.removeAllSessionsForNode(address, true);
+        await this.#sessions.removeAllSessionsForNode(address, sendSessionClose);
         await this.#channels.removeAllNodeChannels(address);
     }
 
@@ -351,7 +346,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         logger.info(`Removing ${address}`);
         this.#peers.delete(actual);
         await this.#store.deletePeer(address);
-        await this.disconnect(actual);
+        await this.disconnect(address, false);
         await this.#sessions.deleteResumptionRecord(address);
         this.#clients.delete(address);
     }

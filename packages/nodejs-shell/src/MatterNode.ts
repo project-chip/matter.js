@@ -61,7 +61,7 @@ export class MatterNode {
                     id,
                 },
                 autoConnect: false,
-                adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                adminFabricLabel: "matter.js Shell",
             });
             await this.commissioningController.initializeControllerStore();
 
@@ -70,6 +70,12 @@ export class MatterNode {
                 await controllerStore.erase();
             }
             this.storageContext = controllerStore.storage.createContext("Node");
+
+            if (await this.Store.has("ControllerFabricLabel")) {
+                await this.commissioningController.updateFabricLabel(
+                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                );
+            }
 
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
