@@ -411,9 +411,7 @@ export class MatterController {
     }
 
     async removeNode(nodeId: NodeId) {
-        const address = this.fabric.addressOf(nodeId);
-        await this.peers.disconnect(address);
-        await this.peers.delete(address);
+        return this.peers.delete(this.fabric.addressOf(nodeId));
     }
 
     /**
