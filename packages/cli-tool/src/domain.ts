@@ -16,7 +16,7 @@ import {
 } from "#general";
 import { bin, globals as defaultGlobals } from "#globals.js";
 import { Location, undefinedValue } from "#location.js";
-import { parseInput } from "#parser.js";
+import { Input, parseInput } from "#parser.js";
 import { Directory } from "#stat.js";
 import { ServerNode } from "@matter/node";
 import colors from "ansi-colors";
@@ -58,7 +58,7 @@ export interface Domain extends DomainContext {
     isDomain: true;
     location: Location;
     exitHandler?: () => MaybePromise;
-    execute(input: string): Promise<unknown>;
+    execute(input: string | Input): Promise<unknown>;
     searchPathFor(name: string): Promise<Location>;
     inspect(what: unknown): string;
     displayError(cause: unknown, prefix?: string): void;
@@ -331,14 +331,12 @@ export async function Domain(context: DomainContext): Promise<Domain> {
         ),
     );
 
-    const cwd = domain.env.vars.string("cwd");
-    if (cwd !== undefined) {
-        try {
-            domain.location = await domain.location.at(cwd);
-        } catch (e) {
-            if (!(e instanceof NotFoundError) && !(e instanceof NotADirectoryError)) {
-                throw e;
-            }
+    const cwd = domain.env.vars.string("cwd") ?? `/${defaultNode.id}`;
+    try {
+        domain.location = await domain.location.at(cwd);
+    } catch (e) {
+        if (!(e instanceof NotFoundError) && !(e instanceof NotADirectoryError)) {
+            throw e;
         }
     }
 
@@ -349,10 +347,12 @@ export async function Domain(context: DomainContext): Promise<Domain> {
 
     return domain;
 
-    async function execute(inputStr: string) {
+    async function execute(input: string | Input) {
         softInterrupted = false;
 
-        const input = parseInput(inputStr);
+        if (typeof input === "string") {
+            input = parseInput(input);
+        }
 
         switch (input.kind) {
             case "empty":

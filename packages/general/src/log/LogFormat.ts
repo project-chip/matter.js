@@ -73,6 +73,8 @@ interface Formatter {
     error(producer: DiagnosticProducer): string;
     status(status: Lifecycle.Status, producer: DiagnosticProducer): string;
     via(text: string): string;
+    added(producer: DiagnosticProducer): string;
+    deleted(producer: DiagnosticProducer): string;
 }
 
 const LifecycleIcons = {
@@ -137,6 +139,8 @@ function formatPlain(diagnostic: unknown, indents = 0) {
         error: producer => creator.text(producer()),
         status: (status, producer) => `${creator.text(statusIcon(status))}${producer()}`,
         via: text => creator.text(text),
+        added: producer => creator.text(`+${producer()}`),
+        deleted: producer => creator.text(`-${producer()}`),
     } satisfies Formatter;
 
     return renderDiagnostic(diagnostic, formatter);
@@ -207,6 +211,8 @@ const Styles = {
     destroying: { color: "gray" },
     destroyed: { color: "gray" },
     via: { color: "magenta" },
+    added: { color: "green" },
+    deleted: { color: "red" },
 } as const satisfies Record<string, Style>;
 
 type StyleName = keyof typeof Styles;
@@ -300,6 +306,20 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
         },
 
         via: text => creator.text(style("via", text)),
+
+        added: producer => {
+            styles.push("added");
+            const result = `${creator.text(style("added", "+"))}${producer()}`;
+            styles.pop();
+            return result;
+        },
+
+        deleted: producer => {
+            styles.push("deleted");
+            const result = `${creator.text(style("deleted", "-"))}${producer()}`;
+            styles.pop();
+            return result;
+        },
     } satisfies Formatter;
 
     return renderDiagnostic(diagnostic, formatter) + ansiEscape("reset");
@@ -419,6 +439,8 @@ function formatHtml(diagnostic: unknown) {
         error: producer => htmlSpan("error", producer()),
         status: (status, producer) => htmlSpan(`status-${status}`, producer()),
         via: text => htmlSpan("via", escape(text)),
+        added: producer => htmlSpan("added", producer()),
+        deleted: producer => htmlSpan("deleted", producer()),
     } satisfies Formatter;
 
     return renderDiagnostic(diagnostic, formatter);
@@ -569,6 +591,12 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
         case Diagnostic.Presentation.Weak:
             return formatter.weak(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Added:
+            return formatter.added(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Deleted:
+            return formatter.deleted(() => renderDiagnostic(value, formatter));
 
         case Diagnostic.Presentation.Error:
             return formatter.error(() => renderDiagnostic(value, formatter));

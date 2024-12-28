@@ -232,11 +232,12 @@ export namespace isCommand {
     ];
 
     const IDENTIFIER = "[\\p{L}$_][\\p{L}$_0-9]*";
+    const PATH_SEGMENT = "[\\p{L}$_][\\p{L}$_\\-0-9]*";
     const EOW = "(?:\\s|$)";
 
     const statementStarts = [...STATEMENT_KEYWORDS.map(kw => `${kw}${EOW}`), `${IDENTIFIER}\\s*=`];
 
-    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.?\\.?/)?${IDENTIFIER}(?:\\/(?:\\.?\\.|${IDENTIFIER}))*`];
+    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.?\\.?/)?${PATH_SEGMENT}(?:\\/(?:\\.?\\.|${PATH_SEGMENT}))*`];
 
     // If this regexp matches, input is NOT a command
     export const STATEMENT_DETECTOR = new RegExp(`^\\s*(?:${statementStarts.join("|")})`, "u");
