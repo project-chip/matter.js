@@ -74,6 +74,16 @@ export namespace Diagnostic {
          * Path, resource or session identifier.
          */
         Via = "via",
+
+        /**
+         * Resource that was added.
+         */
+        Added = "added",
+
+        /**
+         * Resource that was removed.
+         */
+        Deleted = "deleted",
     }
 
     export interface Context {
@@ -179,6 +189,20 @@ export namespace Diagnostic {
         const via = new String(value);
         Object.defineProperty(via, presentation, { value: Presentation.Via });
         return via as string;
+    }
+
+    /**
+     * Create a value identifying a resource that was added.
+     */
+    export function added(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Added, value);
+    }
+
+    /**
+     * Create a value identifying a resource that was removed.
+     */
+    export function deleted(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Deleted, value);
     }
 
     /**

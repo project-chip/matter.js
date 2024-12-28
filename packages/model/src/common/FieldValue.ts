@@ -254,7 +254,7 @@ export namespace FieldValue {
      *
      * @returns the cast value or FieldValue.Invalid if cast is not possible
      */
-    export function cast(type: Metatype, value: any): FieldValue | FieldValue.Invalid | undefined {
+    export function cast<const T extends Metatype>(type: T, value: any): FieldValue | FieldValue.Invalid | undefined {
         if (value === undefined || value === null || type === "any") {
             return value;
         }

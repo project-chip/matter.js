@@ -16,7 +16,7 @@ Command({
     description: "Display help",
     maxArgs: 1,
 
-    invoke: async function help([path]) {
+    invoke: async function help({ path }) {
         const quote = (text: string) => {
             if (this.colorize) {
                 return colors.blue(text);
@@ -26,7 +26,7 @@ Command({
 
         if (path === undefined) {
             const HELP = `This tool allows you to interact with matter.js and your local Matter environment.
-This tool understands both JavaScript and a shell-like syntax that maps "commands" to functions.  Type ${quote("ls /bin")} to see commands you can always use.  Type ${quote("help <name>")} for help with a specific command.
+This tool understands both JavaScript and a shell-like syntax that maps "commands" to functions.  Use ${quote("ls /bin")} to see commands you can always use.  Use ${quote("help <name>")} for help with a specific command.
 The current path appears in the prompt.  This points to the object this tool uses to find commands.  It is also the "global" object for any JavaScript statements you enter.
 You can change the current path using ${quote("cd <path>")}.  Paths work like you would expect, including ${quote("/")}, ${quote(".")} and ${quote("..")}.\n`;
 
