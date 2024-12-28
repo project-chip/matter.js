@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { asyncNew, Construction, ImplementationError, Logger, MaybePromise } from "#general";
+import { asyncNew, Construction, ImplementationError, isObject, Logger, MaybePromise } from "#general";
 import {
     EventNumber,
     EventPriority,
@@ -158,7 +158,10 @@ export class OccurrenceManager {
         if (filterForFabricIndex !== undefined) {
             result = MaybePromise.then(result, (occurrences: NumberedOccurrence[]) =>
                 occurrences.filter(({ payload }) => {
-                    const { fabricIndex } = payload as any;
+                    if (!isObject(payload)) {
+                        return true;
+                    }
+                    const { fabricIndex } = payload;
                     return fabricIndex === undefined || fabricIndex === filterForFabricIndex;
                 }),
             );
