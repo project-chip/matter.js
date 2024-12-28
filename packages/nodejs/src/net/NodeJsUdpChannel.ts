@@ -12,6 +12,7 @@ import {
     Logger,
     MAX_UDP_MESSAGE_SIZE,
     NetworkError,
+    repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
 } from "#general";
@@ -136,17 +137,16 @@ export class NodeJsUdpChannel implements UdpChannel {
                 this.socket.send(data, port, host, error => {
                     if (error !== null) {
                         const netError =
-                            error instanceof Error && "code" in error && error.code === "EHOSTUNREACH"
-                                ? new RetransmissionLimitReachedError(error.message)
-                                : new NetworkError(error.message);
-                        netError.stack = error.stack;
+                            "code" in error && error.code === "EHOSTUNREACH"
+                                ? repackErrorAs(error, RetransmissionLimitReachedError)
+                                : repackErrorAs(error, NetworkError);
                         reject(netError);
                         return;
                     }
                     resolve();
                 });
             } catch (error) {
-                reject(new NetworkError((error as Error).message));
+                reject(repackErrorAs(error, NetworkError));
             }
         });
     }

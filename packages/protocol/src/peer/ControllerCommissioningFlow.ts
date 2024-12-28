@@ -10,7 +10,7 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
-import { Bytes, ChannelType, Crypto, Logger, MatterError, Time, UnexpectedDataError } from "#general";
+import { Bytes, ChannelType, Crypto, Logger, MatterError, Time, UnexpectedDataError, repackErrorAs } from "#general";
 import {
     ClusterId,
     ClusterType,
@@ -250,9 +250,7 @@ export class ControllerCommissioningFlow {
                     StatusResponseError.accept(error);
 
                     // Convert error
-                    const commError = new CommissioningError(error.message);
-                    commError.stack = error.stack;
-                    throw commError;
+                    throw repackErrorAs(error, CommissioningError);
                 } else {
                     throw error;
                 }

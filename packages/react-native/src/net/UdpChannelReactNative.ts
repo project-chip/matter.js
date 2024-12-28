@@ -13,6 +13,7 @@ import {
     Logger,
     MAX_UDP_MESSAGE_SIZE,
     NetworkError,
+    repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
 } from "#general";
@@ -179,9 +180,7 @@ export class UdpChannelReactNative implements UdpChannel {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
-                    const netError = new NetworkError(error.message);
-                    netError.stack = error.stack;
-                    reject(netError);
+                    reject(repackErrorAs(error, NetworkError));
                     return;
                 }
                 resolve();
