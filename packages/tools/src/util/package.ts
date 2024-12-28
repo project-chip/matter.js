@@ -387,6 +387,7 @@ export type PackageJson = {
     matter?: {
         test?: boolean;
     };
+    scripts?: Record<string, string>;
     [key: string]: any;
 };
 
