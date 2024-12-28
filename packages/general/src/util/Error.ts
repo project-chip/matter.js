@@ -5,6 +5,12 @@
  */
 
 import type { Constructable } from "./Construction.js";
+import { ClassExtends } from "./Type.js";
+
+/** If the cause has a "message" field, treat as an Error */
+function considerAsError(error: unknown): error is Error {
+    return (error as Error).message !== undefined;
+}
 
 /**
  * Ensure that a cause is an error object.
@@ -12,7 +18,7 @@ import type { Constructable } from "./Construction.js";
  * We consider anything with a "message" property to be a reasonable error object.
  */
 export function errorOf(cause: unknown): Error {
-    // If the cause is an Constructable, use its construction error
+    // If the cause is a Constructable, use its construction error
     if ((cause as Constructable)?.construction?.error) {
         cause = (cause as Constructable)?.construction.error;
     }
@@ -22,11 +28,28 @@ export function errorOf(cause: unknown): Error {
         return Error("Unknown error");
     }
 
-    // If the cause has a "message" field, treat as an Error
-    if ((cause as Error).message !== undefined) {
-        return cause as Error;
+    if (considerAsError(cause)) {
+        return cause;
     }
 
     // Otherwise create a new error using the original cause as the message
     return new Error(cause.toString());
+}
+
+/**
+ * Repacks an error object as a different error class.
+ * The error stack is copied over from the original error instance
+ */
+export function repackErrorAs(error: unknown, repackAsErrorClass: ClassExtends<Error>) {
+    if (error instanceof repackAsErrorClass) {
+        return error;
+    }
+
+    if (considerAsError(error)) {
+        const repackedError = new repackAsErrorClass(error.message);
+        repackedError.stack = error.stack;
+        return repackedError;
+    }
+
+    throw new TypeError("Cannot repackage non-Error object");
 }
