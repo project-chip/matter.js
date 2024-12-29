@@ -18,9 +18,9 @@ import { Aspect } from "./Aspect.js";
  */
 export class Constraint extends Aspect<Constraint.Definition> implements Constraint.Ast {
     declare desc?: boolean;
-    declare value?: FieldValue;
-    declare min?: FieldValue;
-    declare max?: FieldValue;
+    declare value?: Constraint.Value;
+    declare min?: Constraint.Value;
+    declare max?: Constraint.Value;
     declare in?: FieldValue;
     declare entry?: Constraint;
     declare parts?: Constraint[];
@@ -89,12 +89,41 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
      */
     test(value: FieldValue, properties?: Record<string, any>): boolean {
         // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
-        function valueOf(value: unknown, raw = false) {
+        function valueOf(value: unknown, raw = false): unknown {
             if (!raw && (typeof value === "string" || Array.isArray(value))) {
                 return value.length;
             }
             if (isObject(value)) {
                 const { type, name } = value;
+                switch (type) {
+                    case FieldValue.Reference:
+                        if (typeof name === "string") {
+                            value = valueOf(properties?.[camelize(name)], raw);
+                        }
+                        break;
+
+                    case "+":
+                        {
+                            const lhs = valueOf(value.lhs);
+                            const rhs = valueOf(value.rhs);
+                            if (typeof lhs === "number" && typeof rhs === "number") {
+                                return lhs + rhs;
+                            }
+                            return undefined;
+                        }
+                        break;
+
+                    case "-":
+                        {
+                            const lhs = valueOf(value.lhs);
+                            const rhs = valueOf(value.rhs);
+                            if (typeof lhs === "number" && typeof rhs === "number") {
+                                return lhs - rhs;
+                            }
+                            return undefined;
+                        }
+                        break;
+                }
                 if (type === FieldValue.reference && typeof name === "string") {
                     value = valueOf(properties?.[camelize(name)], raw);
                 }
@@ -164,7 +193,7 @@ export namespace Constraint {
     export type NumberOrIdentifier = number | string;
 
     /**
-     * Parsed list structure.
+     * Parsed constraint.
      */
     export type Ast = {
         /**
@@ -175,17 +204,17 @@ export namespace Constraint {
         /**
          * Constant value.
          */
-        value?: FieldValue;
+        value?: Value;
 
         /**
          * Lower bound on value or sequence length.
          */
-        min?: FieldValue;
+        min?: Value;
 
         /**
          * Upper bound on value or sequence length.
          */
-        max?: FieldValue;
+        max?: Value;
 
         /**
          * Require set membership for the value.
@@ -202,6 +231,22 @@ export namespace Constraint {
          */
         parts?: Ast[];
     };
+
+    /**
+     * Parsed binary operator.
+     */
+    export interface BinaryOperator {
+        type: "+" | "-";
+
+        lhs: Value;
+
+        rhs: Value;
+    }
+
+    /**
+     * Parsed expression.
+     */
+    export type Value = FieldValue | BinaryOperator;
 
     /**
      * These are all ways to describe a constraint.
@@ -425,28 +470,43 @@ export namespace Constraint {
         return scan(0);
     }
 
+    function serializeValue(value: Value): string {
+        if (typeof value !== "object" || value === null || Array.isArray(value) || value instanceof Date) {
+            return FieldValue.serialize(value);
+        }
+
+        switch (value.type) {
+            case "+":
+            case "-":
+                return `(${serializeValue(value.lhs)} ${value.type} ${serializeValue(value.rhs)})`;
+
+            default:
+                return FieldValue.serialize(value);
+        }
+    }
+
     function serializeAtom(ast: Ast) {
         if (ast.desc) {
             return "desc";
         }
 
         if (ast.value !== undefined && ast.value !== null) {
-            return `${FieldValue.serialize(ast.value)}`;
+            return `${serializeValue(ast.value)}`;
         }
 
         if (ast.min !== undefined && ast.min !== null) {
             if (ast.max === undefined || ast.max === null) {
-                return `min ${FieldValue.serialize(ast.min)}`;
+                return `min ${serializeValue(ast.min)}`;
             }
-            return `${FieldValue.serialize(ast.min)} to ${FieldValue.serialize(ast.max)}`;
+            return `${serializeValue(ast.min)} to ${serializeValue(ast.max)}`;
         }
 
         if (ast.max !== undefined && ast.max !== null) {
-            return `max ${FieldValue.serialize(ast.max)}`;
+            return `max ${serializeValue(ast.max)}`;
         }
 
         if (ast.in !== undefined) {
-            return `in ${FieldValue.serialize(ast.in)}`;
+            return `in ${serializeValue(ast.in)}`;
         }
 
         return "all";
