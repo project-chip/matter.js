@@ -49,7 +49,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
     private validateAspect(name: string) {
         const aspect = (this.model as any)[name] as Aspect;
         if (aspect?.errors) {
-            aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, e.message));
+            aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, `${e.source}: ${e.message}`));
         }
     }
 

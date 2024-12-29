@@ -34,6 +34,20 @@ const AllTests = Tests({
         "accepts if reference value is null": { record: { test: 3, minVal: null } },
     }),
 
+    "min with expression": Tests(Fields({ constraint: "min (MinVal + 1)" }, { name: "MinVal", quality: "X" }), {
+        "accepts if over": { record: { test: 6, minVal: 4 } },
+        "rejects if under": {
+            record: { test: 4, minVal: 4 },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "min (minVal + 1)": Value 4 is not within bounds defined by constraint',
+            },
+        },
+        "accepts if reference value is missing": { record: { test: 3 } },
+        "accepts if reference value is null": { record: { test: 3, minVal: null } },
+    }),
+
     max: Tests(Fields({ constraint: "max 4" }), {
         "rejects if over": {
             record: { test: 5 },

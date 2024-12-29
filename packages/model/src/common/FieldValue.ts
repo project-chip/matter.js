@@ -155,7 +155,7 @@ export namespace FieldValue {
             return `${(value as Celsius).value}°C`;
         }
         if (is(value, percent)) {
-            return `${(value as Percent).value}%';`;
+            return `${(value as Percent).value}%`;
         }
         if (is(value, properties)) {
             return stringSerialize((value as Properties).properties) ?? "?";
