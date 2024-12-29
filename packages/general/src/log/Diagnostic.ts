@@ -365,6 +365,17 @@ export namespace Diagnostic {
     export function hex(value: number | bigint) {
         return `0x${value.toString(16)}`;
     }
+
+    export function keylikeFlags(flags: Record<string, unknown>) {
+        return Diagnostic.keylike(Diagnostic.flags(flags));
+    }
+
+    export function flags(flags: Record<string, unknown>) {
+        return Object.entries(flags)
+            .filter(([, value]) => !!value)
+            .map(([key]) => key)
+            .join(" ");
+    }
 }
 
 function formatError(error: any, options: { messagePrefix?: string; parentStack?: string[] } = {}) {
