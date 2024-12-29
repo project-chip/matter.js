@@ -249,11 +249,19 @@ export namespace Diagnostic {
     /**
      * Create a K/V map that presents with formatted keys.
      */
-    export function dict(entries: object): Record<string, unknown> & Diagnostic {
-        return {
+    export function dict(entries: object, suppressUndefinedValues = false): Record<string, unknown> & Diagnostic {
+        const result: any = {
             ...entries,
             [presentation]: Diagnostic.Presentation.Dictionary,
         };
+        if (suppressUndefinedValues) {
+            for (const key in result) {
+                if (result[key] === undefined) {
+                    delete result[key];
+                }
+            }
+        }
+        return result;
     }
 
     /**
