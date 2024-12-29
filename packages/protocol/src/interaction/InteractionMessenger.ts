@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
+import { Diagnostic, Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
 import { Specification } from "#model";
 import {
     Status,
@@ -85,7 +85,14 @@ class InteractionMessenger {
         return this.send(
             MessageType.StatusResponse,
             TlvStatusResponse.encode({ status, interactionModelRevision: Specification.INTERACTION_MODEL_REVISION }),
-            options,
+            {
+                ...options,
+                logContext: {
+                    for: options?.logContext?.for ? `I/Status-${options?.logContext?.for}` : undefined,
+                    status: `${StatusCode[status] ?? "unknown"}(${Diagnostic.hex(status)})`,
+                    ...options?.logContext,
+                },
+            },
         );
     }
 
@@ -193,7 +200,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
                         recipient.handleTimedRequest(this.exchange, timedRequest, message);
-                        await this.sendStatus(StatusCode.Success);
+                        await this.sendStatus(StatusCode.Success, {
+                            logContext: { for: "TimedRequest" },
+                        });
                         continueExchange = true;
                         break;
                     }
@@ -337,11 +346,16 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 )}`,
             );
         }
-        logger.debug(
-            `Sending DataReport chunk with ${dataReportToSend.attributeReports?.length ?? 0} attributes and ${
-                dataReportToSend.eventReports?.length ?? 0
-            } events: ${encodedMessage.length} bytes (moreChunkedMessages: ${dataReportToSend.moreChunkedMessages ?? false}, suppressResponse: ${dataReportToSend.suppressResponse})`,
-        );
+
+        const logContext = {
+            subId: dataReportToSend.subscriptionId,
+            interactionFlags: Diagnostic.keylikeFlags({
+                suppressResponse: dataReportToSend.suppressResponse ?? false,
+                moreChunkedMessages: dataReportToSend.moreChunkedMessages ?? false,
+            }),
+            attr: dataReportToSend.attributeReports?.length,
+            ev: dataReportToSend.eventReports?.length,
+        };
 
         if (dataReportToSend.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
@@ -356,8 +370,10 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 this.throwIfErrorStatusMessage(receivedMessage);
             }
         } else {
-            await this.exchange.send(MessageType.ReportData, encodedMessage);
             await this.waitForSuccess();
+            await this.exchange.send(MessageType.ReportData, encodedMessage, {
+                logContext,
+            });
         }
     }
 }
@@ -393,7 +409,12 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
-                    await this.sendStatus(StatusCode.InvalidSubscription, { multipleMessageInteraction: true });
+                    await this.sendStatus(StatusCode.InvalidSubscription, {
+                        multipleMessageInteraction: true,
+                        logContext: {
+                            subId: report.subscriptionId,
+                        },
+                    });
                     throw new UnexpectedDataError(
                         report.subscriptionId === undefined
                             ? "Invalid Data report without Subscription ID"
@@ -411,9 +432,15 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
-            logger.debug(
-                `Received DataReport chunk with ${report.attributeReports?.length ?? 0} attributes and ${report.eventReports?.length ?? 0} events, suppressResponse: ${report.suppressResponse}, moreChunkedMessages: ${report.moreChunkedMessages}${report.subscriptionId !== undefined ? `, subscriptionId: ${report.subscriptionId}` : ""}`,
-            );
+            const logContext = {
+                subId: report.subscriptionId,
+                dataReportFlags: Diagnostic.keylikeFlags({
+                    suppressResponse: report.suppressResponse,
+                    moreChunkedMessages: report.moreChunkedMessages,
+                }),
+                attr: report.attributeReports?.length,
+                ev: report.eventReports?.length,
+            };
 
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
                 attributeValues.push(...report.attributeReports);
@@ -423,11 +450,17 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             }
 
             if (report.moreChunkedMessages) {
-                await this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true });
+                await this.sendStatus(StatusCode.Success, {
+                    multipleMessageInteraction: true,
+                    logContext,
+                });
             } else if (!report.suppressResponse) {
                 // We received the last message and need to send a final Success, but we do not need to wait for it and
                 // also don't care if it fails
-                this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true }).catch(error =>
+                this.sendStatus(StatusCode.Success, {
+                    multipleMessageInteraction: true,
+                    logContext,
+                }).catch(error =>
                     logger.info("Error while sending final Success after receiving all DataReport chunks", error),
                 );
             }
@@ -619,6 +652,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: true,
             expectedProcessingTimeMs,
+            logContext: {
+                invokeFlags: Diagnostic.keylikeFlags({
+                    suppressResponse: true,
+                }),
+            },
         });
     }
 

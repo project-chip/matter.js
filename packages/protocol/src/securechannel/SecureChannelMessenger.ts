@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError, UnexpectedDataError } from "#general";
+import { Diagnostic, MatterError, UnexpectedDataError } from "#general";
 import {
     GeneralStatusCode,
     ProtocolStatusCode,
@@ -136,7 +136,13 @@ export class SecureChannelMessenger {
                 protocolId: SECURE_CHANNEL_PROTOCOL_ID,
                 protocolStatus,
             }),
-            { requiresAck },
+            {
+                requiresAck,
+                logContext: {
+                    generalStatus: GeneralStatusCode[generalStatus] ?? Diagnostic.hex(generalStatus),
+                    protocolStatus: ProtocolStatusCode[protocolStatus] ?? Diagnostic.hex(protocolStatus),
+                },
+            },
         );
     }
 

@@ -42,6 +42,8 @@ export class UnexpectedMessageError extends MatterError {
     }
 }
 
+export type ExchangeLogContext = Record<string, unknown>;
+
 export type ExchangeSendOptions = {
     /**
      * The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned
@@ -66,6 +68,9 @@ export type ExchangeSendOptions = {
 
     /** Use the provided acknowledge MessageId instead checking the latest to send one */
     includeAcknowledgeMessageId?: number;
+
+    /** Additional context information for logging to be included at the beginning of the Message log. */
+    logContext?: ExchangeLogContext;
 };
 
 /**
@@ -214,14 +219,16 @@ export class MessageExchange {
             Diagnostic.dict({
                 channel: channel.name,
                 protocol: this.#protocolId,
-                id: this.#exchangeId,
-                session: session.name,
-                peerSessionId: this.#peerSessionId,
-                "active threshold ms": this.#activeThresholdMs,
-                "active interval ms": this.#activeIntervalMs,
-                "idle interval ms": this.#idleIntervalMs,
-                maxTransmissions: this.#maxTransmissions,
-                useMrp: this.#useMRP,
+                exId: this.#exchangeId,
+                sess: session.name,
+                peerSess: this.#peerSessionId,
+                SAT: this.#activeThresholdMs,
+                SAI: this.#activeIntervalMs,
+                SII: this.#idleIntervalMs,
+                maxTrans: this.#maxTransmissions,
+                exchangeFlags: Diagnostic.keylikeFlags({
+                    MRP: this.#useMRP,
+                }),
             }),
         );
     }
@@ -266,8 +273,8 @@ export class MessageExchange {
         await this.send(SecureMessageType.StandaloneAck, new Uint8Array(0), { includeAcknowledgeMessageId: messageId });
     }
 
-    async onMessageReceived(message: Message, isDuplicate = false) {
-        logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
+    async onMessageReceived(message: Message, duplicate = false) {
+        logger.debug("Message «", MessageCodec.messageDiagnostics(message, { duplicate }));
 
         // Adjust the incoming message when ack was required but this exchange do not use it to skip all relevant logic
         if (message.payloadHeader.requiresAck && !this.#useMRP) {
@@ -289,7 +296,7 @@ export class MessageExchange {
 
         this.session.notifyActivity(true);
 
-        if (isDuplicate) {
+        if (duplicate) {
             // Received a message retransmission but the reply is not ready yet, ignoring
             if (requiresAck) {
                 await this.sendStandaloneAckForMessage(message);
@@ -357,6 +364,7 @@ export class MessageExchange {
             expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
             requiresAck,
             includeAcknowledgeMessageId,
+            logContext,
         } = options ?? {};
         if (!this.#useMRP && includeAcknowledgeMessageId !== undefined) {
             throw new InternalError("Cannot include an acknowledge message ID when MRP is not used");
@@ -412,7 +420,7 @@ export class MessageExchange {
         if (this.#useMRP && message.payloadHeader.requiresAck) {
             this.#sentMessageToAck = message;
             this.#retransmissionTimer = Time.getTimer(
-                "Message retransmission",
+                `Message retransmission ${message.packetHeader.messageId}`,
                 this.#getResubmissionBackOffTime(0),
                 () => this.#retransmitMessage(message, expectedProcessingTimeMs),
             );
@@ -422,7 +430,7 @@ export class MessageExchange {
             this.#sentMessageAckFailure = rejecter;
         }
 
-        await this.channel.send(message);
+        await this.channel.send(message, logContext);
 
         if (ackPromise !== undefined) {
             this.#retransmissionCounter = 0;
@@ -517,10 +525,10 @@ export class MessageExchange {
                 if (finalWaitTime > 0) {
                     this.#retransmissionCounter--; // We will not resubmit the message again
                     logger.debug(
-                        `Wait additional ${finalWaitTime}ms for processing time and peer resubmissions after all our resubmissions`,
+                        `Message ${message.packetHeader.messageId}: Wait additional ${finalWaitTime}ms for processing time and peer resubmissions after all our resubmissions`,
                     );
                     this.#retransmissionTimer = Time.getTimer(
-                        "Message wait time after resubmissions",
+                        `Message wait time after resubmissions ${message.packetHeader.messageId}`,
                         finalWaitTime,
                         () => this.#retransmitMessage(message),
                     ).start();
