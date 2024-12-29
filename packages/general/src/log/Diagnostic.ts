@@ -61,6 +61,11 @@ export namespace Diagnostic {
         Weak = "weak",
 
         /**
+         * A keylike diagnostic.  The key gets suppressed and the value is rendered as a key.
+         */
+        Keylike = "keylike",
+
+        /**
          * An error message diagnostic.
          */
         Error = "error",
@@ -177,6 +182,13 @@ export namespace Diagnostic {
      */
     export function weak(value: unknown) {
         return Diagnostic(Diagnostic.Presentation.Weak, value);
+    }
+
+    /**
+     * Create a value presented as key
+     */
+    export function keylike(value: string) {
+        return Diagnostic(Diagnostic.Presentation.Keylike, value);
     }
 
     /**
