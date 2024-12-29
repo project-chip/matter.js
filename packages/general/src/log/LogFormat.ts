@@ -8,6 +8,7 @@ import { ImplementationError, InternalError, MatterError } from "../MatterError.
 import { Bytes } from "../util/Bytes.js";
 import { Lifecycle } from "../util/Lifecycle.js";
 import { serialize } from "../util/String.js";
+import { isObject } from "../util/Type.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { LogLevel } from "./LogLevel.js";
 
