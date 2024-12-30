@@ -315,17 +315,24 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.#observers.close();
 
         await this.owner.env.close(DeviceCommissioner);
-        await this.owner.env.close(DeviceAdvertiser);
+        // Shutdown the Broadcaster if DeviceAdvertiser is not initialized
+        // We kick-off the Advertiser shutdown to prevent re-announces when removing sessions and wait a bit later
+        const advertisementShutdown = this.owner.env.has(DeviceAdvertiser)
+            ? this.owner.env.close(DeviceAdvertiser)
+            : this.#mdnsBroadcaster?.close();
+        this.#mdnsBroadcaster = undefined;
+
+        await this.owner.prepareRuntimeShutdown();
+
+        // Now all sessions are closed, so we wait for Advertiser to be gone
+        await advertisementShutdown;
+
         await this.owner.env.close(ExchangeManager);
         await this.owner.env.close(SecureChannelProtocol);
         await this.owner.env.close(TransportInterfaceSet);
 
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
-
-        // DeviceAdvertiser does this but we do so here just in case DeviceAdvertiser did not initialize for some reason
-        await this.#mdnsBroadcaster?.close();
-        this.#mdnsBroadcaster = undefined;
     }
 
     protected override blockNewActivity() {
