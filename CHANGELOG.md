@@ -14,6 +14,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/node
     - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
+    - Enhancement: Optimizes Node shutdown logic to close sessions and subscriptions before shutting down the network
     - Fix: Fixes withBehaviors() method on endpoints
 
 -   @matter/nodejs-ble
