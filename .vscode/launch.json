@@ -753,6 +753,9 @@
                 "--clear",
                 "codegen/src/generate-spec.ts"
             ],
+            "env": {
+                "NODE_OPTIONS": "--max-old-space-size=6144"
+            },
             "program": "${workspaceFolder}/node_modules/.bin/matter-run"
         },
         {

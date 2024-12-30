@@ -48,6 +48,7 @@ export type LaunchOptions = {
     program: string;
     cwd?: string;
     args?: string[];
+    runtimeArgs?: string[];
 };
 
 export type LaunchConfig = LaunchOptions & typeof CONFIG_TEMPLATE;
@@ -89,15 +90,25 @@ for (const example of await Package.workspace.glob("packages/examples/src/*/*.ts
 
 // Generate launches for each code generator
 for (const generator of await Package.workspace.glob("codegen/src/generate-*.ts")) {
-    addRun({
+    const config = {
         name: `Generate ${basename(generator, ".ts").replace(/^generate-/, "")}`,
         args: [Package.workspace.relative(generator)],
-    });
+    };
+
+    if (generator.endsWith("/generate-spec.ts")) {
+        (config as Record<string, unknown>).env = { NODE_OPTIONS: "--max-old-space-size=6144" };
+    }
+
+    addRun(config);
 }
 
 await Package.workspace.writeJson(".vscode/launch.json", launchJson);
 
 function add(launch: LaunchOptions) {
+    if (launch.runtimeArgs) {
+        launch = { ...launch, runtimeArgs: [...CONFIG_TEMPLATE.runtimeArgs, ...launch.runtimeArgs] };
+    }
+
     const config = {
         ...CONFIG_TEMPLATE,
         ...launch,
@@ -120,7 +131,6 @@ function addTest(options: Partial<LaunchOptions> & { name: string }) {
     injectClear(options);
 
     add({
-        ...CONFIG_TEMPLATE,
         ...options,
         program: "node_modules/.bin/matter-test",
     });
@@ -130,7 +140,6 @@ function addRun(options: Partial<LaunchOptions> & { name: string; args: string[]
     injectClear(options);
 
     const result: LaunchOptions = {
-        ...CONFIG_TEMPLATE,
         ...options,
         program: "node_modules/.bin/matter-run",
     };
