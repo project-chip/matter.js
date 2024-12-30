@@ -12,7 +12,6 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
-    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
     - Fix: Fixes withBehaviors() method on endpoints
 
@@ -22,6 +21,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
+    - Enhancement: Optimized Logging for messages in various places
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing

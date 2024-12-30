@@ -1072,7 +1072,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             await subscription.close(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
-                await messenger.sendStatus(error.code);
+                await messenger.sendStatus(error.code, {
+                    logContext: {
+                        for: "I/SubscriptionSeed-Status",
+                    },
+                });
             }
             await messenger.close();
             return; // Make sure to not bubble up the exception
@@ -1092,6 +1096,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 maxInterval,
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             }),
+            {
+                logContext: {
+                    subId: subscriptionId,
+                    maxInterval,
+                },
+            },
         );
 
         // When an error occurs while sending the response, the subscription is not yet active and will be cleaned up by GC
@@ -1230,12 +1240,21 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                             `Send ${lastMessageProcessed ? "final " : ""}invoke response for ${invokeResponseMessage.invokeResponses} commands`,
                         );
                     }
+                    const moreChunkedMessages = lastMessageProcessed ? undefined : true;
                     await messenger.send(
                         MessageType.InvokeResponse,
                         TlvInvokeResponseForSend.encode({
                             ...invokeResponseMessage,
-                            moreChunkedMessages: lastMessageProcessed ? undefined : true,
+                            moreChunkedMessages,
                         }),
+                        {
+                            logContext: {
+                                invokeMsgFlags: Diagnostic.asFlags({
+                                    suppressResponse,
+                                    moreChunkedMessages,
+                                }),
+                            },
+                        },
                     );
                     invokeResponseMessage.invokeResponses = [];
                     messageSize = emptyInvokeResponseBytes.length;

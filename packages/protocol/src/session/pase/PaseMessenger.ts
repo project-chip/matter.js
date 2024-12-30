@@ -30,7 +30,6 @@ type PasePake3 = TypeFromSchema<typeof TlvPasePake3>;
 export class PaseServerMessenger extends SecureChannelMessenger {
     async readPbkdfParamRequest() {
         const { payload } = await this.nextMessage(
-            "PASE PbkdfParamRequest",
             SecureMessageType.PbkdfParamRequest,
             DEFAULT_NORMAL_PROCESSING_TIME_MS,
         );
@@ -44,7 +43,7 @@ export class PaseServerMessenger extends SecureChannelMessenger {
     }
 
     readPasePake1() {
-        return this.nextMessageDecoded(SecureMessageType.PasePake1, TlvPasePake1, "PASE Pake1");
+        return this.nextMessageDecoded(SecureMessageType.PasePake1, TlvPasePake1);
     }
 
     sendPasePake2(pasePake2: PasePake2) {
@@ -52,7 +51,7 @@ export class PaseServerMessenger extends SecureChannelMessenger {
     }
 
     readPasePake3() {
-        return this.nextMessageDecoded(SecureMessageType.PasePake3, TlvPasePake3, "PASE Pake3");
+        return this.nextMessageDecoded(SecureMessageType.PasePake3, TlvPasePake3);
     }
 }
 
@@ -65,7 +64,6 @@ export class PaseClientMessenger extends SecureChannelMessenger {
 
     async readPbkdfParamResponse() {
         const { payload } = await this.nextMessage(
-            "PASE PbkdfParamResponse",
             SecureMessageType.PbkdfParamResponse,
             DEFAULT_NORMAL_PROCESSING_TIME_MS,
         );
@@ -77,7 +75,7 @@ export class PaseClientMessenger extends SecureChannelMessenger {
     }
 
     readPasePake2() {
-        return this.nextMessageDecoded(SecureMessageType.PasePake2, TlvPasePake2, "PASE Pake2");
+        return this.nextMessageDecoded(SecureMessageType.PasePake2, TlvPasePake2);
     }
 
     sendPasePake3(pasePake3: PasePake3) {

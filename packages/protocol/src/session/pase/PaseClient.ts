@@ -80,7 +80,7 @@ export class PaseClient {
         await messenger.sendPasePake3({ verifier: hAY });
 
         // All good! Creating the secure session
-        await messenger.waitForSuccess("Success after PASE Pake3");
+        await messenger.waitForSuccess("PasePake3-Success");
         const secureSession = await this.#sessions.createSecureSession({
             sessionId: initiatorSessionId,
             fabric: undefined,
