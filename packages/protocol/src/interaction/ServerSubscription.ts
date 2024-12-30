@@ -14,7 +14,6 @@ import {
     NoResponseTimeoutError,
     Time,
     Timer,
-    createPromise,
     isObject,
 } from "#general";
 import { Specification } from "#model";
@@ -547,12 +546,9 @@ export class ServerSubscription extends Subscription {
             this.sendNextUpdateImmediately = true;
             return;
         }
-        const { promise, resolver } = createPromise<void>();
-        this.#sendUpdate()
-            .then(resolver)
+        this.currentUpdatePromise = this.#sendUpdate()
             .catch(error => logger.warn("Sending subscription update failed:", error))
             .finally(() => (this.currentUpdatePromise = undefined));
-        this.currentUpdatePromise = promise;
     }
 
     /**
