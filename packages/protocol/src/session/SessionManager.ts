@@ -533,13 +533,14 @@ export class SessionManager {
 
         this.#observers.close();
         await this.#storeResumptionRecords();
-        for (const session of this.#sessions) {
+        const closePromises = this.#sessions.map(async session => {
             await session?.end(false);
             this.#sessions.delete(session);
-        }
+        });
         for (const session of this.#insecureSessions.values()) {
-            await session?.end();
+            closePromises.push(session?.end());
         }
+        await Promise.allSettled(closePromises);
     }
 
     async clear() {
