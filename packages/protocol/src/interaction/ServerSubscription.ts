@@ -150,7 +150,9 @@ export class ServerSubscription extends Subscription {
 
     #lastUpdateTimeMs = 0;
     #updateTimer: Timer;
-    readonly #sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.#triggerSendUpdate());
+    readonly #sendDelayTimer: Timer = Time.getTimer(`Subscription ${this.id} delay`, 50, () =>
+        this.#triggerSendUpdate(),
+    );
     readonly #outstandingAttributeUpdates = new Map<string, AttributePathWithValueVersion<any>>();
     readonly #outstandingEventUpdates = new Set<EventPathWithEventData<any>>();
     readonly #attributeListeners = new Map<
@@ -205,7 +207,9 @@ export class ServerSubscription extends Subscription {
         this.#maxIntervalMs = maxInterval;
         this.#sendIntervalMs = sendInterval;
 
-        this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.#prepareDataUpdate()); // will be started later
+        this.#updateTimer = Time.getTimer(`Subscription ${this.id} update`, this.#sendIntervalMs, () =>
+            this.#prepareDataUpdate(),
+        ); // will be started later
     }
 
     private determineSendingIntervals(
@@ -535,7 +539,7 @@ export class ServerSubscription extends Subscription {
         }
 
         this.#sendDelayTimer.start();
-        this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
+        this.#updateTimer = Time.getTimer(`Subscription update ${this.id}`, this.#sendIntervalMs, () =>
             this.#prepareDataUpdate(),
         ).start();
     }
@@ -837,7 +841,7 @@ export class ServerSubscription extends Subscription {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
-                `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events`,
+                `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events${this.isClosed ? " (for closing)" : ""}`,
             );
             this.#triggerSendUpdate();
             if (this.currentUpdatePromise) {
@@ -871,9 +875,6 @@ export class ServerSubscription extends Subscription {
         attributes: AttributePathWithValueVersion<any>[],
         events: EventPathWithEventData<any>[],
     ) {
-        logger.debug(
-            `Sending subscription update message for ID ${this.id} with ${attributes.length} attributes and ${events.length} events`,
-        );
         const exchange = this.#context.initiateExchange(this.peerAddress, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
         if (attributes.length) {
@@ -901,7 +902,7 @@ export class ServerSubscription extends Subscription {
             } else {
                 await messenger.sendDataReport(
                     {
-                        suppressResponse: false, // Non empty data reports always need to send response
+                        suppressResponse: false, // Non-empty data reports always need to send response
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                         attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
