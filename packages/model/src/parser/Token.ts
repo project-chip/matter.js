@@ -43,6 +43,8 @@ export namespace BasicToken {
         | "]"
         | "("
         | ")"
+        | "{"
+        | "}"
         | "-"
         | "+"
         | "*"

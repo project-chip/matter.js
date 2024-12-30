@@ -5,6 +5,7 @@
  */
 
 import { Lexer } from "#parser/Lexer.js";
+import { BasicToken } from "#parser/Token.js";
 import { TokenStream } from "#parser/TokenStream.js";
 import { camelize } from "@matter/general";
 import { FieldValue } from "../common/index.js";
@@ -22,6 +23,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     declare max?: Constraint.Expression;
     declare in?: FieldValue;
     declare entry?: Constraint;
+    declare cpMax?: number;
     declare parts?: Constraint[];
 
     /**
@@ -75,6 +77,9 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         }
         if (ast.entry !== undefined) {
             this.entry = new Constraint(ast.entry);
+        }
+        if (ast.cpMax !== undefined) {
+            this.cpMax = ast.cpMax;
         }
         if (ast.parts !== undefined) {
             this.parts = ast.parts.map(p => new Constraint(p));
@@ -223,6 +228,11 @@ export namespace Constraint {
         entry?: Ast;
 
         /**
+         * Constraint on codepoints in a string.
+         */
+        cpMax?: number;
+
+        /**
          * List of sub-constraints in a sequence.
          */
         parts?: Ast[];
@@ -258,10 +268,13 @@ namespace Serializer {
         if (ast.entry) {
             return `${serializeAtom(ast)}[${serialize(ast.entry)}]`;
         }
+        if (ast.cpMax) {
+            return `${serializeAtom(ast)}{${ast.cpMax}}`;
+        }
         return serializeAtom(ast);
     }
 
-    function serializeValue(value: Constraint.Expression): string {
+    function serializeValue(value: Constraint.Expression, inExpr = false): string {
         if (typeof value !== "object" || value === null || Array.isArray(value) || value instanceof Date) {
             return FieldValue.serialize(value);
         }
@@ -269,7 +282,13 @@ namespace Serializer {
         switch (value.type) {
             case "+":
             case "-":
-                return `(${serializeValue(value.lhs)} ${value.type} ${serializeValue(value.rhs)})`;
+                const sum = `${serializeValue(value.lhs, true)} ${value.type} ${serializeValue(value.rhs, true)}`;
+                if (inExpr) {
+                    // Ideally only add parenthesis if precedence requires.  But nested expressions are not used
+                    // anywhere as yet (and probably won't be) so don't try to be fancy, just correct
+                    return `(${sum})`;
+                }
+                return sum;
 
             default:
                 return FieldValue.serialize(value);
@@ -351,28 +370,63 @@ namespace Parser {
         }
 
         function parsePart(): Constraint.Ast | undefined {
-            const result = parsePartWithoutArray();
+            const result = parsePartWithoutSubconstraint();
 
-            if (result !== undefined && tokens.token?.type === "[") {
-                tokens.next();
+            if (result === undefined) {
+                return result;
+            }
 
-                const entry = parseParts();
+            switch (tokens.token?.type) {
+                case "[":
+                    {
+                        tokens.next();
 
-                if (tokens.token?.type !== ("]" as any)) {
-                    constraint.error("MISSING_ENTRY_END", 'Entry constraint does not end with "]"');
-                }
+                        const entry = parseParts();
 
-                tokens.next();
+                        if (tokens.token?.type !== ("]" as any)) {
+                            constraint.error("MISSING_ENTRY_END", 'Entry constraint does not end with "]"');
+                        }
 
-                if (entry !== undefined) {
-                    result.entry = entry;
-                }
+                        tokens.next();
+
+                        if (entry !== undefined) {
+                            result.entry = entry;
+                        }
+                    }
+                    break;
+
+                case "{":
+                    {
+                        tokens.next();
+
+                        if (tokens.token?.type !== ("value" as any)) {
+                            constraint.error(
+                                "MISSING_CODEPOINT_MAX",
+                                "Codepoint constraint does not specify maximum codepoint length",
+                            );
+                            if (tokens.peeked?.type === "}") {
+                                tokens.next();
+                            }
+                        } else {
+                            result.cpMax = FieldValue.numericValue(
+                                (tokens.token as unknown as BasicToken.Number).value,
+                            );
+                            tokens.next();
+                        }
+
+                        if (tokens.token?.type !== ("}" as any)) {
+                            constraint.error("MISSING_CODEPOINT_END", 'Codepoint constraint does not end with "}"');
+                        }
+
+                        tokens.next();
+                    }
+                    break;
             }
 
             return result;
         }
 
-        function parsePartWithoutArray(): Constraint.Ast | undefined {
+        function parsePartWithoutSubconstraint(): Constraint.Ast | undefined {
             const { token } = tokens;
 
             if (!token) {
@@ -485,6 +539,37 @@ namespace Parser {
                     const ref = FieldValue.Reference(camelize(token.value));
                     tokens.next();
                     return ref;
+
+                case "-":
+                case "+": {
+                    tokens.next();
+
+                    let number = tokens.token?.type === "value" ? tokens.token.value : undefined;
+
+                    if (number !== undefined) {
+                        tokens.next();
+
+                        if (token.type === "-") {
+                            if (typeof number === "number") {
+                                number *= -1;
+                            } else if (
+                                FieldValue.is(number, FieldValue.percent) ||
+                                FieldValue.is(number, FieldValue.celsius)
+                            ) {
+                                (number as FieldValue.Percent | FieldValue.Celsius).value *= -1;
+                            } else {
+                                number = undefined;
+                            }
+                        }
+                    }
+
+                    if (number === undefined) {
+                        constraint.error("MISSING_NUMBER", `Unary "${token.type}" not followed by numeric value`);
+                        return;
+                    }
+
+                    return number;
+                }
 
                 case "(": {
                     tokens.next();

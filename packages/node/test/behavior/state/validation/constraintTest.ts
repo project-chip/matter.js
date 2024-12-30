@@ -41,7 +41,7 @@ const AllTests = Tests({
             error: {
                 type: ConstraintError,
                 message:
-                    'Validating Test.test: Constraint "min (minVal + 1)": Value 4 is not within bounds defined by constraint',
+                    'Validating Test.test: Constraint "min minVal + 1": Value 4 is not within bounds defined by constraint',
             },
         },
         "accepts if reference value is missing": { record: { test: 3 } },
@@ -111,6 +111,50 @@ const AllTests = Tests({
                 type: ConstraintError,
                 message:
                     'Validating Test.test: Constraint "3 to 4, 6 to 7": Value 8 is not within bounds defined by constraint',
+            },
+        },
+    }),
+
+    "range with expression": Tests(Fields({ constraint: "0 to NumberOfPositions-1" }, { name: "NumberOfPositions" }), {
+        "accepts if under": {
+            record: { test: 1, numberOfPositions: 2 },
+        },
+        "rejects if over": {
+            record: { test: 2, numberOfPositions: 2 },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "0 to numberOfPositions - 1": Value 2 is not within bounds defined by constraint',
+            },
+        },
+    }),
+
+    "string length": Tests(Fields({ type: "string", constraint: "max 2" }), {
+        "accepts if under": {
+            record: { test: "ab" },
+        },
+
+        "rejects if over": {
+            record: { test: "abc" },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "max 2": String length of 3 is not within bounds defined by constraint',
+            },
+        },
+    }),
+
+    "string length with codepoints": Tests(Fields({ type: "string", constraint: "max 8{1}" }), {
+        "accepts if under": {
+            record: { test: "𩸽" },
+        },
+
+        "rejects if over": {
+            record: { test: "𩸽定" },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "max 8{1}": Codepoint count of 2 is not within bounds defined by constraint',
             },
         },
     }),

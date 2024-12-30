@@ -32,6 +32,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/model
     - Feature: The constraint evaluator now supports simple mathematical expressions
+    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
 
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
