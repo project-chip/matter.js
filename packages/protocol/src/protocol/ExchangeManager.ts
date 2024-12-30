@@ -11,6 +11,7 @@ import {
     Environmental,
     ImplementationError,
     Logger,
+    MatterAggregateError,
     MatterError,
     MatterFlowError,
     NotImplementedError,
@@ -181,10 +182,12 @@ export class ExchangeManager {
         for (const listeners of this.#listeners.keys()) {
             this.#deleteListener(listeners);
         }
-        await Promise.allSettled(this.#closers);
-        for (const exchange of this.#exchanges.values()) {
-            await exchange.destroy();
-        }
+        await MatterAggregateError.allSettled(this.#closers, "Error closing exchanges").catch(error =>
+            logger.error(error),
+        );
+        await MatterAggregateError.allSettled(this.#exchanges.values(), "Error closing exchanges").catch(error =>
+            logger.error(error),
+        );
         this.#exchanges.clear();
     }
 

@@ -14,6 +14,7 @@ import {
     Environmental,
     Lifecycle,
     Logger,
+    MatterAggregateError,
     MatterFlowError,
     Mutex,
     Observable,
@@ -540,7 +541,9 @@ export class SessionManager {
         for (const session of this.#insecureSessions.values()) {
             closePromises.push(session?.end());
         }
-        await Promise.allSettled(closePromises);
+        await MatterAggregateError.allSettled(closePromises, "Error closing sessions").catch(error =>
+            logger.error(error),
+        );
     }
 
     async clear() {

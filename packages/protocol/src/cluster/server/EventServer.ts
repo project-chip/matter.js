@@ -10,6 +10,7 @@ import {
     ImplementationError,
     InternalError,
     isObject,
+    MatterAggregateError,
     MaybePromise,
     Storage,
     StorageOperationResult,
@@ -112,7 +113,9 @@ export class EventServer<T = any, S extends Storage = any> {
         }
         this.eventList = [];
         if (promises.length > 0) {
-            return Promise.all(promises).then(() => Promise.resolve()) as StorageOperationResult<S>;
+            return MatterAggregateError.allSettled(promises, "Error binding events to the event handlers").then(
+                () => {},
+            ) as StorageOperationResult<S>;
         }
         return undefined as StorageOperationResult<S>;
     }

@@ -8,6 +8,7 @@ import { NumberedOccurrence } from "#events/Occurrence.js";
 import {
     InternalError,
     Logger,
+    MatterAggregateError,
     MatterError,
     MaybePromise,
     NetworkError,
@@ -858,7 +859,9 @@ export class ServerSubscription extends Subscription {
         if (this.attributeUpdatePromises.size) {
             const resolvers = [...this.attributeUpdatePromises.values()];
             this.attributeUpdatePromises.clear();
-            await Promise.all(resolvers);
+            await MatterAggregateError.allSettled(resolvers, "Error receiving all outstanding attribute values").catch(
+                error => logger.error(error),
+            );
         }
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();

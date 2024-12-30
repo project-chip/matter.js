@@ -4,7 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, Logger, MaybeAsyncStorage, StorageError, SupportedStorageTypes, toJson } from "#general";
+import {
+    fromJson,
+    Logger,
+    MatterAggregateError,
+    MaybeAsyncStorage,
+    StorageError,
+    SupportedStorageTypes,
+    toJson,
+} from "#general";
 import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
 import { join } from "path";
 
@@ -37,8 +45,9 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
     async #finishAllWrites(filename?: string) {
         // Let's try max up to 10 times to finish all writes out there, otherwise something is strange
         for (let i = 0; i < 10; i++) {
-            await Promise.allSettled(
+            await MatterAggregateError.allSettled(
                 filename !== undefined ? [this.#writeFileBlocker.get(filename)] : this.#writeFileBlocker.values(),
+                "Error on finishing all file system writes to storage",
             );
             if (!this.#writeFileBlocker.size) {
                 return;
@@ -114,7 +123,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         for (const [key, value] of Object.entries(keyOrValues)) {
             promises.push(this.#writeFile(this.buildStorageKey(contexts, key), toJson(value)));
         }
-        await Promise.allSettled(promises);
+        await MatterAggregateError.allSettled(promises, "Error when writing values into filesystem storage");
     }
 
     /** According to Node.js documentation, writeFile is not atomic. This method ensures atomicity. */
@@ -172,7 +181,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 })(),
             );
         }
-        await Promise.all(promises);
+        await MatterAggregateError.allSettled(promises, "Error when reading values from filesystem storage");
         return values;
     }
 
@@ -212,6 +221,6 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 promises.push(rm(this.filePath(key), { force: true }));
             }
         }
-        await Promise.all(promises);
+        await MatterAggregateError.allSettled(promises, "Error when clearing all values from filesystem storage");
     }
 }

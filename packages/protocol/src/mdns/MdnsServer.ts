@@ -15,6 +15,7 @@ import {
     DnsRecordType,
     isDeepEqual,
     Logger,
+    MatterAggregateError,
     MAX_MDNS_MESSAGE_SIZE,
     Network,
     Time,
@@ -252,7 +253,7 @@ export class MdnsServer {
     }
 
     async announce(announcedNetPort?: number) {
-        await Promise.allSettled(
+        await MatterAggregateError.allSettled(
             (await this.#getMulticastInterfacesForAnnounce()).map(async ({ name: netInterface }) => {
                 const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
@@ -263,11 +264,12 @@ export class MdnsServer {
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
-        );
+            "Error happened when announcing MDNS messages",
+        ).catch(error => logger.error(error));
     }
 
     async expireAnnouncements(announcedNetPort?: number, type?: AnnouncementType) {
-        await Promise.allSettled(
+        await MatterAggregateError.allSettled(
             this.#records.keys().map(async netInterface => {
                 const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
@@ -300,7 +302,8 @@ export class MdnsServer {
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
-        );
+            "Error happened when expiring MDNS announcements",
+        ).catch(error => logger.error(error));
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();
         this.#recordLastSentAsUnicastAnswer.clear();
