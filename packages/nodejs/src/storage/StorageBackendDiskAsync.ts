@@ -4,15 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    createPromise,
-    fromJson,
-    Logger,
-    MaybeAsyncStorage,
-    StorageError,
-    SupportedStorageTypes,
-    toJson,
-} from "#general";
+import { fromJson, Logger, MaybeAsyncStorage, StorageError, SupportedStorageTypes, toJson } from "#general";
 import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
 import { join } from "path";
 
@@ -133,18 +125,11 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
             return this.#writeFile(fileName, value);
         }
 
-        const { promise, rejecter, resolver } = createPromise<void>();
-
+        const promise = writeFile(this.filePath(fileName), value, "utf8").finally(() => {
+            this.#writeFileBlocker.delete(fileName);
+        });
         this.#writeFileBlocker.set(fileName, promise);
-        writeFile(this.filePath(fileName), value, "utf8")
-            .then(() => {
-                this.#writeFileBlocker.delete(fileName);
-                resolver();
-            })
-            .catch(() => {
-                this.#writeFileBlocker.delete(fileName);
-                rejecter();
-            });
+
         return promise;
     }
 
