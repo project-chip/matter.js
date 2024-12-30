@@ -30,6 +30,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fixes commissionable devices discovery with timeout
     - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
 
+-   @matter/model
+    - Feature: The constraint evaluator now supports simple mathematical expressions
+
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
         including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
