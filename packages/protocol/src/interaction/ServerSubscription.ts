@@ -555,7 +555,7 @@ export class ServerSubscription extends Subscription {
      * Determine all attributes that have changed since the last update and send them tout to the subscriber.
      * Important: This method MUST NOT be called directly. Use triggerSendUpdate() instead!
      */
-    async #sendUpdate() {
+    async #sendUpdate(onlyWithData = false) {
         // Get all outstanding updates, make sure the order is correct per endpoint and cluster
         const attributeUpdatesToSend = new Array<AttributePathWithValueVersion<any>>();
         const attributeUpdates: Record<string, AttributePathWithValueVersion<any>[]> = {};
@@ -576,6 +576,11 @@ export class ServerSubscription extends Subscription {
 
         const eventUpdatesToSend = Array.from(this.#outstandingEventUpdates.values());
         this.#outstandingEventUpdates.clear();
+
+        if (onlyWithData && attributeUpdatesToSend.length === 0 && eventUpdatesToSend.length === 0) {
+            return;
+        }
+
         this.#lastUpdateTimeMs = Time.nowMs();
 
         try {
@@ -625,7 +630,7 @@ export class ServerSubscription extends Subscription {
         if (this.sendNextUpdateImmediately) {
             logger.debug("Sending delayed update immediately after last one was sent.");
             this.sendNextUpdateImmediately = false;
-            await this.#sendUpdate();
+            await this.#sendUpdate(true); // Send but only if non-empty
         }
     }
 
