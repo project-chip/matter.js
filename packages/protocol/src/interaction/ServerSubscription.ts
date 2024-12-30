@@ -896,6 +896,7 @@ export class ServerSubscription extends Subscription {
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
                     this.criteria.isFabricFiltered,
+                    !this.isClosed, // Do not wait for ack when closed
                 );
             } else {
                 await messenger.sendDataReport(
@@ -928,6 +929,7 @@ export class ServerSubscription extends Subscription {
                         }),
                     },
                     this.criteria.isFabricFiltered,
+                    !this.isClosed, // Do not wait for ack when closed
                 );
             }
         } catch (error) {

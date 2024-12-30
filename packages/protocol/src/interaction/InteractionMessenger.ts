@@ -271,7 +271,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
      * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean) {
+    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean, waitForAck = true) {
         const {
             subscriptionId,
             attributeReportsPayload,
@@ -300,7 +300,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
             let firstAttributeAddedToReportMessage = false;
             let firstEventAddedToReportMessage = false;
             const sendAndResetReport = async () => {
-                await this.sendDataReportMessage(dataReport);
+                await this.sendDataReportMessage(dataReport, waitForAck);
                 dataReport.attributeReports = undefined;
                 dataReport.eventReports = undefined;
                 messageSize = emptyDataReportBytes.length;
@@ -366,10 +366,10 @@ export class InteractionServerMessenger extends InteractionMessenger {
             }
         }
 
-        await this.sendDataReportMessage(dataReport);
+        await this.sendDataReportMessage(dataReport, waitForAck);
     }
 
-    async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>) {
+    async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>, waitForAck = true) {
         const dataReportToSend = {
             ...dataReport,
             suppressResponse: dataReport.moreChunkedMessages ? false : dataReport.suppressResponse, // always false when moreChunkedMessages is true
@@ -398,6 +398,8 @@ export class InteractionServerMessenger extends InteractionMessenger {
             try {
                 await this.exchange.send(MessageType.ReportData, encodedMessage, {
                     expectAckOnly: true,
+                    disableMrpLogic: !waitForAck,
+                    logContext,
                 });
             } catch (e) {
                 UnexpectedMessageError.accept(e);
@@ -406,17 +408,19 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 this.throwIfErrorStatusMessage(receivedMessage);
             }
         } else {
-            await this.waitForSuccess();
             await this.exchange.send(MessageType.ReportData, encodedMessage, {
+                disableMrpLogic: !waitForAck,
                 logContext,
             });
+            // We wait for a Success Message - when we don't request an Ack only wait 500ms
+            await this.waitForSuccess("DataReport", { timeoutMs: waitForAck ? undefined : 500 });
         }
     }
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
-    async waitFor(messageType: number, timeoutMs?: number) {
-        const message = await this.nextMessage(timeoutMs);
+    async waitFor(expectedMessageInfo: string, messageType: number, timeoutMs?: number) {
+        const message = await this.anyNextMessage(expectedMessageInfo, { timeoutMs });
         const {
             payloadHeader: { messageType: receivedMessageType },
         } = message;
@@ -441,7 +445,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
 
         while (true) {
-            const dataReportMessage = await this.waitFor(MessageType.ReportData);
+            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {

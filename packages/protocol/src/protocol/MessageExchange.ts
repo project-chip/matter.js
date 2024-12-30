@@ -69,6 +69,11 @@ export type ExchangeSendOptions = {
     /** Use the provided acknowledge MessageId instead checking the latest to send one */
     includeAcknowledgeMessageId?: number;
 
+    /**
+     * Disables the MRP logic which means that no retransmissions are done and receiving an ack is not awaited.
+     */
+    disableMrpLogic?: boolean;
+
     /** Additional context information for logging to be included at the beginning of the Message log. */
     logContext?: ExchangeLogContext;
 };
@@ -361,6 +366,7 @@ export class MessageExchange {
 
         const {
             expectAckOnly = false,
+            disableMrpLogic,
             expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
             requiresAck,
             includeAcknowledgeMessageId,
@@ -417,7 +423,7 @@ export class MessageExchange {
         };
 
         let ackPromise: Promise<Message> | undefined;
-        if (this.#useMRP && message.payloadHeader.requiresAck) {
+        if (this.#useMRP && message.payloadHeader.requiresAck && !disableMrpLogic) {
             this.#sentMessageToAck = message;
             this.#retransmissionTimer = Time.getTimer(
                 `Message retransmission ${message.packetHeader.messageId}`,
@@ -449,30 +455,37 @@ export class MessageExchange {
         }
     }
 
-    nextMessage(expectedProcessingTimeMs?: number) {
+    nextMessage(options?: { expectedProcessingTimeMs?: number; timeoutMs?: number }) {
         let timeout: number;
-        switch (this.channel.type) {
-            case "tcp":
-                // TCP uses 30s timeout according to chip sdk implementation, so do the same
-                timeout = 30_000;
-                break;
-            case "udp":
-                // UDP normally uses MRP, if not we have Group communication which normally have no responses
-                if (!this.#useMRP) {
-                    throw new MatterFlowError("No response expected for this message exchange because UDP and no MRP.");
-                }
-                timeout = this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
-                break;
-            case "ble":
-                // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
-                timeout = 30_000;
-                break;
-            default:
-                throw new MatterFlowError(
-                    `Can not calculate expected timeout for unknown channel type: ${this.channel.type}`,
-                );
+        if (options?.timeoutMs !== undefined) {
+            timeout = options.timeoutMs;
+        } else {
+            switch (this.channel.type) {
+                case "tcp":
+                    // TCP uses 30s timeout according to chip sdk implementation, so do the same
+                    timeout = 30_000;
+                    break;
+                case "udp":
+                    // UDP normally uses MRP, if not we have Group communication which normally have no responses
+                    if (!this.#useMRP) {
+                        throw new MatterFlowError(
+                            "No response expected for this message exchange because UDP and no MRP.",
+                        );
+                    }
+                    const { expectedProcessingTimeMs } = options ?? {};
+                    timeout = this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
+                    break;
+                case "ble":
+                    // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
+                    timeout = 30_000;
+                    break;
+                default:
+                    throw new MatterFlowError(
+                        `Can not calculate expected timeout for unknown channel type: ${this.channel.type}`,
+                    );
+            }
+            timeout += PEER_RESPONSE_TIME_BUFFER_MS;
         }
-        timeout += PEER_RESPONSE_TIME_BUFFER_MS;
         return this.#messagesQueue.read(timeout);
     }
 
