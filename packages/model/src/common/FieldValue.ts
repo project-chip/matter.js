@@ -48,6 +48,11 @@ export namespace FieldValue {
     export type none = typeof none;
 
     /**
+     * A field value that allows type extension.
+     */
+    export type Open = FieldValue | { type: string };
+
+    /**
      * If a field value isn't a primitive type, it's an object with a type field indicating one of these types.
      */
     export type Type = percent | celsius | reference | properties | bytes | none;
@@ -55,7 +60,7 @@ export namespace FieldValue {
     /**
      * Test for one of the special placeholder types.
      */
-    export function is(value: FieldValue | undefined, type: Type) {
+    export function is(value: Open | undefined, type: Type) {
         return value && (value as any).type === type;
     }
 
@@ -161,7 +166,7 @@ export namespace FieldValue {
     /**
      * Given a type name as a hint, do our best to convert a field value to a number.
      */
-    export function numericValue(value: FieldValue | undefined, typeName?: string) {
+    export function numericValue(value: Open | undefined, typeName?: string) {
         if (typeof value === "boolean") {
             return value ? 1 : 0;
         }
@@ -240,7 +245,7 @@ export namespace FieldValue {
     /**
      * Get the referenced name if the FieldValue is a reference.
      */
-    export function referenced(value: FieldValue | undefined) {
+    export function referenced(value: Open | undefined) {
         if (is(value, reference)) {
             return (value as Reference).name;
         }
