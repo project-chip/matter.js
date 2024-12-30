@@ -126,6 +126,7 @@ const NODE_ID = NodeId(BigInt(1));
             await MockTime.advance(150);
             await MockTime.yield3();
             await MockTime.yield3();
+            await MockTime.advance(150);
             await promise;
         };
 
