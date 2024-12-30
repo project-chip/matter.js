@@ -271,7 +271,7 @@ export class MessageCodec {
                 msgId: `${sessionId}/${exchangeId}/${messageId}`,
                 type,
                 acked: ackedMessageId,
-                msgFlags: Diagnostic.keylikeFlags({
+                msgFlags: Diagnostic.asFlags({
                     reqAck: requiresAck,
                     dup: duplicate,
                 }),

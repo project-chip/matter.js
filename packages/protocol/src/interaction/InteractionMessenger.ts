@@ -385,7 +385,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
 
         const logContext = {
             subId: dataReportToSend.subscriptionId,
-            interactionFlags: Diagnostic.keylikeFlags({
+            interactionFlags: Diagnostic.asFlags({
                 suppressResponse: dataReportToSend.suppressResponse ?? false,
                 moreChunkedMessages: dataReportToSend.moreChunkedMessages ?? false,
             }),
@@ -474,7 +474,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
 
             const logContext = {
                 subId: report.subscriptionId,
-                dataReportFlags: Diagnostic.keylikeFlags({
+                dataReportFlags: Diagnostic.asFlags({
                     suppressResponse: report.suppressResponse,
                     moreChunkedMessages: report.moreChunkedMessages,
                 }),
@@ -693,7 +693,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             expectAckOnly: true,
             expectedProcessingTimeMs,
             logContext: {
-                invokeFlags: Diagnostic.keylikeFlags({
+                invokeFlags: Diagnostic.asFlags({
                     suppressResponse: true,
                 }),
             },

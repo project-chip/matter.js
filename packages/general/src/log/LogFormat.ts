@@ -529,8 +529,7 @@ function renderDictionary(value: object, formatter: Formatter) {
         if (parts.length) {
             parts.push(" ");
         }
-        const suppressKey =
-            isObject(v) && (v as Diagnostic)[Diagnostic.presentation] === Diagnostic.Presentation.Keylike;
+        const suppressKey = isObject(v) && (v as Diagnostic)[Diagnostic.presentation] === Diagnostic.Presentation.Flag;
         if (!suppressKey) {
             parts.push(formatter.key(k));
         }
@@ -538,7 +537,7 @@ function renderDictionary(value: object, formatter: Formatter) {
         if (!suppressKey || formattedValue.length) {
             parts.push(formattedValue);
         } else {
-            // if keylike but the value is empty we need to remove the last  space if added above
+            // if flag but the value is empty we need to remove the last  space if added above
             if (parts.length && parts[parts.length - 1] === " ") {
                 parts.pop();
             }
@@ -616,7 +615,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
         case Diagnostic.Presentation.Deleted:
             return formatter.deleted(() => renderDiagnostic(value, formatter));
 
-        case Diagnostic.Presentation.Keylike:
+        case Diagnostic.Presentation.Flag:
             return (value as string).length ? formatter.keylike(value as string) : "";
 
         case Diagnostic.Presentation.Error:

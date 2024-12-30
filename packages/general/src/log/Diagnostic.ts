@@ -61,9 +61,9 @@ export namespace Diagnostic {
         Weak = "weak",
 
         /**
-         * A keylike diagnostic.  The key gets suppressed and the value is rendered as a key.
+         * A keylike diagnostic to list flags.  The key gets suppressed and the value is rendered as a key.
          */
-        Keylike = "keylike",
+        Flag = "flag",
 
         /**
          * An error message diagnostic.
@@ -187,8 +187,8 @@ export namespace Diagnostic {
     /**
      * Create a value presented as key
      */
-    export function keylike(value: string) {
-        return Diagnostic(Diagnostic.Presentation.Keylike, value);
+    export function flag(value: string) {
+        return Diagnostic(Diagnostic.Presentation.Flag, value);
     }
 
     /**
@@ -249,7 +249,7 @@ export namespace Diagnostic {
     /**
      * Create a K/V map that presents with formatted keys.
      */
-    export function dict(entries: object, suppressUndefinedValues = false): Record<string, unknown> & Diagnostic {
+    export function dict(entries: object, suppressUndefinedValues = true): Record<string, unknown> & Diagnostic {
         const result: any = {
             ...entries,
             [presentation]: Diagnostic.Presentation.Dictionary,
@@ -374,11 +374,11 @@ export namespace Diagnostic {
         return `0x${value.toString(16)}`;
     }
 
-    export function keylikeFlags(flags: Record<string, unknown>) {
-        return Diagnostic.keylike(Diagnostic.flags(flags));
+    export function asFlags(flags: Record<string, unknown>) {
+        return Diagnostic.flag(Diagnostic.toFlagString(flags));
     }
 
-    export function flags(flags: Record<string, unknown>) {
+    export function toFlagString(flags: Record<string, unknown>) {
         return Object.entries(flags)
             .filter(([, value]) => !!value)
             .map(([key]) => key)

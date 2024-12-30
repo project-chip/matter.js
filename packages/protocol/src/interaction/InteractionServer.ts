@@ -1249,7 +1249,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         }),
                         {
                             logContext: {
-                                invokeMsgFlags: Diagnostic.keylikeFlags({
+                                invokeMsgFlags: Diagnostic.asFlags({
                                     suppressResponse,
                                     moreChunkedMessages,
                                 }),

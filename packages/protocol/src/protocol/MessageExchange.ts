@@ -231,7 +231,7 @@ export class MessageExchange {
                 SAI: this.#activeIntervalMs,
                 SII: this.#idleIntervalMs,
                 maxTrans: this.#maxTransmissions,
-                exchangeFlags: Diagnostic.keylikeFlags({
+                exchangeFlags: Diagnostic.asFlags({
                     MRP: this.#useMRP,
                 }),
             }),
