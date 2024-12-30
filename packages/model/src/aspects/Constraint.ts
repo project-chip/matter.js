@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, isObject } from "@matter/general";
+import { camelize } from "@matter/general";
 import { FieldValue } from "../common/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -89,16 +89,16 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
      */
     test(value: FieldValue, properties?: Record<string, any>): boolean {
         // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
-        function valueOf(value: unknown, raw = false): unknown {
+        function valueOf(value: Constraint.Value | undefined, raw = false): FieldValue | undefined {
             if (!raw && (typeof value === "string" || Array.isArray(value))) {
                 return value.length;
             }
-            if (isObject(value)) {
-                const { type, name } = value;
+            if (typeof value === "object" && value !== null && "type" in value) {
+                const { type } = value;
                 switch (type) {
-                    case FieldValue.Reference:
-                        if (typeof name === "string") {
-                            value = valueOf(properties?.[camelize(name)], raw);
+                    case FieldValue.reference:
+                        if (typeof value.name === "string") {
+                            value = valueOf(properties?.[camelize(value.name)], raw);
                         }
                         break;
 
@@ -124,9 +124,6 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
                         }
                         break;
                 }
-                if (type === FieldValue.reference && typeof name === "string") {
-                    value = valueOf(properties?.[camelize(name)], raw);
-                }
             }
 
             return value;
@@ -139,7 +136,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         if (this.in) {
             let set = valueOf(this.in, true);
             if (!Array.isArray(set)) {
-                set = [set];
+                set = set === undefined ? [] : [set];
             }
             return (set as unknown[]).indexOf(value) !== -1;
         }
@@ -155,14 +152,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         if (this.min !== undefined && this.min !== null) {
             const min = valueOf(this.min);
-            if (min !== undefined && min !== null && (min as typeof value) > value) {
+            if (min !== undefined && min !== null && min > value) {
                 return false;
             }
         }
 
         if (this.max !== undefined && this.max !== null) {
             const max = valueOf(this.max);
-            if (max !== undefined && max !== null && (max as typeof value) < value) {
+            if (max !== undefined && max !== null && max < value) {
                 return false;
             }
         }
