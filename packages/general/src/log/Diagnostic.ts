@@ -374,10 +374,16 @@ export namespace Diagnostic {
         return `0x${value.toString(16)}`;
     }
 
+    /**
+     * Convert an object with keys to a flag list listing the truthy keys in a keylike/flag presentation.
+     */
     export function asFlags(flags: Record<string, unknown>) {
         return Diagnostic.flag(Diagnostic.toFlagString(flags));
     }
 
+    /**
+     * Convert an object with keys to a space-separated list of truthy keys.
+     */
     export function toFlagString(flags: Record<string, unknown>) {
         return Object.entries(flags)
             .filter(([, value]) => !!value)
