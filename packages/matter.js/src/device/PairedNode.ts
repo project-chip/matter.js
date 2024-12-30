@@ -237,7 +237,10 @@ export class PairedNode {
     readonly #updateEndpointStructureTimer = Time.getTimer(
         "Endpoint structure update",
         STRUCTURE_UPDATE_TIMEOUT_MS,
-        async () => await this.#updateEndpointStructure(),
+        () =>
+            this.#updateEndpointStructure().catch(error =>
+                logger.warn(`Node ${this.nodeId}: Error updating endpoint structure`, error),
+            ),
     );
     #connectionState: NodeStates = NodeStates.Disconnected;
     #reconnectionInProgress = false;
