@@ -5,7 +5,7 @@
  */
 
 import { dirname, resolve } from "path";
-import { exit, stderr, stdout } from "process";
+import { exit, stdout } from "process";
 import { ensureCompiled } from "./ensure-compiled.js";
 import { executeNode } from "./execute.js";
 
@@ -27,9 +27,11 @@ export async function main(argv = process.argv) {
     // Drop node and matter-run
     argv = argv.slice(2);
 
+    const nodeArgv = Array<string>();
+
     // Process arguments to matter-run itself (very simple as of yet so just processing manually)
     while (argv[0][0] === "-") {
-        const option = argv.shift();
+        const option = argv.shift()!;
 
         switch (option) {
             case "--clear":
@@ -40,14 +42,15 @@ export async function main(argv = process.argv) {
                 directExec = true;
                 break;
 
-            default:
-                stderr.write(`Unrecognized option ${option}`);
-                break;
-
             case "--help":
                 stdout.write(
-                    "Usage: matter-run [--clear] [--direct] <SCRIPT> [ARG]...\nRun a Node.js script with source map support and automatic transpilation of TypeScript.",
+                    "Usage: matter-run [--clear] [--direct] [-<NODE_OPT>]... <SCRIPT> [ARG]...\nRun a Node.js script with source map support and automatic transpilation of TypeScript.",
                 );
+                break;
+
+            default:
+                // Any option we don't recognize we pass to node
+                nodeArgv.push(option);
                 break;
         }
     }
@@ -96,6 +99,6 @@ export async function main(argv = process.argv) {
         process.on("SIGINT", () => {});
         process.on("SIGTERM", () => {});
 
-        process.exitCode = await executeNode(script, argv);
+        process.exitCode = await executeNode(script, argv, nodeArgv);
     }
 }

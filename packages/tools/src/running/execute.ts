@@ -46,8 +46,8 @@ export async function execute(bin: string, argv: string[], env?: typeof process.
     });
 }
 
-export async function executeNode(script: string, argv: string[]) {
-    argv = ["--enable-source-maps", script, ...argv];
+export async function executeNode(script: string, argv: string[], nodeArgv = Array<string>()) {
+    argv = ["--enable-source-maps", ...nodeArgv, script, ...argv];
     if (process.env.MATTER_RUN_ECHO) {
         const command = colors.whiteBright(`node ${argv.join(" ")}`);
         process.stdout.write(`${colors.greenBright("Matter execute:")} ${command}\n`);
