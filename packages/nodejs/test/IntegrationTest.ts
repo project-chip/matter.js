@@ -413,7 +413,7 @@ describe("Integration Test", () => {
                     { timedRequestTimeoutMs: 1 },
                 );
                 await assert.rejects(async () => await promise, {
-                    message: "(148) Received error status: 148", // Timeout expired
+                    message: "(148) Received error status: 148 (InvokeResponse)", // Timeout expired
                 });
             });
 
@@ -431,7 +431,7 @@ describe("Integration Test", () => {
                 );
                 const promise = onoffCluster.toggle(undefined, { timedRequestTimeoutMs: 1 });
                 await assert.rejects(async () => await promise, {
-                    message: "(148) Received error status: 148", // Timeout expired
+                    message: "(148) Received error status: 148 (InvokeResponse)", // Timeout expired
                 });
             });
 
