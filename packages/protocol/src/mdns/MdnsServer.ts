@@ -252,7 +252,7 @@ export class MdnsServer {
     }
 
     async announce(announcedNetPort?: number) {
-        await Promise.all(
+        await Promise.allSettled(
             (await this.#getMulticastInterfacesForAnnounce()).map(async ({ name: netInterface }) => {
                 const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
@@ -267,7 +267,7 @@ export class MdnsServer {
     }
 
     async expireAnnouncements(announcedNetPort?: number, type?: AnnouncementType) {
-        await Promise.all(
+        await Promise.allSettled(
             this.#records.keys().map(async netInterface => {
                 const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
