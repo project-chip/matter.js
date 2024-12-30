@@ -122,9 +122,9 @@ export class UdpChannelReactNative implements UdpChannel {
             logger.debug(
                 "Initialize multicast",
                 Diagnostic.dict({
+                    type: type,
                     address: `${multicastInterface}:${listeningPort}`,
                     interface: netInterface,
-                    type: type,
                 }),
             );
             socket.setMulticastInterface(multicastInterface);

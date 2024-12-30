@@ -9,7 +9,7 @@ import { Constraint, FieldValue, Metatype, ValueModel } from "#model";
 import { ConstraintError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
-import { assertArray, assertBoolean, assertNumeric, assertSequence } from "./assertions.js";
+import { assertArray, assertBoolean, assertNumeric, assertSequence, assertString } from "./assertions.js";
 
 /**
  * Creates a function that validates values based on the constraint in the
@@ -62,7 +62,38 @@ export function createConstraintValidator(
                 }
             };
 
-        case Metatype.string:
+        case Metatype.string: {
+            const validateLength: ValueSupervisor.Validate = (value: Val, _session, location) => {
+                assertSequence(value, location);
+                if (!constraint.test(value.length, location.siblings)) {
+                    throw new ConstraintError(
+                        schema,
+                        location,
+                        `String length of ${value.length} is not within bounds defined by constraint`,
+                    );
+                }
+            };
+
+            const { cpMax } = constraint;
+            if (cpMax === undefined) {
+                return validateLength;
+            }
+
+            return (value: Val, _session, location) => {
+                validateLength(value, _session, location);
+                assertString(value, location);
+
+                const codepointCount = [...value].length;
+                if (codepointCount > cpMax) {
+                    throw new ConstraintError(
+                        schema,
+                        location,
+                        `Codepoint count of ${codepointCount} is not within bounds defined by constraint`,
+                    );
+                }
+            };
+        }
+
         case Metatype.bytes:
             return (value: Val, _session, location) => {
                 assertSequence(value, location);
@@ -70,7 +101,7 @@ export function createConstraintValidator(
                     throw new ConstraintError(
                         schema,
                         location,
-                        `Lenght of value ${value} is not within bounds defined by constraint`,
+                        `Byte length of ${value.length} is not within bounds defined by constraint`,
                     );
                 }
             };

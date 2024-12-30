@@ -8,6 +8,7 @@ import { ImplementationError, InternalError, MatterError } from "../MatterError.
 import { Bytes } from "../util/Bytes.js";
 import { Lifecycle } from "../util/Lifecycle.js";
 import { serialize } from "../util/String.js";
+import { isObject } from "../util/Type.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { LogLevel } from "./LogLevel.js";
 
@@ -67,6 +68,7 @@ interface Formatter {
     indent(producer: DiagnosticProducer): string;
     break(): string;
     key(text: string): string;
+    keylike(text: string): string;
     value(producer: DiagnosticProducer): string;
     strong(producer: DiagnosticProducer): string;
     weak(producer: DiagnosticProducer): string;
@@ -133,6 +135,7 @@ function formatPlain(diagnostic: unknown, indents = 0) {
             } ${message.facility} ${message.prefix}${formattedValues}`;
         },
         key: text => creator.text(`${text}: `),
+        keylike: text => creator.text(`${text}`),
         value: producer => creator.text(producer()),
         strong: producer => creator.text(`*${producer()}*`),
         weak: producer => creator.text(producer()),
@@ -269,6 +272,8 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
         },
 
         key: text => creator.text(style("key", `${text}: `)),
+
+        keylike: text => creator.text(style("key", `${text}`)),
 
         value: producer => {
             styles.push("value");
@@ -433,6 +438,7 @@ function formatHtml(diagnostic: unknown) {
         break: () => "<br/>",
         indent: producer => htmlSpan("indent", producer()),
         key: text => htmlSpan("key", `${escape(text)}:`) + " ",
+        keylike: text => htmlSpan("key", `${escape(text)}`),
         value: producer => htmlSpan("value", producer()),
         strong: producer => `<em>${producer()}</em>`,
         weak: producer => htmlSpan("weak", producer()),
@@ -523,8 +529,19 @@ function renderDictionary(value: object, formatter: Formatter) {
         if (parts.length) {
             parts.push(" ");
         }
-        parts.push(formatter.key(k));
-        parts.push(formatter.value(() => renderDiagnostic(v, formatter)));
+        const suppressKey = isObject(v) && (v as Diagnostic)[Diagnostic.presentation] === Diagnostic.Presentation.Flag;
+        if (!suppressKey) {
+            parts.push(formatter.key(k));
+        }
+        const formattedValue = formatter.value(() => renderDiagnostic(v, formatter));
+        if (!suppressKey || formattedValue.length) {
+            parts.push(formattedValue);
+        } else {
+            // if flag but the value is empty we need to remove the last  space if added above
+            if (parts.length && parts[parts.length - 1] === " ") {
+                parts.pop();
+            }
+        }
     }
 
     return parts.join("");
@@ -597,6 +614,9 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
         case Diagnostic.Presentation.Deleted:
             return formatter.deleted(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Flag:
+            return (value as string).length ? formatter.keylike(value as string) : "";
 
         case Diagnostic.Presentation.Error:
             return formatter.error(() => renderDiagnostic(value, formatter));

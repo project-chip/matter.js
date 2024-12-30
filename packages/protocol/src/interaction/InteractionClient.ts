@@ -621,7 +621,6 @@ export class InteractionClient {
             updateReceived?.();
 
             if (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) {
-                logger.debug(`Subscription result empty for subscription ID ${dataReport.subscriptionId}`);
                 return;
             }
 
@@ -715,7 +714,6 @@ export class InteractionClient {
             updateReceived?.();
 
             if (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length) {
-                logger.debug(`Subscription result empty for subscription ID ${dataReport.subscriptionId}`);
                 return;
             }
 
@@ -889,7 +887,6 @@ export class InteractionClient {
                 (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                 (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
             ) {
-                logger.debug(`Subscription result empty for subscription ID ${dataReport.subscriptionId}`);
                 return;
             }
             const { attributeReports, eventReports } = dataReport;

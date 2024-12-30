@@ -12,7 +12,6 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
-    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
     - Enhancement: Optimizes Node shutdown logic to close sessions and subscriptions before shutting down the network
     - Fix: Fixes withBehaviors() method on endpoints
@@ -23,6 +22,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
+    - Enhancement: Optimized Logging for messages in various places
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
@@ -30,6 +30,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fixes the timed node polling during discovery
     - Fix: Fixes commissionable devices discovery with timeout
     - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
+
+-   @matter/model
+    - Feature: The constraint evaluator now supports simple mathematical expressions
+    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
 
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
