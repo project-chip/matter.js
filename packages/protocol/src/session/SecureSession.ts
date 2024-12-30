@@ -156,16 +156,23 @@ export class SecureSession extends Session {
         logger.debug(
             `Created secure ${this.isPase ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
             this.name,
-            Diagnostic.dict({
-                idleIntervalMs: this.idleIntervalMs,
-                activeIntervalMs: this.activeIntervalMs,
-                activeThresholdMs: this.activeThresholdMs,
-                dataModelRevision: this.dataModelRevision,
-                interactionModelRevision: this.interactionModelRevision,
-                specificationVersion: this.specificationVersion,
-                maxPathsPerInvoke: this.maxPathsPerInvoke,
-                caseAuthenticatedTags: this.#caseAuthenticatedTags,
-            }),
+            this.parameterDiagnostics(),
+        );
+    }
+
+    parameterDiagnostics() {
+        return Diagnostic.dict(
+            {
+                SII: this.idleIntervalMs,
+                SAI: this.activeIntervalMs,
+                SAT: this.activeThresholdMs,
+                DMRev: this.dataModelRevision,
+                IMRev: this.interactionModelRevision,
+                spec: Diagnostic.hex(this.specificationVersion),
+                maxPaths: this.maxPathsPerInvoke,
+                CATs: this.#caseAuthenticatedTags,
+            },
+            true,
         );
     }
 

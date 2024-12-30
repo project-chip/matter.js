@@ -106,8 +106,8 @@ export class CaseClient {
             });
             await messenger.sendSuccess();
             logger.info(
-                `Case client: session resumed with ${messenger.getChannelName()} and parameters`,
-                Diagnostic.dict(secureSession.parameters),
+                `Case client: Session resumed with ${messenger.getChannelName()} and parameters`,
+                secureSession.parameterDiagnostics(),
             );
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
@@ -216,7 +216,7 @@ export class CaseClient {
             });
             logger.info(
                 `Case client: Paired successfully with ${messenger.getChannelName()} and parameters`,
-                Diagnostic.dict(secureSession.parameters),
+                secureSession.parameterDiagnostics(),
             );
             resumptionRecord = {
                 fabric,
