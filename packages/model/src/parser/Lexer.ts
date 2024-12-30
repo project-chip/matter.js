@@ -16,10 +16,10 @@ function isNameChar(c: string) {
  *
  * Tokenizes simple text dialects.  Currently sufficient for Matter conformance and constraint tokenization.
  */
-export class Lexer<T extends BasicToken> {
+export class Lexer<T extends BasicToken<KW>, const KW extends string[] = []> {
     #keywords: Set<string>;
 
-    constructor(keywords: Iterable<string> = []) {
+    constructor(keywords?: KW) {
         if (keywords instanceof Set) {
             this.#keywords = keywords;
         } else {
@@ -163,13 +163,27 @@ function* lex(
 
         num *= sign;
 
+        if (base === 10 && peeked.value === ".") {
+            next();
+            let fraction = "";
+            while (true) {
+                const digitValue = valueOf(peeked.value);
+                if (digitValue === undefined) {
+                    break;
+                }
+                fraction += peeked.value;
+                next();
+            }
+            num = Number.parseFloat(`${num}.${fraction}`);
+        }
+
         // Handle specialized suffices for percents and temperatures
         if (peeked.value === "%") {
             next();
             return { type: "value", value: FieldValue.Percent(num), startLine, startChar };
         } else if (peeked.value === "°") {
             next();
-            if (peeked.value?.toLowerCase() === "C") {
+            if (peeked.value?.toLowerCase() === "c") {
                 next();
             }
             return { type: "value", value: FieldValue.Celsius(num), startLine, startChar };
@@ -197,7 +211,7 @@ function* lex(
                 break;
 
             case "-":
-                if (peeked.value !== undefined && (peeked.value >= "0" || peeked.value <= "0")) {
+                if (peeked.value !== undefined && peeked.value >= "0" && peeked.value <= "9") {
                     yield tokenizeNumber(-1);
                 } else {
                     yield { type: current.value, startLine: line, startChar: char };
