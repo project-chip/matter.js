@@ -11,7 +11,7 @@ import { TlvCaseSigma1, TlvCaseSigma2, TlvCaseSigma2Resume, TlvCaseSigma3 } from
 
 export class CaseServerMessenger extends SecureChannelMessenger {
     async readSigma1() {
-        const { payload } = await this.nextMessage("CASE Sigma1", SecureMessageType.Sigma1);
+        const { payload } = await this.nextMessage(SecureMessageType.Sigma1);
         return { sigma1Bytes: payload, sigma1: TlvCaseSigma1.decode(payload) };
     }
 
@@ -24,7 +24,7 @@ export class CaseServerMessenger extends SecureChannelMessenger {
     }
 
     async readSigma3() {
-        const { payload } = await this.nextMessage("CASE Sigma3", SecureMessageType.Sigma3);
+        const { payload } = await this.nextMessage(SecureMessageType.Sigma3);
         return { sigma3Bytes: payload, sigma3: TlvCaseSigma3.decode(payload) };
     }
 }
@@ -38,7 +38,7 @@ export class CaseClientMessenger extends SecureChannelMessenger {
         const {
             payload,
             payloadHeader: { messageType },
-        } = await this.nextMessage("CASE Sigma2 or Sigma2Resume");
+        } = await this.anyNextMessage("Sigma2(Resume)");
         switch (messageType) {
             case SecureMessageType.Sigma2:
                 return { sigma2Bytes: payload, sigma2: TlvCaseSigma2.decode(payload) };

@@ -96,18 +96,53 @@ class InteractionMessenger {
         );
     }
 
-    async waitForSuccess(expectedProcessingTimeMs?: number) {
+    async waitForSuccess(
+        expectedMessageInfo: string,
+        options?: { expectedProcessingTimeMs?: number; timeoutMs?: number },
+    ) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(MessageType.StatusResponse, expectedProcessingTimeMs);
+        await this.nextMessage(MessageType.StatusResponse, options, `Success-${expectedMessageInfo}`);
     }
 
-    async nextMessage(expectedMessageType?: number, expectedProcessingTimeMs?: number) {
-        const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
+    async nextMessage(
+        expectedMessageType: number,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+        expectedMessageInfo?: string,
+    ) {
+        return this.#nextMessage(expectedMessageType, options, expectedMessageInfo);
+    }
+
+    async anyNextMessage(
+        expectedMessageInfo: string,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+    ) {
+        return this.#nextMessage(undefined, options, expectedMessageInfo);
+    }
+
+    async #nextMessage(
+        expectedMessageType?: number,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+        expectedMessageInfo?: string,
+    ) {
+        const { expectedProcessingTimeMs, timeoutMs } = options ?? {};
+        const message = await this.exchange.nextMessage({ expectedProcessingTimeMs, timeoutMs });
         const messageType = message.payloadHeader.messageType;
-        this.throwIfErrorStatusMessage(message);
+        if (expectedMessageType !== undefined && expectedMessageInfo === undefined) {
+            expectedMessageInfo = MessageType[expectedMessageType];
+        }
+        this.throwIfErrorStatusMessage(message, expectedMessageInfo);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType) {
             throw new UnexpectedDataError(
-                `Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`,
+                `Received unexpected message for ${expectedMessageInfo} type: ${messageType}, expected: ${expectedMessageType}`,
             );
         }
         return message;
@@ -117,7 +152,7 @@ class InteractionMessenger {
         await this.exchange.close();
     }
 
-    protected throwIfErrorStatusMessage(message: Message) {
+    protected throwIfErrorStatusMessage(message: Message, logHint?: string) {
         const {
             payloadHeader: { messageType },
             payload,
@@ -125,7 +160,8 @@ class InteractionMessenger {
 
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
-        if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
+        if (status !== StatusCode.Success)
+            throw new StatusResponseError(`Received error status: ${status}${logHint ? ` (${logHint})` : ""}`, status);
     }
 
     getExchangeChannelName() {
@@ -672,7 +708,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             expectAckOnly: false,
             expectedProcessingTimeMs,
         });
-        const responseMessage = await this.nextMessage(responseMessageType, expectedProcessingTimeMs);
+        const responseMessage = await this.nextMessage(
+            responseMessageType,
+            { expectedProcessingTimeMs },
+            MessageType[responseMessageType] ?? `Response-${Diagnostic.hex(responseMessageType)}`,
+        );
         return responseSchema.decode(responseMessage.payload);
     }
 }

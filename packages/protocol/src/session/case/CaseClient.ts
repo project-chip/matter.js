@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Diagnostic, Logger, PublicKey, UnexpectedDataError } from "#general";
+import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "#general";
 import { SessionManager } from "#session/SessionManager.js";
 import { NodeId } from "#types";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
@@ -196,7 +196,7 @@ export class CaseClient {
             const encryptedData = TlvEncryptedDataSigma3.encode({ nodeOpCert, intermediateCACert, signature });
             const encrypted = Crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
             const sigma3Bytes = await messenger.sendSigma3({ encrypted });
-            await messenger.waitForSuccess("Success after CASE Sigma3");
+            await messenger.waitForSuccess("Sigma3-Success");
 
             // All good! Create secure session
             const secureSessionSalt = Bytes.concat(
