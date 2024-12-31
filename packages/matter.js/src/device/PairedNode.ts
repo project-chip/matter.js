@@ -981,7 +981,7 @@ export class PairedNode {
                 const parentEndpoint = this.#endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
                     logger.warn(
-                        `Node ${this.nodeId}: Endpoint ${usages[0]} not found in the data received from teh device!`,
+                        `Node ${this.nodeId}: Endpoint ${usages[0]} not found in the data received from the device!`,
                     );
                 } else if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
                     logger.debug(
