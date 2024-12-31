@@ -237,7 +237,10 @@ export class PairedNode {
     readonly #updateEndpointStructureTimer = Time.getTimer(
         "Endpoint structure update",
         STRUCTURE_UPDATE_TIMEOUT_MS,
-        async () => await this.#updateEndpointStructure(),
+        () =>
+            this.#updateEndpointStructure().catch(error =>
+                logger.warn(`Node ${this.nodeId}: Error updating endpoint structure`, error),
+            ),
     );
     #connectionState: NodeStates = NodeStates.Disconnected;
     #reconnectionInProgress = false;
@@ -977,10 +980,10 @@ export class PairedNode {
                 const childEndpoint = this.#endpoints.get(childEndpointId);
                 const parentEndpoint = this.#endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
-                    throw new InternalError(`Node ${this.nodeId}: Endpoint not found!`); // Should never happen!
-                }
-
-                if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
+                    logger.warn(
+                        `Node ${this.nodeId}: Endpoint ${usages[0]} not found in the data received from the device!`,
+                    );
+                } else if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
                     logger.debug(
                         `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.number}`,
                     );
