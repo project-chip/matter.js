@@ -74,7 +74,7 @@ export class PromiseTimeoutError extends MatterError {
 /**
  * Create a promise with a timeout.
  *
- * By default rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
+ * By default, rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
  *
  * @param timeoutMs the timeout in milliseconds
  * @param promise a promise that resolves or rejects when the timed task completes

@@ -186,22 +186,8 @@ export abstract class Discovery<T = unknown> extends CancelablePromise<T> {
             );
         }
 
-        Promise.allSettled(promises)
-            .then(results => {
-                const errors = Array<any>();
-
-                for (const result of results) {
-                    if (result.status === "rejected") {
-                        errors.push(result.reason);
-                    }
-                }
-
-                if (errors.length) {
-                    throw new DiscoveryAggregateError(errors, `${this} failed`);
-                }
-
-                this.#invokeCompleter();
-            })
+        DiscoveryAggregateError.allSettled(promises, `${this} failed`)
+            .then(() => this.#invokeCompleter())
             .catch(this.#reject);
     }
 
