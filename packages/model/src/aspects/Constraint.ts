@@ -91,8 +91,8 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     /**
      * Test a value against a constraint.  Does not recurse into arrays.
      */
-    test(value: FieldValue, properties?: Record<string, any>): boolean {
-        // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
+    test(value: FieldValue, nameResolver?: (name: string) => unknown): boolean {
+        // Expression evaluator.  This is for constraints such as "min FieldName"
         function valueOf(value: Constraint.Expression | undefined, raw = false): FieldValue | undefined {
             if (!raw && (typeof value === "string" || Array.isArray(value))) {
                 return value.length;
@@ -102,7 +102,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
                 switch (type) {
                     case FieldValue.reference:
                         if (typeof value.name === "string") {
-                            value = valueOf(properties?.[camelize(value.name)], raw);
+                            value = FieldValue(nameResolver?.(camelize(value.name)));
                         }
                         break;
 
@@ -168,7 +168,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
             }
         }
 
-        if (this.parts?.every(part => part.test(value, properties) === false)) {
+        if (this.parts?.every(part => part.test(value, nameResolver) === false)) {
             return false;
         }
 

@@ -46,6 +46,7 @@ export class RootSupervisor implements ValueSupervisor {
     #supportedFeatures: FeatureSet;
     #scope: Scope;
     #members: Set<ValueModel>;
+    #rootSchema: Schema;
     #root: ValueSupervisor;
     #memberNames?: Set<string>;
     #persistentNames?: Set<string>;
@@ -56,7 +57,7 @@ export class RootSupervisor implements ValueSupervisor {
      * @param schema the {@link Schema} for the supervised data
      */
     constructor(schema: Schema) {
-        schema.freeze();
+        this.#rootSchema = schema;
 
         this.#scope = Scope(schema, { forceCache: true, forceOwner: true });
 
@@ -89,7 +90,7 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     get schema() {
-        return this.#root.schema;
+        return this.#rootSchema;
     }
 
     get scope() {
@@ -186,8 +187,7 @@ export class RootSupervisor implements ValueSupervisor {
      * @returns the I/O implementation
      */
     get(schema: Schema): ValueSupervisor {
-        // #root isn't set while we generate root schema so guard against this.#root === undefined
-        if (schema === this.#root?.schema) {
+        if (schema === this.#rootSchema) {
             return this;
         }
 
@@ -216,7 +216,7 @@ export class RootSupervisor implements ValueSupervisor {
         // generated function for places where the function is held directly.
         const deferGeneration = (
             name: string,
-            generator: (schema: Schema, factory: RootSupervisor, base?: new () => Val) => any,
+            generator: (schema: Schema, supervisor: RootSupervisor, base?: new () => Val) => any,
         ) => {
             let generated = false;
 

@@ -12,6 +12,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
+    - Feature: Constraint and conformance expressions may now reference values by name in any owner of a constrained value
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
     - Enhancement: Optimizes Node shutdown logic to close sessions and subscriptions before shutting down the network
     - Fix: Fixes withBehaviors() method on endpoints
@@ -34,6 +35,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/model
     - Feature: The constraint evaluator now supports simple mathematical expressions
     - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
+    - Feature: Default values may now be a reference to another field
 
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller

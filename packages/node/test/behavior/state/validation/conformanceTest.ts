@@ -258,6 +258,7 @@ const AllTests = Tests({
                 Fields(
                     { name: "Value", type: "uint8" },
                     { name: "ValueIsSet", type: "bool", conformance: "F & Value" },
+                    { name: "UnsupportedValueIsSet", type: "bool", conformance: "F & UnsupportedValue" },
                 ),
                 {
                     "allows if present": {

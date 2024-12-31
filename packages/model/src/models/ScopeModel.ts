@@ -20,6 +20,9 @@ export abstract class ScopeModel<T extends BaseElement = BaseElement> extends Mo
 
     readonly isScope = true;
 
+    /**
+     * Obtain the {@link Scope} for this model.
+     */
     get scope() {
         if (this.#operationalScope !== undefined) {
             return this.#operationalScope;
