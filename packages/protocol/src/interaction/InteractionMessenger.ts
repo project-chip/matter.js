@@ -386,8 +386,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
         const logContext = {
             subId: dataReportToSend.subscriptionId,
             interactionFlags: Diagnostic.asFlags({
-                suppressResponse: dataReportToSend.suppressResponse ?? false,
-                moreChunkedMessages: dataReportToSend.moreChunkedMessages ?? false,
+                empty: !dataReportToSend.attributeReports?.length && !dataReportToSend.eventReports?.length,
+                suppressResponse: dataReportToSend.suppressResponse,
+                moreChunkedMessages: dataReportToSend.moreChunkedMessages,
             }),
             attr: dataReportToSend.attributeReports?.length,
             ev: dataReportToSend.eventReports?.length,
@@ -475,6 +476,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             const logContext = {
                 subId: report.subscriptionId,
                 dataReportFlags: Diagnostic.asFlags({
+                    empty: !report.attributeReports?.length && !report.eventReports?.length,
                     suppressResponse: report.suppressResponse,
                     moreChunkedMessages: report.moreChunkedMessages,
                 }),
