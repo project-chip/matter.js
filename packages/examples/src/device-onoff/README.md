@@ -45,16 +45,10 @@ The following parameters are available:
 * --uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
 * --type: the device type to use for pairing (default: light, alternative value is "socket")
 * --netinterface: limit mdns announcements and scanning to the provided network interface, e.g. "en0" (default: all interfaces available)
-* --ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
-* --ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
 * --port: the port to listen on for the device (default: 5540)
 * --store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
 * --on: the command to run when the device is turned on (see example above)
 * --off: the command to run when the device is turned off (see example above)
-
-Additionally, there are some Testing parameters:
-* --ble-wifi-scan-ssid: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
-* --ble-wifi-scan-bssid: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
 
 ## Bundling
 
