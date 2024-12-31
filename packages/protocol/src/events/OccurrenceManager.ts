@@ -4,7 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { asyncNew, Construction, ImplementationError, isObject, Logger, MaybePromise } from "#general";
+import {
+    asyncNew,
+    Construction,
+    ImplementationError,
+    isObject,
+    Logger,
+    MatterAggregateError,
+    MaybePromise,
+} from "#general";
 import {
     EventNumber,
     EventPriority,
@@ -262,7 +270,9 @@ export class OccurrenceManager {
         this.#storedEventCount -= totalCulled;
 
         if (asyncDrops.length) {
-            return Promise.allSettled(asyncDrops).then(() => {});
+            return MatterAggregateError.allSettled(asyncDrops, "Error dropping occurrences")
+                .then(() => {})
+                .catch(error => logger.error(error));
         }
     }
 }

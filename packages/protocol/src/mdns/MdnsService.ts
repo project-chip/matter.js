@@ -10,6 +10,7 @@ import {
     Environment,
     Environmental,
     Logger,
+    MatterAggregateError,
     MaybePromise,
     Network,
     VariableService,
@@ -92,7 +93,10 @@ export class MdnsService {
                 logger.error("Error disposing of MDNS scanner", e),
             );
 
-            await Promise.all([broadcasterDisposal, scannerDisposal]);
+            await MatterAggregateError.allSettled(
+                [broadcasterDisposal, scannerDisposal],
+                "Error disposing MDNS services",
+            ).catch(error => logger.error(error));
 
             this.#broadcaster = this.#scanner = undefined;
         });

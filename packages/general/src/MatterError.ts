@@ -154,6 +154,21 @@ export class MatterAggregateError extends AggregateError {
         }
         return AggregateError[Symbol.hasInstance](instance);
     }
+
+    /**
+     * Wait for all promises to settle and throw an error if any of them reject as MatterAggregateError
+     * (or extended class). Promise results are not returned.
+     * TODO: Enhance the types between call and result to be better unwrapped
+     */
+    static async allSettled(promises: Iterable<unknown>, message = "Errors happened"): Promise<unknown[]> {
+        const results = await Promise.allSettled(promises);
+        const errors = results.filter(result => result.status === "rejected").map(result => result.reason);
+
+        if (errors.length) {
+            throw new this(errors, message);
+        }
+        return (results as PromiseFulfilledResult<unknown>[]).map(result => result.value);
+    }
 }
 
 Object.assign(MatterAggregateError, {

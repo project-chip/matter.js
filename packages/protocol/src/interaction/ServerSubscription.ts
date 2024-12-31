@@ -8,13 +8,13 @@ import { NumberedOccurrence } from "#events/Occurrence.js";
 import {
     InternalError,
     Logger,
+    MatterAggregateError,
     MatterError,
     MaybePromise,
     NetworkError,
     NoResponseTimeoutError,
     Time,
     Timer,
-    createPromise,
     isObject,
 } from "#general";
 import { Specification } from "#model";
@@ -151,7 +151,9 @@ export class ServerSubscription extends Subscription {
 
     #lastUpdateTimeMs = 0;
     #updateTimer: Timer;
-    readonly #sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.#triggerSendUpdate());
+    readonly #sendDelayTimer: Timer = Time.getTimer(`Subscription ${this.id} delay`, 50, () =>
+        this.#triggerSendUpdate(),
+    );
     readonly #outstandingAttributeUpdates = new Map<string, AttributePathWithValueVersion<any>>();
     readonly #outstandingEventUpdates = new Set<EventPathWithEventData<any>>();
     readonly #attributeListeners = new Map<
@@ -206,7 +208,9 @@ export class ServerSubscription extends Subscription {
         this.#maxIntervalMs = maxInterval;
         this.#sendIntervalMs = sendInterval;
 
-        this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.#prepareDataUpdate()); // will be started later
+        this.#updateTimer = Time.getTimer(`Subscription ${this.id} update`, this.#sendIntervalMs, () =>
+            this.#prepareDataUpdate(),
+        ); // will be started later
     }
 
     private determineSendingIntervals(
@@ -536,7 +540,7 @@ export class ServerSubscription extends Subscription {
         }
 
         this.#sendDelayTimer.start();
-        this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
+        this.#updateTimer = Time.getTimer(`Subscription update ${this.id}`, this.#sendIntervalMs, () =>
             this.#prepareDataUpdate(),
         ).start();
     }
@@ -547,19 +551,16 @@ export class ServerSubscription extends Subscription {
             this.sendNextUpdateImmediately = true;
             return;
         }
-        const { promise, resolver } = createPromise<void>();
-        this.#sendUpdate()
-            .then(resolver)
+        this.currentUpdatePromise = this.#sendUpdate()
             .catch(error => logger.warn("Sending subscription update failed:", error))
             .finally(() => (this.currentUpdatePromise = undefined));
-        this.currentUpdatePromise = promise;
     }
 
     /**
      * Determine all attributes that have changed since the last update and send them tout to the subscriber.
      * Important: This method MUST NOT be called directly. Use triggerSendUpdate() instead!
      */
-    async #sendUpdate() {
+    async #sendUpdate(onlyWithData = false) {
         // Get all outstanding updates, make sure the order is correct per endpoint and cluster
         const attributeUpdatesToSend = new Array<AttributePathWithValueVersion<any>>();
         const attributeUpdates: Record<string, AttributePathWithValueVersion<any>[]> = {};
@@ -580,6 +581,11 @@ export class ServerSubscription extends Subscription {
 
         const eventUpdatesToSend = Array.from(this.#outstandingEventUpdates.values());
         this.#outstandingEventUpdates.clear();
+
+        if (onlyWithData && attributeUpdatesToSend.length === 0 && eventUpdatesToSend.length === 0) {
+            return;
+        }
+
         this.#lastUpdateTimeMs = Time.nowMs();
 
         try {
@@ -629,7 +635,7 @@ export class ServerSubscription extends Subscription {
         if (this.sendNextUpdateImmediately) {
             logger.debug("Sending delayed update immediately after last one was sent.");
             this.sendNextUpdateImmediately = false;
-            await this.#sendUpdate();
+            await this.#sendUpdate(true); // Send but only if non-empty
         }
     }
 
@@ -836,7 +842,7 @@ export class ServerSubscription extends Subscription {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
-                `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events`,
+                `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events${this.isClosed ? " (for closing)" : ""}`,
             );
             this.#triggerSendUpdate();
             if (this.currentUpdatePromise) {
@@ -853,7 +859,9 @@ export class ServerSubscription extends Subscription {
         if (this.attributeUpdatePromises.size) {
             const resolvers = [...this.attributeUpdatePromises.values()];
             this.attributeUpdatePromises.clear();
-            await Promise.all(resolvers);
+            await MatterAggregateError.allSettled(resolvers, "Error receiving all outstanding attribute values").catch(
+                error => logger.error(error),
+            );
         }
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();
@@ -870,9 +878,6 @@ export class ServerSubscription extends Subscription {
         attributes: AttributePathWithValueVersion<any>[],
         events: EventPathWithEventData<any>[],
     ) {
-        logger.debug(
-            `Sending subscription update message for ID ${this.id} with ${attributes.length} attributes and ${events.length} events`,
-        );
         const exchange = this.#context.initiateExchange(this.peerAddress, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
         if (attributes.length) {
@@ -901,7 +906,7 @@ export class ServerSubscription extends Subscription {
             } else {
                 await messenger.sendDataReport(
                     {
-                        suppressResponse: false, // Non empty data reports always need to send response
+                        suppressResponse: false, // Non-empty data reports always need to send response
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                         attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
