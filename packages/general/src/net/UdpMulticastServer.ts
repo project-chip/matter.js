@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterAggregateError } from "#MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
 import { isIPv4 } from "../util/Ip.js";
@@ -92,7 +93,7 @@ export class UdpMulticastServer {
         } else {
             const netInterfaces =
                 netInterface !== undefined ? [{ name: netInterface }] : await this.network.getNetInterfaces();
-            await Promise.all(
+            await MatterAggregateError.allSettled(
                 netInterfaces.map(async ({ name: netInterface }) => {
                     const { ipV4, ipV6 } = (await this.network.getIpMac(netInterface)) ?? {
                         mac: "",
@@ -100,7 +101,7 @@ export class UdpMulticastServer {
                         ipV6: [],
                     };
                     const ips = [...ipV4, ...ipV6];
-                    await Promise.all(
+                    await MatterAggregateError.allSettled(
                         ips.map(async ip => {
                             const iPv4 = ipV4.includes(ip);
                             const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
@@ -116,8 +117,10 @@ export class UdpMulticastServer {
                                 logger.info(`${netInterface}: ${(error as Error).message}`);
                             }
                         }),
+                        `Error sending UDP Multicast message on interface ${netInterface}`,
                     );
                 }),
+                "Error sending UDP Multicast message",
             );
         }
     }

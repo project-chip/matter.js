@@ -955,10 +955,16 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
 
         if (!keepSubscriptions) {
-            logger.debug(
-                `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
+            const clearedCount = await this.#context.sessions.clearSubscriptionsForNode(
+                fabric.fabricIndex,
+                session.peerNodeId,
+                true,
             );
-            await this.#context.sessions.clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
+            if (clearedCount > 0) {
+                logger.debug(
+                    `Cleared ${clearedCount} subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
+                );
+            }
         }
 
         if (

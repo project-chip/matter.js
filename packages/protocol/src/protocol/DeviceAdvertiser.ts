@@ -208,13 +208,11 @@ export class DeviceAdvertiser {
 
     async clearBroadcasters() {
         const broadcasters = [...this.#broadcasters];
-        const closed = Promise.allSettled(broadcasters.map(b => b.close()));
+        const closed = MatterAggregateError.allSettled(
+            broadcasters.map(b => b.close()),
+            "Error closing broadcasters",
+        ).catch(error => logger.error(error));
         this.#broadcasters.clear();
-        const errors = (await closed)
-            .map(status => (status.status === "rejected" ? status.reason : undefined))
-            .filter(reason => reason !== undefined);
-        if (errors.length) {
-            throw new MatterAggregateError(errors, "Error closing broadcasters");
-        }
+        await closed;
     }
 }

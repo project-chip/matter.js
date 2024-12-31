@@ -6,7 +6,7 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
-import { ImplementationError } from "#general";
+import { ImplementationError, Logger, MatterAggregateError } from "#general";
 import {
     Ble,
     FabricAuthority,
@@ -20,6 +20,8 @@ import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkServer } from "../network/NetworkServer.js";
 import { ActiveDiscoveries } from "./discovery/ActiveDiscoveries.js";
 import type { Discovery } from "./discovery/Discovery.js";
+
+const logger = Logger.get("ControllerBehavior");
 
 /**
  * Node controller functionality.
@@ -91,7 +93,9 @@ export class ControllerBehavior extends Behavior {
                 discovery.cancel();
             }
 
-            await Promise.allSettled([...discoveries]);
+            await MatterAggregateError.allSettled([...discoveries], "Error while cancelling discoveries").catch(error =>
+                logger.error(error),
+            );
         }
     }
 }

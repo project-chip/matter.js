@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MaybePromise, StorageContext } from "#general";
+import { Logger, MatterAggregateError, MaybePromise, StorageContext } from "#general";
 import { EventNumber } from "#types";
 import { BaseEventStore } from "./BaseEventStore.js";
 import { OccurrenceSummary } from "./EventStore.js";
@@ -100,10 +100,9 @@ export class NonvolatileEventStore extends BaseEventStore {
 
     override close() {
         if (this.#iops.size) {
-            return Promise.allSettled(this.#iops).then(
-                () => {},
-                () => {},
-            );
+            return MatterAggregateError.allSettled(this.#iops, "Error closing event store")
+                .then(() => {})
+                .catch(error => logger.error(error));
         }
     }
 

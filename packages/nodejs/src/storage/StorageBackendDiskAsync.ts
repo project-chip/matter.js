@@ -5,9 +5,9 @@
  */
 
 import {
-    createPromise,
     fromJson,
     Logger,
+    MatterAggregateError,
     MaybeAsyncStorage,
     StorageError,
     SupportedStorageTypes,
@@ -45,8 +45,9 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
     async #finishAllWrites(filename?: string) {
         // Let's try max up to 10 times to finish all writes out there, otherwise something is strange
         for (let i = 0; i < 10; i++) {
-            await Promise.allSettled(
+            await MatterAggregateError.allSettled(
                 filename !== undefined ? [this.#writeFileBlocker.get(filename)] : this.#writeFileBlocker.values(),
+                "Error on finishing all file system writes to storage",
             );
             if (!this.#writeFileBlocker.size) {
                 return;
@@ -122,7 +123,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         for (const [key, value] of Object.entries(keyOrValues)) {
             promises.push(this.#writeFile(this.buildStorageKey(contexts, key), toJson(value)));
         }
-        await Promise.allSettled(promises);
+        await MatterAggregateError.allSettled(promises, "Error when writing values into filesystem storage");
     }
 
     /** According to Node.js documentation, writeFile is not atomic. This method ensures atomicity. */
@@ -133,18 +134,11 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
             return this.#writeFile(fileName, value);
         }
 
-        const { promise, rejecter, resolver } = createPromise<void>();
-
+        const promise = writeFile(this.filePath(fileName), value, "utf8").finally(() => {
+            this.#writeFileBlocker.delete(fileName);
+        });
         this.#writeFileBlocker.set(fileName, promise);
-        writeFile(this.filePath(fileName), value, "utf8")
-            .then(() => {
-                this.#writeFileBlocker.delete(fileName);
-                resolver();
-            })
-            .catch(() => {
-                this.#writeFileBlocker.delete(fileName);
-                rejecter();
-            });
+
         return promise;
     }
 
@@ -187,7 +181,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 })(),
             );
         }
-        await Promise.all(promises);
+        await MatterAggregateError.allSettled(promises, "Error when reading values from filesystem storage");
         return values;
     }
 
@@ -227,6 +221,6 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 promises.push(rm(this.filePath(key), { force: true }));
             }
         }
-        await Promise.all(promises);
+        await MatterAggregateError.allSettled(promises, "Error when clearing all values from filesystem storage");
     }
 }
