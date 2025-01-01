@@ -21,6 +21,7 @@
  */
 
 import {
+    Bytes,
     DeviceTypeId,
     Endpoint,
     EndpointServer,
@@ -164,6 +165,7 @@ class OnOffShellExecServer extends OnOffServer {
 class TestGeneralDiagnosticsServer extends RootRequirements.GeneralDiagnosticsServer {
     override initialize() {
         this.state.testEventTriggersEnabled = true; // set to true if you support test triggers ...
+        this.state.deviceTestEnableKey = Bytes.fromHex("0102030405060708090a0b0c0d0e0f10");
         super.initialize();
     }
 
@@ -292,7 +294,7 @@ const server = await ServerNode.create(RootEndpoint, {
         networks: [{ networkId: networkId, connected: !wifiOrThreadAdded }],
         scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
         connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
-        supportedWifiBands: wifiOrThreadAdded && !threadAdded ? [NetworkCommissioning.WiFiBand["2G4"]] : undefined,
+        supportedWiFiBands: wifiOrThreadAdded && !threadAdded ? [NetworkCommissioning.WiFiBand["2G4"]] : undefined,
         supportedThreadFeatures: wifiOrThreadAdded && threadAdded ? { isFullThreadDevice: true } : undefined,
         threadVersion: wifiOrThreadAdded && threadAdded ? 4 : undefined, // means: Thread 1.3
     },
