@@ -44,6 +44,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
     - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
+    - Enhancement: Added `remove*Listener()` to ClusterClient objects to remove listeners added with `add*Listener()` or `subscribe*()` (The subscription is not cleared!)
     - Fix: When a paired node gets disconnected (or decommissioned) invalidate subscription handlers to prevent reconnection tries
 
 ## 0.11.9 (2024-12-11)
