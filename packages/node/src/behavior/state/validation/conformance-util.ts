@@ -97,6 +97,9 @@ export function asBoolean(node: StaticNode) {
         case Code.Optional:
             return true;
 
+        case Code.Value:
+            return !!node.value;
+
         default:
             return false;
     }

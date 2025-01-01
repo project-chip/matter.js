@@ -26,6 +26,31 @@ export type FieldValue =
     | FieldValue.Bytes
     | FieldValue.None;
 
+/**
+ * Create a FieldValue (or undefined) from a naked JavaScript value.
+ *
+ * Assumes that objects and arrays already contain valid FieldValues.
+ */
+export function FieldValue(value: unknown): FieldValue | undefined {
+    if (typeof value === "function") {
+        throw new UnexpectedDataError("Cannot cast function to FieldValue");
+    }
+
+    if (typeof value === "object" && value !== null) {
+        if (Array.isArray(value)) {
+            return value as FieldValue[];
+        }
+
+        if (value instanceof Date) {
+            return value;
+        }
+
+        return value as FieldValue.Properties;
+    }
+
+    return value as FieldValue;
+}
+
 export namespace FieldValue {
     // Typing with constants should be just as type safe as using an enum but simplifies type definitions
 

@@ -10,7 +10,7 @@ import { BaseElement, ValueElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Aspects } from "./Aspects.js";
 import { Model } from "./Model.js";
-import { PropertyModel } from "./PropertyModel.js";
+import type { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.

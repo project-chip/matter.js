@@ -172,7 +172,7 @@ export const MicrowaveOvenControl = Cluster(
 
         Field({
             name: "PowerSetting", id: 0x2, type: "uint8", conformance: "[PWRNUM].a+",
-            constraint: "minPower to maxPower", default: "MaxPower",
+            constraint: "minPower to maxPower", default: { type: "reference", name: "MaxPower" },
 
             details: "This field shall indicate the PowerSetting associated with the operation of the device. The value " +
                 "of this field shall be subject to the constraints of the PowerSetting attribute of this cluster. If " +

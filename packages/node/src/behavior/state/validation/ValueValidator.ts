@@ -50,19 +50,19 @@ export function ValueValidator(schema: Schema, supervisor: RootSupervisor): Valu
 
         case Metatype.integer:
         case Metatype.float:
-            validator = createSimpleValidator(schema, assertNumeric);
+            validator = createSimpleValidator(schema, supervisor, assertNumeric);
             break;
 
         case Metatype.boolean:
-            validator = createSimpleValidator(schema, assertBoolean);
+            validator = createSimpleValidator(schema, supervisor, assertBoolean);
             break;
 
         case Metatype.string:
-            validator = createSimpleValidator(schema, assertString);
+            validator = createSimpleValidator(schema, supervisor, assertString);
             break;
 
         case Metatype.bytes:
-            validator = createSimpleValidator(schema, assertBytes);
+            validator = createSimpleValidator(schema, supervisor, assertBytes);
             break;
 
         case Metatype.object:
@@ -132,7 +132,7 @@ function createEnumValidator(schema: ValueModel, supervisor: RootSupervisor): Va
 
     const constraint = schema.effectiveConstraint;
     const constraintValidator = constraint.in
-        ? createConstraintValidator(schema.effectiveConstraint, schema)
+        ? createConstraintValidator(schema.effectiveConstraint, schema, supervisor)
         : undefined;
 
     return (value, session, location) => {
@@ -199,9 +199,10 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
 
 function createSimpleValidator(
     schema: ValueModel,
+    supervisor: RootSupervisor,
     validateType: (value: Val, location: ValidationLocation) => void,
 ): ValueSupervisor.Validate {
-    const validateConstraint = createConstraintValidator(schema.effectiveConstraint, schema);
+    const validateConstraint = createConstraintValidator(schema.effectiveConstraint, schema, supervisor);
 
     return (value, session, location) => {
         // If undefined, only conformance tests apply
@@ -282,11 +283,11 @@ function createStructValidator(schema: Schema, supervisor: RootSupervisor): Valu
     return validateStruct;
 }
 
-function createListValidator(schema: ValueModel, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
+function createListValidator(schema: ValueModel, supervisor: RootSupervisor): ValueSupervisor.Validate | undefined {
     const entry = schema.listEntry;
     let validateEntries: undefined | ValueSupervisor.Validate;
     if (entry) {
-        const entryValidator = factory.get(entry).validate;
+        const entryValidator = supervisor.get(entry).validate;
 
         if (entryValidator) {
             validateEntries = (list: Val, session: ValueSupervisor.Session, location: ValidationLocation) => {
@@ -313,7 +314,7 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
         }
     }
 
-    const validateConstraint = createConstraintValidator(schema.constraint, schema);
+    const validateConstraint = createConstraintValidator(schema.constraint, schema, supervisor);
 
     return (value, session, location) => {
         assertArray(value, location);
