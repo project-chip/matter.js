@@ -39,6 +39,7 @@ export class DeviceAdvertiser {
     readonly #context: DeviceAdvertiserContext;
     readonly #broadcasters = new Set<InstanceBroadcaster>();
     readonly #timedOut = AsyncObservable<[]>();
+    readonly #operationalModeEnabled = new AsyncObservable<[]>();
     readonly #operationalModeEnded = new AsyncObservable<[]>();
     readonly #observers = new ObserverGroup();
     #interval: Timer;
@@ -101,6 +102,13 @@ export class DeviceAdvertiser {
      */
     get operationalModeEnded() {
         return this.#operationalModeEnded;
+    }
+
+    /**
+     * Emitted when the device starts advertising in operational mode.
+     */
+    get operationalModeEnabled() {
+        return this.#operationalModeEnabled;
     }
 
     async enterCommissioningMode(mode: CommissioningMode, deviceData: CommissioningModeInstanceData) {
@@ -173,6 +181,12 @@ export class DeviceAdvertiser {
     }
 
     async advertiseFabrics(fabrics: Fabric[], expireCommissioningAnnouncement = false) {
+        if (expireCommissioningAnnouncement) {
+            // TODO: For real "non-ethernet-only" cases like Wifi or Thread devices this might still be too early.
+            //  In these cases we might need an option to (re-)create mdns broadcaster just when interface
+            //  is connected
+            await this.#operationalModeEnabled.emit();
+        }
         for (const broadcaster of this.#broadcasters) {
             await broadcaster.setFabrics(fabrics, expireCommissioningAnnouncement);
             await broadcaster.announce();
