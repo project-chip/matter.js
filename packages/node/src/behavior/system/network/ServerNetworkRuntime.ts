@@ -7,6 +7,7 @@
 import {
     ImplementationError,
     InterfaceType,
+    Logger,
     Network,
     NetworkInterface,
     NetworkInterfaceDetailed,
@@ -35,6 +36,8 @@ import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
+
+const logger = Logger.get("ServerNetworkRuntime");
 
 function convertNetworkEnvironmentType(type: string | number) {
     const convertedType: InterfaceType =
@@ -190,6 +193,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         const advertiser = this.owner.env.get(DeviceAdvertiser);
         const mdnsBroadcaster = this.mdnsBroadcaster;
         if (!advertiser.hasBroadcaster(mdnsBroadcaster)) {
+            logger.debug("Enabling MDNS broadcasting");
             advertiser.addBroadcaster(mdnsBroadcaster);
         }
     }
@@ -252,9 +256,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         // Ensure MdnsService is fully constructed
         await env.load(MdnsService);
 
+        const advertiser = env.get(DeviceAdvertiser);
         // Configure network
         await this.addTransports(env.get(TransportInterfaceSet));
-        await this.addBroadcasters(env.get(DeviceAdvertiser));
+        await this.addBroadcasters(advertiser);
 
         await owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
@@ -274,6 +279,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         // Monitor CommissioningServer to end "uncommissioned" mode when we are commissioned
         this.#observers.on(this.owner.eventsOf(CommissioningServer).commissioned, this.endUncommissionedMode);
+
+        // Monitor DeviceAdvertiser to enable MDNS broadcasting when the first Fabric is added
+        this.#observers.on(advertiser.operationalModeEnabled, this.enableMdnsBroadcasting);
 
         // When first going online, enable commissioning by controllers unless we ourselves are configured as a
         // controller
