@@ -35,7 +35,7 @@ import {
     logLevelFromString,
     singleton,
 } from "@matter/main";
-import { NetworkCommissioningServer, OnOffServer } from "@matter/main/behaviors";
+import { OnOffServer } from "@matter/main/behaviors";
 import { GeneralDiagnostics, NetworkCommissioning } from "@matter/main/clusters";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { RootRequirements } from "@matter/main/endpoints";
@@ -207,12 +207,8 @@ class MyFancyOwnFunctionalityServer extends MyFancyOwnFunctionalityBehavior {
 // In this case we are using with() to install our On/Off cluster behavior.
 // .with("Lighting") not needed because we always have it in by default because we have default implementation
 const OnOffDevice = isSocket
-    ? vendorId === 0xfff4
-        ? OnOffPlugInUnitDevice.with(OnOffShellExecServer, MyFancyOwnFunctionalityServer)
-        : OnOffPlugInUnitDevice.with(OnOffShellExecServer)
-    : vendorId === 0xfff4
-      ? OnOffLightDevice.with(OnOffShellExecServer, MyFancyOwnFunctionalityServer)
-      : OnOffLightDevice.with(OnOffShellExecServer);
+    ? OnOffPlugInUnitDevice.with(OnOffShellExecServer)
+    : OnOffLightDevice.with(OnOffShellExecServer);
 
 /**
  * Modify automatically added clusters of the Root endpoint if needed
@@ -226,30 +222,6 @@ const OnOffDevice = isSocket
 // We use the Basic Root Endpoint without a NetworkCommissioning cluster
 let RootEndpoint = ServerNode.RootEndpoint.with(TestGeneralDiagnosticsServer);
 
-let wifiOrThreadAdded = false;
-let threadAdded = false;
-if (Ble.enabled) {
-    // matter.js will create a Ethernet-only device by default when ut comes to Network Commissioning Features.
-    // To offer e.g. a "Wi-Fi only device" (or any other combination) we need to override the Network Commissioning
-    // cluster and implement all the need handling here. This is a "static implementation" for pure demonstration
-    // purposes and just "simulates" the actions to be done. In a real world implementation this would be done by
-    // the device implementor based on the relevant networking stack.
-    // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
-    if (environment.vars.has("ble.wifi.fake")) {
-        RootEndpoint = RootEndpoint.with(DummyWifiNetworkCommissioningServer);
-        wifiOrThreadAdded = true;
-    } else if (environment.vars.has("ble.thread.fake")) {
-        RootEndpoint = RootEndpoint.with(DummyThreadNetworkCommissioningServer);
-        wifiOrThreadAdded = true;
-        threadAdded = true;
-    }
-} else {
-    RootEndpoint = RootEndpoint.with(
-        NetworkCommissioningServer.with(NetworkCommissioning.Feature.EthernetNetworkInterface),
-    );
-}
-
-const networkId = new Uint8Array(32);
 // Physical devices appear as "nodes" on a Matter network.  As a device implementer you use a NodeServer to bring a
 // device online.
 //
@@ -283,28 +255,54 @@ const server = await ServerNode.create(RootEndpoint, {
         serialNumber: `node-matter-${uniqueId}`,
         uniqueId,
     },
-
-    // @ts-expect-error ... TS do not see the types because both next clusters was added conditionally
-    networkCommissioning: {
-        maxNetworks: 1,
-        interfaceEnabled: true,
-        lastConnectErrorValue: 0,
-        lastNetworkId: wifiOrThreadAdded ? null : networkId,
-        lastNetworkingStatus: wifiOrThreadAdded ? null : NetworkCommissioning.NetworkCommissioningStatus.Success,
-        networks: [{ networkId: networkId, connected: !wifiOrThreadAdded }],
-        scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
-        connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
-        supportedWiFiBands: wifiOrThreadAdded && !threadAdded ? [NetworkCommissioning.WiFiBand["2G4"]] : undefined,
-        supportedThreadFeatures: wifiOrThreadAdded && threadAdded ? { isFullThreadDevice: true } : undefined,
-        threadVersion: wifiOrThreadAdded && threadAdded ? 4 : undefined, // means: Thread 1.3
-    },
-    myFancyFunctionality: {
-        myFancyValue: 0,
-    },
 });
+
+const networkId = new Uint8Array(32);
+if (Ble.enabled) {
+    // matter.js will create an Ethernet-only device by default when it comes to Network Commissioning Features.
+    // To offer e.g. a "Wi-Fi only device" (or any other combination) we need to override the Network Commissioning
+    // cluster and implement all the need handling here. This is a "static implementation" for pure demonstration
+    // purposes and just "simulates" the actions to be done. In a real world implementation this would be done by
+    // the device implementor based on the relevant networking stack.
+    // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
+    if (environment.vars.has("ble.wifi.fake")) {
+        server.behaviors.require(DummyWifiNetworkCommissioningServer, {
+            maxNetworks: 1,
+            interfaceEnabled: true,
+            lastConnectErrorValue: 0,
+            lastNetworkId: networkId,
+            lastNetworkingStatus: null,
+            networks: [{ networkId: networkId, connected: false }],
+            scanMaxTimeSeconds: 3,
+            connectMaxTimeSeconds: 3,
+            supportedWiFiBands: [NetworkCommissioning.WiFiBand["2G4"]],
+        });
+    } else if (environment.vars.has("ble.thread.fake")) {
+        server.behaviors.require(DummyThreadNetworkCommissioningServer, {
+            maxNetworks: 1,
+            interfaceEnabled: true,
+            lastConnectErrorValue: 0,
+            lastNetworkId: null,
+            lastNetworkingStatus: null,
+            networks: [{ networkId: networkId, connected: false }],
+            scanMaxTimeSeconds: 3,
+            connectMaxTimeSeconds: 3,
+            supportedThreadFeatures: { isFullThreadDevice: true },
+            threadVersion: 4, // means: Thread 1.3
+        });
+    }
+}
+
+// Also add our Custom behavior when vendor id is 0xfff4 (just to show how it works)
+if (vendorId === 0xfff4) {
+    server.behaviors.require(MyFancyOwnFunctionalityServer, {
+        myFancyValue: 0,
+    });
+}
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
 const endpoint = new Endpoint(OnOffDevice, { id: "onoff" });
+
 await server.add(endpoint);
 
 /**
@@ -319,7 +317,7 @@ server.lifecycle.decommissioned.on(() => console.log("Server was fully decommiss
 /** This event is triggered when the device went online. This means that it is discoverable in the network. */
 server.lifecycle.online.on(() => console.log("Server is online"));
 
-/** This event is triggered when the device went offline. it is not longer discoverable or connectable in the network. */
+/** This event is triggered when the device went offline. It is no longer discoverable or connectable in the network. */
 server.lifecycle.offline.on(() => console.log("Server is offline"));
 
 /**
