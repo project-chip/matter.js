@@ -220,7 +220,7 @@ const OnOffDevice = isSocket
  */
 
 // We use the Basic Root Endpoint without a NetworkCommissioning cluster
-let RootEndpoint = ServerNode.RootEndpoint.with(TestGeneralDiagnosticsServer);
+const RootEndpoint = ServerNode.RootEndpoint.with(TestGeneralDiagnosticsServer);
 
 // Physical devices appear as "nodes" on a Matter network.  As a device implementer you use a NodeServer to bring a
 // device online.
