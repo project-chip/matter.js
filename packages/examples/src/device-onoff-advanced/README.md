@@ -32,13 +32,13 @@ Additionally, you need to choose if the device should simulate a Thread or a Wif
 Depending on the method you chose you probably need to also add additional parameters for either Wifi or thread which are returned when the device is asked to scn for available networks.
 
 For Wifi the parameters to use are:
-* --ble-wifi-scan-ssid=...: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
-* --ble-wifi-scan-bssid=...: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
+* --ble-wifi-scanSsid=...: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
+* --ble-wifi-scanBssid=...: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
 
 For Thread the parameters to use are:
-* --ble.thread.pan-id=...: The PAN ID to use for the Thread network
-* --ble.thread.extended-pan-id=...: The extended PAN ID to use for the Thread network
-* --ble.thread.network-name=...: The network name to use for the Thread network
+* --ble.thread.panId=...: The PAN ID to use for the Thread network
+* --ble.thread.extendedPanId=...: The extended PAN ID to use for the Thread network
+* --ble.thread.networkName=...: The network name to use for the Thread network
 * --ble.thread.channel=...: The channel to use for the Thread network
 * --ble.thread.address=...: The address to use for the Thread network
 Thread parameters are as of now only needed when commissioning with Amazon because the others are currently not scanning for Thread networks.
