@@ -59,7 +59,14 @@ export class NobleBleClient {
             }
         });
         noble.on("discover", peripheral => this.handleDiscoveredDevice(peripheral));
-        noble.on("scanStart", () => (this.isScanning = true));
+        noble.on("scanStart", () => {
+            if (!this.shouldScan) {
+                // Noble sometimes emits scanStart when we did not asked for and misses the scanStop event
+                // TODO: Remove as soon as Noble fixed this behavior
+                return;
+            }
+            this.isScanning = true;
+        });
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
