@@ -133,6 +133,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 // because a re-discovery is the best option to get teh device into a good state again
                 connectTimeout: Time.getTimer("BLE connect timeout", 60_000, () => {
                     logger.debug(`Timeout while connecting to peripheral ${peripheralAddress}`);
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     peripheral.removeListener("connect", connectHandler);
                     peripheral.removeListener("disconnect", reTryHandler);
                     clearConnectionGuard();
@@ -175,6 +176,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 // Cancel tracking states because we are done in this context
                 clearConnectionGuard();
                 this.#connectionsInProgress.delete(address);
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 peripheral.removeListener("connect", connectHandler);
                 peripheral.removeListener("disconnect", reTryHandler);
 
@@ -333,6 +335,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 }
                 // connecting, disconnected
                 connectionGuard.connectTimeout.start();
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 peripheral.once("connect", connectHandler);
                 peripheral.once("disconnect", reTryHandler);
                 logger.debug(`Peripheral ${peripheralAddress}: Connect to Peripheral now (try ${tryCount})`);
