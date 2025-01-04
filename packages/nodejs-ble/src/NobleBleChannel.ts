@@ -10,8 +10,10 @@ import {
     InternalError,
     Logger,
     NetInterface,
+    NetworkError,
     ServerAddress,
     Time,
+    Timer,
     TransportInterface,
     createPromise,
 } from "@matter/general";
@@ -24,7 +26,6 @@ import {
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
-    Ble,
     BleChannel,
     BleError,
     BtpCodec,
@@ -60,157 +61,308 @@ function nobleUuidToUuid(uuid: string): string {
     return parts.join("-");
 }
 
+type BleConnectionGuard = {
+    connectTimeout: Timer;
+    interviewTimeout: Timer;
+    disconnectTimeout: Timer;
+};
+
 export class NobleBleCentralInterface implements NetInterface {
-    private openChannels: Map<ServerAddress, Peripheral> = new Map();
-    private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
+    #bleScanner: BleScanner;
+    #connectionsInProgress = new Set<ServerAddress>();
+    #connectionGuards = new Set<BleConnectionGuard>();
+    #openChannels = new Map<ServerAddress, Peripheral>();
+    #onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
+    #closed = false;
+
+    constructor(bleScanner: BleScanner) {
+        this.#bleScanner = bleScanner;
+    }
 
     openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<Uint8Array>> {
+        if (this.#closed) {
+            throw new NetworkError("Network interface is closed");
+        }
         return new Promise((resolve, reject) => {
-            if (this.onMatterMessageListener === undefined) {
-                reject(new InternalError(`Network Interface was not added to the system yet.`));
+            if (this.#onMatterMessageListener === undefined) {
+                reject(new InternalError(`Network Interface was not added to the system yet, so can not connect it.`));
                 return;
             }
             if (address.type !== "ble") {
                 reject(new InternalError(`Unsupported address type ${address.type}.`));
                 return;
             }
+            const { peripheralAddress } = address;
+            if (tryCount > 3) {
+                reject(new BleError(`Failed to connect to peripheral ${peripheralAddress}`));
+                return;
+            }
 
             // Get the peripheral by address and connect to it.
-            const { peripheral, hasAdditionalAdvertisementData } = (
-                Ble.get().getBleScanner() as BleScanner
-            ).getDiscoveredDevice(address.peripheralAddress);
+            const { peripheral, hasAdditionalAdvertisementData } =
+                this.#bleScanner.getDiscoveredDevice(peripheralAddress);
 
-            if (tryCount > 3) {
-                reject(new BleError(`Failed to connect to peripheral ${peripheral.address}`));
-                return;
-            }
-
-            logger.debug("BLE peripheral state", peripheral.state);
-            if (peripheral.state === "connected" || peripheral.state === "connecting") {
+            if (this.#openChannels.has(address)) {
                 reject(
                     new BleError(
-                        `Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`,
+                        `Peripheral ${peripheralAddress} is already connected. Only one connection supported right now.`,
                     ),
                 );
                 return;
             }
-            if (this.openChannels.has(address)) {
+            if (this.#connectionsInProgress.has(address)) {
+                logger.debug(`Connection to peripheral ${peripheralAddress} is already in progress.`);
+                return;
+            }
+
+            if (peripheral.state === "error") {
+                // Weired state, so better cancel here and try a re-discovery
                 reject(
                     new BleError(
-                        `Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`,
+                        `Can not connect to peripheral "${peripheralAddress}" because unexpected state "${peripheral.state}"`,
                     ),
                 );
                 return;
             }
-            if (peripheral.state !== "disconnected") {
-                // Try to cleanup strange "in between" states
-                peripheral.disconnectAsync().then(() => this.openChannel(address, tryCount), reject);
-                return;
-            }
 
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            peripheral.once("connect", async () => {
-                if (this.onMatterMessageListener === undefined) {
-                    reject(new InternalError(`Network Interface was not added to the system yet.`));
-                    return;
-                }
-
-                const services = await peripheral.discoverServicesAsync([BLE_MATTER_SERVICE_UUID]);
-                logger.debug(`Found services: ${services.map(s => s.uuid).join(", ")}`);
-
-                for (const service of services) {
-                    logger.debug(`found service: ${service.uuid}`);
-                    if (service.uuid !== BLE_MATTER_SERVICE_UUID) continue;
-
-                    // So, discover its characteristics.
-                    const characteristics = await service.discoverCharacteristicsAsync();
-
-                    let characteristicC1ForWrite: Characteristic | undefined;
-                    let characteristicC2ForSubscribe: Characteristic | undefined;
-                    let additionalCommissioningRelatedData: Uint8Array | undefined;
-
-                    for (const characteristic of characteristics) {
-                        // Loop through each characteristic and match them to the UUIDs that we know about.
-                        logger.debug("found characteristic:", characteristic.uuid, characteristic.properties);
-
-                        switch (nobleUuidToUuid(characteristic.uuid)) {
-                            case BLE_MATTER_C1_CHARACTERISTIC_UUID:
-                                logger.debug("found C1 characteristic");
-                                characteristicC1ForWrite = characteristic;
-                                break;
-
-                            case BLE_MATTER_C2_CHARACTERISTIC_UUID:
-                                logger.debug("found C2 characteristic");
-                                characteristicC2ForSubscribe = characteristic;
-                                break;
-
-                            case BLE_MATTER_C3_CHARACTERISTIC_UUID:
-                                logger.debug("found C3 characteristic");
-                                if (hasAdditionalAdvertisementData) {
-                                    logger.debug("reading additional commissioning related data");
-                                    const data = await characteristic.readAsync();
-                                    additionalCommissioningRelatedData = new Uint8Array(data);
-                                    logger.debug("additional data", data);
-                                }
-                        }
+            // Guard object to indicate if the connection was cancelled. This is used as safe guard in some places
+            // if data come in delayed after we already gave up.
+            const connectionGuard: BleConnectionGuard = {
+                // Timeout when trying to connect to the device because sometimes connect fails and noble does
+                // not emit an event. If device does not connect we do not try any longer and reject the promise
+                // because a re-discovery is the best option to get teh device into a good state again
+                connectTimeout: Time.getTimer("BLE connect timeout", 60_000, () => {
+                    logger.debug(`Timeout while connecting to peripheral ${peripheralAddress}`);
+                    peripheral.removeListener("connect", connectHandler);
+                    peripheral.removeListener("disconnect", reTryHandler);
+                    clearConnectionGuard();
+                    reject(new BleError(`Timeout while connecting to peripheral ${peripheralAddress}`));
+                }),
+                disconnectTimeout: Time.getTimer("BLE disconnect timeout", 60_000, () => {
+                    logger.debug(`Timeout while disconnecting to peripheral ${peripheralAddress}`);
+                    peripheral.removeListener("disconnect", reTryHandler);
+                    clearConnectionGuard();
+                    reject(new BleError(`Timeout while disconnecting to peripheral ${peripheralAddress}`));
+                }),
+                // Timeout when trying to interview the device because sometimes when no response from device
+                // comes noble does not resolve promises
+                interviewTimeout: Time.getTimer("BLE interview timeout", 60_000, () => {
+                    logger.debug(`Timeout while interviewing peripheral ${peripheralAddress}`);
+                    peripheral.removeListener("disconnect", reTryHandler);
+                    clearConnectionGuard();
+                    if (peripheral.state === "connected") {
+                        // We accept the dangling promise potentially because we got a timeout on reading data,
+                        // so chance is high also disconnect does not work reliably for now
+                        peripheral
+                            .disconnectAsync()
+                            .catch(error => logger.error(`Ignored error while disconnecting`, error));
                     }
+                    reject(new BleError(`Timeout while interviewing peripheral ${peripheralAddress}`));
+                }),
+            };
+            this.#connectionGuards.add(connectionGuard);
 
-                    if (!characteristicC1ForWrite || !characteristicC2ForSubscribe) {
-                        logger.debug("missing characteristics");
-                        continue;
-                    }
+            const clearConnectionGuard = () => {
+                const { connectTimeout, interviewTimeout, disconnectTimeout } = connectionGuard;
+                connectTimeout?.stop();
+                interviewTimeout?.stop();
+                disconnectTimeout?.stop();
+                this.#connectionGuards.delete(connectionGuard);
+            };
 
-                    peripheral.removeAllListeners("disconnect");
-                    this.openChannels.set(address, peripheral);
-                    resolve(
-                        await NobleBleChannel.create(
-                            peripheral,
-                            characteristicC1ForWrite,
-                            characteristicC2ForSubscribe,
-                            this.onMatterMessageListener,
-                            additionalCommissioningRelatedData,
-                        ),
-                    );
-                    return;
-                }
+            // Handler to retry the connection. Called on disconnections and errors.
+            const reTryHandler = (error?: any) => {
+                // Cancel tracking states because we are done in this context
+                clearConnectionGuard();
+                this.#connectionsInProgress.delete(address);
+                peripheral.removeListener("connect", connectHandler);
+                peripheral.removeListener("disconnect", reTryHandler);
 
-                peripheral.removeAllListeners("disconnect");
-                reject(new BleError(`Peripheral ${peripheral.address} does not have the required characteristics`));
-            });
-            const reTryHandler = async (error?: any) => {
                 if (error) {
                     logger.error(
-                        `Peripheral ${peripheral.address} disconnected while trying to connect, try again`,
+                        `Peripheral ${peripheralAddress} disconnected while trying to connect, try again`,
                         error,
                     );
                 } else {
-                    logger.info(`Peripheral ${peripheral.address} disconnected while trying to connect, try gain`);
+                    logger.info(`Peripheral ${peripheralAddress} disconnected while trying to connect, try again`);
                 }
-                // Cleanup listeners and try again
-                peripheral.removeAllListeners("disconnect");
-                peripheral.removeAllListeners("connect");
+
+                // Try again and chain promises
                 this.openChannel(address, tryCount + 1)
                     .then(resolve)
                     .catch(reject);
             };
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            peripheral.once("disconnect", reTryHandler);
-            logger.debug(`Connect to Peripheral now (try ${tryCount})`);
-            peripheral.connectAsync().catch(reTryHandler);
+
+            const connectHandler = async (error?: any) => {
+                connectionGuard.connectTimeout.stop(); // Connection done, so clear timeout
+                if (!this.#connectionGuards.has(connectionGuard)) {
+                    // Seems that the response was delayed and this process was cancelled in the meantime
+                    return;
+                }
+                if (error) {
+                    clearConnectionGuard();
+                    reject(new BleError(`Error while connecting to peripheral ${peripheralAddress}`, error));
+                    return;
+                }
+                if (this.#onMatterMessageListener === undefined) {
+                    clearConnectionGuard();
+                    reject(new InternalError(`Network Interface was not added to the system yet or was cleared.`));
+                    return;
+                }
+
+                if (this.#connectionsInProgress.has(address)) {
+                    return;
+                }
+                this.#connectionsInProgress.add(address);
+
+                try {
+                    connectionGuard.interviewTimeout.start();
+                    const services = await peripheral.discoverServicesAsync([BLE_MATTER_SERVICE_UUID]);
+                    if (!this.#connectionGuards.has(connectionGuard)) {
+                        // Seems that the response was delayed and this process was cancelled in the meantime
+                        return;
+                    }
+                    logger.debug(
+                        `Peripheral ${peripheralAddress}: Found services: ${services.map(s => s.uuid).join(", ")}`,
+                    );
+
+                    for (const service of services) {
+                        logger.debug(`Peripheral ${peripheralAddress}: Handle service: ${service.uuid}`);
+                        if (service.uuid !== BLE_MATTER_SERVICE_UUID) continue;
+
+                        // It's Matter, discover its characteristics.
+                        const characteristics = await service.discoverCharacteristicsAsync();
+                        if (!this.#connectionGuards.has(connectionGuard)) {
+                            // Seems that the response was delayed and this process was cancelled in the meantime
+                            return;
+                        }
+
+                        let characteristicC1ForWrite: Characteristic | undefined;
+                        let characteristicC2ForSubscribe: Characteristic | undefined;
+                        let additionalCommissioningRelatedData: Uint8Array | undefined;
+
+                        for (const characteristic of characteristics) {
+                            // Loop through each characteristic and match them to the UUIDs that we know about.
+                            logger.debug(
+                                `Peripheral ${peripheralAddress}: Handle characteristic:`,
+                                characteristic.uuid,
+                                characteristic.properties,
+                            );
+
+                            switch (nobleUuidToUuid(characteristic.uuid)) {
+                                case BLE_MATTER_C1_CHARACTERISTIC_UUID:
+                                    logger.debug(`Peripheral ${peripheralAddress}: Found C1 characteristic`);
+                                    characteristicC1ForWrite = characteristic;
+                                    break;
+
+                                case BLE_MATTER_C2_CHARACTERISTIC_UUID:
+                                    logger.debug(`Peripheral ${peripheralAddress}: Found C2 characteristic`);
+                                    characteristicC2ForSubscribe = characteristic;
+                                    break;
+
+                                case BLE_MATTER_C3_CHARACTERISTIC_UUID:
+                                    logger.debug(`Peripheral ${peripheralAddress}: Found C3 characteristic`);
+                                    if (hasAdditionalAdvertisementData) {
+                                        logger.debug(
+                                            `Peripheral ${peripheralAddress}: Reading additional commissioning related data`,
+                                        );
+                                        const data = await characteristic.readAsync();
+                                        if (!this.#connectionGuards.has(connectionGuard)) {
+                                            // Seems that the response was delayed and this process was cancelled in the meantime
+                                            return;
+                                        }
+                                        additionalCommissioningRelatedData = new Uint8Array(data);
+                                        logger.debug(`Peripheral ${peripheralAddress}: Additional data:`, data);
+                                    }
+                            }
+                        }
+
+                        if (!characteristicC1ForWrite || !characteristicC2ForSubscribe) {
+                            logger.debug(
+                                `Peripheral ${peripheralAddress}: Missing required Matter characteristics. Ignore.`,
+                            );
+                            continue;
+                        }
+
+                        connectionGuard.interviewTimeout.stop();
+                        peripheral.removeListener("disconnect", reTryHandler);
+                        this.#openChannels.set(address, peripheral);
+                        try {
+                            resolve(
+                                await NobleBleChannel.create(
+                                    peripheral,
+                                    characteristicC1ForWrite,
+                                    characteristicC2ForSubscribe,
+                                    this.#onMatterMessageListener,
+                                    additionalCommissioningRelatedData,
+                                ),
+                            );
+                            clearConnectionGuard();
+                            this.#connectionsInProgress.delete(address);
+                        } catch (error) {
+                            this.#connectionsInProgress.delete(address);
+                            this.#openChannels.delete(address);
+                            await peripheral.disconnectAsync();
+                            reTryHandler(error);
+                            return;
+                        }
+                    }
+                } finally {
+                    this.#connectionsInProgress.delete(address);
+                    clearConnectionGuard();
+                }
+
+                peripheral.removeListener("disconnect", reTryHandler);
+                reject(
+                    new BleError(`Peripheral ${peripheralAddress} does not have the required Matter characteristics`),
+                );
+            };
+
+            if (peripheral.state === "connected") {
+                logger.debug(`Peripheral ${peripheralAddress}: Already connected`);
+                connectHandler().catch(error => logger.warn(`Error while connecting`, error)); // Error should never happen
+            } else if (peripheral.state === "disconnecting") {
+                logger.debug(`Peripheral ${peripheralAddress}: Disconnect in progress`);
+                connectionGuard.disconnectTimeout.start();
+                tryCount--;
+                peripheral.once("disconnect", reTryHandler);
+            } else {
+                if (peripheral.state === "connecting") {
+                    peripheral.cancelConnect(); // Send cancel to noble to make sure we can connect
+                    peripheral.state = "disconnected"; // Manually fix status because noble does not do it
+                }
+                // connecting, disconnected
+                connectionGuard.connectTimeout.start();
+                peripheral.once("connect", connectHandler);
+                peripheral.once("disconnect", reTryHandler);
+                logger.debug(`Peripheral ${peripheralAddress}: Connect to Peripheral now (try ${tryCount})`);
+                peripheral.connectAsync().catch(error => {
+                    if (!this.#connectionGuards.has(connectionGuard)) {
+                        // Seems that the response was delayed and this process was cancelled in the meantime
+                        return;
+                    }
+                    logger.info(`Peripheral ${peripheralAddress}: Error while connecting to peripheral`, error);
+                    reTryHandler(error);
+                });
+            }
         });
     }
 
     onData(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void): TransportInterface.Listener {
-        this.onMatterMessageListener = listener;
+        this.#onMatterMessageListener = listener;
         return {
             close: async () => await this.close(),
         };
     }
 
     async close() {
-        for (const peripheral of this.openChannels.values()) {
-            await peripheral.disconnectAsync();
+        this.#closed = true;
+        for (const peripheral of this.#openChannels.values()) {
+            peripheral
+                .disconnectAsync()
+                .catch(error => logger.error(`Peripheral ${peripheral.address}: Error while disconnecting`, error));
         }
+        this.#openChannels.clear();
     }
 
     supports(type: ChannelType, _address?: string) {
@@ -229,39 +381,62 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         onMatterMessageListener: (socket: Channel<Uint8Array>, data: Uint8Array) => void,
         _additionalCommissioningRelatedData?: Uint8Array,
     ): Promise<NobleBleChannel> {
+        const { address: peripheralAddress } = peripheral;
         let mtu = peripheral.mtu ?? 0;
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
             mtu = BLE_MAXIMUM_BTP_MTU;
         }
-        logger.debug(`Using MTU=${mtu} (Peripheral MTU=${peripheral.mtu})`);
+        logger.debug(
+            `Peripheral ${peripheralAddress}: Using MTU=${mtu} bytes (Peripheral supports up to ${peripheral.mtu} bytes)`,
+        );
+
+        const {
+            promise: handshakeResponseReceivedPromise,
+            resolver: handshakeResolver,
+            rejecter: handshakeRejecter,
+        } = createPromise<Buffer>();
+
+        const handshakeHandler = (data: Buffer, isNotification: boolean) => {
+            if (data[0] === 0x65 && data[1] === 0x6c && data.length === 6) {
+                // Check if the first two bytes and length match the Matter handshake
+                logger.info(
+                    `Peripheral ${peripheralAddress}: Received Matter handshake response: ${data.toString("hex")}.`,
+                );
+                btpHandshakeTimeout.stop();
+                handshakeResolver(data);
+            } else {
+                logger.debug(
+                    `Peripheral ${peripheralAddress}: Received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification}) - No handshake response, inforing`,
+                );
+            }
+        };
+
+        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
+            characteristicC2ForSubscribe.removeListener("data", handshakeHandler);
+            characteristicC2ForSubscribe
+                .unsubscribeAsync()
+                .catch(error => logger.error(`Peripheral ${peripheralAddress}: Error while unsubscribing`, error));
+            logger.debug(
+                `Peripheral ${peripheralAddress}: Handshake Response not received. Disconnected from peripheral`,
+            );
+
+            handshakeRejecter(new BleError(`Peripheral ${peripheralAddress}: Handshake Response not received`));
+        }).start();
+
         const btpHandshakeRequest = BtpCodec.encodeBtpHandshakeRequest({
             versions: BTP_SUPPORTED_VERSIONS,
             attMtu: mtu,
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
-        logger.debug(`sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`);
+        logger.debug(
+            `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`,
+        );
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 
-        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
-            await peripheral.disconnectAsync();
-            logger.debug("Handshake Response not received. Disconnected from peripheral");
-        }).start();
-
-        logger.debug("subscribing to C2 characteristic");
+        logger.debug(`Peripheral ${peripheralAddress}: Subscribing to C2 characteristic`);
         await characteristicC2ForSubscribe.subscribeAsync();
 
-        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<Buffer>();
-
-        characteristicC2ForSubscribe.once("data", (data, isNotification) => {
-            logger.debug(`received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`);
-
-            if (data[0] === 0x65 && data[1] === 0x6c && data.length === 6) {
-                // Check if the first two bytes and length match the Matter handshake
-                logger.info(`Received Matter handshake response: ${data.toString("hex")}.`);
-                btpHandshakeTimeout.stop();
-                resolver(data);
-            }
-        });
+        characteristicC2ForSubscribe.once("data", handshakeHandler);
 
         const handshakeResponse = await handshakeResponseReceivedPromise;
 
@@ -275,7 +450,11 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
             async () =>
                 void characteristicC2ForSubscribe
                     .unsubscribeAsync()
-                    .then(() => peripheral.disconnectAsync().then(() => logger.debug("disconnected from peripheral"))),
+                    .then(() =>
+                        peripheral
+                            .disconnectAsync()
+                            .then(() => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`)),
+                    ),
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: Uint8Array) => {
                 if (onMatterMessageListener === undefined) {
@@ -286,7 +465,9 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         );
 
         characteristicC2ForSubscribe.on("data", (data, isNotification) => {
-            logger.debug(`received data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`);
+            logger.debug(
+                `Peripheral ${peripheralAddress}: received data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`,
+            );
 
             void btpSession.handleIncomingBleData(new Uint8Array(data));
         });
@@ -316,11 +497,15 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
      */
     async send(data: Uint8Array) {
         if (!this.connected) {
-            logger.debug("Cannot send data because not connected to peripheral.");
+            logger.debug(
+                `Peripheral ${this.peripheral.address}: Cannot send data because not connected to peripheral.`,
+            );
             return;
         }
         if (this.btpSession === undefined) {
-            throw new BtpFlowError(`Cannot send data, no BTP session initialized`);
+            throw new BtpFlowError(
+                `Peripheral ${this.peripheral.address}: Cannot send data, no BTP session initialized`,
+            );
         }
         await this.btpSession.sendMatterMessage(data);
     }
@@ -332,6 +517,8 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
 
     async close() {
         await this.btpSession.close();
-        await this.peripheral.disconnectAsync();
+        this.peripheral
+            .disconnectAsync()
+            .catch(error => logger.error(`Peripheral ${this.peripheral.address}: Error while disconnecting`, error));
     }
 }
