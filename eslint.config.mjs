@@ -75,13 +75,7 @@ export default [{
     rules: {
         "@typescript-eslint/no-explicit-any": "off",
 
-        "@typescript-eslint/ban-types": ["error", {
-            types: {
-                "{}": false,
-            },
-
-            extendDefaults: true,
-        }],
+            "@typescript-eslint/no-empty-object-type": "off",
 
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
