@@ -30,8 +30,8 @@ export class Mutex implements PromiseLike<unknown> {
      * await.
      */
     then<TResult1 = void, TResult2 = never>(
-        onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+        onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
     ): PromiseLike<TResult1 | TResult2> {
         return (this.#promise || Promise.resolve()).then(onfulfilled, onrejected);
     }
@@ -74,7 +74,11 @@ export class Mutex implements PromiseLike<unknown> {
                 try {
                     resolve(await task());
                 } catch (e) {
-                    reject(e);
+                    if (e instanceof Error) {
+                        reject(e);
+                    } else {
+                        reject(new Error(e?.toString()));
+                    }
                 }
             }, cancel);
         });

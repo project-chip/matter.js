@@ -288,8 +288,8 @@ export class BleScanner implements Scanner {
         return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);
     }
 
-    close(): void {
-        void this.nobleClient.stopScanning();
+    async close() {
+        await this.nobleClient.stopScanning();
         [...this.recordWaiters.keys()].forEach(queryId =>
             this.finishWaiter(queryId, !!this.recordWaiters.get(queryId)?.timer),
         );

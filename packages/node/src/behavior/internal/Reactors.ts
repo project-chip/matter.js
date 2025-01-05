@@ -407,7 +407,7 @@ class ReactorBacking<T extends any[], R> {
     /**
      * Detail the reactor in error messages for errors triggered during reaction.
      */
-    #augmentError(cause: any) {
+    #augmentError(cause: any): Error {
         if (!(cause instanceof Error)) {
             cause = new Error(cause.toString());
         }

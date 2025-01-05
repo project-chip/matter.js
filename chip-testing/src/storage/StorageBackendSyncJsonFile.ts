@@ -60,10 +60,10 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
         writeFileSync(this.path, json, "utf-8");
     }
 
-    override async close() {
+    override close() {
         this.commit();
         this.closed = true;
-        super.close();
+        return super.close();
     }
 
     private toJson(object: any) {

@@ -353,6 +353,7 @@ export const OperationalCredentialsClusterHandler = (
             assertSecureSession(session);
 
             // Assert associated fabric is present
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             session.associatedFabric;
 
             const failsafeContext = MatterDevice.of(session).failsafeContext;

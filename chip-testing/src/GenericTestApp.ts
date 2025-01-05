@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, Storage } from "@matter/main";
+import { Environment, MaybePromise, Storage } from "@matter/main";
 import { ValidationError } from "@matter/main/types";
 import { BackchannelCommand, CommandPipe } from "@matter/testing";
 import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
@@ -175,16 +175,17 @@ export async function startTestApp(
                 runtime.cancel();
                 runtime.inactive
                     .then(() => {
-                        storage
-                            ?.close()
-                            .then(() => {
+                        MaybePromise.then(
+                            storage?.close(),
+                            () => {
                                 console.log(`======> Test instance successfully closed.`);
                                 process.exit(0);
-                            })
-                            .catch(error => {
+                            },
+                            error => {
                                 console.log(error.stack);
                                 process.exit(1);
-                            });
+                            },
+                        );
                     })
                     .catch(error => {
                         console.log(error.stack);

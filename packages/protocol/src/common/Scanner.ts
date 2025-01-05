@@ -158,7 +158,7 @@ export interface Scanner {
     cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise?: boolean): void;
 
     /** Close the scanner server and free resources. */
-    close(): void;
+    close(): Promise<void>;
 }
 
 export class ScannerSet extends BasicSet<Scanner> {

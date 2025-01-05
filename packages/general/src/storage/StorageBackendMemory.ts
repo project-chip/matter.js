@@ -44,7 +44,7 @@ export class StorageBackendMemory extends SyncStorage implements CloneableStorag
         return clone;
     }
 
-    close() {
+    async close() {
         this.isInitialized = false;
         // nothing to do
     }

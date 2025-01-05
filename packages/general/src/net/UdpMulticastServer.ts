@@ -134,8 +134,8 @@ export class UdpMulticastServer {
     }
 
     async close() {
-        this.serverIpv4?.close();
-        this.serverIpv6.close();
+        await this.serverIpv4?.close();
+        await this.serverIpv6.close();
         await this.broadcastChannels.close();
     }
 }
