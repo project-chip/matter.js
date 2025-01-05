@@ -21,8 +21,28 @@ import {
     UINT64_MAX,
     UINT8_MAX,
 } from "#general";
-import * as Elements from "#model";
-import { Model } from "#model";
+import {
+    attribId,
+    clusterId,
+    commandId,
+    devtypeId,
+    endpointNo,
+    epochS,
+    epochUs,
+    eventId,
+    fabricId,
+    fabricIdx,
+    groupId,
+    Model,
+    nodeId,
+    percent,
+    percent100ths,
+    posixMs,
+    subjectId,
+    systimeMs,
+    systimeUs,
+    vendorId,
+} from "#model";
 
 function special(type: string, category: "datatype" | "number" = "datatype") {
     return { type, category };
@@ -32,25 +52,25 @@ function special(type: string, category: "datatype" | "number" = "datatype") {
  * Map of matter datatype names to TlvGenerator.tlvImport arguments.
  */
 export const SpecializedNumbers = {
-    [Elements.attribId.name]: special("TlvAttributeId", "datatype"),
-    [Elements.clusterId.name]: special("TlvClusterId", "datatype"),
-    [Elements.commandId.name]: special("TlvCommandId", "datatype"),
-    [Elements.devtypeId.name]: special("TlvDeviceTypeId", "datatype"),
-    [Elements.endpointNo.name]: special("TlvEndpointNumber", "datatype"),
-    [Elements.eventId.name]: special("TlvEventId", "datatype"),
-    [Elements.fabricId.name]: special("TlvFabricId", "datatype"),
-    [Elements.fabricIdx.name]: special("TlvFabricIndex", "datatype"),
-    [Elements.groupId.name]: special("TlvGroupId", "datatype"),
-    [Elements.nodeId.name]: special("TlvNodeId", "datatype"),
-    [Elements.subjectId.name]: special("TlvSubjectId", "datatype"),
-    [Elements.vendorId.name]: special("TlvVendorId", "datatype"),
-    [Elements.percent.name]: special("TlvPercent", "number"),
-    [Elements.percent100ths.name]: special("TlvPercent100ths", "number"),
-    [Elements.epochUs.name]: special("TlvEpochUs", "number"),
-    [Elements.epochS.name]: special("TlvEpochS", "number"),
-    [Elements.posixMs.name]: special("TlvPosixMs", "number"),
-    [Elements.systimeUs.name]: special("TlvSysTimeUs", "number"),
-    [Elements.systimeMs.name]: special("TlvSysTimeMS", "number"),
+    [attribId.name]: special("TlvAttributeId", "datatype"),
+    [clusterId.name]: special("TlvClusterId", "datatype"),
+    [commandId.name]: special("TlvCommandId", "datatype"),
+    [devtypeId.name]: special("TlvDeviceTypeId", "datatype"),
+    [endpointNo.name]: special("TlvEndpointNumber", "datatype"),
+    [eventId.name]: special("TlvEventId", "datatype"),
+    [fabricId.name]: special("TlvFabricId", "datatype"),
+    [fabricIdx.name]: special("TlvFabricIndex", "datatype"),
+    [groupId.name]: special("TlvGroupId", "datatype"),
+    [nodeId.name]: special("TlvNodeId", "datatype"),
+    [subjectId.name]: special("TlvSubjectId", "datatype"),
+    [vendorId.name]: special("TlvVendorId", "datatype"),
+    [percent.name]: special("TlvPercent", "number"),
+    [percent100ths.name]: special("TlvPercent100ths", "number"),
+    [epochUs.name]: special("TlvEpochUs", "number"),
+    [epochS.name]: special("TlvEpochS", "number"),
+    [posixMs.name]: special("TlvPosixMs", "number"),
+    [systimeUs.name]: special("TlvSysTimeUs", "number"),
+    [systimeMs.name]: special("TlvSysTimeMS", "number"),
 };
 
 /**
