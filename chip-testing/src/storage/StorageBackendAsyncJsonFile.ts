@@ -128,7 +128,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         }
         await this.storeIt(true);
         this.closed = true;
-        this.store.close();
+        await this.store.close();
     }
 
     override async keys(contexts: string[]) {
