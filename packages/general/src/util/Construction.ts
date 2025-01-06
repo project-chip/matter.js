@@ -6,7 +6,7 @@
 
 import { Logger } from "../log/Logger.js";
 import { ImplementationError } from "../MatterError.js";
-import { errorOf } from "./Error.js";
+import { asError, errorOf } from "./Error.js";
 import { CrashedDependenciesError, CrashedDependencyError, Lifecycle } from "./Lifecycle.js";
 import { Observable } from "./Observable.js";
 import { MaybePromise } from "./Promises.js";
@@ -306,8 +306,8 @@ export function Construction<const T extends Constructable>(
         },
 
         then<TResult1 = T, TResult2 = never>(
-            onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+            onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
         ): Promise<TResult1 | TResult2> {
             const handleRejection = onrejected ? () => onrejected?.(crashedError()) as TResult2 : undefined;
             if (status === Lifecycle.Status.Inactive || status === Lifecycle.Status.Initializing) {
@@ -326,7 +326,7 @@ export function Construction<const T extends Constructable>(
         },
 
         catch<TResult = never>(
-            onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+            onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
         ): Promise<T | TResult> {
             return this.then(undefined, onrejected);
         },
@@ -499,8 +499,8 @@ export function Construction<const T extends Constructable>(
                 [Symbol.toStringTag]: "AsyncConstruction#primary",
 
                 then<TResult1 = T, TResult2 = never>(
-                    onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-                    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+                    onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+                    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
                 ): Promise<TResult1 | TResult2> {
                     let rejectionHandler: undefined | typeof onrejected;
                     if (onrejected) {
@@ -512,7 +512,7 @@ export function Construction<const T extends Constructable>(
                 },
 
                 catch<TResult = never>(
-                    onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+                    onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
                 ): Promise<T | TResult> {
                     return this.then(undefined, onrejected);
                 },
@@ -535,8 +535,8 @@ export function Construction<const T extends Constructable>(
                 [Symbol.toStringTag]: "AsyncConstruction#primary",
 
                 then<TResult1 = void, TResult2 = never>(
-                    onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-                    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+                    onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null,
+                    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
                 ): Promise<TResult1 | TResult2> {
                     let rejectionHandler: undefined | typeof onrejected;
                     if (onrejected) {
@@ -548,7 +548,7 @@ export function Construction<const T extends Constructable>(
                 },
 
                 catch<TResult = never>(
-                    onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+                    onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
                 ): Promise<T | TResult> {
                     return this.then(undefined, onrejected);
                 },
@@ -704,7 +704,7 @@ export namespace Construction {
             try {
                 error = onError(crashed);
             } catch (e) {
-                error = e;
+                error = asError(e);
             }
             if (error) {
                 return Promise.reject(error);

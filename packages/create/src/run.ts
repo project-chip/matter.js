@@ -15,7 +15,7 @@ export function run(command: string, args?: string[], options?: SpawnOptions) {
                 ...options,
             });
         } catch (e) {
-            reject(e);
+            reject(e as Error);
             return;
         }
 

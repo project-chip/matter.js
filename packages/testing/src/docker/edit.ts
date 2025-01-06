@@ -57,7 +57,7 @@ async function editLinesOf(container: Container, path: string, edits: edit.LineE
     const input = (await container.read(path)).split("\n");
     const output = Array<string>();
 
-    for await (const line of input) {
+    for (const line of input) {
         if (editor) {
             if (editor.collect(line, output)) {
                 continue;

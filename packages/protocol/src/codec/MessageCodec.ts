@@ -301,7 +301,11 @@ export class MessageCodec {
         writer.writeUInt8(flags);
         writer.writeUInt8(messageType);
         writer.writeUInt16(exchangeId);
-        vendorId !== COMMON_VENDOR_ID ? writer.writeUInt32(protocolId) : writer.writeUInt16(protocolId);
+        if (vendorId !== COMMON_VENDOR_ID) {
+            writer.writeUInt32(protocolId);
+        } else {
+            writer.writeUInt16(protocolId);
+        }
         if (ackedMessageCounter !== undefined) writer.writeUInt32(ackedMessageCounter);
         return writer.toByteArray();
     }

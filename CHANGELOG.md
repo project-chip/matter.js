@@ -17,6 +17,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Optimizes Node shutdown logic to close sessions and subscriptions before shutting down the network
     - Fix: Fixes withBehaviors() method on endpoints
 
+-   @matter/nodejs
+    - Breaking: Also the Sync Storage classes mainly used in legacy API now have an async close method!
+
 -   @matter/nodejs-ble
     - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
     - Fix: Adds support for advanced manufacturer data on Windows (Noble update)

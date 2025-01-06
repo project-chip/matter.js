@@ -45,7 +45,7 @@ export class Spake2p {
     }
 
     static create(context: Uint8Array, w0: bigint) {
-        const random = Crypto.getRandomBigInt(32, P256_CURVE.p);
+        const random = Crypto.getRandomBigInt(32, P256_CURVE.Fp.ORDER);
         return new Spake2p(context, random, w0);
     }
 

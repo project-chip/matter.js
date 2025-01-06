@@ -6,6 +6,7 @@
 
 import { config } from "#config.js";
 import {
+    asError,
     Environment,
     ImplementationError,
     LogFormat,
@@ -154,14 +155,14 @@ export function loadConfigFile(vars: VariableService) {
     try {
         configJson = readFileSync(configPath).toString();
     } catch (e) {
-        throw new ImplementationError(`Error reading configuration file ${configPath}: ${(e as Error).message}`);
+        throw new ImplementationError(`Error reading configuration file ${configPath}: ${asError(e).message}`);
     }
 
     let configVars;
     try {
         configVars = JSON.parse(configJson);
     } catch (e) {
-        throw new ImplementationError(`Error parsing configuration file ${configPath}: ${(e as Error).message}`);
+        throw new ImplementationError(`Error parsing configuration file ${configPath}: ${asError(e).message}`);
     }
 
     return { configPath, configVars };

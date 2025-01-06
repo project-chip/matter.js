@@ -2147,8 +2147,8 @@ describe("Integration Test", () => {
 
         await matterServer.close();
         await matterClient.close();
-        fakeControllerStorage.close();
-        fakeServerStorage.close();
+        await fakeControllerStorage.close();
+        await fakeServerStorage.close();
 
         Time.get = () => mockTimeInstance;
 

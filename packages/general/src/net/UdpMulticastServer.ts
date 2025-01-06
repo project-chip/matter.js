@@ -7,6 +7,7 @@
 import { MatterAggregateError } from "#MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
+import { asError } from "../util/Error.js";
 import { isIPv4 } from "../util/Ip.js";
 import { Network } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
@@ -88,7 +89,7 @@ export class UdpMulticastServer {
                     await this.broadcastChannels.get(netInterface, isIPv4(uniCastTarget))
                 ).send(uniCastTarget, this.broadcastPort, message);
             } catch (error) {
-                logger.info(`${netInterface} ${uniCastTarget}: ${(error as Error).message}`);
+                logger.info(`${netInterface} ${uniCastTarget}: ${asError(error).message}`);
             }
         } else {
             const netInterfaces =
@@ -114,7 +115,7 @@ export class UdpMulticastServer {
                                     await this.broadcastChannels.get(netInterface, iPv4)
                                 ).send(broadcastTarget, this.broadcastPort, message);
                             } catch (error) {
-                                logger.info(`${netInterface}: ${(error as Error).message}`);
+                                logger.info(`${netInterface}: ${asError(error).message}`);
                             }
                         }),
                         `Error sending UDP Multicast message on interface ${netInterface}`,
@@ -134,8 +135,8 @@ export class UdpMulticastServer {
     }
 
     async close() {
-        this.serverIpv4?.close();
-        this.serverIpv6.close();
+        await this.serverIpv4?.close();
+        await this.serverIpv6.close();
         await this.broadcastChannels.close();
     }
 }

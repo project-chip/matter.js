@@ -42,8 +42,8 @@ export class UdpInterface implements NetInterface {
         return this.server.port;
     }
 
-    async close() {
-        this.server.close();
+    close() {
+        return this.server.close();
     }
 }
 

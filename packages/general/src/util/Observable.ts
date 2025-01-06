@@ -7,6 +7,7 @@
 import { ImplementationError } from "../MatterError.js";
 import { Logger } from "../log/Logger.js";
 import "../polyfills/disposable.js";
+import { asError } from "./Error.js";
 import { MaybePromise } from "./Promises.js";
 
 const logger = Logger.get("Observable");
@@ -184,11 +185,7 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
                 try {
                     result = observer(...payload);
                 } catch (e) {
-                    if (e instanceof Error) {
-                        this.#errorHandler(e, observer);
-                    } else {
-                        this.#errorHandler(new Error(`${e}`), observer);
-                    }
+                    this.#errorHandler(asError(e), observer);
                 }
 
                 if (this.#once?.has(observer)) {
@@ -251,8 +248,8 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
     }
 
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
     ): PromiseLike<TResult1 | TResult2> {
         return new Promise<T>(resolve => {
             this.once((...payload): undefined => {

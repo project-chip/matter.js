@@ -5,7 +5,8 @@
  */
 
 import { fromJson, StorageBackendMemory, StorageError, SupportedStorageTypes, Time, toJson } from "#general";
-import { readFile, writeFile } from "fs/promises";
+import { readFileSync } from "fs";
+import { writeFile } from "fs/promises";
 
 export class StorageBackendJsonFile extends StorageBackendMemory {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
@@ -24,15 +25,15 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
 
     static override async create(path: string) {
         const storage = new this(path);
-        await storage.initialize();
+        storage.initialize();
         return storage;
     }
 
-    override async initialize() {
+    override initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
         super.initialize();
         try {
-            this.store = this.fromJson(await readFile(this.path, "utf-8"));
+            this.store = this.fromJson(readFileSync(this.path, "utf-8"));
         } catch (error: any) {
             // We accept that the file does not exist yet to initialize with an empty store.
             if (error.code !== "ENOENT") {
@@ -87,7 +88,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     override async close() {
         this.commitTimer.stop();
         await this.commit();
-        super.close();
+        await super.close();
         this.closed = true;
         this.isInitialized = false;
     }

@@ -213,7 +213,7 @@ describe("BridgedNodeEndpointTest", () => {
             store.initialize();
             expect(store.get(["root"], "__nextNumber__")).equals(6);
             store.delete(["root"], "__nextNumber__");
-            store.close();
+            await store.close();
 
             // Initialize second bridge with same storage
             const bridge2 = await createBridge(AggregatorEndpoint, { environment });

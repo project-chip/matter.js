@@ -31,7 +31,7 @@ Object.assign(globalThis, {
     MockLogger: TheMockLogger,
 });
 
-if (typeof window === "object" && globalThis === window) {
+if (globalThis === (globalThis as any).window) {
     extendApi(Mocha);
     generalSetup(mocha);
     browserSetup(mocha);
