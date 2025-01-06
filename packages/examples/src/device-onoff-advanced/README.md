@@ -11,10 +11,34 @@ This example shows how to build a simple Device node with just one socket or lig
 
 For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
 
-The CLI parameter are else documented at the [Device Node Readme](../device-onoff-cli/README.md).
+The CLI parameter are else documented at the [Device Node Readme](../device-onoff/README.md).
 
 This example is not exposed as npm script so starting requires to run the ts file or the build file.
 
 ```bash
 node .dist/examples/device-onoff-advanced-cli/DeviceNodeFull.js
 ```
+
+## How to test BLE commissioning
+For this to work you first of all need to enable BLE by using `--ble-enable` to enable the BLE only commissioning. The device simulates that it is not on any IP network for the start.
+Please also make sure you follow the [BLE enablement steps for your operating system](../../../nodejs-ble/README.md#prerequisites-and-limitations).
+
+The following parameters are available:
+* --ble-enable: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
+* --ble-hci-id=...: Optionally, HCI ID to use (Linux only, default 0)
+
+Additionally, you need to choose if the device should simulate a Thread or a Wifi enabled device. This can be done by adding `--ble-fake-wifi` or `--ble-fake-thread` to the command line. Then a dummy WifiNetworkCommissioning or ThreadNetworkCommissioning cluster is added to the device node.
+
+Depending on the method you chose you probably need to also add additional parameters for either Wifi or thread which are returned when the device is asked to scn for available networks.
+
+For Wifi the parameters to use are:
+* --ble-wifi-scanSsid=...: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
+* --ble-wifi-scanBssid=...: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
+
+For Thread the parameters to use are:
+* --ble.thread.panId=...: The PAN ID to use for the Thread network
+* --ble.thread.extendedPanId=...: The extended PAN ID to use for the Thread network
+* --ble.thread.networkName=...: The network name to use for the Thread network
+* --ble.thread.channel=...: The channel to use for the Thread network
+* --ble.thread.address=...: The address to use for the Thread network
+Thread parameters are as of now only needed when commissioning with Amazon because the others are currently not scanning for Thread networks.

@@ -67,16 +67,20 @@ function logGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<a
             break;
         case TlvType.Array:
         case TlvType.List:
-            tag?.id !== undefined
-                ? logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type])
-                : logger.info(TlvTypeNames[type]);
+            if (tag?.id !== undefined) {
+                logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type]);
+            } else {
+                logger.info(TlvTypeNames[type]);
+            }
             Logger.nest(() => logGenericArrayOrList(reader, type === TlvType.List));
             logger.info(TlvTypeNames[TlvType.EndOfContainer]);
             break;
         case TlvType.Structure:
-            tag?.id !== undefined
-                ? logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type])
-                : logger.info(TlvTypeNames[type]);
+            if (tag?.id !== undefined) {
+                logger.info(`${tag.id}/0x${tag.id.toString(16)} => `, TlvTypeNames[type]);
+            } else {
+                logger.info(TlvTypeNames[type]);
+            }
             Logger.nest(() => logGenericStructure(reader));
             logger.info(TlvTypeNames[TlvType.EndOfContainer]);
             break;

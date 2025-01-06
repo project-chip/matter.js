@@ -23,7 +23,7 @@ describe("Storage in JSON File", () => {
 
     it("write and read success", async () => {
         const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-        await storage.initialize();
+        storage.initialize();
 
         storage.set(["context"], "key", "value");
 
@@ -35,7 +35,7 @@ describe("Storage in JSON File", () => {
         await storage.committed;
 
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-        await storageRead.initialize();
+        storageRead.initialize();
 
         const valueRead = storage.get(["context"], "key");
         assert.equal(valueRead, "value");

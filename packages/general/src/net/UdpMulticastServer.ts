@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterAggregateError } from "#MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
+import { asError } from "../util/Error.js";
 import { isIPv4 } from "../util/Ip.js";
 import { Network } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
@@ -87,12 +89,12 @@ export class UdpMulticastServer {
                     await this.broadcastChannels.get(netInterface, isIPv4(uniCastTarget))
                 ).send(uniCastTarget, this.broadcastPort, message);
             } catch (error) {
-                logger.info(`${netInterface} ${uniCastTarget}: ${(error as Error).message}`);
+                logger.info(`${netInterface} ${uniCastTarget}: ${asError(error).message}`);
             }
         } else {
             const netInterfaces =
                 netInterface !== undefined ? [{ name: netInterface }] : await this.network.getNetInterfaces();
-            await Promise.all(
+            await MatterAggregateError.allSettled(
                 netInterfaces.map(async ({ name: netInterface }) => {
                     const { ipV4, ipV6 } = (await this.network.getIpMac(netInterface)) ?? {
                         mac: "",
@@ -100,7 +102,7 @@ export class UdpMulticastServer {
                         ipV6: [],
                     };
                     const ips = [...ipV4, ...ipV6];
-                    await Promise.all(
+                    await MatterAggregateError.allSettled(
                         ips.map(async ip => {
                             const iPv4 = ipV4.includes(ip);
                             const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
@@ -113,11 +115,13 @@ export class UdpMulticastServer {
                                     await this.broadcastChannels.get(netInterface, iPv4)
                                 ).send(broadcastTarget, this.broadcastPort, message);
                             } catch (error) {
-                                logger.info(`${netInterface}: ${(error as Error).message}`);
+                                logger.info(`${netInterface}: ${asError(error).message}`);
                             }
                         }),
+                        `Error sending UDP Multicast message on interface ${netInterface}`,
                     );
                 }),
+                "Error sending UDP Multicast message",
             );
         }
     }
@@ -131,8 +135,8 @@ export class UdpMulticastServer {
     }
 
     async close() {
-        this.serverIpv4?.close();
-        this.serverIpv6.close();
+        await this.serverIpv4?.close();
+        await this.serverIpv6.close();
         await this.broadcastChannels.close();
     }
 }

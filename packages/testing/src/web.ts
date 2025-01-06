@@ -28,7 +28,7 @@ export async function testWeb(runner: TestRunner, manual: boolean) {
                 .get("/", (_, res) => res.send(buildIndex(bundlePath)))
                 .listen(0, "localhost", () => resolve(server));
         } catch (e) {
-            reject(e);
+            reject(e as Error);
         }
     });
 
@@ -54,7 +54,7 @@ export async function testWeb(runner: TestRunner, manual: boolean) {
                     });
                 })
                 .catch(error => {
-                    reject(error);
+                    reject(error as Error);
                 });
         }
     });

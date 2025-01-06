@@ -50,7 +50,7 @@ class MockEndpointStore extends EndpointStore {
 }
 
 class MockEndpointStoreService extends EndpointStoreService {
-    #stores = Array<MockEndpointStore>();
+    #stores = new Map<EndpointNumber, MockEndpointStore>();
     #nextNumber = 1;
 
     assignNumber(endpoint: Endpoint<EndpointType.Empty>): void {
@@ -58,17 +58,15 @@ class MockEndpointStoreService extends EndpointStoreService {
     }
 
     storeForEndpoint(endpoint: Endpoint<EndpointType.Empty>): EndpointStore {
-        if (this.#stores[endpoint.number]) {
-            return this.#stores[endpoint.number];
-        }
-
-        return (this.#stores[endpoint.number] = new MockEndpointStore(endpoint));
+        const store = this.#stores.get(endpoint.number) ?? new MockEndpointStore(endpoint);
+        this.#stores.set(endpoint.number, store);
+        return store;
     }
 
     deactivateStoreForEndpoint(_endpoint: Endpoint<EndpointType.Empty>) {}
 
     async eraseStoreForEndpoint(endpoint: Endpoint<EndpointType.Empty>) {
-        delete this.#stores[endpoint.number];
+        this.#stores.delete(endpoint.number);
     }
 }
 

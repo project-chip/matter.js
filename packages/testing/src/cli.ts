@@ -80,10 +80,10 @@ export async function main(argv = process.argv) {
         packageLocation = firstSpec;
     }
 
-    // If the location is a workspace, test all packages with test
     const builder = new Builder();
     const pkg = new Package({ path: packageLocation });
 
+    // If the location is a workspace, test all packages with test
     if (pkg.isWorkspace) {
         const graph = await Graph.load(pkg);
         await graph.build(builder, false);
@@ -97,7 +97,7 @@ export async function main(argv = process.argv) {
                 continue;
             }
 
-            await test(node.pkg);
+            await test(node.pkg, true);
         }
     } else {
         const graph = await Graph.forProject(pkg.path);
@@ -111,12 +111,12 @@ export async function main(argv = process.argv) {
             clear();
         }
 
-        await test(pkg);
+        await test(pkg, false);
     }
 
     await chip.close();
 
-    async function test(pkg: Package) {
+    async function test(pkg: Package, detectWeb: boolean) {
         process.chdir(pkg.path);
 
         if (ls) {
@@ -128,30 +128,31 @@ export async function main(argv = process.argv) {
         }
 
         // If no test types are specified explicitly, run all enabled types
-        if (!testTypes.size) {
+        const thisTestTypes = new Set(testTypes);
+        if (!thisTestTypes.size) {
             if (pkg.supportsEsm) {
-                testTypes.add(TestType.esm);
+                thisTestTypes.add(TestType.esm);
             }
             if (pkg.supportsCjs) {
-                testTypes.add(TestType.cjs);
+                thisTestTypes.add(TestType.cjs);
             }
-            if (args.web) {
-                testTypes.add(TestType.web);
+            if (args.web && (!detectWeb || supportsWebTests(pkg))) {
+                thisTestTypes.add(TestType.web);
             }
         }
 
         const progress = pkg.start("Testing");
         const runner = new TestRunner(pkg, progress, args);
 
-        if (testTypes.has(TestType.esm)) {
+        if (thisTestTypes.has(TestType.esm)) {
             await runner.runNode("esm");
         }
 
-        if (testTypes.has(TestType.cjs)) {
+        if (thisTestTypes.has(TestType.cjs)) {
             await runner.runNode("cjs");
         }
 
-        if (testTypes.has(TestType.web)) {
+        if (thisTestTypes.has(TestType.web)) {
             await runner.runWeb(manual);
         }
 
@@ -161,4 +162,12 @@ export async function main(argv = process.argv) {
             process.exit(0);
         }
     }
+}
+
+function supportsWebTests(pkg: Package) {
+    const testScript = pkg.json?.scripts?.test;
+    if (typeof testScript !== "string") {
+        return false;
+    }
+    return testScript.split(" ").includes("-w");
 }

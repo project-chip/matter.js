@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError, UnexpectedDataError } from "#general";
+import { Diagnostic, MatterError, UnexpectedDataError } from "#general";
 import {
     GeneralStatusCode,
     ProtocolStatusCode,
@@ -43,17 +43,35 @@ export class SecureChannelMessenger {
         this.#defaultExpectedProcessingTimeMs = defaultExpectedProcessingTimeMs;
     }
 
+    async nextMessage(
+        expectedMessageType: number,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+        expectedMessageInfo?: string,
+    ) {
+        return this.#nextMessage(expectedMessageType, expectedProcessingTimeMs, expectedMessageInfo);
+    }
+
+    async anyNextMessage(
+        expectedMessageInfo: string,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+    ) {
+        return this.#nextMessage(undefined, expectedProcessingTimeMs, expectedMessageInfo);
+    }
+
     /**
      * Waits for the next message and returns it.
      * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
      */
-    async nextMessage(
-        expectedMessageInfo: string,
+    async #nextMessage(
         expectedMessageType?: number,
         expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+        expectedMessageInfo?: string,
     ) {
-        const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
+        const message = await this.exchange.nextMessage({ expectedProcessingTimeMs });
         const messageType = message.payloadHeader.messageType;
+        if (expectedMessageType !== undefined && expectedMessageInfo === undefined) {
+            expectedMessageInfo = SecureMessageType[expectedMessageType];
+        }
         this.throwIfErrorStatusReport(message, expectedMessageInfo);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType)
             throw new UnexpectedDataError(
@@ -69,12 +87,9 @@ export class SecureChannelMessenger {
     async nextMessageDecoded<T>(
         expectedMessageType: number,
         schema: TlvSchema<T>,
-        expectedMessageInfo: string,
         expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
     ) {
-        return schema.decode(
-            (await this.nextMessage(expectedMessageInfo, expectedMessageType, expectedProcessingTimeMs)).payload,
-        );
+        return schema.decode((await this.nextMessage(expectedMessageType, expectedProcessingTimeMs)).payload);
     }
 
     /**
@@ -86,7 +101,7 @@ export class SecureChannelMessenger {
         expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
     ) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(expectedMessageInfo, SecureMessageType.StatusReport, expectedProcessingTimeMs);
+        await this.nextMessage(SecureMessageType.StatusReport, expectedProcessingTimeMs, expectedMessageInfo);
     }
 
     /**
@@ -136,7 +151,13 @@ export class SecureChannelMessenger {
                 protocolId: SECURE_CHANNEL_PROTOCOL_ID,
                 protocolStatus,
             }),
-            { requiresAck },
+            {
+                requiresAck,
+                logContext: {
+                    generalStatus: GeneralStatusCode[generalStatus] ?? Diagnostic.hex(generalStatus),
+                    protocolStatus: ProtocolStatusCode[protocolStatus] ?? Diagnostic.hex(protocolStatus),
+                },
+            },
         );
     }
 

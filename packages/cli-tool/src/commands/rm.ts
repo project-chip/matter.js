@@ -10,11 +10,12 @@ import { Command } from "./command.js";
 Command({
     usage: "[PATH]...",
     description: "Deletes the properties at the paths you specify.",
+    restArgs: { name: "path", description: "path to remove", type: "string" },
 
-    invoke: async function rm(...args: unknown[]) {
+    invoke: async function rm(args) {
         const toDelete = Array<Location>();
 
-        for (const path of args) {
+        for (const path of args._) {
             const location = await this.location.at(`${path}`);
             if (!location.parent) {
                 this.err(`Invalid argument: Can't delete ${location.path}`);

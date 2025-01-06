@@ -30,8 +30,6 @@
                 "extendDefaults": true
             }
         ],
-        // turn on errors for missing imports
-        "import/no-unresolved": "error",
 
         "@typescript-eslint/require-await": "off",
 

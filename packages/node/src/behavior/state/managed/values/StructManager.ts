@@ -5,17 +5,18 @@
  */
 
 import { camelize, GeneratedClass, ImplementationError, isObject } from "#general";
-import { Access, ElementTag, Metatype, ValueModel } from "#model";
+import { Access, ElementTag, FieldValue, Metatype, ValueModel } from "#model";
 import { FabricIndex } from "#types";
 import { AccessControl } from "../../../AccessControl.js";
 import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
-import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import type { Schema } from "../../../supervision/Schema.js";
+import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
+import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { Val } from "../../Val.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";
 import { ManagedReference } from "../ManagedReference.js";
+import { NameResolver } from "../NameResolver.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 
 const SESSION = Symbol("options");
@@ -152,13 +153,21 @@ interface Wrapper extends Val.Struct, Internal.Collection {
     [AUTHORIZE_READ]: (index: string) => void;
 }
 
-function configureProperty(manager: RootSupervisor, schema: ValueModel) {
+function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
 
-    const { access, manage, validate } = manager.get(schema);
+    const { access, manage, validate } = supervisor.get(schema);
 
     const fabricScopedList =
         schema.effectiveAccess.fabric === Access.Fabric.Scoped && schema.effectiveMetatype === Metatype.array;
+
+    // We generally do not deal with default values.  If the schema defines a default it is assigned before the manager
+    // is created.  The one exception is for field references.  These we must look up dynamically at runtime because the
+    // value should always track the referenced value
+    let defaultReader: ((val: Val) => Val) | undefined;
+    if (typeof FieldValue.referenced(schema.default) === "string") {
+        defaultReader = NameResolver(supervisor, schema.parent, camelize(FieldValue.referenced(schema.default)!));
+    }
 
     const descriptor: PropertyDescriptor = {
         enumerable: true,
@@ -296,15 +305,15 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 value = struct[name];
             }
 
-            if (value === undefined) {
-                return;
-            }
-
             // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
             // visible.  For direct access to a property we should throw an error but that must be implemented at a
             // higher level because we cannot differentiate here
             if (!access.mayRead(this[SESSION], this[Internal.reference].location)) {
                 return undefined;
+            }
+
+            if (value === undefined) {
+                return defaultReader?.(this);
             }
 
             if (value === null) {

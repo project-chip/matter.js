@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
+import { Diagnostic, Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
 import { Specification } from "#model";
 import {
     Status,
@@ -85,22 +85,64 @@ class InteractionMessenger {
         return this.send(
             MessageType.StatusResponse,
             TlvStatusResponse.encode({ status, interactionModelRevision: Specification.INTERACTION_MODEL_REVISION }),
-            options,
+            {
+                ...options,
+                logContext: {
+                    for: options?.logContext?.for ? `I/Status-${options?.logContext?.for}` : undefined,
+                    status: `${StatusCode[status] ?? "unknown"}(${Diagnostic.hex(status)})`,
+                    ...options?.logContext,
+                },
+            },
         );
     }
 
-    async waitForSuccess(expectedProcessingTimeMs?: number) {
+    async waitForSuccess(
+        expectedMessageInfo: string,
+        options?: { expectedProcessingTimeMs?: number; timeoutMs?: number },
+    ) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(MessageType.StatusResponse, expectedProcessingTimeMs);
+        await this.nextMessage(MessageType.StatusResponse, options, `Success-${expectedMessageInfo}`);
     }
 
-    async nextMessage(expectedMessageType?: number, expectedProcessingTimeMs?: number) {
-        const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
+    async nextMessage(
+        expectedMessageType: number,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+        expectedMessageInfo?: string,
+    ) {
+        return this.#nextMessage(expectedMessageType, options, expectedMessageInfo);
+    }
+
+    async anyNextMessage(
+        expectedMessageInfo: string,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+    ) {
+        return this.#nextMessage(undefined, options, expectedMessageInfo);
+    }
+
+    async #nextMessage(
+        expectedMessageType?: number,
+        options?: {
+            expectedProcessingTimeMs?: number;
+            timeoutMs?: number;
+        },
+        expectedMessageInfo?: string,
+    ) {
+        const { expectedProcessingTimeMs, timeoutMs } = options ?? {};
+        const message = await this.exchange.nextMessage({ expectedProcessingTimeMs, timeoutMs });
         const messageType = message.payloadHeader.messageType;
-        this.throwIfErrorStatusMessage(message);
+        if (expectedMessageType !== undefined && expectedMessageInfo === undefined) {
+            expectedMessageInfo = MessageType[expectedMessageType];
+        }
+        this.throwIfErrorStatusMessage(message, expectedMessageInfo);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType) {
             throw new UnexpectedDataError(
-                `Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`,
+                `Received unexpected message for ${expectedMessageInfo} type: ${messageType}, expected: ${expectedMessageType}`,
             );
         }
         return message;
@@ -110,7 +152,7 @@ class InteractionMessenger {
         await this.exchange.close();
     }
 
-    protected throwIfErrorStatusMessage(message: Message) {
+    protected throwIfErrorStatusMessage(message: Message, logHint?: string) {
         const {
             payloadHeader: { messageType },
             payload,
@@ -118,7 +160,8 @@ class InteractionMessenger {
 
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
-        if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
+        if (status !== StatusCode.Success)
+            throw new StatusResponseError(`Received error status: ${status}${logHint ? ` (${logHint})` : ""}`, status);
     }
 
     getExchangeChannelName() {
@@ -193,7 +236,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
                         recipient.handleTimedRequest(this.exchange, timedRequest, message);
-                        await this.sendStatus(StatusCode.Success);
+                        await this.sendStatus(StatusCode.Success, {
+                            logContext: { for: "TimedRequest" },
+                        });
                         continueExchange = true;
                         break;
                     }
@@ -226,7 +271,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
      * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean) {
+    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean, waitForAck = true) {
         const {
             subscriptionId,
             attributeReportsPayload,
@@ -255,7 +300,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
             let firstAttributeAddedToReportMessage = false;
             let firstEventAddedToReportMessage = false;
             const sendAndResetReport = async () => {
-                await this.sendDataReportMessage(dataReport);
+                await this.sendDataReportMessage(dataReport, waitForAck);
                 dataReport.attributeReports = undefined;
                 dataReport.eventReports = undefined;
                 messageSize = emptyDataReportBytes.length;
@@ -321,10 +366,10 @@ export class InteractionServerMessenger extends InteractionMessenger {
             }
         }
 
-        await this.sendDataReportMessage(dataReport);
+        await this.sendDataReportMessage(dataReport, waitForAck);
     }
 
-    async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>) {
+    async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>, waitForAck = true) {
         const dataReportToSend = {
             ...dataReport,
             suppressResponse: dataReport.moreChunkedMessages ? false : dataReport.suppressResponse, // always false when moreChunkedMessages is true
@@ -337,17 +382,25 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 )}`,
             );
         }
-        logger.debug(
-            `Sending DataReport chunk with ${dataReportToSend.attributeReports?.length ?? 0} attributes and ${
-                dataReportToSend.eventReports?.length ?? 0
-            } events: ${encodedMessage.length} bytes (moreChunkedMessages: ${dataReportToSend.moreChunkedMessages ?? false}, suppressResponse: ${dataReportToSend.suppressResponse})`,
-        );
+
+        const logContext = {
+            subId: dataReportToSend.subscriptionId,
+            interactionFlags: Diagnostic.asFlags({
+                empty: !dataReportToSend.attributeReports?.length && !dataReportToSend.eventReports?.length,
+                suppressResponse: dataReportToSend.suppressResponse,
+                moreChunkedMessages: dataReportToSend.moreChunkedMessages,
+            }),
+            attr: dataReportToSend.attributeReports?.length,
+            ev: dataReportToSend.eventReports?.length,
+        };
 
         if (dataReportToSend.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             try {
                 await this.exchange.send(MessageType.ReportData, encodedMessage, {
                     expectAckOnly: true,
+                    disableMrpLogic: !waitForAck,
+                    logContext,
                 });
             } catch (e) {
                 UnexpectedMessageError.accept(e);
@@ -356,15 +409,19 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 this.throwIfErrorStatusMessage(receivedMessage);
             }
         } else {
-            await this.exchange.send(MessageType.ReportData, encodedMessage);
-            await this.waitForSuccess();
+            await this.exchange.send(MessageType.ReportData, encodedMessage, {
+                disableMrpLogic: !waitForAck,
+                logContext,
+            });
+            // We wait for a Success Message - when we don't request an Ack only wait 500ms
+            await this.waitForSuccess("DataReport", { timeoutMs: waitForAck ? undefined : 500 });
         }
     }
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
-    async waitFor(messageType: number, timeoutMs?: number) {
-        const message = await this.nextMessage(timeoutMs);
+    async waitFor(expectedMessageInfo: string, messageType: number, timeoutMs?: number) {
+        const message = await this.anyNextMessage(expectedMessageInfo, { timeoutMs });
         const {
             payloadHeader: { messageType: receivedMessageType },
         } = message;
@@ -389,11 +446,16 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
 
         while (true) {
-            const dataReportMessage = await this.waitFor(MessageType.ReportData);
+            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
-                    await this.sendStatus(StatusCode.InvalidSubscription, { multipleMessageInteraction: true });
+                    await this.sendStatus(StatusCode.InvalidSubscription, {
+                        multipleMessageInteraction: true,
+                        logContext: {
+                            subId: report.subscriptionId,
+                        },
+                    });
                     throw new UnexpectedDataError(
                         report.subscriptionId === undefined
                             ? "Invalid Data report without Subscription ID"
@@ -411,9 +473,16 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
-            logger.debug(
-                `Received DataReport chunk with ${report.attributeReports?.length ?? 0} attributes and ${report.eventReports?.length ?? 0} events, suppressResponse: ${report.suppressResponse}, moreChunkedMessages: ${report.moreChunkedMessages}${report.subscriptionId !== undefined ? `, subscriptionId: ${report.subscriptionId}` : ""}`,
-            );
+            const logContext = {
+                subId: report.subscriptionId,
+                dataReportFlags: Diagnostic.asFlags({
+                    empty: !report.attributeReports?.length && !report.eventReports?.length,
+                    suppressResponse: report.suppressResponse,
+                    moreChunkedMessages: report.moreChunkedMessages,
+                }),
+                attr: report.attributeReports?.length,
+                ev: report.eventReports?.length,
+            };
 
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
                 attributeValues.push(...report.attributeReports);
@@ -423,11 +492,17 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
             }
 
             if (report.moreChunkedMessages) {
-                await this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true });
+                await this.sendStatus(StatusCode.Success, {
+                    multipleMessageInteraction: true,
+                    logContext,
+                });
             } else if (!report.suppressResponse) {
                 // We received the last message and need to send a final Success, but we do not need to wait for it and
                 // also don't care if it fails
-                this.sendStatus(StatusCode.Success, { multipleMessageInteraction: true }).catch(error =>
+                this.sendStatus(StatusCode.Success, {
+                    multipleMessageInteraction: true,
+                    logContext,
+                }).catch(error =>
                     logger.info("Error while sending final Success after receiving all DataReport chunks", error),
                 );
             }
@@ -619,6 +694,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: true,
             expectedProcessingTimeMs,
+            logContext: {
+                invokeFlags: Diagnostic.asFlags({
+                    suppressResponse: true,
+                }),
+            },
         });
     }
 
@@ -634,7 +714,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             expectAckOnly: false,
             expectedProcessingTimeMs,
         });
-        const responseMessage = await this.nextMessage(responseMessageType, expectedProcessingTimeMs);
+        const responseMessage = await this.nextMessage(
+            responseMessageType,
+            { expectedProcessingTimeMs },
+            MessageType[responseMessageType] ?? `Response-${Diagnostic.hex(responseMessageType)}`,
+        );
         return responseSchema.decode(responseMessage.payload);
     }
 }

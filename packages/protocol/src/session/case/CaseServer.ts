@@ -130,7 +130,7 @@ export class CaseServer implements ProtocolHandler {
             }
 
             logger.info(
-                `session ${secureSession.id} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                `Session ${secureSession.id} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
                 "with CATs",
@@ -139,7 +139,7 @@ export class CaseServer implements ProtocolHandler {
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
             // Wait for success on the peer side
-            await messenger.waitForSuccess("Success after CASE Sigma2Resume");
+            await messenger.waitForSuccess("Sigma2Resume-Success");
 
             await messenger.close();
             await this.#sessions.saveResumptionRecord(resumptionRecord);

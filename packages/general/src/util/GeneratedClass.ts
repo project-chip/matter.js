@@ -117,6 +117,7 @@ interface ConstructorOptions {
 function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
     // CJS Transpilation renames this symbol so bring it local to access
     const _InternalError = InternalError;
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     _InternalError;
 
     // Have to use eval if we don't want every class to be called "GeneratedClass" in the debugger but we can ensure

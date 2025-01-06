@@ -78,5 +78,5 @@ function ListCaster(schema: ValueModel, owner: RootSupervisor) {
     const castToArray = Metatype.cast.array;
     const castEntry = owner.get(entry).cast;
 
-    return (value: any) => castToArray(value).map(castEntry);
+    return (value: any) => castToArray(value)?.map(castEntry);
 }

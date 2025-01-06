@@ -256,7 +256,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         }
 
         const values = translateRecordsToMatter("feature", records, FieldElement);
-        values &&
+        if (values) {
             children.push({
                 tag: FeatureMap.tag,
                 id: FeatureMap.id,
@@ -265,6 +265,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
                 children: values,
                 xref: definition.features?.xref,
             });
+        }
     }
 }
 
@@ -329,7 +330,9 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
 
             return CommandElement({ ...r, response, direction });
         });
-        commands && children.push(...commands);
+        if (commands) {
+            children.push(...commands);
+        }
     }
 
     function translateEvents() {
@@ -368,7 +371,9 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             }
             return EventElement({ ...r, priority });
         });
-        events && children.push(...events);
+        if (events) {
+            children.push(...events);
+        }
     }
 
     function translatePre13StatusCodes() {
@@ -378,7 +383,9 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             details: Alias(Str, "summary"),
         });
         const statusCodes = translateRecordsToMatter("statusCodes", records, FieldElement);
-        statusCodes && children.push(DatatypeElement({ name: "StatusCodeEnum", children: statusCodes }));
+        if (statusCodes) {
+            children.push(DatatypeElement({ name: "StatusCodeEnum", children: statusCodes }));
+        }
     }
 }
 

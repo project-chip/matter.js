@@ -44,7 +44,7 @@ export namespace Specification {
     /**
      * Matter specification version.
      */
-    export type Revision = `${number}.${number}`;
+    export type Revision = `${number}.${number}` | `${number}.${number}.${number}.${number}`;
 
     /**
      * The default specification revision for Matter.js.

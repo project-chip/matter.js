@@ -111,8 +111,8 @@ const NODE_ID = NodeId(BigInt(1));
         afterEach(async () => {
             await broadcaster.close();
             await scanner.close();
-            scannerChannel.close();
-            broadcasterChannel.close();
+            await scannerChannel.close();
+            await broadcasterChannel.close();
         });
 
         const processRecordExpiry = async (port: number) => {
@@ -126,6 +126,7 @@ const NODE_ID = NodeId(BigInt(1));
             await MockTime.advance(150);
             await MockTime.yield3();
             await MockTime.yield3();
+            await MockTime.advance(150);
             await promise;
         };
 

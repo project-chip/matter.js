@@ -12,23 +12,36 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 
 -   @matter/node
-    - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
+    - Feature: Constraint and conformance expressions may now reference values by name in any owner of a constrained value
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
+    - Enhancement: Optimizes Node shutdown logic to close sessions and subscriptions before shutting down the network
     - Fix: Fixes withBehaviors() method on endpoints
 
+-   @matter/nodejs
+    - Breaking: Also the Sync Storage classes mainly used in legacy API now have an async close method!
+
 -   @matter/nodejs-ble
+    - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
     - Fix: Adds support for advanced manufacturer data on Windows (Noble update)
     
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
+    - Enhancement: Optimized Logging for messages in various places
+    - Enhancement: Added support for concurrent and non-concurrent commissioning flows
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
     - Fix: Prevents multi message interactions from trying to continue on new exchange
     - Fix: Fixes the timed node polling during discovery
     - Fix: Fixes commissionable devices discovery with timeout
-    - FIx: Restores the possibility to cancel a (continuous) discovery for commissionable devices
+    - Fix: Restores the possibility to cancel a (continuous) discovery for commissionable devices
+    - Fix: Fixes enablement of MDNS broadcasts when BLE commissioning is used
+
+-   @matter/model
+    - Feature: The constraint evaluator now supports simple mathematical expressions
+    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
+    - Feature: Default values may now be a reference to another field
 
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
@@ -37,17 +50,19 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
     - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
+    - Enhancement: Added `remove*Listener()` to ClusterClient objects to remove listeners added with `add*Listener()` or `subscribe*()` (The subscription is not cleared!)
+    - Fix: When a paired node gets disconnected (or decommissioned) invalidate subscription handlers to prevent reconnection tries
 
 ## 0.11.9 (2024-12-11)
 
 -   @matter/node
+    - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
     - Enhancement: Enhances the number assertations to only allow finite numbers
     - Enhancement: WindowCovering: Adds an internal property to disable the operational state and value management by the default implementation to allow device to handle this themselves
-    - BREAKING: WindowCovering: supportsCalibration is moved from state property to an internal property
-    - Fix: ColorControl: Do not try to convert color mode details if they are not defined
-    - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
     - Enhancement: EventsBehavior allows for configuration of event buffering
     - Enhancement: Matter protocol initialization now runs independently of and after behavior initialization, giving behaviors more flexibility in participating in protocol setup
+    - Fix: ColorControl: Do not try to convert color mode details if they are not defined
+    - Fix: ColorControl: colorMode attribute needs to be defined if HS feature is not used because the default value 0 is else invalid
 
 -   @matter/protocol
     - Fix: Also retry next discovered address when a Channel establishment error for PASE occurs
@@ -58,18 +73,18 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Removes default value from attribute ColorMode of ColorControl cluster because feature specific enum value was used
 
 -   @project-chip/matter.js
+    - BREAKING: In `ContentLauncher` cluster `ParameterEnum` is renamed to `Parameter` and `Parameter` is renamed to `ParameterStruct`
     - Feature: Introduces PairedNode#triggerReconnect() method to trigger a reconnection
     - Enhancement: Considers a node in reconnection state that should be decommissioned as already factory reset
     - Enhancement: Optimizes reconnection handling in Controller API
     - Fix: Do not try to convert color mode details if they are not defined
     - Fix: Clusters generated for extensions of base clusters such as Alarm Base and Mode Base now include full details of extended types; in particular extended enums such as Mode Tag were previously insufficiently defined
-    - BREAKING: In `ContentLauncher` cluster `ParameterEnum` is renamed to `Parameter` and `Parameter` is renamed to `ParameterStruct`
 
 -   @matter/model
+    - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
     - Feature: New `Scope` component analyzes scope of a model, caches analysis results, and implements algorithms that require analysis to perform efficiently
     - Enhancement: Models that define datatypes now inherit from common `ScopeModel` base class
     - Fix: Extended enums and other types now report the full set of members via `Scope#membersOf`
-    - BREAKING: `ClusterModel` and `ValueModel` properties `members`, `activeMembers` and `conformantMembers` are removed; use `Scope#membersOf` instead
 
 -   @matter/protocol
     - Feature: The algorithm that chooses event occurrences to discard when the buffer overflows is now smarter and configurable

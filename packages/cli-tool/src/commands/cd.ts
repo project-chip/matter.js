@@ -11,8 +11,9 @@ Command({
     usage: "[PATH]",
     description: "Change current working directory.  If you omit PATH changes to the last node entered.",
     maxArgs: 1,
+    positionalArgs: [{ name: "path", description: "directory to enter", type: "string" }],
 
-    invoke: async function cd([path]) {
+    invoke: async function cd({ path }) {
         if (path === undefined) {
             path = this.env.vars.get("home", "/");
         } else {

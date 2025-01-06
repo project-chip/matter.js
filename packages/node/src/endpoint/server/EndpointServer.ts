@@ -36,9 +36,11 @@ export class EndpointServer implements EndpointInterface {
     constructor(endpoint: Endpoint) {
         // Sanity checks
         if ((endpoint as ServerEndpoint)[SERVER] !== undefined) {
-            throw new InternalError(`Endpoint ${endpoint} cluster server is already initialized`);
+            throw new InternalError(`Server creation attempted on ${endpoint} that is already served`);
         }
-        endpoint.construction.assert();
+        if (!endpoint.lifecycle.isReady) {
+            throw new InternalError(`Server creation attempted before ${endpoint} is ready`);
+        }
 
         this.#endpoint = endpoint;
         this.#name = endpoint.type.name;
@@ -95,7 +97,9 @@ export class EndpointServer implements EndpointInterface {
     getChildEndpoints(): EndpointInterface[] {
         if (this.#endpoint.hasParts) {
             const parts = this.#endpoint.parts;
-            return [...parts].map(endpoint => EndpointServer.forEndpoint(endpoint));
+            return [...parts]
+                .filter(endpoint => endpoint.lifecycle.isReady)
+                .map(endpoint => EndpointServer.forEndpoint(endpoint));
         }
         return [];
     }

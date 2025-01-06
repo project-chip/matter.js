@@ -1206,27 +1206,30 @@ export class MdnsScanner implements Scanner {
     }
 
     static discoveryDataDiagnostics(data: DiscoveryData) {
-        return Diagnostic.dict({
-            SII: data.SII,
-            SAI: data.SAI,
-            SAT: data.SAT,
-            T: data.T,
-            DT: data.DT,
-            PH: data.PH,
-            ICD: data.ICD,
-            VP: data.VP,
-            DN: data.DN,
-            RI: data.RI,
-            PI: data.PI,
-        });
+        return Diagnostic.dict(
+            {
+                SII: data.SII,
+                SAI: data.SAI,
+                SAT: data.SAT,
+                T: data.T,
+                DT: data.DT,
+                PH: data.PH,
+                ICD: data.ICD,
+                VP: data.VP,
+                DN: data.DN,
+                RI: data.RI,
+                PI: data.PI,
+            },
+            true,
+        );
     }
 
     static deviceAddressDiagnostics(addresses: Map<string, MatterServerRecordWithExpire>) {
         return Array.from(addresses.values()).map(address =>
             Diagnostic.dict({
+                type: address.type,
                 ip: address.ip,
                 port: address.port,
-                type: address.type,
             }),
         );
     }

@@ -30,10 +30,15 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 // Feature lookup
                 const cluster = this.model.owner(ClusterModel);
                 return !!cluster?.features.find(f => f.name === name);
-            } else {
-                // Field lookup
-                return !!this.model.parent?.member(name);
             }
+
+            // Field lookup
+            for (let model = this.model.parent; model; model = model.parent) {
+                if (model.member(name) !== undefined) {
+                    return true;
+                }
+            }
+            return false;
         });
 
         this.validateAspect("constraint");
@@ -49,7 +54,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
     private validateAspect(name: string) {
         const aspect = (this.model as any)[name] as Aspect;
         if (aspect?.errors) {
-            aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, e.message));
+            aspect.errors.forEach((e: DefinitionError) => this.model.error(e.code, `${e.source}: ${e.message}`));
         }
     }
 
@@ -98,7 +103,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             return;
         }
 
-        // Convert value to proper type if possible
+        // Special case for string "empty"
         if (metatype === Metatype.string && defaultValue === "empty") {
             // Metatype doesn't handle this case because otherwise you'd never be able to have a string called "empty".
             // In this case though the data likely comes from the spec so we're going to take a flyer and say you can
@@ -106,7 +111,25 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             delete this.model.default;
             return;
         }
+
+        // Attempt to cast to correct value
         const cast = FieldValue.cast(metatype, defaultValue);
+
+        // Special case for field names
+        if (typeof defaultValue === "string") {
+            // Here we are converting any exact match of a default value to a field name to be a dynamic default
+            // referencing the named field.  If we ever have a default value that is the same as a field name then this
+            // will be incorrect but likely we never will as string defaults are uncommon
+            let referenced = this.model?.member(defaultValue);
+            if (referenced === undefined) {
+                referenced = this.model.owner(ClusterModel)?.member(defaultValue);
+            }
+            if (referenced instanceof ValueModel && referenced.effectiveType === this.model.effectiveType) {
+                this.model.default = FieldValue.Reference(referenced.name);
+                return;
+            }
+        }
+
         if (cast === FieldValue.Invalid) {
             this.error("INVALID_VALUE", `Value "${defaultValue}" is not a ${metatype}`);
             return;

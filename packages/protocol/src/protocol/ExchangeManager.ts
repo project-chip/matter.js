@@ -11,6 +11,7 @@ import {
     Environmental,
     ImplementationError,
     Logger,
+    MatterAggregateError,
     MatterError,
     MatterFlowError,
     NotImplementedError,
@@ -27,7 +28,7 @@ import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ChannelManager } from "./ChannelManager.js";
-import { MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
+import { ExchangeLogContext, MessageExchange, MessageExchangeContext } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
 
@@ -70,8 +71,8 @@ export class MessageChannel implements Channel<Message> {
         return this.channel.maxPayloadSize;
     }
 
-    send(message: Message): Promise<void> {
-        logger.debug("Message »", MessageCodec.messageDiagnostics(message));
+    send(message: Message, logContext?: ExchangeLogContext): Promise<void> {
+        logger.debug("Message »", MessageCodec.messageDiagnostics(message, logContext));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
         if (bytes.length > this.maxPayloadSize) {
@@ -181,10 +182,12 @@ export class ExchangeManager {
         for (const listeners of this.#listeners.keys()) {
             this.#deleteListener(listeners);
         }
-        await Promise.allSettled(this.#closers);
-        for (const exchange of this.#exchanges.values()) {
-            await exchange.destroy();
-        }
+        await MatterAggregateError.allSettled(this.#closers, "Error closing exchanges").catch(error =>
+            logger.error(error),
+        );
+        await MatterAggregateError.allSettled(this.#exchanges.values(), "Error closing exchanges").catch(error =>
+            logger.error(error),
+        );
         this.#exchanges.clear();
     }
 

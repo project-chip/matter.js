@@ -64,15 +64,17 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             });
         }
 
-        override async onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+        override onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
             logger.debug(`C2 subscribe ${maxValueSize}`);
 
-            await server.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
+            server
+                .handleC2SubscribeRequest(maxValueSize, updateValueCallback)
+                .catch(e => logger.warn("Error happened in when handling C2 subscribe", e));
         }
 
-        override async onUnsubscribe() {
+        override onUnsubscribe() {
             logger.debug("C2 unsubscribe");
-            await server.close();
+            server.close().catch(e => logger.warn("Error happened when closing server for C2 unsubscribe", e));
         }
 
         override onIndicate() {

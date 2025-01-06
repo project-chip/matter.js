@@ -81,6 +81,11 @@ export namespace Val {
          * The object that owns the root managed value.
          */
         rootOwner?: any;
+
+        /**
+         * The parent of this reference, if any.
+         */
+        parent?: Reference;
     }
 
     export const properties = Symbol("properties");

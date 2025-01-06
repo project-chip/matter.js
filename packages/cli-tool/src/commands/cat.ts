@@ -12,7 +12,7 @@ Command({
     aliases: ["inspect"],
 
     invoke: async function cat(args) {
-        const locations = await Promise.all(args.map(path => this.location.at(`${path}`)));
+        const locations = await Promise.all(args._.map(path => this.location.at(`${path}`)));
         for (const location of locations) {
             this.out(this.inspect(location.definition), "\n");
         }

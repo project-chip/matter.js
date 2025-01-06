@@ -11,6 +11,7 @@ import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
+import { NameResolver } from "../managed/NameResolver.js";
 import { Val } from "../Val.js";
 import {
     Code,
@@ -312,19 +313,24 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                 return NonconformantNode;
             }
         } else {
-            // Name references a sibling property.  This results in a value node but must be evaluated at runtime
-            // against a specific struct
-            param = camelize(param);
-            return {
-                code: Code.Evaluate,
+            // Name references another value.  This results in a value node but must be evaluated at runtime against a
+            // specific struct
+            const resolver = NameResolver(supervisor, schema.parent, camelize(param));
+            if (resolver) {
+                return {
+                    code: Code.Evaluate,
 
-                evaluate: (_value, options) => {
-                    return {
-                        code: Code.Value,
-                        value: options?.siblings?.[param],
-                    };
-                },
-            };
+                    evaluate: (_value, options) => {
+                        return {
+                            code: Code.Value,
+                            value: resolver(options?.siblings),
+                        };
+                    },
+                };
+            }
+
+            // Unresolved names are always undefined
+            return { code: Code.Value, value: undefined };
         }
     }
 
@@ -416,7 +422,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                 // Static LHS
                 if (isStatic(compiledLhs)) {
                     if (asBoolean(compiledLhs)) {
-                        return compiledRhs;
+                        return asNonvalue(compiledRhs);
                     } else {
                         return NonconformantNode;
                     }
@@ -425,7 +431,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                 // Dynamic LHS, static RHS
                 if (isStatic(compiledRhs)) {
                     if (asBoolean(compiledRhs)) {
-                        return compiledLhs;
+                        return asNonvalue(compiledLhs);
                     } else {
                         return NonconformantNode;
                     }
@@ -440,7 +446,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                     if (asBoolean(compiledLhs)) {
                         return ConformantNode;
                     } else {
-                        return compiledRhs;
+                        return asNonvalue(compiledRhs);
                     }
                 }
 
@@ -449,7 +455,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                     if (asBoolean(compiledRhs)) {
                         return ConformantNode;
                     } else {
-                        return compiledLhs;
+                        return asNonvalue(compiledLhs);
                     }
                 }
 
@@ -462,7 +468,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                     if (asBoolean(compiledLhs)) {
                         return createLogicalInversion(compiledRhs);
                     } else {
-                        return compiledRhs;
+                        return asNonvalue(compiledRhs);
                     }
                 }
 
@@ -471,7 +477,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                     if (asBoolean(compiledRhs)) {
                         return createLogicalInversion(compiledLhs);
                     } else {
-                        return compiledLhs;
+                        return asNonvalue(compiledLhs);
                     }
                 }
 
@@ -527,6 +533,16 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
                 `Matter does not allow enum value ${schema.name} (ID ${schema.effectiveId}) here`,
             );
         };
+    }
+
+    /**
+     * Convert a node to boolean result if it is a value.
+     */
+    function asNonvalue(node: DynamicNode) {
+        if (node.code === Code.Value) {
+            return asBoolean(node) ? ConformantNode : NonconformantNode;
+        }
+        return node;
     }
 
     /**

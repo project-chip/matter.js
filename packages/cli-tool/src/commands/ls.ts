@@ -13,17 +13,18 @@ import { Command } from "./command.js";
 Command({
     usage: "[OPTION]... [PATH]...",
     description: "List properties of the current path or other paths you specify.",
-    flagArgs: {
-        a: "show hidden properties",
-        l: "use a long listing format",
-        d: "list directories themselves, not their contents",
-    },
+    namedArgs: [
+        { name: "a", description: "show hidden properties" },
+        { name: "l", description: "use a long listing format" },
+        { name: "d", description: "list directories themselves, not their contents" },
+    ],
+    restArgs: { name: "file", description: "filename to list", type: "string" },
 
-    invoke: async function ls(args, flags) {
+    invoke: async function ls(args) {
         const locations = Array<DisplayLocation>();
-        for (const str of args) {
+        for (const str of args._) {
             const input = `${str}`;
-            locations.push(DisplayLocation(await this.location.at(input), !!flags.a, input));
+            locations.push(DisplayLocation(await this.location.at(input), !!args.a, input));
         }
 
         const files = Array<DisplayLocation>();
@@ -31,22 +32,22 @@ Command({
 
         if (locations.length) {
             for (const location of locations) {
-                if (location.kind === "directory" && !flags.d) {
+                if (location.kind === "directory" && !args.d) {
                     dirs.push(location);
                 } else {
                     files.push(location);
                 }
             }
         } else {
-            for (const basename of await DisplayLocation(this.location, !!flags.a).paths) {
-                files.push(DisplayLocation(await this.location.at(basename), !!flags.a));
+            for (const basename of await DisplayLocation(this.location, !!args.a).paths) {
+                files.push(DisplayLocation(await this.location.at(basename), !!args.a));
             }
         }
 
         let displayedSomething = false;
 
         if (files.length) {
-            display(this, flags.l, files, "");
+            display(this, args.l, files, "");
             displayedSomething = true;
         }
 
@@ -63,9 +64,9 @@ Command({
             }
             display(
                 this,
-                flags.l,
+                args.l,
                 (await Promise.all((await dir.paths).map(path => dir.at(path)))).map(location =>
-                    DisplayLocation(location, !!flags.a),
+                    DisplayLocation(location, !!args.a),
                 ),
                 linePrefix,
             );

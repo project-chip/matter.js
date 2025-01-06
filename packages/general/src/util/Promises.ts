@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { asError } from "#util/Error.js";
 import { InternalError, MatterError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
 
@@ -55,6 +56,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
                 .catch(reason => {
                     numberRejected++;
                     if (!wasResolved && numberRejected === promises.length) {
+                        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
                         reject(reason);
                     }
                 });
@@ -74,7 +76,7 @@ export class PromiseTimeoutError extends MatterError {
 /**
  * Create a promise with a timeout.
  *
- * By default rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
+ * By default, rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
  *
  * @param timeoutMs the timeout in milliseconds
  * @param promise a promise that resolves or rejects when the timed task completes
@@ -100,7 +102,15 @@ export async function withTimeout<T>(
 
     // Sub-promise 1, the timer
     const timeout = new Promise<void>((resolve, reject) => {
-        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancelFn));
+        const timer = Time.getTimer("promise-timeout", timeoutMs, () => {
+            try {
+                cancelFn();
+            } catch (e) {
+                reject(asError(e));
+                return;
+            }
+            reject(new Error("Timer canceled promise, but no error was thrown"));
+        });
 
         cancelTimer = () => {
             timer.stop();
@@ -207,7 +217,7 @@ export const MaybePromise = {
      */
     catch<T, TResult = never>(
         producer: MaybePromise<T> | (() => MaybePromise<T>),
-        onrejected?: ((reason: any) => MaybePromise<TResult>) | undefined | null,
+        onrejected?: ((reason: any) => MaybePromise<TResult>) | null,
     ) {
         return this.then(producer, undefined, onrejected);
     },
@@ -217,7 +227,7 @@ export const MaybePromise = {
      */
     finally<T>(
         producer: MaybePromise<T> | (() => MaybePromise<T>),
-        onfinally?: (() => MaybePromise<void>) | undefined | null,
+        onfinally?: (() => MaybePromise<void>) | null,
     ): MaybePromise<T> {
         let result: MaybePromise<T> | undefined;
         try {
@@ -303,8 +313,8 @@ export class CancelablePromise<T = void> implements Promise<T> {
     cancel() {}
 
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
     ): CancelablePromise<TResult1 | TResult2> {
         const result = this.#promise.then(onfulfilled, onrejected) as CancelablePromise<TResult1 | TResult2>;
         result.cancel = this.cancel.bind(this);
@@ -312,12 +322,12 @@ export class CancelablePromise<T = void> implements Promise<T> {
     }
 
     catch<TResult = never>(
-        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
     ): CancelablePromise<T | TResult> {
         return this.then(onrejected);
     }
 
-    finally(onfinally?: (() => void) | undefined | null): CancelablePromise<T> {
+    finally(onfinally?: (() => void) | null): CancelablePromise<T> {
         const handler = (result: any) => {
             onfinally?.();
             return result;

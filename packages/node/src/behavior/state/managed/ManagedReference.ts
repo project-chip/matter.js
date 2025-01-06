@@ -48,7 +48,13 @@ export function ManagedReference(
     };
 
     const reference: Val.Reference = {
-        owner: parent,
+        get rootOwner() {
+            return parent.rootOwner;
+        },
+
+        get parent() {
+            return parent;
+        },
 
         get value() {
             // Authorization is unnecessary here because the reference would not exist if access is unauthorized
@@ -67,10 +73,6 @@ export function ManagedReference(
 
         set location(loc: AccessControl.Location) {
             location = loc;
-        },
-
-        get rootOwner() {
-            return parent.rootOwner;
         },
 
         set value(newValue: Val) {
