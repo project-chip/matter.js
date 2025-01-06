@@ -6,7 +6,7 @@
 
 import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Observable, Observer } from "#general";
-import { ImplementationError, InternalError, Logger, MaybePromise } from "#general";
+import { asError, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
 import { Reactor } from "../Reactor.js";
 import { ActionContext } from "../context/ActionContext.js";
 import { Contextual } from "../context/Contextual.js";
@@ -211,9 +211,6 @@ class ReactorBacking<T extends any[], R> {
     }
 
     #unhandledError(error: unknown) {
-        if (!(error instanceof Error)) {
-            error = new Error(`${error}`);
-        }
         logger.error("Unhandled", this.#augmentError(error));
     }
 
@@ -407,13 +404,11 @@ class ReactorBacking<T extends any[], R> {
     /**
      * Detail the reactor in error messages for errors triggered during reaction.
      */
-    #augmentError(cause: any): Error {
-        if (!(cause instanceof Error)) {
-            cause = new Error(cause.toString());
-        }
+    #augmentError(cause: unknown): Error {
+        const error = asError(cause);
 
-        cause.message = `Error in ${this}: ${cause.message}`;
+        error.message = `Error in ${this}: ${error.message}`;
 
-        return cause;
+        return error;
     }
 }

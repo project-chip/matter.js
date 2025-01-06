@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { asError } from "#util/Error.js";
 import { InternalError, MatterError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
 
@@ -55,11 +56,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
                 .catch(reason => {
                     numberRejected++;
                     if (!wasResolved && numberRejected === promises.length) {
-                        if (reason instanceof Error) {
-                            reject(reason);
-                        } else {
-                            reject(new Error(reason?.toString()));
-                        }
+                        reject(asError(reason));
                     }
                 });
         }

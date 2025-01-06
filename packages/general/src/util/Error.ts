@@ -12,6 +12,13 @@ function considerAsError(error: unknown): error is Error {
     return (error as Error).message !== undefined;
 }
 
+export function asError(e: any, prefixText?: string): Error {
+    if (e instanceof Error) {
+        return e;
+    }
+    return new Error(`${prefixText !== undefined ? `${prefixText}: ` : ""}${e?.toString() ?? "Unknown error"}`);
+}
+
 /**
  * Ensure that a cause is an error object.
  *

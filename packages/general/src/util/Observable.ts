@@ -7,6 +7,7 @@
 import { ImplementationError } from "../MatterError.js";
 import { Logger } from "../log/Logger.js";
 import "../polyfills/disposable.js";
+import { asError } from "./Error.js";
 import { MaybePromise } from "./Promises.js";
 
 const logger = Logger.get("Observable");
@@ -184,11 +185,7 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
                 try {
                     result = observer(...payload);
                 } catch (e) {
-                    if (e instanceof Error) {
-                        this.#errorHandler(e, observer);
-                    } else {
-                        this.#errorHandler(new Error(`${e}`), observer);
-                    }
+                    this.#errorHandler(asError(e, "Error processing Observables"), observer);
                 }
 
                 if (this.#once?.has(observer)) {

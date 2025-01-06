@@ -6,7 +6,7 @@
 
 import { Logger } from "../log/Logger.js";
 import { ImplementationError } from "../MatterError.js";
-import { errorOf } from "./Error.js";
+import { asError, errorOf } from "./Error.js";
 import { CrashedDependenciesError, CrashedDependencyError, Lifecycle } from "./Lifecycle.js";
 import { Observable } from "./Observable.js";
 import { MaybePromise } from "./Promises.js";
@@ -704,11 +704,7 @@ export namespace Construction {
             try {
                 error = onError(crashed);
             } catch (e) {
-                if (e instanceof Error) {
-                    error = e;
-                } else {
-                    error = new Error(e?.toString());
-                }
+                error = asError(e, "Error on construction");
             }
             if (error) {
                 return Promise.reject(error);

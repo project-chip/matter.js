@@ -5,6 +5,7 @@
  */
 
 import { Logger } from "../log/Logger.js";
+import { asError } from "./Error.js";
 
 const logger = Logger.get("Mutex");
 
@@ -74,11 +75,7 @@ export class Mutex implements PromiseLike<unknown> {
                 try {
                     resolve(await task());
                 } catch (e) {
-                    if (e instanceof Error) {
-                        reject(e);
-                    } else {
-                        reject(new Error(e?.toString()));
-                    }
+                    reject(asError(e));
                 }
             }, cancel);
         });
