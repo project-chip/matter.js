@@ -21,12 +21,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Also the Sync Storage classes mainly used in legacy API now have an async close method!
 
 -   @matter/nodejs-ble
+    - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
     - Fix: Adds support for advanced manufacturer data on Windows (Noble update)
     
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
     - Enhancement: Optimized Logging for messages in various places
+    - Enhancement: Added support for concurrent and non-concurrent commissioning flows
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
