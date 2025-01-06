@@ -101,7 +101,15 @@ export async function withTimeout<T>(
 
     // Sub-promise 1, the timer
     const timeout = new Promise<void>((resolve, reject) => {
-        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancelFn));
+        const timer = Time.getTimer("promise-timeout", timeoutMs, () => {
+            try {
+                cancelFn();
+            } catch (e) {
+                reject(asError(e));
+                return;
+            }
+            reject(new Error("Timer canceled promise, but no error was thrown"));
+        });
 
         cancelTimer = () => {
             timer.stop();

@@ -148,13 +148,13 @@ class ReactorBacking<T extends any[], R> {
                 // An error here means a synchronous reactor that was not trampolined crashed.  We cannot just throw
                 // because there may have been additional reactions triggered by the synchronous reactor so we still
                 // need the trampoline
-                e = this.#augmentError(e);
+                const error = this.#augmentError(e);
                 if (this.#observable.isAsync) {
                     // Async observable with sync reactor
-                    resolution = Promise.reject(e);
+                    resolution = Promise.reject(error);
                 } else {
                     // Sync observable with sync reactor
-                    rejection = e;
+                    rejection = error;
                 }
             }
 
@@ -321,7 +321,7 @@ class ReactorBacking<T extends any[], R> {
                     const result = await this.#react(args);
                     resolve(result);
                 } catch (e) {
-                    reject(e);
+                    reject(asError(e, "Error on deferred reaction"));
                 }
             };
 
