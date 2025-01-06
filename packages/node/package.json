@@ -42,7 +42,7 @@
         "#*": "./src/*"
     },
     "dependencies": {
-        "@noble/curves": "^1.7.0",
+        "@noble/curves": "^1.8.0",
         "@matter/general": "*",
         "@matter/model": "*",
         "@matter/types": "*",
