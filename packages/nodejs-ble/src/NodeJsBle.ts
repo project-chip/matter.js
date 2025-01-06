@@ -18,38 +18,56 @@ export type BleOptions = {
 };
 
 export class NodeJsBle extends Ble {
-    private blePeripheral: BlenoBleServer | undefined;
-    private bleCentral: NobleBleClient | undefined;
+    #blePeripheralInstance?: BlenoBleServer;
+    #bleCentralInstance?: NobleBleClient;
+    #bleScanner?: BleScanner;
+    #bleBroadcaster?: BleBroadcaster;
+    #bleCentralInterface?: NobleBleCentralInterface;
+    #blePeripheralInterface?: BlePeripheralInterface;
 
     constructor(private readonly options?: BleOptions) {
         super();
     }
 
-    getBlePeripheralInterface(): TransportInterface {
-        if (this.blePeripheral === undefined) {
-            this.blePeripheral = new BlenoBleServer(this.options);
+    get #blePeripheralServer() {
+        if (this.#blePeripheralInstance === undefined) {
+            this.#blePeripheralInstance = new BlenoBleServer(this.options);
         }
-        return new BlePeripheralInterface(this.blePeripheral);
+        return this.#blePeripheralInstance;
+    }
+
+    get #bleCentralClient() {
+        if (this.#bleCentralInstance === undefined) {
+            this.#bleCentralInstance = new NobleBleClient(this.options);
+        }
+        return this.#bleCentralInstance;
+    }
+
+    getBlePeripheralInterface(): TransportInterface {
+        if (this.#blePeripheralInterface === undefined) {
+            this.#blePeripheralInterface = new BlePeripheralInterface(this.#blePeripheralServer);
+        }
+        return this.#blePeripheralInterface;
     }
 
     getBleCentralInterface(): NetInterface {
-        if (this.bleCentral === undefined) {
-            this.bleCentral = new NobleBleClient(this.options);
+        if (this.#bleCentralInterface === undefined) {
+            this.#bleCentralInterface = new NobleBleCentralInterface(this.getBleScanner() as BleScanner);
         }
-        return new NobleBleCentralInterface();
+        return this.#bleCentralInterface;
     }
 
     getBleBroadcaster(additionalAdvertisementData?: Uint8Array): InstanceBroadcaster {
-        if (this.blePeripheral === undefined) {
-            this.blePeripheral = new BlenoBleServer(this.options);
+        if (this.#bleBroadcaster === undefined) {
+            this.#bleBroadcaster = new BleBroadcaster(this.#blePeripheralServer, additionalAdvertisementData);
         }
-        return new BleBroadcaster(this.blePeripheral, additionalAdvertisementData);
+        return this.#bleBroadcaster;
     }
 
     getBleScanner(): Scanner {
-        if (this.bleCentral === undefined) {
-            this.bleCentral = new NobleBleClient(this.options);
+        if (this.#bleScanner === undefined) {
+            this.#bleScanner = new BleScanner(this.#bleCentralClient);
         }
-        return new BleScanner(this.bleCentral);
+        return this.#bleScanner;
     }
 }

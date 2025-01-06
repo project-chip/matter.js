@@ -59,7 +59,14 @@ export class NobleBleClient {
             }
         });
         noble.on("discover", peripheral => this.handleDiscoveredDevice(peripheral));
-        noble.on("scanStart", () => (this.isScanning = true));
+        noble.on("scanStart", () => {
+            if (!this.shouldScan) {
+                // Noble sometimes emits scanStart when we did not asked for and misses the scanStop event
+                // TODO: Remove as soon as Noble fixed this behavior
+                return;
+            }
+            this.isScanning = true;
+        });
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
@@ -71,12 +78,14 @@ export class NobleBleClient {
     }
 
     public async startScanning() {
-        if (this.isScanning) return;
+        if (this.isScanning) {
+            return;
+        }
 
         this.shouldScan = true;
         if (this.nobleState === "poweredOn") {
             logger.debug("Start BLE scanning for Matter Services ...");
-            await noble.startScanningAsync([BLE_MATTER_SERVICE_UUID], false);
+            await noble.startScanningAsync([BLE_MATTER_SERVICE_UUID], true);
         } else {
             logger.debug("noble state is not poweredOn ... delay scanning till poweredOn");
         }
@@ -94,25 +103,26 @@ export class NobleBleClient {
         // The advertisement data contains a name, power level (if available), certain advertised service uuids,
         // as well as manufacturer data.
         // {"localName":"MATTER-3840","serviceData":[{"uuid":"fff6","data":{"type":"Buffer","data":[0,0,15,241,255,1,128,0]}}],"serviceUuids":["fff6"],"solicitationServiceUuids":[],"serviceSolicitationUuids":[]}
+        const address = peripheral.address;
         logger.debug(
-            `Found peripheral ${peripheral.address} (${peripheral.advertisement.localName}): ${Logger.toJSON(
+            `Found peripheral ${address} (${peripheral.advertisement.localName}): ${Logger.toJSON(
                 peripheral.advertisement,
             )}`,
         );
 
         if (!peripheral.connectable) {
-            logger.info(`Peripheral ${peripheral.address} is not connectable ... ignoring`);
+            logger.info(`Peripheral ${address} is not connectable ... ignoring`);
             return;
         }
         const matterServiceData = peripheral.advertisement.serviceData.find(
             serviceData => serviceData.uuid === BLE_MATTER_SERVICE_UUID,
         );
         if (matterServiceData === undefined || matterServiceData.data.length !== 8) {
-            logger.info(`Peripheral ${peripheral.address} does not advertise Matter Service ... ignoring`);
+            logger.info(`Peripheral ${address} does not advertise Matter Service ... ignoring`);
             return;
         }
 
-        this.discoveredPeripherals.set(peripheral.address, { peripheral, matterServiceData: matterServiceData.data });
+        this.discoveredPeripherals.set(address, { peripheral, matterServiceData: matterServiceData.data });
 
         this.deviceDiscoveredCallback?.(peripheral, matterServiceData.data);
     }

@@ -142,7 +142,10 @@ export class ControllerCommissioningFlow {
     #interactionClient: InteractionClient;
     readonly #ca: CertificateAuthority;
     readonly #fabric: Fabric;
-    readonly #transitionToCase: (peerAddress: PeerAddress) => Promise<InteractionClient | undefined>;
+    readonly #transitionToCase: (
+        peerAddress: PeerAddress,
+        supportsConcurrentConnections: boolean,
+    ) => Promise<InteractionClient | undefined>;
     readonly #commissioningOptions: ControllerCommissioningFlowOptions;
     readonly #commissioningSteps = new Array<CommissioningStep>();
     readonly #commissioningStepResults = new Map<string, CommissioningStepResult>();
@@ -168,7 +171,10 @@ export class ControllerCommissioningFlow {
         commissioningOptions: ControllerCommissioningFlowOptions,
 
         /** Callback that establishes CASE connection or handles final commissioning */
-        transitionToCase: (peerAddress: PeerAddress) => Promise<InteractionClient | undefined>,
+        transitionToCase: (
+            peerAddress: PeerAddress,
+            supportsConcurrentConnections: boolean,
+        ) => Promise<InteractionClient | undefined>,
     ) {
         this.#interactionClient = interactionClient;
         this.#ca = ca;
@@ -1144,7 +1150,11 @@ export class ControllerCommissioningFlow {
      */
     async #reconnectWithDevice() {
         logger.debug("Reconnecting with device ...");
-        const transitionResult = await this.#transitionToCase(this.#interactionClient.address);
+        const transitionResult = await this.#transitionToCase(
+            this.#interactionClient.address,
+            // Assume concurrent connections are supported if not know (which should not be the case when we came here)
+            this.#collectedCommissioningData.supportsConcurrentConnection ?? true,
+        );
 
         if (transitionResult === undefined) {
             logger.debug("CASE commissioning handled externally, terminating commissioning flow");
