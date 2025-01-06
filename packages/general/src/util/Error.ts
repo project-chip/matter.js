@@ -12,11 +12,11 @@ function considerAsError(error: unknown): error is Error {
     return (error as Error).message !== undefined;
 }
 
-export function asError(e: any, prefixText?: string): Error {
-    if (e instanceof Error) {
+export function asError(e: any): Error {
+    if (considerAsError(e)) {
         return e;
     }
-    return new Error(`${prefixText !== undefined ? `${prefixText}: ` : ""}${e?.toString() ?? "Unknown error"}`);
+    return new Error(e?.toString() ?? "Unknown error");
 }
 
 /**

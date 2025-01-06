@@ -74,7 +74,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
 
         override onUnsubscribe() {
             logger.debug("C2 unsubscribe");
-            server.close().catch(e => logger.warn("Error happened in when closing server for C2 unsubscribe", e));
+            server.close().catch(e => logger.warn("Error happened when closing server for C2 unsubscribe", e));
         }
 
         override onIndicate() {

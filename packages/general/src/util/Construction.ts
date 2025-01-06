@@ -704,7 +704,7 @@ export namespace Construction {
             try {
                 error = onError(crashed);
             } catch (e) {
-                error = asError(e, "Error on construction");
+                error = asError(e);
             }
             if (error) {
                 return Promise.reject(error);

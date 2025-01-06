@@ -185,7 +185,7 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
                 try {
                     result = observer(...payload);
                 } catch (e) {
-                    this.#errorHandler(asError(e, "Error processing Observables"), observer);
+                    this.#errorHandler(asError(e), observer);
                 }
 
                 if (this.#once?.has(observer)) {

@@ -321,7 +321,7 @@ class ReactorBacking<T extends any[], R> {
                     const result = await this.#react(args);
                     resolve(result);
                 } catch (e) {
-                    reject(asError(e, "Error on deferred reaction"));
+                    reject(asError(e));
                 }
             };
 

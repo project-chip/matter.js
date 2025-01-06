@@ -56,7 +56,8 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
                 .catch(reason => {
                     numberRejected++;
                     if (!wasResolved && numberRejected === promises.length) {
-                        reject(asError(reason));
+                        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+                        reject(reason);
                     }
                 });
         }
