@@ -390,17 +390,15 @@ export class ControllerCommissioner {
             this.#context.ca,
             fabric,
             commissioningOptions,
-            async address => {
-                // TODO Right now we always close after step 12 because we do not check for commissioning flow requirements
-                /*
-                    In concurrent connection commissioning flow the commissioning channel SHALL terminate after
-                    successful step 15 (CommissioningComplete command invocation). In non-concurrent connection
-                    commissioning flow the commissioning channel SHALL terminate after successful step 12 (trigger
-                    joining of operational network at Commissionee). The PASE-derived encryption keys SHALL be deleted
-                    when commissioning channel terminates. The PASE session SHALL be terminated by both Commissioner and
-                    Commissionee once the CommissioningComplete command is received by the Commissionee.
-                 */
-                await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
+            async (address, supportsConcurrentConnections) => {
+                if (!supportsConcurrentConnections) {
+                    /*
+                        In non-concurrent connection
+                        commissioning flow the commissioning channel SHALL terminate after successful step 12 (trigger
+                        joining of operational network at Commissionee).
+                     */
+                    await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
+                }
 
                 if (performCaseCommissioning !== undefined) {
                     await performCaseCommissioning(address, discoveryData);
@@ -426,6 +424,15 @@ export class ControllerCommissioner {
             // We might have added data for an operational address that we need to cleanup
             await this.#context.peers.delete(address);
             throw error;
+        } finally {
+            if (!paseSecureMessageChannel.closed) {
+                /*
+                    In concurrent connection commissioning flow the commissioning channel SHALL terminate after
+                    successful step 15 (CommissioningComplete command invocation).
+                    If PaseSecureMessageChannel is not already closed, we are in non-concurrent connection commissioning flow.
+                 */
+                await paseSecureMessageChannel.close(); // We are done, so close PASE session
+            }
         }
 
         return address;
