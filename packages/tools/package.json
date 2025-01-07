@@ -49,7 +49,7 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
         "ansi-colors": "^4.1.3",
-        "commander": "^12.1.0",
+        "commander": "^13.0.0",
         "esbuild": "^0.24.2",
         "minimatch": "^9.0.5",
         "typescript": "~5.7.2",
