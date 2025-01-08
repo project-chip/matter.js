@@ -6,7 +6,6 @@
 
 //import { OperationalCredentialsBehavior } from "@matter/main/behaviors";
 import { OperationalCredentialsBehavior } from "@matter/main/behaviors/operational-credentials";
-import { edit } from "@matter/testing";
 import { NodeTestInstance } from "../../src/NodeTestInstance.js";
 //import { NodeTestInstance } from "../../src/NodeTestInstance.js";
 
@@ -19,7 +18,8 @@ describe("CADMIN", () => {
     //
     // For now we just patch the test to convert 0xb (whatever that is) to 0x587, which appears to be an internal
     // encoding for ConstraintError (which is just 0x87, so presumably 0x500 is a bit prefix)
-    before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
+    // TODO RE-ADD next line once error is fixed
+    //before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
 
     // TODO - temporarily disabled other tests while working out 1.19 issues
     //chip("CADMIN/*").exclude("CADMIN/1.19");
