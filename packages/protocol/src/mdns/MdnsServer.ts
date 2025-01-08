@@ -115,14 +115,14 @@ export class MdnsServer {
                     : [];
             if (knownAnswers.length > 0) {
                 for (const knownAnswersRecord of knownAnswers) {
-                    answers = answers.filter(record => !isDeepEqual(record, knownAnswersRecord));
+                    answers = answers.filter(record => !isDeepEqual(record, knownAnswersRecord, true));
                     if (answers.length === 0) break; // Nothing to send
                 }
                 if (answers.length === 0) continue; // Nothing to send
                 if (additionalRecords.length > 0) {
                     for (const knownAnswersRecord of knownAnswers) {
                         additionalRecords = additionalRecords.filter(
-                            record => !isDeepEqual(record, knownAnswersRecord),
+                            record => !isDeepEqual(record, knownAnswersRecord, true),
                         );
                     }
                 }
