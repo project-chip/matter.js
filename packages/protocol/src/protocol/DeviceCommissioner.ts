@@ -67,9 +67,12 @@ export class DeviceCommissioner {
 
         // If a commissioning window is open then we re-announce this because it was ended as fabric got added
         this.#observers.on(this.#context.fabrics.events.deleted, async () => {
-            // When fabrics are still existing then re-announcement already happened in DeviceAdvertiser
-            // when operative announcements where expired
-            if (this.#context.fabrics.length === 0) {
+            // If a commissioning window is open, or we removed the last fabric, then we re-announce this
+            // because it was ended as fabric got added
+            if (
+                this.#context.fabrics.length === 0 ||
+                this.#windowStatus !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen
+            ) {
                 this.reactivateAdvertiser();
             }
         });
@@ -200,7 +203,9 @@ export class DeviceCommissioner {
         if (this.#windowStatus === AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
             return;
         }
-        this.#context.advertiser.advertise().catch(error => logger.warn("Error sending announcement:", error));
+        this.#enterCommissioningMode(this.#windowStatus, this.#activeDiscriminator).catch(error =>
+            logger.warn("Error sending announcement:", error),
+        );
     }
 
     async #enterCommissioningMode(
