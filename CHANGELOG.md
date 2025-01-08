@@ -11,6 +11,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/general
+    - Enhancement: Limits MDNS expires just to te relevant operational records when removing a fabric
 -   @matter/node
     - Feature: Constraint and conformance expressions may now reference values by name in any owner of a constrained value
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
