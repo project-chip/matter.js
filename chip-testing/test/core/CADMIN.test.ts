@@ -29,8 +29,8 @@ describe("CADMIN", () => {
         const node = NodeTestInstance.nodeOf(subject);
 
         // CHIP has a hard-coded limit via CHIP_CONFIG_MAX_FABRICS macro which defaults to 16.  TC_ADMIN_1_19 fails
-        // when we exhaust this space with our default fabric limit of 254.  So force ours low enough that CHIP can
-        // handle it.  We set it as low as possible so the test iterates more quickly (5 is the constrained minimum)
-        return node.setStateOf(OperationalCredentialsBehavior, { supportedFabrics: 5 });
+        // when we exhaust this space with our default fabric limit of 254.  Including a bug which lets the test
+        // fail if limit is not 16, so set to 16 to be ok for now.
+        return node.setStateOf(OperationalCredentialsBehavior, { supportedFabrics: 16 });
     });
 });
