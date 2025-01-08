@@ -460,7 +460,7 @@ export class PairedNode {
     triggerReconnect() {
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
             logger.info(
-                `Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
             );
             return;
         }
@@ -480,7 +480,7 @@ export class PairedNode {
         }
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
             logger.debug(
-                `Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
             );
             return;
         }
@@ -522,7 +522,7 @@ export class PairedNode {
                 logger.info(`Node ${this.nodeId}: Node is unknown by controller, we can not connect.`);
                 this.#setConnectionState(NodeStates.Disconnected);
             } else if (this.#connectionState === NodeStates.Disconnected) {
-                logger.info("No reconnection desired because requested status is Disconnected.");
+                logger.info(`Node ${this.nodeId}: No reconnection desired because requested status is Disconnected.`);
             } else {
                 if (error instanceof ChannelStatusResponseError) {
                     logger.info(`Node ${this.nodeId}: Error while establishing new Channel, retrying ...`, error);
@@ -906,13 +906,13 @@ export class PairedNode {
             for (const [endpointId] of Object.entries(allData)) {
                 const endpointIdNumber = EndpointNumber(parseInt(endpointId));
                 if (this.#endpoints.has(endpointIdNumber)) {
-                    logger.debug("Retaining device", endpointId);
+                    logger.debug(`Node ${this.nodeId}: Retaining device`, endpointId);
                     endpointsToRemove.delete(endpointIdNumber);
                 }
             }
             // And remove all endpoints no longer in the structure
             for (const endpointId of endpointsToRemove.values()) {
-                logger.debug("Removing device", endpointId);
+                logger.debug(`Node ${this.nodeId}: Removing device`, endpointId);
                 this.#endpoints.get(endpointId)?.removeFromStructure();
                 this.#endpoints.delete(endpointId);
             }
@@ -934,7 +934,7 @@ export class PairedNode {
                 continue;
             }
 
-            logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
+            logger.debug(`Node ${this.nodeId}: Creating device`, endpointId, Logger.toJSON(clusters));
             this.#endpoints.set(
                 endpointIdNumber,
                 this.#createDevice(endpointIdNumber, clusters, this.#interactionClient),
