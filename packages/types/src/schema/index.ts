@@ -10,3 +10,4 @@ export * from "./BitmapSchema.js";
 export * from "./PairingCodeSchema.js";
 export * from "./QrCodeSchema.js";
 export * from "./Schema.js";
+export * from "./SpecificationVersionSchema.js";
