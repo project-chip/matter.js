@@ -31,6 +31,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
     - Enhancement: Optimized Logging for messages in various places
     - Enhancement: Added support for concurrent and non-concurrent commissioning flows
+    - Enhancement: Re-arms the failsafe timer in commissioning flows before steps that could take longer and during operative reconnection
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
