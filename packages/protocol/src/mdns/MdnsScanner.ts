@@ -78,8 +78,8 @@ type StructuredDnsAnswers = {
 } & StructuredDnsAddressAnswers;
 
 type StructuredDnsAddressAnswers = {
-    addressesV4?: Record<string, Record<string, AnyDnsRecordWithExpiry>>; // IPv4 Address record by name and value (IP)
-    addressesV6?: Record<string, Record<string, AnyDnsRecordWithExpiry>>; // IPv6 Address record by name and value (IP)
+    addressesV4?: Record<string, Map<string, AnyDnsRecordWithExpiry>>; // IPv4 Address record by name and value (IP)
+    addressesV6?: Record<string, Map<string, AnyDnsRecordWithExpiry>>; // IPv6 Address record by name and value (IP)
 };
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
@@ -156,7 +156,9 @@ export class MdnsScanner implements Scanner {
         const allQueries = Array.from(this.#activeAnnounceQueries.values());
         const queries = allQueries.flatMap(({ queries }) => queries);
         const answers = allQueries.flatMap(({ answers }) =>
-            Object.values(answers).flatMap(answer => Object.values(answer).flatMap(records => records)),
+            Object.values(answers).flatMap(answer =>
+                Object.values(answer).flatMap(records => (Array.isArray(records) ? records : records.values())),
+            ),
         );
 
         this.#queryTimer = Time.getTimer("MDNS discovery", this.#nextAnnounceIntervalSeconds * 1000, () =>
@@ -746,18 +748,18 @@ export class MdnsScanner implements Scanner {
                     });
                 } else if (recordType === DnsRecordType.AAAA) {
                     structuredAnswers.addressesV6 = structuredAnswers.addressesV6 ?? {};
-                    structuredAnswers.addressesV6[name] = structuredAnswers.addressesV6[name] ?? [];
-                    structuredAnswers.addressesV6[name][answer.value] = {
+                    structuredAnswers.addressesV6[name] = structuredAnswers.addressesV6[name] ?? new Map();
+                    structuredAnswers.addressesV6[name].set(answer.value, {
                         discoveredAt,
                         ...answer,
-                    };
+                    });
                 } else if (this.#enableIpv4 && recordType === DnsRecordType.A) {
                     structuredAnswers.addressesV4 = structuredAnswers.addressesV4 ?? {};
-                    structuredAnswers.addressesV4[name] = structuredAnswers.addressesV4[name] ?? {};
-                    structuredAnswers.addressesV4[name][answer.value] = {
+                    structuredAnswers.addressesV4[name] = structuredAnswers.addressesV4[name] ?? new Map();
+                    structuredAnswers.addressesV4[name].set(answer.value, {
                         discoveredAt,
                         ...answer,
-                    };
+                    });
                 }
             }),
         );
@@ -818,7 +820,7 @@ export class MdnsScanner implements Scanner {
                 combinedAnswers.addressesV6 = combinedAnswers.addressesV6 ?? {};
                 for (const [name, records] of Object.entries(answers.addressesV6) as unknown as [
                     string,
-                    Record<string, AnyDnsRecordWithExpiry>,
+                    Map<string, AnyDnsRecordWithExpiry>,
                 ][]) {
                     combinedAnswers.addressesV6[name] = combinedAnswers.addressesV6[name] ?? new Map();
                     Object.values(records).forEach(record => {
@@ -837,7 +839,7 @@ export class MdnsScanner implements Scanner {
                 combinedAnswers.addressesV4 = combinedAnswers.addressesV4 ?? {};
                 for (const [name, records] of Object.entries(answers.addressesV4) as unknown as [
                     string,
-                    Record<string, AnyDnsRecordWithExpiry>,
+                    Map<string, AnyDnsRecordWithExpiry>,
                 ][]) {
                     combinedAnswers.addressesV4[name] = combinedAnswers.addressesV4[name] ?? new Map();
                     Object.values(records).forEach(record => {
@@ -872,20 +874,10 @@ export class MdnsScanner implements Scanner {
             );
         }
         if (combinedAnswers.addressesV6) {
-            result.addressesV6 = Object.fromEntries(
-                Object.entries(combinedAnswers.addressesV6).map(([name, records]) => [
-                    name,
-                    Object.fromEntries(records),
-                ]),
-            );
+            result.addressesV6 = combinedAnswers.addressesV6;
         }
         if (this.#enableIpv4 && combinedAnswers.addressesV4) {
-            result.addressesV4 = Object.fromEntries(
-                Object.entries(combinedAnswers.addressesV4).map(([name, records]) => [
-                    name,
-                    Object.fromEntries(records),
-                ]),
-            );
+            result.addressesV4 = combinedAnswers.addressesV4;
         }
 
         return result;
@@ -925,12 +917,12 @@ export class MdnsScanner implements Scanner {
         let updated = false;
         if (answers.addressesV6) {
             for (const [target, ipAddresses] of Object.entries(answers.addressesV6)) {
-                if (interfaceRecords.addressesV6?.[target]) {
+                if (interfaceRecords.addressesV6?.[target] !== undefined) {
                     for (const [ip, record] of Object.entries(ipAddresses)) {
                         if (record.ttl === 0) {
-                            delete interfaceRecords.addressesV6[target][ip];
+                            interfaceRecords.addressesV6[target].delete(ip);
                         } else {
-                            interfaceRecords.addressesV6[target][ip] = record;
+                            interfaceRecords.addressesV6[target].set(ip, record);
                         }
                         updated = true;
                     }
@@ -939,12 +931,12 @@ export class MdnsScanner implements Scanner {
         }
         if (this.#enableIpv4 && answers.addressesV4) {
             for (const [target, ipAddresses] of Object.entries(answers.addressesV4)) {
-                if (interfaceRecords.addressesV4?.[target]) {
+                if (interfaceRecords.addressesV4?.[target] !== undefined) {
                     for (const [ip, record] of Object.entries(ipAddresses)) {
                         if (record.ttl === 0) {
-                            delete interfaceRecords.addressesV4[target][ip];
+                            interfaceRecords.addressesV4[target].delete(ip);
                         } else {
-                            interfaceRecords.addressesV4[target][ip] = record;
+                            interfaceRecords.addressesV4[target].set(ip, record);
                         }
                         updated = true;
                     }
@@ -966,12 +958,12 @@ export class MdnsScanner implements Scanner {
             if (ttl === 0) continue; // Skip records with ttl=0
             if (recordType === DnsRecordType.AAAA) {
                 interfaceRecords.addressesV6 = interfaceRecords.addressesV6 ?? {};
-                interfaceRecords.addressesV6[name] = interfaceRecords.addressesV6[name] ?? {};
-                interfaceRecords.addressesV6[name][ip] = record;
+                interfaceRecords.addressesV6[name] = interfaceRecords.addressesV6[name] ?? new Map();
+                interfaceRecords.addressesV6[name].set(ip, record);
             } else if (this.#enableIpv4 && recordType === DnsRecordType.A) {
                 interfaceRecords.addressesV4 = interfaceRecords.addressesV4 ?? {};
-                interfaceRecords.addressesV4[name] = interfaceRecords.addressesV4[name] ?? {};
-                interfaceRecords.addressesV4[name][ip] = record;
+                interfaceRecords.addressesV4[name] = interfaceRecords.addressesV4[name] ?? new Map();
+                interfaceRecords.addressesV4[name].set(ip, record);
             }
         }
         this.#discoveredIpRecords.set(netInterface, interfaceRecords);
@@ -985,10 +977,10 @@ export class MdnsScanner implements Scanner {
         const ipRecords = new Array<AnyDnsRecordWithExpiry>();
         answers.forEach(answer => {
             if (answer.addressesV6?.[target]) {
-                ipRecords.push(...Object.values(answer.addressesV6[target]));
+                ipRecords.push(...answer.addressesV6[target].values());
             }
             if (this.#enableIpv4 && answer.addressesV4?.[target]) {
-                ipRecords.push(...Object.values(answer.addressesV4[target]));
+                ipRecords.push(...answer.addressesV4[target].values());
             }
         });
         if (ipRecords.length === 0) {
@@ -1399,28 +1391,31 @@ export class MdnsScanner implements Scanner {
         }
         if (data.addressesV6) {
             Object.keys(data.addressesV6).forEach(name => {
-                data.addressesV6![name] = Object.fromEntries(
-                    Object.entries(data.addressesV6![name]).filter(
-                        ([, { discoveredAt, ttl }]) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
-                    ),
-                );
-                if (Object.keys(data.addressesV6![name]).length === 0) {
+                for (const [ip, { discoveredAt, ttl }] of data.addressesV6![name].entries()) {
+                    if (now < discoveredAt + this.#effectiveTTL(ttl * 1000)) continue; // not expired yet
+                    data.addressesV6![name].delete(ip);
+                }
+                if (data.addressesV6![name].size === 0) {
                     delete data.addressesV6![name];
                 }
             });
         }
         if (data.addressesV4) {
             Object.keys(data.addressesV4).forEach(name => {
-                data.addressesV4![name] = Object.fromEntries(
-                    Object.entries(data.addressesV4![name]).filter(
-                        ([, { discoveredAt, ttl }]) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
-                    ),
-                );
-                if (Object.keys(data.addressesV4![name]).length === 0) {
+                for (const [ip, { discoveredAt, ttl }] of data.addressesV4![name].entries()) {
+                    if (now < discoveredAt + this.#effectiveTTL(ttl * 1000)) continue; // not expired yet
+                    data.addressesV4![name].delete(ip);
+                }
+                if (data.addressesV4![name].size === 0) {
                     delete data.addressesV4![name];
                 }
             });
         }
+        console.log(
+            "After expire",
+            Object.keys(data.addressesV6 ?? {}).length,
+            Object.keys(data.addressesV4 ?? {}).length,
+        );
     }
 
     static discoveryDataDiagnostics(data: DiscoveryData) {
