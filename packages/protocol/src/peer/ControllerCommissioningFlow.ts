@@ -10,7 +10,7 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
-import { Bytes, ChannelType, Crypto, Logger, MatterError, Time, UnexpectedDataError, repackErrorAs } from "#general";
+import { Bytes, ChannelType, Crypto, Logger, MatterError, repackErrorAs, Time, UnexpectedDataError } from "#general";
 import {
     ClusterId,
     ClusterType,
@@ -107,6 +107,9 @@ type CommissioningStep = {
 
     /** Logic function to execute */
     stepLogic: () => Promise<CommissioningStepResult>;
+
+    /** Optional flag to indicate that the failsafe timer should be rearmed in any case before this step. */
+    reArmFailsafe?: boolean;
 };
 
 /** Data that are collected initially or through the commissioning process and can be used also by other steps. */
@@ -194,9 +197,15 @@ export class ControllerCommissioningFlow {
     async executeCommissioning() {
         this.#sortSteps();
 
+        let failSafeTimerReArmedAfterPreviousStep = false;
         for (const step of this.#commissioningSteps) {
             logger.info(`Executing commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name}`);
             try {
+                if (step.reArmFailsafe && !failSafeTimerReArmedAfterPreviousStep) {
+                    logger.debug(`Re-Arming failsafe timer before executing step`);
+                    await this.#armFailsafe();
+                }
+                failSafeTimerReArmedAfterPreviousStep = false;
                 const result = await step.stepLogic();
                 this.#setCommissioningStepResult(step, result);
 
@@ -222,6 +231,7 @@ export class ControllerCommissioningFlow {
                             )}s elapsed since last arm failsafe, re-arming failsafe`,
                         );
                         await this.#armFailsafe();
+                        failSafeTimerReArmedAfterPreviousStep = true;
                     }
                 }
 
@@ -369,6 +379,7 @@ export class ControllerCommissioningFlow {
                     stepNumber: 12, // includes step 13
                     subStepNumber: 2,
                     name: "NetworkCommissioning.Wifi",
+                    reArmFailsafe: true,
                     stepLogic: () => this.#configureNetworkWifi(),
                 });
             }
@@ -377,6 +388,7 @@ export class ControllerCommissioningFlow {
                     stepNumber: 12, // includes step 13
                     subStepNumber: 3,
                     name: "NetworkCommissioning.Thread",
+                    reArmFailsafe: true,
                     stepLogic: () => this.#configureNetworkThread(),
                 });
             }
@@ -390,6 +402,7 @@ export class ControllerCommissioningFlow {
             stepNumber: 14, // includes step 15 (CASE connection)
             subStepNumber: 1,
             name: "Reconnect",
+            reArmFailsafe: true,
             stepLogic: () => this.#reconnectWithDevice(),
         });
 
@@ -1149,12 +1162,44 @@ export class ControllerCommissioningFlow {
      *
      */
     async #reconnectWithDevice() {
-        logger.debug("Reconnecting with device ...");
+        const isConcurrentFlow = this.#collectedCommissioningData.supportsConcurrentConnection !== false;
+
+        logger.debug(`Reconnecting with device with ${isConcurrentFlow ? "concurrent" : "non-concurrent"} flow ...`);
+
+        // Reconnection with discovery could take longer then the default failsafe time, so we need to
+        // re-arm the failsafe when we are in a concurrent commissioning flow also in parallel to
+        // the operative reconnection
+        // TODO: Check whats needed for non-concurrent commissioning flows (maybe arm initially longer?)
+        const reArmFailsafeInterval = Time.getPeriodicTimer(
+            "Re-Arm Failsafe during reconnect",
+            this.#failSafeTimeMs / 2,
+            () => {
+                const now = Time.nowMs();
+                if (this.#commissioningExpiryTime !== undefined && now < this.#commissioningExpiryTime) {
+                    logger.error(
+                        `Re-Arm Failsafe Timer during reconnect with device. Time left: ${Math.round((this.#commissioningExpiryTime - now) / 1000)}s`,
+                    );
+                    this.#armFailsafe().catch(error => {
+                        logger.error("Error while re-arming failsafe during reconnect", error);
+                        reArmFailsafeInterval.stop();
+                    });
+                } else {
+                    // Stop as soon as we are over the maximum commissioning time
+                    reArmFailsafeInterval.stop();
+                }
+            },
+        );
+        if (isConcurrentFlow) {
+            reArmFailsafeInterval.start();
+        }
+
         const transitionResult = await this.#transitionToCase(
             this.#interactionClient.address,
             // Assume concurrent connections are supported if not know (which should not be the case when we came here)
-            this.#collectedCommissioningData.supportsConcurrentConnection ?? true,
+            isConcurrentFlow,
         );
+
+        reArmFailsafeInterval.stop();
 
         if (transitionResult === undefined) {
             logger.debug("CASE commissioning handled externally, terminating commissioning flow");
