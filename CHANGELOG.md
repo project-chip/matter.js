@@ -32,6 +32,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Optimized Logging for messages in various places
     - Enhancement: Added support for concurrent and non-concurrent commissioning flows
     - Enhancement: Re-arms the failsafe timer in commissioning flows before steps that could take longer and during operative reconnection
+    - Enhancement: Stores Matter relevant MDNS host information to faster reuse when new SRV announcements come in
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
