@@ -224,6 +224,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     //lastNetworkId: networkId,
                     //lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 },
+                operationalCredentials: {
+                    supportedFabrics: 16,
+                },
                 timeFormatLocalization: {
                     hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
                     activeCalendarType: TimeFormatLocalization.CalendarType.Gregorian,

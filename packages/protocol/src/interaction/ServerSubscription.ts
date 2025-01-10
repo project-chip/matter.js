@@ -676,9 +676,9 @@ export class ServerSubscription extends Subscription {
                 attributes.push({ path, value, version, schema: attribute.schema, attribute });
             } catch (error) {
                 if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                    logger.error(`Permission denied reading attribute ${this.#structure.resolveAttributeName(path)}`);
+                    logger.warn(`Permission denied reading attribute ${this.#structure.resolveAttributeName(path)}`);
                 } else {
-                    logger.error(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
+                    logger.warn(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
                 }
             }
         }
@@ -726,7 +726,11 @@ export class ServerSubscription extends Subscription {
                     });
                 }
             } catch (error) {
-                logger.error(`Error reading event ${this.#structure.resolveEventName(path)}:`, error);
+                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                    logger.warn(`Permission denied reading event ${this.#structure.resolveEventName(path)}`);
+                } else {
+                    logger.warn(`Error reading event ${this.#structure.resolveEventName(path)}:`, error);
+                }
             }
         }
         eventReportsPayload.sort((a, b) => {

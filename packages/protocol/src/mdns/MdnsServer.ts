@@ -115,14 +115,14 @@ export class MdnsServer {
                     : [];
             if (knownAnswers.length > 0) {
                 for (const knownAnswersRecord of knownAnswers) {
-                    answers = answers.filter(record => !isDeepEqual(record, knownAnswersRecord));
+                    answers = answers.filter(record => !isDeepEqual(record, knownAnswersRecord, true));
                     if (answers.length === 0) break; // Nothing to send
                 }
                 if (answers.length === 0) continue; // Nothing to send
                 if (additionalRecords.length > 0) {
                     for (const knownAnswersRecord of knownAnswers) {
                         additionalRecords = additionalRecords.filter(
-                            record => !isDeepEqual(record, knownAnswersRecord),
+                            record => !isDeepEqual(record, knownAnswersRecord, true),
                         );
                     }
                 }
@@ -268,7 +268,8 @@ export class MdnsServer {
         ).catch(error => logger.error(error));
     }
 
-    async expireAnnouncements(announcedNetPort?: number, type?: AnnouncementType) {
+    async expireAnnouncements(options?: { announcedNetPort?: number; type?: AnnouncementType; forInstance?: string }) {
+        const { announcedNetPort, type, forInstance: instanceToExpire } = options ?? {};
         await MatterAggregateError.allSettled(
             this.#records.keys().map(async netInterface => {
                 const records = await this.#records.get(netInterface);
@@ -280,13 +281,25 @@ export class MdnsServer {
                         portType !== this.buildTypePortKey(type, announcedNetPort)
                     )
                         continue;
-                    let instanceName: string | undefined;
-                    portTypeRecords.forEach(record => {
+                    const recordsToProcess =
+                        instanceToExpire !== undefined
+                            ? portTypeRecords.filter(
+                                  ({ forInstance }) => forInstance !== undefined && instanceToExpire === forInstance,
+                              )
+                            : portTypeRecords;
+                    const instanceSet = new Set<string>();
+                    recordsToProcess.forEach(record => {
                         record.ttl = 0;
-                        if (instanceName === undefined && record.recordType === DnsRecordType.TXT) {
-                            instanceName = record.name;
+                        if (record.recordType === DnsRecordType.TXT) {
+                            instanceSet.add(record.name);
                         }
                     });
+                    const instanceName =
+                        instanceSet.size > 1
+                            ? "multiple"
+                            : instanceSet.size === 1
+                              ? Array.from(instanceSet.values())[0]
+                              : "";
                     logger.debug(
                         `Expiring records`,
                         Diagnostic.dict({

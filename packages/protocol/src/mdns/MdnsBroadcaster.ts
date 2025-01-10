@@ -14,6 +14,7 @@ import {
     DnsRecord,
     ImplementationError,
     Logger,
+    MatterAggregateError,
     Network,
     PtrRecord,
     SrvRecord,
@@ -66,7 +67,7 @@ const DEFAULT_PAIRING_HINT = {
  */
 export class MdnsBroadcaster {
     readonly #activeCommissioningAnnouncements = new Set<number>();
-    readonly #activeOperationalAnnouncements = new Map<number, FabricIndex[]>();
+    readonly #activeOperationalAnnouncements = new Map<number, { fabricIndex: FabricIndex; forInstance: string }[]>();
     readonly #network: Network;
     readonly #mdnsServer: MdnsServer;
     readonly #enableIpv4?: boolean;
@@ -255,19 +256,36 @@ export class MdnsBroadcaster {
         }: OperationalInstanceData = {},
     ) {
         const currentOperationalFabrics = this.#activeOperationalAnnouncements.get(announcedNetPort);
-        if (currentOperationalFabrics !== undefined) {
-            const fabricIndexesSet = new Set(fabrics.map(f => f.fabricIndex));
-
-            // Expire Fabric announcements if any entry got removed
-            if (!currentOperationalFabrics.every(fabricIndex => fabricIndexesSet.has(fabricIndex))) {
-                await this.expireFabricAnnouncement(announcedNetPort);
-            }
-        }
 
         this.#activeOperationalAnnouncements.set(
             announcedNetPort,
-            fabrics.map(f => f.fabricIndex),
+            fabrics.map(f => ({
+                fabricIndex: f.fabricIndex,
+                forInstance: getDeviceMatterQname(
+                    Bytes.toHex(f.operationalId).toUpperCase(),
+                    NodeId.toHexString(f.nodeId),
+                ),
+            })),
         );
+
+        const expires = new Array<Promise<void>>();
+
+        if (currentOperationalFabrics !== undefined) {
+            const fabricIndexesSet = new Set(fabrics.map(f => f.fabricIndex));
+
+            // Expire Fabric announcements for instances that got removed
+            for (const { fabricIndex, forInstance } of currentOperationalFabrics) {
+                if (!fabricIndexesSet.has(fabricIndex)) {
+                    expires.push(
+                        this.#mdnsServer.expireAnnouncements({
+                            announcedNetPort,
+                            type: AnnouncementType.Operative,
+                            forInstance,
+                        }),
+                    );
+                }
+            }
+        }
 
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, async netInterface => {
             const ipMac = await this.#network.getIpMac(netInterface);
@@ -285,30 +303,40 @@ export class MdnsBroadcaster {
                 logger.debug(
                     "Announcement Generator: Fabric",
                     Diagnostic.dict({
-                        id: `${Bytes.toHex(operationalId)}/${nodeId}`,
+                        id: `${operationalIdString}-${NodeId.toHexString(nodeId)}`,
                         qname: deviceMatterQname,
                         port: announcedNetPort,
                         interface: netInterface,
                     }),
                 );
                 const fabricRecords = [
-                    PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname),
-                    PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
-                    PtrRecord(fabricQname, deviceMatterQname),
-                    SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
-                    TxtRecord(deviceMatterQname, [
-                        `SII=${sessionIdleInterval}` /* Session Idle Interval */,
-                        `SAI=${sessionActiveInterval}` /* Session Active Interval */,
-                        `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                        //`T=${TCP_SUPPORTED}` /* TCP not supported */,
-                        //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
-                    ]),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname, deviceMatterQname),
+                    PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname, deviceMatterQname),
+                    PtrRecord(fabricQname, deviceMatterQname, deviceMatterQname),
+                    SrvRecord(
+                        deviceMatterQname,
+                        { priority: 0, weight: 0, port: announcedNetPort, target: hostname },
+                        deviceMatterQname,
+                    ),
+                    TxtRecord(
+                        deviceMatterQname,
+                        [
+                            `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                            `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                            `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
+                            //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                            //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                        ],
+                        deviceMatterQname,
+                    ),
                 ];
                 records.push(...fabricRecords);
             });
             records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
+
+        await MatterAggregateError.allSettled(expires);
     }
 
     /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
@@ -378,29 +406,29 @@ export class MdnsBroadcaster {
         this.#mdnsServer.announce(announcementPort).catch(error => logger.error(error));
     }
 
-    async expireFabricAnnouncement(announcementPort: number) {
-        if (this.#activeOperationalAnnouncements.has(announcementPort)) {
-            await this.#mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Operative);
-            this.#activeOperationalAnnouncements.delete(announcementPort);
+    async expireFabricAnnouncement(announcedNetPort: number) {
+        if (this.#activeOperationalAnnouncements.has(announcedNetPort)) {
+            await this.#mdnsServer.expireAnnouncements({ announcedNetPort, type: AnnouncementType.Operative });
+            this.#activeOperationalAnnouncements.delete(announcedNetPort);
         }
     }
 
-    async expireCommissioningAnnouncement(announcementPort: number) {
-        if (this.#activeCommissioningAnnouncements.has(announcementPort)) {
-            await this.#mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Commissionable);
-            this.#activeCommissioningAnnouncements.delete(announcementPort);
+    async expireCommissioningAnnouncement(announcedNetPort: number) {
+        if (this.#activeCommissioningAnnouncements.has(announcedNetPort)) {
+            await this.#mdnsServer.expireAnnouncements({ announcedNetPort, type: AnnouncementType.Commissionable });
+            this.#activeCommissioningAnnouncements.delete(announcedNetPort);
         }
     }
 
-    async expireAllAnnouncements(announcementPort: number) {
+    async expireAllAnnouncements(announcedNetPort: number) {
         if (
-            !this.#activeCommissioningAnnouncements.has(announcementPort) &&
-            !this.#activeOperationalAnnouncements.has(announcementPort)
+            !this.#activeCommissioningAnnouncements.has(announcedNetPort) &&
+            !this.#activeOperationalAnnouncements.has(announcedNetPort)
         )
             return;
-        await this.#mdnsServer.expireAnnouncements(announcementPort);
-        this.#activeCommissioningAnnouncements.delete(announcementPort);
-        this.#activeOperationalAnnouncements.delete(announcementPort);
+        await this.#mdnsServer.expireAnnouncements({ announcedNetPort });
+        this.#activeCommissioningAnnouncements.delete(announcedNetPort);
+        this.#activeOperationalAnnouncements.delete(announcedNetPort);
     }
 
     async close() {

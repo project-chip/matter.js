@@ -6,7 +6,6 @@
 
 //import { OperationalCredentialsBehavior } from "@matter/main/behaviors";
 import { OperationalCredentialsBehavior } from "@matter/main/behaviors/operational-credentials";
-import { edit } from "@matter/testing";
 import { NodeTestInstance } from "../../src/NodeTestInstance.js";
 //import { NodeTestInstance } from "../../src/NodeTestInstance.js";
 
@@ -19,7 +18,8 @@ describe("CADMIN", () => {
     //
     // For now we just patch the test to convert 0xb (whatever that is) to 0x587, which appears to be an internal
     // encoding for ConstraintError (which is just 0x87, so presumably 0x500 is a bit prefix)
-    before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
+    // TODO RE-ADD next line once error is fixed
+    //before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
 
     // TODO - temporarily disabled other tests while working out 1.19 issues
     //chip("CADMIN/*").exclude("CADMIN/1.19");
@@ -29,8 +29,8 @@ describe("CADMIN", () => {
         const node = NodeTestInstance.nodeOf(subject);
 
         // CHIP has a hard-coded limit via CHIP_CONFIG_MAX_FABRICS macro which defaults to 16.  TC_ADMIN_1_19 fails
-        // when we exhaust this space with our default fabric limit of 254.  So force ours low enough that CHIP can
-        // handle it.  We set it as low as possible so the test iterates more quickly (5 is the constrained minimum)
-        return node.setStateOf(OperationalCredentialsBehavior, { supportedFabrics: 5 });
+        // when we exhaust this space with our default fabric limit of 254.  Including a bug which lets the test
+        // fail if limit is not 16, so set to 16 to be ok for now.
+        return node.setStateOf(OperationalCredentialsBehavior, { supportedFabrics: 16 });
     });
 });
