@@ -1411,11 +1411,6 @@ export class MdnsScanner implements Scanner {
                 }
             });
         }
-        console.log(
-            "After expire",
-            Object.keys(data.addressesV6 ?? {}).length,
-            Object.keys(data.addressesV4 ?? {}).length,
-        );
     }
 
     static discoveryDataDiagnostics(data: DiscoveryData) {
