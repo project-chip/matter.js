@@ -197,9 +197,9 @@ export class ControllerCommissioningFlow {
     async executeCommissioning() {
         this.#sortSteps();
 
+        let failSafeTimerReArmedAfterPreviousStep = false;
         for (const step of this.#commissioningSteps) {
             logger.info(`Executing commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name}`);
-            let failSafeTimerReArmedAfterPreviousStep = false;
             try {
                 if (step.reArmFailsafe && !failSafeTimerReArmedAfterPreviousStep) {
                     logger.debug(`Re-Arming failsafe timer before executing step`);
