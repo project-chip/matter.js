@@ -70,10 +70,16 @@ type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
         addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
     };
 
+type AnyDnsRecordWithExpiry = DnsRecord<any> & Lifespan;
+
 type StructuredDnsAnswers = {
-    operational?: Record<number, DnsRecord<any>[]>; // Operational Matter device records by recordType
-    commissionable?: Record<number, DnsRecord<any>[]>; // Commissionable Matter device records by recordType
-    addresses?: Record<string, DnsRecord<any>[]>; // IP Address records by name
+    operational?: Record<number, AnyDnsRecordWithExpiry[]>; // Operational Matter device records by recordType
+    commissionable?: Record<number, AnyDnsRecordWithExpiry[]>; // Commissionable Matter device records by recordType
+} & StructuredDnsAddressAnswers;
+
+type StructuredDnsAddressAnswers = {
+    addressesV4?: Record<string, Record<string, AnyDnsRecordWithExpiry>>; // IPv4 Address record by name and value (IP)
+    addressesV6?: Record<string, Record<string, AnyDnsRecordWithExpiry>>; // IPv6 Address record by name and value (IP)
 };
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
@@ -103,6 +109,7 @@ export class MdnsScanner implements Scanner {
     }
 
     readonly #activeAnnounceQueries = new Map<string, { queries: DnsQuery[]; answers: StructuredDnsAnswers }>();
+    readonly #discoveredIpRecords = new Map<string, StructuredDnsAddressAnswers>();
     #queryTimer?: Timer;
     #nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
 
@@ -249,9 +256,14 @@ export class MdnsScanner implements Scanner {
         this.#queryTimer = Time.getTimer("MDNS discovery", 0, () => this.#sendQueries()).start();
     }
 
-    #getActiveQueryEarlierAnswers() {
+    /**
+     * Combines the known answers from all active queries and the known IP addresses from the network
+     * interface into one data package
+     */
+    #getActiveQueryEarlierAnswers(netInterface: string) {
         return this.#combineStructuredAnswers(
             ...[...this.#activeAnnounceQueries.values()].map(({ answers }) => answers),
+            this.#discoveredIpRecords.get(netInterface) ?? {},
         );
     }
 
@@ -714,21 +726,38 @@ export class MdnsScanner implements Scanner {
     #structureAnswers(...answersList: DnsRecord<any>[][]): StructuredDnsAnswers {
         const structuredAnswers: StructuredDnsAnswers = {};
 
+        const discoveredAt = Time.nowMs();
         answersList.forEach(answers =>
             answers.forEach(answer => {
                 const { name, recordType } = answer;
                 if (name.endsWith(MATTER_SERVICE_QNAME)) {
                     structuredAnswers.operational = structuredAnswers.operational ?? {};
                     structuredAnswers.operational[recordType] = structuredAnswers.operational[recordType] ?? [];
-                    structuredAnswers.operational[recordType].push(answer);
+                    structuredAnswers.operational[recordType].push({
+                        discoveredAt,
+                        ...answer,
+                    });
                 } else if (name.endsWith(MATTER_COMMISSION_SERVICE_QNAME)) {
                     structuredAnswers.commissionable = structuredAnswers.commissionable ?? {};
                     structuredAnswers.commissionable[recordType] = structuredAnswers.commissionable[recordType] ?? [];
-                    structuredAnswers.commissionable[recordType].push(answer);
-                } else if (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA) {
-                    structuredAnswers.addresses = structuredAnswers.addresses ?? {};
-                    structuredAnswers.addresses[name] = structuredAnswers.addresses[name] ?? [];
-                    structuredAnswers.addresses[name].push(answer);
+                    structuredAnswers.commissionable[recordType].push({
+                        discoveredAt,
+                        ...answer,
+                    });
+                } else if (recordType === DnsRecordType.AAAA) {
+                    structuredAnswers.addressesV6 = structuredAnswers.addressesV6 ?? {};
+                    structuredAnswers.addressesV6[name] = structuredAnswers.addressesV6[name] ?? [];
+                    structuredAnswers.addressesV6[name][answer.value] = {
+                        discoveredAt,
+                        ...answer,
+                    };
+                } else if (this.#enableIpv4 && recordType === DnsRecordType.A) {
+                    structuredAnswers.addressesV4 = structuredAnswers.addressesV4 ?? {};
+                    structuredAnswers.addressesV4[name] = structuredAnswers.addressesV4[name] ?? {};
+                    structuredAnswers.addressesV4[name][answer.value] = {
+                        discoveredAt,
+                        ...answer,
+                    };
                 }
             }),
         );
@@ -737,10 +766,12 @@ export class MdnsScanner implements Scanner {
     }
 
     #combineStructuredAnswers(...answersList: StructuredDnsAnswers[]): StructuredDnsAnswers {
+        // Special type for easier combination of answers
         const combinedAnswers: {
-            operational?: Record<number, Map<string, DnsRecord<any>>>;
-            commissionable?: Record<number, Map<string, DnsRecord<any>>>;
-            addresses?: Record<string, DnsRecord<any>[]>;
+            operational?: Record<number, Map<string, AnyDnsRecordWithExpiry>>;
+            commissionable?: Record<number, Map<string, AnyDnsRecordWithExpiry>>;
+            addressesV4?: Record<string, Map<string, AnyDnsRecordWithExpiry>>;
+            addressesV6?: Record<string, Map<string, AnyDnsRecordWithExpiry>>;
         } = {};
 
         for (const answers of answersList) {
@@ -748,11 +779,18 @@ export class MdnsScanner implements Scanner {
                 combinedAnswers.operational = combinedAnswers.operational ?? {};
                 for (const [recordType, records] of Object.entries(answers.operational) as unknown as [
                     number,
-                    DnsRecord<any>[],
+                    AnyDnsRecordWithExpiry[],
                 ][]) {
                     combinedAnswers.operational[recordType] = combinedAnswers.operational[recordType] ?? new Map();
                     records.forEach(record => {
-                        combinedAnswers.operational![recordType].set(record.name, record);
+                        const existingRecord = combinedAnswers.operational![recordType].get(record.name);
+                        if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
+                            if (record.ttl === 0) {
+                                combinedAnswers.operational![recordType].delete(record.name);
+                            } else {
+                                combinedAnswers.operational![recordType].set(record.name, record);
+                            }
+                        }
                     });
                 }
             }
@@ -760,24 +798,58 @@ export class MdnsScanner implements Scanner {
                 combinedAnswers.commissionable = combinedAnswers.commissionable ?? {};
                 for (const [recordType, records] of Object.entries(answers.commissionable) as unknown as [
                     number,
-                    DnsRecord<any>[],
+                    AnyDnsRecordWithExpiry[],
                 ][]) {
                     combinedAnswers.commissionable[recordType] =
                         combinedAnswers.commissionable[recordType] ?? new Map();
                     records.forEach(record => {
-                        combinedAnswers.commissionable![recordType].set(record.name, record);
+                        const existingRecord = combinedAnswers.commissionable![recordType].get(record.name);
+                        if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
+                            if (record.ttl === 0) {
+                                combinedAnswers.commissionable![recordType].delete(record.name);
+                            } else {
+                                combinedAnswers.commissionable![recordType].set(record.name, record);
+                            }
+                        }
                     });
                 }
             }
-            if (answers.addresses) {
-                combinedAnswers.addresses = combinedAnswers.addresses ?? {};
-                for (const [name, records] of Object.entries(answers.addresses) as unknown as [
+            if (answers.addressesV6) {
+                combinedAnswers.addressesV6 = combinedAnswers.addressesV6 ?? {};
+                for (const [name, records] of Object.entries(answers.addressesV6) as unknown as [
                     string,
-                    DnsRecord<any>[],
+                    Record<string, AnyDnsRecordWithExpiry>,
                 ][]) {
-                    combinedAnswers.addresses[name] = combinedAnswers.addresses[name] ?? [];
-                    // IP address consolidation happens when they are selected for a device
-                    combinedAnswers.addresses[name].push(...records);
+                    combinedAnswers.addressesV6[name] = combinedAnswers.addressesV6[name] ?? new Map();
+                    Object.values(records).forEach(record => {
+                        const existingRecord = combinedAnswers.addressesV6![name].get(record.value);
+                        if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
+                            if (record.ttl === 0) {
+                                combinedAnswers.addressesV6![name].delete(name);
+                            } else {
+                                combinedAnswers.addressesV6![name].set(name, record);
+                            }
+                        }
+                    });
+                }
+            }
+            if (this.#enableIpv4 && answers.addressesV4) {
+                combinedAnswers.addressesV4 = combinedAnswers.addressesV4 ?? {};
+                for (const [name, records] of Object.entries(answers.addressesV4) as unknown as [
+                    string,
+                    Record<string, AnyDnsRecordWithExpiry>,
+                ][]) {
+                    combinedAnswers.addressesV4[name] = combinedAnswers.addressesV4[name] ?? new Map();
+                    Object.values(records).forEach(record => {
+                        const existingRecord = combinedAnswers.addressesV4![name].get(record.value);
+                        if (existingRecord && existingRecord.discoveredAt < record.discoveredAt) {
+                            if (record.ttl === 0) {
+                                combinedAnswers.addressesV4![name].delete(name);
+                            } else {
+                                combinedAnswers.addressesV4![name].set(name, record);
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -799,8 +871,21 @@ export class MdnsScanner implements Scanner {
                 ]),
             );
         }
-        if (combinedAnswers.addresses) {
-            result.addresses = combinedAnswers.addresses;
+        if (combinedAnswers.addressesV6) {
+            result.addressesV6 = Object.fromEntries(
+                Object.entries(combinedAnswers.addressesV6).map(([name, records]) => [
+                    name,
+                    Object.fromEntries(records),
+                ]),
+            );
+        }
+        if (this.#enableIpv4 && combinedAnswers.addressesV4) {
+            result.addressesV4 = Object.fromEntries(
+                Object.entries(combinedAnswers.addressesV4).map(([name, records]) => [
+                    name,
+                    Object.fromEntries(records),
+                ]),
+            );
         }
 
         return result;
@@ -819,12 +904,77 @@ export class MdnsScanner implements Scanner {
 
         const answers = this.#structureAnswers([...message.answers, ...message.additionalRecords]);
 
-        const formerAnswers = this.#getActiveQueryEarlierAnswers();
+        const formerAnswers = this.#getActiveQueryEarlierAnswers(netInterface);
         // Check if we got operational discovery records and handle them
         this.#handleOperationalRecords(answers, formerAnswers, netInterface);
 
         // Else check if we got commissionable discovery records and handle them
         this.#handleCommissionableRecords(answers, formerAnswers, netInterface);
+
+        this.#updateIpRecords(answers, netInterface);
+    }
+
+    /**
+     * Update the discovered matter relevant IP records with the new data from the DNS message.
+     */
+    #updateIpRecords(answers: StructuredDnsAnswers, netInterface: string) {
+        const interfaceRecords = this.#discoveredIpRecords.get(netInterface);
+        if (interfaceRecords === undefined) {
+            return;
+        }
+        let updated = false;
+        if (answers.addressesV6) {
+            for (const [target, ipAddresses] of Object.entries(answers.addressesV6)) {
+                if (interfaceRecords.addressesV6?.[target]) {
+                    for (const [ip, record] of Object.entries(ipAddresses)) {
+                        if (record.ttl === 0) {
+                            delete interfaceRecords.addressesV6[target][ip];
+                        } else {
+                            interfaceRecords.addressesV6[target][ip] = record;
+                        }
+                        updated = true;
+                    }
+                }
+            }
+        }
+        if (this.#enableIpv4 && answers.addressesV4) {
+            for (const [target, ipAddresses] of Object.entries(answers.addressesV4)) {
+                if (interfaceRecords.addressesV4?.[target]) {
+                    for (const [ip, record] of Object.entries(ipAddresses)) {
+                        if (record.ttl === 0) {
+                            delete interfaceRecords.addressesV4[target][ip];
+                        } else {
+                            interfaceRecords.addressesV4[target][ip] = record;
+                        }
+                        updated = true;
+                    }
+                }
+            }
+        }
+        if (updated) {
+            this.#discoveredIpRecords.set(netInterface, interfaceRecords);
+        }
+    }
+
+    /**
+     * Register Matter relevant IP records for later usage.
+     */
+    #registerIpRecords(ipAddresses: AnyDnsRecordWithExpiry[], netInterface: string) {
+        const interfaceRecords = this.#discoveredIpRecords.get(netInterface) ?? {};
+        for (const record of ipAddresses) {
+            const { recordType, name, value: ip, ttl } = record as DnsRecord<string>;
+            if (ttl === 0) continue; // Skip records with ttl=0
+            if (recordType === DnsRecordType.AAAA) {
+                interfaceRecords.addressesV6 = interfaceRecords.addressesV6 ?? {};
+                interfaceRecords.addressesV6[name] = interfaceRecords.addressesV6[name] ?? {};
+                interfaceRecords.addressesV6[name][ip] = record;
+            } else if (this.#enableIpv4 && recordType === DnsRecordType.A) {
+                interfaceRecords.addressesV4 = interfaceRecords.addressesV4 ?? {};
+                interfaceRecords.addressesV4[name] = interfaceRecords.addressesV4[name] ?? {};
+                interfaceRecords.addressesV4[name][ip] = record;
+            }
+        }
+        this.#discoveredIpRecords.set(netInterface, interfaceRecords);
     }
 
     #handleIpRecords(
@@ -832,12 +982,21 @@ export class MdnsScanner implements Scanner {
         target: string,
         netInterface: string,
     ): { value: string; ttl: number }[] {
-        const ipRecords = answers
-            .flatMap(answer => answer.addresses?.[target] ?? [])
-            .filter(
-                ({ recordType }) =>
-                    recordType === DnsRecordType.AAAA || (recordType === DnsRecordType.A && this.#enableIpv4),
-            );
+        const ipRecords = new Array<AnyDnsRecordWithExpiry>();
+        answers.forEach(answer => {
+            if (answer.addressesV6?.[target]) {
+                ipRecords.push(...Object.values(answer.addressesV6[target]));
+            }
+            if (this.#enableIpv4 && answer.addressesV4?.[target]) {
+                ipRecords.push(...Object.values(answer.addressesV4[target]));
+            }
+        });
+        if (ipRecords.length === 0) {
+            return [];
+        }
+
+        // Remember the IP records for later Matter usage
+        this.#registerIpRecords(ipRecords, netInterface); // Register for potential later usage
 
         // If an IP is included multiple times we only keep the latest record
         const collectedIps = new Map<string, { value: string; ttl: number }>();
@@ -950,6 +1109,7 @@ export class MdnsScanner implements Scanner {
             discoveredAt,
             ttl: ttl * 1000,
         };
+        const ipsInitiallyEmpty = device.addresses.size === 0;
         const { addresses } = device;
         if (ips.length > 0) {
             for (const { value: ip, ttl } of ips) {
@@ -967,9 +1127,9 @@ export class MdnsScanner implements Scanner {
                 addresses.set(address.ip, address);
             }
             device.addresses = addresses;
-            if (!this.#operationalDeviceRecords.has(matterName)) {
+            if (ipsInitiallyEmpty) {
                 logger.debug(
-                    `Added IPs for operational device ${matterName} to cache (interface ${netInterface}):`,
+                    `Added ${addresses.size} IPs for operational device ${matterName} to cache (interface ${netInterface}):`,
                     ...MdnsScanner.deviceAddressDiagnostics(addresses),
                 );
             }
@@ -1066,7 +1226,7 @@ export class MdnsScanner implements Scanner {
                 continue;
             }
 
-            const recordExisting = storedRecord.addresses.size > 0;
+            const recordAddressesKnown = storedRecord.addresses.size > 0;
 
             const ips = this.#handleIpRecords([formerAnswers, answers], target, netInterface);
             if (ips.length > 0) {
@@ -1099,6 +1259,11 @@ export class MdnsScanner implements Scanner {
                     `Requesting IP addresses for commissionable device ${record.name} (interface ${netInterface}).`,
                 );
                 this.#setQueryRecords(queryId, queries, answers);
+            } else if (!recordAddressesKnown) {
+                logger.debug(
+                    `Added ${storedRecord.addresses.size} IPs for commissionable device ${record.name} to cache (interface ${netInterface}):`,
+                    ...MdnsScanner.deviceAddressDiagnostics(storedRecord.addresses),
+                );
             }
             if (storedRecord.addresses.size === 0) continue;
 
@@ -1106,7 +1271,7 @@ export class MdnsScanner implements Scanner {
             if (queryId === undefined) continue;
 
             queryMissingDataForInstances.delete(record.name); // No need to query anymore, we have anything we need
-            this.#finishWaiter(queryId, true, recordExisting);
+            this.#finishWaiter(queryId, true, recordAddressesKnown);
         }
 
         // We have to query for the SRV records for the missing commissionable devices where we only had TXT records
@@ -1199,10 +1364,63 @@ export class MdnsScanner implements Scanner {
                 });
             }
             if (now > expires && !addresses.size) {
-                // device expired and also has no adresses anymore
+                // device expired and also has no addresses anymore
                 this.#commissionableDeviceRecords.delete(recordKey);
             }
         });
+
+        [...this.#activeAnnounceQueries.values()].forEach(({ answers }) => this.#expireStructuredAnswers(answers, now));
+
+        this.#discoveredIpRecords.forEach(answers => this.#expireStructuredAnswers(answers, now));
+    }
+
+    #expireStructuredAnswers(data: StructuredDnsAnswers, now: number) {
+        if (data.operational) {
+            Object.keys(data.operational).forEach(recordType => {
+                const type = parseInt(recordType);
+                data.operational![type] = data.operational![type].filter(
+                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                );
+                if (data.operational![type].length === 0) {
+                    delete data.operational![type];
+                }
+            });
+        }
+        if (data.commissionable) {
+            Object.keys(data.commissionable).forEach(recordType => {
+                const type = parseInt(recordType);
+                data.commissionable![type] = data.commissionable![type].filter(
+                    ({ discoveredAt, ttl }) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                );
+                if (data.commissionable![type].length === 0) {
+                    delete data.commissionable![type];
+                }
+            });
+        }
+        if (data.addressesV6) {
+            Object.keys(data.addressesV6).forEach(name => {
+                data.addressesV6![name] = Object.fromEntries(
+                    Object.entries(data.addressesV6![name]).filter(
+                        ([, { discoveredAt, ttl }]) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                    ),
+                );
+                if (Object.keys(data.addressesV6![name]).length === 0) {
+                    delete data.addressesV6![name];
+                }
+            });
+        }
+        if (data.addressesV4) {
+            Object.keys(data.addressesV4).forEach(name => {
+                data.addressesV4![name] = Object.fromEntries(
+                    Object.entries(data.addressesV4![name]).filter(
+                        ([, { discoveredAt, ttl }]) => now < discoveredAt + this.#effectiveTTL(ttl * 1000),
+                    ),
+                );
+                if (Object.keys(data.addressesV4![name]).length === 0) {
+                    delete data.addressesV4![name];
+                }
+            });
+        }
     }
 
     static discoveryDataDiagnostics(data: DiscoveryData) {
