@@ -56,6 +56,7 @@ const MDNS_EXPIRY_GRACE_PERIOD_FACTOR = 1.05;
 
 type MatterServerRecordWithExpire = ServerAddressIp & Lifespan;
 
+/** Type for commissionable Device records including Lifespan details. */
 type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> &
     Lifespan & {
         addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
@@ -65,22 +66,26 @@ type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresse
         P?: number; // Additional Field for Product ID
     };
 
+/** Type for operational Device records including Lifespan details. */
 type OperationalDeviceRecordWithExpire = Omit<OperationalDevice, "addresses"> &
     Lifespan & {
         addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
     };
 
+/** Type for any DNS record with Lifespan (discoveredAt and ttl) details. */
 type AnyDnsRecordWithExpiry = DnsRecord<any> & Lifespan;
 
-type StructuredDnsAnswers = {
-    operational?: Record<number, AnyDnsRecordWithExpiry[]>; // Operational Matter device records by recordType
-    commissionable?: Record<number, AnyDnsRecordWithExpiry[]>; // Commissionable Matter device records by recordType
-} & StructuredDnsAddressAnswers;
-
+/** Type for DNS answers with Address details structured for better direct access performance. */
 type StructuredDnsAddressAnswers = {
     addressesV4?: Record<string, Map<string, AnyDnsRecordWithExpiry>>; // IPv4 Address record by name and value (IP)
     addressesV6?: Record<string, Map<string, AnyDnsRecordWithExpiry>>; // IPv6 Address record by name and value (IP)
 };
+
+/** Type for DNS answers with Lifespan details  structured for better direct access performance. */
+type StructuredDnsAnswers = {
+    operational?: Record<number, AnyDnsRecordWithExpiry[]>; // Operational Matter device records by recordType
+    commissionable?: Record<number, AnyDnsRecordWithExpiry[]>; // Commissionable Matter device records by recordType
+} & StructuredDnsAddressAnswers;
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
@@ -108,13 +113,19 @@ export class MdnsScanner implements Scanner {
         );
     }
 
+    /** Active announces by queryId with queries and known answers */
     readonly #activeAnnounceQueries = new Map<string, { queries: DnsQuery[]; answers: StructuredDnsAnswers }>();
-    readonly #discoveredIpRecords = new Map<string, StructuredDnsAddressAnswers>();
-    #queryTimer?: Timer;
-    #nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
 
+    /** Known IP addresses by network interface */
+    readonly #discoveredIpRecords = new Map<string, StructuredDnsAddressAnswers>();
+
+    /** Known operational device records by Matter Qname */
     readonly #operationalDeviceRecords = new Map<string, OperationalDeviceRecordWithExpire>();
+
+    /** Known commissionable device records by queryId */
     readonly #commissionableDeviceRecords = new Map<string, CommissionableDeviceRecordWithExpire>();
+
+    /** Waiters for specific queryIds to resolve a promise when a record is discovered */
     readonly #recordWaiters = new Map<
         string,
         {
@@ -124,9 +135,11 @@ export class MdnsScanner implements Scanner {
             cancelResolver?: (value: void) => void;
         }
     >();
+
+    #queryTimer?: Timer;
+    #nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
     readonly #periodicTimer: Timer;
     #closing = false;
-
     readonly #multicastServer: UdpMulticastServer;
     readonly #enableIpv4?: boolean;
 
