@@ -50,7 +50,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
         including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
-        connection 
+        connection
+    - Feature: Added autoConnect property to node connection options to allow to not automatically connect to a node when PairedNode instance is created. Also introduces a non-blocking PairedNode.connect() method to connect to a node
+    - Feature: Added CommissioningController.getNode() method to get a PairedNode instance for a node by its node ID without a direct connection
     - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
     - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions
