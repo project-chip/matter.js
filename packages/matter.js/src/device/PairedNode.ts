@@ -376,14 +376,16 @@ export class PairedNode {
                 await this.#initializeFromStoredData(storedAttributeData);
             }
 
-            // This kicks of the remote initialization and automatic reconnection handling if it can not be connected
-            this.#initialize().catch(error => {
-                logger.info(`Node ${nodeId}: Error during remote initialization`, error);
-                if (this.state !== NodeStates.Disconnected) {
-                    this.#setConnectionState(NodeStates.WaitingForDeviceDiscovery);
-                    this.#scheduleReconnect();
-                }
-            });
+            if (this.options.autoConnect !== false) {
+                // This kicks of the remote initialization and automatic reconnection handling if it can not be connected
+                this.#initialize().catch(error => {
+                    logger.info(`Node ${nodeId}: Error during remote initialization`, error);
+                    if (this.state !== NodeStates.Disconnected) {
+                        this.#setConnectionState(NodeStates.WaitingForDeviceDiscovery);
+                        this.#scheduleReconnect();
+                    }
+                });
+            }
         });
     }
 
