@@ -319,9 +319,19 @@ export class CommissioningController extends MatterNode {
         await this.controllerInstance?.disconnect(nodeId);
     }
 
+    async getNode(nodeId: NodeId) {
+        const existingNode = this.initializedNodes.get(nodeId);
+        if (existingNode !== undefined) {
+            return existingNode;
+        }
+        return await this.connectNode(nodeId, { autoConnect: false });
+    }
+
     /**
      * Connect to an already paired Node.
      * After connection the endpoint data of the device is analyzed and an object structure is created.
+     * This call is not blocking and returns an initialized PairedNode instance. The connection or reconnection
+     * happens in the background. Please monitor the state of the node to see if the connection was successful.
      */
     async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
         const controller = this.assertControllerIsStarted();
@@ -333,7 +343,7 @@ export class CommissioningController extends MatterNode {
         const existingNode = this.initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.initialized) {
-                await existingNode.reconnect(connectOptions);
+                existingNode.connect(connectOptions);
             }
             return existingNode;
         }

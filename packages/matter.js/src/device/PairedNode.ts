@@ -156,6 +156,12 @@ export enum NodeStateInformation {
 
 export type CommissioningControllerNodeOptions = {
     /**
+     * Unless set to false the node will be automatically connected when initialized. When set to false use
+     * connect() to connect to the node at a later timepoint.
+     */
+    readonly autoConnect?: boolean;
+
+    /**
      * Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient
      * instances. With this reading attributes values is mostly looked up in the locally cached data.
      * Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done
@@ -453,6 +459,18 @@ export class PairedNode {
     }
 
     /**
+     * Schedule a connection to the device. This method is non-blocking and will return immediately.
+     * The connection happens in the background. Please monitor the state of the node to see if the
+     * connection was successful.
+     */
+    connect(connectOptions?: CommissioningControllerNodeOptions) {
+        if (connectOptions !== undefined) {
+            this.options = connectOptions;
+        }
+        this.triggerReconnect();
+    }
+
+    /**
      * Trigger a reconnection to the device. This method is non-blocking and will return immediately.
      * The reconnection happens in the background. Please monitor the state of the node to see if the
      * reconnection was successful.
@@ -460,7 +478,7 @@ export class PairedNode {
     triggerReconnect() {
         if (this.#reconnectionInProgress || this.#remoteInitializationInProgress) {
             logger.info(
-                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "init" : "reconnect"} already underway.`,
+                `Node ${this.nodeId}: Ignoring reconnect request because ${this.#remoteInitializationInProgress ? "initialization" : "reconnect"} already in progress.`,
             );
             return;
         }

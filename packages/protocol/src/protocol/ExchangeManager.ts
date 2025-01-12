@@ -352,8 +352,8 @@ export class ExchangeManager {
             logger.debug(`Channel for session ${session.name} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-                logger.debug(`Initiated exchange ${!!exchange} to close session ${sessionName}`);
                 if (exchange !== undefined) {
+                    logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
                     try {
                         const messenger = new SecureChannelMessenger(exchange);
                         await messenger.sendCloseSession();
