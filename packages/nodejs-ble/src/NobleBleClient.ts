@@ -85,7 +85,9 @@ export class NobleBleClient {
         this.shouldScan = true;
         if (this.nobleState === "poweredOn") {
             logger.debug("Start BLE scanning for Matter Services ...");
-            await noble.startScanningAsync([BLE_MATTER_SERVICE_UUID], true);
+            // TODO Remove this Windows hack once Noble Windows issue is fixed
+            //  see https://github.com/stoprocent/noble/issues/20
+            await noble.startScanningAsync(process.platform !== "win32" ? [BLE_MATTER_SERVICE_UUID] : undefined, true);
         } else {
             logger.debug("noble state is not poweredOn ... delay scanning till poweredOn");
         }
@@ -103,6 +105,16 @@ export class NobleBleClient {
         // The advertisement data contains a name, power level (if available), certain advertised service uuids,
         // as well as manufacturer data.
         // {"localName":"MATTER-3840","serviceData":[{"uuid":"fff6","data":{"type":"Buffer","data":[0,0,15,241,255,1,128,0]}}],"serviceUuids":["fff6"],"solicitationServiceUuids":[],"serviceSolicitationUuids":[]}
+
+        // TODO Remove this Windows hack once Noble Windows issue is fixed
+        //  see https://github.com/stoprocent/noble/issues/20
+        if (
+            process.platform === "win32" &&
+            !peripheral.advertisement.serviceData.some(({ uuid }) => uuid === BLE_MATTER_SERVICE_UUID)
+        ) {
+            return;
+        }
+
         const address = peripheral.address;
         logger.debug(
             `Found peripheral ${address} (${peripheral.advertisement.localName}): ${Logger.toJSON(
@@ -115,7 +127,7 @@ export class NobleBleClient {
             return;
         }
         const matterServiceData = peripheral.advertisement.serviceData.find(
-            serviceData => serviceData.uuid === BLE_MATTER_SERVICE_UUID,
+            ({ uuid }) => uuid === BLE_MATTER_SERVICE_UUID,
         );
         if (matterServiceData === undefined || matterServiceData.data.length !== 8) {
             logger.info(`Peripheral ${address} does not advertise Matter Service ... ignoring`);
