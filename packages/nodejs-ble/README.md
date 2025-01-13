@@ -21,6 +21,9 @@ The used packages have some limitations and prerequisites. Please check the Read
   * When using Device and Controller in parallel: https://github.com/stoprocent/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
   * Please also see common issues and solutions: https://github.com/stoprocent/noble#common-problems
 
+
+> [TIP] For Linux: The :`make` and `g++` packages must be installed.
+
 ## How to use this package
 This package is designed to be used in addition to matter.ja and matter-node.js to enable BLE support. It is not intended to be used standalone.
 
