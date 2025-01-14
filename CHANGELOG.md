@@ -26,6 +26,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
     - Fix: Adds support for advanced manufacturer data on Windows (Noble update)
     - Fix: Added workaround for Noble on Windows to prevent discovery issues
+    - Fix: Considers formerly discovered devices as outdated when new discovery is started
     
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
