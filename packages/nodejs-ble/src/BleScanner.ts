@@ -234,7 +234,14 @@ export class BleScanner implements Scanner {
         timeoutSeconds = 10,
         ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
-        let storedRecords = ignoreExistingRecords ? [] : this.getCommissionableDevices(identifier);
+        let storedRecords = this.getCommissionableDevices(identifier);
+        if (ignoreExistingRecords) {
+            // We want to have a fresh discovery result, so clear out the stored records because they might be outdated
+            for (const record of storedRecords) {
+                this.discoveredMatterDevices.delete(record.peripheral.address);
+            }
+            storedRecords = [];
+        }
         if (storedRecords.length === 0) {
             const queryKey = this.buildCommissionableQueryIdentifier(identifier);
 
