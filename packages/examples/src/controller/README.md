@@ -4,7 +4,7 @@ This example shows basically how a controller could be implemented by showing pa
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../README.md#cli-usage).
 
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
 Please **do not** use this for production, we will replace the API soon!
