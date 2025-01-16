@@ -28,7 +28,7 @@ if (environment.vars.get("ble")) {
     Ble.get = singleton(
         () =>
             new NodeJsBle({
-                hciId: environment.vars.number("ble-hci-id"),
+                hciId: environment.vars.number("ble.hci.id"),
             }),
     );
 }
@@ -101,10 +101,10 @@ class ControllerNode {
         let ble = false;
         if (environment.vars.get("ble")) {
             ble = true;
-            const wifiSsid = environment.vars.string("ble-wifi-ssid");
-            const wifiCredentials = environment.vars.string("ble-wifi-credentials");
-            const threadNetworkName = environment.vars.string("ble-thread-networkname");
-            const threadOperationalDataset = environment.vars.string("ble-thread-operationaldataset");
+            const wifiSsid = environment.vars.string("ble.wifi.ssid");
+            const wifiCredentials = environment.vars.string("ble.wifi.credentials");
+            const threadNetworkName = environment.vars.string("ble.thread.networkname");
+            const threadOperationalDataset = environment.vars.string("ble.thread.operationaldataset");
             if (wifiSsid !== undefined && wifiCredentials !== undefined) {
                 logger.info(`Registering Commissioning over BLE with WiFi: ${wifiSsid}`);
                 commissioningOptions.wifiNetwork = {
