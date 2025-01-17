@@ -161,3 +161,7 @@ runs:
       run: |
         cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
       # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
+
+    - name: Tweak security settings to prevent errors on Ubuntu containers
+      shell: bash
+      run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
