@@ -137,11 +137,6 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: 0.8-API Core - Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-core
         shell: bash
@@ -174,11 +169,6 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
-
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: 0.8-API App - Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-fast
@@ -213,11 +203,6 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: 0.8-API App - Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-slow
         shell: bash
@@ -250,11 +235,6 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: Legacy-API - Run Tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-legacy
         shell: bash
@@ -286,11 +266,6 @@ jobs:
         with:
           rebuild-chip-tool: 'false'
 
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: 0.8-API - Long Test execution
         id: test-execution-long-08
         shell: bash
@@ -320,11 +295,6 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
-
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Legacy-API - Long Test execution
         id: test-execution-long-legacy
@@ -359,11 +329,6 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
-
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Generate an argument environment file
         run: |
@@ -425,11 +390,6 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
-
-      - name: Tweak security settings to prevent errors on Ubuntu containers
-        id: tweak-security-settings
-        shell: bash
-        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Generate an argument environment file
         run: |
