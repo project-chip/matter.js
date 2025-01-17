@@ -137,6 +137,11 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
+      - name: Tweak security settings to prevent errors on Ubuntu containers
+        id: tweak-security-settings
+        shell: bash
+        run: sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: 0.8-API Core - Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-core
         shell: bash
