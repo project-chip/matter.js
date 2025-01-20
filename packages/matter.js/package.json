@@ -49,7 +49,7 @@
         "@matter/node": "*",
         "@matter/protocol": "*",
         "@matter/types": "*",
-        "@noble/curves": "^1.7.0"
+        "@noble/curves": "^1.8.1"
     },
     "devDependencies": {
         "@matter/tools": "*",
