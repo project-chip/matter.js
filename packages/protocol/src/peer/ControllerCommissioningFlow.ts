@@ -441,6 +441,12 @@ export class ControllerCommissioningFlow {
         );
 
         if (statusCode === OperationalCredentials.NodeOperationalCertStatus.Ok) return;
+        if (context === "addNoc" && statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
+            // Let's return a bit more convenient error in this case
+            throw new CommissioningError(
+                `Commission error: This device is already commissioned into this fabric. You can not commission it again.`,
+            );
+        }
         throw new CommissioningError(
             `Commission error for "${context}": ${statusCode}, ${debugText}${
                 fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
@@ -453,7 +459,9 @@ export class ControllerCommissioningFlow {
         logger.debug(`Commissioning step ${context} returned ${errorCode}, ${debugText}`);
 
         if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
-        throw new CommissioningError(`Commission error for "${context}": ${errorCode}, ${debugText}`);
+        throw new CommissioningError(
+            `Commission error for "${context}": ${errorCode}${debugText ? `, ${debugText}` : ""}`,
+        );
     }
 
     /**
