@@ -22,6 +22,7 @@ import { Specification } from "@matter/model";
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
+    AccessControl,
     AdministratorCommissioning,
     BasicInformation,
     ClusterServer,
@@ -2033,6 +2034,29 @@ describe("Integration Test", () => {
                     path: undefined,
                 },
             ]);
+        });
+
+        it("write list attribute", async () => {
+            const nodeId = commissioningController2.getCommissionedNodes()[0];
+            const node = commissioningController2.getPairedNode(nodeId);
+            assert.ok(node);
+            const accessControl = node.getRootClusterClient(AccessControl.Cluster);
+            assert.ok(accessControl);
+            const acl = await accessControl.getAclAttribute(true, true);
+            assert.equal(Array.isArray(acl), true);
+            assert.equal(acl.length, 1);
+            assert.ok(acl[0].subjects);
+            acl.push({
+                ...acl[0],
+                subjects: [NodeId(BigInt(acl[0].subjects[0]) + BigInt(11111111))], // Just a non existing dummy subject
+            });
+
+            await accessControl.setAclAttribute(acl);
+
+            const acl2 = await accessControl.getAclAttribute(true, true);
+            assert.equal(Array.isArray(acl2), true);
+            assert.equal(acl2.length, 2);
+            assert.deepEqual(acl2, acl);
         });
     });
 
