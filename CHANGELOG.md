@@ -13,6 +13,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/general
     - Enhancement: Limits MDNS expires just to te relevant operational records when removing a fabric
+
+-   @matter/model
+    - Feature: The constraint evaluator now supports simple mathematical expressions
+    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
+    - Feature: Default values may now be a reference to another field
+
 -   @matter/node
     - Feature: Constraint and conformance expressions may now reference values by name in any owner of a constrained value
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
@@ -21,6 +27,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs
     - Breaking: Also the Sync Storage classes mainly used in legacy API now have an async close method!
+    - Fix: Converts commissioning.fabrics into dynamically generated property to ensure it is up to date when accessed
 
 -   @matter/nodejs-ble
     - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
@@ -43,13 +50,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fixes commissionable devices discovery with timeout
     - Fix: Restores the possibility to cancel a (continuous) discovery for commissionable devices
     - Fix: Fixes enablement of MDNS broadcasts when BLE commissioning is used
-
--   @matter/model
-    - Feature: The constraint evaluator now supports simple mathematical expressions
-    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
-    - Feature: Default values may now be a reference to another field
-
--   @project-chip/matter.js
+  
+- @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
         including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
         connection

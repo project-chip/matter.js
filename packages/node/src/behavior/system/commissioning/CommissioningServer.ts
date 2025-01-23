@@ -98,23 +98,7 @@ export class CommissioningServer extends Behavior {
             }
         }
 
-        const fabrics = this.env.get(FabricManager);
-        const commissioned = !!fabrics.length;
-        if (fabricAction === FabricAction.Removed) {
-            delete this.state.fabrics[fabricIndex];
-        } else {
-            const fabric = fabrics.find(fabric => fabric.fabricIndex === fabricIndex);
-            if (fabric !== undefined) {
-                this.state.fabrics[fabricIndex] = {
-                    fabricIndex: fabric.fabricIndex,
-                    fabricId: fabric.fabricId,
-                    nodeId: fabric.nodeId,
-                    rootNodeId: fabric.rootNodeId,
-                    rootVendorId: fabric.rootVendorId,
-                    label: fabric.label,
-                };
-            }
-        }
+        const commissioned = !!this.env.get(FabricManager).fabrics.length;
 
         let doFactoryReset = false;
         if (commissioned !== this.state.commissioned) {
@@ -253,17 +237,8 @@ export class CommissioningServer extends Behavior {
     });
 
     #nodeOnline() {
-        const fabrics = this.env.get(FabricManager).fabrics;
-        if (!fabrics.length) {
-            if (this.state.enabled) {
-                this.initiateCommissioning();
-            }
-        } else {
-            const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
-            fabrics.forEach(
-                ({ fabricIndex, externalInformation }) => (exposedFabrics[fabricIndex] = externalInformation),
-            );
-            this.state.fabrics = exposedFabrics;
+        if (this.state.enabled && !this.env.get(FabricManager).fabrics.length) {
+            this.initiateCommissioning();
         }
     }
 
@@ -297,6 +272,17 @@ export namespace CommissioningServer {
             return {
                 get pairingCodes() {
                     return CommissioningServer.pairingCodesFor(endpoint);
+                },
+
+                get fabrics() {
+                    const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+                    endpoint.env
+                        .get(FabricManager)
+                        .fabrics.forEach(
+                            ({ fabricIndex, externalInformation }) =>
+                                (exposedFabrics[fabricIndex] = externalInformation),
+                        );
+                    return exposedFabrics;
                 },
             };
         }
