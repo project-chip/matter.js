@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+- @project-chip/matter.js
+    - Fix: Allows more cases when checking if a device is battery powered to address real world devices
+
 ## 0.12.0 (2025-01-23)
 
 -   @matter/general
