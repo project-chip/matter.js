@@ -668,7 +668,7 @@ export class MessageExchange {
                 logger.error("An error happened when closing the exchange", error);
             }
             if (force) {
-                // We have sent the Ack, so close here, no reties because close is forced
+                // We have sent the Ack, so close here, no retries because close is forced
                 return this.#close();
             }
         } else if (this.#sentMessageToAck === undefined || force) {
