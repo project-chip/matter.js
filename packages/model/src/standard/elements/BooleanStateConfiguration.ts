@@ -63,7 +63,7 @@ export const BooleanStateConfiguration = Cluster(
 
     Attribute({
         name: "CurrentSensitivityLevel", id: 0x0, type: "uint8", access: "RW VO", conformance: "SENSLVL",
-        constraint: "max SupportedSensitivityLevels - 1", quality: "N",
+        constraint: "max supportedSensitivityLevels - 1", quality: "N",
         details: "Indicates the currently selected sensitivity level." +
             "\n" +
             "If a write interaction to this attribute contains an unsupported sensitivity value, a " +
@@ -89,7 +89,7 @@ export const BooleanStateConfiguration = Cluster(
 
     Attribute({
         name: "DefaultSensitivityLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[SENSLVL]",
-        constraint: "max SupportedSensitivityLevels - 1", quality: "F",
+        constraint: "max supportedSensitivityLevels - 1", quality: "F",
         details: "Indicates the default sensitivity level selected by the manufacturer.",
         xref: { document: "cluster", section: "1.8.6.3" }
     }),

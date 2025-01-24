@@ -25,7 +25,7 @@ export class FabricModel extends Model<FabricElement> implements FabricElement {
         return this.children;
     }
 
-    static {
-        Model.types[FabricElement.Tag] = this;
-    }
+    static Tag = FabricElement.Tag;
 }
+
+FabricModel.register();

@@ -301,7 +301,6 @@ export namespace ThreadNetworkDiagnostics {
 
         /**
          * This field shall specify if a link has been established to the Node for which this route table entry
-         *
          * corresponds.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.14.5.5.10
@@ -683,10 +682,11 @@ export namespace ThreadNetworkDiagnostics {
             txAckedCount: OptionalAttribute(0x1a, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame transmission
-             * requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only be incremented
-             * by 1 for each MAC transmission request that is does not request acknowledgement regardless of the amount
-             * of CCA failures, CSMA-CA attempts, or retransmissions.
+             * The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame
+             *
+             * transmission requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only
+             * be incremented by 1 for each MAC transmission request that is does not request acknowledgement
+             * regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.28
              */
@@ -752,10 +752,11 @@ export namespace ThreadNetworkDiagnostics {
             txRetryCount: OptionalAttribute(0x21, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC transmission
-             * packets that meet maximal retry limit for direct packets. The TxDirectMaxRetryExpiryCount attribute
-             * shall only be incremented by 1 for each unique MAC transmission packets that meets the maximal retry
-             * limit for direct packets. This value shall only be reset upon a Node reboot.
+             * The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC
+             *
+             * transmission packets that meet maximal retry limit for direct packets. The TxDirectMaxRetryExpiryCount
+             * attribute shall only be incremented by 1 for each unique MAC transmission packets that meets the maximal
+             * retry limit for direct packets. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.35
              */
@@ -824,8 +825,9 @@ export namespace ThreadNetworkDiagnostics {
             rxBroadcastCount: OptionalAttribute(0x29, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The RxDataCount attribute shall indicate the total number of received unique MAC Data frames. This value
-             * shall only be reset upon a Node reboot.
+             * The RxDataCount attribute shall indicate the total number of received unique MAC Data frames.
+             *
+             * This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.43
              */
@@ -901,8 +903,9 @@ export namespace ThreadNetworkDiagnostics {
 
             /**
              * The RxErrUnknownNeighborCount attribute shall indicate the total number of received unique MAC frame
-             * requests that have been dropped as a result of originating from an unknown neighbor device. This value
-             * shall only be reset upon a Node reboot.
+             * requests that have been dropped as a result of originating from an unknown neighbor
+             *
+             * device. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.52
              */
@@ -952,7 +955,7 @@ export namespace ThreadNetworkDiagnostics {
     export const Base = MutableCluster.Component({
         id: 0x35,
         name: "ThreadNetworkDiagnostics",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
@@ -997,9 +1000,10 @@ export namespace ThreadNetworkDiagnostics {
 
             /**
              * The RoutingRole attribute shall indicate the role that this Node has within the routing of messages
-             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined in the
-             * following table. A value of null shall indicate that the Thread interface is not currently configured or
-             * operational.
+             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined
+             *
+             * in the following table. A value of null shall indicate that the Thread interface is not currently
+             * configured or operational.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.2
              */
@@ -1081,9 +1085,8 @@ export namespace ThreadNetworkDiagnostics {
             dataVersion: Attribute(0xb, TlvNullable(TlvUInt16.bound({ max: 255 }))),
 
             /**
-             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of
-             *
-             * data the Node currently uses. Null if not attached to a Thread network.
+             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of data
+             * the Node currently uses. Null if not attached to a Thread network.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.13
              */
@@ -1152,7 +1155,17 @@ export namespace ThreadNetworkDiagnostics {
                 0x3e,
                 TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 }),
                 { default: [] }
-            )
+            ),
+
+            /**
+             * @see {@link MatterSpecification.v13.Core} § 11.14.6
+             */
+            extAddress: Attribute(0x3f, TlvNullable(TlvUInt64)),
+
+            /**
+             * @see {@link MatterSpecification.v13.Core} § 11.14.6
+             */
+            rloc16: Attribute(0x40, TlvNullable(TlvUInt16))
         },
 
         events: {

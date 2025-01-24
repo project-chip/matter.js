@@ -65,7 +65,7 @@ export namespace RefrigeratorRequirements {
 export const RefrigeratorDeviceDefinition = MutableEndpoint({
     name: "Refrigerator",
     deviceType: 0x70,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: RefrigeratorRequirements,
     behaviors: SupportedBehaviors()
 });

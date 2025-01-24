@@ -8,15 +8,16 @@
 
 import { LaundryWasherControls } from "#clusters/laundry-washer-controls";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { ClusterType } from "#types";
 
 /**
  * LaundryWasherControlsBehavior is the base class for objects that support interaction with {@link
  * LaundryWasherControls.Cluster}.
  *
- * This class does not have optional features of LaundryWasherControls.Cluster enabled. You can enable additional
- * features using LaundryWasherControlsBehavior.with.
+ * LaundryWasherControls.Cluster requires you to enable one or more optional features. You can do so using {@link
+ * LaundryWasherControlsBehavior.with}.
  */
-export const LaundryWasherControlsBehavior = ClusterBehavior.for(LaundryWasherControls.Cluster);
+export const LaundryWasherControlsBehavior = ClusterBehavior.for(ClusterType(LaundryWasherControls.Base));
 
 type LaundryWasherControlsBehaviorType = InstanceType<typeof LaundryWasherControlsBehavior>;
 export interface LaundryWasherControlsBehavior extends LaundryWasherControlsBehaviorType {}

@@ -14,7 +14,7 @@ export const SoftwareVersionCertificationStatusEnum = Datatype(
         name: "SoftwareVersionCertificationStatusEnum", type: "enum8",
         details: "The values 0 through 2 shall correspond to the values 0 through 2 used in certification_type in the " +
             "Certification Declaration.",
-        xref: { document: "core", section: "11.23.7.2" }
+        xref: { document: "core", section: "11.23.8.2" }
     },
 
     Field({

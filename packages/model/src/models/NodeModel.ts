@@ -25,7 +25,7 @@ export class NodeModel extends Model<NodeElement> implements NodeElement {
         return this.children;
     }
 
-    static {
-        Model.types[NodeElement.Tag] = this;
-    }
+    static Tag = NodeElement.Tag;
 }
+
+NodeModel.register();

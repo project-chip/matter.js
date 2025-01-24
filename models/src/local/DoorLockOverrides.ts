@@ -11,14 +11,16 @@ LocalMatter.children.push({
     name: "DoorLock",
 
     children: [
-        // The spec doesn't really define names for these bits, just long-form
-        // descriptions that make ugly identifiers.  Strangely, CHIP defines
-        // the structures but not the actual attributes so they aren't included
-        // in our CHIP model.  So set the names manually
+        // The spec doesn't really define names for these bits, just long-form descriptions that make ugly identifiers.
+        // Strangely, CHIP defines the structures but not the actual attributes so they aren't included in our CHIP
+        // model.  So set the names manually
+        //
+        // Aaaand in 1.4 they've disappeared.  Weren't provisional, weren't deprecated
         {
             tag: "attribute",
             id: 0x45,
             name: "KeypadProgrammingEventMask",
+            until: "1.4",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "1", name: "PinCodeChanged" },
@@ -31,6 +33,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x46,
             name: "RemoteProgrammingEventMask",
+            until: "1.4",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "2", name: "PinAdded" },
@@ -44,6 +47,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x47,
             name: "RfidProgrammingEventMask",
+            until: "1.4",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "5", name: "IdAdded" },

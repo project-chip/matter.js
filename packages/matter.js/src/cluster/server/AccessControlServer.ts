@@ -33,7 +33,9 @@ import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AccessControlClusterServer");
 
-export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof AccessControlCluster> = () => {
+const Cluster = AccessControlCluster.with("Extension");
+
+export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Cluster> = () => {
     let accessControlEntryChangedEvent:
         | FabricSensitiveEventServer<AccessControl.AccessControlEntryChangedEvent, SyncStorage>
         | undefined = undefined;
@@ -326,7 +328,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
 
 export const createDefaultAccessControlClusterServer = () =>
     ClusterServer(
-        AccessControlCluster,
+        Cluster,
         {
             acl: [],
             extension: [],

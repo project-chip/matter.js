@@ -55,6 +55,7 @@ describe("GeneralCommissioning Server test", () => {
                 productId: 1,
                 productName: "test",
                 nodeLabel: "",
+                uniqueId: "",
                 hardwareVersion: 0,
                 hardwareVersionString: "0",
                 location,

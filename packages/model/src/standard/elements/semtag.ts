@@ -13,7 +13,7 @@ export const semtag = Datatype(
     {
         name: "semtag", type: "struct", description: "Semantic Tag", isSeed: true,
         details: "This data type shall be represented by the following structure:",
-        xref: { document: "core", section: "7.18.2.42" }
+        xref: { document: "core", section: "7.19.2.42" }
     },
 
     Field({
@@ -30,7 +30,7 @@ export const semtag = Datatype(
             "\n" +
             "If MfgCode is null, the NamespaceID field shall indicate a standard namespace.",
 
-        xref: { document: "core", section: "7.18.2.42.1" }
+        xref: { document: "core", section: "7.19.2.42.1" }
     }),
 
     Field({
@@ -38,7 +38,7 @@ export const semtag = Datatype(
         details: "The NamespaceID field shall identify a namespace." +
             "\n" +
             "The common and device-specific semantic tag namespaces are listed in StandardNamespaces.",
-        xref: { document: "core", section: "7.18.2.42.2" }
+        xref: { document: "core", section: "7.19.2.42.2" }
     }),
 
     Field({
@@ -48,7 +48,7 @@ export const semtag = Datatype(
             "\n" +
             "A device may expose tags from the common or device-specific namespaces and from " +
             "manufacturer-specific namespaces in a single TagList.",
-        xref: { document: "core", section: "7.18.2.42.3" }
+        xref: { document: "core", section: "7.19.2.42.3" }
     }),
 
     Field({
@@ -63,7 +63,7 @@ export const semtag = Datatype(
             "that has the meaning of \"room\" in a location namespace, would require the a label string to qualify " +
             "the type of room, such as \"1\", \"2b\", \"Bathroom\", etc.",
 
-        xref: { document: "core", section: "7.18.2.42.4" }
+        xref: { document: "core", section: "7.19.2.42.4" }
     })
 );
 

@@ -17,8 +17,7 @@ import {
 
 export const ContentLauncher = Cluster(
     {
-        name: "ContentLauncher", id: 0x50a, asOf: "1.3", classification: "application",
-        pics: "CONTENTLAUNCHER",
+        name: "ContentLauncher", id: 0x50a, classification: "application", pics: "CONTENTLAUNCHER",
 
         details: "This cluster provides an interface for launching content on a Video Player device such as a " +
             "Streaming Media Player, Smart TV or Smart Screen." +
@@ -63,7 +62,8 @@ export const ContentLauncher = Cluster(
         {
             name: "AcceptHeader", id: 0x0, type: "list", access: "R V", conformance: "UP",
             constraint: "max 100[max 1024]", default: [], quality: "N",
-            details: "This attribute shall provide a list of content types supported by the Video Player or Content App " +
+            details: "This attribute shall provide a list of content types supported by the Video Player or Content App" +
+                "\n" +
                 "in the form of entries in the HTTP \"Accept\" request header.",
             xref: { document: "cluster", section: "6.7.6.1" }
         },
@@ -147,9 +147,8 @@ export const ContentLauncher = Cluster(
 
             details: "Upon receipt, this shall launch content from the specified URL." +
                 "\n" +
-                "The content types supported include those identified in the AcceptHeader and SupportedStreaming" +
-                "\n" +
-                "Protocols attributes." +
+                "The content types supported include those identified in the AcceptHeader and " +
+                "SupportedStreamingProtocols attributes." +
                 "\n" +
                 "A check shall be made to ensure the URL is secure (uses HTTPS)." +
                 "\n" +
@@ -166,13 +165,14 @@ export const ContentLauncher = Cluster(
         },
 
         Field({
-            name: "ContentUrl", id: 0x0, type: "string", conformance: "M",
-            details: "This field shall indicate the URL of content to launch.",
+            name: "ContentUrl", id: 0x0, type: "string", conformance: "M", constraint: "any",
+            details: "This field shall indicate the URL of content to launch. The syntax of this field shall follow the " +
+                "syntax as specified in RFC 1738 and shall use the https scheme.",
             xref: { document: "cluster", section: "6.7.7.2.1" }
         }),
 
         Field({
-            name: "DisplayString", id: 0x1, type: "string", conformance: "O",
+            name: "DisplayString", id: 0x1, type: "string", conformance: "O", constraint: "any",
             details: "This field, if present, shall provide a string that may be used to describe the content being " +
                 "accessed at the given URL.",
             xref: { document: "cluster", section: "6.7.7.2.2" }
@@ -180,6 +180,7 @@ export const ContentLauncher = Cluster(
 
         Field({
             name: "BrandingInformation", id: 0x2, type: "BrandingInformationStruct", conformance: "O",
+            constraint: "any",
             details: "This field, if present, shall indicate the branding information that may be displayed when playing " +
                 "back the given content.",
             xref: { document: "cluster", section: "6.7.7.2.3" }
@@ -187,6 +188,7 @@ export const ContentLauncher = Cluster(
 
         Field({
             name: "PlaybackPreferences", id: 0x3, type: "PlaybackPreferencesStruct", conformance: "O",
+            constraint: "any",
 
             details: "This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition " +
                 "for the media, sent from the client to the server. If the server does not find an available track " +
@@ -434,7 +436,8 @@ export const ContentLauncher = Cluster(
         Field({
             name: "ImageUrl", id: 0x0, type: "string", conformance: "O", constraint: "max 8192",
             details: "This field shall indicate the URL of image used for Styling different Video Player sections like " +
-                "Logo, Watermark etc.",
+                "Logo, Watermark etc. The syntax of this field shall follow the syntax as specified in RFC 1738 and " +
+                "shall use the https scheme.",
             xref: { document: "cluster", section: "6.7.5.9.1" }
         }),
 
@@ -458,7 +461,9 @@ export const ContentLauncher = Cluster(
         Field({
             name: "Size", id: 0x2, type: "DimensionStruct", conformance: "O",
             details: "This field shall indicate the size of the image used for Styling different Video Player sections " +
-                "like Logo, Watermark etc.",
+                "like" +
+                "\n" +
+                "Logo, Watermark etc.",
             xref: { document: "cluster", section: "6.7.5.9.3" }
         })
     ),
@@ -527,9 +532,8 @@ export const ContentLauncher = Cluster(
                 "from. In case the position falls in the middle of a frame, the server shall set the position to the " +
                 "beginning of that frame and set the SampledPosition attribute on the MediaPlayback cluster " +
                 "accordingly. A value of null shall indicate that playback position is not applicable for the " +
-                "current state of the media playback." +
-                "\n" +
-                "ported).",
+                "current state of the media playback. (For example : Live media with no known duration and where " +
+                "seek is not supported).",
 
             xref: { document: "cluster", section: "6.7.5.11.1" }
         }),
@@ -579,7 +583,7 @@ export const ContentLauncher = Cluster(
                 xref: { document: "cluster", section: "6.7.5.12.2" }
             },
 
-            Field({ name: "entry", type: "CharacteristicEnum" })
+            Field({ name: "entry", type: "MediaPlayback.CharacteristicEnum" })
         ),
 
         Field({
@@ -591,15 +595,12 @@ export const ContentLauncher = Cluster(
                 "\n" +
                 "This field shall NOT be present if the track is not an audio track." +
                 "\n" +
-                "If the track is an audio track, this field MUST be present. A value of null shall indicate that the" +
-                "\n" +
+                "If the track is an audio track, this field MUST be present. A value of null shall indicate that the " +
                 "server can choose the audio output(s) to play the Audio Track on.",
 
             xref: { document: "cluster", section: "6.7.5.12.3" }
         })
-    ),
-
-    Datatype({ name: "CharacteristicEnum", type: "MediaPlayback.CharacteristicEnum" })
+    )
 );
 
 MatterDefinition.children.push(ContentLauncher);

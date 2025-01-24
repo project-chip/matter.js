@@ -105,6 +105,14 @@ const VarianceMatchers: VarianceMatcher[] = [
         },
     },
 
+    // [fieldName] (optional, unconditional).  Ignores field reference which can only be enforced at runtime
+    {
+        pattern: pattern("[", FIELD, "]"),
+        processor(add) {
+            add(false);
+        },
+    },
+
     // fieldName > num (optional, unconditional).  Ignores field expression
     {
         pattern: pattern(FIELD, " > ", "\\d+"),
@@ -179,6 +187,14 @@ const VarianceMatchers: VarianceMatcher[] = [
         },
     },
 
+    // FOO & !BAR
+    {
+        pattern: pattern(FEATURE, AND, NOT, FEATURE),
+        processor(add, match) {
+            add(false, { allOf: [match[0]], not: match[1] });
+        },
+    },
+
     // !FOO & BAR
     {
         pattern: pattern(NOT, FEATURE, AND, FEATURE),
@@ -244,6 +260,16 @@ const VarianceMatchers: VarianceMatcher[] = [
             add(true);
         },
     },
+
+    // Handles a bunch of super ugly conformances in deprecated occupancy sensing attributes.  They all effectively
+    // become optional if certain features are enabled.  We use the presence of the "HoldTime" field to reliably detect
+    // these and ensure these rules aren't too greedy
+    {
+        pattern: pattern(".*HoldTime", AND, "\\(?", FEATURE, ".*"),
+        processor(add, match) {
+            add(true, { allOf: [match[0]] });
+        },
+    },
 ];
 
 function addElement(components: InferredComponents, element: ValueModel) {
@@ -267,7 +293,7 @@ function addElement(components: InferredComponents, element: ValueModel) {
 
     if (text === "D") {
         text = "O";
-    } else if (text === "P") {
+    } else if (text === "M, D" || text === "P") {
         text = "M";
     }
 

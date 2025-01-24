@@ -24,7 +24,7 @@ export const FlowMeasurement = Cluster(
             name: "MeasuredValue", id: 0x0, type: "uint16", access: "R V", conformance: "M",
             constraint: "minMeasuredValue to maxMeasuredValue", default: null, quality: "X P",
 
-            details: "MeasuredValue represents the flow in m/h as follows:" +
+            details: "Indicates the flow in m/h as follows:" +
                 "\n" +
                 "MeasuredValue = 10 x Flow" +
                 "\n" +
@@ -37,9 +37,9 @@ export const FlowMeasurement = Cluster(
 
     Attribute({
         name: "MinMeasuredValue", id: 0x1, type: "uint16", access: "R V", conformance: "M",
-        constraint: "0 to maxMeasuredValue1", quality: "X",
-        details: "The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. " +
-            "See Measured Value for more details." +
+        constraint: "max 65533", quality: "X",
+        details: "Indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more " +
+            "details." +
             "\n" +
             "The null value indicates that the value is not available.",
         xref: { document: "cluster", section: "2.5.4.2" }
@@ -47,17 +47,18 @@ export const FlowMeasurement = Cluster(
 
     Attribute({
         name: "MaxMeasuredValue", id: 0x2, type: "uint16", access: "R V", conformance: "M",
-        constraint: "minMeasuredValue1 to 65534", quality: "X",
-        details: "The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. " +
-            "See Measured Value for more details." +
+        constraint: "min minMeasuredValue + 1", quality: "X",
+        details: "Indicates the maximum value of MeasuredValue that can be measured. See" +
+            "\n" +
+            "Measured Value for more details." +
             "\n" +
             "The null value indicates that the value is not available.",
         xref: { document: "cluster", section: "2.5.4.3" }
     }),
 
     Attribute({
-        name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O",
-        constraint: "0 to 2048", default: 0,
+        name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O", constraint: "max 2048",
+        default: 0,
         details: "See Measured Value.",
         xref: { document: "cluster", section: "2.5.4.4" }
     })

@@ -131,14 +131,29 @@ export namespace ApplicationLauncher {
         Success = 0,
 
         /**
-         * Requested app is not available.
+         * Requested app is not available
          */
         AppNotAvailable = 1,
 
         /**
-         * Video platform unable to honor command.
+         * Video platform unable to honor command
          */
-        SystemBusy = 2
+        SystemBusy = 2,
+
+        /**
+         * User approval for app download is pending
+         */
+        PendingUserApproval = 3,
+
+        /**
+         * Downloading the requested app
+         */
+        Downloading = 4,
+
+        /**
+         * Installing the requested app
+         */
+        Installing = 5
     }
 
     /**
@@ -235,7 +250,7 @@ export namespace ApplicationLauncher {
     export const Base = MutableCluster.Component({
         id: 0x50c,
         name: "ApplicationLauncher",
-        revision: 1,
+        revision: 2,
 
         features: {
             /**
@@ -308,10 +323,10 @@ export namespace ApplicationLauncher {
              * The endpoint may decide to stop the application based on manufacturer specific behavior or resource
              * constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on the
              * action taken, on the Application Basic cluster of the Endpoint corresponding to the application on which
-             * the action was taken. The Status attribute shall be updated on any other
+             * the action was taken. The Status attribute shall be updated on any other application whose Status may
+             * have changed as a result of this command.
              *
-             * application whose Status may have changed as a result of this command. This command returns a Launcher
-             * Response.
+             * This command returns a Launcher Response.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.4.7.3
              */

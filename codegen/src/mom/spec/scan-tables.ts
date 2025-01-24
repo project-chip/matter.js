@@ -45,15 +45,33 @@ function convertTable(el: HTMLTableElement, previous: Table | undefined) {
         if (table === undefined) {
             // Use the first row to identify whether this is a table split across page boundaries.  For the spec the
             // first row is always replicated on subsequent pages
+            //
+            // Well, it was.  In 1.4 Joint Fabric Administrator DT broke this like they break everything else by not
+            // using th's in their tables
             const firstRowIdentity = Array.from(cells)
                 .map(cell => cell.textContent?.trim())
                 .join("␜");
 
-            if (previous?.firstRowIdentity === firstRowIdentity) {
+            const identitiesMatch = previous?.firstRowIdentity === firstRowIdentity;
+
+            if (identitiesMatch) {
                 table = previous;
 
                 // Skip the first row as it tells us nothing new
                 continue;
+            }
+
+            // Additional heuristic due to caveate above; this is ugly but works for now
+            if (
+                previous && // We have a previous table
+                previous.fields.length === cells.length && // with the same number of columns
+                previous.fields.includes("id") && // with an ID
+                previous.fields.includes("name") && // and a name
+                tr.querySelectorAll("th").length === 0 // and this table has no th in first row
+            ) {
+                table = previous;
+
+                // Do not skip this row because it holds data
             } else {
                 table = {
                     firstRowIdentity,

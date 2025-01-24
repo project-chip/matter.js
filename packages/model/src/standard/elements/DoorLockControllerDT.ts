@@ -24,7 +24,7 @@ export const DoorLockControllerDt = DeviceType(
         xref: { document: "device", section: "8.2.4" }
     }),
     Requirement({
-        name: "ScenesManagement", id: 0x5, conformance: "P, O", element: "clientCluster",
+        name: "ScenesManagement", id: 0x62, conformance: "P, O", element: "clientCluster",
         xref: { document: "device", section: "8.2.4" }
     }),
     Requirement({

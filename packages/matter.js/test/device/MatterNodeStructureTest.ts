@@ -56,6 +56,7 @@ function addRequiredRootClusters(
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",
@@ -139,7 +140,7 @@ function addRequiredRootClusters(
 
     rootEndpoint.addClusterServer(
         ClusterServer(
-            AccessControlCluster,
+            AccessControlCluster.with("Extension"),
             {
                 acl: [],
                 extension: [],
@@ -313,7 +314,7 @@ async function commissioningServer({ storage, values }: { storage?: boolean; val
 
     rootEndpoint = node.getRootEndpoint();
 
-    addRequiredRootClusters(rootEndpoint);
+    addRequiredRootClusters(rootEndpoint, true, false);
     return node;
 }
 
@@ -371,7 +372,7 @@ describe("Endpoint Structures", () => {
 
             expectPaths(endpointStructure, {
                 Descriptor: { attribute: 9 },
-                BasicInformation: { attribute: 21 },
+                BasicInformation: { attribute: 22 },
                 OperationalCredentials: { attribute: 11, command: 8 },
                 GeneralCommissioning: { attribute: 10, command: 3 },
                 AccessControl: { attribute: 10 },
@@ -383,7 +384,7 @@ describe("Endpoint Structures", () => {
 
             const basicInformationCluster = rootEndpoint.getClusterServer(BasicInformationCluster);
             expect(basicInformationCluster).exist;
-            expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(21);
+            expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(22);
             expect((basicInformationCluster?.attributes as any).generatedCommandList.get().length).equal(0);
             expect((basicInformationCluster?.attributes as any).acceptedCommandList.get().length).equal(0);
 
@@ -394,7 +395,7 @@ describe("Endpoint Structures", () => {
             expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).equal(3);
         });
 
-        it("One device with one Light endpoint - no unique id, use index", async () => {
+        it("One device with one Light endpoint - automatic unique id, use index", async () => {
             const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice();
@@ -410,7 +411,7 @@ describe("Endpoint Structures", () => {
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes } = endpointStructure;
 
-            expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(1);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0")).equal(1);
 
             expect(endpoints.size).equal(2);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -444,7 +445,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -463,7 +464,7 @@ describe("Endpoint Structures", () => {
             );
         });
 
-        it("One device with one Light endpoints - with uniqueid", async () => {
+        it("One device with one Light endpoints - manual unique id", async () => {
             const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
@@ -479,7 +480,7 @@ describe("Endpoint Structures", () => {
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes } = endpointStructure;
 
-            expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(1);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-custom_test-unique-id")).equal(1);
 
             expect(endpoints.size).equal(2);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -513,7 +514,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -534,7 +535,7 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0": 10 },
+                values: { "unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0": 10 },
             });
 
             const onoffDevice = new OnOffPluginUnitDevice();
@@ -550,7 +551,7 @@ describe("Endpoint Structures", () => {
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes } = endpointStructure;
 
-            expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(10);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0")).equal(10);
 
             expect(endpoints.size).equal(2);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -584,7 +585,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -605,7 +606,7 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-custom_test-unique-id": 10 },
+                values: { "unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-custom_test-unique-id": 10 },
             });
 
             const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
@@ -621,7 +622,7 @@ describe("Endpoint Structures", () => {
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes } = endpointStructure;
 
-            expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(10);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-custom_test-unique-id")).equal(10);
 
             expect(endpoints.size).equal(2);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -655,7 +656,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -687,6 +688,7 @@ describe("Endpoint Structures", () => {
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
+                        uniqueId: "",
                         nodeLabel: "Socket 1",
                         reachable: true,
                     },
@@ -714,6 +716,7 @@ describe("Endpoint Structures", () => {
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
+                        uniqueId: "",
                         nodeLabel: "Socket 1",
                         reachable: true,
                     },
@@ -818,7 +821,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     NetworkCommissioning: { attribute: 11 },
@@ -834,7 +837,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
             );
         });
@@ -849,10 +852,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice12 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(12) });
 
             aggregator.addBridgedDevice(onoffDevice11, {
+                uniqueId: "",
                 nodeLabel: "Socket 1",
                 reachable: true,
             });
             aggregator.addBridgedDevice(onoffDevice12, {
+                uniqueId: "",
                 nodeLabel: "Socket 2",
                 reachable: true,
             });
@@ -961,7 +966,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     NetworkCommissioning: { attribute: 11 },
@@ -977,7 +982,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -985,7 +990,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
             );
         });
@@ -1009,10 +1014,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice12 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(12) });
 
             aggregator1.addBridgedDevice(onoffDevice11, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
             aggregator1.addBridgedDevice(onoffDevice12, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1033,10 +1040,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(22) });
 
             aggregator2.addBridgedDevice(onoffDevice21, {
+                uniqueId: "",
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
             aggregator2.addBridgedDevice(onoffDevice22, {
+                uniqueId: "",
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1137,7 +1146,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     NetworkCommissioning: { attribute: 11 },
@@ -1154,7 +1163,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1162,7 +1171,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1170,7 +1179,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1178,7 +1187,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
             );
         });
@@ -1201,10 +1210,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice12 = new OnOffPluginUnitDevice();
 
             aggregator1.addBridgedDevice(onoffDevice11, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
             aggregator1.addBridgedDevice(onoffDevice12, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1225,10 +1236,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice22 = new OnOffPluginUnitDevice();
 
             aggregator2.addBridgedDevice(onoffDevice21, {
+                uniqueId: "",
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
             aggregator2.addBridgedDevice(onoffDevice22, {
+                uniqueId: "",
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1333,7 +1346,7 @@ describe("Endpoint Structures", () => {
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -1349,7 +1362,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1357,7 +1370,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
                 {
@@ -1366,7 +1379,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1374,7 +1387,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
             );
         });
@@ -1397,10 +1410,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice12 = new OnOffPluginUnitDevice();
 
             aggregator1.addBridgedDevice(onoffDevice11, {
+                uniqueId: "SOCKET-1-1",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
             aggregator1.addBridgedDevice(onoffDevice12, {
+                uniqueId: "SOCKET-1-2",
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1421,11 +1436,13 @@ describe("Endpoint Structures", () => {
             const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(18) });
 
             aggregator2.addBridgedDevice(onoffDevice21, {
+                uniqueId: "SOCKET-2-1",
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
             aggregator2.addBridgedDevice(onoffDevice22, {
+                uniqueId: "SOCKET-2-2",
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1573,17 +1590,21 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(43),
             ]);
 
-            expect(endpointStorage.get("serial_node-matter-0000-index_0-index_1")).equal(38);
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1")).equal(
-                42,
-            );
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0-unique_SOCKET-1-2")).equal(38);
+            expect(
+                endpointStorage.get(
+                    "unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1",
+                ),
+            ).equal(42);
+            expect(
+                endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_1-unique_COMPOSED2-index_1"),
+            ).equal(43);
 
             expectPaths(
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -1598,7 +1619,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1606,16 +1627,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
-                },
-                { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
-                {
-                    Descriptor: { attribute: 9 },
-                    Binding: { attribute: 6 },
-                    Identify: { attribute: 7, command: 1 },
-                    Groups: { attribute: 6, command: 6 },
-                    OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
                 {
@@ -1625,6 +1637,15 @@ describe("Endpoint Structures", () => {
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
                     BridgedDeviceBasicInformation: { attribute: 8 },
+                },
+                { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
+                {
+                    Descriptor: { attribute: 9 },
+                    Binding: { attribute: 6 },
+                    Identify: { attribute: 7, command: 1 },
+                    Groups: { attribute: 6, command: 6 },
+                    OnOff: { attribute: 6, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 9 },
                 },
                 { Descriptor: { attribute: 9 }, BridgedDeviceBasicInformation: { attribute: 8 } },
                 {
@@ -1646,7 +1667,7 @@ describe("Endpoint Structures", () => {
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0-custom_3333": 3 },
+                values: { "unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0-custom_3333": 3 },
             });
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
@@ -1664,10 +1685,12 @@ describe("Endpoint Structures", () => {
             const onoffDevice12 = new OnOffPluginUnitDevice();
 
             aggregator1.addBridgedDevice(onoffDevice11, {
+                uniqueId: "SOCKET-1-1",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
             aggregator1.addBridgedDevice(onoffDevice12, {
+                uniqueId: "SOCKET-1-2",
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1688,11 +1711,13 @@ describe("Endpoint Structures", () => {
             const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(18) });
 
             aggregator2.addBridgedDevice(onoffDevice21, {
+                uniqueId: "SOCKET-2-1",
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
             aggregator2.addBridgedDevice(onoffDevice22, {
+                uniqueId: "SOCKET-2-2",
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1840,17 +1865,21 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(43),
             ]);
 
-            expect(endpointStorage.get("serial_node-matter-0000-index_0-index_1")).equal(38);
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1")).equal(
-                42,
-            );
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0-unique_SOCKET-1-2")).equal(38);
+            expect(
+                endpointStorage.get(
+                    "unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1",
+                ),
+            ).equal(42);
+            expect(
+                endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_1-unique_COMPOSED2-index_1"),
+            ).equal(43);
 
             expectPaths(
                 endpointStructure,
                 {
                     Descriptor: { attribute: 9 },
-                    BasicInformation: { attribute: 21 },
+                    BasicInformation: { attribute: 22 },
                     OperationalCredentials: { attribute: 11, command: 8 },
                     GeneralCommissioning: { attribute: 10, command: 3 },
                     AccessControl: { attribute: 10 },
@@ -1865,7 +1894,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 {
                     Descriptor: { attribute: 9 },
@@ -1873,16 +1902,7 @@ describe("Endpoint Structures", () => {
                     Identify: { attribute: 7, command: 1 },
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
-                },
-                { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
-                {
-                    Descriptor: { attribute: 9 },
-                    Binding: { attribute: 6 },
-                    Identify: { attribute: 7, command: 1 },
-                    Groups: { attribute: 6, command: 6 },
-                    OnOff: { attribute: 6, command: 3 },
-                    BridgedDeviceBasicInformation: { attribute: 7 },
+                    BridgedDeviceBasicInformation: { attribute: 8 },
                 },
                 { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
                 {
@@ -1892,6 +1912,15 @@ describe("Endpoint Structures", () => {
                     Groups: { attribute: 6, command: 6 },
                     OnOff: { attribute: 6, command: 3 },
                     BridgedDeviceBasicInformation: { attribute: 8 },
+                },
+                { Descriptor: { attribute: 9 }, FixedLabel: { attribute: 6 } },
+                {
+                    Descriptor: { attribute: 9 },
+                    Binding: { attribute: 6 },
+                    Identify: { attribute: 7, command: 1 },
+                    Groups: { attribute: 6, command: 6 },
+                    OnOff: { attribute: 6, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 9 },
                 },
                 { Descriptor: { attribute: 9 }, BridgedDeviceBasicInformation: { attribute: 8 } },
                 {
@@ -1921,11 +1950,12 @@ describe("Endpoint Structures", () => {
             // Add another device
             const onoffDevice13 = new OnOffPluginUnitDevice();
             aggregator1.addBridgedDevice(onoffDevice13, {
+                uniqueId: "SOCKET-1-1",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
             expect(structureChangeCounter).equal(1);
-            expect(endpointStorage.get("serial_node-matter-0000-index_0-index_2")).equal(44);
+            expect(endpointStorage.get("unique_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-index_0-unique_SOCKET-1-1")).equal(44);
 
             // And remove one
             aggregator1.removeBridgedDevice(onoffDevice11);
@@ -1951,6 +1981,7 @@ describe("Endpoint Structures", () => {
             // Add the removed back and verify it gets same endpointID as before
             const onoffDevice11New = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "3333" });
             aggregator1.addBridgedDevice(onoffDevice11New, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-1 NEW",
                 reachable: true,
             });
@@ -2077,6 +2108,7 @@ describe("Endpoint Structures", () => {
             expect(destroyCalled).false;
 
             aggregator.addBridgedDevice(onoffDevice, {
+                uniqueId: "",
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });

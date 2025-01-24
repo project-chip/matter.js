@@ -1053,21 +1053,33 @@ export namespace PowerSource {
              * value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently unable to assess
              * the value.
              *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.13
              */
-            batPercentRemaining: OptionalAttribute(
-                0xc,
-                TlvNullable(TlvUInt8.bound({ max: 200 })),
-                { omitChanges: true }
-            ),
+            batPercentRemaining: OptionalAttribute(0xc, TlvNullable(TlvUInt8.bound({ max: 200 }))),
 
             /**
              * Indicates the estimated time in seconds before the battery will no longer be able to provide power to
              * the Node. A value of NULL shall indicate the Node is currently unable to assess the value.
              *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.14
              */
-            batTimeRemaining: OptionalAttribute(0xd, TlvNullable(TlvUInt32), { omitChanges: true }),
+            batTimeRemaining: OptionalAttribute(0xd, TlvNullable(TlvUInt32)),
 
             /**
              * Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention is
@@ -1108,7 +1120,9 @@ export namespace PowerSource {
              * contributing to a fault have been cleared, the corresponding BatFaultEnum value shall be removed from
              * this list. An empty list shall indicate there are currently no active faults. The order of this list
              * SHOULD have no significance. Clients interested in monitoring changes in active faults may subscribe to
-             * this attribute, or they may subscribe to BatFaultChange.
+             * this attribute, or they may subscribe to Bat
+             *
+             * FaultChange.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.19
              */
@@ -1212,9 +1226,17 @@ export namespace PowerSource {
              * Indicates the estimated time in seconds before the battery source will be at full charge. A value of
              * NULL shall indicate the Node is currently unable to assess the value.
              *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.28
              */
-            batTimeToFullCharge: OptionalAttribute(0x1b, TlvNullable(TlvUInt32), { omitChanges: true }),
+            batTimeToFullCharge: OptionalAttribute(0x1b, TlvNullable(TlvUInt32)),
 
             /**
              * Indicates whether the Node can remain operational while the battery source is charging.
@@ -1268,7 +1290,7 @@ export namespace PowerSource {
     export const Base = MutableCluster.Component({
         id: 0x2f,
         name: "PowerSource",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
@@ -1375,23 +1397,25 @@ export namespace PowerSource {
             { flags: { rechargeable: true }, component: ReplaceableOrRechargeableComponent },
             { flags: { rechargeable: true }, component: RechargeableComponent },
             { flags: { rechargeable: true, battery: false }, component: false },
-            { flags: { replaceable: true, battery: false }, component: false }
+            { flags: { replaceable: true, battery: false }, component: false },
+            { flags: { wired: true, battery: true }, component: false },
+            { flags: { wired: false, battery: false }, component: false }
         )
     });
 
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster(Base);
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
      * This cluster is used to describe the configuration and capabilities of a physical power source that provides
-     * power to one or more endpoints on a node. In case the node has multiple power sources, each is described by its
-     * own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the entire
-     * node.
+     * power to one or more endpoints on a node. In case the node has multiple power sources, each shall be described
+     * by its own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the
+     * entire node.
      *
-     * PowerSourceCluster supports optional features that you can enable with the PowerSourceCluster.with() factory
-     * method.
+     * Per the Matter specification you cannot use {@link PowerSourceCluster} without enabling certain feature
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.7
      */
@@ -1407,13 +1431,13 @@ export namespace PowerSource {
      * @see {@link Complete}
      */
     export const CompleteInstance = MutableCluster({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+        id: Base.id,
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
 
         attributes: {
-            ...Cluster.attributes,
+            ...Base.attributes,
             wiredAssessedInputVoltage: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputVoltage,
                 { optionalIf: [WIRED] }

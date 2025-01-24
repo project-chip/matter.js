@@ -21,7 +21,7 @@ export const epochS = Datatype({
         "This type is employed where compactness of representation is important and where the resolution of " +
         "seconds is still satisfactory.",
 
-    xref: { document: "core", section: "7.18.2.6" }
+    xref: { document: "core", section: "7.19.2.6" }
 });
 
 MatterDefinition.children.push(epochS);

@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const uint48 = Datatype({
     name: "uint48", byteSize: 6, description: "Unsigned 48-bit integer", isSeed: true,
     metatype: "integer",
-    xref: { document: "core", section: "7.18.1" }
+    xref: { document: "core", section: "7.19.1" }
 });
 MatterDefinition.children.push(uint48);

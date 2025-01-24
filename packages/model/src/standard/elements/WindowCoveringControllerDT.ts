@@ -32,10 +32,6 @@ export const WindowCoveringControllerDt = DeviceType(
         xref: { document: "device", section: "8.4.4" }
     }),
     Requirement({
-        name: "ScenesManagement", id: 0x62, conformance: "P, Active, O", element: "clientCluster",
-        xref: { document: "device", section: "8.4.4" }
-    }),
-    Requirement({
         name: "WindowCovering", id: 0x102, conformance: "M", element: "clientCluster",
         xref: { document: "device", section: "8.4.4" }
     })

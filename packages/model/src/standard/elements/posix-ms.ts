@@ -15,7 +15,7 @@ export const posixMs = Datatype({
         "encoded as an unsigned 64-bit scalar value." +
         "\n" +
         "This type is employed for compatibility reasons.",
-    xref: { document: "core", section: "7.18.2.7" }
+    xref: { document: "core", section: "7.19.2.7" }
 });
 
 MatterDefinition.children.push(posixMs);

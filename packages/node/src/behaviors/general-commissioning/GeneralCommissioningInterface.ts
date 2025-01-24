@@ -25,9 +25,8 @@ export namespace GeneralCommissioningInterface {
          * ExpiryLengthSeconds, or disarm it, depending on the situation:
          *
          *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric matches
-         *     the Fabric currently associated with the fail-safe context, then the fail-safe timer
-         *
-         * shall be immediately expired (see further below for side-effects of expiration).
+         *     the Fabric currently associated with the fail-safe context, then the fail-safe timer shall be
+         *     immediately expired (see further below for side-effects of expiration).
          *
          *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation shall
          *     lead to a success response with no side-effects against the fail-safe context.
@@ -43,8 +42,7 @@ export namespace GeneralCommissioningInterface {
          *     ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, indicating a likely conflict
          *     between commissioners.
          *
-         * The value of the Breadcrumb field shall be written to the Breadcrumb Attribute on successful execution of
-         * the command.
+         * The value of the Breadcrumb field shall be written to the Breadcrumb on successful execution of the command.
          *
          * If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) the
          * receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps listed
@@ -88,7 +86,7 @@ export namespace GeneralCommissioningInterface {
          * (CFSC timer) serves to limit the lifetime of any particular Fail Safe Context; it shall NOT be extended or
          * modified on subsequent invocations of ArmFailSafe associated with this Fail Safe Context. Upon expiry of the
          * CFSC timer, the receiver shall execute cleanup behavior equivalent to that of fail-safe timer expiration as
-         * detailed in Section 11.10.6.2.2, “Behavior on expiry of Fail-Safe timer”. Termination of the session prior
+         * detailed in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”. Termination of the session prior
          * to the expiration of that timer for any reason (including a successful end of commissioning or an expiry of
          * a fail-safe timer) shall also delete the CFSC timer.
          *
@@ -99,12 +97,12 @@ export namespace GeneralCommissioningInterface {
          *
          *   1. Terminate any open PASE secure session by clearing any associated Secure Session Context at the Server.
          *
-         *   2. Revoke the temporary administrative privileges granted to any open PASE session (see Section 6.6.2.8,
+         *   2. Revoke the temporary administrative privileges granted to any open PASE session (see Section 6.6.2.9,
          *       “Bootstrapping of the Access Control Cluster”) at the Server.
          *
          *   3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions associated
-         *       with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see Section 11.10.6.2,
-         *       “ArmFailSafe Command”) by clearing any associated Secure Session Context at the Server.
+         *       with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see ArmFailSafe) by clearing
+         *       any associated Secure Session Context at the Server.
          *
          *   4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
          *       Fail-Safe being armed.
@@ -129,11 +127,10 @@ export namespace GeneralCommissioningInterface {
          *
          *   9. Reset the Breadcrumb attribute to zero.
          *
-         *   10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the
+         *   10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the Node
+         *       rollback the state of all non fabric-scoped data present in the Fail-Safe context.
          *
-         * Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.10.6.2
+         * @see {@link MatterSpecification.v13.Core} § 11.10.7.2
          */
         armFailSafe(request: GeneralCommissioning.ArmFailSafeRequest): MaybePromise<GeneralCommissioning.ArmFailSafeResponse>;
 
@@ -152,8 +149,9 @@ export namespace GeneralCommissioningInterface {
          * Location attribute reflected by the Basic Information Cluster configuration, but the
          * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error.
          *
-         * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value received does
-         * not match either the Indoor or Outdoor fixed value in LocationCapability, then the
+         * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value
+         *
+         * received does not match either the Indoor or Outdoor fixed value in LocationCapability, then the
          * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error and the
          * RegulatoryConfig attribute and associated internal radio configuration shall remain unchanged.
          *
@@ -167,7 +165,7 @@ export namespace GeneralCommissioningInterface {
          * when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the Breadcrumb
          * attribute shall be left unchanged.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.10.6.4
+         * @see {@link MatterSpecification.v13.Core} § 11.10.7.4
          */
         setRegulatoryConfig(request: GeneralCommissioning.SetRegulatoryConfigRequest): MaybePromise<GeneralCommissioning.SetRegulatoryConfigResponse>;
 
@@ -182,14 +180,18 @@ export namespace GeneralCommissioningInterface {
          * needed during the Fail-Safe period, such as commissioning (see Section 5.5, “Commissioning Flows”) or other
          * Administrator operations requiring usage of the Fail Safe timer. It ensures that the Server is configured in
          * a state such that it still has all necessary elements to be fully operable within a Fabric, such as ACL
-         * entries (see Access Control Cluster) and operational credentials (see Section 6.4, “Node Operational
-         * Credentials Specification”), and that the Node is reach
+         * entries (see Section 9.10, “Access Control Cluster”) and operational credentials (see Section 6.4, “Node
+         * Operational Credentials Specification”), and that the Node is reachable using CASE
          *
-         * able using CASE (see Section 4.14.2, “Certificate Authenticated Session Establishment (CASE)”) over an
-         * operational network.
+         * (CASE)”) over an operational network.
          *
          * An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command was
          * received when no Fail-Safe context exists.
+         *
+         * If Terms and Conditions are required, then an ErrorCode of TCAcknowledgementsNotReceived shall be responded
+         * to the invoker if the user acknowledgements to the required Terms and Conditions have not been provided. If
+         * the TCAcceptedVersion for the provided acknowledgements is less than TCMinRequiredVersion, then an ErrorCode
+         * of TCMinVersionNotMet shall be responded to the invoker.
          *
          * This command is fabric-scoped, so cannot be issued over a session that does not have an associated fabric,
          * i.e. over PASE session prior to an AddNOC command. In addition, this command is only permitted over CASE and
@@ -217,7 +219,7 @@ export namespace GeneralCommissioningInterface {
          *   2. The commissioning window at the Server shall be closed.
          *
          *   3. Any temporary administrative privileges automatically granted to any open PASE session shall be revoked
-         *      (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
+         *      (see Section 6.6.2.9, “Bootstrapping of the Access Control Cluster”).
          *
          *   4. The Secure Session Context of any PASE session still established at the Server shall be cleared.
          *
@@ -226,10 +228,25 @@ export namespace GeneralCommissioningInterface {
          * After receipt of a CommissioningCompleteResponse with an ErrorCode value of OK, a client cannot expect any
          * previously established PASE session to still be usable, due to the server having cleared such sessions.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.10.6.6
+         * @see {@link MatterSpecification.v13.Core} § 11.10.7.6
          */
         commissioningComplete(): MaybePromise<GeneralCommissioning.CommissioningCompleteResponse>;
     }
+
+    export interface TermsAndConditions {
+        /**
+         * This command sets the user acknowledgements received in the Enhanced Setup Flow Terms & Conditions into the
+         * node.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.10.7.8
+         */
+        setTcAcknowledgements(request: GeneralCommissioning.SetTcAcknowledgementsRequest): MaybePromise<GeneralCommissioning.SetTcAcknowledgementsResponse>;
+    }
 }
 
-export type GeneralCommissioningInterface = { components: [{ flags: {}, methods: GeneralCommissioningInterface.Base }] };
+export type GeneralCommissioningInterface = {
+    components: [
+        { flags: {}, methods: GeneralCommissioningInterface.Base },
+        { flags: { termsAndConditions: true }, methods: GeneralCommissioningInterface.TermsAndConditions }
+    ]
+};

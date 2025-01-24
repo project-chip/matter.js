@@ -31,7 +31,7 @@ export const string = Datatype({
         "specification. Implementations of this version of the specification shall NOT produce character " +
         "strings containing INFORMATION SEPARATOR 1.",
 
-    xref: { document: "core", section: "7.18.2.36" }
+    xref: { document: "core", section: "7.19.2.36" }
 });
 
 MatterDefinition.children.push(string);

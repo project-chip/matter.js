@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BasicInformationServer } from "#behaviors/basic-information";
 import { DescriptorServer } from "#behaviors/descriptor";
 import { AggregatorEndpoint } from "#endpoints/aggregator";
 import { ImplementationError, Logger } from "#general";
@@ -26,14 +27,20 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
         }
         this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
 
-        if (
-            this.state.uniqueId !== undefined &&
-            this.state.serialNumber !== undefined &&
-            this.state.uniqueId === this.state.serialNumber
-        ) {
+        const { uniqueId, serialNumber } = this.state;
+
+        if (uniqueId === undefined) {
+            this.state.uniqueId = BasicInformationServer.createUniqueId();
+        }
+
+        if (serialNumber !== undefined && uniqueId === this.state.serialNumber) {
             logger.warn("uniqueId and serialNumber shall not be the same.");
         }
     }
+
+    static override schema = BasicInformationServer.enableUniqueIdPersistence(
+        BridgedDeviceBasicInformationBehavior.schema,
+    );
 
     /**
      * Per the specification.  Not sure what this adds vs. subscribing to attribute changes.

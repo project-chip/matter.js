@@ -6,8 +6,8 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { BasicInformation } from "#clusters/basic-information";
-import { Diagnostic, Logger, Observable } from "#general";
-import { Specification } from "#model";
+import { Base64, Crypto, Diagnostic, InternalError, Logger, Observable } from "#general";
+import { AttributeModel, Schema, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager } from "#protocol";
 import { DEFAULT_MAX_PATHS_PER_INVOKE, VendorId } from "#types";
@@ -57,6 +57,9 @@ export class BasicInformationServer extends Base {
         setDefault("softwareVersionString", state.softwareVersion.toString());
         setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
         setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE);
+        if (this.state.uniqueId === undefined) {
+            this.state.uniqueId = BasicInformationServer.createUniqueId();
+        }
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
@@ -81,6 +84,20 @@ export class BasicInformationServer extends Base {
         ) {
             logger.warn("uniqueId and serialNumber shall not be the same.");
         }
+    }
+
+    static override schema = this.enableUniqueIdPersistence(Base.schema);
+
+    static enableUniqueIdPersistence(schema?: Schema): Schema {
+        if (schema === undefined) {
+            throw new InternalError("Basic information schema is undefined");
+        }
+
+        return schema.extend({}, schema.require(AttributeModel, "uniqueId").extend({ quality: "FN" }));
+    }
+
+    static createUniqueId() {
+        return Base64.encode(Crypto.getRandomData(24));
     }
 
     #online() {

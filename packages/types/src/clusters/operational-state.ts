@@ -18,7 +18,7 @@ import {
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvUInt8, TlvUInt32 } from "../tlv/TlvNumber.js";
+import { TlvUInt8, TlvUInt32, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
@@ -26,6 +26,48 @@ import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace OperationalState {
+    /**
+     * This type defines the set of known operational state values, and is derived from enum8. The following table
+     * defines the applicable ranges for values that are defined within this type. All values that are undefined shall
+     * be treated as reserved. As shown by the table, states that may be specific to a certain Device Type or other
+     * modality shall be defined in a derived cluster of this cluster.
+     *
+     * The derived cluster-specific state definitions shall NOT duplicate any general state definitions. That is, a
+     * derived cluster specification of this cluster cannot define states with the same semantics as the general states
+     * defined below.
+     *
+     * A manufacturer-specific state definition shall NOT duplicate the general state definitions or derived cluster
+     * state definitions. That is, a manufacturer-defined state defined for this cluster or a derived cluster thereof
+     * cannot define a state with the same semantics as the general states defined below or states defined in a derived
+     * cluster. Such manufacturer-specific state definitions shall be scoped in the context of the Vendor ID present in
+     * the Basic Information cluster.
+     *
+     * The following table defines the generally applicable states.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.1
+     */
+    export enum OperationalStateEnum {
+        /**
+         * The device is stopped
+         */
+        Stopped = 0,
+
+        /**
+         * The device is operating
+         */
+        Running = 1,
+
+        /**
+         * The device is paused during an operation
+         */
+        Paused = 2,
+
+        /**
+         * The device is in an error state
+         */
+        Error = 3
+    }
+
     /**
      * The OperationalStateStruct is used to indicate a possible state of the device.
      *
@@ -37,7 +79,7 @@ export namespace OperationalState {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2.1
          */
-        operationalStateId: TlvField(0, TlvUInt8),
+        operationalStateId: TlvField(0, TlvEnum<OperationalStateEnum>()),
 
         /**
          * This field shall be present if the OperationalStateID is from the set reserved for Manufacturer Specific
@@ -57,15 +99,59 @@ export namespace OperationalState {
     export interface OperationalStateStruct extends TypeFromSchema<typeof TlvOperationalStateStruct> {}
 
     /**
+     * This type defines the set of known operational error values, and is derived from enum8. The following table
+     * defines the applicable ranges for values that are defined within this type. All values that are undefined shall
+     * be treated as reserved. As shown by the table, errors that may be specific to a certain Device Type or other
+     * modality shall be defined in a derived cluster of this cluster.
+     *
+     * The derived cluster-specific error definitions shall NOT duplicate the general error definitions.
+     *
+     * That is, a derived cluster specification of this cluster cannot define errors with the same semantics as the
+     * general errors defined below.
+     *
+     * The manufacturer-specific error definitions shall NOT duplicate the general error definitions or derived
+     * cluster-specific error definitions. That is, a manufacturer-defined error defined for this cluster or a derived
+     * cluster thereof cannot define errors with the same semantics as the general errors defined below or errors
+     * defined in a derived cluster. Such manufacturer-specific error definitions shall be scoped in the context of the
+     * Vendor ID present in the Basic Information cluster.
+     *
+     * The set of ErrorStateID field values defined in each of the generic or derived Operational State cluster
+     * specifications is called ErrorState.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.3
+     */
+    export enum ErrorState {
+        /**
+         * The device is not in an error state
+         */
+        NoError = 0,
+
+        /**
+         * The device is unable to start or resume operation
+         */
+        UnableToStartOrResume = 1,
+
+        /**
+         * The device was unable to complete the current operation
+         */
+        UnableToCompleteOperation = 2,
+
+        /**
+         * The device cannot process the command in its current state
+         */
+        CommandInvalidInState = 3
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
      */
-    export const TlvErrorState = TlvObject({
+    export const TlvErrorStateStruct = TlvObject({
         /**
          * This shall be populated with a value from the ErrorStateEnum.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4.1
          */
-        errorStateId: TlvField(0, TlvUInt8),
+        errorStateId: TlvField(0, TlvEnum<ErrorState>()),
 
         /**
          * This field shall be present if the ErrorStateID is from the set reserved for Manufacturer Specific Errors,
@@ -90,7 +176,7 @@ export namespace OperationalState {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
      */
-    export interface ErrorState extends TypeFromSchema<typeof TlvErrorState> {}
+    export interface ErrorStateStruct extends TypeFromSchema<typeof TlvErrorStateStruct> {}
 
     /**
      * This command shall be supported by an implementation if any of the other commands defined by this cluster are
@@ -109,7 +195,7 @@ export namespace OperationalState {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.5.1
          */
-        commandResponseState: TlvField(0, TlvErrorState)
+        commandResponseState: TlvField(0, TlvErrorStateStruct)
     });
 
     /**
@@ -128,7 +214,7 @@ export namespace OperationalState {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.1
      */
-    export const TlvOperationalErrorEvent = TlvObject({ errorState: TlvField(0, TlvErrorState) });
+    export const TlvOperationalErrorEvent = TlvObject({ errorState: TlvField(0, TlvErrorStateStruct) });
 
     /**
      * Body of the OperationalState operationalError event
@@ -153,9 +239,10 @@ export namespace OperationalState {
 
         /**
          * The total operational time, in seconds, from when the operation was started via an initial Start command or
-         * manual action, until the operation completed. This includes any time spent while paused. There may be cases
-         * whereby the total operational time exceeds the maximum value that can be conveyed by this attribute, in such
-         * instances, this attribute shall be populated with null.
+         * autonomous/manual starting action, until the operation completed. This includes any time
+         *
+         * spent while paused. There may be cases whereby the total operational time exceeds the maximum value that can
+         * be conveyed by this attribute, in such instances, this attribute shall be populated with null.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.2.2
          */
@@ -179,39 +266,12 @@ export namespace OperationalState {
     export interface OperationCompletionEvent extends TypeFromSchema<typeof TlvOperationCompletionEvent> {}
 
     /**
-     * The following table defines the generally applicable ErrorState values.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.3.1
-     */
-    export enum GeneralErrorState {
-        /**
-         * The device is not in an error state
-         */
-        NoError = 0,
-
-        /**
-         * The device is unable to start or resume operation
-         */
-        UnableToStartOrResume = 1,
-
-        /**
-         * The device was unable to complete the current operation
-         */
-        UnableToCompleteOperation = 2,
-
-        /**
-         * The device cannot process the command in its current state
-         */
-        CommandInvalidInState = 3
-    }
-
-    /**
      * @see {@link Cluster}
      */
     export const ClusterInstance = MutableCluster({
         id: 0x60,
         name: "OperationalState",
-        revision: 2,
+        revision: 3,
 
         attributes: {
             /**
@@ -229,9 +289,10 @@ export namespace OperationalState {
 
             /**
              * This attribute represents the current phase of operation being performed by the server. This shall be
-             * the positional index representing the value from the set provided in the PhaseList Attribute, where the
-             * first item in that list is an index of 0. Thus, this attribute shall have a maximum value that is
-             * "length(PhaseList) - 1".
+             * the positional index representing the value from the set provided in the PhaseList Attribute,
+             *
+             * where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value that
+             * is "length(PhaseList) - 1".
              *
              * Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.
              *
@@ -240,24 +301,37 @@ export namespace OperationalState {
             currentPhase: Attribute(0x1, TlvNullable(TlvUInt8)),
 
             /**
-             * Indicates the estimated time left before the operation is completed, in seconds. Changes to this value
-             * shall NOT be reported in a subscription (note the C Quality). A Client implementation may periodically
-             * poll this value to ensure alignment of any local rendering of the CountdownTime with the device provided
-             * value.
+             * Indicates the estimated time left before the operation is completed, in seconds.
              *
-             * A value of 0 means that the operation has completed.
+             * A value of 0 (zero) means that the operation has completed.
              *
-             * When this attribute is null, that represents that there is no time currently defined until operation
-             * completion. This may happen, for example, because no operation is in progress or because the completion
-             * time is unknown.
+             * A value of null represents that there is no time currently defined until operation completion. This may
+             * happen, for example, because no operation is in progress or because the completion time is unknown.
+             *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • If it has changed due to a change in the CurrentPhase or OperationalState attributes, or
+             *
+             *   • When it changes from 0 to any other value and vice versa, or
+             *
+             *   • When it changes from null to any other value and vice versa, or
+             *
+             *   • When it increases, or
+             *
+             *   • When there is any increase or decrease in the estimated time remaining that was due to progressing
+             *     insight of the server’s control logic, or
+             *
+             *   • When it changes at a rate significantly different from one unit per second.
+             *
+             * Changes to this attribute merely due to the normal passage of time with no other dynamic change of
+             * device state shall NOT be reported.
+             *
+             * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
+             * reporting of this attribute in order to keep track of the remaining duration.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.3
              */
-            countdownTime: OptionalAttribute(
-                0x2,
-                TlvNullable(TlvUInt32.bound({ max: 259200 })),
-                { omitChanges: true, default: null }
-            ),
+            countdownTime: OptionalAttribute(0x2, TlvNullable(TlvUInt32.bound({ max: 259200 })), { default: null }),
 
             /**
              * This attribute describes the set of possible operational states that the device exposes. An operational
@@ -279,7 +353,7 @@ export namespace OperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.5
              */
-            operationalState: Attribute(0x4, TlvUInt8),
+            operationalState: Attribute(0x4, TlvEnum<OperationalStateEnum>()),
 
             /**
              * This attribute shall specify the details of any current error condition being experienced on the device
@@ -290,7 +364,7 @@ export namespace OperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.6
              */
-            operationalError: Attribute(0x5, TlvErrorState)
+            operationalError: Attribute(0x5, TlvErrorStateStruct)
         },
 
         commands: {
@@ -443,9 +517,13 @@ export namespace OperationalState {
             operationalError: Event(0x0, EventPriority.Critical, TlvOperationalErrorEvent),
 
             /**
-             * This event is generated when the overall operation ends, successfully or otherwise. For example, the
-             * completion of a cleaning operation in a Robot Vacuum Cleaner, or the completion of a wash cycle in a
+             * This event SHOULD be generated when the overall operation ends, successfully or otherwise. For example,
+             * the completion of a cleaning operation in a Robot Vacuum Cleaner, or the completion of a wash cycle in a
              * Washing Machine.
+             *
+             * It is highly recommended that appliances device types employing the Operational State cluster support
+             * this event, even if it is optional. This assists clients in executing automations or issuing
+             * notifications at critical points in the device operation cycles.
              *
              * This event shall contain the following fields:
              *

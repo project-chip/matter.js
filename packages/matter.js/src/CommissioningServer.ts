@@ -16,6 +16,7 @@ import {
     GroupKeyManagementCluster,
     OperationalCredentialsCluster,
 } from "#clusters";
+import { BasicInformationServer } from "#forwards/behaviors/basic-information.js";
 import {
     Bytes,
     Crypto,
@@ -274,6 +275,7 @@ export class CommissioningServer extends MatterNode {
         const basicInformationAttributes: AttributeInitialValues<typeof BasicInformationCluster.attributes> = {
             dataModelRevision: Specification.DATA_MODEL_REVISION,
             nodeLabel: "",
+            uniqueId: BasicInformationServer.createUniqueId(),
             hardwareVersion: 0,
             hardwareVersionString: "0",
             location: "XX",

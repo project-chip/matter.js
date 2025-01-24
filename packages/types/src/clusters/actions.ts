@@ -41,8 +41,9 @@ export namespace Actions {
          * Can be used to set a static state of the associated endpoints (typically using InstantAction or
          * InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically using
          * StartAction), where the endpoints would e.g. gradually cycle through certain colors for a pleasing effect. A
-         * voice controller could use "set" (to map to InstantAction) or "play" (to map to StartAction) to trigger such
-         * actions.
+         * voice controller could use "set" (to map to InstantAction) or "play" (to map to StartAction) to trig
+         *
+         * ger such actions.
          *
          * Example: see examples 1 and 2.
          *
@@ -223,7 +224,7 @@ export namespace Actions {
          *
          * @see {@link MatterSpecification.v13.Core} § 9.14.4.6.2
          */
-        name: TlvField(1, TlvString.bound({ maxLength: 32 })),
+        name: TlvField(1, TlvString.bound({ maxLength: 128 })),
 
         /**
          * This field shall indicate the type of action. The value of Type of an action, along with its
@@ -300,8 +301,9 @@ export namespace Actions {
         /**
          * User-configured group of endpoints where an endpoint can be in any number of zones
          *
-         * Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the living room
-         * can be part of the "reading corner" zone (subset of the lights in the living room) but also part of the
+         * Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the living
+         *
+         * room can be part of the "reading corner" zone (subset of the lights in the living room) but also part of the
          * "downstairs" zone which contains all the lights on a floor, e.g. combining living room, kitchen and hallway.
          * This indicates that a user has defined this list of endpoints as something they logically would like to
          * control as a group, so Matter controllers could provide the user with a way to do as such.
@@ -332,7 +334,7 @@ export namespace Actions {
          *
          * @see {@link MatterSpecification.v13.Core} § 9.14.4.7.2
          */
-        name: TlvField(1, TlvString.bound({ maxLength: 32 })),
+        name: TlvField(1, TlvString.bound({ maxLength: 128 })),
 
         /**
          * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
@@ -717,8 +719,8 @@ export namespace Actions {
 
             /**
              * The SetupURL attribute (when provided) shall indicate a URL; its syntax shall follow the syntax as
-             * specified in RFC 3986, max. 512 ASCII characters. The location referenced by this URL shall provide
-             * additional information for the actions provided:
+             * specified in RFC 1738, max. 512 ASCII characters and shall use the https scheme. The location referenced
+             * by this URL shall provide additional information for the actions provided:
              *
              *   • When used without suffix, it shall provide information about the various actions which the cluster
              *     provides.
@@ -949,9 +951,8 @@ export namespace Actions {
      *
      *   • Information about logical grouping of endpoints on the Node (example: lights in a room)
      *
-     *   • Information about named actions that can be performed on such a group of endpoints
-     *
-     * ple: recall a scene for a group of lights by its name)
+     *   • Information about named actions that can be performed on such a group of endpoints (example: recall a scene
+     *     for a group of lights by its name)
      *
      *   • Commands to trigger such actions
      *
