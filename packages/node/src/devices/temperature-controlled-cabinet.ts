@@ -92,7 +92,7 @@ export namespace TemperatureControlledCabinetRequirements {
 export const TemperatureControlledCabinetDeviceDefinition = MutableEndpoint({
     name: "TemperatureControlledCabinet",
     deviceType: 0x71,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: TemperatureControlledCabinetRequirements,
     behaviors: SupportedBehaviors()
 });

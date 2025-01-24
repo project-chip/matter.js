@@ -20,17 +20,17 @@ export const PowerSource = Cluster(
         name: "PowerSource", id: 0x2f, classification: "node", pics: "PS",
         details: "This cluster is used to describe the configuration and capabilities of a physical power source that " +
             "provides power to one or more endpoints on a node. In case the node has multiple power sources, " +
-            "each is described by its own cluster instance. Each instance of this cluster may be associated with " +
-            "one or more endpoints or the entire node.",
+            "each shall be described by its own cluster instance. Each instance of this cluster may be " +
+            "associated with one or more endpoints or the entire node.",
         xref: { document: "core", section: "11.7" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.7.4" } },
-        Field({ name: "WIRED", conformance: "O", constraint: "0", description: "Wired", details: "A wired power source" }),
-        Field({ name: "BAT", conformance: "O", constraint: "1", description: "Battery", details: "A battery power source" }),
+        Field({ name: "WIRED", conformance: "O.a", constraint: "0", description: "Wired", details: "A wired power source" }),
+        Field({ name: "BAT", conformance: "O.a", constraint: "1", description: "Battery", details: "A battery power source" }),
         Field({
             name: "RECHG", conformance: "[BAT]", constraint: "2", description: "Rechargeable",
             details: "A rechargeable battery power source"
@@ -161,19 +161,39 @@ export const PowerSource = Cluster(
 
     Attribute({
         name: "BatPercentRemaining", id: 0xc, type: "uint8", access: "R V", conformance: "[BAT]",
-        constraint: "0 to 200", quality: "X C",
+        constraint: "max 200", quality: "X Q",
+
         details: "Indicates the estimated percentage of battery charge remaining until the battery will no longer be " +
             "able to provide power to the Node. Values are expressed in half percent units, ranging from 0 to " +
             "200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently " +
-            "unable to assess the value.",
+            "unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.13" }
     }),
 
     Attribute({
         name: "BatTimeRemaining", id: 0xd, type: "uint32", access: "R V", conformance: "[BAT]",
-        quality: "X C",
+        quality: "X Q",
+
         details: "Indicates the estimated time in seconds before the battery will no longer be able to provide power " +
-            "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value.",
+            "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.14" }
     }),
 
@@ -218,7 +238,9 @@ export const PowerSource = Cluster(
                 "detects all conditions contributing to a fault have been cleared, the corresponding BatFaultEnum " +
                 "value shall be removed from this list. An empty list shall indicate there are currently no active " +
                 "faults. The order of this list SHOULD have no significance. Clients interested in monitoring " +
-                "changes in active faults may subscribe to this attribute, or they may subscribe to BatFaultChange.",
+                "changes in active faults may subscribe to this attribute, or they may subscribe to Bat" +
+                "\n" +
+                "FaultChange.",
 
             xref: { document: "core", section: "11.7.7.19" }
         },
@@ -290,9 +312,19 @@ export const PowerSource = Cluster(
 
     Attribute({
         name: "BatTimeToFullCharge", id: 0x1b, type: "uint32", access: "R V", conformance: "[RECHG]",
-        quality: "X C",
+        quality: "X Q",
+
         details: "Indicates the estimated time in seconds before the battery source will be at full charge. A value " +
-            "of NULL shall indicate the Node is currently unable to assess the value.",
+            "of NULL shall indicate the Node is currently unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.28" }
     }),
 

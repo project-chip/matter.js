@@ -9,6 +9,7 @@
 import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/IdentifyServer.js";
 import { FanControlServer as BaseFanControlServer } from "../behaviors/fan-control/FanControlServer.js";
 import { GroupsServer as BaseGroupsServer } from "../behaviors/groups/GroupsServer.js";
+import { OnOffServer as BaseOnOffServer } from "../behaviors/on-off/OnOffServer.js";
 import {
     HepaFilterMonitoringServer as BaseHepaFilterMonitoringServer
 } from "../behaviors/hepa-filter-monitoring/HepaFilterMonitoringServer.js";
@@ -52,6 +53,13 @@ export namespace AirPurifierRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
+     * The OnOff cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
      * The HepaFilterMonitoring cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link HepaFilterMonitoringServer} for convenience.
@@ -71,8 +79,10 @@ export namespace AirPurifierRequirements {
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, FanControl: FanControlServer },
+
         optional: {
             Groups: GroupsServer,
+            OnOff: OnOffServer,
             HepaFilterMonitoring: HepaFilterMonitoringServer,
             ActivatedCarbonFilterMonitoring: ActivatedCarbonFilterMonitoringServer
         }
@@ -82,7 +92,7 @@ export namespace AirPurifierRequirements {
 export const AirPurifierDeviceDefinition = MutableEndpoint({
     name: "AirPurifier",
     deviceType: 0x2d,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: AirPurifierRequirements,
     behaviors: SupportedBehaviors(
         AirPurifierRequirements.server.mandatory.Identify,

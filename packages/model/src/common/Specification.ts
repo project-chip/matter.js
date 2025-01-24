@@ -49,19 +49,19 @@ export namespace Specification {
     /**
      * The default specification revision for Matter.js.
      */
-    export const REVISION = "1.3.0.1";
+    export const REVISION = "1.4";
 
     /**
      * Binary version of specification revision defined by Basic Information Cluster.
      *
      * Currently spec says least significant octet is "reserved", so we don't stick the .1 into it.
      */
-    export const SPECIFICATION_VERSION = 0x01030000;
+    export const SPECIFICATION_VERSION = 0x01040000;
 
     /**
      * Data model revision associated with the default revision of Matter.
      */
-    export const DATA_MODEL_REVISION = 17;
+    export const DATA_MODEL_REVISION = 18;
 
     /**
      * Interaction model revision associated with the default revision of Matter.

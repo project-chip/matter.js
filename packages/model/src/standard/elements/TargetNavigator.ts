@@ -42,7 +42,7 @@ export const TargetNavigator = Cluster(
         {
             name: "TargetList", id: 0x0, type: "list", access: "R V", conformance: "M",
             details: "Indicates a list of targets that can be navigated to within the experience presented to the user by " +
-                "the Endpoint (Video Player or Content App). The list shall not contain any entries with the same " +
+                "the Endpoint (Video Player or Content App). The list shall NOT contain any entries with the same " +
                 "Identifier in the TargetInfoStruct object.",
             xref: { document: "cluster", section: "6.11.5.1" }
         },
@@ -111,7 +111,7 @@ export const TargetNavigator = Cluster(
             xref: { document: "cluster", section: "6.11.6.2.1" }
         }),
         Field({
-            name: "Data", id: 0x1, type: "string", conformance: "O",
+            name: "Data", id: 0x1, type: "string", conformance: "O", constraint: "any",
             details: "This field shall indicate Optional app-specific data.",
             xref: { document: "cluster", section: "6.11.6.2.2" }
         })

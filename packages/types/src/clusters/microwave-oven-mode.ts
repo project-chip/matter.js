@@ -14,6 +14,7 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
+import { ModeBase } from "./mode-base.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -22,104 +23,81 @@ export namespace MicrowaveOvenMode {
     /**
      * These are optional features supported by MicrowaveOvenModeCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     * @see {@link MatterSpecification.v13.Cluster} § 8.12.4
      */
     export enum Feature {
         /**
          * OnOff (DEPONOFF)
          *
-         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
-         * endpoint. See OnMode for more information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         * Dependency with the OnOff cluster
          */
         OnOff = "OnOff"
     }
 
     export enum ModeTag {
         /**
-         * The normal mode of operation
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.12.6.1
-         */
-        Normal = 16384,
-
-        /**
-         * A mode optimized for defrosting foods
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.12.6.1
-         */
-        Defrost = 16385,
-
-        /**
-         * The device decides which options, features and setting values to use.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Auto = 0,
 
         /**
-         * The mode of the device is optimizing for faster completion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Quick = 1,
 
         /**
-         * The device is silent or barely audible while in this mode.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Quiet = 2,
 
         /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         LowNoise = 3,
 
         /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         LowEnergy = 4,
 
         /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Vacation = 5,
 
         /**
-         * The mode uses the lowest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Min = 6,
 
         /**
-         * The mode uses the highest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Max = 7,
 
         /**
-         * The mode is recommended or suitable for use during night time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
         Night = 8,
 
         /**
-         * The mode is recommended or suitable for use during day time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1
          */
-        Day = 9
+        Day = 9,
+
+        /**
+         * This is the normal mode of operation for general cooking of food.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1.1
+         */
+        Normal = 16384,
+
+        /**
+         * This is a mode optimized for defrosting food.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.12.7.1.2
+         */
+        Defrost = 16385
     }
 
     /**
@@ -149,7 +127,7 @@ export namespace MicrowaveOvenMode {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
          */
-        value: TlvField(1, TlvEnum<ModeTag>())
+        value: TlvField(1, TlvEnum<ModeTag | ModeBase.ModeTag>())
     });
 
     /**
@@ -233,23 +211,26 @@ export namespace MicrowaveOvenMode {
     export const Base = MutableCluster.Component({
         id: 0x5e,
         name: "MicrowaveOvenMode",
-        revision: 1,
+        revision: 2,
 
         features: {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)
         },
 
         attributes: {
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 8.12.4
+             * Exactly one entry in the SupportedModes attribute shall include the Normal mode tag in the ModeTags
+             * field.
+             *
+             * The Normal and Defrost mode tags are mutually exclusive and shall NOT both be used together in a mode’s
+             * ModeTags.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 8.12.5.1
              */
             supportedModes: FixedAttribute(
                 0x0,
@@ -258,16 +239,16 @@ export namespace MicrowaveOvenMode {
             ),
 
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 8.12.4
+             * @see {@link MatterSpecification.v13.Cluster} § 8.12.5
              */
-            currentMode: Attribute(0x1, TlvUInt8, { scene: true, persistent: true })
+            currentMode: Attribute(0x1, TlvUInt8, { persistent: true })
         },
 
         /**
          * This metadata controls which MicrowaveOvenModeCluster elements matter.js activates for specific feature
          * combinations.
          */
-        extensions: MutableCluster.Extensions()
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: false })
     });
 
     /**
@@ -276,8 +257,8 @@ export namespace MicrowaveOvenMode {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced enumerated
-     * values for Microwave Oven devices.
+     * This cluster is derived from the Mode Base cluster and defines additional mode tags and namespaced enumerated
+     * values for microwave oven devices.
      *
      * MicrowaveOvenModeCluster supports optional features that you can enable with the MicrowaveOvenModeCluster.with()
      * factory method.

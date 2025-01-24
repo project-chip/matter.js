@@ -35,7 +35,7 @@ export namespace FanControl {
          * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to SpeedMax,
          * which has a maximum of 100.
          *
-         * See Speed Rules for more details.
+         * See Section 4.4.6.6.1 for more details.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
          */
@@ -286,7 +286,7 @@ export namespace FanControl {
              * changed to the requested value.
              *
              * If this is successfully written to 0, the server shall set the FanMode attribute value to Off. Please
-             * see the Speed Rules for details on other values.
+             * see the Section 4.4.6.6.1 for details on other values.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.6
              */
@@ -423,7 +423,7 @@ export namespace FanControl {
              * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to
              * SpeedMax, which has a maximum of 100.
              *
-             * See Speed Rules for more details.
+             * See Section 4.4.6.6.1 for more details.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
              */
@@ -477,7 +477,7 @@ export namespace FanControl {
              * This attribute shall be set to one of the values in FanModeEnum.
              *
              * When the FanMode attribute is successfully written to, the PercentSetting and SpeedSetting (if present)
-             * attributes shall be set to appropriate values, as defined by the Percent Rules and Speed Rules
+             * attributes shall be set to appropriate values, as defined by the Section 4.4.6.3.1 and Section 4.4.6.6.1
              * respectively, unless otherwise specified below.
              *
              * When the FanMode attribute is set to any given mode, the PercentCurrent and SpeedCurrent (if present)
@@ -510,7 +510,7 @@ export namespace FanControl {
              * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may
              * be a temporary mismatch between the value of this attribute and the value of the PercentSetting
              * attribute due to other system requirements that would not allow the fan to operate at the requested
-             * setting. See Percent Rules for more details.
+             * setting. See Section 4.4.6.3.1 for more details.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.4
              */

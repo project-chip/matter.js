@@ -24,7 +24,7 @@ export namespace FlowMeasurement {
 
         attributes: {
             /**
-             * MeasuredValue represents the flow in m/h as follows:
+             * Indicates the flow in m/h as follows:
              *
              * MeasuredValue = 10 x Flow
              *
@@ -36,24 +36,24 @@ export namespace FlowMeasurement {
             measuredValue: Attribute(0x0, TlvNullable(TlvUInt16), { default: null }),
 
             /**
-             * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. See
-             * Measured Value for more details.
+             * Indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.2
              */
-            minMeasuredValue: Attribute(0x1, TlvNullable(TlvUInt16)),
+            minMeasuredValue: Attribute(0x1, TlvNullable(TlvUInt16.bound({ max: 65533 }))),
 
             /**
-             * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. See
+             * Indicates the maximum value of MeasuredValue that can be measured. See
+             *
              * Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.3
              */
-            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
+            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvUInt16)),
 
             /**
              * See Measured Value.

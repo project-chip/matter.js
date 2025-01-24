@@ -15,7 +15,7 @@ export const commandId = Datatype({
         "\n" +
         "Command IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
         "described in Data Model Types.",
-    xref: { document: "core", section: "7.18.2.30" }
+    xref: { document: "core", section: "7.19.2.30" }
 });
 
 MatterDefinition.children.push(commandId);

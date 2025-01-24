@@ -70,7 +70,7 @@ export const TemperatureControl = Cluster(
 
     Attribute({
         name: "MinTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "TN",
-        constraint: "max (MaxTemperature - 1)", quality: "F",
+        constraint: "max maxTemperature - 1", quality: "F",
         details: "Indicates the minimum temperature to which the TemperatureSetpoint attribute may be set.",
         xref: { document: "cluster", section: "8.2.5.2" }
     }),
@@ -90,7 +90,7 @@ export const TemperatureControl = Cluster(
 
     Attribute({
         name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP",
-        constraint: "max (MaxTemperature - MinTemperature)", quality: "F",
+        constraint: "max maxTemperature - minTemperature", quality: "F",
 
         details: "Indicates the discrete value by which the TemperatureSetpoint attribute can be changed via the " +
             "SetTemperature command." +
@@ -104,7 +104,7 @@ export const TemperatureControl = Cluster(
 
     Attribute({
         name: "SelectedTemperatureLevel", id: 0x4, type: "uint8", access: "R V", conformance: "TL",
-        constraint: "0 to 31",
+        constraint: "max 31",
         details: "Indicates the currently selected temperature level setting of the server. This attribute shall be " +
             "the positional index of the list item in the SupportedTemperatureLevels list that represents the " +
             "currently selected temperature level setting of the server.",

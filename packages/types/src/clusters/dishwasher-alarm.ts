@@ -120,10 +120,9 @@ export namespace DishwasherAlarm {
          * alarm shall respond with a status code of FAILURE; otherwise the server shall respond with a status code of
          * SUCCESS.
          *
-         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the
-         *
-         * Mask field from this command. After that the server shall also update the value of its State attribute to
-         * reflect the status of the new alarm set as indicated by the new value of the Mask attribute.
+         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the Mask
+         * field from this command. After that the server shall also update the value of its State attribute to reflect
+         * the status of the new alarm set as indicated by the new value of the Mask attribute.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2.1
          */
@@ -284,7 +283,8 @@ export namespace DishwasherAlarm {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is a derived cluster of the Alarm Base cluster.
+     * This cluster is a derived cluster of the Alarm Base cluster and provides the alarm definition related to
+     * dishwasher devices.
      *
      * DishwasherAlarmCluster supports optional features that you can enable with the DishwasherAlarmCluster.with()
      * factory method.

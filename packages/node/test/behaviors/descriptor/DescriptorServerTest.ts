@@ -122,8 +122,9 @@ describe("DescriptorServer", () => {
     it("fully populates device types", async () => {
         const light = await MockEndpoint.create(ColorTemperatureLightDevice, {
             colorControl: {
-                coupleColorTempToLevelMinMireds: 0,
-                startUpColorTemperatureMireds: 0,
+                colorMode: 0,
+                coupleColorTempToLevelMinMireds: 1,
+                startUpColorTemperatureMireds: null,
             },
         });
 

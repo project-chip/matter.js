@@ -21,7 +21,7 @@ LocalMatter.children.push({
                     tag: "field",
                     name: "Ranges",
 
-                    // 1.3 spec mislabels the "access" column as "default"
+                    // 1.3 spec mislabels the "access" column as "default" (still present in 1.4 as well)
                     default: [],
                     access: "R V",
                 },

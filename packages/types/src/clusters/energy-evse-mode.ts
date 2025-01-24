@@ -7,23 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import {
-    WritableAttribute,
-    FixedAttribute,
-    Attribute,
-    OptionalWritableAttribute,
-    Command,
-    TlvNoResponse
-} from "../cluster/Cluster.js";
-import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { FixedAttribute, Attribute, Command, TlvNoResponse } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
+import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ModeBase } from "./mode-base.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -31,114 +23,108 @@ export namespace EnergyEvseMode {
     /**
      * These are optional features supported by EnergyEvseModeCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     * @see {@link MatterSpecification.v13.Cluster} § 9.4.4
      */
     export enum Feature {
         /**
          * OnOff (DEPONOFF)
          *
-         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
-         * endpoint. See OnMode for more information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         * Dependency with the OnOff cluster
          */
         OnOff = "OnOff"
     }
 
     export enum ModeTag {
         /**
-         * While in this mode, the EVSE needs to be sent an EnableEvseCharging or EnableEvseDischarging command to make
-         * the EVSE start charging or discharging.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.4.4.1.1
-         */
-        Manual = 16384,
-
-        /**
-         * While in this mode, the EVSE will attempt to automatically start charging based on the user’s charging
-         * targets and a Time of Use tariff to charge at the cheapest times of the day.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.4.4.1.2
-         */
-        TimeOfUse = 16385,
-
-        /**
-         * While in this mode, the EVSE will attempt to automatically start charging based on available excess solar PV
-         * generation, limiting the charging power to avoid imported energy from the grid.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.4.4.1.3
-         */
-        SolarCharging = 16386,
-
-        /**
-         * The device decides which options, features and setting values to use.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Auto = 0,
 
         /**
-         * The mode of the device is optimizing for faster completion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Quick = 1,
 
         /**
-         * The device is silent or barely audible while in this mode.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Quiet = 2,
 
         /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         LowNoise = 3,
 
         /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         LowEnergy = 4,
 
         /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Vacation = 5,
 
         /**
-         * The mode uses the lowest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Min = 6,
 
         /**
-         * The mode uses the highest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Max = 7,
 
         /**
-         * The mode is recommended or suitable for use during night time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
         Night = 8,
 
         /**
-         * The mode is recommended or suitable for use during day time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1
          */
-        Day = 9
+        Day = 9,
+
+        /**
+         * While in modes with this tag, and once enabled with the EnableCharging command, the EVSE will permit
+         * charging based on demand from the EV.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1.1
+         */
+        Manual = 16384,
+
+        /**
+         * While in modes with this tag, and once enabled with the EnableCharging command, the EVSE will attempt to
+         * automatically start charging based on the user’s charging targets (for example, set based on a Time of Use
+         * tariff to charge at the cheapest times of the day).
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1.2
+         */
+        TimeOfUse = 16385,
+
+        /**
+         * While in modes with this tag, and once enabled with the EnableCharging, the EVSE will attempt to
+         *
+         * automatically start charging based on available excess solar PV generation, limiting the charging power to
+         * avoid importing energy from the grid.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1.3
+         */
+        SolarCharging = 16386,
+
+        /**
+         * While in modes with this tag, and once enabled with the EnableDischarging command, the EVSE will permit
+         * discharging based on the current charge state of the EV, and its control from an associated Device Energy
+         * Management cluster.
+         *
+         * NOTE
+         *
+         * being in a mode with this tag set or not does not affect the handling of the EnableDischarging command by
+         * the Energy EVSE cluster, but once enabled, only modes with this tag enable the discharging to actually occur.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.4.7.1.4
+         */
+        V2X = 16387
     }
 
     /**
@@ -168,7 +154,7 @@ export namespace EnergyEvseMode {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
          */
-        value: TlvField(1, TlvEnum<ModeTag>())
+        value: TlvField(1, TlvEnum<ModeTag | ModeBase.ModeTag>())
     });
 
     /**
@@ -179,9 +165,10 @@ export namespace EnergyEvseMode {
     export interface ModeTagStruct extends TypeFromSchema<typeof TlvModeTagStruct> {}
 
     /**
-     * This is a struct representing a possible mode of the server.
+     * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
+     * A blank field indicates no change.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 9.4.5.1
      */
     export const TlvModeOption = TlvObject({
         /**
@@ -240,29 +227,12 @@ export namespace EnergyEvseMode {
     });
 
     /**
-     * This is a struct representing a possible mode of the server.
+     * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
+     * A blank field indicates no change.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 9.4.5.1
      */
     export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
-
-    /**
-     * A EnergyEvseModeCluster supports these elements if it supports feature OnOff.
-     */
-    export const OnOffComponent = MutableCluster.Component({
-        attributes: {
-            /**
-             * Indicates whether the value of CurrentMode depends on the state of the On/Off cluster on the same
-             * endpoint. If this attribute is not present or is set to null, there is no dependency, otherwise the
-             * CurrentMode attribute shall depend on the OnOff attribute in the On/Off cluster
-             *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.5
-             */
-            onMode: WritableAttribute(0x3, TlvNullable(TlvUInt8), { persistent: true, default: null })
-        }
-    });
 
     /**
      * These elements and properties are present in all EnergyEvseMode clusters.
@@ -270,64 +240,42 @@ export namespace EnergyEvseMode {
     export const Base = MutableCluster.Component({
         id: 0x9d,
         name: "EnergyEvseMode",
-        revision: 1,
+        revision: 2,
 
         features: {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)
         },
 
         attributes: {
             /**
-             * This attribute shall contain the list of supported modes that may be selected for the CurrentMode
-             * attribute. Each item in this list represents a unique mode as indicated by the Mode field of the
-             * ModeOptionStruct.
+             * At least one entry in the SupportedModes attribute shall include the Manual mode tag in the ModeTags
+             * field list.
              *
-             * Each entry in this list shall have a unique value for the Mode field. Each entry in this list shall have
-             * a unique value for the Label field.
+             * Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.2
+             * charging or discharging under different conditions shall permit the charging or discharging to occur if
+             * any of the conditions are satisfied.
+             *
+             * Modes shall NOT have both the Manual tag and the TimeOfUse or SolarCharging tags defined in the
+             * SupportedModes attribute.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 9.4.6.1
              */
-            supportedModes: FixedAttribute(0x0, TlvArray(TlvModeOption, { minLength: 2, maxLength: 255 })),
+            supportedModes: FixedAttribute(
+                0x0,
+                TlvArray(TlvModeOption, { minLength: 2, maxLength: 255 }),
+                { default: [] }
+            ),
 
             /**
-             * Indicates the current mode of the server.
-             *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
-             *
-             * The value of this attribute may change at any time via an out-of-band interaction outside of the server,
-             * such as interactions with a user interface, via internal mode changes due to autonomously progressing
-             * through a sequence of operations, on system time-outs or idle delays, or via interactions coming from a
-             * fabric other than the one which last executed a ChangeToMode.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 9.4.6
              */
-            currentMode: Attribute(0x1, TlvUInt8, { scene: true, persistent: true }),
-
-            /**
-             * Indicates the desired startup mode for the server when it is supplied with power.
-             *
-             * If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, when the
-             * server is powered up, except in the case when the OnMode attribute overrides the StartUpMode attribute
-             * (see OnModeWithPowerUp).
-             *
-             * This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode
-             * attribute shall return to its value prior to the restart.
-             *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
-             *
-             * If this attribute is not implemented, or is set to the null value, it shall have no effect.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.4
-             */
-            startUpMode: OptionalWritableAttribute(0x2, TlvNullable(TlvUInt8), { persistent: true })
+            currentMode: Attribute(0x1, TlvUInt8, { persistent: true })
         },
 
         commands: {
@@ -345,7 +293,7 @@ export namespace EnergyEvseMode {
          * This metadata controls which EnergyEvseModeCluster elements matter.js activates for specific feature
          * combinations.
          */
-        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: OnOffComponent })
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: false })
     });
 
     /**
@@ -354,8 +302,8 @@ export namespace EnergyEvseMode {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is derived from the Mode Base cluster which also defines a namespace for the operation of EVSE
-     * devices.
+     * This cluster is derived from the Mode Base cluster and defines additional mode tags and namespaced enumerated
+     * values for EVSE devices.
      *
      * EnergyEvseModeCluster supports optional features that you can enable with the EnergyEvseModeCluster.with()
      * factory method.
@@ -365,32 +313,7 @@ export namespace EnergyEvseMode {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-    const DEPONOFF = { onOff: true };
-
-    /**
-     * @see {@link Complete}
-     */
-    export const CompleteInstance = MutableCluster({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
-        attributes: {
-            ...Cluster.attributes,
-            onMode: MutableCluster.AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
-        },
-        commands: Cluster.commands
-    });
-
-    /**
-     * This cluster supports all EnergyEvseMode features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
-     */
-    export interface Complete extends Identity<typeof CompleteInstance> {}
-
-    export const Complete: Complete = CompleteInstance;
+    export const Complete = Cluster;
 }
 
 export type EnergyEvseModeCluster = EnergyEvseMode.Cluster;

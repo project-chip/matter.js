@@ -13,7 +13,7 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
-import { TlvUInt32, TlvUInt16, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvUInt32, TlvUInt16, TlvUInt8, TlvBitmap } from "../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -87,7 +87,7 @@ export namespace ContentControl {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
      */
     export const TlvRatingName = TlvObject({
         /**
@@ -95,20 +95,20 @@ export namespace ContentControl {
          * system is dependent upon the region or country where the Node has been provisioned, and may vary from one
          * country to another.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.1
          */
         ratingName: TlvField(0, TlvString.bound({ maxLength: 8 })),
 
         /**
          * This field shall specify a human readable (displayable) description for RatingName.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.2
          */
         ratingNameDesc: TlvOptionalField(1, TlvString.bound({ maxLength: 64 }))
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
      */
     export interface RatingName extends TypeFromSchema<typeof TlvRatingName> {}
 
@@ -141,9 +141,8 @@ export namespace ContentControl {
      */
     export const TlvSetScheduledContentRatingThresholdRequest = TlvObject({
         /**
-         * This field indicates a threshold rating for filtering scheduled content. This field shall be set to one
-         *
-         * of the values present in the ScheduledContentRatings attribute.
+         * This field indicates a threshold rating for filtering scheduled content. This field shall be set to one of
+         * the values present in the ScheduledContentRatings attribute.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.11.1
          */
@@ -177,7 +176,7 @@ export namespace ContentControl {
 
         /**
          * This field shall indicate the amount of extra time (in seconds) to increase RemainingScreenTime. This field
-         * shall not exceed the remaining time of this day.
+         * shall NOT exceed the remaining time of this day.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.6.2
          */
@@ -198,9 +197,8 @@ export namespace ContentControl {
      */
     export const TlvSetScreenDailyTimeRequest = TlvObject({
         /**
-         * This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on
-         *
-         * this media device within one day.
+         * This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on this media
+         * device within one day.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.7.1
          */
@@ -215,16 +213,14 @@ export namespace ContentControl {
     export interface SetScreenDailyTimeRequest extends TypeFromSchema<typeof TlvSetScreenDailyTimeRequest> {}
 
     /**
-     * [options="header",valign="middle"]b
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
      */
     export const TlvBlockChannel = TlvObject({
         /**
          * This field shall indicate a unique index value for a blocked channel. This value may be used to indicate one
          * selected channel which will be removed from BlockChannelList attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.1
          */
         blockChannelIndex: TlvField(0, TlvNullable(TlvUInt16)),
 
@@ -234,7 +230,7 @@ export namespace ContentControl {
          * This field is required but shall be set to 0 for channels such as over-the-top channels that are not
          * represented by a major or minor number.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.2
          */
         majorNumber: TlvField(1, TlvUInt16),
 
@@ -244,7 +240,7 @@ export namespace ContentControl {
          * This field is required but shall be set to 0 for channels such as over-the-top channels that are not
          * represented by a major or minor number.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.3
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.3
          */
         minorNumber: TlvField(2, TlvUInt16),
 
@@ -252,15 +248,13 @@ export namespace ContentControl {
          * This field shall indicate the unique identifier for a specific channel. This field is optional, but SHOULD
          * be provided when MajorNumber and MinorNumber are not available.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2.4
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.4
          */
         identifier: TlvOptionalField(3, TlvString)
     });
 
     /**
-     * [options="header",valign="middle"]b
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
      */
     export interface BlockChannel extends TypeFromSchema<typeof TlvBlockChannel> {}
 
@@ -310,7 +304,7 @@ export namespace ContentControl {
     export interface RemoveBlockChannelsRequest extends TypeFromSchema<typeof TlvRemoveBlockChannelsRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
      */
     export const TlvAppInfo = TlvObject({
         /**
@@ -319,7 +313,7 @@ export namespace ContentControl {
          * Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) and will
          * assign an ApplicationID to each Content App.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.1
          */
         catalogVendorId: TlvField(0, TlvUInt16),
 
@@ -327,13 +321,13 @@ export namespace ContentControl {
          * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or
          * "Company X". This field shall be unique within a catalog.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.2
          */
         applicationId: TlvField(1, TlvString)
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
      */
     export interface AppInfo extends TypeFromSchema<typeof TlvAppInfo> {}
 
@@ -381,44 +375,44 @@ export namespace ContentControl {
     export interface RemoveBlockApplicationsRequest extends TypeFromSchema<typeof TlvRemoveBlockApplicationsRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
      */
-    export enum DayOfWeek {
+    export const DayOfWeek = {
         /**
          * Sunday
          */
-        Sunday = 0,
+        sunday: BitFlag(0),
 
         /**
          * Monday
          */
-        Monday = 1,
+        monday: BitFlag(1),
 
         /**
          * Tuesday
          */
-        Tuesday = 2,
+        tuesday: BitFlag(2),
 
         /**
          * Wednesday
          */
-        Wednesday = 3,
+        wednesday: BitFlag(3),
 
         /**
          * Thursday
          */
-        Thursday = 4,
+        thursday: BitFlag(4),
 
         /**
          * Friday
          */
-        Friday = 5,
+        friday: BitFlag(5),
 
         /**
          * Saturday
          */
-        Saturday = 6
-    }
+        saturday: BitFlag(6)
+    };
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.6
@@ -461,34 +455,34 @@ export namespace ContentControl {
     export interface TimePeriod extends TypeFromSchema<typeof TlvTimePeriod> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5
      */
     export const TlvTimeWindow = TlvObject({
         /**
          * This field shall indicate a unique index of a specific time window. This value may be used to indicate a
          * selected time window which will be removed from the BlockContentTimeWindow attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5.1
          */
         timeWindowIndex: TlvField(0, TlvNullable(TlvUInt16)),
 
         /**
          * This field shall indicate a day of week.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5.2
          */
-        dayOfWeek: TlvField(1, TlvEnum<DayOfWeek>()),
+        dayOfWeek: TlvField(1, TlvBitmap(TlvUInt8, DayOfWeek)),
 
         /**
          * This field shall indicate one or more discrete time periods.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.3
+         * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5.3
          */
         timePeriod: TlvField(2, TlvArray(TlvTimePeriod))
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.5
      */
     export interface TimeWindow extends TypeFromSchema<typeof TlvTimeWindow> {}
 
@@ -788,9 +782,8 @@ export namespace ContentControl {
             /**
              * The purpose of this command is to add the extra screen time for the user.
              *
-             * If a client with Operate privilege invokes this command, the media device shall check whether
-             *
-             * the PINCode passed in the command matches the current PINCode value. If these match, then the
+             * If a client with Operate privilege invokes this command, the media device shall check whether the
+             * PINCode passed in the command matches the current PINCode value. If these match, then the
              * RemainingScreenTime attribute shall be increased by the specified BonusTime value.
              *
              * If the PINs do not match, then a response with InvalidPINCode error status shall be returned, and no
@@ -844,9 +837,8 @@ export namespace ContentControl {
         attributes: {
             /**
              * Indicates whether the playback of unrated content is allowed when the Content Control feature is
-             * activated. If this attribute equals FALSE, then playback of unrated content
-             *
-             * shall be permitted. Otherwise, the media device shall prevent the playback of unrated content.
+             * activated. If this attribute equals FALSE, then playback of unrated content shall be permitted.
+             * Otherwise, the media device shall prevent the playback of unrated content.
              *
              * When this attribute changes, the device SHOULD make the user aware of any limits of this feature. For
              * example, if the feature does not control content within apps, then the device should make this clear to
@@ -899,9 +891,10 @@ export namespace ContentControl {
             /**
              * The purpose of this command is to set BlockChannelList attribute.
              *
-             * Upon receipt of the AddBlockChannels command, the media device shall check if the channels passed in
-             * this command are valid. If the channel is invalid, then a response with InvalidChannel error Status
-             * shall be returned.
+             * Upon receipt of the AddBlockChannels command, the media device shall check if the channels
+             *
+             * passed in this command are valid. If the channel is invalid, then a response with InvalidChannel error
+             * Status shall be returned.
              *
              * If there is at least one channel in Channels field which is not in the BlockChannelList attribute, the
              * media device shall process the request by adding these new channels into the BlockChannelList attribute
@@ -960,7 +953,9 @@ export namespace ContentControl {
              *
              * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications
              * passed in this command are installed. If there is an application in Applications field which is not
-             * identified by media device, then a response with UnidentifiableApplication error Status may be returned.
+             * identified by media device, then a response with UnidentifiableApplication error Status may be
+             *
+             * returned.
              *
              * If there is one or more applications which are not present in BlockApplicationList attribute, the media
              * device shall process the request by adding the new application to the BlockApplicationList attribute and
@@ -1009,7 +1004,7 @@ export namespace ContentControl {
              * the Content Control feature is activated. The media device shall reject any request to play content
              * during one period of this attribute. If it is entering any one period of this attribute, the media
              * device shall block content which is playing and generate an event EnteringBlockContentTimeWindow. There
-             * shall not be multiple entries in this attribute list for the same day of week.
+             * shall NOT be multiple entries in this attribute list for the same day of week.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.11
              */
@@ -1021,7 +1016,6 @@ export namespace ContentControl {
              * The purpose of this command is to set the BlockContentTimeWindow attribute.
              *
              * Upon receipt of the SetBlockContentTimeWindow command, the media device shall check if the
-             *
              * TimeWindowIndex field passed in this command is NULL. If the TimeWindowIndex field is NULL, the media
              * device shall check if there is an entry in the BlockContentTimeWindow attribute which matches with the
              * TimePeriod and DayOfWeek fields passed in this command. * If Yes, then a response with

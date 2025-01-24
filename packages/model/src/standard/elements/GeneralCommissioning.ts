@@ -10,8 +10,8 @@ import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    CommandElement as Command,
     FieldElement as Field,
+    CommandElement as Command,
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
@@ -26,7 +26,15 @@ export const GeneralCommissioning = Cluster(
         xref: { document: "core", section: "11.10" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+
+    Attribute(
+        { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.10.4" } },
+        Field({
+            name: "TC", conformance: "P", constraint: "0", description: "TermsAndConditions",
+            details: "Supports Terms & Conditions acknowledgement"
+        })
+    ),
 
     Attribute({
         name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M", default: 0,
@@ -46,7 +54,7 @@ export const GeneralCommissioning = Cluster(
             "the functioning of any cluster, other than being set as a side-effect of commands where this " +
             "behavior is described.",
 
-        xref: { document: "core", section: "11.10.5.1" }
+        xref: { document: "core", section: "11.10.6.1" }
     }),
 
     Attribute({
@@ -54,7 +62,7 @@ export const GeneralCommissioning = Cluster(
         conformance: "M", constraint: "desc", quality: "F",
         details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. " +
             "See BasicCommissioningInfo for more information.",
-        xref: { document: "core", section: "11.10.5.2" }
+        xref: { document: "core", section: "11.10.6.2" }
     }),
 
     Attribute({
@@ -64,7 +72,7 @@ export const GeneralCommissioning = Cluster(
             "\n" +
             "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
             "RegulatoryConfig attribute.",
-        xref: { document: "core", section: "11.10.5.3" }
+        xref: { document: "core", section: "11.10.6.3" }
     }),
 
     Attribute({
@@ -74,7 +82,8 @@ export const GeneralCommissioning = Cluster(
         details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be " +
             "told an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified " +
             "for outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
-            "whether the device will be used inside or outside. However a device which states its capability is " +
+            "whether the device will be used inside or outside. However a device which states its capability is" +
+            "\n" +
             "\"Indoor/Outdoor\" means it would like clarification if possible." +
             "\n" +
             "For Nodes without radio network interfaces (e.g. Ethernet-only devices), the value IndoorOutdoor " +
@@ -84,7 +93,7 @@ export const GeneralCommissioning = Cluster(
             "This means devices always have a safe default value, and Commissioners which choose to implement " +
             "smarter handling can.",
 
-        xref: { document: "core", section: "11.10.5.4" }
+        xref: { document: "core", section: "11.10.6.4" }
     }),
 
     Attribute({
@@ -93,7 +102,88 @@ export const GeneralCommissioning = Cluster(
         details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
             "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
             "mode.",
-        xref: { document: "core", section: "11.10.5.5" }
+        xref: { document: "core", section: "11.10.6.5" }
+    }),
+
+    Attribute({
+        name: "TcAcceptedVersion", id: 0x5, type: "uint16", access: "R A", conformance: "P, TC",
+        quality: "N",
+
+        details: "Indicates the last version of the T&Cs for which the device received user acknowledgements. On " +
+            "factory reset this field shall be reset to 0." +
+            "\n" +
+            "When Custom Commissioning Flow is used to obtain user consent (e. g. because the Commissioner does " +
+            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall " +
+            "ensure that this attribute is set to a value which is greater than or equal to TCMinRequiredVersion " +
+            "before returning the user back to the originating Commissioner (see Enhanced Setup Flow).",
+
+        xref: { document: "core", section: "11.10.6.6" }
+    }),
+
+    Attribute({
+        name: "TcMinRequiredVersion", id: 0x6, type: "uint16", access: "R A", conformance: "P, TC",
+        quality: "N",
+
+        details: "Indicates the minimum version of the texts presented by the Enhanced Setup Flow that need to be " +
+            "accepted by the user for this device. This attribute may change as the result of an OTA update." +
+            "\n" +
+            "If an event such as a software update causes TCAcceptedVersion to become less than " +
+            "TCMinRequiredVersion, then the device shall update TCAcknowledgementsRequired to True so that an " +
+            "administrator can detect that a newer version of the texts needs to be presented to the user.",
+
+        xref: { document: "core", section: "11.10.6.7" }
+    }),
+
+    Attribute({
+        name: "TcAcknowledgements", id: 0x7, type: "map16", access: "R A", conformance: "P, TC",
+        quality: "N",
+
+        details: "Indicates the user’s response to the presented terms. Each bit position corresponds to a user " +
+            "response for the associated index of matching text, such that bit 0 (bit value 1) is for text index " +
+            "0. Bit 15 (bit value 0x8000) is for text index 15. A bit value of 1 indicates acceptance and a " +
+            "value of 0 indicates non-acceptance. For example, if there are two texts that were presented where " +
+            "the first (bit 0, value 1) was declined and the second accepted (bit 1, value 2), we would expect " +
+            "the resulting value of the map to be 2." +
+            "\n" +
+            "Whenever a user provides responses to newly presented terms and conditions, this attribute shall be " +
+            "updated with the latest responses. This may happen in response to updated terms that were presented " +
+            "to the user. On a factory reset this field shall be reset with all bits set to 0.",
+
+        xref: { document: "core", section: "11.10.6.8" }
+    }),
+
+    Attribute({
+        name: "TcAcknowledgementsRequired", id: 0x8, type: "bool", access: "R A", conformance: "P, TC",
+        default: true, quality: "N",
+
+        details: "Indicates whether SetTCAcknowledgements is currently required to be called with the inclusion of " +
+            "mandatory terms accepted." +
+            "\n" +
+            "This attribute may be present and False in the case where no terms and conditions are currently " +
+            "mandatory to accept for CommissioningComplete to succeed." +
+            "\n" +
+            "This attribute may appear, or become True after commissioning (e.g. due to a firmware update) to " +
+            "indicate that new Terms & Conditions are available that the user must accept." +
+            "\n" +
+            "Upon Factory Data Reset, this attribute shall be set to a value of True." +
+            "\n" +
+            "When Custom Commissioning Flow is used to obtain user consent (e.g. because the Commissioner does " +
+            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall " +
+            "ensure that this attribute is set to False before returning the user back to the original " +
+            "Commissioner (see Enhanced Setup Flow).",
+
+        xref: { document: "core", section: "11.10.6.9" }
+    }),
+
+    Attribute({
+        name: "TcUpdateDeadline", id: 0x9, type: "uint32", access: "R A", conformance: "P, TC",
+        quality: "X N",
+        details: "Indicates the System Time in seconds when any functionality limitations will begin due to a lack of " +
+            "acceptance of updated Terms and Conditions, as described in Section 5.7.4.5, “Presenting Updated " +
+            "Terms and Conditions”." +
+            "\n" +
+            "A null value indicates that there is no pending deadline for updated TC acceptance.",
+        xref: { document: "core", section: "11.10.6.10" }
     }),
 
     Command(
@@ -115,9 +205,8 @@ export const GeneralCommissioning = Cluster(
                 "duration of ExpiryLengthSeconds, or disarm it, depending on the situation:" +
                 "\n" +
                 "  • If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric " +
-                "    matches the Fabric currently associated with the fail-safe context, then the fail-safe timer" +
-                "\n" +
-                "shall be immediately expired (see further below for side-effects of expiration)." +
+                "    matches the Fabric currently associated with the fail-safe context, then the fail-safe timer " +
+                "    shall be immediately expired (see further below for side-effects of expiration)." +
                 "\n" +
                 "  • If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation " +
                 "    shall lead to a success response with no side-effects against the fail-safe context." +
@@ -133,8 +222,8 @@ export const GeneralCommissioning = Cluster(
                 "    respond with ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, " +
                 "    indicating a likely conflict between commissioners." +
                 "\n" +
-                "The value of the Breadcrumb field shall be written to the Breadcrumb Attribute on successful " +
-                "execution of the command." +
+                "The value of the Breadcrumb field shall be written to the Breadcrumb on successful execution of the " +
+                "command." +
                 "\n" +
                 "If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) " +
                 "the receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up " +
@@ -182,7 +271,7 @@ export const GeneralCommissioning = Cluster(
                 "Context timer (CFSC timer) serves to limit the lifetime of any particular Fail Safe Context; it " +
                 "shall NOT be extended or modified on subsequent invocations of ArmFailSafe associated with this " +
                 "Fail Safe Context. Upon expiry of the CFSC timer, the receiver shall execute cleanup behavior " +
-                "equivalent to that of fail-safe timer expiration as detailed in Section 11.10.6.2.2, “Behavior on " +
+                "equivalent to that of fail-safe timer expiration as detailed in Section 11.10.7.2.2, “Behavior on " +
                 "expiry of Fail-Safe timer”. Termination of the session prior to the expiration of that timer for " +
                 "any reason (including a successful end of commissioning or an expiry of a fail-safe timer) shall " +
                 "also delete the CFSC timer." +
@@ -196,12 +285,11 @@ export const GeneralCommissioning = Cluster(
                 "      the Server." +
                 "\n" +
                 "  2. Revoke the temporary administrative privileges granted to any open PASE session (see Section " +
-                "      6.6.2.8, “Bootstrapping of the Access Control Cluster”) at the Server." +
+                "      6.6.2.9, “Bootstrapping of the Access Control Cluster”) at the Server." +
                 "\n" +
                 "  3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions " +
                 "      associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see " +
-                "      Section 11.10.6.2, “ArmFailSafe Command”) by clearing any associated Secure Session Context " +
-                "      at the Server." +
+                "      ArmFailSafe) by clearing any associated Secure Session Context at the Server." +
                 "\n" +
                 "  4. Reset the configuration of all Network Commissioning Networks attribute to their state prior " +
                 "      to the Fail-Safe being armed." +
@@ -227,11 +315,10 @@ export const GeneralCommissioning = Cluster(
                 "\n" +
                 "  9. Reset the Breadcrumb attribute to zero." +
                 "\n" +
-                "  10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the" +
-                "\n" +
-                "Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
+                "  10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the " +
+                "      Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
 
-            xref: { document: "core", section: "11.10.6.2" }
+            xref: { document: "core", section: "11.10.7.2" }
         },
 
         Field({ name: "ExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M", default: 900 }),
@@ -241,20 +328,20 @@ export const GeneralCommissioning = Cluster(
     Command(
         {
             name: "ArmFailSafeResponse", id: 0x1, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.3" }
+            xref: { document: "core", section: "11.10.7.3" }
         },
 
         Field({
             name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
             details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                 "functional description of the ArmFailSafe command.",
-            xref: { document: "core", section: "11.10.6.3.1" }
+            xref: { document: "core", section: "11.10.7.3.1" }
         }),
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "M", constraint: "max 128", default: "",
-            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-            xref: { document: "core", section: "11.10.6.3.2" }
+            details: "See Section 11.10.7.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.7.3.2" }
         })
     ),
 
@@ -278,7 +365,8 @@ export const GeneralCommissioning = Cluster(
                 "still set the Location attribute reflected by the Basic Information Cluster configuration, but the " +
                 "SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error." +
                 "\n" +
-                "If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value " +
+                "If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value" +
+                "\n" +
                 "received does not match either the Indoor or Outdoor fixed value in LocationCapability, then the " +
                 "SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error " +
                 "and the RegulatoryConfig attribute and associated internal radio configuration shall remain " +
@@ -294,7 +382,7 @@ export const GeneralCommissioning = Cluster(
                 "command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, " +
                 "the Breadcrumb attribute shall be left unchanged.",
 
-            xref: { document: "core", section: "11.10.6.4" }
+            xref: { document: "core", section: "11.10.7.4" }
         },
 
         Field({ name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum", conformance: "M" }),
@@ -305,20 +393,20 @@ export const GeneralCommissioning = Cluster(
     Command(
         {
             name: "SetRegulatoryConfigResponse", id: 0x3, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.5" }
+            xref: { document: "core", section: "11.10.7.5" }
         },
 
         Field({
             name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
             details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                 "functional description of the SetRegulatoryConfig command.",
-            xref: { document: "core", section: "11.10.6.5.1" }
+            xref: { document: "core", section: "11.10.7.5.1" }
         }),
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
-            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-            xref: { document: "core", section: "11.10.6.5.2" }
+            details: "See Section 11.10.7.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.7.5.2" }
         })
     ),
 
@@ -336,15 +424,19 @@ export const GeneralCommissioning = Cluster(
             "all steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, " +
             "“Commissioning Flows”) or other Administrator operations requiring usage of the Fail Safe timer. It " +
             "ensures that the Server is configured in a state such that it still has all necessary elements to " +
-            "be fully operable within a Fabric, such as ACL entries (see Access Control Cluster) and operational " +
-            "credentials (see Section 6.4, “Node Operational Credentials Specification”), and that the Node is " +
-            "reach" +
+            "be fully operable within a Fabric, such as ACL entries (see Section 9.10, “Access Control Cluster”) " +
+            "and operational credentials (see Section 6.4, “Node Operational Credentials Specification”), and " +
+            "that the Node is reachable using CASE" +
             "\n" +
-            "able using CASE (see Section 4.14.2, “Certificate Authenticated Session Establishment (CASE)”) over " +
-            "an operational network." +
+            "(CASE)”) over an operational network." +
             "\n" +
             "An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command " +
             "was received when no Fail-Safe context exists." +
+            "\n" +
+            "If Terms and Conditions are required, then an ErrorCode of TCAcknowledgementsNotReceived shall be " +
+            "responded to the invoker if the user acknowledgements to the required Terms and Conditions have not " +
+            "been provided. If the TCAcceptedVersion for the provided acknowledgements is less than " +
+            "TCMinRequiredVersion, then an ErrorCode of TCMinVersionNotMet shall be responded to the invoker." +
             "\n" +
             "This command is fabric-scoped, so cannot be issued over a session that does not have an associated " +
             "fabric, i.e. over PASE session prior to an AddNOC command. In addition, this command is only " +
@@ -373,7 +465,7 @@ export const GeneralCommissioning = Cluster(
             "  2. The commissioning window at the Server shall be closed." +
             "\n" +
             "  3. Any temporary administrative privileges automatically granted to any open PASE session shall " +
-            "     be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”)." +
+            "     be revoked (see Section 6.6.2.9, “Bootstrapping of the Access Control Cluster”)." +
             "\n" +
             "  4. The Secure Session Context of any PASE session still established at the Server shall be " +
             "     cleared." +
@@ -384,26 +476,88 @@ export const GeneralCommissioning = Cluster(
             "expect any previously established PASE session to still be usable, due to the server having cleared " +
             "such sessions.",
 
-        xref: { document: "core", section: "11.10.6.6" }
+        xref: { document: "core", section: "11.10.7.6" }
     }),
 
     Command(
         {
             name: "CommissioningCompleteResponse", id: 0x5, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.10.6.7" }
+            xref: { document: "core", section: "11.10.7.7" }
         },
 
         Field({
             name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
             details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                 "functional description of the CommissioningComplete command.",
-            xref: { document: "core", section: "11.10.6.7.1" }
+            xref: { document: "core", section: "11.10.7.7.1" }
         }),
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
-            details: "See Section 11.10.6.1, “Common fields in General Commissioning cluster responses”.",
-            xref: { document: "core", section: "11.10.6.7.2" }
+            details: "See Section 11.10.7.1, “Common fields in General Commissioning cluster responses”.",
+            xref: { document: "core", section: "11.10.7.7.2" }
+        })
+    ),
+
+    Command(
+        {
+            name: "SetTcAcknowledgements", id: 0x6, access: "A", conformance: "P, TC", direction: "request",
+            response: "SetTcAcknowledgementsResponse",
+            details: "This command sets the user acknowledgements received in the Enhanced Setup Flow Terms & Conditions " +
+                "into the node.",
+            xref: { document: "core", section: "11.10.7.8" }
+        },
+
+        Field({
+            name: "TcVersion", id: 0x0, type: "uint16", conformance: "M",
+            details: "This field shall contain the version of the Enhanced Setup Flow Terms & Conditions that were " +
+                "presented to the user.",
+            xref: { document: "core", section: "11.10.7.8.1" }
+        }),
+
+        Field({
+            name: "TcUserResponse", id: 0x1, type: "map16", conformance: "M",
+
+            details: "This field shall contain the user responses to the Enhanced Setup Flow Terms & Conditions as a map " +
+                "where each bit set in the bitmap corresponds to an accepted term in the file located at " +
+                "EnhancedSetupFlowTCUrl." +
+                "\n" +
+                "### Effect on Receipt" +
+                "\n" +
+                "This command shall copy the user responses and accepted version to the presented Enhanced Setup " +
+                "Flow Terms & Conditions from the values provided in the TCUserResponse and TCVersion fields to the " +
+                "TCAcknowledgements Attribute and the TCAcceptedVersion Attribute fields respectively." +
+                "\n" +
+                "This command shall result in success with an ErrorCode value of OK in the " +
+                "SetTCAcknowledgementsResponse if all required terms were accepted by the user. Specifically, all " +
+                "bits have a value of 1 in TCAcknowledgements whose ordinal is marked as required in the file " +
+                "located at EnhancedSe" +
+                "\n" +
+                "tupFlowTCUrl." +
+                "\n" +
+                "If the TCVersion field is less than the TCMinRequiredVersion, then the ErrorCode of " +
+                "TCMinVersionNotMet shall be returned and TCAcknowledgements shall remain unchanged." +
+                "\n" +
+                "If TCVersion is greater than or equal to TCMinRequiredVersion, but the TCUserResponse value " +
+                "indicates that not all required terms were accepted by the user, then the ErrorCode of " +
+                "RequiredTCNotAccepted shall be returned and TCAcknowledgements shall remain unchanged.",
+
+            xref: { document: "core", section: "11.10.7.8.2" }
+        })
+    ),
+
+    Command(
+        {
+            name: "SetTcAcknowledgementsResponse", id: 0x7, conformance: "P, TC", direction: "response",
+            details: "This command is used to convey the result from SetTCAcknowledgements.",
+            xref: { document: "core", section: "11.10.7.9" }
+        },
+
+        Field({
+            name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                "functional description of the SetTCAcknowledgements command.",
+            xref: { document: "core", section: "11.10.7.9.1" }
         })
     ),
 
@@ -411,7 +565,7 @@ export const GeneralCommissioning = Cluster(
         {
             name: "CommissioningErrorEnum", type: "enum8",
             details: "This enumeration is used by several response commands in this cluster to indicate particular errors.",
-            xref: { document: "core", section: "11.10.4.1" }
+            xref: { document: "core", section: "11.10.5.1" }
         },
         Field({ name: "Ok", id: 0x0, conformance: "M", description: "No error" }),
         Field({
@@ -429,6 +583,18 @@ export const GeneralCommissioning = Cluster(
         Field({
             name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
             description: "Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated with the current fail- safe context."
+        }),
+        Field({
+            name: "RequiredTcNotAccepted", id: 0x5, conformance: "TC",
+            description: "One or more required TC features from the Enhanced Setup Flow were not accepted."
+        }),
+        Field({
+            name: "TcAcknowledgementsNotReceived", id: 0x6, conformance: "TC",
+            description: "No acknowledgements from the user for the TC features were received."
+        }),
+        Field({
+            name: "TcMinVersionNotMet", id: 0x7, conformance: "TC",
+            description: "The version of the TC features acknowledged by the user did not meet the minimum required version."
         })
     ),
 
@@ -437,7 +603,7 @@ export const GeneralCommissioning = Cluster(
             name: "RegulatoryLocationTypeEnum", type: "enum8",
             details: "This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate " +
                 "possible radio usage.",
-            xref: { document: "core", section: "11.10.4.2" }
+            xref: { document: "core", section: "11.10.5.2" }
         },
 
         Field({ name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" }),
@@ -449,7 +615,7 @@ export const GeneralCommissioning = Cluster(
         {
             name: "BasicCommissioningInfo", type: "struct",
             details: "This structure provides some constant values that may be of use to all commissioners.",
-            xref: { document: "core", section: "11.10.4.3" }
+            xref: { document: "core", section: "11.10.5.3" }
         },
 
         Field({
@@ -459,20 +625,20 @@ export const GeneralCommissioning = Cluster(
                 "of the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field " +
                 "SHOULD allow a Commissioner to proceed with a nominal commissioning without having to-rearm the " +
                 "fail-safe, with some margin.",
-            xref: { document: "core", section: "11.10.4.3.1" }
+            xref: { document: "core", section: "11.10.5.3.1" }
         }),
 
         Field({
             name: "MaxCumulativeFailsafeSeconds", id: 0x1, type: "uint16", conformance: "M", constraint: "desc",
 
             details: "This field shall contain a conservative value in seconds denoting the maximum total duration for " +
-                "which a fail safe timer can be re-armed. See Section 11.10.6.2.1, “Fail Safe Context”." +
+                "which a fail safe timer can be re-armed. See Section 11.10.7.2.1, “Fail Safe Context”." +
                 "\n" +
                 "The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent " +
                 "additional guidelines, it is recommended that the value of this field be aligned with the initial " +
                 "Announcement Duration and default to 900 seconds.",
 
-            xref: { document: "core", section: "11.10.4.3.2" }
+            xref: { document: "core", section: "11.10.5.3.2" }
         })
     )
 );

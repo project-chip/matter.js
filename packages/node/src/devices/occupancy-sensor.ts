@@ -10,6 +10,9 @@ import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/Iden
 import {
     OccupancySensingServer as BaseOccupancySensingServer
 } from "../behaviors/occupancy-sensing/OccupancySensingServer.js";
+import {
+    BooleanStateConfigurationServer as BaseBooleanStateConfigurationServer
+} from "../behaviors/boolean-state-configuration/BooleanStateConfigurationServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -17,6 +20,9 @@ import { Identity } from "#general";
 /**
  * An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting the occupancy
  * state in a designated area.
+ *
+ * OccupancySensorDevice requires OccupancySensing cluster but OccupancySensing is not added by default because you
+ * must select the features your device supports. You can add manually using OccupancySensorDevice.with().
  *
  * @see {@link MatterSpecification.v13.Device} § 7.3
  */
@@ -38,20 +44,27 @@ export namespace OccupancySensorRequirements {
     export const OccupancySensingServer = BaseOccupancySensingServer;
 
     /**
+     * The BooleanStateConfiguration cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link BooleanStateConfigurationServer} for convenience.
+     */
+    export const BooleanStateConfigurationServer = BaseBooleanStateConfigurationServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { Identify: IdentifyServer, OccupancySensing: OccupancySensingServer } };
+    export const server = {
+        mandatory: { Identify: IdentifyServer, OccupancySensing: OccupancySensingServer },
+        optional: { BooleanStateConfiguration: BooleanStateConfigurationServer }
+    };
 }
 
 export const OccupancySensorDeviceDefinition = MutableEndpoint({
     name: "OccupancySensor",
     deviceType: 0x107,
-    deviceRevision: 3,
+    deviceRevision: 4,
     requirements: OccupancySensorRequirements,
-    behaviors: SupportedBehaviors(
-        OccupancySensorRequirements.server.mandatory.Identify,
-        OccupancySensorRequirements.server.mandatory.OccupancySensing
-    )
+    behaviors: SupportedBehaviors(OccupancySensorRequirements.server.mandatory.Identify)
 });
 
 export const OccupancySensorDevice: OccupancySensorDevice = OccupancySensorDeviceDefinition;

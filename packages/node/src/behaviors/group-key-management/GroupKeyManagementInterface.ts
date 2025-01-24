@@ -57,18 +57,18 @@ export namespace GroupKeyManagementInterface {
          *     being null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
          *
          * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-         * that provided in the GroupKeySet field, then the contents of that group key set shall be replaced. A
-         * replacement shall be done by executing the equivalent of entirely removing the previous Group Key Set with
-         * the given GroupKeySetID, followed by an addition of a Group Key Set with the provided configuration.
-         * Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set associated with the
-         * accessing fabric shall be created with the provided data. The Group Key Set shall be written to non-volatile
-         * storage.
+         * that provided in the GroupKeySet field, then the contents of that group key set shall be
+         *
+         * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous Group
+         * Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
+         * configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set
+         * associated with the accessing fabric shall be created with the provided data. The Group Key Set shall be
+         * written to non-volatile storage.
          *
          * Upon completion, this command shall send a status code back to the initiator:
          *
-         *   • If the Group Key Set was properly installed or updated on the Node, the status code shall be
-         *
-         * set to SUCCESS.
+         *   • If the Group Key Set was properly installed or updated on the Node, the status code shall be set to
+         *     SUCCESS.
          *
          *   • If there are insufficient resources on the receiver to store an additional Group Key Set, the status
          *     code shall be set to RESOURCE_EXHAUSTED (see group key limits);
@@ -100,9 +100,8 @@ export namespace GroupKeyManagementInterface {
          *
          * Effect on Receipt
          *
-         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKey
-         *
-         * SetID as that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed,
+         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
+         * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed,
          * including all epoch keys it contains.
          *
          * If there exist any entries for the accessing fabric within the GroupKeyMap attribute that refer to the
@@ -123,8 +122,6 @@ export namespace GroupKeyManagementInterface {
         /**
          * This command is used by Administrators to query a list of all Group Key Sets associated with the accessing
          * fabric.
-         *
-         * NOTE Field 0 for this command is reserved and shall NOT be used.
          *
          * Effect on Receipt
          *

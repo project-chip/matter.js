@@ -399,7 +399,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 colorControl: {
-                    coupleColorTempToLevelMinMireds: 0,
+                    coupleColorTempToLevelMinMireds: 1,
                     remainingTime: 0,
                     driftCompensation: 0,
                     compensationText: "foo",

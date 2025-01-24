@@ -26,7 +26,7 @@ export const OtaSoftwareUpdateRequestor = Cluster(
     Attribute(
         {
             name: "DefaultOtaProviders", id: 0x0, type: "list", access: "RW F VA", conformance: "M",
-            constraint: "desc", default: [],
+            constraint: "desc", default: [], quality: "N",
 
             details: "This field is a list of ProviderLocation whose entries shall be set by Administrators, either " +
                 "during Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider " +
@@ -450,8 +450,7 @@ export const OtaSoftwareUpdateRequestor = Cluster(
 
         Field({
             name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M",
-            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA" +
-                "\n" +
+            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA " +
                 "Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to " +
                 "do discovery of the location of that endpoint by walking over all endpoints and checking their " +
                 "Descriptor Cluster.",

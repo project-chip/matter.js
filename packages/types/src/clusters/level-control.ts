@@ -153,11 +153,12 @@ export namespace LevelControl {
 
         /**
          * This field shall indicate the rate of movement in units per second. The actual rate of movement SHOULD be as
-         * close to this rate as the device is able. If the Rate field is equal to null, then the value in
-         * DefaultMoveRate attribute shall be used. However, if the Rate field is equal to null and the DefaultMoveRate
-         * attribute is not supported, or if the Rate field is equal to null and the value of the DefaultMoveRate
-         * attribute is equal to null, then the device SHOULD move as fast as it is able. If the device is not able to
-         * move at a variable rate, this field may be disregarded.
+         * close to this rate as the device is able. If the Rate field is null, then the value of the DefaultMoveRate
+         * attribute shall be used if that attribute is supported and its value is not null. If the Rate field is null
+         * and the DefaultMoveRate attribute is either not supported or set to null, then the device SHOULD move as
+         * fast as it is able. If the device is not able to move at a variable rate, this
+         *
+         * field may be disregarded.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.2.2
          */
@@ -211,8 +212,10 @@ export namespace LevelControl {
 
         /**
          * This field shall indicate the time that shall be taken to perform the step, in tenths of a second. A step is
-         * a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to this as the
-         * device is able. If the TransitionTime field is equal to null, the device SHOULD move as fast as it is able.
+         * a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to
+         *
+         * this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as fast as
+         * it is able.
          *
          * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
          *
@@ -257,6 +260,20 @@ export namespace LevelControl {
              * Indicates the time remaining until the current command is complete - it is specified in 1/10ths of a
              * second.
              *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • When it changes from 0 to any value higher than 10, or
+             *
+             *   • When it changes, with a delta larger than 10, caused by the invoke of a command, or
+             *
+             *   • When it changes to 0.
+             *
+             * For commands with a transition time or changes to the transition time less than 1 second, changes to
+             * this attribute shall NOT be reported.
+             *
+             * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
+             * reporting of this attribute in order to keep track of the remaining duration.
+             *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.3
              */
             remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
@@ -266,7 +283,7 @@ export namespace LevelControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.4
              */
-            minLevel: OptionalAttribute(0x2, TlvUInt8.bound({ min: 1 }), { default: 1 }),
+            minLevel: OptionalAttribute(0x2, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
 
             /**
              * Indicates the desired startup level for a device when it is supplied with power and this level shall be
@@ -296,7 +313,7 @@ export namespace LevelControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.4
              */
-            minLevel: OptionalAttribute(0x2, TlvUInt8, { default: 0 })
+            minLevel: OptionalAttribute(0x2, TlvUInt8.bound({ max: 254 }), { default: 0 })
         }
     });
 
@@ -307,6 +324,14 @@ export namespace LevelControl {
         attributes: {
             /**
              * Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.
+             *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once per second, or
+             *
+             *   • At the start of the movement/transition, or
+             *
+             *   • At the end of the movement/transition.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.6
              */
@@ -343,7 +368,7 @@ export namespace LevelControl {
     export const Base = MutableCluster.Component({
         id: 0x8,
         name: "LevelControl",
-        revision: 5,
+        revision: 6,
 
         features: {
             /**
@@ -384,6 +409,14 @@ export namespace LevelControl {
         attributes: {
             /**
              * Indicates the current level of this device. The meaning of 'level' is device dependent.
+             *
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once per second, or
+             *
+             *   • At the end of the movement/transition, or
+             *
+             *   • When it changes from null to any other value and vice versa.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.2
              */
@@ -436,7 +469,7 @@ export namespace LevelControl {
              * Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off
              * cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. If the
              * OnLevel attribute is not implemented, or is set to the null value, it has no effect. For more details
-             * see Effect of On/Off Commands on the CurrentLevel Attribute.
+             * see Effect of On/Off Commands on the CurrentLevel attribute.
              *
              * OnLevel represents a mandatory field that was previously not present or optional. Implementers should be
              * aware that older devices may not implement it.
@@ -471,7 +504,7 @@ export namespace LevelControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.14
              */
-            defaultMoveRate: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8))
+            defaultMoveRate: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8.bound({ min: 1 })))
         },
 
         commands: {

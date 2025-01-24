@@ -12,9 +12,6 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 /**
  * DeviceEnergyManagementModeBehavior is the base class for objects that support interaction with {@link
  * DeviceEnergyManagementMode.Cluster}.
- *
- * This class does not have optional features of DeviceEnergyManagementMode.Cluster enabled. You can enable additional
- * features using DeviceEnergyManagementModeBehavior.with.
  */
 export const DeviceEnergyManagementModeBehavior = ClusterBehavior.for(DeviceEnergyManagementMode.Cluster);
 

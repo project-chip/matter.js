@@ -44,8 +44,8 @@ export namespace OperationalCredentialsInterface {
          * shall be tagged as being for a subsequent UpdateNOC, otherwise the internal state of the CSR shall be tagged
          * as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about the processing.
          *
-         * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-         * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+         * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+         * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
          * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
          * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -85,8 +85,8 @@ export namespace OperationalCredentialsInterface {
          *
          * Effect When Received
          *
-         * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-         * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+         * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+         * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
          * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
          * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -98,9 +98,8 @@ export namespace OperationalCredentialsInterface {
          * If the prior CSRRequest state that preceded UpdateNOC had the IsForUpdateNOC field indicated as false, then
          * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
-         * If any of the following conditions arise, the Node shall process an error by responding with an
-         *
-         * NOCResponse with a StatusCode of InvalidNOC as described in Section 11.18.6.7.2, “Handling Errors”:
+         * If any of the following conditions arise, the Node shall process an error by responding with an NOCResponse
+         * with a StatusCode of InvalidNOC as described in Section 11.18.6.7.2, “Handling Errors”:
          *
          *   • The NOC provided in the NOCValue does not refer in its subject to the FabricID associated with the
          *     accessing fabric.
@@ -181,12 +180,14 @@ export namespace OperationalCredentialsInterface {
          * If the certificate from the RootCACertificate field is already installed, based on exact byte-for-byte
          * equality, then this command shall succeed with no change to the list.
          *
-         * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-         * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+         * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+         * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
          * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period,
-         * which would cause the new invocation to add a second root certificate within a given fail- safe timer
-         * period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * which would cause the new invocation to add a second root certificate within a given fail-
+         *
+         * safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the
+         * initiator.
          *
          * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
          * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.

@@ -33,7 +33,7 @@ export const ApplicationLauncher = Cluster(
         xref: { document: "cluster", section: "6.4" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "cluster", section: "6.4.4" } },
@@ -158,10 +158,10 @@ export const ApplicationLauncher = Cluster(
                 "The endpoint may decide to stop the application based on manufacturer specific behavior or resource " +
                 "constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on " +
                 "the action taken, on the Application Basic cluster of the Endpoint corresponding to the application " +
-                "on which the action was taken. The Status attribute shall be updated on any other" +
+                "on which the action was taken. The Status attribute shall be updated on any other application whose " +
+                "Status may have changed as a result of this command." +
                 "\n" +
-                "application whose Status may have changed as a result of this command. This command returns a " +
-                "Launcher Response.",
+                "This command returns a Launcher Response.",
 
             xref: { document: "cluster", section: "6.4.7.3" }
         },
@@ -194,8 +194,14 @@ export const ApplicationLauncher = Cluster(
     Datatype(
         { name: "StatusEnum", type: "enum8", xref: { document: "cluster", section: "6.4.5.1" } },
         Field({ name: "Success", id: 0x0, conformance: "M", description: "Command succeeded" }),
-        Field({ name: "AppNotAvailable", id: 0x1, conformance: "M", description: "Requested app is not available." }),
-        Field({ name: "SystemBusy", id: 0x2, conformance: "M", description: "Video platform unable to honor command." })
+        Field({ name: "AppNotAvailable", id: 0x1, conformance: "M", description: "Requested app is not available" }),
+        Field({ name: "SystemBusy", id: 0x2, conformance: "M", description: "Video platform unable to honor command" }),
+        Field({
+            name: "PendingUserApproval", id: 0x3, conformance: "M",
+            description: "User approval for app download is pending"
+        }),
+        Field({ name: "Downloading", id: 0x4, conformance: "M", description: "Downloading the requested app" }),
+        Field({ name: "Installing", id: 0x5, conformance: "M", description: "Installing the requested app" })
     ),
 
     Datatype(

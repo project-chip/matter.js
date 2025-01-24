@@ -6,5 +6,6 @@
 
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
+export * from "./OvenCavityOperationalStateInterface.js";
 export * from "./OvenCavityOperationalStateBehavior.js";
 export * from "./OvenCavityOperationalStateServer.js";

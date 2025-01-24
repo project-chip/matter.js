@@ -110,15 +110,15 @@ export namespace BallastConfiguration {
             minLevel: WritableAttribute(0x10, TlvUInt8, { writeAcl: AccessLevel.Manage }),
 
             /**
-             * This attribute shall specify the light output of the ballast according to the dimming light curve
+             * This attribute shall specify the light output of the ballast according to the dimming light curve (see
+             * Dimming Curve) when the Level Control Cluster’s CurrentLevel attribute equals to 254 (and the On/Off
+             * Cluster’s OnOff attribute equals to TRUE).
              *
-             * (see Dimming Curve) when the Level Control Cluster’s CurrentLevel attribute equals to 254 (and the
-             * On/Off Cluster’s OnOff attribute equals to TRUE).
+             * The value of this attribute shall be both less than or equal to PhysicalMaxLevel and greater than
              *
-             * The value of this attribute shall be both less than or equal to PhysicalMaxLevel and greater than or
-             * equal to MinLevel. If an attempt is made to set this attribute to a level where these conditions are not
-             * met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall NOT be
-             * set.
+             * or equal to MinLevel. If an attempt is made to set this attribute to a level where these conditions are
+             * not met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall NOT
+             * be set.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.3.6.5
              */

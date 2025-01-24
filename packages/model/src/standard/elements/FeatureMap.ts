@@ -19,7 +19,9 @@ export const FeatureMap = Attribute({
         "features. A cluster feature is a set of cluster elements that are mandatory or optional for a " +
         "defined feature of the cluster. If a cluster feature is supported by the cluster instance, then the " +
         "corresponding bit shall be set to 1, otherwise the bit shall be set to 0 (zero). All undefined bits " +
-        "in this attribute shall be set to 0 (zero)." +
+        "in" +
+        "\n" +
+        "this attribute shall be set to 0 (zero)." +
         "\n" +
         "The set of cluster elements that are designated as mandatory (M) are implicitly part of the " +
         "mandatory cluster feature set, and do not have a bit in the FeatureMap attribute." +
@@ -35,8 +37,8 @@ export const FeatureMap = Attribute({
         "\n" +
         "Feature sets are revision controlled as part of a cluster using the ClusterRevision attribute. The " +
         "cluster specification is the independent element that is revision controlled. A remote application " +
-        "reading the FeatureMap Attribute and ClusterRevision Attribute will then know exactly what features " +
-        "are supported in the cluster instance." +
+        "reading the FeatureMap and ClusterRevision Attribute will then know exactly what features are " +
+        "supported in the cluster instance." +
         "\n" +
         "Each feature set shall be well defined within the cluster specification. Each feature shall be " +
         "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag " +

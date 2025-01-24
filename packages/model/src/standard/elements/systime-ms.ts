@@ -15,7 +15,7 @@ export const systimeMs = Datatype({
         "since boot." +
         "\n" +
         "This type is employed for compatibility reasons.",
-    xref: { document: "core", section: "7.18.2.9" }
+    xref: { document: "core", section: "7.19.2.9" }
 });
 
 MatterDefinition.children.push(systimeMs);

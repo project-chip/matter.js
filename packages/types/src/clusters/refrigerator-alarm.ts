@@ -203,7 +203,8 @@ export namespace RefrigeratorAlarm {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is a derived cluster of Alarm Base cluster.
+     * This cluster is a derived cluster of Alarm Base cluster and provides the alarm definition related to
+     * refrigerator and temperature controlled cabinet devices.
      *
      * RefrigeratorAlarmCluster supports optional features that you can enable with the RefrigeratorAlarmCluster.with()
      * factory method.

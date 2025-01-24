@@ -26,13 +26,12 @@ export namespace LocalizationConfiguration {
         attributes: {
             /**
              * The ActiveLocale attribute shall represent the locale that the Node is currently configured to use when
-             * conveying information. The ActiveLocale attribute shall be a Language Tag as defined by BCP47
-             * [https://tools.ietf.org/rfc/bcp/bcp47.txt]. The ActiveLocale attribute shall have a default value
-             * assigned by the Vendor and shall be a value contained within the SupportedLocales attribute.
+             * conveying information. The ActiveLocale attribute shall be a Language Tag as defined by BCP47. The
+             * ActiveLocale attribute shall have a default value assigned by the Vendor and shall be a value contained
+             * within the SupportedLocales attribute.
              *
-             * An attempt to write a value to ActiveLocale that is not present in SupportedLocales shall result in
-             *
-             * a CONSTRAINT_ERROR error.
+             * An attempt to write a value to ActiveLocale that is not present in SupportedLocales shall result in a
+             * CONSTRAINT_ERROR error.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.3.4.1
              */

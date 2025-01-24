@@ -27,8 +27,8 @@ export const ValidProxies = Cluster(
 
     Attribute(
         {
-            name: "ValidProxyList", id: 0x0, type: "list", access: "RW", conformance: "M", constraint: "nA",
-            default: [], quality: "N F",
+            name: "ValidProxyList", id: 0x0, type: "list", access: "RW", conformance: "M", default: [],
+            quality: "N F",
             details: "List of valid proxies that can proxy this Node. Each entry in this list is fabric-scoped.",
             xref: { document: "core", section: "9.15.14.5.1" }
         },

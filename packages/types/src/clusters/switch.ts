@@ -25,7 +25,7 @@ export namespace Switch {
         /**
          * LatchingSwitch (LS)
          *
-         * This feature is for a switch that maintains its position after being pressed (or turned).
+         * This feature flag is for a switch that maintains its position after being pressed (or turned).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
          */
@@ -34,7 +34,7 @@ export namespace Switch {
         /**
          * MomentarySwitch (MS)
          *
-         * This feature is for a switch that does not maintain its position after being pressed (or turned). After
+         * This feature flag is for a switch that does not maintain its position after being pressed (or turned). After
          * releasing, it goes back to its idle position.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
@@ -44,8 +44,7 @@ export namespace Switch {
         /**
          * MomentarySwitchRelease (MSR)
          *
-         * This feature is for a momentary switch that can distinguish and report release events. When this feature
-         * flag MSR is present, MS shall be present as well.
+         * This feature flag is for a momentary switch that can distinguish and report release events.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
          */
@@ -54,8 +53,7 @@ export namespace Switch {
         /**
          * MomentarySwitchLongPress (MSL)
          *
-         * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
-         * this feature flag MSL is present, MS and MSR shall be present as well.
+         * This feature flag is for a momentary switch that can distinguish and report long presses from short presses.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
          */
@@ -64,48 +62,23 @@ export namespace Switch {
         /**
          * MomentarySwitchMultiPress (MSM)
          *
-         * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
-         * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall
-         * be present as well.
+         * This feature flag is for a momentary switch that can distinguish and report double press and potentially
+         * multiple presses with more events, such as triple press, etc.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
          */
-        MomentarySwitchMultiPress = "MomentarySwitchMultiPress"
+        MomentarySwitchMultiPress = "MomentarySwitchMultiPress",
+
+        /**
+         * ActionSwitch (AS)
+         *
+         * This feature flag indicates simplified handling of events for multi-press-capable switches. See Multi Press
+         * Details.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.6
+         */
+        ActionSwitch = "ActionSwitch"
     }
-
-    /**
-     * Body of the Switch multiPressOngoing event
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
-     */
-    export const TlvMultiPressOngoingEvent = TlvObject({
-        /**
-         * This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.1
-         */
-        newPosition: TlvField(0, TlvUInt8),
-
-        /**
-         * This field shall contain:
-         *
-         *   • a value of 2 when the second press of a multi-press sequence has been detected,
-         *
-         *   • a value of 3 when the third press of a multi-press sequence has been detected,
-         *
-         *   • a value of N when the Nth press of a multi-press sequence has been detected.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.2
-         */
-        currentNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 2 }))
-    });
-
-    /**
-     * Body of the Switch multiPressOngoing event
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
-     */
-    export interface MultiPressOngoingEvent extends TypeFromSchema<typeof TlvMultiPressOngoingEvent> {}
 
     /**
      * Body of the Switch multiPressComplete event
@@ -114,7 +87,7 @@ export namespace Switch {
      */
     export const TlvMultiPressCompleteEvent = TlvObject({
         previousPosition: TlvField(0, TlvUInt8),
-        totalNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 1 }))
+        totalNumberOfPressesCounted: TlvField(1, TlvUInt8)
     });
 
     /**
@@ -230,14 +203,66 @@ export namespace Switch {
     export interface ShortReleaseEvent extends TypeFromSchema<typeof TlvShortReleaseEvent> {}
 
     /**
+     * Body of the Switch multiPressOngoing event
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
+     */
+    export const TlvMultiPressOngoingEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.1
+         */
+        newPosition: TlvField(0, TlvUInt8),
+
+        /**
+         * This field shall contain:
+         *
+         *   • a value of 2 when the second press of a multi-press sequence has been detected,
+         *
+         *   • a value of 3 when the third press of a multi-press sequence has been detected,
+         *
+         *   • a value of N when the Nth press of a multi-press sequence has been detected.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.2
+         */
+        currentNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 2 }))
+    });
+
+    /**
+     * Body of the Switch multiPressOngoing event
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
+     */
+    export interface MultiPressOngoingEvent extends TypeFromSchema<typeof TlvMultiPressOngoingEvent> {}
+
+    /**
      * A SwitchCluster supports these elements if it supports feature MomentarySwitchMultiPress.
      */
     export const MomentarySwitchMultiPressComponent = MutableCluster.Component({
         attributes: {
             /**
              * Indicates how many consecutive presses can be detected and reported by a momentary switch which supports
-             * multi-press (e.g. it will report the value 3 if it can detect single press, double press and triple
-             * press, but not quad press and beyond).
+             * multi-press (MSM feature flag set).
+             *
+             * For example, a momentary switch supporting single press, double press and triple press, but not quad
+             * press and beyond, would return the value 3.
+             *
+             * When more than MultiPressMax presses are detected within a multi-press sequence:
+             *
+             *   • The server for cluster revision < 2 SHOULD generate a MultiPressComplete event with the
+             *     TotalNumberOfPressesCounted field set to the value of the MultiPressMax attribute, and avoid
+             *     generating any further InitialPress and MultiPressOngoing events until the switch has become fully
+             *     idle (i.e. no longer in the process of counting presses within the multipress).
+             *
+             *   • The server for cluster revision >= 2 shall generate a MultiPressComplete event with the
+             *     TotalNumberOfPressesCounted field set to zero (indicating an aborted sequence), and shall NOT
+             *     generate any further InitialPress and MultiPressOngoing events until the switch has become fully
+             *     idle (i.e. no longer in the process of counting presses within the multipress).
+             *
+             * This approach avoids unintentionally causing intermediate actions where there is a very long sequence of
+             * presses beyond MultiPressMax that may be taken in account specially by switches (e.g. to trigger special
+             * behavior such as factory reset for which generating events towards the client is not appropriate).
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.5.3
              */
@@ -247,14 +272,6 @@ export namespace Switch {
         events: {
             /**
              * This event shall be generated to indicate how many times the momentary switch has been pressed in a
-             * multi-press sequence, during that sequence. See Multi Press Details below.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
-             */
-            multiPressOngoing: Event(0x5, EventPriority.Info, TlvMultiPressOngoingEvent),
-
-            /**
-             * This event shall be generated to indicate how many times the momentary switch has been pressed in a
              * multi-press sequence, after it has been detected that the sequence has ended. See Multi Press Details.
              *
              * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
@@ -262,9 +279,11 @@ export namespace Switch {
              *
              * The TotalNumberOfPressesCounted field shall contain:
              *
-             *   • a value of 1 when there was one press in a multi-press sequence (and the sequence has ended),
+             *   • a value of 0 when there was an aborted multi-press sequence, where the number of presses goes beyond
+             *     MultiPressMax presses,
              *
-             *     i.e. there was no double press (or more),
+             *   • a value of 1 when there was exactly one press in a multi-press sequence (and the sequence has
+             *     ended), i.e. there was no double press (or more),
              *
              *   • a value of 2 when there were exactly two presses in a multi-press sequence (and the sequence has
              *     ended),
@@ -274,6 +293,14 @@ export namespace Switch {
              *
              *   • a value of N when there were exactly N presses in a multi-press sequence (and the sequence has
              *     ended).
+             *
+             * NOTE
+             *
+             * The introduction of TotalNumberOfPressesCounted supporting the value 0 may impact clients of switches
+             * using cluster revision 1 since such servers would not use this value of TotalNumberOfPressesCounted to
+             * indicate an aborted sequence. Clients SHOULD always act using the TotalNumberOfPressesCounted field
+             * taken into account since for values from 1 to MultiPressMax, the user action that led to the event was
+             * different depending on the count.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.7
              */
@@ -316,8 +343,36 @@ export namespace Switch {
     export const MomentarySwitchLongPressComponent = MutableCluster.Component({
         events: {
             /**
-             * This event shall be generated, when the momentary switch has been pressed for a "long" time (this time
-             * interval is manufacturer determined (e.g. since it depends on the switch physics)).
+             * This event shall be generated when the momentary switch has been pressed for a "long" time. The time
+             * interval constituting a "long" time is manufacturer-determined, since it depends on the switch physics.
+             *
+             *   • When the AS feature flag is set, this event:
+             *
+             *     ◦ shall NOT be generated during a multi-press sequence (since a long press is a separate cycle from
+             *       any multi-press cycles);
+             *
+             *     ◦ shall only be generated after the first InitialPress following a MultiPressComplete when a long
+             *       press is detected after the idle time.
+             *
+             *   • Else, when the MSM feature flag is set, this event:
+             *
+             *     ◦ shall NOT be generated during a multi-press sequence (since a long press is a separate cycle from
+             *       any multi-press cycles);
+             *
+             *     ◦ shall only be generated after the first InitialPress following a MultiPressComplete when a long
+             *       press is detected after the idle time;
+             *
+             *     ◦ shall NOT be generated after a MultiPressOngoing event without an intervening MultiPressComplete
+             *       event.
+             *
+             * The above constraints imply that for a given activity detection cycle of a switch having MSM and/or MSL
+             * feature flags set, the entire activity is either a single long press detection cycle of (InitialPress,
+             * LongPress, LongRelease), or a single multi-press detection cycle (ending in MultiPressComplete), where
+             * presses that would otherwise be reported as long presses are instead reported as a counted press in the
+             * MultiPressComplete event, and as InitialPress/ShortRelease pairs otherwise (where applicable).
+             *
+             * The rationale for this constraint is the ambiguity of interpretation of events when mixing long presses
+             * and multi-press events.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.3
              */
@@ -341,14 +396,19 @@ export namespace Switch {
     export const MomentarySwitchReleaseComponent = MutableCluster.Component({
         events: {
             /**
+             * If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at all,
+             * since setting the Action Switch feature flag forbids the Momentary Switch ShortRelease (MSR) feature
+             * flag from being set. Otherwise, the following paragraphs describe the situations where this event is
+             * generated.
+             *
              * This event shall be generated, when the momentary switch has been released (after debouncing).
              *
-             *   • If the server supports the Momentary Switch LongPress (MSL) feature, this event shall be generated
-             *     when the switch is released if no LongPress event had been generated since the previous InitialPress
-             *     event.
+             *   • If the server has the Momentary Switch LongPress (MSL) feature flag set, then this event shall be
+             *     generated when the switch is released if no LongPress event had been generated since the previous
+             *     InitialPress event.
              *
-             *   • If the server does not support the Momentary Switch LongPress (MSL) feature, this event shall be
-             *     generated when the switch is released - even when the switch was pressed for a long time.
+             *   • If the server does not have the Momentary Switch LongPress (MSL) feature flag set, this event shall
+             *     be generated when the switch is released - even when the switch was pressed for a long time.
              *
              *   • Also see Section 1.13.7, “Sequence of generated events”.
              *
@@ -359,18 +419,37 @@ export namespace Switch {
     });
 
     /**
+     * A SwitchCluster supports these elements if it supports feature MomentarySwitchMultiPress and it doesn't support
+     * feature AS.
+     */
+    export const MomentarySwitchMultiPressNotActionSwitchComponent = MutableCluster.Component({
+        events: {
+            /**
+             * If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at all.
+             * Otherwise, the following paragraphs describe the situations where this event is generated.
+             *
+             * This event shall be generated to indicate how many times the momentary switch has been pressed in a
+             * multi-press sequence, during that sequence. See Multi Press Details below.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
+             */
+            multiPressOngoing: Event(0x5, EventPriority.Info, TlvMultiPressOngoingEvent)
+        }
+    });
+
+    /**
      * These elements and properties are present in all Switch clusters.
      */
     export const Base = MutableCluster.Component({
         id: 0x3b,
         name: "Switch",
-        revision: 1,
+        revision: 2,
 
         features: {
             /**
              * LatchingSwitch
              *
-             * This feature is for a switch that maintains its position after being pressed (or turned).
+             * This feature flag is for a switch that maintains its position after being pressed (or turned).
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
              */
@@ -379,8 +458,8 @@ export namespace Switch {
             /**
              * MomentarySwitch
              *
-             * This feature is for a switch that does not maintain its position after being pressed (or turned). After
-             * releasing, it goes back to its idle position.
+             * This feature flag is for a switch that does not maintain its position after being pressed (or turned).
+             * After releasing, it goes back to its idle position.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
              */
@@ -389,8 +468,7 @@ export namespace Switch {
             /**
              * MomentarySwitchRelease
              *
-             * This feature is for a momentary switch that can distinguish and report release events. When this feature
-             * flag MSR is present, MS shall be present as well.
+             * This feature flag is for a momentary switch that can distinguish and report release events.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
              */
@@ -399,8 +477,8 @@ export namespace Switch {
             /**
              * MomentarySwitchLongPress
              *
-             * This feature is for a momentary switch that can distinguish and report long presses from short presses.
-             * When this feature flag MSL is present, MS and MSR shall be present as well.
+             * This feature flag is for a momentary switch that can distinguish and report long presses from short
+             * presses.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
              */
@@ -409,13 +487,22 @@ export namespace Switch {
             /**
              * MomentarySwitchMultiPress
              *
-             * This feature is for a momentary switch that can distinguish and report double press and potentially
-             * multiple presses with more events, such as triple press, etc. When this feature flag MSM is present, MS
-             * and MSR shall be present as well.
+             * This feature flag is for a momentary switch that can distinguish and report double press and potentially
+             * multiple presses with more events, such as triple press, etc.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
              */
-            momentarySwitchMultiPress: BitFlag(4)
+            momentarySwitchMultiPress: BitFlag(4),
+
+            /**
+             * ActionSwitch
+             *
+             * This feature flag indicates simplified handling of events for multi-press-capable switches. See Multi
+             * Press Details.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.6
+             */
+            actionSwitch: BitFlag(5)
         },
 
         attributes: {
@@ -428,9 +515,10 @@ export namespace Switch {
             numberOfPositions: FixedAttribute(0x0, TlvUInt8.bound({ min: 2 }), { default: 2 }),
 
             /**
-             * Indicates the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition
-             * value 0 shall be assigned to the default position of the switch: for example the "open" state of a
-             * rocker switch, or the "idle" state of a push button switch.
+             * Indicates the position of the switch. The valid range is zero to NumberOfPositions - 1.
+             *
+             * CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open"
+             * state of a rocker switch, or the "idle" state of a push button switch.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.5.2
              */
@@ -446,11 +534,21 @@ export namespace Switch {
             { flags: { momentarySwitch: true }, component: MomentarySwitchComponent },
             { flags: { momentarySwitchLongPress: true }, component: MomentarySwitchLongPressComponent },
             { flags: { momentarySwitchRelease: true }, component: MomentarySwitchReleaseComponent },
+            {
+                flags: { momentarySwitchMultiPress: true, actionSwitch: false },
+                component: MomentarySwitchMultiPressNotActionSwitchComponent
+            },
             { flags: { momentarySwitchRelease: true, momentarySwitch: false }, component: false },
+            { flags: { momentarySwitchRelease: true, actionSwitch: true }, component: false },
             { flags: { momentarySwitchLongPress: true, momentarySwitch: false }, component: false },
-            { flags: { momentarySwitchLongPress: true, momentarySwitchRelease: false }, component: false },
+            {
+                flags: { momentarySwitchLongPress: true, momentarySwitchRelease: false, actionSwitch: false },
+                component: false
+            },
+            { flags: { actionSwitch: true, momentarySwitchMultiPress: false }, component: false },
             { flags: { momentarySwitchMultiPress: true, momentarySwitch: false }, component: false },
             { flags: { momentarySwitchMultiPress: true, momentarySwitchRelease: false }, component: false },
+            { flags: { actionSwitch: true, momentarySwitch: false }, component: false },
             { flags: { latchingSwitch: true, momentarySwitch: true }, component: false },
             { flags: { latchingSwitch: false, momentarySwitch: false }, component: false }
         )
@@ -488,6 +586,7 @@ export namespace Switch {
     const MS = { momentarySwitch: true };
     const MSL = { momentarySwitchLongPress: true };
     const MSR = { momentarySwitchRelease: true };
+    const MSM_NOT_AS = { momentarySwitchMultiPress: true, actionSwitch: false };
 
     /**
      * @see {@link Complete}
@@ -528,8 +627,8 @@ export namespace Switch {
                 { mandatoryIf: [MSL] }
             ),
             multiPressOngoing: MutableCluster.AsConditional(
-                MomentarySwitchMultiPressComponent.events.multiPressOngoing,
-                { mandatoryIf: [MSM] }
+                MomentarySwitchMultiPressNotActionSwitchComponent.events.multiPressOngoing,
+                { mandatoryIf: [MSM_NOT_AS] }
             ),
             multiPressComplete: MutableCluster.AsConditional(
                 MomentarySwitchMultiPressComponent.events.multiPressComplete,

@@ -150,7 +150,8 @@ export namespace ContentLauncher {
     export const TlvStyleInformation = TlvObject({
         /**
          * This field shall indicate the URL of image used for Styling different Video Player sections like Logo,
-         * Watermark etc.
+         * Watermark etc. The syntax of this field shall follow the syntax as specified in RFC 1738 and shall use the
+         * https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.9.1
          */
@@ -170,8 +171,9 @@ export namespace ContentLauncher {
         color: TlvOptionalField(1, TlvString),
 
         /**
-         * This field shall indicate the size of the image used for Styling different Video Player sections like Logo,
-         * Watermark etc.
+         * This field shall indicate the size of the image used for Styling different Video Player sections like
+         *
+         * Logo, Watermark etc.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.9.3
          */
@@ -276,9 +278,8 @@ export namespace ContentLauncher {
          *
          * This field shall NOT be present if the track is not an audio track.
          *
-         * If the track is an audio track, this field MUST be present. A value of null shall indicate that the
-         *
-         * server can choose the audio output(s) to play the Audio Track on.
+         * If the track is an audio track, this field MUST be present. A value of null shall indicate that the server
+         * can choose the audio output(s) to play the Audio Track on.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.12.3
          */
@@ -303,9 +304,8 @@ export namespace ContentLauncher {
          * This field shall indicate the preferred position (in milliseconds) in the media to launch playback from. In
          * case the position falls in the middle of a frame, the server shall set the position to the beginning of that
          * frame and set the SampledPosition attribute on the MediaPlayback cluster accordingly. A value of null shall
-         * indicate that playback position is not applicable for the current state of the media playback.
-         *
-         * ported).
+         * indicate that playback position is not applicable for the current state of the media playback. (For example
+         * : Live media with no known duration and where seek is not supported).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11.1
          */
@@ -346,7 +346,8 @@ export namespace ContentLauncher {
      */
     export const TlvLaunchUrlRequest = TlvObject({
         /**
-         * This field shall indicate the URL of content to launch.
+         * This field shall indicate the URL of content to launch. The syntax of this field shall follow the syntax as
+         * specified in RFC 1738 and shall use the https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2.1
          */
@@ -703,8 +704,9 @@ export namespace ContentLauncher {
     export const UrlPlaybackComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute shall provide a list of content types supported by the Video Player or Content App in the
-             * form of entries in the HTTP "Accept" request header.
+             * This attribute shall provide a list of content types supported by the Video Player or Content App
+             *
+             * in the form of entries in the HTTP "Accept" request header.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.7.6.1
              */
@@ -722,9 +724,8 @@ export namespace ContentLauncher {
             /**
              * Upon receipt, this shall launch content from the specified URL.
              *
-             * The content types supported include those identified in the AcceptHeader and SupportedStreaming
-             *
-             * Protocols attributes.
+             * The content types supported include those identified in the AcceptHeader and SupportedStreamingProtocols
+             * attributes.
              *
              * A check shall be made to ensure the URL is secure (uses HTTPS).
              *
