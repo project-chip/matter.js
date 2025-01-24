@@ -12,7 +12,7 @@ export { camelize, describeList, serialize } from "#general";
  */
 export function asObjectKey(label: any) {
     let str = `${label}`;
-    if (!str.match(/^[$_a-z][$_a-z0-9]*$/i)) {
+    if (!str.match(/^[$_a-z][$\w]*$/i)) {
         str = JSON.stringify(label);
     }
     return str;

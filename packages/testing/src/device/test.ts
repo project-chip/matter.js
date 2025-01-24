@@ -84,7 +84,7 @@ export namespace Test {
         return name
             .toLowerCase()
             .split("_")
-            .map(segment => (segment.match(/^[0-9]+$/) ? segment.padStart(8, "0") : segment))
+            .map(segment => (segment.match(/^\d+$/) ? segment.padStart(8, "0") : segment))
             .join("_");
     }
 }

@@ -1325,7 +1325,7 @@ export namespace NetworkCommissioning {
                 component: false
             }
         )
-    })
+    });
 
     /**
      * @see {@link Cluster}

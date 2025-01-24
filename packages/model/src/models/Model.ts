@@ -574,7 +574,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         if (this.#children !== undefined && this.#children.length) {
             props.children = this.#children.length;
         }
-        return `${inspect(props, options)}`.replace(/^{/, `${decamelize(this.tag)} {`);
+        return `${inspect(props, options)}`.replace(/^\{/, `${decamelize(this.tag)} {`);
     }
 }
 

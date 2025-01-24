@@ -202,7 +202,7 @@ function buildBitmap(scope: Scope, model: ValueModel) {
             maxBit = Math.trunc(Math.log2(defaultValue)) + 1;
         }
 
-        for (let i = 0, mask = 1 << minBit; i < maxBit - minBit; i++, mask << 1) {
+        for (let i = 0, mask = 1 << minBit; i < maxBit - minBit; i++, mask <<= 1) {
             if (fieldsDefined & mask) {
                 continue;
             }

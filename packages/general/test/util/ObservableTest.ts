@@ -12,7 +12,7 @@ import { Observable, ObserverGroup } from "#util/Observable.js";
 describe("ObservableGroup", () => {
     // Test for TS bug workaround
     it("supports variable argument lengths", () => {
-        const observable = new Observable<[foo: string, bar: boolean]>();
+        const observable = Observable<[foo: string, bar: boolean]>();
         const observers = new ObserverGroup();
         observers.on(observable, foo => {
             if (foo === "four") return;
@@ -24,7 +24,7 @@ describe("ObservableGroup", () => {
     });
 
     it("installs observers", () => {
-        const observable = new Observable<[foo: string]>();
+        const observable = Observable<[foo: string]>();
         const observers = new ObserverGroup();
 
         let observedValue: string | undefined;
@@ -40,7 +40,7 @@ describe("ObservableGroup", () => {
     });
 
     it("removes observers on close", () => {
-        const observable = new Observable<[foo: string]>();
+        const observable = Observable<[foo: string]>();
         const observers = new ObserverGroup();
 
         observers.on(observable, () => {});

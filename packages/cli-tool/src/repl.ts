@@ -252,7 +252,7 @@ function evaluate(
             } else {
                 // Look for the "matter-cli-" marker which we prefix on the "filename"
                 specialLine = lines.findIndex(line => {
-                    const match = line.match(/at matter-cli-(?:[a-z]+):([0-9]+:[0-9]+)?/);
+                    const match = line.match(/at matter-cli-[a-z]+:(\d+:\d+)?/);
                     if (match) {
                         specialLoc = match[1];
                         return true;

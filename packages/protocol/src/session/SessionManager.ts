@@ -116,7 +116,7 @@ export class SessionManager {
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
     #sessionParameters;
-    readonly #resubmissionStarted = new Observable<[session: Session]>();
+    readonly #resubmissionStarted = Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
     readonly #subscriptionUpdateMutex = new Mutex(this);

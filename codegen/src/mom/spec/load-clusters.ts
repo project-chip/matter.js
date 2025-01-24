@@ -288,7 +288,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
 
         if (!ref.tables) {
             // Sometimes there's a section with no table to indicate no elements
-            if (ref.prose?.[0]?.textContent?.match(/(?:this cluster has no|no cluster specific)/i)) {
+            if (ref.prose?.[0]?.textContent?.match(/this cluster has no|no cluster specific/i)) {
                 return;
             }
             logger.warn("no defining table in definition of", name, "for", ref.name, `(${ref.path})`);

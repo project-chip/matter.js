@@ -82,7 +82,7 @@ export function identifyDocument(path: string): IndexDetail {
 
     let version;
     const titleAndVersion = title.split(/ version /i);
-    if (titleAndVersion.length === 2 && titleAndVersion[1].match(/(?:\d\.)+/i)) {
+    if (titleAndVersion.length === 2 && titleAndVersion[1].match(/(?:\d\.)+/)) {
         title = titleAndVersion[0];
         version = titleAndVersion[1];
     } else {
@@ -90,7 +90,7 @@ export function identifyDocument(path: string): IndexDetail {
         if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
             throw new Error(`No version found for ${title} in ${path}`);
         }
-        version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
+        version = versionEl.textContent.replace(/.*version ([\d.]).*/i, "$1");
     }
 
     // Drop dotted elements except the first two.  To date these have represented trivial changes

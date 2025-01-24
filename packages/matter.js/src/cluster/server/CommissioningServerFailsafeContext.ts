@@ -6,7 +6,7 @@
 
 import { BasicInformation, GeneralCommissioning, NetworkCommissioning, OperationalCredentials } from "#clusters";
 import { asyncNew } from "#general";
-import { EndpointInterface, Fabric, FailsafeContext } from "#protocol";
+import { type EndpointInterface, Fabric, FailsafeContext } from "#protocol";
 import { EndpointNumber, TypeFromSchema } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
 

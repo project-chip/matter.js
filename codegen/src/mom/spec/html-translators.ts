@@ -24,7 +24,7 @@ export const Str = (el: HTMLElement) => {
             // P starts with text
             child.firstChild?.nodeType === 3 /** TEXT_CONTENT */ &&
             // Containing a single digit
-            child.firstChild.textContent?.match(/^[0-9]$/) &&
+            child.firstChild.textContent?.match(/^\d$/) &&
             // Followed by a span
             (child.firstChild.nextSibling as Element)?.tagName === "SPAN" &&
             // That doesn't indicate numeric arity
@@ -146,7 +146,7 @@ export const Code = (el: HTMLElement) => {
             const beginning = parts[i].replace(/^.*([A-Z])/, "$1");
 
             // Get ending of word from next part
-            const ending = parts[i + 1].replace(/^([a-z]+).*/, "$1");
+            const ending = parts[i + 1].replace(/^([a-z]).*/, "$1");
 
             // If the concatenation is a word, assume it should be joined
             if (Words.has(`${beginning}${ending}`.toLowerCase())) {
@@ -180,7 +180,7 @@ export const Identifier = (el: HTMLElement) => {
     let str = Code(el);
 
     // Strip everything following a subset of characters known to be inside what is properly a "key"
-    str = str.replace(/^([a-z0-9 _:.,/\-$]+).*/i, "$1");
+    str = str.replace(/^([\w :.,/\-$]+)/, "$1");
 
     return camelize(str, true);
 };

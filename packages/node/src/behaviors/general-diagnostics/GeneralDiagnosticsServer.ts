@@ -368,7 +368,7 @@ export class GeneralDiagnosticsServer extends Base {
                 isOperational: isOperationalReachable(name),
                 offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                 offPremiseServicesReachableIPv6: null, // null means unknown or not supported
-                hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
+                hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-f]/gi, "")),
                 iPv4Addresses: ipV4.slice(0, 4).map(ip => ipv4ToBytes(ip)),
                 iPv6Addresses: ipV6.slice(0, 8).map(ip => ipv4ToBytes(ip)),
                 type: type ?? networkType,

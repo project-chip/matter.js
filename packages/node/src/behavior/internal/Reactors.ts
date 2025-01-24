@@ -284,11 +284,6 @@ class ReactorBacking<T extends any[], R> {
 
         // Otherwise run in independent context and errors do not interfere with emitter
         try {
-            let purpose = "react";
-            if (this.#reactor.name) {
-                purpose = `${purpose}<${this.#reactor.name}>`;
-            }
-
             const reactor = (context: ActionContext) => {
                 return this.#reactWithContext(context, this.#owner.backing, args);
             };

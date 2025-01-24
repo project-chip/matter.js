@@ -193,7 +193,7 @@ export class TlvGenerator {
      * Get the filename for global datatypes.
      */
     static filenameFor(model: Model) {
-        const name = model.name.replace(/(Enum|Bitmap|Struct)$/, "");
+        const name = model.name.replace(/Enum|Bitmap|Struct$/, "");
         return camelize(name, true);
     }
 

@@ -45,7 +45,7 @@ export async function before({ project }: Project.Context) {
 
             // Quick hack to pull out imports, assumes modules formatted by prettier.  More than sufficient for current
             // needs
-            for (const [, pkgName] of source.matchAll(/import .* from "(@[^/"]+\/[^/"]+|[^/"]+)[^"]*";/g)) {
+            for (const [, pkgName] of source.matchAll(/import .* from "(@[^/"]+\/[^/"]+|[^/"]+)";/g)) {
                 if (dependencies[pkgName]) {
                     continue;
                 }

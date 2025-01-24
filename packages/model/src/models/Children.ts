@@ -537,7 +537,7 @@ export function Children<T extends Model = Model>(
 
     const self = new Proxy(children, {
         get: (_target, name, receiver) => {
-            if (typeof name === "string" && name.match(/^[0-9]+$/)) {
+            if (typeof name === "string" && name.match(/^\d+$/)) {
                 let child = children[name as unknown as number];
                 if (child && !(child instanceof Model)) {
                     child = Model.create(child) as T;
@@ -584,7 +584,7 @@ export function Children<T extends Model = Model>(
         },
 
         set: (_target, name, value, receiver) => {
-            if (typeof name !== "string" || !name.match(/^[0-9]+$/)) {
+            if (typeof name !== "string" || !name.match(/^\d+$/)) {
                 if (name === "length") {
                     if (value > children.length) {
                         // Do not allow preallocation that would create gaps
@@ -636,7 +636,7 @@ export function Children<T extends Model = Model>(
         deleteProperty: (_target, p) => {
             let child: undefined | Model.Definition<T>;
 
-            if (typeof p === "string" && p.match(/^[0-9]+$/)) {
+            if (typeof p === "string" && p.match(/^\d+$/)) {
                 child = children[p as unknown as number];
             }
 

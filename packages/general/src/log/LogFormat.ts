@@ -384,7 +384,7 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
         if (text === "") {
             return text;
         }
-        const segments = text.match(/([^✓✔✗✘]+|[✓✔✗✘])/g);
+        const segments = text.match(/[^✓✔✗✘]+|[✓✔✗✘]/g);
         if (segments === null) {
             throw new InternalError("ANSI text processing regex failure");
         }
@@ -682,8 +682,8 @@ function formatTime(time: Date) {
  * Multiline messages should always have whitespace as the first character after newlines.  Ensure this is so.
  */
 function ensureIndented(text: string) {
-    if (text.match(/\n\S/s)) {
-        return text.replace(/\n/gs, "\n  ");
+    if (text.match(/\n\S/)) {
+        return text.replace(/\n/g, "\n  ");
     }
     return text;
 }

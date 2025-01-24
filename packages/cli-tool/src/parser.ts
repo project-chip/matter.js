@@ -237,7 +237,7 @@ export namespace isCommand {
 
     const statementStarts = [...STATEMENT_KEYWORDS.map(kw => `${kw}${EOW}`), `${IDENTIFIER}\\s*=`];
 
-    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.?\\.?/)?${PATH_SEGMENT}(?:\\/(?:\\.?\\.|${PATH_SEGMENT}))*`];
+    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.{0,2}/)?${PATH_SEGMENT}(?:\\/(?:\\.?\\.|${PATH_SEGMENT}))*`];
 
     // If this regexp matches, input is NOT a command
     export const STATEMENT_DETECTOR = new RegExp(`^\\s*(?:${statementStarts.join("|")})`, "u");

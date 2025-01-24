@@ -65,7 +65,7 @@ function detectList(text: string, listState: ListType[]) {
         return false;
     }
 
-    if (detectEnumeration(/^[0-9]+\./, ListType.Number, "1")) return;
+    if (detectEnumeration(/^\d+\./, ListType.Number, "1")) return;
     if (detectEnumeration(/^[ivx]+\./, ListType.LowerRoman, "i")) return;
     if (detectEnumeration(/^[IVX]+\./, ListType.UpperRoman, "I")) return;
     if (detectEnumeration(/^[a-z]+\./, ListType.LowerAlpha, "a")) return;
@@ -144,11 +144,23 @@ function detectStructure(text: string): TextStructure {
 }
 
 function wrapParagraph(input: string, into: string[], wrapWidth: number, padding: number, prefixWidth: number) {
-    // Note - do not wrap text surrounded by "{@" and "}" as this is likely a ESDoc directive and ESDoc doesn't like
-    // directives wrapped
-    const segments = input.match(/(?:{@[^}]+}|\S+)(?:\s+|$)/g);
-    if (!segments?.length) {
+    const segments = input.match(/\s+/g);
+    if (!segments) {
         return;
+    }
+
+    // Reassemble text surrounded by "{@" and "}" as this is likely an ESDoc directive and ESDoc doesn't like directives
+    // wrapped
+    for (let i = 0; i < segments?.length; i++) {
+        if (!segments[i].includes("{@")) {
+            continue;
+        }
+        for (let j = i; j < segments.length; j++) {
+            if (segments[j].includes("}")) {
+                segments.splice(i, j - i + 1, segments.slice(i, j + 1).join(" "));
+                break;
+            }
+        }
     }
 
     // Configure for list prefix formatting

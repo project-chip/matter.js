@@ -206,7 +206,7 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     }
 
     protected decodeInternal(encoded: string): ManualPairingData {
-        encoded = encoded.replace(/[^0-9]/g, ""); // we SHALL be robust against other characters
+        encoded = encoded.replace(/\D/g, ""); // we SHALL be robust against other characters
         if (encoded.length !== 11 && encoded.length != 21) {
             throw new UnexpectedDataError("Invalid pairing code");
         }

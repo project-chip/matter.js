@@ -171,7 +171,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                expect(result).equal(pairingCode.code.replace(/[^0-9]/g, ""));
+                expect(result).equal(pairingCode.code.replace(/\D/g, ""));
             }
         });
 

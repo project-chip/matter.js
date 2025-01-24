@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TypescriptContext } from "./typescript/context.js";
+import { type TypescriptContext } from "./typescript/context.js";
 import { createSolutionBuilderContext } from "./typescript/solution-builder.js";
 
 /**

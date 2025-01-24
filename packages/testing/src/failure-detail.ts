@@ -25,7 +25,7 @@ export function FailureDetail(error: any, logs?: string[]) {
             diff = "(no diff implementation installed)";
         } else {
             diff = FailureDetail.diff(error.actual.toString(), error.expected.toString());
-            diff = diff.trim().replace(/^ {6}/gms, "");
+            diff = diff.trim().replace(/^ {6}/gm, "");
         }
     }
 
@@ -54,11 +54,11 @@ export namespace FailureDetail {
         process.stdout.write(colors.redBright(`${prefix}${failure.message}\n\n`));
 
         if (failure.diff) {
-            process.stdout.write(`${prefix}    ${failure.diff.replace(/\n/gm, "\n      ")}\n\n`);
+            process.stdout.write(`${prefix}    ${failure.diff.replace(/\n/g, "\n      ")}\n\n`);
         }
 
         if (failure.stack) {
-            process.stdout.write(`${prefix}${colors.dim(failure.stack.replace(/\n/gm, `\n${prefix}`))}\n\n`);
+            process.stdout.write(`${prefix}${colors.dim(failure.stack.replace(/\n/g, `\n${prefix}`))}\n\n`);
         }
 
         if (failure.cause) {
@@ -75,7 +75,7 @@ export namespace FailureDetail {
         }
 
         if (failure.logs) {
-            process.stdout.write(`  ${failure.logs.replace(/\n/gm, "\n  ")}\n\n`);
+            process.stdout.write(`  ${failure.logs.replace(/\n/g, "\n  ")}\n\n`);
         }
     }
 

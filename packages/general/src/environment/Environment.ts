@@ -176,8 +176,8 @@ export class Environment {
         let events = this.#serviceEvents.get(type);
         if (events === undefined) {
             events = {
-                added: new Observable(),
-                deleted: new Observable(),
+                added: Observable(),
+                deleted: Observable(),
             };
             this.#serviceEvents.set(type, events);
         }

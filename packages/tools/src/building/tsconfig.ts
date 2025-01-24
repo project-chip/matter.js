@@ -50,12 +50,6 @@ async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: stri
 
     const tsconfig = await node.pkg.readJson(tsconfigPath);
 
-    let refs = tsconfig.refs as undefined | { path: string }[];
-
-    if (refs === undefined) {
-        refs = [];
-    }
-
     const deps = node.dependencies
         .filter(dep => dep.pkg.isLibrary)
         .map(dep => dep.pkg.resolve("src"))
