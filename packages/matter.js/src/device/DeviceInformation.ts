@@ -140,27 +140,36 @@ export class DeviceInformation {
                 const networks = await networkCluster.getNetworksAttribute();
                 if (networks) {
                     if (networks.some(network => network.connected)) {
-                        const features = await networkCluster.getFeatureMapAttribute();
-                        if (features) {
-                            if (features.ethernetNetworkInterface) {
-                                deviceData.ethernetConnected = true;
-                            } else if (features.wiFiNetworkInterface) {
-                                deviceData.wifiConnected = true;
-                            } else if (features.threadNetworkInterface) {
-                                deviceData.threadConnected = true;
-                            }
+                        const features = networkCluster.supportedFeatures;
+                        if (features.ethernetNetworkInterface) {
+                            deviceData.ethernetConnected = true;
+                        } else if (features.wiFiNetworkInterface) {
+                            deviceData.wifiConnected = true;
+                        } else if (features.threadNetworkInterface) {
+                            deviceData.threadConnected = true;
                         }
                     }
                 }
             }
         }
 
-        const powerSourceCluster = endpoint.getClusterClient(PowerSource.Cluster);
-        if (powerSourceCluster !== undefined) {
-            if ((await powerSourceCluster.getStatusAttribute()) === PowerSource.PowerSourceStatus.Active) {
-                const features = await powerSourceCluster.getFeatureMapAttribute();
-                if (features?.battery) {
-                    deviceData.isBatteryPowered = true;
+        if (!deviceData.isBatteryPowered) {
+            // Only query if PowerSource with Battery not already found
+            const powerSourceCluster = endpoint.getClusterClient(PowerSource.Cluster);
+            if (powerSourceCluster !== undefined) {
+                const features = powerSourceCluster.supportedFeatures;
+                if (
+                    features.battery ||
+                    !features.wired ||
+                    powerSourceCluster.isAttributeSupportedByName("batChargeLevel") // We saw devices with wrong features
+                ) {
+                    const status = await powerSourceCluster.getStatusAttribute();
+                    if (
+                        status === PowerSource.PowerSourceStatus.Active ||
+                        status === PowerSource.PowerSourceStatus.Unspecified
+                    ) {
+                        deviceData.isBatteryPowered = true;
+                    }
                 }
             }
         }
