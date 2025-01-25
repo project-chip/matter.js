@@ -968,25 +968,35 @@ describe("Integration Test", () => {
 
             const { promise: updatePromise, resolver: updateResolver } = createPromise<void>();
 
+            let resolved = false;
             await onOffClient.subscribeOnOffAttribute(
                 value => {
+                    console.trace("onOffClient.subscribeOnOffAttribute", value);
                     pushedUpdates.push({ value, time: Time.nowMs() });
-                    updateResolver();
+                    if (!resolved) updateResolver();
+                    resolved = true;
                 },
                 0,
                 5,
                 dataVersion,
             );
 
+            await MockTime.advance(2 * 1000);
+
             assert.deepEqual(pushedUpdates, []);
 
-            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(true);
+
             await MockTime.advance(100);
 
             await updatePromise;
 
-            assert.deepEqual(pushedUpdates, [{ value: true, time: startTime + 2 * 1000 + 100 }]);
+            // We might get multiple same values triggered because we use a direct AttributeClient here
+            // and PairedNode might retrigger those event correctly on the Client objects for legacy reasons
+            assert.equal(pushedUpdates.length > 0, true);
+            pushedUpdates.forEach(update =>
+                assert.deepEqual(update, { value: true, time: startTime + 2 * 1000 + 100 }),
+            );
         });
 
         /*

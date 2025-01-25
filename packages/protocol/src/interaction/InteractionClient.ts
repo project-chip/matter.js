@@ -910,6 +910,27 @@ export class InteractionClient {
             }
             const { attributeReports, eventReports } = dataReport;
 
+            // We emit events first because events usually happened and lead to a new final attribute value
+            if (eventReports !== undefined) {
+                let maxEventNumber = this.#nodeStore?.maxEventNumber ?? eventReports[0].events[0].eventNumber;
+                eventReports.forEach(data => {
+                    logger.debug(
+                        `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
+                    );
+                    const { events } = data;
+
+                    maxEventNumber =
+                        events.length === 1
+                            ? events[0].eventNumber
+                            : events.reduce(
+                                  (max, { eventNumber }) => (max < eventNumber ? eventNumber : max),
+                                  maxEventNumber,
+                              );
+                    eventListener?.(data);
+                });
+                await this.#nodeStore?.updateLastEventNumber(maxEventNumber);
+            }
+
             if (attributeReports !== undefined) {
                 for (const data of attributeReports) {
                     const {
@@ -934,26 +955,6 @@ export class InteractionClient {
 
                     attributeListener?.(data, changed, oldValue);
                 }
-            }
-
-            if (eventReports !== undefined) {
-                let maxEventNumber = this.#nodeStore?.maxEventNumber ?? eventReports[0].events[0].eventNumber;
-                eventReports.forEach(data => {
-                    logger.debug(
-                        `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
-                    );
-                    const { events } = data;
-
-                    maxEventNumber =
-                        events.length === 1
-                            ? events[0].eventNumber
-                            : events.reduce(
-                                  (max, { eventNumber }) => (max < eventNumber ? eventNumber : max),
-                                  maxEventNumber,
-                              );
-                    eventListener?.(data);
-                });
-                await this.#nodeStore?.updateLastEventNumber(maxEventNumber);
             }
         };
         this.registerSubscriptionListener(subscriptionId, async dataReport => {
