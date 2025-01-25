@@ -13,12 +13,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Adjustment: For subscriptions we now trigger event listeners before attribute listeners
+    - Fix: Added force closing of exchanges on shutdown of the node
 
 -   @project-chip/matter.js
     - Fix: Allows more cases when checking if a device is battery powered to address real world devices
-
--   @matter/protocol
-    - Fix: Added force closing of exchanges on shutdown of the node
 
 ## 0.12.0 (2025-01-23)
 
