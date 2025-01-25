@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -193,7 +193,7 @@ export class TlvGenerator {
      * Get the filename for global datatypes.
      */
     static filenameFor(model: Model) {
-        const name = model.name.replace(/(Enum|Bitmap|Struct)$/, "");
+        const name = model.name.replace(/Enum|Bitmap|Struct$/, "");
         return camelize(name, true);
     }
 

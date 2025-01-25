@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -284,11 +284,6 @@ class ReactorBacking<T extends any[], R> {
 
         // Otherwise run in independent context and errors do not interfere with emitter
         try {
-            let purpose = "react";
-            if (this.#reactor.name) {
-                purpose = `${purpose}<${this.#reactor.name}>`;
-            }
-
             const reactor = (context: ActionContext) => {
                 return this.#reactWithContext(context, this.#owner.backing, args);
             };

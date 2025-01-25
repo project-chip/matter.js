@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -237,7 +237,7 @@ export namespace isCommand {
 
     const statementStarts = [...STATEMENT_KEYWORDS.map(kw => `${kw}${EOW}`), `${IDENTIFIER}\\s*=`];
 
-    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.?\\.?/)?${PATH_SEGMENT}(?:\\/(?:\\.?\\.|${PATH_SEGMENT}))*`];
+    const commandStarts = ["\\.", "\\.\\.", `\\s*(?:\\.{0,2}/)?${PATH_SEGMENT}(?:\\/(?:\\.?\\.|${PATH_SEGMENT}))*`];
 
     // If this regexp matches, input is NOT a command
     export const STATEMENT_DETECTOR = new RegExp(`^\\s*(?:${statementStarts.join("|")})`, "u");

@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Destructable, Environment, Logger, RuntimeService, VariableService } from "#general";
+import { Destructable, Environment, Logger, RuntimeService, type VariableService } from "#general";
 import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 
 const logger = Logger.get("ProcessManager");

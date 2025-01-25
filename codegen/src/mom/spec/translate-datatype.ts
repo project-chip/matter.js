@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -45,24 +45,22 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
     }
 
     // Up through 1.1 prose was informal but remarkably consistent; "derived from" always matches
-    let match = text?.match(/derived from ([a-z0-9\-_]+)/i);
+    let match = text?.match(/derived from ([\w-]+)/i);
 
     // This now applies to cluster 1.2 § 1.14.15.1, because consistency is overrated
     if (!match) {
-        match = text?.match(/data type shall be a ([a-z0-9\-_]+)/i);
+        match = text?.match(/data type shall be a ([\w-]+)/i);
     }
 
     // Applies to a handful of overrides of ModeOptionStruct in cluster 1.2
     if (!match) {
-        match = text?.match(
-            /lists the changes relative to the [a-z0-9\-_ ]+ cluster for the fields of the ([a-z0-9\-_]+) type/i,
-        );
+        match = text?.match(/lists the changes relative to the [\w\- ]+ cluster for the fields of the ([\w-]+) type/i);
     }
 
     // And 1.3 throws in this beaut
     let constraint: string | undefined;
     if (!match) {
-        match = text?.match(/This data type is an? ([a-z0-9\-_]+) of fixed length (\d+)/i);
+        match = text?.match(/This data type is an? ([\w-]+) of fixed length (\d+)/i);
         constraint = match?.[2];
     }
 

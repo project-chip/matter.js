@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -52,11 +52,11 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/ such that:$/, "")
         .replace(/, derived from \w+,/, "")
         .replace(/\([^)]*$/, "")
-        .replace(/\s\s+/, "  ")
+        .replace(/\s{2,}/, "  ")
         .replace(/This attribute shall (?:indicate|represent)/, "Indicates")
         .replace(/This attribute shall be null/, "Null")
         .replace(/The following tags are defined in this namespace\./, "")
-        .replace(/This section contains the (.*) as part of the semantic tag feature\./i, "")
+        .replace(/This section contains the .* as part of the semantic tag feature\./i, "")
         .replace(
             /The table below lists the changes relative to the Mode Base Cluster for the fields of the ModeOptionStruct type\./,
             "",
@@ -70,7 +70,7 @@ function extractUsefulDocumentation(p: HTMLElement) {
 function mergeSplitParagraphs(paragraphs: string[]) {
     for (let i = 0; i < paragraphs.length - 1; i++) {
         const trailing = paragraphs[i].replace(/^.*\s(\w+)$/, "$1").toLowerCase();
-        const leading = paragraphs[i + 1].replace(/^(\w+).*$/, "$1").toLowerCase();
+        const leading = paragraphs[i + 1].replace(/^(\w+)\W.*$/, "$1").toLowerCase();
         if (Words.has(leading) && !NotWords.has(leading) && Words.has(trailing) && !NotWords.has(trailing)) {
             continue;
         }

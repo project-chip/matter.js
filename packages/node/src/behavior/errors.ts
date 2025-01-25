@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -64,9 +64,9 @@ export class ValidateError extends SchemaViolationError {
  */
 export class DatatypeError extends ValidateError {
     constructor(path: SchemaErrorPath, type: string, value: unknown, code?: StatusCode) {
-        const str = `${value}`;
+        let str = `${value}`;
         if (str.length > 60) {
-            value = `${str.substring(60)}…`;
+            str = `${str.substring(60)}…`;
         }
         super(path, `Value "${str}" is not ${type}`, code);
     }

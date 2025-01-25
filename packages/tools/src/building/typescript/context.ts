@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -41,7 +41,7 @@ export namespace TypescriptContext {
         // command line.  Use the "light blue" ANSI escape code as an injection point for an additional newline
         //
         // eslint-disable-next-line no-control-regex
-        formatted = formatted.replace(/\u001b\[96m/gms, "\n\u001b[96m");
+        formatted = formatted.replace(/\u001b\[96m/g, "\n\u001b[96m");
 
         throw new BuildError(formatted);
     }
