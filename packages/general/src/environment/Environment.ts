@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -176,8 +176,8 @@ export class Environment {
         let events = this.#serviceEvents.get(type);
         if (events === undefined) {
             events = {
-                added: new Observable(),
-                deleted: new Observable(),
+                added: Observable(),
+                deleted: Observable(),
             };
             this.#serviceEvents.set(type, events);
         }

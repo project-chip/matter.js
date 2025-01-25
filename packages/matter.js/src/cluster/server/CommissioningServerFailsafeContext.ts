@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { BasicInformation, GeneralCommissioning, NetworkCommissioning, OperationalCredentials } from "#clusters";
 import { asyncNew } from "#general";
-import { EndpointInterface, Fabric, FailsafeContext } from "#protocol";
+import { type EndpointInterface, Fabric, FailsafeContext } from "#protocol";
 import { EndpointNumber, TypeFromSchema } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
 

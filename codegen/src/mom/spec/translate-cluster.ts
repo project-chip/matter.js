@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -304,7 +304,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
         const commands = translateRecordsToMatter("command", records, r => {
             let direction: CommandElement.Direction | undefined;
 
-            if (r.direction?.match(/client.*⇐.*server/i)) {
+            if (r.direction?.match(/client[^⇐]*⇐[^⇐]*server/i)) {
                 direction = CommandElement.Direction.Response;
             } else if (r.direction?.match(/client.*server/i)) {
                 direction = CommandElement.Direction.Request;

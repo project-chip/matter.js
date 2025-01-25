@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2022-2025 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
@@ -37,6 +43,7 @@ export default [
             "plugin:import/errors",
             "plugin:import/warnings",
             "plugin:import/typescript",
+            "plugin:regexp/recommended",
         ),
     ),
     {

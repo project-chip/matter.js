@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -336,7 +336,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     if (typeof k !== "string") {
                         return true;
                     }
-                    if (!k.match(/^[0-9]+$/)) {
+                    if (!k.match(/^\d+$/)) {
                         return true;
                     }
                     if (Number.parseInt(k) < length) {
@@ -349,7 +349,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
             };
 
             getOwnPropertyDescriptor = (_target, key) => {
-                if (typeof key === "string" && key.match(/^[0-9]+$/)) {
+                if (typeof key === "string" && key.match(/^\d+$/)) {
                     key = Number.parseInt(key);
                 }
                 if (typeof key !== "number") {
@@ -364,7 +364,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
     const target = [] as Val.List;
     const handlers: ProxyHandler<Val.List> = {
         get(_target, property, receiver) {
-            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+            if (typeof property === "string" && property.match(/^\d+/)) {
                 sublocation.path.id = property;
                 return readEntry(Number.parseInt(property), sublocation);
             }
@@ -393,7 +393,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
         // On write we enter a transaction
         set(_target, property, newValue, receiver) {
-            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+            if (typeof property === "string" && property.match(/^\d+/)) {
                 sublocation.path.id = property;
                 validateEntry?.(newValue, session, sublocation);
                 writeEntry(Number.parseInt(property), newValue, sublocation);
@@ -407,7 +407,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         },
 
         has(_target, property) {
-            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+            if (typeof property === "string" && property.match(/^\d+/)) {
                 return hasEntry(Number.parseInt(property));
             }
 
@@ -415,7 +415,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         },
 
         deleteProperty: (_target, property) => {
-            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+            if (typeof property === "string" && property.match(/^\d+/)) {
                 sublocation.path.id = property;
                 writeEntry(Number.parseInt(property), undefined, sublocation);
                 return true;

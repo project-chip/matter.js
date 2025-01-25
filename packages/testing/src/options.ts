@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -28,7 +28,7 @@ function option<T extends keyof TestOptions>(options: TestOptions, name: T) {
     return process.env?.[
         "MATTER_" +
             name
-                .match(/(.[^A-Z]+)/g)
+                .match(/.[^A-Z]+/g)
                 ?.map(s => s.toUpperCase())
                 .join("_")
     ];

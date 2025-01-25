@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -171,7 +171,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                expect(result).equal(pairingCode.code.replace(/[^0-9]/g, ""));
+                expect(result).equal(pairingCode.code.replace(/\D/g, ""));
             }
         });
 

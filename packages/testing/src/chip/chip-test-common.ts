@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +12,7 @@ import colors from "ansi-colors";
  * Adds coloring to improve visibility and updates the runner's state.
  */
 export function parseStep(line: string, step: (name: string) => void) {
-    const stepMatch = line.match(/^(.*\s\*{5})\s+(Test Step \d+)\s+:\s+(.*)$/);
+    const stepMatch = line.match(/^(.*\s\*{5})\s+(Test Step \d+)\s+:(?:\s+(\S.*)|\S.*)$/);
     if (stepMatch) {
         const [, prefix, stepNum, stepName] = stepMatch;
         step(stepName);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -77,7 +77,7 @@ function convertTable(el: HTMLTableElement, previous: Table | undefined) {
         if (!table.fields.length) {
             cells.forEach(cell => {
                 let key = cell.textContent || "";
-                key = key.replace(/[\W]/g, "").toLowerCase();
+                key = key.replace(/\W/g, "").toLowerCase();
                 table?.fields.push(key);
             });
             continue;
