@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -151,7 +151,7 @@ export class Logger {
 
         let levelNum;
         if (typeof level === "string") {
-            if (level.match(/^[0-9]+$/)) {
+            if (level.match(/^\d+$/)) {
                 levelNum = Number.parseInt(level);
             } else {
                 levelNum = (LogLevel as unknown as Record<string, number | undefined>)[level.toUpperCase()];

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -574,7 +574,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         if (this.#children !== undefined && this.#children.length) {
             props.children = this.#children.length;
         }
-        return `${inspect(props, options)}`.replace(/^{/, `${decamelize(this.tag)} {`);
+        return `${inspect(props, options)}`.replace(/^\{/, `${decamelize(this.tag)} {`);
     }
 }
 

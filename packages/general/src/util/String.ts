@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -104,7 +104,7 @@ export function serialize(value: any) {
     const visited = new Set();
 
     function asValidKey(key: string) {
-        if (key.match(/[a-z_$][a-z_$0-9]*/i)) {
+        if (key.match(/[a-z_$][\w$]*/i)) {
             return key;
         }
         return JSON.stringify(key);

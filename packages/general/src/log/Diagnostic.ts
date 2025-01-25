@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -550,7 +550,7 @@ function messageAndStackFor(error: any, parentStack?: string[]) {
     // Spiff up stack lines a bit
     const stack = Array<unknown>();
     for (const line of stackLines) {
-        const match1 = line.match(/^at\s+(?:(.+)\s+\(([^)]+)\)|(<anonymous>))$/);
+        const match1 = line.match(/^at\s+(?:(\S|\S.*\S)\s+\(([^)]+)\)|(<anonymous>))$/);
         if (match1) {
             const value = [Diagnostic.weak("at "), match1[1] ?? match1[3]];
             if (match1[2] !== undefined) {
@@ -560,7 +560,7 @@ function messageAndStackFor(error: any, parentStack?: string[]) {
             continue;
         }
 
-        const match2 = line.match(/^at\s+(.+)(:\d+:\d+)$/);
+        const match2 = line.match(/^at\s+(\S.*)(:\d+:\d+)$/);
         if (match2) {
             stack.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
             continue;

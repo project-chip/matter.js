@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -95,7 +95,7 @@ export function* scanDocument(docRef: HtmlReference) {
                     const text = Str(element).replace(/\s*\([^)]+\)\s*/g, " ");
 
                     // Test for "heading" shapes with a numerical prefix followed by a label
-                    if (text?.match(/^\d+\.(\d+\.)+ [ a-zA-Z0-9]+$/) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
+                    if (text?.match(/^\d+\.(\d+\.)+ [ a-z0-9]+$/i) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
                         let possibleHeading = parseHeading(element);
 
                         // Ignore links elsewhere.  This occurs in TOC entries.  If this gets too fiddly then we can

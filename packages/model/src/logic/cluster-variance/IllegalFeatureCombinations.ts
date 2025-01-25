@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -190,11 +190,11 @@ function addFeatureNode(
             if (node.param.num > 1) {
                 unsupported();
             }
-            let choice = choices[node.param.name];
+            const choice = choices[node.param.name];
             if (choice) {
                 choice.features.push(feature.name);
             } else {
-                choice = choices[node.param.name] = {
+                choices[node.param.name] = choices[node.param.name] = {
                     exclusive: !node.param.orMore,
                     features: [feature.name],
                 };

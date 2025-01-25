@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,13 +29,18 @@ export function DatasourceStore(
         initialValues,
 
         async set(transaction: Transaction, values: Val.Struct) {
+            if (behaviorId === "__proto__") {
+                return;
+            }
             const participant = participantFor(transaction, endpointStore);
             if (!participant.mutations) {
                 participant.mutations = {};
             }
             const behaviorMutations = participant.mutations[behaviorId];
             if (behaviorMutations) {
-                Object.assign(behaviorMutations, values);
+                for (const key in values) {
+                    behaviorMutations[key] = values[key];
+                }
             } else {
                 participant.mutations[behaviorId] = { ...values };
             }

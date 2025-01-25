@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -331,10 +331,8 @@ export class Behaviors {
      * Behaviors that fail initialization will be marked with crashed {@link status}.
      */
     activate(type: Behavior.Type, agent: Agent) {
-        let backing = this.#backings[type.id];
-
-        if (!backing) {
-            backing = this.#createBacking(type, agent);
+        if (!this.#backings[type.id]) {
+            this.#createBacking(type, agent);
         }
     }
 

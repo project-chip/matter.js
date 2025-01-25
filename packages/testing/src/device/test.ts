@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -84,7 +84,7 @@ export namespace Test {
         return name
             .toLowerCase()
             .split("_")
-            .map(segment => (segment.match(/^[0-9]+$/) ? segment.padStart(8, "0") : segment))
+            .map(segment => (segment.match(/^\d+$/) ? segment.padStart(8, "0") : segment))
             .join("_");
     }
 }

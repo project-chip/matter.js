@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -266,9 +266,15 @@ export function structureReadAttributeDataToClusterObject(data: DecodedAttribute
         value,
     } of data) {
         if (structure[endpointId] === undefined) {
+            if ((endpointId as any) === "__proto__") {
+                continue;
+            }
             structure[endpointId] = {};
         }
         if (structure[endpointId][clusterId] === undefined) {
+            if ((clusterId as any) === "__proto__") {
+                continue;
+            }
             structure[endpointId][clusterId] = {};
         }
         structure[endpointId][clusterId][attributeName] = value;
