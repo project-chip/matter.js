@@ -185,9 +185,10 @@ export class ExchangeManager {
         await MatterAggregateError.allSettled(this.#closers, "Error closing exchanges").catch(error =>
             logger.error(error),
         );
-        await MatterAggregateError.allSettled(this.#exchanges.values(), "Error closing exchanges").catch(error =>
-            logger.error(error),
-        );
+        await MatterAggregateError.allSettled(
+            Array.from(this.#exchanges.values()).map(exchange => exchange.close(true)),
+            "Error closing exchanges",
+        ).catch(error => logger.error(error));
         this.#exchanges.clear();
     }
 
