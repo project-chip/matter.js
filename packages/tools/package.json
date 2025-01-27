@@ -63,7 +63,7 @@
     },
     "devDependencies": {
         "@types/minimatch": "^5.1.2",
-        "@types/node": "^22.10.1"
+        "@types/node": "^22.10.10"
     },
     "publishConfig": {
         "access": "public"
