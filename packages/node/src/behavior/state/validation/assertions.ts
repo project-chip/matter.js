@@ -6,8 +6,7 @@
 
 import { isObject } from "#general";
 import { SchemaErrorPath } from "#model";
-import { DatatypeError } from "../../errors.js";
-import { Val } from "../Val.js";
+import { DatatypeError, Val } from "#protocol";
 
 export function assertNumber(value: Val, path: SchemaErrorPath): asserts value is number {
     if (Number.isFinite(value)) {

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -24,3 +25,5 @@ export const TlvWriteRequest = TlvObject({
     moreChunkedMessages: TlvOptionalField(3, TlvBoolean),
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
+
+export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;

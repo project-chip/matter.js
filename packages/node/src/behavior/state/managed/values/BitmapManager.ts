@@ -5,12 +5,11 @@
  */
 
 import { camelize, GeneratedClass, isObject } from "#general";
+import type { Schema } from "#model";
 import { DataModelPath, FeatureMap, ValueModel } from "#model";
-import { ConstraintError, PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
+import { ConstraintError, PhantomReferenceError, SchemaImplementationError, Val } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 import { assertBoolean, assertNumber } from "../../validation/assertions.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";

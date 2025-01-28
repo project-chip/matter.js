@@ -6,6 +6,7 @@
 
 import { commander } from "../util/commander.js";
 import { Package } from "../util/package.js";
+import { reportCycles } from "./cycles.js";
 import { buildDocs, mergeDocs } from "./docs.js";
 import { Graph } from "./graph.js";
 import { ProjectBuilder, Target } from "./project-builder.js";
@@ -19,6 +20,7 @@ enum Mode {
     DisplayGraph,
     BuildDocs,
     SyncTsconfigs,
+    Circular,
 }
 
 interface Args {
@@ -91,6 +93,13 @@ export async function main(argv = process.argv) {
             mode = Mode.BuildDocs;
         });
 
+    program
+        .command("cycles")
+        .description("find circular dependencies")
+        .action(() => {
+            mode = Mode.Circular;
+        });
+
     program.action(() => {});
 
     const args = program.parse(argv).opts<Args>();
@@ -144,7 +153,7 @@ export async function main(argv = process.argv) {
             break;
 
         case Mode.BuildDocs: {
-            const progress = pkg.start("Documenting");
+            using progress = pkg.start("Documenting");
             if (pkg.isWorkspace) {
                 const graph = await Graph.load();
                 for (const node of graph.nodes) {
@@ -155,6 +164,21 @@ export async function main(argv = process.argv) {
                 await mergeDocs(Package.workspace);
             } else {
                 await progress.run(pkg.name, () => buildDocs(pkg, progress));
+            }
+            break;
+        }
+
+        case Mode.Circular: {
+            using progress = pkg.start("Analyzing dependencies");
+            if (pkg.isWorkspace) {
+                const graph = await Graph.load();
+                for (const node of graph.nodes) {
+                    if (node.pkg.isLibrary) {
+                        await reportCycles(node.pkg, progress);
+                    }
+                }
+            } else {
+                await reportCycles(pkg, progress);
             }
             break;
         }

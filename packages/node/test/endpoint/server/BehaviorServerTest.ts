@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { OnOffServer } from "#behaviors/on-off";
 import { AccessControl } from "#clusters/access-control";
@@ -16,16 +15,13 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Bytes } from "#general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
 import {
-    ChannelManager,
     ExchangeManager,
     Fabric,
     FabricBuilder,
     FabricManager,
-    InteractionServerMessenger,
     Message,
     MessageExchange,
     MessageType,
-    SessionType,
 } from "#protocol";
 import {
     AttributeId,
@@ -40,20 +36,16 @@ import {
     TlvDataReport,
     TlvEnum,
     TlvField,
-    TlvInvokeRequest,
     TlvInvokeResponseData,
-    TlvInvokeResponseForSend,
     TlvNullable,
     TlvObject,
-    TlvReadRequest,
     TlvStatusResponse,
     TlvSubjectId,
-    TlvSubscribeRequest,
-    TlvWriteRequest,
     TypeFromSchema,
     VendorId,
 } from "#types";
 import { MockServerNode } from "../../node/mock-server-node.js";
+import { interaction } from "../../node/node-helpers.js";
 
 const ROOT_CERT = Bytes.fromHex(
     "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118",
@@ -104,111 +96,6 @@ class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetwo
     }
 }
 
-async function connect(node: MockServerNode, fabric: Fabric) {
-    const exchange = await node.createExchange({ fabric });
-
-    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
-
-    return { exchange, interactionServer };
-}
-
-async function performWrite(
-    node: MockServerNode,
-    fabric: Fabric,
-    request: TypeFromSchema<typeof TlvWriteRequest>["writeRequests"][number],
-) {
-    const { exchange, interactionServer } = await connect(node, fabric);
-
-    await interactionServer.handleWriteRequest(
-        exchange,
-        {
-            suppressResponse: true,
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            timedRequest: false,
-            writeRequests: [request],
-        },
-        {
-            packetHeader: { sessionType: SessionType.Unicast },
-        } as Message,
-    );
-}
-
-async function performRead(
-    node: MockServerNode,
-    fabric: Fabric,
-    isFabricFiltered: boolean,
-    request: Exclude<TypeFromSchema<typeof TlvReadRequest>["attributeRequests"], undefined>[number],
-) {
-    const { exchange, interactionServer } = await connect(node, fabric);
-
-    const result = await interactionServer.handleReadRequest(
-        exchange,
-        {
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            attributeRequests: [request],
-            isFabricFiltered: isFabricFiltered,
-        },
-        {
-            packetHeader: { sessionType: SessionType.Unicast },
-        } as Message,
-    );
-    const data = result.payload?.next();
-    return typeof data.value === "object" && "attributeData" in data.value
-        ? data.value.attributeData?.payload
-        : undefined;
-}
-
-const BarelyMockedMessenger = {
-    sendStatus: _code => {},
-    sendDataReport: async (_report, _forFabricFilteredRead) => {},
-    send: async (_type, _message) => {},
-    close: async () => {},
-} as InteractionServerMessenger;
-
-const BarelyMockedMessage = {
-    packetHeader: { sessionType: SessionType.Unicast },
-} as Message;
-
-async function performInvoke(
-    node: MockServerNode,
-    fabric: Fabric,
-    request: TypeFromSchema<typeof TlvInvokeRequest>["invokeRequests"][number],
-    responder: (value: TypeFromSchema<typeof TlvInvokeResponseData>) => void,
-) {
-    const { exchange, interactionServer } = await connect(node, fabric);
-
-    await interactionServer.handleInvokeRequest(
-        exchange,
-        {
-            invokeRequests: [request],
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            suppressResponse: false,
-            timedRequest: false,
-        },
-        {
-            ...BarelyMockedMessenger,
-            send: async (_type, message) => {
-                const response = TlvInvokeResponseForSend.decode(message).invokeResponses[0];
-                responder(TlvInvokeResponseData.decodeTlv(response));
-            },
-        } as InteractionServerMessenger,
-        BarelyMockedMessage,
-    );
-}
-
-async function performSubscribe(
-    node: MockServerNode,
-    fabric: Fabric,
-    request: TypeFromSchema<typeof TlvSubscribeRequest>,
-) {
-    const { exchange, interactionServer } = await connect(node, fabric);
-
-    const channelManager = node.env.get(ChannelManager);
-    channelManager.getChannel = () => exchange.channel;
-
-    await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
-}
-
 // This is AccessControl.AccessControlEntryStruct but not sure how to remove fabric index from payload so just
 // redefining for now
 const AcesWithoutFabric = TlvObject({
@@ -219,7 +106,7 @@ const AcesWithoutFabric = TlvObject({
 });
 
 async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchema<typeof AcesWithoutFabric>) {
-    await performWrite(node, fabric, {
+    await interaction.write(node, fabric, {
         path: {
             endpointId: EndpointNumber(0),
             clusterId: ClusterId(AccessControl.Cluster.id),
@@ -230,7 +117,7 @@ async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchem
 }
 
 async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: boolean) {
-    return await performRead(node, fabric, isFabricFiltered, {
+    return await interaction.read(node, fabric, isFabricFiltered, {
         endpointId: EndpointNumber(0),
         clusterId: AccessControl.Cluster.id,
         attributeId: AttributeId(AccessControl.Cluster.attributes.acl.id),
@@ -290,7 +177,7 @@ describe("BehaviorServer", () => {
         const fabric1 = await createFabric(node, 1);
 
         // Create a subscription to a couple of attributes and an event
-        await performSubscribe(node, fabric1, {
+        await interaction.subscribe(node, fabric1, {
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             isFabricFiltered: false,
             attributeRequests: [FABRICS_PATH, COMMISSIONED_FABRICS_PATH],
@@ -393,7 +280,7 @@ describe("BehaviorServer", () => {
 
         const fabric = await createFabric(node, 1);
 
-        const commands = await performRead(node, fabric, false, {
+        const commands = await interaction.read(node, fabric, false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(NetworkCommissioning.Cluster.id),
             attributeId: AttributeId(AcceptedCommandList.id),
@@ -403,7 +290,7 @@ describe("BehaviorServer", () => {
             NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId,
         ]);
 
-        const commandResponds = await performRead(node, fabric, false, {
+        const commandResponds = await interaction.read(node, fabric, false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(NetworkCommissioning.Cluster.id),
             attributeId: AttributeId(GeneratedCommandList.id),
@@ -421,7 +308,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const featureMap = await performRead(node, await createFabric(node, 1), false, {
+        const featureMap = await interaction.read(node, await createFabric(node, 1), false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(OnOff.Cluster.id),
             attributeId: AttributeId(FeatureMap.id),
@@ -452,7 +339,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        await performInvoke(
+        await interaction.invoke(
             node,
             await createFabric(node, 1),
             {

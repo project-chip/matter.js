@@ -5,12 +5,11 @@
  */
 
 import { camelize } from "#general";
-import { Access, FieldModel, Scope } from "#model";
+import { Access, FieldModel, Schema, Scope } from "#model";
+import type { Val } from "#protocol";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
-import type { Val } from "../state/Val.js";
 import { RootSupervisor } from "./RootSupervisor.js";
-import { Schema } from "./Schema.js";
 
 /**
  * Create a {@link RootSupervisor} for a {@link Behavior}.

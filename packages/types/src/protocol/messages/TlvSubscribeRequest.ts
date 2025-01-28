@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -41,3 +42,5 @@ export const TlvSubscribeRequest = TlvObject({
     dataVersionFilters: TlvOptionalField(8, TlvArray(TlvDataVersionFilter)),
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
+
+export type SubscribeRequest = TypeFromSchema<typeof TlvSubscribeRequest>;

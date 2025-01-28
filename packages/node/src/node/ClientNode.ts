@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { Identity, Lifecycle, MaybePromise, NotImplementedError } from "#general";
+import { Interactable } from "@matter/protocol";
 import { ClientEndpointInitializer } from "./client/ClientEndpointInitializer.js";
 import { Node } from "./Node.js";
 import type { ServerNode } from "./ServerNode.js";
@@ -78,6 +80,11 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
         }
 
         return (super.act as any)(actorOrPurpose, actor);
+    }
+
+    get interaction(): Interactable<ActionContext> {
+        // TODO
+        throw new NotImplementedError();
     }
 }
 

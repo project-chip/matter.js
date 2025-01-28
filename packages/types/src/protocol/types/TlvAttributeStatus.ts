@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvAttributePath } from "./TlvAttributePath.js";
 import { TlvStatus } from "./TlvStatus.js";
@@ -15,3 +16,5 @@ export const TlvAttributeStatus = TlvObject({
     path: TlvField(0, TlvAttributePath),
     status: TlvField(1, TlvStatus),
 });
+
+export type AttributeStatus = TypeFromSchema<typeof TlvAttributeStatus>;

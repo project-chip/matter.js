@@ -155,12 +155,16 @@ export class Progress {
         std.out.write(`    ${ansi.yellow("Warning:")} ${text}\n`);
     }
 
-    shutdown() {
+    close() {
         if (this.#refreshInterval) {
             clearInterval(this.#refreshInterval);
             this.#refreshInterval = undefined;
         }
         writeStatus("");
+    }
+
+    [Symbol.dispose]() {
+        this.close();
     }
 
     refresh() {

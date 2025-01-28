@@ -88,6 +88,9 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
                 options.subject = NodeId(0);
             }
         }
+        if (!options.node) {
+            options.node = this;
+        }
         return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
     }
 

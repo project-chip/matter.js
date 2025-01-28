@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ControllerBehavior } from "#behavior/system/controller/ControllerBehavior.js";
 import { EventsBehavior } from "#behavior/system/events/EventsBehavior.js";
@@ -14,7 +15,7 @@ import { SessionsBehavior } from "#behavior/system/sessions/SessionsBehavior.js"
 import { Endpoint } from "#endpoint/Endpoint.js";
 import type { Environment } from "#general";
 import { Construction, DiagnosticSource, Identity, MatterError, asyncNew, errorOf } from "#general";
-import { FabricManager, OccurrenceManager, SessionManager } from "#protocol";
+import { FabricManager, Interactable, OccurrenceManager, ServerInteraction, SessionManager } from "#protocol";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoints/root.js";
 import { Node } from "./Node.js";
 import { ClientNodes } from "./client/ClientNodes.js";
@@ -38,6 +39,7 @@ class FactoryResetError extends MatterError {
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
     #nodes?: ClientNodes;
+    #interaction?: Interactable<ActionContext>;
 
     /**
      * Construct a new ServerNode.
@@ -161,6 +163,13 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         }
 
         return this.#nodes;
+    }
+
+    get interaction() {
+        if (this.#interaction === undefined) {
+            this.#interaction = new ServerInteraction<ActionContext>(this.protocol);
+        }
+        return this.#interaction;
     }
 
     async advertiseNow() {

@@ -6,7 +6,7 @@
 
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
-import { Endpoint } from "#endpoint/Endpoint.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
 import { ImplementationError } from "#general";
 
 /**

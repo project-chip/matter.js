@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningDiscovery, ContinuousDiscovery, Discovery, InstanceDiscovery } from "#behavior/index.js";
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
+import { CommissioningDiscovery } from "#behavior/system/controller/discovery/CommissioningDiscovery.js";
+import { ContinuousDiscovery } from "#behavior/system/controller/discovery/ContinuousDiscovery.js";
+import { Discovery } from "#behavior/system/controller/discovery/Discovery.js";
+import { InstanceDiscovery } from "#behavior/system/controller/discovery/InstanceDiscovery.js";
 import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
 import { CancelablePromise, Lifespan, Time } from "#general";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";

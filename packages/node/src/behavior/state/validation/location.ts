@@ -5,7 +5,7 @@
  */
 
 import { DataModelPath } from "#model";
-import { Val } from "../Val.js";
+import { Val } from "#protocol";
 
 /**
  * Contextual information tracked during validation.

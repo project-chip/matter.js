@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 
@@ -14,3 +15,5 @@ export const TlvTimedRequest = TlvObject({
     timeout: TlvField(0, TlvUInt16),
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
+
+export type TimedRequest = TypeFromSchema<typeof TlvTimedRequest>;

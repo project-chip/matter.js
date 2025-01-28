@@ -6,11 +6,11 @@
 
 import type { Agent } from "#endpoint/Agent.js";
 import { AsyncObservable, EventEmitter, ImplementationError, MaybePromise, Observable } from "#general";
+import type { Schema } from "#model";
 import { ClusterComposer, ClusterType, ElementModifier, TypeFromBitSchema } from "#types";
 import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
-import { Schema } from "../supervision/Schema.js";
 import { NetworkBehavior } from "../system/network/NetworkBehavior.js";
 import { ExtensionInterfaceOf, createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
 import type { ClusterEvents } from "./ClusterEvents.js";

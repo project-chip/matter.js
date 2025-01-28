@@ -13,18 +13,14 @@ import {
     Logger,
     MaybePromise,
     Observable,
+    Transaction,
 } from "#general";
-import { AccessLevel, DataModelPath } from "#model";
-import { ClusterId } from "#types";
-import { AccessControl } from "../../AccessControl.js";
-import { ExpiredReferenceError } from "../../errors.js";
+import { AccessLevel } from "#model";
+import type { Val } from "#protocol";
+import { AccessControl, ExpiredReferenceError } from "#protocol";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
-import type { Val } from "../Val.js";
-import { Resource } from "../transaction/Resource.js";
-import { Transaction } from "../transaction/Transaction.js";
-import { ReadOnlyTransaction } from "../transaction/Tx.js";
 
 const logger = Logger.get("Datasource");
 
@@ -37,7 +33,7 @@ const FEATURES_KEY = "__features__";
  * Datasources maintain a version number and triggers change events.  If modified in a transaction they compute changes
  * and persist values as necessary.
  */
-export interface Datasource<T extends StateType = StateType> extends Resource {
+export interface Datasource<T extends StateType = StateType> extends Transaction.Resource {
     /**
      * Create a managed version of the source data.
      */
@@ -57,6 +53,11 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
      * Obtain a read-only view of values.
      */
     readonly view: InstanceType<T>;
+
+    /**
+     * Path used in diagnostic messages.
+     */
+    location: AccessControl.Location;
 }
 
 /**
@@ -69,19 +70,23 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
     return {
         toString() {
-            return internals.path.toString();
+            return internals.location.path.toString();
         },
 
         reference(session: ValueSupervisor.Session) {
-            let context = internals.sessions?.get(session);
-            if (!context) {
-                context = createSessionContext(this, internals, session);
+            let ref = internals.sessions?.get(session);
+            if (!ref) {
+                ref = createReference(this, internals, session);
             }
-            return context.managed as InstanceType<T>;
+            return ref.managed as InstanceType<T>;
         },
 
         get version() {
             return internals.version;
+        },
+
+        get location() {
+            return internals.location;
         },
 
         validate(session: ValueSupervisor.Session, values?: Val.Struct) {
@@ -89,19 +94,21 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             if (!validate) {
                 return;
             }
-            validate(values ?? internals.values, session, { path: internals.path });
+            validate(values ?? internals.values, session, { path: internals.location.path });
         },
 
         get view() {
             if (!readOnlyView) {
                 const session: ValueSupervisor.Session = {
                     offline: true,
-                    authorizedFor(desiredAccessLevel: AccessLevel) {
-                        return desiredAccessLevel === AccessLevel.View;
+                    authorityAt(desiredAccessLevel: AccessLevel) {
+                        return desiredAccessLevel === AccessLevel.View
+                            ? AccessControl.Authority.Granted
+                            : AccessControl.Authority.Unauthorized;
                     },
-                    transaction: ReadOnlyTransaction,
+                    transaction: Transaction.ReadOnly,
                 };
-                readOnlyView = createSessionContext(this, internals, session).managed as InstanceType<T>;
+                readOnlyView = createReference(this, internals, session).managed as InstanceType<T>;
             }
             return readOnlyView;
         },
@@ -134,9 +141,9 @@ export namespace Datasource {
         supervisor: RootSupervisor;
 
         /**
-         * Path used in diagnostic messages.
+         * Data model location, used for access control and diagnostics.
          */
-        path: DataModelPath;
+        location: AccessControl.Location;
 
         /**
          * Events triggered automatically.
@@ -156,11 +163,6 @@ export namespace Datasource {
          * Optional storage for non-volatile values.
          */
         store?: Store;
-
-        /**
-         * The cluster used for access control checks.
-         */
-        cluster?: ClusterId;
 
         /**
          * The object that owns the datasource.  This is passed as the "owner" parameter to {@link Val.Dynamic}.
@@ -203,8 +205,6 @@ interface SessionContext {
  * Internal datasource state.
  */
 interface Internals extends Datasource.Options {
-    path: DataModelPath;
-    cluster?: ClusterId;
     values: Val.Struct;
     version: number;
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
@@ -234,7 +234,7 @@ function configure(options: Datasource.Options): Internals {
         const storedFeaturesKey = storedValues?.[FEATURES_KEY];
         if (storedFeaturesKey !== undefined && storedFeaturesKey !== featuresKey) {
             logger.warn(
-                `Ignoring persisted values for ${options.path} because features changed from "${storedFeaturesKey}" to "${featuresKey}"`,
+                `Ignoring persisted values for ${options.location.path} because features changed from "${storedFeaturesKey}" to "${featuresKey}"`,
             );
             storedValues = undefined;
         }
@@ -261,7 +261,7 @@ function configure(options: Datasource.Options): Internals {
 
         interactionObserver() {
             function handleObserverError(error: any) {
-                logger.error(`Error in ${options.path} observer:`, error);
+                logger.error(`Error in ${options.location.path} observer:`, error);
             }
 
             try {
@@ -281,7 +281,7 @@ function configure(options: Datasource.Options): Internals {
  *
  * This reference provides external access to the {@link Val.Struct} in the context of a specific session.
  */
-function createSessionContext(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
+function createReference(resource: Transaction.Resource, internals: Internals, session: ValueSupervisor.Session) {
     let values = internals.values;
     let precommitValues: Val.Struct | undefined;
     let changes: CommitChanges | undefined;
@@ -289,7 +289,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
 
     const participant = {
         toString() {
-            return internals.path.toString();
+            return internals.location.path.toString();
         },
         preCommit,
         commit1,
@@ -307,7 +307,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
                 rollback();
             } catch (e) {
                 logger.error(
-                    `Error resetting reference to ${internals.path} after reset of transaction ${transaction.via}:`,
+                    `Error resetting reference to ${internals.location.path} after reset of transaction ${transaction.via}:`,
                     e,
                 );
             }
@@ -340,7 +340,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         },
 
         get location() {
-            return { path: internals.path, cluster: internals.cluster };
+            return internals.location;
         },
 
         set location(_loc: AccessControl.Location) {
@@ -412,7 +412,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
             refreshSubrefs();
         } catch (e) {
             logger.error(
-                `Error detaching reference to ${internals.path} from closed transaction ${transaction.via}:`,
+                `Error detaching reference to ${internals.location.path} from closed transaction ${transaction.via}:`,
                 e,
             );
         }
@@ -618,7 +618,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
                 mutations = session.trace.mutations = [];
             }
             mutations.push({
-                path: internals.path,
+                path: internals.location.path,
                 values: changes.persistent,
             });
         }

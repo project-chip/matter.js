@@ -67,12 +67,12 @@ export class Builder {
         try {
             await this.#doBuild(project, progress);
         } catch (e: any) {
-            progress.shutdown();
+            progress.close();
             process.stderr.write(`${e.stack ?? e.message}\n\n`);
             process.exit(1);
         }
 
-        progress.shutdown();
+        progress.close();
     }
 
     async #doBuild(project: Project, progress: Progress) {

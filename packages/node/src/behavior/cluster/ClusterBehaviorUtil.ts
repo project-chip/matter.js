@@ -5,6 +5,7 @@
  */
 
 import { AsyncObservable, camelize, GeneratedClass, ImplementationError } from "#general";
+import type { Schema } from "#model";
 import {
     ClusterModel,
     DefaultValue,
@@ -16,11 +17,10 @@ import {
     Scope,
     ValueModel,
 } from "#model";
+import { Val } from "#protocol";
 import { Attribute, ClusterType } from "#types";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
-import { Val } from "../state/Val.js";
-import { Schema } from "../supervision/Schema.js";
 import type { ClusterBehavior } from "./ClusterBehavior.js";
 import { ClusterBehaviorCache } from "./ClusterBehaviorCache.js";
 

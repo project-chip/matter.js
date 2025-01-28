@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
-import { Schema } from "#behavior/supervision/Schema.js";
+import type { Schema } from "#model";
+import { Val } from "#protocol";
 import { camelize } from "@matter/general";
 import { ClusterModel, Model, ValueModel } from "@matter/model";
 import { Internal } from "./Internal.js";

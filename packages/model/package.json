@@ -37,8 +37,8 @@
         "@noble/curves": "^1.8.1"
     },
     "devDependencies": {
-        "@matter/tools": "*",
-        "@matter/testing": "*"
+        "@matter/testing": "*",
+        "@matter/tools": "*"
     },
     "files": [
         "dist/**/*",

@@ -169,14 +169,17 @@ export abstract class BehaviorBacking {
 
     protected get datasourceOptions(): Datasource.Options {
         return {
-            path: this.#endpoint.path.at(this.#type.id).at("state"),
+            location: {
+                path: this.#endpoint.path.at(this.#type.id).at("state"),
+                endpoint: this.#endpoint.number,
+                cluster: this.type.schema?.tag === "cluster" ? (this.type.schema.id as ClusterId) : undefined,
+            },
             supervisor: this.type.supervisor,
             type: this.type.State,
             events: this.events as unknown as Datasource.Events,
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
             owner: this.#endpoint,
-            cluster: this.type.schema?.tag === "cluster" ? (this.type.schema.id as ClusterId) : undefined,
         };
     }
 
@@ -237,6 +240,23 @@ export abstract class BehaviorBacking {
             this.#reactors = new Reactors(this);
         }
         this.#reactors.add(observable, reactor, options);
+    }
+
+    /**
+     * Terminate reactions.
+     */
+    async stopReacting(selector?: { observable?: Observable; reactor?: Reactor }) {
+        if (this.#reactors === undefined) {
+            return;
+        }
+
+        if (selector?.observable === undefined && selector?.reactor === undefined) {
+            await this.#reactors.close();
+            this.#reactors = undefined;
+            return;
+        }
+
+        await this.#reactors.remove(selector);
     }
 
     /**

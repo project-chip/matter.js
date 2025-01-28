@@ -6,13 +6,11 @@
 
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { camelize } from "#general";
+import type { Schema } from "#model";
 import { Conformance, DataModelPath, FeatureSet, FieldValue, Metatype, ValueModel } from "#model";
-import { AccessControl } from "../../AccessControl.js";
-import { ConformanceError, SchemaImplementationError } from "../../errors.js";
-import { Schema } from "../../supervision/Schema.js";
+import { AccessControl, ConformanceError, SchemaImplementationError, Val } from "#protocol";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NameResolver } from "../managed/NameResolver.js";
-import { Val } from "../Val.js";
 import {
     Code,
     ConformantNode,

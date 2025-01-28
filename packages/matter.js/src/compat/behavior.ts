@@ -5,7 +5,6 @@
  */
 
 export {
-    AccessControl,
     Behavior,
     ClusterBehavior,
     CommissioningServer as CommissioningBehavior,

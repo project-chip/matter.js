@@ -434,7 +434,7 @@ export class ObservableProxy extends BasicObservable {
 
         Object.defineProperty(this.#emitter, observant, {
             get() {
-                return this.isObserved;
+                return super.isObserved;
             },
         });
 

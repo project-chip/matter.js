@@ -19,4 +19,4 @@ await progress.run("@project-chip/matter.js", generateProjectChipMatterjsForward
 
 await progress.run("@matter/main", generateMatterjsMainForwards);
 
-progress.shutdown();
+progress.close();
