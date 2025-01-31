@@ -6,7 +6,9 @@
 
 import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#general";
 import {
+    BaseDataReport,
     DataReportPayload,
+    DataReportPayloadGenerator,
     FabricManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -919,6 +921,27 @@ const wildcardTestCases: {
     }, // all filtered
 ];
 
+function fillIterableDataReport(data: {
+    dataReport: BaseDataReport;
+    payload: DataReportPayloadGenerator;
+}): DataReportPayload {
+    const { dataReport: report, payload } = data;
+    const dataReport: DataReportPayload = { ...report };
+
+    if (payload !== undefined) {
+        for (const payloadItem of payload) {
+            if ("attributeData" in payloadItem || "attributeStatus" in payloadItem) {
+                dataReport.attributeReportsPayload = dataReport.attributeReportsPayload ?? [];
+                dataReport.attributeReportsPayload.push(payloadItem);
+            } else if ("eventData" in payloadItem || "eventStatus" in payloadItem) {
+                dataReport.eventReportsPayload = dataReport.eventReportsPayload ?? [];
+                dataReport.eventReportsPayload.push(payloadItem);
+            }
+        }
+    }
+    return dataReport;
+}
+
 describe("InteractionProtocol", () => {
     let realGetRandomData = Crypto.get().getRandomData;
 
@@ -1042,7 +1065,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
         });
 
         it("replies with attributes and events using (unused) version filter", async () => {
@@ -1057,7 +1080,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
         });
 
         it("replies with attributes and events with active version filter", async () => {
@@ -1072,7 +1095,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE_WITH_FILTER);
         });
 
         for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
@@ -1110,7 +1133,7 @@ describe("InteractionProtocol", () => {
                     DummyUnicastMessage,
                 );
 
-                assert.deepEqual(result.attributeReportsPayload?.length, count);
+                assert.deepEqual(fillIterableDataReport(result).attributeReportsPayload?.length || 0, count);
             });
         }
     });

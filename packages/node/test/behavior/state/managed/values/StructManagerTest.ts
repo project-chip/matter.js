@@ -79,7 +79,7 @@ async function testDuality(life: boolean, actor: (struct: { alive?: boolean }) =
 
     const datasource = Datasource({ type: SchrödingersCatsState, supervisor, path: DataModelPath(0) });
 
-    await OfflineContext.act("test", undefined, cx => {
+    OfflineContext.act("test", undefined, cx => {
         actor(datasource.reference(cx));
     });
 }

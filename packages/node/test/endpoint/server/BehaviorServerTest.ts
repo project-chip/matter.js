@@ -151,8 +151,7 @@ async function performRead(
             packetHeader: { sessionType: SessionType.Unicast },
         } as Message,
     );
-
-    return result.attributeReportsPayload?.[0]?.attributeData?.payload;
+    return (result.payload?.next().value as any)?.attributeData?.payload;
 }
 
 const BarelyMockedMessenger = {
@@ -283,6 +282,10 @@ describe("BehaviorServer", () => {
 
         const fabric1 = await createFabric(node, 1);
 
+        // The new fabric needs some internal time to be ready and usable for a subscription
+        await MockTime.yield3();
+        await MockTime.yield3();
+
         // Create a subscription to a couple of attributes and an event
         await performSubscribe(node, fabric1, {
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -336,16 +339,14 @@ describe("BehaviorServer", () => {
         expect(report?.attributeReports?.length).equals(2);
         expect(report?.eventReports).equals(undefined);
 
-        // Confirm the second report is for Fabrics (because of async-ness is a bit delayed)
-        const fabricsReport = report?.attributeReports?.[1]?.attributeData;
+        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
         const decodedFabrics =
             fabricsReport?.data &&
             OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
         expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        // Confirm the first report is for CommissionedFabrics
-        const commissionedFabricsReport = report?.attributeReports?.[0]?.attributeData;
+        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
         expect(
             commissionedFabricsReport?.data &&
