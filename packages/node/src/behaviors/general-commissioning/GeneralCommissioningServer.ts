@@ -46,7 +46,10 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
     /** As required by Commissioning Flows any new PASE session needs to arm the failsafe for 60s. */
     async #handleAddedPaseSessions(session: SecureSession) {
-        if (!session.isPase) {
+        if (
+            !session.isPase || // Only PASE sessions
+            session.fabric !== undefined // That does not have an assigned fabric (can never happen in real usecases)
+        ) {
             return;
         }
         logger.debug(`New PASE session added: ${session.id}. Arming Failsafe for 60s.`);
