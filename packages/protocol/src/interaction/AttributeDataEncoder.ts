@@ -68,7 +68,7 @@ export type DataReportPayload = BaseDataReport & {
 /**
  * Type for the DataReport Generator function to send all data
  */
-export type DataReportPayloadGenerator = Generator<EventOrAttributeDataPayload, boolean>;
+export type DataReportPayloadIterator = IterableIterator<EventOrAttributeDataPayload>;
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
 export function encodeAttributePayload(

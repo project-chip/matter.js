@@ -49,7 +49,7 @@ import {
     BaseDataReport,
     canAttributePayloadBeChunked,
     chunkAttributePayload,
-    DataReportPayloadGenerator,
+    DataReportPayloadIterator,
     encodeAttributePayload,
     encodeEventPayload,
     EventReportPayload,
@@ -184,7 +184,7 @@ export interface InteractionRecipient {
         exchange: MessageExchange,
         request: ReadRequest,
         message: Message,
-    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadGenerator }>;
+    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadIterator }>;
     handleWriteRequest(exchange: MessageExchange, request: WriteRequest, message: Message): Promise<WriteResponse>;
     handleSubscribeRequest(
         exchange: MessageExchange,
@@ -292,7 +292,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
     async sendDataReport(
         baseDataReport: BaseDataReport,
         forFabricFilteredRead: boolean,
-        payload?: DataReportPayloadGenerator,
+        payload?: DataReportPayloadIterator,
         waitForAck = true,
     ) {
         const { subscriptionId, suppressResponse, interactionModelRevision } = baseDataReport;
@@ -327,11 +327,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 if (attributeReportsToSend.length === 0 && eventReportsToSend.length === 0) {
                     const { done, value } = payload.next();
                     if (done) {
-                        if (value !== true) {
-                            // A non-true response when generator is done is an error
-                            logger.debug("Cancel DataReport sending because of non-true finish signal", value);
-                            return;
-                        }
                         // No more chunks to send
                         delete dataReport.moreChunkedMessages;
                         break;

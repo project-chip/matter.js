@@ -8,7 +8,7 @@ import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#g
 import {
     BaseDataReport,
     DataReportPayload,
-    DataReportPayloadGenerator,
+    DataReportPayloadIterator,
     FabricManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -923,7 +923,7 @@ const wildcardTestCases: {
 
 function fillIterableDataReport(data: {
     dataReport: BaseDataReport;
-    payload: DataReportPayloadGenerator;
+    payload: DataReportPayloadIterator;
 }): DataReportPayload {
     const { dataReport: report, payload } = data;
     const dataReport: DataReportPayload = { ...report };

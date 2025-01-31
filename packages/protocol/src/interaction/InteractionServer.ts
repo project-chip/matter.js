@@ -48,7 +48,7 @@ import {
     decodeListAttributeValueWithSchema,
     expandPathsInAttributeData,
 } from "./AttributeDataDecoder.js";
-import { DataReportPayloadGenerator, EventReportPayload } from "./AttributeDataEncoder.js";
+import { DataReportPayloadIterator, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     DataReport,
@@ -379,7 +379,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     /**
      * Returns an iterator that yields the data reports and events data for the given read request.
-     * It returns true on success. If an error is thrown the send is cancelled immediately.
      */
     *#iterateReadAttributesPaths(
         { attributeRequests, dataVersionFilters, isFabricFiltered }: ReadRequest,
@@ -525,15 +524,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 yield eventReport;
             }
         }
-
-        return true;
     }
 
     async handleReadRequest(
         exchange: MessageExchange,
         readRequest: ReadRequest,
         message: Message,
-    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadGenerator }> {
+    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadIterator }> {
         const { attributeRequests, eventRequests, isFabricFiltered, interactionModelRevision } = readRequest;
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${

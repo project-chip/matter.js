@@ -694,7 +694,6 @@ export class ServerSubscription extends Subscription {
     /**
      * Returns an iterator that yields the initial subscription data to be sent to the controller.
      * The iterator will yield all attributes and events that match the subscription criteria.
-     * It will return true when finished without an error which triggers the sending of the data.
      * A thrown exception will cancel the sending process immediately.
      * TODO: Streamline all this with the normal Read flow to also handle Concrete Path subscriptions with errors correctly
      */
@@ -796,8 +795,6 @@ export class ServerSubscription extends Subscription {
         }
 
         this.#lastUpdateTimeMs = Time.nowMs();
-
-        return true;
     }
 
     async sendInitialReport(messenger: InteractionServerMessenger) {
@@ -920,7 +917,6 @@ export class ServerSubscription extends Subscription {
     /**
      * Iterates over all attributes and events that have changed since the last update and sends them to
      * the controller.
-     * It will return true when finished without an error which triggers the sending of the data.
      * A thrown exception will cancel the sending process immediately.
      */
     *#iterateDataUpdate(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
@@ -948,7 +944,6 @@ export class ServerSubscription extends Subscription {
                 eventData: { path, eventNumber, priority, epochTimestamp, schema, payload },
             };
         }
-        return true;
     }
 
     private async sendUpdateMessage(
