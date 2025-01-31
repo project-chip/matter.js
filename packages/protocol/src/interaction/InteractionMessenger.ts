@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
+import {
+    Diagnostic,
+    InternalError,
+    Logger,
+    MatterFlowError,
+    NoResponseTimeoutError,
+    UnexpectedDataError,
+} from "#general";
 import { Specification } from "#model";
 import {
     Status,
@@ -38,11 +45,14 @@ import {
     UnexpectedMessageError,
 } from "../protocol/MessageExchange.js";
 import {
-    DataReportPayload,
+    AttributeReportPayload,
+    BaseDataReport,
     canAttributePayloadBeChunked,
     chunkAttributePayload,
+    DataReportPayloadGenerator,
     encodeAttributePayload,
     encodeEventPayload,
+    EventReportPayload,
 } from "./AttributeDataEncoder.js";
 
 export enum MessageType {
@@ -268,17 +278,16 @@ export class InteractionServerMessenger extends InteractionMessenger {
     }
 
     /**
-     * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
+     * Handle a DataReport with a Payload Iterator for a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean, waitForAck = true) {
-        const {
-            subscriptionId,
-            attributeReportsPayload,
-            eventReportsPayload,
-            suppressResponse,
-            interactionModelRevision,
-        } = dataReportPayload;
+    async sendDataReport(
+        baseDataReport: BaseDataReport,
+        forFabricFilteredRead: boolean,
+        payload?: DataReportPayloadGenerator,
+        waitForAck = true,
+    ) {
+        const { subscriptionId, suppressResponse, interactionModelRevision } = baseDataReport;
 
         const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
             subscriptionId,
@@ -288,85 +297,114 @@ export class InteractionServerMessenger extends InteractionMessenger {
             eventReports: undefined,
         };
 
-        if (attributeReportsPayload !== undefined || eventReportsPayload !== undefined) {
-            // TODO Add tag compressing once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+        try {
+            if (payload !== undefined) {
+                // TODO Add tag compressing once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+                dataReport.moreChunkedMessages = true; // Assume we have multiple chunks, also for size calculation
+                const emptyDataReportBytes = TlvDataReportForSend.encode(dataReport);
 
-            const attributeReportsToSend = [...(attributeReportsPayload ?? [])];
-            const eventReportsToSend = [...(eventReportsPayload ?? [])];
+                const sendAndResetReport = async () => {
+                    await this.sendDataReportMessage(dataReport, waitForAck);
+                    delete dataReport.attributeReports;
+                    delete dataReport.eventReports;
+                    messageSize = emptyDataReportBytes.length + 3; // We add 3 bytes because either one of the both removed arrays will be added or it is the last message and we don't care
+                };
+                let messageSize = emptyDataReportBytes.length;
 
-            dataReport.moreChunkedMessages = true; // Assume we have multiple chunks, also for size calculation
-            const emptyDataReportBytes = TlvDataReportForSend.encode(dataReport);
+                let attributeReportsToSend = new Array<AttributeReportPayload>();
+                let eventReportsToSend = new Array<EventReportPayload>();
 
-            let firstAttributeAddedToReportMessage = false;
-            let firstEventAddedToReportMessage = false;
-            const sendAndResetReport = async () => {
-                await this.sendDataReportMessage(dataReport, waitForAck);
-                dataReport.attributeReports = undefined;
-                dataReport.eventReports = undefined;
-                messageSize = emptyDataReportBytes.length;
-                firstAttributeAddedToReportMessage = false;
-                firstEventAddedToReportMessage = false;
-            };
+                while (true) {
+                    // If we have no data to process we need to get the next chunk
+                    // If no more data is available we cancel the while loop and send final message
+                    if (attributeReportsToSend.length === 0 && eventReportsToSend.length === 0) {
+                        const { done, value } = payload.next();
+                        if (done) {
+                            if (value !== true) {
+                                // A non-true response when generator is done is an error
+                                logger.debug("Cancel DataReport sending because of non-true finish signal", value);
+                                return;
+                            }
+                            // No more chunks to send
+                            delete dataReport.moreChunkedMessages;
+                            break;
+                        }
+                        if (value === undefined) {
+                            continue;
+                        }
+                        if ("attributeData" in value || "attributeStatus" in value) {
+                            attributeReportsToSend = [value];
+                        } else if ("eventData" in value || "eventStatus" in value) {
+                            eventReportsToSend = [value];
+                        } else {
+                            payload.throw(new InternalError(`Invalid report type: ${value}`));
+                        }
+                    }
 
-            let messageSize = emptyDataReportBytes.length;
-            while (true) {
-                if (attributeReportsToSend.length > 0) {
-                    const attributeReport = attributeReportsToSend.shift();
-                    if (attributeReport !== undefined) {
-                        if (!firstAttributeAddedToReportMessage) {
-                            firstAttributeAddedToReportMessage = true;
+                    // If we have attribute data to send, we add them first
+                    if (attributeReportsToSend.length > 0) {
+                        const attributeReport = attributeReportsToSend.shift();
+                        if (attributeReport !== undefined) {
+                            if (dataReport.attributeReports === undefined) {
+                                messageSize += 3; // Array element is added now which needs 3 bytes
+                            }
+                            const allowMissingFieldsForNonFabricFilteredRead =
+                                !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
+                            const encodedAttribute = encodeAttributePayload(attributeReport, {
+                                allowMissingFieldsForNonFabricFilteredRead,
+                            });
+                            const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
+                            if (messageSize + attributeReportBytes > this.exchange.maxPayloadSize) {
+                                if (canAttributePayloadBeChunked(attributeReport)) {
+                                    // Attribute is a non-empty array: chunk it and add the chunks to the beginning of the queue
+                                    attributeReportsToSend.unshift(...chunkAttributePayload(attributeReport));
+                                    continue;
+                                }
+                                await sendAndResetReport();
+                            }
+                            messageSize += attributeReportBytes;
+                            if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
+                            dataReport.attributeReports.push(encodedAttribute);
+                        }
+                    } else if (eventReportsToSend.length > 0) {
+                        const eventReport = eventReportsToSend.shift();
+                        if (eventReport === undefined) {
+                            // No more chunks to send
+                            delete dataReport.moreChunkedMessages;
+                            break;
+                        }
+                        if (dataReport.eventReports === undefined) {
                             messageSize += 3; // Array element is added now which needs 3 bytes
                         }
                         const allowMissingFieldsForNonFabricFilteredRead =
-                            !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
-                        const encodedAttribute = encodeAttributePayload(attributeReport, {
+                            !forFabricFilteredRead && eventReport.hasFabricSensitiveData;
+                        const encodedEvent = encodeEventPayload(eventReport, {
                             allowMissingFieldsForNonFabricFilteredRead,
                         });
-                        const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
-                        if (messageSize + attributeReportBytes > this.exchange.maxPayloadSize) {
-                            if (canAttributePayloadBeChunked(attributeReport)) {
-                                // Attribute is a non-empty array: chunk it and add the chunks to the beginning of the queue
-                                attributeReportsToSend.unshift(...chunkAttributePayload(attributeReport));
-                                continue;
-                            }
+                        const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
+                        if (messageSize + eventReportBytes > this.exchange.maxPayloadSize) {
                             await sendAndResetReport();
                         }
-                        messageSize += attributeReportBytes;
-                        if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
-                        dataReport.attributeReports.push(encodedAttribute);
-                    }
-                } else if (eventReportsToSend.length > 0) {
-                    const eventReport = eventReportsToSend.shift();
-                    if (eventReport === undefined) {
+                        messageSize += eventReportBytes;
+                        if (dataReport.eventReports === undefined) dataReport.eventReports = [];
+                        dataReport.eventReports.push(encodedEvent);
+                    } else {
                         // No more chunks to send
                         delete dataReport.moreChunkedMessages;
                         break;
                     }
-                    if (!firstEventAddedToReportMessage) {
-                        firstEventAddedToReportMessage = true;
-                        messageSize += 3; // Array element is added now which needs 3 bytes
-                    }
-                    const allowMissingFieldsForNonFabricFilteredRead =
-                        !forFabricFilteredRead && eventReport.hasFabricSensitiveData;
-                    const encodedEvent = encodeEventPayload(eventReport, {
-                        allowMissingFieldsForNonFabricFilteredRead,
-                    });
-                    const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
-                    if (messageSize + eventReportBytes > this.exchange.maxPayloadSize) {
-                        await sendAndResetReport();
-                    }
-                    messageSize += eventReportBytes;
-                    if (dataReport.eventReports === undefined) dataReport.eventReports = [];
-                    dataReport.eventReports.push(encodedEvent);
-                } else {
-                    // No more chunks to send
-                    delete dataReport.moreChunkedMessages;
-                    break;
                 }
             }
-        }
 
-        await this.sendDataReportMessage(dataReport, waitForAck);
+            await this.sendDataReportMessage(dataReport, waitForAck);
+        } catch (e) {
+            // Rethrow any error that happens, either into the Generator or directly
+            if (payload !== undefined) {
+                payload.throw(e);
+            } else {
+                throw e;
+            }
+        }
     }
 
     async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>, waitForAck = true) {
