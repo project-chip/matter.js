@@ -171,7 +171,10 @@ export class TransactionalInteractionServer extends InteractionServer {
         if (context) {
             return context;
         } else {
-            throw new InternalError("Endpoint not found for ACL check. This should never happen.");
+            throw new StatusResponseError(
+                "Endpoint not found for ACL check. This should never happen.",
+                StatusCode.UnsupportedEndpoint,
+            );
         }
     }
 
@@ -185,33 +188,35 @@ export class TransactionalInteractionServer extends InteractionServer {
     ) {
         const readAttribute = () => super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
 
-        // Offline read do not require ACL checks
-        if (offline) {
-            return OfflineContext.act("offline-read", this.#activity, readAttribute);
-        }
-
         const endpoint = this.#endpointStructure.getEndpoint(path.endpointId);
         if (!endpoint) {
             throw new InternalError("Endpoint not found for ACL check. This should never happen.");
         }
 
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            endpointContext: this.#getAclEndpointContext(path.endpointId),
-            root: this.#endpoint,
-        }).act(readAttribute);
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttribute)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  endpointContext: this.#getAclEndpointContext(path.endpointId),
+                  root: this.#endpoint,
+              }).act(readAttribute);
+
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Reads should not return a promise.");
+        }
+        return result;
     }
 
     /**
      * Reads the attributes for the given endpoint.
      * This can currently only be used for subscriptions because errors are ignored!
      */
-    protected override readAttributesForEndpoint(
+    protected override readEndpointAttributesForSubscription(
         endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
         exchange: MessageExchange,
@@ -246,21 +251,22 @@ export class TransactionalInteractionServer extends InteractionServer {
             return result;
         };
 
-        // Offline read do not require ACL checks
-        if (offline) {
-            return OfflineContext.act("offline-read", this.#activity, readAttributes);
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttributes)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  endpointContext: this.#getAclEndpointContext(endpointId),
+                  root: this.#endpoint,
+              }).act(readAttributes);
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Online read should not return a promise.");
         }
-
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            endpointContext: this.#getAclEndpointContext(endpointId),
-            root: this.#endpoint,
-        }).act(readAttributes);
+        return result;
     }
 
     protected override async readEvent(

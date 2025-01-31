@@ -27,7 +27,11 @@ import { ContextAgents } from "./ContextAgents.js";
  */
 export function OnlineContext(options: OnlineContext.Options) {
     return {
-        act<T>(actor: (context: ActionContext) => T): T {
+        /**
+         * It can return a promise even if the actor method does not return a promise, so manual checks
+         * are needed.
+         */
+        act<T>(actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
             let agents: undefined | ContextAgents;
 
             let fabric: FabricIndex | undefined;
@@ -152,7 +156,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 const result = Transaction.act(via, actOnline);
                 if (MaybePromise.is(result)) {
                     isAsync = true;
-                    return Promise.resolve(result).catch(traceError).finally(close) as T;
+                    return Promise.resolve(result).catch(traceError).finally(close);
                 }
                 return result;
             } catch (e) {

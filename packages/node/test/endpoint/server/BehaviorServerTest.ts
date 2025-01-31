@@ -16,6 +16,7 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Bytes } from "#general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
 import {
+    ChannelManager,
     ExchangeManager,
     Fabric,
     FabricBuilder,
@@ -151,7 +152,10 @@ async function performRead(
             packetHeader: { sessionType: SessionType.Unicast },
         } as Message,
     );
-    return (result.payload?.next().value as any)?.attributeData?.payload;
+    const data = result.payload?.next();
+    return typeof data.value === "object" && "attributeData" in data.value
+        ? data.value.attributeData?.payload
+        : undefined;
 }
 
 const BarelyMockedMessenger = {
@@ -198,6 +202,9 @@ async function performSubscribe(
     request: TypeFromSchema<typeof TlvSubscribeRequest>,
 ) {
     const { exchange, interactionServer } = await connect(node, fabric);
+
+    const channelManager = node.env.get(ChannelManager);
+    channelManager.getChannel = () => exchange.channel;
 
     await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
 }
@@ -281,10 +288,6 @@ describe("BehaviorServer", () => {
         const node = await MockServerNode.createOnline();
 
         const fabric1 = await createFabric(node, 1);
-
-        // The new fabric needs some internal time to be ready and usable for a subscription
-        await MockTime.yield3();
-        await MockTime.yield3();
 
         // Create a subscription to a couple of attributes and an event
         await performSubscribe(node, fabric1, {

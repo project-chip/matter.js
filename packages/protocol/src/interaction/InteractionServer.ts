@@ -591,7 +591,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
      * Reads the attributes for the given endpoint.
      * This can currently only be used for subscriptions because errors are ignored!
      */
-    protected readAttributesForEndpoint(
+    protected readEndpointAttributesForSubscription(
         _endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
         exchange: MessageExchange,
@@ -1082,8 +1082,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             readAttribute: (path, attribute, offline) =>
                 this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
 
-            readAttributesForEndpoint: (endpointId, attributes) =>
-                this.readAttributesForEndpoint(endpointId, attributes, exchange, isFabricFiltered, message),
+            readEndpointAttributesForSubscription: (endpointId, attributes) =>
+                this.readEndpointAttributesForSubscription(endpointId, attributes, exchange, isFabricFiltered, message),
 
             readEvent: (path, event, eventFilters) =>
                 this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
