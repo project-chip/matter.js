@@ -350,13 +350,6 @@ export class ControllerCommissioningFlow {
             stepLogic: () => this.#certificates(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 9,
-            subStepNumber: 2,
-            name: "OperationalCredentials.UpdateFabricLabel",
-            stepLogic: () => this.#updateFabricLabel(),
-        });
-
         // TODO Step 10: TimeSynchronization.SetTrustedTimeSource if supported
 
         this.#commissioningSteps.push({
@@ -411,6 +404,13 @@ export class ControllerCommissioningFlow {
             subStepNumber: 1,
             name: "GeneralCommissioning.Complete",
             stepLogic: () => this.#completeCommissioning(),
+        });
+
+        this.#commissioningSteps.push({
+            stepNumber: 17, // Should be allowed in Step 9, but Tasmota is not supporting this
+            subStepNumber: 1,
+            name: "OperationalCredentials.UpdateFabricLabel",
+            stepLogic: () => this.#updateFabricLabel(),
         });
     }
 
