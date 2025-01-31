@@ -27,7 +27,7 @@ import { ContextAgents } from "./ContextAgents.js";
  */
 export function OnlineContext(options: OnlineContext.Options) {
     return {
-        act<T>(actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
+        act<T>(actor: (context: ActionContext) => T): T {
             let agents: undefined | ContextAgents;
 
             let fabric: FabricIndex | undefined;
@@ -152,7 +152,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 const result = Transaction.act(via, actOnline);
                 if (MaybePromise.is(result)) {
                     isAsync = true;
-                    return Promise.resolve(result).catch(traceError).finally(close);
+                    return Promise.resolve(result).catch(traceError).finally(close) as T;
                 }
                 return result;
             } catch (e) {

@@ -33,9 +33,9 @@ export const OfflineContext = {
     act<T>(
         purpose: string,
         activity: NodeActivity | undefined,
-        actor: (context: ActionContext) => MaybePromise<T>,
+        actor: (context: ActionContext) => T,
         options?: OfflineContext.Options,
-    ): MaybePromise<T> {
+    ): T {
         const id = nextInternalId;
         nextInternalId = (nextInternalId + 1) % 65535;
         const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
