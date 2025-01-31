@@ -696,6 +696,7 @@ export class ServerSubscription extends Subscription {
      * The iterator will yield all attributes and events that match the subscription criteria.
      * It will return true when finished without an error which triggers the sending of the data.
      * A thrown exception will cancel the sending process immediately.
+     * TODO: Streamline all this with the normal Read flow to also handle Concrete Path subscriptions with errors correctly
      */
     *#iterateInitialSubscriptionData(
         attributesToSend: {
