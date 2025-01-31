@@ -92,7 +92,7 @@ export class LegacyInteractionServer extends InteractionServer {
         }
     }
 
-    protected override async readAttribute(
+    protected override readAttribute(
         path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange,
@@ -104,7 +104,7 @@ export class LegacyInteractionServer extends InteractionServer {
         if (!offline) {
             this.#assertAccess(path, exchange, attribute.readAcl);
         }
-        const data = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        const data = super.readAttribute(path, attribute, exchange, isFabricFiltered, message);
         if (attribute instanceof FabricScopedAttributeServer && !isFabricFiltered) {
             const { value, version } = data;
             return {
