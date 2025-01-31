@@ -207,6 +207,58 @@ export class TransactionalInteractionServer extends InteractionServer {
         }).act(readAttribute);
     }
 
+    protected override readAttributesForEndpoint(
+        endpointId: EndpointNumber,
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
+        exchange: MessageExchange,
+        fabricFiltered: boolean,
+        message: Message,
+        offline = false,
+    ) {
+        const readAttributes = () => {
+            const result = new Array<{
+                path: AttributePath;
+                attribute: AnyAttributeServer<unknown>;
+                value: any;
+                version: number;
+            }>();
+            for (const { path, attribute } of attributes) {
+                try {
+                    const value = super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
+                    result.push({ path, attribute, value: value.value, version: value.version });
+                } catch (error) {
+                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                        logger.warn(
+                            `Permission denied reading attribute ${this.#endpointStructure.resolveAttributeName(path)}`,
+                        );
+                    } else {
+                        logger.warn(
+                            `Error reading attribute ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                            error,
+                        );
+                    }
+                }
+            }
+            return result;
+        };
+
+        // Offline read do not require ACL checks
+        if (offline) {
+            return OfflineContext.act("offline-read", this.#activity, readAttributes);
+        }
+
+        return OnlineContext({
+            activity: (exchange as WithActivity)[activityKey],
+            fabricFiltered,
+            message,
+            exchange,
+            tracer: this.#tracer,
+            actionType: ActionTracer.ActionType.Read,
+            endpointContext: this.#getAclEndpointContext(endpointId),
+            root: this.#endpoint,
+        }).act(readAttributes);
+    }
+
     protected override async readEvent(
         path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,

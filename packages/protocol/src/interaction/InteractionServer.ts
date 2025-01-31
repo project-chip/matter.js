@@ -570,6 +570,34 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         return attribute.getWithVersion(exchange.session, isFabricFiltered, offline ? undefined : message);
     }
 
+    protected readAttributesForEndpoint(
+        _endpointId: EndpointNumber,
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
+        exchange: MessageExchange,
+        isFabricFiltered: boolean,
+        message: Message,
+        offline = false,
+    ) {
+        const result = new Array<{
+            path: AttributePath;
+            attribute: AnyAttributeServer<unknown>;
+            value: any;
+            version: number;
+        }>();
+        for (const { path, attribute } of attributes) {
+            const { version, value } = this.readAttribute(
+                path,
+                attribute,
+                exchange,
+                isFabricFiltered,
+                message,
+                offline,
+            );
+            result.push({ path, value, version, attribute });
+        }
+        return result;
+    }
+
     protected async readEvent(
         _path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
@@ -577,7 +605,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
-        _endpoint: EndpointInterface,
     ) {
         return event.get(exchange.session, isFabricFiltered, message, eventFilters);
     }
@@ -773,16 +800,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                             : decodeListAttributeValueWithSchema(
                                   schema as ArraySchema<any>,
                                   [writeRequest],
-                                  (
-                                      await this.readAttribute(
-                                          path,
-                                          attribute,
-                                          exchange,
-                                          true,
-                                          message,
-                                          this.#endpointStructure.getEndpoint(endpointId)!,
-                                      )
-                                  ).value ?? defaultValue,
+                                  this.readAttribute(path, attribute, exchange, true, message).value ?? defaultValue,
                               );
                     logger.debug(
                         `Handle write request from ${
@@ -1028,26 +1046,13 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             structure: this.#endpointStructure,
 
             readAttribute: (path, attribute, offline) =>
-                this.readAttribute(
-                    path,
-                    attribute,
-                    exchange,
-                    isFabricFiltered,
-                    message,
-                    this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    offline,
-                ),
+                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
+
+            readAttributesForEndpoint: (endpointId, attributes) =>
+                this.readAttributesForEndpoint(endpointId, attributes, exchange, isFabricFiltered, message),
 
             readEvent: (path, event, eventFilters) =>
-                this.readEvent(
-                    path,
-                    eventFilters,
-                    event,
-                    exchange,
-                    isFabricFiltered,
-                    message,
-                    this.#endpointStructure.getEndpoint(path.endpointId)!,
-                ),
+                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
 
             initiateExchange: (address: PeerAddress, protocolId) => this.#context.initiateExchange(address, protocolId),
         };
