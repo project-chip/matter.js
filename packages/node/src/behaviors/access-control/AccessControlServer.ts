@@ -10,7 +10,7 @@ import { AccessControl as AccessControlTypes } from "#clusters/access-control";
 import { deepCopy, InternalError, isDeepEqual, Logger } from "#general";
 import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { AccessControlManager, EndpointInterface, FabricManager, IncomingSubjectDescriptor } from "#protocol";
+import { AccessControlManager, AclEndpointContext, FabricManager, IncomingSubjectDescriptor } from "#protocol";
 import {
     CaseAuthenticatedTag,
     ClusterId,
@@ -332,7 +332,7 @@ export class AccessControlServer extends AccessControlBehavior {
     accessLevelsFor(
         context: ActionContext,
         location: AccessControl.Location,
-        endpoint?: EndpointInterface,
+        endpoint?: AclEndpointContext,
     ): AccessLevel[] {
         if (location.cluster === undefined) {
             // Without a cluster, internal behaviors are only accessible internally so this is an irrelevant placeholder
@@ -385,7 +385,7 @@ export class AccessControlServer extends AccessControlBehavior {
         _aclList: AccessControlTypes.AccessControlEntry[],
         _aclEntry: AccessControlTypes.AccessControlEntry,
         _subjectDesc: IncomingSubjectDescriptor,
-        _endpoint: EndpointInterface,
+        _endpoint: AclEndpointContext,
         _clusterId: ClusterId,
     ) {
         return true;

@@ -10,7 +10,7 @@ import { EndpointType } from "#endpoint/type/EndpointType.js";
 import { Diagnostic, ImplementationError, InternalError, MaybePromise } from "#general";
 import { AccessLevel } from "#model";
 import type { Message } from "#protocol";
-import { assertSecureSession, EndpointInterface, MessageExchange } from "#protocol";
+import { AclEndpointContext, assertSecureSession, MessageExchange } from "#protocol";
 import { FabricIndex, NodeId, StatusResponseError, SubjectId } from "#types";
 import { AccessControlServer } from "../../../behaviors/access-control/AccessControlServer.js";
 import { RootEndpoint } from "../../../endpoints/root.js";
@@ -111,7 +111,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                         const accessLevels = accessControl.accessLevelsFor(
                             context as ActionContext,
                             location,
-                            options.endpoint,
+                            options.endpointContext,
                         );
                         location.accessLevels = accessLevels;
                         return accessLevels.includes(desiredAccessLevel);
@@ -180,7 +180,7 @@ export namespace OnlineContext {
         message?: Message;
         tracer?: ActionTracer;
         actionType?: ActionTracer.ActionType;
-        endpoint?: EndpointInterface;
+        endpointContext?: AclEndpointContext;
         root?: Endpoint<RootEndpoint>;
     } & (
         | { exchange: MessageExchange; fabric?: undefined; subject?: undefined }
