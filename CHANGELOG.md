@@ -9,6 +9,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/nodejs
+    - Fix: Added Workaround for IP family confusion in Node.js 18.0.0 till 18.3.0 
+
+-   @matter/protocol
+    - Adjustment: Moved the handling to set the fabric label during commissioning to after commissioningComplete to work around a Tasmota-Matter bug
+
 ## 0.12.1 (2025-01-25)
 
 -   @matter/protocol

@@ -158,5 +158,6 @@ export class NodeJsNetwork extends Network {
 
 function familyIs(version: number, { family }: NetworkInterfaceInfo) {
     // Node 18.0 - 18.3 reported family as a single digit number instead of the documented string
+    // TODO: Remove when killing Node.js 18 support after EOL
     return family === `IPv${version}` || `${family}` === `${version}`;
 }
