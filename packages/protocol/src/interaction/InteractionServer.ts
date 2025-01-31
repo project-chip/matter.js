@@ -587,6 +587,10 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         return attribute.getWithVersion(exchange.session, isFabricFiltered, offline ? undefined : message);
     }
 
+    /**
+     * Reads the attributes for the given endpoint.
+     * This can currently only be used for subscriptions because errors are ignored!
+     */
     protected readAttributesForEndpoint(
         _endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
@@ -602,15 +606,28 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             version: number;
         }>();
         for (const { path, attribute } of attributes) {
-            const { version, value } = this.readAttribute(
-                path,
-                attribute,
-                exchange,
-                isFabricFiltered,
-                message,
-                offline,
-            );
-            result.push({ path, value, version, attribute });
+            try {
+                const { version, value } = this.readAttribute(
+                    path,
+                    attribute,
+                    exchange,
+                    isFabricFiltered,
+                    message,
+                    offline,
+                );
+                result.push({ path, value, version, attribute });
+            } catch (error) {
+                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                    logger.warn(
+                        `Permission denied reading attribute ${this.#endpointStructure.resolveAttributeName(path)}`,
+                    );
+                } else {
+                    logger.warn(
+                        `Error reading attribute ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                        error,
+                    );
+                }
+            }
         }
         return result;
     }

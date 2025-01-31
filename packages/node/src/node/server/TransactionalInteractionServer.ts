@@ -207,6 +207,10 @@ export class TransactionalInteractionServer extends InteractionServer {
         }).act(readAttribute);
     }
 
+    /**
+     * Reads the attributes for the given endpoint.
+     * This can currently only be used for subscriptions because errors are ignored!
+     */
     protected override readAttributesForEndpoint(
         endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
