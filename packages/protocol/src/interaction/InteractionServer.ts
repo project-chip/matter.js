@@ -48,9 +48,10 @@ import {
     decodeListAttributeValueWithSchema,
     expandPathsInAttributeData,
 } from "./AttributeDataDecoder.js";
-import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import { DataReportPayloadGenerator, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
+    DataReport,
     InteractionRecipient,
     InteractionServerMessenger,
     InvokeRequest,
@@ -262,185 +263,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         await new InteractionServerMessenger(exchange).handleRequest(this);
     }
 
-    async handleReadRequest(
+    async #collectEventDataForRead(
+        { eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
         exchange: MessageExchange,
-        {
-            attributeRequests,
-            dataVersionFilters,
-            eventRequests,
-            eventFilters,
-            isFabricFiltered,
-            interactionModelRevision,
-        }: ReadRequest,
         message: Message,
-    ): Promise<DataReportPayload> {
-        logger.debug(
-            `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
-            }, events:${
-                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
-            } isFabricFiltered=${isFabricFiltered}`,
-        );
-
-        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
-            logger.debug(
-                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
-            );
-        }
-        if (attributeRequests === undefined && eventRequests === undefined) {
-            throw new StatusResponseError(
-                "Only Read requests with attributeRequests or eventRequests are supported right now",
-                StatusCode.UnsupportedRead,
-            );
-        }
-
-        if (message.packetHeader.sessionType !== SessionType.Unicast) {
-            throw new StatusResponseError(
-                "Subscriptions are only allowed on unicast sessions",
-                StatusCode.InvalidAction,
-            );
-        }
-
-        const dataVersionFilterMap = new Map<string, number>(
-            dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
-        );
-        if (dataVersionFilterMap.size > 0) {
-            logger.debug(
-                `DataVersionFilters: ${Array.from(dataVersionFilterMap.entries())
-                    .map(([path, version]) => `${path}=${version}`)
-                    .join(", ")}`,
-            );
-        }
-
-        const attributeReportsPayload = new Array<AttributeReportPayload>();
-        for (const requestPath of attributeRequests ?? []) {
-            validateReadAttributesPath(requestPath);
-
-            const attributes = this.#endpointStructure.getAttributes([requestPath]);
-
-            // Requested attribute path not found in any cluster server on any endpoint
-            if (attributes.length === 0) {
-                // TODO Add checks for nodeId -> UnknownNode
-                if (isConcreteAttributePath(requestPath)) {
-                    const { endpointId, clusterId, attributeId } = requestPath;
-                    // Concrete path, but still unknown for us, so generate the right error status
-                    try {
-                        this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
-                        throw new InternalError(
-                            "validateConcreteAttributePath should throw StatusResponseError but did not.",
-                        );
-                    } catch (e) {
-                        StatusResponseError.accept(e);
-                        logger.debug(
-                            `Error reading attribute from ${
-                                exchange.channel.name
-                            }: ${this.#endpointStructure.resolveAttributeName(requestPath)}: unsupported path: Status=${
-                                e.code
-                            }`,
-                        );
-                        attributeReportsPayload.push({
-                            hasFabricSensitiveData: false,
-                            attributeStatus: { path: requestPath, status: { status: e.code } },
-                        });
-                    }
-                }
-
-                // Wildcard path and we do not know any of the attributes: Ignore the error
-                logger.debug(
-                    `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                        requestPath,
-                    )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
-                );
-                continue;
-            }
-
-            // Process all known attributes for the given path
-            for (const { path, attribute } of attributes) {
-                const { nodeId, endpointId, clusterId } = path;
-
-                try {
-                    // We accept attributes not in the model ans readable, because existence is checked already
-                    if (getMatterModelClusterAttribute(clusterId, attribute.id)?.readable === false) {
-                        throw new StatusResponseError(
-                            `Attribute ${attribute.id} is not readable.`,
-                            StatusCode.UnsupportedRead,
-                        );
-                    }
-
-                    let value, version;
-                    try {
-                        ({ value, version } = await this.readAttribute(
-                            path,
-                            attribute,
-                            exchange,
-                            isFabricFiltered,
-                            message,
-                            this.#endpointStructure.getEndpoint(endpointId)!,
-                        ));
-                    } catch (e) {
-                        NoAssociatedFabricError.accept(e);
-
-                        // TODO: Remove when we remove legacy API
-                        //  This is not fully correct but should be sufficient for now
-                        //  This is fixed in the new API already, so this error should never throw
-                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
-                        //  Assume for now that in this place we only need to handle fabric sensitive case
-                        if (endpointId === undefined || clusterId === undefined) {
-                            throw new MatterFlowError("Should never happen");
-                        }
-                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
-                        if (cluster === undefined || cluster.datasource == undefined) {
-                            throw new MatterFlowError("Should never happen");
-                        }
-                        version = cluster.datasource.version;
-                        value = [];
-                    }
-
-                    const versionFilterValue =
-                        endpointId !== undefined && clusterId !== undefined
-                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                            : undefined;
-                    if (versionFilterValue !== undefined && versionFilterValue === version) {
-                        logger.debug(
-                            `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                                path,
-                            )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
-                        );
-                        continue;
-                    }
-
-                    logger.debug(
-                        `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            path,
-                        )}=${Logger.toJSON(value)} (version=${version})`,
-                    );
-
-                    const { schema } = attribute;
-                    attributeReportsPayload.push({
-                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                        attributeData: { path, dataVersion: version, payload: value, schema },
-                    });
-                } catch (error) {
-                    logger.error(
-                        `Error while reading attribute from ${
-                            exchange.channel.name
-                        } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
-                        error,
-                    );
-
-                    StatusResponseError.accept(error);
-
-                    // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
-                    if (isConcreteAttributePath(requestPath)) {
-                        attributeReportsPayload.push({
-                            hasFabricSensitiveData: false,
-                            attributeStatus: { path, status: { status: error.code } },
-                        });
-                    }
-                }
-            }
-        }
-
+    ) {
         let eventReportsPayload: undefined | EventReportPayload[];
         if (eventRequests) {
             eventReportsPayload = [];
@@ -486,7 +313,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 const reportsForPath = new Array<EventReportPayload>();
                 for (const { path, event } of events) {
                     try {
-                        const { endpointId } = path;
                         const matchingEvents = await this.readEvent(
                             path,
                             eventFilters,
@@ -494,7 +320,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                             exchange,
                             isFabricFiltered,
                             message,
-                            this.#endpointStructure.getEndpoint(endpointId)!,
                         );
                         logger.debug(
                             `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
@@ -549,22 +374,214 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 );
             }
         }
+        return eventReportsPayload;
+    }
+
+    /**
+     * Returns an iterator that yields the data reports and events data for the given read request.
+     * It returns true on success. If an error is thrown the send is cancelled immediately.
+     */
+    *#iterateReadAttributesPaths(
+        { attributeRequests, dataVersionFilters, isFabricFiltered }: ReadRequest,
+        eventReportsPayload: EventReportPayload[] | undefined,
+        exchange: MessageExchange,
+        message: Message,
+    ) {
+        const dataVersionFilterMap = new Map<string, number>(
+            dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
+        );
+        if (dataVersionFilterMap.size > 0) {
+            logger.debug(
+                `DataVersionFilters: ${Array.from(dataVersionFilterMap.entries())
+                    .map(([path, version]) => `${path}=${version}`)
+                    .join(", ")}`,
+            );
+        }
+
+        for (const requestPath of attributeRequests ?? []) {
+            validateReadAttributesPath(requestPath);
+
+            const attributes = this.#endpointStructure.getAttributes([requestPath]);
+
+            // Requested attribute path not found in any cluster server on any endpoint
+            if (attributes.length === 0) {
+                // TODO Add checks for nodeId -> UnknownNode
+                if (isConcreteAttributePath(requestPath)) {
+                    const { endpointId, clusterId, attributeId } = requestPath;
+                    // Concrete path, but still unknown for us, so generate the right error status
+                    try {
+                        this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                        throw new InternalError(
+                            "validateConcreteAttributePath should throw StatusResponseError but did not.",
+                        );
+                    } catch (e) {
+                        StatusResponseError.accept(e);
+                        logger.debug(
+                            `Error reading attribute from ${
+                                exchange.channel.name
+                            }: ${this.#endpointStructure.resolveAttributeName(requestPath)}: unsupported path: Status=${
+                                e.code
+                            }`,
+                        );
+                        yield {
+                            hasFabricSensitiveData: false,
+                            attributeStatus: { path: requestPath, status: { status: e.code } },
+                        };
+                    }
+                }
+
+                // Wildcard path and we do not know any of the attributes: Ignore the error
+                logger.debug(
+                    `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                        requestPath,
+                    )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
+                );
+                continue;
+            }
+
+            // Process all known attributes for the given path
+            for (const { path, attribute } of attributes) {
+                const { nodeId, endpointId, clusterId } = path;
+
+                try {
+                    // We accept attributes not in the model ans readable, because existence is checked already
+                    if (getMatterModelClusterAttribute(clusterId, attribute.id)?.readable === false) {
+                        throw new StatusResponseError(
+                            `Attribute ${attribute.id} is not readable.`,
+                            StatusCode.UnsupportedRead,
+                        );
+                    }
+
+                    let value, version;
+                    try {
+                        // TODO Optimize read later here too to optimize context usage
+                        ({ value, version } = this.readAttribute(path, attribute, exchange, isFabricFiltered, message));
+                    } catch (e) {
+                        NoAssociatedFabricError.accept(e);
+
+                        // TODO: Remove when we remove legacy API
+                        //  This is not fully correct but should be sufficient for now
+                        //  This is fixed in the new API already, so this error should never throw
+                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                        //  Assume for now that in this place we only need to handle fabric sensitive case
+                        if (endpointId === undefined || clusterId === undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
+                        if (cluster === undefined || cluster.datasource == undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        version = cluster.datasource.version;
+                        value = [];
+                    }
+
+                    const versionFilterValue =
+                        endpointId !== undefined && clusterId !== undefined
+                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                            : undefined;
+                    if (versionFilterValue !== undefined && versionFilterValue === version) {
+                        logger.debug(
+                            `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                                path,
+                            )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
+                        );
+                        continue;
+                    }
+
+                    logger.debug(
+                        `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                            path,
+                        )}=${Logger.toJSON(value)} (version=${version})`,
+                    );
+
+                    const { schema } = attribute;
+                    yield {
+                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
+                        attributeData: { path, dataVersion: version, payload: value, schema },
+                    };
+                } catch (error) {
+                    logger.error(
+                        `Error while reading attribute from ${
+                            exchange.channel.name
+                        } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                        error,
+                    );
+
+                    StatusResponseError.accept(error);
+
+                    // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
+                    if (isConcreteAttributePath(requestPath)) {
+                        yield {
+                            hasFabricSensitiveData: false,
+                            attributeStatus: { path, status: { status: error.code } },
+                        };
+                    }
+                }
+            }
+        }
+
+        if (eventReportsPayload !== undefined) {
+            for (const eventReport of eventReportsPayload) {
+                yield eventReport;
+            }
+        }
+
+        return true;
+    }
+
+    async handleReadRequest(
+        exchange: MessageExchange,
+        readRequest: ReadRequest,
+        message: Message,
+    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadGenerator }> {
+        const { attributeRequests, eventRequests, isFabricFiltered, interactionModelRevision } = readRequest;
+        logger.debug(
+            `Received read request from ${exchange.channel.name}: attributes:${
+                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+            }, events:${
+                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+            } isFabricFiltered=${isFabricFiltered}`,
+        );
+
+        if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${Specification.INTERACTION_MODEL_REVISION}.`,
+            );
+        }
+        if (attributeRequests === undefined && eventRequests === undefined) {
+            throw new StatusResponseError(
+                "Only Read requests with attributeRequests or eventRequests are supported right now",
+                StatusCode.UnsupportedRead,
+            );
+        }
+
+        if (message.packetHeader.sessionType !== SessionType.Unicast) {
+            throw new StatusResponseError(
+                "Subscriptions are only allowed on unicast sessions",
+                StatusCode.InvalidAction,
+            );
+        }
 
         return {
-            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-            suppressResponse: true,
-            attributeReportsPayload,
-            eventReportsPayload,
+            dataReport: {
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                suppressResponse: true,
+            },
+            payload: this.#iterateReadAttributesPaths(
+                readRequest,
+                await this.#collectEventDataForRead(readRequest, exchange, message),
+                exchange,
+                message,
+            ),
         };
     }
 
-    protected async readAttribute(
+    protected readAttribute(
         _path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
-        _endpoint: EndpointInterface,
         offline = false,
     ) {
         return attribute.getWithVersion(exchange.session, isFabricFiltered, offline ? undefined : message);

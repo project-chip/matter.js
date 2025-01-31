@@ -180,7 +180,11 @@ class InteractionMessenger {
 }
 
 export interface InteractionRecipient {
-    handleReadRequest(exchange: MessageExchange, request: ReadRequest, message: Message): Promise<DataReport>;
+    handleReadRequest(
+        exchange: MessageExchange,
+        request: ReadRequest,
+        message: Message,
+    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadGenerator }>;
     handleWriteRequest(exchange: MessageExchange, request: WriteRequest, message: Message): Promise<WriteResponse>;
     handleSubscribeRequest(
         exchange: MessageExchange,
@@ -215,11 +219,15 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             );
                         }
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        // This potentially sends multiple DataReport Messages
-                        await this.sendDataReport(
-                            await recipient.handleReadRequest(this.exchange, readRequest, message),
-                            readRequest.isFabricFiltered,
+
+                        const { dataReport, payload } = await recipient.handleReadRequest(
+                            this.exchange,
+                            readRequest,
+                            message,
                         );
+
+                        // This potentially sends multiple DataReport Messages
+                        await this.sendDataReport(dataReport, readRequest.isFabricFiltered, payload);
                         break;
                     }
                     case MessageType.WriteRequest: {
