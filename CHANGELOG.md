@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.12.2 (2025-02-01)
 
 -   @matter/node
     - Enhancement: Added support to check all device types of an endpoint against ACL definition and not only primary one
