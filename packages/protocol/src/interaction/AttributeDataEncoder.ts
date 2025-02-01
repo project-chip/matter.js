@@ -54,11 +54,21 @@ export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data">
     payload: any;
 };
 
+export type EventOrAttributeDataPayload = AttributeReportPayload | EventReportPayload;
+
+/** A base type for a DataReport which removes the fields of the actual attribute or event content */
+export type BaseDataReport = Omit<TypeFromSchema<typeof TlvDataReport>, "attributeReports" | "eventReports">;
+
 /** Type for TlvDataReport where the real data are represented with the schema and the JS value. */
-export type DataReportPayload = Omit<TypeFromSchema<typeof TlvDataReport>, "attributeReports" | "eventReports"> & {
+export type DataReportPayload = BaseDataReport & {
     attributeReportsPayload?: AttributeReportPayload[];
     eventReportsPayload?: EventReportPayload[];
 };
+
+/**
+ * Type for the DataReport Generator function to send all data
+ */
+export type DataReportPayloadIterator = IterableIterator<EventOrAttributeDataPayload>;
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
 export function encodeAttributePayload(

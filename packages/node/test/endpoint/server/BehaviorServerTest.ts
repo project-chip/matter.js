@@ -16,6 +16,7 @@ import { OnOffLightDevice } from "#devices/on-off-light";
 import { Bytes } from "#general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
 import {
+    ChannelManager,
     ExchangeManager,
     Fabric,
     FabricBuilder,
@@ -151,8 +152,10 @@ async function performRead(
             packetHeader: { sessionType: SessionType.Unicast },
         } as Message,
     );
-
-    return result.attributeReportsPayload?.[0]?.attributeData?.payload;
+    const data = result.payload?.next();
+    return typeof data.value === "object" && "attributeData" in data.value
+        ? data.value.attributeData?.payload
+        : undefined;
 }
 
 const BarelyMockedMessenger = {
@@ -199,6 +202,9 @@ async function performSubscribe(
     request: TypeFromSchema<typeof TlvSubscribeRequest>,
 ) {
     const { exchange, interactionServer } = await connect(node, fabric);
+
+    const channelManager = node.env.get(ChannelManager);
+    channelManager.getChannel = () => exchange.channel;
 
     await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
 }
@@ -336,16 +342,14 @@ describe("BehaviorServer", () => {
         expect(report?.attributeReports?.length).equals(2);
         expect(report?.eventReports).equals(undefined);
 
-        // Confirm the second report is for Fabrics (because of async-ness is a bit delayed)
-        const fabricsReport = report?.attributeReports?.[1]?.attributeData;
+        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
         const decodedFabrics =
             fabricsReport?.data &&
             OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
         expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        // Confirm the first report is for CommissionedFabrics
-        const commissionedFabricsReport = report?.attributeReports?.[0]?.attributeData;
+        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
         expect(
             commissionedFabricsReport?.data &&

@@ -74,31 +74,37 @@ export class LegacyInteractionServer extends InteractionServer {
     ) {
         const { endpointId, clusterId } = path;
         const endpoint = this.#endpointStructure.getEndpoint(endpointId);
-        if (endpoint === undefined) {
+        if (endpoint === undefined || endpoint.number === undefined) {
             throw new InternalError("Endpoint not found for ACL check. This should never happen.");
         }
         const aclManager = this.#getAclManager(exchange.session);
-        if (!aclManager.allowsPrivilege(exchange.session as SecureSession, endpoint, clusterId, desiredAccessLevel)) {
+        if (
+            !aclManager.allowsPrivilege(
+                exchange.session as SecureSession,
+                { number: endpoint.number, deviceTypes: [endpoint.deviceType] },
+                clusterId,
+                desiredAccessLevel,
+            )
+        ) {
             throw new AccessDeniedError(
                 `Access to ${endpointId}/${Diagnostic.hex(clusterId)} denied on ${exchange.session.name}.`,
             );
         }
     }
 
-    protected override async readAttribute(
+    protected override readAttribute(
         path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
         offline = false,
     ) {
         // Offline read do not require ACL checks
         if (!offline) {
             this.#assertAccess(path, exchange, attribute.readAcl);
         }
-        const data = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        const data = super.readAttribute(path, attribute, exchange, isFabricFiltered, message);
         if (attribute instanceof FabricScopedAttributeServer && !isFabricFiltered) {
             const { value, version } = data;
             return {
@@ -116,10 +122,9 @@ export class LegacyInteractionServer extends InteractionServer {
         exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
     ): Promise<NumberedOccurrence[]> {
         this.#assertAccess(path, exchange, event.readAcl);
-        return super.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message, endpoint);
+        return super.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message);
     }
 
     protected override async writeAttribute(

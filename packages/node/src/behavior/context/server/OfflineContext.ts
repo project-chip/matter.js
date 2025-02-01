@@ -24,6 +24,7 @@ export const OfflineContext = {
      *
      * {@link act} provides an {@link ActionContext} you can use to access agents for a {@link Endpoint}.
      * State changes and change events occur once {@link actor} returns.
+     * It can return a promise even if the actor method does not return a promise, so manual checks are needed.
      *
      * The {@link Transaction} is destroyed with {@link act} exits so you should not keep a reference to any agents
      * beyond the lifespan of {@link actor}.

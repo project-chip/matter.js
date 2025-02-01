@@ -11,10 +11,16 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/node
+    - Enhancement: Added support to check all device types of an endpoint against ACL definition and not only primary one
+    - Enhancement: Optimized data handling for subscriptions by reading them endpoint wise to optimize memory usage and to reuse the used context
+    - Adjustment: Refactored ACL logic to just get relevant endpoint information instead a whole EndpointInterface
+
 -   @matter/nodejs
     - Fix: Added Workaround for IP family confusion in Node.js 18.0.0 till 18.3.0 
 
 -   @matter/protocol
+    - Enhancement: Optimized sending of DataReports to stream the read data to the encoder when needed to reduce memory usage
     - Adjustment: Moved the handling to set the fabric label during commissioning to after commissioningComplete to work around a Tasmota-Matter bug
 
 ## 0.12.1 (2025-01-25)
