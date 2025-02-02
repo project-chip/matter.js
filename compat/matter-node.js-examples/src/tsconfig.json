@@ -10,6 +10,9 @@
             "path": "../../../packages/matter.js/src"
         },
         {
+            "path": "../../../packages/tools/src"
+        },
+        {
             "path": "../../matter-node-ble.js/src"
         }
     ]

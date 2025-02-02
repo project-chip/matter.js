@@ -7,8 +7,8 @@
 import colors from "ansi-colors";
 import { JsonNotFoundError, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
-import { Builder } from "./builder.js";
 import { InternalBuildError } from "./error.js";
+import { ProjectBuilder } from "./project-builder.js";
 import { BUILD_INFO_LOCATION, BuildInformation, Project } from "./project.js";
 
 /**
@@ -72,7 +72,7 @@ export class Graph {
 
     // TODO - parallelization will be trivial except need to update Progress to support display of multiple simultaneous
     // tasks
-    async build(builder: Builder, showSkipped = true) {
+    async build(builder: ProjectBuilder, showSkipped = true) {
         const toBuild = new Set(this.nodes);
 
         const needsConfig = this.nodes.find(node => node.pkg.hasConfig);

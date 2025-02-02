@@ -9,7 +9,7 @@ import "./util/node-shims.js";
 
 import "./global-definitions.js";
 
-import { Builder, Graph, Package, Project } from "#tools";
+import { Graph, Package, Project, ProjectBuilder } from "#tools";
 import { clear } from "console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -80,7 +80,7 @@ export async function main(argv = process.argv) {
         packageLocation = firstSpec;
     }
 
-    const builder = new Builder();
+    const builder = new ProjectBuilder();
     const pkg = new Package({ path: packageLocation });
 
     // If the location is a workspace, test all packages with test

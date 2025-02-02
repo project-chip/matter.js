@@ -12,6 +12,9 @@
         },
         {
             "path": "../../testing/src"
+        },
+        {
+            "path": "../../tools/src"
         }
     ]
 }

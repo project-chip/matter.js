@@ -17,6 +17,9 @@
             "path": "../../testing/src"
         },
         {
+            "path": "../../tools/src"
+        },
+        {
             "path": "../../types/src"
         }
     ]

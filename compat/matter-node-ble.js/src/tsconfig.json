@@ -8,6 +8,9 @@
     "references": [
         {
             "path": "../../../packages/nodejs-ble/src"
+        },
+        {
+            "path": "../../../packages/tools/src"
         }
     ]
 }

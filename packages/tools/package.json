@@ -25,6 +25,16 @@
                 "default": "./dist/cjs/index.js"
             }
         },
+        "./ansi-text": {
+            "import": {
+                "types": "./dist/esm/ansi-text/index.d.ts",
+                "default": "./dist/esm/ansi-text/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/ansi-text/index.d.ts",
+                "default": "./dist/cjs/ansi-text/index.js"
+            }
+        },
         "./bootstrap": {
             "import": {
                 "default": "./src/util/bootstrap.mjs"

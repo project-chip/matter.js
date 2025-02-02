@@ -13,8 +13,9 @@ import { AddressInfo } from "net";
 import { relative } from "path";
 import { Browser, chromium, ConsoleMessage, Page } from "playwright";
 import { TestOptions } from "./options.js";
-import { ConsoleProxyReporter, Reporter } from "./reporter.js";
+import { Reporter } from "./reporter.js";
 import type { TestRunner } from "./runner.js";
+import { WebReporter } from "./web-reporter.js";
 
 export async function testWeb(runner: TestRunner, manual: boolean) {
     const files = await runner.loadFiles("esm");
@@ -105,13 +106,13 @@ function consoleHandler(reporter: Reporter) {
         const text = message.text();
 
         // If it's not an encoded reporter update, write to normal console
-        if (type !== "log" || !text.startsWith(ConsoleProxyReporter.FLAG)) {
+        if (type !== "log" || !text.startsWith(WebReporter.FLAG)) {
             console[type](text);
             return;
         }
 
         // Invoke reporter
-        const args: string[] = JSON.parse(text.slice(ConsoleProxyReporter.FLAG.length));
+        const args: string[] = JSON.parse(text.slice(WebReporter.FLAG.length));
         const method = (reporter as any)[args[0]];
         if (typeof method !== "function") {
             throw new Error(`Invalid encoded reporter update method ${args[0]}`);
