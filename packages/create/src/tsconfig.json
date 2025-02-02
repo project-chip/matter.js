@@ -7,5 +7,9 @@
             "node"
         ]
     },
-    "references": []
+    "references": [
+        {
+            "path": "../../tools/src"
+        }
+    ]
 }

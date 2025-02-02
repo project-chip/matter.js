@@ -52,6 +52,14 @@ declare global {
                * Receive intercepted log messages.
                */
               loggerSink?: (level: number, message: string) => void;
+
+              /**
+               * Extract error details.
+               */
+              messageAndStackFor?: (
+                  error: unknown,
+                  parentStack?: string[],
+              ) => { message: string; stack?: string; stackLines?: string[] };
           };
 
     namespace Mocha {

@@ -11,9 +11,11 @@ import { FailureDetail } from "./failure-detail.js";
 import { Boot } from "./mocks/boot.js";
 import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
-import { ConsoleProxyReporter, Reporter } from "./reporter.js";
+import { Reporter } from "./reporter.js";
 import type { TestDescriptor } from "./test-descriptor.js";
+import { TextDiff } from "./text-diff.js";
 import { wtf } from "./util/wtf.js";
+import { WebReporter } from "./web-reporter.js";
 
 // We allow fixed 60s. timeout for our extended "before/after each test" hooks.  To make this configurable we'd need
 // to perform timeout handling ourselves so avoiding for now
@@ -92,7 +94,7 @@ export function generalSetup(mocha: Mocha) {
         return (this.currentTest as HookableTest)[afterOneHook]?.call(this, done);
     });
 
-    FailureDetail.diff = Base.generateDiff.bind(Base);
+    TextDiff.generator = Base.generateDiff.bind(Base);
 }
 
 export function extendApi(Mocha: typeof MochaType) {
@@ -262,7 +264,7 @@ export function browserSetup(mocha: BrowserMocha) {
         // Start Mocha, proxying reporting through console to Playwright and completing once Mocha has finished
         auto: async function (options: TestOptions) {
             TestOptions.apply(mocha, options);
-            mocha.reporter(adaptReporter(Mocha, "Web", new ConsoleProxyReporter()));
+            mocha.reporter(adaptReporter(Mocha, "Web", new WebReporter()));
             return new Promise<void>(accept => {
                 const runner = this.start();
                 runner.on("end", accept);

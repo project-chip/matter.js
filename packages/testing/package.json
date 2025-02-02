@@ -41,7 +41,8 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "imports": {
-        "#tools": "@matter/tools"
+        "#tools": "@matter/tools",
+        "#tools/ansi-text": "@matter/tools/ansi-text"
     },
     "dependencies": {
         "@matter/tools": "0.0.0-git",

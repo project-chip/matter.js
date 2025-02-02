@@ -12,6 +12,9 @@
         },
         {
             "path": "../../protocol/src"
+        },
+        {
+            "path": "../../tools/src"
         }
     ]
 }

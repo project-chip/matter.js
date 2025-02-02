@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
+import { ansi, Wrapper } from "#tools/ansi-text";
 
 interface LoggerLike {
     format: string;
@@ -22,7 +22,7 @@ export const TheMockLogger: MockLogger = {
 };
 
 function formatExternalMessage(source: string, text: string) {
-    return `${colors.bgCyan.black.bold(` ${source} `)} ${colors.dim(text)}`;
+    return `${Wrapper.prefixStart}${ansi.black.bg.cyan.bold(` ${source} `)} ${Wrapper.prefixStop}${ansi.dim(text)}`;
 }
 
 /**

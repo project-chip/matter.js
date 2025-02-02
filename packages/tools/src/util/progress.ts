@@ -4,16 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
 import { stderr, stdout } from "process";
+import { screen } from "../ansi-text/screen.js";
+import { std } from "../ansi-text/std.js";
+import { ansi } from "../ansi-text/text-builder.js";
 import { Package } from "./package.js";
 
-const CLEAR = "\x1b[K";
 const SPINNER = "◐◓◑◒"; //"⡜⠔⠢⢣"; //["⚫︎", "⚪︎"]; "⡈⠔⠢⢁";
 const SPINNER_INTERVAL = 100;
 
 function packageIdentity(pkg: Package) {
-    let identity = colors.bold(pkg.json.name);
+    let identity = ansi.bold(pkg.json.name).toString();
     if (pkg.json.version) {
         identity = `${identity}@${pkg.json.version}`;
     }
@@ -50,24 +51,20 @@ const writeStatus = (() => {
     intercept(stderr);
 
     return function writeStatus(text: string, willOverwrite = false) {
-        const columns = process.stdout.columns;
-        if (willOverwrite && columns !== undefined && text.length > columns - 2) {
-            text = filterAnsi(text, columns - 2) + "…";
-        }
-
-        text += willOverwrite ? "\r" : "\n";
+        text += willOverwrite ? `${screen.erase.toEol}\r` : `${screen.erase.toEol}\n`;
         if (text === lastStatus) {
             return;
         }
 
-        if (lastStatus) {
-            lastStatus = undefined;
-            stdout.write(CLEAR);
-        } else if (needNewline && !text.startsWith("\n")) {
-            stdout.write("\n");
-        }
+        std.out.state({ buffer: true }, () => {
+            if (lastStatus) {
+                lastStatus = undefined;
+            } else if (needNewline && !text.startsWith("\n")) {
+                std.out("\n");
+            }
 
-        stdout.write(text);
+            std.out.writeTruncated(text);
+        });
 
         lastStatus = text;
     };
@@ -86,15 +83,15 @@ export class Progress {
     constructor() {}
 
     emphasize(text: unknown) {
-        return colors.bold(`${text}`);
+        return ansi.bold(`${text}`);
     }
 
     deemphasize(text: unknown) {
-        return colors.dim(`${text}`);
+        return ansi.dim(`${text}`);
     }
 
     skip(why: string, pkg: Package) {
-        stdout.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
+        std.out.write(ansi.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
     }
 
     startup(what: string, pkgOrOverwrite?: Package | boolean) {
@@ -130,34 +127,32 @@ export class Progress {
             return;
         }
 
-        const subtask = this.#subtasks.length
-            ? colors.dim(` (${colors.dim(this.#subtasks[this.#subtasks.length - 1])})`)
-            : "";
+        const subtask = this.#subtasks.length ? ansi.dim(` (${this.#subtasks[this.#subtasks.length - 1]})`) : "";
 
-        writeStatus(`  ${colors.yellow(this.#spinner)} ${this.#ongoingText}${subtask}`, true);
+        writeStatus(`  ${ansi.yellow(this.#spinner)} ${this.#ongoingText}${subtask}`, true);
     }
 
     success(text: string) {
         this.status = Progress.Status.Success;
-        writeStatus(`  ${colors.green("✓")} ${text} ${this.#duration}`);
+        writeStatus(`  ${ansi.green("✓")} ${text} ${this.#duration}`);
         this.#start = this.#ongoingText = undefined;
     }
 
     failure(text: string) {
         this.status = Progress.Status.Failure;
-        writeStatus(`  ${colors.redBright("✗")} ${text} ${this.#duration}`);
+        writeStatus(`  ${ansi.bright.red("✗")} ${text} ${this.#duration}`);
         this.#start = this.#ongoingText = undefined;
     }
 
     info(label: string, value?: any) {
         if (value) {
-            label = `${colors.dim(label)} ${value}`;
+            label = `${ansi.dim(label)} ${value}`;
         }
-        writeStatus(`  ${colors.dim("‣")} ${label}`);
+        writeStatus(`  ${ansi.dim("‣")} ${label}`);
     }
 
     warn(text: string) {
-        stdout.write(`    ${colors.yellow("Warning:")} ${text}\n`);
+        std.out.write(`    ${ansi.yellow("Warning:")} ${text}\n`);
     }
 
     shutdown() {
@@ -223,7 +218,7 @@ export class Progress {
         } else {
             ms = Math.trunc(ms / 1000);
         }
-        return colors.dim.yellow(`(${ms}s)`);
+        return `${ansi.dim.yellow}(${ms}s)${ansi.not.dim.not.yellow}`;
     }
 }
 
@@ -234,36 +229,4 @@ export namespace Progress {
         Success = "success",
         Failure = "failure",
     }
-}
-
-// See https://stackoverflow.com/questions/26238553/how-can-i-truncate-a-string-to-a-maximum-length-without-breaking-ansi-escape-cod
-// TODO - this function doesn't seem entirely correct, still seems to truncate too much
-// Crop the length of lines, ANSI escape code aware
-// Always outputs every escape char, regardless of length (so we always end up with a sane state)
-// Visible characters are filtered out once length is exceeded
-function filterAnsi(str: string, len: number) {
-    if (!len || len < 10) return str; // probably not a valid console -- send back the whole line
-    let count = 0, // number of visible chars on line so far
-        esc = false, // in an escape sequence
-        longesc = false; // in a multi-character escape sequence
-    let outp = true; // should output this character
-    return str
-        .split("")
-        .filter(function (c) {
-            // filter characters...
-            if (esc && !longesc && c == "[") longesc = true; // have seen an escape, now '[', start multi-char escape
-            if (c == "\x1b") esc = true; // start of escape sequence
-
-            outp = count < len || esc; // if length exceeded, don't output non-escape chars
-            if (!esc && !longesc) count++; // if not in escape, count visible char
-
-            if (esc && !longesc && c != "\x1b") esc = false; // out of single char escape
-            if (longesc && c != "[" && c >= "@" && c <= "~") {
-                esc = false;
-                longesc = false;
-            } // end of multi-char escape
-
-            return outp; // result for filter
-        })
-        .join(""); // glue chars back into string
 }

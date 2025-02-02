@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Package, Progress } from "#tools";
-import colors from "ansi-colors";
+import { ansi, Package, Progress, std } from "#tools";
 import debug from "debug";
 import { relative } from "path";
 import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
+import { FailureReporter } from "./failure-reporter.js";
+import { NodejsReporter } from "./nodejs-reporter.js";
 import { testNodejs } from "./nodejs.js";
 import { TestOptions } from "./options.js";
-import { ProgressReporter, Reporter } from "./reporter.js";
+import { Reporter } from "./reporter.js";
 import { listSupportFiles } from "./util/files.js";
 import { testWeb } from "./web.js";
 
@@ -27,13 +28,15 @@ export class TestRunner {
     ) {
         chip.runner = this;
 
-        this.reporter = new (class extends ProgressReporter {
+        this.reporter = new (class extends NodejsReporter {
             constructor() {
                 super(progress);
             }
+
             override failRun(detail: FailureDetail) {
-                process.stdout.write("\n");
-                FailureDetail.dump(detail);
+                std.err.write("\n");
+                FailureReporter.report(std.err, detail, "Test suite crash");
+                std.err.write("\n");
                 process.exit(1);
             }
         })();
@@ -87,6 +90,6 @@ export class TestRunner {
 }
 
 function fatal(message: string) {
-    process.stderr.write(colors.redBright(`\n${message}\n\n`));
+    std.err.write(ansi.bright.red(`\n${message}\n\n`));
     process.exit(1);
 }

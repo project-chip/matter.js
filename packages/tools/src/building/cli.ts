@@ -6,9 +6,9 @@
 
 import { commander } from "../util/commander.js";
 import { Package } from "../util/package.js";
-import { Builder, Target } from "./builder.js";
 import { buildDocs, mergeDocs } from "./docs.js";
 import { Graph } from "./graph.js";
+import { ProjectBuilder, Target } from "./project-builder.js";
 import { Project } from "./project.js";
 import { syncAllTsconfigs } from "./tsconfig.js";
 
@@ -105,7 +105,7 @@ export async function main(argv = process.argv) {
     }
 
     function builder(graph?: Graph) {
-        return new Builder({ ...args, targets: [...targets], graph });
+        return new ProjectBuilder({ ...args, targets: [...targets], graph });
     }
 
     switch (mode as Mode) {

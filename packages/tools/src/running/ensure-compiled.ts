@@ -6,8 +6,8 @@
 
 import { exit } from "process";
 import { fileURLToPath } from "url";
-import { Builder } from "../building/builder.js";
 import { Graph } from "../building/graph.js";
+import { ProjectBuilder } from "../building/project-builder.js";
 import { Project } from "../building/project.js";
 import { Package } from "../util/package.js";
 
@@ -39,7 +39,7 @@ export async function ensureCompiled(path: string) {
     // In development we currently build package and dependencies unconditionally before running
     const isDevelopment = !path.match(/[\\/]node_modules[\\/]/);
     if (isDevelopment && format !== "none") {
-        const builder = new Builder();
+        const builder = new ProjectBuilder();
         const dependencies = await Graph.forProject(path);
         if (dependencies) {
             // Project is in a workspace; build along with dependencies from the same workspace

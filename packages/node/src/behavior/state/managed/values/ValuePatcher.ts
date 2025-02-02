@@ -179,6 +179,9 @@ function ListPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSuper
             throw new WriteError(path, `patch definition ${changes} is not an object`);
         }
 
+        // eslint reports error here when linting entire project but not individual file.  Unsure if this is a bug but
+        // disabling as code is correct as written
+        // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for (const indexStr in changes) {
             const index = Number.parseInt(indexStr);
 
