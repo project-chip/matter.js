@@ -22,6 +22,7 @@ import { PeerAddress } from "#peer/PeerAddress.js";
 import type { MessageExchange } from "#protocol/MessageExchange.js";
 import { SecureSession } from "#session/SecureSession.js";
 import {
+    EndpointNumber,
     EventNumber,
     INTERACTION_PROTOCOL_ID,
     StatusCode,
@@ -37,7 +38,7 @@ import {
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../cluster/server/EventServer.js";
 import { NoChannelError } from "../protocol/ChannelManager.js";
-import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import { EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
@@ -133,7 +134,11 @@ export interface ServerSubscriptionContext {
         path: AttributePath,
         attribute: AnyAttributeServer<unknown>,
         offline?: boolean,
-    ): Promise<{ version: number; value: unknown }>;
+    ): { version: number; value: unknown };
+    readEndpointAttributesForSubscription(
+        endpointId: EndpointNumber,
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<unknown>; offline?: boolean }[],
+    ): { path: AttributePath; attribute: AnyAttributeServer<unknown>; version: number; value: unknown }[];
     readEvent(
         path: EventPath,
         event: AnyEventServer<any, any>,
@@ -425,7 +430,7 @@ export class ServerSubscription extends Subscription {
         const { newAttributes } = this.registerNewAttributes();
 
         for (const { path, attribute } of newAttributes) {
-            const { version, value } = await this.#context.readAttribute(path, attribute);
+            const { version, value } = this.#context.readAttribute(path, attribute);
 
             // We do not do any version filtering for attributes that are newly added to make sure controller gets
             // most current state
@@ -639,69 +644,7 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    async sendInitialReport(messenger: InteractionServerMessenger) {
-        this.#updateTimer.stop();
-
-        const { newAttributes, attributeErrors } = this.registerNewAttributes();
-
-        const dataVersionFilterMap = new Map<string, number>(
-            this.criteria.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ??
-                [],
-        );
-
-        let attributesFilteredWithVersion = false;
-        const attributes = new Array<{
-            path: TypeFromSchema<typeof TlvAttributePath>;
-            value: any;
-            version: number;
-            schema: TlvSchema<any>;
-            attribute: AnyAttributeServer<any>;
-        }>();
-        for (const { path, attribute } of newAttributes) {
-            try {
-                const { value, version } = await this.#context.readAttribute(path, attribute);
-                if (value === undefined) continue;
-
-                const { nodeId, endpointId, clusterId } = path;
-
-                const versionFilterValue =
-                    endpointId !== undefined && clusterId !== undefined
-                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                        : undefined;
-                if (versionFilterValue !== undefined && versionFilterValue === version) {
-                    attributesFilteredWithVersion = true;
-                    continue;
-                }
-
-                attributes.push({ path, value, version, schema: attribute.schema, attribute });
-            } catch (error) {
-                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                    logger.warn(`Permission denied reading attribute ${this.#structure.resolveAttributeName(path)}`);
-                } else {
-                    logger.warn(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
-                }
-            }
-        }
-        const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
-            ({ path, schema, value, version, attribute }) => ({
-                hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                attributeData: {
-                    path,
-                    dataVersion: version,
-                    payload: value,
-                    schema,
-                },
-            }),
-        );
-        attributeErrors.forEach(attributeStatus =>
-            attributeReportsPayload.push({
-                hasFabricSensitiveData: false,
-                attributeStatus,
-            }),
-        );
-
-        const { newEvents, eventErrors } = this.#registerNewEvents();
-
+    async #collectInitialEventReportPayloads(newEvents: EventWithPath[]) {
         let eventsFiltered = false;
         const eventReportsPayload = new Array<EventReportPayload>();
         for (const { path, event } of newEvents) {
@@ -745,8 +688,91 @@ export class ServerSubscription extends Subscription {
             }
         });
 
+        return { eventReportsPayload, eventsFiltered };
+    }
+
+    /**
+     * Returns an iterator that yields the initial subscription data to be sent to the controller.
+     * The iterator will yield all attributes and events that match the subscription criteria.
+     * A thrown exception will cancel the sending process immediately.
+     * TODO: Streamline all this with the normal Read flow to also handle Concrete Path subscriptions with errors correctly
+     */
+    *#iterateInitialSubscriptionData(
+        attributesToSend: {
+            newAttributes: AttributeWithPath[];
+            attributeErrors: TypeFromSchema<typeof TlvAttributeStatus>[];
+        },
+        eventsToSend: {
+            eventReportsPayload: EventReportPayload[];
+            eventsFiltered: boolean;
+            eventErrors: TypeFromSchema<typeof TlvEventStatus>[];
+        },
+    ) {
+        const dataVersionFilterMap = new Map<string, number>(
+            this.criteria.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ??
+                [],
+        );
+
+        const { newAttributes, attributeErrors } = attributesToSend;
+        const { eventReportsPayload, eventsFiltered, eventErrors } = eventsToSend;
+
+        logger.debug(
+            `Initializes Subscription with ${newAttributes.length} attributes and ${eventReportsPayload.length} events.`,
+        );
+
+        let attributesFilteredWithVersion = false;
+
+        const attributesPerCluster = new Map<EndpointNumber, AttributeWithPath[]>();
+        for (const { path, attribute } of newAttributes) {
+            const { endpointId } = path;
+            const endpointAttributes = attributesPerCluster.get(endpointId) ?? new Array<AttributeWithPath>();
+            endpointAttributes.push({ path, attribute });
+            attributesPerCluster.set(endpointId, endpointAttributes);
+        }
+
+        let attributesCounter = 0;
+        for (const endpointId of attributesPerCluster.keys()) {
+            const endpointAttributes = attributesPerCluster.get(endpointId)!;
+            attributesPerCluster.delete(endpointId);
+            for (const { path, attribute, value, version } of this.#context.readEndpointAttributesForSubscription(
+                endpointId,
+                endpointAttributes,
+            )) {
+                if (value === undefined) continue;
+
+                const { nodeId, endpointId, clusterId } = path;
+
+                const versionFilterValue =
+                    endpointId !== undefined && clusterId !== undefined
+                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                        : undefined;
+                if (versionFilterValue !== undefined && versionFilterValue === version) {
+                    attributesFilteredWithVersion = true;
+                    continue;
+                }
+
+                attributesCounter++;
+                yield {
+                    hasFabricSensitiveData: attribute.hasFabricSensitiveData,
+                    attributeData: {
+                        path,
+                        dataVersion: version,
+                        payload: value,
+                        schema: attribute.schema,
+                    },
+                };
+            }
+        }
+
+        for (const attributeStatus of attributeErrors) {
+            yield {
+                hasFabricSensitiveData: false,
+                attributeStatus,
+            };
+        }
+
         if (
-            attributes.length === 0 &&
+            attributesCounter === 0 &&
             !attributesFilteredWithVersion &&
             eventReportsPayload.length === 0 &&
             !eventsFiltered
@@ -757,27 +783,38 @@ export class ServerSubscription extends Subscription {
             );
         }
 
-        eventErrors.forEach(eventStatus =>
-            eventReportsPayload.push({
+        for (const eventReport of eventReportsPayload) {
+            yield eventReport;
+        }
+
+        for (const eventStatus of eventErrors) {
+            yield {
                 hasFabricSensitiveData: false,
                 eventStatus,
-            }),
-        );
+            };
+        }
 
-        logger.debug(
-            `Initialize Subscription with ${attributes.length} attributes and ${eventReportsPayload.length} events.`,
-        );
         this.#lastUpdateTimeMs = Time.nowMs();
+    }
+
+    async sendInitialReport(messenger: InteractionServerMessenger) {
+        this.#updateTimer.stop();
+
+        const { newAttributes, attributeErrors } = this.registerNewAttributes();
+        const { newEvents, eventErrors } = this.#registerNewEvents();
+        const { eventReportsPayload, eventsFiltered } = await this.#collectInitialEventReportPayloads(newEvents);
 
         await messenger.sendDataReport(
             {
                 suppressResponse: false, // we always need proper response for initial report
                 subscriptionId: this.id,
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                attributeReportsPayload,
-                eventReportsPayload,
             },
             this.criteria.isFabricFiltered,
+            this.#iterateInitialSubscriptionData(
+                { newAttributes, attributeErrors },
+                { eventReportsPayload, eventsFiltered, eventErrors },
+            ),
         );
     }
 
@@ -805,16 +842,15 @@ export class ServerSubscription extends Subscription {
             // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
             // TODO: Remove this once we remove the legacy API and go away from using AttributeServers in the background
-            return this.#context.readAttribute(path, attribute, true).then(({ value }) => {
-                this.#outstandingAttributeUpdates.set(attributePathToId(path), {
-                    attribute,
-                    path,
-                    schema,
-                    version,
-                    value,
-                });
-                this.#prepareDataUpdate();
+            const { value } = this.#context.readAttribute(path, attribute, true);
+            this.#outstandingAttributeUpdates.set(attributePathToId(path), {
+                attribute,
+                path,
+                schema,
+                version,
+                value,
             });
+            this.#prepareDataUpdate();
         }
         this.#outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.#prepareDataUpdate();
@@ -878,6 +914,38 @@ export class ServerSubscription extends Subscription {
         await super.close();
     }
 
+    /**
+     * Iterates over all attributes and events that have changed since the last update and sends them to
+     * the controller.
+     * A thrown exception will cancel the sending process immediately.
+     */
+    *#iterateDataUpdate(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
+        for (const {
+            path,
+            schema,
+            value: payload,
+            version: dataVersion,
+            attribute: { hasFabricSensitiveData },
+        } of attributes) {
+            yield {
+                hasFabricSensitiveData,
+                attributeData: { path, dataVersion, schema, payload },
+            };
+        }
+
+        for (const {
+            path,
+            schema,
+            event,
+            data: { number: eventNumber, priority, epochTimestamp, payload },
+        } of events) {
+            yield {
+                hasFabricSensitiveData: event.hasFabricSensitiveData,
+                eventData: { path, eventNumber, priority, epochTimestamp, schema, payload },
+            };
+        }
+    }
+
     private async sendUpdateMessage(
         attributes: AttributePathWithValueVersion<any>[],
         events: EventPathWithEventData<any>[],
@@ -905,6 +973,7 @@ export class ServerSubscription extends Subscription {
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
                     this.criteria.isFabricFiltered,
+                    undefined,
                     !this.isClosed, // Do not wait for ack when closed
                 );
             } else {
@@ -913,31 +982,9 @@ export class ServerSubscription extends Subscription {
                         suppressResponse: false, // Non-empty data reports always need to send response
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                        attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
-                            hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                            attributeData: {
-                                path,
-                                dataVersion: version,
-                                schema,
-                                payload: value,
-                            },
-                        })),
-                        eventReportsPayload: events.map(({ path, schema, event, data }) => {
-                            const { number, priority, epochTimestamp, payload } = data;
-                            return {
-                                hasFabricSensitiveData: event.hasFabricSensitiveData,
-                                eventData: {
-                                    path,
-                                    eventNumber: number,
-                                    priority,
-                                    epochTimestamp,
-                                    schema,
-                                    payload,
-                                },
-                            };
-                        }),
                     },
                     this.criteria.isFabricFiltered,
+                    this.#iterateDataUpdate(attributes, events),
                     !this.isClosed, // Do not wait for ack when closed
                 );
             }

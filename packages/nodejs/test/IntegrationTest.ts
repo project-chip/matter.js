@@ -971,7 +971,6 @@ describe("Integration Test", () => {
             let resolved = false;
             await onOffClient.subscribeOnOffAttribute(
                 value => {
-                    console.trace("onOffClient.subscribeOnOffAttribute", value);
                     pushedUpdates.push({ value, time: Time.nowMs() });
                     if (!resolved) updateResolver();
                     resolved = true;

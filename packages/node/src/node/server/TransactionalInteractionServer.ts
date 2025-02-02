@@ -17,6 +17,7 @@ import { EndpointServer } from "#endpoint/server/EndpointServer.js";
 import { Diagnostic, InternalError, Logger, MaybePromise } from "#general";
 import {
     AccessDeniedError,
+    AclEndpointContext,
     AnyAttributeServer,
     AnyEventServer,
     AttributePath,
@@ -32,12 +33,11 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
-    NumberedOccurrence,
     SessionManager,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
-import { TlvEventFilter, TypeFromSchema } from "#types";
+import { EndpointNumber, StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
 import { AccessControlServer } from "../../behaviors/access-control/AccessControlServer.js";
 import { ServerNode } from "../ServerNode.js";
 
@@ -72,6 +72,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayedInExchange = new Set<MessageExchange>();
+    #endpointContexts = new Map<number, AclEndpointContext>();
 
     static async create(endpoint: Endpoint<ServerNode.RootEndpoint>, sessions: SessionManager) {
         const structure = new InteractionEndpointStructure();
@@ -155,33 +156,117 @@ export class TransactionalInteractionServer extends InteractionServer {
         return (this.#aclServer = aclServer);
     }
 
-    protected override async readAttribute(
+    #getAclEndpointContext(endpointId: EndpointNumber) {
+        if (!this.#endpointContexts.has(endpointId)) {
+            this.#endpoint.visit(({ number, state }) => {
+                if (number !== undefined && !this.#endpointContexts.has(number)) {
+                    this.#endpointContexts.set(number, {
+                        number,
+                        deviceTypes: state.descriptor.deviceTypeList.map(({ deviceType }) => deviceType),
+                    });
+                }
+            });
+        }
+        const context = this.#endpointContexts.get(endpointId);
+        if (context) {
+            return context;
+        } else {
+            throw new StatusResponseError(
+                "Endpoint not found for ACL check. This should never happen.",
+                StatusCode.UnsupportedEndpoint,
+            );
+        }
+    }
+
+    protected override readAttribute(
         path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange,
         fabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
         offline = false,
     ) {
-        const readAttribute = () =>
-            super.readAttribute(path, attribute, exchange, fabricFiltered, message, endpoint, offline);
+        const readAttribute = () => super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
 
-        // Offline read do not require ACL checks
-        if (offline) {
-            return OfflineContext.act("offline-read", this.#activity, readAttribute);
+        const endpoint = this.#endpointStructure.getEndpoint(path.endpointId);
+        if (!endpoint) {
+            throw new InternalError("Endpoint not found for ACL check. This should never happen.");
         }
 
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            endpoint,
-            root: this.#endpoint,
-        }).act(readAttribute);
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttribute)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  endpointContext: this.#getAclEndpointContext(path.endpointId),
+                  root: this.#endpoint,
+              }).act(readAttribute);
+
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Reads should not return a promise.");
+        }
+        return result;
+    }
+
+    /**
+     * Reads the attributes for the given endpoint.
+     * This can currently only be used for subscriptions because errors are ignored!
+     */
+    protected override readEndpointAttributesForSubscription(
+        endpointId: EndpointNumber,
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
+        exchange: MessageExchange,
+        fabricFiltered: boolean,
+        message: Message,
+        offline = false,
+    ) {
+        const readAttributes = () => {
+            const result = new Array<{
+                path: AttributePath;
+                attribute: AnyAttributeServer<unknown>;
+                value: any;
+                version: number;
+            }>();
+            for (const { path, attribute } of attributes) {
+                try {
+                    const value = super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
+                    result.push({ path, attribute, value: value.value, version: value.version });
+                } catch (error) {
+                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                        logger.warn(
+                            `Permission denied reading attribute ${this.#endpointStructure.resolveAttributeName(path)}`,
+                        );
+                    } else {
+                        logger.warn(
+                            `Error reading attribute ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                            error,
+                        );
+                    }
+                }
+            }
+            return result;
+        };
+
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttributes)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  endpointContext: this.#getAclEndpointContext(endpointId),
+                  root: this.#endpoint,
+              }).act(readAttributes);
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Online read should not return a promise.");
+        }
+        return result;
     }
 
     protected override async readEvent(
@@ -191,15 +276,14 @@ export class TransactionalInteractionServer extends InteractionServer {
         exchange: MessageExchange,
         fabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
-    ): Promise<NumberedOccurrence[]> {
+    ) {
         const readEvent = (context: ActionContext) => {
             if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
                 throw new AccessDeniedError(
-                    `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
+                    `Access to ${path.endpointId}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
             }
-            return super.readEvent(path, eventFilters, event, exchange, fabricFiltered, message, endpoint);
+            return super.readEvent(path, eventFilters, event, exchange, fabricFiltered, message);
         };
 
         return OnlineContext({
@@ -209,7 +293,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Read,
-            endpoint,
+            endpointContext: this.#getAclEndpointContext(path.endpointId),
             root: this.#endpoint,
         }).act(readEvent);
     }
@@ -291,7 +375,8 @@ export class TransactionalInteractionServer extends InteractionServer {
             fabricFiltered: true,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Write,
-            endpoint,
+            endpointContext: this.#getAclEndpointContext(path.endpointId),
+
             root: this.#endpoint,
         }).act(writeAttribute);
     }
@@ -322,7 +407,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Invoke,
-            endpoint,
+            endpointContext: this.#getAclEndpointContext(path.endpointId),
             root: this.#endpoint,
         }).act(invokeCommand);
     }
@@ -337,6 +422,8 @@ export class TransactionalInteractionServer extends InteractionServer {
         if (this.#endpoint.lifecycle.isPartsReady) {
             const server = EndpointServer.forEndpoint(this.#endpoint);
             this.#endpointStructure.initializeFromEndpoint(server);
+
+            this.#endpointContexts.clear();
         }
     }
 }
