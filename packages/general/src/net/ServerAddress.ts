@@ -26,5 +26,5 @@ export interface Lifespan {
 export type ServerAddress = (ServerAddressIp | ServerAddressBle) & Partial<Lifespan>;
 
 export function serverAddressToString(address: ServerAddress): string {
-    return address.type === "udp" ? `udp://${address.ip}:${address.port}` : `ble://${address.peripheralAddress}`;
+    return address.type === "udp" ? `udp://[${address.ip}]:${address.port}` : `ble://${address.peripheralAddress}`;
 }

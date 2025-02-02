@@ -66,7 +66,7 @@ class UdpConnection implements IpNetworkChannel<Uint8Array> {
     }
 
     get name() {
-        return `${this.type}://${this.peerAddress}:${this.peerPort}`;
+        return `${this.type}://[${this.peerAddress}]:${this.peerPort}`;
     }
 
     get networkAddress(): ServerAddressIp {
