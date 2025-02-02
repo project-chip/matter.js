@@ -37,7 +37,7 @@
         "matter-composeddevice": "matter-run src/device-composed-onoff/ComposedDeviceNode.ts",
         "matter-multidevice": "matter-run src/device-multiple-onoff/MultiDeviceNode.ts",
         "matter-controller": "matter-run src/controller/ControllerNode.ts",
-        "bundle-device": "esbuild src/device-onoff/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/bleno --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.cjs",
+        "bundle-device": "esbuild src/device-onoff/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/bleno --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --keep-names --outfile=build/bundle/DeviceNode.cjs",
         "matter-device-bundled": "node --enable-source-maps build/bundle/DeviceNode.cjs"
     },
     "bin": {
