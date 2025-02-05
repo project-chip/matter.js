@@ -878,16 +878,13 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    async #flush() {
+    #flush() {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
                 `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events${this.isClosed ? " (for closing)" : ""}`,
             );
             this.#triggerSendUpdate();
-            if (this.currentUpdatePromise) {
-                await this.currentUpdatePromise;
-            }
         }
     }
 
@@ -906,7 +903,7 @@ export class ServerSubscription extends Subscription {
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();
         if (graceful) {
-            await this.#flush();
+            this.#flush();
         }
         if (this.currentUpdatePromise) {
             await this.currentUpdatePromise;
