@@ -819,12 +819,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Root certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
-        if (!rootCert.extensions.keyUsage.keyCertSign || !rootCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Root certificate keyUsage must have keyCertSign and CRLSign set.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Root certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.
@@ -1058,12 +1061,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Ica certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(icaCert.extensions.keyUsage) !== 0x0060) {
-        if (!icaCert.extensions.keyUsage.keyCertSign || !icaCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Ica certificate must have keyUsage set to keyCertSign and CRLSign.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Ica certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.
