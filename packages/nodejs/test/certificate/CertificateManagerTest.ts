@@ -6,6 +6,7 @@
 
 import { Bytes, Crypto, DerCodec, DerKey, DerNode, PrivateKey, PublicKey, X962 } from "#general";
 import {
+    CertificateError,
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
@@ -62,10 +63,16 @@ describe("CertificateManager", () => {
     describe("generates the correct ASN1 bytes", () => {
         Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
             describe(`generates the correct ASN1 bytes for ${key}`, () => {
-                it("encode root certificate", () => {
-                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                    assert.equal(Bytes.toHex(CertificateManager.rootCertToAsn1(rootTlv)), Bytes.toHex(certs.ROOT.ASN1));
-                });
+                if ("ASN1" in certs.ROOT) {
+                    it("encode root certificate", () => {
+                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        assert.equal(
+                            Bytes.toHex(CertificateManager.rootCertToAsn1(rootTlv)),
+                            // @ts-expect-error ASN1 might be absent, but checked above
+                            Bytes.toHex(certs.ROOT.ASN1),
+                        );
+                    });
+                }
 
                 if ("ICAC" in certs && "ASN1" in certs.ICAC) {
                     it("encode intermediate certificate", () => {
@@ -105,21 +112,77 @@ describe("CertificateManager", () => {
 
                 if ("ICAC" in certs) {
                     it("verify intermediate certificate via ROOT", () => {
-                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        CertificateManager.verifyIntermediateCaCertificate(rootTlv, icacTlv);
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        CertificateManager.verifyIntermediateCaCertificate(rootCert, icacCert);
                     });
 
-                    it("verify operational certificate via ICAC", () => {
-                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        CertificateManager.verifyNodeOperationalCertificate(icacTlv, nocTlv);
+                    it("verify operational certificate via ICAC and ROOT", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                    });
+
+                    it("verify operational certificate via ICAC and ROOT with fabricId in root matching", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        rootCert.subject.fabricId = nocCert.subject.fabricId;
+                        icacCert.subject.fabricId = undefined;
+                        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                    });
+
+                    it("verify operational certificate via ICAC and ROOT with fabricId in ica matching", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        rootCert.subject.fabricId = undefined;
+                        icacCert.subject.fabricId = nocCert.subject.fabricId;
+                        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                    });
+
+                    it("verify operational certificate via ICAC and ROOT with fabricId in all matching", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        rootCert.subject.fabricId = nocCert.subject.fabricId;
+                        icacCert.subject.fabricId = nocCert.subject.fabricId;
+                        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert);
+                    });
+
+                    it("verify operational certificate via ICAC and ROOT with fabricId in root not matching", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        rootCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
+                        icacCert.subject.fabricId = undefined;
+                        assert.throws(
+                            () => CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
+                            new CertificateError(
+                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${rootCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
+                            ),
+                        );
+                    });
+
+                    it("verify operational certificate via ICAC and ROOT with fabricId in ica matching", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacCert = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        rootCert.subject.fabricId = undefined;
+                        icacCert.subject.fabricId = FabricId(nocCert.subject.fabricId + 1n);
+                        assert.throws(
+                            () => CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
+                            new CertificateError(
+                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId!.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
+                            ),
+                        );
                     });
                 } else {
-                    it("verify operational certificate via ROOT", () => {
-                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                        CertificateManager.verifyNodeOperationalCertificate(rootTlv, nocTlv);
+                    it("verify operational certificate via ROOT only", () => {
+                        const rootCert = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const nocCert = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert);
                     });
                 }
             });
