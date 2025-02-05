@@ -174,7 +174,7 @@ describe("CertificateManager", () => {
                         assert.throws(
                             () => CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icacCert),
                             new CertificateError(
-                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId!.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
+                                `FabricId in NoC certificate does not match the fabricId in the parent certificate. "${icacCert.subject.fabricId.toString()}" !== "${nocCert.subject.fabricId.toString()}"`,
                             ),
                         );
                     });
