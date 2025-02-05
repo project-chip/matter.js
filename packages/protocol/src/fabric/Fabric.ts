@@ -172,26 +172,16 @@ export class Fabric {
     }
 
     verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
-        if (intermediateCACert === undefined) {
-            // Validate NOC Certificate against Root Certificate
-            CertificateManager.verifyNodeOperationalCertificate(
-                TlvRootCertificate.decode(this.rootCert),
-                TlvOperationalCertificate.decode(operationalCert),
-            );
-        } else {
-            const decodedIcaCert = TlvIntermediateCertificate.decode(intermediateCACert);
-            // Validate NOC Certificate against ICA Certificate
-            CertificateManager.verifyNodeOperationalCertificate(
-                decodedIcaCert,
-                TlvOperationalCertificate.decode(operationalCert),
-            );
-
+        const rootCert = TlvRootCertificate.decode(this.rootCert);
+        const nocCert = TlvOperationalCertificate.decode(operationalCert);
+        const icaCert =
+            intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
+        if (icaCert !== undefined) {
             // Validate ICACertificate against Root Certificate
-            CertificateManager.verifyIntermediateCaCertificate(
-                TlvRootCertificate.decode(this.rootCert),
-                decodedIcaCert,
-            );
+            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
+        // Validate NOC Certificate against ICA Certificate
+        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
@@ -402,22 +392,14 @@ export class FabricBuilder {
             throw new MatterFlowError("Root Certificate needs to be set first.");
         }
 
-        if (intermediateCACert !== undefined) {
-            const decodedIntermediateCACert = TlvIntermediateCertificate.decode(intermediateCACert);
-            CertificateManager.verifyIntermediateCaCertificate(
-                TlvRootCertificate.decode(this.#rootCert),
-                decodedIntermediateCACert,
-            );
-            CertificateManager.verifyNodeOperationalCertificate(
-                decodedIntermediateCACert,
-                TlvOperationalCertificate.decode(operationalCert),
-            );
-        } else {
-            CertificateManager.verifyNodeOperationalCertificate(
-                TlvRootCertificate.decode(this.#rootCert),
-                TlvOperationalCertificate.decode(operationalCert),
-            );
+        const rootCert = TlvRootCertificate.decode(this.#rootCert);
+        const nocCert = TlvOperationalCertificate.decode(operationalCert);
+        const icaCert =
+            intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
+        if (icaCert !== undefined) {
+            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
+        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
 
         this.#operationalCert = operationalCert;
         this.#intermediateCACert = intermediateCACert;

@@ -819,12 +819,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Root certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
-        if (!rootCert.extensions.keyUsage.keyCertSign || !rootCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Root certificate keyUsage must have keyCertSign and CRLSign set.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Root certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.
@@ -863,8 +866,9 @@ export namespace CertificateManager {
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
     export function verifyNodeOperationalCertificate(
-        rootOrIcaCert: RootCertificate | IntermediateCertificate,
         nocCert: OperationalCertificate,
+        rootCert: RootCertificate,
+        icaCert?: IntermediateCertificate,
     ) {
         CertificateManager.validateGeneralCertificateFields(nocCert);
 
@@ -908,13 +912,21 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
+        if (rootCert.subject.fabricId !== undefined && rootCert.subject.fabricId !== nocCert.subject.fabricId) {
+            throw new CertificateError(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.fabricId,
+                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
         if (
-            rootOrIcaCert.subject.fabricId !== undefined &&
-            rootOrIcaCert.subject.fabricId !== nocCert.subject.fabricId
+            icaCert !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== nocCert.subject.fabricId
         ) {
             throw new CertificateError(
                 `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                    rootOrIcaCert.subject.fabricId,
+                    icaCert.subject.fabricId,
                 )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
             );
         }
@@ -959,14 +971,19 @@ export namespace CertificateManager {
         }
 
         // Validate authority key identifier against subject key identifier
-        if (!Bytes.areEqual(nocCert.extensions.authorityKeyIdentifier, rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+        if (
+            !Bytes.areEqual(
+                nocCert.extensions.authorityKeyIdentifier,
+                (icaCert ?? rootCert).extensions.subjectKeyIdentifier,
+            )
+        ) {
             throw new CertificateError(
                 `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
             );
         }
 
         Crypto.verify(
-            PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
+            PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
             nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
         );
@@ -997,14 +1014,6 @@ export namespace CertificateManager {
                     `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
                 );
             }
-            // If present on root certificate fabric-id needs to match with Ica fabric Id
-            if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
-                throw new CertificateError(
-                    `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                        rootCert.subject.fabricId,
-                    )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
-                );
-            }
         }
 
         // The subject DN SHALL encode exactly one matter-icac-id attribute.
@@ -1025,7 +1034,12 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
-        if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+        // Here means: When both are set, they must match
+        if (
+            rootCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            rootCert.subject.fabricId !== icaCert.subject.fabricId
+        ) {
             throw new CertificateError(
                 `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
                     rootCert.subject.fabricId,
@@ -1047,12 +1061,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Ica certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(icaCert.extensions.keyUsage) !== 0x0060) {
-        if (!icaCert.extensions.keyUsage.keyCertSign || !icaCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Ica certificate must have keyUsage set to keyCertSign and CRLSign.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Ica certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.
