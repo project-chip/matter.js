@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.12.3 (2025-02-05)
 
 -   @matter/protocol
     - Fix: Reduced some over-exact certificate validation to unblock Aqara commissioning
