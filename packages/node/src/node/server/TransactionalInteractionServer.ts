@@ -156,6 +156,11 @@ export class TransactionalInteractionServer extends InteractionServer {
         return (this.#aclServer = aclServer);
     }
 
+    /**
+     * Gets the context information from an endpoint needed for ACL checks. It prefills a cache if needed.
+     * The cache is cleared on structural changes and initialized again on next need.
+     * TODO Remove with the legacy API
+     */
     #getAclEndpointContext(endpointId: EndpointNumber) {
         if (!this.#endpointContexts.has(endpointId)) {
             this.#endpoint.visit(({ number, state }) => {
