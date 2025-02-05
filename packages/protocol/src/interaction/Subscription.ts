@@ -23,7 +23,7 @@ export interface SubscriptionCriteria {
 /**
  * A single active subscription.
  */
-export class Subscription {
+export abstract class Subscription {
     #session: SecureSession;
     #id: SubscriptionId;
     #isClosed?: boolean;
@@ -61,7 +61,7 @@ export class Subscription {
     }
 
     /**
-     * Update session state.  This probably is meaniningless except in a server context.
+     * Update session state.  This probably is meaningless except in a server context.
      */
     async update() {}
 
@@ -76,13 +76,13 @@ export class Subscription {
         this.#isClosed = value;
     }
 
+    /** Close the subscription with the option to gracefully flush outstanding data. */
+    abstract close(graceful: boolean): Promise<void>;
+
     /**
-     * Close the session.
-     *
-     * @param _graceful in a server context this means flush pending updates.  Not sure if applies to client
-     * subscriptions
+     * Destroy the subscription. Unsubscribe from all attributes and events and stop all timers.
      */
-    async close(_graceful = true): Promise<void> {
+    protected async destroy(): Promise<void> {
         this.#isClosed = true;
         this.#session.subscriptions.delete(this);
         logger.debug(`Removed subscription ${this.id} from ${this.#session.name}`);

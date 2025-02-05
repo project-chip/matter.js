@@ -117,6 +117,7 @@ export class ExchangeManager {
     readonly #listeners = new Map<TransportInterface, TransportInterface.Listener>();
     readonly #closers = new Set<Promise<void>>();
     readonly #observers = new ObserverGroup(this);
+    #closing = false;
 
     constructor(context: ExchangeManagerContext) {
         this.#transportInterfaces = context.transportInterfaces;
@@ -176,6 +177,7 @@ export class ExchangeManager {
     }
 
     async close() {
+        this.#closing = true;
         for (const protocol of this.#protocols.values()) {
             await protocol.close();
         }
@@ -201,6 +203,7 @@ export class ExchangeManager {
         let session: Session | undefined;
         if (packet.header.sessionType === SessionType.Unicast) {
             if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
+                if (this.#closing) return;
                 const initiatorNodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
                 session =
                     this.#sessionManager.getUnsecureSession(initiatorNodeId) ??
@@ -211,6 +214,7 @@ export class ExchangeManager {
                 session = this.#sessionManager.getSession(packet.header.sessionId);
             }
         } else if (packet.header.sessionType === SessionType.Group) {
+            if (this.#closing) return;
             if (packet.header.sourceNodeId !== undefined) {
                 //session = this.sessionManager.findGroupSession(packet.header.destGroupId, packet.header.sessionId);
             }
@@ -253,6 +257,7 @@ export class ExchangeManager {
         if (exchange !== undefined) {
             await exchange.onMessageReceived(message, isDuplicate);
         } else {
+            if (this.#closing) return;
             if (session.closingAfterExchangeFinished) {
                 throw new MatterFlowError(
                     `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,

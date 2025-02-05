@@ -13,6 +13,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/protocol
     - Fix: Reduced some over-exact certificate validation to unblock Aqara commissioning
+    - Fix: Prevented issues where closing subscriptions could block the session closing or establishing new subscriptions
+    - Fix: Prevented to establish new exchanges while shutting down Exchange Manager
 
 ## 0.12.2 (2025-02-01)
 
