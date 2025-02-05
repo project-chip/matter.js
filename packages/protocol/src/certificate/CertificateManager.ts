@@ -863,8 +863,9 @@ export namespace CertificateManager {
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
     export function verifyNodeOperationalCertificate(
-        rootOrIcaCert: RootCertificate | IntermediateCertificate,
         nocCert: OperationalCertificate,
+        rootCert: RootCertificate,
+        icaCert?: IntermediateCertificate,
     ) {
         CertificateManager.validateGeneralCertificateFields(nocCert);
 
@@ -908,13 +909,21 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
+        if (rootCert.subject.fabricId !== undefined && rootCert.subject.fabricId !== nocCert.subject.fabricId) {
+            throw new CertificateError(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.fabricId,
+                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
         if (
-            rootOrIcaCert.subject.fabricId !== undefined &&
-            rootOrIcaCert.subject.fabricId !== nocCert.subject.fabricId
+            icaCert !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== nocCert.subject.fabricId
         ) {
             throw new CertificateError(
                 `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                    rootOrIcaCert.subject.fabricId,
+                    icaCert.subject.fabricId,
                 )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
             );
         }
@@ -959,14 +968,19 @@ export namespace CertificateManager {
         }
 
         // Validate authority key identifier against subject key identifier
-        if (!Bytes.areEqual(nocCert.extensions.authorityKeyIdentifier, rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+        if (
+            !Bytes.areEqual(
+                nocCert.extensions.authorityKeyIdentifier,
+                (icaCert ?? rootCert).extensions.subjectKeyIdentifier,
+            )
+        ) {
             throw new CertificateError(
                 `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
             );
         }
 
         Crypto.verify(
-            PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
+            PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
             nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
         );
@@ -997,14 +1011,6 @@ export namespace CertificateManager {
                     `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
                 );
             }
-            // If present on root certificate fabric-id needs to match with Ica fabric Id
-            if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
-                throw new CertificateError(
-                    `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                        rootCert.subject.fabricId,
-                    )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
-                );
-            }
         }
 
         // The subject DN SHALL encode exactly one matter-icac-id attribute.
@@ -1025,7 +1031,12 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
-        if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+        // Here means: When both are set, they must match
+        if (
+            rootCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            rootCert.subject.fabricId !== icaCert.subject.fabricId
+        ) {
             throw new CertificateError(
                 `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
                     rootCert.subject.fabricId,
