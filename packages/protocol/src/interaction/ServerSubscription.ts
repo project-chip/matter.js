@@ -878,7 +878,7 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    async flush() {
+    async #flush() {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
@@ -906,7 +906,7 @@ export class ServerSubscription extends Subscription {
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();
         if (graceful) {
-            await this.flush();
+            await this.#flush();
         }
         if (this.currentUpdatePromise) {
             await this.currentUpdatePromise;
