@@ -629,8 +629,9 @@ export class ServerSubscription extends Subscription {
                     error instanceof NetworkError ||
                     error instanceof NoChannelError
                 ) {
-                    // We could not send at all, consider session as dead
-                    await this.session.destroy(false);
+                    // Let's consider this subscription as dead and wait for a reconnect
+                    await this.destroy();
+                    return;
                 } else {
                     throw error;
                 }
@@ -891,8 +892,7 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    override async close(graceful = false) {
-        this.isClosed = true;
+    protected override async destroy() {
         this.#sendUpdatesActivated = false;
         this.unregisterAttributeListeners(Array.from(this.#attributeListeners.keys()));
         this.unregisterEventListeners(Array.from(this.#eventListeners.keys()));
@@ -905,13 +905,23 @@ export class ServerSubscription extends Subscription {
         }
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();
+        await super.destroy();
+    }
+
+    /**
+     * Closes the subscription and flushes all outstanding data updates if requested.
+     */
+    override async close(graceful = false) {
+        if (this.isClosed) {
+            return;
+        }
+        await this.destroy();
         if (graceful) {
             await this.flush();
         }
         if (this.currentUpdatePromise) {
             await this.currentUpdatePromise;
         }
-        await super.close();
     }
 
     /**
