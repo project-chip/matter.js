@@ -26,6 +26,7 @@ import { Subscription } from "#interaction/Subscription.js";
 import { Specification } from "#model";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, NodeId } from "#types";
+import { SupportedTransportsSchema } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";
@@ -34,6 +35,7 @@ import {
     FALLBACK_DATAMODEL_REVISION,
     FALLBACK_INTERACTIONMODEL_REVISION,
     FALLBACK_MAX_PATHS_PER_INVOKE,
+    FALLBACK_MAX_TCP_MESSAGE_SIZE,
     FALLBACK_SPECIFICATION_VERSION,
     Session,
     SESSION_ACTIVE_INTERVAL_MS,
@@ -53,6 +55,8 @@ const DEFAULT_SESSION_PARAMETERS = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     specificationVersion: Specification.SPECIFICATION_VERSION,
     maxPathsPerInvoke: DEFAULT_MAX_PATHS_PER_INVOKE,
+    supportedTransports: {},
+    maxTcpMessageSize: FALLBACK_MAX_TCP_MESSAGE_SIZE,
 };
 
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
@@ -80,6 +84,8 @@ type ResumptionStorageRecord = {
         interactionModelRevision: number;
         specificationVersion: number;
         maxPathsPerInvoke: number;
+        supportedTransports?: number;
+        maxTcpMessageSize?: number;
     };
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
@@ -115,7 +121,7 @@ export class SessionManager {
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
-    #sessionParameters;
+    #sessionParameters: SessionParameters;
     readonly #resubmissionStarted = Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
@@ -441,7 +447,12 @@ export class SessionManager {
                         resumptionId,
                         fabricId: fabric.fabricId,
                         peerNodeId: peerNodeId,
-                        sessionParameters,
+                        sessionParameters: {
+                            ...sessionParameters,
+                            supportedTransports: sessionParameters.supportedTransports
+                                ? SupportedTransportsSchema.encode(sessionParameters.supportedTransports)
+                                : undefined,
+                        },
                         caseAuthenticatedTags,
                     }) as ResumptionStorageRecord,
             ),
@@ -471,6 +482,8 @@ export class SessionManager {
                     interactionModelRevision,
                     specificationVersion,
                     maxPathsPerInvoke,
+                    supportedTransports,
+                    maxTcpMessageSize,
                 } = {},
                 caseAuthenticatedTags,
             }) => {
@@ -501,6 +514,11 @@ export class SessionManager {
                         interactionModelRevision: interactionModelRevision ?? FALLBACK_INTERACTIONMODEL_REVISION,
                         specificationVersion: specificationVersion ?? FALLBACK_SPECIFICATION_VERSION,
                         maxPathsPerInvoke: maxPathsPerInvoke ?? FALLBACK_MAX_PATHS_PER_INVOKE,
+                        supportedTransports:
+                            supportedTransports !== undefined
+                                ? SupportedTransportsSchema.decode(supportedTransports)
+                                : {},
+                        maxTcpMessageSize: maxTcpMessageSize ?? FALLBACK_MAX_TCP_MESSAGE_SIZE,
                     },
                     caseAuthenticatedTags,
                 });
