@@ -28,7 +28,7 @@ export class DataReadQueue<T> implements Stream<T> {
             resolver,
             rejecter,
             timeoutTimer: Time.getTimer("Queue timeout", timeoutMs, () =>
-                rejecter(new NoResponseTimeoutError()),
+                rejecter(new NoResponseTimeoutError("No incoming data within the timeout period")),
             ).start(),
         };
         return promise;
