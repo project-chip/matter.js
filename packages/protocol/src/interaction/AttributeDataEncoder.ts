@@ -30,14 +30,20 @@ type FullAttributePath = {
     dataVersion?: number;
 };
 
+/** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
+type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, "data"> & {
+    schema: TlvSchema<any>;
+    payload: any;
+};
+
 /** Type for TlvAttributeReport where the real data are represented with the schema and the JS value. */
 export type AttributeReportPayload = Omit<TypeFromSchema<typeof TlvAttributeReport>, "attributeData"> & {
     attributeData?: AttributeDataPayload;
     hasFabricSensitiveData: boolean;
 };
 
-/** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
-type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, "data"> & {
+/** Type for TlvEventData where the real data are represented with the schema and the JS value. */
+export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
     schema: TlvSchema<any>;
     payload: any;
 };
@@ -46,12 +52,6 @@ type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, 
 export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "eventData"> & {
     eventData?: EventDataPayload;
     hasFabricSensitiveData: boolean;
-};
-
-/** Type for TlvEventData where the real data are represented with the schema and the JS value. */
-export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
-    schema: TlvSchema<any>;
-    payload: any;
 };
 
 export type EventOrAttributeDataPayload = AttributeReportPayload | EventReportPayload;
@@ -69,6 +69,21 @@ export type DataReportPayload = BaseDataReport & {
  * Type for the DataReport Generator function to send all data
  */
 export type DataReportPayloadIterator = IterableIterator<EventOrAttributeDataPayload>;
+
+export function encodeAttributePayloadData(
+    attributePayload: AttributeReportPayload,
+    options?: TlvEncodingOptions,
+): TlvStream {
+    const { attributeData } = attributePayload;
+    if (attributeData === undefined) {
+        throw new MatterFlowError(
+            `Cannot encode Attribute Payload data with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+        );
+    }
+
+    const { schema, payload } = attributeData;
+    return schema.encodeTlv(payload, options);
+}
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
 export function encodeAttributePayload(
