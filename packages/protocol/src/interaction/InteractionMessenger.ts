@@ -419,6 +419,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             });
                         } else {
                             // Check if the new attribute belongs to the same endpoint and cluster as the first queued attribute
+                            // Remove once https://github.com/project-chip/connectedhomeip/issues/37384 is fixed and some time passed
                             const firstQueuedAttributeData = attributeReportsToSend[0].attributeReport.attributeData;
                             if (
                                 firstQueuedAttributeData !== undefined &&
