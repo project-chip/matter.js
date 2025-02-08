@@ -439,12 +439,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                                 for (const attributeReport of attributeReportsToSend) {
                                     attributeReport.needSendNext = true;
                                 }
-                                console.log(
-                                    "    CLUSTER PATH CHANGE!!",
-                                    value.attributeData?.path.endpointId,
-                                    value.attributeData?.path.clusterId,
-                                    value.attributeData?.path.attributeId,
-                                );
                                 attributeReportsToSend.push({
                                     attributeReport: value,
                                     encoded,
@@ -525,13 +519,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                                     const encodedChunkDataSize = TlvAny.getEncodedByteLength(encodedChunkData);
                                     if (encodedChunkDataSize > availableBytes) {
                                         // This chunks does not match anymore, put it and next chunks back to the queue
-                                        console.log(
-                                            "ADD CHUNKS TO QUEUE ",
-                                            chunks.length + 1,
-                                            attributeToSend.attributeReport.attributeData?.path.endpointId,
-                                            attributeToSend.attributeReport.attributeData?.path.clusterId,
-                                            attributeToSend.attributeReport.attributeData?.path.attributeId,
-                                        );
                                         chunks.unshift(nextChunk);
                                         for (let i = chunks.length - 1; i >= 0; i--) {
                                             const chunk = chunks[i];
@@ -549,14 +536,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                                         if (dataReport.attributeReports === undefined) {
                                             dataReport.attributeReports = [];
                                         }
-                                        console.log(
-                                            "ADD CHUNKED ENTRIES FOR SEND ",
-                                            messageSize + 3,
-                                            initialChunk.attributeData!.payload.length,
-                                            initialChunk.attributeData?.path.endpointId,
-                                            initialChunk.attributeData?.path.clusterId,
-                                            initialChunk.attributeData?.path.attributeId,
-                                        );
                                         dataReport.attributeReports.push(
                                             encodeAttributePayload(initialChunk, {
                                                 allowMissingFieldsForNonFabricFilteredRead,
@@ -601,12 +580,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             // We did not send the message, means assumption is that there is more space in the message
                             // So we add the current attribute to the end of the queue
                             attributeReportsToSend.push(attributeToSend);
-                            console.log(
-                                `ADD TO QUEUE (${needSendNext ? "NEXT" : "LAST"})`,
-                                attributeToSend.attributeReport.attributeData?.path.endpointId,
-                                attributeToSend.attributeReport.attributeData?.path.clusterId,
-                                attributeToSend.attributeReport.attributeData?.path.attributeId,
-                            );
                             continue;
                         }
                     }
@@ -614,13 +587,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     if (dataReport.attributeReports === undefined) {
                         dataReport.attributeReports = [];
                     }
-                    console.log(
-                        "ADD FOR SEND ",
-                        messageSize + 3,
-                        attributeToSend.attributeReport.attributeData?.path.endpointId,
-                        attributeToSend.attributeReport.attributeData?.path.clusterId,
-                        attributeToSend.attributeReport.attributeData?.path.attributeId,
-                    );
                     dataReport.attributeReports.push(encoded);
                 } else if (eventReportsToSend.length > 0) {
                     const eventToSend = eventReportsToSend.shift();
@@ -646,7 +612,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     break;
                 }
             }
-            console.log("SEND FINAL", attributeReportsToSend.length, eventReportsToSend.length);
         }
 
         await this.sendDataReportMessage(dataReport, waitForAck);
