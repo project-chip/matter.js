@@ -121,38 +121,22 @@ class ControllerNode {
             }
         }
 
-        /**
-         * Create Matter Server and Controller Node
-         *
-         * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * CommissioningController to it and add the just created device instance to it.
-         * The Controller node defines the port where the server listens for the UDP packages of the Matter protocol
-         * and initializes deice specific certificates and such.
-         *
-         * The below logic also adds command handlers for commands of clusters that normally are handled internally
-         * like testEventTrigger (General Diagnostic Cluster) that can be implemented with the logic when these commands
-         * are called.
-         */
-
+        /** Create Matter Controller Node and bind it to the Environment. */
         const commissioningController = new CommissioningController({
             environment: {
                 environment,
                 id: uniqueId,
             },
-            autoConnect: false,
+            autoConnect: false, // Do not auto connect to the commissioned nodes
             adminFabricLabel,
         });
 
-        /**
-         * Start the Matter Server
-         *
-         * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * CommissioningServer node then this command also starts the announcement of the device into the network.
-         */
+        /** Start the Matter Controller Node */
         await commissioningController.start();
 
+        // When we do not have a commissioned node we need to commission the device provided by CLI parameters
         if (!commissioningController.isCommissioned()) {
-            const options = {
+            const options: NodeCommissioningOptions = {
                 commissioning: commissioningOptions,
                 discovery: {
                     knownAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
@@ -167,16 +151,14 @@ class ControllerNode {
                     },
                 },
                 passcode: setupPin,
-            } as NodeCommissioningOptions;
+            };
             logger.info(`Commissioning ... ${Logger.toJSON(options)}`);
             const nodeId = await commissioningController.commissionNode(options);
 
             console.log(`Commissioning successfully done with nodeId ${nodeId}`);
         }
 
-        /**
-         * TBD
-         */
+        // After commissioning or if we have a commissioned node we can connect to it
         try {
             const nodes = commissioningController.getCommissionedNodes();
             console.log("Found commissioned nodes:", Logger.toJSON(nodes));
@@ -186,11 +168,13 @@ class ControllerNode {
                 throw new Error(`Node ${nodeId} not found in commissioned nodes`);
             }
 
-            // Trigger node connection. Returns once process started, events are there to wait for completion
-            // By default will subscript to all attributes and events
-            const node = await commissioningController.connectNode(nodeId);
+            const nodeDetails = commissioningController.getCommissionedNodesDetails();
+            console.log("Commissioned nodes details:", Logger.toJSON(nodeDetails.find(node => node.nodeId === nodeId)));
 
-            // React on generic events
+            // Get the node instance
+            const node = await commissioningController.getNode(nodeId);
+
+            // Subscribe to events of the node
             node.events.attributeChanged.on(({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
                 console.log(
                     `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
@@ -225,8 +209,15 @@ class ControllerNode {
                 console.log(`Node ${nodeId} structure changed`);
             });
 
-            // Now wait till the structure of the node gor initialized (potentially with persisted data)
-            await node.events.initialized;
+            // Connect to the node if not already connected, this will automatically subscribe to all attributes and events
+            if (!node.isConnected) {
+                node.connect();
+            }
+
+            // Wait for initialization oif not yet initialized - this should only happen if we just commissioned it
+            if (!node.initialized) {
+                await node.events.initialized;
+            }
 
             // Or use this to wait for full remote initialization and reconnection.
             // Will only return when node is connected!

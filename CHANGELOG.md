@@ -9,12 +9,22 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+
+-   @matter/protocol
+    - Enhancement: Optimized Report Data message chunking 
+    - Fix: handles errors when setting fabric label during commissioning as non-critical for the commissioning flow
+
+
 ### 0.12.3 (2025-02-05)
 
 -   @matter/protocol
     - Fix: Reduced some over-exact certificate validation to unblock Aqara commissioning
     - Fix: Prevented issues where closing subscriptions could block the session closing or establishing new subscriptions
     - Fix: Prevented to establish new exchanges while shutting down Exchange Manager
+
+-   @project-chip/matter.js
+    - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use
 
 ## 0.12.2 (2025-02-01)
 
