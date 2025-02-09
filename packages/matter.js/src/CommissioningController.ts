@@ -133,37 +133,41 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
 export class CommissioningController extends MatterNode {
-    private started = false;
-    private ipv4Disabled?: boolean;
-    private readonly listeningAddressIpv4?: string;
-    private readonly listeningAddressIpv6?: string;
+    #started = false;
+    #ipv4Disabled?: boolean;
+    readonly #listeningAddressIpv4?: string;
+    readonly #listeningAddressIpv6?: string;
 
-    private environment?: Environment; // Set when new API was initialized correctly
-    private storage?: StorageContext;
+    readonly #options: CommissioningControllerOptions;
 
-    private mdnsScanner?: MdnsScanner;
-    private mdnsBroadcaster?: MdnsBroadcaster;
+    #environment?: Environment; // Set when new API was initialized correctly
+    #storage?: StorageContext;
 
-    private controllerInstance?: MatterController;
-    private initializedNodes = new Map<NodeId, PairedNode>();
-    private nodeUpdateLabelHandlers = new Map<NodeId, (nodeState: NodeStates) => Promise<void>>();
-    private sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
+    #mdnsScanner?: MdnsScanner;
+    #mdnsBroadcaster?: MdnsBroadcaster;
+
+    #controllerInstance?: MatterController;
+    readonly #initializedNodes = new Map<NodeId, PairedNode>();
+    readonly #nodeUpdateLabelHandlers = new Map<NodeId, (nodeState: NodeStates) => Promise<void>>();
+    readonly #sessionDisconnectedHandler = new Map<NodeId, () => Promise<void>>();
 
     /**
      * Creates a new CommissioningController instance
      *
      * @param options The options for the CommissioningController
      */
-    constructor(private readonly options: CommissioningControllerOptions) {
+    constructor(options: CommissioningControllerOptions) {
         super();
+        this.#options = options;
     }
 
     get nodeId() {
-        return this.controllerInstance?.nodeId;
+        return this.#controllerInstance?.nodeId;
     }
 
+    /** Returns the configuration data needed to create a PASE commissioner, e.g. in a mobile app. */
     get paseCommissionerConfig() {
-        const controller = this.assertControllerIsStarted(
+        const controller = this.#assertControllerIsStarted(
             "The CommissioningController needs to be started to get the PASE commissioner data.",
         );
         const { caConfig, fabricConfig: fabricData } = controller;
@@ -173,33 +177,33 @@ export class CommissioningController extends MatterNode {
         };
     }
 
-    assertIsAddedToMatterServer() {
-        if (this.mdnsScanner === undefined || (this.storage === undefined && this.environment === undefined)) {
+    #assertIsAddedToMatterServer() {
+        if (this.#mdnsScanner === undefined || (this.#storage === undefined && this.#environment === undefined)) {
             throw new ImplementationError("Add the node to the Matter instance before.");
         }
-        if (!this.started) {
+        if (!this.#started) {
             throw new ImplementationError("The node needs to be started before interacting with the controller.");
         }
-        return { mdnsScanner: this.mdnsScanner, storage: this.storage, environment: this.environment };
+        return { mdnsScanner: this.#mdnsScanner, storage: this.#storage, environment: this.#environment };
     }
 
-    assertControllerIsStarted(errorText?: string) {
-        if (this.controllerInstance === undefined) {
+    #assertControllerIsStarted(errorText?: string) {
+        if (this.#controllerInstance === undefined) {
             throw new ImplementationError(
                 errorText ?? "Controller instance not yet started. Please call start() first.",
             );
         }
-        return this.controllerInstance;
+        return this.#controllerInstance;
     }
 
     /** Internal method to initialize a MatterController instance. */
-    private async initializeController() {
-        const { mdnsScanner, storage, environment } = this.assertIsAddedToMatterServer();
-        if (this.controllerInstance !== undefined) {
-            return this.controllerInstance;
+    async #initializeController() {
+        const { mdnsScanner, storage, environment } = this.#assertIsAddedToMatterServer();
+        if (this.#controllerInstance !== undefined) {
+            return this.#controllerInstance;
         }
         const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags, adminFabricLabel } =
-            this.options;
+            this.#options;
 
         if (environment === undefined && storage === undefined) {
             throw new ImplementationError("Storage not initialized correctly.");
@@ -211,11 +215,11 @@ export class CommissioningController extends MatterNode {
             : new LegacyControllerStore(storage!);
 
         const { netInterfaces, scanners, port } = await configureNetwork({
-            ipv4Disabled: this.ipv4Disabled,
+            ipv4Disabled: this.#ipv4Disabled,
             mdnsScanner,
             localPort,
-            listeningAddressIpv4: this.listeningAddressIpv4,
-            listeningAddressIpv6: this.listeningAddressIpv6,
+            listeningAddressIpv4: this.#listeningAddressIpv4,
+            listeningAddressIpv6: this.#listeningAddressIpv6,
         });
 
         const controller = await MatterController.create({
@@ -224,7 +228,7 @@ export class CommissioningController extends MatterNode {
             netInterfaces,
             sessionClosedCallback: peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
-                const handler = this.sessionDisconnectedHandler.get(peerNodeId);
+                const handler = this.#sessionDisconnectedHandler.get(peerNodeId);
                 if (handler !== undefined) {
                     handler().catch(error => logger.warn(`Error while handling session disconnect: ${error}`));
                 }
@@ -235,30 +239,30 @@ export class CommissioningController extends MatterNode {
             caseAuthenticatedTags,
             adminFabricLabel,
         });
-        if (this.mdnsBroadcaster) {
-            controller.addBroadcaster(this.mdnsBroadcaster.createInstanceBroadcaster(port));
+        if (this.#mdnsBroadcaster) {
+            controller.addBroadcaster(this.#mdnsBroadcaster.createInstanceBroadcaster(port));
         }
         return controller;
     }
 
     /**
      * Commissions/Pairs a new device into the controller fabric. The method returns the NodeId of the commissioned
-     * node.
+     * node on success.
      */
     async commissionNode(nodeOptions: NodeCommissioningOptions, connectNodeAfterCommissioning = true) {
-        this.assertIsAddedToMatterServer();
-        const controller = this.assertControllerIsStarted();
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
 
         const nodeId = await controller.commission(nodeOptions);
 
         if (connectNodeAfterCommissioning) {
             const node = await this.connectNode(nodeId, {
                 ...nodeOptions,
-                autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
+                autoSubscribe: nodeOptions.autoSubscribe ?? this.#options.autoSubscribe,
                 subscribeMinIntervalFloorSeconds:
-                    nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
+                    nodeOptions.subscribeMinIntervalFloorSeconds ?? this.#options.subscribeMinIntervalFloorSeconds,
                 subscribeMaxIntervalCeilingSeconds:
-                    nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
+                    nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.#options.subscribeMaxIntervalCeilingSeconds,
             });
             await node.events.initialized;
         }
@@ -272,14 +276,14 @@ export class CommissioningController extends MatterNode {
      * process.
      */
     completeCommissioningForNode(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
-        this.assertIsAddedToMatterServer();
-        const controller = this.assertControllerIsStarted();
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
         return controller.completeCommissioning(peerNodeId, discoveryData);
     }
 
     /** Check if a given node id is commissioned on this controller. */
     isNodeCommissioned(nodeId: NodeId) {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
         return controller.getCommissionedNodes().includes(nodeId) ?? false;
     }
 
@@ -287,11 +291,13 @@ export class CommissioningController extends MatterNode {
      * Remove a Node id from the controller. This method should only be used if the decommission method on the
      * PairedNode instance returns an error. By default, it tries to decommission the node from the controller but will
      * remove it also in case of an error during decommissioning. Ideally try to decommission the node before and only
-     * use this in case of an error.
+     * use this in case of an error as last option.
+     * If this method is used the state of the PairedNode instance might be out of sync, so the PairedNode instance
+     * should be disconnected first.
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
-        const controller = this.assertControllerIsStarted();
-        const node = this.initializedNodes.get(nodeId);
+        const controller = this.#assertControllerIsStarted();
+        const node = this.#initializedNodes.get(nodeId);
         let decommissionSuccess = false;
         if (tryDecommissioning) {
             try {
@@ -308,19 +314,24 @@ export class CommissioningController extends MatterNode {
             node.close(!decommissionSuccess);
         }
         await controller.removeNode(nodeId);
-        this.initializedNodes.delete(nodeId);
+        this.#initializedNodes.delete(nodeId);
     }
 
+    /** @deprecated Use PairedNode.disconnect() instead */
     async disconnectNode(nodeId: NodeId) {
-        const node = this.initializedNodes.get(nodeId);
+        const node = this.#initializedNodes.get(nodeId);
         if (node === undefined) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
-        await this.controllerInstance?.disconnect(nodeId);
+        await this.#controllerInstance?.disconnect(nodeId);
     }
 
+    /**
+     * Returns the PairedNode instance for a given NodeId. The instance is initialized without auto connect if not yet
+     * created.
+     */
     async getNode(nodeId: NodeId) {
-        const existingNode = this.initializedNodes.get(nodeId);
+        const existingNode = this.#initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             return existingNode;
         }
@@ -332,15 +343,17 @@ export class CommissioningController extends MatterNode {
      * After connection the endpoint data of the device is analyzed and an object structure is created.
      * This call is not blocking and returns an initialized PairedNode instance. The connection or reconnection
      * happens in the background. Please monitor the state of the node to see if the connection was successful.
+     *
+     * @deprecated Use getNode() instead and call PairedNode.connect() or PairedNode.disconnect() as needed.
      */
     async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
 
         if (!controller.getCommissionedNodes().includes(nodeId)) {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
-        const existingNode = this.initializedNodes.get(nodeId);
+        const existingNode = this.#initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.initialized) {
                 existingNode.connect(connectOptions);
@@ -352,14 +365,14 @@ export class CommissioningController extends MatterNode {
             nodeId,
             this,
             connectOptions,
-            this.controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
+            this.#controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
             await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
             async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
-            handler => this.sessionDisconnectedHandler.set(nodeId, handler),
+            handler => this.#sessionDisconnectedHandler.set(nodeId, handler),
             controller.sessions,
-            await this.collectStoredAttributeData(nodeId),
+            await this.#collectStoredAttributeData(nodeId),
         );
-        this.initializedNodes.set(nodeId, pairedNode);
+        this.#initializedNodes.set(nodeId, pairedNode);
 
         pairedNode.events.initializedFromRemote.on(
             async deviceData => await controller.enhanceCommissionedNodeDetails(nodeId, deviceData),
@@ -368,8 +381,8 @@ export class CommissioningController extends MatterNode {
         return pairedNode;
     }
 
-    async collectStoredAttributeData(nodeId: NodeId): Promise<DecodedAttributeReportValue<any>[]> {
-        const controller = this.assertControllerIsStarted();
+    async #collectStoredAttributeData(nodeId: NodeId): Promise<DecodedAttributeReportValue<any>[]> {
+        const controller = this.#assertControllerIsStarted();
         const storedDataVersions = await controller.getStoredClusterDataVersions(nodeId);
         const result = new Array<DecodedAttributeReportValue<any>>();
         for (const { endpointId, clusterId } of storedDataVersions) {
@@ -381,9 +394,11 @@ export class CommissioningController extends MatterNode {
     /**
      * Connects to all paired nodes.
      * After connection the endpoint data of the device is analyzed and an object structure is created.
+     *
+     * @deprecated Use getCommissionedNodes() to get the list of nodes and getNode(nodeId) instead and call PairedNode.connect() or PairedNode.disconnect() as needed.
      */
     async connect(connectOptions?: CommissioningControllerNodeOptions) {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
 
         if (!controller.isCommissioned()) {
             throw new ImplementationError(
@@ -394,40 +409,43 @@ export class CommissioningController extends MatterNode {
         for (const nodeId of controller.getCommissionedNodes()) {
             await this.connectNode(nodeId, connectOptions);
         }
-        return Array.from(this.initializedNodes.values());
+        return Array.from(this.#initializedNodes.values());
     }
 
     /**
      * Set the MDNS Scanner instance. Should be only used internally
      *
      * @param mdnsScanner MdnsScanner instance
+     * @private
      */
     setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.mdnsScanner = mdnsScanner;
+        this.#mdnsScanner = mdnsScanner;
     }
 
     /**
      * Set the MDNS Broadcaster instance. Should be only used internally
      *
      * @param mdnsBroadcaster MdnsBroadcaster instance
+     * @private
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.mdnsBroadcaster = mdnsBroadcaster;
+        this.#mdnsBroadcaster = mdnsBroadcaster;
     }
 
     /**
      * Set the Storage instance. Should be only used internally
      *
      * @param storage storage context to use
+     * @private
      */
     setStorage(storage: StorageContext<SyncStorage>) {
-        this.storage = storage;
-        this.environment = undefined;
+        this.#storage = storage;
+        this.#environment = undefined;
     }
 
     /** Returns true if t least one node is commissioned/paired with this controller instance. */
     isCommissioned() {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
 
         return controller.isCommissioned();
     }
@@ -441,78 +459,90 @@ export class CommissioningController extends MatterNode {
         discoveryType?: NodeDiscoveryType,
         forcedConnection = true,
     ): Promise<InteractionClient> {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
         if (!forcedConnection) {
             return controller.createInteractionClient(nodeId, { discoveryType });
         }
         return controller.connect(nodeId, { discoveryType });
     }
 
-    /** Returns the PairedNode instance for a given node id, if this node is connected. */
+    /**
+     * Returns the PairedNode instance for a given node id, if this node is connected.
+     * @deprecated Use getNode() instead
+     */
     getPairedNode(nodeId: NodeId) {
-        return this.initializedNodes.get(nodeId);
+        return this.#initializedNodes.get(nodeId);
     }
 
-    /** Returns an array with the Node Ids for all commissioned nodes. */
+    /** Returns an array with the NodeIds of all commissioned nodes. */
     getCommissionedNodes() {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
 
         return controller.getCommissionedNodes() ?? [];
     }
 
+    /** Returns an arra with all commissioned NodeIds and their metadata. */
     getCommissionedNodesDetails() {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
 
         return controller.getCommissionedNodesDetails() ?? [];
     }
 
-    /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
+    /**
+     * Disconnects all connected nodes and closes the network connections and other resources of the controller.
+     * You can use "start()" to restart the controller after closing it.
+     */
     async close() {
-        for (const node of this.initializedNodes.values()) {
+        for (const node of this.#initializedNodes.values()) {
             node.close();
         }
-        await this.controllerInstance?.close();
-        this.controllerInstance = undefined;
-        this.initializedNodes.clear();
-        this.ipv4Disabled = undefined;
-        this.started = false;
+        await this.#controllerInstance?.close();
+        this.#controllerInstance = undefined;
+        this.#initializedNodes.clear();
+        this.#ipv4Disabled = undefined;
+        this.#started = false;
     }
 
+    /** Return the port used by the controller for the UDP interface. */
     getPort(): number | undefined {
-        return this.options.localPort;
+        return this.#options.localPort;
     }
 
+    /** @private */
     initialize(ipv4Disabled: boolean) {
-        if (this.started) {
+        if (this.#started) {
             throw new ImplementationError("Controller instance already started.");
         }
-        if (this.ipv4Disabled !== undefined && this.ipv4Disabled !== ipv4Disabled) {
+        if (this.#ipv4Disabled !== undefined && this.#ipv4Disabled !== ipv4Disabled) {
             throw new ImplementationError(
                 "Changing the IPv4 disabled flag after starting the controller is not supported.",
             );
         }
-        this.ipv4Disabled = ipv4Disabled;
+        this.#ipv4Disabled = ipv4Disabled;
     }
 
+    /** @private */
     async initializeControllerStore() {
         // This can only happen if "MatterServer" approach is not used
-        if (this.options.environment === undefined) {
+        if (this.#options.environment === undefined) {
             throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
         }
 
-        const { environment, id } = this.options.environment;
+        const { environment, id } = this.#options.environment;
         const controllerStore = await ControllerStore.create(id, environment);
         environment.set(ControllerStore, controllerStore);
     }
 
-    /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
+    /**
+     * Initialize the controller and initialize and connect to all commissioned nodes if autoConnect is not set to false.
+     */
     async start() {
-        if (this.ipv4Disabled === undefined) {
-            if (this.options.environment === undefined) {
+        if (this.#ipv4Disabled === undefined) {
+            if (this.#options.environment === undefined) {
                 throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
             }
 
-            const { environment } = this.options.environment;
+            const { environment } = this.#options.environment;
 
             if (!environment.has(ControllerStore)) {
                 await this.initializeControllerStore();
@@ -520,44 +550,52 @@ export class CommissioningController extends MatterNode {
 
             // Load the MDNS service from the environment and set onto the controller
             const mdnsService = await environment.load(MdnsService);
-            this.ipv4Disabled = !mdnsService.enableIpv4;
+            this.#ipv4Disabled = !mdnsService.enableIpv4;
             this.setMdnsBroadcaster(mdnsService.broadcaster);
             this.setMdnsScanner(mdnsService.scanner);
 
-            this.environment = environment;
-            const runtime = this.environment.runtime;
+            this.#environment = environment;
+            const runtime = this.#environment.runtime;
             runtime.add(this);
         }
 
-        this.started = true;
-        if (this.controllerInstance === undefined) {
-            this.controllerInstance = await this.initializeController();
+        this.#started = true;
+        if (this.#controllerInstance === undefined) {
+            this.#controllerInstance = await this.#initializeController();
         }
-        await this.controllerInstance.announce();
-        if (this.options.autoConnect !== false && this.controllerInstance.isCommissioned()) {
+        await this.#controllerInstance.announce();
+        if (this.#options.autoConnect !== false && this.#controllerInstance.isCommissioned()) {
             await this.connect();
         }
     }
 
+    /**
+     * Cancels the discovery process for commissionable devices started with discoverCommissionableDevices().
+     */
     cancelCommissionableDeviceDiscovery(
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
     ) {
-        this.assertIsAddedToMatterServer();
-        const controller = this.assertControllerIsStarted();
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
         controller
             .collectScanners(discoveryCapabilities)
             .forEach(scanner => ControllerDiscovery.cancelCommissionableDeviceDiscovery(scanner, identifierData));
     }
 
+    /**
+     * Starts to discover commissionable devices.
+     * The promise will be fulfilled after the provided timeout or when the discovery is stopped via
+     * cancelCommissionableDeviceDiscovery(). The discoveredCallback will be called for each discovered device.
+     */
     async discoverCommissionableDevices(
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
         discoveredCallback?: (device: CommissionableDevice) => void,
         timeoutSeconds = 900,
     ) {
-        this.assertIsAddedToMatterServer();
-        const controller = this.assertControllerIsStarted();
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
         return await ControllerDiscovery.discoverCommissionableDevices(
             controller.collectScanners(discoveryCapabilities),
             timeoutSeconds,
@@ -566,11 +604,15 @@ export class CommissioningController extends MatterNode {
         );
     }
 
+    /**
+     * Use this method to reset the Controller storage. The method can only be called if the controller is stopped and
+     * will remove all commissioning data and paired nodes from the controller.
+     */
     async resetStorage() {
-        this.assertControllerIsStarted(
+        this.#assertControllerIsStarted(
             "Storage cannot be reset while the controller is operating! Please close the controller first.",
         );
-        const { storage, environment } = this.assertIsAddedToMatterServer();
+        const { storage, environment } = this.#assertIsAddedToMatterServer();
         if (environment !== undefined) {
             const controllerStore = environment.get(ControllerStore);
             await controllerStore.erase();
@@ -583,12 +625,13 @@ export class CommissioningController extends MatterNode {
 
     /** Returns active session information for all connected nodes. */
     getActiveSessionInformation() {
-        return this.controllerInstance?.getActiveSessionInformation() ?? [];
+        return this.#controllerInstance?.getActiveSessionInformation() ?? [];
     }
 
+    /** @private */
     async validateAndUpdateFabricLabel(nodeId: NodeId) {
-        const controller = this.assertControllerIsStarted();
-        const node = this.initializedNodes.get(nodeId);
+        const controller = this.#assertControllerIsStarted();
+        const node = this.#initializedNodes.get(nodeId);
         if (node === undefined) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
@@ -614,14 +657,18 @@ export class CommissioningController extends MatterNode {
         }
     }
 
+    /**
+     * Updates the fabric label for the controller and all connected nodes.
+     * The label is used to identify the controller and all connected nodes in the fabric.
+     */
     async updateFabricLabel(label: string) {
-        const controller = this.assertControllerIsStarted();
+        const controller = this.#assertControllerIsStarted();
         if (controller.fabricConfig.label === label) {
             return;
         }
         await controller.updateFabricLabel(label);
 
-        for (const node of this.initializedNodes.values()) {
+        for (const node of this.#initializedNodes.values()) {
             if (node.isConnected) {
                 // When Node is connected, update the fabric label on the node directly
                 try {
@@ -643,14 +690,14 @@ export class CommissioningController extends MatterNode {
 
             // If no update handler is registered, register one
             // TODO: Convert this next to a task system for node tasks and also better handle error cases
-            if (!this.nodeUpdateLabelHandlers.has(node.nodeId)) {
+            if (!this.#nodeUpdateLabelHandlers.has(node.nodeId)) {
                 const updateOnReconnect = (nodeState: NodeStates) => {
                     if (nodeState === NodeStates.Connected) {
                         this.validateAndUpdateFabricLabel(node.nodeId)
                             .catch(error => logger.warn(`Error updating fabric label on node ${node.nodeId}:`, error))
                             .finally(() => {
                                 node.events.stateChanged.off(updateOnReconnect);
-                                this.nodeUpdateLabelHandlers.delete(node.nodeId);
+                                this.#nodeUpdateLabelHandlers.delete(node.nodeId);
                             });
                     }
                 };
