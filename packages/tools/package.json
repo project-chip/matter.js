@@ -64,7 +64,7 @@
         "minimatch": "^9.0.5",
         "typescript": "~5.7.3",
         "type-fest": "^4.32.0",
-        "typedoc": "^0.27.6",
+        "typedoc": "^0.27.7",
         "typedoc-github-theme": "^0.2.1",
         "@microsoft/tsdoc": "^0.15.1"
     },
