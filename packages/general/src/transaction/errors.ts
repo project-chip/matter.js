@@ -42,6 +42,12 @@ export class FinalizationError extends MatterError {}
 export class TransactionDestroyedError extends MatterError {}
 
 /**
- * Trhown if a {@link Transaction} cannot commit because state has mutated continuously for too many pre-commit events.
+ * Thrown if a {@link Transaction} cannot commit because state has mutated continuously for too many pre-commit cycles.
+ *
+ * "Pre-commit" is a commit event triggered by {@link Transaction} before stage 1 commit.  During pre-commit listeners
+ * may mutate state.  If state does change, the transaction re-runs pre-commit so all listeners see the same state.
+ *
+ * If state continues to mutate for too many of these cycles then the transaction will abort.  This likely indicates a
+ * logic error that will result in an infinite loop.
  */
 export class UnsettledStateError extends FinalizationError {}

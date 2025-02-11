@@ -36,7 +36,7 @@ import {
     WriteRequest,
     WriteResponse,
 } from "#protocol";
-import { EndpointNumber, StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
+import { StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
 import { AccessControlServer } from "../../behaviors/access-control/AccessControlServer.js";
 import { ServerNode } from "../ServerNode.js";
 
@@ -368,7 +368,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         const invokeCommand = (context: ActionContext) => {
             if (
                 context.authorityAt(command.invokeAcl, {
-                    endpoint: EndpointNumber(1),
+                    endpoint: endpoint.number,
                     cluster: path.clusterId,
                 } as AccessControl.Location) !== AccessControl.Authority.Granted
             ) {

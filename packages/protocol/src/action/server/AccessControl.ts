@@ -117,12 +117,6 @@ export namespace AccessControl {
          * enforcement.
          */
         owningFabric?: FabricIndex;
-
-        /**
-         * The access levels already retrieved for this location. With this subtree elements can access the same
-         * access levels without re-evaluating.
-         */
-        accessLevels?: AccessLevel[];
     }
 
     /**

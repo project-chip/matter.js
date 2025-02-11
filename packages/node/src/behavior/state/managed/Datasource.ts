@@ -253,6 +253,9 @@ function configure(options: Datasource.Options): Internals {
         values[key] = initialValues[key];
     }
 
+    // Location affects security so make it immutable
+    Object.freeze(options.location);
+
     return {
         ...options,
         version: Crypto.getRandomUInt32(),

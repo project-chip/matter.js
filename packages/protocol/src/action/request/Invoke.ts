@@ -17,16 +17,16 @@ export interface Invoke extends InvokeRequest {
  * Request invocation of one or more commands.
  */
 export function Invoke(definition: Invoke.Definition): Invoke {
-    let { interactionModelRevision, suppressResponse, timed: timedRequest } = definition;
-    const { commands } = definition;
+    const {
+        commands,
+        interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
+        suppressResponse = false,
+        timed: timedRequest = false,
+    } = definition;
 
     if (!commands?.length) {
         throw new MalformedRequestError(`Invocation requires at least one command`);
     }
-
-    interactionModelRevision ??= FALLBACK_INTERACTIONMODEL_REVISION;
-    suppressResponse ??= false;
-    timedRequest ??= false;
 
     return {
         invokeRequests: commands,

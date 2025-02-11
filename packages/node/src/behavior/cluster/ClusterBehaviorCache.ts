@@ -6,8 +6,8 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#index.js";
+import { Schema } from "#model";
 import { ClusterType } from "#types";
-import { Schema } from "../supervision/Schema.js";
 
 /**
  * To save memory we cache behavior implementations specialized for specific clusters.  This allows for efficient

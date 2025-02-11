@@ -102,7 +102,7 @@ export function Read(optionsOrSelector: Read.Options | Read.Selector, ...selecto
         const { endpoint } = selector;
 
         // Install data version filter if the endpoint reports it has complete version information
-        if (typeof endpoint === "object" && typeof endpoint.versions === "object" && typeof cluster === "object") {
+        if (typeof endpoint === "object" && endpoint?.versions && typeof cluster === "object" && cluster !== null) {
             const version = endpoint.versions?.[camelize(cluster.name)];
             if (version !== undefined) {
                 const filter = {

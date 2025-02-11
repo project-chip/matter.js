@@ -27,6 +27,7 @@ export function OnlineContext(options: OnlineContext.Options) {
     let fabric: FabricIndex | undefined;
     let subject: SubjectId;
     let nodeProtocol: NodeProtocol | undefined;
+    let accessLevelCache: Map<AccessControl.Location, number[]> | undefined;
 
     const { exchange } = options;
     const session = exchange?.session;
@@ -167,8 +168,9 @@ export function OnlineContext(options: OnlineContext.Options) {
                 }
 
                 // We already checked access levels in this transaction, so reuse it
-                if (location.accessLevels !== undefined) {
-                    return location.accessLevels.includes(desiredAccessLevel)
+                const cachedAccessLevels = accessLevelCache?.get(location);
+                if (cachedAccessLevels !== undefined) {
+                    return cachedAccessLevels.includes(desiredAccessLevel)
                         ? AccessControl.Authority.Granted
                         : AccessControl.Authority.Unauthorized;
                 }
@@ -182,7 +184,12 @@ export function OnlineContext(options: OnlineContext.Options) {
                     throw new InternalError("AccessControlServer should already be initialized.");
                 }
                 const accessLevels = accessControl.accessLevelsFor(context, location, aclEndpointContextFor(location));
-                location.accessLevels = accessLevels;
+
+                if (accessLevelCache === undefined) {
+                    accessLevelCache = new Map();
+                }
+                accessLevelCache.set(location, accessLevels);
+
                 return accessLevels.includes(desiredAccessLevel)
                     ? AccessControl.Authority.Granted
                     : AccessControl.Authority.Unauthorized;
