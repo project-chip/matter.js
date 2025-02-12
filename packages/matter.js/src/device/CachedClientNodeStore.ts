@@ -6,8 +6,7 @@
 
 import type { StorageContext } from "#general";
 import { Construction, Logger } from "#general";
-import { Val } from "#node";
-import { DecodedAttributeReportValue, PeerDataStore } from "#protocol";
+import { DecodedAttributeReportValue, PeerDataStore, Val } from "#protocol";
 import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "#types";
 import { ClientEndpointStore } from "./ClientEndpointStore.js";
 

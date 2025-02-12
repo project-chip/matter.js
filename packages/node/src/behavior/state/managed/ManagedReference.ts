@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "../../AccessControl.js";
-import { ExpiredReferenceError } from "../../errors.js";
-import { Val } from "../Val.js";
+import { AccessControl, ExpiredReferenceError, Val } from "#protocol";
 
 type Container = Record<string | number, Val>;
 

@@ -81,7 +81,7 @@ export class LegacyInteractionServer extends InteractionServer {
         if (
             !aclManager.allowsPrivilege(
                 exchange.session as SecureSession,
-                { number: endpoint.number, deviceTypes: [endpoint.deviceType] },
+                { id: endpoint.number, deviceTypes: [endpoint.deviceType] },
                 clusterId,
                 desiredAccessLevel,
             )

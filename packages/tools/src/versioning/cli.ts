@@ -48,5 +48,5 @@ export async function main(argv = process.argv) {
         await progress.run(`Tagging version ${progress.emphasize(versioner.version)}`, () => versioner.tag());
     }
 
-    progress.shutdown();
+    progress.close();
 }

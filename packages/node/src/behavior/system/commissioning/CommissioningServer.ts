@@ -18,8 +18,8 @@ import {
 import { DatatypeModel, FieldElement } from "#model";
 import type { Node } from "#node/Node.js";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, FabricAction, FabricManager, FailsafeContext, PaseClient } from "#protocol";
+import type { ServerNode } from "#node/ServerNode.js";
+import { ExposedFabricInformation, FabricAction, FabricManager, FailsafeContext, PaseClient, Val } from "#protocol";
 import {
     CommissioningFlowType,
     CommissioningOptions,
@@ -33,7 +33,6 @@ import { BasicInformationBehavior } from "../../../behaviors/basic-information/B
 import { OperationalCredentialsBehavior } from "../../../behaviors/operational-credentials/OperationalCredentialsBehavior.js";
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";
-import { Val } from "../../state/Val.js";
 import { NetworkServer } from "../network/NetworkServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 

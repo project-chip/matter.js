@@ -10,6 +10,7 @@ import { dirname, join, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
 import { globSync } from "./glob.js";
+import { ImportAliases } from "./import-aliases.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
@@ -53,7 +54,7 @@ export class Package {
     hasTests: boolean;
     hasConfig: boolean;
     isLibrary: boolean;
-    #aliases?: Record<string, string>;
+    #importAliases?: ImportAliases;
 
     constructor({
         path = ".",
@@ -314,7 +315,11 @@ export class Package {
                 if (existsSync(join(path, "package.json"))) {
                     result = new Package({ path });
                 } else {
-                    result = find(dirname(path));
+                    const parentDir = dirname(path);
+                    if (parentDir === path) {
+                        return null;
+                    }
+                    result = find(parentDir);
                 }
                 packageForPath[path] = result;
             }
@@ -334,17 +339,17 @@ export class Package {
         throw new Error(`Cannot find package.json for "${path}"`);
     }
 
-    get aliases(): Record<string, string> {
-        if (this.#aliases !== undefined) {
-            return this.#aliases;
+    get importAliases(): ImportAliases {
+        if (this.#importAliases !== undefined) {
+            return this.#importAliases;
         }
 
-        this.#aliases = {
-            ...Package.maybeForPath(dirname(this.path))?.aliases,
-            ...this.json.imports,
-        };
+        this.#importAliases = new ImportAliases(
+            this.json.imports,
+            Package.maybeForPath(dirname(this.path))?.importAliases,
+        );
 
-        return this.#aliases;
+        return this.#importAliases;
     }
 
     get modules() {

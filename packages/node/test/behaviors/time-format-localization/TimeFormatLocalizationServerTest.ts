@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ConstraintError } from "#behavior/errors.js";
 import { TimeFormatLocalizationServer } from "#behaviors/time-format-localization";
 import { TimeFormatLocalization } from "#clusters/time-format-localization";
 import { ServerNode } from "#node/ServerNode.js";
+import { ConstraintError } from "#protocol";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 function createEndpoint() {

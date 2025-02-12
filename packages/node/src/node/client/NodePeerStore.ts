@@ -6,7 +6,7 @@
 
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
 import { InternalError } from "#general";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { OperationalPeer, PeerAddress, PeerAddressStore, PeerDataStore } from "#protocol";
 
 /**

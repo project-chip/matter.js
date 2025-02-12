@@ -103,9 +103,7 @@ describe("SwitchServer", () => {
     describe("test custom validators", () => {
         it("Accept valid currentPosition", async () => {
             const device = await createLatchingSwitch();
-            await expect(device.set({ switch: { currentPosition: 1 } })).to.not.be.rejectedWith(
-                "Rolled back due to pre-commit error",
-            );
+            await expect(device.set({ switch: { currentPosition: 1 } })).to.not.be.rejected;
         });
 
         it("Reject invalid currentPosition", async () => {
@@ -117,9 +115,7 @@ describe("SwitchServer", () => {
 
         it("Accept valid rawPosition", async () => {
             const device = await createLatchingSwitch();
-            await expect(device.set({ switch: { rawPosition: 1 } })).to.not.be.rejectedWith(
-                "Rolled back due to pre-commit error",
-            );
+            await expect(device.set({ switch: { rawPosition: 1 } })).to.not.be.rejected;
         });
 
         it("Reject invalid rawPosition", async () => {

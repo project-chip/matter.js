@@ -6,5 +6,3 @@
 
 export * from "./managed/index.js";
 export * from "./StateType.js";
-export * from "./transaction/index.js";
-export * from "./Val.js";

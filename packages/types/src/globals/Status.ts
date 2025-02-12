@@ -231,5 +231,10 @@ export enum Status {
      *
      * @see {@link MatterSpecification.v13.Core} § 8.10.1
      */
-    NoCommandResponse = 204
+    NoCommandResponse = 204,
+
+    /**
+     * Matter 1.4, temporarily patched in manually.
+     */
+    AccessRestricted = 0x9d,
 }

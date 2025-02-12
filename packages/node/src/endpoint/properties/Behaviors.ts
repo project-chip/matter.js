@@ -11,8 +11,7 @@ import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
-import { Val } from "#behavior/state/Val.js";
-import { Transaction } from "#behavior/state/transaction/Transaction.js";
+import { Datasource } from "#behavior/state/managed/Datasource.js";
 import {
     camelize,
     Construction,
@@ -23,9 +22,11 @@ import {
     Lifecycle,
     Logger,
     MaybePromise,
-    ReadOnlyError,
+    Transaction,
 } from "#general";
 import { FeatureSet } from "#model";
+import { ProtocolService } from "#node/server/ProtocolService.js";
+import { ClusterTypeProtocol, Val } from "#protocol";
 import { ClusterType } from "#types";
 import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
 import type { Agent } from "../Agent.js";
@@ -52,6 +53,7 @@ export class Behaviors {
     #supported: SupportedBehaviors;
     #backings: Record<string, BehaviorBacking> = {};
     #options: Record<string, object | undefined>;
+    #protocol?: ProtocolService;
 
     /**
      * The {@link SupportedBehaviors} of the {@link Endpoint}.
@@ -370,6 +372,8 @@ export class Behaviors {
                 }
 
                 for (const id of destroyNow) {
+                    const backing = this.#backings[id];
+                    this.#protocol?.deleteCluster(backing);
                     await this.#backings[id].close(agent);
                     delete this.#backings[id];
                 }
@@ -503,6 +507,10 @@ export class Behaviors {
         return elements;
     }
 
+    [Symbol.iterator]() {
+        return Object.values(this.#supported)[Symbol.iterator]();
+    }
+
     #activateLate(type: Behavior.Type) {
         const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context => {
             this.activate(type, context.agentFor(this.#endpoint));
@@ -527,6 +535,13 @@ export class Behaviors {
                 }
             });
         }
+    }
+
+    /**
+     * Create a read-only online view of a behavior.
+     */
+    createOnlineView(type: Behavior.Type) {
+        return this.#backingFor(type).datasource;
     }
 
     /**
@@ -563,6 +578,10 @@ export class Behaviors {
 
         const backing = this.#endpoint.env.get(EndpointInitializer).createBacking(this.#endpoint, myType);
         this.#backings[type.id] = backing;
+        if (!this.#protocol) {
+            this.#protocol = this.#endpoint.env.get(ProtocolService);
+        }
+        this.#protocol.addCluster(backing);
         backing.construction.start(agent);
 
         return backing;
@@ -583,20 +602,20 @@ export class Behaviors {
     }
 
     /**
-     * Updates endpoint "state" and "events" properties to include properties for our implementations.
+     * Updates endpoint "state" and "events" properties to include properties for a supported behavior.
      */
     #augmentEndpoint(type: Behavior.Type) {
-        Object.defineProperty(this.#endpoint.state, type.id, {
+        const stateDescriptor = {
             get: () => {
                 return this.#backingFor(type).stateView;
             },
 
-            set() {
-                throw new ReadOnlyError('The "state" property is read-only; you must use set() to modify state');
-            },
-
             enumerable: true,
-        });
+        };
+        Object.defineProperty(this.#endpoint.state, type.id, stateDescriptor);
+        if (type.schema?.id !== undefined) {
+            Object.defineProperty(this.#endpoint.state, type.schema.id, stateDescriptor);
+        }
 
         let events: undefined | EventEmitter;
         Object.defineProperty(this.#endpoint.events, type.id, {
@@ -614,4 +633,11 @@ export class Behaviors {
 
 function clusterOf(behavior?: Behavior.Type): ClusterType | undefined {
     return (behavior as ClusterBehavior.Type)?.cluster;
+}
+
+export namespace Behaviors {
+    export interface ProtocolContext {
+        descriptor: ClusterTypeProtocol;
+        datasource: Datasource;
+    }
 }

@@ -4,13 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "#behavior/AccessControl.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
 import { deepCopy, InternalError, isDeepEqual, Logger } from "#general";
 import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { AccessControlManager, AclEndpointContext, FabricManager, IncomingSubjectDescriptor } from "#protocol";
+import {
+    AccessControl,
+    AccessControlManager,
+    AclEndpointContext,
+    FabricManager,
+    IncomingSubjectDescriptor,
+} from "#protocol";
 import {
     CaseAuthenticatedTag,
     ClusterId,

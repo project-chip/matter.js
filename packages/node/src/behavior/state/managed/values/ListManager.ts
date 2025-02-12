@@ -5,14 +5,12 @@
  */
 
 import { isObject, serialize } from "#general";
+import type { Schema } from "#model";
 import { Access, DataModelPath, ValueModel } from "#model";
+import { AccessControl, ExpiredReferenceError, ReadError, SchemaImplementationError, Val, WriteError } from "#protocol";
 import { StatusCode } from "#types";
-import { AccessControl } from "../../../AccessControl.js";
-import { ExpiredReferenceError, ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";
 import { ManagedReference } from "../ManagedReference.js";

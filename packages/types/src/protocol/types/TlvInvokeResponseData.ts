@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvCommandData } from "./TlvCommandData.js";
 import { TlvCommandStatus } from "./TlvCommandStatus.js";
@@ -15,3 +16,5 @@ export const TlvInvokeResponseData = TlvObject({
     command: TlvOptionalField(0, TlvCommandData),
     status: TlvOptionalField(1, TlvCommandStatus),
 });
+
+export type InvokeResponseData = TypeFromSchema<typeof TlvInvokeResponseData>;

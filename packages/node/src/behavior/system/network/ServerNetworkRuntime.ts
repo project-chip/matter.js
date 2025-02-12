@@ -16,7 +16,7 @@ import {
     TransportInterfaceSet,
     UdpInterface,
 } from "#general";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
 import {
     Ble,

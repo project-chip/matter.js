@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Schema } from "#model";
 import { Conformance, DataModelPath, SchemaErrorPath, SchemaImplementationError } from "#model";
-import { Schema } from "../../supervision/Schema.js";
-import { Val } from "../Val.js";
+import { Val } from "#protocol";
 import { ValidationLocation } from "./location.js";
 
 export class UnsupportedConformanceNodeError extends SchemaImplementationError {

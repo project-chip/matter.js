@@ -6,13 +6,12 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
-import { ConstraintError } from "#behavior/errors.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { Val } from "#behavior/state/Val.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { MaybePromise } from "#general";
 import { ClusterModel, DataModelPath, FeatureMap, FeatureSet, FieldElement } from "#model";
-import { FabricIndex, NodeId } from "#types";
+import { ConstraintError, Val } from "#protocol";
+import { EndpointNumber, FabricIndex, NodeId } from "#types";
 import { aclEndpoint, TestStruct } from "./value-utils.js";
 
 export type Nested = {
@@ -24,7 +23,7 @@ export type Nested = {
 const TestContext = {
     fabric: FabricIndex(1),
     subject: NodeId(1),
-    root: aclEndpoint([1, 3]),
+    node: aclEndpoint([1, 3]),
 };
 
 function testNested(
@@ -77,7 +76,11 @@ async function testDuality(life: boolean, actor: (struct: { alive?: boolean }) =
 
     const supervisor = RootSupervisor.for(schema);
 
-    const datasource = Datasource({ type: SchrödingersCatsState, supervisor, path: DataModelPath(0) });
+    const datasource = Datasource({
+        type: SchrödingersCatsState,
+        supervisor,
+        location: { endpoint: EndpointNumber(1), path: DataModelPath(0) },
+    });
 
     await OfflineContext.act("test", undefined, cx => {
         actor(datasource.reference(cx));

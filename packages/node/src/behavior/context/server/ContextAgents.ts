@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Agent } from "#endpoint/Agent.js";
-import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { ActionContext } from "../ActionContext.js";
+import type { Agent } from "#endpoint/Agent.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
+import type { EndpointType } from "#endpoint/type/EndpointType.js";
+import type { ActionContext } from "../ActionContext.js";
 
 /**
  * Internal helper for managing agents associated with a session.

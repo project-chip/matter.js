@@ -13,5 +13,6 @@ export * from "./MatterError.js";
 export * from "./net/index.js";
 export * from "./storage/index.js";
 export * from "./time/index.js";
+export * from "./transaction/index.js";
 export * from "./util/index.js";
 import "./polyfills/index.js";

@@ -6,7 +6,8 @@
 
 import { isDeepEqual } from "#compat/util.js";
 import { Construction, StorageContext } from "#general";
-import { EndpointStore, Val } from "#node";
+import { EndpointStore } from "#node";
+import { Val } from "@matter/protocol";
 
 /**
  * This is a simple and pragmatic adoption for EndpointStore for Client usecases to cache subscription data.

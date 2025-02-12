@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MaybePromise } from "#general";
+import type { MaybePromise } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { Discovery, DiscoveryError } from "./Discovery.js";
 
 /**

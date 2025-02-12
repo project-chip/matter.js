@@ -24,6 +24,7 @@ export class EndpointLifecycle {
     #installed = Observable<[]>(error => this.emitError("installed", error));
     #ready = Observable<[]>(error => this.emitError("ready", error));
     #partsReady = Observable<[]>(error => this.emitError("partsReady", error));
+    #destroying = Observable<[]>(error => this.emitError("destroying", error));
     #destroyed = Observable<[]>(error => this.emitError("destroyed", error));
     #changed = Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error =>
         this.emitError("changed", error),
@@ -57,6 +58,13 @@ export class EndpointLifecycle {
      */
     get treeReady() {
         return this.partsReady;
+    }
+
+    /**
+     * Emitted when the endpoint begins destruction.
+     */
+    get destroying() {
+        return this.#destroying;
     }
 
     /**
@@ -237,6 +245,7 @@ export namespace EndpointLifecycle {
         Ready = "ready",
         PartsReady = "partsReady",
         Crashed = "crashed",
+        Destroying = "destroying",
         Destroyed = "destroyed",
         ServersChanged = "serversChanged",
         ClientsChanged = "clientsChanged",

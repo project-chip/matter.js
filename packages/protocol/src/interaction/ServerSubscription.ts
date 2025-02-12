@@ -136,7 +136,6 @@ export interface ServerSubscriptionContext {
         offline?: boolean,
     ): { version: number; value: unknown };
     readEndpointAttributesForSubscription(
-        endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<unknown>; offline?: boolean }[],
     ): { path: AttributePath; attribute: AnyAttributeServer<unknown>; version: number; value: unknown }[];
     readEvent(
@@ -736,7 +735,6 @@ export class ServerSubscription extends Subscription {
             const endpointAttributes = attributesPerCluster.get(endpointId)!;
             attributesPerCluster.delete(endpointId);
             for (const { path, attribute, value, version } of this.#context.readEndpointAttributesForSubscription(
-                endpointId,
                 endpointAttributes,
             )) {
                 if (value === undefined) continue;

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
@@ -14,7 +13,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
 import { FieldElement, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { MdnsService } from "#protocol";
+import { MdnsService, Val } from "#protocol";
 import { CommandId, StatusCode, StatusResponseError, TlvInvokeResponse } from "#types";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
 

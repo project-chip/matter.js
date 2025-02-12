@@ -7,10 +7,9 @@
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { InternalError } from "#general";
 import { Constraint, FieldValue, Metatype, ValueModel } from "#model";
-import { ConstraintError } from "../../errors.js";
+import { ConstraintError, Val } from "#protocol";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NameResolver } from "../managed/NameResolver.js";
-import { Val } from "../Val.js";
 import { assertArray, assertBoolean, assertNumeric, assertSequence, assertString } from "./assertions.js";
 import { ValidationLocation } from "./location.js";
 

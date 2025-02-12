@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ConformanceError } from "#behavior/errors.js";
 import { FieldElement } from "#model";
+import { ConformanceError } from "#protocol";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
 function missing(conformance: string, fieldName = "test") {

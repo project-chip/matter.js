@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Instrumentation, Val } from "#node";
+import { Instrumentation } from "#node";
+import { Val } from "#protocol";
 import { inspect } from "util";
 
 /**
