@@ -189,6 +189,9 @@ class Tx implements Transaction {
     }
 
     onShared(listener: () => void, once?: boolean) {
+        if (this.status === Status.ReadOnly) {
+            return;
+        }
         if (this.#shared === undefined) {
             this.#shared = Observable();
         }
@@ -197,6 +200,9 @@ class Tx implements Transaction {
     }
 
     onClose(listener: () => void) {
+        if (this.status === Status.ReadOnly) {
+            return;
+        }
         if (this.status === Status.Destroyed) {
             listener();
         }
