@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LogLevel } from "#log/LogLevel.js";
 import { TransactionFlowError } from "./errors.js";
 import type { Transaction } from "./Transaction.js";
 
@@ -65,4 +66,19 @@ export namespace Status {
     export function formatStatus(status: Status) {
         return `<${status}>`;
     }
+
+    /**
+     * If an asynchronous transaction holds an exclusive (write) lock for an extended period it will write details of
+     * the lock to the log.  Set this value to configure the length of the reporting window.
+     *
+     * A value of 0 forces lock reports for all async transactions; a negative value disables reporting.
+     */
+    // eslint-disable-next-line prefer-const
+    export let slowTransactionMs = 200;
+
+    /**
+     * The log level for slow transaction reporting.
+     */
+    // eslint-disable-next-line prefer-const
+    export let slowLogLevel = LogLevel.INFO;
 }

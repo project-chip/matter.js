@@ -7,6 +7,7 @@
 import { Diagnostic } from "#log/Diagnostic.js";
 import { Logger } from "#log/Logger.js";
 import { ImplementationError, ReadOnlyError } from "#MatterError.js";
+import { Time, Timer } from "#time/Time.js";
 import { Observable } from "#util/Observable.js";
 import { MaybePromise } from "#util/Promises.js";
 import { describeList } from "#util/String.js";
@@ -15,7 +16,7 @@ import type { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";
 import { ResourceSet } from "./ResourceSet.js";
 import { Status } from "./Status.js";
-import { Transaction } from "./Transaction.js";
+import type { Transaction } from "./Transaction.js";
 
 const logger = Logger.get("Transaction");
 
@@ -47,12 +48,12 @@ export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
         const result = tx.commit();
         if (MaybePromise.is(result)) {
             return result.then(() => {
-                if (tx.status === Transaction.Status.Exclusive) {
+                if (tx.status === Status.Exclusive) {
                     return commitTransaction(finalResult);
                 }
                 return finalResult;
             });
-        } else if (tx.status === Transaction.Status.Exclusive) {
+        } else if (tx.status === Status.Exclusive) {
             return commitTransaction(finalResult);
         }
 
@@ -137,6 +138,7 @@ class Tx implements Transaction {
     #shared?: Observable<[]>;
     #closed?: Observable<[]>;
     #isAsync = false;
+    #reportingLocks = false;
 
     constructor(via: string, readonly = false) {
         this.#via = Diagnostic.via(via);
@@ -148,6 +150,7 @@ class Tx implements Transaction {
     }
 
     close() {
+        Monitor.delete(this);
         this.#status = Status.Destroyed;
         this.#resources.clear();
         this.#roles.clear();
@@ -352,7 +355,13 @@ class Tx implements Transaction {
             throw new TransactionFlowError("Attempted wait on a transaction that is already waiting");
         }
 
-        logger.debug("Tx", this.via, "waiting on", describeList("and", ...[...others].map(other => other.via)));
+        logger.log(
+            Status.slowLogLevel,
+            "Tx",
+            this.via,
+            "waiting on",
+            describeList("and", ...[...others].map(other => other.via)),
+        );
 
         this.#waitingOn = others;
         return new Promise<void>(resolve => {
@@ -372,6 +381,15 @@ class Tx implements Transaction {
         return `transaction<${this.via}>`;
     }
 
+    treatAsSlow() {
+        Monitor.delete(this);
+        if (this.#reportingLocks) {
+            return;
+        }
+        this.#reportingLocks = true;
+        this.#locksChanged(this.#resources);
+    }
+
     /**
      * Shared implementation for commit and rollback.
      */
@@ -389,6 +407,10 @@ class Tx implements Transaction {
             const set = new ResourceSet(this, this.#resources);
             const unlocked = set.releaseLocks();
             this.#locksChanged(unlocked, `${why} and unlocked`);
+
+            // Reset "slow" transaction state
+            Monitor.delete(this);
+            this.#reportingLocks = false;
 
             // Release participants
             this.#participants.clear();
@@ -691,13 +713,18 @@ class Tx implements Transaction {
             return;
         }
 
+        if (!this.#reportingLocks) {
+            Monitor.add(this);
+            return;
+        }
+
         let resourceDescription;
         if (how === "locked") {
             resourceDescription = Diagnostic.strong(describeList("and", ...[...resources].map(r => r.toString())));
         } else {
             resourceDescription = `${resources.size} resource${resources.size === 1 ? "" : "s"}`;
         }
-        logger.debug(this.via, how, resourceDescription);
+        logger.log(Status.slowLogLevel, this.via, how, resourceDescription);
     }
 
     #assertAvailable() {
@@ -732,3 +759,52 @@ function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
         )}`,
     );
 }
+
+/**
+ * "Slow" async transaction monitoring implementation.
+ */
+const Monitor = (function () {
+    const monitored = new Map<Tx, number>();
+    let monitor: Timer | undefined;
+
+    function check() {
+        const now = Time.nowMs();
+        for (const [tx, slowAt] of monitored) {
+            if (now > slowAt) {
+                tx.treatAsSlow();
+            }
+        }
+    }
+
+    return {
+        add(tx: Tx) {
+            const { slowTransactionMs } = Status;
+            if (slowTransactionMs < 0) {
+                return;
+            }
+
+            if (!slowTransactionMs) {
+                tx.treatAsSlow();
+                return;
+            }
+
+            if (monitored.has(tx)) {
+                return;
+            }
+
+            monitored.set(tx, Time.nowMs() + slowTransactionMs);
+            if (monitor === undefined) {
+                monitor = Time.getPeriodicTimer("tx-lock-monitor", slowTransactionMs / 10, check);
+                monitor.start();
+            }
+        },
+
+        delete(tx: Tx) {
+            monitored.delete(tx);
+            if (!monitored.size && monitor) {
+                monitor.stop();
+                monitor = undefined;
+            }
+        },
+    };
+})();

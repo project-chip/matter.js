@@ -452,6 +452,7 @@ export class Logger {
     warn = (...values: any[]) => this.#log(LogLevel.WARN, values);
     error = (...values: any[]) => this.#log(LogLevel.ERROR, values);
     fatal = (...values: any[]) => this.#log(LogLevel.FATAL, values);
+    log = (level: LogLevel, ...values: any[]) => this.#log(level, values);
 
     #log(level: LogLevel, values: any[]) {
         for (const logger of Logger.logger) {
