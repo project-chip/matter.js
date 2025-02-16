@@ -5,9 +5,9 @@
  */
 
 import { StorageBackendDisk } from "#storage/StorageBackendDisk.js";
+import { LocalStorage } from "node-localstorage";
 import * as assert from "node:assert";
 import { readFile, stat } from "node:fs/promises";
-import { LocalStorage } from "node-localstorage";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 

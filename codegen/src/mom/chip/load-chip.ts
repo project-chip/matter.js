@@ -6,8 +6,8 @@
 
 import { Logger } from "#general";
 import { AnyElement, ClusterElement, DatatypeElement, Matter, Metatype, ValueElement } from "#model";
-import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
+import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { readFileWithCache } from "../../util/file.js";

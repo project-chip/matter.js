@@ -6,8 +6,8 @@
 
 import { Diagnostic, Logger } from "#general";
 import { Specification } from "#model";
-import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
+import { readFileSync } from "node:fs";
 import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
 
