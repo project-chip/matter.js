@@ -7,7 +7,6 @@
 import { Mei } from "../common/Mei.js";
 import { CommandElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
-import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
 export class CommandModel extends ValueModel<CommandElement> implements CommandElement {
@@ -57,9 +56,7 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
         return this.direction;
     }
 
-    static {
-        Model.types[CommandElement.Tag] = this;
-    }
-
     static Tag = CommandElement.Tag;
 }
+
+CommandModel.register();

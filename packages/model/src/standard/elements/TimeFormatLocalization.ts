@@ -58,7 +58,7 @@ export const TimeFormatLocalization = Cluster(
 
     Attribute({
         name: "ActiveCalendarType", id: 0x1, type: "CalendarTypeEnum", access: "RW VM",
-        conformance: "CALFMT", constraint: "in supportedCalendarTypes", quality: "N",
+        conformance: "CALFMT", constraint: "in SupportedCalendarTypes", quality: "N",
 
         details: "Indicates the calendar format that the Node is currently configured to use when conveying dates." +
             "\n" +

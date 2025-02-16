@@ -25,9 +25,19 @@ const GlobalTypeSections: Partial<Record<Specification, Record<string, GlobalRef
     },
 };
 
+/**
+ * As we scan the document we maintain a stack of "collectors" that ingest sections.
+ */
 interface SubsectionCollector {
-    subsection: string;
-    collector: (ref: HtmlReference) => void;
+    /**
+     * The collector is active until it returns false for a section.
+     */
+    collects(ref: HtmlReference): boolean;
+
+    /**
+     * Adds a section for which the collector has asserted ownership via {@link collects}.
+     */
+    collect(ref: HtmlReference): void;
 }
 
 /**
@@ -56,6 +66,11 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                     collectors.pop();
                     break;
 
+                case ScanDirective.POP2:
+                    collectors.pop();
+                    collectors.pop();
+                    break;
+
                 case ScanDirective.NAMESPACE:
                     if (definition?.type === "cluster") {
                         if (!definition.namespace) {
@@ -67,7 +82,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             }
         }
 
-        while (collectors.length && !subref.xref.section.startsWith(collectors[collectors.length - 1].subsection)) {
+        while (collectors.length && !collectors[collectors.length - 1].collects(subref)) {
             collectors.pop();
         }
 
@@ -78,10 +93,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
 
             definition = identifyCluster(subref);
             if (definition) {
-                collectors.push({
-                    subsection: definition.xref.section,
-                    collector: clusterCollector,
-                });
+                collect(definition.xref.section, clusterCollector);
             } else {
                 definition = identifyGlobal(subref);
                 if (definition) {
@@ -91,7 +103,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         }
 
         if (collectors.length) {
-            collectors[collectors.length - 1].collector(subref);
+            collectors[collectors.length - 1].collect(subref);
         }
     }
 
@@ -109,10 +121,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
 
             const name = ref.name.slice(0, ref.name.length - 8);
             if (FAKE_CLUSTER_NAMES.indexOf(name) !== -1) {
-                collectors.push({
-                    subsection: ref.xref.section,
-                    collector() {},
-                });
+                collect(ref.xref.section, () => {});
                 return;
             }
 
@@ -132,6 +141,21 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 return { type: "cluster", ...ref };
             }
         }
+    }
+
+    function collect(
+        subsection: string,
+        collect: (ref: HtmlReference) => void,
+        collects?: (ref: HtmlReference) => boolean,
+    ) {
+        if (collects === undefined) {
+            collects = ref => isSubsectionOf(subsection, ref);
+        }
+        collectors.push({ collect, collects });
+    }
+
+    function isSubsectionOf(section: string, ref: HtmlReference) {
+        return ref.xref.section.startsWith(section);
     }
 
     function clusterCollector(subref: HtmlReference) {
@@ -216,47 +240,53 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
     }
 
     function collectDatatypes(definition: ClusterReference, subref: HtmlReference) {
-        collectors.push({
-            subsection: subref.xref.section,
-            collector(datatypeRef) {
-                if (!definition.datatypes) {
-                    definition.datatypes = [];
-                }
-                datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
-                logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
-                definition.datatypes.push(datatypeRef);
-                if (datatypeRef.tables) {
-                    // Probably a struct, enum or bitmap.  These are sometimes followed with sections that
-                    // detail individual items
-                    collectDetails(datatypeRef);
-                }
-            },
+        collect(subref.xref.section, datatypeRef => {
+            if (!definition.datatypes) {
+                definition.datatypes = [];
+            }
+            datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
+            logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
+            definition.datatypes.push(datatypeRef);
+            if (datatypeRef.tables) {
+                // Probably a struct, enum or bitmap.  These are sometimes followed with sections that
+                // detail individual items
+                collectDetails(datatypeRef, other => {
+                    // A field in the "datatypes" section following a datatype is a spec bug and should have been part
+                    // of the previous section.  Detect this and treat as if it is a proper subsection
+                    if (other.name.endsWith(" Field")) {
+                        return true;
+                    }
+                    if (other.prose?.[0]?.textContent?.match(/^This field /)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
         });
     }
 
     function collectNamespace(definition: ClusterReference, subref: HtmlReference) {
-        collectors.push({
-            subsection: subref.xref.section,
-            collector(ref) {
-                // Only collect namespace sections that appear to have a defining table
-                if (!ref.tables || !ref.tables[0].fields.includes("name")) {
-                    return;
-                }
+        collect(subref.xref.section, ref => {
+            // Only collect namespace sections that appear to have a defining table
+            if (!ref.tables || !ref.tables[0].fields.includes("name")) {
+                return;
+            }
 
-                if (!definition.namespace) {
-                    definition.namespace = [];
-                }
-                logger.debug(`namespace section ${ref.name} § ${ref.xref.section}`);
-                definition.namespace.push(ref);
-                collectDetails(ref);
-            },
+            if (!definition.namespace) {
+                definition.namespace = [];
+            }
+            logger.debug(`namespace section ${ref.name} § ${ref.xref.section}`);
+            definition.namespace.push(ref);
+            collectDetails(ref);
         });
     }
 
-    function collectDetails(ref: HtmlReference) {
-        collectors.push({
-            subsection: ref.detailSection ?? ref.xref.section,
-            collector(subref: HtmlReference) {
+    function collectDetails(ref: HtmlReference, memberDetector?: (ref: HtmlReference) => boolean) {
+        const section = ref.detailSection ?? ref.xref.section;
+        collect(
+            ref.detailSection ?? ref.xref.section,
+            subref => {
                 if (!ref.details) {
                     ref.details = [];
                 }
@@ -267,7 +297,20 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                     collectDetails(subref);
                 }
             },
-        });
+            other => {
+                const isSubsection = isSubsectionOf(section, other);
+                if (isSubsection) {
+                    return true;
+                }
+
+                // Support specialized detection of sections that *should* be subsections but are not
+                if (memberDetector?.(other)) {
+                    return true;
+                }
+
+                return false;
+            },
+        );
     }
 
     function defineElement(

@@ -71,7 +71,7 @@ export const epochUs = Datatype(
             "UTC Epoch Time = (NTP(s) - 0xBC17C200)*10^6 + ((NTP(frac32)*10^6) / 2^32) where all numbers are " +
             "treated as unsigned 64-bit integers and the division is integer division.",
 
-        xref: { document: "core", section: "7.18.2.5" }
+        xref: { document: "core", section: "7.19.2.5" }
     }
 );
 

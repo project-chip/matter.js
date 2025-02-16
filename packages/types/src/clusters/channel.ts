@@ -127,9 +127,8 @@ export namespace Channel {
         callSign: TlvOptionalField(3, TlvString),
 
         /**
-         * This field shall indicate the local affiliate call sign, such as "KCTS". This field is optional, but
-         *
-         * SHOULD be provided when known.
+         * This field shall indicate the local affiliate call sign, such as "KCTS". This field is optional, but SHOULD
+         * be provided when known.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.5.5
          */
@@ -602,33 +601,35 @@ export namespace Channel {
 
         /**
          * This field shall be used for indicating the level of parental guidance recommended for of a particular
-         * program. This can be any rating system used in the country or region where the program is
-         *
-         * broadcast. For example, in the United States “TV-PG” may contain material that parents can find not suitable
-         * for younger children but can be accepted in general for older children. This field is optional but shall be
-         * provided if known.
+         * program. This can be any rating system used in the country or region where the program is broadcast. For
+         * example, in the United States “TV-PG” may contain material that parents can find not suitable for younger
+         * children but can be accepted in general for older children. This field is optional but shall be provided if
+         * known.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.9
          */
         ratings: TlvOptionalField(8, TlvArray(TlvString, { maxLength: 255 })),
 
         /**
-         * This field shall represent a url of a thumbnail that clients can use to render an image for the program.
+         * This field shall represent a URL of a thumbnail that clients can use to render an image for the program. The
+         * syntax of this field shall follow the syntax as specified in RFC 1738 and shall use the https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.10
          */
         thumbnailUrl: TlvOptionalField(9, TlvString.bound({ maxLength: 8192 })),
 
         /**
-         * This field shall represent a url of a poster that clients can use to render an image for the program on the
-         * detail view.
+         * This field shall represent a URL of a poster that clients can use to render an image for the program on the
+         * detail view. The syntax of this field shall follow the syntax as specified in RFC 1738 and shall use the
+         * https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.11
          */
         posterArtUrl: TlvOptionalField(10, TlvString.bound({ maxLength: 8192 })),
 
         /**
-         * This field shall represent the DVB-I url associated to the program.
+         * This field shall represent the DVB-I URL associated to the program. The syntax of this field shall follow
+         * the syntax as specified in RFC 1738 and shall use the https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.12
          */
@@ -923,10 +924,8 @@ export namespace Channel {
             /**
              * This command retrieves the program guide. It accepts several filter parameters to return specific
              * schedule and program information from a content app. The command shall receive in response a
-             * ProgramGuideResponse. Standard error codes shall be used when arguments provided are not
-             *
-             * valid. For example, if StartTime is greater than EndTime, the status code INVALID_ACTION shall be
-             * returned.
+             * ProgramGuideResponse. Standard error codes shall be used when arguments provided are not valid. For
+             * example, if StartTime is greater than EndTime, the status code INVALID_ACTION shall be returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.5
              */
@@ -1051,7 +1050,11 @@ export namespace Channel {
      *
      * This cluster server would be supported on Video Player devices or endpoints that allow Channel control such as a
      * Content App. This cluster provides a list of available channels and provides commands for absolute and relative
-     * channel changes.
+     * channel changes. Some of these commands and/or their responses may be large (see Large Message Quality under
+     * Data Model section in [MatterCore]), but they do not have the Large quality indicator (L) because they can also
+     * be transferred over MRP (see Message Reliability Protocol in [MatterCore]) in pages that fit within the MRP MTU
+     * limit. However, an implementation may leverage a transport like TCP that allows large payloads, if available, to
+     * minimize the number of messages required to transfer the corresponding payload.
      *
      * The cluster server for Channel is implemented by an endpoint that controls the current Channel.
      *

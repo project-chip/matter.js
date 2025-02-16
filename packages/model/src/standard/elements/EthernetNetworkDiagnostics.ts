@@ -81,8 +81,7 @@ export const EthernetNetworkDiagnostics = Cluster(
         name: "TxErrCount", id: 0x4, type: "uint64", access: "R V", conformance: "ERRCNT", default: 0,
         quality: "C",
         details: "The TxErrCount attribute shall indicate the number of failed packet transmissions that have " +
-            "occurred on the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a" +
-            "\n" +
+            "occurred on the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a " +
             "reboot of the Node.",
         xref: { document: "core", section: "11.16.6.5" }
     }),

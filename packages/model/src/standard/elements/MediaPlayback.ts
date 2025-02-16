@@ -58,11 +58,14 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "AA", constraint: "4", description: "AudioAdvance",
-            details: "This feature is for a device or app that supports playing audio during fast and slow advance and " +
+
+            details: "This feature is for a device or app that supports playing audio during fast and slow advance and" +
+                "\n" +
                 "rewind (e.g., while playback speed is not 1). A device that supports this feature may only support " +
                 "playing audio during certain speeds." +
                 "\n" +
                 "A cluster implementing AA shall implement AS.",
+
             xref: { document: "cluster", section: "6.10.4.5" }
         })
     ),
@@ -467,7 +470,7 @@ export const MediaPlayback = Cluster(
             xref: { document: "cluster", section: "6.10.7.12.1" }
         }),
         Field({
-            name: "Data", id: 0x1, type: "string", conformance: "O",
+            name: "Data", id: 0x1, type: "string", conformance: "O", constraint: "any",
             details: "This field shall indicate Optional app-specific data.",
             xref: { document: "cluster", section: "6.10.7.12.2" }
         })
@@ -671,8 +674,8 @@ export const MediaPlayback = Cluster(
 
             details: "This field shall indicate the associated discrete position within the media stream, in milliseconds " +
                 "from the beginning of the stream, being associated with the time indicated by the UpdatedAt field. " +
-                "The Position shall not be greater than the duration of the media if duration is specified. The " +
-                "Position shall not be greater than the time difference between current time and start time of the " +
+                "The Position shall NOT be greater than the duration of the media if duration is specified. The " +
+                "Position shall NOT be greater than the time difference between current time and start time of the " +
                 "media when start time is specified." +
                 "\n" +
                 "A value of null shall indicate that playback position is not applicable for the current state of " +

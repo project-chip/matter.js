@@ -11,6 +11,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const enum8 = Datatype({
     name: "enum8", type: "uint8", description: "8-bit enumeration", isSeed: true, metatype: "enum",
-    xref: { document: "core", section: "7.18.2" }
+    xref: { document: "core", section: "7.19.2" }
 })
 MatterDefinition.children.push(enum8);

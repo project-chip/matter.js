@@ -24,7 +24,7 @@ export const BasicInformation = Cluster(
         xref: { document: "core", section: "11.1" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 4 }),
 
     Attribute({
         name: "DataModelRevision", id: 0x0, type: "uint16", access: "R V", conformance: "M",
@@ -160,17 +160,15 @@ export const BasicInformation = Cluster(
         xref: { document: "core", section: "11.1.5.13" }
     }),
 
-    Attribute(
-        {
-            name: "ProductUrl", id: 0xd, type: "string", access: "R V", conformance: "O", constraint: "max 256",
-            quality: "F",
-            details: "This attribute shall specify a link to a product specific web page. The syntax of the ProductURL " +
-                "attribute shall follow the syntax as specified in RFC 3986 [https://tools.ietf.org/html/rfc3986]. " +
-                "The specified URL SHOULD resolve to a maintained web page available for the lifetime of the " +
-                "product. The maximum length of the ProductUrl attribute is 256 ASCII characters.",
-            xref: { document: "core", section: "11.1.5.14" }
-        }
-    ),
+    Attribute({
+        name: "ProductUrl", id: 0xd, type: "string", access: "R V", conformance: "O", constraint: "max 256",
+        quality: "F",
+        details: "This attribute shall specify a link to a product specific web page. The specified URL SHOULD " +
+            "resolve to a maintained web page available for the lifetime of the product. The syntax of this " +
+            "attribute shall follow the syntax as specified in RFC 1738 and shall use the https scheme. The " +
+            "maximum length of this attribute is 256 ASCII characters.",
+        xref: { document: "core", section: "11.1.5.14" }
+    }),
 
     Attribute({
         name: "ProductLabel", id: 0xe, type: "string", access: "R V", conformance: "O",
@@ -210,23 +208,34 @@ export const BasicInformation = Cluster(
     }),
 
     Attribute({
-        name: "UniqueId", id: 0x12, type: "string", access: "R V", conformance: "O", constraint: "max 32",
+        name: "UniqueId", id: 0x12, type: "string", access: "R V", conformance: "M", constraint: "max 32",
         quality: "F",
 
-        details: "This attribute (when used) shall indicate a unique identifier for the device, which is constructed " +
-            "in a manufacturer specific manner." +
+        details: "Indicates a unique identifier for the device, which is constructed in a manufacturer specific " +
+            "manner." +
             "\n" +
             "It may be constructed using a permanent device identifier (such as device MAC address) as basis. In " +
             "order to prevent tracking," +
             "\n" +
             "  • it SHOULD NOT be identical to (or easily derived from) such permanent device identifier" +
             "\n" +
-            "  • it SHOULD be updated when the device is factory reset" +
+            "  • it shall be updated when the device is factory reset" +
             "\n" +
-            "  • it shall not be identical to the SerialNumber attribute" +
+            "  • it shall NOT be identical to the SerialNumber attribute" +
             "\n" +
-            "  • it shall not be printed on the product or delivered with the product The value does not need to " +
-            "    be human readable.",
+            "  • it shall NOT be printed on the product or delivered with the product" +
+            "\n" +
+            "The value does not need to be human readable, since it is intended for machine to machine (M2M) " +
+            "communication." +
+            "\n" +
+            "NOTE" +
+            "\n" +
+            "NOTE" +
+            "\n" +
+            "The conformance of the UniqueID attribute was optional in cluster revisions prior to revision 4." +
+            "\n" +
+            "This UniqueID attribute shall NOT be the same as the Persistent Unique ID which is used in the " +
+            "Rotating Device Identifier mechanism.",
 
         xref: { document: "core", section: "11.1.5.19" }
     }),
@@ -245,7 +254,8 @@ export const BasicInformation = Cluster(
             "rely on the amounts provided in this attribute." +
             "\n" +
             "Note that since the fixed values within this attribute may change over time, both increasing and " +
-            "decreasing, as software versions change for a given Node, clients SHOULD take care not to assume " +
+            "decreasing, as software versions change for a given Node, clients SHOULD take care not to assume" +
+            "\n" +
             "forever unchanging values and SHOULD NOT cache this value permanently at Commissioning time.",
 
         xref: { document: "core", section: "11.1.5.20" }
@@ -307,9 +317,8 @@ export const BasicInformation = Cluster(
         details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, " +
             "“Invoke Request Action”) that the Node is able to process. Note that since this attribute may " +
             "change over time, both increasing and decreasing, as software versions change for a given Node, " +
-            "clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
-            "\n" +
-            "cache this value permanently at Commissioning time." +
+            "clients SHOULD take care not to assume forever unchanging values and SHOULD NOT cache this value " +
+            "permanently at Commissioning time." +
             "\n" +
             "If the MaxPathsPerInvoke attribute is absent or zero, such as in Basic Information cluster " +
             "revisions prior to Revision 3, clients shall assume a value of 1.",
@@ -353,8 +362,7 @@ export const BasicInformation = Cluster(
                 "Leave event is generated, it SHOULD be assumed that the fabric recorded in the event is no longer " +
                 "usable, and subsequent interactions targeting that fabric will most likely fail." +
                 "\n" +
-                "Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the" +
-                "\n" +
+                "Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the " +
                 "fabric by removing related bindings, access control list entries and other data referencing the " +
                 "leaving Node.",
 

@@ -117,7 +117,7 @@ export namespace Identify {
      */
     export const TlvTriggerEffectRequest = TlvObject({
         /**
-         * This field specifies the identify effect to use and shall contain one of the non-reserved values in
+         * This field shall indicate the identify effect to use and shall contain one of the non-reserved values in
          * EffectIdentifierEnum.
          *
          * All values of the EffectIdentifierEnum shall be supported. Implementors may deviate from the example light
@@ -128,8 +128,8 @@ export namespace Identify {
         effectIdentifier: TlvField(0, TlvEnum<EffectIdentifier>()),
 
         /**
-         * This field is used to indicate which variant of the effect, indicated in the EffectIdentifier field, SHOULD
-         * be triggered. If a device does not support the given variant, it shall use the default variant. This field
+         * This field shall indicate which variant of the effect, indicated in the EffectIdentifier field, SHOULD be
+         * triggered. If a device does not support the given variant, it shall use the default variant. This field
          * shall contain one of the values in EffectVariantEnum.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.2.6.2.2
@@ -150,12 +150,11 @@ export namespace Identify {
     export const ClusterInstance = MutableCluster({
         id: 0x3,
         name: "Identify",
-        revision: 4,
+        revision: 5,
 
         attributes: {
             /**
-             * This attribute specifies the remaining length of time, in seconds, that the endpoint will continue to
-             * identify itself.
+             * Indicates the remaining length of time, in seconds, that the endpoint will continue to identify itself.
              *
              * If this attribute is set to a value other than 0 then the device shall enter its identification state,
              * in order to indicate to an observer which of several nodes and/or endpoints it is. It is recommended
@@ -170,11 +169,11 @@ export namespace Identify {
             identifyTime: WritableAttribute(0x0, TlvUInt16, { default: 0 }),
 
             /**
-             * This attribute specifies how the identification state is presented to the user.
+             * Indicates how the identification state is presented to the user.
              *
-             * This field shall contain one of the values defined in IdentifyTypeEnum. The value None shall NOT be used
-             * if the device is capable of presenting its identification state using one of the other methods defined
-             * in IdentifyTypeEnum.
+             * This attribute shall contain one of the values defined in IdentifyTypeEnum. The value None shall NOT be
+             * used if the device is capable of presenting its identification state using one of the other methods
+             * defined in IdentifyTypeEnum.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.2.5.2
              */

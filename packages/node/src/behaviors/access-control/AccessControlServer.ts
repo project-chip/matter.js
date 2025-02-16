@@ -35,7 +35,7 @@ const logger = Logger.get("AccessControlServer");
 /**
  * This is the default server implementation of AccessControlBehavior.
  */
-export class AccessControlServer extends AccessControlBehavior {
+export class AccessControlServer extends AccessControlBehavior.with("Extension") {
     declare internal: AccessControlServer.Internal;
 
     override initialize() {

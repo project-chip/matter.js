@@ -25,7 +25,7 @@ export const SwitchesNs = SemanticNamespace(
             "Position Namespace and the Common Number Namespace in the Generic Switch device type section in the " +
             "Device Library.",
 
-        xref: { document: "namespace", section: "15" }
+        xref: { document: "namespace", section: "18" }
     },
 
     SemanticTag({ name: "On", id: 0x0 }),
@@ -42,7 +42,7 @@ export const SwitchesNs = SemanticNamespace(
         details: "When this value is used, the Label field in the same Semantic Tag structure shall be filled with a " +
             "textual description of the function indicated on the button, such as a label or icon printed on the " +
             "button, e.g. \"dining\".",
-        xref: { document: "namespace", section: "15.1" }
+        xref: { document: "namespace", section: "18.1" }
     })
 );
 

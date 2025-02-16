@@ -34,16 +34,21 @@ export const RootNodeDt = DeviceType(
 
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 22, revision: 2 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 22, revision: 3 } ], element: "attribute" })
     ),
     Requirement({
         name: "BasicInformation", id: 0x28, conformance: "M", element: "serverCluster", quality: "I",
         xref: { document: "device", section: "2.1.5" }
     }),
-    Requirement({
-        name: "AccessControl", id: 0x1f, conformance: "M", element: "serverCluster", quality: "I",
-        xref: { document: "device", section: "2.1.5" }
-    }),
+
+    Requirement(
+        {
+            name: "AccessControl", id: 0x1f, conformance: "M", element: "serverCluster", quality: "I",
+            xref: { document: "device", section: "2.1.5" }
+        },
+        Requirement({ name: "MNGD", conformance: "[ManagedAclAllowed]", constraint: "desc", element: "feature" })
+    ),
+
     Requirement({
         name: "PowerSourceConfiguration", id: 0x2e, conformance: "O, D", element: "serverCluster",
         quality: "I",
@@ -104,26 +109,23 @@ export const RootNodeDt = DeviceType(
     }),
     Requirement({
         name: "EthernetNetworkDiagnostics", id: 0x37, conformance: "[Ethernet]", element: "serverCluster",
-        quality: "I",
         xref: { document: "device", section: "2.1.5" }
     }),
     Requirement({
-        name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, 0, i]", element: "serverCluster",
-        quality: "I",
+        name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, Fi]", element: "serverCluster",
         xref: { document: "device", section: "2.1.5" }
     }),
     Requirement({
         name: "ThreadNetworkDiagnostics", id: 0x35, conformance: "[Thread]", element: "serverCluster",
-        quality: "I",
         xref: { document: "device", section: "2.1.5" }
     }),
 
     Requirement(
         {
-            name: "IcdManagement", id: 0x46, conformance: "SIT", element: "serverCluster", quality: "I",
+            name: "IcdManagement", id: 0x46, conformance: "SIT | LIT", element: "serverCluster", quality: "I",
             xref: { document: "device", section: "2.1.5" }
         },
-        Requirement({ name: "LONGIDLETIMESUPPORT", conformance: "P, LIT", element: "feature" })
+        Requirement({ name: "LONGIDLETIMESUPPORT", conformance: "LIT", element: "feature" })
     ),
 
     Field(
@@ -131,6 +133,11 @@ export const RootNodeDt = DeviceType(
         Field({
             name: "CustomNetworkConfig",
             description: "The node only supports out-of-band-configured networking (e.g. rich user interface, manufacturer-specific means, custom commissioning flows, or future IP-compliant network technology not yet directly supported by NetworkCommissioning cluster).",
+            xref: { document: "device", section: "2.1.3" }
+        }),
+        Field({
+            name: "ManagedAclAllowed",
+            description: "The node has at least one endpoint where some Device Type present on the endpoint has a Device Library element requirement table entry that sets this condition to true.",
             xref: { document: "device", section: "2.1.3" }
         })
     )

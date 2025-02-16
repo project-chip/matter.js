@@ -112,9 +112,9 @@ export const TimeSynchronization = Cluster(
         name: "TrustedTimeSource", id: 0x3, type: "TrustedTimeSourceStruct", access: "R V",
         conformance: "TSC", default: null, quality: "X N",
         details: "A Node ID, endpoint, and associated fabric index of a Node that may be used as trusted time source. " +
-            "See Time source prioritization. This attribute reflects the last value set by an administrator " +
-            "using the SetTrustedTimeSource command. If the value is null, no trusted time source has yet been " +
-            "set.",
+            "See Section 11.17.13, “Time source prioritization”. This attribute reflects the last value set by " +
+            "an administrator using the SetTrustedTimeSource command. If the value is null, no trusted time " +
+            "source has yet been set.",
         xref: { document: "core", section: "11.17.8.4" }
     }),
 
@@ -146,9 +146,7 @@ export const TimeSynchronization = Cluster(
                 "daylight savings time)." +
                 "\n" +
                 "The first entry shall have a ValidAt entry of 0. If there is a second entry, it shall have a " +
-                "non-zero" +
-                "\n" +
-                "ValidAt time." +
+                "non-zero ValidAt time." +
                 "\n" +
                 "If a node supports a TimeZoneDatabase, and it has data for the given time zone Name and the given " +
                 "Offset matches, the node may update its own DSTOffset attribute to add new DST change times as " +
@@ -280,18 +278,16 @@ export const TimeSynchronization = Cluster(
     Event(
         {
             name: "DstStatus", id: 0x1, access: "V", conformance: "TZ", priority: "info",
-
-            details: "This event shall be generated when the node starts or stops applying a DST offset." +
-                "\n" +
-                "DSTOffsetActive" +
-                "\n" +
-                "Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, " +
-                "as opposed to standard time).",
-
+            details: "This event shall be generated when the node starts or stops applying a DST offset.",
             xref: { document: "core", section: "11.17.10.2" }
         },
 
-        Field({ name: "DstOffsetActive", id: 0x0, type: "bool", conformance: "M" })
+        Field({
+            name: "DstOffsetActive", id: 0x0, type: "bool", conformance: "M",
+            details: "Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, " +
+                "as opposed to standard time).",
+            xref: { document: "core", section: "11.17.10.2.1" }
+        })
     ),
 
     Event(
@@ -347,8 +343,9 @@ export const TimeSynchronization = Cluster(
                 "valid time source, it may send a Granularity of NoTimeGranularity." +
                 "\n" +
                 "Upon receipt of this command, the node may update its UTCTime attribute to match the time specified " +
-                "in the command, if the stated Granularity and TimeSource are acceptable. The node shall update its " +
-                "UTCTime attribute if its current Granularity is NoTimeGranularity." +
+                "in the command, if the stated Granularity and TimeSource are acceptable. The node shall" +
+                "\n" +
+                "update its UTCTime attribute if its current Granularity is NoTimeGranularity." +
                 "\n" +
                 "If the time is updated, the node shall also update its Granularity attribute based on the " +
                 "granularity specified in the command and the expected clock drift of the node. This SHOULD normally " +
@@ -368,17 +365,14 @@ export const TimeSynchronization = Cluster(
             details: "This shall give the Client’s UTC Time.",
             xref: { document: "core", section: "11.17.9.1.1" }
         }),
-
         Field({
             name: "Granularity", id: 0x1, type: "GranularityEnum", conformance: "M", default: 0,
-            details: "This shall give the Client’s Granularity, as described in Section 11.17.8.2, “Granularity " +
-                "Attribute”.",
+            details: "This shall give the Client’s Granularity, as described in Granularity.",
             xref: { document: "core", section: "11.17.9.1.2" }
         }),
-
         Field({
             name: "TimeSource", id: 0x2, type: "TimeSourceEnum", conformance: "O", default: 0,
-            details: "This shall give the Client’s TimeSource, as described in Section 11.17.8.3, “TimeSource Attribute”.",
+            details: "This shall give the Client’s TimeSource, as described in TimeSource.",
             xref: { document: "core", section: "11.17.9.1.3" }
         })
     ),
@@ -387,11 +381,16 @@ export const TimeSynchronization = Cluster(
         {
             name: "SetTrustedTimeSource", id: 0x1, access: "F A", conformance: "TSC", direction: "request",
             response: "status",
-            details: "This command shall set the TrustedTimeSource attribute. Upon receipt of this command, * If the " +
-                "TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource attribute " +
-                "to null and shall generate a MissingTrustedTimeSource event. * Otherwise, the node shall set the " +
-                "TrustedTimeSource attribute to a struct which has NodeID and Endpoint fields matching those in the " +
-                "TrustedTimeSource field and has its FabricIndex field set to the command’s accessing fabric index.",
+
+            details: "This command shall set the TrustedTimeSource attribute. Upon receipt of this command:" +
+                "\n" +
+                "  • If the TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource " +
+                "    attribute to null and shall generate a MissingTrustedTimeSource event." +
+                "\n" +
+                "  • Otherwise, the node shall set the TrustedTimeSource attribute to a struct which has NodeID and " +
+                "    Endpoint fields matching those in the TrustedTimeSource field and has its FabricIndex field set " +
+                "    to the command’s accessing fabric index.",
+
             xref: { document: "core", section: "11.17.9.2" }
         },
 
@@ -445,10 +444,9 @@ export const TimeSynchronization = Cluster(
         Field({
             name: "DstOffsetsRequired", id: 0x0, type: "bool", conformance: "M", default: true,
             details: "If the node supports a time zone database with information for the time zone that will be applied, " +
-                "it" +
-                "\n" +
-                "may use this information to set the DSTOffset attribute. If the node is setting its own DSTOffset " +
-                "attribute, the DSTOffsetsRequired field shall be set to false, otherwise it shall be set to true.",
+                "it may use this information to set the DSTOffset attribute. If the node is setting its own " +
+                "DSTOffset attribute, the DSTOffsetsRequired field shall be set to false, otherwise it shall be set " +
+                "to true.",
             xref: { document: "core", section: "11.17.9.4.1" }
         })
     ),
@@ -460,8 +458,9 @@ export const TimeSynchronization = Cluster(
 
             details: "This command is used to set the DST offsets for a node." +
                 "\n" +
-                "  • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with " +
-                "    RESOURCE_EXHAUSTED." +
+                "  • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with" +
+                "\n" +
+                "RESOURCE_EXHAUSTED." +
                 "\n" +
                 "  • Else if the list entries do not conform to the list requirements for DSTOffset attribute, the " +
                 "    node shall respond with CONSTRAINT_ERROR." +
@@ -701,7 +700,10 @@ export const TimeSynchronization = Cluster(
 
     Datatype(
         { name: "StatusCodeEnum", type: "enum8", xref: { document: "core", section: "11.17.7.1" } },
-        Field({ name: "TimeNotAccepted", id: 0x2, description: "Node rejected the attempt to set the UTC time" })
+        Field({
+            name: "TimeNotAccepted", id: 0x2, conformance: "M",
+            description: "Node rejected the attempt to set the UTC time"
+        })
     )
 );
 

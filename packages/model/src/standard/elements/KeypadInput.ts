@@ -83,9 +83,11 @@ export const KeypadInput = Cluster(
     Command(
         {
             name: "SendKeyResponse", id: 0x1, conformance: "M", direction: "response",
-            details: "This command shall be generated in response to a SendKey command.",
+            details: "This command shall be generated in response to a SendKey command. The data for this command shall " +
+                "be as follows:",
             xref: { document: "cluster", section: "6.8.6.2" }
         },
+
         Field({
             name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
             details: "This field shall indicate the status of the request.",

@@ -691,3 +691,16 @@ function ensureIndented(text: string) {
 if (MatterError.formatterFor === MatterError.defaultFormatterFactory) {
     MatterError.formatterFor = LogFormat;
 }
+
+if (typeof MatterHooks !== "undefined") {
+    MatterHooks.messageAndStackFor = (error: unknown, parentStack?: string[]) => {
+        const { message, stack, stackLines } = Diagnostic.messageAndStackFor(error, parentStack);
+
+        let stackStr;
+        if (stack) {
+            stackStr = stack.map(frame => LogFormat.ansi(frame).trim()).join("\n");
+        }
+
+        return { message, stack: stackStr, stackLines };
+    };
+}

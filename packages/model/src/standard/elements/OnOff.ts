@@ -72,8 +72,7 @@ export const OnOff = Cluster(
                 "\n" +
                 "When this feature is supported, and any change of the \"dead front\" state leads to changes in " +
                 "attributes of other clusters due to the \"dead front\" feature, these attribute changes shall NOT be " +
-                "skipped or omitted from the usual processing associated with attribute changes. For example, if an" +
-                "\n" +
+                "skipped or omitted from the usual processing associated with attribute changes. For example, if an " +
                 "attribute changes from value 4 to null on \"dead front\" behavior due to an Off command being " +
                 "received, this change shall be processed for reporting and subscriptions.",
 

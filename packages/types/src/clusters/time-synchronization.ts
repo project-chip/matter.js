@@ -298,10 +298,9 @@ export namespace TimeSynchronization {
      */
     export const TlvSetTimeZoneResponse = TlvObject({
         /**
-         * If the node supports a time zone database with information for the time zone that will be applied, it
-         *
-         * may use this information to set the DSTOffset attribute. If the node is setting its own DSTOffset attribute,
-         * the DSTOffsetsRequired field shall be set to false, otherwise it shall be set to true.
+         * If the node supports a time zone database with information for the time zone that will be applied, it may
+         * use this information to set the DSTOffset attribute. If the node is setting its own DSTOffset attribute, the
+         * DSTOffsetsRequired field shall be set to false, otherwise it shall be set to true.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.4.1
          */
@@ -334,7 +333,15 @@ export namespace TimeSynchronization {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.17.10.2
      */
-    export const TlvDstStatusEvent = TlvObject({ dstOffsetActive: TlvField(0, TlvBoolean) });
+    export const TlvDstStatusEvent = TlvObject({
+        /**
+         * Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, as opposed
+         * to standard time).
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.17.10.2.1
+         */
+        dstOffsetActive: TlvField(0, TlvBoolean)
+    });
 
     /**
      * Body of the TimeSynchronization dstStatus event
@@ -513,14 +520,14 @@ export namespace TimeSynchronization {
         utcTime: TlvField(0, TlvEpochUs),
 
         /**
-         * This shall give the Client’s Granularity, as described in Section 11.17.8.2, “Granularity Attribute”.
+         * This shall give the Client’s Granularity, as described in Granularity.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.1.2
          */
         granularity: TlvField(1, TlvEnum<Granularity>()),
 
         /**
-         * This shall give the Client’s TimeSource, as described in Section 11.17.8.3, “TimeSource Attribute”.
+         * This shall give the Client’s TimeSource, as described in TimeSource.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.1.3
          */
@@ -551,8 +558,9 @@ export namespace TimeSynchronization {
         attributes: {
             /**
              * A Node ID, endpoint, and associated fabric index of a Node that may be used as trusted time source. See
-             * Time source prioritization. This attribute reflects the last value set by an administrator using the
-             * SetTrustedTimeSource command. If the value is null, no trusted time source has yet been set.
+             * Section 11.17.13, “Time source prioritization”. This attribute reflects the last value set by an
+             * administrator using the SetTrustedTimeSource command. If the value is null, no trusted time source has
+             * yet been set.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.4
              */
@@ -561,11 +569,14 @@ export namespace TimeSynchronization {
 
         commands: {
             /**
-             * This command shall set the TrustedTimeSource attribute. Upon receipt of this command, * If the
-             * TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource attribute to
-             * null and shall generate a MissingTrustedTimeSource event. * Otherwise, the node shall set the
-             * TrustedTimeSource attribute to a struct which has NodeID and Endpoint fields matching those in the
-             * TrustedTimeSource field and has its FabricIndex field set to the command’s accessing fabric index.
+             * This command shall set the TrustedTimeSource attribute. Upon receipt of this command:
+             *
+             *   • If the TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource
+             *     attribute to null and shall generate a MissingTrustedTimeSource event.
+             *
+             *   • Otherwise, the node shall set the TrustedTimeSource attribute to a struct which has NodeID and
+             *     Endpoint fields matching those in the TrustedTimeSource field and has its FabricIndex field set to
+             *     the command’s accessing fabric index.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.9.2
              */
@@ -658,7 +669,6 @@ export namespace TimeSynchronization {
              * savings time).
              *
              * The first entry shall have a ValidAt entry of 0. If there is a second entry, it shall have a non-zero
-             *
              * ValidAt time.
              *
              * If a node supports a TimeZoneDatabase, and it has data for the given time zone Name and the given Offset
@@ -780,7 +790,8 @@ export namespace TimeSynchronization {
              * This command is used to set the DST offsets for a node.
              *
              *   • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with
-             *     RESOURCE_EXHAUSTED.
+             *
+             * RESOURCE_EXHAUSTED.
              *
              *   • Else if the list entries do not conform to the list requirements for DSTOffset attribute, the node
              *     shall respond with CONSTRAINT_ERROR.
@@ -814,11 +825,6 @@ export namespace TimeSynchronization {
 
             /**
              * This event shall be generated when the node starts or stops applying a DST offset.
-             *
-             * DSTOffsetActive
-             *
-             * Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, as
-             * opposed to standard time).
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.10.2
              */
@@ -944,8 +950,9 @@ export namespace TimeSynchronization {
              * time source, it may send a Granularity of NoTimeGranularity.
              *
              * Upon receipt of this command, the node may update its UTCTime attribute to match the time specified in
-             * the command, if the stated Granularity and TimeSource are acceptable. The node shall update its UTCTime
-             * attribute if its current Granularity is NoTimeGranularity.
+             * the command, if the stated Granularity and TimeSource are acceptable. The node shall
+             *
+             * update its UTCTime attribute if its current Granularity is NoTimeGranularity.
              *
              * If the time is updated, the node shall also update its Granularity attribute based on the granularity
              * specified in the command and the expected clock drift of the node. This SHOULD normally be one level

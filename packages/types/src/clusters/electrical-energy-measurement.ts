@@ -125,31 +125,31 @@ export namespace ElectricalEnergyMeasurement {
         endTimestamp: TlvOptionalField(2, TlvEpochS),
 
         /**
-         * This field shall indicate the seconds since boot at the beginning of the period during which the value of
-         * the Energy field was measured.
+         * This field shall indicate the time elapsed since boot at the beginning of the period during which the value
+         * of the Energy field was measured.
          *
-         * If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted.
+         * If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted. Otherwise, if the
+         * server had not yet determined the time in UTC at the start of the measurement
          *
-         * Otherwise, if the server had not yet determined the time in UTC at the start of the measurement period, or
-         * does not have the capability of determining the time in UTC, this field shall be indicated.
+         * period, or does not have the capability of determining the time in UTC, this field shall be indicated.
          *
          * Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement
-         * period, this field may be omitted; if it is indicated, its value shall be the seconds since boot at the UTC
-         * time indicated in StartTimestamp.
+         * period, this field may be omitted; if it is indicated, its value shall be the time elapsed since boot at the
+         * UTC time indicated in StartTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.4
          */
         startSystime: TlvOptionalField(3, TlvSysTimeMS),
 
         /**
-         * This field shall indicate the seconds since boot at the end of the period during which the value of the
+         * This field shall indicate the time elapsed since boot at the end of the period during which the value of the
          * Energy field was measured.
          *
          * If the server had not yet determined the time in UTC by the end of the measurement period, or does not have
          * the capability of determining the time in UTC, this field shall be indicated.
          *
          * Otherwise, if the server had determined the time in UTC by the end of the measurement period, this field may
-         * be omitted; if it is indicated, its value shall be the seconds since boot at the UTC time indicated in
+         * be omitted; if it is indicated, its value shall be the time elapsed since boot at the UTC time indicated in
          * EndTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.5
@@ -200,9 +200,8 @@ export namespace ElectricalEnergyMeasurement {
          * This field shall indicate the timestamp in UTC when the value of the Energy field on the
          * CumulativeEnergyExported attribute was most recently zero.
          *
-         * If the server had determined the time in UTC when the value of the Energy field on the Cumula
-         *
-         * tiveEnergyExported attribute was most recently zero, this field shall be indicated.
+         * If the server had determined the time in UTC when the value of the Energy field on the
+         * CumulativeEnergyExported attribute was most recently zero, this field shall be indicated.
          *
          * Otherwise, if the server had not yet determined the time in UTC when the value of the Energy field on the
          * CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining
@@ -216,7 +215,7 @@ export namespace ElectricalEnergyMeasurement {
         exportedResetTimestamp: TlvOptionalField(1, TlvNullable(TlvEpochS)),
 
         /**
-         * This field shall indicate the seconds since boot when the value of the Energy field on the
+         * This field shall indicate the time elapsed since boot when the value of the Energy field on the
          * CumulativeEnergyImported attribute was most recently zero.
          *
          * If the server had not yet determined the time in UTC when the value of the Energy field on the
@@ -225,14 +224,14 @@ export namespace ElectricalEnergyMeasurement {
          *
          * Otherwise, if the server had determined the time in UTC when the value of the Energy field on the
          * CumulativeEnergyImported attribute was most recently zero, this field may be omitted; if it is indicated,
-         * its value shall be the seconds since boot at the UTC time indicated in ImportedResetTimestamp.
+         * its value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.3
          */
         importedResetSystime: TlvOptionalField(2, TlvNullable(TlvSysTimeMS)),
 
         /**
-         * This field shall indicate the seconds since boot when the value of the Energy field on the
+         * This field shall indicate the time elapsed since boot when the value of the Energy field on the
          * CumulativeEnergyExported attribute was most recently zero.
          *
          * If the server had not yet determined the time in UTC when the value of the Energy field on the
@@ -241,7 +240,7 @@ export namespace ElectricalEnergyMeasurement {
          *
          * Otherwise, if the server had determined the time in UTC when the value of the Energy field on the
          * CumulativeEnergyExported attribute was most recently zero, this field may be omitted; if it is indicated,
-         * its value shall be the seconds since boot at the UTC time indicated in ImportedResetTimestamp.
+         * its value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.4
          */

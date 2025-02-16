@@ -260,9 +260,8 @@ export const SmokeCoAlarm = Cluster(
 
         details: "This command shall initiate a device self-test. The return status shall indicate whether the test " +
             "was successfully initiated. Only one SelfTestRequest may be processed at a time. When the value of " +
-            "the ExpressedState attribute is any of SmokeAlarm, COAlarm, Testing, InterconnectSmoke, Inter" +
-            "\n" +
-            "connectCO, the device shall NOT execute the self-test, and shall return status code BUSY." +
+            "the ExpressedState attribute is any of SmokeAlarm, COAlarm, Testing, InterconnectSmoke, " +
+            "InterconnectCO, the device shall NOT execute the self-test, and shall return status code BUSY." +
             "\n" +
             "Upon successful acceptance of SelfTestRequest, the TestInProgress attribute shall be set to True " +
             "and ExpressedState attribute shall be set to Testing. Any faults identified during the test shall " +
@@ -304,12 +303,12 @@ export const SmokeCoAlarm = Cluster(
     ),
 
     Datatype(
-        { name: "ExpressedStateEnum", type: "enum8", xref: { document: "cluster", section: "2.11.5.3" } },
-        Field({
-            name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the device is not alarming",
+        {
+            name: "ExpressedStateEnum", type: "enum8",
             details: "This value shall indicate that this alarm is not alarming.",
-            xref: { document: "cluster", section: "2.11.5.3.1" }
-        }),
+            xref: { document: "cluster", section: "2.11.5.3" }
+        },
+        Field({ name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the device is not alarming" }),
 
         Field({
             name: "SmokeAlarm", id: 0x1, conformance: "SMOKE", description: "Smoke Alarm state",
@@ -410,15 +409,14 @@ export const SmokeCoAlarm = Cluster(
     ),
 
     Datatype(
-        { name: "ContaminationStateEnum", type: "enum8", xref: { document: "cluster", section: "2.11.5.6" } },
-
-        Field({
-            name: "Normal", id: 0x0, conformance: "M",
-            description: "Nominal state, the sensor is not contaminated",
+        {
+            name: "ContaminationStateEnum", type: "enum8",
             details: "This value shall indicate that the smoke sensor has nominal contamination levels, no customer " +
                 "action is required.",
-            xref: { document: "cluster", section: "2.11.5.6.1" }
-        }),
+            xref: { document: "cluster", section: "2.11.5.6" }
+        },
+
+        Field({ name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the sensor is not contaminated" }),
 
         Field({
             name: "Low", id: 0x1, conformance: "O", description: "Low contamination",

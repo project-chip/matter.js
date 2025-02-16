@@ -254,7 +254,6 @@ export function createBooleanTest(node: DynamicNode): DynamicNode {
 
         evaluate: (value, location) => {
             const result = evaluate(value, location);
-            assertValue(location, result, "boolean test");
             return asConformance(result);
         },
     };

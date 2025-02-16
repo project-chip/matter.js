@@ -92,11 +92,10 @@ export const WiFiNetworkDiagnostics = Cluster(
     Attribute({
         name: "BeaconRxCount", id: 0x6, type: "uint32", access: "R V", conformance: "PKTCNT", default: 0,
         quality: "X C",
-        details: "The BeaconRxCount attribute shall indicate the count of the number of received beacons. The" +
-            "\n" +
-            "total number of expected beacons that could have been received during the interval since " +
-            "association SHOULD match the sum of BeaconRxCount and BeaconLostCount. If the Node does not have an " +
-            "ability to report count of beacons received, this value may remain set to zero.",
+        details: "The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total " +
+            "number of expected beacons that could have been received during the interval since association " +
+            "SHOULD match the sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to " +
+            "report count of beacons received, this value may remain set to zero.",
         xref: { document: "core", section: "11.15.6.7" }
     }),
 
@@ -185,8 +184,7 @@ export const WiFiNetworkDiagnostics = Cluster(
             name: "Status", id: 0x1, type: "uint16", conformance: "M",
 
             details: "The Status field shall be set to the Status Code value that was present in the last frame related " +
-                "to association where Status Code was not equal to zero and which caused the failure of a last trial" +
-                "\n" +
+                "to association where Status Code was not equal to zero and which caused the failure of a last trial " +
                 "attempt, if this last failure was due to one of the following Management frames:" +
                 "\n" +
                 "  • Association Response (Type 0, Subtype 1)" +

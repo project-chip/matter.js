@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const uint16 = Datatype({
     name: "uint16", byteSize: 2, description: "Unsigned 16-bit integer", isSeed: true,
     metatype: "integer",
-    xref: { document: "core", section: "7.18.1" }
+    xref: { document: "core", section: "7.19.1" }
 });
 MatterDefinition.children.push(uint16);

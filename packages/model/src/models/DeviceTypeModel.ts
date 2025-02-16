@@ -35,10 +35,10 @@ export class DeviceTypeModel extends Model<DeviceTypeElement> implements DeviceT
         );
     }
 
-    static {
-        Model.types[DeviceTypeElement.Tag] = this;
-    }
+    static Tag = DeviceTypeElement.Tag;
 }
+
+DeviceTypeModel.register();
 
 export namespace DeviceTypeModel {
     export type Child = RequirementModel | FieldModel;

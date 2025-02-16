@@ -116,7 +116,7 @@ export namespace NetworkCommissioning {
         NetworkNotFound = 5,
 
         /**
-         * Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz
+         * Cannot find AP: Mismatch on band/channels/regulatory domain/ 2.4GHz vs 5GHz
          */
         RegulatoryError = 6,
 
@@ -387,7 +387,7 @@ export namespace NetworkCommissioning {
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
 
         /**
-         * See Section 11.9.7.1.2, “Breadcrumb Field” for usage.
+         * See Breadcrumb for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.6.2
          */
@@ -423,8 +423,7 @@ export namespace NetworkCommissioning {
          *
          *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
          *
-         *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.9.6.1,
-         *     “MaxNetworks Attribute”.
+         *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by MaxNetworks.
          *
          *   • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
          *     network configurations in Networks attribute.
@@ -436,7 +435,7 @@ export namespace NetworkCommissioning {
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
 
         /**
-         * See Section 11.9.7.2.2, “DebugText Field” for usage.
+         * See DebugText for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.7.2
          */
@@ -482,7 +481,7 @@ export namespace NetworkCommissioning {
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
 
         /**
-         * See Section 11.9.7.1.2, “Breadcrumb Field” for usage.
+         * See Breadcrumb for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.8.2
          */
@@ -528,15 +527,15 @@ export namespace NetworkCommissioning {
          *
          *   • UnknownError: An internal error occurred during the operation.
          *
-         *   • Association errors (see also description of errors in Section 11.9.5.4, “NetworkCommissioningStatusEnum
-         *     Type”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
+         *   • Association errors (see also description of errors in NetworkCommissioningStatusEnum): AuthFailure,
+         *     UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.9.1
          */
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
 
         /**
-         * See Section 11.9.7.2.2, “DebugText Field” for usage.
+         * See DebugText for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.9.2
          */
@@ -604,7 +603,7 @@ export namespace NetworkCommissioning {
         networkIndex: TlvField(1, TlvUInt8),
 
         /**
-         * See Section 11.9.7.1.2, “Breadcrumb Field” for usage.
+         * See Breadcrumb for usage.
          *
          * Effect when received
          *
@@ -632,7 +631,7 @@ export namespace NetworkCommissioning {
          *
          * On receiving ReorderNetwork with:
          *
-         *   • NetworkId = Home-Guest
+         *   • NetworkID = Home-Guest
          *
          *   • NetworkIndex = 0
          *
@@ -643,7 +642,7 @@ export namespace NetworkCommissioning {
          *
          * On receiving ReorderNetwork with:
          *
-         *   • NetworkId = FancyCat
+         *   • NetworkID = FancyCat
          *
          *   • NetworkIndex = 3
          *
@@ -718,7 +717,7 @@ export namespace NetworkCommissioning {
         credentials: TlvField(1, TlvByteString.bound({ maxLength: 64 })),
 
         /**
-         * See Section 11.9.7.1.2, “Breadcrumb Field” for usage.
+         * See Breadcrumb for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.3.3
          */
@@ -787,7 +786,7 @@ export namespace NetworkCommissioning {
         operationalDataset: TlvField(0, TlvByteString.bound({ maxLength: 254 })),
 
         /**
-         * See Section 11.9.7.1.2, “Breadcrumb Field” for usage.
+         * See Breadcrumb for usage.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.4.2
          */
@@ -862,7 +861,7 @@ export namespace NetworkCommissioning {
              * Indicates the maximum duration taken, in seconds, by the network interface on this cluster server
              * instance to provide scan results.
              *
-             * See Section 11.9.7.1, “ScanNetworks Command” for usage.
+             * See ScanNetworks for usage.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.9.6.3
              */
@@ -871,8 +870,10 @@ export namespace NetworkCommissioning {
             /**
              * Indicates the maximum duration taken, in seconds, by the network interface on this cluster server
              * instance to report a successful or failed network connection indication. This maximum time shall account
-             * for all operations needed until a successful network connection is deemed to have occurred, including,
-             * for example, obtaining IP addresses, or the execution of necessary internal retries.
+             * for all operations needed until a successful network connection is
+             *
+             * deemed to have occurred, including, for example, obtaining IP addresses, or the execution of necessary
+             * internal retries.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.9.6.4
              */
@@ -896,8 +897,8 @@ export namespace NetworkCommissioning {
              * SSID) is provided in the command arguments. Directed scanning shall restrict the result set to the
              * specified network only.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
+             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * The client shall NOT expect the server to be done scanning and have responded with ScanNetworksResponse
              * before ScanMaxTimeSeconds seconds have elapsed. Enough transport time affordances for retries SHOULD be
@@ -914,7 +915,6 @@ export namespace NetworkCommissioning {
              * determine reachability capabilities as seen by the server’s own radios.
              *
              * For Wi-Fi-supporting servers the server shall always scan on all bands supported by the interface
-             *
              * associated with the cluster instance on which the command was invoked.
              *
              * If the command was invoked over the same link whose configuration is managed by a given server cluster
@@ -938,8 +938,8 @@ export namespace NetworkCommissioning {
              *
              * attribute shall remain unchanged, except for the removal of the requested network configuration.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
+             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If the Networks attribute does not contain a matching entry, the command shall immediately respond with
              * NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
@@ -966,8 +966,16 @@ export namespace NetworkCommissioning {
              * unable to proceed with such an operation, such as if it is currently attempting to connect in the
              * background, or is already proceeding with a prior ConnectNetwork.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
+             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             *
+             * Before connecting to the new network, the Node shall disconnect the operational network connections
+             * managed by any other Network Commissioning cluster instances (whether under the Root Node or a Secondary
+             * Network Interface), where those connections are not represented by an entry in the Networks attribute of
+             * the corresponding cluster instance. This ensures that an Administrator or Commissioner can reliably
+             * reconfigure the operational network connection of a device that has one or more Secondary Network
+             * interfaces, for example by removing the active network configuration from one cluster instance, followed
+             * by adding a new configuration and calling ConnectNetwork on a different cluster instance.
              *
              * Success or failure of this command shall be communicated by the ConnectNetworkResponse command, unless
              * some data model validations caused a FAILURE status to be sent prior to finishing execution of the
@@ -992,11 +1000,12 @@ export namespace NetworkCommissioning {
              * attribute.
              *
              * Even after successfully connecting to a network, the configuration shall revert to the prior state of
-             * configuration if the CommissioningComplete command (see Section 11.10.6.6, “CommissioningComplete
-             * Command”) is not successfully invoked before expiry of the Fail-Safe timer.
+             * configuration if the CommissioningComplete command (see CommissioningComplete) is not successfully
+             * invoked before expiry of the Fail-Safe timer.
              *
-             * When non-concurrent commissioning is being used by a Commissioner or Administrator, the
-             * ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
+             * When non-concurrent commissioning is being used by a Commissioner or Administrator, the Con
+             *
+             * nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
              * commissioning channel, even if not yet connected to the operational network, unless the device would be
              * incapable of joining that network, in which case the usual failure path described in the prior
              * paragraphs shall be followed. Once the commissioning channel is closed, the operational channel will be
@@ -1004,8 +1013,8 @@ export namespace NetworkCommissioning {
              * discovery of the Node on the new operational network. Therefore, before invoking the ConnectNetwork
              * command, the client SHOULD re-invoke the Arm Fail-Safe command with a duration that meets the following:
              *
-             *   1. Sufficient time to meet the minimum required time (see Section 11.9.6.4, “ConnectMaxTimeSeconds
-             *      Attribute”) that may be taken by the server to connect to the desired network.
+             *   1. Sufficient time to meet the minimum required time (see ConnectMaxTimeSeconds) that may be taken by
+             *      the server to connect to the desired network.
              *
              *   2. Sufficient time to account for possible message-layer retries when a response is requested.
              *
@@ -1068,8 +1077,8 @@ export namespace NetworkCommissioning {
             /**
              * This command shall be used to add or modify Wi-Fi network configurations.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
+             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * The Credentials associated with the network are not readable after execution of this command, as they do
              * not appear in the Networks attribute, for security reasons.
@@ -1125,8 +1134,8 @@ export namespace NetworkCommissioning {
             /**
              * This command shall be used to add or modify Thread network configurations.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
+             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
              * behavior of addition/update.
@@ -1227,7 +1236,7 @@ export namespace NetworkCommissioning {
              * It is undefined what happens if InterfaceEnabled is written to false on the same interface as that which
              * is used to write the value. In that case, it is possible that the Administrator would have to await
              * expiry of the fail-safe, and associated recovery of network configuration to prior safe values, before
-             * being able to communicate with the node again (see Section 11.10.6.2, “ArmFailSafe Command”).
+             * being able to communicate with the node again (see ArmFailSafe).
              *
              * It may be possible to disable Ethernet interfaces but it is implementation-defined. If not supported, a
              * write to this attribute with a value of false shall fail with a status of INVALID_ACTION. When disabled,
@@ -1284,11 +1293,9 @@ export namespace NetworkCommissioning {
 
             /**
              * Indicates the ErrorValue used in the last failed attempt to connect to an operational network, using
-             * this interface, whether by invocation of the ConnectNetwork command or by
-             *
-             * autonomous connection after loss of connectivity or during initial establishment. If no such attempt was
-             * made, or no network configurations exist in the Networks attribute, then this attribute shall be set to
-             * null.
+             * this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after
+             * loss of connectivity or during initial establishment. If no such attempt was made, or no network
+             * configurations exist in the Networks attribute, then this attribute shall be set to null.
              *
              * If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus
              * attribute, then this field shall be set to null.

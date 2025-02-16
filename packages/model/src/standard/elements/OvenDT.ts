@@ -20,7 +20,7 @@ export const OvenDt = DeviceType(
 
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 123, revision: 1 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 123, revision: 2 } ], element: "attribute" })
     ),
     Requirement({
         name: "Identify", id: 0x3, conformance: "O", element: "serverCluster",

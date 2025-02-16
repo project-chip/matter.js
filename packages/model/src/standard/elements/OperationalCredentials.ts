@@ -92,8 +92,8 @@ export const OperationalCredentials = Cluster(
             name: "TrustedRootCertificates", id: 0x4, type: "list", access: "R V", conformance: "M",
             constraint: "max supportedFabrics[max 400]", quality: "N C",
 
-            details: "This attribute shall contain a read-only list of Trusted Root CA Certificates installed on the " +
-                "Node, as octet strings containing their Matter Certificate Encoding representation." +
+            details: "This attribute shall contain a read-only list of Trusted Root CA Certificates (RCAC) installed on " +
+                "the Node, as octet strings containing their Matter Certificate Encoding representation." +
                 "\n" +
                 "These certificates are installed through the AddTrustedRootCertificate command." +
                 "\n" +
@@ -215,9 +215,8 @@ export const OperationalCredentials = Cluster(
                 "CSR shall be tagged as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about " +
                 "the processing." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, " +
                 "then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
@@ -335,9 +334,8 @@ export const OperationalCredentials = Cluster(
                 "\n" +
                 "### Effect When Received" +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, " +
                 "then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
@@ -352,9 +350,8 @@ export const OperationalCredentials = Cluster(
                 "as the rest of the new fabric’s operational credentials, even if some other fabric already uses the " +
                 "exact same root of trust certificate." +
                 "\n" +
-                "If the NOC provided in the NOCValue encodes an Operational Identifier for a <Root Public Key, Fab" +
-                "\n" +
-                "ricID> pair already present on the device, then the device shall process the error by responding " +
+                "If the NOC provided in the NOCValue encodes an Operational Identifier for a <Root Public Key, " +
+                "FabricID> pair already present on the device, then the device shall process the error by responding " +
                 "with a StatusCode of FabricConflict as described in Section 11.18.6.7.2, “Handling Errors”." +
                 "\n" +
                 "If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics " +
@@ -404,11 +401,14 @@ export const OperationalCredentials = Cluster(
                 "      that is currently invoking the AddNOC command, within another of the Fabrics of which it is a " +
                 "      member." +
                 "\n" +
+                "    a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL " +
+                "       entries with the new FabricIndex may be added to the ARL attribute." +
+                "\n" +
                 "  8. The incoming IPKValue shall be stored in the Fabric-scoped slot within the Group Key " +
                 "      Management cluster (see KeySetWrite), for subsequent use during CASE." +
                 "\n" +
-                "  9. The Fabric Index associated with the armed fail-safe context (see Section 11.10.6.2, " +
-                "      “ArmFailSafe Command”) shall be updated to match the Fabric Index just allocated." +
+                "  9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be " +
+                "      updated to match the Fabric Index just allocated." +
                 "\n" +
                 "  10. If the current secure session was established with PASE, the receiver shall:" +
                 "\n" +
@@ -444,9 +444,8 @@ export const OperationalCredentials = Cluster(
                 "\n" +
                 "Effect When Received" +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, " +
                 "then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
@@ -458,8 +457,7 @@ export const OperationalCredentials = Cluster(
                 "If the prior CSRRequest state that preceded UpdateNOC had the IsForUpdateNOC field indicated as " +
                 "false, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
                 "\n" +
-                "If any of the following conditions arise, the Node shall process an error by responding with an" +
-                "\n" +
+                "If any of the following conditions arise, the Node shall process an error by responding with an " +
                 "NOCResponse with a StatusCode of InvalidNOC as described in Section 11.18.6.7.2, “Handling Errors”:" +
                 "\n" +
                 "  • The NOC provided in the NOCValue does not refer in its subject to the FabricID associated with " +
@@ -623,41 +621,42 @@ export const OperationalCredentials = Cluster(
                 "Effect on Receipt" +
                 "\n" +
                 "If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then " +
-                "an NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there " +
-                "shall NOT be any permanent changes to any device data." +
+                "an NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and" +
                 "\n" +
-                "Otherwise, one of the following outcomes shall occur:" +
+                "there shall NOT be any permanent changes to any device data. Otherwise, one of the following " +
+                "outcomes shall occur:" +
                 "\n" +
                 "  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall " +
-                "     delete all Matter related data on the node which was created since it was commissioned. This" +
+                "     delete all Matter related data on the node which was created since it was commissioned. This " +
+                "     includes all Fabric-Scoped data, including Access Control List, Access Restriction List, " +
+                "     bindings, scenes, group keys, operational certificates, etc. All Trusted Roots shall also be " +
+                "     removed. If a time synchronization cluster is present on the Node, the TrustedTimeSource and " +
+                "     DefaultNtp shall be set to null. Any Matter related data including logs, secure sessions, " +
+                "     exchanges and interaction model constructs shall also be removed. Since this operation " +
+                "     involves the removal of the secure session data that may underpin the current set of " +
+                "     exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its " +
+                "     secure session with the target." +
                 "\n" +
-                "includes all Fabric-Scoped data, including Access Control List, bindings, scenes, group keys, " +
-                "operational certificates, etc. All Trusted Roots shall also be removed. If a time synchronization " +
-                "cluster is present on the Node, the TrustedTimeSource and DefaultNtp shall be set to null. Any " +
-                "Matter related data including logs, secure sessions, exchanges and interaction model constructs " +
-                "shall also be removed. Since this operation involves the removal of the secure session data that " +
-                "may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a " +
-                "response before terminating its secure session with the target." +
+                "  2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the " +
+                "     process of irrevocably deleting all associated Fabric-Scoped data, including Access Control " +
+                "     Entries, Access Restriction Entries, bindings, group keys, operational certificates, etc. Any " +
+                "     remaining Trusted Roots no longer referenced by any operational certificate shall also be " +
+                "     removed. If a time synchronization cluster is present on the Node, and the TrustedTimeSource " +
+                "     FabricIndex matches the given FabricIndex, the TrustedTimeSource shall be set to null. All " +
+                "     secure sessions, exchanges and interaction model constructs related to the Operational " +
+                "     Identity under the given Fabric shall also be removed. Following the removal, an NOCResponse " +
+                "     with a StatusCode of OK shall be returned." +
                 "\n" +
-                "2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the " +
-                "process of irrevocably deleting all associated Fabric-Scoped data, including Access Control List, " +
-                "bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no longer " +
-                "referenced by any operational certificate shall also be removed. If a time synchronization cluster " +
-                "is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the " +
-                "TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model " +
-                "constructs related to the Operational Identity under the given Fabric shall also be removed. " +
-                "Following the removal, an NOCResponse with a StatusCode of OK shall be returned." +
-                "\n" +
-                "3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of " +
-                "irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, " +
-                "group keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any " +
-                "operational certificate shall also be removed. If a time synchronization cluster is present on the " +
-                "Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the TrustedTimeSource " +
-                "shall be set to null. All secure sessions, exchanges and interaction model constructs related to " +
-                "the Operational Identity under the given Fabric shall also be removed. Since this operation " +
-                "involves the removal of the secure session data that may underpin the current set of exchanges, the " +
-                "Node invoking the command SHOULD NOT expect a response before terminating its secure session with " +
-                "the target.",
+                "  3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process " +
+                "     of irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, " +
+                "     Access Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining " +
+                "     Trusted Roots no longer referenced by any operational certificate shall also be removed. If a " +
+                "     time synchronization cluster is present on the Node, and the TrustedTimeSource FabricIndex " +
+                "     matches the given FabricIndex, the TrustedTimeSource shall be set to null. All secure " +
+                "     sessions, exchanges and interaction model constructs related to the Operational Identity under " +
+                "     the given Fabric shall also be removed. Since this operation involves the removal of the " +
+                "     secure session data that may underpin the current set of exchanges, the Node invoking the " +
+                "     command SHOULD NOT expect a response before terminating its secure session with the target.",
 
             xref: { document: "core", section: "11.18.6.12.1" }
         })
@@ -675,12 +674,12 @@ export const OperationalCredentials = Cluster(
                 "If the certificate from the RootCACertificate field is already installed, based on exact " +
                 "byte-for-byte equality, then this command shall succeed with no change to the list." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer " +
-                "period, which would cause the new invocation to add a second root certificate within a given fail- " +
+                "period, which would cause the new invocation to add a second root certificate within a given fail-" +
+                "\n" +
                 "safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to " +
                 "the initiator." +
                 "\n" +
@@ -796,11 +795,16 @@ export const OperationalCredentials = Cluster(
 
         Field({
             name: "VendorId", id: 0x2, type: "vendor-id", access: "F", conformance: "M", constraint: "desc",
+
             details: "This field shall contain the value of AdminVendorID provided in the AddNOC command that led to the " +
                 "creation of this FabricDescriptorStruct. The set of allowed values is defined in AdminVendorID." +
                 "\n" +
                 "The intent is to provide some measure of user transparency about which entities have Administer " +
-                "privileges on the Node.",
+                "privileges on the Node." +
+                "\n" +
+                "Clients shall consider the VendorID field value to be untrustworthy until the NOC chain associated " +
+                "with the fabric has passed the Vendor ID Validation Procedure against the associated RCAC.",
+
             xref: { document: "core", section: "11.18.4.5.2" }
         }),
 

@@ -37,7 +37,7 @@ export const temperature = Datatype(
             "\n" +
             "0.01 resolution as expected by the ZCL format.",
 
-        xref: { document: "core", section: "7.18.2.11" }
+        xref: { document: "core", section: "7.19.2.11" }
     }
 );
 

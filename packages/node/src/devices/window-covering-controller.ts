@@ -12,9 +12,6 @@ import {
 } from "../behaviors/window-covering/WindowCoveringBehavior.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../behaviors/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../behaviors/groups/GroupsBehavior.js";
-import {
-    ScenesManagementBehavior as BaseScenesManagementBehavior
-} from "../behaviors/scenes-management/ScenesManagementBehavior.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -56,13 +53,6 @@ export namespace WindowCoveringControllerRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
-     */
-    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = { optional: { Identify: IdentifyServer }, mandatory: {} };
@@ -72,7 +62,7 @@ export namespace WindowCoveringControllerRequirements {
      */
     export const client = {
         mandatory: { WindowCovering: WindowCoveringBehavior },
-        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior, ScenesManagement: ScenesManagementBehavior }
+        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior }
     };
 }
 

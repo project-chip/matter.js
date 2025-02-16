@@ -259,7 +259,7 @@ function createStructValidator(schema: Schema, supervisor: RootSupervisor): Valu
         for (const name in sublocation.choices) {
             const choice = sublocation.choices[name];
 
-            if (choice.count < choice.target) {
+            if (choice.count < choice.target && !choice.orLess) {
                 throw new ConformanceError(
                     schema,
                     location,

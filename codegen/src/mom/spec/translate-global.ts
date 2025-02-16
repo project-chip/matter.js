@@ -83,11 +83,16 @@ const DatatypeSchema = {
  * Extract basic datatypes from core spec.  We are not functional without these so this code is less lenient.
  */
 function* translateDatatypes(ref: GlobalReference): Generator<DatatypeElement> {
-    // Patch details so semtag matches correct detail section
+    // Rename detail sections that do not match the name or description of the corresponding table entry
     if (ref.details) {
         for (const detail of ref.details) {
-            if (detail.name == "SemanticTagStruct") {
-                detail.name = "semtag";
+            switch (detail.name) {
+                case "SemanticTagStruct Type":
+                    detail.name = "semtag";
+                    break;
+
+                case "LocationDescriptorStruct":
+                    detail.name = "locationdesc";
             }
         }
     }

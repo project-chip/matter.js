@@ -25,10 +25,9 @@ export namespace GeneralDiagnosticsInterface {
 
         /**
          * This command may be used by a client to obtain a correlated view of both System Time, and, if currently
-         * synchronized and supported, "wall clock time" of the server. This can help clients establish
-         *
-         * time correlation between their concept of time and the server’s concept of time. This is especially useful
-         * when processing event histories where some events only contain System Time.
+         * synchronized and supported, "wall clock time" of the server. This can help clients establish time
+         * correlation between their concept of time and the server’s concept of time. This is especially useful when
+         * processing event histories where some events only contain System Time.
          *
          * Upon command invocation, the server shall respond with a TimeSnapshotResponse.
          *

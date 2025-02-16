@@ -315,7 +315,7 @@ export namespace BasicInformation {
     export const ClusterInstance = MutableCluster({
         id: 0x28,
         name: "BasicInformation",
-        revision: 3,
+        revision: 4,
 
         attributes: {
             /**
@@ -453,10 +453,10 @@ export namespace BasicInformation {
             partNumber: OptionalFixedAttribute(0xc, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * This attribute shall specify a link to a product specific web page. The syntax of the ProductURL
-             * attribute shall follow the syntax as specified in RFC 3986 [https://tools.ietf.org/html/rfc3986]. The
-             * specified URL SHOULD resolve to a maintained web page available for the lifetime of the product. The
-             * maximum length of the ProductUrl attribute is 256 ASCII characters.
+             * This attribute shall specify a link to a product specific web page. The specified URL SHOULD resolve to
+             * a maintained web page available for the lifetime of the product. The syntax of this attribute shall
+             * follow the syntax as specified in RFC 1738 and shall use the https scheme. The maximum length of this
+             * attribute is 256 ASCII characters.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.14
              */
@@ -505,24 +505,34 @@ export namespace BasicInformation {
             reachable: OptionalAttribute(0x11, TlvBoolean, { default: true }),
 
             /**
-             * This attribute (when used) shall indicate a unique identifier for the device, which is constructed in a
-             * manufacturer specific manner.
+             * Indicates a unique identifier for the device, which is constructed in a manufacturer specific manner.
              *
              * It may be constructed using a permanent device identifier (such as device MAC address) as basis. In
              * order to prevent tracking,
              *
              *   • it SHOULD NOT be identical to (or easily derived from) such permanent device identifier
              *
-             *   • it SHOULD be updated when the device is factory reset
+             *   • it shall be updated when the device is factory reset
              *
-             *   • it shall not be identical to the SerialNumber attribute
+             *   • it shall NOT be identical to the SerialNumber attribute
              *
-             *   • it shall not be printed on the product or delivered with the product The value does not need to be
-             *     human readable.
+             *   • it shall NOT be printed on the product or delivered with the product
+             *
+             * The value does not need to be human readable, since it is intended for machine to machine (M2M)
+             * communication.
+             *
+             * NOTE
+             *
+             * NOTE
+             *
+             * The conformance of the UniqueID attribute was optional in cluster revisions prior to revision 4.
+             *
+             * This UniqueID attribute shall NOT be the same as the Persistent Unique ID which is used in the Rotating
+             * Device Identifier mechanism.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.19
              */
-            uniqueId: OptionalFixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
+            uniqueId: FixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
             /**
              * This attribute shall provide the minimum guaranteed value for some system-wide resource capabilities
@@ -535,8 +545,9 @@ export namespace BasicInformation {
              * provided in this attribute.
              *
              * Note that since the fixed values within this attribute may change over time, both increasing and
-             * decreasing, as software versions change for a given Node, clients SHOULD take care not to assume forever
-             * unchanging values and SHOULD NOT cache this value permanently at Commissioning time.
+             * decreasing, as software versions change for a given Node, clients SHOULD take care not to assume
+             *
+             * forever unchanging values and SHOULD NOT cache this value permanently at Commissioning time.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.20
              */
@@ -595,9 +606,8 @@ export namespace BasicInformation {
              * Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, “Invoke
              * Request Action”) that the Node is able to process. Note that since this attribute may change over time,
              * both increasing and decreasing, as software versions change for a given Node, clients SHOULD take care
-             * not to assume forever unchanging values and SHOULD NOT
-             *
-             * cache this value permanently at Commissioning time.
+             * not to assume forever unchanging values and SHOULD NOT cache this value permanently at Commissioning
+             * time.
              *
              * If the MaxPathsPerInvoke attribute is absent or zero, such as in Basic Information cluster revisions
              * prior to Revision 3, clients shall assume a value of 1.
@@ -634,10 +644,8 @@ export namespace BasicInformation {
              * generated, it SHOULD be assumed that the fabric recorded in the event is no longer usable, and
              * subsequent interactions targeting that fabric will most likely fail.
              *
-             * Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the
-             *
-             * fabric by removing related bindings, access control list entries and other data referencing the leaving
-             * Node.
+             * Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the fabric
+             * by removing related bindings, access control list entries and other data referencing the leaving Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.6.3
              */

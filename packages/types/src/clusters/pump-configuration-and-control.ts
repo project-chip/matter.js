@@ -221,9 +221,10 @@ export namespace PumpConfigurationAndControl {
         /**
          * The pump will regulate its speed to maintain a constant differential pressure over its flanges.
          *
-         * The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – MaxCompPressure]
-         * attributes. The internal setpoint will be lowered (compensated) dependent on the flow in the pump (lower
-         * flow ⇒ lower internal setpoint).
+         * The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – Max
+         *
+         * CompPressure] attributes. The internal setpoint will be lowered (compensated) dependent on the flow in the
+         * pump (lower flow ⇒ lower internal setpoint).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.3.3
          */
@@ -339,8 +340,9 @@ export namespace PumpConfigurationAndControl {
             maxCompPressure: OptionalFixedAttribute(0x6, TlvNullable(TlvInt16), { default: null }),
 
             /**
-             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
+             * This attribute specifies the minimum speed the pump can achieve when it is working with the Con
+             *
+             * trolMode attribute set to ConstantSpeed.
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.
              *
@@ -359,9 +361,8 @@ export namespace PumpConfigurationAndControl {
             maxConstSpeed: OptionalFixedAttribute(0x8, TlvNullable(TlvUInt16), { default: null }),
 
             /**
-             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
-             *
-             * trolMode attribute set to ConstantFlow.
+             * This attribute specifies the minimum flow the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantFlow.
              *
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.
              *
@@ -436,8 +437,9 @@ export namespace PumpConfigurationAndControl {
     export const ConstantSpeedComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
+             * This attribute specifies the minimum speed the pump can achieve when it is working with the Con
+             *
+             * trolMode attribute set to ConstantSpeed.
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.
              *
@@ -463,9 +465,8 @@ export namespace PumpConfigurationAndControl {
     export const ConstantFlowComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
-             *
-             * trolMode attribute set to ConstantFlow.
+             * This attribute specifies the minimum flow the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantFlow.
              *
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.
              *
@@ -606,8 +607,9 @@ export namespace PumpConfigurationAndControl {
 
             /**
              * This attribute specifies the activity status of the pump functions as listed in PumpStatusBitmap. Where
-             * a pump controller function is active, the corresponding bit shall be set to 1. Where a pump controller
-             * function is not active, the corresponding bit shall be set to 0.
+             * a pump controller function is active, the corresponding bit shall be set to 1. Where a pump
+             *
+             * controller function is not active, the corresponding bit shall be set to 0.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.2.7.14
              */
@@ -675,7 +677,7 @@ export namespace PumpConfigurationAndControl {
              * If the value is not available (the measurement or estimation of the speed is done in the pump), this
              * attribute will indicate the null value.
              *
-             * Valid range is 0 to 65.534 RPM.
+             * Valid range is 0 to 65,534 RPM.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.2.7.18
              */
@@ -686,10 +688,10 @@ export namespace PumpConfigurationAndControl {
              * has been running. It is updated dynamically as it increases. It is preserved over power cycles of the
              * pump. If LifeTimeRunningHours rises above maximum value it “rolls over” and starts at 0 (zero).
              *
-             * This attribute is writeable, in order to allow setting to an appropriate value after maintenance. If
+             * This attribute is writeable, in order to allow setting to an appropriate value after maintenance. If the
+             * value is not available, this attribute will indicate the null value.
              *
-             * the value is not available, this attribute will indicate the null value. Valid range is 0 to 16,777,214
-             * hrs.
+             * Valid range is 0 to 16,777,214 hrs.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.2.7.19
              */
@@ -770,9 +772,7 @@ export namespace PumpConfigurationAndControl {
             /**
              * This attribute specifies the control mode of the pump as defined in ControlModeEnum.
              *
-             * See the OperationMode attribute for a detailed description of the operation and control of the
-             *
-             * pump.
+             * See the OperationMode attribute for a detailed description of the operation and control of the pump.
              *
              * ControlMode may be changed at any time, even when the pump is running. The behavior of the pump at the
              * point of changing is vendor-specific.
@@ -793,7 +793,7 @@ export namespace PumpConfigurationAndControl {
              * @see {@link MatterSpecification.v13.Cluster} § 4.2.7
              * @deprecated
              */
-            alarmMask: OptionalAttribute(0x22, TlvUInt16, { persistent: true, default: 0 })
+            alarmMask: OptionalWritableAttribute(0x22, TlvUInt16)
         },
 
         events: {
@@ -918,6 +918,18 @@ export namespace PumpConfigurationAndControl {
      * The Pump Configuration and Control cluster provides an interface for the setup and control of pump devices, and
      * the automatic reporting of pump status information. Note that control of pump speed is not included – speed is
      * controlled by the On/Off and Level Control clusters.
+     *
+     * ### Pump controller Pump
+     *
+     * C Pump configuration and control S C Level control S
+     *
+     * C On/Off S
+     *
+     * C = Client S = Server
+     *
+     * Note: Device names are examples for illustration purposes only
+     *
+     * Figure 14. Typical Usage of Pump Configuration and Control Cluster
      *
      * Per the Matter specification you cannot use {@link PumpConfigurationAndControlCluster} without enabling certain
      * feature combinations. You must use the {@link with} factory method to obtain a working cluster.

@@ -162,3 +162,6 @@ RUN mkdir /run/dbus
 # Summarize tests for efficient metadata load at runtime
 COPY generate-test-descriptor /bin/generate-test-descriptor
 RUN generate-test-descriptor > /lib/test-descriptor.json
+
+# Include CHIP SHA for diagnostic purposes
+COPY --from=build /connectedhomeip/.git/refs/heads/master /etc/chip-version

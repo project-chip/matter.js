@@ -90,9 +90,10 @@ export namespace GeneralDiagnostics {
          *   • If Value is 0x55 and the Count is zero, then the PayloadTestResponse would have the Payload field set to
          *     an empty octet string.
          *
-         *   • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set to a
-         *     content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 representation would
-         *     be paWlpaWlpaWlpQ==.
+         *   • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set
+         *
+         * to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 representation would
+         * be paWlpaWlpaWlpQ==.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.7.4.3
          */
@@ -199,9 +200,11 @@ export namespace GeneralDiagnostics {
         offPremiseServicesReachableIPv6: TlvField(3, TlvNullable(TlvBoolean)),
 
         /**
-         * This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface
-         * and contain the current extended MAC address for a 802.15.4 interface. The byte order of the octstr shall be
-         * in wire byte order. For addresses values less than 64 bits, the first two bytes shall be zero.
+         * This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network
+         *
+         * interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of the
+         * octstr shall be in wire byte order. For addresses values less than 64 bits, the first two bytes shall be
+         * zero.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.5.6.5
          */
@@ -439,8 +442,9 @@ export namespace GeneralDiagnostics {
          * Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved for
          * testing use by manufacturers and will not appear in CSA certification test literature.
          *
-         * If the value of EventTrigger received is not supported by the receiving Node, this command shall fail with a
-         * status code of INVALID_COMMAND.
+         * If the value of EventTrigger received is not supported by the receiving Node, this command shall
+         *
+         * fail with a status code of INVALID_COMMAND.
          *
          * Otherwise, if the EnableKey value matches the configured internal value for a particular Node, and the
          * EventTrigger value matches a supported test event trigger value, the command shall succeed and execute the
@@ -520,16 +524,14 @@ export namespace GeneralDiagnostics {
      */
     export const TlvHardwareFaultChangeEvent = TlvObject({
         /**
-         * This field shall represent the set of faults currently detected, as per Section 11.12.5.1,
-         * “HardwareFaultEnum Type”.
+         * This field shall represent the set of faults currently detected, as per HardwareFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.1.1
          */
         current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
 
         /**
-         * This field shall represent the set of faults detected prior to this change event, as per Section 11.12.5.1,
-         * “HardwareFaultEnum Type”.
+         * This field shall represent the set of faults detected prior to this change event, as per HardwareFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.1.2
          */
@@ -550,16 +552,14 @@ export namespace GeneralDiagnostics {
      */
     export const TlvRadioFaultChangeEvent = TlvObject({
         /**
-         * This field shall represent the set of faults currently detected, as per Section 11.12.5.2, “RadioFaultEnum
-         * Type”.
+         * This field shall represent the set of faults currently detected, as per RadioFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.2.1
          */
         current: TlvField(0, TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 })),
 
         /**
-         * This field shall represent the set of faults detected prior to this change event, as per Section 11.12.5.2,
-         * “RadioFaultEnum Type”.
+         * This field shall represent the set of faults detected prior to this change event, as per RadioFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.2.2
          */
@@ -580,16 +580,14 @@ export namespace GeneralDiagnostics {
      */
     export const TlvNetworkFaultChangeEvent = TlvObject({
         /**
-         * This field shall represent the set of faults currently detected, as per Section 11.12.5.3, “NetworkFaultEnum
-         * Type”.
+         * This field shall represent the set of faults currently detected, as per NetworkFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.3.1
          */
         current: TlvField(0, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 })),
 
         /**
-         * This field shall represent the set of faults detected prior to this change event, as per Section 11.12.5.3,
-         * “NetworkFaultEnum Type”.
+         * This field shall represent the set of faults detected prior to this change event, as per NetworkFaultEnum.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.8.3.2
          */
@@ -725,11 +723,12 @@ export namespace GeneralDiagnostics {
              * The ActiveHardwareFaults attribute shall indicate the set of faults currently detected by the Node. When
              * the Node detects a fault has been raised, the appropriate HardwareFaultEnum value shall be added to this
              * list. This list shall NOT contain more than one instance of a specific HardwareFaultEnum value. When the
-             * Node detects that all conditions contributing to a fault has been cleared, the corresponding
-             * HardwareFaultEnum value shall be removed from this list. An empty list shall indicate there are
-             * currently no active faults. The order of this list SHOULD have no significance. Clients interested in
-             * monitoring changes in active faults may subscribe to this attribute, or they may subscribe to
-             * HardwareFaultChange.
+             * Node detects that all conditions contributing to a fault has been
+             *
+             * cleared, the corresponding HardwareFaultEnum value shall be removed from this list. An empty list shall
+             * indicate there are currently no active faults. The order of this list SHOULD have no significance.
+             * Clients interested in monitoring changes in active faults may subscribe to this attribute, or they may
+             * subscribe to HardwareFaultChange.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.6.6
              */
@@ -776,10 +775,10 @@ export namespace GeneralDiagnostics {
             /**
              * The TestEventTriggersEnabled attribute shall indicate whether the Node has any TestEventTrigger
              * configured. When this attribute is true, the Node has been configured with one or more test event
-             * triggers by virtue of the internally programmed EnableKey value (see Section 11.12.7.1,
-             * “TestEventTrigger Command”) being set to a non-zero value. This attribute can be used by Administrators
-             * to detect if a device was inadvertently commissioned with test event trigger mode enabled, and take
-             * appropriate action (e.g. warn the user and/or offer to remove all fabrics on the Node).
+             * triggers by virtue of the internally programmed EnableKey value (see TestEventTrigger) being set to a
+             * non-zero value. This attribute can be used by Administrators to detect if a device was inadvertently
+             * commissioned with test event trigger mode enabled, and take appropriate action (e.g. warn the user
+             * and/or offer to remove all fabrics on the Node).
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.6.9
              */
@@ -807,10 +806,9 @@ export namespace GeneralDiagnostics {
 
             /**
              * This command may be used by a client to obtain a correlated view of both System Time, and, if currently
-             * synchronized and supported, "wall clock time" of the server. This can help clients establish
-             *
-             * time correlation between their concept of time and the server’s concept of time. This is especially
-             * useful when processing event histories where some events only contain System Time.
+             * synchronized and supported, "wall clock time" of the server. This can help clients establish time
+             * correlation between their concept of time and the server’s concept of time. This is especially useful
+             * when processing event histories where some events only contain System Time.
              *
              * Upon command invocation, the server shall respond with a TimeSnapshotResponse.
              *

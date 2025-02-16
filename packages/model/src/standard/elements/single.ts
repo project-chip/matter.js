@@ -11,6 +11,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const single = Datatype({
     name: "single", byteSize: 4, description: "Single precision", isSeed: true, metatype: "float",
-    xref: { document: "core", section: "7.18.1" }
+    xref: { document: "core", section: "7.19.1" }
 });
 MatterDefinition.children.push(single);

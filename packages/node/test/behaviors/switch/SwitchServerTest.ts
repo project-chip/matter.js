@@ -109,7 +109,7 @@ describe("SwitchServer", () => {
         it("Reject invalid currentPosition", async () => {
             const device = await createLatchingSwitch();
             await expect(device.set({ switch: { currentPosition: 2 } })).to.be.rejectedWith(
-                "Error in reactor<node0.part0.switch.#assertPositionInRange>: (135) Position 2 invalid",
+                'Validating node0.part0.switch.state: Constraint "max numberOfPositions - 1": Value 2 is not within bounds defined by constraint (135)',
             );
         });
 

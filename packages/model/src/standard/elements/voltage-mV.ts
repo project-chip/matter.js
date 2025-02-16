@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const voltageMV = Datatype({
     name: "voltage-mV", type: "int64", description: "Voltage", isSeed: true,
     details: "This type represents voltage measured in millivolts.",
-    xref: { document: "core", section: "7.18.2.14" }
+    xref: { document: "core", section: "7.19.2.14" }
 });
 MatterDefinition.children.push(voltageMV);

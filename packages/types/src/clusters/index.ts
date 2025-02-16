@@ -38,6 +38,7 @@ export {
 } from "./carbon-monoxide-concentration-measurement.js";
 export { ChannelCluster, Channel } from "./channel.js";
 export { ColorControlCluster, ColorControl } from "./color-control.js";
+export { CommissionerControlCluster, CommissionerControl } from "./commissioner-control.js";
 export { ConcentrationMeasurement } from "./concentration-measurement.js";
 export { ContentAppObserverCluster, ContentAppObserver } from "./content-app-observer.js";
 export { ContentControlCluster, ContentControl } from "./content-control.js";
@@ -49,6 +50,7 @@ export { DiagnosticLogsCluster, DiagnosticLogs } from "./diagnostic-logs.js";
 export { DishwasherAlarmCluster, DishwasherAlarm } from "./dishwasher-alarm.js";
 export { DishwasherModeCluster, DishwasherMode } from "./dishwasher-mode.js";
 export { DoorLockCluster, DoorLock } from "./door-lock.js";
+export { EcosystemInformationCluster, EcosystemInformation } from "./ecosystem-information.js";
 export { ElectricalEnergyMeasurementCluster, ElectricalEnergyMeasurement } from "./electrical-energy-measurement.js";
 export { ElectricalPowerMeasurementCluster, ElectricalPowerMeasurement } from "./electrical-power-measurement.js";
 export { EnergyEvseCluster, EnergyEvse } from "./energy-evse.js";
@@ -70,6 +72,8 @@ export { HepaFilterMonitoringCluster, HepaFilterMonitoring } from "./hepa-filter
 export { IcdManagementCluster, IcdManagement } from "./icd-management.js";
 export { IdentifyCluster, Identify } from "./identify.js";
 export { IlluminanceMeasurementCluster, IlluminanceMeasurement } from "./illuminance-measurement.js";
+export { JointFabricDatastoreClusterCluster, JointFabricDatastoreCluster } from "./joint-fabric-datastore-cluster.js";
+export { JointFabricPkiCluster, JointFabricPki } from "./joint-fabric-pki.js";
 export { KeypadInputCluster, KeypadInput } from "./keypad-input.js";
 export { Label } from "./label.js";
 export { LaundryDryerControlsCluster, LaundryDryerControls } from "./laundry-dryer-controls.js";
@@ -111,7 +115,6 @@ export { PowerTopologyCluster, PowerTopology } from "./power-topology.js";
 export { PressureMeasurementCluster, PressureMeasurement } from "./pressure-measurement.js";
 export { ProxyConfigurationCluster, ProxyConfiguration } from "./proxy-configuration.js";
 export { ProxyDiscoveryCluster, ProxyDiscovery } from "./proxy-discovery.js";
-export { PulseWidthModulationCluster, PulseWidthModulation } from "./pulse-width-modulation.js";
 export { PumpConfigurationAndControlCluster, PumpConfigurationAndControl } from "./pump-configuration-and-control.js";
 export {
     RadonConcentrationMeasurementCluster,
@@ -128,6 +131,7 @@ export { RvcCleanModeCluster, RvcCleanMode } from "./rvc-clean-mode.js";
 export { RvcOperationalStateCluster, RvcOperationalState } from "./rvc-operational-state.js";
 export { RvcRunModeCluster, RvcRunMode } from "./rvc-run-mode.js";
 export { ScenesManagementCluster, ScenesManagement } from "./scenes-management.js";
+export { ServiceAreaCluster, ServiceArea } from "./service-area.js";
 export { SmokeCoAlarmCluster, SmokeCoAlarm } from "./smoke-co-alarm.js";
 export { SoftwareDiagnosticsCluster, SoftwareDiagnostics } from "./software-diagnostics.js";
 export { SwitchCluster, Switch } from "./switch.js";
@@ -139,7 +143,12 @@ export {
     ThermostatUserInterfaceConfigurationCluster,
     ThermostatUserInterfaceConfiguration
 } from "./thermostat-user-interface-configuration.js";
+export {
+    ThreadBorderRouterManagementCluster,
+    ThreadBorderRouterManagement
+} from "./thread-border-router-management.js";
 export { ThreadNetworkDiagnosticsCluster, ThreadNetworkDiagnostics } from "./thread-network-diagnostics.js";
+export { ThreadNetworkDirectoryCluster, ThreadNetworkDirectory } from "./thread-network-directory.js";
 export { TimeFormatLocalizationCluster, TimeFormatLocalization } from "./time-format-localization.js";
 export { TimeSynchronizationCluster, TimeSynchronization } from "./time-synchronization.js";
 export {
@@ -154,5 +163,9 @@ export {
     ValveConfigurationAndControl
 } from "./valve-configuration-and-control.js";
 export { WakeOnLanCluster, WakeOnLan } from "./wake-on-lan.js";
+export { WaterHeaterManagementCluster, WaterHeaterManagement } from "./water-heater-management.js";
+export { WaterHeaterModeCluster, WaterHeaterMode } from "./water-heater-mode.js";
+export { WaterTankLevelMonitoringCluster, WaterTankLevelMonitoring } from "./water-tank-level-monitoring.js";
 export { WiFiNetworkDiagnosticsCluster, WiFiNetworkDiagnostics } from "./wi-fi-network-diagnostics.js";
+export { WiFiNetworkManagementCluster, WiFiNetworkManagement } from "./wi-fi-network-management.js";
 export { WindowCoveringCluster, WindowCovering } from "./window-covering.js";

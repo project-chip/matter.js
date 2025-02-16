@@ -22,7 +22,7 @@
  *
  * Status codes in an undefined range, or status codes undefined within a range are reserved and shall NOT be indicated.
  *
- * @see {@link MatterSpecification.v13.Core} § 7.18.2.18
+ * @see {@link MatterSpecification.v13.Core} § 7.19.2.18
  */
 export enum Status {
     /**
@@ -169,6 +169,13 @@ export enum Status {
     Busy = 156,
 
     /**
+     * The access to the action or command by the sender is permitted by the ACL but restricted by the ARL.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 8.10.1
+     */
+    AccessRestricted = 157,
+
+    /**
      * The cluster indicated is not supported on the endpoint.
      *
      * @see {@link MatterSpecification.v13.Core} § 8.10.1
@@ -234,7 +241,17 @@ export enum Status {
     NoCommandResponse = 204,
 
     /**
-     * Matter 1.4, temporarily patched in manually.
+     * The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl
+     * to complete this.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 8.10.1
      */
-    AccessRestricted = 0x9d,
+    TermsAndConditionsChanged = 205,
+
+    /**
+     * The node requires the user to visit the EnhancedSetupFlowMaintenanceUrl for instructions on further action.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 8.10.1
+     */
+    MaintenanceRequired = 206
 }

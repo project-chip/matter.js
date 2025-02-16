@@ -164,7 +164,8 @@ export const Groups = Cluster(
 
         Field({
             name: "GroupName", id: 0x1, type: "string", conformance: "M", constraint: "max 16",
-            details: "This field may be set to a human-readable name for the group. If the client has no name for the " +
+            details: "This field may be set to a human-readable name for the group. If the client has no name for the" +
+                "\n" +
                 "group, the GroupName field shall be set to the empty string." +
                 "\n" +
                 "Support of group names is optional and is indicated by the FeatureMap and NameSupport attribute.",

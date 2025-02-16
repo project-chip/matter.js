@@ -15,6 +15,12 @@ import {
     PowerSourceConfigurationServer as BasePowerSourceConfigurationServer
 } from "../behaviors/power-source-configuration/PowerSourceConfigurationServer.js";
 import { PowerSourceServer as BasePowerSourceServer } from "../behaviors/power-source/PowerSourceServer.js";
+import {
+    EcosystemInformationServer as BaseEcosystemInformationServer
+} from "../behaviors/ecosystem-information/EcosystemInformationServer.js";
+import {
+    AdministratorCommissioningServer as BaseAdministratorCommissioningServer
+} from "../behaviors/administrator-commissioning/AdministratorCommissioningServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { DeviceClassification } from "#model";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
@@ -52,6 +58,20 @@ export namespace BridgedNodeRequirements {
     export const PowerSourceServer = BasePowerSourceServer;
 
     /**
+     * The EcosystemInformation cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link EcosystemInformationServer} for convenience.
+     */
+    export const EcosystemInformationServer = BaseEcosystemInformationServer;
+
+    /**
+     * The AdministratorCommissioning cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link AdministratorCommissioningServer} for convenience.
+     */
+    export const AdministratorCommissioningServer = BaseAdministratorCommissioningServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -60,14 +80,20 @@ export namespace BridgedNodeRequirements {
             Index: IndexBehavior,
             BridgedDeviceBasicInformation: BridgedDeviceBasicInformationServer
         },
-        optional: { PowerSourceConfiguration: PowerSourceConfigurationServer, PowerSource: PowerSourceServer }
+
+        optional: {
+            PowerSourceConfiguration: PowerSourceConfigurationServer,
+            PowerSource: PowerSourceServer,
+            EcosystemInformation: EcosystemInformationServer,
+            AdministratorCommissioning: AdministratorCommissioningServer
+        }
     };
 }
 
 export const BridgedNodeEndpointDefinition = MutableEndpoint({
     name: "BridgedNode",
     deviceType: 0x13,
-    deviceRevision: 2,
+    deviceRevision: 3,
     deviceClass: DeviceClassification.Utility,
     requirements: BridgedNodeRequirements,
     behaviors: SupportedBehaviors(

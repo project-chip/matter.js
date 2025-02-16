@@ -149,9 +149,11 @@ export namespace ModeSelect {
              * If this attribute is not present or is set to null, it shall NOT have an effect, otherwise the
              * CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster
              *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
+             * The value of this field shall match the Mode field of one of the entries in the SupportedModes
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.7
+             * attribute.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.6
              */
             onMode: WritableAttribute(0x5, TlvNullable(TlvUInt8), { persistent: true, default: null })
         }
@@ -186,19 +188,18 @@ export namespace ModeSelect {
              * description Milk and the second instance can have the description Sugar. This allows the user to tell
              * the purpose of each of the instances.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.1
              */
             description: FixedAttribute(0x0, TlvString.bound({ maxLength: 64 })),
 
             /**
              * This attribute, when not null, shall indicate a single standard namespace for any standard semantic tag
-             * value supported in this or any other cluster instance with the same value of this attribute. A
+             * value supported in this or any other cluster instance with the same value of this attribute. A null
+             * value indicates no standard namespace, and therefore, no standard semantic tags are provided in this
+             * cluster instance. Each standard namespace and corresponding values and value meanings shall be defined
+             * in another document.
              *
-             * null value indicates no standard namespace, and therefore, no standard semantic tags are provided in
-             * this cluster instance. Each standard namespace and corresponding values and value meanings shall be
-             * defined in another document.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.2
              */
             standardNamespace: FixedAttribute(0x1, TlvNullable(TlvUInt16), { default: null }),
 
@@ -207,7 +208,7 @@ export namespace ModeSelect {
              * item in this list represents a unique mode as indicated by the Mode field of the ModeOptionStruct. Each
              * entry in this list shall have a unique value for the Mode field.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.4
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.3
              */
             supportedModes: FixedAttribute(0x2, TlvArray(TlvModeOption, { maxLength: 255 }), { default: [] }),
 
@@ -218,9 +219,9 @@ export namespace ModeSelect {
              *
              * attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.5
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.4
              */
-            currentMode: Attribute(0x3, TlvUInt8, { scene: true, persistent: true }),
+            currentMode: Attribute(0x3, TlvUInt8, { persistent: true }),
 
             /**
              * The StartUpMode attribute value indicates the desired startup mode for the server when it is supplied
@@ -239,7 +240,7 @@ export namespace ModeSelect {
              *
              * If this attribute is not implemented, or is set to the null value, it shall have no effect.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.6
+             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.5
              */
             startUpMode: OptionalWritableAttribute(0x4, TlvNullable(TlvUInt8), { persistent: true })
         },
@@ -273,7 +274,9 @@ export namespace ModeSelect {
      * wash cycle of a laundry machine.
      *
      * The server allows the client to set a mode on the server. A mode is one of a list of options that may be
-     * presented by a client for a user choice, or understood by the client, via the semantic tags on the mode.
+     * presented by a client for a user choice, or understood by the client, via the semantic tags on the
+     *
+     * mode.
      *
      * A semantic tag is either a standard tag within a standard category namespace, or a manufacturer specific tag,
      * within the namespace of the vendor ID of the manufacturer. If there is no semantic tag, the mode is anonymous,

@@ -20,7 +20,7 @@ export class SemanticTagModel extends Model<SemanticTagElement> implements Seman
         super.children = children;
     }
 
-    static {
-        Model.types[SemanticTagElement.Tag] = this;
-    }
+    static Tag = SemanticTagElement.Tag;
 }
+
+SemanticTagModel.register();

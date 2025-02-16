@@ -51,7 +51,7 @@ export namespace PressureMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.6
              */
-            minScaledValue: Attribute(0x11, TlvNullable(TlvInt16.bound({ min: -32767 })), { default: 0 }),
+            minScaledValue: Attribute(0x11, TlvNullable(TlvInt16.bound({ max: 32766 })), { default: 0 }),
 
             /**
              * Indicates the maximum value of ScaledValue that can be measured. The null value indicates that the value
@@ -117,7 +117,7 @@ export namespace PressureMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.2
              */
-            minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -32767 }))),
+            minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ max: 32766 }))),
 
             /**
              * Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more details.

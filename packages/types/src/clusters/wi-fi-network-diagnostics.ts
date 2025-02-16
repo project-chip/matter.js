@@ -185,9 +185,8 @@ export namespace WiFiNetworkDiagnostics {
 
         /**
          * The Status field shall be set to the Status Code value that was present in the last frame related to
-         * association where Status Code was not equal to zero and which caused the failure of a last trial
-         *
-         * attempt, if this last failure was due to one of the following Management frames:
+         * association where Status Code was not equal to zero and which caused the failure of a last trial attempt, if
+         * this last failure was due to one of the following Management frames:
          *
          *   • Association Response (Type 0, Subtype 1)
          *
@@ -292,11 +291,10 @@ export namespace WiFiNetworkDiagnostics {
     export const PacketCountsComponent = MutableCluster.Component({
         attributes: {
             /**
-             * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The
-             *
-             * total number of expected beacons that could have been received during the interval since association
-             * SHOULD match the sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to
-             * report count of beacons received, this value may remain set to zero.
+             * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total number
+             * of expected beacons that could have been received during the interval since association SHOULD match the
+             * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of
+             * beacons received, this value may remain set to zero.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.15.6.7
              */

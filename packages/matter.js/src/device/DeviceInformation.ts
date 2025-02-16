@@ -155,7 +155,7 @@ export class DeviceInformation {
 
         if (!deviceData.isBatteryPowered) {
             // Only query if PowerSource with Battery not already found
-            const powerSourceCluster = endpoint.getClusterClient(PowerSource.Cluster);
+            const powerSourceCluster = endpoint.getClusterClient(PowerSource.Complete);
             if (powerSourceCluster !== undefined) {
                 const features = powerSourceCluster.supportedFeatures;
                 if (
@@ -201,11 +201,11 @@ export class DeviceInformation {
                 },
                 {
                     clusterId: PowerSource.Cluster.id,
-                    attributeId: PowerSource.Cluster.attributes.featureMap.id,
+                    attributeId: PowerSource.Complete.attributes.featureMap.id,
                 },
                 {
                     clusterId: PowerSource.Cluster.id,
-                    attributeId: PowerSource.Cluster.attributes.status.id,
+                    attributeId: PowerSource.Complete.attributes.status.id,
                 },
                 {
                     endpointId: EndpointNumber(0),
@@ -270,9 +270,9 @@ export class DeviceInformation {
                     break;
                 case PowerSource.Cluster.id:
                     const powerSourceEntry = powerSourceData.get(endpointId) ?? {};
-                    if (attributeId === PowerSource.Cluster.attributes.featureMap.id) {
+                    if (attributeId === PowerSource.Complete.attributes.featureMap.id) {
                         powerSourceEntry.features = value;
-                    } else if (attributeId === PowerSource.Cluster.attributes.status.id) {
+                    } else if (attributeId === PowerSource.Complete.attributes.status.id) {
                         powerSourceEntry.status = value;
                     }
                     powerSourceData.set(endpointId, powerSourceEntry);
