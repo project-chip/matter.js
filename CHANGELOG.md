@@ -11,10 +11,21 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### __WORK IN PROGRESS__
 
+-   @matter/general
+    - Adjustment: Do not accept listeners on read-only transactions
+    - Enhancement: Only report locks for slow async transactions in logs
+    - Enhancement: Do not report Read transactions anymore in logs
+
+-   @matter/node
+    - Enhancement: Added caching for generated ClusterType and ClusterBehavior classes
+    - Enhancement: Added preparations for optimized node read handling
+
 -   @matter/protocol
     - Enhancement: Optimized Report Data message chunking 
     - Fix: handles errors when setting fabric label during commissioning as non-critical for the commissioning flow
 
+-   @project-chip/matter.js
+    - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use
 
 ### 0.12.3 (2025-02-05)
 
@@ -22,9 +33,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Reduced some over-exact certificate validation to unblock Aqara commissioning
     - Fix: Prevented issues where closing subscriptions could block the session closing or establishing new subscriptions
     - Fix: Prevented to establish new exchanges while shutting down Exchange Manager
-
--   @project-chip/matter.js
-    - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use
 
 ## 0.12.2 (2025-02-01)
 
