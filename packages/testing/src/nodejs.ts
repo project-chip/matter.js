@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { mkdir, writeFile } from "fs/promises";
-import type { Session } from "inspector/promises";
 import Mocha from "mocha";
-import { relative } from "path";
+import { mkdir, writeFile } from "node:fs/promises";
+import type { Session } from "node:inspector/promises";
+import { relative } from "node:path";
 import { adaptReporter, afterRun, beforeRun, extendApi, generalSetup, runMocha } from "./mocha.js";
 import { TestOptions } from "./options.js";
 import type { TestRunner } from "./runner.js";

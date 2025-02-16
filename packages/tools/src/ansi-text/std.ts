@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { stderr, stdout } from "process";
+import { stderr, stdout } from "node:process";
 import { Printer } from "./printer.js";
 import { ansi } from "./text-builder.js";
 import { TextWriter } from "./text-writer.js";

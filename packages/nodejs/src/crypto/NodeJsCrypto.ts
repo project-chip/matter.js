@@ -17,7 +17,7 @@ import {
     CryptoVerifyError,
     PrivateKey,
 } from "#general";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 
 export class NodeJsCrypto extends Crypto {
     encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {

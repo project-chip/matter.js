@@ -7,7 +7,7 @@
 import { StorageBackendMemory, StorageContext } from "#general";
 import { FabricManager, SessionManager, SessionParameters } from "#protocol";
 import { NodeId } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 const DUMMY_BYTEARRAY = new Uint8Array();
 

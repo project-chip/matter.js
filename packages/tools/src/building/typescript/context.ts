@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { dirname } from "path";
+import { dirname } from "node:path";
 import {
     createCompilerHost,
     Diagnostic,

@@ -43,7 +43,7 @@ import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
 import { QrCode } from "@matter/main/types";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
 import { DummyWifiNetworkCommissioningServer } from "./cluster/DummyWifiNetworkCommissioningServer.js";
 import {

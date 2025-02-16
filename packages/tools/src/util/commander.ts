@@ -5,7 +5,7 @@
  */
 
 import { Command } from "commander";
-import process from "process";
+import process from "node:process";
 import { ansi } from "../ansi-text/text-builder.js";
 
 export function commander(name: string, description: string) {

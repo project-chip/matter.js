@@ -13,8 +13,8 @@ import {
     SupportedStorageTypes,
     toJson,
 } from "#general";
-import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
-import { join } from "path";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const logger = new Logger("StorageBackendDiskAsync");
 

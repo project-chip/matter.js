@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { existsSync, readFileSync } from "fs";
-import { cp, writeFile } from "fs/promises";
+import { existsSync, readFileSync } from "node:fs";
+import { cp, writeFile } from "node:fs/promises";
 import { ansi } from "../ansi-text/text-builder.js";
 import { Graph } from "../building/graph.js";
 import { execute } from "../running/execute.js";

@@ -15,7 +15,7 @@ import {
     Identify,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("Groups Server test", () => {

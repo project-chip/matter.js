@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { dirname, resolve } from "path";
-import { exit, stdout } from "process";
+import { dirname, resolve } from "node:path";
+import { exit, stdout } from "node:process";
 import { ensureCompiled } from "./ensure-compiled.js";
 import { executeNode } from "./execute.js";
 

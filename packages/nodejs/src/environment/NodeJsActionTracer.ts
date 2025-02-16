@@ -6,8 +6,8 @@
 
 import { Environment, MaybePromise, serialize } from "#general";
 import { ActionTracer } from "#node";
-import { FileHandle, open } from "fs/promises";
-import { resolve } from "path";
+import { FileHandle, open } from "node:fs/promises";
+import { resolve } from "node:path";
 
 export class NodeJsActionTracer extends ActionTracer {
     #path: string;

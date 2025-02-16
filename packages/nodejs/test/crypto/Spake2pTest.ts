@@ -5,7 +5,7 @@
  */
 
 import { Bytes, Crypto, Spake2p } from "#general";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 describe("Spake2p", () => {
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {

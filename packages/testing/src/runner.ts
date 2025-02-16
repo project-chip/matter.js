@@ -6,7 +6,7 @@
 
 import { ansi, Package, Progress, std } from "#tools";
 import debug from "debug";
-import { relative } from "path";
+import { relative } from "node:path";
 import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import { FailureReporter } from "./failure-reporter.js";
