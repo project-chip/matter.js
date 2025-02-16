@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { spawn, SpawnOptions } from "child_process";
-import { platform } from "os";
+import { spawn, SpawnOptions } from "node:child_process";
+import { platform } from "node:os";
 
 import colors from "ansi-colors";
 

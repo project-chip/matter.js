@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { relative } from "path";
+import { relative } from "node:path";
 import {
     Application,
     ContainerReflection,

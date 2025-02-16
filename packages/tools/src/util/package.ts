@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { existsSync, readFileSync, statSync } from "fs";
-import { readdir, readFile, stat, writeFile } from "fs/promises";
-import { dirname, join, relative, resolve } from "path";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join, relative, resolve } from "node:path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
 import { globSync } from "./glob.js";

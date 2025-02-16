@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { stdout } from "process";
+import { stdout } from "node:process";
 import { Config } from "./config.js";
 import { blue, bold, fittedTextOf, visibleWidthOf } from "./formatting.js";
 import { welcome } from "./messages.js";

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 import { Progress } from "../util/progress.js";
 import { BuildError } from "./error.js";
 import { Graph } from "./graph.js";

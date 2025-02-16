@@ -6,10 +6,10 @@
 
 import { Logger } from "#general";
 import { AnyElement, ClusterElement, DatatypeElement, Matter, Metatype, ValueElement } from "#model";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
-import { homedir } from "os";
-import { resolve } from "path";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
 import { readFileWithCache } from "../../util/file.js";
 import { Directory, Repo } from "../../util/github.js";
 import { translateChip } from "./translate-chip.js";

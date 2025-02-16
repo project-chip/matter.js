@@ -5,8 +5,8 @@
  */
 
 import { fromJson, StorageBackendMemory, StorageError, SupportedStorageTypes, Time, toJson } from "#general";
-import { readFileSync } from "fs";
-import { writeFile } from "fs/promises";
+import { readFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 
 export class StorageBackendJsonFile extends StorageBackendMemory {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */

@@ -7,10 +7,10 @@
 import { Package } from "#tools";
 import { build } from "esbuild";
 import express from "express";
-import { writeFile } from "fs/promises";
-import http from "http";
-import { AddressInfo } from "net";
-import { relative } from "path";
+import { writeFile } from "node:fs/promises";
+import http from "node:http";
+import { AddressInfo } from "node:net";
+import { relative } from "node:path";
 import { Browser, chromium, ConsoleMessage, Page } from "playwright";
 import { TestOptions } from "./options.js";
 import { Reporter } from "./reporter.js";

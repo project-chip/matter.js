@@ -6,7 +6,7 @@
 
 import { Instrumentation } from "#node";
 import { Val } from "#protocol";
-import { inspect } from "util";
+import { inspect } from "node:util";
 
 /**
  * Node's default console formatting makes it difficult to view the value of managed collections.  This function

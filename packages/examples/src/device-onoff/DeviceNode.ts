@@ -23,7 +23,7 @@ import {
 } from "@matter/main";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { logEndpoint } from "@matter/main/protocol";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 async function main() {
     /** Initialize configuration values */

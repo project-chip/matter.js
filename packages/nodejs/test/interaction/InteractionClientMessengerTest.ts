@@ -22,7 +22,7 @@ import {
     TlvSubscribeResponse,
 } from "#types";
 import { Specification } from "@matter/model";
-import assert from "assert";
+import assert from "node:assert";
 import { createDummyMessageExchange } from "./InteractionTestUtils.js";
 
 function handleReadRequest(exchange: MessageExchange, messageType: number, payload: Uint8Array) {

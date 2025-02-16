@@ -5,8 +5,8 @@
  */
 
 import { Project } from "@matter/tools";
-import { mkdir, readFile, writeFile } from "fs/promises";
-import { basename, dirname } from "path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { basename, dirname } from "node:path";
 import { Config, Template } from "./config.js";
 
 /**

@@ -17,7 +17,7 @@ import {
     UdpChannel,
     UdpChannelOptions,
 } from "#general";
-import { NetworkInterfaceInfo, networkInterfaces } from "os";
+import { NetworkInterfaceInfo, networkInterfaces } from "node:os";
 import { NodeJsUdpChannel } from "./NodeJsUdpChannel.js";
 
 const logger = Logger.get("NetworkNode");

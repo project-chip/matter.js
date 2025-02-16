@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { resolve } from "path";
+import { resolve } from "node:path";
 import { TsFile } from "../util/TsFile.js";
 
 export function generateForwards(

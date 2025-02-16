@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { dirname, join } from "path";
+import { dirname, join } from "node:path";
 
 import { loadHtml, parseHeading } from "./doc-utils.js";
 import { Str } from "./html-translators.js";

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Writable } from "stream";
-import { promisify } from "util";
+import { Writable } from "node:stream";
+import { promisify } from "node:util";
 import { asyncLinesOf, textOf } from "../util/text.js";
 import type { Docker } from "./docker.js";
 import { NonZeroExitError } from "./errors.js";

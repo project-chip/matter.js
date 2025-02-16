@@ -10,7 +10,7 @@ import "./util/node-shims.js";
 import "./global-definitions.js";
 
 import { Graph, Package, Project, ProjectBuilder } from "#tools";
-import { clear } from "console";
+import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";

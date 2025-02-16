@@ -5,7 +5,7 @@
  */
 
 import { Package } from "#tools";
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 
 export function listSupportFiles(format = "cjs") {
     const files = Array<string>();

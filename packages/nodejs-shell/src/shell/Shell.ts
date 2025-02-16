@@ -5,7 +5,7 @@
  */
 
 import { MatterError } from "@matter/general";
-import { createWriteStream, readFileSync } from "fs";
+import { createWriteStream, readFileSync } from "node:fs";
 import readline from "node:readline";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";

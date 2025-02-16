@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readdirSync, readFileSync, statSync } from "fs";
-import { resolve } from "path";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { resolve } from "node:path";
 import { ignoreErrorSync } from "./errors.js";
 
 function isNotFoundError(e: unknown) {

@@ -5,7 +5,7 @@
  */
 
 import { Graph, Package } from "@matter/tools";
-import { basename } from "path";
+import { basename } from "node:path";
 
 const LAUNCH_TEMPLATE = {
     version: "0.2.0",

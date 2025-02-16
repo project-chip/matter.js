@@ -69,7 +69,7 @@ import {
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import {
     DummyGroupcastMessage,
     DummyUnicastMessage,
