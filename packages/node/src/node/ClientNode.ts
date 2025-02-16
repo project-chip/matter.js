@@ -6,6 +6,8 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
+import { ClientNetworkRuntime } from "#behavior/system/network/ClientNetworkRuntime.js";
+import { NetworkClient } from "#behavior/system/network/NetworkClient.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
 import { Agent } from "#endpoint/Agent.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
@@ -51,7 +53,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
     }
 
     protected createRuntime(): NetworkRuntime {
-        throw new NotImplementedError();
+        return new ClientNetworkRuntime(this);
     }
 
     async prepareRuntimeShutdown() {}
@@ -91,7 +93,7 @@ export class ClientNode extends Node<ClientNode.RootEndpoint> {
 export namespace ClientNode {
     export interface Options extends Node.Options<RootEndpoint> {}
 
-    export const RootEndpoint = Node.CommonRootEndpoint.with(CommissioningClient);
+    export const RootEndpoint = Node.CommonRootEndpoint.with(CommissioningClient, NetworkClient);
 
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}
 }

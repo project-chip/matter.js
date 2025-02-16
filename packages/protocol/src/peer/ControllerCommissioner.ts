@@ -27,11 +27,11 @@ import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { PaseClient } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
-import { InteractionClient } from "../interaction/InteractionClient.js";
+import { InteractionClient, InteractionClientProvider } from "../interaction/InteractionClient.js";
 import { ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { PeerAddress } from "./PeerAddress.js";
-import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
+import { NodeDiscoveryType } from "./PeerSet.js";
 
 const logger = Logger.get("PeerCommissioner");
 
@@ -108,7 +108,7 @@ export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
  * Interfaces {@link ControllerCommissioner} with other components.
  */
 export interface ControllerCommissionerContext {
-    peers: PeerSet;
+    clients: InteractionClientProvider;
     scanners: ScannerSet;
     netInterfaces: NetInterfaceSet;
     sessions: SessionManager;
@@ -130,7 +130,7 @@ export class ControllerCommissioner {
 
     static [Environmental.create](env: Environment) {
         const instance = new ControllerCommissioner({
-            peers: env.get(PeerSet),
+            clients: env.get(InteractionClientProvider),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
             sessions: env.get(SessionManager),
@@ -385,6 +385,7 @@ export class ControllerCommissioner {
             // Use the created secure session to do the commissioning
             new InteractionClient(
                 new DedicatedChannelExchangeProvider(this.#context.exchanges, paseSecureMessageChannel),
+                this.#context.clients.peers.subscriptionClient,
                 address,
             ),
             this.#context.ca,
@@ -406,7 +407,7 @@ export class ControllerCommissioner {
                 }
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.#context.peers.connect(
+                return await this.#context.clients.connect(
                     address,
                     {
                         discoveryType: NodeDiscoveryType.TimedDiscovery,
@@ -422,7 +423,7 @@ export class ControllerCommissioner {
             await commissioningManager.executeCommissioning();
         } catch (error) {
             // We might have added data for an operational address that we need to cleanup
-            await this.#context.peers.delete(address);
+            await this.#context.clients.peers.delete(address);
             throw error;
         } finally {
             if (!paseSecureMessageChannel.closed) {

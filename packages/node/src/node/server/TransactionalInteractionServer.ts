@@ -32,6 +32,7 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
+    MessageType,
     SessionManager,
     WriteRequest,
     WriteResponse,
@@ -126,10 +127,16 @@ export class TransactionalInteractionServer extends InteractionServer {
         this.#newActivityBlocked = true;
     }
 
-    override async onNewExchange(exchange: MessageExchange) {
+    override async onNewExchange(exchange: MessageExchange, message: Message) {
         // When closing, ignore anything newly incoming
         if (this.#newActivityBlocked || this.isClosing) {
             return;
+        }
+
+        // An incoming data report as the first message is not a valid server operation.  We instead delegate to a
+        // client implementation if available
+        if (message.payloadHeader.messageType === MessageType.SubscribeRequest && this.clientHandler) {
+            return this.clientHandler.onNewExchange(exchange, message);
         }
 
         // Activity tracking.  This provides diagnostic information and prevents the server from shutting down whilst
