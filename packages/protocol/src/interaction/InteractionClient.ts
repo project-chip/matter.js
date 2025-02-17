@@ -5,20 +5,20 @@
  */
 
 import {
+    Environment,
+    Environmental,
     ImplementationError,
-    InternalError,
     Logger,
     MatterFlowError,
-    MaybePromise,
     PromiseQueue,
-    Time,
     Timer,
     UnexpectedDataError,
     isDeepEqual,
 } from "#general";
 import { Specification } from "#model";
-import { PeerAddress } from "#peer/PeerAddress.js";
+import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { PeerDataStore } from "#peer/PeerAddressStore.js";
+import { DiscoveryOptions, PeerSet } from "#peer/PeerSet.js";
 import {
     ArraySchema,
     Attribute,
@@ -30,7 +30,6 @@ import {
     Event,
     EventId,
     EventNumber,
-    INTERACTION_PROTOCOL_ID,
     NodeId,
     RequestType,
     ResponseType,
@@ -47,16 +46,11 @@ import {
     resolveEventName,
 } from "#types";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
-import { MessageExchange } from "../protocol/MessageExchange.js";
-import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
-import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
-import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
-import {
-    DataReport,
-    IncomingInteractionClientMessenger,
-    InteractionClientMessenger,
-    ReadRequest,
-} from "./InteractionMessenger.js";
+import { DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
+import { DecodedDataReport } from "./DecodedDataReport.js";
+import { DecodedEventData, DecodedEventReportValue } from "./EventDataDecoder.js";
+import { DataReport, InteractionClientMessenger, ReadRequest } from "./InteractionMessenger.js";
+import { RegisteredSubscription, SubscriptionClient } from "./SubscriptionClient.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -74,102 +68,98 @@ export interface AttributeStatus {
     status: StatusCode;
 }
 
-export class SubscriptionClient implements ProtocolHandler {
-    private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => MaybePromise<void>>();
-    private readonly subscriptionUpdateTimers = new Map<number, Timer>();
+export class InteractionClientProvider {
+    readonly #peers: PeerSet;
+    readonly #clients = new PeerAddressMap<InteractionClient>();
 
-    constructor() {}
-
-    getId() {
-        return INTERACTION_PROTOCOL_ID;
+    constructor(peers: PeerSet) {
+        this.#peers = peers;
+        this.#peers.deleted.on(peer => this.#onPeerLoss(peer.address));
+        this.#peers.disconnected.on(address => this.#onPeerLoss(address));
     }
 
-    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => MaybePromise<void>) {
-        this.subscriptionListeners.set(subscriptionId, listener);
+    static [Environmental.create](env: Environment) {
+        const instance = new InteractionClientProvider(env.get(PeerSet));
+        env.set(InteractionClientProvider, instance);
+        return instance;
     }
 
-    removeSubscriptionListener(subscriptionId: number) {
-        this.subscriptionListeners.delete(subscriptionId);
+    get peers() {
+        return this.#peers;
     }
 
-    registerSubscriptionUpdateTimer(subscriptionId: number, timer: Timer) {
-        this.subscriptionUpdateTimers.set(subscriptionId, timer);
+    async connect(
+        address: PeerAddress,
+        discoveryOptions: DiscoveryOptions,
+        allowUnknownPeer = false,
+    ): Promise<InteractionClient> {
+        await this.#peers.ensureConnection(address, discoveryOptions, allowUnknownPeer);
+
+        return this.getInteractionClient(address, discoveryOptions);
     }
 
-    removeSubscriptionUpdateTimer(subscriptionId: number) {
-        this.subscriptionUpdateTimers.get(subscriptionId)?.stop();
-        this.subscriptionUpdateTimers.delete(subscriptionId);
-    }
-
-    async onNewExchange(exchange: MessageExchange) {
-        const messenger = new IncomingInteractionClientMessenger(exchange);
-
-        let dataReport: DataReport;
-        try {
-            // TODO Adjust this to getting packages as callback when received to handle error cases and checks outside
-            dataReport = await messenger.readDataReports([...this.subscriptionListeners.keys()]);
-        } finally {
-            messenger.close().catch(error => logger.info("Error closing client messenger", error));
-        }
-        const subscriptionId = dataReport.subscriptionId as number; // this is checked in the messenger already because we hand over allowed list
-
-        const listener = this.subscriptionListeners.get(subscriptionId);
-        const timer = this.subscriptionUpdateTimers.get(subscriptionId);
-
-        if (timer !== undefined) {
-            timer.stop().start(); // Restart timer because we received data
+    async getInteractionClient(address: PeerAddress, discoveryOptions: DiscoveryOptions) {
+        let client = this.#clients.get(address);
+        if (client !== undefined) {
+            return client;
         }
 
-        await listener?.(dataReport);
+        const nodeStore = this.#peers.get(address)?.dataStore;
+        await nodeStore?.construction; // Lazy initialize the data if not already done
+
+        const exchangeProvider = await this.#peers.exchangeProviderFor(address, discoveryOptions);
+
+        client = new InteractionClient(
+            exchangeProvider,
+            this.#peers.subscriptionClient,
+            address,
+            this.#peers.interactionQueue,
+            nodeStore,
+        );
+        this.#clients.set(address, client);
+
+        return client;
     }
 
-    async close() {
-        this.subscriptionListeners.clear();
-        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
-        this.subscriptionUpdateTimers.clear();
+    #onPeerLoss(address: PeerAddress) {
+        const client = this.#clients.get(address);
+        if (client !== undefined) {
+            client.close();
+            this.#clients.delete(address);
+        }
     }
 }
 
 export class InteractionClient {
+    readonly #exchangeProvider: ExchangeProvider;
     readonly #nodeStore?: PeerDataStore;
     readonly #ownSubscriptionIds = new Set<number>();
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
 
     constructor(
-        private readonly exchangeProvider: ExchangeProvider,
+        exchangeProvider: ExchangeProvider,
+        subscriptionClient: SubscriptionClient,
         readonly address: PeerAddress,
         queue?: PromiseQueue,
         nodeStore?: PeerDataStore,
     ) {
+        this.#exchangeProvider = exchangeProvider;
         this.#nodeStore = nodeStore;
+        this.#subscriptionClient = subscriptionClient;
         this.#queue = queue;
-
-        const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
-        if (client === undefined || !(client instanceof SubscriptionClient)) {
-            throw new InternalError(
-                `Subscription protocol handler ${INTERACTION_PROTOCOL_ID} missing or unexpected type.`,
-            );
-        }
-        this.#subscriptionClient = client;
     }
 
     get channelUpdated() {
-        if (this.exchangeProvider instanceof ReconnectableExchangeProvider) {
-            return this.exchangeProvider.channelUpdated;
+        if (this.#exchangeProvider instanceof ReconnectableExchangeProvider) {
+            return this.#exchangeProvider.channelUpdated;
         }
         throw new ImplementationError("ExchangeProvider does not support channelUpdated");
     }
 
-    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => MaybePromise<void>) {
-        this.#ownSubscriptionIds.add(subscriptionId);
-        this.#subscriptionClient.registerSubscriptionListener(subscriptionId, listener);
-    }
-
     removeSubscription(subscriptionId: number) {
         this.#ownSubscriptionIds.delete(subscriptionId);
-        this.#subscriptionClient.removeSubscriptionListener(subscriptionId);
-        this.#subscriptionClient.removeSubscriptionUpdateTimer(subscriptionId);
+        this.#subscriptionClient.delete(subscriptionId);
     }
 
     async getAllAttributes(
@@ -259,10 +249,7 @@ export class InteractionClient {
             isFabricFiltered?: boolean;
             executeQueued?: boolean;
         } = {},
-    ): Promise<{
-        attributeReports: DecodedAttributeReportValue<any>[];
-        eventReports: DecodedEventReportValue<any>[];
-    }> {
+    ): Promise<DecodedDataReport> {
         const {
             attributes: attributeRequests,
             dataVersionFilters,
@@ -302,10 +289,7 @@ export class InteractionClient {
             );
         }
 
-        const result = await this.withMessenger<{
-            attributeReports: DecodedAttributeReportValue<any>[];
-            eventReports: DecodedEventReportValue<any>[];
-        }>(async messenger => {
+        const result = await this.withMessenger(async messenger => {
             const { isFabricFiltered = true } = options;
             return await this.processReadRequest(messenger, {
                 attributeRequests,
@@ -320,7 +304,12 @@ export class InteractionClient {
             });
         }, executeQueued);
 
-        if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
+        if (
+            dataVersionFilters !== undefined &&
+            dataVersionFilters.length > 0 &&
+            enrichCachedAttributeData &&
+            result.attributeReports
+        ) {
             this.#enrichCachedAttributeData(result.attributeReports, dataVersionFilters);
         }
 
@@ -404,7 +393,7 @@ export class InteractionClient {
     private async processReadRequest(
         messenger: InteractionClientMessenger,
         request: ReadRequest,
-    ): Promise<{ attributeReports: DecodedAttributeReportValue<any>[]; eventReports: DecodedEventReportValue<any>[] }> {
+    ): Promise<DecodedDataReport> {
         const { attributeRequests, eventRequests } = request;
         logger.debug(
             `Sending read request to ${messenger.getExchangeChannelName()} for attributes ${attributeRequests
@@ -415,14 +404,11 @@ export class InteractionClient {
         const response = await messenger.sendReadRequest(request);
 
         // Normalize and decode the response
-        const normalizedResult = {
-            attributeReports: normalizeAndDecodeReadAttributeReport(response.attributeReports ?? []),
-            eventReports: normalizeAndDecodeReadEventReport(response.eventReports ?? []),
-        };
+        const normalizedResult = DecodedDataReport(response);
         logger.debug(
-            `Received read response with attributes ${normalizedResult.attributeReports
+            `Received read response with attributes ${(normalizedResult.attributeReports ?? [])
                 .map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`)
-                .join(", ")} and events ${normalizedResult.eventReports
+                .join(", ")} and events ${(normalizedResult.eventReports ?? [])
                 .map(({ path, events }) => `${resolveEventName(path)} = ${Logger.toJSON(events)}`)
                 .join(", ")}`,
         );
@@ -643,33 +629,39 @@ export class InteractionClient {
                 return;
             }
 
-            const data = normalizeAndDecodeReadAttributeReport(dataReport.attributeReports);
+            const { attributeReports } = DecodedDataReport(dataReport);
 
-            if (data.length === 0) {
+            if (attributeReports.length === 0) {
                 throw new MatterFlowError("Subscription result reporting undefined/no value not specified");
             }
-            if (data.length > 1) {
+            if (attributeReports.length > 1) {
                 throw new UnexpectedDataError("Unexpected response with more then one attribute");
             }
-            const { value, version } = data[0];
+            const { value, version } = attributeReports[0];
             if (value === undefined)
                 throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
-            await this.#nodeStore?.persistAttributes([data[0]]);
+            await this.#nodeStore?.persistAttributes([attributeReports[0]]);
 
             listener?.(value, version);
         };
 
-        this.registerSubscriptionListener(subscriptionId, subscriptionListener);
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
-        await subscriptionListener(report);
+                maxIntervalS: maxInterval,
+                onData: subscriptionListener,
+                onTimeout: updateTimeoutHandler,
+            },
+            report,
+        );
+    }
+
+    async #registerSubscription(subscription: RegisteredSubscription, initialReport: DataReport) {
+        this.#ownSubscriptionIds.add(subscription.id);
+        this.#subscriptionClient.add(subscription);
+        await subscription.onData(initialReport);
     }
 
     async subscribeEvent<T, E extends Event<T, any>>(options: {
@@ -736,30 +728,30 @@ export class InteractionClient {
                 return;
             }
 
-            const data = normalizeAndDecodeReadEventReport(dataReport.eventReports);
+            const { eventReports } = DecodedDataReport(dataReport);
 
-            if (data.length === 0) {
+            if (eventReports.length === 0) {
                 throw new MatterFlowError("Received empty subscription result value.");
             }
-            if (data.length > 1) {
+            if (eventReports.length > 1) {
                 throw new UnexpectedDataError("Unexpected response with more then one attribute.");
             }
-            const { events } = data[0];
+            const { events } = eventReports[0];
             if (events === undefined)
                 throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
             events.forEach(event => listener?.(event));
         };
-        this.registerSubscriptionListener(subscriptionId, subscriptionListener);
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
-        subscriptionListener(report);
+                maxIntervalS: maxInterval,
+                onData: subscriptionListener,
+                onTimeout: updateTimeoutHandler,
+            },
+            report,
+        );
     }
 
     async subscribeAllAttributesAndEvents(options: {
@@ -957,39 +949,21 @@ export class InteractionClient {
                 }
             }
         };
-        this.registerSubscriptionListener(subscriptionId, async dataReport => {
-            await subscriptionListener({
-                ...dataReport,
-                attributeReports:
-                    dataReport.attributeReports !== undefined
-                        ? normalizeAndDecodeReadAttributeReport(dataReport.attributeReports)
-                        : undefined,
-                eventReports:
-                    dataReport.eventReports !== undefined
-                        ? normalizeAndDecodeReadEventReport(dataReport.eventReports)
-                        : undefined,
-            });
-        });
 
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+        const seedReport = DecodedDataReport(report);
+
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
+                maxIntervalS: maxInterval,
 
-        const seedReport = {
-            attributeReports:
-                report.attributeReports !== undefined
-                    ? normalizeAndDecodeReadAttributeReport(report.attributeReports)
-                    : undefined,
-            eventReports:
-                report.eventReports !== undefined ? normalizeAndDecodeReadEventReport(report.eventReports) : undefined,
-            subscriptionId,
-        };
-        await subscriptionListener(seedReport);
+                onData: dataReport => subscriptionListener(DecodedDataReport(dataReport)),
+
+                onTimeout: updateTimeoutHandler,
+            },
+            seedReport,
+        );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
             this.#enrichCachedAttributeData(seedReport.attributeReports ?? [], dataVersionFilters);
@@ -1164,7 +1138,7 @@ export class InteractionClient {
         invoke: (messenger: InteractionClientMessenger) => Promise<T>,
         executeQueued = false,
     ): Promise<T> {
-        const messenger = await InteractionClientMessenger.create(this.exchangeProvider);
+        const messenger = await InteractionClientMessenger.create(this.#exchangeProvider);
         let result: T;
         try {
             if (executeQueued) {
@@ -1181,27 +1155,6 @@ export class InteractionClient {
         return result;
     }
 
-    private registerSubscriptionUpdateTimer(
-        maximumPeerResponseTime: number,
-        subscriptionId: number,
-        maxIntervalS: number,
-        updateTimeoutHandler: Timer.Callback,
-    ) {
-        if (!this.#ownSubscriptionIds.has(subscriptionId)) {
-            throw new MatterFlowError(
-                `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
-            );
-        }
-        const maxIntervalMs = maxIntervalS * 1000 + maximumPeerResponseTime;
-
-        const timer = Time.getTimer("Subscription timeout", maxIntervalMs, () => {
-            logger.info(`Subscription ${subscriptionId} timed out after ${maxIntervalMs}ms ...`);
-            this.removeSubscription(subscriptionId);
-            updateTimeoutHandler();
-        }).start();
-        this.#subscriptionClient.registerSubscriptionUpdateTimer(subscriptionId, timer);
-    }
-
     removeAllSubscriptions() {
         for (const subscriptionId of this.#ownSubscriptionIds) {
             this.removeSubscription(subscriptionId);
@@ -1213,11 +1166,11 @@ export class InteractionClient {
     }
 
     get session() {
-        return this.exchangeProvider.session;
+        return this.#exchangeProvider.session;
     }
 
     get channelType() {
-        return this.exchangeProvider.channelType;
+        return this.#exchangeProvider.channelType;
     }
 
     /** Enrich cached data to get complete responses when data version filters were used. */

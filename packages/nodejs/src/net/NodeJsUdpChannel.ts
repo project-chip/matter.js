@@ -138,7 +138,12 @@ export class NodeJsUdpChannel implements UdpChannel {
                     if (error !== null) {
                         const netError =
                             "code" in error && error.code === "EHOSTUNREACH"
-                                ? repackErrorAs(error, RetransmissionLimitReachedError)
+                                ? repackErrorAs(
+                                      error,
+                                      // TODO - this is a routing error; current error indicates timeout and is defined
+                                      // in higher-level module (MessageExchange)
+                                      RetransmissionLimitReachedError,
+                                  )
                                 : repackErrorAs(error, NetworkError);
                         reject(netError);
                         return;

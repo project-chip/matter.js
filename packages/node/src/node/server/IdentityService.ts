@@ -7,7 +7,10 @@
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
 import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import { ImplementationError } from "#general";
+import { ImplementationError, InternalError } from "#general";
+import type { ClientNode } from "#node/ClientNode.js";
+import type { PeerAddress } from "#protocol";
+import type { FabricIndex, NodeId } from "#types";
 
 /**
  * Thrown when there is a endpoint ID or number conflict.
@@ -55,4 +58,16 @@ export class IdentityService {
             throw new IdentityConflictError(`Endpoint number ${number} is already assigned to ${owner}`);
         }
     }
+
+    /**
+     * Assign a peer address.
+     */
+    assignNodeAddress(_node: ClientNode, _fabricIndex: FabricIndex, _nodeId?: NodeId): PeerAddress {
+        throw new InternalError("Client node ID assignment is not initialized");
+    }
+
+    /**
+     * Release a peer address.
+     */
+    releaseNodeAddress(_address: PeerAddress) {}
 }

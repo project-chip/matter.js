@@ -16,7 +16,7 @@ import { PeerAddress, PeerAddressStore } from "#protocol";
 import { ClientNode } from "../ClientNode.js";
 import type { ServerNode } from "../ServerNode.js";
 import { ClientNodeFactory } from "./ClientNodeFactory.js";
-import { NodePeerStore } from "./NodePeerStore.js";
+import { NodePeerAddressStore } from "./NodePeerAddressStore.js";
 
 const DEFAULT_TTL = 900 * 1000;
 const EXPIRATION_INTERVAL = 60 * 1000;
@@ -36,7 +36,7 @@ export class ClientNodes extends EndpointContainer<ClientNode> {
             owner.env.set(ClientNodeFactory, new Factory(this));
         }
 
-        this.owner.env.set(PeerAddressStore, new NodePeerStore(owner));
+        this.owner.env.set(PeerAddressStore, new NodePeerAddressStore(owner));
 
         this.added.on(this.#manageExpiration.bind(this));
         this.deleted.on(this.#manageExpiration.bind(this));

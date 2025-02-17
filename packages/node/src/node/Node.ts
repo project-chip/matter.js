@@ -85,8 +85,8 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         return this.env.get(ProtocolService).protocol;
     }
 
-    protected override createLifecycle(): NodeLifecycle {
-        return new NodeLifecycle(this);
+    override get lifecycle(): NodeLifecycle {
+        return super.lifecycle as NodeLifecycle;
     }
 
     /**
@@ -179,7 +179,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
     protected abstract createRuntime(): NetworkRuntime;
 
     /**
-     * An {@link Interactable} that allows for execution of Matter interactions.
+     * An {@link Interactable} that allows for execution of Matter interactions against this node.
      */
     abstract interaction: Interactable<ActionContext>;
 
@@ -202,8 +202,8 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         });
     }
 
-    override get lifecycle(): NodeLifecycle {
-        return super.lifecycle as NodeLifecycle;
+    protected override createLifecycle(): NodeLifecycle {
+        return new NodeLifecycle(this);
     }
 
     protected statusUpdate(message: string) {
@@ -253,6 +253,17 @@ export namespace Node {
             type: defaultType,
             ...configuration,
         } as Endpoint.Configuration<T>;
+    }
+
+    export function forEndpoint(endpoint: Endpoint): Node {
+        const node = endpoint.ownerOfType(RootEndpoint);
+        if (node === undefined) {
+            throw new ImplementationError(`Cannot complete operation because ${endpoint} is not installed in a node`);
+        }
+        if (!(node instanceof Node)) {
+            throw new ImplementationError(`Root endpoint for ${endpoint} is not a node`);
+        }
+        return node;
     }
 
     /**

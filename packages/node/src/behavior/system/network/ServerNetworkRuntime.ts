@@ -5,7 +5,6 @@
  */
 
 import {
-    ImplementationError,
     InterfaceType,
     Logger,
     Network,
@@ -26,6 +25,7 @@ import {
     DeviceCommissioner,
     ExchangeManager,
     InstanceBroadcaster,
+    InteractionServer,
     MdnsInstanceBroadcaster,
     MdnsService,
     SecureChannelProtocol,
@@ -52,7 +52,6 @@ function convertNetworkEnvironmentType(type: string | number) {
  * Handles network functionality for {@link NodeServer}.
  */
 export class ServerNetworkRuntime extends NetworkRuntime {
-    #interactionServer?: TransactionalInteractionServer;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
@@ -231,16 +230,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await bleTransport.close();
     }
 
-    /**
-     * Expose the internal InteractionServer for testing.
-     */
-    get interactionServer() {
-        if (this.#interactionServer === undefined) {
-            throw new ImplementationError("Interaction server is not available yet");
-        }
-        return this.#interactionServer;
-    }
-
     get #commissionedFabrics() {
         return this.owner.state.operationalCredentials.commissionedFabrics;
     }
@@ -272,8 +261,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         };
 
         // Install our interaction server
-        this.#interactionServer = await TransactionalInteractionServer.create(this.owner, env.get(SessionManager));
-        env.get(ExchangeManager).addProtocolHandler(this.#interactionServer);
+        const interactionServer = await TransactionalInteractionServer.create(this.owner, env.get(SessionManager));
+        env.set(InteractionServer, interactionServer);
+        env.get(ExchangeManager).addProtocolHandler(interactionServer);
 
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
 
@@ -338,13 +328,11 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.env.close(ExchangeManager);
         await this.owner.env.close(SecureChannelProtocol);
         await this.owner.env.close(TransportInterfaceSet);
-
-        await this.#interactionServer?.[Symbol.asyncDispose]();
-        this.#interactionServer = undefined;
+        await this.owner.env.close(InteractionServer);
     }
 
     protected override blockNewActivity() {
-        this.#interactionServer?.blockNewActivity();
+        (this.owner.env.maybeGet(InteractionServer) as TransactionalInteractionServer)?.blockNewActivity();
     }
 
     protected async configureCommissioning() {

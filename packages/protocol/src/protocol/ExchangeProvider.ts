@@ -12,8 +12,13 @@ import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
 import { Session } from "../session/Session.js";
 
+/**
+ * Interface for obtaining an exchange with a specific peer.
+ */
 export abstract class ExchangeProvider {
-    protected constructor(protected readonly exchangeManager: ExchangeManager) {}
+    abstract readonly supportsReconnect: boolean;
+
+    constructor(protected readonly exchangeManager: ExchangeManager) {}
 
     hasProtocolHandler(protocolId: number) {
         return this.exchangeManager.hasProtocolHandler(protocolId);
@@ -33,8 +38,12 @@ export abstract class ExchangeProvider {
     abstract channelType: ChannelType;
 }
 
+/**
+ * Manages an exchange over an established channel.
+ */
 export class DedicatedChannelExchangeProvider extends ExchangeProvider {
     #channel: MessageChannel;
+    readonly supportsReconnect = false;
 
     constructor(exchangeManager: ExchangeManager, channel: MessageChannel) {
         super(exchangeManager);
@@ -58,7 +67,11 @@ export class DedicatedChannelExchangeProvider extends ExchangeProvider {
     }
 }
 
+/**
+ * Manages peer exchange that will reestablish automatically in the case of communication failure.
+ */
 export class ReconnectableExchangeProvider extends ExchangeProvider {
+    readonly supportsReconnect = true;
     readonly #address: PeerAddress;
     readonly #reconnectChannelFunc: () => Promise<void>;
     readonly #channelUpdated = Observable<[void]>();

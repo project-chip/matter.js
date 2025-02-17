@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { MatterError } from "../MatterError.js";
+import { MatterError, TimeoutError } from "../MatterError.js";
 
 export class EndOfStreamError extends MatterError {
     constructor(message = "Unexpected end of stream") {
@@ -11,7 +11,7 @@ export class EndOfStreamError extends MatterError {
     }
 }
 
-export class NoResponseTimeoutError extends MatterError {}
+export class NoResponseTimeoutError extends TimeoutError {}
 
 export interface Stream<T> {
     read(): Promise<T>;
