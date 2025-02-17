@@ -93,7 +93,7 @@ class Profiler {
 
         let Session;
         try {
-            Session = (await import("inspector/promises")).Session;
+            Session = (await import("node:inspector/promises")).Session;
         } catch (e) {
             console.error(`We don't support profiling on this version of Node.js: ${e}`);
             return;

@@ -10,6 +10,7 @@ import js from "@eslint/js";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import _import from "eslint-plugin-import";
+import nodeImport from "eslint-plugin-node-import";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -50,6 +51,7 @@ export default [
         plugins: {
             "@typescript-eslint": fixupPluginRules(typescriptEslint),
             import: fixupPluginRules(_import),
+            "node-import": fixupPluginRules(nodeImport),
         },
 
         linterOptions: {
@@ -120,6 +122,10 @@ export default [
                     ],
                 },
             ],
+
+            // This is not released yet so using separate plugin temporarily
+            //"import/enforce-node-protocol-usage": "error",
+            "node-import/prefer-node-protocol": "error",
 
             "@typescript-eslint/no-namespace": "off",
             "no-inner-declarations": "off",
