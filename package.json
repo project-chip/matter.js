@@ -55,6 +55,7 @@
     "embedme": "^1.22.1",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-node-import": "^1.0.4",
     "eslint-plugin-regexp": "^2.7.0",
     "globals": "^15.14.0",
     "prettier": "^3.5.0",
