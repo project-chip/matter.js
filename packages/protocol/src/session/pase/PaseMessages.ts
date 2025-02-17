@@ -4,8 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SupportedTransportsBitmap } from "#common/index.js";
 import { CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "#general";
-import { TlvBoolean, TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt16, TlvUInt32 } from "#types";
+import {
+    TlvBitmap,
+    TlvBoolean,
+    TlvByteString,
+    TlvField,
+    TlvObject,
+    TlvOptionalField,
+    TlvUInt16,
+    TlvUInt32,
+} from "#types";
 
 /** @see {@link MatterSpecification.v13.Core} § 4.12.8 */
 export const TlvSessionParameters = TlvObject({
@@ -29,6 +39,12 @@ export const TlvSessionParameters = TlvObject({
 
     /** Maximum Paths pert Invoke */
     maxPathsPerInvoke: TlvOptionalField(7, TlvUInt16) /* default: 1 */,
+
+    /** Supported transport protocols in addition to MRP.*/
+    supportedTransports: TlvOptionalField(8, TlvBitmap(TlvUInt16, SupportedTransportsBitmap)) /* default: {} */,
+
+    /** Maximum size of the message carried over TCP in bytes */
+    maxTcpMessageSize: TlvOptionalField(9, TlvUInt32) /* default: 64000 */,
 });
 
 /** @see {@link MatterSpecification.v13.Core} § 4.14.1.2 */

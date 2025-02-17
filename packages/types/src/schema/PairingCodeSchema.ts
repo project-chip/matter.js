@@ -37,11 +37,26 @@ export enum CommissioningFlowType {
 
 /** See {@link MatterSpecification.v13.Core} § 5.1.3.1 Table 39 */
 export const DiscoveryCapabilitiesBitmap = {
-    /** Device supports BLE for discovery when not commissioned. */
+    /**
+     * BLE
+     * * Set when device supports BLE for discovery when not commissioned.
+     * * Not-Set when device does not support BLE for discovery or is currently commissioned into one or more fabrics.
+     */
     ble: BitFlag(1),
 
-    /** Device is already on the IP network. */
+    /**
+     * On the IP network
+     * * Set when device is already on the IP network.
+     */
     onIpNetwork: BitFlag(2),
+
+    /**
+     * Wi-Fi Public Action Frame
+     * * Set when device supports Wi-Fi Public Action Frame for discovery when not commissioned.
+     * * Not-Set when device does not support Wi-Fi Public Action Frame for discovery or is currently commissioned into
+     *   one or more fabrics.
+     */
+    wifiPublicActionFrame: BitFlag(3),
 };
 export const DiscoveryCapabilitiesSchema = BitmapSchema(DiscoveryCapabilitiesBitmap);
 

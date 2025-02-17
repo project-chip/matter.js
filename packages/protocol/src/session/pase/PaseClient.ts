@@ -46,12 +46,21 @@ export class PaseClient {
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
 
         // Send pbkdfRequest and Read pbkdfResponse
+        const tcpSupported =
+            sessionParameters.supportedTransports?.tcpClient ||
+            sessionParameters.supportedTransports?.tcpServer ||
+            false;
         const requestPayload = await messenger.sendPbkdfParamRequest({
             initiatorRandom,
             initiatorSessionId,
             passcodeId: DEFAULT_PASSCODE_ID,
             hasPbkdfParameters: false,
-            initiatorSessionParams: sessionParameters,
+            initiatorSessionParams: {
+                ...sessionParameters,
+                // The MAX_TCP_MESSAGE_SIZE field SHALL only be present if the SUPPORTED_TRANSPORTS field
+                // indicates that TCP is supported.
+                maxTcpMessageSize: tcpSupported ? sessionParameters.maxTcpMessageSize : undefined,
+            },
         });
         const {
             responsePayload,
