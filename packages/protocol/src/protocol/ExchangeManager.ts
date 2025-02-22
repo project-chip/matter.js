@@ -273,7 +273,7 @@ export class ExchangeManager {
                     !message.payloadHeader.requiresAck
                 ) {
                     logger.debug(
-                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId}.`,
+                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name}`,
                     );
                     return;
                 }
@@ -296,7 +296,7 @@ export class ExchangeManager {
                 });
                 await exchange.close();
                 logger.debug(
-                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId}.`,
+                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
                 );
             } else {
                 if (protocolHandler === undefined) {
@@ -304,14 +304,14 @@ export class ExchangeManager {
                 }
                 if (isDuplicate) {
                     logger.info(
-                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId}.`,
+                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
                     );
                     return;
                 } else {
                     logger.info(
                         `Discarding unexpected message ${messageId} for protocol ${
                             message.payloadHeader.protocolId
-                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} : ${Logger.toJSON(message)}`,
+                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} on channel ${channel.name}: ${Logger.toJSON(message)}`,
                     );
                 }
             }
@@ -356,7 +356,7 @@ export class ExchangeManager {
         }
         if (session.sendCloseMessageWhenClosing) {
             const channel = this.#channelManager.getChannelForSession(session);
-            logger.debug(`Channel for session ${session.name} is ${channel?.name}`);
+            logger.debug(`Channel for session ${sessionName} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
                 if (exchange !== undefined) {
@@ -423,18 +423,21 @@ export class ExchangeManager {
             transportInterface.onData((socket, data) => {
                 if (udpInterface && data.length > socket.maxPayloadSize) {
                     logger.warn(
-                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
+                        `Ignoring UDP message on channel ${socket.name} with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
                     );
                     return;
                 }
 
                 try {
                     this.onMessage(socket, data).catch(error =>
-                        logger.info(error instanceof MatterError ? error.message : error),
+                        logger.info(
+                            `Error on channel ${socket.name}:`,
+                            error instanceof MatterError ? error.message : error,
+                        ),
                     );
                 } catch (error) {
                     logger.info(
-                        "Ignoring UDP message with error",
+                        `Ignoring UDP message on channel ${socket.name} with error`,
                         error instanceof MatterError ? error.message : error,
                     );
                 }
