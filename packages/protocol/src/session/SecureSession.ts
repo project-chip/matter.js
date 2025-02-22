@@ -327,9 +327,13 @@ export class SecureSession extends Session {
                     await this.closer;
                 } catch (error) {
                     NoChannelError.accept(error);
+                } finally {
+                    await this.destroyed.emit();
                 }
+                return;
             }
         }
+        await this.destroyed.emit();
     }
 
     /**

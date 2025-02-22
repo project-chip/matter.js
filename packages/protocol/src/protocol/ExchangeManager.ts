@@ -48,6 +48,7 @@ export class MessageChannel implements Channel<Message> {
         closeCallback?: () => Promise<void>,
     ) {
         this.#closeCallback = closeCallback;
+        this.session.destroyed.on(() => this.close());
     }
 
     set closeCallback(callback: () => Promise<void>) {
