@@ -8,6 +8,7 @@ import { EventEmitter, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { ExposedFabricInformation, SecureSession, SessionManager } from "#protocol";
 import { NodeId } from "#types";
+import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
@@ -24,10 +25,7 @@ export class SessionsBehavior extends Behavior {
         if (env.has(SessionManager)) {
             this.#enterOnlineMode(env.get(SessionManager));
         }
-
-        const sessionManagerEvents = env.eventsFor(SessionManager);
-        this.reactTo(sessionManagerEvents.added, this.#enterOnlineMode);
-        this.reactTo(sessionManagerEvents.deleted, this.#enterOfflineMode);
+        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).offline, this.#enterOfflineMode);
     }
 
     #convertToExposedSession(session: SecureSession): SessionsBehavior.Session {
