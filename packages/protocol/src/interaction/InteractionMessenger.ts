@@ -738,6 +738,11 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         return result;
     }
 
+    /**
+     * Read data reports as they come in on the wire.
+     *
+     * Data reports payloads are decoded but list attributes may be split across messages; these will require reassembly.
+     */
     async *readDataReports() {
         while (true) {
             const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);

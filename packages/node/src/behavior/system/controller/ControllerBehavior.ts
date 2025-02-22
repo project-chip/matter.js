@@ -8,9 +8,9 @@ import { Behavior } from "#behavior/Behavior.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
 import {
     ImplementationError,
+    isNetworkInterface,
     Logger,
     MatterAggregateError,
-    NetInterface,
     NetInterfaceSet,
     TransportInterfaceSet,
 } from "#general";
@@ -123,8 +123,8 @@ export class ControllerBehavior extends Behavior {
         const netInterfaces = this.env.get(NetInterfaceSet);
         const netTransports = this.env.get(TransportInterfaceSet);
         for (const transport of netTransports) {
-            if ("openChannel" in transport) {
-                netInterfaces.add(transport as NetInterface);
+            if (isNetworkInterface(transport)) {
+                netInterfaces.add(transport);
             }
         }
         if (this.state.ble) {

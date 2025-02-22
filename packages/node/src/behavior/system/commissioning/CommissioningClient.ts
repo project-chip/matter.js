@@ -100,10 +100,13 @@ export class CommissioningClient extends Behavior {
 
         const commissioner = this.endpoint.env.get(ControllerCommissioner);
 
+        const identityService = this.endpoint.env.get(IdentityService);
+        const address = identityService.assignNodeAddress(node, fabric.fabricIndex, options.nodeId);
+
         const commissioningOptions: LocatedNodeCommissioningOptions = {
             addresses,
             fabric,
-            nodeId: options.nodeId,
+            nodeId: address.nodeId,
             passcode,
             discoveryData: this.descriptor,
         };
@@ -111,9 +114,6 @@ export class CommissioningClient extends Behavior {
         if (this.finalizeCommissioning !== CommissioningClient.prototype.finalizeCommissioning) {
             commissioningOptions.finalizeCommissioning = this.finalizeCommissioning.bind(this);
         }
-
-        const identityService = this.endpoint.env.get(IdentityService);
-        const address = identityService.assignNodeAddress(node, fabric.fabricIndex, options.nodeId);
 
         try {
             await commissioner.commission(commissioningOptions);

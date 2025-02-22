@@ -36,6 +36,7 @@ export class NetworkClient extends NetworkBehavior {
             return;
         }
 
+        // TODO - configure subscription based on physical device properties
         const message = Subscribe({
             isFabricFiltered: true,
             minIntervalFloorSeconds: DEFAULT_MIN_INTERVAL_FLOOR_SECONDS,

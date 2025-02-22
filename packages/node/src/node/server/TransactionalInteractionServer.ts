@@ -135,7 +135,7 @@ export class TransactionalInteractionServer extends InteractionServer {
 
         // An incoming data report as the first message is not a valid server operation.  We instead delegate to a
         // client implementation if available
-        if (message.payloadHeader.messageType === MessageType.SubscribeRequest && this.clientHandler) {
+        if (message.payloadHeader.messageType === MessageType.ReportData && this.clientHandler) {
             return this.clientHandler.onNewExchange(exchange, message);
         }
 

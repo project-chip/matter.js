@@ -50,7 +50,7 @@ export namespace PhysicalDeviceProperties {
         if (isIntermittentlyConnected) {
             if (minIntervalFloorSeconds !== undefined && minIntervalFloorSeconds !== DEFAULT_SUBSCRIPTION_FLOOR_ICD_S) {
                 logger.info(
-                    `${description}: Overwriting minIntervalFloorSeconds for intermittently connected device to 0`,
+                    `${description}: Overwriting minIntervalFloorSeconds for intermittently connected device to ${DEFAULT_SUBSCRIPTION_FLOOR_ICD_S}`,
                 );
                 minIntervalFloorSeconds = DEFAULT_SUBSCRIPTION_FLOOR_ICD_S;
             }

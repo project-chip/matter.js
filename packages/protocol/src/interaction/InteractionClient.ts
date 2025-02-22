@@ -304,12 +304,7 @@ export class InteractionClient {
             });
         }, executeQueued);
 
-        if (
-            dataVersionFilters !== undefined &&
-            dataVersionFilters.length > 0 &&
-            enrichCachedAttributeData &&
-            result.attributeReports
-        ) {
+        if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
             this.#enrichCachedAttributeData(result.attributeReports, dataVersionFilters);
         }
 
