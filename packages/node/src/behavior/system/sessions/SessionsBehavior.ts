@@ -24,10 +24,7 @@ export class SessionsBehavior extends Behavior {
         if (env.has(SessionManager)) {
             this.#enterOnlineMode(env.get(SessionManager));
         }
-
-        const sessionManagerEvents = env.eventsFor(SessionManager);
-        this.reactTo(sessionManagerEvents.added, this.#enterOnlineMode);
-        this.reactTo(sessionManagerEvents.deleted, this.#enterOfflineMode);
+        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).offline, this.#enterOfflineMode);
     }
 
     #convertToExposedSession(session: SecureSession): SessionsBehavior.Session {
