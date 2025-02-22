@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "#general";
+import { AsyncObservable, Time } from "#general";
 import { NodeId } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
