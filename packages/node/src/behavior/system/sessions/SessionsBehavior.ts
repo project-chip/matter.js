@@ -8,6 +8,7 @@ import { EventEmitter, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { ExposedFabricInformation, SecureSession, SessionManager } from "#protocol";
 import { NodeId } from "#types";
+import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
