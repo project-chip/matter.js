@@ -6,10 +6,11 @@
 
 import { EventEmitter, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, SecureSession, SessionManager } from "#protocol";
+import { ExposedFabricInformation, SecureSession, SessionManager, Subscription } from "#protocol";
 import { NodeId } from "#types";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
+import { SubscriptionBehavior } from "../subscription/SubscriptionBehavior.js";
 
 /**
  * Active {@link ServerNode} client sessions.
@@ -46,7 +47,7 @@ export class SessionsBehavior extends Behavior {
 
         this.reactTo(sessions.sessions.deleted, this.#sessionClosed);
 
-        this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged);
+        this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged, { lock: true });
     }
 
     #sessionOpened(session: SecureSession) {
@@ -67,10 +68,16 @@ export class SessionsBehavior extends Behavior {
         this.events.closed.emit(this.#convertToExposedSession(session));
     }
 
-    #subscriptionsChanged(session: SecureSession) {
+    #subscriptionsChanged(session: SecureSession, subscription: Subscription) {
         if (session.isPase) {
             return;
         }
+
+        // When subscription was added then inform SubscriptionBehavior
+        if (session.subscriptions.has(subscription)) {
+            this.agent.get(SubscriptionBehavior).addSubscription(subscription);
+        }
+
         const sessionEntry = this.state.sessions[session.id];
         if (sessionEntry === undefined) {
             return;
