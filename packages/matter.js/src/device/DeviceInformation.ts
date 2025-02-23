@@ -13,20 +13,13 @@ import {
     ThreadNetworkDiagnostics,
 } from "#clusters";
 import { Logger, SupportedStorageTypes } from "@matter/general";
-import { InteractionClient, SupportedAttributeClient } from "@matter/protocol";
+import { InteractionClient, PhysicalDeviceProperties, SupportedAttributeClient } from "@matter/protocol";
 import { EndpointNumber, GlobalAttributes, NodeId, TypeFromPartialBitSchema, TypeFromSchema } from "@matter/types";
 import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("DeviceInformation");
 
-export type DeviceMetaInformation = {
-    threadConnected: boolean;
-    wifiConnected: boolean;
-    ethernetConnected: boolean;
-    rootEndpointServerList: number[];
-    isBatteryPowered: boolean;
-    isIntermittentlyConnected: boolean;
-    isThreadSleepyEndDevice: boolean;
+export type DeviceMetaInformation = PhysicalDeviceProperties & {
     dataRevision: number;
 };
 
@@ -38,13 +31,6 @@ export type DeviceInformationData = {
 };
 
 export const DEVICE_DATA_REVISION = 1;
-
-const DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S = 1;
-const DEFAULT_SUBSCRIPTION_FLOOR_ICD_S = 0;
-const DEFAULT_SUBSCRIPTION_CEILING_WIFI_S = 60;
-const DEFAULT_SUBSCRIPTION_CEILING_THREAD_S = 60;
-const DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S = 180;
-const DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S = 600;
 
 const GlobalAttributeKeys = Object.keys(GlobalAttributes({}));
 
@@ -315,43 +301,11 @@ export class DeviceInformation {
         subscribeMinIntervalFloorSeconds?: number;
         subscribeMaxIntervalCeilingSeconds?: number;
     }) {
-        let {
-            subscribeMinIntervalFloorSeconds: minIntervalFloorSeconds,
-            subscribeMaxIntervalCeilingSeconds: maxIntervalCeilingSeconds,
-        } = options;
-
-        const { isBatteryPowered, isIntermittentlyConnected, threadConnected, isThreadSleepyEndDevice } =
-            this.#deviceMeta ?? {};
-
-        if (isIntermittentlyConnected) {
-            if (minIntervalFloorSeconds !== undefined && minIntervalFloorSeconds !== DEFAULT_SUBSCRIPTION_FLOOR_ICD_S) {
-                logger.info(
-                    `Node ${this.nodeId}: Overwriting minIntervalFloorSeconds for intermittently connected device to 0`,
-                );
-                minIntervalFloorSeconds = DEFAULT_SUBSCRIPTION_FLOOR_ICD_S;
-            }
-        }
-
-        const defaultCeiling = isBatteryPowered
-            ? DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S
-            : isThreadSleepyEndDevice
-              ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S
-              : threadConnected
-                ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_S
-                : DEFAULT_SUBSCRIPTION_CEILING_WIFI_S;
-        if (maxIntervalCeilingSeconds === undefined) {
-            maxIntervalCeilingSeconds = defaultCeiling;
-        }
-        if (maxIntervalCeilingSeconds < defaultCeiling) {
-            logger.debug(
-                `Node ${this.nodeId}: maxIntervalCeilingSeconds should idealy be set to ${defaultCeiling}s instead of ${maxIntervalCeilingSeconds}s because of device type`,
-            );
-        }
-
-        return {
-            minIntervalFloorSeconds: minIntervalFloorSeconds ?? DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S,
-            maxIntervalCeilingSeconds,
-        };
+        return PhysicalDeviceProperties.determineSubscriptionParameters({
+            properties: this.#deviceMeta,
+            description: `Node ${this.nodeId}`,
+            ...options,
+        });
     }
 
     toStorageData(): DeviceInformationData {

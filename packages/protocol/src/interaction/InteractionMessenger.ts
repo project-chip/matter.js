@@ -18,11 +18,9 @@ import {
     StatusCode,
     StatusResponseError,
     TlvAny,
-    TlvAttributeReport,
     TlvDataReport,
     TlvDataReportForSend,
     TlvDataVersionFilter,
-    TlvEventReport,
     TlvInvokeRequest,
     TlvInvokeResponse,
     TlvReadRequest,
@@ -693,15 +691,10 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         return message;
     }
 
-    // TODO: Adjust to use callbacks or events to push put received data to allow parallel processing
-    async readDataReports(expectedSubscriptionIds?: number[]): Promise<DataReport> {
-        let subscriptionId: number | undefined;
-        const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
-        const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
+    async readAggregateDataReport(expectedSubscriptionIds?: number[]): Promise<DataReport> {
+        let result: DataReport | undefined;
 
-        while (true) {
-            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
-            const report = TlvDataReport.decode(dataReportMessage.payload);
+        for await (const report of this.readDataReports()) {
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
                     await this.sendStatus(StatusCode.InvalidSubscription, {
@@ -718,55 +711,81 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 }
             }
 
-            if (subscriptionId === undefined && report.subscriptionId !== undefined) {
-                subscriptionId = report.subscriptionId;
-            } else if (
-                (subscriptionId !== undefined || report.subscriptionId !== undefined) &&
-                report.subscriptionId !== subscriptionId
-            ) {
+            if (result?.subscriptionId !== undefined && report.subscriptionId !== result.subscriptionId) {
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
-            const logContext = {
-                subId: report.subscriptionId,
-                dataReportFlags: Diagnostic.asFlags({
-                    empty: !report.attributeReports?.length && !report.eventReports?.length,
-                    suppressResponse: report.suppressResponse,
-                    moreChunkedMessages: report.moreChunkedMessages,
-                }),
-                attr: report.attributeReports?.length,
-                ev: report.eventReports?.length,
-            };
+            if (!result) {
+                result = report;
+            } else {
+                if (Array.isArray(report.attributeReports)) {
+                    if (!result.attributeReports) {
+                        result.attributeReports = report.attributeReports;
+                    } else {
+                        result.attributeReports.push(...report.attributeReports);
+                    }
+                }
+                if (Array.isArray(report.eventReports)) {
+                    if (!result.eventReports) {
+                        result.eventReports = report.eventReports;
+                    } else {
+                        result.eventReports.push(...report.eventReports);
+                    }
+                }
+            }
+        }
 
-            if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
-                attributeValues.push(...report.attributeReports);
-            }
-            if (Array.isArray(report.eventReports) && report.eventReports.length > 0) {
-                eventValues.push(...report.eventReports);
-            }
+        if (result === undefined) {
+            // readDataReports should have thrown
+            throw new InternalError("No data reports loaded during read");
+        }
+
+        return result;
+    }
+
+    /**
+     * Read data reports as they come in on the wire.
+     *
+     * Data reports payloads are decoded but list attributes may be split across messages; these will require reassembly.
+     */
+    async *readDataReports() {
+        while (true) {
+            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
+            const report = TlvDataReport.decode(dataReportMessage.payload);
+
+            yield report;
 
             if (report.moreChunkedMessages) {
                 await this.sendStatus(StatusCode.Success, {
                     multipleMessageInteraction: true,
-                    logContext,
+                    logContext: this.#logContextOf(report),
                 });
             } else if (!report.suppressResponse) {
-                // We received the last message and need to send a final Success, but we do not need to wait for it and
+                // We received the last message and need to send a final success, but we do not need to wait for it and
                 // also don't care if it fails
                 this.sendStatus(StatusCode.Success, {
                     multipleMessageInteraction: true,
-                    logContext,
-                }).catch(error =>
-                    logger.info("Error while sending final Success after receiving all DataReport chunks", error),
-                );
+                    logContext: this.#logContextOf(report),
+                }).catch(error => logger.info("Error sending success after final data report chunk", error));
             }
 
             if (!report.moreChunkedMessages) {
-                report.attributeReports = attributeValues;
-                report.eventReports = eventValues;
-                return report;
+                break;
             }
         }
+    }
+
+    #logContextOf(report: DataReport) {
+        return {
+            subId: report.subscriptionId,
+            dataReportFlags: Diagnostic.asFlags({
+                empty: !report.attributeReports?.length && !report.eventReports?.length,
+                suppressResponse: report.suppressResponse,
+                moreChunkedMessages: report.moreChunkedMessages,
+            }),
+            attr: report.attributeReports?.length,
+            ev: report.eventReports?.length,
+        };
     }
 }
 
@@ -793,6 +812,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
             if (
+                this.exchangeProvider.supportsReconnect &&
                 (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) &&
                 !options?.multipleMessageInteraction
             ) {
@@ -815,7 +835,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     async sendReadRequest(readRequest: ReadRequest) {
         await this.send(MessageType.ReadRequest, this.#encodeReadingRequest(TlvReadRequest, readRequest));
 
-        return this.readDataReports();
+        return this.readAggregateDataReport();
     }
 
     #encodeReadingRequest<T extends TlvSchema<any>>(schema: T, request: TypeFromSchema<T>) {
@@ -876,7 +896,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const request = this.#encodeReadingRequest(TlvSubscribeRequest, subscribeRequest);
         await this.send(MessageType.SubscribeRequest, request);
 
-        const report = await this.readDataReports();
+        const report = await this.readAggregateDataReport();
         const { subscriptionId } = report;
 
         if (subscriptionId === undefined) {

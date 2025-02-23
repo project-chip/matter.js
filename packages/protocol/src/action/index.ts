@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export * from "./client/index.js";
 export * from "./errors.js";
 export * from "./Interactable.js";
 export * from "./protocols.js";

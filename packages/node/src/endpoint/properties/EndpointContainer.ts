@@ -80,6 +80,10 @@ export class EndpointContainer<T extends Endpoint = Endpoint>
         return this.#children.find(predicate);
     }
 
+    forEach(fn: (part: T) => boolean) {
+        [...this.#children].forEach(fn);
+    }
+
     [Symbol.iterator]() {
         return this.#children[Symbol.iterator]();
     }

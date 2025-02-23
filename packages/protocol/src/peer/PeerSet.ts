@@ -7,6 +7,7 @@
 import { DiscoveryData, ScannerSet } from "#common/Scanner.js";
 import {
     anyPromise,
+    AsyncObservable,
     BasicSet,
     ChannelType,
     Construction,
@@ -22,13 +23,12 @@ import {
     NetInterfaceSet,
     NoResponseTimeoutError,
     ObservableSet,
-    PromiseQueue,
     ServerAddressIp,
     serverAddressToString,
     Time,
     Timer,
 } from "#general";
-import { InteractionClient } from "#interaction/InteractionClient.js";
+import { SubscriptionClient } from "#interaction/SubscriptionClient.js";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseClient, SecureSession, Session } from "#session/index.js";
@@ -39,6 +39,7 @@ import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../pr
 import { ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
 import { ControllerDiscovery, DiscoveryError, PairRetransmissionLimitReachedError } from "./ControllerDiscovery.js";
+import { InteractionQueue } from "./InteractionQueue.js";
 import { OperationalPeer } from "./OperationalPeer.js";
 import { PeerAddressStore, PeerDataStore } from "./PeerAddressStore.js";
 
@@ -46,9 +47,6 @@ const logger = Logger.get("PeerSet");
 
 const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
 const RETRANSMISSION_DISCOVERY_TIMEOUT_S = 5;
-
-const CONCURRENT_QUEUED_INTERACTIONS = 4;
-const INTERACTION_QUEUE_DELAY_MS = 100;
 
 /**
  * Types of discovery that may be performed when connecting operationally.
@@ -93,6 +91,7 @@ export interface PeerSetContext {
     sessions: SessionManager;
     channels: ChannelManager;
     exchanges: ExchangeManager;
+    subscriptionClient: SubscriptionClient;
     scanners: ScannerSet;
     netInterfaces: NetInterfaceSet;
     store: PeerAddressStore;
@@ -105,6 +104,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #sessions: SessionManager;
     readonly #channels: ChannelManager;
     readonly #exchanges: ExchangeManager;
+    readonly #subscriptionClient: SubscriptionClient;
     readonly #scanners: ScannerSet;
     readonly #netInterfaces: NetInterfaceSet;
     readonly #caseClient: CaseClient;
@@ -117,16 +117,17 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     }>();
     readonly #construction: Construction<PeerSet>;
     readonly #store: PeerAddressStore;
-    readonly #interactionQueue = new PromiseQueue(CONCURRENT_QUEUED_INTERACTIONS, INTERACTION_QUEUE_DELAY_MS);
+    readonly #interactionQueue = new InteractionQueue();
     readonly #nodeCachedData = new PeerAddressMap<PeerDataStore>(); // Temporarily until we store it in new API
-    readonly #clients = new PeerAddressMap<InteractionClient>();
+    readonly #disconnected = AsyncObservable<[address: PeerAddress]>();
 
     constructor(context: PeerSetContext) {
-        const { sessions, channels, exchanges, scanners, netInterfaces, store } = context;
+        const { sessions, channels, exchanges, subscriptionClient, scanners, netInterfaces, store } = context;
 
         this.#sessions = sessions;
         this.#channels = channels;
         this.#exchanges = exchanges;
+        this.#subscriptionClient = subscriptionClient;
         this.#scanners = scanners;
         this.#netInterfaces = netInterfaces;
         this.#store = store;
@@ -165,6 +166,10 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         return this.#peers.deleted;
     }
 
+    get disconnected() {
+        return this.#disconnected;
+    }
+
     has(item: PeerAddress | OperationalPeer) {
         if ("address" in item) {
             return this.#peers.has(item);
@@ -201,6 +206,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             sessions: env.get(SessionManager),
             channels: env.get(ChannelManager),
             exchanges: env.get(ExchangeManager),
+            subscriptionClient: env.get(SubscriptionClient),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
             store: env.get(PeerAddressStore),
@@ -213,20 +219,18 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         return this.#peers;
     }
 
-    /**
-     * Connect to a node on a fabric.
-     */
-    async connect(
-        address: PeerAddress,
-        discoveryOptions: DiscoveryOptions,
-        allowUnknownPeer = false,
-    ): Promise<InteractionClient> {
-        await this.#ensureConnection(address, discoveryOptions, allowUnknownPeer);
-
-        return this.initializeInteractionClient(address, discoveryOptions);
+    get subscriptionClient() {
+        return this.#subscriptionClient;
     }
 
-    async #ensureConnection(address: PeerAddress, discoveryOptions: DiscoveryOptions, allowUnknownPeer = false) {
+    get interactionQueue() {
+        return this.#interactionQueue;
+    }
+
+    /**
+     * Ensure there is a channel to the designated peer.
+     */
+    async ensureConnection(address: PeerAddress, discoveryOptions: DiscoveryOptions, allowUnknownPeer = false) {
         if (!this.#peersByAddress.has(address) && !allowUnknownPeer) {
             throw new UnknownNodeError(`Cannot connect to unknown device ${PeerAddress(address)}`);
         }
@@ -256,62 +260,44 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         }
     }
 
-    async initializeInteractionClient(address: PeerAddress, discoveryOptions?: DiscoveryOptions) {
-        const existingClient = this.#clients.get(address);
-        if (existingClient !== undefined) {
-            return existingClient;
-        }
-
-        const nodeStore = this.get(address)?.dataStore;
-        await nodeStore?.construction; // Lazy initialize the data if not already done
-
+    /**
+     * Obtain an exchange provider for the designated peer.
+     */
+    async exchangeProviderFor(address: PeerAddress, discoveryOptions?: DiscoveryOptions) {
         let initiallyConnected = this.#channels.hasChannel(address);
-        const client = new InteractionClient(
-            new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
-                if (!initiallyConnected && !this.#channels.hasChannel(address)) {
-                    // We got an uninitialized node, so do the first connection as usual
-                    await this.#ensureConnection(address, { discoveryType: NodeDiscoveryType.None });
-                    initiallyConnected = true; // We only do this connection once, rest is handled in following code
-                    if (this.#channels.hasChannel(address)) {
-                        return;
-                    }
+        return new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
+            if (!initiallyConnected && !this.#channels.hasChannel(address)) {
+                // We got an uninitialized node, so do the first connection as usual
+                await this.ensureConnection(address, { discoveryType: NodeDiscoveryType.None });
+                initiallyConnected = true; // We only do this connection once, rest is handled in following code
+                if (this.#channels.hasChannel(address)) {
+                    return;
                 }
+            }
 
-                if (!this.#channels.hasChannel(address)) {
-                    throw new RetransmissionLimitReachedError(
-                        `Device ${PeerAddress(address)} is currently not reachable.`,
-                    );
-                }
-                await this.#channels.removeAllNodeChannels(address);
+            if (!this.#channels.hasChannel(address)) {
+                throw new RetransmissionLimitReachedError(`Device ${PeerAddress(address)} is currently not reachable.`);
+            }
+            await this.#channels.removeAllNodeChannels(address);
 
-                // Enrich discoveryData with data from the node store when not provided
-                const { discoveryData } = discoveryOptions ?? {
-                    discoveryData: this.#peersByAddress.get(address)?.discoveryData,
-                };
-                // Try to use first result for one last try before we need to reconnect
-                const operationalAddress = this.#knownOperationalAddressFor(address, true);
-                if (operationalAddress === undefined) {
-                    logger.info(
-                        `Re-discovering device failed (no address found), remove all sessions for ${PeerAddress(address)}`,
-                    );
-                    // We remove all sessions, this also informs the PairedNode class
-                    await this.#sessions.removeAllSessionsForNode(address);
-                    throw new RetransmissionLimitReachedError(
-                        `No operational address found for ${PeerAddress(address)}`,
-                    );
-                }
-                if (
-                    (await this.#reconnectKnownAddress(address, operationalAddress, discoveryData, 2_000)) === undefined
-                ) {
-                    throw new RetransmissionLimitReachedError(`${PeerAddress(address)} is not reachable.`);
-                }
-            }),
-            address,
-            this.#interactionQueue,
-            nodeStore,
-        );
-        this.#clients.set(address, client);
-        return client;
+            // Enrich discoveryData with data from the node store when not provided
+            const { discoveryData } = discoveryOptions ?? {
+                discoveryData: this.#peersByAddress.get(address)?.discoveryData,
+            };
+            // Try to use first result for one last try before we need to reconnect
+            const operationalAddress = this.#knownOperationalAddressFor(address, true);
+            if (operationalAddress === undefined) {
+                logger.info(
+                    `Re-discovering device failed (no address found), remove all sessions for ${PeerAddress(address)}`,
+                );
+                // We remove all sessions, this also informs the PairedNode class
+                await this.#sessions.removeAllSessionsForNode(address);
+                throw new RetransmissionLimitReachedError(`No operational address found for ${PeerAddress(address)}`);
+            }
+            if ((await this.#reconnectKnownAddress(address, operationalAddress, discoveryData, 2_000)) === undefined) {
+                throw new RetransmissionLimitReachedError(`${PeerAddress(address)} is not reachable.`);
+            }
+        });
     }
 
     /**
@@ -327,10 +313,15 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     /**
      * Terminate any active peer connection.
      */
-    async disconnect(address: PeerAddress, sendSessionClose = true) {
-        this.#clients.get(address)?.removeAllSubscriptions();
+    async disconnect(peer: PeerAddress | OperationalPeer, sendSessionClose = true) {
+        const address = this.get(peer)?.address;
+        if (address === undefined) {
+            return;
+        }
+
         await this.#sessions.removeAllSessionsForNode(address, sendSessionClose);
         await this.#channels.removeAllNodeChannels(address);
+        await this.#disconnected.emit(address);
     }
 
     /**
@@ -348,7 +339,6 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         await this.#store.deletePeer(address);
         await this.disconnect(address, false);
         await this.#sessions.deleteResumptionRecord(address);
-        this.#clients.delete(address);
     }
 
     async close() {
@@ -358,8 +348,11 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             // This ends discovery without triggering promises
             mdnsScanner?.cancelOperationalDeviceDiscovery(this.#sessions.fabricFor(address), address.nodeId, false);
         }
-        this.#clients.forEach(client => client.close());
-        this.#clients.clear();
+
+        for (const { address } of this.#peers) {
+            await this.disconnect(address, false);
+        }
+
         this.#interactionQueue.close();
         this.#runningPeerReconnections.forEach(({ rejecter }) =>
             rejecter(new ChannelNotConnectedError("PeerSet closed")),

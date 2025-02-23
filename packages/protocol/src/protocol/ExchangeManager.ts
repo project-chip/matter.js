@@ -150,6 +150,10 @@ export class ExchangeManager {
         return instance;
     }
 
+    get channels() {
+        return this.#channelManager;
+    }
+
     hasProtocolHandler(protocolId: number) {
         return this.#protocols.has(protocolId);
     }
@@ -159,10 +163,10 @@ export class ExchangeManager {
     }
 
     addProtocolHandler(protocol: ProtocolHandler) {
-        if (this.hasProtocolHandler(protocol.getId())) {
-            throw new ImplementationError(`Handler for protocol ${protocol.getId()} already registered.`);
+        if (this.hasProtocolHandler(protocol.id)) {
+            throw new ImplementationError(`Handler for protocol ${protocol.id} already registered.`);
         }
-        this.#protocols.set(protocol.getId(), protocol);
+        this.#protocols.set(protocol.id, protocol);
     }
 
     initiateExchange(address: PeerAddress, protocolId: number) {

@@ -169,6 +169,7 @@ export namespace StructManager {
 
 function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
+    const id = schema.id;
 
     const { access, manage, validate } = supervisor.get(schema);
 
@@ -189,7 +190,15 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
         set(this: Struct, value: Val) {
             access.authorizeWrite(this[Internal.session], this[Internal.reference].location);
 
-            const oldValue = this[Internal.reference].value[name];
+            // We allow attribute/field name or id as key.  If name is present id is ignored
+            let storedKey =
+                name in this[Internal.reference].value
+                    ? name
+                    : id !== undefined && id in this[Internal.reference]
+                      ? id
+                      : name;
+
+            const oldValue = this[Internal.reference].value[storedKey];
 
             const self = this;
 
@@ -198,12 +207,13 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
 
                 // Identify the target.  Usually just "struct" except when struct supports Val.Dynamic
                 let target;
-                if ((struct as Val.Dynamic)[Val.properties]) {
+                if (Val.properties in struct) {
                     const properties = (struct as Val.Dynamic)[Val.properties](
                         this[Internal.reference].rootOwner,
                         this[Internal.session],
                     );
                     if (name in properties) {
+                        storedKey = name;
                         target = properties;
                     } else {
                         target = struct;
@@ -218,7 +228,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 }
 
                 // Modify the value
-                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[name])) {
+                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[storedKey])) {
                     // In the case of fabric-scoped write to established list we use the managed proxy to perform update
                     // as it will sort through values and only modify those with correct fabricIndex
                     const proxy = self[name] as Val.List;
@@ -228,7 +238,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     proxy.length = value.length;
                 } else {
                     // Direct assignment
-                    target[name] = value;
+                    target[storedKey] = value;
                 }
 
                 if (!this[Internal.session].acceptInvalid && validate) {
@@ -248,7 +258,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     } catch (e) {
                         // Undo our change on error.  Rollback will take care of this when transactional but this
                         // handles the cases of 1.) no transaction, and 2.) error is caught within transaction
-                        target[name] = oldValue;
+                        target[storedKey] = oldValue;
 
                         throw e;
                     }
@@ -275,7 +285,12 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     }
                 }
 
-                return struct[name];
+                const value = struct[name];
+                if (value !== undefined || id === undefined) {
+                    return value;
+                }
+
+                return struct[id];
             }
         };
     } else {
@@ -320,6 +335,9 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 }
             } else {
                 value = struct[name];
+                if (value === undefined && id !== undefined) {
+                    value = struct[id];
+                }
             }
 
             // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
