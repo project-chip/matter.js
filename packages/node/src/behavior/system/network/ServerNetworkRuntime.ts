@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
 import {
+    Construction,
     InterfaceType,
     Logger,
+    NetInterfaceSet,
     Network,
     NetworkInterface,
     NetworkInterfaceDetailed,
@@ -16,6 +19,7 @@ import {
     UdpInterface,
 } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
+import { NodePeerAddressStore } from "#node/index.js";
 import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
 import {
     Ble,
@@ -28,6 +32,9 @@ import {
     InteractionServer,
     MdnsInstanceBroadcaster,
     MdnsService,
+    PeerAddressStore,
+    PeerSet,
+    ScannerSet,
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
@@ -252,7 +259,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         const advertiser = env.get(DeviceAdvertiser);
         // Configure network
-        await this.addTransports(env.get(TransportInterfaceSet));
+        const interfaces = env.get(TransportInterfaceSet);
+        await this.addTransports(interfaces);
+        env.set(NetInterfaceSet, interfaces);
         await this.addBroadcasters(advertiser);
 
         await owner.act("start-network", agent => agent.load(ProductDescriptionServer));
@@ -307,7 +316,17 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         // Ensure there is a device commissioner if (but only if) commissioning is enabled
         await this.configureCommissioning();
+
         this.#observers.on(this.owner.eventsOf(CommissioningServer).enabled$Changed, this.configureCommissioning);
+    }
+
+    override async [Construction.construct]() {
+        await super[Construction.construct]();
+
+        // Initialize ScannerSet
+        this.owner.env.get(ScannerSet).add((await this.owner.env.load(MdnsService)).scanner);
+        this.owner.env.set(PeerAddressStore, new NodePeerAddressStore(this.owner));
+        await this.owner.env.load(PeerSet);
 
         await this.openAdvertisementWindow();
     }
