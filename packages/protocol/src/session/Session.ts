@@ -62,6 +62,7 @@ export abstract class Session {
     abstract get closingAfterExchangeFinished(): boolean;
     #manager?: SessionManager;
     timestamp = Time.nowMs();
+    readonly createdAt = Time.nowMs();
     activeTimestamp = 0;
     protected readonly idleIntervalMs: number;
     protected readonly activeIntervalMs: number;

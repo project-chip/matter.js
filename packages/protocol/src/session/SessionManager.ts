@@ -378,11 +378,12 @@ export class SessionManager {
         });
     }
 
-    async removeAllSessionsForNode(address: PeerAddress, sendClose = false) {
+    async removeAllSessionsForNode(address: PeerAddress, sendClose = false, closeBeforeCreatedTimestamp?: number) {
         await this.#construction;
 
         for (const session of this.#sessions) {
             if (!session.isSecure) continue;
+            if (closeBeforeCreatedTimestamp !== undefined && session.createdAt >= closeBeforeCreatedTimestamp) continue;
             const secureSession = session;
             if (secureSession.peerIs(address)) {
                 await secureSession.destroy(sendClose, false);

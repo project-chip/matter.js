@@ -588,6 +588,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address = PeerAddress(address);
 
         const { ip, port } = operationalAddress;
+        const startTime = Time.nowMs();
         try {
             logger.debug(
                 `Resuming connection to ${PeerAddress(address)} at ${ip}:${port}${
@@ -606,7 +607,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                     error,
                 );
                 // We remove all sessions, this also informs the PairedNode class
-                await this.#sessions.removeAllSessionsForNode(address);
+                await this.#sessions.removeAllSessionsForNode(address, false, startTime);
                 return undefined;
             } else {
                 throw error;
