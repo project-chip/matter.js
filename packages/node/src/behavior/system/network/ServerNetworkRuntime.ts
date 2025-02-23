@@ -56,6 +56,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
     #observers = new ObserverGroup(this);
+    #formerSubscriptionsHandled = false;
 
     override get owner() {
         return super.owner as ServerNode;
@@ -99,8 +100,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return interfaceDetails;
     }
 
-    openAdvertisementWindow() {
-        return this.owner.env.get(DeviceAdvertiser).startAdvertising();
+    async openAdvertisementWindow() {
+        if (!this.#formerSubscriptionsHandled) {
+            await this.#reestablishFormerSubscriptions();
+        }
+
+        await this.owner.env.get(DeviceAdvertiser).startAdvertising();
     }
 
     advertiseNow() {
@@ -343,5 +348,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             // Ensure no DeviceCommissioner is active
             await this.owner.env.close(DeviceCommissioner);
         }
+    }
+
+    async #reestablishFormerSubscriptions() {
+        const { env } = this.owner;
+        if (!env.has(InteractionServer)) {
+            return;
+        }
+        this.#formerSubscriptionsHandled = true;
+
+        await this.owner.act(agent =>
+            agent
+                .get(SubscriptionBehavior)
+                .reestablishFormerSubscriptions(env.get(InteractionServer) as TransactionalInteractionServer),
+        );
     }
 }
