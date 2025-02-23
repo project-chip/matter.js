@@ -401,9 +401,9 @@ export class InteractionClient {
         // Normalize and decode the response
         const normalizedResult = DecodedDataReport(response);
         logger.debug(
-            `Received read response with attributes ${(normalizedResult.attributeReports ?? [])
+            `Received read response with attributes ${normalizedResult.attributeReports
                 .map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`)
-                .join(", ")} and events ${(normalizedResult.eventReports ?? [])
+                .join(", ")} and events ${normalizedResult.eventReports
                 .map(({ path, events }) => `${resolveEventName(path)} = ${Logger.toJSON(events)}`)
                 .join(", ")}`,
         );

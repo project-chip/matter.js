@@ -110,7 +110,6 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     readonly #caseClient: CaseClient;
     readonly #peers = new BasicSet<OperationalPeer>();
     readonly #peersByAddress = new PeerAddressMap<OperationalPeer>();
-    readonly #clients = new PeerAddressMap<ReconnectableExchangeProvider>();
     readonly #runningPeerDiscoveries = new PeerAddressMap<RunningDiscovery>();
     readonly #runningPeerReconnections = new PeerAddressMap<{
         promise: Promise<MessageChannel>;
@@ -265,11 +264,6 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
      * Obtain an exchange provider for the designated peer.
      */
     async exchangeProviderFor(address: PeerAddress, discoveryOptions?: DiscoveryOptions) {
-        const client = this.#clients.get(address);
-        if (client !== undefined) {
-            return client;
-        }
-
         let initiallyConnected = this.#channels.hasChannel(address);
         return new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
             if (!initiallyConnected && !this.#channels.hasChannel(address)) {
