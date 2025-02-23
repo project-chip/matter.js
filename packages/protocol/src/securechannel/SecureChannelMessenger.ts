@@ -43,6 +43,10 @@ export class SecureChannelMessenger {
         this.#defaultExpectedProcessingTimeMs = defaultExpectedProcessingTimeMs;
     }
 
+    get channel() {
+        return this.exchange.channel;
+    }
+
     async nextMessage(
         expectedMessageType: number,
         expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
