@@ -565,17 +565,12 @@ export class SessionManager {
     }
 
     /** Clears all subscriptions for a given node and returns how many were cleared. */
-    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
+    async clearSubscriptionsForNode(peerAddress: PeerAddress, flushSubscriptions?: boolean) {
         let clearedCount = 0;
         for (const session of this.#sessions) {
-            if (session.fabric?.fabricIndex !== fabricIndex) {
-                continue;
+            if (PeerAddress.is(session.peerAddress, peerAddress)) {
+                clearedCount += await session.clearSubscriptions(flushSubscriptions, true);
             }
-            if (session.peerNodeId !== nodeId) {
-                continue;
-            }
-            await session.clearSubscriptions(flushSubscriptions);
-            clearedCount++;
         }
         return clearedCount;
     }

@@ -292,11 +292,12 @@ export class SecureSession extends Session {
         return this.#fabric;
     }
 
-    async clearSubscriptions(flushSubscriptions = false) {
+    async clearSubscriptions(flushSubscriptions = false, cancelledByPeer = false) {
         const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
         for (const subscription of subscriptions) {
-            await subscription.close(flushSubscriptions);
+            await subscription.close(flushSubscriptions, cancelledByPeer);
         }
+        return subscriptions.length;
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
