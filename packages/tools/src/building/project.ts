@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Hash } from "crypto";
 import { build as esbuild, Format } from "esbuild";
-import { cp, mkdir, readFile, rm, symlink, writeFile } from "fs/promises";
-import { platform } from "os";
-import { dirname, join } from "path";
+import { Hash } from "node:crypto";
+import { cp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { platform } from "node:os";
+import { dirname, join } from "node:path";
 import { ignoreError } from "../util/errors.js";
 import { CONFIG_PATH, Package } from "../util/package.js";
 

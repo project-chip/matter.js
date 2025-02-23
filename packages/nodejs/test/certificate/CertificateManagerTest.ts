@@ -13,7 +13,7 @@ import {
     TlvRootCertificate,
 } from "#protocol";
 import { CaseAuthenticatedTag, FabricId, NodeId, ValidationOutOfBoundsError } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import {
     CERTIFICATE_SETS,
     TEST_CSR_REQUEST_ASN1,

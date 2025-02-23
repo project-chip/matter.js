@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import wordListPath from "word-list";
 
 export const Words = new Set(readFileSync(wordListPath, "utf-8").split("\n"));

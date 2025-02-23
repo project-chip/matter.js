@@ -232,7 +232,7 @@ export class CaseServer implements ProtocolHandler {
                 caseAuthenticatedTags,
             });
             logger.info(
-                `session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                `Session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
                 "with CATs",

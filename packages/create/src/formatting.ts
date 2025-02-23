@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { stdout } from "process";
+import { stdout } from "node:process";
 
 function formatter(on: number, off: number): (text: string) => string {
     if (!stdout.isTTY) {

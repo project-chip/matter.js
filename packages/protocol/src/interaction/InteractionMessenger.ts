@@ -540,7 +540,6 @@ export class InteractionServerMessenger extends InteractionMessenger {
                                                 allowMissingFieldsForNonFabricFilteredRead,
                                             }),
                                         );
-
                                         break;
                                     }
                                     availableBytes -= encodedChunkDataSize;
@@ -579,6 +578,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             // We did not send the message, means assumption is that there is more space in the message
                             // So we add the current attribute to the end of the queue
                             attributeReportsToSend.push(attributeToSend);
+                            continue;
+                        }
+                        if (encodedSize > this.exchange.maxPayloadSize - emptyDataReportBytes.length - 3) {
+                            // We sent the message but the current attribute is too big for a message alone so needs to
+                            // be chunked, so add it to the queue at the beginning
+                            attributeReportsToSend.unshift(attributeToSend);
                             continue;
                         }
                     }
@@ -624,7 +629,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
         const encodedMessage = TlvDataReportForSend.encode(dataReportToSend);
         if (encodedMessage.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `DataReport is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
+                `DataReport with ${encodedMessage.length}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Logger.toJSON(
                     dataReportToSend,
                 )}`,
             );

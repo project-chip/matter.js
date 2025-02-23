@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { spawn, SpawnOptions, SpawnSyncOptions } from "child_process";
+import { spawn, SpawnOptions, SpawnSyncOptions } from "node:child_process";
 
 export function run(command: string, args?: string[], options?: SpawnOptions) {
     return new Promise<void>((resolve, reject) => {

@@ -5,7 +5,7 @@
  */
 
 import { LogLevel } from "#general";
-import { open } from "fs/promises";
+import { open } from "node:fs/promises";
 
 /**
  * Creates a file based logger to append to the given path.

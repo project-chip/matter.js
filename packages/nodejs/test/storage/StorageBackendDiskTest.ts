@@ -5,11 +5,11 @@
  */
 
 import { StorageBackendDisk } from "#storage/StorageBackendDisk.js";
-import * as assert from "assert";
-import { readFile, stat } from "fs/promises";
 import { LocalStorage } from "node-localstorage";
-import { tmpdir } from "os";
-import { resolve } from "path";
+import * as assert from "node:assert";
+import { readFile, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
 
 const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage");
 

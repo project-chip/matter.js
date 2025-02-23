@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { env } from "process";
+import { env } from "node:process";
 
 /**
  * Significant locations within the test container.

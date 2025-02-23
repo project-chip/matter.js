@@ -25,7 +25,7 @@ import {
 import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
 import { logEndpoint } from "@matter/main/protocol";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 const devices = await getConfiguration();
 for (let idx = 1; idx < devices.length; idx++) {

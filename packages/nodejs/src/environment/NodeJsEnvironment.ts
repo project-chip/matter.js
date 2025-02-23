@@ -15,9 +15,9 @@ import {
     StorageService,
     VariableService,
 } from "#general";
-import { existsSync, readFileSync } from "fs";
-import { writeFile } from "fs/promises";
-import { resolve } from "path";
+import { existsSync, readFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import { NodeJsNetwork } from "../net/NodeJsNetwork.js";
 import { StorageBackendDiskAsync } from "../storage/StorageBackendDiskAsync.js";
 import { NodeJsActionTracer } from "./NodeJsActionTracer.js";

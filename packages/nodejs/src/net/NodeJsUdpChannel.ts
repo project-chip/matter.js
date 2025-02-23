@@ -17,7 +17,7 @@ import {
     UdpChannelOptions,
 } from "#general";
 import { RetransmissionLimitReachedError } from "#protocol";
-import * as dgram from "dgram";
+import * as dgram from "node:dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
 
 const logger = Logger.get("NodejsChannel");

@@ -14,7 +14,7 @@ import {
     fromJson,
     toJson,
 } from "@matter/general";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 
 export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */

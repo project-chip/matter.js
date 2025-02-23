@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
 
 // @ts-expect-error we don't have types for detective-typescript
 import detective from "detective-typescript";
-import { dirname, relative, resolve } from "path";
+import { dirname, relative, resolve } from "node:path";
 import { std } from "../ansi-text/std.js";
 import { ansi } from "../ansi-text/text-builder.js";
 

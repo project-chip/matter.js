@@ -79,7 +79,12 @@ export class CaseClient {
         if (sigma2Resume !== undefined) {
             // Process sigma2 resume
             if (resumptionRecord === undefined) throw new UnexpectedDataError("Received an unexpected sigma2Resume.");
-            const { sharedSecret, fabric, sessionParameters: resumptionSessionParams } = resumptionRecord;
+            const {
+                sharedSecret,
+                fabric,
+                sessionParameters: resumptionSessionParams,
+                caseAuthenticatedTags,
+            } = resumptionRecord;
             const { responderSessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
 
             // We use the Fallbacks for the session parameters overridden by our stored ones from the resumption record
@@ -103,10 +108,11 @@ export class CaseClient {
                 isInitiator: true,
                 isResumption: true,
                 peerSessionParameters: sessionParameters,
+                caseAuthenticatedTags,
             });
             await messenger.sendSuccess();
             logger.info(
-                `Case client: Session resumed with ${messenger.getChannelName()} and parameters`,
+                `Case client: Session ${secureSession.id} successfully resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} and parameters`,
                 secureSession.parameterDiagnostics(),
             );
 
@@ -157,17 +163,12 @@ export class CaseClient {
 
             if (peerNodeIdNOCert !== peerNodeId) {
                 throw new UnexpectedDataError(
-                    "The node ID in the peer certificate doesn't match the expected peer node ID",
-                );
-            }
-            if (peerNodeIdNOCert !== peerNodeId) {
-                throw new UnexpectedDataError(
-                    "The node ID in the peer certificate doesn't match the expected peer node ID",
+                    `The node ID in the peer certificate ${peerNodeIdNOCert} doesn't match the expected peer node ID ${peerNodeId}`,
                 );
             }
             if (peerFabricIdNOCert !== fabric.fabricId) {
                 throw new UnexpectedDataError(
-                    "The fabric ID in the peer certificate doesn't match the expected fabric ID",
+                    `The fabric ID in the peer certificate ${peerFabricIdNOCert} doesn't match the expected fabric ID ${fabric.fabricId}`,
                 );
             }
             if (peerIntermediateCACert !== undefined) {
@@ -175,9 +176,9 @@ export class CaseClient {
                     subject: { fabricId: peerFabricIdIcaCert },
                 } = TlvIntermediateCertificate.decode(peerIntermediateCACert);
 
-                if (peerFabricIdIcaCert !== fabric.fabricId) {
+                if (peerFabricIdIcaCert !== undefined && peerFabricIdIcaCert !== fabric.fabricId) {
                     throw new UnexpectedDataError(
-                        "The fabric ID in the peer intermediate CA certificate doesn't match the expected fabric ID",
+                        `The fabric ID in the peer intermediate CA certificate ${peerFabricIdIcaCert} doesn't match the expected fabric ID ${fabric.fabricId}`,
                     );
                 }
             }
@@ -199,6 +200,7 @@ export class CaseClient {
             await messenger.waitForSuccess("Sigma3-Success");
 
             // All good! Create secure session
+            const { caseAuthenticatedTags } = resumptionRecord ?? {}; // Even if resumption does not work try to reuse the caseAuthenticatedTags
             const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
@@ -213,9 +215,12 @@ export class CaseClient {
                 isInitiator: true,
                 isResumption: false,
                 peerSessionParameters: sessionParameters,
+                caseAuthenticatedTags,
             });
             logger.info(
-                `Case client: Paired successfully with ${messenger.getChannelName()} and parameters`,
+                `Case client Session ${secureSession.id} established successfully with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                    fabric.nodeId,
+                )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}and parameters`,
                 secureSession.parameterDiagnostics(),
             );
             resumptionRecord = {
@@ -224,6 +229,7 @@ export class CaseClient {
                 sharedSecret,
                 resumptionId: peerResumptionId,
                 sessionParameters: secureSession.parameters,
+                caseAuthenticatedTags,
             };
         }
 

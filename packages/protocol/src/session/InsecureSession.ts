@@ -87,6 +87,7 @@ export class InsecureSession extends Session {
 
     async destroy() {
         await this.end();
+        await this.destroyed.emit();
     }
 
     async end() {
