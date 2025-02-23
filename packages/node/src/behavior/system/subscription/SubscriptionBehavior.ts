@@ -29,7 +29,9 @@ const REESTABLISH_SUBSCRIPTIONS_TIMEOUT_S = 2;
 /**
  * Subscriptions Persistence handling.
  *
- * This behavior collects and stores active subscriptions
+ * This behavior collects and stores active subscriptions to allow re-activating them on restart in order to try to speed
+ * up the controller reconnection process. This can mean  a bit more memory usage on start of the device. To disable this
+ * feature set `persistenceEnabled` as state of the `subscription` behavior to `false`.
  */
 export class SubscriptionBehavior extends Behavior {
     static override readonly id = "subscription";
