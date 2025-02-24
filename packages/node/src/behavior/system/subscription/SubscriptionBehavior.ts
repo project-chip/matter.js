@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { deepCopy, Diagnostic, isIpNetworkChannel, Logger, MatterError, ServerAddressIp } from "#general";
+import { deepCopy, isIpNetworkChannel, Logger, MatterError, ServerAddressIp } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { TransactionalInteractionServer } from "#node/index.js";
 import {
@@ -51,83 +51,83 @@ export class SubscriptionBehavior extends Behavior {
             name: "SubscriptionState",
             type: "struct",
         },
-        FieldElement({
-            name: "subscriptions",
-            type: "list",
-            quality: "N",
-            children: [
-                FieldElement({
+        FieldElement(
+            {
+                name: "subscriptions",
+                type: "list",
+                quality: "N",
+            },
+            FieldElement(
+                {
                     name: "entry",
                     type: "struct",
-                    children: [
-                        FieldElement({ name: "subscriptionId", type: "uint32" }),
-                        FieldElement({
-                            name: "peerAddress",
+                },
+                FieldElement({ name: "subscriptionId", type: "uint32" }),
+                FieldElement(
+                    {
+                        name: "peerAddress",
+                        type: "struct",
+                    },
+                    FieldElement({ name: "fabricIndex", type: "fabric-id" }),
+                    FieldElement({ name: "nodeId", type: "node-id" }),
+                ),
+                FieldElement(
+                    {
+                        name: "attributeRequests",
+                        type: "list",
+                    },
+                    FieldElement(
+                        {
+                            name: "entry",
                             type: "struct",
-                            children: [
-                                FieldElement({ name: "fabricIndex", type: "fabric-id" }),
-                                FieldElement({ name: "nodeId", type: "node-id" }),
-                            ],
-                        }),
+                        },
+                        FieldElement({ name: "enableTagCompression", type: "bool", conformance: "O" }),
+                        FieldElement({ name: "nodeId", type: "node-id", conformance: "O" }),
+                        FieldElement({ name: "endpointId", type: "endpoint-no", conformance: "O" }),
+                        FieldElement({ name: "clusterId", type: "cluster-id", conformance: "O" }),
+                        FieldElement({ name: "attributeId", type: "attrib-id", conformance: "O" }),
+                        FieldElement({ name: "listIndex", type: "uint16", conformance: "O" }),
                         FieldElement({
-                            name: "attributeRequests",
-                            type: "list",
-                            children: [
-                                FieldElement({
-                                    name: "entry",
-                                    type: "struct",
-                                    children: [
-                                        FieldElement({ name: "enableTagCompression", type: "bool", conformance: "O" }),
-                                        FieldElement({ name: "nodeId", type: "node-id", conformance: "O" }),
-                                        FieldElement({ name: "endpointId", type: "endpoint-no", conformance: "O" }),
-                                        FieldElement({ name: "clusterId", type: "cluster-id", conformance: "O" }),
-                                        FieldElement({ name: "attributeId", type: "attrib-id", conformance: "O" }),
-                                        FieldElement({ name: "listIndex", type: "uint16", conformance: "O" }),
-                                        FieldElement({
-                                            name: "wildcardPathFlags",
-                                            type: "WildcardPathFlagsBitmap",
-                                            conformance: "O",
-                                        }),
-                                    ],
-                                }),
-                            ],
-                        }),
-                        FieldElement({
-                            name: "eventRequests",
-                            type: "list",
-                            children: [
-                                FieldElement({
-                                    name: "entry",
-                                    type: "struct",
-                                    children: [
-                                        FieldElement({ name: "nodeId", type: "node-id", quality: "O" }),
-                                        FieldElement({ name: "endpointId", type: "endpoint-no", quality: "O" }),
-                                        FieldElement({ name: "clusterId", type: "cluster-id", quality: "O" }),
-                                        FieldElement({ name: "eventId", type: "event-id", quality: "O" }),
-                                        FieldElement({ name: "isUrgent", type: "bool", quality: "O" }),
-                                    ],
-                                }),
-                            ],
-                        }),
-                        FieldElement({ name: "isFabricFiltered", type: "bool" }),
-                        FieldElement({ name: "maxIntervalCeilingSeconds", type: "uint16" }),
-                        FieldElement({ name: "minIntervalFloorSeconds", type: "uint16" }),
-                        FieldElement({ name: "maxInterval", type: "uint16" }),
-                        FieldElement({ name: "sendInterval", type: "uint16" }),
-                        FieldElement({
-                            name: "operationalAddress",
-                            type: "struct",
+                            name: "wildcardPathFlags",
+                            type: "WildcardPathFlagsBitmap",
                             conformance: "O",
-                            children: [
-                                FieldElement({ name: "type", type: "string" }),
-                                FieldElement({ name: "ip", type: "string" }),
-                                FieldElement({ name: "port", type: "uint16" }),
-                            ],
                         }),
-                    ],
-                }),
-            ],
-        }),
+                    ),
+                ),
+                FieldElement(
+                    {
+                        name: "eventRequests",
+                        type: "list",
+                    },
+                    FieldElement(
+                        {
+                            name: "entry",
+                            type: "struct",
+                        },
+                        FieldElement({ name: "nodeId", type: "node-id", quality: "O" }),
+                        FieldElement({ name: "endpointId", type: "endpoint-no", quality: "O" }),
+                        FieldElement({ name: "clusterId", type: "cluster-id", quality: "O" }),
+                        FieldElement({ name: "eventId", type: "event-id", quality: "O" }),
+                        FieldElement({ name: "isUrgent", type: "bool", quality: "O" }),
+                    ),
+                ),
+                FieldElement({ name: "isFabricFiltered", type: "bool" }),
+                FieldElement({ name: "maxIntervalCeilingSeconds", type: "uint16" }),
+                FieldElement({ name: "minIntervalFloorSeconds", type: "uint16" }),
+                FieldElement({ name: "maxInterval", type: "uint16" }),
+                FieldElement({ name: "sendInterval", type: "uint16" }),
+                FieldElement(
+                    {
+                        name: "operationalAddress",
+                        type: "struct",
+                        conformance: "O",
+                    },
+                    FieldElement({ name: "type", type: "string" }),
+                    FieldElement({ name: "ip", type: "string" }),
+                    FieldElement({ name: "port", type: "uint16" }),
+                ),
+            ),
+        ),
     );
 
     addSubscription(subscription: Subscription) {
@@ -211,23 +211,15 @@ export class SubscriptionBehavior extends Behavior {
 
         const successfullReEstablishments = Array<number>();
         for (const subscription of formerSubscriptions) {
-            const { peerAddress, operationalAddress, subscriptionId } = subscription;
+            const { peerAddress: peerAddressDetails, operationalAddress, subscriptionId } = subscription;
+            const peerAddress = PeerAddress(peerAddressDetails);
             if (peerStopList.has(peerAddress)) {
-                logger.debug(
-                    "Skip re-establishing former subscription to",
-                    Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
-                );
+                logger.debug(`Skip re-establishing former subscription to ${peerAddress}`);
                 continue;
             }
-            logger.debug(
-                `Try to re-establish former subscription ${subscriptionId} to`,
-                Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
-            );
+            logger.debug(`Try to re-establish former subscription ${subscriptionId} to ${peerAddress}`);
             if (sessions.getSessionForNode(peerAddress) !== undefined) {
-                logger.debug(
-                    "We already have and existing session for peer",
-                    Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
-                );
+                logger.debug(`We already have and existing session for peer ${peerAddress}`);
             } else {
                 try {
                     await peers.ensureConnection(peerAddress, {
@@ -241,8 +233,7 @@ export class SubscriptionBehavior extends Behavior {
                 } catch (error) {
                     peerStopList.add(peerAddress);
                     logger.debug(
-                        "Failed to connect to",
-                        Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
+                        `Failed to connect to ${peerAddress}`,
                         error instanceof MatterError ? error.message : error,
                     );
                     continue;
@@ -251,26 +242,19 @@ export class SubscriptionBehavior extends Behavior {
             try {
                 if (peerStopList.has(peerAddress)) {
                     // To prevent concurrency issues, check again if there is a stop reason for this fabric
-                    logger.debug(
-                        `Skip re-establishing former subscription ${subscriptionId} to`,
-                        Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
-                    );
+                    logger.debug(`Skip re-establishing former subscription ${subscriptionId} to ${peerAddress}`);
                     continue;
                 }
                 const session = sessions.getSessionForNode(peerAddress);
                 if (session === undefined) {
                     peerStopList.add(peerAddress);
-                    logger.debug(
-                        "Could not connect to peer",
-                        Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
-                    );
+                    logger.debug(`Could not connect to peer ${peerAddress}`);
                     continue;
                 }
                 await interactionServer.establishFormerSubscription(subscription, session);
             } catch (error) {
                 logger.debug(
-                    `Failed to re-establish former subscription ${subscriptionId} to`,
-                    Diagnostic.dict({ fabricIndex: peerAddress.fabricIndex, fabricId: peerAddress.nodeId }),
+                    `Failed to re-establish former subscription ${subscriptionId} to ${peerAddress}`,
                     StatusResponseError.is(error)
                         ? error.code === StatusCode.InvalidSubscription
                             ? "Subscription no langer valid for peer"
