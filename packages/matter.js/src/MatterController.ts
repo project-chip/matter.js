@@ -501,7 +501,7 @@ export class MatterController {
      * Returns a InteractionClient on success.
      */
     async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions, allowUnknownPeer?: boolean) {
-        return this.clients.connect(this.fabric.addressOf(peerNodeId), discoveryOptions, allowUnknownPeer);
+        return this.clients.connect(this.fabric.addressOf(peerNodeId), { discoveryOptions, allowUnknownPeer });
     }
 
     createInteractionClient(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {

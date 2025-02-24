@@ -11,6 +11,7 @@ import {
     Logger,
     MatterFlowError,
     PromiseQueue,
+    ServerAddressIp,
     Timer,
     UnexpectedDataError,
     isDeepEqual,
@@ -90,11 +91,15 @@ export class InteractionClientProvider {
 
     async connect(
         address: PeerAddress,
-        discoveryOptions: DiscoveryOptions,
-        allowUnknownPeer = false,
+        options: {
+            discoveryOptions: DiscoveryOptions;
+            allowUnknownPeer?: boolean;
+            operationalAddress?: ServerAddressIp;
+        },
     ): Promise<InteractionClient> {
-        await this.#peers.ensureConnection(address, discoveryOptions, allowUnknownPeer);
+        await this.#peers.ensureConnection(address, options);
 
+        const { discoveryOptions } = options;
         return this.getInteractionClient(address, discoveryOptions);
     }
 

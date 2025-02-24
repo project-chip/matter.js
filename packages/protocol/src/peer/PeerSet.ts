@@ -144,6 +144,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
 
         this.#sessions.resubmissionStarted.on(this.#handleResubmissionStarted.bind(this));
 
+        /** A channel was added by ourselves */
         this.#channels.added.on((address, msgChannel) => {
             if (isIpNetworkChannel(msgChannel.channel)) {
                 // Update the channel address if it has one
@@ -230,7 +231,15 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     /**
      * Ensure there is a channel to the designated peer.
      */
-    async ensureConnection(address: PeerAddress, discoveryOptions: DiscoveryOptions, allowUnknownPeer = false) {
+    async ensureConnection(
+        address: PeerAddress,
+        options: {
+            discoveryOptions: DiscoveryOptions;
+            allowUnknownPeer?: boolean;
+            operationalAddress?: ServerAddressIp;
+        },
+    ) {
+        const { discoveryOptions, allowUnknownPeer, operationalAddress } = options;
         if (!this.#peersByAddress.has(address) && !allowUnknownPeer) {
             throw new UnknownNodeError(`Cannot connect to unknown device ${PeerAddress(address)}`);
         }
@@ -246,7 +255,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             const { promise, resolver, rejecter } = createPromise<MessageChannel>();
             this.#runningPeerReconnections.set(address, { promise, rejecter });
 
-            this.#resume(address, discoveryOptions)
+            this.#resume(address, discoveryOptions, operationalAddress)
                 .then(channel => {
                     this.#runningPeerReconnections.delete(address);
                     resolver(channel);
@@ -268,7 +277,9 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         return new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
             if (!initiallyConnected && !this.#channels.hasChannel(address)) {
                 // We got an uninitialized node, so do the first connection as usual
-                await this.ensureConnection(address, { discoveryType: NodeDiscoveryType.None });
+                await this.ensureConnection(address, {
+                    discoveryOptions: { discoveryType: NodeDiscoveryType.None },
+                });
                 initiallyConnected = true; // We only do this connection once, rest is handled in following code
                 if (this.#channels.hasChannel(address)) {
                     return;
@@ -366,18 +377,22 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
      * device is discovered again using its operational instance details.
      * It returns the operational MessageChannel on success.
      */
-    async #resume(address: PeerAddress, discoveryOptions?: DiscoveryOptions) {
+    async #resume(address: PeerAddress, discoveryOptions?: DiscoveryOptions, tryOperationalAddress?: ServerAddressIp) {
         const { discoveryType } = discoveryOptions ?? {};
+
         const operationalAddress =
-            discoveryType === NodeDiscoveryType.None
+            tryOperationalAddress ??
+            (discoveryType === NodeDiscoveryType.None
                 ? this.#getLastOperationalAddress(address)
-                : this.#knownOperationalAddressFor(address);
+                : this.#knownOperationalAddressFor(address));
+
         try {
             return await this.#connectOrDiscoverNode(address, operationalAddress, discoveryOptions);
         } catch (error) {
             if (
                 (error instanceof DiscoveryError || error instanceof NoResponseTimeoutError) &&
-                this.#peersByAddress.has(address)
+                this.#peersByAddress.has(address) &&
+                tryOperationalAddress === undefined
             ) {
                 logger.info(`Resume failed, remove all sessions for ${PeerAddress(address)}`);
                 // We remove all sessions, this also informs the PairedNode class
@@ -432,7 +447,13 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
             operationalAddress !== undefined &&
             (runningDiscoveryType === NodeDiscoveryType.None || requestedDiscoveryType === NodeDiscoveryType.None)
         ) {
-            const directReconnection = await this.#reconnectKnownAddress(address, operationalAddress, discoveryData);
+            const directReconnection = await this.#reconnectKnownAddress(
+                address,
+                operationalAddress,
+                discoveryData,
+                // When we use a timeout for discovery also use this for reconnecting to the node
+                timeoutSeconds ? timeoutSeconds * 1000 : undefined,
+            );
             if (directReconnection !== undefined) {
                 return directReconnection;
             }
@@ -567,6 +588,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         address = PeerAddress(address);
 
         const { ip, port } = operationalAddress;
+        const startTime = Time.nowMs();
         try {
             logger.debug(
                 `Resuming connection to ${PeerAddress(address)} at ${ip}:${port}${
@@ -585,7 +607,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
                     error,
                 );
                 // We remove all sessions, this also informs the PairedNode class
-                await this.#sessions.removeAllSessionsForNode(address);
+                await this.#sessions.removeAllSessionsForNode(address, false, startTime);
                 return undefined;
             } else {
                 throw error;
