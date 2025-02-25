@@ -166,7 +166,7 @@ export class SubscriptionBehavior extends Behavior {
             sendInterval,
             operationalAddress,
         };
-        this.reactTo(subscription.cancelled, this.#subscriptionCancelled);
+        this.reactTo(subscription.cancelled, this.#subscriptionCancelled, { lock: true });
 
         const existingIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
         if (existingIndex !== -1) {
