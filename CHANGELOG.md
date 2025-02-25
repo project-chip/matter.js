@@ -28,6 +28,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Ensure to use persisted CaseAdminTags when re-establishing a CASE session from the device side
     - Fix: Fixed another place with a Noc/ICA Fabric-ID validation issue
     - Fix: Fixes Session and Channel deletion in some cases
+    - Fix: Properly handle read requests with no attributes and events and just return an empty result
 
 -   @project-chip/matter.js
     - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use

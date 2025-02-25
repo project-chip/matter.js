@@ -197,7 +197,7 @@ export interface InteractionRecipient {
         exchange: MessageExchange,
         request: ReadRequest,
         message: Message,
-    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadIterator }>;
+    ): Promise<{ dataReport: DataReport; payload?: DataReportPayloadIterator }>;
     handleWriteRequest(exchange: MessageExchange, request: WriteRequest, message: Message): Promise<WriteResponse>;
     handleSubscribeRequest(
         exchange: MessageExchange,

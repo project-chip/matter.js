@@ -254,7 +254,7 @@ export namespace interaction {
         );
 
         const data = result.payload?.next();
-        return typeof data.value === "object" && "attributeData" in data.value
+        return typeof data?.value === "object" && "attributeData" in data.value
             ? data.value.attributeData?.payload
             : undefined;
     }

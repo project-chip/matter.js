@@ -923,7 +923,7 @@ const wildcardTestCases: {
 
 function fillIterableDataReport(data: {
     dataReport: BaseDataReport;
-    payload: DataReportPayloadIterator;
+    payload?: DataReportPayloadIterator;
 }): DataReportPayload {
     const { dataReport: report, payload } = data;
     const dataReport: DataReportPayload = { ...report };
