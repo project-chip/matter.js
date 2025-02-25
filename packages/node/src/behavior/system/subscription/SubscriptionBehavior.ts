@@ -166,7 +166,7 @@ export class SubscriptionBehavior extends Behavior {
             sendInterval,
             operationalAddress,
         };
-        this.reactTo(subscription.cancelled, this.#subscriptionCancelled, { lock: true });
+        this.reactTo(subscription.cancelled, this.#subscriptionCancelled);
 
         const existingIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
         if (existingIndex !== -1) {
@@ -177,13 +177,15 @@ export class SubscriptionBehavior extends Behavior {
         this.state.subscriptions.push(peerSubscription);
     }
 
-    #subscriptionCancelled(subscription: Subscription) {
+    async #subscriptionCancelled(subscription: Subscription) {
         if (subscription.isCanceledByPeer) {
             if (this.state.persistenceEnabled === false) return;
             const { id } = subscription;
             const subscriptionIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
             if (subscriptionIndex !== -1) {
+                await this.context.transaction.begin();
                 this.state.subscriptions.splice(subscriptionIndex, 1);
+                await this.context.transaction.commit();
             }
         }
     }
