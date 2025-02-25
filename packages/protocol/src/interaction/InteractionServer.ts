@@ -561,7 +561,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         exchange: MessageExchange,
         readRequest: ReadRequest,
         message: Message,
-    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadIterator }> {
+    ): Promise<{ dataReport: DataReport; payload?: DataReportPayloadIterator }> {
         const { attributeRequests, eventRequests, isFabricFiltered, interactionModelRevision } = readRequest;
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
@@ -577,10 +577,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
         if (attributeRequests === undefined && eventRequests === undefined) {
-            throw new StatusResponseError(
-                "Only Read requests with attributeRequests or eventRequests are supported right now",
-                StatusCode.UnsupportedRead,
-            );
+            return {
+                dataReport: {
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: true,
+                },
+            };
         }
 
         if (message.packetHeader.sessionType !== SessionType.Unicast) {
