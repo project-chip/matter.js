@@ -11,3 +11,4 @@ export * from "./OperationalPeer.js";
 export * from "./PeerAddress.js";
 export * from "./PeerAddressStore.js";
 export * from "./PeerSet.js";
+export * from "./PhysicalDeviceProperties.js";

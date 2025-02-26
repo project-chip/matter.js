@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "#behavior/AccessControl.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
@@ -16,8 +15,8 @@ import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { EndpointServer } from "#endpoint/server/EndpointServer.js";
 import { Diagnostic, InternalError, Logger, MaybePromise } from "#general";
 import {
+    AccessControl,
     AccessDeniedError,
-    AclEndpointContext,
     AnyAttributeServer,
     AnyEventServer,
     AttributePath,
@@ -33,11 +32,12 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
+    MessageType,
     SessionManager,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
-import { EndpointNumber, StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
+import { StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
 import { AccessControlServer } from "../../behaviors/access-control/AccessControlServer.js";
 import { ServerNode } from "../ServerNode.js";
 
@@ -67,34 +67,33 @@ const AclAttributeId = AccessControlCluster.attributes.acl.id;
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #changeListener: (type: EndpointLifecycle.Change, endpoint: Endpoint) => void;
-    #endpoint: Endpoint<ServerNode.RootEndpoint>;
+    #node: ServerNode;
     #activity: NodeActivity;
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayedInExchange = new Set<MessageExchange>();
-    #endpointContexts = new Map<number, AclEndpointContext>();
 
-    static async create(endpoint: Endpoint<ServerNode.RootEndpoint>, sessions: SessionManager) {
+    static async create(node: ServerNode, sessions: SessionManager) {
         const structure = new InteractionEndpointStructure();
 
-        return new TransactionalInteractionServer(endpoint, {
+        return new TransactionalInteractionServer(node, {
             sessions,
             structure,
-            subscriptionOptions: endpoint.state.network.subscriptionOptions,
-            maxPathsPerInvoke: endpoint.state.basicInformation.maxPathsPerInvoke,
+            subscriptionOptions: node.state.network.subscriptionOptions,
+            maxPathsPerInvoke: node.state.basicInformation.maxPathsPerInvoke,
             initiateExchange: (address, protocolId) =>
-                endpoint.env.get(ExchangeManager).initiateExchange(address, protocolId),
+                node.env.get(ExchangeManager).initiateExchange(address, protocolId),
         });
     }
 
-    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>, context: InteractionContext) {
+    constructor(node: ServerNode, context: InteractionContext) {
         super(context);
 
         const { structure } = context;
 
-        this.#activity = endpoint.env.get(NodeActivity);
+        this.#activity = node.env.get(NodeActivity);
 
-        this.#endpoint = endpoint;
+        this.#node = node;
         this.#endpointStructure = structure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
@@ -114,24 +113,30 @@ export class TransactionalInteractionServer extends InteractionServer {
             }
         };
 
-        endpoint.lifecycle.changed.on(this.#changeListener);
+        node.lifecycle.changed.on(this.#changeListener);
     }
 
     async [Symbol.asyncDispose]() {
-        this.#endpoint.lifecycle.changed.off(this.#changeListener);
+        this.#node.lifecycle.changed.off(this.#changeListener);
         await this.close();
         this.#endpointStructure.close();
-        await EndpointServer.forEndpoint(this.#endpoint)[Symbol.asyncDispose]();
+        await EndpointServer.forEndpoint(this.#node)[Symbol.asyncDispose]();
     }
 
     blockNewActivity() {
         this.#newActivityBlocked = true;
     }
 
-    override async onNewExchange(exchange: MessageExchange) {
+    override async onNewExchange(exchange: MessageExchange, message: Message) {
         // When closing, ignore anything newly incoming
         if (this.#newActivityBlocked || this.isClosing) {
             return;
+        }
+
+        // An incoming data report as the first message is not a valid server operation.  We instead delegate to a
+        // client implementation if available
+        if (message.payloadHeader.messageType === MessageType.ReportData && this.clientHandler) {
+            return this.clientHandler.onNewExchange(exchange, message);
         }
 
         // Activity tracking.  This provides diagnostic information and prevents the server from shutting down whilst
@@ -149,38 +154,11 @@ export class TransactionalInteractionServer extends InteractionServer {
         if (this.#aclServer !== undefined) {
             return this.#aclServer;
         }
-        const aclServer = this.#endpoint.act(agent => agent.get(AccessControlServer));
+        const aclServer = this.#node.act(agent => agent.get(AccessControlServer));
         if (MaybePromise.is(aclServer)) {
             throw new InternalError("AccessControlServer should already be initialized.");
         }
         return (this.#aclServer = aclServer);
-    }
-
-    /**
-     * Gets the context information from an endpoint needed for ACL checks. It prefills a cache if needed.
-     * The cache is cleared on structural changes and initialized again on next need.
-     * TODO Remove with the legacy API
-     */
-    #getAclEndpointContext(endpointId: EndpointNumber) {
-        if (!this.#endpointContexts.has(endpointId)) {
-            this.#endpoint.visit(({ number, state }) => {
-                if (number !== undefined && !this.#endpointContexts.has(number)) {
-                    this.#endpointContexts.set(number, {
-                        number,
-                        deviceTypes: state.descriptor.deviceTypeList.map(({ deviceType }) => deviceType),
-                    });
-                }
-            });
-        }
-        const context = this.#endpointContexts.get(endpointId);
-        if (context) {
-            return context;
-        } else {
-            throw new StatusResponseError(
-                "Endpoint not found for ACL check. This should never happen.",
-                StatusCode.UnsupportedEndpoint,
-            );
-        }
     }
 
     protected override readAttribute(
@@ -207,8 +185,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                   exchange,
                   tracer: this.#tracer,
                   actionType: ActionTracer.ActionType.Read,
-                  endpointContext: this.#getAclEndpointContext(path.endpointId),
-                  root: this.#endpoint,
+                  node: this.#node,
               }).act(readAttribute);
 
         if (MaybePromise.is(result)) {
@@ -222,7 +199,6 @@ export class TransactionalInteractionServer extends InteractionServer {
      * This can currently only be used for subscriptions because errors are ignored!
      */
     protected override readEndpointAttributesForSubscription(
-        endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
         exchange: MessageExchange,
         fabricFiltered: boolean,
@@ -265,8 +241,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                   exchange,
                   tracer: this.#tracer,
                   actionType: ActionTracer.ActionType.Read,
-                  endpointContext: this.#getAclEndpointContext(endpointId),
-                  root: this.#endpoint,
+                  node: this.#node,
               }).act(readAttributes);
         if (MaybePromise.is(result)) {
             throw new InternalError("Online read should not return a promise.");
@@ -283,7 +258,12 @@ export class TransactionalInteractionServer extends InteractionServer {
         message: Message,
     ) {
         const readEvent = (context: ActionContext) => {
-            if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (
+                context.authorityAt(event.readAcl, {
+                    endpoint: path.endpointId,
+                    cluster: path.clusterId,
+                } as AccessControl.Location) !== AccessControl.Authority.Granted
+            ) {
                 throw new AccessDeniedError(
                     `Access to ${path.endpointId}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
@@ -298,8 +278,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Read,
-            endpointContext: this.#getAclEndpointContext(path.endpointId),
-            root: this.#endpoint,
+            node: this.#node,
         }).act(readEvent);
     }
 
@@ -380,9 +359,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             fabricFiltered: true,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Write,
-            endpointContext: this.#getAclEndpointContext(path.endpointId),
-
-            root: this.#endpoint,
+            node: this.#node,
         }).act(writeAttribute);
     }
 
@@ -396,7 +373,12 @@ export class TransactionalInteractionServer extends InteractionServer {
         timed = false,
     ) {
         const invokeCommand = (context: ActionContext) => {
-            if (!context.authorizedFor(command.invokeAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (
+                context.authorityAt(command.invokeAcl, {
+                    endpoint: endpoint.number,
+                    cluster: path.clusterId,
+                } as AccessControl.Location) !== AccessControl.Authority.Granted
+            ) {
                 throw new AccessDeniedError(
                     `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
@@ -412,23 +394,20 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Invoke,
-            endpointContext: this.#getAclEndpointContext(path.endpointId),
-            root: this.#endpoint,
+            node: this.#node,
         }).act(invokeCommand);
     }
 
     get #tracer() {
-        if (this.#endpoint.env.has(ActionTracer)) {
-            return this.#endpoint.env.get(ActionTracer);
+        if (this.#node.env.has(ActionTracer)) {
+            return this.#node.env.get(ActionTracer);
         }
     }
 
     #updateStructure() {
-        if (this.#endpoint.lifecycle.isPartsReady) {
-            const server = EndpointServer.forEndpoint(this.#endpoint);
+        if (this.#node.lifecycle.isPartsReady) {
+            const server = EndpointServer.forEndpoint(this.#node);
             this.#endpointStructure.initializeFromEndpoint(server);
-
-            this.#endpointContexts.clear();
         }
     }
 }

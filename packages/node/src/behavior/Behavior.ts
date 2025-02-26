@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Agent, INSTALL_BEHAVIOR } from "#endpoint/Agent.js";
+import { type Agent, INSTALL_BEHAVIOR } from "#endpoint/Agent.js";
 import {
     AsyncObservable,
     EventEmitter,
@@ -13,16 +13,16 @@ import {
     MaybePromise,
     NotImplementedError,
     Observable,
+    Transaction,
 } from "#general";
+import { Schema } from "#model";
+import { assertSecureSession } from "#protocol";
 import type { ClusterType } from "#types";
-import { assertSecureSession } from "@matter/protocol";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";
-import { Resource } from "./state/transaction/Resource.js";
 import { BehaviorSupervisor } from "./supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "./supervision/RootSupervisor.js";
-import { Schema } from "./supervision/Schema.js";
 
 // Internal fields
 const BACKING = Symbol("endpoint-owner");
@@ -227,6 +227,15 @@ export abstract class Behavior {
     }
 
     /**
+     * Stop reacting to specified conditions.
+     *
+     * @param selector the observable and/or reactor to disable; if omitted terminates all reaction
+     */
+    protected stopReacting(selector?: Reactor.Selector) {
+        return (this as unknown as Internal)[BACKING].stopReacting(selector);
+    }
+
+    /**
      * Create a generic callback function that has the same properties as a {@link Reactor}.
      *
      * Like a reactor, the callback's "this" will be bound to an active Behavior instance.
@@ -293,7 +302,7 @@ export abstract class Behavior {
      */
     static dependencies?: Iterable<Behavior.Type>;
 
-    get [Resource.reference]() {
+    get [Transaction.Resource.reference]() {
         return (this as unknown as Internal)[BACKING].datasource;
     }
 }

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { IndexBehavior } from "#behavior/system/index/IndexBehavior.js";
 import { NetworkRuntime } from "#behavior/system/network/NetworkRuntime.js";
@@ -21,8 +22,10 @@ import {
     Logger,
     RuntimeService,
 } from "#general";
+import { Interactable } from "#protocol";
 import { RootEndpoint } from "../endpoints/root.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
+import { ProtocolService } from "./server/ProtocolService.js";
 
 const logger = Logger.get("Node");
 
@@ -48,6 +51,7 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         this.#environment = new Environment(config.id, parentEnvironment);
 
         this.#environment.set(NodeActivity, new NodeActivity());
+        this.#environment.set(ProtocolService, new ProtocolService(this));
 
         if (this.lifecycle.hasNumber) {
             if (this.number !== 0) {
@@ -74,8 +78,15 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         return this.#environment;
     }
 
-    protected override createLifecycle(): NodeLifecycle {
-        return new NodeLifecycle(this);
+    /**
+     * The optimized view that supports local Matter protocol implementation.
+     */
+    get protocol() {
+        return this.env.get(ProtocolService).protocol;
+    }
+
+    override get lifecycle(): NodeLifecycle {
+        return super.lifecycle as NodeLifecycle;
     }
 
     /**
@@ -167,7 +178,12 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
      */
     protected abstract createRuntime(): NetworkRuntime;
 
-    abstract prepareRuntimeShutdown(): Promise<void>;
+    /**
+     * An {@link Interactable} that allows for execution of Matter interactions against this node.
+     */
+    abstract interaction: Interactable<ActionContext>;
+
+    protected abstract prepareRuntimeShutdown(): Promise<void>;
 
     get [RuntimeService.label]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];
@@ -186,8 +202,8 @@ export abstract class Node<T extends Node.CommonRootEndpoint = Node.CommonRootEn
         });
     }
 
-    override get lifecycle(): NodeLifecycle {
-        return super.lifecycle as NodeLifecycle;
+    protected override createLifecycle(): NodeLifecycle {
+        return new NodeLifecycle(this);
     }
 
     protected statusUpdate(message: string) {
@@ -237,6 +253,17 @@ export namespace Node {
             type: defaultType,
             ...configuration,
         } as Endpoint.Configuration<T>;
+    }
+
+    export function forEndpoint(endpoint: Endpoint): Node {
+        const node = endpoint.ownerOfType(RootEndpoint);
+        if (node === undefined) {
+            throw new ImplementationError(`Cannot complete operation because ${endpoint} is not installed in a node`);
+        }
+        if (!(node instanceof Node)) {
+            throw new ImplementationError(`Root endpoint for ${endpoint} is not a node`);
+        }
+        return node;
     }
 
     /**

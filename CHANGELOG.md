@@ -9,6 +9,30 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+
+-   @matter/general
+    - Adjustment: Do not accept listeners on read-only transactions
+    - Enhancement: Only report locks for slow async transactions in logs
+    - Enhancement: Do not report Read transactions anymore in logs
+
+-   @matter/node
+    - Feature: Added Persisted Subscriptions to try to reestablish subscriptions after a restart, enabled by default
+    - Enhancement: Added caching for generated ClusterType and ClusterBehavior classes
+    - Enhancement: Added preparations for optimized node read handling
+
+-   @matter/protocol
+    - Feature: Allows to re-establish subscriptions after a restart
+    - Enhancement: Optimized Report Data message chunking 
+    - Fix: Handles errors when setting fabric label during commissioning as non-critical for the commissioning flow
+    - Fix: Ensure to use persisted CaseAdminTags when re-establishing a CASE session from the device side
+    - Fix: Fixed another place with a Noc/ICA Fabric-ID validation issue
+    - Fix: Fixes Session and Channel deletion in some cases
+    - Fix: Properly handle read requests with no attributes and events and just return an empty result
+
+-   @project-chip/matter.js
+    - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use
+
 ### 0.12.3 (2025-02-05)
 
 -   @matter/protocol

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { stderr, stdout } from "process";
+import { stderr, stdout } from "node:process";
 import { screen } from "../ansi-text/screen.js";
 import { std } from "../ansi-text/std.js";
 import { ansi } from "../ansi-text/text-builder.js";
@@ -155,12 +155,16 @@ export class Progress {
         std.out.write(`    ${ansi.yellow("Warning:")} ${text}\n`);
     }
 
-    shutdown() {
+    close() {
         if (this.#refreshInterval) {
             clearInterval(this.#refreshInterval);
             this.#refreshInterval = undefined;
         }
         writeStatus("");
+    }
+
+    [Symbol.dispose]() {
+        this.close();
     }
 
     refresh() {

@@ -5,12 +5,11 @@
  */
 
 import { camelize, ImplementationError, isObject } from "#general";
+import type { Schema } from "#model";
 import { DataModelPath, Metatype, ValueModel } from "#model";
-import { SchemaImplementationError, WriteError } from "../../../errors.js";
+import { SchemaImplementationError, Val, WriteError } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 
 /**
  * Obtain a {@link ValueSupervisor.Patch} function for the given schema.

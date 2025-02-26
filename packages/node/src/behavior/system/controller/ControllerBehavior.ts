@@ -6,14 +6,24 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { BasicInformationBehavior } from "#behaviors/basic-information";
-import { ImplementationError, Logger, MatterAggregateError } from "#general";
+import {
+    ImplementationError,
+    isNetworkInterface,
+    Logger,
+    MatterAggregateError,
+    NetInterfaceSet,
+    TransportInterfaceSet,
+} from "#general";
+import { Node } from "#node/Node.js";
 import {
     Ble,
     FabricAuthority,
     FabricAuthorityConfigurationProvider,
     FabricManager,
+    InteractionServer,
     MdnsService,
     ScannerSet,
+    SubscriptionClient,
 } from "#protocol";
 import type { CommissioningClient } from "../commissioning/CommissioningClient.js";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
@@ -84,6 +94,12 @@ export class ControllerBehavior extends Behavior {
                 commissioning.state.enabled = false;
             }
         }
+
+        const node = Node.forEndpoint(this.endpoint);
+        this.reactTo(node.lifecycle.online, this.#nodeOnline);
+        if (node.lifecycle.isOnline) {
+            this.#nodeOnline();
+        }
     }
 
     override async [Symbol.asyncDispose]() {
@@ -97,6 +113,44 @@ export class ControllerBehavior extends Behavior {
                 logger.error(error),
             );
         }
+
+        this.env.delete(FabricAuthority);
+        this.env.delete(ScannerSet);
+    }
+
+    #nodeOnline() {
+        // Configure network connections
+        const netInterfaces = this.env.get(NetInterfaceSet);
+        const netTransports = this.env.get(TransportInterfaceSet);
+        for (const transport of netTransports) {
+            if (isNetworkInterface(transport)) {
+                netInterfaces.add(transport);
+            }
+        }
+        if (this.state.ble) {
+            netInterfaces.add(Ble.get().getBleCentralInterface());
+        }
+
+        // This is necessary to receive data reports for subscriptions
+        this.env.get(InteractionServer).clientHandler = this.env.get(SubscriptionClient);
+
+        // Clean up as the node goes offline
+        const node = Node.forEndpoint(this.endpoint);
+        this.reactTo(node.lifecycle.goingOffline, this.#nodeGoingOffline);
+    }
+
+    async #nodeGoingOffline() {
+        const netInterfaces = this.env.get(NetInterfaceSet);
+        const netTransports = this.env.get(TransportInterfaceSet);
+
+        // Remove "transports" from the net interface set so they are not closed twice
+        for (const intf of netInterfaces) {
+            if (netTransports.has(intf)) {
+                netInterfaces.delete(intf);
+            }
+        }
+
+        await this.env.close(NetInterfaceSet);
     }
 }
 

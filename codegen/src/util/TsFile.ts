@@ -7,7 +7,7 @@
 import { FormattedText, InternalError, serialize } from "#general";
 import { Specification } from "#model";
 import { Package } from "#tools";
-import { posix, relative, sep } from "path";
+import { posix, relative, sep } from "node:path";
 import { absolute, readMatterFile, writeMatterFile } from "./file.js";
 import { asObjectKey } from "./string.js";
 

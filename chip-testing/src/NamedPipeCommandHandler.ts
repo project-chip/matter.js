@@ -5,7 +5,7 @@
  */
 
 import { CommandPipe } from "@matter/testing";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 import { constants } from "node:fs";
 import { FileHandle, open, unlink } from "node:fs/promises";
 import { Socket } from "node:net";

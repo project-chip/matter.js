@@ -625,6 +625,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     async close() {
+        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
         await this.env.get(EndpointInitializer).deactivateDescendant(this);
         await this.#construction.close();
     }

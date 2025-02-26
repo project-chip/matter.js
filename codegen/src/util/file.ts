@@ -5,10 +5,10 @@
  */
 
 import { Package } from "#tools";
-import { createHash } from "crypto";
-import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
-import { dirname, isAbsolute, relative as nodeRelative, resolve } from "path";
-import { fileURLToPath } from "url";
+import { createHash } from "node:crypto";
+import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { dirname, isAbsolute, relative as nodeRelative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // Paths we read/write must be defined here
 const DIR_MAPPING = {

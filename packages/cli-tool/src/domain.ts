@@ -20,8 +20,8 @@ import { Input, parseInput } from "#parser.js";
 import { Directory } from "#stat.js";
 import { ServerNode } from "@matter/node";
 import colors from "ansi-colors";
-import { inspect } from "util";
-import { createContext, runInContext, RunningCodeOptions } from "vm";
+import { inspect } from "node:util";
+import { createContext, runInContext, RunningCodeOptions } from "node:vm";
 
 export interface TextWriter {
     (...text: string[]): void;

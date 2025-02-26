@@ -5,7 +5,7 @@
  */
 
 import { Environment, Environmental } from "#general";
-import { Discovery } from "./Discovery.js";
+import type { Discovery } from "./Discovery.js";
 
 /**
  * Ongoing node discoveries registered with the environment.

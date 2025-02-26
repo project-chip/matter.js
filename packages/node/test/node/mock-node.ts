@@ -6,7 +6,6 @@
 
 import { Behavior } from "#behavior/Behavior.js";
 import { ServerBehaviorBacking } from "#behavior/internal/ServerBehaviorBacking.js";
-import { Val } from "#behavior/state/Val.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointInitializer } from "#endpoint/properties/EndpointInitializer.js";
 import { EndpointStore } from "#endpoint/storage/EndpointStore.js";
@@ -17,6 +16,7 @@ import { ServerNode } from "#node/ServerNode.js";
 import { IdentityService } from "#node/server/IdentityService.js";
 import { EndpointStoreService } from "#node/storage/EndpointStoreService.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
+import { Val } from "#protocol";
 import { EndpointNumber } from "#types";
 
 export class MockPartInitializer extends EndpointInitializer {

@@ -10,7 +10,7 @@ import { repl } from "#repl.js";
 import { Environment, LogFormat, MatterError } from "@matter/general";
 import "@matter/nodejs";
 import colors from "ansi-colors";
-import { stdout } from "process";
+import { stdout } from "node:process";
 
 export async function main(argv: string[]) {
     colors.enabled = stdout.isTTY;

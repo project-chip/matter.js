@@ -30,7 +30,7 @@ export type AclExtensionEntry = AccessControl.AccessControlExtension;
 export type AclExtensionList = AclExtensionEntry[];
 
 export type AclEndpointContext = {
-    number: EndpointNumber;
+    id: EndpointNumber;
     deviceTypes: DeviceTypeId[];
 };
 
@@ -163,7 +163,7 @@ export class AccessControlManager {
         }
 
         logger.notice(
-            `Failed access control check for ${endpoint.number}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
+            `Failed access control check for ${endpoint.id}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
             this.#getAccessControlEntriesForFabric(session.associatedFabric),
             "with ISD=",
             this.#getIsdFromMessage(session),
@@ -180,7 +180,7 @@ export class AccessControlManager {
      * Determines the granted privileges for the given session, endpoint, and cluster ID and returns them.
      */
     getGrantedPrivileges(session: SecureSession, endpoint: AclEndpointContext, clusterId: ClusterId): AccessLevel[] {
-        const endpointId = endpoint.number;
+        const endpointId = endpoint.id;
         const fabric = session.fabric;
         const subjectDesc = this.#getIsdFromMessage(session);
         const acl = fabric ? this.#getAccessControlEntriesForFabric(fabric) : [ImplicitDefaultPaseAclEntry];

@@ -5,13 +5,12 @@
  */
 
 import { camelize } from "#general";
+import type { Schema } from "#model";
 import { AttributeModel, ClusterModel, DataModelPath, FeatureMap, Metatype, ValueModel } from "#model";
+import { ConformanceError, DatatypeError, SchemaImplementationError, Val } from "#protocol";
 import { StatusCode } from "#types";
-import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
-import { Schema } from "../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import { Val } from "../Val.js";
 import { Internal } from "../managed/Internal.js";
 import {
     assertArray,

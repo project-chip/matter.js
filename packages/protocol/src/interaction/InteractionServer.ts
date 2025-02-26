@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, Diagnostic, InternalError, Logger, MatterFlowError } from "#general";
+import { Crypto, Diagnostic, InternalError, Logger, MatterFlowError, Observable, ServerAddressIp } from "#general";
 import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel, Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { SessionManager } from "#session/SessionManager.js";
@@ -66,6 +66,19 @@ import { ServerSubscription, ServerSubscriptionContext } from "./ServerSubscript
 import { ServerSubscriptionConfig } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("InteractionServer");
+
+export interface PeerSubscription {
+    subscriptionId: number;
+    peerAddress: PeerAddress;
+    minIntervalFloorSeconds: number;
+    maxIntervalCeilingSeconds: number;
+    attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
+    eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
+    isFabricFiltered: boolean;
+    maxInterval: number;
+    sendInterval: number;
+    operationalAddress?: ServerAddressIp;
+}
 
 export interface CommandPath {
     nodeId?: NodeId;
@@ -227,11 +240,14 @@ export interface InteractionContext {
  * Translates interactions from the Matter protocol to matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler, InteractionRecipient {
+    readonly id = INTERACTION_PROTOCOL_ID;
     #context: InteractionContext;
     #nextSubscriptionId = Crypto.getRandomUInt32();
     #isClosing = false;
+    #clientHandler?: ProtocolHandler;
     readonly #subscriptionConfig: ServerSubscriptionConfig;
     readonly #maxPathsPerInvoke;
+    readonly #subscriptionEstablishmentStarted = Observable<[peerAddress: PeerAddress]>();
 
     constructor(context: InteractionContext) {
         this.#context = context;
@@ -244,10 +260,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         });
     }
 
-    getId() {
-        return INTERACTION_PROTOCOL_ID;
-    }
-
     protected get isClosing() {
         return this.#isClosing;
     }
@@ -256,11 +268,30 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         return this.#maxPathsPerInvoke;
     }
 
-    async onNewExchange(exchange: MessageExchange) {
+    get subscriptionEstablishmentStarted() {
+        return this.#subscriptionEstablishmentStarted;
+    }
+
+    async onNewExchange(exchange: MessageExchange, message: Message) {
         // Note - changes here must be copied to TransactionalInteractionServer as it does not call super() to avoid
         // the stack frame
         if (this.#isClosing) return; // We are closing, ignore anything newly incoming
+
+        // An incoming data report as the first message is not a valid server operation.  We instead delegate to a
+        // client implementation if available
+        if (message.payloadHeader.messageType === MessageType.SubscribeRequest && this.#clientHandler) {
+            return this.#clientHandler.onNewExchange(exchange, message);
+        }
+
         await new InteractionServerMessenger(exchange).handleRequest(this);
+    }
+
+    get clientHandler(): ProtocolHandler | undefined {
+        return this.#clientHandler;
+    }
+
+    set clientHandler(clientHandler: ProtocolHandler) {
+        this.#clientHandler = clientHandler;
     }
 
     async #collectEventDataForRead(
@@ -530,7 +561,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         exchange: MessageExchange,
         readRequest: ReadRequest,
         message: Message,
-    ): Promise<{ dataReport: DataReport; payload: DataReportPayloadIterator }> {
+    ): Promise<{ dataReport: DataReport; payload?: DataReportPayloadIterator }> {
         const { attributeRequests, eventRequests, isFabricFiltered, interactionModelRevision } = readRequest;
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
@@ -546,10 +577,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             );
         }
         if (attributeRequests === undefined && eventRequests === undefined) {
-            throw new StatusResponseError(
-                "Only Read requests with attributeRequests or eventRequests are supported right now",
-                StatusCode.UnsupportedRead,
-            );
+            return {
+                dataReport: {
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    suppressResponse: true,
+                },
+            };
         }
 
         if (message.packetHeader.sessionType !== SessionType.Unicast) {
@@ -589,7 +622,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
      * This can currently only be used for subscriptions because errors are ignored!
      */
     protected readEndpointAttributesForSubscription(
-        _endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
         exchange: MessageExchange,
         isFabricFiltered: boolean,
@@ -963,7 +995,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
     async handleSubscribeRequest(
         exchange: MessageExchange,
-        {
+        request: SubscribeRequest,
+        messenger: InteractionServerMessenger,
+        message: Message,
+    ): Promise<void> {
+        const {
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
             attributeRequests,
@@ -973,10 +1009,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             keepSubscriptions,
             isFabricFiltered,
             interactionModelRevision,
-        }: SubscribeRequest,
-        messenger: InteractionServerMessenger,
-        message: Message,
-    ): Promise<void> {
+        } = request;
         logger.debug(
             `Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`,
         );
@@ -1005,8 +1038,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         if (!keepSubscriptions) {
             const clearedCount = await this.#context.sessions.clearSubscriptionsForNode(
-                fabric.fabricIndex,
-                session.peerNodeId,
+                fabric.addressOf(session.peerNodeId),
                 true,
             );
             if (clearedCount > 0) {
@@ -1072,46 +1104,22 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
         const subscriptionId = this.#nextSubscriptionId++;
 
-        const context: ServerSubscriptionContext = {
-            session,
-            structure: this.#endpointStructure,
-
-            readAttribute: (path, attribute, offline) =>
-                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
-
-            readEndpointAttributesForSubscription: (endpointId, attributes) =>
-                this.readEndpointAttributesForSubscription(endpointId, attributes, exchange, isFabricFiltered, message),
-
-            readEvent: (path, event, eventFilters) =>
-                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
-
-            initiateExchange: (address: PeerAddress, protocolId) => this.#context.initiateExchange(address, protocolId),
-        };
-
-        const subscription = new ServerSubscription({
-            id: subscriptionId,
-            context,
-            criteria: {
-                attributeRequests,
-                dataVersionFilters,
-                eventRequests,
-                eventFilters,
-                isFabricFiltered,
-            },
-            minIntervalFloor: minIntervalFloorSeconds,
-            maxIntervalCeiling: maxIntervalCeilingSeconds,
-            subscriptionOptions: this.#subscriptionConfig,
-        });
-
+        this.#subscriptionEstablishmentStarted.emit(session.peerAddress);
+        let subscription: ServerSubscription;
         try {
-            // Send initial data report to prime the subscription with initial data
-            await subscription.sendInitialReport(messenger);
+            subscription = await this.#establishSubscription(
+                subscriptionId,
+                request,
+                messenger,
+                session,
+                exchange,
+                message,
+            );
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
                 error,
             );
-            await subscription.close(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 await messenger.sendStatus(error.code, {
@@ -1125,11 +1133,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         }
 
         const maxInterval = subscription.maxInterval;
-        logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${
-                session.id
-            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
-        );
         // Then send the subscription response
         await messenger.send(
             MessageType.SubscribeResponse,
@@ -1147,7 +1150,131 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         );
 
         // When an error occurs while sending the response, the subscription is not yet active and will be cleaned up by GC
-        subscription.activateSendingUpdates();
+        subscription.activate();
+    }
+
+    async #establishSubscription(
+        id: number,
+        {
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            attributeRequests,
+            dataVersionFilters,
+            eventRequests,
+            eventFilters,
+            isFabricFiltered,
+        }: SubscribeRequest,
+        messenger: InteractionServerMessenger,
+        session: SecureSession,
+        exchange: MessageExchange,
+        message: Message,
+    ) {
+        const context: ServerSubscriptionContext = {
+            session,
+            structure: this.#endpointStructure,
+
+            readAttribute: (path, attribute, offline) =>
+                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
+
+            readEndpointAttributesForSubscription: attributes =>
+                this.readEndpointAttributesForSubscription(attributes, exchange, isFabricFiltered, message),
+
+            readEvent: (path, event, eventFilters) =>
+                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
+
+            initiateExchange: (address: PeerAddress, protocolId) => this.#context.initiateExchange(address, protocolId),
+        };
+
+        const subscription = new ServerSubscription({
+            id,
+            context,
+            criteria: {
+                attributeRequests,
+                dataVersionFilters,
+                eventRequests,
+                eventFilters,
+                isFabricFiltered,
+            },
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            subscriptionOptions: this.#subscriptionConfig,
+        });
+
+        try {
+            // Send initial data report to prime the subscription with initial data
+            await subscription.sendInitialReport(messenger);
+        } catch (error) {
+            await subscription.close(); // Cleanup
+            throw error;
+        }
+
+        logger.info(
+            `Successfully created subscription ${id} for Session ${
+                session.id
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
+        );
+        return subscription;
+    }
+
+    async establishFormerSubscription(
+        {
+            subscriptionId,
+            attributeRequests,
+            eventRequests,
+            isFabricFiltered,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            maxInterval,
+            sendInterval,
+        }: PeerSubscription,
+        session: SecureSession,
+    ) {
+        const exchange = this.#context.initiateExchange(session.peerAddress, INTERACTION_PROTOCOL_ID);
+        const message = {} as Message;
+        logger.debug(
+            `Send DataReports to re-establish subscription ${subscriptionId} to `,
+            Diagnostic.dict({ isFabricFiltered, maxInterval, sendInterval }),
+        );
+        const context: ServerSubscriptionContext = {
+            session,
+            structure: this.#endpointStructure,
+
+            readAttribute: (path, attribute, offline) =>
+                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
+
+            readEndpointAttributesForSubscription: attributes =>
+                this.readEndpointAttributesForSubscription(attributes, exchange, isFabricFiltered, message),
+
+            readEvent: (path, event, eventFilters) =>
+                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
+
+            initiateExchange: (address: PeerAddress, protocolId) => this.#context.initiateExchange(address, protocolId),
+        };
+
+        const subscription = new ServerSubscription({
+            id: subscriptionId,
+            context,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            criteria: {
+                attributeRequests,
+                eventRequests,
+                isFabricFiltered,
+            },
+            subscriptionOptions: this.#subscriptionConfig,
+            useAsMaxInterval: maxInterval,
+            useAsSendInterval: sendInterval,
+        });
+
+        try {
+            // Send initial data report to prime the subscription with initial data
+            await subscription.sendInitialReport(new InteractionServerMessenger(exchange));
+            subscription.activate();
+        } catch (error) {
+            await subscription.close(); // Cleanup
+            throw error;
+        }
+        return subscription;
     }
 
     async handleInvokeRequest(

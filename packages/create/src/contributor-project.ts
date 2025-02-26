@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { homedir } from "os";
-import { join, resolve } from "path";
-import { createInterface } from "readline/promises";
+import { homedir } from "node:os";
+import { join, resolve } from "node:path";
+import { createInterface } from "node:readline/promises";
 import { blue, bold, dim, fittedTextOf } from "./formatting.js";
 import { error, info, notice } from "./messages.js";
 import { createAndValidateDest, install, ProjectError } from "./new-project.js";

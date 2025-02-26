@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -28,3 +29,5 @@ export const TlvDataReport = TlvObject({
     suppressResponse: TlvOptionalField(4, TlvBoolean),
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
+
+export type DataReport = TypeFromSchema<typeof TlvDataReport>;

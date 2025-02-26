@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readdir } from "fs/promises";
+import { readdir } from "node:fs/promises";
 
 import Dockerode from "dockerode";
 import { Composition } from "./composition.js";

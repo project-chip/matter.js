@@ -5,8 +5,8 @@
  */
 
 import Dockerode, { ExecCreateOptions } from "dockerode";
-import { ReadStream } from "fs";
-import { finished } from "stream/promises";
+import { ReadStream } from "node:fs";
+import { finished } from "node:stream/promises";
 import { base64Of } from "../util/text.js";
 import type { Docker } from "./docker.js";
 import { edit } from "./edit.js";

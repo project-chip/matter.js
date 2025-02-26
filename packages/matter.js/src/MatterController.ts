@@ -47,6 +47,7 @@ import {
     FabricBuilder,
     FabricManager,
     InstanceBroadcaster,
+    InteractionClientProvider,
     NodeDiscoveryType,
     OperationalPeer,
     PeerAddress,
@@ -225,6 +226,7 @@ export class MatterController {
     private readonly channelManager = new ChannelManager(CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE);
     private readonly exchangeManager: ExchangeManager;
     private readonly peers: PeerSet;
+    private readonly clients: InteractionClientProvider;
     private readonly commissioner: ControllerCommissioner;
     #construction: Construction<MatterController>;
 
@@ -283,13 +285,15 @@ export class MatterController {
             this.sessionClosedCallback?.(session.peerNodeId);
         });
 
+        const subscriptionClient = new SubscriptionClient();
+
         this.exchangeManager = new ExchangeManager({
             sessionManager: this.sessionManager,
             channelManager: this.channelManager,
             transportInterfaces: this.netInterfaces,
         });
         this.exchangeManager.addProtocolHandler(new SecureChannelProtocol(this.sessionManager, fabricManager));
-        this.exchangeManager.addProtocolHandler(new SubscriptionClient());
+        this.exchangeManager.addProtocolHandler(subscriptionClient);
 
         // Adapts the historical storage format for MatterController to OperationalPeer objects
         this.nodesStore = new CommissionedNodeStore(controllerStore, fabric);
@@ -298,13 +302,16 @@ export class MatterController {
             sessions: this.sessionManager,
             channels: this.channelManager,
             exchanges: this.exchangeManager,
+            subscriptionClient,
             scanners: this.scanners,
             netInterfaces: this.netInterfaces,
             store: this.nodesStore,
         });
 
+        this.clients = new InteractionClientProvider(this.peers);
+
         this.commissioner = new ControllerCommissioner({
-            peers: this.peers,
+            clients: this.clients,
             scanners: this.scanners,
             netInterfaces: this.netInterfaces,
             exchanges: this.exchangeManager,
@@ -494,11 +501,11 @@ export class MatterController {
      * Returns a InteractionClient on success.
      */
     async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions, allowUnknownPeer?: boolean) {
-        return this.peers.connect(this.fabric.addressOf(peerNodeId), discoveryOptions, allowUnknownPeer);
+        return this.clients.connect(this.fabric.addressOf(peerNodeId), { discoveryOptions, allowUnknownPeer });
     }
 
     createInteractionClient(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
-        return this.peers.initializeInteractionClient(this.fabric.addressOf(peerNodeId), discoveryOptions);
+        return this.clients.getInteractionClient(this.fabric.addressOf(peerNodeId), discoveryOptions);
     }
 
     async getNextAvailableSessionId() {

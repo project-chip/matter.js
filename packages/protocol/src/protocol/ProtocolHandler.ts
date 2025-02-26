@@ -8,7 +8,7 @@ import { Message } from "../codec/MessageCodec.js";
 import { MessageExchange } from "./MessageExchange.js";
 
 export interface ProtocolHandler {
-    getId(): number;
+    readonly id: number;
     onNewExchange(exchange: MessageExchange, message: Message): Promise<void>;
     close(): Promise<void>;
 }

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFile } from "fs/promises";
-import { resolve } from "path";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 
 const CREATE_DIR = resolve(import.meta.dirname, "../..");
 export const TEMPLATE_DIR = resolve(CREATE_DIR, "dist/templates");

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
@@ -29,6 +28,7 @@ import {
     PublicKeyError,
     TlvAttestation,
     TlvCertSigningRequest,
+    Val,
 } from "#protocol";
 import {
     Command,

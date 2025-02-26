@@ -4,14 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { Participant } from "#behavior/state/transaction/Participant.js";
-import { Transaction } from "#behavior/state/transaction/Transaction.js";
-import { MaybePromise } from "#general";
+import { MaybePromise, Transaction } from "#general";
+import { Val } from "#protocol";
 import type { EndpointStore } from "./EndpointStore.js";
 
-interface StorageParticipant extends Participant {
+interface StorageParticipant extends Transaction.Participant {
     mutations?: Record<string, Val.Struct>;
 }
 

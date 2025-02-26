@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { basename } from "path";
+import { basename } from "node:path";
 import { Subject } from "../device/subject.js";
 import { BaseTest } from "../device/test.js";
 import { Terminal } from "../docker/terminal.js";

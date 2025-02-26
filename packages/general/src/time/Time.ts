@@ -5,7 +5,7 @@
  */
 
 import { Boot } from "#util/Boot.js";
-import { CancelablePromise } from "#util/Promises.js";
+import { CancelablePromise } from "#util/Cancelable.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";

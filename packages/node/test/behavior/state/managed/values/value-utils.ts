@@ -6,13 +6,14 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
-import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { Endpoint } from "#endpoint/Endpoint.js";
 import { camelize, Identity, MaybePromise, Observable } from "#general";
 import { DataModelPath, FieldElement, FieldModel } from "#model";
+import { Node } from "#node/Node.js";
+import { Val } from "#protocol";
+import { EndpointNumber } from "#types";
 
 /**
  * Create schema for a single field.
@@ -82,7 +83,10 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
     }
 
     const datasource = Datasource({
-        path: DataModelPath("TestStruct"),
+        location: {
+            endpoint: EndpointNumber(1),
+            path: DataModelPath("TestStruct"),
+        },
         type: TestState,
         supervisor,
         defaults,
@@ -117,8 +121,14 @@ export type TestStruct = Identity<ReturnType<typeof TestStruct>>;
 
 export function aclEndpoint(acls: number[]) {
     return {
+        protocol: {
+            1: {
+                deviceTypes: [],
+            },
+        },
+
         act: () => ({
             accessLevelsFor: () => acls,
         }),
-    } as unknown as Endpoint<any>;
+    } as unknown as Node;
 }

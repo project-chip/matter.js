@@ -136,7 +136,6 @@ export interface ServerSubscriptionContext {
         offline?: boolean,
     ): { version: number; value: unknown };
     readEndpointAttributesForSubscription(
-        endpointId: EndpointNumber,
         attributes: { path: AttributePath; attribute: AnyAttributeServer<unknown>; offline?: boolean }[],
     ): { path: AttributePath; attribute: AnyAttributeServer<unknown>; version: number; value: unknown }[];
     readEvent(
@@ -176,41 +175,58 @@ export class ServerSubscription extends Subscription {
         }
     >();
     #sendUpdatesActivated = false;
-    readonly #maxIntervalMs: number;
     readonly #sendIntervalMs: number;
-    private readonly minIntervalFloorMs: number;
-    private readonly maxIntervalCeilingMs: number;
-    private readonly peerAddress: PeerAddress;
+    readonly #minIntervalFloorMs: number;
+    readonly #maxIntervalCeilingMs: number;
+    readonly #peerAddress: PeerAddress;
 
-    private sendNextUpdateImmediately = false;
-    private sendUpdateErrorCounter = 0;
-    private attributeUpdatePromises = new Set<PromiseLike<void>>();
-    private currentUpdatePromise?: Promise<void>;
+    #sendNextUpdateImmediately = false;
+    #sendUpdateErrorCounter = 0;
+    readonly #attributeUpdatePromises = new Set<PromiseLike<void>>();
+    #currentUpdatePromise?: Promise<void>;
 
     constructor(options: {
         id: number;
         context: ServerSubscriptionContext;
         criteria: SubscriptionCriteria;
-        minIntervalFloor: number;
-        maxIntervalCeiling: number;
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
         subscriptionOptions: ServerSubscriptionConfig;
+        useAsMaxInterval?: number;
+        useAsSendInterval?: number;
     }) {
-        const { id, context, criteria, minIntervalFloor, maxIntervalCeiling, subscriptionOptions } = options;
+        const {
+            id,
+            context,
+            criteria,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            subscriptionOptions,
+            useAsMaxInterval,
+            useAsSendInterval,
+        } = options;
 
         super(context.session, id, criteria);
         this.#context = context;
         this.#structure = context.structure;
 
-        this.peerAddress = this.session.peerAddress;
-        this.minIntervalFloorMs = minIntervalFloor * 1000;
-        this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
+        this.#peerAddress = this.session.peerAddress;
+        this.#minIntervalFloorMs = minIntervalFloorSeconds * 1000;
+        this.#maxIntervalCeilingMs = maxIntervalCeilingSeconds * 1000;
 
-        const { maxInterval, sendInterval } = this.determineSendingIntervals(
-            subscriptionOptions.minIntervalSeconds * 1000,
-            subscriptionOptions.maxIntervalSeconds * 1000,
-            subscriptionOptions.randomizationWindowSeconds * 1000,
-        );
-        this.#maxIntervalMs = maxInterval;
+        let maxInterval: number;
+        let sendInterval: number;
+        if (useAsMaxInterval !== undefined && useAsSendInterval !== undefined) {
+            maxInterval = useAsMaxInterval * 1000;
+            sendInterval = useAsSendInterval * 1000;
+        } else {
+            ({ maxInterval, sendInterval } = this.#determineSendingIntervals(
+                subscriptionOptions.minIntervalSeconds * 1000,
+                subscriptionOptions.maxIntervalSeconds * 1000,
+                subscriptionOptions.randomizationWindowSeconds * 1000,
+            ));
+        }
+        this.maxIntervalMs = maxInterval;
         this.#sendIntervalMs = sendInterval;
 
         this.#updateTimer = Time.getTimer(`Subscription ${this.id} update`, this.#sendIntervalMs, () =>
@@ -218,7 +234,7 @@ export class ServerSubscription extends Subscription {
         ); // will be started later
     }
 
-    private determineSendingIntervals(
+    #determineSendingIntervals(
         subscriptionMinIntervalMs: number,
         subscriptionMaxIntervalMs: number,
         subscriptionRandomizationWindowMs: number,
@@ -231,7 +247,7 @@ export class ServerSubscription extends Subscription {
         const maxInterval = Math.min(
             Math.max(
                 subscriptionMinIntervalMs,
-                Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
+                Math.max(this.#minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.#maxIntervalCeilingMs)),
             ) + Math.floor(subscriptionRandomizationWindowMs * Math.random()),
             MAX_INTERVAL_PUBLISHER_LIMIT_S * 1000,
         );
@@ -240,7 +256,7 @@ export class ServerSubscription extends Subscription {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
             // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
             // second subscription report after first failed.
-            sendInterval = Math.max(this.minIntervalFloorMs, Math.floor(maxInterval * 0.8));
+            sendInterval = Math.max(this.#minIntervalFloorMs, Math.floor(maxInterval * 0.8));
         }
         if (sendInterval < subscriptionMinIntervalMs) {
             // But not faster than once every 2s
@@ -252,7 +268,7 @@ export class ServerSubscription extends Subscription {
         return { maxInterval, sendInterval };
     }
 
-    private registerNewAttributes() {
+    #registerNewAttributes() {
         const newAttributes = new Array<AttributeWithPath>();
         const attributeErrors = new Array<TypeFromSchema<typeof TlvAttributeStatus>>();
         const formerAttributes = new Set<string>(this.#attributeListeners.keys());
@@ -427,7 +443,7 @@ export class ServerSubscription extends Subscription {
      * controller. The data of newly added events are not sent automatically.
      */
     async updateSubscription() {
-        const { newAttributes } = this.registerNewAttributes();
+        const { newAttributes } = this.#registerNewAttributes();
 
         for (const { path, attribute } of newAttributes) {
             const { version, value } = this.#context.readAttribute(path, attribute);
@@ -486,15 +502,21 @@ export class ServerSubscription extends Subscription {
         this.#prepareDataUpdate();
     }
 
-    get maxInterval(): number {
-        return Math.ceil(this.#maxIntervalMs / 1000);
-    }
-
     get sendInterval(): number {
         return Math.ceil(this.#sendIntervalMs / 1000);
     }
 
-    activateSendingUpdates() {
+    get minIntervalFloorSeconds(): number {
+        return Math.ceil(this.#minIntervalFloorMs / 1000);
+    }
+
+    get maxIntervalCeilingSeconds(): number {
+        return Math.ceil(this.#maxIntervalCeilingMs / 1000);
+    }
+
+    override activate() {
+        super.activate();
+
         // We do not need these data anymore, so we can free some memory
         if (this.criteria.eventFilters !== undefined) this.criteria.eventFilters.length = 0;
         if (this.criteria.dataVersionFilters !== undefined) this.criteria.dataVersionFilters.length = 0;
@@ -534,11 +556,11 @@ export class ServerSubscription extends Subscription {
         this.#updateTimer.stop();
         const now = Time.nowMs();
         const timeSinceLastUpdateMs = now - this.#lastUpdateTimeMs;
-        if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
+        if (timeSinceLastUpdateMs < this.#minIntervalFloorMs) {
             // Respect minimum delay time between updates
             this.#updateTimer = Time.getTimer(
                 "Subscription update",
-                this.minIntervalFloorMs - timeSinceLastUpdateMs,
+                this.#minIntervalFloorMs - timeSinceLastUpdateMs,
                 () => this.#prepareDataUpdate(),
             ).start();
             return;
@@ -551,14 +573,14 @@ export class ServerSubscription extends Subscription {
     }
 
     #triggerSendUpdate() {
-        if (this.currentUpdatePromise !== undefined) {
+        if (this.#currentUpdatePromise !== undefined) {
             logger.debug("Sending update already in progress, delaying update ...");
-            this.sendNextUpdateImmediately = true;
+            this.#sendNextUpdateImmediately = true;
             return;
         }
-        this.currentUpdatePromise = this.#sendUpdate()
+        this.#currentUpdatePromise = this.#sendUpdate()
             .catch(error => logger.warn("Sending subscription update failed:", error))
-            .finally(() => (this.currentUpdatePromise = undefined));
+            .finally(() => (this.#currentUpdatePromise = undefined));
     }
 
     /**
@@ -594,20 +616,20 @@ export class ServerSubscription extends Subscription {
         this.#lastUpdateTimeMs = Time.nowMs();
 
         try {
-            await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
-            this.sendUpdateErrorCounter = 0;
+            await this.#sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
+            this.#sendUpdateErrorCounter = 0;
         } catch (error) {
             if (this.isClosed) {
                 // No need to care about resubmissions when the server is closing
                 return;
             }
 
-            this.sendUpdateErrorCounter++;
+            this.#sendUpdateErrorCounter++;
             logger.info(
-                `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
+                `Error sending subscription update message (error count=${this.#sendUpdateErrorCounter}):`,
                 (error instanceof MatterError && error.message) || error,
             );
-            if (this.sendUpdateErrorCounter <= 2) {
+            if (this.#sendUpdateErrorCounter <= 2) {
                 // fill the data back in the queue to resend with next try
                 const newAttributeUpdatesToSend = Array.from(this.#outstandingAttributeUpdates.values());
                 this.#outstandingAttributeUpdates.clear();
@@ -623,13 +645,14 @@ export class ServerSubscription extends Subscription {
                 logger.info(
                     `Sending update failed 3 times in a row, canceling subscription ${this.id} and let controller subscribe again.`,
                 );
-                this.sendNextUpdateImmediately = false;
+                this.#sendNextUpdateImmediately = false;
                 if (
                     error instanceof NoResponseTimeoutError ||
                     error instanceof NetworkError ||
                     error instanceof NoChannelError
                 ) {
                     // Let's consider this subscription as dead and wait for a reconnect
+                    this.isCanceledByPeer = true; // We handle this case like  if the controller canceled the subscription
                     await this.destroy();
                     return;
                 } else {
@@ -638,9 +661,9 @@ export class ServerSubscription extends Subscription {
             }
         }
 
-        if (this.sendNextUpdateImmediately) {
+        if (this.#sendNextUpdateImmediately) {
             logger.debug("Sending delayed update immediately after last one was sent.");
-            this.sendNextUpdateImmediately = false;
+            this.#sendNextUpdateImmediately = false;
             await this.#sendUpdate(true); // Send but only if non-empty
         }
     }
@@ -736,7 +759,6 @@ export class ServerSubscription extends Subscription {
             const endpointAttributes = attributesPerCluster.get(endpointId)!;
             attributesPerCluster.delete(endpointId);
             for (const { path, attribute, value, version } of this.#context.readEndpointAttributesForSubscription(
-                endpointId,
                 endpointAttributes,
             )) {
                 if (value === undefined) continue;
@@ -801,7 +823,7 @@ export class ServerSubscription extends Subscription {
     async sendInitialReport(messenger: InteractionServerMessenger) {
         this.#updateTimer.stop();
 
-        const { newAttributes, attributeErrors } = this.registerNewAttributes();
+        const { newAttributes, attributeErrors } = this.#registerNewAttributes();
         const { newEvents, eventErrors } = this.#registerNewEvents();
         const { eventReportsPayload, eventsFiltered } = await this.#collectInitialEventReportPayloads(newEvents);
 
@@ -824,8 +846,8 @@ export class ServerSubscription extends Subscription {
         if (MaybePromise.is(changeResult)) {
             const resolver = Promise.resolve(changeResult)
                 .catch(error => logger.error(`Error handling attribute change:`, error))
-                .finally(() => this.attributeUpdatePromises.delete(resolver));
-            this.attributeUpdatePromises.add(resolver);
+                .finally(() => this.#attributeUpdatePromises.delete(resolver));
+            this.#attributeUpdatePromises.add(resolver);
         }
     }
 
@@ -879,15 +901,15 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    async flush() {
+    async #flush() {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
                 `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events${this.isClosed ? " (for closing)" : ""}`,
             );
             this.#triggerSendUpdate();
-            if (this.currentUpdatePromise) {
-                await this.currentUpdatePromise;
+            if (this.#currentUpdatePromise) {
+                await this.#currentUpdatePromise;
             }
         }
     }
@@ -896,9 +918,9 @@ export class ServerSubscription extends Subscription {
         this.#sendUpdatesActivated = false;
         this.unregisterAttributeListeners(Array.from(this.#attributeListeners.keys()));
         this.unregisterEventListeners(Array.from(this.#eventListeners.keys()));
-        if (this.attributeUpdatePromises.size) {
-            const resolvers = [...this.attributeUpdatePromises.values()];
-            this.attributeUpdatePromises.clear();
+        if (this.#attributeUpdatePromises.size) {
+            const resolvers = [...this.#attributeUpdatePromises.values()];
+            this.#attributeUpdatePromises.clear();
             await MatterAggregateError.allSettled(resolvers, "Error receiving all outstanding attribute values").catch(
                 error => logger.error(error),
             );
@@ -911,16 +933,19 @@ export class ServerSubscription extends Subscription {
     /**
      * Closes the subscription and flushes all outstanding data updates if requested.
      */
-    override async close(graceful = false) {
+    override async close(graceful = false, cancelledByPeer = false) {
         if (this.isClosed) {
             return;
         }
+        if (cancelledByPeer) {
+            this.isCanceledByPeer = true;
+        }
         await this.destroy();
         if (graceful) {
-            await this.flush();
+            await this.#flush();
         }
-        if (this.currentUpdatePromise) {
-            await this.currentUpdatePromise;
+        if (this.#currentUpdatePromise) {
+            await this.#currentUpdatePromise;
         }
     }
 
@@ -956,11 +981,8 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    private async sendUpdateMessage(
-        attributes: AttributePathWithValueVersion<any>[],
-        events: EventPathWithEventData<any>[],
-    ) {
-        const exchange = this.#context.initiateExchange(this.peerAddress, INTERACTION_PROTOCOL_ID);
+    async #sendUpdateMessage(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
+        const exchange = this.#context.initiateExchange(this.#peerAddress, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
         if (attributes.length) {
             logger.debug(

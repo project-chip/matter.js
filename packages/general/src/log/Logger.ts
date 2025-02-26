@@ -5,6 +5,7 @@
  */
 
 import { Boot } from "#util/Boot.js";
+import { CancelablePromise } from "#util/Cancelable.js";
 import { ImplementationError, NotImplementedError } from "../MatterError.js";
 import { Time } from "../time/Time.js";
 import { Bytes } from "../util/Bytes.js";
@@ -451,6 +452,7 @@ export class Logger {
     warn = (...values: any[]) => this.#log(LogLevel.WARN, values);
     error = (...values: any[]) => this.#log(LogLevel.ERROR, values);
     fatal = (...values: any[]) => this.#log(LogLevel.FATAL, values);
+    log = (level: LogLevel, ...values: any[]) => this.#log(level, values);
 
     #log(level: LogLevel, values: any[]) {
         for (const logger of Logger.logger) {
@@ -491,3 +493,5 @@ Boot.init(() => {
         MatterHooks.loggerSetup?.(Logger);
     }
 });
+
+CancelablePromise.logger = Logger.get("CancelablePromise");

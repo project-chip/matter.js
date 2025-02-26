@@ -18,7 +18,7 @@ import { OnOffLightDevice } from "@matter/main/devices/on-off-light";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
 import { logEndpoint } from "@matter/main/protocol";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 /** Initialize configuration values */
 const { isSocket, deviceName, vendorName, passcode, discriminator, vendorId, productName, productId, port, uniqueId } =

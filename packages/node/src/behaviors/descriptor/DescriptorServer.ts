@@ -147,7 +147,9 @@ export class DescriptorServer extends DescriptorBehavior {
                     return;
                 }
                 await this.#updatePartsList();
-                this.#monitorDestruction(endpoint);
+                if (!this.endpoint.behaviors.has(IndexBehavior)) {
+                    this.#monitorDestruction(endpoint);
+                }
                 break;
 
             case EndpointLifecycle.Change.ServersChanged:
@@ -158,6 +160,14 @@ export class DescriptorServer extends DescriptorBehavior {
                 await this.context.transaction.addResources(this);
                 await this.context.transaction.begin();
                 this.state.serverList = this.#serverList;
+                break;
+
+            case EndpointLifecycle.Change.Destroying:
+                if (endpoint !== this.endpoint) {
+                    return;
+                }
+
+                await this.stopReacting({ reactor: this.#updatePartsList });
                 break;
         }
     }

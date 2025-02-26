@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
@@ -16,3 +17,5 @@ export const TlvWriteResponse = TlvObject({
     writeResponses: TlvField(0, TlvArray(TlvAttributeStatus)),
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
+
+export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;

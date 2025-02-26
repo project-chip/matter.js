@@ -6,8 +6,8 @@
 
 import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
 import { Bytes, Key, PrivateKey, PublicKey } from "#general";
-import * as assert from "assert";
-import * as crypto from "crypto";
+import * as assert from "node:assert";
+import * as crypto from "node:crypto";
 
 const KEY = Bytes.fromHex("abf227feffea8c38e688ddcbffc459f1");
 const ENCRYPTED_DATA = Bytes.fromHex("c4527bd6965518e8382edbbd28f27f42492d0766124f9961a772");

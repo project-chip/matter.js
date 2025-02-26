@@ -6,7 +6,7 @@
 
 import { Observable } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { Discovery } from "./Discovery.js";
 
 /**

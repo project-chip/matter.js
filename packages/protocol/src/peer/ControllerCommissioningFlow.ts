@@ -814,11 +814,8 @@ export class ControllerCommissioningFlow {
                 }),
             );
         } catch (error) {
-            CommissioningError.accept(error);
-            return {
-                code: CommissioningStepResultCode.Failure,
-                breadcrumb: this.#lastBreadcrumb,
-            };
+            // convert error
+            throw repackErrorAs(error, RecoverableCommissioningError);
         }
 
         return {

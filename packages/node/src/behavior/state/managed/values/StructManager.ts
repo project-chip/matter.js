@@ -5,30 +5,77 @@
  */
 
 import { camelize, GeneratedClass, ImplementationError, isObject } from "#general";
+import type { Schema } from "#model";
 import { Access, ElementTag, FieldValue, Metatype, ValueModel } from "#model";
+import { AccessControl, PhantomReferenceError, SchemaImplementationError, Val } from "#protocol";
 import { FabricIndex } from "#types";
-import { AccessControl } from "../../../AccessControl.js";
-import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";
 import { ManagedReference } from "../ManagedReference.js";
 import { NameResolver } from "../NameResolver.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 
-const SESSION = Symbol("options");
 const AUTHORIZE_READ = Symbol("authorize-read");
+
+/**
+ * Internal view of struct.
+ */
+interface Struct extends Val.Struct {
+    [Internal.session]: ValueSupervisor.Session;
+    [Internal.reference]: Val.Reference<Val.Struct>;
+
+    /**
+     * Direct read authorization.
+     */
+    [AUTHORIZE_READ](attributeId: number): void;
+}
 
 /**
  * For structs we generate a class with accessors for each property in the schema.
  */
 export function StructManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
+    /**
+     * These install on the prototype.  We use this for internal methods and ID methods as we don't want them to be
+     * enumerable.
+     */
+    const prototypeDescriptors = {
+        // TODO - interferes with Chai deep equal.  Best fix would probably be a custom deep equal assertion but
+        // leaving out for now
+        // [Symbol.toStringTag]: {
+        //     value: name,
+        // },
+
+        // TODO - makes Mocha diffs pretty useless.  Best fix is probably customized diff but leaving out for now
+        // toString: {
+        //     value() {
+        //         return serialize(this);
+        //     }
+        // },
+
+        // AUTHORIZE_READ is effectively a protected method, see StructManager.assertDirectReadAuthorized below
+        [AUTHORIZE_READ]: {
+            value(this: Struct, attributeId: number) {
+                const access = propertyAccessControls[attributeId];
+
+                if (access === undefined) {
+                    throw new ImplementationError(`Direct read of unknown property ${attributeId}`);
+                }
+
+                access.authorizeRead(this[Internal.session], this[Internal.reference].location);
+            },
+        },
+    } as PropertyDescriptorMap;
+
+    /**
+     * These we define on the instance so they appear as normal object properties.
+     */
     const instanceDescriptors = {} as PropertyDescriptorMap;
-    const propertyAccessControls = {} as Record<string, AccessControl>;
+
+    const propertyAccessControls = {} as Record<number, AccessControl>;
     let hasFabricIndex = false;
+    const isCluster = schema.tag === ElementTag.Cluster;
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of owner.membersOf(schema)) {
@@ -37,7 +84,10 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
         const { access, descriptor } = configureProperty(owner, member);
 
         instanceDescriptors[name] = descriptor;
-        propertyAccessControls[name] = access;
+        if (member.id !== undefined) {
+            prototypeDescriptors[member.id] = { ...descriptor, enumerable: false };
+            propertyAccessControls[member.id] = access;
+        }
 
         if (member.name === "FabricIndex") {
             hasFabricIndex = true;
@@ -52,7 +102,16 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
     const Wrapper = GeneratedClass({
         name,
 
-        initialize(this: Wrapper, ref: Val.Reference, session: ValueSupervisor.Session) {
+        initialize(this: Struct, ref: Val.Reference, session: ValueSupervisor.Session) {
+            Object.defineProperties(this, {
+                [Internal.reference]: {
+                    value: ref as Val.Reference<Val.Struct>,
+                },
+                [Internal.session]: {
+                    value: session,
+                },
+            });
+
             // Only objects are acceptable
             if (!isObject(ref.value)) {
                 throw new SchemaImplementationError(
@@ -63,52 +122,22 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
 
             // If we have a fabric index, update the context
             if (hasFabricIndex) {
-                const owningFabric = (ref as Val.Reference<Val.Struct>).value.fabricIndex as FabricIndex | undefined;
+                const owningFabric = ref.value.fabricIndex as FabricIndex | undefined;
                 ref.location = { ...ref.location, owningFabric };
             }
-
-            Object.defineProperties(this, {
-                [Internal.reference]: {
-                    value: ref as Val.Reference<Val.Struct>,
-                },
-                [SESSION]: {
-                    value: session,
-                },
-            });
 
             // Sadly we can't place instance descriptors on our prototype because then simple JS patterns that rely on
             // enumerating own properties (e.g. spread) won't work.  At least we can reuse the accessors so they should
             // get JITed
-            Object.defineProperties(this, instanceDescriptors);
+            //
+            // The "protocol" optimization for clusters omits these fields as the attribute protocol is ID only.
+            // Currently outer layers do not support ID keys for fields
+            if (!isCluster || !session.protocol) {
+                Object.defineProperties(this, instanceDescriptors);
+            }
         },
 
-        instanceDescriptors: {
-            // TODO - interferes with Chai deep equal.  Best fix would probably be a custom deep equal assertion but
-            // leaving out for now
-            // [Symbol.toStringTag]: {
-            //     value: name,
-            // },
-
-            // TODO - makes Mocha diffs pretty useless.  Best fix is probably customized diff but leaving out for now
-            // toString: {
-            //     value() {
-            //         return serialize(this);
-            //     }
-            // },
-
-            // AUTHORIZE_READ is effectively a protected method, see StructManager.assertDirectReadAuthorized below
-            [AUTHORIZE_READ]: {
-                value(this: Wrapper, index: string) {
-                    const access = propertyAccessControls[index];
-
-                    if (access === undefined) {
-                        throw new ImplementationError(`Direct read of unknown property ${index}`);
-                    }
-
-                    access.authorizeRead(this[SESSION], this[Internal.reference].location);
-                },
-            },
-        },
+        instanceDescriptors: prototypeDescriptors,
     }) as new (value: Val, session: AccessControl.Session) => Val.Struct;
 
     Instrumentation.instrumentStruct(Wrapper);
@@ -125,36 +154,22 @@ export namespace StructManager {
      *
      * This function instead throws an error for unauthorized access.  It must be invoked before direct property reads.
      *
+     * @deprecated remove with old API
+     *
      * @param struct a managed struct
-     * @param index the field to read
+     * @param attributeId the AttributeId to read
      */
-    export function assertDirectReadAuthorized(struct: Val.Struct, index: string) {
-        if (!(struct as Wrapper)?.[AUTHORIZE_READ]) {
+    export function assertDirectReadAuthorized(struct: Val.Struct, attributeId: number) {
+        if (!(struct as Struct)?.[AUTHORIZE_READ]) {
             throw new ImplementationError("Cannot authorize read of unmanaged value");
         }
-        return (struct as Wrapper)[AUTHORIZE_READ](index);
+        return (struct as Struct)[AUTHORIZE_READ](attributeId);
     }
-}
-
-interface Wrapper extends Val.Struct, Internal.Collection {
-    /**
-     * A reference to the raw value.
-     */
-    [Internal.reference]: Val.Reference<Val.Struct>;
-
-    /**
-     * Information regarding the current user session.
-     */
-    [SESSION]: ValueSupervisor.Session;
-
-    /**
-     * Direct read authorization.
-     */
-    [AUTHORIZE_READ]: (index: string) => void;
 }
 
 function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
+    const id = schema.id;
 
     const { access, manage, validate } = supervisor.get(schema);
 
@@ -172,10 +187,18 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
     const descriptor: PropertyDescriptor = {
         enumerable: true,
 
-        set(this: Wrapper, value: Val) {
-            access.authorizeWrite(this[SESSION], this[Internal.reference].location);
+        set(this: Struct, value: Val) {
+            access.authorizeWrite(this[Internal.session], this[Internal.reference].location);
 
-            const oldValue = this[Internal.reference].value[name];
+            // We allow attribute/field name or id as key.  If name is present id is ignored
+            let storedKey =
+                name in this[Internal.reference].value
+                    ? name
+                    : id !== undefined && id in this[Internal.reference]
+                      ? id
+                      : name;
+
+            const oldValue = this[Internal.reference].value[storedKey];
 
             const self = this;
 
@@ -184,12 +207,13 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
 
                 // Identify the target.  Usually just "struct" except when struct supports Val.Dynamic
                 let target;
-                if ((struct as Val.Dynamic)[Val.properties]) {
+                if (Val.properties in struct) {
                     const properties = (struct as Val.Dynamic)[Val.properties](
                         this[Internal.reference].rootOwner,
-                        this[SESSION],
+                        this[Internal.session],
                     );
                     if (name in properties) {
+                        storedKey = name;
                         target = properties;
                     } else {
                         target = struct;
@@ -204,7 +228,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 }
 
                 // Modify the value
-                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[name])) {
+                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[storedKey])) {
                     // In the case of fabric-scoped write to established list we use the managed proxy to perform update
                     // as it will sort through values and only modify those with correct fabricIndex
                     const proxy = self[name] as Val.List;
@@ -214,10 +238,10 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     proxy.length = value.length;
                 } else {
                     // Direct assignment
-                    target[name] = value;
+                    target[storedKey] = value;
                 }
 
-                if (!this[SESSION].acceptInvalid && validate) {
+                if (!this[Internal.session].acceptInvalid && validate) {
                     // Note: We validate fully for nested structs but *not* for the current struct.  This is because
                     // choice conformance may be violated temporarily as individual fields change.
                     //
@@ -227,14 +251,14 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                     // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
                     // validation step that is performed on commit when choice conformance is in play.
                     try {
-                        validate(value, this[SESSION], {
+                        validate(value, this[Internal.session], {
                             path: this[Internal.reference].location.path,
                             siblings: struct,
                         });
                     } catch (e) {
                         // Undo our change on error.  Rollback will take care of this when transactional but this
                         // handles the cases of 1.) no transaction, and 2.) error is caught within transaction
-                        target[name] = oldValue;
+                        target[storedKey] = oldValue;
 
                         throw e;
                     }
@@ -245,20 +269,28 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
 
     if (manage === PrimitiveManager) {
         // For primitives we don't need a manager so just proxy reads directly
-        descriptor.get = function (this: Wrapper) {
-            if (access.mayRead(this[SESSION], this[Internal.reference].location)) {
+        descriptor.get = function (this: Struct) {
+            if (access.mayRead(this[Internal.session], this[Internal.reference].location)) {
                 const struct = this[Internal.reference].value as Val.Dynamic;
                 if (struct === undefined) {
                     throw new PhantomReferenceError(this[Internal.reference].location);
                 }
                 if (struct[Val.properties]) {
-                    const properties = struct[Val.properties](this[Internal.reference].rootOwner, this[SESSION]);
+                    const properties = struct[Val.properties](
+                        this[Internal.reference].rootOwner,
+                        this[Internal.session],
+                    );
                     if (name in properties) {
                         return properties[name];
                     }
                 }
 
-                return struct[name];
+                const value = struct[name];
+                if (value !== undefined || id === undefined) {
+                    return value;
+                }
+
+                return struct[id];
             }
         };
     } else {
@@ -286,7 +318,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
         }
 
-        descriptor.get = function (this: Wrapper) {
+        descriptor.get = function (this: Struct) {
             let value;
 
             // Obtain the value.  Normally just struct[name] except in the case of Val.Dynamic
@@ -294,7 +326,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
             if ((struct as Val.Dynamic)[Val.properties]) {
                 const properties = (struct as Val.Dynamic)[Val.properties](
                     this[Internal.reference].rootOwner,
-                    this[SESSION],
+                    this[Internal.session],
                 );
                 if (name in properties) {
                     value = properties[name];
@@ -303,12 +335,15 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
                 }
             } else {
                 value = struct[name];
+                if (value === undefined && id !== undefined) {
+                    value = struct[id];
+                }
             }
 
             // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
             // visible.  For direct access to a property we should throw an error but that must be implemented at a
             // higher level because we cannot differentiate here
-            if (!access.mayRead(this[SESSION], this[Internal.reference].location)) {
+            if (!access.mayRead(this[Internal.session], this[Internal.reference].location)) {
                 return undefined;
             }
 
@@ -327,9 +362,9 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
 
             const assertWriteOk = (value: Val) => {
                 // Note - this needs to mirror behavior in the setter above
-                access.authorizeWrite(this[SESSION], this[Internal.reference].location);
+                access.authorizeWrite(this[Internal.session], this[Internal.reference].location);
                 if (validate) {
-                    validate(value, this[SESSION], {
+                    validate(value, this[Internal.session], {
                         path: this[Internal.reference].location.path,
                         siblings: this[Internal.reference].value,
                     });
@@ -339,7 +374,7 @@ function configureProperty(supervisor: RootSupervisor, schema: ValueModel) {
             // Clone the container before write
             const ref = ManagedReference(this[Internal.reference], name, assertWriteOk, cloneContainer);
 
-            ref.owner = manage(ref, this[SESSION]);
+            ref.owner = manage(ref, this[Internal.session]);
 
             return ref.owner;
         };

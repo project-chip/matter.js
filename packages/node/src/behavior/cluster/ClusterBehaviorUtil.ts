@@ -5,6 +5,7 @@
  */
 
 import { AsyncObservable, camelize, GeneratedClass, ImplementationError } from "#general";
+import type { Schema } from "#model";
 import {
     ClusterModel,
     DefaultValue,
@@ -16,12 +17,12 @@ import {
     Scope,
     ValueModel,
 } from "#model";
+import { Val } from "#protocol";
 import { Attribute, ClusterType } from "#types";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
-import { Val } from "../state/Val.js";
-import { Schema } from "../supervision/Schema.js";
 import type { ClusterBehavior } from "./ClusterBehavior.js";
+import { ClusterBehaviorCache } from "./ClusterBehaviorCache.js";
 
 const KNOWN_DEFAULTS = Symbol("knownDefaults");
 
@@ -45,9 +46,7 @@ export function introspectionInstanceOf(type: Behavior.Type) {
 /**
  * This is the actual implementation of ClusterBehavior.for().  The result must match {@link ClusterBehavior.Type}<C>.
  */
-export function createType<const C extends ClusterType>(cluster: C, base: Behavior.Type, schema?: Schema) {
-    const namesUsed = new Set<string>();
-
+export function createType(cluster: ClusterType, base: Behavior.Type, schema?: Schema) {
     if (schema === undefined) {
         if (base.schema) {
             schema = base.schema;
@@ -59,6 +58,11 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 
     schema = syncFeatures(schema, cluster);
 
+    const cached = ClusterBehaviorCache.get(cluster, base, schema);
+    if (cached) {
+        return cached;
+    }
+
     let name;
     if (base.name.startsWith(cluster.name)) {
         name = base.name;
@@ -69,7 +73,8 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
     // Mutation of schema will almost certainly result in logic errors so ensure that can't happen
     schema.freeze();
 
-    return GeneratedClass({
+    const namesUsed = new Set<string>();
+    const type = GeneratedClass({
         name,
         base,
 
@@ -99,7 +104,11 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         },
 
         instanceDescriptors: createDefaultCommandDescriptors(cluster, base),
-    });
+    }) as ClusterBehavior.Type;
+
+    ClusterBehaviorCache.set(cluster, base, schema, type);
+
+    return type;
 }
 
 /**

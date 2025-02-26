@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { exit } from "process";
-import { fileURLToPath } from "url";
+import { exit } from "node:process";
+import { fileURLToPath } from "node:url";
 import { Graph } from "../building/graph.js";
 import { ProjectBuilder } from "../building/project-builder.js";
 import { Project } from "../building/project.js";

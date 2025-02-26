@@ -30,6 +30,8 @@ import { CaseServerMessenger } from "./CaseMessenger.js";
 const logger = Logger.get("CaseServer");
 
 export class CaseServer implements ProtocolHandler {
+    readonly id = SECURE_CHANNEL_PROTOCOL_ID;
+
     #sessions: SessionManager;
     #fabrics: FabricManager;
 
@@ -56,10 +58,6 @@ export class CaseServer implements ProtocolHandler {
             // Destroy the unsecure session used to establish the secure Case session
             await exchange.session.destroy();
         }
-    }
-
-    getId(): number {
-        return SECURE_CHANNEL_PROTOCOL_ID;
     }
 
     private async handleSigma1(messenger: CaseServerMessenger) {
@@ -234,7 +232,7 @@ export class CaseServer implements ProtocolHandler {
                 caseAuthenticatedTags,
             });
             logger.info(
-                `session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                `Session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
                 "with CATs",

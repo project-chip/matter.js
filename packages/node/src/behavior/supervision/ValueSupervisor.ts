@@ -4,15 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Transaction } from "#general";
 import { AsyncObservable } from "#general";
-import { DataModelPath } from "#model";
-import type { AccessControl } from "../AccessControl.js";
+import { DataModelPath, Schema } from "#model";
+import type { AccessControl, Val } from "#protocol";
 import { ActionTracer } from "../context/ActionTracer.js";
-import type { Val } from "../state/Val.js";
-import type { Transaction } from "../state/transaction/Transaction.js";
 import type { ValidationLocation } from "../state/validation/location.js";
 import type { RootSupervisor } from "./RootSupervisor.js";
-import type { Schema } from "./Schema.js";
 
 /**
  * Value supervisor implements schema-based supervision of a specific value.
@@ -25,12 +23,11 @@ import type { Schema } from "./Schema.js";
  *
  *   - Managed instance generation
  *
- * Supervision is implemented via schema-driven runtime compilation.  We
- * perform as much logic as possible at startup to minimize overhead during
- * server operation.
+ * Supervision is implemented via schema-driven runtime compilation.  We perform as much logic as possible at startup to
+ * minimize overhead during server operation.
  *
- * This means we typically ingest schema, create a compact form of denormalized
- * metadata, and/or generate functions to perform required operations.
+ * This means we typically ingest schema, create a compact form of denormalized metadata, and/or generate functions to
+ * perform required operations.
  */
 export interface ValueSupervisor {
     /**
@@ -95,6 +92,12 @@ export namespace ValueSupervisor {
          * If present the session is associated with an online interaction.  Emits when the interaction ends.
          */
         interactionComplete?: AsyncObservable<[]>;
+
+        /**
+         * If true, structs initialize without named properties which are more expensive to install.  This is useful
+         * when implementing the Matter protocol where ID is the only value necessary.
+         */
+        protocol?: boolean;
     }
 
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;

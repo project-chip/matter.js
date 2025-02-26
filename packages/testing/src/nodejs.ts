@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { mkdir, writeFile } from "fs/promises";
-import type { Session } from "inspector/promises";
 import Mocha from "mocha";
-import { relative } from "path";
+import { mkdir, writeFile } from "node:fs/promises";
+import type { Session } from "node:inspector/promises";
+import { relative } from "node:path";
 import { adaptReporter, afterRun, beforeRun, extendApi, generalSetup, runMocha } from "./mocha.js";
 import { TestOptions } from "./options.js";
 import type { TestRunner } from "./runner.js";
@@ -93,7 +93,7 @@ class Profiler {
 
         let Session;
         try {
-            Session = (await import("inspector/promises")).Session;
+            Session = (await import("node:inspector/promises")).Session;
         } catch (e) {
             console.error(`We don't support profiling on this version of Node.js: ${e}`);
             return;

@@ -5,7 +5,7 @@
  */
 
 import { GeneratedClass } from "#general";
-import { Val } from "./Val.js";
+import { Val } from "#protocol";
 
 /**
  * State is a plain JS object.

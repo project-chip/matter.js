@@ -134,7 +134,7 @@ export class Graph {
             progress.info("built", formatTime(node.info.timestamp ?? 0));
             progress.info("dirty", node.isDirty ? colors.dim.red("yes") : colors.dim.green("no"));
             progress.info("dependencies", node.dependencies.map(formatDep).join(", "));
-            progress.shutdown();
+            progress.close();
         }
     }
 

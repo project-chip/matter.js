@@ -10,7 +10,7 @@ import "./util/node-shims.js";
 import "./global-definitions.js";
 
 import { Graph, Package, Project, ProjectBuilder } from "#tools";
-import { clear } from "console";
+import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";
@@ -123,7 +123,7 @@ export async function main(argv = process.argv) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
             inspect(await defaultDescriptor(runner));
-            progress.shutdown();
+            progress.close();
             return;
         }
 
@@ -156,7 +156,7 @@ export async function main(argv = process.argv) {
             await runner.runWeb(manual);
         }
 
-        progress.shutdown();
+        progress.close();
 
         if (args.forceExit) {
             process.exit(0);

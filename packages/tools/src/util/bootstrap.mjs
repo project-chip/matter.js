@@ -73,7 +73,14 @@ async function bootstrap() {
         await new Promise(resolve => {
             const proc = spawn(
                 esbuild,
-                ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning", "--sourcemap=inline"],
+                [
+                    "src/**/*.ts",
+                    "--outdir=dist/esm",
+                    "--format=esm",
+                    "--log-level=warning",
+                    "--sourcemap=inline",
+                    "--target=es2022",
+                ],
                 options,
             );
 

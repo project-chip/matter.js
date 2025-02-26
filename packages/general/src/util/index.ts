@@ -8,6 +8,7 @@ export * from "./Array.js";
 export * from "./Boot.js";
 export * from "./Bytes.js";
 export * from "./Cache.js";
+export * from "./Cancelable.js";
 export * from "./Construction.js";
 export * from "./DataReader.js";
 export * from "./DataReadQueue.js";
