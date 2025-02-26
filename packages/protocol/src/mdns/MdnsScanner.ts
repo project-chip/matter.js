@@ -1316,7 +1316,7 @@ export class MdnsScanner implements Scanner {
         // Fill in some defaults for convenience
         if (result.T === undefined) {
             result.T = 0; // TCP not supported
-        } else if (!((result.T & ~1) & 6)) {
+        } else if (!(result.T & ~1 & 6)) {
             // Value 1 is reserved and should be handled as 0 according to Matter spec,
             // else check if tcpClient (Bit 1) or tcpServer (Bit 2) or both are supported, all other values are invalid
             result.T = 0; // TCP not supported
