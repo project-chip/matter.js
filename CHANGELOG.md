@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.12.4 (2025-02-26)
 
 -   @matter/general
     - Adjustment: Do not accept listeners on read-only transactions
