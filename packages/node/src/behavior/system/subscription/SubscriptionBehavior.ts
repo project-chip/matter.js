@@ -189,7 +189,7 @@ export class SubscriptionBehavior extends Behavior {
     }
 
     async #removeSubscriptionIndex(index: number) {
-        this.context.transaction.addResources(this);
+        await this.context.transaction.addResources(this);
         await this.context.transaction.begin();
         this.state.subscriptions.splice(index, 1);
         await this.context.transaction.commit();
