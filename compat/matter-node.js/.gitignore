@@ -1,6 +1,0 @@
-/dist
-/build
-/node_modules
-/out
-*.tsbuildinfo
-testdata-storage

@@ -5,9 +5,8 @@
  */
 
 import { Logger } from "@matter/general";
-import { CommissionableDeviceIdentifiers } from "@project-chip/matter.js/common";
-import { VendorId } from "@project-chip/matter.js/datatype";
-import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
+import { CommissionableDeviceIdentifiers } from "@matter/protocol";
+import { ManualPairingCodeCodec, VendorId } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 

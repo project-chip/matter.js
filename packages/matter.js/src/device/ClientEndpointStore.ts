@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual } from "#compat/util.js";
-import { Construction, StorageContext } from "#general";
+import { Construction, isDeepEqual, StorageContext } from "#general";
 import { EndpointStore } from "#node";
 import { Val } from "@matter/protocol";
 
