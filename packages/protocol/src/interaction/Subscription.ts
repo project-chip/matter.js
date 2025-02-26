@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger, Observable } from "#general";
+import { AsyncObservable, InternalError, Logger } from "#general";
 import { type SecureSession } from "#session/SecureSession.js";
 import { TlvAttributePath, TlvDataVersionFilter, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 
@@ -29,7 +29,7 @@ export abstract class Subscription {
     #isClosed?: boolean;
     #isCanceledByPeer?: boolean;
     #criteria: SubscriptionCriteria;
-    #cancelled = Observable<[subscription: Subscription]>();
+    #cancelled = AsyncObservable<[subscription: Subscription]>();
     #maxIntervalMs?: number;
 
     constructor(session: SecureSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
