@@ -5,8 +5,9 @@
  */
 
 import { AsyncObservable, Time } from "#general";
-import { NodeId } from "#types";
+import { NodeId, TypeFromPartialBitSchema } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
+import { SupportedTransportsBitmap } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
@@ -45,14 +46,52 @@ export const FALLBACK_SPECIFICATION_VERSION = 0;
  */
 export const FALLBACK_MAX_PATHS_PER_INVOKE = 1;
 
+export const FALLBACK_MAX_TCP_MESSAGE_SIZE = 64000;
+
 export interface SessionParameters {
+    /**
+     * Minimum amount of time between sender retries when the destination node is Idle.
+     * This SHALL be greater than or equal to the maximum amount of time a node may be
+     * non-responsive to incoming messages when Idle.
+     * Default: 500ms
+     */
     idleIntervalMs: number;
+
+    /**
+     * Minimum amount of time between sender retries when the destination node is Active.
+     * This SHALL be greater than or equal to the maximum amount of time a node may be
+     * non-responsive to incoming messages when Active.
+     * Default: 300ms
+     */
     activeIntervalMs: number;
+
+    /**
+     * Minimum amount of time the node SHOULD stay active after network activity.
+     * Default: 4000ms
+     */
     activeThresholdMs: number;
+
+    /** Version of Data Model for the Session parameters side where it appears. */
     dataModelRevision: number;
+
+    /** Version of Interaction Model for the Session parameters side where it appears. */
     interactionModelRevision: number;
+
+    /** Version of Specification for the Session parameters side where it appears. */
     specificationVersion: number;
+
+    /** The maximum number of elements in the InvokeRequests list that the Node is able to process. */
     maxPathsPerInvoke: number;
+
+    /** A bitmap of the supported transport protocols in addition to MRP. */
+    supportedTransports: TypeFromPartialBitSchema<typeof SupportedTransportsBitmap>;
+
+    /**
+     * Maximum size of the message carried over TCP, excluding the framing message length
+     * field, that the node is capable of receiving from its peer.
+     * Default: 64000 bytes
+     */
+    maxTcpMessageSize: number; // matter message and protocol overhead and such
 }
 
 export type SessionParameterOptions = Partial<SessionParameters>;
@@ -73,6 +112,8 @@ export abstract class Session {
     protected readonly maxPathsPerInvoke: number;
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState: MessageReceptionState;
+    protected readonly supportedTransports: TypeFromPartialBitSchema<typeof SupportedTransportsBitmap>;
+    protected readonly maxTcpMessageSize: number;
 
     /**
      * If the ExchangeManager performs async work to clean up a session it sets this promise.  This is because
@@ -101,6 +142,8 @@ export abstract class Session {
                 interactionModelRevision = FALLBACK_INTERACTIONMODEL_REVISION,
                 specificationVersion = FALLBACK_SPECIFICATION_VERSION,
                 maxPathsPerInvoke = FALLBACK_MAX_PATHS_PER_INVOKE,
+                supportedTransports = {}, // no TCP support by default
+                maxTcpMessageSize = FALLBACK_MAX_TCP_MESSAGE_SIZE,
             } = {},
             setActiveTimestamp,
         } = args;
@@ -114,6 +157,8 @@ export abstract class Session {
         this.interactionModelRevision = interactionModelRevision;
         this.specificationVersion = specificationVersion;
         this.maxPathsPerInvoke = maxPathsPerInvoke;
+        this.supportedTransports = supportedTransports;
+        this.maxTcpMessageSize = maxTcpMessageSize;
         if (setActiveTimestamp) {
             this.activeTimestamp = this.timestamp;
         }
@@ -155,6 +200,8 @@ export abstract class Session {
             interactionModelRevision,
             specificationVersion,
             maxPathsPerInvoke,
+            supportedTransports,
+            maxTcpMessageSize,
         } = this;
         return {
             idleIntervalMs,
@@ -164,6 +211,8 @@ export abstract class Session {
             interactionModelRevision,
             specificationVersion,
             maxPathsPerInvoke,
+            supportedTransports,
+            maxTcpMessageSize,
         };
     }
 

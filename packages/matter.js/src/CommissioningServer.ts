@@ -61,7 +61,6 @@ import {
     ManualPairingCodeCodec,
     ProductDescription,
     QrPairingCodeCodec,
-    TypeFromBitSchema,
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
@@ -768,7 +767,7 @@ export class CommissioningServer extends MatterNode {
      * Return the pairing information for the device
      */
     getPairingCode(
-        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+        discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
     ): DevicePairingInformation {
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
