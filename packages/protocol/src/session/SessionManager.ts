@@ -378,14 +378,16 @@ export class SessionManager {
         });
     }
 
-    async removeAllSessionsForNode(address: PeerAddress, sendClose = false) {
+    async removeAllSessionsForNode(address: PeerAddress, sendClose = false, closeBeforeCreatedTimestamp?: number) {
         await this.#construction;
 
         for (const session of this.#sessions) {
             if (!session.isSecure) continue;
+            if (closeBeforeCreatedTimestamp !== undefined && session.createdAt >= closeBeforeCreatedTimestamp) continue;
             const secureSession = session;
             if (secureSession.peerIs(address)) {
                 await secureSession.destroy(sendClose, false);
+                this.#sessions.delete(session);
             }
         }
     }
@@ -563,17 +565,12 @@ export class SessionManager {
     }
 
     /** Clears all subscriptions for a given node and returns how many were cleared. */
-    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
+    async clearSubscriptionsForNode(peerAddress: PeerAddress, flushSubscriptions?: boolean) {
         let clearedCount = 0;
         for (const session of this.#sessions) {
-            if (session.fabric?.fabricIndex !== fabricIndex) {
-                continue;
+            if (PeerAddress.is(session.peerAddress, peerAddress)) {
+                clearedCount += await session.clearSubscriptions(flushSubscriptions, true);
             }
-            if (session.peerNodeId !== nodeId) {
-                continue;
-            }
-            await session.clearSubscriptions(flushSubscriptions);
-            clearedCount++;
         }
         return clearedCount;
     }

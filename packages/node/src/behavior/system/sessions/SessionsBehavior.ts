@@ -6,8 +6,9 @@
 
 import { EventEmitter, Observable } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, SecureSession, SessionManager } from "#protocol";
+import { ExposedFabricInformation, SecureSession, SessionManager, Subscription } from "#protocol";
 import { NodeId } from "#types";
+import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
@@ -24,10 +25,7 @@ export class SessionsBehavior extends Behavior {
         if (env.has(SessionManager)) {
             this.#enterOnlineMode(env.get(SessionManager));
         }
-
-        const sessionManagerEvents = env.eventsFor(SessionManager);
-        this.reactTo(sessionManagerEvents.added, this.#enterOnlineMode);
-        this.reactTo(sessionManagerEvents.deleted, this.#enterOfflineMode);
+        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).offline, this.#enterOfflineMode);
     }
 
     #convertToExposedSession(session: SecureSession): SessionsBehavior.Session {
@@ -48,7 +46,7 @@ export class SessionsBehavior extends Behavior {
 
         this.reactTo(sessions.sessions.deleted, this.#sessionClosed);
 
-        this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged);
+        this.reactTo(sessions.subscriptionsChanged, this.#subscriptionsChanged, { lock: true });
     }
 
     #sessionOpened(session: SecureSession) {
@@ -69,10 +67,16 @@ export class SessionsBehavior extends Behavior {
         this.events.closed.emit(this.#convertToExposedSession(session));
     }
 
-    #subscriptionsChanged(session: SecureSession) {
+    #subscriptionsChanged(session: SecureSession, subscription: Subscription) {
         if (session.isPase) {
             return;
         }
+
+        // When subscription was added then inform SubscriptionBehavior
+        if (session.subscriptions.has(subscription)) {
+            this.events.subscriptionAdded.emit(subscription);
+        }
+
         const sessionEntry = this.state.sessions[session.id];
         if (sessionEntry === undefined) {
             return;
@@ -108,5 +112,6 @@ export namespace SessionsBehavior {
         opened = Observable<[session: Session]>();
         closed = Observable<[session: Session]>();
         subscriptionsChanged = Observable<[session: Session]>();
+        subscriptionAdded = Observable<[subscription: Subscription]>();
     }
 }

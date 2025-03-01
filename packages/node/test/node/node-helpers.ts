@@ -7,8 +7,16 @@
 import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
-import { CommissioningServer, NetworkServer } from "#index.js";
-import { ChannelManager, Fabric, FabricManager, InteractionServerMessenger, Message, SessionType } from "#protocol";
+import { CommissioningServer } from "#index.js";
+import {
+    ChannelManager,
+    Fabric,
+    FabricManager,
+    InteractionServer,
+    InteractionServerMessenger,
+    Message,
+    SessionType,
+} from "#protocol";
 import {
     NodeId,
     TlvInvokeRequest,
@@ -199,7 +207,7 @@ export namespace interaction {
     export async function connect(node: MockServerNode, fabric: Fabric) {
         const exchange = await node.createExchange({ fabric });
 
-        const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
+        const interactionServer = node.env.get(InteractionServer);
 
         return { exchange, interactionServer };
     }
@@ -246,7 +254,7 @@ export namespace interaction {
         );
 
         const data = result.payload?.next();
-        return typeof data.value === "object" && "attributeData" in data.value
+        return typeof data?.value === "object" && "attributeData" in data.value
             ? data.value.attributeData?.payload
             : undefined;
     }

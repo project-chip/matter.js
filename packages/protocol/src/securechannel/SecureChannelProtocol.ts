@@ -28,9 +28,7 @@ import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchem
 const logger = Logger.get("SecureChannelProtocol");
 
 export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
-    getId(): number {
-        return SECURE_CHANNEL_PROTOCOL_ID;
-    }
+    readonly id = SECURE_CHANNEL_PROTOCOL_ID;
 
     async onNewExchange(exchange: MessageExchange, message: Message) {
         const messageType = message.payloadHeader.messageType;

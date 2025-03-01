@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "#general";
+import { AsyncObservable, Time } from "#general";
 import { NodeId } from "#types";
 import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -62,6 +62,7 @@ export abstract class Session {
     abstract get closingAfterExchangeFinished(): boolean;
     #manager?: SessionManager;
     timestamp = Time.nowMs();
+    readonly createdAt = Time.nowMs();
     activeTimestamp = 0;
     protected readonly idleIntervalMs: number;
     protected readonly activeIntervalMs: number;
@@ -76,9 +77,10 @@ export abstract class Session {
     /**
      * If the ExchangeManager performs async work to clean up a session it sets this promise.  This is because
      * historically we didn't return from destroy() until ExchangeManager was complete.  Not sure if this is entirely
-     * necessary but it makes sense so this allows us to maintain the old behavior.
+     * necessary, but it makes sense so this allows us to maintain the old behavior.
      */
     closer?: Promise<void>;
+    #destroyed = AsyncObservable<[]>();
 
     constructor(args: {
         manager?: SessionManager;
@@ -115,6 +117,10 @@ export abstract class Session {
         if (setActiveTimestamp) {
             this.activeTimestamp = this.timestamp;
         }
+    }
+
+    get destroyed() {
+        return this.#destroyed;
     }
 
     notifyActivity(messageReceived: boolean) {

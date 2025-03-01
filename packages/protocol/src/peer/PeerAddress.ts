@@ -86,3 +86,17 @@ export class PeerAddressMap<T> extends Map<PeerAddress, T> {
         return super.get(PeerAddress(key));
     }
 }
+
+export class PeerAddressSet extends Set<PeerAddress> {
+    override add(value: PeerAddress) {
+        return super.add(PeerAddress(value));
+    }
+
+    override has(value: PeerAddress) {
+        return super.has(PeerAddress(value));
+    }
+
+    override delete(value: PeerAddress) {
+        return super.delete(PeerAddress(value));
+    }
+}

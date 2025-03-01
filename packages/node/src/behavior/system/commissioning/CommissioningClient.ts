@@ -9,6 +9,7 @@ import { ImplementationError, NotImplementedError, ServerAddress, Time } from "#
 import { DatatypeModel, FieldElement } from "#model";
 import type { ClientNode } from "#node/ClientNode.js";
 import { Node } from "#node/Node.js";
+import { IdentityService } from "#node/server/IdentityService.js";
 import {
     CommissioningMode,
     ControllerCommissioner,
@@ -99,10 +100,13 @@ export class CommissioningClient extends Behavior {
 
         const commissioner = this.endpoint.env.get(ControllerCommissioner);
 
+        const identityService = this.endpoint.env.get(IdentityService);
+        const address = identityService.assignNodeAddress(node, fabric.fabricIndex, options.nodeId);
+
         const commissioningOptions: LocatedNodeCommissioningOptions = {
             addresses,
             fabric,
-            nodeId: options.nodeId,
+            nodeId: address.nodeId,
             passcode,
             discoveryData: this.descriptor,
         };
@@ -111,8 +115,14 @@ export class CommissioningClient extends Behavior {
             commissioningOptions.finalizeCommissioning = this.finalizeCommissioning.bind(this);
         }
 
-        const address = await commissioner.commission(commissioningOptions);
-        this.state.peerAddress = address;
+        try {
+            await commissioner.commission(commissioningOptions);
+            this.state.peerAddress = address;
+        } finally {
+            if (this.state.peerAddress !== address) {
+                identityService.releaseNodeAddress(address);
+            }
+        }
 
         return node;
     }
@@ -175,7 +185,9 @@ export class CommissioningClient extends Behavior {
                 ],
             }),
             FieldElement({ name: "discoveredAt", type: "systime-ms", quality: "N", conformance: "M" }),
-            FieldElement({ name: "ttl", type: "number", quality: "N" }),
+            FieldElement({ name: "onlineAt", type: "systime-ms" }),
+            FieldElement({ name: "offlineAt", type: "systime-ms" }),
+            FieldElement({ name: "ttl", type: "uint32", quality: "N" }),
             FieldElement({ name: "deviceIdentifier", type: "string", quality: "N" }),
             FieldElement({ name: "discriminator", type: "uint16", quality: "N" }),
             FieldElement({ name: "commissioningMode", type: "uint8", quality: "N" }),
@@ -212,8 +224,6 @@ export namespace CommissioningClient {
         /**
          * Known network addresses for the device.  If this is undefined the node has not been located on any network
          * interface.
-         *
-         * TODO - track discovery time and TTL on individual addresses
          */
         addresses?: ServerAddress[];
 
@@ -221,6 +231,16 @@ export namespace CommissioningClient {
          * Time at which the device was discovered.
          */
         discoveredAt: number = Time.nowMs();
+
+        /**
+         * Time at which we discovered the device's current operational addresses.
+         */
+        onlineAt?: number;
+
+        /**
+         * Time at which we concluded the device's current operational address is unreachable.
+         */
+        offlineAt?: number;
 
         /**
          * The TTL of the discovery record if applicable.

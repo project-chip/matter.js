@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "#general";
+import { AsyncObservable, InternalError, Logger } from "#general";
 import { type SecureSession } from "#session/SecureSession.js";
 import { TlvAttributePath, TlvDataVersionFilter, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 
@@ -29,15 +29,13 @@ export abstract class Subscription {
     #isClosed?: boolean;
     #isCanceledByPeer?: boolean;
     #criteria: SubscriptionCriteria;
+    #cancelled = AsyncObservable<[subscription: Subscription]>();
+    #maxIntervalMs?: number;
 
     constructor(session: SecureSession, id: SubscriptionId, criteria: SubscriptionCriteria) {
         this.#session = session;
         this.#id = id;
         this.#criteria = criteria;
-
-        // TODO Do not add to session but to node/peer
-        this.#session.subscriptions.add(this);
-        logger.debug(`Added subscription ${this.#id} to ${this.#session.name}`);
     }
 
     get id() {
@@ -60,6 +58,28 @@ export abstract class Subscription {
         return this.#session;
     }
 
+    get cancelled() {
+        return this.#cancelled;
+    }
+
+    get maxIntervalMs(): number {
+        if (this.#maxIntervalMs === undefined) {
+            throw new InternalError("Subscription MaxIntervalMs accessed before it was set");
+        }
+        return this.#maxIntervalMs;
+    }
+
+    set maxIntervalMs(value: number) {
+        if (this.#maxIntervalMs !== undefined) {
+            throw new InternalError("Subscription MaxIntervalMs set twice. This should never happen.");
+        }
+        this.#maxIntervalMs = value;
+    }
+
+    get maxInterval(): number {
+        return Math.ceil(this.maxIntervalMs / 1000);
+    }
+
     /**
      * Update session state.  This probably is meaningless except in a server context.
      */
@@ -77,7 +97,7 @@ export abstract class Subscription {
     }
 
     /** Close the subscription with the option to gracefully flush outstanding data. */
-    abstract close(graceful: boolean): Promise<void>;
+    abstract close(graceful: boolean, cancelledByPeer?: boolean): Promise<void>;
 
     /**
      * Destroy the subscription. Unsubscribe from all attributes and events and stop all timers.
@@ -86,5 +106,13 @@ export abstract class Subscription {
         this.#isClosed = true;
         this.#session.subscriptions.delete(this);
         logger.debug(`Removed subscription ${this.id} from ${this.#session.name}`);
+
+        this.#cancelled.emit(this);
+    }
+
+    protected activate() {
+        // TODO Do not add to session but to node/peer
+        this.#session.subscriptions.add(this);
+        logger.debug(`Added subscription ${this.#id} to ${this.#session.name}`);
     }
 }

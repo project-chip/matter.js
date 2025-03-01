@@ -156,7 +156,8 @@ export default function commands(theNode: MatterNode) {
                         const autoSubscribe = minSubscriptionInterval !== undefined;
 
                         for (const nodeIdToProcess of nodeIds) {
-                            await theNode.commissioningController.connectNode(nodeIdToProcess, {
+                            const node = await theNode.commissioningController.getNode(nodeIdToProcess);
+                            node.connect({
                                 autoSubscribe,
                                 subscribeMinIntervalFloorSeconds: autoSubscribe ? minSubscriptionInterval : undefined,
                                 subscribeMaxIntervalCeilingSeconds: autoSubscribe ? maxSubscriptionInterval : undefined,
