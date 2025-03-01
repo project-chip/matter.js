@@ -21,6 +21,7 @@ import {
 } from "#protocol";
 import { StatusCode, StatusResponseError } from "#types";
 import { Behavior } from "../../Behavior.js";
+import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 const logger = Logger.get("SubscriptionBehavior");
 
 /** Timeout in seconds to wait for responses or discovery of the peer node when trying to re-establish a subscription. */
@@ -44,6 +45,9 @@ export class SubscriptionBehavior extends Behavior {
             this.internal.formerSubscriptions = deepCopy(this.state.subscriptions);
         }
         this.state.subscriptions = [];
+
+        const sessions = this.agent.get(SessionsBehavior);
+        this.reactTo(sessions.events.subscriptionAdded, this.#addSubscription, { lock: true });
     }
 
     static override schema = new DatatypeModel(
@@ -130,7 +134,7 @@ export class SubscriptionBehavior extends Behavior {
         ),
     );
 
-    addSubscription(subscription: Subscription) {
+    #addSubscription(subscription: Subscription) {
         if (this.state.persistenceEnabled === false || !(subscription instanceof ServerSubscription)) return;
 
         const {
@@ -178,8 +182,7 @@ export class SubscriptionBehavior extends Behavior {
     }
 
     #subscriptionCancelled(subscription: Subscription): MaybePromise {
-        if (subscription.isCanceledByPeer) {
-            if (this.state.persistenceEnabled === false) return;
+        if (subscription.isCanceledByPeer && this.state.persistenceEnabled !== false) {
             const { id } = subscription;
             const subscriptionIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
             if (subscriptionIndex !== -1) {
