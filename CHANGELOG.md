@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.12.5 (2025-03-02)
 
 -   @matter/node
     - Fix: Fixed edge cases where subscriptions were not persisted correctly
