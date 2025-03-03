@@ -6,7 +6,7 @@
 
 import { Logger } from "@matter/general";
 import { ClusterModel, EventModel, MatterModel } from "@matter/model";
-import { ClusterId } from "@project-chip/matter.js/datatype";
+import { ClusterId } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { camelize } from "../util/String";

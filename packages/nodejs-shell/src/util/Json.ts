@@ -6,7 +6,7 @@
 
 import { Bytes } from "@matter/general";
 import { ValueModel } from "@matter/model";
-import { ValidationDatatypeMismatchError } from "@project-chip/matter.js/common";
+import { ValidationDatatypeMismatchError } from "@matter/types";
 import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {

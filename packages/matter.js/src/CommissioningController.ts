@@ -46,7 +46,6 @@ import {
 } from "#types";
 import { CommissioningControllerNodeOptions, NodeStates, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
-import { MatterNode } from "./MatterNode.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -132,7 +131,7 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 };
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
-export class CommissioningController extends MatterNode {
+export class CommissioningController {
     #started = false;
     #ipv4Disabled?: boolean;
     readonly #listeningAddressIpv4?: string;
@@ -157,7 +156,6 @@ export class CommissioningController extends MatterNode {
      * @param options The options for the CommissioningController
      */
     constructor(options: CommissioningControllerOptions) {
-        super();
         this.#options = options;
     }
 
