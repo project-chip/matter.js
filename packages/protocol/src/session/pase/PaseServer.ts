@@ -127,12 +127,22 @@ export class PaseServer implements ProtocolHandler {
         const responderSessionId = await this.sessions.getNextAvailableSessionId(); // Responder Session Id
         const responderRandom = Crypto.getRandom();
 
+        const responderSessionParams = this.sessions.sessionParameters;
+        const tcpSupported =
+            responderSessionParams.supportedTransports?.tcpClient ||
+            responderSessionParams.supportedTransports?.tcpServer ||
+            false;
         const responsePayload = await messenger.sendPbkdfParamResponse({
             initiatorRandom,
             responderRandom,
             responderSessionId,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
-            responderSessionParams: this.sessions.sessionParameters, // responder session parameters
+            responderSessionParams: {
+                ...responderSessionParams,
+                // The MAX_TCP_MESSAGE_SIZE field SHALL only be present if the SUPPORTED_TRANSPORTS field
+                // indicates that TCP is supported.
+                maxTcpMessageSize: tcpSupported ? responderSessionParams.maxTcpMessageSize : undefined,
+            },
         });
 
         // Process pake1 and send pake2
