@@ -16,22 +16,21 @@ Specification](https://csa-iot.org/developer-resource/specifications-download-re
 
 Subfolders support specific functions:
 
--   [elements/](elements) - types describing the data model
--   [models/](models) - classes implementing an operational version of the data model
--   [standard/](standard) - the full data model defined by the Matter Specification
--   [definitions/](definitions) - support enums and types
--   [aspects/](aspects) - parsers and ASTs for fields that utilize domain specific languages
--   [logic/](logic) - various algorithms that operate on models
+-   [elements/](src/elements) - types describing the data model
+-   [models/](src/models) - classes implementing an operational version of the data model
+-   [standard/](src/standard) - the full data model defined by the Matter Specification
+-   [aspects/](src/aspects) - parsers and ASTs for fields that utilize domain specific languages
+-   [logic/](src/logic) - various algorithms that operate on models
 
-The datatypes in [elements](elements) model Matter elements using TypeScript types. _Elements_ are a formal component
+The datatypes in [elements](src/elements) model Matter elements using TypeScript types. _Elements_ are a formal component
 of the Matter specification that describe individual structures in the data model. Our element definitions are subtypes
-of [BaseElement](elements/BaseElement.ts).
+of [BaseElement](src/elements/BaseElement.ts).
 
-For each element definition, a class in [models](models) offers a concrete operational implementation. This is the API
+For each element definition, a class in [models](src/models) offers a concrete operational implementation. This is the API
 to use if you need to work with the data model beyond simple data modeling. Our models are all subtypes of
-[Model](models/Model.ts).
+[Model](src/models/Model.ts).
 
-[MatterModel](models/MatterModel.ts) is the primary entrypoint to the API.
+[MatterModel](src/models/MatterModel.ts) is the primary entrypoint to the API.
 
 ## Usage
 
@@ -115,7 +114,7 @@ We still include the CHIP generator and model in our repository but no longer us
 
 ### Standard (final) data model
 
-Unlike above data models, the _standard data model_ in [src/model/standard](./standard) is part of the matter.js public
+Unlike above data models, the _standard data model_ in [src/model/standard](./src/standard) is part of the matter.js public
 API. This represents our best attempt at a complete Matter data model.
 
 [generate-model.ts](../../codegen/src/generate-model.ts) creates this model by analyzing and combining elements from
