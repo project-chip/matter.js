@@ -6,7 +6,7 @@ matter.js also allows it to start multiple devices in one process. With this esp
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../examples/README.md#cli-usage).
 
 The parameters are like with the composed device or bridge.
 

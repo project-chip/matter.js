@@ -11,6 +11,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/protocol
+    - Feature: Supporting Matter 1.4
+
+-   @matter/types
+    - Feature: Supporting Matter 1.4
+
 -   @project-chip/matter.js
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
     - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.

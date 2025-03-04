@@ -6,7 +6,7 @@ A Bridge is used to expose multiple devices at once.
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../examples/README.md#cli-usage).
 
 The usage and parameter are comparable to above, but the bridge adds support for multiple types and on/off commands:
 
