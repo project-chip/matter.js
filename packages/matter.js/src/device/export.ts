@@ -11,9 +11,7 @@ export * from "./ComposedDevice.js";
 export * from "./Device.js";
 export * from "./DeviceInformation.js";
 export * from "./DeviceTypes.js";
-export * from "./DimmableDevices.js";
 export * from "./Endpoint.js";
-export * from "./OnOffDevices.js";
 export * from "./PairedNode.js";
 
 // Compat

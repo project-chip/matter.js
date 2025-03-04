@@ -28,6 +28,7 @@ import {
 import {
     AttributeId,
     ClusterId,
+    ClusterType,
     CommandId,
     EndpointNumber,
     EventId,
@@ -53,21 +54,18 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
     WildcardPathFlagsBitmap,
+    WritableAttribute,
 } from "#types";
-import { Specification } from "@matter/model";
+import { AccessLevel, Specification } from "@matter/model";
 import {
     AccessControlCluster,
-    AccessLevel,
     AdministratorCommissioning,
     BasicInformation,
     BasicInformationCluster,
-    ClusterServer,
-    ClusterServerObj,
-    ClusterType,
     OnOffCluster,
     WiFiNetworkDiagnosticsCluster,
-    WritableAttribute,
-} from "@project-chip/matter.js/cluster";
+} from "@matter/types/clusters";
+import { ClusterServer, ClusterServerObj } from "@project-chip/matter.js/cluster";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
 import * as assert from "node:assert";
 import {

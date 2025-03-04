@@ -5,10 +5,9 @@
  */
 
 import { Logger, MatterError } from "@matter/general";
+import { ManualPairingCodeCodec, NodeId, QrCode } from "@matter/types";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@matter/types/clusters";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
-import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
-import { NodeId } from "@project-chip/matter.js/datatype";
-import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { createDiagnosticCallbacks } from "./cmd_nodes";

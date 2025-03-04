@@ -6,9 +6,8 @@
 
 import { Diagnostic, Logger } from "@matter/general";
 import { AttributeModel, ClusterModel, MatterModel } from "@matter/model";
-import { SupportedAttributeClient } from "@project-chip/matter.js/cluster";
-import { ValidationError } from "@project-chip/matter.js/common";
-import { AttributeId, ClusterId, EndpointNumber } from "@project-chip/matter.js/datatype";
+import { SupportedAttributeClient } from "@matter/protocol";
+import { AttributeId, ClusterId, EndpointNumber, ValidationError } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";

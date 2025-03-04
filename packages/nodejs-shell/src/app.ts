@@ -86,19 +86,14 @@ async function main() {
                             type: "string",
                             default: undefined,
                         },
-                        legacyStorage: {
-                            description: "Use legacy storage structure (pre 0.11)",
-                            type: "boolean",
-                            default: false,
-                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile, legacyStorage } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
 
-                theNode = new MatterNode(nodeNum, netInterface, legacyStorage);
+                theNode = new MatterNode(nodeNum, netInterface);
                 await theNode.initialize(factoryReset);
 
                 if (logfile !== undefined) {

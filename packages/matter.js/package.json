@@ -95,66 +95,6 @@
                 "types": "./dist/cjs/device/export.d.ts",
                 "default": "./dist/cjs/device/export.js"
             }
-        },
-        "./behavior/*": {
-            "import": {
-                "types": "./dist/esm/compat/behavior/*.d.ts",
-                "default": "./dist/esm/compat/behavior/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/behavior/*.d.ts",
-                "default": "./dist/cjs/compat/behavior/*.js"
-            }
-        },
-        "./behaviors/*": {
-            "import": {
-                "types": "./dist/esm/forwards/behaviors/*.d.ts",
-                "default": "./dist/esm/forwards/behaviors/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/forwards/behaviors/*.d.ts",
-                "default": "./dist/cjs/forwards/behaviors/*.js"
-            }
-        },
-        "./tags/*": {
-            "import": {
-                "types": "./dist/esm/forwards/tags/*.d.ts",
-                "default": "./dist/esm/forwards/tags/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/forwards/tags/*.d.ts",
-                "default": "./dist/cjs/forwards/tags/*.js"
-            }
-        },
-        "./devices/*": {
-            "import": {
-                "types": "./dist/esm/forwards/devices/*.d.ts",
-                "default": "./dist/esm/forwards/devices/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/forwards/devices/*.d.ts",
-                "default": "./dist/cjs/forwards/devices/*.js"
-            }
-        },
-        "./endpoints/*": {
-            "import": {
-                "types": "./dist/esm/forwards/endpoints/*.d.ts",
-                "default": "./dist/esm/forwards/endpoints/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/forwards/endpoints/*.d.ts",
-                "default": "./dist/cjs/forwards/endpoints/*.js"
-            }
-        },
-        "./*": {
-            "import": {
-                "types": "./dist/esm/compat/*.d.ts",
-                "default": "./dist/esm/compat/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/*.d.ts",
-                "default": "./dist/cjs/compat/*.js"
-            }
         }
     },
     "types": "dist/esm/export.d.ts",
@@ -166,20 +106,8 @@
             "cluster/*": [
                 "/dist/cjs/cluster/export.d.ts"
             ],
-            "devices/*": [
-                "/dist/cjs/forwards/devices/*.d.ts"
-            ],
-            "endpoints/*": [
-                "/dist/cjs/forwards/endpoints/*.d.ts"
-            ],
-            "behaviors/*": [
-                "/dist/cjs/forwards/behaviors/*.d.ts"
-            ],
             ".": [
                 "/dist/cjs/export.d.ts"
-            ],
-            "*": [
-                "/dist/cjs/compat/*.d.ts"
             ]
         }
     },

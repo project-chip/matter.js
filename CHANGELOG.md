@@ -17,6 +17,13 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/types
     - Feature: Supporting Matter 1.4
 
+-   @project-chip/matter.js
+    - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
+    - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.
+
+-   @project-chip/* packages (beside above)
+    - Breaking: Packages are removed! Please use the new packages under @matter/* if needed
+
 ### 0.12.5 (2025-03-02)
 
 -   @matter/node
