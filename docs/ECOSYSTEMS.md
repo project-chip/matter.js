@@ -12,7 +12,7 @@ Table Legend:
 - "MDL Section" column identifies the relevant section in the Matter Device Library Specification Version 1.2 (Oct. 18, 2023).
 - "ID" refers to the device type ID as set out in each device type's "Classification" section in the the MDL.
 
-| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |  **Google**   | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assisitant <br>2024.5.2** | **flic**  |
+| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |  **Google**   | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assistant <br>2024.5.2** | **flic**  |
 |------------------|-----------------------------------------------------|:------------------------:|:-------------:|:----------:|:---------------:|:------------:|:--------:|:--------------------------------:|:---------:|
 |                  | **Bridge Support**                                  |            X             |       X       |     X      |        X        |      -       |    -     |                X                 |   X       |
 |                  | **Composed Devices Support**                        |            X             |       X       |    X(1)    |        -        |      -       |    -     |                X                 |   ?       |
