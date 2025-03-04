@@ -38,14 +38,14 @@
         "@matter/general": "*",
         "@matter/nodejs": "*",
         "@matter/protocol": "*",
-        "@react-native-async-storage/async-storage": "^2.1.0",
+        "@react-native-async-storage/async-storage": "^2.1.2",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
-        "@types/node": "^22.13.5",
+        "@types/node": "^22.13.9",
         "jwk-to-pem": "^2.0.7",
-        "react-native-ble-plx": "^3.4.0",
+        "react-native-ble-plx": "^3.5.0",
         "react-native-polyfill-globals": "^3.1.0",
-        "react-native-quick-crypto": "^0.7.11",
+        "react-native-quick-crypto": "^0.7.12",
         "react-native-udp": "^4.1.7"
     },
     "devDependencies": {
