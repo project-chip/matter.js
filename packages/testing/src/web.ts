@@ -26,7 +26,9 @@ export async function testWeb(runner: TestRunner, manual: boolean) {
             const server = express()
                 .use(express.static(Package.workspace.resolve("node_modules")))
                 .use(express.static(Package.workspace.path))
-                .get("/", (_, res) => res.send(buildIndex(bundlePath)))
+                .get("/", (_, res) => {
+                    res.send(buildIndex(bundlePath));
+                })
                 .listen(0, "localhost", () => resolve(server));
         } catch (e) {
             reject(e as Error);
