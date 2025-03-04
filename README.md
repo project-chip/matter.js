@@ -184,7 +184,7 @@ You can use `npm run build-clean` on the root level to build all packages from s
 
 You can use `npm run test` on the root level to run all tests for all packages.
 
-Special testing using the Chip-Tool-Certification tests is available in the package matter-node.js-examples. Please refer to the [README.md](packages/matter-node.js/README.md#chip-tool-certification-testing) in the package for more details.
+Special testing using the Chip-Tool-Certification tests is available in the package chip-testing. Please refer to the [README.md](chip-testing/README.md) in the package for more details.
 
 ## API documentation
 
@@ -205,7 +205,7 @@ Native support.  For other environments you will need to implement a few platfor
 - **Crypto**: Until we have a pure JavaScript implementation of the required crypto functions, a native implementation is needed. The [Crypto Interface](packages/general/src/crypto/Crypto.ts) needs to be implemented which includes methods to generate random numbers, generate keys and to encrypt/decrypt data with various algorithms.
 - **Storage**: The Storage implementation needs to provide a way to store and retrieve data, easiest in a key-value form. The [Storage Interface](packages/general/src/storage/Storage.ts) needs to be implemented which includes methods to store and retrieve data.
 - **Time**: We provided a time implementation compatible with any modern JS environment.  You can replace our implementation by implementing he [Time Interface](packages/general/src/time/Time.ts) needs to be implemented which includes methods to get the current time in milliseconds. 
-- **BLE**: If your implementation is not Ethernet based or Pre-Connected to an IP network you need to provide a BLE implementation. The [BLE Interface](packages/general/src/protocol/Ble.ts) needs to be implemented which includes methods to start and stop BLE advertising and to connect to a BLE device. Depending on if you implement a Controller or Device you need to implement the Peripheral and Broadcaster (Device) or Central and Scanner (Controller) BLE interfaces. **For a device the platform you implement needs to allow to send custom "Manufacturer data" in the BLE advertising packet!**
+- **BLE**: If your implementation is not Ethernet based or Pre-Connected to an IP network you need to provide a BLE implementation. The [BLE Interface](packages/protocol/src/ble/Ble.ts) needs to be implemented which includes methods to start and stop BLE advertising and to connect to a BLE device. Depending on if you implement a Controller or Device you need to implement the Peripheral and Broadcaster (Device) or Central and Scanner (Controller) BLE interfaces. **For a device the platform you implement needs to allow to send custom "Manufacturer data" in the BLE advertising packet!**
 - **Wi-Fi/Thread Commissioning**: To implement a device that requires commissioning to join a network, you must provide a commissioning method for Wifi or thread. This must include methods to scan for networks, configure the device for a network and to connect to a network. The implementation in this case must implement WifiNetworkCommissioning and/or ThreadNetworkCommissioning clusters.
 - **Intl**: For some internationalization features (e.g. reporting locale or calendar type) we use standard JavaScript internationalization APIs. If your platform does not support these will need to add polyfills.
 

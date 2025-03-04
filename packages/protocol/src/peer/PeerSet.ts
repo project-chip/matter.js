@@ -603,8 +603,8 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         } catch (error) {
             if (error instanceof NoResponseTimeoutError) {
                 logger.debug(
-                    `Failed to resume connection to ${address} connection with ${ip}:${port}, discover the node:`,
-                    error,
+                    `Failed to resume connection to ${address} connection with ${ip}:${port}, discovering the node now:`,
+                    error.message ? error.message : error,
                 );
                 // We remove all sessions, this also informs the PairedNode class
                 await this.#sessions.removeAllSessionsForNode(address, false, startTime);

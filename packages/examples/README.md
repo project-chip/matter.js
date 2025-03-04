@@ -55,7 +55,7 @@ Some command line parameters, for example those used to set the level of logging
 ### Common CLI parameter for all examples
 The following CLI parameters are the same for all examples:
 
-* -clearstorage: the storage location will be reset on start of the process. The sorage location is set via parameter "-store" (see concrete examples below)
+* -clearstorage: the storage location will be reset on start of the process. The storage location is set via parameter "-store" (see concrete examples below)
 * -loglevel: the log level to use (default: debug, possible values: fatal, error, warn, info, debug)
 * -logformat: the log format to use (default: ansi (if executed in a shell/tty), else plain, possible values: ansi, plain, html)
 

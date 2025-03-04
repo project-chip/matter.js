@@ -33,7 +33,7 @@ There are other parameters available to enable BLE and define the HCI device to 
 Please note the extra `--` to separate the npm parameters from the shell parameters!
 
 ## matter.js v0.11 Storage adjustment!
-In matter.js 0.11 we adjusted the storage to the new environment based one. This means that by default the storage is in the user directory in .matter/shell-XX where XX is the nodeBum you provided as parameter. You can adjust the storage base location with "--storage-path=..." as parameter.
+In matter.js 0.11 we adjusted the storage to the new environment based one. This means that by default the storage is in the user directory in .matter/shell-XX where XX is the nodeNum you provided as parameter. You can adjust the storage base location with "--storage-path=..." as parameter.
 
 To use a former storage you can use "--legacyStorage" and the storage will be in the .matter-shell-XX directory in the local directory as before.
 To manually convert a storage you can follow the following steps. The described steps assume ./.matter-shell-XX is the old storage and ~/.matter/shell-XX is the new storage location.
@@ -111,7 +111,7 @@ You can also define the node id to pair the device by providing this ID as param
 
 You can commission multiple nodes to the controller.
 
-After a successfull commissioning the shell outputs the device name and some information and automatically described to the node and logs potential updates.
+After a successful commissioning the shell outputs the device name and some information and automatically described to the node and logs potential updates.
 
 ### List commissioned nodes
 

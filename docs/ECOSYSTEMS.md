@@ -12,7 +12,7 @@ Table Legend:
 - "MDL Section" column identifies the relevant section in the Matter Device Library Specification Version 1.2 (Oct. 18, 2023).
 - "ID" refers to the device type ID as set out in each device type's "Classification" section in the the MDL.
 
-| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |  **Google**   | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assisitant <br>2024.5.2** | **flic**  |
+| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |  **Google**   | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assistant <br>2024.5.2** | **flic**  |
 |------------------|-----------------------------------------------------|:------------------------:|:-------------:|:----------:|:---------------:|:------------:|:--------:|:--------------------------------:|:---------:|
 |                  | **Bridge Support**                                  |            X             |       X       |     X      |        X        |      -       |    -     |                X                 |   X       |
 |                  | **Composed Devices Support**                        |            X             |       X       |    X(1)    |        -        |      -       |    -     |                X                 |   ?       |
@@ -71,6 +71,13 @@ Table Legend:
 | 13.3             | Room Air Conditioner <br>(ID: 0x0072)               |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
 | 13.4             | Temperature Controlled Cabinet <br>(ID: 0x0071)     |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
 | 13.5             | Dishwasher <br>(ID: 0x0075)                         |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.6             | Laundry Dryer <br>(ID: 0x007C)                      |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.7             | Cook Surface <br>(ID: 0x0077)                       |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.8             | Cooktop <br>(ID: 0x0078)                            |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.9             | Oven <br>(ID: 0x007B)                               |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.10            | Extractor Hood <br>(ID: 0x007A)                     |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 13.11            | Microwave Oven <br>(ID: 0x0079)                     |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
+| 14.1             | EVSE Device Type <br>(ID: 0x050C)                   |            ?             |       ?       |     ?      |        ?        |      ?       |    ?     |                ?                 |   ?       |
 
 (1) See the section below on Composed devices and Alexa
 (2) See note on Flic sensors
@@ -142,7 +149,7 @@ control Matter smart home devices. Currently, Samsung SmartThings Station or Sam
 
 ### Home Assistant - Matter integration
 
-Home Assistant's official Matter integration is in Beta-stage however it is fully working and compatible with the Matter 1.2 standard. To connect Thread based devices you also need an Thread Border Router radio that is compatible with Home Assistant's official Thread integration, that includes their official Home Assistant Yellow hub and their Home Assistant SkyConnect Zigbee/Thread USB dongle.
+Home Assistant's official Matter integration is in Beta-stage however it is fully working and compatible with the Matter 1.3 standard. To connect Thread based devices you also need an Thread Border Router radio that is compatible with Home Assistant's official Thread integration, that includes their official Home Assistant Yellow hub and their Home Assistant SkyConnect Zigbee/Thread USB dongle.
 
 - [https://www.home-assistant.io/integrations/matter/](https://www.home-assistant.io/integrations/matter/)
 - [https://www.home-assistant.io/integrations/thread/](https://www.home-assistant.io/integrations/thread/)

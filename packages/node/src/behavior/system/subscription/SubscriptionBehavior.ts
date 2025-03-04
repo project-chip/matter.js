@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { deepCopy, isIpNetworkChannel, Logger, MatterError, ServerAddressIp } from "#general";
+import { deepCopy, isIpNetworkChannel, Logger, MatterError, MaybePromise, ServerAddressIp } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { TransactionalInteractionServer } from "#node/index.js";
 import {
@@ -21,6 +21,7 @@ import {
 } from "#protocol";
 import { StatusCode, StatusResponseError } from "#types";
 import { Behavior } from "../../Behavior.js";
+import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 const logger = Logger.get("SubscriptionBehavior");
 
 /** Timeout in seconds to wait for responses or discovery of the peer node when trying to re-establish a subscription. */
@@ -44,6 +45,9 @@ export class SubscriptionBehavior extends Behavior {
             this.internal.formerSubscriptions = deepCopy(this.state.subscriptions);
         }
         this.state.subscriptions = [];
+
+        const sessions = this.agent.get(SessionsBehavior);
+        this.reactTo(sessions.events.subscriptionAdded, this.#addSubscription, { lock: true });
     }
 
     static override schema = new DatatypeModel(
@@ -130,7 +134,7 @@ export class SubscriptionBehavior extends Behavior {
         ),
     );
 
-    addSubscription(subscription: Subscription) {
+    #addSubscription(subscription: Subscription) {
         if (this.state.persistenceEnabled === false || !(subscription instanceof ServerSubscription)) return;
 
         const {
@@ -177,15 +181,21 @@ export class SubscriptionBehavior extends Behavior {
         this.state.subscriptions.push(peerSubscription);
     }
 
-    #subscriptionCancelled(subscription: Subscription) {
-        if (subscription.isCanceledByPeer) {
-            if (this.state.persistenceEnabled === false) return;
+    #subscriptionCancelled(subscription: Subscription): MaybePromise {
+        if (subscription.isCanceledByPeer && this.state.persistenceEnabled !== false) {
             const { id } = subscription;
             const subscriptionIndex = this.state.subscriptions.findIndex(({ subscriptionId }) => id === subscriptionId);
             if (subscriptionIndex !== -1) {
-                this.state.subscriptions.splice(subscriptionIndex, 1);
+                return this.#removeSubscriptionIndex(subscriptionIndex);
             }
         }
+    }
+
+    async #removeSubscriptionIndex(index: number) {
+        await this.context.transaction.addResources(this);
+        await this.context.transaction.begin();
+        this.state.subscriptions.splice(index, 1);
+        await this.context.transaction.commit();
     }
 
     async reestablishFormerSubscriptions(interactionServer: TransactionalInteractionServer) {

@@ -112,7 +112,7 @@ export class CaseClient {
             });
             await messenger.sendSuccess();
             logger.info(
-                `Case client: Session ${secureSession.id} successfully resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} and parameters`,
+                `Case client: Session ${secureSession.id} successfully resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} with parameters`,
                 secureSession.parameterDiagnostics(),
             );
 
@@ -220,7 +220,7 @@ export class CaseClient {
             logger.info(
                 `Case client Session ${secureSession.id} established successfully with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
-                )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}and parameters`,
+                )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)} with parameters`,
                 secureSession.parameterDiagnostics(),
             );
             resumptionRecord = {

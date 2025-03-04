@@ -50,7 +50,7 @@ In fact this is all what they have in common, so the differences are:
 
 This Environment component even more simplifies to build devices by making sure base components are handled centrally for all things needed.
 
-The environment related classes are exported unter `matter(-node).js/environment`.
+The environment related classes are exported under `matter(-node).js/environment`.
 
 ### New:ServerNode <--> Legacy:CommissioningServer
 
@@ -580,7 +580,7 @@ If multiple cluster implementations need the same dynamic dependencies you can c
 ```javascript
 // create the own Behavior
 export class MyDeviceBehavior extends Behavior {
-    static override readonly id = "myDeviceImpl"; // give the Bahavior a unique name
+    static override readonly id = "myDeviceImpl"; // give the Behavior a unique name
 
     declare state: MyDeviceBehavior.State;
 }
