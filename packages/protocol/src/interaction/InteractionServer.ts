@@ -1211,7 +1211,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         logger.info(
             `Successfully created subscription ${id} for Session ${
                 session.id
-            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
+            } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
         );
         return subscription;
     }
@@ -1270,6 +1270,11 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             // Send initial data report to prime the subscription with initial data
             await subscription.sendInitialReport(new InteractionServerMessenger(exchange));
             subscription.activate();
+            logger.info(
+                `Successfully re-established subscription ${subscriptionId} for Session ${
+                    session.id
+                } to ${session.peerAddress}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${subscription.maxInterval} seconds (sendInterval = ${subscription.sendInterval} seconds)`,
+            );
         } catch (error) {
             await subscription.close(); // Cleanup
             throw error;

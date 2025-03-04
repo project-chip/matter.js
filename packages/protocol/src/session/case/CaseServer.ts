@@ -130,7 +130,7 @@ export class CaseServer implements ProtocolHandler {
             logger.info(
                 `Session ${secureSession.id} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
-                )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
+                )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
                 "with CATs",
                 caseAuthenticatedTags,
             );
@@ -234,7 +234,7 @@ export class CaseServer implements ProtocolHandler {
             logger.info(
                 `Session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
-                )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
+                )} (index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
                 "with CATs",
                 caseAuthenticatedTags,
             );

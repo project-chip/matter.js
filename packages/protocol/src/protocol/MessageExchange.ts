@@ -233,6 +233,7 @@ export class MessageExchange {
                 maxTrans: this.#maxTransmissions,
                 exchangeFlags: Diagnostic.asFlags({
                     MRP: this.#useMRP,
+                    I: this.isInitiator,
                 }),
             }),
         );

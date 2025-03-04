@@ -19,6 +19,9 @@ export function textOf(input: {}) {
 }
 
 export function base64Of(input: string | Uint8Array) {
+    if (typeof input === "string") {
+        return Buffer.from(input, "utf8").toString("base64");
+    }
     return Buffer.from(input).toString("base64");
 }
 

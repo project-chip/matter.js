@@ -10,7 +10,6 @@ import { ExposedFabricInformation, SecureSession, SessionManager, Subscription }
 import { NodeId } from "#types";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
-import { SubscriptionBehavior } from "../subscription/SubscriptionBehavior.js";
 
 /**
  * Active {@link ServerNode} client sessions.
@@ -75,7 +74,7 @@ export class SessionsBehavior extends Behavior {
 
         // When subscription was added then inform SubscriptionBehavior
         if (session.subscriptions.has(subscription)) {
-            this.agent.get(SubscriptionBehavior).addSubscription(subscription);
+            this.events.subscriptionAdded.emit(subscription);
         }
 
         const sessionEntry = this.state.sessions[session.id];
@@ -113,5 +112,6 @@ export namespace SessionsBehavior {
         opened = Observable<[session: Session]>();
         closed = Observable<[session: Session]>();
         subscriptionsChanged = Observable<[session: Session]>();
+        subscriptionAdded = Observable<[subscription: Subscription]>();
     }
 }
