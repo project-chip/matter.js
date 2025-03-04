@@ -36,5 +36,5 @@ reporting on failed tests.
 
 The test environment orchestrated by this package installs a small number of
 Mocks for Matter.js infrastructure singletons.
-[global-declarations.ts](src/testing/global-declarations.ts) defines a global
+[global-declarations.ts](src/global-declarations.ts) defines a global
 API for these mocks.

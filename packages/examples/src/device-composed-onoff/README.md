@@ -6,7 +6,7 @@ A composed device is one device with multiple different device types combined. T
 
 ### Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../examples/README.md#cli-usage).
 
 The parameters are like with the bridge but with an added "-type light/socket" parameter to define the type of the composed device itself.
 
