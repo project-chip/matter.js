@@ -4,7 +4,7 @@ This example shows how to build a simple minimalistic DeviceNode with just one s
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../examples/README.md#cli-usage).
 
 To run from the build files:
 
