@@ -13,7 +13,7 @@ export const transId = Datatype({
     name: "trans-id", type: "uint32", description: "Transaction ID", isSeed: true,
     details: "An identifier for a transaction as defined in the Interaction Model specification, see Transaction " +
         "ID.",
-    xref: { document: "core", section: "7.18.2.32" }
+    xref: { document: "core", section: "7.19.2.32" }
 });
 
 MatterDefinition.children.push(transId);

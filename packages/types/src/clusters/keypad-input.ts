@@ -177,7 +177,7 @@ export namespace KeypadInput {
     }
 
     /**
-     * This command shall be generated in response to a SendKey command.
+     * This command shall be generated in response to a SendKey command. The data for this command shall be as follows:
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2
      */
@@ -191,7 +191,7 @@ export namespace KeypadInput {
     });
 
     /**
-     * This command shall be generated in response to a SendKey command.
+     * This command shall be generated in response to a SendKey command. The data for this command shall be as follows:
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2
      */

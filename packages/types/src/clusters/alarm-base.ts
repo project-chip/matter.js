@@ -84,10 +84,9 @@ export namespace AlarmBase {
          * alarm shall respond with a status code of FAILURE; otherwise the server shall respond with a status code of
          * SUCCESS.
          *
-         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the
-         *
-         * Mask field from this command. After that the server shall also update the value of its State attribute to
-         * reflect the status of the new alarm set as indicated by the new value of the Mask attribute.
+         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the Mask
+         * field from this command. After that the server shall also update the value of its State attribute to reflect
+         * the status of the new alarm set as indicated by the new value of the Mask attribute.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2.1
          */

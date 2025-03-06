@@ -216,50 +216,67 @@ function installPreciseDetails(
         definitions.map(detail => [detail.name.toLowerCase().replace(/\s*\([^)]+\)\s*/g, " "), detail]),
     );
 
-    records.forEach(r => {
-        if (!r.name) {
+    for (const record of records) {
+        if (!record.name) {
             return;
         }
 
         let titleSuffix;
-        if (r.element?.endsWith("field")) {
+        if (record.element?.endsWith("field")) {
             titleSuffix = "field";
-        } else if (r.element) {
-            titleSuffix = r.element;
+        } else if (record.element) {
+            titleSuffix = record.element;
         } else {
             titleSuffix = tag;
         }
 
-        const name = r.name.toLowerCase();
-        let detail = lookup[`${name} ${titleSuffix}`] || lookup[`${name}`];
+        // We identify the detail section associated with a row using both "name" and "description", optionally followed
+        // by a suffix specific to the type of thing
+        let detail: HtmlReference | undefined;
+        for (let identifier of [record.name, (record as { description?: string }).description]) {
+            if (identifier === undefined) {
+                continue;
+            }
 
-        // Grr WC (at least) doing their own thing per usual and uses "bits" suffix instead of "bit"
-        if (detail === undefined && titleSuffix === "bit") {
-            detail = lookup[`${name} bits`];
-        }
+            identifier = identifier.toLowerCase();
 
-        if (detail === undefined) {
-            const description = (r as { description?: string }).description?.toLowerCase();
-            if (description !== undefined) {
-                detail = lookup[`${description} ${titleSuffix}`] || lookup[`${description}`];
+            detail = lookup[`${identifier} ${titleSuffix}`] || lookup[`${identifier}`];
+            if (detail) {
+                break;
+            }
+
+            // 1.4 added " Type" suffix to global types
+            if (titleSuffix === "datatype") {
+                detail = lookup[`${identifier} type`];
+                if (detail) {
+                    break;
+                }
+            }
+
+            // Grr WC (at least) doing their own thing per usual and uses "bits" suffix instead of "bit"
+            if (titleSuffix === "bit") {
+                detail = lookup[`${identifier} bits`];
+                if (detail) {
+                    break;
+                }
             }
         }
 
         if (detail) {
-            r.xref = detail.xref;
+            record.xref = detail.xref;
 
-            addDocumentation(r, detail);
+            addDocumentation(record, detail);
 
-            if (r.details && r.details.indexOf("SHALL indicate the of the") !== -1) {
+            if (record.details && record.details.indexOf("SHALL indicate the of the") !== -1) {
                 // Goofballs copy & pasted this typo a couple times
-                r.details = r.details.replace("the of the", "the status of the");
+                record.details = record.details.replace("the of the", "the status of the");
             }
 
             if (childTranslator) {
-                r.children = childTranslator(tag, r, detail);
+                record.children = childTranslator(tag, record, detail);
             }
         }
-    });
+    }
 }
 
 /** The type of data we think is present in a field */

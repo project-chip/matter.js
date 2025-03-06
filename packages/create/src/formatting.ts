@@ -47,7 +47,7 @@ export function visibleWidthOf(str: string) {
 }
 
 export function fittedTextOf(text: string, width = stdout.columns) {
-    if (width <= 20) {
+    if (typeof width !== "number" || width <= 20) {
         return text;
     }
 
@@ -69,7 +69,7 @@ export function fittedTextOf(text: string, width = stdout.columns) {
     return paragraphs.join("\n");
 }
 
-function wrap(text: string, width = stdout.columns) {
+function wrap(text: string, width: number) {
     const words = text.trim().split(/\s+/);
     let lineWidth = 0;
     let line = "";

@@ -10,5 +10,8 @@ import { OccupancySensingBehavior } from "./OccupancySensingBehavior.js";
 
 /**
  * This is the default server implementation of {@link OccupancySensingBehavior}.
+ *
+ * The Matter specification requires the OccupancySensing cluster to support features we do not enable by default. You
+ * should use {@link OccupancySensingServer.with} to specialize the class for the features your implementation supports.
  */
 export class OccupancySensingServer extends OccupancySensingBehavior {}

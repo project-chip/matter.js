@@ -17,13 +17,18 @@ import {
 
 export const Channel = Cluster(
     {
-        name: "Channel", id: 0x504, asOf: "1.3", classification: "application", pics: "CHANNEL",
+        name: "Channel", id: 0x504, classification: "application", pics: "CHANNEL",
 
         details: "This cluster provides an interface for controlling the current Channel on a device or endpoint." +
             "\n" +
             "This cluster server would be supported on Video Player devices or endpoints that allow Channel " +
             "control such as a Content App. This cluster provides a list of available channels and provides " +
-            "commands for absolute and relative channel changes." +
+            "commands for absolute and relative channel changes. Some of these commands and/or their responses " +
+            "may be large (see Large Message Quality under Data Model section in [MatterCore]), but they do not " +
+            "have the Large quality indicator (L) because they can also be transferred over MRP (see Message " +
+            "Reliability Protocol in [MatterCore]) in pages that fit within the MRP MTU limit. However, an " +
+            "implementation may leverage a transport like TCP that allows large payloads, if available, to " +
+            "minimize the number of messages required to transfer the corresponding payload." +
             "\n" +
             "The cluster server for Channel is implemented by an endpoint that controls the current Channel.",
 
@@ -106,7 +111,7 @@ export const Channel = Cluster(
             xref: { document: "cluster", section: "6.6.7.2.1" }
         }),
         Field({
-            name: "Data", id: 0x1, type: "string", conformance: "O",
+            name: "Data", id: 0x1, type: "string", conformance: "O", constraint: "any",
             details: "This field shall indicate Optional app-specific data.",
             xref: { document: "cluster", section: "6.6.7.2.2" }
         })
@@ -163,14 +168,10 @@ export const Channel = Cluster(
         {
             name: "GetProgramGuide", id: 0x4, access: "O", conformance: "EG", direction: "request",
             response: "ProgramGuideResponse",
-
             details: "This command retrieves the program guide. It accepts several filter parameters to return specific " +
                 "schedule and program information from a content app. The command shall receive in response a " +
-                "ProgramGuideResponse. Standard error codes shall be used when arguments provided are not" +
-                "\n" +
-                "valid. For example, if StartTime is greater than EndTime, the status code INVALID_ACTION shall be " +
-                "returned.",
-
+                "ProgramGuideResponse. Standard error codes shall be used when arguments provided are not valid. For " +
+                "example, if StartTime is greater than EndTime, the status code INVALID_ACTION shall be returned.",
             xref: { document: "cluster", section: "6.6.7.5" }
         },
 
@@ -221,7 +222,7 @@ export const Channel = Cluster(
                 details: "This field shall indicate the list of additional external content identifiers.",
                 xref: { document: "cluster", section: "6.6.7.5.6" }
             },
-            Field({ name: "entry", type: "AdditionalInfoStruct" })
+            Field({ name: "entry", type: "ContentLauncher.AdditionalInfoStruct" })
         ),
 
         Field({
@@ -285,7 +286,7 @@ export const Channel = Cluster(
                 details: "This field, if present, shall indicate the list of additional external content identifiers.",
                 xref: { document: "cluster", section: "6.6.7.7.3" }
             },
-            Field({ name: "entry", type: "AdditionalInfoStruct" })
+            Field({ name: "entry", type: "ContentLauncher.AdditionalInfoStruct" })
         ),
 
         Field({
@@ -324,7 +325,7 @@ export const Channel = Cluster(
                 details: "This field, if present, shall indicate the list of additional external content identifiers.",
                 xref: { document: "cluster", section: "6.6.7.8.3" }
             },
-            Field({ name: "entry", type: "AdditionalInfoStruct" })
+            Field({ name: "entry", type: "ContentLauncher.AdditionalInfoStruct" })
         ),
 
         Field({
@@ -417,9 +418,8 @@ export const Channel = Cluster(
 
         Field({
             name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O",
-            details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, but" +
-                "\n" +
-                "SHOULD be provided when known.",
+            details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, " +
+                "but SHOULD be provided when known.",
             xref: { document: "cluster", section: "6.6.5.5.5" }
         }),
 
@@ -546,14 +546,11 @@ export const Channel = Cluster(
         Field(
             {
                 name: "Ratings", id: 0x8, type: "list", conformance: "O", constraint: "max 255", default: [],
-
                 details: "This field shall be used for indicating the level of parental guidance recommended for of a " +
-                    "particular program. This can be any rating system used in the country or region where the program is" +
-                    "\n" +
-                    "broadcast. For example, in the United States “TV-PG” may contain material that parents can find not " +
-                    "suitable for younger children but can be accepted in general for older children. This field is " +
+                    "particular program. This can be any rating system used in the country or region where the program " +
+                    "is broadcast. For example, in the United States “TV-PG” may contain material that parents can find " +
+                    "not suitable for younger children but can be accepted in general for older children. This field is " +
                     "optional but shall be provided if known.",
-
                 xref: { document: "cluster", section: "6.6.5.7.9" }
             },
 
@@ -562,21 +559,24 @@ export const Channel = Cluster(
 
         Field({
             name: "ThumbnailUrl", id: 0x9, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall represent a url of a thumbnail that clients can use to render an image for the " +
-                "program.",
+            details: "This field shall represent a URL of a thumbnail that clients can use to render an image for the " +
+                "program. The syntax of this field shall follow the syntax as specified in RFC 1738 and shall use " +
+                "the https scheme.",
             xref: { document: "cluster", section: "6.6.5.7.10" }
         }),
 
         Field({
             name: "PosterArtUrl", id: 0xa, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall represent a url of a poster that clients can use to render an image for the " +
-                "program on the detail view.",
+            details: "This field shall represent a URL of a poster that clients can use to render an image for the " +
+                "program on the detail view. The syntax of this field shall follow the syntax as specified in RFC " +
+                "1738 and shall use the https scheme.",
             xref: { document: "cluster", section: "6.6.5.7.11" }
         }),
 
         Field({
             name: "DvbiUrl", id: 0xb, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall represent the DVB-I url associated to the program.",
+            details: "This field shall represent the DVB-I URL associated to the program. The syntax of this field shall " +
+                "follow the syntax as specified in RFC 1738 and shall use the https scheme.",
             xref: { document: "cluster", section: "6.6.5.7.12" }
         }),
 
@@ -641,7 +641,7 @@ export const Channel = Cluster(
                 xref: { document: "cluster", section: "6.6.5.7.19" }
             },
 
-            Field({ name: "entry", type: "AdditionalInfoStruct" })
+            Field({ name: "entry", type: "ContentLauncher.AdditionalInfoStruct" })
         )
     ),
 
@@ -756,9 +756,7 @@ export const Channel = Cluster(
                 "response as the last page.",
             xref: { document: "cluster", section: "6.6.5.12.2" }
         })
-    ),
-
-    Datatype({ name: "AdditionalInfoStruct", type: "ContentLauncher.AdditionalInfoStruct" })
+    )
 );
 
 MatterDefinition.children.push(Channel);

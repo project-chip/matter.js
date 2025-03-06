@@ -9,6 +9,7 @@
 import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../behaviors/groups/GroupsServer.js";
 import { FanControlServer as BaseFanControlServer } from "../behaviors/fan-control/FanControlServer.js";
+import { OnOffServer as BaseOnOffServer } from "../behaviors/on-off/OnOffServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -43,15 +44,25 @@ export namespace FanRequirements {
     export const FanControlServer = BaseFanControlServer;
 
     /**
+     * The OnOff cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer } };
+    export const server = {
+        mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer },
+        optional: { OnOff: OnOffServer }
+    };
 }
 
 export const FanDeviceDefinition = MutableEndpoint({
     name: "Fan",
     deviceType: 0x2b,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: FanRequirements,
     behaviors: SupportedBehaviors(
         FanRequirements.server.mandatory.Identify,

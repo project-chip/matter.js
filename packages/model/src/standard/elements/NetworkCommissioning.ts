@@ -96,17 +96,21 @@ export const NetworkCommissioning = Cluster(
         details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
             "instance to provide scan results." +
             "\n" +
-            "See Section 11.9.7.1, “ScanNetworks Command” for usage.",
+            "See ScanNetworks for usage.",
         xref: { document: "core", section: "11.9.6.3" }
     }),
 
     Attribute({
         name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V", conformance: "WI | TH",
         constraint: "desc", quality: "F",
+
         details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
             "instance to report a successful or failed network connection indication. This maximum time shall " +
-            "account for all operations needed until a successful network connection is deemed to have occurred, " +
-            "including, for example, obtaining IP addresses, or the execution of necessary internal retries.",
+            "account for all operations needed until a successful network connection is" +
+            "\n" +
+            "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
+            "necessary internal retries.",
+
         xref: { document: "core", section: "11.9.6.4" }
     }),
 
@@ -120,8 +124,7 @@ export const NetworkCommissioning = Cluster(
             "It is undefined what happens if InterfaceEnabled is written to false on the same interface as that " +
             "which is used to write the value. In that case, it is possible that the Administrator would have to " +
             "await expiry of the fail-safe, and associated recovery of network configuration to prior safe " +
-            "values, before being able to communicate with the node again (see Section 11.10.6.2, “ArmFailSafe " +
-            "Command”)." +
+            "values, before being able to communicate with the node again (see ArmFailSafe)." +
             "\n" +
             "It may be possible to disable Ethernet interfaces but it is implementation-defined. If not " +
             "supported, a write to this attribute with a value of false shall fail with a status of " +
@@ -173,11 +176,10 @@ export const NetworkCommissioning = Cluster(
         default: null, quality: "X",
 
         details: "Indicates the ErrorValue used in the last failed attempt to connect to an operational network, " +
-            "using this interface, whether by invocation of the ConnectNetwork command or by" +
-            "\n" +
-            "autonomous connection after loss of connectivity or during initial establishment. If no such " +
-            "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
-            "shall be set to null." +
+            "using this interface, whether by invocation of the ConnectNetwork command or by autonomous " +
+            "connection after loss of connectivity or during initial establishment. If no such attempt was made, " +
+            "or no network configurations exist in the Networks attribute, then this attribute shall be set to " +
+            "null." +
             "\n" +
             "If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus " +
             "attribute, then this field shall be set to null." +
@@ -244,9 +246,8 @@ export const NetworkCommissioning = Cluster(
                 "Wi-Fi SSID) is provided in the command arguments. Directed scanning shall restrict the result set " +
                 "to the specified network only." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "The client shall NOT expect the server to be done scanning and have responded with " +
                 "ScanNetworksResponse before ScanMaxTimeSeconds seconds have elapsed. Enough transport time " +
@@ -263,8 +264,7 @@ export const NetworkCommissioning = Cluster(
                 "if a ConnectNetwork having the specified SSID were to take place. This command is useful for " +
                 "clients to determine reachability capabilities as seen by the server’s own radios." +
                 "\n" +
-                "For Wi-Fi-supporting servers the server shall always scan on all bands supported by the interface" +
-                "\n" +
+                "For Wi-Fi-supporting servers the server shall always scan on all bands supported by the interface " +
                 "associated with the cluster instance on which the command was invoked." +
                 "\n" +
                 "If the command was invoked over the same link whose configuration is managed by a given server " +
@@ -391,9 +391,8 @@ export const NetworkCommissioning = Cluster(
 
             details: "This command shall be used to add or modify Wi-Fi network configurations." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "The Credentials associated with the network are not readable after execution of this command, as " +
                 "they do not appear in the Networks attribute, for security reasons." +
@@ -458,7 +457,7 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
-            details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+            details: "See Breadcrumb for usage.",
             xref: { document: "core", section: "11.9.7.3.3" }
         })
     ),
@@ -470,9 +469,8 @@ export const NetworkCommissioning = Cluster(
 
             details: "This command shall be used to add or modify Thread network configurations." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
                 "for behavior of addition/update." +
@@ -499,7 +497,7 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-            details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+            details: "See Breadcrumb for usage.",
             xref: { document: "core", section: "11.9.7.4.2" }
         })
     ),
@@ -514,9 +512,8 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "attribute shall remain unchanged, except for the removal of the requested network configuration." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
                 "If the Networks attribute does not contain a matching entry, the command shall immediately respond " +
                 "with NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound." +
@@ -537,7 +534,7 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-            details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+            details: "See Breadcrumb for usage.",
             xref: { document: "core", section: "11.9.7.6.2" }
         })
     ),
@@ -571,8 +568,7 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
                 "\n" +
-                "  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section " +
-                "    11.9.6.1, “MaxNetworks Attribute”." +
+                "  • BoundsExceeded: Adding this network configuration would exceed the limit defined by MaxNetworks." +
                 "\n" +
                 "  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the " +
                 "    added network configurations in Networks attribute." +
@@ -584,13 +580,12 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512",
-            details: "See Section 11.9.7.2.2, “DebugText Field” for usage.",
+            details: "See DebugText for usage.",
             xref: { document: "core", section: "11.9.7.7.2" }
         }),
 
         Field({
-            name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
-            constraint: "0 to (MaxNetworks - 1)",
+            name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O", constraint: "max maxNetworks - 1",
             details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                 "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                 "by the associated request command.",
@@ -611,9 +606,17 @@ export const NetworkCommissioning = Cluster(
                 "currently unable to proceed with such an operation, such as if it is currently attempting to " +
                 "connect in the background, or is already proceeding with a prior ConnectNetwork." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
-                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
-                "initiator." +
+                "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
+                "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
+                "\n" +
+                "Before connecting to the new network, the Node shall disconnect the operational network connections " +
+                "managed by any other Network Commissioning cluster instances (whether under the Root Node or a " +
+                "Secondary Network Interface), where those connections are not represented by an entry in the " +
+                "Networks attribute of the corresponding cluster instance. This ensures that an Administrator or " +
+                "Commissioner can reliably reconfigure the operational network connection of a device that has one " +
+                "or more Secondary Network interfaces, for example by removing the active network configuration from " +
+                "one cluster instance, followed by adding a new configuration and calling ConnectNetwork on a " +
+                "different cluster instance." +
                 "\n" +
                 "Success or failure of this command shall be communicated by the ConnectNetworkResponse command, " +
                 "unless some data model validations caused a FAILURE status to be sent prior to finishing execution " +
@@ -638,22 +641,22 @@ export const NetworkCommissioning = Cluster(
                 "attribute." +
                 "\n" +
                 "Even after successfully connecting to a network, the configuration shall revert to the prior state " +
-                "of configuration if the CommissioningComplete command (see Section 11.10.6.6, " +
-                "“CommissioningComplete Command”) is not successfully invoked before expiry of the Fail-Safe timer." +
+                "of configuration if the CommissioningComplete command (see CommissioningComplete) is not " +
+                "successfully invoked before expiry of the Fail-Safe timer." +
                 "\n" +
-                "When non-concurrent commissioning is being used by a Commissioner or Administrator, the " +
-                "ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to " +
-                "closing the commissioning channel, even if not yet connected to the operational network, unless the " +
-                "device would be incapable of joining that network, in which case the usual failure path described " +
-                "in the prior paragraphs shall be followed. Once the commissioning channel is closed, the " +
-                "operational channel will be started. It is possible that the only method to determine success of " +
-                "the operation is operational discovery of the Node on the new operational network. Therefore, " +
-                "before invoking the ConnectNetwork command, the client SHOULD re-invoke the Arm Fail-Safe command " +
-                "with a duration that meets the following:" +
+                "When non-concurrent commissioning is being used by a Commissioner or Administrator, the Con" +
                 "\n" +
-                "  1. Sufficient time to meet the minimum required time (see Section 11.9.6.4, " +
-                "     “ConnectMaxTimeSeconds Attribute”) that may be taken by the server to connect to the desired " +
-                "     network." +
+                "nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing " +
+                "the commissioning channel, even if not yet connected to the operational network, unless the device " +
+                "would be incapable of joining that network, in which case the usual failure path described in the " +
+                "prior paragraphs shall be followed. Once the commissioning channel is closed, the operational " +
+                "channel will be started. It is possible that the only method to determine success of the operation " +
+                "is operational discovery of the Node on the new operational network. Therefore, before invoking the " +
+                "ConnectNetwork command, the client SHOULD re-invoke the Arm Fail-Safe command with a duration that " +
+                "meets the following:" +
+                "\n" +
+                "  1. Sufficient time to meet the minimum required time (see ConnectMaxTimeSeconds) that may be " +
+                "     taken by the server to connect to the desired network." +
                 "\n" +
                 "  2. Sufficient time to account for possible message-layer retries when a response is requested." +
                 "\n" +
@@ -685,7 +688,7 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-            details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+            details: "See Breadcrumb for usage.",
             xref: { document: "core", section: "11.9.7.8.2" }
         })
     ),
@@ -727,16 +730,15 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "  • UnknownError: An internal error occurred during the operation." +
                 "\n" +
-                "  • Association errors (see also description of errors in Section 11.9.5.4, " +
-                "    “NetworkCommissioningStatusEnum Type”): AuthFailure, UnsupportedSecurity, " +
-                "    OtherConnectionFailure, IPV6Failed, IPBindFailed",
+                "  • Association errors (see also description of errors in NetworkCommissioningStatusEnum): " +
+                "    AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed",
 
             xref: { document: "core", section: "11.9.7.9.1" }
         }),
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "O",
-            details: "See Section 11.9.7.2.2, “DebugText Field” for usage.",
+            details: "See DebugText for usage.",
             xref: { document: "core", section: "11.9.7.9.2" }
         }),
 
@@ -794,7 +796,7 @@ export const NetworkCommissioning = Cluster(
             {
                 name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
 
-                details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage." +
+                details: "See Breadcrumb for usage." +
                     "\n" +
                     "Effect when received" +
                     "\n" +
@@ -823,7 +825,7 @@ export const NetworkCommissioning = Cluster(
                     "\n" +
                     "On receiving ReorderNetwork with:" +
                     "\n" +
-                    "  • NetworkId = Home-Guest" +
+                    "  • NetworkID = Home-Guest" +
                     "\n" +
                     "  • NetworkIndex = 0" +
                     "\n" +
@@ -834,7 +836,7 @@ export const NetworkCommissioning = Cluster(
                     "\n" +
                     "On receiving ReorderNetwork with:" +
                     "\n" +
-                    "  • NetworkId = FancyCat" +
+                    "  • NetworkID = FancyCat" +
                     "\n" +
                     "  • NetworkIndex = 3" +
                     "\n" +
@@ -904,38 +906,44 @@ export const NetworkCommissioning = Cluster(
             xref: { document: "core", section: "11.9.5.3" }
         },
 
-        Field({ name: "2G4", id: 0x0, conformance: "O.a+", description: "2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)" }),
-        Field({ name: "3G65", id: 0x1, conformance: "O.a+", description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)" }),
-        Field({ name: "5G", id: 0x2, conformance: "O.a+", description: "5GHz - 5.150GHz to5.895GHz(802.11a/n/ac/ax)" }),
-        Field({ name: "6G", id: 0x3, conformance: "O.a+", description: "6GHz - 5.925GHz to7.125GHz (802.11ax / Wi-Fi 6E)" }),
-        Field({ name: "60G", id: 0x4, conformance: "O.a+", description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)" }),
-        Field({ name: "1G", id: 0x5, conformance: "O.a+", description: "Sub-1GHz - 755MHz to 931MHz (802.11ah)" })
+        Field({ name: "2G4", id: 0x0, conformance: "O.b+", description: "2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)" }),
+        Field({ name: "3G65", id: 0x1, conformance: "O.b+", description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)" }),
+        Field({ name: "5G", id: 0x2, conformance: "O.b+", description: "5GHz - 5.150GHz to5.895GHz(802.11a/n/ac/ax)" }),
+        Field({ name: "6G", id: 0x3, conformance: "O.b+", description: "6GHz - 5.925GHz to7.125GHz (802.11ax / Wi-Fi 6E)" }),
+        Field({ name: "60G", id: 0x4, conformance: "O.b+", description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)" }),
+        Field({ name: "1G", id: 0x5, conformance: "O.b+", description: "Sub-1GHz - 755MHz to 931MHz (802.11ah)" })
     ),
 
     Datatype(
         { name: "NetworkCommissioningStatusEnum", type: "enum8", xref: { document: "core", section: "11.9.5.4" } },
-        Field({ name: "Success", id: 0x0, description: "OK, no error" }),
-        Field({ name: "OutOfRange", id: 0x1, description: "Value Outside Range" }),
-        Field({ name: "BoundsExceeded", id: 0x2, description: "A collection would exceed its size limit" }),
+        Field({ name: "Success", id: 0x0, conformance: "M", description: "OK, no error" }),
+        Field({ name: "OutOfRange", id: 0x1, conformance: "M", description: "Value Outside Range" }),
+        Field({ name: "BoundsExceeded", id: 0x2, conformance: "M", description: "A collection would exceed its size limit" }),
         Field({
-            name: "NetworkIdNotFound", id: 0x3,
+            name: "NetworkIdNotFound", id: 0x3, conformance: "M",
             description: "The NetworkID is not among the collection of added networks"
         }),
         Field({
-            name: "DuplicateNetworkId", id: 0x4,
+            name: "DuplicateNetworkId", id: 0x4, conformance: "M",
             description: "The NetworkID is already among the collection of added networks"
         }),
-        Field({ name: "NetworkNotFound", id: 0x5, description: "Cannot find AP: SSID Not found" }),
+        Field({ name: "NetworkNotFound", id: 0x5, conformance: "M", description: "Cannot find AP: SSID Not found" }),
         Field({
-            name: "RegulatoryError", id: 0x6,
-            description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz"
+            name: "RegulatoryError", id: 0x6, conformance: "M",
+            description: "Cannot find AP: Mismatch on band/channels/regulatory domain/ 2.4GHz vs 5GHz"
         }),
-        Field({ name: "AuthFailure", id: 0x7, description: "Cannot associate due to authentication failure" }),
-        Field({ name: "UnsupportedSecurity", id: 0x8, description: "Cannot associate due to unsupported security mode" }),
-        Field({ name: "OtherConnectionFailure", id: 0x9, description: "Other association failure" }),
-        Field({ name: "Ipv6Failed", id: 0xa, description: "Failure to generate an IPv6 address" }),
-        Field({ name: "IpBindFailed", id: 0xb, description: "Failure to bind Wi-Fi <-> IP interfaces" }),
-        Field({ name: "UnknownError", id: 0xc, description: "Unknown error" })
+        Field({
+            name: "AuthFailure", id: 0x7, conformance: "M",
+            description: "Cannot associate due to authentication failure"
+        }),
+        Field({
+            name: "UnsupportedSecurity", id: 0x8, conformance: "M",
+            description: "Cannot associate due to unsupported security mode"
+        }),
+        Field({ name: "OtherConnectionFailure", id: 0x9, conformance: "M", description: "Other association failure" }),
+        Field({ name: "Ipv6Failed", id: 0xa, conformance: "M", description: "Failure to generate an IPv6 address" }),
+        Field({ name: "IpBindFailed", id: 0xb, conformance: "M", description: "Failure to bind Wi-Fi <-> IP interfaces" }),
+        Field({ name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" })
     ),
 
     Datatype(
@@ -1017,7 +1025,7 @@ export const NetworkCommissioning = Cluster(
             details: "ThreadInterfaceScanResultStruct represents a single Thread network scan result.",
             xref: { document: "core", section: "11.9.5.7" }
         },
-        Field({ name: "PanId", id: 0x0, type: "uint16", conformance: "TH", constraint: "0 to 65534" }),
+        Field({ name: "PanId", id: 0x0, type: "uint16", conformance: "TH", constraint: "max 65534" }),
         Field({ name: "ExtendedPanId", id: 0x1, type: "uint64", conformance: "TH" }),
         Field({ name: "NetworkName", id: 0x2, type: "string", conformance: "TH", constraint: "1 to 16" }),
         Field({ name: "Channel", id: 0x3, type: "uint16", conformance: "TH" }),

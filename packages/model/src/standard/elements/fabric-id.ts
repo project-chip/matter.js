@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const fabricId = Datatype({
     name: "fabric-id", type: "uint64", description: "Fabric ID", isSeed: true,
     details: "A value to identify a fabric.",
-    xref: { document: "core", section: "7.18.2.19" }
+    xref: { document: "core", section: "7.19.2.19" }
 });
 MatterDefinition.children.push(fabricId);

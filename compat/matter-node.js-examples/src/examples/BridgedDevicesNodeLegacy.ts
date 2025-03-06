@@ -188,6 +188,7 @@ class BridgedDevice {
                 nodeLabel: name, // Main end user name for the device
                 productName: name,
                 productLabel: name,
+                uniqueId: `${uniqueId}`,
                 serialNumber: `node-matter-${uniqueId}-${i}`,
                 reachable: true,
             });

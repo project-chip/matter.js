@@ -443,7 +443,7 @@ export const ElectricalPowerMeasurement = Cluster(
 
     Event(
         {
-            name: "MeasurementPeriodRanges", id: 0x0, access: "R V", conformance: "Ranges", priority: "info",
+            name: "MeasurementPeriodRanges", id: 0x0, access: "V", conformance: "Ranges", priority: "info",
             details: "If supported, this event shall be generated at the end of a measurement period. The start and end " +
                 "times for measurement periods shall be determined by the server, and may represent overlapping " +
                 "periods.",
@@ -518,7 +518,7 @@ export const ElectricalPowerMeasurement = Cluster(
 
         Field({
             name: "EndTimestamp", id: 0x4, type: "epoch-s", conformance: "desc",
-            constraint: "min startTimestamp1",
+            constraint: "min startTimestamp + 1",
             details: "This field shall be the timestamp in UTC of the end of the measurement period." +
                 "\n" +
                 "If the server had not yet determined the time in UTC at or before the beginning of the measurement " +
@@ -537,7 +537,7 @@ export const ElectricalPowerMeasurement = Cluster(
 
         Field({
             name: "MaxTimestamp", id: 0x6, type: "epoch-s", conformance: "EndTimestamp",
-            constraint: "min minTimestamp1",
+            constraint: "min minTimestamp + 1",
             details: "This field shall be the most recent timestamp in UTC of the value in the Max field. This field " +
                 "shall be greater than or equal to the value of the StartTimestamp field. This field shall be less " +
                 "than or equal to the value of the EndTimestamp field.",
@@ -555,7 +555,7 @@ export const ElectricalPowerMeasurement = Cluster(
 
         Field({
             name: "EndSystime", id: 0x8, type: "systime-ms", conformance: "desc",
-            constraint: "min startSystime1",
+            constraint: "min startSystime + 1",
             details: "This field shall be the time since boot of the end of the measurement period." +
                 "\n" +
                 "If the server had determined the time in UTC at the end of the measurement period, this field may " +
@@ -574,7 +574,7 @@ export const ElectricalPowerMeasurement = Cluster(
 
         Field({
             name: "MaxSystime", id: 0xa, type: "systime-ms", conformance: "EndSystime",
-            constraint: "min minSystime1",
+            constraint: "min minSystime + 1",
             details: "This field shall be the measurement time since boot of the value in the Max field. This field shall " +
                 "be greater than or equal to the value of the StartSystime field." +
                 "\n" +

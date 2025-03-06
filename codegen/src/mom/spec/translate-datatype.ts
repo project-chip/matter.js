@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "#general";
-import { AnyElement, DatatypeElement, FabricIndex, FieldElement, Metatype } from "#model";
+import { AnyElement, DatatypeElement, ElementTag, FabricIndex, FieldElement, Metatype } from "#model";
 import { addDocumentation } from "./add-documentation.js";
 import {
     Bits,
@@ -24,9 +24,9 @@ import { HtmlReference } from "./spec-types.js";
 import {
     Alias,
     Children,
+    chooseIdentityAliases,
     Optional,
     TableRecord,
-    chooseIdentityAliases,
     translateRecordsToMatter,
     translateTable,
 } from "./translate-table.js";
@@ -40,9 +40,6 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
     let name = repairTypeIdentifier(definition.name);
 
     const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
-    if (!text) {
-        logger.warn(`no text to search for base type`);
-    }
 
     // Up through 1.1 prose was informal but remarkably consistent; "derived from" always matches
     let match = text?.match(/derived from ([\w-]+)/i);
@@ -104,12 +101,15 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
 
     if (!type && name.match(/\s/)) {
         // This isn't actually a datatype
+        if (!text) {
+            logger.warn(`${definition.xref.document} § ${definition.xref.section} does not appear to be a datatype`);
+        }
         return;
     }
 
     const datatype = DatatypeElement({
         type: type,
-        name,
+        name: name.replace(/\s+/g, ""),
         description,
         constraint,
         xref: definition.xref,
@@ -166,7 +166,9 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
         return true;
     });
 
-    applyAccessNotes(fields, records);
+    if (type.Tag !== ElementTag.Attribute) {
+        applyAccessNotes(fields, records);
+    }
 
     return translateRecordsToMatter(type.Tag, records, type) as ReturnType<T>[] | undefined;
 }

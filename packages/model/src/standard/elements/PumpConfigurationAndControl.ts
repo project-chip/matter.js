@@ -18,9 +18,23 @@ import {
 export const PumpConfigurationAndControl = Cluster(
     {
         name: "PumpConfigurationAndControl", id: 0x200, classification: "application", pics: "PCC",
+
         details: "The Pump Configuration and Control cluster provides an interface for the setup and control of pump " +
             "devices, and the automatic reporting of pump status information. Note that control of pump speed is " +
-            "not included – speed is controlled by the On/Off and Level Control clusters.",
+            "not included – speed is controlled by the On/Off and Level Control clusters." +
+            "\n" +
+            "### Pump controller Pump" +
+            "\n" +
+            "C Pump configuration and control S C Level control S" +
+            "\n" +
+            "C On/Off S" +
+            "\n" +
+            "C = Client S = Server" +
+            "\n" +
+            "Note: Device names are examples for illustration purposes only" +
+            "\n" +
+            "Figure 14. Typical Usage of Pump Configuration and Control Cluster",
+
         xref: { document: "cluster", section: "4.2" }
     },
 
@@ -131,8 +145,9 @@ export const PumpConfigurationAndControl = Cluster(
     Attribute({
         name: "MinConstSpeed", id: 0x7, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
         default: null, quality: "X F",
-        details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
-            "ControlMode attribute set to ConstantSpeed." +
+        details: "This attribute specifies the minimum speed the pump can achieve when it is working with the Con" +
+            "\n" +
+            "trolMode attribute set to ConstantSpeed." +
             "\n" +
             "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
         xref: { document: "cluster", section: "4.2.7.8" }
@@ -151,9 +166,8 @@ export const PumpConfigurationAndControl = Cluster(
     Attribute({
         name: "MinConstFlow", id: 0x9, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
         default: null, quality: "X F",
-        details: "This attribute specifies the minimum flow the pump can achieve when it is working with the Con" +
-            "\n" +
-            "trolMode attribute set to ConstantFlow." +
+        details: "This attribute specifies the minimum flow the pump can achieve when it is working with the " +
+            "ControlMode attribute set to ConstantFlow." +
             "\n" +
             "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
         xref: { document: "cluster", section: "4.2.7.10" }
@@ -197,7 +211,8 @@ export const PumpConfigurationAndControl = Cluster(
         name: "PumpStatus", id: 0x10, type: "PumpStatusBitmap", access: "R V", conformance: "O",
         constraint: "desc", default: 0, quality: "P",
         details: "This attribute specifies the activity status of the pump functions as listed in PumpStatusBitmap. " +
-            "Where a pump controller function is active, the corresponding bit shall be set to 1. Where a pump " +
+            "Where a pump controller function is active, the corresponding bit shall be set to 1. Where a pump" +
+            "\n" +
             "controller function is not active, the corresponding bit shall be set to 0.",
         xref: { document: "cluster", section: "4.2.7.14" }
     }),
@@ -276,7 +291,7 @@ export const PumpConfigurationAndControl = Cluster(
             "If the value is not available (the measurement or estimation of the speed is done in the pump), " +
             "this attribute will indicate the null value." +
             "\n" +
-            "Valid range is 0 to 65.534 RPM.",
+            "Valid range is 0 to 65,534 RPM.",
 
         xref: { document: "cluster", section: "4.2.7.18" }
     }),
@@ -290,10 +305,10 @@ export const PumpConfigurationAndControl = Cluster(
             "cycles of the pump. If LifeTimeRunningHours rises above maximum value it “rolls over” and starts at " +
             "0 (zero)." +
             "\n" +
-            "This attribute is writeable, in order to allow setting to an appropriate value after maintenance. If" +
+            "This attribute is writeable, in order to allow setting to an appropriate value after maintenance. " +
+            "If the value is not available, this attribute will indicate the null value." +
             "\n" +
-            "the value is not available, this attribute will indicate the null value. Valid range is 0 to " +
-            "16,777,214 hrs.",
+            "Valid range is 0 to 16,777,214 hrs.",
 
         xref: { document: "cluster", section: "4.2.7.19" }
     }),
@@ -370,9 +385,7 @@ export const PumpConfigurationAndControl = Cluster(
 
         details: "This attribute specifies the control mode of the pump as defined in ControlModeEnum." +
             "\n" +
-            "See the OperationMode attribute for a detailed description of the operation and control of the" +
-            "\n" +
-            "pump." +
+            "See the OperationMode attribute for a detailed description of the operation and control of the pump." +
             "\n" +
             "ControlMode may be changed at any time, even when the pump is running. The behavior of the pump at " +
             "the point of changing is vendor-specific." +
@@ -384,11 +397,7 @@ export const PumpConfigurationAndControl = Cluster(
         xref: { document: "cluster", section: "4.2.7.23" }
     }),
 
-    Attribute({
-        name: "AlarmMask", id: 0x22, type: "uint16", access: "R V", conformance: "D", constraint: "desc",
-        default: 0, quality: "N",
-        xref: { document: "cluster", section: "4.2.7" }
-    }),
+    Attribute({ name: "AlarmMask", id: 0x22, type: "uint16", conformance: "D", xref: { document: "cluster", section: "4.2.7" } }),
     Event({
         name: "SupplyVoltageLow", id: 0x0, access: "V", conformance: "O", priority: "info",
         xref: { document: "cluster", section: "4.2.8" }
@@ -567,9 +576,10 @@ export const PumpConfigurationAndControl = Cluster(
         Field({
             name: "ProportionalPressure", id: 0x2, conformance: "PRSCOMP",
             description: "The pump will regulate its speed to maintain a constant differential pressure over its flanges.",
-            details: "The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – " +
-                "MaxCompPressure] attributes. The internal setpoint will be lowered (compensated) dependent on the " +
-                "flow in the pump (lower flow ⇒ lower internal setpoint).",
+            details: "The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – Max" +
+                "\n" +
+                "CompPressure] attributes. The internal setpoint will be lowered (compensated) dependent on the flow " +
+                "in the pump (lower flow ⇒ lower internal setpoint).",
             xref: { document: "cluster", section: "4.2.6.3.3" }
         }),
 

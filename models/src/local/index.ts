@@ -15,9 +15,7 @@
 import "./AdministratorCommissioningOverrides.js";
 import "./any.js";
 import "./BasicInformationOverrides.js";
-import "./ChannelOverrides.js";
 import "./ColorControlOverrides.js";
-import "./ContentLauncherOverrides.js";
 import "./DoorLockOverrides.js";
 import "./ElectricalPowerMeasurementOverrides.js";
 import "./GroupKeyManagementOverrides.js";

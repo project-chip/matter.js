@@ -20,9 +20,8 @@ import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace OtaSoftwareUpdateProvider {
     /**
-     * Note that only HTTP over TLS (HTTPS) is supported (see RFC 7230). Using HTTP without TLS shall
-     *
-     * NOT be supported, as there is no way to authenticate the involved participants.
+     * Note that only HTTP over TLS (HTTPS) is supported (see RFC 7230). Using HTTP without TLS shall NOT be supported,
+     * as there is no way to authenticate the involved participants.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.20.6.4.3
      */
@@ -107,9 +106,10 @@ export namespace OtaSoftwareUpdateProvider {
         hardwareVersion: TlvOptionalField(4, TlvUInt16),
 
         /**
-         * The location, if present, shall provide the same value as the Basic Information Cluster Location attribute
-         * for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow per-region
-         * selection of the Software Image.
+         * The location, if present, shall provide the same value as the Basic Information Cluster Location
+         *
+         * attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow
+         * per-region selection of the Software Image.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.6
          */
@@ -244,27 +244,27 @@ export namespace OtaSoftwareUpdateProvider {
          *
          *     a. The Operational Node ID in the host field shall match the NodeID of the OTA Provider responding with
          *        the QueryImageResponse. The usage of a different Node ID than that of the provider is reserved for
-         *        future use. This constraint reduces the number of independent
+         *        future use. This constraint reduces the number of independent CASE secure channel sessions that have
+         *        to be maintained to proceed with OTA software updates, thus reducing energy and resource utilization
+         *        for the software update process.
          *
-         * CASE secure channel sessions that have to be maintained to proceed with OTA software updates, thus reducing
-         * energy and resource utilization for the software update process.
+         *   4. The user section of the authority field shall be absent, as there are no "users" to be considered.
          *
-         * 4. The user section of the authority field shall be absent, as there are no "users" to be considered.
+         *   5. The port section of the authority field shall be absent, as the port for transport shall be determined
+         *      through Operational Discovery of the target Node.
          *
-         * 5. The port section of the authority field shall be absent, as the port for transport shall be determined
-         * through Operational Discovery of the target Node.
+         *   6. The URI shall NOT contain a query field.
          *
-         * 6. The URI shall not contain a query field.
+         *   7. The URI shall NOT contain a fragment field.
          *
-         * 7. The URI shall not contain a fragment field.
+         *   8. The path field shall employ absolute path representation and shall contain the file designator of the
+         *      software image to download at the BDX server. When used with the BDX server, the leading / separating
+         *      the URI authority from the path shall be omitted. When contacting the BDX server, further processing of
+         *      the file designator shall NOT be done, including handling of URL-encoded escape sequences. Rather, the
+         *      exact octets of the path, as received shall be the values used by both client and server in handling
+         *      the file designator.
          *
-         * 8. The path field shall employ absolute path representation and shall contain the file designator of the
-         * software image to download at the BDX server. When used with the BDX server, the leading / separating the
-         * URI authority from the path shall be omitted. When contacting the BDX server, further processing of the file
-         * designator shall NOT be done, including handling of URL-encoded escape sequences. Rather, the exact octets
-         * of the path, as received shall be the values used by both client and server in handling the file designator.
-         *
-         *   a. The path shall only contain valid URI characters.
+         *     a. The path shall only contain valid URI characters.
          *
          * These rules above for BDX URIs simplify parsing for OTA Requestors receiving Image URIs. The following
          * example procedure shows how the format constraints simplify the extraction of the necessary data to reach
@@ -450,7 +450,7 @@ export namespace OtaSoftwareUpdateProvider {
 
     /**
      * See Section 11.20.3.6, “Applying a software update” for the semantics of the values. This enumeration is used in
-     * the Action field of the ApplyUpdateResponse command. See (Section 11.20.6.5.4.1, “Action Field”).
+     * the Action field of the ApplyUpdateResponse command. See (Action).
      *
      * @see {@link MatterSpecification.v13.Core} § 11.20.6.4.2
      */
@@ -533,7 +533,7 @@ export namespace OtaSoftwareUpdateProvider {
          * may never come back (e.g. device removed from Fabric altogether, or a critical malfunction), an OTA Provider
          * shall NOT expect every OTA Requestor to invoke this command for correct operation of the OTA Provider.
          *
-         * This command shall be considered optional and shall not result in reduced availability of the OTA Provider
+         * This command shall be considered optional and shall NOT result in reduced availability of the OTA Provider
          * functionality if OTA Requestors never invoke this command.
          *
          * Effect on Receipt

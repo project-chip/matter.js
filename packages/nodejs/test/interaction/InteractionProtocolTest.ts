@@ -869,25 +869,25 @@ const wildcardTestCases: {
     wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
     count: number;
 }[] = [
-    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 20 },
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
     { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
     {
         testCase: "skipGlobalAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipGlobalAttributes: true },
-        count: 17,
+        count: 18,
     }, // 4 less
     {
         testCase: "skipAttributeList",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipAttributeList: true },
-        count: 19,
+        count: 20,
     }, // 1 less
     {
         testCase: "skipCommandLists",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipCommandLists: true },
-        count: 18,
+        count: 19,
     }, // 2 less
     {
         testCase: "skipFixedAttributes",
@@ -899,7 +899,7 @@ const wildcardTestCases: {
         testCase: "skipChangesOmittedAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipChangesOmittedAttributes: true },
-        count: 20,
+        count: 21,
     }, // nothing filtered
     {
         testCase: "no for WiFiDiag",
@@ -1016,6 +1016,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",
@@ -1187,7 +1188,6 @@ describe("InteractionProtocol", () => {
                 AccessControlCluster,
                 {
                     acl: [],
-                    extension: [],
                     subjectsPerAccessControlEntry: 4,
                     targetsPerAccessControlEntry: 4,
                     accessControlEntriesPerFabric: 4,
@@ -1195,7 +1195,6 @@ describe("InteractionProtocol", () => {
                 {},
                 {
                     accessControlEntryChanged: true,
-                    accessControlExtensionChanged: true,
                 },
             );
 
@@ -1312,6 +1311,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",
@@ -1357,6 +1357,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",

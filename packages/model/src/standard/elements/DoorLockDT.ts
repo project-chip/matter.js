@@ -30,7 +30,7 @@ export const DoorLockDt = DeviceType(
         xref: { document: "device", section: "8.1.4" }
     }),
     Requirement({
-        name: "ScenesManagement", id: 0x5, conformance: "X", element: "serverCluster",
+        name: "ScenesManagement", id: 0x62, conformance: "X", element: "serverCluster",
         xref: { document: "device", section: "8.1.4" }
     }),
 
@@ -39,7 +39,7 @@ export const DoorLockDt = DeviceType(
             name: "DoorLock", id: 0x101, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "8.1.4" }
         },
-        Requirement({ name: "USER", conformance: "Matter & (PIN | RID | FPG | FACE)", element: "feature" }),
+        Requirement({ name: "USER", conformance: "Matter & (PIN | RID | FPG | FACE | ALIRO)", element: "feature" }),
         Requirement({ name: "RFIDCREDENTIAL", conformance: "P, O", element: "feature" }),
         Requirement({ name: "AlarmMask", conformance: "[Alarms]", element: "attribute" })
     )

@@ -22,7 +22,7 @@ describe("CADMIN", () => {
     //before(() => chip.testFor("CADMIN/1.19").edit(edit.sed("s/0x0000000B/0x00000587/")));
 
     // TODO - temporarily disabled other tests while working out 1.19 issues
-    //chip("CADMIN/*").exclude("CADMIN/1.19");
+    chip("CADMIN/*").exclude("CADMIN/1.19");
 
     // TODO - need to resolve issues w/ 1.19
     chip("CADMIN/1.19").beforeTest(subject => {

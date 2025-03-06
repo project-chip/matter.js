@@ -520,6 +520,35 @@ const AllTests = Tests({
                 },
             },
         ),
+
+        "hairy real-world": Tests(
+            Features({
+                PIR: "PIR",
+                US: "US",
+                PHY: "PHY",
+            }),
+            Fields(
+                {
+                    name: "HoldTime",
+                    type: "uint16",
+                },
+                {
+                    name: "PirUnoccupiedToOccupiedThreshold",
+                    type: "uint8",
+                },
+                {
+                    name: "PirUnoccupiedToOccupiedDelay",
+                    type: "uint8",
+                    conformance:
+                        "HoldTime & (PIR | !PIR & !US & !PHY) & PirUnoccupiedToOccupiedThreshold, [HoldTime & (PIR | !PIR & !US & !PHY)], D",
+                },
+            ),
+            {
+                "OccupancySensing.PirUnoccupiedToOccupiedDelay": {
+                    record: { pirUnoccupiedToOccupiedDelay: 4 },
+                },
+            },
+        ),
     }),
 });
 

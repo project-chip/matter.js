@@ -13,6 +13,9 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
+ * PowerSourceEndpoint requires PowerSource cluster but PowerSource is not added by default because you must select the
+ * features your device supports. You can add manually using PowerSourceEndpoint.with().
+ *
  * @see {@link MatterSpecification.v13.Device} § 2.2
  */
 export interface PowerSourceEndpoint extends Identity<typeof PowerSourceEndpointDefinition> {}
@@ -37,7 +40,7 @@ export const PowerSourceEndpointDefinition = MutableEndpoint({
     deviceRevision: 1,
     deviceClass: DeviceClassification.Utility,
     requirements: PowerSourceRequirements,
-    behaviors: SupportedBehaviors(PowerSourceRequirements.server.mandatory.PowerSource)
+    behaviors: SupportedBehaviors()
 });
 
 export const PowerSourceEndpoint: PowerSourceEndpoint = PowerSourceEndpointDefinition;

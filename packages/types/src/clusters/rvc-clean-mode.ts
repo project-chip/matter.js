@@ -14,8 +14,8 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ModeBase } from "./mode-base.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -23,21 +23,68 @@ export namespace RvcCleanMode {
     /**
      * These are optional features supported by RvcCleanModeCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     * @see {@link MatterSpecification.v13.Cluster} § 7.3.4
      */
     export enum Feature {
         /**
          * OnOff (DEPONOFF)
          *
-         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
-         * endpoint. See OnMode for more information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         * Dependency with the OnOff cluster
          */
         OnOff = "OnOff"
     }
 
     export enum ModeTag {
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Auto = 0,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Quick = 1,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Quiet = 2,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        LowNoise = 3,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        LowEnergy = 4,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Vacation = 5,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Min = 6,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Max = 7,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Night = 8,
+
+        /**
+         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         */
+        Day = 9,
+
         /**
          * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
          */
@@ -55,77 +102,7 @@ export namespace RvcCleanMode {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2.3
          */
-        Mop = 16386,
-
-        /**
-         * The device decides which options, features and setting values to use.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Auto = 0,
-
-        /**
-         * The mode of the device is optimizing for faster completion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quick = 1,
-
-        /**
-         * The device is silent or barely audible while in this mode.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quiet = 2,
-
-        /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowNoise = 3,
-
-        /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowEnergy = 4,
-
-        /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Vacation = 5,
-
-        /**
-         * The mode uses the lowest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Min = 6,
-
-        /**
-         * The mode uses the highest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Max = 7,
-
-        /**
-         * The mode is recommended or suitable for use during night time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Night = 8,
-
-        /**
-         * The mode is recommended or suitable for use during day time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Day = 9
+        Mop = 16386
     }
 
     /**
@@ -155,7 +132,7 @@ export namespace RvcCleanMode {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
          */
-        value: TlvField(1, TlvEnum<ModeTag>())
+        value: TlvField(1, TlvEnum<ModeTag | ModeBase.ModeTag>())
     });
 
     /**
@@ -168,9 +145,6 @@ export namespace RvcCleanMode {
     /**
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
-     *
-     * At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag in the
-     * ModeTags field list.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 7.3.5.1
      */
@@ -234,9 +208,6 @@ export namespace RvcCleanMode {
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
      *
-     * At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag in the
-     * ModeTags field list.
-     *
      * @see {@link MatterSpecification.v13.Cluster} § 7.3.5.1
      */
     export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
@@ -245,37 +216,7 @@ export namespace RvcCleanMode {
         /**
          * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.1
          */
-        CleaningInProgress = 64,
-
-        /**
-         * Switching to the mode indicated by the NewMode field is allowed and possible. The CurrentMode attribute is
-         * set to the value of the NewMode field.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
-         */
-        Success = 0,
-
-        /**
-         * The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
-         */
-        UnsupportedMode = 1,
-
-        /**
-         * Generic failure code, indicating that switching to the mode indicated by the NewMode field is not allowed or
-         * not possible.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
-         */
-        GenericFailure = 2,
-
-        /**
-         * The received request cannot be handled due to the current mode of the device
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
-         */
-        InvalidInMode = 3
+        CleaningInProgress = 64
     }
 
     /**
@@ -284,23 +225,23 @@ export namespace RvcCleanMode {
     export const Base = MutableCluster.Component({
         id: 0x55,
         name: "RvcCleanMode",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)
         },
 
         attributes: {
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 7.3.6
+             * At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag in
+             * the ModeTags field list.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 7.3.6.1
              */
             supportedModes: FixedAttribute(
                 0x0,
@@ -311,7 +252,7 @@ export namespace RvcCleanMode {
             /**
              * @see {@link MatterSpecification.v13.Cluster} § 7.3.6
              */
-            currentMode: Attribute(0x1, TlvUInt8, { scene: true, persistent: true })
+            currentMode: Attribute(0x1, TlvUInt8, { persistent: true })
         },
 
         commands: {
@@ -329,7 +270,7 @@ export namespace RvcCleanMode {
          * This metadata controls which RvcCleanModeCluster elements matter.js activates for specific feature
          * combinations.
          */
-        extensions: MutableCluster.Extensions()
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: false })
     });
 
     /**
@@ -338,8 +279,8 @@ export namespace RvcCleanMode {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is derived from the Mode Base cluster to define specifics for Robotic Vacuum Cleaner devices. It
-     * also defines a namespace for the cleaning type for these devices.
+     * This cluster is derived from the Mode Base cluster and defines additional mode tags and namespaced enumerated
+     * values for the cleaning type of robotic vacuum cleaner devices.
      *
      * RvcCleanModeCluster supports optional features that you can enable with the RvcCleanModeCluster.with() factory
      * method.

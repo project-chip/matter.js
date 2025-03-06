@@ -53,7 +53,7 @@ describe("Quality", () => {
         });
 
         it("serialize", () => {
-            expect(`${quality}`).equal("X N F S P C I Q L K");
+            expect(`${quality}`).equal("X N F S P C I Q L K T");
         });
     });
 

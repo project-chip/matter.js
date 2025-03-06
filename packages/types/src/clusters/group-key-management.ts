@@ -57,7 +57,7 @@ export namespace GroupKeyManagement {
 
         /**
          * This field references the set of group keys that generate operational group keys for use with this group, as
-         * specified in Section 4.16.3.5.1, “Group Key Set ID”.
+         * specified in Section 4.17.3.5.1, “Group Key Set ID”.
          *
          * A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for the IPK.
          *
@@ -151,7 +151,7 @@ export namespace GroupKeyManagement {
     export const TlvGroupKeySet = TlvObject({
         /**
          * This field shall provide the fabric-unique index for the associated group key set, as specified in Section
-         * 4.16.3.5.1, “Group Key Set ID”.
+         * 4.17.3.5.1, “Group Key Set ID”.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.2.5.4.1
          */
@@ -176,7 +176,7 @@ export namespace GroupKeyManagement {
         epochKey0: TlvField(2, TlvNullable(TlvByteString.bound({ length: 16 }))),
 
         /**
-         * This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.16.3, “Epoch
+         * This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.17.3, “Epoch
          * Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.2.5.4.4
@@ -184,16 +184,15 @@ export namespace GroupKeyManagement {
         epochStartTime0: TlvField(3, TlvNullable(TlvEpochUs)),
 
         /**
-         * This field, if not null, shall be the root credential used in the derivation of an operational group
-         *
-         * key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall NOT be null.
+         * This field, if not null, shall be the root credential used in the derivation of an operational group key for
+         * epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall NOT be null.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.2.5.4.5
          */
         epochKey1: TlvField(4, TlvNullable(TlvByteString.bound({ length: 16 }))),
 
         /**
-         * This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.16.3, “Epoch
+         * This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.17.3, “Epoch
          * Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.2.5.4.6
@@ -209,7 +208,7 @@ export namespace GroupKeyManagement {
         epochKey2: TlvField(6, TlvNullable(TlvByteString.bound({ length: 16 }))),
 
         /**
-         * This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.16.3, “Epoch
+         * This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.17.3, “Epoch
          * Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.2.5.4.8
@@ -358,8 +357,9 @@ export namespace GroupKeyManagement {
 
             /**
              * This attribute is a list of GroupInfoMapStruct entries. Each entry provides read-only information about
-             * how a given logical Group ID maps to a particular set of endpoints, and a name for the group. The
-             * content of this attribute reflects data managed via the Groups cluster (see AppClusters), and is in
+             * how a given logical Group ID maps to a particular set of endpoints, and a name for the group.
+             *
+             * The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and is in
              * general terms referred to as the 'node-wide Group Table'.
              *
              * The GroupTable shall NOT contain any entry whose GroupInfoMapStruct has an empty Endpoints list. If a
@@ -437,18 +437,18 @@ export namespace GroupKeyManagement {
              *     being null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
              *
              * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-             * that provided in the GroupKeySet field, then the contents of that group key set shall be replaced. A
-             * replacement shall be done by executing the equivalent of entirely removing the previous Group Key Set
-             * with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
+             * that provided in the GroupKeySet field, then the contents of that group key set shall be
+             *
+             * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous
+             * Group Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
              * configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set
              * associated with the accessing fabric shall be created with the provided data. The Group Key Set shall be
              * written to non-volatile storage.
              *
              * Upon completion, this command shall send a status code back to the initiator:
              *
-             *   • If the Group Key Set was properly installed or updated on the Node, the status code shall be
-             *
-             * set to SUCCESS.
+             *   • If the Group Key Set was properly installed or updated on the Node, the status code shall be set to
+             *     SUCCESS.
              *
              *   • If there are insufficient resources on the receiver to store an additional Group Key Set, the status
              *     code shall be set to RESOURCE_EXHAUSTED (see group key limits);
@@ -486,10 +486,9 @@ export namespace GroupKeyManagement {
              *
              * Effect on Receipt
              *
-             * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKey
-             *
-             * SetID as that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be
-             * removed, including all epoch keys it contains.
+             * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
+             * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed,
+             * including all epoch keys it contains.
              *
              * If there exist any entries for the accessing fabric within the GroupKeyMap attribute that refer to the
              * GroupKeySetID just removed, then these entries shall be removed from that list.
@@ -515,8 +514,6 @@ export namespace GroupKeyManagement {
             /**
              * This command is used by Administrators to query a list of all Group Key Sets associated with the
              * accessing fabric.
-             *
-             * NOTE Field 0 for this command is reserved and shall NOT be used.
              *
              * Effect on Receipt
              *
@@ -555,8 +552,9 @@ export namespace GroupKeyManagement {
      * require Administer privilege.
      *
      * Each group entry includes a membership list of zero of more endpoints that are members of the group on the node.
-     * Modification of this membership list is done via the Groups cluster, which is scoped to an endpoint. Please see
-     * the System Model specification for more information on groups.
+     * Modification of this membership list is done via the Groups cluster, which is
+     *
+     * scoped to an endpoint. Please see the System Model specification for more information on groups.
      *
      * GroupKeyManagementCluster supports optional features that you can enable with the
      * GroupKeyManagementCluster.with() factory method.

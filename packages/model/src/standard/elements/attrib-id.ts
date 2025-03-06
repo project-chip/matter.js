@@ -15,7 +15,7 @@ export const attribId = Datatype({
         "\n" +
         "Attribute IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
         "are described in Data Model Types.",
-    xref: { document: "core", section: "7.18.2.27" }
+    xref: { document: "core", section: "7.19.2.27" }
 });
 
 MatterDefinition.children.push(attribId);

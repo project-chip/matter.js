@@ -73,108 +73,15 @@ function addFeatureNode(
     illegal: IllegalFeatureCombinations,
     choices: Choices,
 ) {
-    function unsupported() {
-        throw new InternalError(`New rule required to support ${feature.path} conformance "${feature.conformance}"`);
-    }
-
-    /**
-     * Extract a feature name.
-     */
-    function extractName(node: Conformance.Ast): string {
-        if (node.type === Conformance.Special.Name) {
-            return node.param;
-        }
-        unsupported();
-        return ""; // Unreachable
-    }
-
-    /**
-     * Extract a flag for a single feature.  Fails unless the AST is for NAME or !NAME.
-     */
-    function extractFeatureFlag(node: Conformance.Ast) {
-        switch (node.type) {
-            case Conformance.Special.Name:
-                return { [node.param]: true };
-
-            case Conformance.Operator.NOT:
-                return { [extractName(node.param)]: false };
-
-            default:
-                unsupported();
-        }
-    }
-
-    /**
-     * Extends a flag set with flag values that are disallowed given the base feature set.
-     */
-    function addExclusivityRequirement(flags: FeatureBitmap, node: Conformance.Ast) {
-        switch (node.type) {
-            case Conformance.OR:
-                addExclusivityRequirement(flags, node.param.lhs);
-                addExclusivityRequirement(flags, node.param.rhs);
-                break;
-
-            default:
-                Object.assign(flags, extractFeatureFlag(node));
-                break;
-        }
-    }
-
-    /**
-     * Add illegal feature sets for features that must be enabled based on the state of other features.
-     */
-    function addDependencyRequirement(feature: string, node: Conformance.Ast) {
-        switch (node.type) {
-            case Conformance.Special.Name:
-                illegal.push({ [feature]: true, [node.param]: false });
-                break;
-
-            case Conformance.AND:
-                addDependencyRequirement(feature, node.param.lhs);
-                addDependencyRequirement(feature, node.param.rhs);
-                break;
-
-            default:
-                unsupported();
-        }
-    }
-
-    /**
-     * Extract a feature flag disjunction.  Supports | and !.
-     */
-    function extractDisjunctFeatures(node: Conformance.Ast) {
-        const result = {} as FeatureBitmap;
-
-        function extract(node: Conformance.Ast, invert = false) {
-            switch (node.type) {
-                case Conformance.Special.Name:
-                    result[node.param] = !invert;
-                    break;
-
-                case Conformance.Operator.OR:
-                    extract(node.param.lhs, invert);
-                    extract(node.param.rhs, invert);
-                    break;
-
-                case Conformance.Operator.NOT:
-                    extract(node.param, !invert);
-                    break;
-
-                default:
-                    unsupported();
-            }
-        }
-
-        extract(node);
-
-        return result;
-    }
-
     switch (node.type) {
         case Conformance.Special.Desc:
         case Conformance.Special.Empty:
         case Conformance.Flag.Optional:
         case Conformance.Flag.Provisional:
+            break;
+
+        case Conformance.Flag.Mandatory:
+            illegal.push({ [feature.name]: false });
             break;
 
         case Conformance.Flag.Deprecated:
@@ -244,8 +151,124 @@ function addFeatureNode(
             break;
         }
 
+        case Conformance.Operator.OR: {
+            const features = extractDisjunctFeatures(node);
+            illegal.push(Object.fromEntries(Object.entries(features).map((k, v) => [k, !v])));
+            break;
+        }
+
         default:
             unsupported();
-            break;
+    }
+
+    function unsupported(): never {
+        throw new InternalError(`New rule required to support ${feature.path} conformance "${feature.conformance}"`);
+    }
+
+    /**
+     * Extract a feature name.
+     */
+    function extractName(node: Conformance.Ast): string {
+        if (node.type === Conformance.Special.Name) {
+            return node.param;
+        }
+        unsupported();
+    }
+
+    /**
+     * Extract a flag for a single feature.  Fails unless the AST is for NAME or !NAME.
+     */
+    function extractFeatureFlag(node: Conformance.Ast) {
+        switch (node.type) {
+            case Conformance.Special.Name:
+                return { [node.param]: true };
+
+            case Conformance.Operator.NOT:
+                return { [extractName(node.param)]: false };
+
+            default:
+                unsupported();
+        }
+    }
+
+    /**
+     * Extends a flag set with flag values that are disallowed given the base feature set.
+     */
+    function addExclusivityRequirement(flags: FeatureBitmap, node: Conformance.Ast) {
+        switch (node.type) {
+            case Conformance.OR:
+                addExclusivityRequirement(flags, node.param.lhs);
+                addExclusivityRequirement(flags, node.param.rhs);
+                break;
+
+            default:
+                Object.assign(flags, extractFeatureFlag(node));
+                break;
+        }
+    }
+
+    /**
+     * Add illegal feature sets for features that must be enabled based on the state of other features.
+     */
+    function addDependencyRequirement(feature: string, node: Conformance.Ast) {
+        switch (node.type) {
+            case Conformance.Special.Name:
+                illegal.push({ [feature]: true, [node.param]: false });
+                break;
+
+            case Conformance.AND:
+                addDependencyRequirement(feature, node.param.lhs);
+                addDependencyRequirement(feature, node.param.rhs);
+                break;
+
+            case Conformance.OR:
+                if (
+                    node.param.lhs.type === Conformance.Special.Name &&
+                    node.param.rhs.type === Conformance.Special.Name
+                ) {
+                    illegal.push({ [feature]: true, [node.param.lhs.param]: false, [node.param.rhs.param]: false });
+                }
+                break;
+
+            case Conformance.Operator.NOT:
+                if (node.param.type === Conformance.Special.Name) {
+                    illegal.push({ [feature]: true, [node.param.param]: true });
+                }
+                break;
+
+            default:
+                unsupported();
+        }
+    }
+
+    /**
+     * Extract a feature flag disjunction.  Supports | and !.
+     */
+    function extractDisjunctFeatures(node: Conformance.Ast) {
+        const result = {} as FeatureBitmap;
+
+        function extract(node: Conformance.Ast, invert = false) {
+            switch (node.type) {
+                case Conformance.Special.Name:
+                    result[node.param] = !invert;
+                    break;
+
+                case Conformance.Operator.OR:
+                    extract(node.param.lhs, invert);
+                    extract(node.param.rhs, invert);
+                    break;
+
+                case Conformance.Operator.NOT:
+                    extract(node.param, !invert);
+                    break;
+
+                default:
+                    unsupported();
+            }
+        }
+
+        extract(node);
+
+        return result;
     }
 }

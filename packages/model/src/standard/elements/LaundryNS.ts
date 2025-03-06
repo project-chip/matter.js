@@ -17,7 +17,7 @@ export const LaundryNs = SemanticNamespace(
         name: "Laundry", id: 0xe,
         details: "The tags contained in this namespace are restricted for use in the laundry domain and shall NOT be " +
             "used in any other domain or context.",
-        xref: { document: "namespace", section: "11" }
+        xref: { document: "namespace", section: "14" }
     },
 
     SemanticTag({ name: "Normal", id: 0x0 }),

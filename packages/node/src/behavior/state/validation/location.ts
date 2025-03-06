@@ -42,5 +42,6 @@ export namespace ValidationLocation {
         count: number;
         target: number;
         orMore: boolean;
+        orLess: boolean;
     }
 }

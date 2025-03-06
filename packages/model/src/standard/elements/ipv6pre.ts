@@ -31,7 +31,7 @@ export const ipv6Pre = Datatype({
         "\n" +
         "  • Allowed non-minimal encoding: Prefix 2001:0DB8:BB00::/40 → 7 octets → 2820010DB8BB00",
 
-    xref: { document: "core", section: "7.18.2.40" }
+    xref: { document: "core", section: "7.19.2.40" }
 });
 
 MatterDefinition.children.push(ipv6Pre);

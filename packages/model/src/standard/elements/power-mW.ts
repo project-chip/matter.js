@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const powerMW = Datatype({
     name: "power-mW", type: "int64", description: "Power", isSeed: true,
     details: "This type represents power measured in milliwatts.",
-    xref: { document: "core", section: "7.18.2.12" }
+    xref: { document: "core", section: "7.19.2.12" }
 });
 MatterDefinition.children.push(powerMW);

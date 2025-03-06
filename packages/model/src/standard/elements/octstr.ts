@@ -13,7 +13,7 @@ export const octstr = Datatype({
     name: "octstr", description: "Octet string", isSeed: true, metatype: "bytes",
     details: "The octet string data type defines a sequence of octets with a finite octet count from 0 to 65534. " +
         "It is recommended to define a constraint on the maximum possible count.",
-    xref: { document: "core", section: "7.18.1.7" }
+    xref: { document: "core", section: "7.19.1.7" }
 });
 
 MatterDefinition.children.push(octstr);

@@ -13,9 +13,8 @@ export namespace SmokeCoAlarmInterface {
         /**
          * This command shall initiate a device self-test. The return status shall indicate whether the test was
          * successfully initiated. Only one SelfTestRequest may be processed at a time. When the value of the
-         * ExpressedState attribute is any of SmokeAlarm, COAlarm, Testing, InterconnectSmoke, Inter
-         *
-         * connectCO, the device shall NOT execute the self-test, and shall return status code BUSY.
+         * ExpressedState attribute is any of SmokeAlarm, COAlarm, Testing, InterconnectSmoke, InterconnectCO, the
+         * device shall NOT execute the self-test, and shall return status code BUSY.
          *
          * Upon successful acceptance of SelfTestRequest, the TestInProgress attribute shall be set to True and
          * ExpressedState attribute shall be set to Testing. Any faults identified during the test shall be reflected

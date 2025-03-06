@@ -106,10 +106,10 @@ export class MatterModel extends ScopeModel<MatterElement> implements MatterElem
         return this.children.filter(child => child.isSeed).map(child => child.clone());
     }
 
-    static {
-        Model.types[MatterElement.Tag] = this;
-    }
+    static Tag = MatterElement.Tag;
 }
+
+MatterModel.register();
 
 export namespace MatterModel {
     export type Child =

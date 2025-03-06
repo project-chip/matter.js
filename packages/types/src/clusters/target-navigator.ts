@@ -151,7 +151,7 @@ export namespace TargetNavigator {
         attributes: {
             /**
              * Indicates a list of targets that can be navigated to within the experience presented to the user by the
-             * Endpoint (Video Player or Content App). The list shall not contain any entries with the same Identifier
+             * Endpoint (Video Player or Content App). The list shall NOT contain any entries with the same Identifier
              * in the TargetInfoStruct object.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.11.5.1

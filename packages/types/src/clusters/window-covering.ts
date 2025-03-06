@@ -229,9 +229,6 @@ export namespace WindowCovering {
          */
         operational: BitFlag(0),
 
-        /**
-         * Deprecated and reserved.
-         */
         onlineReserved: BitFlag(1),
 
         /**
@@ -631,7 +628,7 @@ export namespace WindowCovering {
              * Indicates the maximum possible encoder position possible (Unit cm, centimeters) to position the height
              * of the window covering lift.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.2
              */
             physicalClosedLimitLift: OptionalFixedAttribute(0x1, TlvUInt16, { default: 0 }),
 
@@ -639,7 +636,7 @@ export namespace WindowCovering {
              * Indicates the actual lift position (Unit cm, centimeters) of the window covering from the fully-open
              * position.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.5
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.4
              */
             currentPositionLift: OptionalAttribute(0x3, TlvNullable(TlvUInt16), { persistent: true, default: null }),
 
@@ -647,7 +644,7 @@ export namespace WindowCovering {
              * Indicates the open limit for lifting the window covering whether position (in centimeters) is encoded or
              * timed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.18
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.17
              */
             installedOpenLimitLift: Attribute(0x10, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 0 }),
 
@@ -655,7 +652,7 @@ export namespace WindowCovering {
              * Indicates the closed limit for lifting the window covering whether position (in centimeters) is encoded
              * or timed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.19
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.18
              */
             installedClosedLimitLift: Attribute(
                 0x11,
@@ -675,7 +672,7 @@ export namespace WindowCovering {
              * Indicates the maximum possible encoder position possible (Unit 0.1°, tenths of a degree) to position the
              * angle of the window covering tilt.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.4
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.3
              */
             physicalClosedLimitTilt: OptionalFixedAttribute(0x2, TlvUInt16, { default: 0 }),
 
@@ -683,7 +680,7 @@ export namespace WindowCovering {
              * Indicates the actual tilt position (Unit 0.1°, tenths of a degree) of the window covering from the
              * fully-open position.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.6
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.5
              */
             currentPositionTilt: OptionalAttribute(0x4, TlvNullable(TlvUInt16), { persistent: true, default: null }),
 
@@ -691,7 +688,7 @@ export namespace WindowCovering {
              * Indicates the open limit for tilting the window covering whether position (in tenth of a degree) is
              * encoded or timed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.20
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.19
              */
             installedOpenLimitTilt: Attribute(0x12, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 0 }),
 
@@ -699,7 +696,7 @@ export namespace WindowCovering {
              * Indicates the closed limit for tilting the window covering whether position (in tenth of a degree) is
              * encoded or timed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.21
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.20
              */
             installedClosedLimitTilt: Attribute(
                 0x13,
@@ -718,7 +715,7 @@ export namespace WindowCovering {
              * Indicates the total number of lift/slide actuations applied to the window covering since the device was
              * installed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.7
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.6
              */
             numberOfActuationsLift: OptionalAttribute(0x5, TlvUInt16, { persistent: true, default: 0 })
         },
@@ -756,7 +753,7 @@ export namespace WindowCovering {
              * Indicates the total number of tilt actuations applied to the window covering since the device was
              * installed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.8
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.7
              */
             numberOfActuationsTilt: OptionalAttribute(0x6, TlvUInt16, { persistent: true, default: 0 })
         },
@@ -794,30 +791,26 @@ export namespace WindowCovering {
              * Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute is
              * equal to CurrentPositionLiftPercent100ths attribute divided by 100.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.12
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.11
              */
             currentPositionLiftPercentage: OptionalAttribute(
                 0x8,
                 TlvNullable(TlvPercent),
-                { scene: true, persistent: true, default: null }
+                { persistent: true, default: null }
             ),
 
             /**
              * Indicates the position where the window covering lift will go or is moving to as a percentage (Unit
              * 0.01%).
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.14
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.13
              */
-            targetPositionLiftPercent100ths: Attribute(
-                0xb,
-                TlvNullable(TlvPercent100ths),
-                { scene: true, default: null }
-            ),
+            targetPositionLiftPercent100ths: Attribute(0xb, TlvNullable(TlvPercent100ths), { default: null }),
 
             /**
              * Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals 100.00%.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.10
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.9
              */
             currentPositionLiftPercent100ths: Attribute(
                 0xe,
@@ -859,30 +852,26 @@ export namespace WindowCovering {
              * Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute is
              * equal to CurrentPositionTiltPercent100ths attribute divided by 100.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.13
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.12
              */
             currentPositionTiltPercentage: OptionalAttribute(
                 0x9,
                 TlvNullable(TlvPercent),
-                { scene: true, persistent: true, default: null }
+                { persistent: true, default: null }
             ),
 
             /**
              * Indicates the position where the window covering tilt will go or is moving to as a percentage (Unit
              * 0.01%).
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.15
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.14
              */
-            targetPositionTiltPercent100ths: Attribute(
-                0xc,
-                TlvNullable(TlvPercent100ths),
-                { scene: true, default: null }
-            ),
+            targetPositionTiltPercent100ths: Attribute(0xc, TlvNullable(TlvPercent100ths), { default: null }),
 
             /**
              * Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals 100.00%.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.11
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.10
              */
             currentPositionTiltPercent100ths: Attribute(
                 0xf,
@@ -1000,7 +989,7 @@ export namespace WindowCovering {
             /**
              * This attribute shall identify the type of window covering.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.1
              */
             type: FixedAttribute(0x0, TlvEnum<WindowCoveringType>(), { default: WindowCoveringType.Rollershade }),
 
@@ -1010,14 +999,14 @@ export namespace WindowCovering {
              * To change settings, devices shall write to the Mode attribute. The behavior causing the setting or
              * clearing of each bit is vendor specific.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.9
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.8
              */
             configStatus: Attribute(0x7, TlvBitmap(TlvUInt8, ConfigStatus), { persistent: true }),
 
             /**
              * Indicates the currently ongoing operations and applies to all type of devices.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.16
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.15
              */
             operationalStatus: Attribute(0xa, TlvBitmap(TlvUInt8, OperationalStatus)),
 
@@ -1027,7 +1016,7 @@ export namespace WindowCovering {
              *
              * The table below helps to match the EndProductType attribute with the Type attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.17
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.16
              */
             endProductType: FixedAttribute(0xd, TlvEnum<EndProductType>(), { default: EndProductType.RollerShade }),
 
@@ -1041,7 +1030,7 @@ export namespace WindowCovering {
              * write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set,
              * must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.22
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.21
              */
             mode: WritableAttribute(
                 0x17,
@@ -1054,7 +1043,7 @@ export namespace WindowCovering {
              * movements. By default for nominal operation all flags are cleared (0). A device might support none, one
              * or several bit flags from this attribute (all optional).
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.23
+             * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.22
              */
             safetyStatus: OptionalAttribute(0x1a, TlvBitmap(TlvUInt16, SafetyStatus))
         },

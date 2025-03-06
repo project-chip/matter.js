@@ -22,8 +22,12 @@ export const AcceptedCommandList = Attribute(
             "This attribute shall be a list of the command IDs for client generated commands that are supported " +
             "and processed by the server." +
             "\n" +
-            "For each client request command in this list that mandates a response from the server, the response " +
-            "command shall be indicated in the GeneratedCommandList attribute.",
+            "For each client request command in this list that mandates a response from the server, the" +
+            "\n" +
+            "response command shall be indicated in the GeneratedCommandList attribute." +
+            "\n" +
+            "If any attribute on a server supports atomic writes, this attribute shall contain the command ID " +
+            "for AtomicRequest.",
 
         xref: { document: "core", section: "7.13.4" }
     },

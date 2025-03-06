@@ -776,7 +776,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetHue, ColorControl.Direction.ShortestDistance, transitionTime, false),
+            this.moveToHueLogic(targetHue, ColorControl.Direction.Shortest, transitionTime, false),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1124,7 +1124,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.ShortestDistance, transitionTime, true),
+            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.Shortest, transitionTime, true),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1161,7 +1161,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
             this.state.colorLoopStartEnhancedHue = startHue;
         }
         if (updateFlags.updateAction) {
-            if (action === ColorControl.Action.DeActivateTheColorLoop) {
+            if (action === ColorControl.ColorLoopAction.Deactivate) {
                 return this.#stopColorLoop();
             } else {
                 return MaybePromise.then(
@@ -1169,15 +1169,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
                     () => {
                         this.state.colorLoopStoredEnhancedHue = this.state.enhancedCurrentHue;
                         this.state.colorLoopActive = ColorControl.ColorLoopActive.Active;
-                        if (
-                            action ===
-                            ColorControl.Action.ActivateTheColorLoopFromTheValueInTheColorLoopStartEnhancedHueField
-                        ) {
+                        if (action === ColorControl.ColorLoopAction.ActivateFromColorLoopStartEnhancedHue) {
                             return this.startColorLoopLogic(this.state.colorLoopStartEnhancedHue);
-                        } else if (
-                            action ===
-                            ColorControl.Action.ActivateTheColorLoopFromTheValueOfTheEnhancedCurrentHueAttribute
-                        ) {
+                        } else if (action === ColorControl.ColorLoopAction.ActivateFromEnhancedCurrentHue) {
                             return this.startColorLoopLogic(this.state.enhancedCurrentHue);
                         }
                     },
@@ -1686,13 +1680,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         } else if (direction === ColorControl.Direction.Down) {
             return -(max - distance);
         }
-        if (direction === ColorControl.Direction.ShortestDistance) {
+        if (direction === ColorControl.Direction.Shortest) {
             if (Math.abs(distance) > max / 2) {
                 return -(max - distance);
             }
             return distance;
         }
-        if (direction === ColorControl.Direction.LongestDistance) {
+        if (direction === ColorControl.Direction.Longest) {
             if (Math.abs(distance) > max / 2) {
                 return distance;
             }

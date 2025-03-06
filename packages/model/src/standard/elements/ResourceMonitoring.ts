@@ -19,7 +19,8 @@ export const ResourceMonitoring = Cluster(
     {
         name: "ResourceMonitoring", classification: "application", pics: "REPM",
 
-        details: "This generic cluster provides an interface to the current condition of a resource. A resource is a " +
+        details: "This generic cluster provides an interface to the current condition of a resource. A resource is a" +
+            "\n" +
             "component of a device that is designed to be replaced, refilled, or emptied when exhausted or full. " +
             "Examples of resources include filters, cartridges, and water tanks. While batteries fit this " +
             "definition they are not intended to be used with this cluster. Use the power source cluster for " +
