@@ -11,11 +11,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
--   @matter/protocol
-    - Feature: Supporting Matter 1.4
+-   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
 
--   @matter/types
-    - Feature: Supporting Matter 1.4
+-   @matter/main
+    - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
 -   @project-chip/matter.js
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
