@@ -13,6 +13,9 @@ import { GeneralCommissioningInterface } from "./GeneralCommissioningInterface.j
 /**
  * GeneralCommissioningBehavior is the base class for objects that support interaction with {@link
  * GeneralCommissioning.Cluster}.
+ *
+ * This class does not have optional features of GeneralCommissioning.Cluster enabled. You can enable additional
+ * features using GeneralCommissioningBehavior.with.
  */
 export const GeneralCommissioningBehavior = ClusterBehavior
     .withInterface<GeneralCommissioningInterface>()

@@ -7,6 +7,7 @@
 import { dirname, join } from "node:path";
 
 import { loadHtml, parseHeading } from "./doc-utils.js";
+import { looksLikeDatatype, looksLikeField } from "./header-detection-heuristics.js";
 import { Str } from "./html-translators.js";
 import { scanTables } from "./scan-tables.js";
 import { HtmlReference, Table } from "./spec-types.js";
@@ -127,11 +128,7 @@ export function* scanDocument(docRef: HtmlReference) {
                     }
 
                     // Sometimes there isn't even a section marker.  In this case we generate the missing section number
-                    if (
-                        text?.match(/^[a-z0-9]+(?: Field| Value)$/i) &&
-                        fakeSection.faking &&
-                        !fakeSection.fakingField
-                    ) {
+                    if (looksLikeField(text) && fakeSection.faking && !fakeSection.fakingField) {
                         // Already faking; treat these like a sub-headings to our fake heading
                         yield* emit();
                         fakeSection.subsection++;
@@ -144,9 +141,7 @@ export function* scanDocument(docRef: HtmlReference) {
                             },
                         };
                         break;
-                    } else if (
-                        text?.match(/^[a-z0-9]+(?:Enum|Struct| Attribute| Command| Event| Type| Field| Value| Bits?)$/i)
-                    ) {
+                    } else if (looksLikeDatatype(text)) {
                         // Looks like a section
                         const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
                         yield* emit();

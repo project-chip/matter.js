@@ -16,8 +16,9 @@ export namespace TimeSynchronizationInterface {
          * source, it may send a Granularity of NoTimeGranularity.
          *
          * Upon receipt of this command, the node may update its UTCTime attribute to match the time specified in the
-         * command, if the stated Granularity and TimeSource are acceptable. The node shall update its UTCTime
-         * attribute if its current Granularity is NoTimeGranularity.
+         * command, if the stated Granularity and TimeSource are acceptable. The node shall
+         *
+         * update its UTCTime attribute if its current Granularity is NoTimeGranularity.
          *
          * If the time is updated, the node shall also update its Granularity attribute based on the granularity
          * specified in the command and the expected clock drift of the node. This SHOULD normally be one level lower
@@ -35,11 +36,14 @@ export namespace TimeSynchronizationInterface {
 
     export interface TimeSyncClient {
         /**
-         * This command shall set the TrustedTimeSource attribute. Upon receipt of this command, * If the
-         * TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource attribute to null
-         * and shall generate a MissingTrustedTimeSource event. * Otherwise, the node shall set the TrustedTimeSource
-         * attribute to a struct which has NodeID and Endpoint fields matching those in the TrustedTimeSource field and
-         * has its FabricIndex field set to the command’s accessing fabric index.
+         * This command shall set the TrustedTimeSource attribute. Upon receipt of this command:
+         *
+         *   • If the TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource
+         *     attribute to null and shall generate a MissingTrustedTimeSource event.
+         *
+         *   • Otherwise, the node shall set the TrustedTimeSource attribute to a struct which has NodeID and Endpoint
+         *     fields matching those in the TrustedTimeSource field and has its FabricIndex field set to the command’s
+         *     accessing fabric index.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.2
          */
@@ -85,7 +89,8 @@ export namespace TimeSynchronizationInterface {
          * This command is used to set the DST offsets for a node.
          *
          *   • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with
-         *     RESOURCE_EXHAUSTED.
+         *
+         * RESOURCE_EXHAUSTED.
          *
          *   • Else if the list entries do not conform to the list requirements for DSTOffset attribute, the node shall
          *     respond with CONSTRAINT_ERROR.

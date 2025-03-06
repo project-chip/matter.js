@@ -53,19 +53,19 @@ export namespace EnergyEvse {
          * specify how many miles or km of additional range they need for their typical daily commute. This range
          * requirement can be converted into a daily energy demand with a target charging completion time.
          *
-         * The EVSE itself may use this information (or may allow a controller such as an EMS) to compute an
+         * The EVSE itself can use this information (or may allow a controller such as an EMS) to compute an optimized
+         * charging schedule.
          *
-         * optimized charging schedule.
-         *
-         * An EVSE device may implement the Device Energy Management cluster PFR (Power Forecast Reporting) and FA
-         * (Forecast Adjustment) features. This can help a controller (such as an EMS) to optimize the EVSE against
-         * other ESAs. For example, a solar PV ESA may share its Forecast and allow the EVSE to know the best time to
-         * charge so that any excess solar generation is used to charge the EV.
+         * An EVSE device which includes a Device Energy Management device with the Device Energy Management cluster
+         * PFR (Power Forecast Reporting) feature can use the charging preferences information to produce its power
+         * forecast.
          *
          * EVSE devices that support the Device Energy Management cluster’s FA feature can have their charging profiles
          * set by a controller device such as an EMS. For example, if the EVSE advertises a simple power forecast which
          * allows the EMS to adjust over a wide range of power and time durations, then the EVSE may allow the EMS to
-         * propose a revised optimized forecast (which is the charging profile).
+         * propose a revised optimized forecast (which is the charging profile). For example, a solar PV ESA may also
+         * share its Forecast, so enabling an EMS to adjust the EVSE forecast to the best time to charge so that any
+         * excess solar generation is used to charge the EV.
          *
          * See the Device Energy Management Cluster for more details.
          *
@@ -124,6 +124,12 @@ export namespace EnergyEvse {
          * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
          * discharge to the home or grid.
          *
+         * The charging and discharging may be controlled by a home Energy Management System (EMS) using the Device
+         * Energy Management cluster of the associated Device Energy Management device. For example, an EMS may use the
+         * PA (Power Adjustment) feature to continually adjust the charge/discharge current to/from the EV so as to
+         * minimise the energy flow from/to the grid as the demand in the home and the solar supply to the home both
+         * fluctuate.
+         *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.5
          */
         V2X = "V2X"
@@ -138,7 +144,8 @@ export namespace EnergyEvse {
         /**
          * This field shall indicate the expiry time, in UTC, when discharging will be automatically disabled.
          *
-         * A value in the past in this field shall disable the EVSE whereas a null value shall enable it permanently.
+         * A value in the past in this field shall disable the EVSE discharging whereas a null value shall enable EVSE
+         * discharging permanently.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.3.1
          */
@@ -147,9 +154,7 @@ export namespace EnergyEvse {
         /**
          * This field shall indicate the maximum current that can be received by the EVSE from the EV. The EVSE current
          * limit can be advertised to an EV in 0.6A steps. The value of the MaximumDischargeCurrent attribute shall be
-         * stored and persisted across reboots by the EVSE to the value of this
-         *
-         * field.
+         * stored and persisted across reboots by the EVSE to the value of this field.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.3.2
          */
@@ -164,7 +169,7 @@ export namespace EnergyEvse {
     export interface EnableDischargingRequest extends TypeFromSchema<typeof TlvEnableDischargingRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.5
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.1
      */
     export const TargetDayOfWeek = {
         /**
@@ -251,7 +256,7 @@ export namespace EnergyEvse {
          * This field represents the target SoC that the vehicle should be charged to before the
          * TargetTimeMinutesPastMidnight.
          *
-         * If the EVSE can obtain the SoC of the vehicle:
+         * If the EVSE supports the SOC feature and can obtain the SoC of the vehicle:
          *
          *   • the TargetSoC field shall take precedence over the AddedEnergy field.
          *
@@ -261,13 +266,14 @@ export namespace EnergyEvse {
          *   • if the TargetSoC value is set to 100% then the EVSE SHOULD continue to charge the vehicle until the
          *     vehicle decides to stop charging.
          *
-         * If the EVSE cannot obtain the SoC of the vehicle:
+         * If the EVSE does not support the SOC feature or cannot obtain the SoC of the vehicle:
          *
-         *   • in this case, the AddedEnergy field shall take precedence over the TargetSoC field, and the TargetSoC
-         *     field may only take the values null or 100%.
+         *   • the AddedEnergy field shall take precedence over the TargetSoC field, and if the EVSE does not support
+         *     the SOC feature then the TargetSoC field may only take the values null or 100%.
          *
-         *   • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty and charge
-         *     until the vehicle stops demanding a charge.
+         *   • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty
+         *
+         * and charge until the vehicle stops demanding a charge.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.6.2
          */
@@ -289,7 +295,7 @@ export namespace EnergyEvse {
          *
          * NOTE
          *
-         * If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD not limit this AddedEnergy value to
+         * If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD NOT limit this AddedEnergy value to
          * the Battery Capacity of the vehicle, since the EV may also require energy for heating and cooling of the
          * battery during charging, or for heating or cooling the cabin.
          *
@@ -322,8 +328,20 @@ export namespace EnergyEvse {
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.7
      */
     export const TlvChargingTargetSchedule = TlvObject({
-        dayOfWeekForSequence: TlvOptionalField(0, TlvBitmap(TlvUInt8, TargetDayOfWeek)),
-        chargingTargets: TlvOptionalField(1, TlvArray(TlvChargingTarget, { maxLength: 10 }))
+        /**
+         * This field shall indicate the days of the week that the charging targets SHOULD be associated to. This field
+         * is a bitmap and therefore the associated targets could be applied to multiple days.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.8
+         */
+        dayOfWeekForSequence: TlvField(0, TlvBitmap(TlvUInt8, TargetDayOfWeek)),
+
+        /**
+         * This field shall indicate a list of up to 10 charging targets for each of the associated days of the week.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.9
+         */
+        chargingTargets: TlvField(1, TlvArray(TlvChargingTarget, { maxLength: 10 }))
     });
 
     /**
@@ -400,7 +418,7 @@ export namespace EnergyEvse {
     export interface RfidEvent extends TypeFromSchema<typeof TlvRfidEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.1
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.2
      */
     export enum State {
         /**
@@ -440,7 +458,7 @@ export namespace EnergyEvse {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.2
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.3
      */
     export enum SupplyState {
         /**
@@ -465,13 +483,18 @@ export namespace EnergyEvse {
         DisabledError = 3,
 
         /**
-         * The EV is not currently allowed to charge or discharge due to Diagnostics Mode.
+         * The EV is not currently allowed to charge or discharge due to self- diagnostics mode.
          */
-        DisabledDiagnostics = 4
+        DisabledDiagnostics = 4,
+
+        /**
+         * The EV is currently allowed to charge and discharge
+         */
+        Enabled = 5
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.3
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.4
      */
     export enum FaultState {
         /**
@@ -592,10 +615,9 @@ export namespace EnergyEvse {
          * limit can be advertised to an EV in 0.6A steps.
          *
          * The value of the this field shall be stored by the EVSE to determine the value of MaximumChargeCurrent
-         * attribute. For example, if the UserMaximumChargeCurrent attribute is adjusted below then
-         *
-         * this value, and then later adjusted above this value, the resulting MaximumChargeCurrent attribute will be
-         * limited to this value.
+         * attribute. For example, if the UserMaximumChargeCurrent attribute is adjusted below then this value, and
+         * then later adjusted above this value, the resulting MaximumChargeCurrent attribute will be limited to this
+         * value.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.2.3
          */
@@ -660,7 +682,6 @@ export namespace EnergyEvse {
 
         /**
          * This field shall indicate the total amount of energy transferred from the EVSE to the EV during the session.
-         * This value shall always be positive.
          *
          * Note that if bi-directional charging occurs during the session, then this value shall only include the sum
          * of energy transferred from the EVSE to the EV, and shall NOT be a net value of charging and discharging
@@ -672,7 +693,6 @@ export namespace EnergyEvse {
 
         /**
          * This field shall indicate the total amount of energy transferred from the EV to the EVSE during the session.
-         * This value shall always be positive.
          *
          * Note that if bi-directional discharging occurs during the session, then this value shall only include the
          * sum of energy transferred from the EV to the EVSE, and shall NOT be a net value of charging and discharging
@@ -711,19 +731,25 @@ export namespace EnergyEvse {
         state: TlvField(1, TlvEnum<State>()),
 
         /**
-         * This field shall indicate the value of the maximum charging or discharging current at the time the event was
-         * generated.
+         * This field shall indicate the value of the maximum charging current at the time the event was generated.
          *
-         * This field is signed. A positive value indicates the EV has been enabled for charging and the value is taken
-         * directly from the MaximumChargeCurrent attribute.
-         *
-         * A negative value indicates that the EV has been enabled for discharging and the value can be taken from the
-         * MaximumDischargeCurrent attribute with its sign inverted. i.e. if the MaximumDischargeCurrent was 32000mA,
-         * this would be represented here as -32000mA.
+         * A non-zero value indicates that the EV has been enabled for charging and the value is taken directly from
+         * the MaximumChargeCurrent attribute. A zero value indicates that the EV has not been enabled for charging.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.3.3
          */
-        maximumCurrent: TlvField(2, TlvInt64.bound({ min: 0 }))
+        maximumCurrent: TlvField(2, TlvInt64.bound({ min: 0 })),
+
+        /**
+         * This field shall indicate the value of the maximum discharging current at the time the event was generated.
+         *
+         * A non-zero value indicates that the EV has been enabled for discharging and the value is taken directly from
+         * the MaximumDischargeCurrent attribute. A zero value indicates that the EV has not been enabled for
+         * discharging.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.3.4
+         */
+        maximumDischargeCurrent: TlvOptionalField(3, TlvInt64.bound({ min: 0 }))
     });
 
     /**
@@ -734,7 +760,7 @@ export namespace EnergyEvse {
     export interface EnergyTransferStartedEvent extends TypeFromSchema<typeof TlvEnergyTransferStartedEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.4
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.5
      */
     export enum EnergyTransferStoppedReason {
         /**
@@ -780,7 +806,21 @@ export namespace EnergyEvse {
          */
         reason: TlvField(2, TlvEnum<EnergyTransferStoppedReason>()),
 
-        energyTransferred: TlvField(4, TlvInt64.bound({ min: 0 }))
+        /**
+         * This field shall indicate the amount of energy transferred from the EVSE to the EV since the previous
+         * EnergyTransferStarted event, in mWh.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.4.4
+         */
+        energyTransferred: TlvField(4, TlvInt64.bound({ min: 0 })),
+
+        /**
+         * This field shall indicate the amount of energy transferred from the EV to the EVSE since the previous
+         * EnergyTransferStarted event, in mWh.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.4.5
+         */
+        energyDischarged: TlvOptionalField(5, TlvInt64.bound({ min: 0 }))
     });
 
     /**
@@ -881,7 +921,8 @@ export namespace EnergyEvse {
 
         commands: {
             /**
-             * Allows a client to enable the EVSE to discharge an EV.
+             * Upon receipt, this shall allow a client to enable the discharge of an EV, and to provide or update the
+             * maximum discharge current.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.3
              */
@@ -898,7 +939,9 @@ export namespace EnergyEvse {
              * Indicates the time, in UTC, when the EVSE plans to start the next scheduled charge based on the charging
              * preferences.
              *
-             * If this is null it indicates that there is no scheduled charging, or that the vehicle is not plugged in.
+             * A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use
+             * Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that charging is
+             * enabled.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.8.12
              */
@@ -908,7 +951,9 @@ export namespace EnergyEvse {
              * Indicates the time, in UTC, when the EVSE SHOULD complete the next scheduled charge based on the
              * charging preferences.
              *
-             * If this is null it indicates that there is no scheduled charging, or that the vehicle is not plugged in.
+             * A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use
+             * Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that charging is
+             * enabled.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.8.13
              */
@@ -918,8 +963,9 @@ export namespace EnergyEvse {
              * Indicates the amount of energy that the EVSE is going to attempt to add to the vehicle in the next
              * charging target.
              *
-             * If this is null it indicates that there is no scheduled charging, or that the EVSE is using the
-             * TargetSoC method to charge the vehicle.
+             * A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use
+             * Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that charging is
+             * enabled, or that the next ChargingTargetStruct is using the TargetSoC value to charge the vehicle.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.8.14
              */
@@ -928,8 +974,10 @@ export namespace EnergyEvse {
             /**
              * Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged.
              *
-             * If this is null it indicates that there is no scheduled charging, or that the EVSE cannot obtain the
-             * current State of Charge from the vehicle.
+             * A null value indicates that there is no scheduled charging
+             *
+             * Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that charging is
+             * enabled, or that the next ChargingTargetStruct is using the AddedEnergy value to charge the vehicle.
              *
              * If the SOC feature is not supported, only the values null and 100% are supported.
              *
@@ -961,7 +1009,9 @@ export namespace EnergyEvse {
              *
              * AddedRange (km) = 10,000 x 4800 / 1,000,000 = 48 km
              *
-             * AddedRange (Miles) = AddedEnergy (Wh) x ApproxEVEfficiency (km/kWh x 1000) x 0.6213
+             * AddedRange (Miles) = AddedEnergy (Wh) x ApproxEVEfficiency (km/kWh x 1000) x
+             *
+             * 0.6213
              *
              * = 29.82 Miles
              *
@@ -1061,7 +1111,7 @@ export namespace EnergyEvse {
     export const Base = MutableCluster.Component({
         id: 0x99,
         name: "EnergyEvse",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
@@ -1073,19 +1123,19 @@ export namespace EnergyEvse {
              * This range requirement can be converted into a daily energy demand with a target charging completion
              * time.
              *
-             * The EVSE itself may use this information (or may allow a controller such as an EMS) to compute an
-             *
+             * The EVSE itself can use this information (or may allow a controller such as an EMS) to compute an
              * optimized charging schedule.
              *
-             * An EVSE device may implement the Device Energy Management cluster PFR (Power Forecast Reporting) and FA
-             * (Forecast Adjustment) features. This can help a controller (such as an EMS) to optimize the EVSE against
-             * other ESAs. For example, a solar PV ESA may share its Forecast and allow the EVSE to know the best time
-             * to charge so that any excess solar generation is used to charge the EV.
+             * An EVSE device which includes a Device Energy Management device with the Device Energy Management
+             * cluster PFR (Power Forecast Reporting) feature can use the charging preferences information to produce
+             * its power forecast.
              *
              * EVSE devices that support the Device Energy Management cluster’s FA feature can have their charging
              * profiles set by a controller device such as an EMS. For example, if the EVSE advertises a simple power
              * forecast which allows the EMS to adjust over a wide range of power and time durations, then the EVSE may
-             * allow the EMS to propose a revised optimized forecast (which is the charging profile).
+             * allow the EMS to propose a revised optimized forecast (which is the charging profile). For example, a
+             * solar PV ESA may also share its Forecast, so enabling an EMS to adjust the EVSE forecast to the best
+             * time to charge so that any excess solar generation is used to charge the EV.
              *
              * See the Device Energy Management Cluster for more details.
              *
@@ -1144,6 +1194,12 @@ export namespace EnergyEvse {
              * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
              * discharge to the home or grid.
              *
+             * The charging and discharging may be controlled by a home Energy Management System (EMS) using the Device
+             * Energy Management cluster of the associated Device Energy Management device. For example, an EMS may use
+             * the PA (Power Adjustment) feature to continually adjust the charge/discharge current to/from the EV so
+             * as to minimise the energy flow from/to the grid as the demand in the home and the solar supply to the
+             * home both fluctuate.
+             *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.5
              */
             v2X: BitFlag(4)
@@ -1159,10 +1215,12 @@ export namespace EnergyEvse {
              *
              * NOTE
              *
-             * SessionEnding is not really a state but a transition. However, the transition period
+             * SessionEnding is not really a state but a transition. However, the transition period may take a few
+             * seconds and is useful for some clean up purposes.
              *
-             * may take a few seconds and is useful for some clean up purposes. The Fault state is used to indicate
-             * that the FaultState attribute is not NoError.
+             * The Fault state is used to indicate that the FaultState attribute is not NoError.
+             *
+             * A null value shall indicate that the state cannot be determined.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.8.1
              */
@@ -1211,8 +1269,9 @@ export namespace EnergyEvse {
             circuitCapacity: Attribute(0x5, TlvInt64.bound({ min: 0 }), { persistent: true, default: 0 }),
 
             /**
-             * Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set
-             * using the EnableCharging command.
+             * Indicates the minimum current that can be delivered by the EVSE to the EV.
+             *
+             * The attribute can be set using the EnableCharging command.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.8.7
              */
@@ -1281,7 +1340,7 @@ export namespace EnergyEvse {
              */
             randomizationDelayWindow: OptionalWritableAttribute(
                 0xa,
-                TlvUInt32.bound({ min: 0, max: 86400 }),
+                TlvUInt32.bound({ max: 86400 }),
                 { persistent: true, default: 600, writeAcl: AccessLevel.Manage }
             ),
 
@@ -1314,7 +1373,8 @@ export namespace EnergyEvse {
             disable: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse, { timed: true }),
 
             /**
-             * Allows a client to enable the EVSE to charge an EV.
+             * This command allows a client to enable the EVSE to charge an EV, and to provide or update the maximum
+             * and minimum charge current.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.2
              */
@@ -1345,14 +1405,18 @@ export namespace EnergyEvse {
             evNotDetected: Event(0x1, EventPriority.Info, TlvEvNotDetectedEvent),
 
             /**
-             * This event shall be generated when the EV starts charging or discharging.
+             * This event shall be generated whenever the EV starts charging or discharging, except when an EV has
+             * switched between charging and discharging under the control of the PowerAdjustment feature of the Device
+             * Energy Management cluster of the associated Device Energy Management device.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.3
              */
             energyTransferStarted: Event(0x2, EventPriority.Info, TlvEnergyTransferStartedEvent),
 
             /**
-             * This event shall be generated when the EV stops charging or discharging.
+             * This event shall be generated whenever the EV stops charging or discharging, except when an EV has
+             * switched between charging and discharging under the control of the PowerAdjustment feature of the Device
+             * Energy Management cluster of the associated Device Energy Management device.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.3.10.4
              */
@@ -1383,7 +1447,8 @@ export namespace EnergyEvse {
             { flags: { chargingPreferences: true }, component: ChargingPreferencesComponent },
             { flags: { soCReporting: true }, component: SoCReportingComponent },
             { flags: { plugAndCharge: true }, component: PlugAndChargeComponent },
-            { flags: { rfid: true }, component: RfidComponent }
+            { flags: { rfid: true }, component: RfidComponent },
+            { flags: { chargingPreferences: false }, component: false }
         )
     });
 
@@ -1403,8 +1468,9 @@ export namespace EnergyEvse {
      * IEC61841 define Pilot signal as a modulated DC voltage on a single wire.
      *
      * Power Line Communication (PLC) is supported by some EVSEs (e.g. for support of ISO 15118 in Europe and SAE
-     * J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to Home (V2H) that allows for
-     * bi-directional charging/discharging of electric vehicles.
+     * J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to
+     *
+     * Home (V2H) that allows for bi-directional charging/discharging of electric vehicles.
      *
      * More modern EVSE devices may optionally support ISO 15118-20 in Europe and SAE J2836/3 for NA to support
      * bi-directional charging (Vehicle to Grid - V2G) and Plug and Charge capabilities.

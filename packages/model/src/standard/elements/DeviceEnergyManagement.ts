@@ -20,13 +20,14 @@ export const DeviceEnergyManagement = Cluster(
     {
         name: "DeviceEnergyManagement", id: 0x98, classification: "application", pics: "DEM",
 
-        details: "This cluster allows a client to manage the power draw of a device. An example of such a client " +
-            "could be an Energy Management System (EMS) which controls an Energy Smart Appliance (ESA)." +
+        details: "This cluster allows a client to manage the power draw of a device. An example of such a client could" +
             "\n" +
-            "In most deployments the EMS will be the client, and the ESA will host the Energy Management Cluster " +
-            "server." +
+            "be an Energy Management System (EMS) which controls an Energy Smart Appliance (ESA)." +
             "\n" +
-            "Figure 15. Example of the how an EMS is a client of multiple ESAs Energy Management clusters." +
+            "In most deployments the EMS will be the client, and the ESA will host the Device Energy Management " +
+            "Cluster server." +
+            "\n" +
+            "Figure 17. Example of the how an EMS is a client of multiple ESAs Device Energy Management clusters." +
             "\n" +
             "This cluster is intended to be generic in nature and could apply to any electrical load or " +
             "generator (e.g. a Battery Electric Storage System - BESS, solar PV inverter, EVSE, HVAC, heat pump, " +
@@ -55,7 +56,7 @@ export const DeviceEnergyManagement = Cluster(
             "'grid carbon intensity', 'time of use' or 'type of use' tariffs to schedule its operation to run at " +
             "the cheapest and greenest times." +
             "\n" +
-            "Figure 16. Example of the how an HVAC may use multiple clusters" +
+            "Figure 18. Example of the how an HVAC may use multiple clusters" +
             "\n" +
             "NOTE" +
             "\n" +
@@ -65,40 +66,39 @@ export const DeviceEnergyManagement = Cluster(
             "NOTE" +
             "\n" +
             "Different markets may follow different approaches, but the UK [PAS1878] and [EUCodeOfConduct] give " +
-            "examples of how ESAs may be mandated to support these features in the future." +
-            "\n" +
-            "NOTE Support of Device Energy Management Cluster is provisional.",
+            "examples of how ESAs may be mandated to support these features in the future.",
 
         xref: { document: "cluster", section: "9.2" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 4 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "cluster", section: "9.2.4" } },
 
         Field({
-            name: "PA", conformance: "O.a+", constraint: "0", description: "PowerAdjustment",
+            name: "PA", conformance: "O", constraint: "0", description: "PowerAdjustment",
 
             details: "For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report " +
                 "their current power adjustment capability and have an EMS request a temporary adjustment. This may " +
                 "typically be to curtail power requirements during peak periods, but can also be used to turn on an " +
                 "ESA if there is excess renewable or local generation (Solar PV)." +
                 "\n" +
-                "For example, a home may have solar PV which often produces more power than the home requires," +
-                "\n" +
+                "For example, a home may have solar PV which often produces more power than the home requires, " +
                 "resulting in the excess power flowing into the grid. This excess power naturally fluctuates when " +
                 "clouds pass overhead and other loads in the home are switched on and off." +
                 "\n" +
                 "EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and " +
                 "can start charging the vehicle, and periodically modify the charging power depending on PV " +
-                "generation and other home loads, so as to minimize import and export to the grid.",
+                "generation and other home loads, so as to minimize import and export to the grid. An EMS may also " +
+                "use this feature to control the discharging (and re-charging) of the vehicle if the EVSE and " +
+                "vehicle support the V2X feature of the EVSE cluster of the associated EVSE device.",
 
             xref: { document: "cluster", section: "9.2.4.1" }
         }),
 
         Field({
-            name: "PFR", conformance: "(STA | PAU | FA | CON) & !SFR, O.a+", constraint: "1",
+            name: "PFR", conformance: "[!PA].a, STA | PAU | FA | CON, O", constraint: "1",
             description: "PowerForecastReporting",
 
             details: "For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report " +
@@ -144,8 +144,7 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "SFR", conformance: "(STA | PAU | FA | CON) & !PFR, O.a+", constraint: "2",
-            description: "StateForecastReporting",
+            name: "SFR", conformance: "[!PA].a", constraint: "2", description: "StateForecastReporting",
 
             details: "Some ESAs do not know their actual power consumption, but do know the state of operation. Like the " +
                 "PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change " +
@@ -165,7 +164,7 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "STA", conformance: "O.a+", constraint: "3", description: "StartTimeAdjustment",
+            name: "STA", conformance: "O", constraint: "3", description: "StartTimeAdjustment",
 
             details: "ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the " +
                 "start time of the energy transfer that the ESA has previously suggested it would use." +
@@ -190,9 +189,10 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "PAU", conformance: "O.a+", constraint: "4", description: "Pausable",
+            name: "PAU", conformance: "O", constraint: "4", description: "Pausable",
 
-            details: "ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a " +
+            details: "ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a" +
+                "\n" +
                 "forecast power profile that the ESA is currently using." +
                 "\n" +
                 "Washing machine example: A Washing Machine is in operation, and starting its water heating step." +
@@ -215,7 +215,7 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "FA", conformance: "P, O.a+", constraint: "5", description: "ForecastAdjustment",
+            name: "FA", conformance: "O", constraint: "5", description: "ForecastAdjustment",
 
             details: "ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the " +
                 "start, duration and/or power level limits of the steps of the power profile that the ESA has " +
@@ -246,12 +246,13 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "CON", conformance: "P, O.a+", constraint: "6", description: "ConstraintBasedAdjustment",
+            name: "CON", conformance: "O", constraint: "6", description: "ConstraintBasedAdjustment",
 
             details: "ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of " +
                 "periods during which power usage should be modified (for example when the EMS has been made aware " +
-                "that the grid supplier has requested reduced energy usage due to overall peak grid demand) and may " +
-                "cause the ESA to modify the intended power profile has previously suggested it would use." +
+                "that the grid supplier has requested reduced energy usage due to overall peak grid demand)" +
+                "\n" +
+                "and may cause the ESA to modify the intended power profile has previously suggested it would use." +
                 "\n" +
                 "EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged " +
                 "starting at a moderate rate at 1am, so that it has enough charge by the time it is needed later " +
@@ -260,8 +261,7 @@ export const DeviceEnergyManagement = Cluster(
                 "However, the DSR service provider has informed the EMS that due to high forecast winds it is now " +
                 "forecast that there will be very cheap energy available from wind generation between 2am and 3am." +
                 "\n" +
-                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the" +
-                "\n" +
+                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
                 "EVSE has a power profile suggesting it plans to start charging the vehicle at 1am." +
                 "\n" +
                 "The EMS can then try to reduce the cost of charging the EV by informing the EVSE of the desire to " +
@@ -305,17 +305,17 @@ export const DeviceEnergyManagement = Cluster(
                 "whether the power values reported by the ESA need to have their sign inverted when dealing with " +
                 "forecasts and adjustments." +
                 "\n" +
-                "For example, a solar PV inverter (being a generator) may produce positive values to indicate " +
-                "generation, however an EMS when predicting the total home load would need to subtract these " +
-                "positive values from the loads to compute a net import at the grid meter." +
+                "For example, a solar PV inverter (being a generator) may produce negative values to indicate " +
+                "generation (since power is flowing out of the node into the home), however a display showing the " +
+                "power to the consumers may need to present a positive solar production value to the consumer." +
                 "\n" +
                 "For example, a home battery storage system (BESS) which needs to charge the battery and then " +
                 "discharge to the home loads, would be classed as a generator. These types of devices shall have " +
                 "this field set to true. When generating its forecast or advertising its PowerAdjustmentCapability, " +
-                "the power values shall be positive to indicate discharging to the loads in the home, and negative " +
+                "the power values shall be negative to indicate discharging to the loads in the home, and positive " +
                 "to indicate when it is charging its battery." +
                 "\n" +
-                "GRID meter = Σ LoadPowers - Σ GeneratorPowers" +
+                "GRID meter = Σ LoadPowers + Σ GeneratorPowers" +
                 "\n" +
                 "Example:",
 
@@ -346,73 +346,76 @@ export const DeviceEnergyManagement = Cluster(
         details: "Indicates the minimum electrical power that the ESA can consume when switched on. This does not " +
             "include when in power save or standby modes." +
             "\n" +
-            "Note that for Generator ESAs that can charge an internal battery (such as a battery storage " +
-            "inverter), the AbsMinPower will be a negative number representing the maximum power that the ESA " +
-            "can charge its internal battery.",
+            "NOTE" +
+            "\n" +
+            "For Generator ESAs that can discharge an internal battery (such as a battery storage inverter) to " +
+            "loads in the home, the AbsMinPower will be a negative number representing the maximum power that " +
+            "the ESA can discharge its internal battery.",
 
         xref: { document: "cluster", section: "9.2.8.4" }
     }),
 
     Attribute({
-        name: "AbsMaxPower", id: 0x4, type: "power-mW", access: "R V", conformance: "M", default: 0,
+        name: "AbsMaxPower", id: 0x4, type: "power-mW", access: "R V", conformance: "M",
+        constraint: "min absMinPower", default: 0,
 
         details: "Indicates the maximum electrical power that the ESA can consume when switched on." +
             "\n" +
-            "The value of the AbsMaxPower attribute shall be limited" +
-            "\n" +
-            "AbsMaxPower >= AbsMinPower" +
-            "\n" +
-            "Note that for Generator ESAs that can discharge a battery to loads in the home (such as a battery " +
-            "storage inverter), the AbsMaxPower will be a positive number representing the maximum power at " +
-            "which the ESA can discharge its internal battery." +
+            "Note that for Generator ESAs that can charge a battery by importing power into the node (such as a " +
+            "battery storage inverter), the AbsMaxPower will be a positive number representing the maximum power " +
+            "at which the ESA can charge its internal battery." +
             "\n" +
             "For example, a battery storage inverter that can charge its battery at a maximum power of 2000W and " +
-            "can discharge the battery at a maximum power of 3000W, would have a AbsMinPower: -2000, " +
-            "AbsMaxPower: 3000W.",
+            "can discharge the battery at a maximum power of 3000W, would have a AbsMinPower: -3000, " +
+            "AbsMaxPower: 2000W.",
 
         xref: { document: "cluster", section: "9.2.8.5" }
     }),
 
-    Attribute(
-        {
-            name: "PowerAdjustmentCapability", id: 0x5, type: "list", access: "R V", conformance: "PA",
-            constraint: "max 8", default: null, quality: "X",
+    Attribute({
+        name: "PowerAdjustmentCapability", id: 0x5, type: "PowerAdjustCapabilityStruct", access: "R V",
+        conformance: "PA", default: null, quality: "X Q",
 
-            details: "Indicates how the ESA can be adjusted at the current time. This attribute SHOULD be updated " +
-                "regularly by ESAs." +
-                "\n" +
-                "For example, a battery storage inverter may need to regulate its internal temperature, or the " +
-                "charging rate of the battery may be limited due to cold temperatures, or a change in the state of " +
-                "charge of the battery may mean that the maximum charging or discharging rate is limited." +
-                "\n" +
-                "An empty list shall indicate that no power adjustment is currently possible." +
-                "\n" +
-                "Multiple entries in the list allow to indicate that permutations of scenarios may be possible." +
-                "\n" +
-                "For example, a 10kWh battery could be at 80% state of charge. If charging at 2kW, then it would be " +
-                "full in 1 hour. However, it could be discharged at 2kW for 4 hours." +
-                "\n" +
-                "In this example the list of PowerAdjustStructs allows multiple scenarios to be offered as follows:",
+        details: "Indicates how the ESA can be adjusted at the current time, and the state of any active adjustment." +
+            "\n" +
+            "A null value indicates that no power adjustment is currently possible, and nor is any adjustment " +
+            "currently active." +
+            "\n" +
+            "This attribute SHOULD be updated periodically by ESAs to reflect any changes in internal state, for " +
+            "example temperature or stored energy, which would affect the power or duration limits." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds on changes, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa.",
 
-            xref: { document: "cluster", section: "9.2.8.6" }
-        },
-
-        Field({ name: "entry", type: "PowerAdjustStruct" })
-    ),
+        xref: { document: "cluster", section: "9.2.8.6" }
+    }),
 
     Attribute({
         name: "Forecast", id: 0x6, type: "ForecastStruct", access: "R V", conformance: "PFR | SFR",
-        default: null, quality: "X",
+        default: null, quality: "X Q",
 
         details: "This attribute allows an ESA to share its intended forecast with a client (such as an Energy " +
             "Management System)." +
             "\n" +
-            "A null value indicates that there is no forecast currently available" +
-            "\n" +
-            "yet been selected by the user)." +
+            "A null value indicates that there is no forecast currently available (for example, a program has " +
+            "not yet been selected by the user)." +
             "\n" +
             "A server may reset this value attribute to null on a reboot, and it does not need to persist any " +
-            "previous forecasts.",
+            "previous forecasts." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds on changes, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa, or" +
+            "\n" +
+            "  • As a result of a command which causes the forecast to be updated, or" +
+            "\n" +
+            "  • As a result of a change in the opt-out status which in turn may cause the ESA to recalculate " +
+            "    its forecast.",
 
         xref: { document: "cluster", section: "9.2.8.7" }
     }),
@@ -429,9 +432,29 @@ export const DeviceEnergyManagement = Cluster(
             "optimization reasons, it shall reject any commands which have the AdjustmentCauseEnum value " +
             "LocalOptimization. If the ESA is in the GridOptOut or OptOut states, so it cannot be controlled by " +
             "an EMS for grid optimization reasons, it shall reject any commands which have the " +
-            "AdjustmentCauseEnum value GridOptimization. If the ESA is in the LocalOptOut, GridOptOut, or " +
-            "NoOptOut states, the device is still permitted to optimize its own energy usage, for example, using " +
-            "tariff information it may obtain.",
+            "AdjustmentCauseEnum value GridOptimization." +
+            "\n" +
+            "If the user changes the Opt-Out state of the ESA which is currently operating with a Forecast that " +
+            "is due to a previous StartTimeAdjustRequest, ModifyForecastRequest or " +
+            "RequestConstraintBasedForecast command that would now not be permitted due to the new Opt-out state" +
+            "\n" +
+            "attribute ForecastUpdateReason field currently contains a reason which is now opted out), the ESA " +
+            "shall behave as if it had received a CancelRequest command." +
+            "\n" +
+            "If the user changes the Opt-Out state of the ESA which currently has the ESAStateEnum with value " +
+            "Paused due to a previous PauseRequest command that would now not be permitted due to the new " +
+            "Opt-out state, and the ESA supports the PFR or SFR features (i.e. the Forecast attribute " +
+            "ForecastUpdateReason field currently contains a reason which is now opted out), the ESA shall " +
+            "behave as if it had received a ResumeRequest command." +
+            "\n" +
+            "If the user changes the Opt-Out state of the ESA which currently has the ESAStateEnum with value " +
+            "PowerAdjustActive due to a previous PowerAdjustRequest command that would now not be permitted due " +
+            "to the new Opt-out state (i.e. the Forecast attribute ForecastUpdateReason field currently contains " +
+            "a reason which is now opted out), the ESA shall behave as if it had received a " +
+            "CancelPowerAdjustRequest command." +
+            "\n" +
+            "If the ESA is in the LocalOptOut, GridOptOut, or NoOptOut states, the device is still permitted to " +
+            "optimize its own energy usage, for example, using tariff information it may obtain.",
 
         xref: { document: "cluster", section: "9.2.8.8" }
     }),
@@ -465,9 +488,9 @@ export const DeviceEnergyManagement = Cluster(
             name: "EnergyUse", id: 0x2, type: "energy-mWh", conformance: "M",
             details: "This field shall indicate the approximate energy used by the ESA during the session." +
                 "\n" +
-                "For example, if the ESA was on and was adjusted to be switched off, then this shall be 0W. If this " +
-                "was a battery inverter that was requested to charge it would have a negative energy use. If this " +
-                "was a normal load that was turned on, then it will have positive value.",
+                "For example, if the ESA was on and was adjusted to be switched off, then this shall be 0 mWh. If " +
+                "this was a battery inverter that was requested to discharge it would have a negative EnergyUse " +
+                "value. If this was a normal load that was turned on, then it will have positive value.",
             xref: { document: "cluster", section: "9.2.10.2.3" }
         })
     ),
@@ -558,7 +581,7 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M", constraint: "desc",
+            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M",
             details: "This field shall indicate the cause of the request from the EMS.",
             xref: { document: "cluster", section: "9.2.9.3.2" }
         })
@@ -581,7 +604,7 @@ export const DeviceEnergyManagement = Cluster(
         }),
 
         Field({
-            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M", constraint: "desc",
+            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M",
             details: "This field shall indicate the cause of the request from the EMS.",
             xref: { document: "cluster", section: "9.2.9.4.2" }
         })
@@ -604,7 +627,7 @@ export const DeviceEnergyManagement = Cluster(
 
         Field({
             name: "ForecastId", id: 0x0, type: "uint32", conformance: "M",
-            details: "This field shall indicate the ForecastId that is to be modified.",
+            details: "This field shall indicate the ForecastID that is to be modified.",
             xref: { document: "cluster", section: "9.2.9.6.1" }
         }),
 
@@ -612,7 +635,7 @@ export const DeviceEnergyManagement = Cluster(
             {
                 name: "SlotAdjustments", id: 0x1, type: "list", conformance: "M", constraint: "max 10",
                 details: "This field shall contain a list of SlotAdjustment parameters that should be modified in the " +
-                    "corresponding Forecast with matching ForecastId.",
+                    "corresponding Forecast with matching ForecastID.",
                 xref: { document: "cluster", section: "9.2.9.6.2" }
             },
 
@@ -620,7 +643,7 @@ export const DeviceEnergyManagement = Cluster(
         ),
 
         Field({
-            name: "Cause", id: 0x2, type: "AdjustmentCauseEnum", conformance: "M", constraint: "desc",
+            name: "Cause", id: 0x2, type: "AdjustmentCauseEnum", conformance: "M",
             details: "This field shall indicate the cause of the request from the EMS.",
             xref: { document: "cluster", section: "9.2.9.6.3" }
         })
@@ -639,7 +662,8 @@ export const DeviceEnergyManagement = Cluster(
                 name: "Constraints", id: 0x0, type: "list", conformance: "M", constraint: "max 10",
 
                 details: "This field shall indicate the series of turn up or turn down power requests that the ESA is being " +
-                    "asked to constrain its operation within." +
+                    "asked to constrain its operation within. These requests shall be in the future, shall be in " +
+                    "chronological order, starting with the earliest start time, and shall NOT overlap in time." +
                     "\n" +
                     "For example, a grid event which requires devices to reduce power (turn down) between 4pm and 6pm " +
                     "and due to excess power on the grid overnight, may request ESAs to increase their power demand " +
@@ -648,8 +672,9 @@ export const DeviceEnergyManagement = Cluster(
                     "If this ESA supports PFR this would have 2 entries in the list as follows:" +
                     "\n" +
                     "If this ESA supports SFR where it does not know the actual power, but has an understanding of the " +
-                    "functions that use more energy, it could be requested to use more or less energy using the " +
-                    "LoadControl field as follows:",
+                    "functions that use more energy, it could be requested to use more or less energy using the LoadCon" +
+                    "\n" +
+                    "trol field as follows:",
 
                 xref: { document: "cluster", section: "9.2.9.7.1" }
             },
@@ -658,7 +683,7 @@ export const DeviceEnergyManagement = Cluster(
         ),
 
         Field({
-            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M", constraint: "desc",
+            name: "Cause", id: 0x1, type: "AdjustmentCauseEnum", conformance: "M",
             details: "This field shall indicate the cause of the request from the EMS.",
             xref: { document: "cluster", section: "9.2.9.7.2" }
         })
@@ -743,7 +768,7 @@ export const DeviceEnergyManagement = Cluster(
             description: "The ESA is in the middle of a power adjustment event"
         }),
         Field({
-            name: "Paused", id: 0x4, conformance: "[FA]",
+            name: "Paused", id: 0x4, conformance: "PAU",
             description: "The ESA is currently paused by a client using the PauseRequest command"
         })
     ),
@@ -771,29 +796,29 @@ export const DeviceEnergyManagement = Cluster(
     Datatype(
         { name: "CauseEnum", type: "enum8", xref: { document: "cluster", section: "9.2.7.5" } },
         Field({
-            name: "NormalCompletion", id: 0x0, conformance: "O",
+            name: "NormalCompletion", id: 0x0, conformance: "M",
             description: "The ESA completed the power adjustment as requested"
         }),
-        Field({ name: "Offline", id: 0x1, conformance: "O", description: "The ESA was set to offline" }),
+        Field({ name: "Offline", id: 0x1, conformance: "M", description: "The ESA was set to offline" }),
         Field({
-            name: "Fault", id: 0x2, conformance: "O",
+            name: "Fault", id: 0x2, conformance: "M",
             description: "The ESA has developed a fault could not complete the adjustment"
         }),
         Field({
-            name: "UserOptOut", id: 0x3, conformance: "O",
+            name: "UserOptOut", id: 0x3, conformance: "M",
             description: "The user has disabled the ESA’s flexibility capability"
         }),
-        Field({ name: "Cancelled", id: 0x4, conformance: "O", description: "The adjustment was cancelled by a client" })
+        Field({ name: "Cancelled", id: 0x4, conformance: "M", description: "The adjustment was cancelled by a client" })
     ),
 
     Datatype(
         { name: "AdjustmentCauseEnum", type: "enum8", xref: { document: "cluster", section: "9.2.7.6" } },
         Field({
-            name: "LocalOptimization", id: 0x0, conformance: "O",
+            name: "LocalOptimization", id: 0x0, conformance: "M",
             description: "The adjustment is to optimize the local energy usage"
         }),
         Field({
-            name: "GridOptimization", id: 0x1, conformance: "O",
+            name: "GridOptimization", id: 0x1, conformance: "M",
             description: "The adjustment is to optimize the grid energy usage"
         })
     ),
@@ -801,14 +826,27 @@ export const DeviceEnergyManagement = Cluster(
     Datatype(
         { name: "ForecastUpdateReasonEnum", type: "enum8", xref: { document: "cluster", section: "9.2.7.7" } },
         Field({
-            name: "InternalOptimization", id: 0x0, conformance: "O",
+            name: "InternalOptimization", id: 0x0, conformance: "M",
             description: "The update was due to internal ESA device optimization"
         }),
         Field({
-            name: "LocalOptimization", id: 0x1, conformance: "O",
+            name: "LocalOptimization", id: 0x1, conformance: "M",
             description: "The update was due to local EMS optimization"
         }),
-        Field({ name: "GridOptimization", id: 0x2, conformance: "O", description: "The update was due to grid optimization" })
+        Field({ name: "GridOptimization", id: 0x2, conformance: "M", description: "The update was due to grid optimization" })
+    ),
+
+    Datatype(
+        { name: "PowerAdjustReasonEnum", type: "enum8", xref: { document: "cluster", section: "9.2.7.8" } },
+        Field({ name: "NoAdjustment", id: 0x0, conformance: "M", description: "There is no Power Adjustment active" }),
+        Field({
+            name: "LocalOptimizationAdjustment", id: 0x1, conformance: "M",
+            description: "There is PowerAdjustment active due to local EMS optimization"
+        }),
+        Field({
+            name: "GridOptimizationAdjustment", id: 0x2, conformance: "M",
+            description: "There is PowerAdjustment active due to local EMS optimization"
+        })
     ),
 
     Datatype(
@@ -816,13 +854,13 @@ export const DeviceEnergyManagement = Cluster(
             name: "CostStruct", type: "struct",
             details: "This indicates a generic mechanism for expressing cost to run an appliance, in terms of financial, " +
                 "GHG emissions, comfort value etc.",
-            xref: { document: "cluster", section: "9.2.7.8" }
+            xref: { document: "cluster", section: "9.2.7.9" }
         },
 
         Field({
             name: "CostType", id: 0x0, type: "CostTypeEnum", conformance: "M", default: 0,
             details: "This field shall indicate the type of cost being represented (see CostTypeEnum).",
-            xref: { document: "cluster", section: "9.2.7.8.1" }
+            xref: { document: "cluster", section: "9.2.7.9.1" }
         }),
 
         Field({
@@ -832,7 +870,7 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "For example, if the Value was -302 and DecimalPoints was 2, then this would represent a benefit of " +
                 "3.02.",
-            xref: { document: "cluster", section: "9.2.7.8.2" }
+            xref: { document: "cluster", section: "9.2.7.9.2" }
         }),
 
         Field({
@@ -840,7 +878,7 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the number of digits to the right of the decimal point in the Value " +
                 "field. For example, if the Value was 102 and DecimalPoints was 2, then this would represent a cost " +
                 "of 1.02.",
-            xref: { document: "cluster", section: "9.2.7.8.3" }
+            xref: { document: "cluster", section: "9.2.7.9.3" }
         }),
 
         Field({
@@ -849,72 +887,94 @@ export const DeviceEnergyManagement = Cluster(
                 "match the values defined by [ISO 4217]." +
                 "\n" +
                 "This is an optional field. It shall be included if CostType is Financial.",
-            xref: { document: "cluster", section: "9.2.7.8.4" }
+            xref: { document: "cluster", section: "9.2.7.9.4" }
         })
     ),
 
     Datatype(
-        { name: "PowerAdjustStruct", type: "struct", xref: { document: "cluster", section: "9.2.7.9" } },
+        { name: "PowerAdjustStruct", type: "struct", xref: { document: "cluster", section: "9.2.7.10" } },
 
         Field({
             name: "MinPower", id: 0x0, type: "power-mW", conformance: "M", default: 0,
-
             details: "This field shall indicate the minimum power that the ESA can have its power adjusted to." +
                 "\n" +
-                "Note that this is a signed value. Negative values indicate power flows away from loads (e.g. " +
-                "charging a battery inverter)." +
-                "\n" +
-                "MinPower shall be less than MaxPower.",
-
-            xref: { document: "cluster", section: "9.2.7.9.1" }
+                "Note that this is a signed value. Negative values indicate power flows out of the node (e.g. " +
+                "discharging a battery).",
+            xref: { document: "cluster", section: "9.2.7.10.1" }
         }),
 
         Field({
-            name: "MaxPower", id: 0x1, type: "power-mW", conformance: "M", default: 0,
+            name: "MaxPower", id: 0x1, type: "power-mW", conformance: "M", constraint: "min minPower",
+            default: 0,
 
             details: "This field shall indicate the maximum power that the ESA can have its power adjusted to." +
                 "\n" +
-                "Note that this is a signed value. Negative values indicate power flows away from loads (e.g. " +
-                "charging a battery inverter)." +
-                "\n" +
-                "MinPower shall be less than MaxPower." +
+                "Note that this is a signed value. Negative values indicate power flows out of the node (e.g. " +
+                "discharging a battery)." +
                 "\n" +
                 "For example, if the charging current of an EVSE can be adjusted within the range of 6A to 32A on a " +
                 "230V supply, then the power adjustment range is between 1380W and 7360W. Here the MinPower would be " +
                 "1380W, and MaxPower would be 7360W." +
                 "\n" +
                 "For example, if a battery storage inverter can discharge between 0 to 3000W towards a load, then " +
-                "its MinPower would be 0W and its MaxPower would be 3000W." +
+                "power is flowing out of the node and is therefore negative. Its MinPower would be -3000W and its " +
+                "MaxPower would be 0W." +
                 "\n" +
                 "In another example, if a battery storage inverter can charge its internal battery, between 0W and " +
-                "2000W. Here power is flowing away from the home loads, so the power values need to be negative. As " +
-                "such the MinPower becomes -2000W and MaxPower becomes 0W.",
+                "2000W. Here power is flowing into the node when charging. As such the MinPower becomes 0W and " +
+                "MaxPower becomes 2000W.",
 
-            xref: { document: "cluster", section: "9.2.7.9.2" }
+            xref: { document: "cluster", section: "9.2.7.10.2" }
         }),
 
         Field({
             name: "MinDuration", id: 0x2, type: "elapsed-s", conformance: "M", default: 0,
             details: "This field shall indicate the minimum duration, in seconds, that a controller may invoke an ESA " +
                 "power adjustment. Manufacturers may use this to as an anti-cycling capability to avoid controllers " +
-                "from rapidly making power adjustments." +
-                "\n" +
-                "Note that MinDuration shall be less than MaxDuration.",
-            xref: { document: "cluster", section: "9.2.7.9.3" }
+                "from rapidly making power adjustments.",
+            xref: { document: "cluster", section: "9.2.7.10.3" }
         }),
 
         Field({
-            name: "MaxDuration", id: 0x3, type: "elapsed-s", conformance: "M",
-
+            name: "MaxDuration", id: 0x3, type: "elapsed-s", conformance: "M", constraint: "min minDuration",
             details: "This field shall indicate the maximum duration, in seconds, that a controller may invoke an ESA " +
                 "power adjustment. Manufacturers may use this to protect the user experience, to avoid over heating " +
                 "of the ESA, ensuring that there is sufficient headroom to use or store energy in the ESA or for any " +
-                "other reason." +
-                "\n" +
-                "Note that MinDuration shall be less than MaxDuration.",
-
-            xref: { document: "cluster", section: "9.2.7.9.4" }
+                "other reason.",
+            xref: { document: "cluster", section: "9.2.7.10.4" }
         })
+    ),
+
+    Datatype(
+        { name: "PowerAdjustCapabilityStruct", type: "struct", xref: { document: "cluster", section: "9.2.7.11" } },
+
+        Field(
+            {
+                name: "PowerAdjustCapability", id: 0x0, type: "list", conformance: "M", constraint: "max 8",
+                default: null, quality: "X",
+
+                details: "This field shall indicate how the ESA can be adjusted at the current time." +
+                    "\n" +
+                    "For example, a battery storage inverter may need to regulate its internal temperature, or the " +
+                    "charging rate of the battery may be limited due to cold temperatures, or a change in the state of " +
+                    "charge of the battery may mean that the maximum charging or discharging rate is limited." +
+                    "\n" +
+                    "An empty list shall indicate that no power adjustment is currently possible." +
+                    "\n" +
+                    "Multiple entries in the list allow indicating that permutations of scenarios may be possible." +
+                    "\n" +
+                    "For example, a 10kWh battery could be at 80% state of charge. If charging at 2kW, then it would be " +
+                    "full in 1 hour. However, it could be discharged at 2kW for 4 hours." +
+                    "\n" +
+                    "In this example the list of PowerAdjustStructs allows multiple scenarios to be offered as follows:",
+
+                xref: { document: "cluster", section: "9.2.7.12" }
+            },
+
+            Field({ name: "entry", type: "PowerAdjustStruct" })
+        ),
+
+        Field({ name: "Cause", id: 0x1, type: "PowerAdjustReasonEnum", conformance: "M", default: 0 })
     ),
 
     Datatype(
@@ -929,11 +989,11 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "feature and instead report its internal state.",
 
-            xref: { document: "cluster", section: "9.2.7.10" }
+            xref: { document: "cluster", section: "9.2.7.13" }
         },
 
         Field({
-            name: "ForecastId", id: 0x0, type: "uint16", conformance: "M", default: 0,
+            name: "ForecastId", id: 0x0, type: "uint32", conformance: "M", default: 0,
 
             details: "This field shall indicate the sequence number for the current forecast. If the ESA updates a " +
                 "forecast, it shall monotonically increase this value." +
@@ -942,36 +1002,34 @@ export const DeviceEnergyManagement = Cluster(
                 "that any previous subscriptions are lost if a device reboots. The loss of a subscription and " +
                 "subsequent re-subscription allows the EMS to learn about any new forecasts." +
                 "\n" +
-                "The value of ForecastId is allowed to wrap.",
+                "The value of ForecastID is allowed to wrap.",
 
-            xref: { document: "cluster", section: "9.2.7.10.1" }
+            xref: { document: "cluster", section: "9.2.7.13.1" }
         }),
 
         Field({
             name: "ActiveSlotNumber", id: 0x1, type: "uint16", conformance: "M", default: 0, quality: "X",
             details: "This field shall indicate which element of the Slots list is currently active in the Forecast " +
                 "sequence. A null value indicates that the sequence has not yet started.",
-            xref: { document: "cluster", section: "9.2.7.10.2" }
+            xref: { document: "cluster", section: "9.2.7.13.2" }
         }),
 
         Field({
             name: "StartTime", id: 0x2, type: "epoch-s", conformance: "M",
             details: "This field shall indicate the planned start time, in UTC, for the entire Forecast.",
-            xref: { document: "cluster", section: "9.2.7.10.3" }
+            xref: { document: "cluster", section: "9.2.7.13.3" }
         }),
         Field({
             name: "EndTime", id: 0x3, type: "epoch-s", conformance: "M",
             details: "This field shall indicate the planned end time, in UTC, for the entire Forecast.",
-            xref: { document: "cluster", section: "9.2.7.10.4" }
+            xref: { document: "cluster", section: "9.2.7.13.4" }
         }),
 
         Field({
             name: "EarliestStartTime", id: 0x4, type: "epoch-s", conformance: "STA", quality: "X",
             details: "This field shall indicate the earliest start time, in UTC, that the entire Forecast can be shifted " +
-                "to." +
-                "\n" +
-                "A null value indicates that it can be started immediately.",
-            xref: { document: "cluster", section: "9.2.7.10.5" }
+                "to. A null value indicates that it can be started immediately.",
+            xref: { document: "cluster", section: "9.2.7.13.5" }
         }),
 
         Field({
@@ -980,15 +1038,15 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "e.g. for an EVSE charging session, this may indicate the departure time for the vehicle, by which " +
                 "time the charging session must end.",
-            xref: { document: "cluster", section: "9.2.7.10.6" }
+            xref: { document: "cluster", section: "9.2.7.13.6" }
         }),
 
         Field({
-            name: "IsPauseable", id: 0x6, type: "bool", conformance: "M",
+            name: "IsPausable", id: 0x6, type: "bool", conformance: "M",
             details: "This field shall indicate that some part of the Forecast can be paused. It aims to allow a client " +
                 "to read this flag and if it is false, then none of the slots contain SlotIsPausable set to true. " +
                 "This can save a client from having to check each slot in the list.",
-            xref: { document: "cluster", section: "9.2.7.10.7" }
+            xref: { document: "cluster", section: "9.2.7.13.7" }
         }),
 
         Field(
@@ -997,7 +1055,7 @@ export const DeviceEnergyManagement = Cluster(
                 details: "This field shall contain a list of SlotStructs." +
                     "\n" +
                     "It shall contain at least 1 entry, and a maximum of 10.",
-                xref: { document: "cluster", section: "9.2.7.10.8" }
+                xref: { document: "cluster", section: "9.2.7.13.8" }
             },
 
             Field({ name: "entry", type: "SlotStruct" })
@@ -1006,7 +1064,7 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "ForecastUpdateReason", id: 0x8, type: "ForecastUpdateReasonEnum", conformance: "M",
             details: "This field shall contain the reason the current Forecast was generated.",
-            xref: { document: "cluster", section: "9.2.7.10.9" }
+            xref: { document: "cluster", section: "9.2.7.13.9" }
         })
     ),
 
@@ -1014,28 +1072,28 @@ export const DeviceEnergyManagement = Cluster(
         {
             name: "SlotStruct", type: "struct",
             details: "This indicates a specific stage of an ESA’s operation.",
-            xref: { document: "cluster", section: "9.2.7.11" }
+            xref: { document: "cluster", section: "9.2.7.14" }
         },
 
         Field({
             name: "MinDuration", id: 0x0, type: "elapsed-s", conformance: "M",
             details: "This field shall indicate the minimum time (in seconds) that the appliance expects to be in this " +
                 "slot for.",
-            xref: { document: "cluster", section: "9.2.7.11.1" }
+            xref: { document: "cluster", section: "9.2.7.14.1" }
         }),
 
         Field({
             name: "MaxDuration", id: 0x1, type: "elapsed-s", conformance: "M",
             details: "This field shall indicate the maximum time (in seconds) that the appliance expects to be in this " +
                 "slot for.",
-            xref: { document: "cluster", section: "9.2.7.11.2" }
+            xref: { document: "cluster", section: "9.2.7.14.2" }
         }),
 
         Field({
             name: "DefaultDuration", id: 0x2, type: "elapsed-s", conformance: "M",
             details: "This field shall indicate the expected time (in seconds) that the appliance expects to be in this " +
                 "slot for.",
-            xref: { document: "cluster", section: "9.2.7.11.3" }
+            xref: { document: "cluster", section: "9.2.7.14.3" }
         }),
 
         Field({
@@ -1050,7 +1108,7 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "When the Forecast attribute is read, then this value shall be the most recent value.",
 
-            xref: { document: "cluster", section: "9.2.7.11.4" }
+            xref: { document: "cluster", section: "9.2.7.14.4" }
         }),
 
         Field({
@@ -1064,27 +1122,31 @@ export const DeviceEnergyManagement = Cluster(
                 "When subscribed to, a change in this field value shall NOT cause the Forecast attribute to be " +
                 "updated, since this value may change every 1 second." +
                 "\n" +
-                "Note that if the ESA is currently paused, then this value shall not change." +
+                "Note that if the ESA is currently paused, then this value shall NOT change." +
                 "\n" +
                 "When the Forecast attribute is read, then this value shall be the most recent value.",
 
-            xref: { document: "cluster", section: "9.2.7.11.5" }
+            xref: { document: "cluster", section: "9.2.7.14.5" }
         }),
 
-        Field({ name: "SlotIsPauseable", id: 0x5, type: "bool", conformance: "PAU" }),
+        Field({
+            name: "SlotIsPausable", id: 0x5, type: "bool", conformance: "PAU",
+            details: "This field shall indicate whether this slot can be paused.",
+            xref: { document: "cluster", section: "9.2.7.14.6" }
+        }),
 
         Field({
             name: "MinPauseDuration", id: 0x6, type: "elapsed-s", conformance: "PAU",
             details: "This field shall indicate the shortest period that the slot can be paused for. This can be set to " +
                 "avoid controllers trying to pause ESAs for short periods and then resuming operation in a cyclic " +
                 "fashion which may damage or cause excess energy to be consumed with restarting of an operation.",
-            xref: { document: "cluster", section: "9.2.7.11.7" }
+            xref: { document: "cluster", section: "9.2.7.14.7" }
         }),
 
         Field({
             name: "MaxPauseDuration", id: 0x7, type: "elapsed-s", conformance: "PAU",
             details: "This field shall indicate the longest period that the slot can be paused for.",
-            xref: { document: "cluster", section: "9.2.7.11.8" }
+            xref: { document: "cluster", section: "9.2.7.14.8" }
         }),
 
         Field({
@@ -1105,12 +1167,12 @@ export const DeviceEnergyManagement = Cluster(
                 "NOTE An ESA shall always use the same value to represent the same operating state." +
                 "\n" +
                 "By providing this information a smart EMS may be able to learn the observed power draw when the ESA " +
-                "is put into a specific state. It can potentially then use the information in the " +
-                "PowerForecastReporting data to predict the power draw from the appliance and potentially ask it to " +
-                "modify its timing via one of the adjustment request commands, or adjust other ESAs power to " +
-                "compensate.",
+                "is put into a specific state. It can potentially then use the ManufacturerESAState field in the " +
+                "Forecast attribute along with observed power drawn to predict the power draw from the appliance and " +
+                "potentially ask it to modify its timing via one of the adjustment request commands, or adjust other " +
+                "ESAs power to compensate.",
 
-            xref: { document: "cluster", section: "9.2.7.11.9" }
+            xref: { document: "cluster", section: "9.2.7.14.9" }
         }),
 
         Field({
@@ -1118,7 +1180,7 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the expected power that the appliance will use during this slot. It may " +
                 "be considered the average value over the slot, and some variation from this would be expected (for " +
                 "example, as it is ramping up).",
-            xref: { document: "cluster", section: "9.2.7.11.10" }
+            xref: { document: "cluster", section: "9.2.7.14.10" }
         }),
 
         Field({
@@ -1127,7 +1189,7 @@ export const DeviceEnergyManagement = Cluster(
                 "(e.g. during a ramp up it may be 0W)." +
                 "\n" +
                 "Some appliances (e.g. battery inverters which can charge and discharge) may have a negative power.",
-            xref: { document: "cluster", section: "9.2.7.11.11" }
+            xref: { document: "cluster", section: "9.2.7.14.11" }
         }),
 
         Field({
@@ -1136,7 +1198,7 @@ export const DeviceEnergyManagement = Cluster(
                 "(e.g. during a ramp up it may be 0W). This field ignores the effects of short-lived inrush currents." +
                 "\n" +
                 "Some appliances (e.g. battery inverters which can charge and discharge) may have a negative power.",
-            xref: { document: "cluster", section: "9.2.7.11.12" }
+            xref: { document: "cluster", section: "9.2.7.14.12" }
         }),
 
         Field({
@@ -1145,7 +1207,7 @@ export const DeviceEnergyManagement = Cluster(
                 "this slot." +
                 "\n" +
                 "Some appliances (e.g. battery inverters which can charge and discharge) may have a negative energy.",
-            xref: { document: "cluster", section: "9.2.7.11.13" }
+            xref: { document: "cluster", section: "9.2.7.14.13" }
         }),
 
         Field(
@@ -1173,7 +1235,7 @@ export const DeviceEnergyManagement = Cluster(
                     "server) it may omit this field. This is treated as extra meta data that an EMS may use to optimize " +
                     "a system.",
 
-                xref: { document: "cluster", section: "9.2.7.11.14" }
+                xref: { document: "cluster", section: "9.2.7.14.14" }
             },
 
             Field({ name: "entry", type: "CostStruct" })
@@ -1189,7 +1251,7 @@ export const DeviceEnergyManagement = Cluster(
                 "allows an ESA to indicate it could be switched on to charge, but this would be the minimum power " +
                 "limit it can be set to.",
 
-            xref: { document: "cluster", section: "9.2.7.11.15" }
+            xref: { document: "cluster", section: "9.2.7.14.15" }
         }),
 
         Field({
@@ -1202,11 +1264,11 @@ export const DeviceEnergyManagement = Cluster(
                 "allows an ESA to indicate it could be switched on to charge, but this would be the maximum power " +
                 "limit it can be set to.",
 
-            xref: { document: "cluster", section: "9.2.7.11.16" }
+            xref: { document: "cluster", section: "9.2.7.14.16" }
         }),
 
         Field({
-            name: "MinDurationAdjustment", id: 0x10, type: "elapsed-s", conformance: "FA & (PFR | SFR)",
+            name: "MinDurationAdjustment", id: 0x10, type: "elapsed-s", conformance: "FA",
 
             details: "This field shall indicate the minimum time, in seconds, that the slot can be requested to shortened " +
                 "to." +
@@ -1217,11 +1279,11 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "For example, a heat pump compressor may have a minimum cycle time of order a few minutes.",
 
-            xref: { document: "cluster", section: "9.2.7.11.17" }
+            xref: { document: "cluster", section: "9.2.7.14.17" }
         }),
 
         Field({
-            name: "MaxDurationAdjustment", id: 0x11, type: "elapsed-s", conformance: "FA & (PFR | SFR)",
+            name: "MaxDurationAdjustment", id: 0x11, type: "elapsed-s", conformance: "FA",
 
             details: "This field shall indicate the maximum time, in seconds, that the slot can be requested to extended " +
                 "to." +
@@ -1232,26 +1294,29 @@ export const DeviceEnergyManagement = Cluster(
                 "full. In the case of a battery inverter which can be discharged, it may equally indicate the " +
                 "maximum time the battery could be discharged for (at the MaxPowerAdjustment power level).",
 
-            xref: { document: "cluster", section: "9.2.7.11.18" }
+            xref: { document: "cluster", section: "9.2.7.14.18" }
         })
     ),
 
     Datatype(
-        { name: "SlotAdjustmentStruct", type: "struct", xref: { document: "cluster", section: "9.2.7.12" } },
+        { name: "SlotAdjustmentStruct", type: "struct", xref: { document: "cluster", section: "9.2.7.15" } },
 
         Field({
             name: "SlotIndex", id: 0x0, type: "uint8", conformance: "M", constraint: "desc",
             details: "This field shall indicate the index into the Slots list within the Forecast that is to be modified. " +
                 "It shall be less than the actual length of the Slots list (implicitly it must be in the range 0 to " +
                 "9 based on the maximum length of the Slots list constraint).",
-            xref: { document: "cluster", section: "9.2.7.12.1" }
+            xref: { document: "cluster", section: "9.2.7.15.1" }
         }),
 
         Field({
-            name: "NominalPower", id: 0x1, type: "power-mW", conformance: "M", constraint: "desc",
+            name: "NominalPower", id: 0x1, type: "power-mW", conformance: "PFR", constraint: "desc",
             details: "This field shall indicate the new requested power that the ESA shall operate at. It MUST be between " +
-                "the MinPowerAdjustment and MaxPowerAdjustment for the slot as advertised by the ESA.",
-            xref: { document: "cluster", section: "9.2.7.12.2" }
+                "the AbsMinPower and AbsMaxPower attributes as advertised by the ESA if it supports PFR." +
+                "\n" +
+                "This is a signed value and can be used to indicate charging or discharging. If the ESA does NOT " +
+                "support PFR this value shall be ignored by the ESA.",
+            xref: { document: "cluster", section: "9.2.7.15.2" }
         }),
 
         Field({
@@ -1259,7 +1324,7 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the new requested duration, in seconds, that the ESA shall extend or " +
                 "shorten the slot duration to. It MUST be between the MinDurationAdjustment and " +
                 "MaxDurationAdjustment for the slot as advertised by the ESA.",
-            xref: { document: "cluster", section: "9.2.7.12.3" }
+            xref: { document: "cluster", section: "9.2.7.15.3" }
         })
     ),
 
@@ -1269,7 +1334,7 @@ export const DeviceEnergyManagement = Cluster(
             details: "The ConstraintsStruct allows a client to inform an ESA about a constraint period (such as a grid " +
                 "event, or perhaps excess solar PV). The format allows the client to suggest that the ESA can either " +
                 "turn up its energy consumption, or turn down its energy consumption during this period.",
-            xref: { document: "cluster", section: "9.2.7.13" }
+            xref: { document: "cluster", section: "9.2.7.16" }
         },
 
         Field({
@@ -1278,26 +1343,23 @@ export const DeviceEnergyManagement = Cluster(
                 "compute a new Forecast." +
                 "\n" +
                 "This value is in UTC and MUST be in the future.",
-            xref: { document: "cluster", section: "9.2.7.13.1" }
+            xref: { document: "cluster", section: "9.2.7.16.1" }
         }),
 
         Field({
-            name: "Duration", id: 0x1, type: "elapsed-s", conformance: "M", constraint: "0 to 86400",
+            name: "Duration", id: 0x1, type: "elapsed-s", conformance: "M", constraint: "max 86400",
             details: "This field shall indicate the duration of the constraint in seconds.",
-            xref: { document: "cluster", section: "9.2.7.13.2" }
+            xref: { document: "cluster", section: "9.2.7.16.2" }
         }),
 
         Field({
             name: "NominalPower", id: 0x2, type: "power-mW", conformance: "PFR", constraint: "desc",
-
             details: "This field shall indicate the nominal power that client wishes the ESA to operate at during the " +
                 "constrained period. It MUST be between the AbsMinPower and AbsMaxPower attributes as advertised by " +
                 "the ESA if it supports PFR." +
                 "\n" +
-                "This is a signed value and can be used to indicate charging or discharging. If the ESA does NOT " +
-                "support PFR this value shall be ignored by the ESA.",
-
-            xref: { document: "cluster", section: "9.2.7.13.3" }
+                "This is a signed value and can be used to indicate charging or discharging.",
+            xref: { document: "cluster", section: "9.2.7.16.3" }
         }),
 
         Field({
@@ -1305,9 +1367,8 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the maximum energy that can be transferred to or from the ESA during the " +
                 "constraint period." +
                 "\n" +
-                "This is a signed value and can be used to indicate charging or discharging. If the ESA does NOT " +
-                "support PFR this value may be ignored by the ESA.",
-            xref: { document: "cluster", section: "9.2.7.13.4" }
+                "This is a signed value and can be used to indicate charging or discharging.",
+            xref: { document: "cluster", section: "9.2.7.16.4" }
         }),
 
         Field({
@@ -1322,7 +1383,7 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "Note that the mapping between values and operation is manufacturer specific.",
 
-            xref: { document: "cluster", section: "9.2.7.13.5" }
+            xref: { document: "cluster", section: "9.2.7.16.5" }
         })
     )
 );

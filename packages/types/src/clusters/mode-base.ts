@@ -45,71 +45,51 @@ export namespace ModeBase {
 
     export enum ModeTag {
         /**
-         * The device decides which options, features and setting values to use.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Auto = 0,
 
         /**
-         * The mode of the device is optimizing for faster completion.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Quick = 1,
 
         /**
-         * The device is silent or barely audible while in this mode.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Quiet = 2,
 
         /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         LowNoise = 3,
 
         /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         LowEnergy = 4,
 
         /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Vacation = 5,
 
         /**
-         * The mode uses the lowest available setting value.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Min = 6,
 
         /**
-         * The mode uses the highest available setting value.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Max = 7,
 
         /**
-         * The mode is recommended or suitable for use during night time.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Night = 8,
 
         /**
-         * The mode is recommended or suitable for use during day time.
-         *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
          */
         Day = 9
@@ -235,7 +215,7 @@ export namespace ModeBase {
          * able to transition as requested, the ChangeToModeResponse command shall:
          *
          *   • Have the Status set to a product-specific Status value representing the error, or GenericFailure if a
-         *     more specific error cannot be provided. See Status Field for details.
+         *     more specific error cannot be provided. See Status field for details.
          *
          *   • Provide a human readable string in the StatusText field.
          *
@@ -245,10 +225,9 @@ export namespace ModeBase {
          * supplied with a human readable string or include an empty string and the CurrentMode field shall be set to
          * the value of the NewMode field.
          *
-         * If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeRe
-         *
-         * sponse command shall have the Status field set to Success and the StatusText field may be supplied with a
-         * human readable string or include an empty string.
+         * If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeResponse command
+         * shall have the Status field set to Success and the StatusText field may be supplied with a human readable
+         * string or include an empty string.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1.1
          */
@@ -263,7 +242,9 @@ export namespace ModeBase {
     export interface ChangeToModeRequest extends TypeFromSchema<typeof TlvChangeToModeRequest> {}
 
     /**
-     * This command is sent by the device on receipt of the ChangeToMode command.
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2
      */
@@ -277,7 +258,9 @@ export namespace ModeBase {
     });
 
     /**
-     * This command is sent by the device on receipt of the ChangeToMode command.
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2
      */
@@ -293,7 +276,7 @@ export namespace ModeBase {
         Success = 0,
 
         /**
-         * The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.
+         * The value of the NewMode field doesn’t match any entries in the SupportedModes attribute.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
          */
@@ -327,7 +310,7 @@ export namespace ModeBase {
              *
              * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.5
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.4
              */
             onMode: WritableAttribute(0x3, TlvNullable(TlvUInt8), { persistent: true, default: null })
         }
@@ -362,7 +345,7 @@ export namespace ModeBase {
              * Each entry in this list shall have a unique value for the Mode field. Each entry in this list shall have
              * a unique value for the Label field.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.1
              */
             supportedModes: FixedAttribute(0x0, TlvArray(TlvModeOption, { minLength: 2, maxLength: 255 })),
 
@@ -376,9 +359,9 @@ export namespace ModeBase {
              * through a sequence of operations, on system time-outs or idle delays, or via interactions coming from a
              * fabric other than the one which last executed a ChangeToMode.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.2
              */
-            currentMode: Attribute(0x1, TlvUInt8, { scene: true, persistent: true }),
+            currentMode: Attribute(0x1, TlvUInt8, { persistent: true }),
 
             /**
              * Indicates the desired startup mode for the server when it is supplied with power.
@@ -394,7 +377,7 @@ export namespace ModeBase {
              *
              * If this attribute is not implemented, or is set to the null value, it shall have no effect.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.4
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.3
              */
             startUpMode: OptionalWritableAttribute(0x2, TlvNullable(TlvUInt8), { persistent: true })
         },

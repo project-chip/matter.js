@@ -46,11 +46,9 @@ export namespace OtaSoftwareUpdateRequestor {
         providerNodeId: TlvField(1, TlvNodeId),
 
         /**
-         * This field shall contain the endpoint number which has the OTA Provider device type and OTA
-         *
-         * Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do
-         * discovery of the location of that endpoint by walking over all endpoints and checking their Descriptor
-         * Cluster.
+         * This field shall contain the endpoint number which has the OTA Provider device type and OTA Software Update
+         * Provider cluster server on the ProviderNodeID. This is provided to avoid having to do discovery of the
+         * location of that endpoint by walking over all endpoints and checking their Descriptor Cluster.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.4.4.2
          */
@@ -496,7 +494,7 @@ export namespace OtaSoftwareUpdateRequestor {
             defaultOtaProviders: WritableFabricScopedAttribute(
                 0x0,
                 TlvArray(TlvProviderLocation),
-                { default: [], writeAcl: AccessLevel.Administer }
+                { persistent: true, default: [], writeAcl: AccessLevel.Administer }
             ),
 
             /**

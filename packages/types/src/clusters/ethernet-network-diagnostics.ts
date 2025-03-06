@@ -126,9 +126,7 @@ export namespace EthernetNetworkDiagnostics {
         attributes: {
             /**
              * The TxErrCount attribute shall indicate the number of failed packet transmissions that have occurred on
-             * the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a
-             *
-             * reboot of the Node.
+             * the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a reboot of the Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.16.6.5
              */

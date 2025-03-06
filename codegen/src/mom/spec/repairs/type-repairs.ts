@@ -23,6 +23,10 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     "Time of Day": "TimeOfDay",
     "voltage-mW": "voltage-mV",
     utc: "epoch-s",
+    ipv4addr: "ipv4adr",
+    ipv6addr: "ipv6adr",
+    "endpoint-id": "endpoint-no",
+    "ModeBitmap.": "ModeBitmap",
 
     // Can't use this one because ModeSelect defines a different SemanticTagStruct
     //SemanticTagStruct: "semtag",
@@ -33,16 +37,25 @@ export function repairTypeIdentifier<T extends string | undefined>(type: T): T {
         return type;
     }
 
-    if (type.startsWith("list[") && type.endsWith("]")) {
-        const entryType = type.slice(5, type.length - 1);
+    // 1.4 also started putting section identifiers in some type columns, so we end up with e.g.
+    // Section11.24.5.2,“DatastoreStatusEntryType”. Perhaps alchemy trying to be fancy as it tends to happen along with
+    // DataTypeList
+    type = type.replace(/Section\d+(?:\.\d+)*,“([^”]+)Type”/gi, "$1") as typeof type;
+
+    // Grr core says list is list[...] but 1.4 decided DataTypeList[...] is good too without documenting.  Possibly an
+    // alchemy bug
+    const listMatch = type.match(/^(?:list|DataTypeList)\[(.*)\]$/);
+
+    if (listMatch) {
+        let entryType = listMatch[1];
         if (TYPE_ERRORS[entryType]) {
-            return `list[${TYPE_ERRORS[entryType]}]` as T;
+            entryType = TYPE_ERRORS[entryType];
         }
-        return type;
+        return `list[${entryType}]` as T;
     }
 
-    if (TYPE_ERRORS[type]) {
-        return TYPE_ERRORS[type] as T;
+    if (TYPE_ERRORS[type!]) {
+        return TYPE_ERRORS[type!] as T;
     }
 
     return type;

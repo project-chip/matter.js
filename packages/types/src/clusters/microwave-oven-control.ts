@@ -147,17 +147,22 @@ export namespace MicrowaveOvenControl {
     export const PowerAsNumberComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the power level associated with the operation of the device.
+             * Indicates the power level associated with the operation of the device. If the MinPower, MaxPower, and
+             * PowerStep attributes are not supported:
              *
-             * If the MinPower, MaxPower, and PowerStep attributes are not supported, the minimum value of this
-             * attribute shall be 10, the maximum value of this attribute shall be 100, the value shall be in even
-             * multiples of 10, and the default value shall be 100.
+             *   • The minimum value of this attribute shall be 10,
+             *
+             *   • The maximum value of this attribute shall be 100,
+             *
+             *   • The value shall be in even multiples of 10,
+             *
+             *   • The default value shall be 100.
              *
              * If the MinPower, MaxPower, and PowerStep attributes are supported:
              *
              *   • The value of this attribute shall be between MinPower and MaxPower inclusive.
              *
-             *   • The value of this attribute shall be an integer multiple of PowerStep.
+             *   • The value of this attribute shall be such that (PowerSetting - MinPower) % PowerStep == 0
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.13.5.3
              */
@@ -171,26 +176,24 @@ export namespace MicrowaveOvenControl {
     export const PowerNumberLimitsComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the minimum power level that can be set on the server. The value of this attribute shall be
-             * less than or equal to the value of MaxPower. The value of this attribute
-             *
-             * shall be an integer multiple of PowerStep.
+             * Indicates the minimum value to which the PowerSetting attribute that can be set on the server.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.13.5.4
              */
-            minPower: FixedAttribute(0x3, TlvUInt8.bound({ min: 1 }), { default: 10 }),
+            minPower: FixedAttribute(0x3, TlvUInt8.bound({ min: 1, max: 99 }), { default: 10 }),
 
             /**
-             * Indicates the maximum power level that can be set on the server. The value of this attribute shall be
-             * greater than or equal to the value of MinPower. The value of this attribute shall be an integer multiple
-             * of PowerStep.
+             * Indicates the maximum value to which the PowerSetting attribute that can be set on the server.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.13.5.5
              */
             maxPower: FixedAttribute(0x4, TlvUInt8.bound({ max: 100 }), { default: 100 }),
 
             /**
-             * Indicates the increment of power that can be set on the server.
+             * Indicates the increment of power that can be set on the server. The value of this attribute shall be
+             * between 1 and MaxPower inclusive.
+             *
+             * The value of this attribute shall be such that (MaxPower - MinPower) % PowerStep == 0
              *
              * For example, if MinPower is 1, MaxPower is 10, and PowerSetting can be set to any integer between
              * MinPower and MaxPower, PowerStep would be set to 1.
@@ -286,9 +289,8 @@ export namespace MicrowaveOvenControl {
 
         commands: {
             /**
-             * This command is used to set the cooking parameters associated with the operation of the device.
-             *
-             * This command supports the following fields:
+             * This command is used to set the cooking parameters associated with the operation of the device. This
+             * command supports the following fields:
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.13.6.2
              */

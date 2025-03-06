@@ -75,9 +75,10 @@ export namespace MediaPlayback {
         /**
          * AudioAdvance (AA)
          *
-         * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
-         * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
-         * during certain speeds.
+         * This feature is for a device or app that supports playing audio during fast and slow advance and
+         *
+         * rewind (e.g., while playback speed is not 1). A device that supports this feature may only support playing
+         * audio during certain speeds.
          *
          * A cluster implementing AA shall implement AS.
          *
@@ -102,7 +103,7 @@ export namespace MediaPlayback {
         /**
          * This field shall indicate the associated discrete position within the media stream, in milliseconds from the
          * beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall
-         * not be greater than the duration of the media if duration is specified. The Position shall not be greater
+         * NOT be greater than the duration of the media if duration is specified. The Position shall NOT be greater
          * than the time difference between current time and start time of the media when start time is specified.
          *
          * A value of null shall indicate that playback position is not applicable for the current state of the media
@@ -938,9 +939,10 @@ export namespace MediaPlayback {
             /**
              * AudioAdvance
              *
-             * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
-             * (e.g., while playback speed is not 1). A device that supports this feature may only support playing
-             * audio during certain speeds.
+             * This feature is for a device or app that supports playing audio during fast and slow advance and
+             *
+             * rewind (e.g., while playback speed is not 1). A device that supports this feature may only support
+             * playing audio during certain speeds.
              *
              * A cluster implementing AA shall implement AS.
              *

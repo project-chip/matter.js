@@ -69,7 +69,7 @@ export const WindowCovering = Cluster(
         name: "Type", id: 0x0, type: "TypeEnum", access: "R V", conformance: "M", constraint: "desc",
         default: 0, quality: "F",
         details: "This attribute shall identify the type of window covering.",
-        xref: { document: "cluster", section: "5.3.6.2" }
+        xref: { document: "cluster", section: "5.3.6.1" }
     }),
 
     Attribute({
@@ -77,7 +77,7 @@ export const WindowCovering = Cluster(
         conformance: "[LF & PA_LF & ABS]", default: 0, quality: "F",
         details: "Indicates the maximum possible encoder position possible (Unit cm, centimeters) to position the " +
             "height of the window covering lift.",
-        xref: { document: "cluster", section: "5.3.6.3" }
+        xref: { document: "cluster", section: "5.3.6.2" }
     }),
 
     Attribute({
@@ -85,7 +85,7 @@ export const WindowCovering = Cluster(
         conformance: "[TL & PA_TL & ABS]", default: 0, quality: "F",
         details: "Indicates the maximum possible encoder position possible (Unit 0.1°, tenths of a degree) to " +
             "position the angle of the window covering tilt.",
-        xref: { document: "cluster", section: "5.3.6.4" }
+        xref: { document: "cluster", section: "5.3.6.3" }
     }),
 
     Attribute({
@@ -94,7 +94,7 @@ export const WindowCovering = Cluster(
         default: null, quality: "X N",
         details: "Indicates the actual lift position (Unit cm, centimeters) of the window covering from the " +
             "fully-open position.",
-        xref: { document: "cluster", section: "5.3.6.5" }
+        xref: { document: "cluster", section: "5.3.6.4" }
     }),
 
     Attribute({
@@ -103,7 +103,7 @@ export const WindowCovering = Cluster(
         default: null, quality: "X N",
         details: "Indicates the actual tilt position (Unit 0.1°, tenths of a degree) of the window covering from the " +
             "fully-open position.",
-        xref: { document: "cluster", section: "5.3.6.6" }
+        xref: { document: "cluster", section: "5.3.6.5" }
     }),
 
     Attribute({
@@ -111,7 +111,7 @@ export const WindowCovering = Cluster(
         default: 0, quality: "N",
         details: "Indicates the total number of lift/slide actuations applied to the window covering since the device " +
             "was installed.",
-        xref: { document: "cluster", section: "5.3.6.7" }
+        xref: { document: "cluster", section: "5.3.6.6" }
     }),
 
     Attribute({
@@ -119,7 +119,7 @@ export const WindowCovering = Cluster(
         default: 0, quality: "N",
         details: "Indicates the total number of tilt actuations applied to the window covering since the device was " +
             "installed.",
-        xref: { document: "cluster", section: "5.3.6.8" }
+        xref: { document: "cluster", section: "5.3.6.7" }
     }),
 
     Attribute({
@@ -129,46 +129,46 @@ export const WindowCovering = Cluster(
             "\n" +
             "To change settings, devices shall write to the Mode attribute. The behavior causing the setting or " +
             "clearing of each bit is vendor specific.",
-        xref: { document: "cluster", section: "5.3.6.9" }
+        xref: { document: "cluster", section: "5.3.6.8" }
     }),
 
     Attribute({
         name: "CurrentPositionLiftPercentage", id: 0x8, type: "percent", access: "R V",
-        conformance: "[LF & PA_LF]", default: null, quality: "X N S P",
+        conformance: "[LF & PA_LF]", default: null, quality: "X N P",
         details: "Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute " +
             "is equal to CurrentPositionLiftPercent100ths attribute divided by 100.",
-        xref: { document: "cluster", section: "5.3.6.12" }
+        xref: { document: "cluster", section: "5.3.6.11" }
     }),
 
     Attribute({
         name: "CurrentPositionTiltPercentage", id: 0x9, type: "percent", access: "R V",
-        conformance: "[TL & PA_TL]", constraint: "0 to 100", default: null, quality: "X N S P",
+        conformance: "[TL & PA_TL]", default: null, quality: "X N P",
         details: "Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute " +
             "is equal to CurrentPositionTiltPercent100ths attribute divided by 100.",
-        xref: { document: "cluster", section: "5.3.6.13" }
+        xref: { document: "cluster", section: "5.3.6.12" }
     }),
 
     Attribute({
         name: "OperationalStatus", id: 0xa, type: "OperationalStatusBitmap", access: "R V",
         conformance: "M", default: 0, quality: "P",
         details: "Indicates the currently ongoing operations and applies to all type of devices.",
-        xref: { document: "cluster", section: "5.3.6.16" }
+        xref: { document: "cluster", section: "5.3.6.15" }
     }),
 
     Attribute({
         name: "TargetPositionLiftPercent100ths", id: 0xb, type: "percent100ths", access: "R V",
-        conformance: "LF & PA_LF", default: null, quality: "X S P",
+        conformance: "LF & PA_LF", default: null, quality: "X P",
         details: "Indicates the position where the window covering lift will go or is moving to as a percentage (Unit " +
             "0.01%).",
-        xref: { document: "cluster", section: "5.3.6.14" }
+        xref: { document: "cluster", section: "5.3.6.13" }
     }),
 
     Attribute({
         name: "TargetPositionTiltPercent100ths", id: 0xc, type: "percent100ths", access: "R V",
-        conformance: "TL & PA_TL", default: null, quality: "X S P",
+        conformance: "TL & PA_TL", default: null, quality: "X P",
         details: "Indicates the position where the window covering tilt will go or is moving to as a percentage (Unit " +
             "0.01%).",
-        xref: { document: "cluster", section: "5.3.6.15" }
+        xref: { document: "cluster", section: "5.3.6.14" }
     }),
 
     Attribute({
@@ -178,55 +178,55 @@ export const WindowCovering = Cluster(
             "main category indicated by the Type attribute." +
             "\n" +
             "The table below helps to match the EndProductType attribute with the Type attribute.",
-        xref: { document: "cluster", section: "5.3.6.17" }
+        xref: { document: "cluster", section: "5.3.6.16" }
     }),
 
     Attribute({
         name: "CurrentPositionLiftPercent100ths", id: 0xe, type: "percent100ths", access: "R V",
-        conformance: "LF & PA_LF", constraint: "0 to 10000", default: null, quality: "X N P",
+        conformance: "LF & PA_LF", constraint: "max 10000", default: null, quality: "X N P",
+        details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
+            "100.00%.",
+        xref: { document: "cluster", section: "5.3.6.9" }
+    }),
+
+    Attribute({
+        name: "CurrentPositionTiltPercent100ths", id: 0xf, type: "percent100ths", access: "R V",
+        conformance: "TL & PA_TL", constraint: "max 10000", default: null, quality: "X N P",
         details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
             "100.00%.",
         xref: { document: "cluster", section: "5.3.6.10" }
     }),
 
     Attribute({
-        name: "CurrentPositionTiltPercent100ths", id: 0xf, type: "percent100ths", access: "R V",
-        conformance: "TL & PA_TL", constraint: "0 to 10000", default: null, quality: "X N P",
-        details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
-            "100.00%.",
-        xref: { document: "cluster", section: "5.3.6.11" }
+        name: "InstalledOpenLimitLift", id: 0x10, type: "uint16", access: "R V",
+        conformance: "LF & PA_LF & ABS", constraint: "max 65534", default: 0, quality: "N",
+        details: "Indicates the open limit for lifting the window covering whether position (in centimeters) is " +
+            "encoded or timed.",
+        xref: { document: "cluster", section: "5.3.6.17" }
     }),
 
     Attribute({
-        name: "InstalledOpenLimitLift", id: 0x10, type: "uint16", access: "R V",
-        conformance: "LF & PA_LF & ABS", constraint: "0 to 65534", default: 0, quality: "N",
-        details: "Indicates the open limit for lifting the window covering whether position (in centimeters) is " +
+        name: "InstalledClosedLimitLift", id: 0x11, type: "uint16", access: "R V",
+        conformance: "LF & PA_LF & ABS", constraint: "max 65534", default: 65534, quality: "N",
+        details: "Indicates the closed limit for lifting the window covering whether position (in centimeters) is " +
             "encoded or timed.",
         xref: { document: "cluster", section: "5.3.6.18" }
     }),
 
     Attribute({
-        name: "InstalledClosedLimitLift", id: 0x11, type: "uint16", access: "R V",
-        conformance: "LF & PA_LF & ABS", constraint: "0 to 65534", default: 65534, quality: "N",
-        details: "Indicates the closed limit for lifting the window covering whether position (in centimeters) is " +
+        name: "InstalledOpenLimitTilt", id: 0x12, type: "uint16", access: "R V",
+        conformance: "TL & PA_TL & ABS", constraint: "max 65534", default: 0, quality: "N",
+        details: "Indicates the open limit for tilting the window covering whether position (in tenth of a degree) is " +
             "encoded or timed.",
         xref: { document: "cluster", section: "5.3.6.19" }
     }),
 
     Attribute({
-        name: "InstalledOpenLimitTilt", id: 0x12, type: "uint16", access: "R V",
-        conformance: "TL & PA_TL & ABS", constraint: "0 to 65534", default: 0, quality: "N",
-        details: "Indicates the open limit for tilting the window covering whether position (in tenth of a degree) is " +
-            "encoded or timed.",
-        xref: { document: "cluster", section: "5.3.6.20" }
-    }),
-
-    Attribute({
         name: "InstalledClosedLimitTilt", id: 0x13, type: "uint16", access: "R V",
-        conformance: "TL & PA_TL & ABS", constraint: "0 to 65534", default: 65534, quality: "N",
+        conformance: "TL & PA_TL & ABS", constraint: "max 65534", default: 65534, quality: "N",
         details: "Indicates the closed limit for tilting the window covering whether position (in tenth of a degree) " +
             "is encoded or timed.",
-        xref: { document: "cluster", section: "5.3.6.21" }
+        xref: { document: "cluster", section: "5.3.6.20" }
     }),
 
     Attribute({ name: "VelocityLift", id: 0x14, conformance: "D", xref: { document: "cluster", section: "5.3.6" } }),
@@ -250,7 +250,7 @@ export const WindowCovering = Cluster(
             "any write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits " +
             "set, must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.",
 
-        xref: { document: "cluster", section: "5.3.6.22" }
+        xref: { document: "cluster", section: "5.3.6.21" }
     }),
 
     Attribute({ name: "IntermediateSetpointsLift", id: 0x18, conformance: "D", xref: { document: "cluster", section: "5.3.6" } }),
@@ -262,7 +262,7 @@ export const WindowCovering = Cluster(
         details: "The SafetyStatus attribute reflects the state of the safety sensors and the common issues " +
             "preventing movements. By default for nominal operation all flags are cleared (0). A device might " +
             "support none, one or several bit flags from this attribute (all optional).",
-        xref: { document: "cluster", section: "5.3.6.23" }
+        xref: { document: "cluster", section: "5.3.6.22" }
     }),
 
     Command({
@@ -390,7 +390,7 @@ export const WindowCovering = Cluster(
         },
 
         Field({ name: "LiftPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M", constraint: "desc" }),
-        Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "X", constraint: "desc" })
+        Field({ name: "Ignored", id: 0x1, conformance: "X" })
     ),
 
     Command(
@@ -433,7 +433,7 @@ export const WindowCovering = Cluster(
         },
 
         Field({ name: "TiltPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M", constraint: "desc" }),
-        Field({ name: "Ignored", id: 0x1, type: "percent100ths", conformance: "X", constraint: "desc" })
+        Field({ name: "Ignored", id: 0x1, conformance: "X" })
     ),
 
     Datatype(
@@ -451,7 +451,7 @@ export const WindowCovering = Cluster(
             }
         ),
 
-        Field({ name: "OnlineReserved", constraint: "1", description: "Deprecated and reserved." }),
+        Field({ name: "OnlineReserved", constraint: "1" }),
 
         Field(
             {

@@ -11,6 +11,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const percent100ths = Datatype({
     name: "percent100ths", type: "uint16", description: "Percentage units 0.01%", isSeed: true,
-    xref: { document: "core", section: "7.18.2" }
+    xref: { document: "core", section: "7.19.2" }
 });
 MatterDefinition.children.push(percent100ths);

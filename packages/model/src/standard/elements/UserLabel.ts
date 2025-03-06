@@ -16,7 +16,8 @@ import {
 export const UserLabel = Cluster(
     {
         name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", pics: "ULABEL",
-        details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
+        details: "This cluster is derived from the Label cluster and provides a feature to tag an endpoint with zero " +
+            "or more writable labels.",
         xref: { document: "core", section: "9.9" }
     },
 

@@ -10,27 +10,18 @@ import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/Iden
 import { ThermostatServer as BaseThermostatServer } from "../behaviors/thermostat/ThermostatServer.js";
 import { GroupsServer as BaseGroupsServer } from "../behaviors/groups/GroupsServer.js";
 import {
-    ScenesManagementServer as BaseScenesManagementServer
-} from "../behaviors/scenes-management/ScenesManagementServer.js";
-import {
     ThermostatUserInterfaceConfigurationServer as BaseThermostatUserInterfaceConfigurationServer
 } from "../behaviors/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationServer.js";
 import {
     EnergyPreferenceServer as BaseEnergyPreferenceServer
 } from "../behaviors/energy-preference/EnergyPreferenceServer.js";
-import {
-    TimeSynchronizationServer as BaseTimeSynchronizationServer
-} from "../behaviors/time-synchronization/TimeSynchronizationServer.js";
-import {
-    RelativeHumidityMeasurementBehavior as BaseRelativeHumidityMeasurementBehavior
-} from "../behaviors/relative-humidity-measurement/RelativeHumidityMeasurementBehavior.js";
-import {
-    TimeSynchronizationBehavior as BaseTimeSynchronizationBehavior
-} from "../behaviors/time-synchronization/TimeSynchronizationBehavior.js";
 import { FanControlBehavior as BaseFanControlBehavior } from "../behaviors/fan-control/FanControlBehavior.js";
 import {
     TemperatureMeasurementBehavior as BaseTemperatureMeasurementBehavior
 } from "../behaviors/temperature-measurement/TemperatureMeasurementBehavior.js";
+import {
+    RelativeHumidityMeasurementBehavior as BaseRelativeHumidityMeasurementBehavior
+} from "../behaviors/relative-humidity-measurement/RelativeHumidityMeasurementBehavior.js";
 import {
     OccupancySensingBehavior as BaseOccupancySensingBehavior
 } from "../behaviors/occupancy-sensing/OccupancySensingBehavior.js";
@@ -74,13 +65,6 @@ export namespace ThermostatRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
-     */
-    export const ScenesManagementServer = BaseScenesManagementServer;
-
-    /**
      * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThermostatUserInterfaceConfigurationServer} for
@@ -94,27 +78,6 @@ export namespace ThermostatRequirements {
      * We provide this alias to the default implementation {@link EnergyPreferenceServer} for convenience.
      */
     export const EnergyPreferenceServer = BaseEnergyPreferenceServer;
-
-    /**
-     * The TimeSynchronization cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link TimeSynchronizationServer} for convenience.
-     */
-    export const TimeSynchronizationServer = BaseTimeSynchronizationServer;
-
-    /**
-     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link RelativeHumidityMeasurementBehavior} for convenience.
-     */
-    export const RelativeHumidityMeasurementBehavior = BaseRelativeHumidityMeasurementBehavior;
-
-    /**
-     * The TimeSynchronization cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link TimeSynchronizationBehavior} for convenience.
-     */
-    export const TimeSynchronizationBehavior = BaseTimeSynchronizationBehavior;
 
     /**
      * The FanControl cluster is optional per the Matter specification.
@@ -131,6 +94,13 @@ export namespace ThermostatRequirements {
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
+     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link RelativeHumidityMeasurementBehavior} for convenience.
+     */
+    export const RelativeHumidityMeasurementBehavior = BaseRelativeHumidityMeasurementBehavior;
+
+    /**
      * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
@@ -142,13 +112,10 @@ export namespace ThermostatRequirements {
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, Thermostat: ThermostatServer },
-
         optional: {
             Groups: GroupsServer,
-            ScenesManagement: ScenesManagementServer,
             ThermostatUserInterfaceConfiguration: ThermostatUserInterfaceConfigurationServer,
-            EnergyPreference: EnergyPreferenceServer,
-            TimeSynchronization: TimeSynchronizationServer
+            EnergyPreference: EnergyPreferenceServer
         }
     };
 
@@ -157,10 +124,9 @@ export namespace ThermostatRequirements {
      */
     export const client = {
         optional: {
-            RelativeHumidityMeasurement: RelativeHumidityMeasurementBehavior,
-            TimeSynchronization: TimeSynchronizationBehavior,
             FanControl: FanControlBehavior,
             TemperatureMeasurement: TemperatureMeasurementBehavior,
+            RelativeHumidityMeasurement: RelativeHumidityMeasurementBehavior,
             OccupancySensing: OccupancySensingBehavior
         },
 
@@ -171,7 +137,7 @@ export namespace ThermostatRequirements {
 export const ThermostatDeviceDefinition = MutableEndpoint({
     name: "Thermostat",
     deviceType: 0x301,
-    deviceRevision: 3,
+    deviceRevision: 4,
     requirements: ThermostatRequirements,
     behaviors: SupportedBehaviors(ThermostatRequirements.server.mandatory.Identify)
 });

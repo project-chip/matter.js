@@ -25,7 +25,9 @@ export const ModeSelect = Cluster(
             "\n" +
             "The server allows the client to set a mode on the server. A mode is one of a list of options that " +
             "may be presented by a client for a user choice, or understood by the client, via the semantic tags " +
-            "on the mode." +
+            "on the" +
+            "\n" +
+            "mode." +
             "\n" +
             "A semantic tag is either a standard tag within a standard category namespace, or a manufacturer " +
             "specific tag, within the namespace of the vendor ID of the manufacturer. If there is no semantic " +
@@ -66,21 +68,18 @@ export const ModeSelect = Cluster(
             "have the description Milk and the second instance can have the description Sugar. This allows the " +
             "user to tell the purpose of each of the instances.",
 
-        xref: { document: "cluster", section: "1.9.6.2" }
+        xref: { document: "cluster", section: "1.9.6.1" }
     }),
 
     Attribute({
         name: "StandardNamespace", id: 0x1, type: "enum16", access: "R V", conformance: "M",
         constraint: "desc", default: null, quality: "X F",
-
         details: "This attribute, when not null, shall indicate a single standard namespace for any standard semantic " +
-            "tag value supported in this or any other cluster instance with the same value of this attribute. A" +
-            "\n" +
+            "tag value supported in this or any other cluster instance with the same value of this attribute. A " +
             "null value indicates no standard namespace, and therefore, no standard semantic tags are provided " +
             "in this cluster instance. Each standard namespace and corresponding values and value meanings shall " +
             "be defined in another document.",
-
-        xref: { document: "cluster", section: "1.9.6.3" }
+        xref: { document: "cluster", section: "1.9.6.2" }
     }),
 
     Attribute(
@@ -90,7 +89,7 @@ export const ModeSelect = Cluster(
             details: "This attribute is the list of supported modes that may be selected for the CurrentMode attribute. " +
                 "Each item in this list represents a unique mode as indicated by the Mode field of the " +
                 "ModeOptionStruct. Each entry in this list shall have a unique value for the Mode field.",
-            xref: { document: "cluster", section: "1.9.6.4" }
+            xref: { document: "cluster", section: "1.9.6.3" }
         },
 
         Field({ name: "entry", type: "ModeOptionStruct" })
@@ -98,13 +97,13 @@ export const ModeSelect = Cluster(
 
     Attribute({
         name: "CurrentMode", id: 0x3, type: "uint8", access: "R V", conformance: "M", constraint: "desc",
-        quality: "N S",
+        quality: "N",
         details: "This attribute represents the current mode of the server." +
             "\n" +
             "The value of this field must match the Mode field of one of the entries in the SupportedModes" +
             "\n" +
             "attribute.",
-        xref: { document: "cluster", section: "1.9.6.5" }
+        xref: { document: "cluster", section: "1.9.6.4" }
     }),
 
     Attribute({
@@ -127,7 +126,7 @@ export const ModeSelect = Cluster(
             "\n" +
             "If this attribute is not implemented, or is set to the null value, it shall have no effect.",
 
-        xref: { document: "cluster", section: "1.9.6.6" }
+        xref: { document: "cluster", section: "1.9.6.5" }
     }),
 
     Attribute({
@@ -138,10 +137,11 @@ export const ModeSelect = Cluster(
             "endpoint. If this attribute is not present or is set to null, it shall NOT have an effect, " +
             "otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster" +
             "\n" +
-            "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
+            "The value of this field shall match the Mode field of one of the entries in the SupportedModes" +
+            "\n" +
             "attribute.",
 
-        xref: { document: "cluster", section: "1.9.6.7" }
+        xref: { document: "cluster", section: "1.9.6.6" }
     }),
 
     Command(

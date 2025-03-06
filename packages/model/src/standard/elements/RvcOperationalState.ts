@@ -19,19 +19,20 @@ export const RvcOperationalState = Cluster(
     {
         name: "RvcOperationalState", id: 0x61, type: "OperationalState", classification: "application",
         pics: "RVCOPSTATE",
-        details: "This cluster provides an interface for monitoring the operational state of a Robotic Vacuum Cleaner.",
+        details: "This cluster is derived from the Operational State cluster and provides an interface for monitoring " +
+            "the operational state of a robotic vacuum cleaner.",
         xref: { document: "cluster", section: "7.4" }
     },
 
     Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
     Command({ name: "Pause", id: 0x0, xref: { document: "cluster", section: "7.4.5" } }),
-    Command({ name: "Stop", id: 0x1, conformance: "D", xref: { document: "cluster", section: "7.4.5" } }),
-    Command({ name: "Start", id: 0x2, conformance: "D", xref: { document: "cluster", section: "7.4.5" } }),
+    Command({ name: "Stop", id: 0x1, conformance: "X", xref: { document: "cluster", section: "7.4.5" } }),
+    Command({ name: "Start", id: 0x2, conformance: "X", xref: { document: "cluster", section: "7.4.5" } }),
     Command({ name: "Resume", id: 0x3, xref: { document: "cluster", section: "7.4.5" } }),
     Command({ name: "OperationalCommandResponse", id: 0x4, xref: { document: "cluster", section: "7.4.5" } }),
 
     Command({
-        name: "GoHome", id: 0x80, access: "O", conformance: "P, O", direction: "request",
+        name: "GoHome", id: 0x80, access: "O", conformance: "O", direction: "request",
         response: "OperationalCommandResponse",
 
         details: "On receipt of this command, the device shall start seeking the charging dock, if possible in the " +
@@ -65,12 +66,12 @@ export const RvcOperationalState = Cluster(
                 "RVC Pause Compatibility defines the compatibility of the states this cluster defines with the Pause " +
                 "command." +
                 "\n" +
-                "### Table 39. RVC Pause Compatibility" +
+                "### Table 13. RVC Pause Compatibility" +
                 "\n" +
                 "RVC Resume Compatibility defines the compatibility of the states this cluster defines with the " +
                 "Resume command." +
                 "\n" +
-                "### Table 40. RVC Resume Compatibility" +
+                "### Table 14. RVC Resume Compatibility" +
                 "\n" +
                 "While in the Charging or Docked states, the device shall NOT attempt to resume unless it " +
                 "transitioned to those states while operating and can resume, such as, for example, if it is " +
@@ -82,6 +83,10 @@ export const RvcOperationalState = Cluster(
             xref: { document: "cluster", section: "7.4.4.1" }
         },
 
+        Field({ name: "Stopped", id: 0x0, conformance: "M", description: "The device is stopped" }),
+        Field({ name: "Running", id: 0x1, conformance: "M", description: "The device is operating" }),
+        Field({ name: "Paused", id: 0x2, conformance: "M", description: "The device is paused during an operation" }),
+        Field({ name: "Error", id: 0x3, conformance: "M", description: "The device is in an error state" }),
         Field({
             name: "SeekingCharger", id: 0x40, conformance: "M",
             description: "The device is en route to the charging dock"
@@ -98,6 +103,19 @@ export const RvcOperationalState = Cluster(
             xref: { document: "cluster", section: "7.4.4.2" }
         },
 
+        Field({ name: "NoError", id: 0x0, conformance: "M", description: "The device is not in an error state" }),
+        Field({
+            name: "UnableToStartOrResume", id: 0x1, conformance: "M",
+            description: "The device is unable to start or resume operation"
+        }),
+        Field({
+            name: "UnableToCompleteOperation", id: 0x2, conformance: "M",
+            description: "The device was unable to complete the current operation"
+        }),
+        Field({
+            name: "CommandInvalidInState", id: 0x3, conformance: "M",
+            description: "The device cannot process the command in its current state"
+        }),
         Field({
             name: "FailedToFindChargingDock", id: 0x40, conformance: "M",
             description: "The device has failed to find or reach the charging dock"

@@ -69,7 +69,7 @@ export const struct = Datatype({
         "    fields shall NOT be indicated when reporting data back to the client, when the struct has an " +
         "    associated fabric, and it is not the accessing fabric.",
 
-    xref: { document: "core", section: "7.18.1.9" }
+    xref: { document: "core", section: "7.19.1.9" }
 });
 
 MatterDefinition.children.push(struct);

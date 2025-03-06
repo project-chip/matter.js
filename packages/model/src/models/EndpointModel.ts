@@ -25,7 +25,7 @@ export class EndpointModel extends Model<EndpointModel> implements EndpointEleme
         return this.children;
     }
 
-    static {
-        Model.types[EndpointElement.Tag] = this;
-    }
+    static Tag = EndpointElement.Tag;
 }
+
+EndpointModel.register();

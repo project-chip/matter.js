@@ -79,24 +79,23 @@ export namespace LaundryWasherControls {
     export const SpinComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute indicates the list of spin speeds available to the appliance in the currently selected
-             * mode. The spin speed values are determined by the manufacturer. At least one spin speed value shall be
-             * provided in the SpinSpeeds list. The list of spin speeds may change depending on the currently selected
-             * Laundry Washer mode. For example, Quick mode might have a completely different list of SpinSpeeds than
-             * Delicates mode.
+             * Indicates the list of spin speeds available to the appliance in the currently selected mode. The spin
+             * speed values are determined by the manufacturer. At least one spin speed value shall be provided in the
+             * SpinSpeeds list. The list of spin speeds may change depending on the currently selected Laundry Washer
+             * mode. For example, Quick mode might have a completely different list of SpinSpeeds than Delicates mode.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.6.1
              */
             spinSpeeds: Attribute(0x0, TlvArray(TlvString, { maxLength: 16 }), { default: [] }),
 
             /**
-             * This attribute indicates the currently selected spin speed. It is the index into the SpinSpeeds list of
-             * the selected spin speed, as such, this attribute can be an integer between 0 and the number of entries
-             * in SpinSpeeds - 1. If a value is received that is outside of the defined constraints, a CONSTRAINT_ERROR
-             * shall be sent as the response. If a value is attempted to be written that doesn’t match a valid index
-             * (e.g. an index of 5 when the list has 4 values), a CONSTRAINT_ERROR shall be sent as the response. If
-             * null is written to this attribute, there will be no spin speed for the selected cycle. If the value is
-             * null, there will be no spin speed on the current mode.
+             * Indicates the currently selected spin speed. It is the index into the SpinSpeeds list of the selected
+             * spin speed, as such, this attribute can be an integer between 0 and the number of entries in SpinSpeeds
+             * - 1. If a value is received that is outside of the defined constraints, a CONSTRAINT_ERROR shall be sent
+             * as the response. If a value is attempted to be written that doesn’t match a valid index (e.g. an index
+             * of 5 when the list has 4 values), a CONSTRAINT_ERROR shall be sent as the response. If null is written
+             * to this attribute, there will be no spin speed for the selected cycle. If the value is null, there will
+             * be no spin speed on the current mode.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.6.2
              */
@@ -110,18 +109,19 @@ export namespace LaundryWasherControls {
     export const RinseComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute represents how many times a rinse cycle shall be performed on a device for the current
-             * mode of operation. A value of None shall indicate that no rinse cycle will be performed. This value may
-             * be set by the client to adjust the number of rinses that are performed for the current mode of
-             * operation. If the device is not in a compatible state to accept the provided value, an INVALID_IN_STATE
-             * error shall be sent as the response.
+             * Indicates how many times a rinse cycle shall be performed on a device for the current mode of operation.
+             * A value of None shall indicate that no rinse cycle will be performed. This value may be set by the
+             * client to adjust the number of rinses that are performed for
+             *
+             * the current mode of operation. If the device is not in a compatible state to accept the provided value,
+             * an INVALID_IN_STATE error shall be sent as the response.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.6.3
              */
             numberOfRinses: WritableAttribute(0x2, TlvEnum<NumberOfRinses>(), { default: NumberOfRinses.Normal }),
 
             /**
-             * This attribute represents the amount of rinses allowed for a specific mode. Each entry shall indicate a
+             * Indicates the amount of rinses allowed for a specific mode. Each entry shall indicate a
              * NumberOfRinsesEnum value that is possible in the selected mode on the device. The value of this
              * attribute may change at runtime based on the currently selected mode. Each entry shall be distinct.
              *
@@ -137,7 +137,7 @@ export namespace LaundryWasherControls {
     export const Base = MutableCluster.Component({
         id: 0x53,
         name: "LaundryWasherControls",
-        revision: 1,
+        revision: 2,
 
         features: {
             /**
@@ -167,20 +167,21 @@ export namespace LaundryWasherControls {
          */
         extensions: MutableCluster.Extensions(
             { flags: { spin: true }, component: SpinComponent },
-            { flags: { rinse: true }, component: RinseComponent }
+            { flags: { rinse: true }, component: RinseComponent },
+            { flags: { spin: false, rinse: false }, component: false }
         )
     });
 
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster(Base);
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
      * This cluster provides a way to access options associated with the operation of a laundry washer device type.
      *
-     * LaundryWasherControlsCluster supports optional features that you can enable with the
-     * LaundryWasherControlsCluster.with() factory method.
+     * Per the Matter specification you cannot use {@link LaundryWasherControlsCluster} without enabling certain
+     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.6
      */
@@ -194,10 +195,10 @@ export namespace LaundryWasherControls {
      * @see {@link Complete}
      */
     export const CompleteInstance = MutableCluster({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+        id: Base.id,
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
 
         attributes: {
             spinSpeeds: MutableCluster.AsConditional(SpinComponent.attributes.spinSpeeds, { mandatoryIf: [SPIN] }),

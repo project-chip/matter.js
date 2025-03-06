@@ -25,6 +25,7 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
     declare quieter?: boolean;
     declare largeMessage?: boolean;
     declare diagnostics?: boolean;
+    declare atomic?: boolean;
 
     /**
      * Initialize from a Quality.All definition or a string conforming to the
@@ -119,6 +120,7 @@ export namespace Quality {
         quieter = "Q",
         largeMessage = "L",
         diagnostics = "K",
+        atomic = "T",
     }
 
     /**
@@ -135,6 +137,7 @@ export namespace Quality {
         Q = "quieter",
         L = "largeMessage",
         K = "diagnostics",
+        T = "atomic",
     }
 
     /**
@@ -145,7 +148,7 @@ export namespace Quality {
     /**
      * Runtime version of QualityFlag.
      */
-    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I", "Q", "L", "K"];
+    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I", "Q", "L", "K", "T"];
 
     /**
      * Quality values that apply to data fields.
@@ -184,6 +187,11 @@ export namespace Quality {
          * to report.
          */
         quieter?: boolean;
+
+        /**
+         * Designates attribute as mutable only via atomic write.
+         */
+        atomic?: boolean;
     };
 
     /**

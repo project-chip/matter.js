@@ -26,7 +26,7 @@ export const ThreadNetworkDiagnostics = Cluster(
         xref: { document: "core", section: "11.14" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.14.4" } },
@@ -62,8 +62,9 @@ export const ThreadNetworkDiagnostics = Cluster(
         name: "RoutingRole", id: 0x1, type: "RoutingRoleEnum", access: "R V", conformance: "M",
         quality: "X",
         details: "The RoutingRole attribute shall indicate the role that this Node has within the routing of messages " +
-            "through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined in the " +
-            "following table. A value of null shall indicate that the Thread interface is not currently " +
+            "through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined" +
+            "\n" +
+            "in the following table. A value of null shall indicate that the Thread interface is not currently " +
             "configured or operational.",
         xref: { document: "core", section: "11.14.6.2" }
     }),
@@ -157,8 +158,7 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "StableDataVersion", id: 0xc, type: "uint16", access: "R V", conformance: "M",
         constraint: "max 255", quality: "X",
-        details: "The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of" +
-            "\n" +
+        details: "The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of " +
             "data the Node currently uses. Null if not attached to a Thread network.",
         xref: { document: "core", section: "11.14.6.13" }
     }),
@@ -297,7 +297,8 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "TxNoAckRequestedCount", id: 0x1b, type: "uint32", access: "R V", conformance: "[MACCNT]",
         default: 0, quality: "C",
-        details: "The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame " +
+        details: "The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame" +
+            "\n" +
             "transmission requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall " +
             "only be incremented by 1 for each MAC transmission request that is does not request acknowledgement " +
             "regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.",
@@ -366,11 +367,14 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "TxDirectMaxRetryExpiryCount", id: 0x22, type: "uint32", access: "R V",
         conformance: "[MACCNT]", default: 0, quality: "C",
-        details: "The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC " +
+
+        details: "The TxDirectMaxRetryExpiryCount attribute shall indicate the total number of unique MAC" +
+            "\n" +
             "transmission packets that meet maximal retry limit for direct packets. The " +
             "TxDirectMaxRetryExpiryCount attribute shall only be incremented by 1 for each unique MAC " +
             "transmission packets that meets the maximal retry limit for direct packets. This value shall only " +
             "be reset upon a Node reboot.",
+
         xref: { document: "core", section: "11.14.6.35" }
     }),
 
@@ -440,8 +444,9 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "RxDataCount", id: 0x2a, type: "uint32", access: "R V", conformance: "[MACCNT]", default: 0,
         quality: "C",
-        details: "The RxDataCount attribute shall indicate the total number of received unique MAC Data frames. This " +
-            "value shall only be reset upon a Node reboot.",
+        details: "The RxDataCount attribute shall indicate the total number of received unique MAC Data frames." +
+            "\n" +
+            "This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.43" }
     }),
 
@@ -517,8 +522,9 @@ export const ThreadNetworkDiagnostics = Cluster(
         name: "RxErrUnknownNeighborCount", id: 0x33, type: "uint32", access: "R V", conformance: "[MACCNT]",
         default: 0, quality: "C",
         details: "The RxErrUnknownNeighborCount attribute shall indicate the total number of received unique MAC " +
-            "frame requests that have been dropped as a result of originating from an unknown neighbor device. " +
-            "This value shall only be reset upon a Node reboot.",
+            "frame requests that have been dropped as a result of originating from an unknown neighbor" +
+            "\n" +
+            "device. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.52" }
     }),
 
@@ -613,6 +619,15 @@ export const ThreadNetworkDiagnostics = Cluster(
         },
         Field({ name: "entry", type: "NetworkFaultEnum" })
     ),
+
+    Attribute({
+        name: "ExtAddress", id: 0x3f, type: "uint64", access: "R V", conformance: "P, M", quality: "X",
+        xref: { document: "core", section: "11.14.6" }
+    }),
+    Attribute({
+        name: "Rloc16", id: 0x40, type: "uint16", access: "R V", conformance: "P, M", quality: "X",
+        xref: { document: "core", section: "11.14.6" }
+    }),
 
     Event(
         {
@@ -876,9 +891,8 @@ export const ThreadNetworkDiagnostics = Cluster(
 
         Field({
             name: "LinkEstablished", id: 0x9, type: "bool", conformance: "M",
-            details: "This field shall specify if a link has been established to the Node for which this route table entry" +
-                "\n" +
-                "corresponds.",
+            details: "This field shall specify if a link has been established to the Node for which this route table " +
+                "entry corresponds.",
             xref: { document: "core", section: "11.14.5.5.10" }
         })
     ),

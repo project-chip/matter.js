@@ -26,7 +26,7 @@ export class SemanticNamespaceModel extends Model<SemanticNamespaceElement> impl
         return this.children;
     }
 
-    static {
-        Model.types[SemanticNamespaceElement.Tag] = this;
-    }
+    static Tag = SemanticNamespaceElement.Tag;
 }
+
+SemanticNamespaceModel.register();
