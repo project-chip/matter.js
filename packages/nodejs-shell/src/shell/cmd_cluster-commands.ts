@@ -6,8 +6,7 @@
 
 import { Logger } from "@matter/general";
 import { ClusterModel, CommandModel, MatterModel } from "@matter/model";
-import { ValidationError } from "@project-chip/matter.js/common";
-import { ClusterId } from "@project-chip/matter.js/datatype";
+import { ClusterId, ValidationError } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";

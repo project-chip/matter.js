@@ -5,7 +5,7 @@
  */
 
 import { capitalize, decamelize, Logger } from "@matter/general";
-import { NodeId } from "@project-chip/matter.js/datatype";
+import { NodeId } from "@matter/types";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";

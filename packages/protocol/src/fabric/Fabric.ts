@@ -364,7 +364,6 @@ export class FabricBuilder {
         return this;
     }
 
-    // TODO Remove when legacy API gets removed because then no longer needed
     get rootCert() {
         return this.#rootCert;
     }
