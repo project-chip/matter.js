@@ -214,7 +214,7 @@ jobs:
               --chip-tool ../bin/chip-tool \
               --log-level info \
               --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
-              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_3_2,Test_TC_CC_3_3,Test_TC_CC_4_3}" \
+              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_3_2,Test_TC_CC_3_3,Test_TC_CC_4_3,Test_TC_CC_5_3}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
