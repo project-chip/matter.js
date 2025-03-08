@@ -670,7 +670,7 @@ The same also is possible for own Behavior classes, with the main different that
 
 ```javascript
 export class MyBehavior extends Behavior {
-    static override readonly id = "myBehavior"; // give the Bahavior a unique name
+    static override readonly id = "myBehavior"; // give the Behavior a unique name
 
     declare state: MyDeviceBehavior.State;
 
