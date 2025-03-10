@@ -28,7 +28,7 @@ This will commission a MatterServer device (for debugging/capability showing pur
 The following parameters are available and used to initially commission a device (they can be omitted after this):
 * --fabriclabel: the fabric label to use for commissioning (default: "matter.js Controller")
 * If the IP and Port of the device is known (should be only the case in testing cases) you can use the following parameters:
-    * --ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
+    * --ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passcode) is most likely better)
     * --port the port of the device to commission (default: 5540)
 * Device identification options:
     * --pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored) - usually the code below the QR Code on the device or displayed in the app!
