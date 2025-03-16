@@ -69,7 +69,9 @@ export class ChannelManager {
     }
 
     hasChannel(address: PeerAddress) {
-        return !!this.#channels.get(address)?.length;
+        return !!this.#channels
+            .get(address)
+            ?.filter(channel => !channel.closed && !channel.session.closingAfterExchangeFinished).length;
     }
 
     getChannel(address: PeerAddress, session?: Session) {
@@ -77,6 +79,7 @@ export class ChannelManager {
         if (session !== undefined) {
             results = results.filter(channel => channel.session.id === session.id);
         }
+        results = results.filter(channel => !channel.closed && !channel.session.closingAfterExchangeFinished);
         if (results.length === 0)
             throw new NoChannelError(
                 `Can't find a channel to ${PeerAddress(address)}${session !== undefined ? ` session ${session.id}` : ""}`,
