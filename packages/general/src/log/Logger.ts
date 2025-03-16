@@ -216,7 +216,7 @@ export class Logger {
      *
      * @param log The log function to set
      */
-    public static set log(log: (level: LogLevel, formattedLog: string) => void) {
+    public static set log(log: (level: LogLevel, formattedLog: string, facility?: string) => void) {
         Logger.setLogger("default", log);
     }
 
