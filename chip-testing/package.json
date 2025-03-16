@@ -30,7 +30,9 @@
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter/testing": "*"
+        "@matter/testing": "*",
+        "@types/ws": "^8.5.14",
+        "ws": "^8.18.1"
     },
     "matter": {
         "test": false
