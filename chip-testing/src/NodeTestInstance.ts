@@ -17,12 +17,12 @@ import {
 import { AdministratorCommissioningServer } from "@matter/main/behaviors/administrator-commissioning";
 import { OccurrenceManager } from "@matter/main/protocol";
 import { BackchannelCommand, chip, Subject } from "@matter/testing";
-import { log, TestInstance, TestInstanceConfig } from "./GenericTestApp.js";
+import { DeviceTestInstance, DeviceTestInstanceConfig, log } from "./GenericTestApp.js";
 
 /**
  * {@link serverNode}-based test subject.
  */
-export abstract class NodeTestInstance extends TestInstance implements Subject {
+export abstract class NodeTestInstance extends DeviceTestInstance implements Subject {
     #env = new Environment(`${this.id}-env`, Environment.default);
     #node?: ServerNode;
 
@@ -31,7 +31,7 @@ export abstract class NodeTestInstance extends TestInstance implements Subject {
     static nonvolatileEvents = false;
     static testEnableKey = "00112233445566778899aabbccddeeff";
 
-    constructor(config: TestInstanceConfig) {
+    constructor(config: DeviceTestInstanceConfig) {
         super(config);
     }
 
@@ -85,7 +85,7 @@ export abstract class NodeTestInstance extends TestInstance implements Subject {
         }
 
         try {
-            this.#env.set(StorageService, new StorageService(this.#env, () => this.config.storage));
+            this.#env.set(StorageService, new StorageService(this.#env, () => this.storage));
             await this.#setupServer();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
@@ -102,7 +102,7 @@ export abstract class NodeTestInstance extends TestInstance implements Subject {
         }
 
         CloneableStorage.assert(snapshot);
-        this.config.storage = await snapshot.clone();
+        this.storage = await snapshot.clone();
 
         await this.#setupServer();
     }
@@ -150,8 +150,8 @@ export abstract class NodeTestInstance extends TestInstance implements Subject {
     }
 
     async snapshot() {
-        CloneableStorage.assert(this.config.storage);
-        return this.config.storage.clone();
+        CloneableStorage.assert(this.storage);
+        return this.storage.clone();
     }
 
     override async backchannel(command: BackchannelCommand) {

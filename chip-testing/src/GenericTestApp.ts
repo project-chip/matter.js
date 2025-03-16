@@ -5,12 +5,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "@matter/general";
 import { Environment, MaybePromise, Storage } from "@matter/main";
 import { ValidationError } from "@matter/main/types";
 import { BackchannelCommand, CommandPipe } from "@matter/testing";
 import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
-import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
+
+const logger = Logger.get("GenericTestApp");
 
 // TODO - the get*Parameter calls are deprecated along with matter-node.js so copied here temporarily.  Replace with
 // yargs ?
@@ -42,10 +44,22 @@ const allocatedIds = new Set();
 export abstract class TestInstance {
     static id = "test-node";
     #id: string;
-    #commandPipe?: CommandPipe;
+    #config: TestInstanceConfig;
 
     get id() {
         return this.#id;
+    }
+
+    get storage() {
+        return this.#config.storage;
+    }
+
+    set storage(storage: Storage) {
+        this.#config.storage = storage;
+    }
+
+    get config() {
+        return this.#config;
     }
 
     get baseAppName() {
@@ -59,7 +73,8 @@ export abstract class TestInstance {
         return this.baseAppName;
     }
 
-    constructor(protected config: TestInstanceConfig) {
+    constructor(config: TestInstanceConfig) {
+        this.#config = config;
         this.#id = (this.constructor as { (): unknown; id: string }).id;
         if (config.domain !== undefined) {
             this.#id = `${this.#id}-${config.domain}`;
@@ -75,26 +90,36 @@ export abstract class TestInstance {
         }
     }
 
+    abstract initialize(): Promise<void>;
+    abstract start(): Promise<void>;
+    abstract stop(): Promise<void>;
+    abstract close(): Promise<void>;
+}
+
+export abstract class DeviceTestInstance extends TestInstance {
+    #commandPipe?: CommandPipe;
+    #commandPipeFactory: (app: DeviceTestInstance, name: string) => Promise<void | CommandPipe>;
+
+    constructor(config: DeviceTestInstanceConfig) {
+        super(config);
+        this.#commandPipeFactory = config.commandPipeFactory;
+    }
+
     async activateCommandPipe(name: string) {
         if (this.#commandPipe === undefined) {
-            if (this.config.commandPipeFactory === undefined) {
+            if (this.#commandPipeFactory === undefined) {
                 throw new Error(`Cannot instantiate ${this.appName} without command pipe factory`);
             }
-            const pipe = await this.config.commandPipeFactory(this, name);
+            const pipe = await this.#commandPipeFactory(this, name);
             if (pipe) {
                 this.#commandPipe = pipe;
             }
         }
     }
 
-    abstract initialize(): Promise<void>;
-    abstract start(): Promise<void>;
-
     async stop(): Promise<void> {
         await this.#commandPipe?.close();
     }
-
-    abstract close(): Promise<void>;
 
     async backchannel(command: BackchannelCommand) {
         throw new Error(`Unhandled backchannel ${command.name}`);
@@ -116,23 +141,25 @@ export interface TestInstanceConfig {
     discriminator?: number;
     passcode?: number;
     domain?: string;
+}
 
+export interface DeviceTestInstanceConfig extends TestInstanceConfig {
     /**
      * Initializes a {@link CommandPipe} for the application.
      *
      * This function may optionally return the pipe object.  When running tests locally using GenericTestApp this is
      * necessary to close the pipe.  When running containerized this is unnecessary as the test harness manages pipes.
      */
-    commandPipeFactory: (app: TestInstance, name: string) => Promise<void | CommandPipe>;
+    commandPipeFactory: (app: DeviceTestInstance, name: string) => Promise<void | CommandPipe>;
 }
 
-export interface TestInstanceConstructor<T extends TestInstance = TestInstance> {
-    new (config: TestInstanceConfig): T;
+export interface DeviceTestInstanceConstructor<T extends DeviceTestInstance = DeviceTestInstance> {
+    new (config: DeviceTestInstanceConfig): T;
 }
 
-export async function startTestApp(
-    testInstanceClass: TestInstanceConstructor,
-    storageType: typeof StorageBackendSyncJsonFile | typeof StorageBackendAsyncJsonFile = StorageBackendSyncJsonFile,
+export async function startDeviceTestApp(
+    testInstanceClass: DeviceTestInstanceConstructor,
+    storageType: typeof StorageBackendAsyncJsonFile = StorageBackendAsyncJsonFile,
 ) {
     const storageName = `/tmp/chip_${getParameter("KVS") ?? "kvs"}`;
 
@@ -143,7 +170,7 @@ export async function startTestApp(
 
     const testInstance = new testInstanceClass({
         storage,
-        commandPipeFactory: async (app: TestInstance, name: string) => {
+        commandPipeFactory: async (app: DeviceTestInstance, name: string) => {
             const pipe = new NamedPipeCommandHandler(
                 {
                     backchannel(command: BackchannelCommand): void | Promise<void> {
@@ -161,13 +188,17 @@ export async function startTestApp(
         passcode: getIntParameter("passcode"),
     });
 
+    await startTestApp(testInstance);
+}
+
+export async function startTestApp(testInstance: TestInstance) {
     await testInstance.initialize();
     await testInstance.start();
 
-    console.log(`======> Waiting for tests`);
+    logger.info(`-----> Waiting for tests`);
 
     function exitHandler(signal: string) {
-        console.log(`======> Closing test instance because of ${signal} ...`);
+        logger.info(`-----> Closing test instance because of ${signal} ...`);
         testInstance
             .stop()
             .then(() => {
@@ -176,24 +207,24 @@ export async function startTestApp(
                 runtime.inactive
                     .then(() => {
                         MaybePromise.then(
-                            storage?.close(),
+                            testInstance.storage?.close(),
                             () => {
-                                console.log(`======> Test instance successfully closed.`);
+                                logger.info(`-----> Test instance successfully closed.`);
                                 process.exit(0);
                             },
                             error => {
-                                console.log(error.stack);
+                                logger.info(error.stack);
                                 process.exit(1);
                             },
                         );
                     })
                     .catch(error => {
-                        console.log(error.stack);
+                        logger.info(error.stack);
                         process.exit(1);
                     });
             })
             .catch(error => {
-                console.log(error.stack);
+                logger.info(error.stack);
                 process.exit(1);
             });
     }
@@ -201,5 +232,5 @@ export async function startTestApp(
     process.on("SIGTERM", () => exitHandler("SIGTERM"));
     process.on("SIGINT", () => exitHandler("SIGINT"));
 
-    process.on("exit", code => console.log(`======> Exit Test instance with code ${code}`));
+    process.on("exit", code => logger.info(`-----> Exit Test instance with code ${code}`));
 }

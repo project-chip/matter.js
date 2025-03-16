@@ -69,14 +69,14 @@ import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitori
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
-import { TestInstanceConfig } from "./GenericTestApp.js";
+import { DeviceTestInstanceConfig } from "./GenericTestApp.js";
 import { NodeTestInstance } from "./NodeTestInstance.js";
 import { SwitchSimulator } from "./simulators/SwitchSimulator.js";
 
 export class AllClustersTestInstance extends NodeTestInstance {
     static override id = "binford-6100";
 
-    constructor(config: TestInstanceConfig) {
+    constructor(config: DeviceTestInstanceConfig) {
         super(config);
     }
 

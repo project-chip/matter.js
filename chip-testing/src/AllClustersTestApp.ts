@@ -8,7 +8,7 @@
 import "@matter/nodejs";
 
 import { AllClustersTestInstance } from "./AllClustersTestInstance.js";
-import { startTestApp } from "./GenericTestApp.js";
+import { startDeviceTestApp } from "./GenericTestApp.js";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 
 process.title = "AllClustersTestApp.js"; // Needed for Stress testing to detect the process to kill.
@@ -17,4 +17,4 @@ console.log("Start AllClustersApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp(AllClustersTestInstance, StorageBackendAsyncJsonFile).catch(console.error);
+startDeviceTestApp(AllClustersTestInstance, StorageBackendAsyncJsonFile).catch(console.error);

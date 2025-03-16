@@ -6,10 +6,10 @@
  */
 import "@matter/nodejs";
 import { BridgeTestInstance } from "./BridgeTestInstance.js";
-import { startTestApp } from "./GenericTestApp.js";
+import { startDeviceTestApp } from "./GenericTestApp.js";
 
 console.log("Start BridgeApp");
 console.log(process.pid);
 console.log(process.argv);
 
-startTestApp(BridgeTestInstance).catch(console.error);
+startDeviceTestApp(BridgeTestInstance).catch(console.error);

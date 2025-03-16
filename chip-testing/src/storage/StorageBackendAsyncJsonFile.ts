@@ -23,7 +23,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     private currentStoreItPromise?: Promise<void>;
     private lastStoredTime = 0;
 
-    constructor(private readonly path: string) {
+    constructor(readonly path: string) {
         super();
     }
 
