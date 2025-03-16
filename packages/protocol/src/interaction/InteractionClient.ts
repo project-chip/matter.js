@@ -959,11 +959,11 @@ export class InteractionClient {
             eventReports?: DecodedEventReportValue<any>[];
             subscriptionId?: number;
         }) => {
-            updateReceived?.();
             if (
                 (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                 (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
             ) {
+                updateReceived?.();
                 return;
             }
             const { attributeReports, eventReports } = dataReport;
@@ -1014,6 +1014,7 @@ export class InteractionClient {
                     attributeListener?.(data, changed, oldValue);
                 }
             }
+            updateReceived?.();
         };
 
         const seedReport = DecodedDataReport(report);
