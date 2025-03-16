@@ -22,6 +22,7 @@ import {
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     ImplementationError,
     Logger,
+    MatterError,
     NetInterfaceSet,
     ServerAddressIp,
     serverAddressToString,
@@ -59,7 +60,6 @@ import {
     SecureChannelProtocol,
     SessionManager,
     SubscriptionClient,
-    UnknownNodeError,
 } from "#protocol";
 import {
     CaseAuthenticatedTag,
@@ -586,11 +586,8 @@ export class MatterController {
         filterClusterId?: ClusterId,
     ): Promise<{ endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[]> {
         const peer = this.peers.get(this.fabric.addressOf(nodeId));
-        if (peer === undefined) {
-            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
-        }
-        if (peer.dataStore === undefined) {
-            return []; // We have no store, also also no data
+        if (peer === undefined || peer.dataStore === undefined) {
+            return []; // We have no store, also no data
         }
         await peer.dataStore.construction;
         return peer.dataStore.getClusterDataVersions(filterEndpointId, filterClusterId);
@@ -602,11 +599,8 @@ export class MatterController {
         clusterId: ClusterId,
     ): Promise<DecodedAttributeReportValue<any>[]> {
         const peer = this.peers.get(this.fabric.addressOf(nodeId));
-        if (peer === undefined) {
-            throw new UnknownNodeError(`Node ${nodeId} is not commissioned.`);
-        }
-        if (peer.dataStore === undefined) {
-            return []; // We have no store, also also no data
+        if (peer === undefined || peer.dataStore === undefined) {
+            return []; // We have no store, also no data
         }
         await peer.dataStore.construction;
         return peer.dataStore.retrieveAttributes(endpointId, clusterId);

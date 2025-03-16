@@ -361,9 +361,9 @@ export class CommissioningController {
     }
 
     /** @deprecated Use PairedNode.disconnect() instead */
-    async disconnectNode(nodeId: NodeId) {
+    async disconnectNode(nodeId: NodeId, force = false) {
         const node = this.#initializedNodes.get(nodeId);
-        if (node === undefined) {
+        if (node === undefined && !force) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
         await this.#controllerInstance?.disconnect(nodeId);
@@ -373,12 +373,12 @@ export class CommissioningController {
      * Returns the PairedNode instance for a given NodeId. The instance is initialized without auto connect if not yet
      * created.
      */
-    async getNode(nodeId: NodeId) {
+    async getNode(nodeId: NodeId, allowUnknownNode = false) {
         const existingNode = this.#initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             return existingNode;
         }
-        return await this.connectNode(nodeId, { autoConnect: false });
+        return await this.connectNode(nodeId, { autoConnect: false }, allowUnknownNode);
     }
 
     /**
@@ -389,10 +389,12 @@ export class CommissioningController {
      *
      * @deprecated Use getNode() instead and call PairedNode.connect() or PairedNode.disconnect() as needed.
      */
-    async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
+    async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions, allowUnknownNode = false) {
         const controller = this.#assertControllerIsStarted();
 
-        if (!controller.getCommissionedNodes().includes(nodeId)) {
+        logger.info(`Connecting to node ${nodeId}...`, controller.getCommissionedNodes());
+        const nodeIsCommissioned = controller.getCommissionedNodes().includes(nodeId);
+        if (!nodeIsCommissioned && !allowUnknownNode) {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
@@ -408,8 +410,8 @@ export class CommissioningController {
             nodeId,
             this,
             connectOptions,
-            this.#controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
-            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
+            nodeIsCommissioned ? (this.#controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {}) : {},
+            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, { forcedConnection: false }), // First connect without discovery to last known address
             async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.#sessionDisconnectedHandler.set(nodeId, handler),
             controller.sessions,
