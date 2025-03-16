@@ -5,15 +5,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogFormat, Logger } from "@matter/general";
+/**
+ * This is a chip-tool compatible WebSocket Controller.
+ *
+ * The controller logs are returned to chip tool and also logged into a file test_controller.log.
+ */
+
+import { Logger } from "@matter/general";
 import "@matter/nodejs";
 import { createFileLogger } from "@matter/nodejs";
 import { writeFileSync } from "node:fs";
 import { ControllerTestInstance, startControllerTestApp } from "./ControllerTestInstance.js";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 
-Logger.format = LogFormat.PLAIN;
-Logger.log = await createFileLogger("./test.log");
+Logger.log = await createFileLogger("./test_controller.log");
 
 const logger = Logger.get("ControllerWebSocketTestApp");
 logger.info("Start Controller WebSocket App");
