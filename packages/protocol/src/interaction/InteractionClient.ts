@@ -46,6 +46,7 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
+import { MessageChannel } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
 import { DecodedDataReport } from "./DecodedDataReport.js";
@@ -103,6 +104,17 @@ export class InteractionClientProvider {
         return this.getInteractionClient(address, discoveryOptions);
     }
 
+    async getInteractionClientForChannel(channel: MessageChannel): Promise<InteractionClient> {
+        const exchangeProvider = await this.#peers.exchangeProviderFor(channel);
+
+        return new InteractionClient(
+            exchangeProvider,
+            this.#peers.subscriptionClient,
+            undefined,
+            this.#peers.interactionQueue,
+        );
+    }
+
     async getInteractionClient(address: PeerAddress, discoveryOptions: DiscoveryOptions) {
         let client = this.#clients.get(address);
         if (client !== undefined) {
@@ -141,11 +153,12 @@ export class InteractionClient {
     readonly #ownSubscriptionIds = new Set<number>();
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
+    readonly #address?: PeerAddress;
 
     constructor(
         exchangeProvider: ExchangeProvider,
         subscriptionClient: SubscriptionClient,
-        readonly address: PeerAddress,
+        address?: PeerAddress,
         queue?: PromiseQueue,
         nodeStore?: PeerDataStore,
     ) {
@@ -153,6 +166,18 @@ export class InteractionClient {
         this.#nodeStore = nodeStore;
         this.#subscriptionClient = subscriptionClient;
         this.#queue = queue;
+        this.#address = address;
+    }
+
+    get address() {
+        if (this.#address === undefined) {
+            throw new ImplementationError("This InteractionClient is not bound to a specific peer.");
+        }
+        return this.#address;
+    }
+
+    get isReconnectable() {
+        return this.#exchangeProvider instanceof ReconnectableExchangeProvider;
     }
 
     get channelUpdated() {

@@ -36,7 +36,7 @@ import { SessionManager } from "#session/SessionManager.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "@matter/types";
 import { ChannelManager } from "../protocol/ChannelManager.js";
 import { ChannelNotConnectedError, ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
-import { ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
+import { DedicatedChannelExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
 import { ControllerDiscovery, DiscoveryError, PairRetransmissionLimitReachedError } from "./ControllerDiscovery.js";
 import { InteractionQueue } from "./InteractionQueue.js";
@@ -272,7 +272,11 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
     /**
      * Obtain an exchange provider for the designated peer.
      */
-    async exchangeProviderFor(address: PeerAddress, discoveryOptions?: DiscoveryOptions) {
+    async exchangeProviderFor(addressOrChannel: PeerAddress | MessageChannel, discoveryOptions?: DiscoveryOptions) {
+        if (addressOrChannel instanceof MessageChannel) {
+            return new DedicatedChannelExchangeProvider(this.#exchanges, addressOrChannel);
+        }
+        const address: PeerAddress = addressOrChannel;
         let initiallyConnected = this.#channels.hasChannel(address);
         return new ReconnectableExchangeProvider(this.#exchanges, this.#channels, address, async () => {
             if (!initiallyConnected && !this.#channels.hasChannel(address)) {
@@ -622,6 +626,7 @@ export class PeerSet implements ImmutableSet<OperationalPeer>, ObservableSet<Ope
         discoveryData?: DiscoveryData,
         expectedProcessingTimeMs?: number,
     ) {
+        logger.debug(`Pair with ${address} at ${serverAddressToString(operationalServerAddress)}`);
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);

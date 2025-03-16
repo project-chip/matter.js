@@ -34,6 +34,7 @@ import {
     MdnsBroadcaster,
     MdnsScanner,
     MdnsService,
+    MessageChannel,
     NodeDiscoveryType,
     ScannerSet,
 } from "#protocol";
@@ -305,6 +306,13 @@ export class CommissioningController {
         return nodeId;
     }
 
+    connectPaseChannel(nodeOptions: NodeCommissioningOptions) {
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
+
+        return controller.connectPaseChannel(nodeOptions);
+    }
+
     /**
      * Completes the commissioning process for a node when the initial commissioning process was done by a PASE
      * commissioner. This method should be called to discover the device operational and complete the commissioning
@@ -490,15 +498,18 @@ export class CommissioningController {
      * not be used directly. See the PairedNode class for the public API.
      */
     async createInteractionClient(
-        nodeId: NodeId,
+        nodeIdOrChannel: NodeId | MessageChannel,
         discoveryType?: NodeDiscoveryType,
-        forcedConnection = true,
+        options?: {
+            forcedConnection?: boolean;
+        },
     ): Promise<InteractionClient> {
         const controller = this.#assertControllerIsStarted();
-        if (!forcedConnection) {
-            return controller.createInteractionClient(nodeId, { discoveryType });
+        const { forcedConnection } = options ?? {};
+        if (nodeIdOrChannel instanceof MessageChannel || !forcedConnection) {
+            return controller.createInteractionClient(nodeIdOrChannel, { discoveryType });
         }
-        return controller.connect(nodeId, { discoveryType });
+        return controller.connect(nodeIdOrChannel, { discoveryType }, forcedConnection);
     }
 
     /**

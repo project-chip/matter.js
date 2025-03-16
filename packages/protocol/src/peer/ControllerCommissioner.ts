@@ -176,9 +176,11 @@ export class ControllerCommissioner {
     }
 
     /**
-     * Commission a node with discovery.
+     * Discover and establish a PASE channel with a device.
      */
-    async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
+    async discoverAndEstablishPase(
+        options: DiscoveryAndCommissioningOptions,
+    ): Promise<{ paseSecureChannel: MessageChannel; discoveryData?: DiscoveryData }> {
         const {
             discovery: { timeoutSeconds = 30 },
             passcode,
@@ -218,7 +220,7 @@ export class ControllerCommissioner {
         const scannersToUse = this.#context.scanners.select(discoveryCapabilities);
 
         logger.info(
-            `Commissioning device with identifier ${Logger.toJSON(identifierData)} and ${
+            `Connecting to device with identifier ${Logger.toJSON(identifierData)} and ${
                 scannersToUse.length
             } scanners and knownAddress ${Logger.toJSON(knownAddress)}`,
         );
@@ -258,6 +260,17 @@ export class ControllerCommissioner {
             paseSecureChannel = result;
         }
 
+        return { paseSecureChannel, discoveryData };
+    }
+
+    /**
+     * Commission a node with discovery.
+     */
+    async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
+        // Establish PASE channel
+        const { paseSecureChannel, discoveryData } = await this.discoverAndEstablishPase(options);
+
+        // Commission the node
         return await this.#commissionConnectedNode(paseSecureChannel, options, discoveryData);
     }
 
@@ -273,7 +286,7 @@ export class ControllerCommissioner {
     ): Promise<MessageChannel> {
         let paseChannel: Channel<Uint8Array>;
         if (device !== undefined) {
-            logger.info(`Commissioning device`, MdnsScanner.discoveryDataDiagnostics(device));
+            logger.info(`Establish PASE to device`, MdnsScanner.discoveryDataDiagnostics(device));
         }
         if (address.type === "udp") {
             const { ip } = address;

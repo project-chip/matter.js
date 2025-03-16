@@ -441,6 +441,17 @@ export class MatterController {
         return this.peers.disconnect(this.fabric.addressOf(nodeId));
     }
 
+    async connectPaseChannel(options: NodeCommissioningOptions) {
+        const { paseSecureChannel } = await this.commissioner.discoverAndEstablishPase({
+            ...options.commissioning,
+            fabric: this.fabric,
+            discovery: options.discovery,
+            passcode: options.passcode,
+        });
+        logger.warn("PASE channel established", paseSecureChannel.session.name, paseSecureChannel.session.isSecure);
+        return paseSecureChannel;
+    }
+
     async removeNode(nodeId: NodeId) {
         return this.peers.delete(this.fabric.addressOf(nodeId));
     }
@@ -528,8 +539,11 @@ export class MatterController {
         return this.clients.connect(this.fabric.addressOf(peerNodeId), { discoveryOptions, allowUnknownPeer });
     }
 
-    createInteractionClient(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
-        return this.clients.getInteractionClient(this.fabric.addressOf(peerNodeId), discoveryOptions);
+    createInteractionClient(peerNodeIdOrChannel: NodeId | MessageChannel, discoveryOptions: DiscoveryOptions) {
+        if (peerNodeIdOrChannel instanceof MessageChannel) {
+            return this.clients.getInteractionClientForChannel(peerNodeIdOrChannel);
+        }
+        return this.clients.getInteractionClient(this.fabric.addressOf(peerNodeIdOrChannel), discoveryOptions);
     }
 
     async getNextAvailableSessionId() {
