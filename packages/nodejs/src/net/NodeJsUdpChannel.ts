@@ -160,7 +160,9 @@ export class NodeJsUdpChannel implements UdpChannel {
         try {
             this.socket.close();
         } catch (error) {
-            logger.debug("Error on closing socket", error);
+            if (!(error instanceof Error) || error.message !== "Not running") {
+                logger.debug("Error on closing socket", error);
+            }
         }
     }
 
