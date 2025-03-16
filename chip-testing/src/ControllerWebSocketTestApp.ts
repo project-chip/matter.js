@@ -12,7 +12,6 @@
  */
 
 import { Logger } from "@matter/general";
-import "@matter/nodejs";
 import { createFileLogger } from "@matter/nodejs";
 import { writeFileSync } from "node:fs";
 import { ControllerTestInstance, startControllerTestApp } from "./ControllerTestInstance.js";

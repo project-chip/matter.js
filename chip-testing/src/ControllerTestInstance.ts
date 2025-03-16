@@ -39,7 +39,7 @@ export async function startControllerTestApp(
     try {
         mkdirSync(storageDir);
     } catch (error) {
-        if ((error as any).code !== "EEXISTS") {
+        if ((error as any).code !== "EEXIST") {
             logger.error(`Failed to create storage directory: ${storageDir}`, error);
         }
     }

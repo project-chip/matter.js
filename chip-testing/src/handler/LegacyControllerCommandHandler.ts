@@ -265,7 +265,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
         const client = await (await this.#controllerInstance.getNode(nodeId)).getInteractionClient();
         const cluster = getClusterById(clusterId);
 
-        logger.info("Writing attribute", attributeName, "with value", value, cluster.attributes[attributeName]);
+        logger.info("Writing attribute", attributeName, "with value", value);
         await client.setAttribute({
             attributeData: {
                 endpointId,
@@ -518,8 +518,8 @@ export class LegacyControllerCommandHandler extends CommandHandler {
             );
             const vendorId = VP === undefined ? -1 : VP.includes("+") ? parseInt(VP.split("+")[0]) : parseInt(VP);
             const productId = VP === undefined ? -1 : VP.includes("+") ? parseInt(VP.split("+")[1]) : -1;
-            let port = addresses.length ? (addresses[0] as ServerAddressIp).port : 0;
-            let numIPs = addresses.length;
+            const port = addresses.length ? (addresses[0] as ServerAddressIp).port : 0;
+            const numIPs = addresses.length;
             return {
                 value: {
                     commissioningMode: CM,

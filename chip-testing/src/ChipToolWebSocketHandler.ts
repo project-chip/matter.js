@@ -13,6 +13,7 @@ import {
     decamelize,
     EventId,
     EventNumber,
+    LogFormat,
     NodeId,
     Observable,
 } from "@matter/main";
@@ -165,18 +166,15 @@ function convertMatterToWebSocketTagBased(value: any, model: ValueModel): any {
         return result;
     }
     if (typeof value === "object" && model.metabase?.metatype === "bitmap") {
-        logger.warn("Decode bitmap", value);
         let numberValue = 0;
 
         model.members.forEach(member => {
-            let memberValue =
+            const memberValue =
                 member.name !== undefined && value[camelize(member.name)]
                     ? value[camelize(member.name)]
                     : member.description !== undefined && value[camelize(member.description)]
                       ? value[camelize(member.description)]
                       : undefined;
-
-            logger.warn("Decode bitmap member", memberValue, numberValue, member);
 
             if (!memberValue) {
                 return;
@@ -187,7 +185,6 @@ function convertMatterToWebSocketTagBased(value: any, model: ValueModel): any {
                 numberValue |= 1 << constraintValue;
             } else {
                 const minBit = FieldValue.numericValue(member.constraint.min) ?? 0;
-                logger.info("Decode bitmap member", memberValue, "at", minBit);
                 numberValue |= typeof memberValue === "boolean" ? 1 : memberValue << minBit;
             }
         });
@@ -294,8 +291,8 @@ function convertWebsocketDataToMatter(value: any, model: ValueModel): any {
         if (
             ((model.metabase?.metatype === "integer" || model.metabase?.metatype === "enum") &&
                 value.startsWith("0x") &&
-                value.match(/^0x[0-9a-fA-F]+$/)) ||
-            value.match(/^-?[1-9][0-9]*$/) ||
+                value.match(/^0x[\da-fA-F]+$/)) ||
+            value.match(/^-?[1-9]\d*$/) ||
             value === "0"
         ) {
             return parseNumber(value);
@@ -320,7 +317,7 @@ function loggerSetup(): {
     startRecording: () => void;
     stopRecording: () => { module: string; category: string; message: string }[];
 } {
-    Logger.format = "ansi";
+    Logger.format = LogFormat.ANSI;
 
     let messageBuffer: { module: string; category: string; message: string }[] | undefined;
 
@@ -439,34 +436,39 @@ export class ChipToolWebSocketHandler {
                 logger.error("Testrunner WebSocket error", error);
             });
 
-            ws.on("message", async data => {
+            ws.on("message", data => {
                 const str = (data ?? "").toString();
-
-                let result: ChipWebSocketCommandResponse;
-
-                try {
-                    if (str.startsWith("json:")) {
-                        const json = JSON.parse(str.substring(5)) as IncomingChipWebSocketCommand;
-                        result = await this.#handleJsonCommand(json);
-                    } else {
-                        result = await this.#handleTextCommand(str);
-                    }
-                } catch (error) {
-                    logger.error("WebSocket Message parsing error", error);
-                    result = { results: [{ error: (error as unknown as Error).message }, { error: "FAILURE" }] };
-                }
-
-                // Grab logs and send response including logs
-                const logs = this.#stopRecording!();
-                logger.info("WebSocket response", result, `and ${logs.length} log lines`);
-                const { results } = result;
-                const response: OutgoingChipWebSocketCommandResponse = { results, logs };
-                this.#startRecording!();
-
-                let responseStr = toJson(response);
-                ws.send(responseStr);
+                this.#handleWebSocketMessage(str).then(
+                    result => ws.send(result),
+                    error => logger.error("WebSocket Message handling error", error),
+                );
             });
         });
+    }
+
+    async #handleWebSocketMessage(data: string): Promise<string> {
+        let result: ChipWebSocketCommandResponse;
+
+        try {
+            if (data.startsWith("json:")) {
+                const json = JSON.parse(data.substring(5)) as IncomingChipWebSocketCommand;
+                result = await this.#handleJsonCommand(json);
+            } else {
+                result = await this.#handleTextCommand(data);
+            }
+        } catch (error) {
+            logger.error("WebSocket Message parsing error", error);
+            result = { results: [{ error: (error as Error).message }, { error: "FAILURE" }] };
+        }
+
+        // Grab logs and send response including logs
+        const logs = this.#stopRecording!();
+        logger.info("WebSocket response", result, `and ${logs.length} log lines`);
+        const { results } = result;
+        const response: OutgoingChipWebSocketCommandResponse = { results, logs };
+        this.#startRecording!();
+
+        return toJson(response);
     }
 
     /** Handles an incoming one line text command */

@@ -15,7 +15,6 @@
  */
 
 import { Logger } from "@matter/general";
-import "@matter/nodejs";
 import { createFileLogger } from "@matter/nodejs";
 import { spawn } from "node:child_process";
 import { WebSocket, WebSocketServer } from "ws";
