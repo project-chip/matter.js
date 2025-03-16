@@ -14,6 +14,7 @@ import {
 } from "#general";
 import { Specification } from "#model";
 import {
+    ReceivedStatusResponseError,
     Status,
     StatusCode,
     StatusResponseError,
@@ -184,7 +185,10 @@ class InteractionMessenger {
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
         if (status !== StatusCode.Success)
-            throw new StatusResponseError(`Received error status: ${status}${logHint ? ` (${logHint})` : ""}`, status);
+            throw new ReceivedStatusResponseError(
+                `Received error status: ${status}${logHint ? ` (${logHint})` : ""}`,
+                status,
+            );
     }
 
     getExchangeChannelName() {
@@ -680,7 +684,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         if (receivedMessageType !== messageType) {
             if (receivedMessageType === MessageType.StatusResponse) {
                 const statusCode = TlvStatusResponse.decode(message.payload).status;
-                throw new StatusResponseError(`Received status response ${statusCode}`, statusCode);
+                throw new ReceivedStatusResponseError(`Received status response ${statusCode}`, statusCode);
             }
             throw new MatterFlowError(
                 `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(

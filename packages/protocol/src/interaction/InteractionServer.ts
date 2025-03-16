@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, Diagnostic, InternalError, Logger, MatterFlowError, Observable, ServerAddressIp } from "#general";
+import {
+    Crypto,
+    Diagnostic,
+    InternalError,
+    Logger,
+    MatterError,
+    MatterFlowError,
+    Observable,
+    ServerAddressIp,
+} from "#general";
 import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel, Specification } from "#model";
 import { PeerAddress } from "#peer/PeerAddress.js";
 import { SessionManager } from "#session/SessionManager.js";
@@ -19,6 +28,7 @@ import {
     EventNumber,
     INTERACTION_PROTOCOL_ID,
     NodeId,
+    ReceivedStatusResponseError,
     StatusCode,
     StatusResponseError,
     TlvAny,
@@ -1115,12 +1125,12 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 exchange,
                 message,
             );
-        } catch (error: any) {
+        } catch (error) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
-                error,
+                error instanceof MatterError ? error.message : error,
             );
-            if (error instanceof StatusResponseError) {
+            if (error instanceof StatusResponseError && !(error instanceof ReceivedStatusResponseError)) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 await messenger.sendStatus(error.code, {
                     logContext: {
