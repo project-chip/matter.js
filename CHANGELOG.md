@@ -13,12 +13,25 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
 
+-   chip-testing
+    -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
+
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
+
+-   @matter/protocol
+    - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
+    - Feature: Enhanced `getMultipleAttributesAndEvents()` to also return attributeStatus and eventStatus properties with errors returned from the read interaction 
+    - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
+    - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
+    - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
 
 -   @project-chip/matter.js
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
     - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.
+    - Breaking: Changed signatures of `commissionNode()` and `createInteractionClient()` to provide options as object and not plain parameters
+    - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
+    - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
 
 -   @project-chip/* packages (beside above)
     - Breaking: Packages are removed! Please use the new packages under @matter/* if needed
