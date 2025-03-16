@@ -6,6 +6,7 @@
 
 import { OperationalCredentials } from "#clusters";
 import {
+    ClassExtends,
     Environment,
     ImplementationError,
     InternalError,
@@ -24,6 +25,7 @@ import {
     Ble,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
+    ControllerCommissioningFlow,
     ControllerDiscovery,
     DecodedAttributeReportValue,
     DiscoveryAndCommissioningOptions,
@@ -44,6 +46,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
+import { CertificateAuthority, Fabric } from "@matter/protocol";
 import { CommissioningControllerNodeOptions, NodeStates, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
 
@@ -121,6 +124,24 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * on the environment when you call start().
      */
     readonly environment?: ControllerEnvironmentOptions;
+
+    /**
+     * The NodeId of the root node to use for the controller. This is only needed if a special NodeId needs to be used
+     * but certificates should be self-generated. By default, a random operational ID is generated.
+     */
+    readonly rootNodeId?: NodeId;
+
+    /**
+     * If provided this Certificate Authority instance is used to fetch or get all relevant certificates for the
+     * Controller. If not provided a new Certificate Authority instance is created and certificates will be self-generated.
+     */
+    readonly rootCertificateAuthority?: CertificateAuthority;
+
+    /**
+     * If provided this Fabric instance is used for this controller. The instance need to be in sync with the provided
+     * or stored certificate authority. If provided then rootFabricId, rootFabricIndex and rootFabricLabel are ignored.
+     */
+    readonly rootFabric?: Fabric;
 };
 
 /** Options needed to commission a new node */
@@ -200,8 +221,15 @@ export class CommissioningController {
         if (this.#controllerInstance !== undefined) {
             return this.#controllerInstance;
         }
-        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags, adminFabricLabel } =
-            this.#options;
+        const {
+            localPort,
+            adminFabricId,
+            adminVendorId,
+            adminFabricIndex,
+            caseAuthenticatedTags,
+            adminFabricLabel,
+            rootNodeId,
+        } = this.#options;
 
         if (environment === undefined && storage === undefined) {
             throw new ImplementationError("Storage not initialized correctly.");
@@ -236,6 +264,7 @@ export class CommissioningController {
             adminFabricIndex,
             caseAuthenticatedTags,
             adminFabricLabel,
+            rootNodeId,
         });
         if (this.#mdnsBroadcaster) {
             controller.addBroadcaster(this.#mdnsBroadcaster.createInstanceBroadcaster(port));
@@ -247,11 +276,19 @@ export class CommissioningController {
      * Commissions/Pairs a new device into the controller fabric. The method returns the NodeId of the commissioned
      * node on success.
      */
-    async commissionNode(nodeOptions: NodeCommissioningOptions, connectNodeAfterCommissioning = true) {
+    async commissionNode(
+        nodeOptions: NodeCommissioningOptions,
+        commissionOptions?: {
+            connectNodeAfterCommissioning?: boolean;
+            commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
+        },
+    ) {
         this.#assertIsAddedToMatterServer();
         const controller = this.#assertControllerIsStarted();
 
-        const nodeId = await controller.commission(nodeOptions);
+        const { connectNodeAfterCommissioning = true, commissioningFlowImpl } = commissionOptions ?? {};
+
+        const nodeId = await controller.commission(nodeOptions, { commissioningFlowImpl });
 
         if (connectNodeAfterCommissioning) {
             const node = await this.connectNode(nodeId, {

@@ -72,7 +72,9 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
+import { ClassExtends } from "@matter/general";
 import { ControllerStoreInterface } from "@matter/node";
+import { ControllerCommissioningFlow, MessageChannel } from "@matter/protocol";
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
@@ -104,6 +106,9 @@ export class MatterController {
         adminFabricIndex?: FabricIndex;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
         adminFabricLabel: string;
+        rootNodeId?: NodeId;
+        rootCertificateAuthority?: CertificateAuthority;
+        rootFabric?: Fabric;
     }): Promise<MatterController> {
         const {
             controllerStore,
@@ -115,17 +120,20 @@ export class MatterController {
             adminFabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
             caseAuthenticatedTags,
             adminFabricLabel,
+            rootNodeId,
+            rootCertificateAuthority,
+            rootFabric,
         } = options;
 
-        const ca = await CertificateAuthority.create(controllerStore.caStorage);
+        const ca = rootCertificateAuthority ?? (await CertificateAuthority.create(controllerStore.caStorage));
         const fabricStorage = controllerStore.fabricStorage;
 
         let controller: MatterController | undefined = undefined;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
-        if (await fabricStorage.has("fabric")) {
-            const fabric = new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
+        if (rootFabric !== undefined || (await fabricStorage.has("fabric"))) {
+            const fabric = rootFabric ?? new Fabric(await fabricStorage.get<Fabric.Config>("fabric"));
             if (Bytes.areEqual(fabric.rootCert, ca.rootCert)) {
-                logger.info("Loaded existing fabric from storage");
+                logger.info("Used existing fabric");
                 controller = new MatterController({
                     controllerStore,
                     scanners,
@@ -136,9 +144,12 @@ export class MatterController {
                     sessionClosedCallback,
                 });
             } else {
+                if (rootFabric !== undefined) {
+                    throw new MatterError("Fabric CA certificate is not in sync with CA.");
+                }
                 logger.info("Fabric CA certificate changed ...");
                 if (await controllerStore.nodesStorage.has("commissionedNodes")) {
-                    throw new Error(
+                    throw new MatterError(
                         "Fabric certificate changed, but commissioned nodes are still present. Please clear the storage.",
                     );
                 }
@@ -146,16 +157,16 @@ export class MatterController {
         }
         if (controller === undefined) {
             logger.info("Creating new fabric");
-            const rootNodeId = NodeId.randomOperationalNodeId();
+            const controllerNodeId = rootNodeId ?? NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
                 .setRootCert(ca.rootCert)
-                .setRootNodeId(rootNodeId)
+                .setRootNodeId(controllerNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
                 .setLabel(adminFabricLabel);
             fabricBuilder.setOperationalCert(
-                ca.generateNoc(fabricBuilder.publicKey, adminFabricId, rootNodeId, caseAuthenticatedTags),
+                ca.generateNoc(fabricBuilder.publicKey, adminFabricId, controllerNodeId, caseAuthenticatedTags),
             );
             const fabric = await fabricBuilder.build(adminFabricIndex);
 
@@ -174,7 +185,8 @@ export class MatterController {
     }
 
     public static async createAsPaseCommissioner(options: {
-        certificateAuthorityConfig: CertificateAuthority.Configuration;
+        certificateAuthorityConfig?: CertificateAuthority.Configuration;
+        rootCertificateAuthority?: CertificateAuthority;
         fabricConfig: Fabric.Config;
         scanners: ScannerSet;
         netInterfaces: NetInterfaceSet;
@@ -183,6 +195,7 @@ export class MatterController {
     }): Promise<MatterController> {
         const {
             certificateAuthorityConfig,
+            rootCertificateAuthority,
             fabricConfig,
             adminFabricLabel,
             scanners,
@@ -200,7 +213,12 @@ export class MatterController {
             logger.info("BLE is not enabled. Using only IP network for commissioning.");
         }
 
-        const certificateManager = await CertificateAuthority.create(certificateAuthorityConfig);
+        if (rootCertificateAuthority === undefined && certificateAuthorityConfig === undefined) {
+            throw new ImplementationError("Either rootCertificateAuthority or certificateAuthorityConfig must be set.");
+        }
+
+        const certificateManager =
+            rootCertificateAuthority ?? (await CertificateAuthority.create(certificateAuthorityConfig!));
 
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());
@@ -388,7 +406,10 @@ export class MatterController {
      */
     async commission(
         options: NodeCommissioningOptions,
-        completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
+        customizations?: {
+            completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>;
+            commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
+        },
     ): Promise<NodeId> {
         const commissioningOptions: DiscoveryAndCommissioningOptions = {
             ...options.commissioning,
@@ -396,6 +417,8 @@ export class MatterController {
             discovery: options.discovery,
             passcode: options.passcode,
         };
+
+        const { completeCommissioningCallback, commissioningFlowImpl } = customizations ?? {};
 
         if (completeCommissioningCallback) {
             commissioningOptions.finalizeCommissioning = async (peerAddress, discoveryData) => {
@@ -405,6 +428,7 @@ export class MatterController {
                 }
             };
         }
+        commissioningOptions.commissioningFlowImpl = commissioningFlowImpl;
 
         const address = await this.commissioner.commissionWithDiscovery(commissioningOptions);
 

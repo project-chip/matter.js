@@ -142,22 +142,22 @@ const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
  */
 export class ControllerCommissioningFlow {
-    #interactionClient: InteractionClient;
-    readonly #ca: CertificateAuthority;
-    readonly #fabric: Fabric;
-    readonly #transitionToCase: (
+    protected interactionClient: InteractionClient;
+    protected readonly ca: CertificateAuthority;
+    protected readonly fabric: Fabric;
+    protected readonly transitionToCase: (
         peerAddress: PeerAddress,
         supportsConcurrentConnections: boolean,
     ) => Promise<InteractionClient | undefined>;
-    readonly #commissioningOptions: ControllerCommissioningFlowOptions;
-    readonly #commissioningSteps = new Array<CommissioningStep>();
-    readonly #commissioningStepResults = new Map<string, CommissioningStepResult>();
+    protected readonly commissioningOptions: ControllerCommissioningFlowOptions;
+    protected readonly commissioningSteps = new Array<CommissioningStep>();
+    protected readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
     readonly #clusterClients = new Map<ClusterId, ClusterClientObj>();
     #commissioningStartedTime: number | undefined;
     #commissioningExpiryTime: number | undefined;
     #lastFailSafeTime: number | undefined;
-    #lastBreadcrumb = 1;
-    #collectedCommissioningData: CollectedCommissioningData = {};
+    protected lastBreadcrumb = 1;
+    protected collectedCommissioningData: CollectedCommissioningData = {};
     #failSafeTimeMs = DEFAULT_FAILSAFE_TIME_MS;
 
     constructor(
@@ -179,11 +179,11 @@ export class ControllerCommissioningFlow {
             supportsConcurrentConnections: boolean,
         ) => Promise<InteractionClient | undefined>,
     ) {
-        this.#interactionClient = interactionClient;
-        this.#ca = ca;
-        this.#fabric = fabric;
-        this.#transitionToCase = transitionToCase;
-        this.#commissioningOptions = commissioningOptions;
+        this.interactionClient = interactionClient;
+        this.ca = ca;
+        this.fabric = fabric;
+        this.transitionToCase = transitionToCase;
+        this.commissioningOptions = commissioningOptions;
         logger.debug(`Commissioning options: ${Logger.toJSON(commissioningOptions)}`);
         this.#initializeCommissioningSteps();
     }
@@ -198,7 +198,7 @@ export class ControllerCommissioningFlow {
         this.#sortSteps();
 
         let failSafeTimerReArmedAfterPreviousStep = false;
-        for (const step of this.#commissioningSteps) {
+        for (const step of this.commissioningSteps) {
             logger.info(`Executing commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name}`);
             try {
                 if (step.reArmFailsafe && !failSafeTimerReArmedAfterPreviousStep) {
@@ -294,7 +294,7 @@ export class ControllerCommissioningFlow {
         logger.debug(
             `Creating new cluster client for cluster ${cluster.name} (endpoint ${endpointId}, isFeatureSpecific ${isFeatureSpecific})`,
         );
-        const client = ClusterClient(cluster, endpointId, this.#interactionClient);
+        const client = ClusterClient(cluster, endpointId, this.interactionClient);
         this.#clusterClients.set(cluster.id, client);
         return client;
     }
@@ -304,7 +304,7 @@ export class ControllerCommissioningFlow {
      * @see {@link MatterSpecification.v13.Core} § 5.5
      */
     #initializeCommissioningSteps() {
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 0, // Preparation
             subStepNumber: 1,
             name: "GetInitialData",
@@ -316,21 +316,21 @@ export class ControllerCommissioningFlow {
         // TODO Step 3-5: Commissioner handles/prepares for T&C Ack, if supported
         // Step 6: is the PASE session establishment which is done before this starts here
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 7,
             subStepNumber: 1,
             name: "GeneralCommissioning.ArmFailsafe",
             stepLogic: () => this.#armFailsafe(),
         });
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 8,
             subStepNumber: 1,
             name: "GeneralCommissioning.ConfigureRegulatoryInformation",
             stepLogic: () => this.#configureRegulatoryInformation(),
         });
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 8,
             subStepNumber: 2,
             name: "TimeSynchronization.SynchronizeTime",
@@ -339,14 +339,14 @@ export class ControllerCommissioningFlow {
 
         // TODO Step 9: If device and Controller supports T&C Feature then User consent is handled
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 10,
             subStepNumber: 1,
             name: "OperationalCredentials.DeviceAttestation",
             stepLogic: () => this.#deviceAttestation(),
         });
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 11, // includes 11-13
             subStepNumber: 1,
             name: "OperationalCredentials.Certificates",
@@ -355,7 +355,7 @@ export class ControllerCommissioningFlow {
 
         // TODO Step 14: TimeSynchronization.SetTrustedTimeSource if supported
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 15,
             subStepNumber: 1,
             name: "AccessControl",
@@ -363,15 +363,15 @@ export class ControllerCommissioningFlow {
         });
 
         // Care about Network commissioning only when we are on BLE, because else we are already on IP network
-        if (this.#interactionClient.channelType === ChannelType.BLE) {
-            this.#commissioningSteps.push({
+        if (this.interactionClient.channelType === ChannelType.BLE) {
+            this.commissioningSteps.push({
                 stepNumber: 16,
                 subStepNumber: 1,
                 name: "NetworkCommissioning.Validate",
                 stepLogic: () => this.#validateNetwork(),
             });
-            if (this.#commissioningOptions.wifiNetwork !== undefined) {
-                this.#commissioningSteps.push({
+            if (this.commissioningOptions.wifiNetwork !== undefined) {
+                this.commissioningSteps.push({
                     stepNumber: 16, // includes step 17
                     subStepNumber: 2,
                     name: "NetworkCommissioning.Wifi",
@@ -379,8 +379,8 @@ export class ControllerCommissioningFlow {
                     stepLogic: () => this.#configureNetworkWifi(),
                 });
             }
-            if (this.#commissioningOptions.threadNetwork !== undefined) {
-                this.#commissioningSteps.push({
+            if (this.commissioningOptions.threadNetwork !== undefined) {
+                this.commissioningSteps.push({
                     stepNumber: 16, // includes step 17
                     subStepNumber: 3,
                     name: "NetworkCommissioning.Thread",
@@ -390,11 +390,11 @@ export class ControllerCommissioningFlow {
             }
         } else {
             logger.info(
-                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.#interactionClient.channelType})`,
+                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.interactionClient.channelType})`,
             );
         }
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 18, // includes step 19 (CASE connection)
             subStepNumber: 1,
             name: "Reconnect",
@@ -402,14 +402,14 @@ export class ControllerCommissioningFlow {
             stepLogic: () => this.#reconnectWithDevice(),
         });
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 20,
             subStepNumber: 1,
             name: "GeneralCommissioning.Complete",
             stepLogic: () => this.#completeCommissioning(),
         });
 
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 99, // Should be allowed in Step 13, but Tasmota is not supporting this
             subStepNumber: 1,
             name: "OperationalCredentials.UpdateFabricLabel",
@@ -418,18 +418,18 @@ export class ControllerCommissioningFlow {
     }
 
     #sortSteps() {
-        this.#commissioningSteps.sort((a, b) => {
+        this.commissioningSteps.sort((a, b) => {
             if (a.stepNumber !== b.stepNumber) return a.stepNumber - b.stepNumber;
             return a.subStepNumber - b.subStepNumber;
         });
     }
 
     #setCommissioningStepResult(step: CommissioningStep, result: CommissioningStepResult) {
-        this.#commissioningStepResults.set(`${step.stepNumber}-${step.subStepNumber}`, result);
+        this.commissioningStepResults.set(`${step.stepNumber}-${step.subStepNumber}`, result);
     }
 
     getCommissioningStepResult(stepNumber: number, subStepNumber: number) {
-        return this.#commissioningStepResults.get(`${stepNumber}-${subStepNumber}`);
+        return this.commissioningStepResults.get(`${stepNumber}-${subStepNumber}`);
     }
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
@@ -472,10 +472,10 @@ export class ControllerCommissioningFlow {
      */
     async #getInitialData() {
         const descriptorClient = this.#getClusterClient(Descriptor.Cluster);
-        this.#collectedCommissioningData.rootPartsList = await descriptorClient.getPartsListAttribute();
-        this.#collectedCommissioningData.rootServerList = await descriptorClient.getServerListAttribute();
+        this.collectedCommissioningData.rootPartsList = await descriptorClient.getPartsListAttribute();
+        this.collectedCommissioningData.rootServerList = await descriptorClient.getServerListAttribute();
 
-        const networkData = await this.#interactionClient.getMultipleAttributes({
+        const networkData = await this.interactionClient.getMultipleAttributes({
             attributes: [
                 {
                     clusterId: NetworkCommissioning.Complete.id,
@@ -505,16 +505,16 @@ export class ControllerCommissioningFlow {
                 networkStatus.push({ endpointId, value });
             }
         }
-        this.#collectedCommissioningData.networkFeatures = networkFeatures;
-        this.#collectedCommissioningData.networkStatus = networkStatus;
+        this.collectedCommissioningData.networkFeatures = networkFeatures;
+        this.collectedCommissioningData.networkStatus = networkStatus;
 
         const basicInfoClient = this.#getClusterClient(BasicInformation.Cluster);
-        this.#collectedCommissioningData.vendorId = await basicInfoClient.getVendorIdAttribute();
-        this.#collectedCommissioningData.productId = await basicInfoClient.getProductIdAttribute();
-        this.#collectedCommissioningData.productName = await basicInfoClient.getProductNameAttribute();
+        this.collectedCommissioningData.vendorId = await basicInfoClient.getVendorIdAttribute();
+        this.collectedCommissioningData.productId = await basicInfoClient.getProductIdAttribute();
+        this.collectedCommissioningData.productName = await basicInfoClient.getProductNameAttribute();
 
         const generalCommissioningClient = this.#getClusterClient(GeneralCommissioning.Cluster);
-        this.#collectedCommissioningData.supportsConcurrentConnection =
+        this.collectedCommissioningData.supportsConcurrentConnection =
             await generalCommissioningClient.getSupportsConcurrentConnectionAttribute();
 
         /*
@@ -529,7 +529,7 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -544,9 +544,9 @@ export class ControllerCommissioningFlow {
      */
     async #armFailsafe() {
         const client = this.#getClusterClient(GeneralCommissioning.Cluster);
-        if (this.#collectedCommissioningData.basicCommissioningInfo === undefined) {
+        if (this.collectedCommissioningData.basicCommissioningInfo === undefined) {
             const basicCommissioningInfo = await client.getBasicCommissioningInfoAttribute();
-            this.#collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
+            this.collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
             this.#failSafeTimeMs = basicCommissioningInfo.failSafeExpiryLengthSeconds * 1000;
             this.#commissioningStartedTime = Time.nowMs();
             this.#commissioningExpiryTime =
@@ -555,15 +555,15 @@ export class ControllerCommissioningFlow {
         this.#ensureGeneralCommissioningSuccess(
             "armFailSafe",
             await client.armFailSafe({
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
                 expiryLengthSeconds:
-                    this.#collectedCommissioningData.basicCommissioningInfo?.failSafeExpiryLengthSeconds,
+                    this.collectedCommissioningData.basicCommissioningInfo?.failSafeExpiryLengthSeconds,
             }),
         );
         this.#lastFailSafeTime = Time.nowMs();
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -572,7 +572,7 @@ export class ControllerCommissioningFlow {
         try {
             const client = this.#getClusterClient(GeneralCommissioning.Cluster);
             await client.armFailSafe({
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
                 expiryLengthSeconds: 0,
             });
             this.#lastFailSafeTime = undefined; // No failsafe active anymore
@@ -589,11 +589,11 @@ export class ControllerCommissioningFlow {
      * Commissionee using the SetRegulatoryConfig command.
      */
     async #configureRegulatoryInformation() {
-        if (this.#collectedCommissioningData.networkFeatures === undefined) {
+        if (this.collectedCommissioningData.networkFeatures === undefined) {
             throw new CommissioningError("No network features collected. This should never happen.");
         }
         // Read the infos for all Network Commissioning clusters
-        const hasRadioNetwork = this.#collectedCommissioningData.networkFeatures.some(
+        const hasRadioNetwork = this.collectedCommissioningData.networkFeatures.some(
             ({ value: { wiFiNetworkInterface, threadNetworkInterface } }) =>
                 wiFiNetworkInterface || threadNetworkInterface,
         );
@@ -602,7 +602,7 @@ export class ControllerCommissioningFlow {
             const client = this.#getClusterClient(GeneralCommissioning.Cluster);
             let locationCapability = await client.getLocationCapabilityAttribute();
             if (locationCapability === GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor) {
-                locationCapability = this.#commissioningOptions.regulatoryLocation;
+                locationCapability = this.commissioningOptions.regulatoryLocation;
             } else {
                 logger.debug(
                     `Device does not support a configurable regulatory location type. Location is set to "${
@@ -610,10 +610,10 @@ export class ControllerCommissioningFlow {
                     }"`,
                 );
             }
-            let countryCode = this.#commissioningOptions.regulatoryCountryCode;
+            let countryCode = this.commissioningOptions.regulatoryCountryCode;
             const regulatoryResult = await client.setRegulatoryConfig(
                 {
-                    breadcrumb: this.#lastBreadcrumb++,
+                    breadcrumb: this.lastBreadcrumb++,
                     newRegulatoryConfig: locationCapability,
                     countryCode,
                 },
@@ -631,7 +631,7 @@ export class ControllerCommissioningFlow {
                     "setRegulatoryConfig",
                     await client.setRegulatoryConfig(
                         {
-                            breadcrumb: this.#lastBreadcrumb,
+                            breadcrumb: this.lastBreadcrumb,
                             newRegulatoryConfig: locationCapability,
                             countryCode,
                         },
@@ -643,12 +643,12 @@ export class ControllerCommissioningFlow {
             }
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -663,8 +663,8 @@ export class ControllerCommissioningFlow {
      */
     async #synchronizeTime() {
         if (
-            this.#collectedCommissioningData.rootServerList !== undefined &&
-            this.#collectedCommissioningData.rootServerList.find(
+            this.collectedCommissioningData.rootServerList !== undefined &&
+            this.collectedCommissioningData.rootServerList.find(
                 clusterId => clusterId === TimeSynchronizationCluster.id,
             )
         ) {
@@ -673,7 +673,7 @@ export class ControllerCommissioningFlow {
         }
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -717,7 +717,7 @@ export class ControllerCommissioningFlow {
         }
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
 
         // TODO consider Distributed Compliance Ledger Info about Commissioning Flow
@@ -756,23 +756,23 @@ export class ControllerCommissioningFlow {
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
-                rootCaCertificate: this.#ca.rootCert,
+                rootCaCertificate: this.ca.rootCert,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerOperationalCert = this.#ca.generateNoc(
+        const peerOperationalCert = this.ca.generateNoc(
             operationalPublicKey,
-            this.#fabric.fabricId,
-            this.#interactionClient.address.nodeId,
+            this.fabric.fabricId,
+            this.interactionClient.address.nodeId,
         );
 
         const addNocResponse = await operationalCredentialsClusterClient.addNoc(
             {
                 nocValue: peerOperationalCert,
                 icacValue: new Uint8Array(0),
-                ipkValue: this.#fabric.identityProtectionKey,
-                adminVendorId: this.#fabric.rootVendorId,
-                caseAdminSubject: this.#fabric.rootNodeId,
+                ipkValue: this.fabric.identityProtectionKey,
+                adminVendorId: this.fabric.rootVendorId,
+                caseAdminSubject: this.fabric.rootNodeId,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -780,11 +780,11 @@ export class ControllerCommissioningFlow {
         this.#ensureOperationalCredentialsSuccess("addNoc", addNocResponse);
 
         const { fabricIndex } = addNocResponse;
-        this.#collectedCommissioningData.fabricIndex = fabricIndex;
+        this.collectedCommissioningData.fabricIndex = fabricIndex;
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -796,12 +796,12 @@ export class ControllerCommissioningFlow {
      * the commissioning process.
      */
     async #updateFabricLabel() {
-        const { fabricIndex } = this.#collectedCommissioningData;
+        const { fabricIndex } = this.collectedCommissioningData;
         if (fabricIndex === undefined) {
             logger.error("No fabric index available after addNoc. This should never happen.");
             return {
                 code: CommissioningStepResultCode.Failure,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         const operationalCredentialCluster = this.#getClusterClient(OperationalCredentials.Cluster);
@@ -809,7 +809,7 @@ export class ControllerCommissioningFlow {
             this.#ensureOperationalCredentialsSuccess(
                 "updateFabricLabel",
                 await operationalCredentialCluster.updateFabricLabel({
-                    label: this.#fabric.label,
+                    label: this.fabric.label,
                     fabricIndex,
                 }),
             );
@@ -820,7 +820,7 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -836,7 +836,7 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -855,24 +855,24 @@ export class ControllerCommissioningFlow {
      */
     async #validateNetwork() {
         if (
-            this.#collectedCommissioningData.networkFeatures === undefined ||
-            this.#collectedCommissioningData.networkStatus === undefined
+            this.collectedCommissioningData.networkFeatures === undefined ||
+            this.collectedCommissioningData.networkStatus === undefined
         ) {
             throw new CommissioningError("No network features or status collected. This should never happen.");
         }
         if (
-            this.#commissioningOptions.wifiNetwork === undefined &&
-            this.#commissioningOptions.threadNetwork === undefined
+            this.commissioningOptions.wifiNetwork === undefined &&
+            this.commissioningOptions.threadNetwork === undefined
         ) {
             // Check if we have no networkCommissioning cluster or an Ethernet one
             const anyEthernetInterface =
-                this.#collectedCommissioningData.networkFeatures.length === 0 ||
-                this.#collectedCommissioningData.networkFeatures.some(
+                this.collectedCommissioningData.networkFeatures.length === 0 ||
+                this.collectedCommissioningData.networkFeatures.some(
                     ({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true,
                 );
             const anyInterfaceConnected =
-                this.#collectedCommissioningData.networkStatus.length === 0 ||
-                this.#collectedCommissioningData.networkStatus.some(({ value }) =>
+                this.collectedCommissioningData.networkStatus.length === 0 ||
+                this.collectedCommissioningData.networkStatus.some(({ value }) =>
                     value.some(({ connected }) => connected),
                 );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
@@ -884,26 +884,26 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     async #configureNetworkWifi() {
-        if (this.#commissioningOptions.wifiNetwork === undefined) {
+        if (this.commissioningOptions.wifiNetwork === undefined) {
             logger.debug("WiFi network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         if (
-            this.#collectedCommissioningData.networkFeatures !== undefined &&
-            this.#collectedCommissioningData.networkStatus !== undefined
+            this.collectedCommissioningData.networkFeatures !== undefined &&
+            this.collectedCommissioningData.networkStatus !== undefined
         ) {
-            const rootNetworkFeatures = this.#collectedCommissioningData.networkFeatures.find(
+            const rootNetworkFeatures = this.collectedCommissioningData.networkFeatures.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
-            const rootNetworkStatus = this.#collectedCommissioningData.networkStatus.find(
+            const rootNetworkStatus = this.collectedCommissioningData.networkStatus.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
 
@@ -915,15 +915,15 @@ export class ControllerCommissioningFlow {
                 logger.debug("Commissionee does not support any WiFi network interface");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
             if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the WiFi network");
-                this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+                this.collectedCommissioningData.successfullyConnectedToNetwork = true;
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
         }
@@ -934,13 +934,13 @@ export class ControllerCommissioningFlow {
             EndpointNumber(0),
             true,
         );
-        const ssid = Bytes.fromString(this.#commissioningOptions.wifiNetwork.wifiSsid);
-        const credentials = Bytes.fromString(this.#commissioningOptions.wifiNetwork.wifiCredentials);
+        const ssid = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
+        const credentials = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
 
         const { networkingStatus, wiFiScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
             {
                 ssid,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -949,7 +949,7 @@ export class ControllerCommissioningFlow {
         }
         if (wiFiScanResults === undefined || wiFiScanResults.length === 0) {
             throw new CommissioningError(
-                `Commissionee did not return any WiFi networks for the requested SSID ${this.#commissioningOptions.wifiNetwork.wifiSsid}`,
+                `Commissionee did not return any WiFi networks for the requested SSID ${this.commissioningOptions.wifiNetwork.wifiSsid}`,
             );
         }
 
@@ -961,7 +961,7 @@ export class ControllerCommissioningFlow {
             {
                 ssid,
                 credentials,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -972,7 +972,7 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError(`Commissionee did not return network index`);
         }
         logger.debug(
-            `Commissionee added WiFi network ${this.#commissioningOptions.wifiNetwork.wifiSsid} with network index ${networkIndex}`,
+            `Commissionee added WiFi network ${this.commissioningOptions.wifiNetwork.wifiSsid} with network index ${networkIndex}`,
         );
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
@@ -981,22 +981,22 @@ export class ControllerCommissioningFlow {
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
         if (connected) {
-            this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+            this.collectedCommissioningData.successfullyConnectedToNetwork = true;
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
-                    this.#commissioningOptions.wifiNetwork.wifiSsid
+                    this.commissioningOptions.wifiNetwork.wifiSsid
                 } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -1004,42 +1004,42 @@ export class ControllerCommissioningFlow {
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to connect to WiFi network: ${connectResult.debugText}`);
         }
-        this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+        this.collectedCommissioningData.successfullyConnectedToNetwork = true;
         logger.debug(
             `Commissionee successfully connected to WiFi network ${
-                this.#commissioningOptions.wifiNetwork.wifiSsid
+                this.commissioningOptions.wifiNetwork.wifiSsid
             } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     async #configureNetworkThread() {
-        if (this.#collectedCommissioningData.successfullyConnectedToNetwork) {
+        if (this.collectedCommissioningData.successfullyConnectedToNetwork) {
             logger.debug("Node is already connected to a network. Skipping Thread configuration.");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
-        if (this.#commissioningOptions.threadNetwork === undefined) {
+        if (this.commissioningOptions.threadNetwork === undefined) {
             logger.debug("Thread network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         if (
-            this.#collectedCommissioningData.networkFeatures !== undefined &&
-            this.#collectedCommissioningData.networkStatus !== undefined
+            this.collectedCommissioningData.networkFeatures !== undefined &&
+            this.collectedCommissioningData.networkStatus !== undefined
         ) {
-            const rootNetworkFeatures = this.#collectedCommissioningData.networkFeatures.find(
+            const rootNetworkFeatures = this.collectedCommissioningData.networkFeatures.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
-            const rootNetworkStatus = this.#collectedCommissioningData.networkStatus.find(
+            const rootNetworkStatus = this.collectedCommissioningData.networkStatus.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
 
@@ -1051,14 +1051,14 @@ export class ControllerCommissioningFlow {
                 logger.debug("Commissionee does not support any Thread network interface");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
             if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the Thread network");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
         }
@@ -1071,7 +1071,7 @@ export class ControllerCommissioningFlow {
         );
 
         const { networkingStatus, threadScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
-            { breadcrumb: this.#lastBreadcrumb++ },
+            { breadcrumb: this.lastBreadcrumb++ },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
@@ -1079,22 +1079,22 @@ export class ControllerCommissioningFlow {
         }
         if (threadScanResults === undefined || threadScanResults.length === 0) {
             throw new CommissioningError(
-                `Commissionee did not return any Thread networks for the requested Network ${this.#commissioningOptions.threadNetwork.networkName}`,
+                `Commissionee did not return any Thread networks for the requested Network ${this.commissioningOptions.threadNetwork.networkName}`,
             );
         }
         const wantedNetworkFound = threadScanResults.find(
-            ({ networkName }) => networkName === this.#commissioningOptions.threadNetwork?.networkName,
+            ({ networkName }) => networkName === this.commissioningOptions.threadNetwork?.networkName,
         );
         if (wantedNetworkFound === undefined) {
             throw new CommissioningError(
                 `Commissionee did not return the requested Network ${
-                    this.#commissioningOptions.threadNetwork.networkName
+                    this.commissioningOptions.threadNetwork.networkName
                 }: ${Logger.toJSON(threadScanResults)}`,
             );
         }
         logger.debug(
             `Commissionee found wanted Thread network ${
-                this.#commissioningOptions.threadNetwork.networkName
+                this.commissioningOptions.threadNetwork.networkName
             }: ${Logger.toJSON(wantedNetworkFound)}`,
         );
 
@@ -1104,8 +1104,8 @@ export class ControllerCommissioningFlow {
             networkIndex,
         } = await networkCommissioningClusterClient.addOrUpdateThreadNetwork(
             {
-                operationalDataset: Bytes.fromHex(this.#commissioningOptions.threadNetwork.operationalDataset),
-                breadcrumb: this.#lastBreadcrumb++,
+                operationalDataset: Bytes.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -1116,7 +1116,7 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError(`Commissionee did not return network index`);
         }
         logger.debug(
-            `Commissionee added Thread network ${this.#commissioningOptions.threadNetwork.networkName} with network index ${networkIndex}`,
+            `Commissionee added Thread network ${this.commissioningOptions.threadNetwork.networkName} with network index ${networkIndex}`,
         );
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
@@ -1127,19 +1127,19 @@ export class ControllerCommissioningFlow {
         if (connected) {
             logger.debug(
                 `Commissionee is already connected to Thread network ${
-                    this.#commissioningOptions.threadNetwork.networkName
+                    this.commissioningOptions.threadNetwork.networkName
                 } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -1151,13 +1151,13 @@ export class ControllerCommissioningFlow {
         }
         logger.debug(
             `Commissionee successfully connected to Thread network ${
-                this.#commissioningOptions.threadNetwork.networkName
+                this.commissioningOptions.threadNetwork.networkName
             } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -1170,7 +1170,7 @@ export class ControllerCommissioningFlow {
      *     (CASE)”) session with the Commissionee over the operational network.
      */
     async #reconnectWithDevice() {
-        const isConcurrentFlow = this.#collectedCommissioningData.supportsConcurrentConnection !== false;
+        const isConcurrentFlow = this.collectedCommissioningData.supportsConcurrentConnection !== false;
 
         logger.debug(`Reconnecting with device with ${isConcurrentFlow ? "concurrent" : "non-concurrent"} flow ...`);
 
@@ -1201,8 +1201,8 @@ export class ControllerCommissioningFlow {
             reArmFailsafeInterval.start();
         }
 
-        const transitionResult = await this.#transitionToCase(
-            this.#interactionClient.address,
+        const transitionResult = await this.transitionToCase(
+            this.interactionClient.address,
             // Assume concurrent connections are supported if not know (which should not be the case when we came here)
             isConcurrentFlow,
         );
@@ -1213,18 +1213,18 @@ export class ControllerCommissioningFlow {
             logger.debug("CASE commissioning handled externally, terminating commissioning flow");
             return {
                 code: CommissioningStepResultCode.Stop,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
-        this.#interactionClient = transitionResult;
+        this.interactionClient = transitionResult;
         this.#clusterClients.clear();
 
         logger.debug("Successfully reconnected with device ...");
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -1247,7 +1247,7 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 }

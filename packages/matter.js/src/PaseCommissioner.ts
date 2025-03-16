@@ -119,7 +119,7 @@ export class PaseCommissioner {
     ) {
         const controller = this.assertControllerIsStarted();
 
-        return await controller.commission(nodeOptions, completeCommissioningCallback);
+        return await controller.commission(nodeOptions, { completeCommissioningCallback });
     }
 
     /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */

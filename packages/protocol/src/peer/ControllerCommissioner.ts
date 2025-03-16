@@ -11,6 +11,7 @@ import { Fabric } from "#fabric/Fabric.js";
 import {
     Channel,
     ChannelType,
+    ClassExtends,
     Environment,
     Environmental,
     isIPv6,
@@ -55,6 +56,12 @@ export interface CommissioningOptions extends Partial<ControllerCommissioningFlo
      * not throw, the commissioner considers commissioning complete.
      */
     finalizeCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
+
+    /**
+     * Commissioning Flow Implementation as class that extends the official implementation to use for commissioning.
+     * Defaults to the matter.js default implementation {@link ControllerCommissioningFlow}.
+     */
+    commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
 }
 
 /**
@@ -347,7 +354,11 @@ export class ControllerCommissioner {
             ...options,
         };
 
-        const { fabric, finalizeCommissioning: performCaseCommissioning } = commissioningOptions;
+        const {
+            fabric,
+            finalizeCommissioning: performCaseCommissioning,
+            commissioningFlowImpl = ControllerCommissioningFlow,
+        } = commissioningOptions;
 
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -381,7 +392,7 @@ export class ControllerCommissioner {
         logger.info(
             `Start commissioning of node ${address.nodeId} into fabric ${fabric.fabricId} (index ${address.fabricIndex})`,
         );
-        const commissioningManager = new ControllerCommissioningFlow(
+        const commissioningManager = new commissioningFlowImpl(
             // Use the created secure session to do the commissioning
             new InteractionClient(
                 new DedicatedChannelExchangeProvider(this.#context.exchanges, paseSecureMessageChannel),
