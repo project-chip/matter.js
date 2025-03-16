@@ -26,7 +26,7 @@ export function initializeWebPlumbing(
     if (webServer) {
         createServer((_, res) => {
             readFile(`${__dirname}/index.html`)
-                .then((content) => {
+                .then(content => {
                     res.writeHead(200, { "Content-Type": "text/html" });
                     res.end(content);
                 })
@@ -81,8 +81,9 @@ export function initializeWebPlumbing(
                 if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
-            } catch (err) {// Intentionally left empty
-                }
+            } catch (err) {
+                // Intentionally left empty
+            }
 
             client = ws;
         });
@@ -92,8 +93,9 @@ export function initializeWebPlumbing(
                 if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
-            } catch (err) {// Intentionally left empty
-                }
+            } catch (err) {
+                // Intentionally left empty
+            }
         });
     });
 
@@ -101,7 +103,7 @@ export function initializeWebPlumbing(
         if (socket.readyState === WebSocket.CONNECTING) {
             await new Promise<void>((resolve, reject) => {
                 socket.onopen = () => resolve();
-                socket.onerror = (err) => reject(new Error(`WebSocket error: ${err.type}`));
+                socket.onerror = err => reject(new Error(`WebSocket error: ${err.type}`));
             });
         }
 
