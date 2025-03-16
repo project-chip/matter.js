@@ -346,20 +346,26 @@ export class PairedNode {
         this.#reconnectFunc = reconnectFunc;
 
         this.#interactionClient = interactionClient;
-        this.#interactionClient.channelUpdated.on(() => {
-            // When we had planned a reconnect because of a disconnect we can stop the timer now
-            if (
-                this.#reconnectDelayTimer?.isRunning &&
-                !this.#clientReconnectInProgress &&
-                !this.#reconnectionInProgress &&
-                this.#connectionState === NodeStates.Reconnecting
-            ) {
-                logger.info(`Node ${this.nodeId}: Got a reconnect, so reconnection not needed anymore ...`);
-                this.#reconnectDelayTimer?.stop();
-                this.#reconnectDelayTimer = undefined;
-                this.#setConnectionState(NodeStates.Connected);
-            }
-        });
+        if (this.#interactionClient.isReconnectable) {
+            this.#interactionClient.channelUpdated.on(() => {
+                // When we had planned a reconnect because of a disconnect we can stop the timer now
+                if (
+                    this.#reconnectDelayTimer?.isRunning &&
+                    !this.#clientReconnectInProgress &&
+                    !this.#reconnectionInProgress &&
+                    this.#connectionState === NodeStates.Reconnecting
+                ) {
+                    logger.info(`Node ${this.nodeId}: Got a reconnect, so reconnection not needed anymore ...`);
+                    this.#reconnectDelayTimer?.stop();
+                    this.#reconnectDelayTimer = undefined;
+                    this.#setConnectionState(NodeStates.Connected);
+                }
+            });
+        } else {
+            logger.warn(
+                `Node ${this.nodeId}: InteractionClient is not reconnectable, no automatic reconnection will happen in case of errors.`,
+            );
+        }
         this.#nodeDetails = new DeviceInformation(nodeId, knownNodeDetails);
         logger.info(`Node ${this.nodeId}: Created paired node with device data`, this.#nodeDetails.meta);
 
