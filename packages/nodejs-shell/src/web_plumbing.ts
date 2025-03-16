@@ -24,19 +24,18 @@ export function initializeWebPlumbing(
     webPort: number,
 ): void {
     if (webServer) {
-        // barebones web server to serve an index.html file that can connect to the WebSocket
-        createServer(async (_, res) => {
-            try {
-                const content = await readFile(`${__dirname}/index.html`);
-                res.writeHead(200, { "Content-Type": "text/html" });
-                res.end(content);
-            } catch {
-                res.writeHead(404);
-                res.end("Not Found");
-            }
+        createServer((_, res) => {
+            readFile(`${__dirname}/index.html`)
+                .then((content) => {
+                    res.writeHead(200, { "Content-Type": "text/html" });
+                    res.end(content);
+                })
+                .catch(() => {
+                    res.writeHead(404);
+                    res.end("Not Found");
+                });
         }).listen(webPort, () => console.info(`Server running at http://localhost:${webPort}`));
     }
-
     const wss = new WebSocket.Server({ port: webSocketPort });
     console.info(`WebSocket server running on ws://localhost:${webSocketPort}`);
 
@@ -82,17 +81,19 @@ export function initializeWebPlumbing(
                 if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
-            } catch (err) {}
+            } catch (err) {// Intentionally left empty
+                }
 
             client = ws;
         });
         ws.on("error", err => {
-            process.stderr.write("WebSocket error: " + err + "\n");
+            process.stderr.write("WebSocket error: " + err.message + "\n");
             try {
                 if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
-            } catch (err) {}
+            } catch (err) {// Intentionally left empty
+                }
         });
     });
 
@@ -100,7 +101,7 @@ export function initializeWebPlumbing(
         if (socket.readyState === WebSocket.CONNECTING) {
             await new Promise<void>((resolve, reject) => {
                 socket.onopen = () => resolve();
-                socket.onerror = err => reject(err);
+                socket.onerror = (err) => reject(new Error(`WebSocket error: ${err.type}`));
             });
         }
 
