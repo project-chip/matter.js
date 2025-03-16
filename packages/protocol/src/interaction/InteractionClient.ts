@@ -48,9 +48,9 @@ import {
 } from "#types";
 import { MessageChannel } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
-import { DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
+import { DecodedAttributeReportStatus, DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
 import { DecodedDataReport } from "./DecodedDataReport.js";
-import { DecodedEventData, DecodedEventReportValue } from "./EventDataDecoder.js";
+import { DecodedEventData, DecodedEventReportStatus, DecodedEventReportValue } from "./EventDataDecoder.js";
 import { DataReport, InteractionClientMessenger, ReadRequest } from "./InteractionMessenger.js";
 import { RegisteredSubscription, SubscriptionClient } from "./SubscriptionClient.js";
 
@@ -258,6 +258,22 @@ export class InteractionClient {
         return (await this.getMultipleAttributesAndEvents(options)).attributeReports;
     }
 
+    async getMultipleAttributesAndStatus(
+        options: {
+            attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
+            isFabricFiltered?: boolean;
+            executeQueued?: boolean;
+        } = {},
+    ): Promise<{
+        attributeData: DecodedAttributeReportValue<any>[];
+        attributeStatus?: DecodedAttributeReportStatus[];
+    }> {
+        const { attributeReports, attributeStatus } = await this.getMultipleAttributesAndEvents(options);
+        return { attributeData: attributeReports, attributeStatus };
+    }
+
     async getMultipleEvents(
         options: {
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
@@ -430,12 +446,23 @@ export class InteractionClient {
 
         // Normalize and decode the response
         const normalizedResult = DecodedDataReport(response);
+        const { attributeReports, attributeStatus, eventReports, eventStatus } = normalizedResult;
+
+        const logData = Array<string>();
+        if (attributeReports.length > 0) {
+            logData.push(`attributes ${attributeReports.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventReports.length > 0) {
+            logData.push(`events ${eventReports.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
+        if (attributeStatus !== undefined && attributeStatus.length > 0) {
+            logData.push(`attributeErrors ${attributeStatus.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventStatus !== undefined && eventStatus.length > 0) {
+            logData.push(`eventErrors ${eventStatus.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
         logger.debug(
-            `Received read response with attributes ${normalizedResult.attributeReports
-                .map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`)
-                .join(", ")} and events ${normalizedResult.eventReports
-                .map(({ path, events }) => `${resolveEventName(path)} = ${Logger.toJSON(events)}`)
-                .join(", ")}`,
+            logData.length ? `Received read response with ${logData.join(", ")}` : "Received empty read response",
         );
         return normalizedResult;
     }

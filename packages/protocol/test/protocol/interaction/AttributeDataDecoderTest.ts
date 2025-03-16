@@ -86,17 +86,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -160,17 +160,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -263,17 +263,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -371,17 +371,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -416,17 +416,17 @@ describe("AttributeDataDecoder", () => {
             expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(1),
                 attributeName: "serverList",
                 clusterId: ClusterId(29),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 ClusterId(4),
                 ClusterId(29),
                 ClusterId(31),
@@ -460,17 +460,17 @@ describe("AttributeDataDecoder", () => {
             expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(9),
                 attributeName: "softwareVersion",
                 clusterId: ClusterId(40),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal(1);
+            expect(attributeData[0].value).deep.equal(1);
         });
 
         it("decode whole cluster response", () => {
@@ -933,17 +933,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "onOff",
                 clusterId: ClusterId(6),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal(false);
+            expect(attributeData[0].value).deep.equal(false);
         });
     });
 
