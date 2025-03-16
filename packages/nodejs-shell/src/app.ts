@@ -12,9 +12,14 @@ import { Ble } from "@matter/protocol";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
+import { initializeWebPlumbing } from "./web_plumbing.js";
 
 const PROMPT = "matter> ";
+const DEFAULT_WEBSOCKET_PORT = 8081;
+const DEFAULT_HTTP_PORT = 3000;
 const logger = Logger.get("Shell");
+let theShell: Shell;
+
 if (process.stdin?.isTTY) Logger.format = LogFormat.ANSI;
 
 let theNode: MatterNode;
@@ -86,12 +91,44 @@ async function main() {
                             type: "string",
                             default: undefined,
                         },
+                        webSocketInterface: {
+                            description: "Enable WebSocket interface",
+                            type: "boolean",
+                            default: false,
+                        },
+                        webSocketPort: {
+                            description: "WebSocket port",
+                            type: "number",
+                            default: DEFAULT_WEBSOCKET_PORT,
+                        },
+                        webServer: {
+                            description: "Enable Web server when using WebSocket interface",
+                            type: "boolean",
+                            default: false,
+                        },
+                        webHttpPort: {
+                            description: "Web Server port",
+                            type: "number",
+                            default: DEFAULT_HTTP_PORT,
+                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
+                const {
+                    nodeNum,
+                    ble,
+                    bleHciId,
+                    nodeType,
+                    factoryReset,
+                    netInterface,
+                    logfile,
+                    webSocketInterface,
+                    webSocketPort,
+                    webServer,
+                    webHttpPort,
+                } = argv;
 
                 theNode = new MatterNode(nodeNum, netInterface);
                 await theNode.initialize(factoryReset);
@@ -111,8 +148,12 @@ async function main() {
                 }
                 setLogLevel("default", await theNode.Store.get<string>("LogLevel", "info"));
 
-                const theShell = new Shell(theNode, nodeNum, PROMPT);
-
+                if (webSocketInterface) {
+                    Logger.format = LogFormat.PLAIN;
+                    initializeWebPlumbing(theNode, nodeNum, webSocketPort, webServer, webHttpPort); // set up but wait for connect to create Shell
+                } else {
+                    theShell = new Shell(theNode, nodeNum, PROMPT, process.stdin, process.stdout);
+                }
                 if (bleHciId !== undefined) {
                     await theNode.Store.set("BleHciId", bleHciId);
                 }
@@ -129,11 +170,14 @@ async function main() {
                 }
 
                 console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
-                theShell.start(theNode.storageLocation);
+                if (!webSocketInterface) {
+                    theShell.start(theNode.storageLocation);
+                }
             },
         )
         .version(false)
-        .scriptName("shell");
+        .scriptName("shell")
+        .strict();
     await yargsInstance.wrap(yargsInstance.terminalWidth()).parseAsync();
 }
 
