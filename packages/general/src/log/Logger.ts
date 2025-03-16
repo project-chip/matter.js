@@ -16,7 +16,7 @@ import { LogLevel } from "./LogLevel.js";
 /**
  * Log messages to the console.  This is the default logging mechanism.
  */
-export function consoleLogger(level: LogLevel, formattedLog: string) {
+export function consoleLogger(level: LogLevel, formattedLog: string, _facility?: string) {
     const console = (<any>consoleLogger).console;
     switch (level) {
         case LogLevel.DEBUG:
@@ -65,7 +65,7 @@ function logFormatterFor(formatName: string): LoggerDefinition["logFormatter"] {
 type LoggerDefinition = {
     logIdentifier: string;
     logFormatter: (now: Date, level: LogLevel, facility: string, prefix: string, ...values: any[]) => string;
-    log: (level: LogLevel, formattedLog: string) => void;
+    log: (level: LogLevel, formattedLog: string, facility?: string) => void;
     defaultLogLevel: LogLevel;
     logLevels: { [facility: string]: LogLevel };
     context?: Diagnostic.Context;
@@ -296,7 +296,10 @@ export class Logger {
      * @param identifier The identifier of the logger
      * @param log The log function to set
      */
-    public static setLogger(identifier: string, log: (level: LogLevel, formattedLog: string) => void) {
+    public static setLogger(
+        identifier: string,
+        log: (level: LogLevel, formattedLog: string, facility?: string) => void,
+    ) {
         const logger = Logger.logger.find(logger => logger.logIdentifier === identifier);
         if (logger) {
             logger.log = log;
@@ -465,7 +468,11 @@ export class Logger {
             }
 
             logger.context.run(() =>
-                logger.log(level, logger.logFormatter(Time.now(), level, this.#name, nestingPrefix(), values)),
+                logger.log(
+                    level,
+                    logger.logFormatter(Time.now(), level, this.#name, nestingPrefix(), values),
+                    this.#name,
+                ),
             );
         }
     }
