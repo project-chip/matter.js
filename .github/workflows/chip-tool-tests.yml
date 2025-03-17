@@ -375,6 +375,10 @@ jobs:
             let file = fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/test_definition.py", "utf8");
             file = file.replace("['--interface-id', str(-1)]", "['--interface-id', str(0)]");
             fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/test_definition.py", file);
+            
+            let file2= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
+            file2 = file2.replaceAll("'ip netns exec tool'.split() + ", "");
+            fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file2);
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
