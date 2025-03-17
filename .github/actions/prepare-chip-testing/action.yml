@@ -23,11 +23,6 @@ inputs:
     required: true
     default: "false"
 
-env:
-  BUILD_VARIANT: "no-ble-no-shell-tsan-clang"
-  TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
-  LSAN_OPTIONS: detect_leaks=1
-
 runs:
   using: 'composite'
   steps:
@@ -97,6 +92,8 @@ runs:
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build executables
       id: build-executables
+      env:
+        BUILD_VARIANT: "no-ble-no-shell-tsan-clang"
       shell: bash
       run: |
         cd connectedhomeip
