@@ -366,10 +366,18 @@ jobs:
         with:
           rebuild-chip-tool: 'false'
 
+      - name: Patch Test runner interface-id
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const fs = require("fs");
+            let file= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
+            file = file.replaceAll("ip netns exec tool", "ip netns exec app");
+            fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file);
+
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
-        env:
-          MATTER_MDNS_NETWORKINTERFACE: "eth-app"
         shell: bash
         run: |
           sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
