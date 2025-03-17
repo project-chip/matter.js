@@ -391,7 +391,6 @@ jobs:
               --log-level info \
               --target-glob "{Test_*,}" \
               --target-skip-glob "{Test_TC_ACE_1_6,Test_TC_BDX_*,Test_TC_DEMM_2_1,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_DRLK_2_7,Test_TC_DRLK_2_8,Test_TC_EEVSEM_2_1,Test_TC_LVL_9_1,Test_TC_LWM_2_1,Test_TC_OO_2_7,Test_TC_REFALM_2_1,Test_TC_SC_5_2,Test_TC_S_2_2,Test_TC_S_2_3,Test_TC_S_2_4,Test_TC_WIFINM_2_1}" \
-              --include-tags MANUAL \
               run \
               --all-clusters-app ../bin/chip-all-clusters-app \
               --lock-app ../bin/chip-lock-app \
