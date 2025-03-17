@@ -18,6 +18,10 @@ inputs:
     description: 'Also Build matter-js?'
     required: true
     default: "true"
+  patch-test-yaml:
+    description: 'Patch Yaml Files for Matter.js testrun?'
+    required: true
+    default: "false"
 
 runs:
   using: 'composite'
@@ -93,8 +97,16 @@ runs:
         cd connectedhomeip
         ./scripts/run_in_build_env.sh \
           "./scripts/build/build_examples.py \
-             --target linux-x64-chip-tool \
-             build
+            --target linux-x64-chip-tool \
+            --target linux-x64-all-clusters \
+            --target linux-x64-bridge \
+            --target linux-x64-lock \
+            --target linux-x64-tv-app \
+            --target linux-x64-lit-icd \
+            --target linux-x64-microwave-oven \
+            --target linux-x64-rvc \
+            --target linux-x64-network-manager \
+            build
           "
         cp out/linux-x64-chip-tool/chip-tool ../bin/
       #          More options for later, but takes long to build
@@ -156,7 +168,8 @@ runs:
       run: |
         npm ci
 
-    - name: Patch test definitions
+    - if: ${{ inputs.patch-test-yaml == 'true' }}
+      name: Patch test definitions
       shell: bash
       run: |
         cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
