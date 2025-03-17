@@ -109,52 +109,14 @@ runs:
             build
           "
         cp out/linux-x64-chip-tool/chip-tool ../bin/
-      #          More options for later, but takes long to build
-      #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
-      #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
-      #          rm -rf out/linux-x64-all-clusters
-      #          ./scripts/build/build_examples.py --target linux-x64-chip-cert build
-      #          cp out/linux-x64-chip-cert/chip-cert ../bin/
-      #          rm -rf out/linux-x64-chip-cert
-      #          ./scripts/build/build_examples.py --target linux-x64-all-clusters-minimal build
-      #          cp out/linux-x64-all-clusters-minimal/chip-all-clusters-minimal-app ../bin/
-      #          rm -rf out/linux-x64-all-clusters-minimal
-      #          ./scripts/build/build_examples.py --target linux-x64-thermostat build
-      #          cp out/linux-x64-thermostat/thermostat-app ../bin/
-      #          rm -rf out/linux-x64-thermostat
-      #          ./scripts/build/build_examples.py --target linux-x64-lock build
-      #          cp out/linux-x64-lock/chip-lock-app ../bin/
-      #          rm -rf out/linux-x64-lock
-      #          ./scripts/build/build_examples.py --target linux-x64-shell build
-      #          cp out/linux-x64-shell/chip-shell ../bin/
-      #          rm -rf out/linux-x64-shell
-      #          ./scripts/build/build_examples.py --target linux-x64-ota-provider build
-      #          cp out/linux-x64-ota-provider/chip-ota-provider-app ../bin/
-      #          rm -rf out/linux-x64-ota-provider
-      #          ./scripts/build/build_examples.py --target linux-x64-ota-requestor build
-      #          cp out/linux-x64-ota-requestor/chip-ota-requestor-app ../bin/
-      #          rm -rf out/linux-x64-ota-requestor
-      #          ./scripts/build/build_examples.py --target linux-x64-tv-app build
-      #          cp out/linux-x64-tv-app/chip-tv-app ../bin/
-      #          rm -rf out/linux-x64-tv-app
-      #          ./scripts/build/build_examples.py --target linux-x64-tv-casting-app build
-      #          cp out/linux-x64-tv-casting-app/chip-tv-casting-app ../bin/
-      #          rm -rf out/linux-x64-tv-casting-app
-      #          ./scripts/build/build_examples.py --target linux-x64-bridge build
-      #          cp out/linux-x64-bridge/chip-bridge-app ../bin/
-      #          rm -rf out/linux-x64-bridge
-      #          ./scripts/build/build_examples.py --target linux-x64-contact-sensor build
-      #          cp out/linux-x64-contact-sensor/contact-sensor-app ../bin/
-      #          rm -rf out/linux-x64-contact-sensor
-      #          ./scripts/build/build_examples.py --target linux-x64-dishwasher build
-      #          cp out/linux-x64-dishwasher/chip-dishwasher-app ../bin/
-      #          rm -rf out/linux-x64-dishwasher
-      #          ./scripts/build/build_examples.py --target linux-x64-simulated-app1 build
-      #          cp out/linux-x64-simulated-app1/chip-app1 ../bin/
-      #          rm -rf out/linux-x64-simulated-app1
-      #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
-      #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
-      #          rm -rf out/linux-x64-simulated-app2
+        cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
+        cp out/linux-x64-bridge/chip-bridge-app ../bin/
+        cp out/linux-x64-lock/chip-lock-app ../bin/
+        cp out/linux-x64-tv-app/chip-tv-app ../bin/
+        cp out/linux-x64-lit-icd/lit-icd-app ../bin/
+        cp out/linux-x64-microwave-oven/chip-microwave-oven-app ../bin/
+        cp out/linux-x64-rvc/chip-rvc-app ../bin/
+        cp out/linux-x64-network-manager/matter-network-manager-app ../bin/
 
     - name: Display used binaries
       shell: bash
