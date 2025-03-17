@@ -356,10 +356,6 @@ jobs:
     if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
 
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/project-chip/chip-build:119
-      options: --privileged --sysctl "net.ipv6.conf.all.disable_ipv6=0
-        net.ipv4.conf.all.forwarding=1 net.ipv6.conf.all.forwarding=1"
 
     steps:
       - name: Check out matter.js
@@ -369,6 +365,16 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+
+      - name: Patch Test runner interface-id
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const fs = require("fs");
+            let file = fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/test_definition.py", "utf8");
+            file = file.replace("['--interface-id', str(-1)]", "['--interface-id', str(0)]");
+            fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/test_definition.py", file);
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
