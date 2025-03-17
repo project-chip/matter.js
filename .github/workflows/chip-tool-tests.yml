@@ -376,14 +376,17 @@ jobs:
             file = file.replace("['--interface-id', str(-1)]", "['--interface-id', str(0)]");
             fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/test_definition.py", file);
             
-            let file2= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
-            file2 = file2.replaceAll("'ip netns exec tool'.split() + ", "");
-            fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file2);
+            //let file2= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
+            //file2 = file2.replaceAll("'ip netns exec tool'.split() + ", "");
+            //fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file2);
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
         shell: bash
         run: |
+          sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+          sudo sysctl -w net.ipv4.conf.all.forwarding=1
+          sudo sysctl -w net.ipv6.conf.all.forwarding=1
           cd connectedhomeip
           ./scripts/run_in_build_env.sh  \
             './scripts/tests/run_test_suite.py \
