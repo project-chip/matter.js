@@ -373,7 +373,7 @@ jobs:
           script: |
             const fs = require("fs");
             let file= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
-            file = file.replaceAll("ip netns exec tool", "ip netns exec app");
+            file = file.replaceAll("'ip netns exec tool'", "'ip netns exec app'");
             fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file);
 
       - name: Chip-Apps execution with matter.js controller
