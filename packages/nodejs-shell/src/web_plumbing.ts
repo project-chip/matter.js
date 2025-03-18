@@ -8,7 +8,7 @@ import { Logger, LogLevel, NotImplementedError } from "@matter/general";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { Readable, Writable } from "node:stream";
-import { Data, WebSocket } from "ws";
+import WebSocket, { Data, WebSocketServer } from "ws";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
 
@@ -36,7 +36,7 @@ export function initializeWebPlumbing(
                 });
         }).listen(webPort, () => console.info(`Server running at http://localhost:${webPort}`));
     }
-    const wss = new WebSocket.Server({ port: webSocketPort });
+    const wss = new WebSocketServer({ port: webSocketPort });
     console.info(`WebSocket server running on ws://localhost:${webSocketPort}`);
 
     console.log =
