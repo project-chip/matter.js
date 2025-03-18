@@ -93,7 +93,7 @@ runs:
       name: Build executables
       id: build-executables
       env:
-        BUILD_VARIANT: "no-ble-no-shell-tsan-clang"
+        BUILD_VARIANT: "ipv6only-no-ble-no-shell-tsan-clang"
       shell: bash
       run: |
         cd connectedhomeip
