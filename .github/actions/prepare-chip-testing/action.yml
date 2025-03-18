@@ -92,31 +92,33 @@ runs:
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build executables
       id: build-executables
+      env:
+        BUILD_VARIANT: "no-ble-no-shell-tsan-clang"
       shell: bash
       run: |
         cd connectedhomeip
         ./scripts/run_in_build_env.sh \
           "./scripts/build/build_examples.py \
-            --target linux-x64-chip-tool \
-            --target linux-x64-all-clusters \
-            --target linux-x64-lock \
-            --target linux-x64-tv-app \
-            --target linux-x64-bridge \
-            --target linux-x64-lit-icd \
-            --target linux-x64-microwave-oven \
-            --target linux-x64-rvc \
-            --target linux-x64-network-manager \
+            --target linux-x64-chip-tool-${BUILD_VARIANT} \
+            --target linux-x64-all-clusters-${BUILD_VARIANT} \
+            --target linux-x64-lock-${BUILD_VARIANT} \
+            --target linux-x64-tv-app-${BUILD_VARIANT} \
+            --target linux-x64-bridge-${BUILD_VARIANT} \
+            --target linux-x64-lit-icd-${BUILD_VARIANT} \
+            --target linux-x64-microwave-oven-${BUILD_VARIANT} \
+            --target linux-x64-rvc-${BUILD_VARIANT} \
+            --target linux-x64-network-manager-${BUILD_VARIANT} \
             build
           "
-        cp out/linux-x64-chip-tool/chip-tool ../bin/
-        cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
-        cp out/linux-x64-bridge/chip-bridge-app ../bin/
-        cp out/linux-x64-lock/chip-lock-app ../bin/
-        cp out/linux-x64-tv-app/chip-tv-app ../bin/
-        cp out/linux-x64-lit-icd/lit-icd-app ../bin/
-        cp out/linux-x64-microwave-oven/chip-microwave-oven-app ../bin/
-        cp out/linux-x64-rvc/chip-rvc-app ../bin/
-        cp out/linux-x64-network-manager/matter-network-manager-app ../bin/
+        cp out/linux-x64-chip-tool-${BUILD_VARIANT}/chip-tool ../bin/
+        cp out/linux-x64-all-clusters-${BUILD_VARIANT}/chip-all-clusters-app ../bin/
+        cp out/linux-x64-bridge-${BUILD_VARIANT}/chip-bridge-app ../bin/
+        cp out/linux-x64-lock-${BUILD_VARIANT}/chip-lock-app ../bin/
+        cp out/linux-x64-tv-app-${BUILD_VARIANT}/chip-tv-app ../bin/
+        cp out/linux-x64-lit-icd-${BUILD_VARIANT}/lit-icd-app ../bin/
+        cp out/linux-x64-microwave-oven-${BUILD_VARIANT}/chip-microwave-oven-app ../bin/
+        cp out/linux-x64-rvc-${BUILD_VARIANT}/chip-rvc-app ../bin/
+        cp out/linux-x64-network-manager-${BUILD_VARIANT}/matter-network-manager-app ../bin/
 
     - name: Display used binaries
       shell: bash

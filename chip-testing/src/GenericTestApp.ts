@@ -209,7 +209,7 @@ export async function startTestApp(testInstance: TestInstance) {
                         MaybePromise.then(
                             testInstance.storage?.close(),
                             () => {
-                                logger.info(`-----> Test instance successfully closed.`);
+                                logger.info(`Test instance successfully closed.`);
                                 process.exit(0);
                             },
                             error => {
