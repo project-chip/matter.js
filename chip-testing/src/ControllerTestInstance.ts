@@ -112,7 +112,7 @@ export class ControllerTestInstance extends TestInstance {
         const envBeta = new Environment(`${this.id}-beta`, this.#env);
         envBeta.set(StorageService, initStorageService());
         this.#controllerInstances.set("beta", {
-            env: envAlpha,
+            env: envBeta,
             handler: new LegacyControllerCommandHandler(
                 "beta",
                 new CommissioningController({
@@ -130,7 +130,7 @@ export class ControllerTestInstance extends TestInstance {
         const envGamma = new Environment(`${this.id}-gamma`, this.#env);
         envGamma.set(StorageService, initStorageService());
         this.#controllerInstances.set("gamma", {
-            env: envAlpha,
+            env: envGamma,
             handler: new LegacyControllerCommandHandler(
                 "gamma",
                 new CommissioningController({
@@ -155,7 +155,7 @@ export class ControllerTestInstance extends TestInstance {
         try {
             this.#setupControllers();
             logger.info(
-                `-----> ${this.appName}: Setup Controllers done ${Array.from(this.#controllerInstances.keys()).join(",")}`,
+                `${this.appName}: Setup Controllers done ${Array.from(this.#controllerInstances.keys()).join(",")}`,
             );
             this.#commandHandler.initialize(
                 new Map(Array.from(this.#controllerInstances.entries()).map(([name, { handler }]) => [name, handler])),
@@ -167,7 +167,7 @@ export class ControllerTestInstance extends TestInstance {
             throw error;
         }
 
-        logger.info(`-----> ${this.appName}: Setup done`);
+        logger.info(`${this.appName}: Setup done`);
     }
 
     /** Start the command handlers. Controller will be started when needed. */
@@ -181,7 +181,7 @@ export class ControllerTestInstance extends TestInstance {
          */
         this.#commandHandler.start();
 
-        logger.info("-----> STARTED");
+        logger.info("STARTED");
     }
 
     /** Stop the test instance MatterServer and the device. */
@@ -199,6 +199,6 @@ export class ControllerTestInstance extends TestInstance {
     override async close() {
         await this.stop();
 
-        logger.info(`-----> ${this.appName}: Controller Instance stopped`);
+        logger.info(`${this.appName}: Controller Instance stopped`);
     }
 }

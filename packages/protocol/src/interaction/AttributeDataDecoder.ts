@@ -57,6 +57,7 @@ export type DecodedAttributeValue<T> = Omit<DecodedAttributeReportValue<T>, "ver
 /**
  * Parses, normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from
  * a received DataReport.
+ * TODO: Convert into a Generator function once we migrate Reading Data for controller to also be streaming
  */
 export function normalizeAndDecodeReadAttributeReport(data: TypeFromSchema<typeof TlvAttributeReport>[]): {
     attributeData: DecodedAttributeReportValue<any>[];

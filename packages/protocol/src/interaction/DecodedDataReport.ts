@@ -25,8 +25,8 @@ export interface DecodedDataReport extends DataReport {
 }
 
 export function DecodedDataReport(report: DataReport): DecodedDataReport {
-    if ((report as unknown as DecodedDataReport).isNormalized) {
-        return report as unknown as DecodedDataReport;
+    if ((report as DecodedDataReport).isNormalized) {
+        return report as DecodedDataReport;
     }
 
     const { attributeData: attributeReports, attributeStatus } =

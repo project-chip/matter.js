@@ -195,10 +195,10 @@ export async function startTestApp(testInstance: TestInstance) {
     await testInstance.initialize();
     await testInstance.start();
 
-    logger.info(`-----> Waiting for tests`);
+    logger.info(`Waiting for tests`);
 
     function exitHandler(signal: string) {
-        logger.info(`-----> Closing test instance because of ${signal} ...`);
+        logger.info(`Closing test instance because of ${signal} ...`);
         testInstance
             .stop()
             .then(() => {
@@ -232,5 +232,5 @@ export async function startTestApp(testInstance: TestInstance) {
     process.on("SIGTERM", () => exitHandler("SIGTERM"));
     process.on("SIGINT", () => exitHandler("SIGINT"));
 
-    process.on("exit", code => logger.info(`-----> Exit Test instance with code ${code}`));
+    process.on("exit", code => logger.info(`Exit Test instance with code ${code}`));
 }

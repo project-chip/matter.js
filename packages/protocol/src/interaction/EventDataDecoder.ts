@@ -35,7 +35,7 @@ export type DecodedEventData<T> = {
     data?: T;
 };
 
-type DecodedEventReportEntry = {
+export type DecodedEventReportEntry = {
     path: {
         nodeId?: NodeId;
         endpointId: EndpointNumber;
@@ -56,6 +56,7 @@ export type DecodedEventReportStatus = DecodedEventReportEntry & {
     clusterStatus?: number;
 };
 
+// TODO: Convert into a Generator function once we migrate Reading Data for controller to also be streaming
 export function normalizeAndDecodeReadEventReport(data: TypeFromSchema<typeof TlvEventReport>[]): {
     eventData: DecodedEventReportValue<any>[];
     eventStatus: DecodedEventReportStatus[];

@@ -12,6 +12,7 @@
  * It will generate a test_sniffer.log file in the directory it was executed from with the details.
  *
  * You need to manually set the path to the chip-tool to execute.
+ * TODO: Make the patch configurable
  */
 
 import { Logger } from "@matter/general";
