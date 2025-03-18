@@ -53,12 +53,12 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 return;
             }
         }
+        await this.#fsyncStorageDir();
     }
 
     async close() {
         this.isInitialized = false;
         await this.#finishAllWrites();
-        await this.#fsyncStorageDir();
     }
 
     filePath(fileName: string) {
@@ -67,7 +67,6 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
 
     async clear() {
         await this.#finishAllWrites();
-        await this.#fsyncStorageDir();
         await rm(this.#path, { recursive: true, force: true });
         await mkdir(this.#path, { recursive: true });
     }
