@@ -157,8 +157,8 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         await MockTime.resolve(super.cancel());
     }
 
-    override async close() {
-        await MockTime.resolve(super.close());
+    override async close(stepMs?: number) {
+        await MockTime.resolve(super.close(), { macrotasks: true, stepMs });
     }
 }
 

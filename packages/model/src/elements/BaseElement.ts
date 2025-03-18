@@ -7,12 +7,10 @@
 import { ElementTag, Specification } from "../common/index.js";
 
 /**
- * Per the Matter specification, an element is a data construct that supports
- * an instance of data.  So, a class.
+ * Per the Matter specification, an element is a data construct that supports an instance of data.
  *
- * Elements as defined by this package are a static data structure.  Each
- * element has a corresponding "Model" that is a proper class with runtime
- * functionality related to the element.
+ * Elements as defined by this package are a static data structure.  Each element has a corresponding "Model" that is a
+ * proper class with runtime functionality related to the element.
  */
 export interface BaseElement {
     /**

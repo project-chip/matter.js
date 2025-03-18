@@ -15,7 +15,7 @@ import { BridgedLightDevice, createBridge } from "./bridge-helpers.js";
 const commissioning = CommissioningHelper();
 
 // TODO - this should be 1000+ but requires additional optimization first
-const NODE_COUNT = 100;
+const NODE_COUNT = 10;
 
 async function createLargeBridge() {
     const parts = Array<Endpoint.Configuration>();

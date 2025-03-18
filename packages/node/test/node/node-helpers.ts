@@ -63,7 +63,7 @@ export async function testFactoryReset(mode: "online" | "offline-after-commissio
     const oldUniqueId = "asdf";
     await node.set({ basicInformation: { uniqueId: oldUniqueId } });
 
-    await MockTime.resolve(node.erase());
+    await MockTime.resolve(node.erase(), { macrotasks: true });
 
     // Confirm previous online state is resumed
     expect(node.lifecycle.isOnline).equals(mode === "online");

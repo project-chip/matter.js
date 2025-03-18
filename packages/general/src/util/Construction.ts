@@ -239,7 +239,7 @@ export function Construction<const T extends Constructable>(
     let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
 
     const self: Construction<any> = {
-        [Symbol.toStringTag]: "AsyncConstruction",
+        [Symbol.toStringTag]: "Construction",
 
         get error() {
             return error;
@@ -663,7 +663,7 @@ export function Construction<const T extends Constructable>(
 
     function createErrorHandler(name: string) {
         return (e: any) => {
-            unhandledError(`Unhandled error in ${self} ${name}:`, e);
+            unhandledError(`Unhandled error in ${subject} ${name}:`, e);
         };
     }
 }
