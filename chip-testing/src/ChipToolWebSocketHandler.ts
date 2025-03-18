@@ -23,6 +23,7 @@ import {
     AcceptedCommandList,
     AttributeList,
     AttributeModel,
+    ClusterModel,
     ClusterRevision,
     CommandModel,
     EventModel,
@@ -57,6 +58,7 @@ const GlobalAttributes: AttributeDetails = {
  */
 type ClusterMapEntry = {
     clusterId: ClusterId;
+    model: ClusterModel;
     commands: { [key: string]: CommandModel };
     attributes: AttributeDetails;
     events: { [key: string]: EventModel };
@@ -70,6 +72,7 @@ MatterModel.standard.clusters.forEach(cluster => {
     const aces = cluster.allAces;
     const clusterData: ClusterMapEntry = {
         clusterId: ClusterId(cluster.id),
+        model: cluster,
         commands: {},
         attributes: {},
         events: {},
@@ -86,24 +89,6 @@ MatterModel.standard.clusters.forEach(cluster => {
     });
     ClusterMap[cluster.name.toLowerCase()] = clusterData;
 });
-// For Derived clusters we need to combine the model parts with the base cluster
-/*derivedClusters.forEach(({ cluster, base }) => {
-    ClusterMap[cluster] = {
-        clusterId: ClusterMap[cluster].clusterId,
-        commands: {
-            ...ClusterMap[base].commands,
-            ...ClusterMap[cluster].commands,
-        },
-        attributes: {
-            ...ClusterMap[base].attributes,
-            ...ClusterMap[cluster].attributes,
-        },
-        events: {
-            ...ClusterMap[base].events,
-            ...ClusterMap[cluster].events,
-        },
-    };
-});*/
 
 /** Mapping of Loglevels between Matter,js and the testrunner understanding */
 const LogLevelMap: { [key: number]: string } = {
@@ -156,12 +141,12 @@ function toChipJson(object: object, spaces?: number): string {
  * Uses the matter.js Model to convert the response data for read, subscribe and invoke into a tag based response
  * including conversion of data types.
  */
-function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel): unknown {
+function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clusterModel: ClusterModel): unknown {
     if (value === null) {
         return null;
     }
     if (Array.isArray(value) && model.type === "list") {
-        return value.map(v => convertMatterToWebSocketTagBased(v, model.members[0]));
+        return value.map(v => convertMatterToWebSocketTagBased(v, model.members[0], clusterModel));
     }
     if (isObject(value) && model.metabase?.name === "struct") {
         const valueKeys = Object.keys(value);
@@ -169,7 +154,7 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel): un
         for (const member of model.members) {
             const name = camelize(member.name);
             if (member.name !== undefined && member.id !== undefined && valueKeys.includes(name)) {
-                result[member.id] = convertMatterToWebSocketTagBased(value[name], member);
+                result[member.id] = convertMatterToWebSocketTagBased(value[name], member, clusterModel);
             }
         }
         return result;
@@ -177,7 +162,7 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel): un
     if (isObject(value) && model.metabase?.metatype === "bitmap") {
         let numberValue = 0;
 
-        for (const member of model.members) {
+        for (const member of clusterModel.scope.membersOf(model)) {
             const memberValue =
                 member.name !== undefined && value[camelize(member.name)]
                     ? value[camelize(member.name)]
@@ -975,7 +960,7 @@ export class ChipToolWebSocketHandler {
             return {
                 results: values.map(data => ({
                     ...data,
-                    value: convertMatterToWebSocketTagBased(data.value, attributeModel),
+                    value: convertMatterToWebSocketTagBased(data.value, attributeModel, clusterData.model),
                 })),
             };
         } catch (error) {
@@ -1026,7 +1011,7 @@ export class ChipToolWebSocketHandler {
             return {
                 results: values.map(data => ({
                     ...data,
-                    value: convertMatterToWebSocketTagBased(data.value, eventModel),
+                    value: convertMatterToWebSocketTagBased(data.value, eventModel, clusterData.model),
                 })),
             };
         } catch (error) {
@@ -1070,7 +1055,7 @@ export class ChipToolWebSocketHandler {
                     logger.info("Subscribe-Data Update", data);
                     this.#subscriptionData.push({
                         ...data,
-                        value: convertMatterToWebSocketTagBased(data.value, attributeModel),
+                        value: convertMatterToWebSocketTagBased(data.value, attributeModel, clusterData.model),
                     });
                 },
             });
@@ -1078,7 +1063,7 @@ export class ChipToolWebSocketHandler {
             return {
                 results: values.map(entry => ({
                     ...entry,
-                    value: convertMatterToWebSocketTagBased(entry.value, attributeModel),
+                    value: convertMatterToWebSocketTagBased(entry.value, attributeModel, clusterData.model),
                 })),
             };
         } catch (error) {
@@ -1120,7 +1105,7 @@ export class ChipToolWebSocketHandler {
                     logger.info("Subscribe-Data Update", data);
                     this.#subscriptionData.push({
                         ...data,
-                        value: convertMatterToWebSocketTagBased(data.value, eventModel),
+                        value: convertMatterToWebSocketTagBased(data.value, eventModel, clusterData.model),
                     });
                 },
             });
@@ -1128,7 +1113,7 @@ export class ChipToolWebSocketHandler {
             return {
                 results: values.map(entry => ({
                     ...entry,
-                    value: convertMatterToWebSocketTagBased(entry.value, eventModel),
+                    value: convertMatterToWebSocketTagBased(entry.value, eventModel, clusterData.model),
                 })),
             };
         } catch (error) {
@@ -1231,7 +1216,11 @@ export class ChipToolWebSocketHandler {
                             clusterId: clusterData.clusterId,
                             commandId: commandModel.responseModel.id,
                             endpointId: parseInt(endpointId),
-                            value: convertMatterToWebSocketTagBased(result, commandModel.responseModel),
+                            value: convertMatterToWebSocketTagBased(
+                                result,
+                                commandModel.responseModel,
+                                clusterData.model,
+                            ),
                         },
                     ],
                 };
