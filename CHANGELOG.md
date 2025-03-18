@@ -19,6 +19,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
+-   @matter/nodejs
+    - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases
+
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
     - Feature: Enhanced `getMultipleAttributesAndEvents()` to also return attributeStatus and eventStatus properties with errors returned from the read interaction 
