@@ -74,14 +74,42 @@ RUN sed -i "s/is_debug = true/is_debug = false/" build/config/BUILDCONFIG.gn && 
 RUN case ${TARGETPLATFORM} in \
     "linux/amd64") \
         source scripts/activate.sh && \
-        scripts/build/build_examples.py --target linux-x64-chip-tool-ipv6only-platform-mdns build \
+        scripts/build/build_examples.py \
+          --target linux-x64-chip-tool-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-all-clusters-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-lock-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-tv-app-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-bridge-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-lit-icd-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-microwave-oven-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-rvc-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-x64-network-manager-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          build \
     ;; \
     "linux/arm64") \
         source scripts/activate.sh && \
-        scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-platform-mdns /bins build \
+        scripts/build/build_examples.py \
+          --target linux-arm64-chip-tool-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-all-clusters-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-lock-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-tv-app-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-bridge-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-lit-icd-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-microwave-oven-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-rvc-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          --target linux-arm64-network-manager-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
+          /bins build \
     ;; \
     esac
 RUN cp out/*/chip-tool out
+RUN cp out/*/chip-all-clusters-app out
+RUN cp out/*/chip-bridge-app out
+RUN cp out/*/chip-lock-app out
+RUN cp out/*/chip-tv-app out
+RUN cp out/*/lit-icd-app out
+RUN cp out/*/chip-microwave-oven-app out
+RUN cp out/*/chip-rvc-app out
+RUN cp out/*/matter-network-manager-app out
 
 # Build python wheels
 RUN scripts/build_python.sh --chip_mdns platform
@@ -111,7 +139,7 @@ LABEL org.opencontainers.image.title="matter.js CHIP tooling build"
 LABEL org.opencontainers.image.url=https://github.com/matter-js/matter.js-chip
 LABEL org.opencontainers.image.source=https://github.com/project-chip/matter.js/tree/main/packages/testing/chip
 
-RUN rm -rf bin.usr-is-merged boot home media mnt opt sbin.usr-is-merged srv 
+RUN rm -rf bin.usr-is-merged boot home media mnt opt sbin.usr-is-merged srv
 
 # chip-tool binary
 COPY --from=install /connectedhomeip/out/chip-tool /bin/chip-tool

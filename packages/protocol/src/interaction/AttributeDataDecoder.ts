@@ -16,17 +16,18 @@ import {
     getClusterAttributeById,
     getClusterById,
     NodeId,
+    Status,
     TlvAny,
     TlvAttributeData,
     TlvAttributeReport,
+    TlvAttributeStatus,
     TlvSchema,
     TypeFromSchema,
 } from "#types";
 
 const logger = Logger.get("AttributeDataDecoder");
 
-/** Represents a fully qualified and decoded attribute value from a received DataReport */
-export type DecodedAttributeReportValue<T> = {
+type DecodedAttributeReportEntry = {
     path: {
         nodeId?: NodeId;
         endpointId: EndpointNumber;
@@ -34,8 +35,18 @@ export type DecodedAttributeReportValue<T> = {
         attributeId: AttributeId;
         attributeName: string;
     };
+};
+
+/** Represents a fully qualified and decoded attribute value from a received DataReport */
+export type DecodedAttributeReportValue<T> = DecodedAttributeReportEntry & {
     version: number;
     value: T;
+};
+
+/** Represents a fully qualified and decoded attribute status from a received DataReport */
+export type DecodedAttributeReportStatus = DecodedAttributeReportEntry & {
+    status?: Status;
+    clusterStatus?: number;
 };
 
 /** Represents a decoded attribute value from a received DataReport where data version could be optional. */
@@ -46,14 +57,20 @@ export type DecodedAttributeValue<T> = Omit<DecodedAttributeReportValue<T>, "ver
 /**
  * Parses, normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from
  * a received DataReport.
+ * TODO: Convert into a Generator function once we migrate Reading Data for controller to also be streaming
  */
-export function normalizeAndDecodeReadAttributeReport(
-    data: TypeFromSchema<typeof TlvAttributeReport>[],
-): DecodedAttributeReportValue<any>[] {
+export function normalizeAndDecodeReadAttributeReport(data: TypeFromSchema<typeof TlvAttributeReport>[]): {
+    attributeData: DecodedAttributeReportValue<any>[];
+    attributeStatus: DecodedAttributeReportStatus[];
+} {
     // TODO Decide how to handle the attribute report status field, right now we ignore it
     const dataValues = data.flatMap(({ attributeData }) => (attributeData !== undefined ? attributeData : []));
+    const dataStatus = data.flatMap(({ attributeStatus }) => (attributeStatus !== undefined ? attributeStatus : []));
 
-    return normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue<any>[]; // dataVersion existing in incoming data, so must also in outgoing data
+    return {
+        attributeData: normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue<any>[],
+        attributeStatus: normalizeAttributeStatus(dataStatus),
+    };
 }
 
 export function expandPathsInAttributeData(
@@ -119,6 +136,49 @@ export function normalizeAttributeData(
     });
 
     return Array.from(responseList.values());
+}
+
+/**
+ * Normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from a received
+ * DataReport.
+ */
+export function normalizeAttributeStatus(
+    data: TypeFromSchema<typeof TlvAttributeStatus>[],
+): DecodedAttributeReportStatus[] {
+    const result = new Array<DecodedAttributeReportStatus>();
+    data.forEach(entry => {
+        const {
+            path: { nodeId, endpointId, clusterId, attributeId },
+            status,
+        } = entry;
+
+        if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
+            throw new UnexpectedDataError(`Invalid attribute path ${endpointId}/${clusterId}/${attributeId}`);
+        }
+        const cluster = getClusterById(clusterId);
+        const attributeDetail = getClusterAttributeById(cluster, attributeId);
+        if (attributeDetail === undefined) {
+            result.push({
+                path: {
+                    nodeId,
+                    endpointId,
+                    clusterId,
+                    attributeId,
+                    attributeName: `Unknown (${Diagnostic.hex(attributeId)})`,
+                },
+                status: status.status,
+                clusterStatus: status.clusterStatus,
+            });
+
+            return;
+        }
+        result.push({
+            path: { nodeId, endpointId, clusterId, attributeId, attributeName: attributeDetail.name },
+            status: status.status,
+            clusterStatus: status.clusterStatus,
+        });
+    });
+    return result;
 }
 
 /**

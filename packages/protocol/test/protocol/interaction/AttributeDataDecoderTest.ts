@@ -86,17 +86,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -160,17 +160,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -263,17 +263,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -371,17 +371,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -416,17 +416,17 @@ describe("AttributeDataDecoder", () => {
             expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(1),
                 attributeName: "serverList",
                 clusterId: ClusterId(29),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal([
+            expect(attributeData[0].value).deep.equal([
                 ClusterId(4),
                 ClusterId(29),
                 ClusterId(31),
@@ -460,17 +460,17 @@ describe("AttributeDataDecoder", () => {
             expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(9),
                 attributeName: "softwareVersion",
                 clusterId: ClusterId(40),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal(1);
+            expect(attributeData[0].value).deep.equal(1);
         });
 
         it("decode whole cluster response", () => {
@@ -486,297 +486,300 @@ describe("AttributeDataDecoder", () => {
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData).deep.equal([
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 0,
-                        attributeName: "dataModelRevision",
-                        nodeId: undefined,
+            expect(normalizedData).deep.equal({
+                attributeData: [
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 0,
+                            attributeName: "dataModelRevision",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: 1,
                     },
-                    version: 2020087125,
-                    value: 1,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 1,
-                        attributeName: "vendorName",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 1,
+                            attributeName: "vendorName",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "TEST_VENDOR",
                     },
-                    version: 2020087125,
-                    value: "TEST_VENDOR",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 2,
-                        attributeName: "vendorId",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 2,
+                            attributeName: "vendorId",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: VendorId(65521),
                     },
-                    version: 2020087125,
-                    value: VendorId(65521),
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 3,
-                        attributeName: "productName",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 3,
+                            attributeName: "productName",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "TEST_PRODUCT",
                     },
-                    version: 2020087125,
-                    value: "TEST_PRODUCT",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 4,
-                        attributeName: "productId",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 4,
+                            attributeName: "productId",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: 32769,
                     },
-                    version: 2020087125,
-                    value: 32769,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 5,
-                        attributeName: "nodeLabel",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 5,
+                            attributeName: "nodeLabel",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "",
                     },
-                    version: 2020087125,
-                    value: "",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 6,
-                        attributeName: "location",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 6,
+                            attributeName: "location",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "US",
                     },
-                    version: 2020087125,
-                    value: "US",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 7,
-                        attributeName: "hardwareVersion",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 7,
+                            attributeName: "hardwareVersion",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: 0,
                     },
-                    version: 2020087125,
-                    value: 0,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 8,
-                        attributeName: "hardwareVersionString",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 8,
+                            attributeName: "hardwareVersionString",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "TEST_VERSION",
                     },
-                    version: 2020087125,
-                    value: "TEST_VERSION",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 9,
-                        attributeName: "softwareVersion",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 9,
+                            attributeName: "softwareVersion",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: 1,
                     },
-                    version: 2020087125,
-                    value: 1,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 10,
-                        attributeName: "softwareVersionString",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 10,
+                            attributeName: "softwareVersionString",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "1.0",
                     },
-                    version: 2020087125,
-                    value: "1.0",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 11,
-                        attributeName: "manufacturingDate",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 11,
+                            attributeName: "manufacturingDate",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "20200101",
                     },
-                    version: 2020087125,
-                    value: "20200101",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 12,
-                        attributeName: "partNumber",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 12,
+                            attributeName: "partNumber",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "",
                     },
-                    version: 2020087125,
-                    value: "",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 13,
-                        attributeName: "productUrl",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 13,
+                            attributeName: "productUrl",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "",
                     },
-                    version: 2020087125,
-                    value: "",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 14,
-                        attributeName: "productLabel",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 14,
+                            attributeName: "productLabel",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "",
                     },
-                    version: 2020087125,
-                    value: "",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 15,
-                        attributeName: "serialNumber",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 15,
+                            attributeName: "serialNumber",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "TEST_SN",
                     },
-                    version: 2020087125,
-                    value: "TEST_SN",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 16,
-                        attributeName: "localConfigDisabled",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 16,
+                            attributeName: "localConfigDisabled",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: false,
                     },
-                    version: 2020087125,
-                    value: false,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 17,
-                        attributeName: "reachable",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 17,
+                            attributeName: "reachable",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: true,
                     },
-                    version: 2020087125,
-                    value: true,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 18,
-                        attributeName: "uniqueId",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 18,
+                            attributeName: "uniqueId",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: "25E632BBA75FBE9C",
                     },
-                    version: 2020087125,
-                    value: "25E632BBA75FBE9C",
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 19,
-                        attributeName: "capabilityMinima",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 19,
+                            attributeName: "capabilityMinima",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 65535,
+                        },
                     },
-                    version: 2020087125,
-                    value: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 65535,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65532,
+                            attributeName: "featureMap",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: {},
                     },
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65532,
-                        attributeName: "featureMap",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65533,
+                            attributeName: "clusterRevision",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: 1,
                     },
-                    version: 2020087125,
-                    value: {},
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65533,
-                        attributeName: "clusterRevision",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65528,
+                            attributeName: "generatedCommandList",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: [],
                     },
-                    version: 2020087125,
-                    value: 1,
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65528,
-                        attributeName: "generatedCommandList",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65529,
+                            attributeName: "acceptedCommandList",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: [],
                     },
-                    version: 2020087125,
-                    value: [],
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65529,
-                        attributeName: "acceptedCommandList",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65530,
+                            attributeName: "Unknown (0xfffa)",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: [0, 1, 2],
                     },
-                    version: 2020087125,
-                    value: [],
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65530,
-                        attributeName: "Unknown (0xfffa)",
-                        nodeId: undefined,
+                    {
+                        path: {
+                            endpointId: 0,
+                            clusterId: 40,
+                            attributeId: 65531,
+                            attributeName: "attributeList",
+                            nodeId: undefined,
+                        },
+                        version: 2020087125,
+                        value: [AttributeId(0), AttributeId(1), AttributeId(2), AttributeId(3), AttributeId(4)],
                     },
-                    version: 2020087125,
-                    value: [0, 1, 2],
-                },
-                {
-                    path: {
-                        endpointId: 0,
-                        clusterId: 40,
-                        attributeId: 65531,
-                        attributeName: "attributeList",
-                        nodeId: undefined,
-                    },
-                    version: 2020087125,
-                    value: [AttributeId(0), AttributeId(1), AttributeId(2), AttributeId(3), AttributeId(4)],
-                },
-            ]);
+                ],
+                attributeStatus: [],
+            });
         });
     });
 
@@ -933,17 +936,17 @@ describe("AttributeDataDecoder", () => {
                     },
                 },
             ];
-            const normalizedData = normalizeAndDecodeReadAttributeReport(data);
+            const { attributeData } = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).equal(1);
-            expect(normalizedData[0].path).deep.equal({
+            expect(attributeData.length).equal(1);
+            expect(attributeData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "onOff",
                 clusterId: ClusterId(6),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).deep.equal(false);
+            expect(attributeData[0].value).deep.equal(false);
         });
     });
 

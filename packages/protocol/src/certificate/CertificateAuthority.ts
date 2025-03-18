@@ -34,6 +34,7 @@ const logger = Logger.get("CertificateAuthority");
 
 /**
  * Manages the root key pair for a fabric owned by a local node.
+ * TODO: Add support for (optional) ICACs
  */
 export class CertificateAuthority {
     private rootCertId = BigInt(0);

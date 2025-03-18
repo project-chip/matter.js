@@ -14,9 +14,11 @@ import {
     getClusterById,
     getClusterEventById,
     NodeId,
+    Status,
     TlvAny,
     TlvEventData,
     TlvEventReport,
+    TlvEventStatus,
     TlvStream,
     TypeFromSchema,
 } from "#types";
@@ -33,7 +35,7 @@ export type DecodedEventData<T> = {
     data?: T;
 };
 
-export type DecodedEventReportValue<T> = {
+export type DecodedEventReportEntry = {
     path: {
         nodeId?: NodeId;
         endpointId: EndpointNumber;
@@ -41,16 +43,32 @@ export type DecodedEventReportValue<T> = {
         eventId: EventId;
         eventName: string;
     };
+};
+
+/** Represents a fully qualified and decoded attribute value from a received DataReport */
+export type DecodedEventReportValue<T> = DecodedEventReportEntry & {
     events: DecodedEventData<T>[];
 };
 
-export function normalizeAndDecodeReadEventReport(
-    data: TypeFromSchema<typeof TlvEventReport>[],
-): DecodedEventReportValue<any>[] {
+/** Represents a fully qualified and decoded attribute status from a received DataReport */
+export type DecodedEventReportStatus = DecodedEventReportEntry & {
+    status?: Status;
+    clusterStatus?: number;
+};
+
+// TODO: Convert into a Generator function once we migrate Reading Data for controller to also be streaming
+export function normalizeAndDecodeReadEventReport(data: TypeFromSchema<typeof TlvEventReport>[]): {
+    eventData: DecodedEventReportValue<any>[];
+    eventStatus: DecodedEventReportStatus[];
+} {
     // TODO Decide how to handle the attribute report status field, right now we ignore it
     const dataValues = data.flatMap(({ eventData }) => (eventData !== undefined ? eventData : []));
+    const dataStatus = data.flatMap(({ eventStatus }) => (eventStatus !== undefined ? eventStatus : []));
 
-    return normalizeAndDecodeEventData(dataValues);
+    return {
+        eventData: normalizeAndDecodeEventData(dataValues),
+        eventStatus: normalizeEventStatus(dataStatus),
+    };
 }
 
 export function normalizeEventData(
@@ -114,6 +132,40 @@ export function normalizeAndDecodeEventData(
                 path: undefined,
             }));
             result.push({ path: { nodeId, endpointId, clusterId, eventId, eventName: name }, events });
+        } catch (error: any) {
+            logger.error(`Error decoding event ${endpointId}/${clusterId}/${eventId}: ${error.message}`);
+        }
+    });
+    return result;
+}
+
+export function normalizeEventStatus(data: TypeFromSchema<typeof TlvEventStatus>[]): DecodedEventReportStatus[] {
+    const result = new Array<DecodedEventReportStatus>();
+    data.forEach(entry => {
+        const {
+            path: { nodeId, endpointId, clusterId, eventId },
+            status,
+        } = entry;
+
+        if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
+            throw new UnexpectedDataError(`Invalid event path ${endpointId}/${clusterId}/${eventId}`);
+        }
+        try {
+            const cluster = getClusterById(clusterId);
+            const eventDetail = getClusterEventById(cluster, eventId);
+            if (eventDetail === undefined) {
+                result.push({
+                    path: { nodeId, endpointId, clusterId, eventId, eventName: `Unknown (${Diagnostic.hex(eventId)})` },
+                    status: status.status,
+                    clusterStatus: status.clusterStatus,
+                });
+                return;
+            }
+            result.push({
+                path: { nodeId, endpointId, clusterId, eventId, eventName: eventDetail.name },
+                status: status.status,
+                clusterStatus: status.clusterStatus,
+            });
         } catch (error: any) {
             logger.error(`Error decoding event ${endpointId}/${clusterId}/${eventId}: ${error.message}`);
         }

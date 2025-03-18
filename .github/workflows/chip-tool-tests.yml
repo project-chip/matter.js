@@ -136,8 +136,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API Core - Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-core
         shell: bash
         run: |
@@ -149,6 +150,39 @@ jobs:
               --log-level info \
               --target-glob "{Test_TC_ACE_*,Test_TC_ACL_*,Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DGGEN_*,Test_TC_DESC_*,Test_TC_OPCREDS_*,TestAccessControlC*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissionerNodeId,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestDiscovery}" \
               --target-skip-glob "{Test_TC_ACE_1_6*}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  matterjs-tests-core:
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
+
+      - name: Run Core cluster tests using the python parser sending commands to matter.js-controller from yaml files
+        id: test-execution-08-core-matterjs
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
+              --log-level info \
+              --target-glob "{Test_TC_ACE_*,Test_TC_ACL_*,Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DGGEN_*,Test_TC_DESC_*,Test_TC_OPCREDS_*,TestAccessControlC*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissionerNodeId,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestDiscovery}" \
+              --target-skip-glob "{TestCASERecovery,Test_TC_ACE_1_6}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
@@ -169,8 +203,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API App - Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-fast
         shell: bash
         run: |
@@ -179,6 +214,39 @@ jobs:
             './scripts/tests/run_test_suite.py \
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_*CONC_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster}" \
+              --target-skip-glob "{Test_TC_OO_2_7}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  matterjs-tests-app-fast:
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
+
+      - name: Run fast application cluster tests using the python parser sending commands to matter.js-controller from yaml files
+        id: test-execution-08-app-fast
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_*CONC_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster}" \
               --target-skip-glob "{Test_TC_OO_2_7}" \
@@ -202,8 +270,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API App - Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-slow
         shell: bash
         run: |
@@ -234,8 +303,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
 
-      - name: 0.8-API - Long Test execution
+      - name: Long Test execution
         id: test-execution-long-08
         shell: bash
         run: |
@@ -244,6 +314,36 @@ jobs:
             './scripts/tests/run_test_suite.py \
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_CADMIN_1_3,Test_TC_CADMIN_1_4,Test_TC_CADMIN_1_5,Test_TC_CADMIN_1_6,Test_TC_CADMIN_1_9,Test_TC_CADMIN_1_10,Test_TC_CADMIN_1_16,Test_TC_CADMIN_1_23,Test_TC_CADMIN_1_24}" \
+              --include-tags MANUAL \
+              run \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+            '
+  matterjs-tests-long:
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
+
+      - name: Long Test execution with matter.js controller
+        id: test-execution-long-08
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_TC_CADMIN_1_3,Test_TC_CADMIN_1_4,Test_TC_CADMIN_1_5,Test_TC_CADMIN_1_6,Test_TC_CADMIN_1_9,Test_TC_CADMIN_1_10,Test_TC_CADMIN_1_16,Test_TC_CADMIN_1_23,Test_TC_CADMIN_1_24}" \
               --include-tags MANUAL \
@@ -268,6 +368,7 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
 
       - name: Generate an argument environment file
         run: |
@@ -284,7 +385,7 @@ jobs:
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
 
-      - name: 0.8-API - Run Tests
+      - name: Run Tests
         id: python-tests-08
         shell: bash
         run: |

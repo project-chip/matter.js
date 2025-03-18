@@ -6,6 +6,7 @@
 
 import { OperationalCredentials } from "#clusters";
 import {
+    ClassExtends,
     Environment,
     ImplementationError,
     InternalError,
@@ -24,6 +25,7 @@ import {
     Ble,
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
+    ControllerCommissioningFlow,
     ControllerDiscovery,
     DecodedAttributeReportValue,
     DiscoveryAndCommissioningOptions,
@@ -32,6 +34,7 @@ import {
     MdnsBroadcaster,
     MdnsScanner,
     MdnsService,
+    MessageChannel,
     NodeDiscoveryType,
     ScannerSet,
 } from "#protocol";
@@ -44,6 +47,7 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
 } from "#types";
+import { CertificateAuthority, Fabric } from "@matter/protocol";
 import { CommissioningControllerNodeOptions, NodeStates, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
 
@@ -121,6 +125,24 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * on the environment when you call start().
      */
     readonly environment?: ControllerEnvironmentOptions;
+
+    /**
+     * The NodeId of the root node to use for the controller. This is only needed if a special NodeId needs to be used
+     * but certificates should be self-generated. By default, a random operational ID is generated.
+     */
+    readonly rootNodeId?: NodeId;
+
+    /**
+     * If provided this Certificate Authority instance is used to fetch or get all relevant certificates for the
+     * Controller. If not provided a new Certificate Authority instance is created and certificates will be self-generated.
+     */
+    readonly rootCertificateAuthority?: CertificateAuthority;
+
+    /**
+     * If provided this Fabric instance is used for this controller. The instance need to be in sync with the provided
+     * or stored certificate authority. If provided then rootFabricId, rootFabricIndex and rootFabricLabel are ignored.
+     */
+    readonly rootFabric?: Fabric;
 };
 
 /** Options needed to commission a new node */
@@ -200,8 +222,15 @@ export class CommissioningController {
         if (this.#controllerInstance !== undefined) {
             return this.#controllerInstance;
         }
-        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags, adminFabricLabel } =
-            this.#options;
+        const {
+            localPort,
+            adminFabricId,
+            adminVendorId,
+            adminFabricIndex,
+            caseAuthenticatedTags,
+            adminFabricLabel,
+            rootNodeId,
+        } = this.#options;
 
         if (environment === undefined && storage === undefined) {
             throw new ImplementationError("Storage not initialized correctly.");
@@ -236,6 +265,7 @@ export class CommissioningController {
             adminFabricIndex,
             caseAuthenticatedTags,
             adminFabricLabel,
+            rootNodeId,
         });
         if (this.#mdnsBroadcaster) {
             controller.addBroadcaster(this.#mdnsBroadcaster.createInstanceBroadcaster(port));
@@ -247,11 +277,19 @@ export class CommissioningController {
      * Commissions/Pairs a new device into the controller fabric. The method returns the NodeId of the commissioned
      * node on success.
      */
-    async commissionNode(nodeOptions: NodeCommissioningOptions, connectNodeAfterCommissioning = true) {
+    async commissionNode(
+        nodeOptions: NodeCommissioningOptions,
+        commissionOptions?: {
+            connectNodeAfterCommissioning?: boolean;
+            commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
+        },
+    ) {
         this.#assertIsAddedToMatterServer();
         const controller = this.#assertControllerIsStarted();
 
-        const nodeId = await controller.commission(nodeOptions);
+        const { connectNodeAfterCommissioning = true, commissioningFlowImpl } = commissionOptions ?? {};
+
+        const nodeId = await controller.commission(nodeOptions, { commissioningFlowImpl });
 
         if (connectNodeAfterCommissioning) {
             const node = await this.connectNode(nodeId, {
@@ -266,6 +304,13 @@ export class CommissioningController {
         }
 
         return nodeId;
+    }
+
+    connectPaseChannel(nodeOptions: NodeCommissioningOptions) {
+        this.#assertIsAddedToMatterServer();
+        const controller = this.#assertControllerIsStarted();
+
+        return controller.connectPaseChannel(nodeOptions);
     }
 
     /**
@@ -316,9 +361,9 @@ export class CommissioningController {
     }
 
     /** @deprecated Use PairedNode.disconnect() instead */
-    async disconnectNode(nodeId: NodeId) {
+    async disconnectNode(nodeId: NodeId, force = false) {
         const node = this.#initializedNodes.get(nodeId);
-        if (node === undefined) {
+        if (node === undefined && !force) {
             throw new ImplementationError(`Node ${nodeId} is not connected!`);
         }
         await this.#controllerInstance?.disconnect(nodeId);
@@ -328,12 +373,12 @@ export class CommissioningController {
      * Returns the PairedNode instance for a given NodeId. The instance is initialized without auto connect if not yet
      * created.
      */
-    async getNode(nodeId: NodeId) {
+    async getNode(nodeId: NodeId, allowUnknownNode = false) {
         const existingNode = this.#initializedNodes.get(nodeId);
         if (existingNode !== undefined) {
             return existingNode;
         }
-        return await this.connectNode(nodeId, { autoConnect: false });
+        return await this.connectNode(nodeId, { autoConnect: false }, allowUnknownNode);
     }
 
     /**
@@ -344,10 +389,12 @@ export class CommissioningController {
      *
      * @deprecated Use getNode() instead and call PairedNode.connect() or PairedNode.disconnect() as needed.
      */
-    async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
+    async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions, allowUnknownNode = false) {
         const controller = this.#assertControllerIsStarted();
 
-        if (!controller.getCommissionedNodes().includes(nodeId)) {
+        logger.info(`Connecting to node ${nodeId}...`, controller.getCommissionedNodes());
+        const nodeIsCommissioned = controller.getCommissionedNodes().includes(nodeId);
+        if (!nodeIsCommissioned && !allowUnknownNode) {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
@@ -363,8 +410,8 @@ export class CommissioningController {
             nodeId,
             this,
             connectOptions,
-            this.#controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {},
-            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, false), // First connect without discovery to last known address
+            nodeIsCommissioned ? (this.#controllerInstance?.getCommissionedNodeDetails(nodeId)?.deviceData ?? {}) : {},
+            await this.createInteractionClient(nodeId, NodeDiscoveryType.None, { forcedConnection: false }), // First connect without discovery to last known address
             async (discoveryType?: NodeDiscoveryType) => void (await controller.connect(nodeId, { discoveryType })),
             handler => this.#sessionDisconnectedHandler.set(nodeId, handler),
             controller.sessions,
@@ -453,15 +500,18 @@ export class CommissioningController {
      * not be used directly. See the PairedNode class for the public API.
      */
     async createInteractionClient(
-        nodeId: NodeId,
+        nodeIdOrChannel: NodeId | MessageChannel,
         discoveryType?: NodeDiscoveryType,
-        forcedConnection = true,
+        options?: {
+            forcedConnection?: boolean;
+        },
     ): Promise<InteractionClient> {
         const controller = this.#assertControllerIsStarted();
-        if (!forcedConnection) {
-            return controller.createInteractionClient(nodeId, { discoveryType });
+        const { forcedConnection } = options ?? {};
+        if (nodeIdOrChannel instanceof MessageChannel || !forcedConnection) {
+            return controller.createInteractionClient(nodeIdOrChannel, { discoveryType });
         }
-        return controller.connect(nodeId, { discoveryType });
+        return controller.connect(nodeIdOrChannel, { discoveryType }, forcedConnection);
     }
 
     /**

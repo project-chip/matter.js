@@ -12,8 +12,8 @@ import { WakeOnLanServer } from "@matter/main/behaviors/wake-on-lan";
 import { AdministratorCommissioning, ApplicationBasic, BasicInformation } from "@matter/main/clusters";
 import { DimmableLightDevice } from "@matter/main/devices/dimmable-light";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
-import { NodeTestInstance } from "./NodeTestInstance.js";
 import { TestLowPowerServer } from "./cluster/TestLowPowerServer.js";
+import { NodeTestInstance } from "./NodeTestInstance.js";
 
 export class TvTestInstance extends NodeTestInstance {
     static override id = "bingeford-6100";

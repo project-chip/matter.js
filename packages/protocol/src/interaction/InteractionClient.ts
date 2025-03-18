@@ -31,7 +31,9 @@ import {
     Event,
     EventId,
     EventNumber,
+    FabricIndex,
     NodeId,
+    ObjectSchema,
     RequestType,
     ResponseType,
     StatusCode,
@@ -46,10 +48,11 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
+import { MessageChannel } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
-import { DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
+import { DecodedAttributeReportStatus, DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
 import { DecodedDataReport } from "./DecodedDataReport.js";
-import { DecodedEventData, DecodedEventReportValue } from "./EventDataDecoder.js";
+import { DecodedEventData, DecodedEventReportStatus, DecodedEventReportValue } from "./EventDataDecoder.js";
 import { DataReport, InteractionClientMessenger, ReadRequest } from "./InteractionMessenger.js";
 import { RegisteredSubscription, SubscriptionClient } from "./SubscriptionClient.js";
 
@@ -103,6 +106,17 @@ export class InteractionClientProvider {
         return this.getInteractionClient(address, discoveryOptions);
     }
 
+    async getInteractionClientForChannel(channel: MessageChannel): Promise<InteractionClient> {
+        const exchangeProvider = await this.#peers.exchangeProviderFor(channel);
+
+        return new InteractionClient(
+            exchangeProvider,
+            this.#peers.subscriptionClient,
+            undefined,
+            this.#peers.interactionQueue,
+        );
+    }
+
     async getInteractionClient(address: PeerAddress, discoveryOptions: DiscoveryOptions) {
         let client = this.#clients.get(address);
         if (client !== undefined) {
@@ -141,11 +155,12 @@ export class InteractionClient {
     readonly #ownSubscriptionIds = new Set<number>();
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
+    readonly #address?: PeerAddress;
 
     constructor(
         exchangeProvider: ExchangeProvider,
         subscriptionClient: SubscriptionClient,
-        readonly address: PeerAddress,
+        address?: PeerAddress,
         queue?: PromiseQueue,
         nodeStore?: PeerDataStore,
     ) {
@@ -153,6 +168,18 @@ export class InteractionClient {
         this.#nodeStore = nodeStore;
         this.#subscriptionClient = subscriptionClient;
         this.#queue = queue;
+        this.#address = address;
+    }
+
+    get address() {
+        if (this.#address === undefined) {
+            throw new ImplementationError("This InteractionClient is not bound to a specific peer.");
+        }
+        return this.#address;
+    }
+
+    get isReconnectable() {
+        return this.#exchangeProvider instanceof ReconnectableExchangeProvider;
     }
 
     get channelUpdated() {
@@ -233,6 +260,22 @@ export class InteractionClient {
         return (await this.getMultipleAttributesAndEvents(options)).attributeReports;
     }
 
+    async getMultipleAttributesAndStatus(
+        options: {
+            attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
+            isFabricFiltered?: boolean;
+            executeQueued?: boolean;
+        } = {},
+    ): Promise<{
+        attributeData: DecodedAttributeReportValue<any>[];
+        attributeStatus?: DecodedAttributeReportStatus[];
+    }> {
+        const { attributeReports, attributeStatus } = await this.getMultipleAttributesAndEvents(options);
+        return { attributeData: attributeReports, attributeStatus };
+    }
+
     async getMultipleEvents(
         options: {
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
@@ -242,6 +285,18 @@ export class InteractionClient {
         } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
         return (await this.getMultipleAttributesAndEvents(options)).eventReports;
+    }
+
+    async getMultipleEventsAndStatus(
+        options: {
+            events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+            executeQueued?: boolean;
+        } = {},
+    ): Promise<{ eventData: DecodedEventReportValue<any>[]; eventStatus?: DecodedEventReportStatus[] }> {
+        const { eventReports, eventStatus } = await this.getMultipleAttributesAndEvents(options);
+        return { eventData: eventReports, eventStatus };
     }
 
     async getMultipleAttributesAndEvents(
@@ -405,12 +460,23 @@ export class InteractionClient {
 
         // Normalize and decode the response
         const normalizedResult = DecodedDataReport(response);
+        const { attributeReports, attributeStatus, eventReports, eventStatus } = normalizedResult;
+
+        const logData = Array<string>();
+        if (attributeReports.length > 0) {
+            logData.push(`attributes ${attributeReports.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventReports.length > 0) {
+            logData.push(`events ${eventReports.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
+        if (attributeStatus !== undefined && attributeStatus.length > 0) {
+            logData.push(`attributeErrors ${attributeStatus.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventStatus !== undefined && eventStatus.length > 0) {
+            logData.push(`eventErrors ${eventStatus.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
         logger.debug(
-            `Received read response with attributes ${normalizedResult.attributeReports
-                .map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`)
-                .join(", ")} and events ${normalizedResult.eventReports
-                .map(({ path, events }) => `${resolveEventName(path)} = ${Logger.toJSON(events)}`)
-                .join(", ")}`,
+            logData.length ? `Received read response with ${logData.join(", ")}` : "Received empty read response",
         );
         return normalizedResult;
     }
@@ -893,11 +959,11 @@ export class InteractionClient {
             eventReports?: DecodedEventReportValue<any>[];
             subscriptionId?: number;
         }) => {
-            updateReceived?.();
             if (
                 (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                 (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
             ) {
+                updateReceived?.();
                 return;
             }
             const { attributeReports, eventReports } = dataReport;
@@ -948,6 +1014,7 @@ export class InteractionClient {
                     attributeListener?.(data, changed, oldValue);
                 }
             }
+            updateReceived?.();
         };
 
         const seedReport = DecodedDataReport(report);
@@ -977,23 +1044,47 @@ export class InteractionClient {
         clusterId: ClusterId;
         request: RequestType<C>;
         command: C;
+
+        /** Send as timed request. If no timedRequestTimeoutMs is provided the default of 10s will be used. */
         asTimedRequest?: boolean;
+
+        /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
         timedRequestTimeoutMs?: number;
+
+        /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
+
+        /** Execute this request queued - mainly used to execute invokes sequentially for thread devices. */
         executeQueued?: boolean;
+
+        /** Skip request data validation. Use this only when you know that your data is correct and validation would return an error. */
+        skipValidation?: boolean;
     }): Promise<ResponseType<C>> {
         const { executeQueued } = options;
 
         const {
             endpointId,
             clusterId,
-            request,
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
             useExtendedFailSafeMessageResponseTimeout = false,
+            skipValidation,
         } = options;
-        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+        let { request } = options;
+        const timedRequest =
+            (timed && !skipValidation) || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
+        if (requestSchema instanceof ObjectSchema) {
+            if (request === undefined) {
+                // If developer did not provide a request object, create an empty one if it needs to be an object
+                // This can happen when all object properties are optional
+                request = {} as RequestType<C>;
+            }
+            if (requestSchema.isFabricScoped && request.fabricIndex === undefined) {
+                request.fabricIndex = FabricIndex.NO_FABRIC;
+            }
+        }
 
         logger.debug(
             `Invoking command: ${resolveCommandName({
@@ -1003,7 +1094,9 @@ export class InteractionClient {
             })} with ${Logger.toJSON(request)}`,
         );
 
-        requestSchema.validate(request);
+        if (!skipValidation) {
+            requestSchema.validate(request);
+        }
 
         const commandFields = requestSchema.encodeTlv(request);
 
