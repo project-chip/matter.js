@@ -16,6 +16,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   chip-testing
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
 
+-   @matter/general
+    - Fix: Correctly MDNS records with not-existing QNames
+
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
