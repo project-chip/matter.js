@@ -79,3 +79,10 @@ jobs:
               --rvc-app ../bin/chip-rvc-app \
               --network-manager-app ../bin/matter-network-manager-app \
             '
+      - name: Verify that Matter.js controller was used
+        shell: bash
+        run: |
+          ls -la test_controller.log
+          if [ ! -f ./test_controller.log ]; then
+              exit 1
+          fi
