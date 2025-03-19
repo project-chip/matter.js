@@ -24,7 +24,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
 -   @matter/nodejs
-    - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases
+    - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
