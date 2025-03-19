@@ -411,7 +411,7 @@ export class DnsCodec {
 
     static encodeQName(qname: string) {
         const writer = new DataWriter(Endian.Big);
-        if (qname.length > 0) {
+        if (qname !== undefined && qname.length > 0) {
             // TODO: Implement compression
             qname.split(".").forEach(label => {
                 const labelData = Bytes.fromString(label);
