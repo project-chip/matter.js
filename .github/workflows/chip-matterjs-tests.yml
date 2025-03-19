@@ -17,8 +17,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  head-commit-message:
+    if: github.repository == 'project-chip/matter.js'
+    name: get head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      head-commit-message: ${{ steps.get_head_commit_message.outputs.headCommitMsg }}
+    steps:
+      - name: Get repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Print head git commit message
+        id: get_head_commit_message
+        run: echo "headCommitMsg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
+  # Find out what is needed to be done by this test workflow
+  tests-needed:
+    needs: [head-commit-message]
+    if: github.repository == 'project-chip/matter.js'
+    runs-on: ubuntu-latest
+    outputs:
+      controller-tests-required: ${{ steps.check-trigger.outputs.controller-tests-required }}
+
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || ((github.event_name == 'push' || github.event_name == 'pull_request') && contains(needs.head-commit-message.outputs.head-commit-message, '[execute-controllertests]') == true) }}
+        name: Controller tests required to run?
+        id: check-trigger
+        run: echo "controller-tests-required=true" >> $GITHUB_OUTPUT
+
   # If we need to do anything make sure that chip binaries are build and environment can be set up
   prepare-chip-build:
+    needs: [tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
@@ -32,8 +66,8 @@ jobs:
 
   matterjs-all-chip-apps:
     needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
