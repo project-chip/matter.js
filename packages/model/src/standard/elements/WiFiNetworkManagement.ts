@@ -10,7 +10,8 @@ import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    CommandElement as Command
+    CommandElement as Command,
+    FieldElement as Field
 } from "../../elements/index.js";
 
 export const WiFiNetworkManagement = Cluster(
@@ -88,11 +89,14 @@ export const WiFiNetworkManagement = Cluster(
         xref: { document: "cluster", section: "10.2.5.1" }
     }),
 
-    Command({
-        name: "NetworkPassphraseResponse", id: 0x1, conformance: "M", direction: "response",
-        details: "This command shall be generated in response to a NetworkPassphraseRequest command.",
-        xref: { document: "cluster", section: "10.2.5.2" }
-    })
+    Command(
+        {
+            name: "NetworkPassphraseResponse", id: 0x1, conformance: "M", direction: "response",
+            details: "This command shall be generated in response to a NetworkPassphraseRequest command.",
+            xref: { document: "cluster", section: "10.2.5.2" }
+        },
+        Field({ name: "Passphrase", id: 0x0, type: "octstr", conformance: "M", constraint: "max 64" })
+    )
 );
 
 MatterDefinition.children.push(WiFiNetworkManagement);

@@ -39,5 +39,6 @@ import "./TimeFormatLocalizationOverrides.js";
 import "./TimeSynchronizationOverrides.js";
 import "./todOverrides.js";
 import "./UserLabelOverrides.js";
+import "./WiFiNetworkManagementOverrides.js";
 import "./WildcardPathFlagsBitmap.js";
 import "./WindowCoveringOverrides.js";

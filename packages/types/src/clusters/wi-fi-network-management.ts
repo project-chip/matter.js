@@ -13,10 +13,28 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { AccessLevel } from "#model";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace WiFiNetworkManagement {
+    /**
+     * This command shall be generated in response to a NetworkPassphraseRequest command.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 10.2.5.2
+     */
+    export const TlvNetworkPassphraseResponse = TlvObject({
+        passphrase: TlvField(0, TlvByteString.bound({ maxLength: 64 }))
+    });
+
+    /**
+     * This command shall be generated in response to a NetworkPassphraseRequest command.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 10.2.5.2
+     */
+    export interface NetworkPassphraseResponse extends TypeFromSchema<typeof TlvNetworkPassphraseResponse> {}
+
     /**
      * @see {@link Cluster}
      */
@@ -95,7 +113,7 @@ export namespace WiFiNetworkManagement {
                 0x0,
                 TlvNoArguments,
                 0x1,
-                TlvNoArguments,
+                TlvNetworkPassphraseResponse,
                 { invokeAcl: AccessLevel.Manage }
             )
         }
