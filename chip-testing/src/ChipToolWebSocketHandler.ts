@@ -200,6 +200,19 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clu
     return value;
 }
 
+/** Chip JSON-like data strings can contain long numbers that are not supported by JSON.parse */
+function parseChipJSON(json: string) {
+    json = json.replace(/: (\d{15,})[,}]/g, (match, number) => {
+        const num = BigInt(number);
+        if (num > Number.MAX_SAFE_INTEGER) {
+            return match.replace(number, `"0x${num.toString(16)}"`);
+        }
+        return match;
+    });
+
+    return JSON.parse(json);
+}
+
 /** Use the matter.js model to convert the incoming data for write and invoke commands into the expected format. */
 function convertWebsocketDataToMatter(value: any, model: ValueModel): any {
     if (value === undefined) {
@@ -209,22 +222,18 @@ function convertWebsocketDataToMatter(value: any, model: ValueModel): any {
         return null;
     }
 
-    if (Array.isArray(value) && model.type === "list") {
-        return value.map(v => convertWebsocketDataToMatter(v, model.members[0]));
+    if (model.type === "list") {
+        if (typeof value === "string") {
+            value = parseChipJSON(value);
+        }
+        if (Array.isArray(value)) {
+            return value.map(v => convertWebsocketDataToMatter(v, model.members[0]));
+        }
     }
 
     if (model.metabase?.name === "struct") {
         if (typeof value === "string") {
-            // Chip JSON-like data strings can contain long numbers that are not supported by JSON.parse
-            value = value.replace(/: (\d{15,})[,}]/g, (match, number) => {
-                const num = BigInt(number);
-                if (num > Number.MAX_SAFE_INTEGER) {
-                    return match.replace(number, `"0x${num.toString(16)}"`);
-                }
-                return match;
-            });
-
-            value = JSON.parse(value);
+            value = parseChipJSON(value);
         }
         if (typeof value === "object") {
             const members = model.members.reduce(

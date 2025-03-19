@@ -2368,7 +2368,7 @@ export const DoorLock = Cluster(
         }),
         Field({ name: "Passage", constraint: "4", description: "Passage operation mode is NOT supported" }),
         Field({
-            name: "AlwaysSet", conformance: "M", constraint: "5 to 15",
+            name: "AlwaysSet", conformance: "M", constraint: "5 to 16",
             description: "This needs always be set because this bitmap is inverse.!"
         })
     ),
