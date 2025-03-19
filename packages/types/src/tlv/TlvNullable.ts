@@ -33,9 +33,14 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         // The Matter standard allows to send an empty string or Array for nullable elements that have a length.
         // This should be handled like null, so make sure to convert that correctly when decoding.
         // @see {@link MatterSpecification.v12.Core} § 7.17.1
+        // But because of Spec vs SDK interpretation issues we only map empty data where the min length is >0 as null
+        // and leave the handling of e.g. null vs "" to the implementation.
+        // see https://github.com/CHIP-Specifications/connectedhomeip-spec/issues/11387
         if (
             value !== null &&
             (this.schema instanceof ArraySchema || this.schema instanceof StringSchema) &&
+            this.schema.minLength !== undefined &&
+            this.schema.minLength > 0 &&
             (value as any).length === 0
         ) {
             return null;
