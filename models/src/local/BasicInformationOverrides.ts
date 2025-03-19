@@ -18,6 +18,7 @@ LocalMatter.children.push({
             type: "ProductAppearanceStruct",
             conformance: "O",
             quality: "F",
+            until: "1.3",
         },
     ],
 });

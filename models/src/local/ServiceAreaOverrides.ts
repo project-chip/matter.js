@@ -9,6 +9,7 @@ import { LocalMatter } from "../local.js";
 LocalMatter.children.push({
     tag: "cluster",
     name: "ServiceArea",
+    asOf: "1.4",
 
     children: [
         // Field name for ProgressStruct need to be adjusted to how SDK shipped. Will be fixed also by Matter 1.5 likely

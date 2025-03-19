@@ -17,7 +17,7 @@ import {
 
 export const ServiceArea = Cluster(
     {
-        name: "ServiceArea", id: 0x150, classification: "application", pics: "SEAR",
+        name: "ServiceArea", id: 0x150, asOf: "1.4", classification: "application", pics: "SEAR",
 
         details: "This cluster provides an interface for controlling the areas where a device should operate, for " +
             "reporting the status at each area, and for querying the current area." +

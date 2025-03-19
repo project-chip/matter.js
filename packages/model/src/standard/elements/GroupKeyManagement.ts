@@ -256,8 +256,7 @@ export const GroupKeyManagement = Cluster(
             xref: { document: "core", section: "11.2.7.5" }
         },
 
-        Field({ name: "DoNotUse", id: 0x0, conformance: "X" }),
-        Field({ name: "GroupKeySetIDs", id: 0x1, conformance: "X" })
+        Field({ name: "DoNotUse", id: 0x0, conformance: "X" })
     ),
 
     Command(

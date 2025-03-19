@@ -16,7 +16,8 @@ import {
 
 export const WiFiNetworkManagement = Cluster(
     {
-        name: "WiFiNetworkManagement", id: 0x451, classification: "application", pics: "WIFINM",
+        name: "WiFiNetworkManagement", id: 0x451, asOf: "1.4", classification: "application",
+        pics: "WIFINM",
         details: "This cluster provides an interface for getting information about the Wi-Fi network that a Network " +
             "Infrastructure Manager device type provides. Privileged nodes within the same fabric as a Network " +
             "Infrastructure Manager can use these interfaces to request information related to the Wi-Fi Network " +

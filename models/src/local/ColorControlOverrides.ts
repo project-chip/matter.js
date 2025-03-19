@@ -140,27 +140,12 @@ LocalMatter.children.push({
             ],
         },
 
-        // In 1.4 the spec removed default values for these.  Unsure why but bring them back as they are mandatory
-        {
-            tag: "attribute",
-            id: 0x400b,
-            name: "ColorTempPhysicalMinMireds",
-            default: 1,
-        },
-        {
-            tag: "attribute",
-            id: 0x400c,
-            name: "ColorTempPhysicalMaxMireds",
-            default: 0xfeff,
-        },
-
-        // This field is mandatory but spec
-
         // Set the correct type of MoveMode because just in the description
         {
             tag: "command",
             id: 0x4b,
             name: "MoveColorTemperature",
+            until: "1.3",
 
             children: [
                 { tag: "field", name: "MoveMode", id: 0x0, type: "MoveModeEnum", conformance: "M", constraint: "desc" },
@@ -172,6 +157,7 @@ LocalMatter.children.push({
             tag: "command",
             id: 0x4c,
             name: "StepColorTemperature",
+            until: "1.3",
 
             children: [
                 { tag: "field", name: "StepMode", id: 0x0, type: "StepModeEnum", conformance: "M", constraint: "desc" },

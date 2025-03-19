@@ -1449,10 +1449,17 @@ export const Thermostat = Cluster(
         )
     ),
 
-    Datatype({
-        name: "OccupancyBitmap", type: "OccupancySensing.OccupancyBitmap",
-        xref: { document: "cluster", section: "4.3.8.7" }
-    }),
+    Datatype(
+        { name: "OccupancyBitmap", type: "map8", xref: { document: "cluster", section: "4.3.8.7" } },
+
+        Field({
+            name: "Occupied", constraint: "0", description: "Indicates the occupancy state",
+            details: "If this bit is set, it shall indicate the occupied state else if the bit if not set, it shall " +
+                "indicate the unoccupied state.",
+            xref: { document: "cluster", section: "4.3.8.7.1" }
+        })
+    ),
+
     Datatype(
         { name: "PresetTypeFeaturesBitmap", type: "map16", xref: { document: "cluster", section: "4.3.8.8" } },
         Field({ name: "Automatic", constraint: "0", description: "Preset may be automatically activated by the thermostat" }),

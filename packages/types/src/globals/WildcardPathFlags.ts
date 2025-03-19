@@ -30,9 +30,6 @@ export const WildcardPathFlags = {
      */
     wildcardSkipAttributeList: BitFlag(2),
 
-    /**
-     * Reserved
-     */
     reserved: BitFlag(3),
 
     /**

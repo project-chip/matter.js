@@ -20,7 +20,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x45,
             name: "KeypadProgrammingEventMask",
-            until: "1.4",
+            until: "1.3",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "1", name: "PinCodeChanged" },
@@ -33,7 +33,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x46,
             name: "RemoteProgrammingEventMask",
-            until: "1.4",
+            until: "1.3",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "2", name: "PinAdded" },
@@ -47,7 +47,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x47,
             name: "RfidProgrammingEventMask",
-            until: "1.4",
+            until: "1.3",
             children: [
                 { tag: "field", constraint: "0", name: "Unknown" },
                 { tag: "field", constraint: "5", name: "IdAdded" },
@@ -58,8 +58,8 @@ LocalMatter.children.push({
         // Aaaand they didn't bother adhering to any convention describing the
         // types for these guys.  Would be easy to detect but since we've
         // already got overrides going on just doing it here
-        { tag: "attribute", id: 0x3, name: "DoorState", type: "DoorStateEnum" },
-        { tag: "attribute", id: 0x25, name: "OperatingMode", type: "OperatingModeEnum" },
+        { tag: "attribute", id: 0x3, name: "DoorState", type: "DoorStateEnum", until: "1.3" },
+        { tag: "attribute", id: 0x25, name: "OperatingMode", type: "OperatingModeEnum", until: "1.3" },
 
         // This name gets mangled by spec importer
         { tag: "attribute", id: 0x33, name: "RequirePinForRemoteOperation" },

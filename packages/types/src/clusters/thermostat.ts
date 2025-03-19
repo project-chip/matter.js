@@ -17,9 +17,8 @@ import {
     Command,
     TlvNoResponse
 } from "../cluster/Cluster.js";
-import { OccupancySensing } from "./occupancy-sensing.js";
+import { BitFlag, BitsFromPartial, BitField } from "../schema/BitmapSchema.js";
 import { TlvUInt8, TlvBitmap, TlvInt16, TlvInt8, TlvEnum, TlvUInt16, TlvEpochS, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { BitsFromPartial, BitFlag, BitField } from "../schema/BitmapSchema.js";
 import { AccessLevel } from "#model";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvArray } from "../tlv/TlvArray.js";
@@ -105,6 +104,21 @@ export namespace Thermostat {
          */
         Presets = "Presets"
     }
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.7
+     */
+    export const Occupancy = {
+        /**
+         * Indicates the occupancy state
+         *
+         * If this bit is set, it shall indicate the occupied state else if the bit if not set, it shall indicate the
+         * unoccupied state.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.7.1
+         */
+        occupied: BitFlag(0)
+    };
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.26
@@ -1415,8 +1429,8 @@ export namespace Thermostat {
              */
             occupancy: Attribute(
                 0x2,
-                TlvBitmap(TlvUInt8, OccupancySensing.Occupancy),
-                { default: BitsFromPartial(OccupancySensing.Occupancy, { occupied: true }) }
+                TlvBitmap(TlvUInt8, Occupancy),
+                { default: BitsFromPartial(Occupancy, { occupied: true }) }
             )
         }
     });

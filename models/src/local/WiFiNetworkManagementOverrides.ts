@@ -9,6 +9,7 @@ import { LocalMatter } from "../local.js";
 LocalMatter.children.push({
     tag: "cluster",
     name: "WiFiNetworkManagement",
+    asOf: "1.4",
 
     children: [
         // Adds missing command response excluded in scraping because ofg a missing ID in the column in the 1.4 spec

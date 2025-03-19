@@ -19,6 +19,7 @@ LocalMatter.children.push({
             tag: "datatype",
             name: "OccupancyBitmap",
             type: "OccupancySensing.OccupancyBitmap",
+            until: "1.3",
         },
         {
             tag: "attribute",

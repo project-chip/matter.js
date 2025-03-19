@@ -607,7 +607,7 @@ export const ColorControl = Cluster(
 
     Attribute({
         name: "ColorTempPhysicalMinMireds", id: 0x400b, type: "uint16", access: "R V", conformance: "CT",
-        constraint: "1 to 65279", default: 1,
+        constraint: "1 to 65279",
         details: "Indicates the minimum mired value supported by the hardware. ColorTempPhysicalMinMireds corresponds " +
             "to the maximum color temperature in kelvins supported by the hardware." +
             "\n" +
@@ -617,7 +617,7 @@ export const ColorControl = Cluster(
 
     Attribute({
         name: "ColorTempPhysicalMaxMireds", id: 0x400c, type: "uint16", access: "R V", conformance: "CT",
-        constraint: "max 65279", default: 65279,
+        constraint: "max 65279",
         details: "Indicates the maximum mired value supported by the hardware. ColorTempPhysicalMaxMireds corresponds " +
             "to the minimum color temperature in kelvins supported by the hardware." +
             "\n" +
@@ -1086,7 +1086,7 @@ export const ColorControl = Cluster(
         },
 
         Field({
-            name: "MoveMode", id: 0x0, type: "MoveModeEnum", conformance: "M", constraint: "desc",
+            name: "MoveMode", id: 0x0, type: "MoveModeEnum", conformance: "M",
             details: "This field shall indicate the mode of movement, as described in the MoveHue command.",
             xref: { document: "cluster", section: "3.2.8.21.1" }
         }),
@@ -1145,7 +1145,7 @@ export const ColorControl = Cluster(
         },
 
         Field({
-            name: "StepMode", id: 0x0, type: "StepModeEnum", conformance: "M", constraint: "desc",
+            name: "StepMode", id: 0x0, type: "StepModeEnum", conformance: "M",
             details: "This field shall indicate the mode of the step to be performed, as described in the StepHue command.",
             xref: { document: "cluster", section: "3.2.8.22.1" }
         }),
