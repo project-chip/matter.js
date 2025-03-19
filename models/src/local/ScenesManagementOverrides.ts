@@ -11,6 +11,8 @@ LocalMatter.children.push({
     name: "ScenesManagement",
 
     children: [
+        // Field name for AddScene and ViewSceneResponse needs to be adjusted to match the 1.4 spec
+        // ExtensionFieldSetStruct -> ExtensionFieldSets
         {
             tag: "command",
             id: 0x00,

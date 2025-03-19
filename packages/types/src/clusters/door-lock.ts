@@ -24,7 +24,7 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { AccessLevel } from "#model";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { BitFlag, BitsFromPartial } from "../schema/BitmapSchema.js";
+import { BitFlag, BitsFromPartial, BitField } from "../schema/BitmapSchema.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
@@ -2519,33 +2519,42 @@ export namespace DoorLock {
     }
 
     /**
+     * For the OperatingModesBitmap, a bit SET indicates that the operating mode IS NOT supported. A bit CLEAR indicates
+     * that the operating mode IS supported. This is the inverse of most bitmaps in this specification, and it is
+     * RECOMMENDED that clients carefully take this into consideration.
+     *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.3
      */
     export const OperatingModes = {
         /**
-         * Normal operation mode
+         * Normal operation mode is NOT supported
          */
         normal: BitFlag(0),
 
         /**
-         * Vacation operation mode
+         * Vacation operation mode is NOT supported
          */
         vacation: BitFlag(1),
 
         /**
-         * Privacy operation mode
+         * Privacy operation mode is NOT supported
          */
         privacy: BitFlag(2),
 
         /**
-         * No remote lock and unlock operation mode
+         * No remote lock and unlock operation mode is NOT supported
          */
         noRemoteLockUnlock: BitFlag(3),
 
         /**
-         * Passage operation mode
+         * Passage operation mode is NOT supported
          */
-        passage: BitFlag(4)
+        passage: BitFlag(4),
+
+        /**
+         * This needs always be set because this bitmap is inverse.!
+         */
+        alwaysSet: BitField(5, 10)
     };
 
     /**
@@ -4321,7 +4330,9 @@ export namespace DoorLock {
             supportedOperatingModes: FixedAttribute(
                 0x26,
                 TlvBitmap(TlvUInt16, OperatingModes),
-                { default: BitsFromPartial(OperatingModes, { vacation: true, privacy: true, passage: true }) }
+                {
+                    default: BitsFromPartial(OperatingModes, { vacation: true, privacy: true, passage: true, alwaysSet: 2047 })
+                }
             ),
 
             /**

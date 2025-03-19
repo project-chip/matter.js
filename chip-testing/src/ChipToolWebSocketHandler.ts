@@ -186,18 +186,6 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clu
             }
         }
 
-        // Special handling for OperatingModeEnum in DoorLock cluster because here the values need to be reversed
-        // TODO Remove once we support the meta details for reverse enums or such
-        if (
-            model.name === "SupportedOperatingModes" &&
-            model.type === "OperatingModesBitmap" &&
-            model.parent?.name === "DoorLock"
-        ) {
-            // Add missing bits that need to be set because out of the datatype definition
-            // TODO Fix by overriding Definition in the model in followup PR
-            return numberValue + 0xffe0;
-        }
-
         return numberValue;
     }
 

@@ -11,6 +11,7 @@ LocalMatter.children.push({
     name: "WiFiNetworkManagement",
 
     children: [
+        // Adds missing command response excluded in scraping because ofg a missing ID in the column in the 1.4 spec
         {
             tag: "command",
             id: 0x1,
