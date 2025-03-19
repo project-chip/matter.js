@@ -131,8 +131,8 @@ export namespace TimeFormatLocalization {
              * If not UseActiveLocale, this value shall take priority over any unit implied through the ActiveLocale
              * attribute.
              *
-             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the calendar type,
-             * and if ActiveLocale is not present, the calendar type is unknown.
+             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the calendar type, and
+             * if ActiveLocale is not present, the calendar type is unknown.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.4.6.2
              */
@@ -245,8 +245,8 @@ export namespace TimeFormatLocalization {
     /**
      * This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

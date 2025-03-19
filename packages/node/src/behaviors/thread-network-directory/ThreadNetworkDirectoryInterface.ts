@@ -15,8 +15,8 @@ export namespace ThreadNetworkDirectoryInterface {
          * Adds an entry to the ThreadNetworks attribute with the specified Thread Operational Dataset.
          *
          * If there is an existing entry with the Extended PAN ID then the Thread Operational Dataset for that entry is
-         * replaced. As a result, changes to the network parameters (e.g. Channel, Network Name, PSKc, …) of an
-         * existing entry with a given Extended PAN ID can be made using this command.
+         * replaced. As a result, changes to the network parameters (e.g. Channel, Network Name, PSKc, …) of an existing
+         * entry with a given Extended PAN ID can be made using this command.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 10.4.6.1
          */

@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { CommissionerControlInterface } from "./CommissionerControlInterface.js";
 
 /**
- * CommissionerControlBehavior is the base class for objects that support interaction with {@link
- * CommissionerControl.Cluster}.
+ * CommissionerControlBehavior is the base class for objects that support interaction with
+ * {@link CommissionerControl.Cluster}.
  */
 export const CommissionerControlBehavior = ClusterBehavior
     .withInterface<CommissionerControlInterface>()

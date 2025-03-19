@@ -89,9 +89,9 @@ export enum Status {
     UnsupportedAttribute = 134,
 
     /**
-     * Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may
-     * be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the
-     * individual attribute descriptions for specific details.
+     * Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be
+     * out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual
+     * attribute descriptions for specific details.
      *
      * @see {@link MatterSpecification.v13.Core} § 8.10.1
      */
@@ -190,8 +190,8 @@ export enum Status {
     NoUpstreamSubscription = 197,
 
     /**
-     * A Untimed Write or Untimed Invoke interaction was used for an attribute or command that requires a Timed Write
-     * or Timed Invoke.
+     * A Untimed Write or Untimed Invoke interaction was used for an attribute or command that requires a Timed Write or
+     * Timed Invoke.
      *
      * @see {@link MatterSpecification.v13.Core} § 8.10.1
      */
@@ -241,8 +241,8 @@ export enum Status {
     NoCommandResponse = 204,
 
     /**
-     * The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl
-     * to complete this.
+     * The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl to
+     * complete this.
      *
      * @see {@link MatterSpecification.v13.Core} § 8.10.1
      */

@@ -224,8 +224,8 @@ export namespace EthernetNetworkDiagnostics {
 
             /**
              * The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on the
-             * ethernet network interface. A value of null shall indicate that the interface is not currently
-             * configured or operational.
+             * ethernet network interface. A value of null shall indicate that the interface is not currently configured
+             * or operational.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.16.6.8
              */
@@ -258,8 +258,8 @@ export namespace EthernetNetworkDiagnostics {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may
-     * be used by a Node to assist a user or Administrator in diagnosing potential problems. The Ethernet Network
+     * The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be
+     * used by a Node to assist a user or Administrator in diagnosing potential problems. The Ethernet Network
      * Diagnostics Cluster attempts to centralize all metrics that are relevant to a potential Ethernet connection to a
      * Node.
      *
@@ -318,8 +318,8 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * This cluster supports all EthernetNetworkDiagnostics features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

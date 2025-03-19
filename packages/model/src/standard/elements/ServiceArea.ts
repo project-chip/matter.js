@@ -24,8 +24,8 @@ export const ServiceArea = Cluster(
             "\n" +
             "The device may operate at one area at a time, as in the case of a mobile device, such as a robot. " +
             "Other devices may operate at (service) multiple areas simultaneously, as in the case of a sensor " +
-            "that can monitor multiple areas. This cluster specification uses the term \"operate\" to describe " +
-            "both the operating and servicing actions, regardless of the device type." +
+            "that can monitor multiple areas. This cluster specification uses the term \"operate\" to describe both " +
+            "the operating and servicing actions, regardless of the device type." +
             "\n" +
             "The cluster allows the client to select one or more areas on the server, to indicate where the " +
             "device SHOULD attempt to operate. An area is one of a list of options that may be presented by a " +
@@ -61,9 +61,9 @@ export const ServiceArea = Cluster(
             name: "SupportedAreas", id: 0x0, type: "list", access: "R V", conformance: "M",
             constraint: "max 255",
 
-            details: "This attribute shall contain the list of areas that can be included in the SelectedAreas " +
-                "attribute’s list. Each item in this list represents a unique area, as indicated by the AreaID field " +
-                "of AreaStruct." +
+            details: "This attribute shall contain the list of areas that can be included in the SelectedAreas attribute’s " +
+                "list. Each item in this list represents a unique area, as indicated by the AreaID field of " +
+                "AreaStruct." +
                 "\n" +
                 "Each entry in this list shall have a unique value for the AreaID field." +
                 "\n" +
@@ -84,13 +84,13 @@ export const ServiceArea = Cluster(
                 "The value of this attribute may change at any time via an out-of-band interaction outside of the " +
                 "server, such as interactions with a user interface, or due to internal device changes." +
                 "\n" +
-                "When removing entries in the SupportedAreas attribute list the server shall adjust the values of " +
-                "the SelectedAreas, CurrentArea, and Progress attributes such that they only reference valid entries " +
-                "in the updated SupportedAreas attribute list. These changes to the SelectedAreas, CurrentArea, and " +
-                "Progress attributes may result in the server setting some or all of them to empty (for " +
-                "SelectedAreas and Progress) or null (for CurrentArea), or updating them with data that matches the " +
-                "constraints from the description of the respective attributes. These actions are required to ensure " +
-                "having a consistent representation of the maps and locations available to the clients." +
+                "When removing entries in the SupportedAreas attribute list the server shall adjust the values of the " +
+                "SelectedAreas, CurrentArea, and Progress attributes such that they only reference valid entries in " +
+                "the updated SupportedAreas attribute list. These changes to the SelectedAreas, CurrentArea, and " +
+                "Progress attributes may result in the server setting some or all of them to empty (for SelectedAreas " +
+                "and Progress) or null (for CurrentArea), or updating them with data that matches the constraints " +
+                "from the description of the respective attributes. These actions are required to ensure having a " +
+                "consistent representation of the maps and locations available to the clients." +
                 "\n" +
                 "The SupportedAreas attribute list changes mentioned above SHOULD NOT be allowed while the device is " +
                 "operating, to reduce the impact on the clients, and the potential confusion for the users." +
@@ -127,8 +127,8 @@ export const ServiceArea = Cluster(
                 "  • a single level home may be represented using two maps, each including a different set of rooms, " +
                 "    such as \"map of living room and kitchen\" and \"map of bedrooms and hallway\"" +
                 "\n" +
-                "  • a single level home may be represented using one map for the indoor areas (living room, " +
-                "    bedrooms etc.) and one for the outdoor areas (garden, swimming pool etc.)" +
+                "  • a single level home may be represented using one map for the indoor areas (living room, bedrooms " +
+                "    etc.) and one for the outdoor areas (garden, swimming pool etc.)" +
                 "\n" +
                 "Each map includes one or more areas - see the SupportedAreas attribute. In the context of this " +
                 "cluster specification, a map is effectively a group label for a set of areas, rather than a " +
@@ -138,8 +138,8 @@ export const ServiceArea = Cluster(
                 "indicate that the device is to operate on the first floor, and allow the user to choose only from " +
                 "the areas situated on that level." +
                 "\n" +
-                "If empty, that indicates that the device is currently unable to provide this information. Each " +
-                "entry in this list shall have a unique value for the MapID field." +
+                "If empty, that indicates that the device is currently unable to provide this information. Each entry " +
+                "in this list shall have a unique value for the MapID field." +
                 "\n" +
                 "Each entry in this list shall have a unique value for the Name field." +
                 "\n" +
@@ -157,8 +157,8 @@ export const ServiceArea = Cluster(
                 "meet the constraints indicated in the description of the SupportedLocations attribute. This may " +
                 "result in" +
                 "\n" +
-                "the server removing entries from the SupportedAreas attribute list. See the SupportedAreas " +
-                "attribute description for the implications of changing that attribute." +
+                "the server removing entries from the SupportedAreas attribute list. See the SupportedAreas attribute " +
+                "description for the implications of changing that attribute." +
                 "\n" +
                 "The SupportedMaps attribute list changes mentioned above SHOULD NOT be allowed while the device is " +
                 "operating, to reduce the impact on the clients, and the potential confusion for the users.",
@@ -176,9 +176,9 @@ export const ServiceArea = Cluster(
 
             details: "Indicates the set of areas where the device SHOULD attempt to operate." +
                 "\n" +
-                "The mobile devices may travel without operating across any areas while attempting to reach the " +
-                "areas indicated by the SelectedAreas attribute. For example, a robotic vacuum cleaner may drive " +
-                "without cleaning when traveling without operating." +
+                "The mobile devices may travel without operating across any areas while attempting to reach the areas " +
+                "indicated by the SelectedAreas attribute. For example, a robotic vacuum cleaner may drive without " +
+                "cleaning when traveling without operating." +
                 "\n" +
                 "If this attribute is empty, the device is not constrained to operate in any specific areas. If this " +
                 "attribute is not empty:" +
@@ -202,8 +202,8 @@ export const ServiceArea = Cluster(
             "located, regardless of whether it is operating or not, such as while traveling between areas." +
             "\n" +
             "If the device is not mobile and can operate at multiple areas sequentially, this attribute shall " +
-            "indicate the area which is currently being serviced, or the area which is currently traversed by " +
-            "the device. For example, a camera device may use this attribute to indicate which area it currently " +
+            "indicate the area which is currently being serviced, or the area which is currently traversed by the " +
+            "device. For example, a camera device may use this attribute to indicate which area it currently " +
             "takes video of (serviced area) or which area it currently has in view but not taking video of (e.g. " +
             "an area which is traversed while panning)." +
             "\n" +
@@ -215,9 +215,9 @@ export const ServiceArea = Cluster(
             "monitor multiple areas at the same time, the CurrentArea attribute shall NOT be implemented, since " +
             "it doesn’t apply. Else this attribute shall be optionally implemented." +
             "\n" +
-            "A null value indicates that the device is currently unable to provide this information. For " +
-            "example, the device is traversing an unknown area, or the SupportedAreas attribute was updated and " +
-            "the area where the device is located was removed from that list." +
+            "A null value indicates that the device is currently unable to provide this information. For example, " +
+            "the device is traversing an unknown area, or the SupportedAreas attribute was updated and the area " +
+            "where the device is located was removed from that list." +
             "\n" +
             "If not null, the value of this attribute shall match the AreaID field of an entry on the " +
             "SupportedAreas attribute’s list.",
@@ -229,14 +229,14 @@ export const ServiceArea = Cluster(
         name: "EstimatedEndTime", id: 0x4, type: "epoch-s", access: "R V", conformance: "[CurrentArea]",
         default: null, quality: "X Q",
 
-        details: "Indicates the estimated Epoch time for completing operating at the area indicated by the " +
-            "CurrentArea attribute, in seconds." +
+        details: "Indicates the estimated Epoch time for completing operating at the area indicated by the CurrentArea " +
+            "attribute, in seconds." +
             "\n" +
             "A value of 0 means that the operation has completed." +
             "\n" +
-            "When this attribute is null, that represents that there is no time currently defined until " +
-            "operation completion. This may happen, for example, because no operation is in progress or because " +
-            "the completion time is unknown." +
+            "When this attribute is null, that represents that there is no time currently defined until operation " +
+            "completion. This may happen, for example, because no operation is in progress or because the " +
+            "completion time is unknown." +
             "\n" +
             "Null if the CurrentArea attribute is null." +
             "\n" +
@@ -268,8 +268,8 @@ export const ServiceArea = Cluster(
             details: "Indicates the operating status at one or more areas. Each entry in this list shall have a unique " +
                 "value for the AreaID field." +
                 "\n" +
-                "For each entry in this list, the AreaID field shall match an entry on the SupportedAreas " +
-                "attribute’s list." +
+                "For each entry in this list, the AreaID field shall match an entry on the SupportedAreas attribute’s " +
+                "list." +
                 "\n" +
                 "When this attribute is empty, that represents that no progress information is currently available." +
                 "\n" +
@@ -290,18 +290,18 @@ export const ServiceArea = Cluster(
                 "When the device ends operation unexpectedly, such as due to an error, the server shall update all " +
                 "Progress list entries with the Status field set to Operating or Pending to Skipped." +
                 "\n" +
-                "When the device finishes operating, successfully or not, it shall NOT change the Progress " +
-                "attribute, except in the case of an unexpected end of operation as described above, or due to " +
-                "changes to the SupportedMaps or SupportedAreas attributes, so the clients can retrieve the progress " +
-                "information at that time." +
+                "When the device finishes operating, successfully or not, it shall NOT change the Progress attribute, " +
+                "except in the case of an unexpected end of operation as described above, or due to changes to the " +
+                "SupportedMaps or SupportedAreas attributes, so the clients can retrieve the progress information at " +
+                "that time." +
                 "\n" +
                 "NOTE" +
                 "\n" +
                 "if the device implements the Operational Status cluster, or a derivation of it, in case the device " +
                 "fails to service any locations in the SelectedAreas list before ending the operation, it SHOULD use " +
-                "the Operational Status cluster to indicate that the device was unable to complete the operation " +
-                "(see the UnableToCompleteOperation error from that cluster specification). The clients SHOULD then " +
-                "read the Progress attribute, and indicate which areas have been successfully serviced (marked as " +
+                "the Operational Status cluster to indicate that the device was unable to complete the operation (see " +
+                "the UnableToCompleteOperation error from that cluster specification). The clients SHOULD then read " +
+                "the Progress attribute, and indicate which areas have been successfully serviced (marked as " +
                 "completed).",
 
             xref: { document: "cluster", section: "1.17.6.6" }
@@ -354,9 +354,9 @@ export const ServiceArea = Cluster(
                 "edArea, the server may use StatusText to indicate which areas are unsupported." +
                 "\n" +
                 "If the Status field is not set to Success, or UnsupportedArea, the StatusText field shall include a " +
-                "vendor-defined error description which can be used to explain the error to the user. For example, " +
-                "if the Status field is set to InvalidInMode, the StatusText field SHOULD indicate why the request " +
-                "is not allowed, given the current mode of the device, which may involve other clusters.",
+                "vendor-defined error description which can be used to explain the error to the user. For example, if " +
+                "the Status field is set to InvalidInMode, the StatusText field SHOULD indicate why the request is " +
+                "not allowed, given the current mode of the device, which may involve other clusters.",
 
             xref: { document: "cluster", section: "1.17.7.2.1" }
         }),
@@ -404,9 +404,9 @@ export const ServiceArea = Cluster(
                 "InvalidAreaList, the server may use StatusText to indicate why this list is invalid." +
                 "\n" +
                 "If the Status field is not set to Success or InvalidAreaList, the StatusText field shall include a " +
-                "vendor defined error description which can be used to explain the error to the user. For example, " +
-                "if the Status field is set to InvalidInMode, the StatusText field SHOULD indicate why the request " +
-                "is not allowed, given the current mode of the device, which may involve other clusters.",
+                "vendor defined error description which can be used to explain the error to the user. For example, if " +
+                "the Status field is set to InvalidInMode, the StatusText field SHOULD indicate why the request is " +
+                "not allowed, given the current mode of the device, which may involve other clusters.",
 
             xref: { document: "cluster", section: "1.17.7.4.1" }
         }),
@@ -425,8 +425,8 @@ export const ServiceArea = Cluster(
             name: "LandmarkTag", id: 0x0, type: "tag", conformance: "M",
             details: "This field shall indicate that the area is associated with a landmark." +
                 "\n" +
-                "This field shall be the ID of a landmark semantic tag, located within the Common Landmark " +
-                "Namespace. For example, this tag may indicate that the area refers to an area next to a table.",
+                "This field shall be the ID of a landmark semantic tag, located within the Common Landmark Namespace. " +
+                "For example, this tag may indicate that the area refers to an area next to a table.",
             xref: { document: "cluster", section: "1.17.5.1.1" }
         }),
 
@@ -440,10 +440,10 @@ export const ServiceArea = Cluster(
                 "This field shall be the ID of a relative position semantic tag, located within the Common Relative " +
                 "Position Namespace." +
                 "\n" +
-                "If the RelativePositionTag field is null, this field indicates proximity to the landmark. " +
-                "Otherwise, the RelativePositionTag field indicates the position of the area relative to the " +
-                "landmark indicated by the LandmarkTag field. For example, this tag, in conjunction with the " +
-                "LandmarkTag field, may indicate that the area refers to a zone under a table.",
+                "If the RelativePositionTag field is null, this field indicates proximity to the landmark. Otherwise, " +
+                "the RelativePositionTag field indicates the position of the area relative to the landmark indicated " +
+                "by the LandmarkTag field. For example, this tag, in conjunction with the LandmarkTag field, may " +
+                "indicate that the area refers to a zone under a table.",
 
             xref: { document: "cluster", section: "1.17.5.1.2" }
         })
@@ -453,8 +453,8 @@ export const ServiceArea = Cluster(
         {
             name: "AreaInfoStruct", type: "struct",
 
-            details: "The data from this structure indicates the name and/or semantic data describing an area, as " +
-                "detailed below." +
+            details: "The data from this structure indicates the name and/or semantic data describing an area, as detailed " +
+                "below." +
                 "\n" +
                 "This data type includes the LocationInfo field, with the following fields: LocationName, " +
                 "FloorNumber, AreaType. Additional semantic data may be available in the LandmarkInfo field." +
@@ -500,8 +500,8 @@ export const ServiceArea = Cluster(
                 "    set to the ID of a \"Living Room\" semantic tag. Clients wishing to direct the device to operate " +
                 "    in (or service) the living room can use this area." +
                 "\n" +
-                "  • An area can have LocationInfo set to null, the LandmarkInfo’s LandmarkTag field set to the ID " +
-                "    of the \"Table\" landmark semantic tag, and the RelativePositionTag field set to the ID of the " +
+                "  • An area can have LocationInfo set to null, the LandmarkInfo’s LandmarkTag field set to the ID of " +
+                "    the \"Table\" landmark semantic tag, and the RelativePositionTag field set to the ID of the " +
                 "    \"Under\" position semantic tag. With such an area indication, the client can request the device " +
                 "    to operate in (or service) the area located under the table.",
 
@@ -512,13 +512,13 @@ export const ServiceArea = Cluster(
             name: "LandmarkInfo", id: 0x1, type: "LandmarkInfoStruct", conformance: "M", quality: "X",
 
             details: "This field shall indicate an association with a landmark. A value of null indicates that the " +
-                "information is not available or known. For example, this may indicate that the area refers to a " +
-                "zone next to a table." +
+                "information is not available or known. For example, this may indicate that the area refers to a zone " +
+                "next to a table." +
                 "\n" +
-                "If this field is not null, that indicates that the area is restricted to the zone where the " +
-                "landmark is located, as indicated by the LandmarkTag and, if not null, by the RelativePositionTag " +
-                "fields, rather than to the entire room or floor where the landmark is located, if those are " +
-                "indicated by the LocationInfo field.",
+                "If this field is not null, that indicates that the area is restricted to the zone where the landmark " +
+                "is located, as indicated by the LandmarkTag and, if not null, by the RelativePositionTag fields, " +
+                "rather than to the entire room or floor where the landmark is located, if those are indicated by the " +
+                "LocationInfo field.",
 
             xref: { document: "cluster", section: "1.17.5.2.2" }
         })
@@ -562,9 +562,9 @@ export const ServiceArea = Cluster(
             details: "This field shall indicate the map identifier which the area is associated with. A value of null " +
                 "indicates that the area is not associated with a map." +
                 "\n" +
-                "If the SupportedMaps attribute is not empty, this field shall match the MapID field of an entry " +
-                "from the SupportedMaps attribute’s list. If the SupportedMaps attribute is empty, this field shall " +
-                "be null.",
+                "If the SupportedMaps attribute is not empty, this field shall match the MapID field of an entry from " +
+                "the SupportedMaps attribute’s list. If the SupportedMaps attribute is empty, this field shall be " +
+                "null.",
 
             xref: { document: "cluster", section: "1.17.5.4.2" }
         }),
@@ -574,8 +574,8 @@ export const ServiceArea = Cluster(
 
             details: "This field shall contain data describing the area." +
                 "\n" +
-                "This SHOULD be used by clients to determine the name and/or the full, or the partial, semantics of " +
-                "a certain area." +
+                "This SHOULD be used by clients to determine the name and/or the full, or the partial, semantics of a " +
+                "certain area." +
                 "\n" +
                 "NOTE" +
                 "\n" +

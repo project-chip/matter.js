@@ -28,8 +28,8 @@ export namespace ThreadBorderRouterManagementInterface {
         getActiveDatasetRequest(): MaybePromise<ThreadBorderRouterManagement.DatasetResponse>;
 
         /**
-         * This command shall be used to request the pending dataset of the Thread network to which the border router
-         * is connected.
+         * This command shall be used to request the pending dataset of the Thread network to which the border router is
+         * connected.
          *
          * If the command is not executed via a CASE session, the command shall fail with a status code of
          * UNSUPPORTED_ACCESS.

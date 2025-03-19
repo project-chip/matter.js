@@ -17,8 +17,8 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
  *   • If both PercentMax and FixedMax are indicated, then for a given true value in the range between RangeMin and
  *     RangeMax,
  *
- *     ◦ the reported value shall be less than or equal to the sum of the true value, FixedMax and PercentMax percent
- *       of the true value.
+ *     ◦ the reported value shall be less than or equal to the sum of the true value, FixedMax and PercentMax percent of
+ *       the true value.
  *
  *     ◦ the reported value shall be greater than or equal to the true value minus the sum of FixedMax and PercentMax
  *       percent of the true value.
@@ -90,24 +90,24 @@ export const TlvMeasurementAccuracyRange = TlvObject({
     percentTypical: TlvOptionalField(4, TlvPercent100ths),
 
     /**
-     * This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit indicated
-     * by MeasurementType.
+     * This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit indicated by
+     * MeasurementType.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.6
      */
     fixedMax: TlvOptionalField(5, TlvUInt64),
 
     /**
-     * This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit indicated
-     * by MeasurementType.
+     * This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit indicated by
+     * MeasurementType.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.7
      */
     fixedMin: TlvOptionalField(6, TlvUInt64),
 
     /**
-     * This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit indicated
-     * by MeasurementType.
+     * This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit indicated by
+     * MeasurementType.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.8
      */
@@ -121,8 +121,8 @@ export const TlvMeasurementAccuracyRange = TlvObject({
  *   • If both PercentMax and FixedMax are indicated, then for a given true value in the range between RangeMin and
  *     RangeMax,
  *
- *     ◦ the reported value shall be less than or equal to the sum of the true value, FixedMax and PercentMax percent
- *       of the true value.
+ *     ◦ the reported value shall be less than or equal to the sum of the true value, FixedMax and PercentMax percent of
+ *       the true value.
  *
  *     ◦ the reported value shall be greater than or equal to the true value minus the sum of FixedMax and PercentMax
  *       percent of the true value.

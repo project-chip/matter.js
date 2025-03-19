@@ -101,9 +101,9 @@ export namespace ModeSelect {
 
         /**
          * This field is a list of semantic tags that map to the mode option. This may be used by clients to determine
-         * the meaning of the mode option as defined in a standard or manufacturer specific namespace. Semantic tags
-         * can help clients look for options that meet certain criteria. A semantic tag shall be either a standard tag
-         * or manufacturer specific tag as defined in each SemanticTagStruct list entry.
+         * the meaning of the mode option as defined in a standard or manufacturer specific namespace. Semantic tags can
+         * help clients look for options that meet certain criteria. A semantic tag shall be either a standard tag or
+         * manufacturer specific tag as defined in each SemanticTagStruct list entry.
          *
          * A mode option may have more than one semantic tag. A mode option may be mapped to a mixture of standard and
          * manufacturer specific semantic tags.
@@ -171,8 +171,8 @@ export namespace ModeSelect {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
+             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
+             * endpoint. See OnMode for more information.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.9.4.1
              */
@@ -185,8 +185,8 @@ export namespace ModeSelect {
              *
              * For example, a coffee machine may have a Mode Select cluster for the amount of milk to add, and another
              * Mode Select cluster for the amount of sugar to add. In this case, the first instance can have the
-             * description Milk and the second instance can have the description Sugar. This allows the user to tell
-             * the purpose of each of the instances.
+             * description Milk and the second instance can have the description Sugar. This allows the user to tell the
+             * purpose of each of the instances.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.1
              */
@@ -194,10 +194,10 @@ export namespace ModeSelect {
 
             /**
              * This attribute, when not null, shall indicate a single standard namespace for any standard semantic tag
-             * value supported in this or any other cluster instance with the same value of this attribute. A null
-             * value indicates no standard namespace, and therefore, no standard semantic tags are provided in this
-             * cluster instance. Each standard namespace and corresponding values and value meanings shall be defined
-             * in another document.
+             * value supported in this or any other cluster instance with the same value of this attribute. A null value
+             * indicates no standard namespace, and therefore, no standard semantic tags are provided in this cluster
+             * instance. Each standard namespace and corresponding values and value meanings shall be defined in another
+             * document.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.2
              */
@@ -269,9 +269,9 @@ export namespace ModeSelect {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster provides an interface for controlling a characteristic of a device that can be set to one of
-     * several predefined values. For example, the light pattern of a disco ball, the mode of a massage chair, or the
-     * wash cycle of a laundry machine.
+     * This cluster provides an interface for controlling a characteristic of a device that can be set to one of several
+     * predefined values. For example, the light pattern of a disco ball, the mode of a massage chair, or the wash cycle
+     * of a laundry machine.
      *
      * The server allows the client to set a mode on the server. A mode is one of a list of options that may be
      * presented by a client for a user choice, or understood by the client, via the semantic tags on the
@@ -286,8 +286,8 @@ export namespace ModeSelect {
      * example: A LightBlinking cluster ID supports blinking modes for a light (and is described that way).
      *
      * An anonymous mode shall support the derived cluster purpose. A manufacturer specific semantic tag shall support
-     * the derived cluster purpose. An anonymous mode shall NOT replace the meaning of a standard semantic tag, when
-     * one exists, for the cluster purpose.
+     * the derived cluster purpose. An anonymous mode shall NOT replace the meaning of a standard semantic tag, when one
+     * exists, for the cluster purpose.
      *
      * ModeSelectCluster supports optional features that you can enable with the ModeSelectCluster.with() factory
      * method.
@@ -317,8 +317,8 @@ export namespace ModeSelect {
     /**
      * This cluster supports all ModeSelect features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

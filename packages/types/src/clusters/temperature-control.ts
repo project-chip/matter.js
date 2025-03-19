@@ -241,9 +241,9 @@ export namespace TemperatureControl {
     /**
      * This cluster provides an interface to the setpoint temperature on devices such as washers, refrigerators, and
      * water heaters. The setpoint temperature is the temperature to which a device using this cluster would attempt to
-     * control to. This cluster does not provide access to the actual or physical temperature associated with any
-     * device using this cluster. Access to the physical temperature associated with a device using this cluster would
-     * be provided by other clusters as part of that devices device type definition.
+     * control to. This cluster does not provide access to the actual or physical temperature associated with any device
+     * using this cluster. Access to the physical temperature associated with a device using this cluster would be
+     * provided by other clusters as part of that devices device type definition.
      *
      * The values and constraints of the attributes communicated to clients SHOULD match the controls on any physical
      * interface on a device implementing this server. For example, the value of the Step attribute SHOULD match the
@@ -300,8 +300,8 @@ export namespace TemperatureControl {
     /**
      * This cluster supports all TemperatureControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

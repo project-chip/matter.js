@@ -12,10 +12,10 @@ import { OperationalCredentials } from "#clusters/operational-credentials";
 export namespace OperationalCredentialsInterface {
     export interface Base {
         /**
-         * This command shall be generated to request the Attestation Information, in the form of an
-         * AttestationResponse Command. If the AttestationNonce that is provided in the command is malformed, a
-         * recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall be
-         * used in the computation of the Attestation Information.
+         * This command shall be generated to request the Attestation Information, in the form of an AttestationResponse
+         * Command. If the AttestationNonce that is provided in the command is malformed, a recipient shall fail the
+         * command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall be used in the computation of
+         * the Attestation Information.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
          */
@@ -36,8 +36,8 @@ export namespace OperationalCredentialsInterface {
          * The CSRNonce field shall be used in the computation of the NOCSR Information. If the CSRNonce is malformed,
          * then this command shall fail with an INVALID_COMMAND status code.
          *
-         * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE session,
-         * the command shall fail with an INVALID_COMMAND status code, as it would never be possible to use a resulting
+         * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE session, the
+         * command shall fail with an INVALID_COMMAND status code, as it would never be possible to use a resulting
          * subsequent certificate issued from the CSR with the UpdateNOC command, which is forbidden over PASE sessions.
          *
          * If the IsForUpdateNOC field is present and set to true, the internal state of the CSR associated keypair
@@ -47,8 +47,8 @@ export namespace OperationalCredentialsInterface {
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
-         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
-         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+         * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
          * If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is found
          * to collide with an existing key pair already previously generated and installed, and that check had been
@@ -88,12 +88,12 @@ export namespace OperationalCredentialsInterface {
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
-         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
-         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+         * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
-         * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period,
-         * then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator, since the only
-         * valid following logical operation is invoking the AddNOC command.
+         * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period, then
+         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator, since the only valid
+         * following logical operation is invoking the AddNOC command.
          *
          * If the prior CSRRequest state that preceded UpdateNOC had the IsForUpdateNOC field indicated as false, then
          * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -111,8 +111,8 @@ export namespace OperationalCredentialsInterface {
          * shall apply:
          *
          *   1. The Operational Certificate under the accessing fabric index in the NOCs list shall be updated to match
-         *      the incoming NOCValue and ICACValue (if present), such that the Node’s Operational Identifier within
-         *      the Fabric immediately changes.
+         *      the incoming NOCValue and ICACValue (if present), such that the Node’s Operational Identifier within the
+         *      Fabric immediately changes.
          *
          *     a. The operational key pair associated with the incoming NOC from the NOCValue, and generated by the
          *        prior CSRRequest command, shall be committed to permanent storage, for subsequent use during CASE.
@@ -158,15 +158,14 @@ export namespace OperationalCredentialsInterface {
          *
          * WARNING
          *
-         * This command, if referring to an already existing Fabric not under the control of the invoking
-         * Administrator, shall ONLY be invoked after obtaining some form of explicit user consent through some method
-         * executed by the Administrator or Commissioner. This method of obtaining consent SHOULD employ as much data
-         * as possible about the existing Fabric associations within the Fabrics list, so that likelihood is as small
-         * as possible of a user removing a Fabric unwittingly. If a method exists for an Administrator or Commissioner
-         * to convey Fabric Removal to an entity related to that Fabric, whether in-band or out-of-band, then this
-         * method SHOULD be used to notify the other Administrative Domain’s party of the removal. Otherwise, users may
-         * only observe the removal of a Fabric association as persistently failing attempts to reach a Node
-         * operationally.
+         * This command, if referring to an already existing Fabric not under the control of the invoking Administrator,
+         * shall ONLY be invoked after obtaining some form of explicit user consent through some method executed by the
+         * Administrator or Commissioner. This method of obtaining consent SHOULD employ as much data as possible about
+         * the existing Fabric associations within the Fabrics list, so that likelihood is as small as possible of a
+         * user removing a Fabric unwittingly. If a method exists for an Administrator or Commissioner to convey Fabric
+         * Removal to an entity related to that Fabric, whether in-band or out-of-band, then this method SHOULD be used
+         * to notify the other Administrative Domain’s party of the removal. Otherwise, users may only observe the
+         * removal of a Fabric association as persistently failing attempts to reach a Node operationally.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
          */
@@ -189,12 +188,12 @@ export namespace OperationalCredentialsInterface {
          * safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the
          * initiator.
          *
-         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
-         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+         * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
          * If the certificate from the RootCACertificate field fails any validity checks, not fulfilling all the
-         * requirements for a valid Matter Certificate Encoding representation, including a truncated or oversize
-         * value, then this command shall fail with an INVALID_COMMAND status code sent back to the initiator.
+         * requirements for a valid Matter Certificate Encoding representation, including a truncated or oversize value,
+         * then this command shall fail with an INVALID_COMMAND status code sent back to the initiator.
          *
          * Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root of
          * trust using the RemoveFabric command.

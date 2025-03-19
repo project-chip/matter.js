@@ -40,8 +40,8 @@ export namespace GroupKeyManagementInterface {
          *     contain a later epoch start time than the epoch start time found in the EpochStartTime0 field. Otherwise
          *     this command shall fail with an INVALID_COMMAND status code responded to the client.
          *
-         *   • If exactly one of the EpochKey1 or EpochStartTime1 is null, rather than both being null, or neither
-         *     being null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
+         *   • If exactly one of the EpochKey1 or EpochStartTime1 is null, rather than both being null, or neither being
+         *     null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
          *
          *   • If the EpochKey2 field is not null, then the EpochKey1 and EpochKey0 fields shall NOT be null. Otherwise
          *     this command shall fail with an INVALID_COMMAND status code responded to the client.
@@ -53,25 +53,25 @@ export namespace GroupKeyManagementInterface {
          *     contain a later epoch start time than the epoch start time found in the EpochStartTime1 field. Otherwise
          *     this command shall fail with an INVALID_COMMAND status code responded to the client.
          *
-         *   • If exactly one of the EpochKey2 or EpochStartTime2 is null, rather than both being null, or neither
-         *     being null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
+         *   • If exactly one of the EpochKey2 or EpochStartTime2 is null, rather than both being null, or neither being
+         *     null, then this command shall fail with an INVALID_COMMAND status code responded to the client.
          *
-         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-         * that provided in the GroupKeySet field, then the contents of that group key set shall be
+         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as that
+         * provided in the GroupKeySet field, then the contents of that group key set shall be
          *
-         * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous Group
-         * Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
-         * configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set
-         * associated with the accessing fabric shall be created with the provided data. The Group Key Set shall be
-         * written to non-volatile storage.
+         * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous Group Key
+         * Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided configuration.
+         * Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set associated with the
+         * accessing fabric shall be created with the provided data. The Group Key Set shall be written to non-volatile
+         * storage.
          *
          * Upon completion, this command shall send a status code back to the initiator:
          *
          *   • If the Group Key Set was properly installed or updated on the Node, the status code shall be set to
          *     SUCCESS.
          *
-         *   • If there are insufficient resources on the receiver to store an additional Group Key Set, the status
-         *     code shall be set to RESOURCE_EXHAUSTED (see group key limits);
+         *   • If there are insufficient resources on the receiver to store an additional Group Key Set, the status code
+         *     shall be set to RESOURCE_EXHAUSTED (see group key limits);
          *
          *   • Otherwise, this status code shall be set to FAILURE.
          *
@@ -84,8 +84,8 @@ export namespace GroupKeyManagementInterface {
          *
          * Effect on Receipt
          *
-         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-         * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be sent in a
+         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as that
+         * provided in the GroupKeySetID field, then the contents of that Group Key Set shall be sent in a
          * KeySetReadResponse command, but with the EpochKey0, EpochKey1 and EpochKey2 fields replaced by null.
          *
          * Otherwise, if the GroupKeySetID does not refer to a Group Key Set associated with the accessing fabric, then
@@ -100,9 +100,9 @@ export namespace GroupKeyManagementInterface {
          *
          * Effect on Receipt
          *
-         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
-         * that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed,
-         * including all epoch keys it contains.
+         * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as that
+         * provided in the GroupKeySetID field, then the contents of that Group Key Set shall be removed, including all
+         * epoch keys it contains.
          *
          * If there exist any entries for the accessing fabric within the GroupKeyMap attribute that refer to the
          * GroupKeySetID just removed, then these entries shall be removed from that list.

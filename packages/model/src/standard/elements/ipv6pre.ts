@@ -19,9 +19,9 @@ export const ipv6Pre = Datatype({
         "    ◦ A value of 0 indicates an absent/invalid prefix." +
         "\n" +
         "  • The subsequent octets shall encode the contiguous leftmost bits of the prefix, in network byte " +
-        "    order, with left justification, such that the first bit of the prefix is in the most " +
-        "    significant bit of the first octet. Encoding SHOULD use the least number of bytes to encode the " +
-        "    prefix but may include unused trailing zeroes." +
+        "    order, with left justification, such that the first bit of the prefix is in the most significant " +
+        "    bit of the first octet. Encoding SHOULD use the least number of bytes to encode the prefix but " +
+        "    may include unused trailing zeroes." +
         "\n" +
         "Examples of encoding:" +
         "\n" +

@@ -68,6 +68,6 @@ export const OnOffPlugInUnitDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "5.1.4" }
     })
-)
+);
 
 MatterDefinition.children.push(OnOffPlugInUnitDt);

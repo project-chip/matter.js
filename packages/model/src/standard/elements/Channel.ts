@@ -150,8 +150,8 @@ export const Channel = Cluster(
                 "\n" +
                 "When the value of the increase or decrease is larger than the number of channels remaining in the " +
                 "given direction, then the behavior shall be to return to the beginning (or end) of the channel list " +
-                "and continue. For example, if the current channel is at index 0 and count value of -1 is given, " +
-                "then the current channel should change to the last channel.",
+                "and continue. For example, if the current channel is at index 0 and count value of -1 is given, then " +
+                "the current channel should change to the last channel.",
 
             xref: { document: "cluster", section: "6.6.7.4" }
         },
@@ -177,9 +177,9 @@ export const Channel = Cluster(
 
         Field({
             name: "StartTime", id: 0x0, type: "epoch-s", conformance: "M",
-            details: "This field shall indicate the beginning of the time window for which program guide entries are to " +
-                "be retrieved, as a UTC time. Entries with a start time on or after this value will be included in " +
-                "the results.",
+            details: "This field shall indicate the beginning of the time window for which program guide entries are to be " +
+                "retrieved, as a UTC time. Entries with a start time on or after this value will be included in the " +
+                "results.",
             xref: { document: "cluster", section: "6.6.7.5.1" }
         }),
 
@@ -267,15 +267,15 @@ export const Channel = Cluster(
 
         Field({
             name: "ProgramIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "max 255",
-            details: "This field shall indicate the program identifier for the program that should be recorded. This " +
-                "value is provided by the identifier field in ProgramStruct.",
+            details: "This field shall indicate the program identifier for the program that should be recorded. This value " +
+                "is provided by the identifier field in ProgramStruct.",
             xref: { document: "cluster", section: "6.6.7.7.1" }
         }),
 
         Field({
             name: "ShouldRecordSeries", id: 0x1, type: "bool", conformance: "M",
-            details: "This field shall indicate whether the whole series associated to the program should be recorded. " +
-                "For example, invoking record program on an episode with that flag set to true, the target should " +
+            details: "This field shall indicate whether the whole series associated to the program should be recorded. For " +
+                "example, invoking record program on an episode with that flag set to true, the target should " +
                 "schedule record the whole series.",
             xref: { document: "cluster", section: "6.6.7.7.2" }
         }),
@@ -418,15 +418,15 @@ export const Channel = Cluster(
 
         Field({
             name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O",
-            details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, " +
-                "but SHOULD be provided when known.",
+            details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, but " +
+                "SHOULD be provided when known.",
             xref: { document: "cluster", section: "6.6.5.5.5" }
         }),
 
         Field({
             name: "Identifier", id: 0x5, type: "string", conformance: "O",
-            details: "This shall indicate the unique identifier for a specific channel. This field is optional, but " +
-                "SHOULD be provided when MajorNumber and MinorNumber are not available.",
+            details: "This shall indicate the unique identifier for a specific channel. This field is optional, but SHOULD " +
+                "be provided when MajorNumber and MinorNumber are not available.",
             xref: { document: "cluster", section: "6.6.5.5.6" }
         }),
 
@@ -483,8 +483,8 @@ export const Channel = Cluster(
 
         Field({
             name: "Identifier", id: 0x0, type: "string", conformance: "M", constraint: "max 255",
-            details: "This field shall indicate a unique identifier for a program within an electronic program guide " +
-                "list. The identifier shall be unique across multiple channels.",
+            details: "This field shall indicate a unique identifier for a program within an electronic program guide list. " +
+                "The identifier shall be unique across multiple channels.",
             xref: { document: "cluster", section: "6.6.5.7.1" }
         }),
 
@@ -517,16 +517,16 @@ export const Channel = Cluster(
 
         Field({
             name: "Subtitle", id: 0x5, type: "string", conformance: "O", constraint: "max 255",
-            details: "This field shall indicate the subtitle for the specific program. For example, “Maybe Today\" which " +
-                "is an episode name for “MCIS: Los Angeles”. This field is optional but shall be provided if " +
-                "applicable and known.",
+            details: "This field shall indicate the subtitle for the specific program. For example, “Maybe Today\" which is " +
+                "an episode name for “MCIS: Los Angeles”. This field is optional but shall be provided if applicable " +
+                "and known.",
             xref: { document: "cluster", section: "6.6.5.7.6" }
         }),
 
         Field({
             name: "Description", id: 0x6, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall indicate the brief description for the specific program. For example, a " +
-                "description of an episode. This field is optional but shall be provided if known.",
+            details: "This field shall indicate the brief description for the specific program. For example, a description " +
+                "of an episode. This field is optional but shall be provided if known.",
             xref: { document: "cluster", section: "6.6.5.7.7" }
         }),
 
@@ -547,9 +547,9 @@ export const Channel = Cluster(
             {
                 name: "Ratings", id: 0x8, type: "list", conformance: "O", constraint: "max 255", default: [],
                 details: "This field shall be used for indicating the level of parental guidance recommended for of a " +
-                    "particular program. This can be any rating system used in the country or region where the program " +
-                    "is broadcast. For example, in the United States “TV-PG” may contain material that parents can find " +
-                    "not suitable for younger children but can be accepted in general for older children. This field is " +
+                    "particular program. This can be any rating system used in the country or region where the program is " +
+                    "broadcast. For example, in the United States “TV-PG” may contain material that parents can find not " +
+                    "suitable for younger children but can be accepted in general for older children. This field is " +
                     "optional but shall be provided if known.",
                 xref: { document: "cluster", section: "6.6.5.7.9" }
             },
@@ -560,16 +560,16 @@ export const Channel = Cluster(
         Field({
             name: "ThumbnailUrl", id: 0x9, type: "string", conformance: "O", constraint: "max 8192",
             details: "This field shall represent a URL of a thumbnail that clients can use to render an image for the " +
-                "program. The syntax of this field shall follow the syntax as specified in RFC 1738 and shall use " +
-                "the https scheme.",
+                "program. The syntax of this field shall follow the syntax as specified in RFC 1738 and shall use the " +
+                "https scheme.",
             xref: { document: "cluster", section: "6.6.5.7.10" }
         }),
 
         Field({
             name: "PosterArtUrl", id: 0xa, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall represent a URL of a poster that clients can use to render an image for the " +
-                "program on the detail view. The syntax of this field shall follow the syntax as specified in RFC " +
-                "1738 and shall use the https scheme.",
+            details: "This field shall represent a URL of a poster that clients can use to render an image for the program " +
+                "on the detail view. The syntax of this field shall follow the syntax as specified in RFC 1738 and " +
+                "shall use the https scheme.",
             xref: { document: "cluster", section: "6.6.5.7.11" }
         }),
 
@@ -605,8 +605,8 @@ export const Channel = Cluster(
         Field({
             name: "SeriesInfo", id: 0xf, type: "SeriesInfoStruct", conformance: "O", default: null,
             quality: "X",
-            details: "This field shall represent the information of a series such as season and episode number. This " +
-                "field is optional but SHOULD be provided if the program represents a series and this information is " +
+            details: "This field shall represent the information of a series such as season and episode number. This field " +
+                "is optional but SHOULD be provided if the program represents a series and this information is " +
                 "available.",
             xref: { document: "cluster", section: "6.6.5.7.16" }
         }),
@@ -614,8 +614,8 @@ export const Channel = Cluster(
         Field(
             {
                 name: "CategoryList", id: 0x10, type: "list", conformance: "O", constraint: "max 255", default: [],
-                details: "This field shall represent the category of a particular program. This field is optional but shall " +
-                    "be provided if known.",
+                details: "This field shall represent the category of a particular program. This field is optional but shall be " +
+                    "provided if known.",
                 xref: { document: "cluster", section: "6.6.5.7.17" }
             },
 

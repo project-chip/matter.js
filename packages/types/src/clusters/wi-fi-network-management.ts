@@ -29,15 +29,15 @@ export namespace WiFiNetworkManagement {
             /**
              * Indicates the SSID of the primary Wi-Fi network provided by this device.
              *
-             * A value of null shall indicate that no primary Wi-Fi network is available (e.g. because the Wi-Fi
-             * network has not yet been configured by the user).
+             * A value of null shall indicate that no primary Wi-Fi network is available (e.g. because the Wi-Fi network
+             * has not yet been configured by the user).
              *
              * NOTE
              *
              * The SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified.
-             * Implementations must be careful to support transferring these byte strings without requiring a
-             * particular encoding. The most common encoding is UTF-8, however this is just a convention. Some
-             * configurations may use Latin-1 or other character sets.
+             * Implementations must be careful to support transferring these byte strings without requiring a particular
+             * encoding. The most common encoding is UTF-8, however this is just a convention. Some configurations may
+             * use Latin-1 or other character sets.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 10.2.4.1
              */
@@ -62,8 +62,8 @@ export namespace WiFiNetworkManagement {
              * NOTE
              *
              * The passphrase itself is not exposed as an attribute to avoid its unintentional retrieval or caching by
-             * clients that use wildcard reads or otherwise routinely read all available attributes. It can be
-             * retrieved using the NetworkPassphraseRequest
+             * clients that use wildcard reads or otherwise routinely read all available attributes. It can be retrieved
+             * using the NetworkPassphraseRequest
              *
              * command.
              *
@@ -84,8 +84,8 @@ export namespace WiFiNetworkManagement {
              * If the command is not executed via a CASE session, the command shall be rejected with a status of
              * UNSUPPORTED_ACCESS.
              *
-             * If no primary Wi-Fi network is available (the SSID attribute is null), the command shall be rejected
-             * with a status of INVALID_IN_STATE.
+             * If no primary Wi-Fi network is available (the SSID attribute is null), the command shall be rejected with
+             * a status of INVALID_IN_STATE.
              *
              * Otherwise a NetworkPassphraseResponse shall be generated.
              *
@@ -103,8 +103,8 @@ export namespace WiFiNetworkManagement {
 
     /**
      * This cluster provides an interface for getting information about the Wi-Fi network that a Network Infrastructure
-     * Manager device type provides. Privileged nodes within the same fabric as a Network Infrastructure Manager can
-     * use these interfaces to request information related to the Wi-Fi Network such as SSID and Passphrase.
+     * Manager device type provides. Privileged nodes within the same fabric as a Network Infrastructure Manager can use
+     * these interfaces to request information related to the Wi-Fi Network such as SSID and Passphrase.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 10.2
      */

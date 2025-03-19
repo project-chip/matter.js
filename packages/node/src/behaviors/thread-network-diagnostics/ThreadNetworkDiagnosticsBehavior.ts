@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ThreadNetworkDiagnosticsInterface } from "./ThreadNetworkDiagnosticsInterface.js";
 
 /**
- * ThreadNetworkDiagnosticsBehavior is the base class for objects that support interaction with {@link
- * ThreadNetworkDiagnostics.Cluster}.
+ * ThreadNetworkDiagnosticsBehavior is the base class for objects that support interaction with
+ * {@link ThreadNetworkDiagnostics.Cluster}.
  *
  * This class does not have optional features of ThreadNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using ThreadNetworkDiagnosticsBehavior.with.

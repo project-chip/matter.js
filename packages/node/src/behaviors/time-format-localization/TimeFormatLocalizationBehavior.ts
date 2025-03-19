@@ -10,8 +10,8 @@ import { TimeFormatLocalization } from "#clusters/time-format-localization";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * TimeFormatLocalizationBehavior is the base class for objects that support interaction with {@link
- * TimeFormatLocalization.Cluster}.
+ * TimeFormatLocalizationBehavior is the base class for objects that support interaction with
+ * {@link TimeFormatLocalization.Cluster}.
  *
  * This class does not have optional features of TimeFormatLocalization.Cluster enabled. You can enable additional
  * features using TimeFormatLocalizationBehavior.with.

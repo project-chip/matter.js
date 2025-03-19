@@ -257,8 +257,8 @@ export namespace Switch {
              *
              *   • The server for cluster revision >= 2 shall generate a MultiPressComplete event with the
              *     TotalNumberOfPressesCounted field set to zero (indicating an aborted sequence), and shall NOT
-             *     generate any further InitialPress and MultiPressOngoing events until the switch has become fully
-             *     idle (i.e. no longer in the process of counting presses within the multipress).
+             *     generate any further InitialPress and MultiPressOngoing events until the switch has become fully idle
+             *     (i.e. no longer in the process of counting presses within the multipress).
              *
              * This approach avoids unintentionally causing intermediate actions where there is a very long sequence of
              * presses beyond MultiPressMax that may be taken in account specially by switches (e.g. to trigger special
@@ -282,8 +282,8 @@ export namespace Switch {
              *   • a value of 0 when there was an aborted multi-press sequence, where the number of presses goes beyond
              *     MultiPressMax presses,
              *
-             *   • a value of 1 when there was exactly one press in a multi-press sequence (and the sequence has
-             *     ended), i.e. there was no double press (or more),
+             *   • a value of 1 when there was exactly one press in a multi-press sequence (and the sequence has ended),
+             *     i.e. there was no double press (or more),
              *
              *   • a value of 2 when there were exactly two presses in a multi-press sequence (and the sequence has
              *     ended),
@@ -298,8 +298,8 @@ export namespace Switch {
              *
              * The introduction of TotalNumberOfPressesCounted supporting the value 0 may impact clients of switches
              * using cluster revision 1 since such servers would not use this value of TotalNumberOfPressesCounted to
-             * indicate an aborted sequence. Clients SHOULD always act using the TotalNumberOfPressesCounted field
-             * taken into account since for values from 1 to MultiPressMax, the user action that led to the event was
+             * indicate an aborted sequence. Clients SHOULD always act using the TotalNumberOfPressesCounted field taken
+             * into account since for values from 1 to MultiPressMax, the user action that led to the event was
              * different depending on the count.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.7
@@ -397,8 +397,8 @@ export namespace Switch {
         events: {
             /**
              * If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at all,
-             * since setting the Action Switch feature flag forbids the Momentary Switch ShortRelease (MSR) feature
-             * flag from being set. Otherwise, the following paragraphs describe the situations where this event is
+             * since setting the Action Switch feature flag forbids the Momentary Switch ShortRelease (MSR) feature flag
+             * from being set. Otherwise, the following paragraphs describe the situations where this event is
              * generated.
              *
              * This event shall be generated, when the momentary switch has been released (after debouncing).
@@ -640,8 +640,8 @@ export namespace Switch {
     /**
      * This cluster supports all Switch features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -18,8 +18,8 @@ export const ThermostatUserInterfaceConfiguration = Cluster(
     {
         name: "ThermostatUserInterfaceConfiguration", id: 0x204, classification: "application",
         pics: "TSUIC",
-        details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, " +
-            "or a thermostat controller device, that supports a keypad and LCD screen.",
+        details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, or " +
+            "a thermostat controller device, that supports a keypad and LCD screen.",
         xref: { document: "cluster", section: "4.5" }
     },
 
@@ -43,10 +43,10 @@ export const ThermostatUserInterfaceConfiguration = Cluster(
         name: "ScheduleProgrammingVisibility", id: 0x2, type: "ScheduleProgrammingVisibilityEnum",
         access: "RW VM", conformance: "O", default: 0,
 
-        details: "This attribute is used to hide the weekly schedule programming functionality or menu on a " +
-            "thermostat from a user to prevent local user programming of the weekly schedule. The schedule " +
-            "programming may still be performed via a remote interface, and the thermostat may operate in " +
-            "schedule programming mode." +
+        details: "This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat " +
+            "from a user to prevent local user programming of the weekly schedule. The schedule programming may " +
+            "still be performed via a remote interface, and the thermostat may operate in schedule programming " +
+            "mode." +
             "\n" +
             "This attribute is designed to prevent local tampering with or disabling of schedules that may have " +
             "been programmed by users or service providers via a more capable remote interface. The programming " +

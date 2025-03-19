@@ -20,10 +20,10 @@ export const GroupKeyManagement = Cluster(
         name: "GroupKeyManagement", id: 0x3f, classification: "node", pics: "GRPKEY",
 
         details: "The Group Key Management cluster manages group keys for the node. The cluster is scoped to the node " +
-            "and is a singleton for the node. This cluster maintains a list of groups supported by the node. " +
-            "Each group list entry supports a single group, with a single group ID and single group key. " +
-            "Duplicate groups are not allowed in the list. Additions or removal of a group entry are performed " +
-            "via modifications of the list. Such modifications require Administer privilege." +
+            "and is a singleton for the node. This cluster maintains a list of groups supported by the node. Each " +
+            "group list entry supports a single group, with a single group ID and single group key. Duplicate " +
+            "groups are not allowed in the list. Additions or removal of a group entry are performed via " +
+            "modifications of the list. Such modifications require Administer privilege." +
             "\n" +
             "Each group entry includes a membership list of zero of more endpoints that are members of the group " +
             "on the node. Modification of this membership list is done via the Groups cluster, which is" +
@@ -47,8 +47,8 @@ export const GroupKeyManagement = Cluster(
         {
             name: "GroupKeyMap", id: 0x0, type: "list", access: "RW F VM", conformance: "M", constraint: "desc",
             default: [], quality: "N",
-            details: "This attribute is a list of GroupKeyMapStruct entries. Each entry associates a logical Group Id " +
-                "with a particular group key set.",
+            details: "This attribute is a list of GroupKeyMapStruct entries. Each entry associates a logical Group Id with " +
+                "a particular group key set.",
             xref: { document: "core", section: "11.2.6.1" }
         },
 
@@ -63,8 +63,8 @@ export const GroupKeyManagement = Cluster(
             details: "This attribute is a list of GroupInfoMapStruct entries. Each entry provides read-only information " +
                 "about how a given logical Group ID maps to a particular set of endpoints, and a name for the group." +
                 "\n" +
-                "The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and " +
-                "is in general terms referred to as the 'node-wide Group Table'." +
+                "The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and is " +
+                "in general terms referred to as the 'node-wide Group Table'." +
                 "\n" +
                 "The GroupTable shall NOT contain any entry whose GroupInfoMapStruct has an empty Endpoints list. If " +
                 "a RemoveGroup or RemoveAllGroups command causes the removal of a group mapping from its last mapped " +
@@ -114,8 +114,8 @@ export const GroupKeyManagement = Cluster(
                 "    CONSTRAINT_ERROR status code responded to the client." +
                 "\n" +
                 "  • If the EpochStartTime0 is set to 0, then this command shall fail with an INVALID_COMMAND status " +
-                "    code responded to the client. Note that internally, a GroupKeySetStruct’s EpochStartTime0 may " +
-                "    be set to zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct " +
+                "    code responded to the client. Note that internally, a GroupKeySetStruct’s EpochStartTime0 may be " +
+                "    set to zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct " +
                 "    (see IPKValue). However, the value 0 is illegal in the GroupKeySet field sent by a client." +
                 "\n" +
                 "  • If the EpochKey1 field is not null, then the EpochKey0 field shall NOT be null. Otherwise this " +
@@ -154,14 +154,14 @@ export const GroupKeyManagement = Cluster(
                 "\n" +
                 "replaced. A replacement shall be done by executing the equivalent of entirely removing the previous " +
                 "Group Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the " +
-                "provided configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new " +
-                "Group Key Set associated with the accessing fabric shall be created with the provided data. The " +
-                "Group Key Set shall be written to non-volatile storage." +
+                "provided configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group " +
+                "Key Set associated with the accessing fabric shall be created with the provided data. The Group Key " +
+                "Set shall be written to non-volatile storage." +
                 "\n" +
                 "Upon completion, this command shall send a status code back to the initiator:" +
                 "\n" +
-                "  • If the Group Key Set was properly installed or updated on the Node, the status code shall be " +
-                "    set to SUCCESS." +
+                "  • If the Group Key Set was properly installed or updated on the Node, the status code shall be set " +
+                "    to SUCCESS." +
                 "\n" +
                 "  • If there are insufficient resources on the receiver to store an additional Group Key Set, the " +
                 "    status code shall be set to RESOURCE_EXHAUSTED (see group key limits);" +
@@ -227,8 +227,8 @@ export const GroupKeyManagement = Cluster(
                 "\n" +
                 "This command shall fail with an INVALID_COMMAND status code back to the initiator if the " +
                 "GroupKeySetID being removed is 0, which is the Key Set associated with the Identity Protection Key " +
-                "(IPK). The only method to remove the IPK is usage of the RemoveFabric command or any operation " +
-                "which causes the equivalent of a RemoveFabric to occur by side-effect." +
+                "(IPK). The only method to remove the IPK is usage of the RemoveFabric command or any operation which " +
+                "causes the equivalent of a RemoveFabric to occur by side-effect." +
                 "\n" +
                 "This command shall send a SUCCESS status code back to the initiator on success, or NOT_FOUND if the " +
                 "GroupKeySetID requested did not exist.",
@@ -263,8 +263,8 @@ export const GroupKeyManagement = Cluster(
     Command(
         {
             name: "KeySetReadAllIndicesResponse", id: 0x5, conformance: "M", direction: "response",
-            details: "This command shall be generated in response to KeySetReadAllIndices and it shall contain the list " +
-                "of GroupKeySetID for all Group Key Sets associated with the scoped Fabric.",
+            details: "This command shall be generated in response to KeySetReadAllIndices and it shall contain the list of " +
+                "GroupKeySetID for all Group Key Sets associated with the scoped Fabric.",
             xref: { document: "core", section: "11.2.7.6" }
         },
 
@@ -356,9 +356,9 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey0", id: 0x2, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
-                "group key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 " +
-                "shall NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.3" }
         }),
 
@@ -372,9 +372,9 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey1", id: 0x4, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
-                "group key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 " +
-                "shall NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.5" }
         }),
 
@@ -388,9 +388,9 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey2", id: 0x6, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
-                "group key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 " +
-                "shall NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.7" }
         }),
 

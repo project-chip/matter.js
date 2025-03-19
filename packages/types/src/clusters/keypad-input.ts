@@ -234,12 +234,12 @@ export namespace KeypadInput {
              *
              * If a device has multiple media endpoints implementing this cluster, such as a casting video player
              * endpoint with one or more content app endpoints, then only the endpoint receiving the command shall
-             * process the keycode as input. In other words, a specific content app endpoint shall NOT process a
-             * keycode received by a different content app endpoint.
+             * process the keycode as input. In other words, a specific content app endpoint shall NOT process a keycode
+             * received by a different content app endpoint.
              *
-             * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint
-             * will consider the first key press to be a press and hold. When such a repeat KeyCode value is not
-             * received within 200 ms, then the endpoint will consider the last key press to be a release.
+             * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint will
+             * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received
+             * within 200 ms, then the endpoint will consider the last key press to be a release.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
              */
@@ -262,9 +262,9 @@ export namespace KeypadInput {
      * This cluster provides an interface for key code based input and control on a device like a Video Player or an
      * endpoint like a Content App. This may include text or action commands such as UP, DOWN, and SELECT.
      *
-     * This cluster would be supported on Video Player devices as well as devices that support remote control input
-     * from a keypad or remote. This cluster provides the list of supported keypad inputs and provides a command for
-     * sending them.
+     * This cluster would be supported on Video Player devices as well as devices that support remote control input from
+     * a keypad or remote. This cluster provides the list of supported keypad inputs and provides a command for sending
+     * them.
      *
      * The cluster server for Keypad Input is implemented by a device that can receive keypad input, such as a Video
      * Player, or an endpoint that can receive keypad input, such as a Content App.

@@ -22,8 +22,8 @@ export const LocalizationConfiguration = Cluster(
             "such, Nodes that visually or audibly convey information need a mechanism by which they can be " +
             "configured to use a user’s preferred language, units, etc." +
             "\n" +
-            "This cluster supports an interface to a Node. It provides attributes for determining and " +
-            "configuring localization information that a Node shall utilize when conveying values to a user.",
+            "This cluster supports an interface to a Node. It provides attributes for determining and configuring " +
+            "localization information that a Node shall utilize when conveying values to a user.",
 
         xref: { document: "core", section: "11.3" }
     },

@@ -12,11 +12,11 @@ import { NetworkCommissioningInterface } from "./NetworkCommissioningInterface.j
 import { ClusterType } from "#types";
 
 /**
- * NetworkCommissioningBehavior is the base class for objects that support interaction with {@link
- * NetworkCommissioning.Cluster}.
+ * NetworkCommissioningBehavior is the base class for objects that support interaction with
+ * {@link NetworkCommissioning.Cluster}.
  *
- * NetworkCommissioning.Cluster requires you to enable one or more optional features. You can do so using {@link
- * NetworkCommissioningBehavior.with}.
+ * NetworkCommissioning.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link NetworkCommissioningBehavior.with}.
  */
 export const NetworkCommissioningBehavior = ClusterBehavior
     .withInterface<NetworkCommissioningInterface>()

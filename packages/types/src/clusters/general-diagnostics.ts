@@ -174,8 +174,8 @@ export namespace GeneralDiagnostics {
         name: TlvField(0, TlvString.bound({ maxLength: 32 })),
 
         /**
-         * This field shall indicate if the Node is currently advertising itself operationally on this network
-         * interface and is capable of successfully receiving incoming traffic from other Nodes.
+         * This field shall indicate if the Node is currently advertising itself operationally on this network interface
+         * and is capable of successfully receiving incoming traffic from other Nodes.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.5.6.2
          */
@@ -202,9 +202,8 @@ export namespace GeneralDiagnostics {
         /**
          * This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network
          *
-         * interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of the
-         * octstr shall be in wire byte order. For addresses values less than 64 bits, the first two bytes shall be
-         * zero.
+         * interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of the octstr
+         * shall be in wire byte order. For addresses values less than 64 bits, the first two bytes shall be zero.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.12.5.6.5
          */
@@ -415,10 +414,9 @@ export namespace GeneralDiagnostics {
     export const TlvTestEventTriggerRequest = TlvObject({
         /**
          * The EnableKey is a 128 bit value provided by the client in this command, which needs to match a value chosen
-         * by the manufacturer and configured on the server using manufacturer-specific means, such as
-         * pre-provisioning. The value of all zeroes is reserved to indicate that no EnableKey is set. Therefore, if
-         * the EnableKey field is received with all zeroes, this command shall FAIL with a response status of
-         * CONSTRAINT_ERROR.
+         * by the manufacturer and configured on the server using manufacturer-specific means, such as pre-provisioning.
+         * The value of all zeroes is reserved to indicate that no EnableKey is set. Therefore, if the EnableKey field
+         * is received with all zeroes, this command shall FAIL with a response status of CONSTRAINT_ERROR.
          *
          * The EnableKey SHOULD be unique per exact set of devices going to a certification test.
          *
@@ -435,9 +433,9 @@ export namespace GeneralDiagnostics {
         /**
          * This field shall indicate the test or test mode which the client wants to trigger.
          *
-         * The expected side-effects of EventTrigger values are out of scope of this specification and will be
-         * described within appropriate certification test literature provided to manufacturers by the Connectivity
-         * Standards Alliance, in conjunction with certification test cases documentation.
+         * The expected side-effects of EventTrigger values are out of scope of this specification and will be described
+         * within appropriate certification test literature provided to manufacturers by the Connectivity Standards
+         * Alliance, in conjunction with certification test cases documentation.
          *
          * Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved for
          * testing use by manufacturers and will not appear in CSA certification test literature.
@@ -491,9 +489,9 @@ export namespace GeneralDiagnostics {
         systemTimeMs: TlvField(0, TlvSysTimeMS),
 
         /**
-         * This shall indicate the current time in POSIX Time in milliseconds, with the value taken from the same
-         * source that could populate the Timestamp field of events. This value shall only be null when any the
-         * following are true:
+         * This shall indicate the current time in POSIX Time in milliseconds, with the value taken from the same source
+         * that could populate the Timestamp field of events. This value shall only be null when any the following are
+         * true:
          *
          *   • The node doesn’t support the Time Synchronization cluster.
          *
@@ -631,8 +629,8 @@ export namespace GeneralDiagnostics {
              * This command provides a means for certification tests or manufacturer’s internal tests to validate
              * particular command handling and encoding constraints by generating a response of a given size.
              *
-             * This command shall use the same EnableKey behavior as the TestEventTrigger command, whereby processing
-             * of the command is only enabled when the TestEventTriggersEnabled field is true, which shall NOT be true
+             * This command shall use the same EnableKey behavior as the TestEventTrigger command, whereby processing of
+             * the command is only enabled when the TestEventTriggersEnabled field is true, which shall NOT be true
              * outside of certification testing or manufacturer’s internal tests.
              *
              * The fields for the PayloadTestRequest command are as follows:
@@ -664,8 +662,8 @@ export namespace GeneralDiagnostics {
              * This feature indicates support for extended Data Model testing commands, which are required in some
              * situations.
              *
-             * This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic Information Cluster has
-             * a value > 1.
+             * This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic Information Cluster has a
+             * value > 1.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.4.1
              */
@@ -692,11 +690,11 @@ export namespace GeneralDiagnostics {
             rebootCount: Attribute(0x1, TlvUInt16, { persistent: true }),
 
             /**
-             * The UpTime attribute shall indicate a best-effort assessment of the length of time, in seconds, since
-             * the Node’s last reboot. This attribute SHOULD be incremented to account for the periods of time that a
-             * Node is in a low-power or sleep state. This attribute shall only be reset upon a device reboot. This
-             * attribute shall be based on the same System Time source as those used to fulfill any usage of the
-             * system-us and system-ms data types within the server.
+             * The UpTime attribute shall indicate a best-effort assessment of the length of time, in seconds, since the
+             * Node’s last reboot. This attribute SHOULD be incremented to account for the periods of time that a Node
+             * is in a low-power or sleep state. This attribute shall only be reset upon a device reboot. This attribute
+             * shall be based on the same System Time source as those used to fulfill any usage of the system-us and
+             * system-ms data types within the server.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.6.3
              */
@@ -739,13 +737,13 @@ export namespace GeneralDiagnostics {
             ),
 
             /**
-             * The ActiveRadioFaults attribute shall indicate the set of faults currently detected by the Node. When
-             * the Node detects a fault has been raised, the appropriate RadioFaultEnum value shall be added to this
-             * list. This list shall NOT contain more than one instance of a specific RadioFaultEnum value. When the
-             * Node detects that all conditions contributing to a fault has been cleared, the corresponding
-             * RadioFaultEnum value shall be removed from this list. An empty list shall indicate there are currently
-             * no active faults. The order of this list SHOULD have no significance. Clients interested in monitoring
-             * changes in active faults may subscribe to this attribute, or they may subscribe to RadioFaultChange.
+             * The ActiveRadioFaults attribute shall indicate the set of faults currently detected by the Node. When the
+             * Node detects a fault has been raised, the appropriate RadioFaultEnum value shall be added to this list.
+             * This list shall NOT contain more than one instance of a specific RadioFaultEnum value. When the Node
+             * detects that all conditions contributing to a fault has been cleared, the corresponding RadioFaultEnum
+             * value shall be removed from this list. An empty list shall indicate there are currently no active faults.
+             * The order of this list SHOULD have no significance. Clients interested in monitoring changes in active
+             * faults may subscribe to this attribute, or they may subscribe to RadioFaultChange.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.6.7
              */
@@ -777,8 +775,8 @@ export namespace GeneralDiagnostics {
              * configured. When this attribute is true, the Node has been configured with one or more test event
              * triggers by virtue of the internally programmed EnableKey value (see TestEventTrigger) being set to a
              * non-zero value. This attribute can be used by Administrators to detect if a device was inadvertently
-             * commissioned with test event trigger mode enabled, and take appropriate action (e.g. warn the user
-             * and/or offer to remove all fabrics on the Node).
+             * commissioned with test event trigger mode enabled, and take appropriate action (e.g. warn the user and/or
+             * offer to remove all fabrics on the Node).
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.6.9
              */
@@ -819,8 +817,8 @@ export namespace GeneralDiagnostics {
 
         events: {
             /**
-             * The HardwareFaultChange Event shall indicate a change in the set of hardware faults currently detected
-             * by the Node.
+             * The HardwareFaultChange Event shall indicate a change in the set of hardware faults currently detected by
+             * the Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.12.8.1
              */
@@ -902,8 +900,8 @@ export namespace GeneralDiagnostics {
     /**
      * This cluster supports all GeneralDiagnostics features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

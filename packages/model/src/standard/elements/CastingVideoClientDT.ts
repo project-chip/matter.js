@@ -14,8 +14,8 @@ export const CastingVideoClientDt = DeviceType(
         name: "CastingVideoClient", id: 0x29, category: "Media", classification: "simple",
         details: "This defines conformance to the Casting Video Client device type." +
             "\n" +
-            "A Casting Video Client is a client that can launch content on a Casting Video Player, for example, " +
-            "a Smart Speaker or a Content Provider phone app.",
+            "A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a " +
+            "Smart Speaker or a Content Provider phone app.",
         xref: { document: "device", section: "10.6" }
     },
 

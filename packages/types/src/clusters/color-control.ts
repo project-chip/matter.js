@@ -181,8 +181,8 @@ export namespace ColorControl {
         moveMode: TlvField(0, TlvEnum<MoveMode>()),
 
         /**
-         * This field shall indicate the rate of movement in steps per second. A step is a change in the device’s hue
-         * of one unit.
+         * This field shall indicate the rate of movement in steps per second. A step is a change in the device’s hue of
+         * one unit.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.8.5.2
          */
@@ -242,8 +242,8 @@ export namespace ColorControl {
          *
          * NOTE
          *
-         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime
-         * data fields in other clusters / commands.
+         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime data
+         * fields in other clusters / commands.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.8.6.3
          */
@@ -338,8 +338,8 @@ export namespace ColorControl {
          *
          * NOTE
          *
-         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime
-         * data fields in other clusters / commands.
+         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime data
+         * fields in other clusters / commands.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.8.9.3
          */
@@ -559,9 +559,8 @@ export namespace ColorControl {
         stepSize: TlvField(1, TlvUInt16),
 
         /**
-         * This field shall indicate, in units of 1/10ths of a second, the time that shall be taken to perform the
-         * step. A step is a change to the device’s color temperature of a magnitude corresponding to the StepSize
-         * field.
+         * This field shall indicate, in units of 1/10ths of a second, the time that shall be taken to perform the step.
+         * A step is a change to the device’s color temperature of a magnitude corresponding to the StepSize field.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.8.22.3
          */
@@ -660,8 +659,8 @@ export namespace ColorControl {
         moveMode: TlvField(0, TlvEnum<MoveMode>()),
 
         /**
-         * This field shall indicate the rate of movement in steps per second. A step is a change in the extended hue
-         * of a device by one unit.
+         * This field shall indicate the rate of movement in steps per second. A step is a change in the extended hue of
+         * a device by one unit.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.8.16.2
          */
@@ -1206,8 +1205,8 @@ export namespace ColorControl {
         attributes: {
             /**
              * Indicates a scaled inverse of the current value of the color temperature. The unit of
-             * ColorTemperatureMireds is the mired (micro reciprocal degree), a.k.a. mirek (micro reciprocal kelvin).
-             * It is updated as fast as practical during commands that change the color.
+             * ColorTemperatureMireds is the mired (micro reciprocal degree), a.k.a. mirek (micro reciprocal kelvin). It
+             * is updated as fast as practical during commands that change the color.
              *
              * Changes to this attribute shall only be marked as reportable in the following cases:
              *
@@ -1250,11 +1249,11 @@ export namespace ColorControl {
             colorTempPhysicalMaxMireds: Attribute(0x400c, TlvUInt16.bound({ max: 65279 }), { default: 65279 }),
 
             /**
-             * Indicates a lower bound on the value of the ColorTemperatureMireds attribute for the purposes of
-             * coupling the ColorTemperatureMireds attribute to the CurrentLevel attribute when the
-             * CoupleColorTempToLevel bit of the Options attribute of the Level Control cluster is equal to 1. When
-             * coupling the ColorTemperatureMireds attribute to the CurrentLevel attribute, this value shall correspond
-             * to a CurrentLevel value of 254 (100%).
+             * Indicates a lower bound on the value of the ColorTemperatureMireds attribute for the purposes of coupling
+             * the ColorTemperatureMireds attribute to the CurrentLevel attribute when the CoupleColorTempToLevel bit of
+             * the Options attribute of the Level Control cluster is equal to 1. When coupling the
+             * ColorTemperatureMireds attribute to the CurrentLevel attribute, this value shall correspond to a
+             * CurrentLevel value of 254 (100%).
              *
              * This attribute shall be set such that the following relationship exists: ColorTempPhysicalMinMireds <=
              * CoupleColorTempToLevelMinMireds <= ColorTemperatureMireds
@@ -1272,8 +1271,8 @@ export namespace ColorControl {
 
             /**
              * Indicates the desired startup color temperature value the light shall use when it is supplied with power
-             * and this value shall be reflected in the ColorTemperatureMireds attribute. In addition, the ColorMode
-             * and EnhancedColorMode attributes shall be set to 2 (ColorTemperatureMireds). The values of the
+             * and this value shall be reflected in the ColorTemperatureMireds attribute. In addition, the ColorMode and
+             * EnhancedColorMode attributes shall be set to 2 (ColorTemperatureMireds). The values of the
              * StartUpColorTemperatureMireds attribute are listed in the table below,
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.23
@@ -1418,8 +1417,8 @@ export namespace ColorControl {
             colorLoopStartEnhancedHue: Attribute(0x4005, TlvUInt16, { default: 8960 }),
 
             /**
-             * Indicates the value of the EnhancedCurrentHue attribute before the color loop was started. Once the
-             * color loop is complete, the EnhancedCurrentHue attribute shall be restored to this value.
+             * Indicates the value of the EnhancedCurrentHue attribute before the color loop was started. Once the color
+             * loop is complete, the EnhancedCurrentHue attribute shall be restored to this value.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.18
              */
@@ -1513,8 +1512,8 @@ export namespace ColorControl {
              *
              *   • When it changes to 0.
              *
-             * For commands with a transition time or changes to the transition time less than 1 second, changes to
-             * this attribute shall NOT be reported.
+             * For commands with a transition time or changes to the transition time less than 1 second, changes to this
+             * attribute shall NOT be reported.
              *
              * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
              * reporting of this attribute in order to keep track of the remaining duration.
@@ -1541,8 +1540,8 @@ export namespace ColorControl {
             /**
              * Indicates which attributes are currently determining the color of the device.
              *
-             * The value of the ColorMode attribute cannot be written directly - it is set upon reception of any
-             * command in section Commands to the appropriate mode for that command.
+             * The value of the ColorMode attribute cannot be written directly - it is set upon reception of any command
+             * in section Commands to the appropriate mode for that command.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.10
              */
@@ -1605,8 +1604,8 @@ export namespace ColorControl {
             primary1Y: OptionalFixedAttribute(0x12, TlvUInt16.bound({ max: 65279 })),
 
             /**
-             * Indicates a representation of the maximum intensity of this primary as defined in the Dimming Light
-             * Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the
+             * Indicates a representation of the maximum intensity of this primary as defined in the Dimming Light Curve
+             * in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the
              * primary with the highest maximum intensity contains the value 254.
              *
              * A value of null shall indicate that this primary is not available.
@@ -2039,8 +2038,8 @@ export namespace ColorControl {
     /**
      * This cluster supports all ColorControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

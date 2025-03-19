@@ -206,10 +206,9 @@ export namespace Thermostat {
      */
     export const TlvWeeklyScheduleTransition = TlvObject({
         /**
-         * This field shall represent the start time of the schedule transition during the associated day. The time
-         * will be represented by a 16 bits unsigned integer to designate the minutes since midnight. For example, 6am
-         * will be represented by 360 minutes since midnight and 11:30pm will be represented by 1410 minutes since
-         * midnight.
+         * This field shall represent the start time of the schedule transition during the associated day. The time will
+         * be represented by a 16 bits unsigned integer to designate the minutes since midnight. For example, 6am will
+         * be represented by 360 minutes since midnight and 11:30pm will be represented by 1410 minutes since midnight.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.30.1
          */
@@ -253,10 +252,10 @@ export namespace Thermostat {
         numberOfTransitionsForSequence: TlvField(0, TlvUInt8),
 
         /**
-         * This field shall represent the day of the week at which all the transitions within the payload of the
-         * command SHOULD be associated to. This field is a bitmap and therefore the associated setpoint could overlap
-         * onto multiple days (you could set one transition time for all “week days” or whatever combination of days
-         * the implementation requests).
+         * This field shall represent the day of the week at which all the transitions within the payload of the command
+         * SHOULD be associated to. This field is a bitmap and therefore the associated setpoint could overlap onto
+         * multiple days (you could set one transition time for all “week days” or whatever combination of days the
+         * implementation requests).
          *
          * Each setpoint transition will begin with the day of week for this transition. There can be up to 10
          * transitions for each command.
@@ -272,14 +271,14 @@ export namespace Thermostat {
          * If the HeatSetpointPresent bit is On, the HeatSetpoint field shall NOT be null in every entry of the
          * Transitions list.
          *
-         * If the HeatSetpointPresent bit is Off, the HeatSetpoint field shall be null in every entry of the
-         * Transitions list.
+         * If the HeatSetpointPresent bit is Off, the HeatSetpoint field shall be null in every entry of the Transitions
+         * list.
          *
          * If the CoolSetpointPresent bit is On, the CoolSetpoint field shall NOT be null in every entry of the
          * Transitions list.
          *
-         * If the CoolSetpointPresent bit is Off, the CoolSetpoint field shall be null in every entry of the
-         * Transitions list.
+         * If the CoolSetpointPresent bit is Off, the CoolSetpoint field shall be null in every entry of the Transitions
+         * list.
          *
          * At least one of the bits in the Mode For Sequence byte shall be on.
          *
@@ -479,8 +478,8 @@ export namespace Thermostat {
          * This field shall indicate a device generated identifier for this preset. It shall be unique on the device,
          * and shall NOT be reused after the associated preset has been deleted.
          *
-         * This field shall only be null when the encompassing PresetStruct is appended to the Presets attribute for
-         * the purpose of creating a new Preset. Refer to Presets for the creation of Preset handles.
+         * This field shall only be null when the encompassing PresetStruct is appended to the Presets attribute for the
+         * purpose of creating a new Preset. Refer to Presets for the creation of Preset handles.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.28.1
          */
@@ -520,8 +519,8 @@ export namespace Thermostat {
         heatingSetpoint: TlvOptionalField(4, TlvInt16),
 
         /**
-         * This field shall indicate whether the preset is marked as "built-in", meaning that it can be modified, but
-         * it cannot be deleted.
+         * This field shall indicate whether the preset is marked as "built-in", meaning that it can be modified, but it
+         * cannot be deleted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.28.6
          */
@@ -705,8 +704,8 @@ export namespace Thermostat {
      *   • If the server supports the OCC feature, and the Occupied bit is not set on the Occupancy attribute, then the
      *     UnoccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint
      *
-     *   • Otherwise, the OccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint If a HeatingSetpoint
-     *     was used to determine the heating setpoint:
+     *   • Otherwise, the OccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint If a HeatingSetpoint was
+     *     used to determine the heating setpoint:
      *
      *   • If the server supports the OCC feature, and the Occupied bit is not set on the Occupancy attribute, then the
      *     UnoccupiedHeatingSetpoint attribute shall be set to the HeatingSetpoint
@@ -738,16 +737,16 @@ export namespace Thermostat {
      */
     export const TlvScheduleTransition = TlvObject({
         /**
-         * This field shall specify a bitmask of days of the week that the transition applies to. The Vacation bit
-         * shall NOT be set; vacation schedules shall be set via the vacation preset.
+         * This field shall specify a bitmask of days of the week that the transition applies to. The Vacation bit shall
+         * NOT be set; vacation schedules shall be set via the vacation preset.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.32.1
          */
         dayOfWeek: TlvField(0, TlvBitmap(TlvUInt8, ScheduleDayOfWeek)),
 
         /**
-         * This shall specify the time of day at which the transition becomes active, in terms of minutes within the
-         * day representing the wall clock, where 0 is 00:00:00, 1 is 00:01:00 and 1439 is 23:59:00.
+         * This shall specify the time of day at which the transition becomes active, in terms of minutes within the day
+         * representing the wall clock, where 0 is 00:00:00, 1 is 00:01:00 and 1439 is 23:59:00.
          *
          * Handling of transitions during the changeover of Daylight Saving Time is implementation-dependent.
          *
@@ -818,8 +817,8 @@ export namespace Thermostat {
      *   • If the server supports the OCC feature, and the Occupied bit is not set on the Occupancy attribute, then the
      *     UnoccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint
      *
-     *   • Otherwise, the OccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint If a HeatingSetpoint
-     *     was used to determine the heating setpoint:
+     *   • Otherwise, the OccupiedCoolingSetpoint attribute shall be set to the CoolingSetpoint If a HeatingSetpoint was
+     *     used to determine the heating setpoint:
      *
      *   • If the server supports the OCC feature, and the Occupied bit is not set on the Occupancy attribute, then the
      *     UnoccupiedHeatingSetpoint attribute shall be set to the HeatingSetpoint
@@ -859,8 +858,8 @@ export namespace Thermostat {
          * This field shall indicate a device generated identifier for this schedule. It shall be unique on the device,
          * and shall NOT be reused after the associated schedule has been deleted.
          *
-         * This field shall only be null when the encompassing ScheduleStruct is appended to the Schedules attribute
-         * for the purpose of creating a new Schedule. Refer to Schedules for the creation of Schedule handles.
+         * This field shall only be null when the encompassing ScheduleStruct is appended to the Schedules attribute for
+         * the purpose of creating a new Schedule. Refer to Schedules for the creation of Schedule handles.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.31.1
          */
@@ -894,19 +893,19 @@ export namespace Thermostat {
          * This field shall NOT contain more than one ScheduleStruct with the same TransitionTime field and overlapping
          * DayOfWeek fields; i.e. there shall be no duplicate transitions.
          *
-         * If the NumberOfScheduleTransitionsPerDay attribute is not null, then for each bit in
-         * ScheduleDayOfWeekBitmap, the number of transitions with that bit set in DayOfWeek shall NOT be greater than
-         * the value of the NumberOfScheduleTransitionsPerDay attribute.
+         * If the NumberOfScheduleTransitionsPerDay attribute is not null, then for each bit in ScheduleDayOfWeekBitmap,
+         * the number of transitions with that bit set in DayOfWeek shall NOT be greater than the value of the
+         * NumberOfScheduleTransitionsPerDay attribute.
          *
-         * For the purposes of determining which ScheduleStruct in this list is currently active, the current time
-         * shall be the number of minutes past midnight in the display value of the current time, not the actual number
-         * of minutes that have elapsed since midnight. On days which transition into or out of daylight saving time,
+         * For the purposes of determining which ScheduleStruct in this list is currently active, the current time shall
+         * be the number of minutes past midnight in the display value of the current time, not the actual number of
+         * minutes that have elapsed since midnight. On days which transition into or out of daylight saving time,
          * certain values may repeat or not occur during the transition period.
          *
          * A ScheduleTransitionStruct in this list shall be active if the current day of the week matches its DayOfWeek
          * field and the current time is greater than or equal to the TransitionTime, but less than the TransitionTime
-         * on any other ScheduleTransitionStruct in the Transitions field whose DayOfWeek field also matches the
-         * current day of the week.
+         * on any other ScheduleTransitionStruct in the Transitions field whose DayOfWeek field also matches the current
+         * day of the week.
          *
          * If the current time is less than every ScheduleTransitionStruct whose DayOfWeek field also matches the
          * current day of the week, the server shall attempt the same process to identify the active
@@ -1368,8 +1367,8 @@ export namespace Thermostat {
         mode: TlvField(0, TlvEnum<SetpointRaiseLowerMode>()),
 
         /**
-         * This field shall indicate the amount (possibly negative) that should be added to the setpoint(s), in steps
-         * of 0.1°C.
+         * This field shall indicate the amount (possibly negative) that should be added to the setpoint(s), in steps of
+         * 0.1°C.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.10.1.2
          */
@@ -1443,8 +1442,8 @@ export namespace Thermostat {
             absMaxHeatSetpointLimit: OptionalFixedAttribute(0x4, TlvInt16, { default: 3000 }),
 
             /**
-             * Indicates the level of heating demanded by the PI loop in percent. This value is 0 when the thermostat
-             * is in “off” or “cooling” mode.
+             * Indicates the level of heating demanded by the PI loop in percent. This value is 0 when the thermostat is
+             * in “off” or “cooling” mode.
              *
              * This attribute is reported regularly and may be used to control a heating device.
              *
@@ -1708,8 +1707,8 @@ export namespace Thermostat {
              *
              * NOTE
              *
-             * For backwards compatibility, this attribute is optionally writeable. However any writes to this
-             * attribute shall be silently ignored.
+             * For backwards compatibility, this attribute is optionally writeable. However any writes to this attribute
+             * shall be silently ignored.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.3.9.21
              */
@@ -1769,12 +1768,11 @@ export namespace Thermostat {
             /**
              * This command is used to update the thermostat weekly setpoint schedule from a management system. If the
              * thermostat already has a weekly setpoint schedule programmed, then it SHOULD replace each daily setpoint
-             * set as it receives the updates from the management system. For example, if the thermostat has 4
-             * setpoints for every day of the week and is sent a SetWeeklySchedule command with one setpoint for
-             * Saturday then the thermostat SHOULD remove all 4 setpoints for Saturday and replace those with the
-             * updated setpoint but leave all other days unchanged. If the schedule is larger than what fits in one
-             * frame or contains more than 10 transitions, the schedule shall then be sent using multiple
-             * SetWeeklySchedule Commands.
+             * set as it receives the updates from the management system. For example, if the thermostat has 4 setpoints
+             * for every day of the week and is sent a SetWeeklySchedule command with one setpoint for Saturday then the
+             * thermostat SHOULD remove all 4 setpoints for Saturday and replace those with the updated setpoint but
+             * leave all other days unchanged. If the schedule is larger than what fits in one frame or contains more
+             * than 10 transitions, the schedule shall then be sent using multiple SetWeeklySchedule Commands.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.3.10.2
              */
@@ -1816,8 +1814,8 @@ export namespace Thermostat {
              * also referred to as the “span.”
              *
              * The purpose of this attribute is to allow remote configuration of the span between the desired setpoint
-             * and the measured temperature to help prevent over-cycling and reduce energy bills, though this may
-             * result in lower comfort on the part of some users.
+             * and the measured temperature to help prevent over-cycling and reduce energy bills, though this may result
+             * in lower comfort on the part of some users.
              *
              * The null value indicates the attribute is unused.
              *
@@ -1868,19 +1866,19 @@ export namespace Thermostat {
              * Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to float
              * above the UnoccupiedCoolingSetpoint (i.e., UnoccupiedCoolingSetpoint + UnoccupiedSetback) or below the
              * UnoccupiedHeatingSetpoint setpoint (i.e., UnoccupiedHeatingSetpoint - UnoccupiedSetback) before
-             * initiating a state change to bring the temperature back to the user’s desired setpoint. This attribute
-             * is sometimes also referred to as the “span.”
+             * initiating a state change to bring the temperature back to the user’s desired setpoint. This attribute is
+             * sometimes also referred to as the “span.”
              *
              * The purpose of this attribute is to allow remote configuration of the span between the desired setpoint
-             * and the measured temperature to help prevent over-cycling and reduce energy bills, though this may
-             * result in lower comfort on the part of some users.
+             * and the measured temperature to help prevent over-cycling and reduce energy bills, though this may result
+             * in lower comfort on the part of some users.
              *
              * The null value indicates the attribute is unused.
              *
              * If the Thermostat client attempts to write UnoccupiedSetback to a value greater than
-             * UnoccupiedSetbackMax, the Thermostat server shall set its UnoccupiedSetback value to
-             * UnoccupiedSetbackMax and shall send a Write Attribute Response command with a Status Code field
-             * enumeration of SUCCESS response.
+             * UnoccupiedSetbackMax, the Thermostat server shall set its UnoccupiedSetback value to UnoccupiedSetbackMax
+             * and shall send a Write Attribute Response command with a Status Code field enumeration of SUCCESS
+             * response.
              *
              * If the Thermostat client attempts to write UnoccupiedSetback to a value less than UnoccupiedSetbackMin,
              * the Thermostat server shall set its UnoccupiedSetback value to UnoccupiedSetbackMin and shall send a
@@ -1959,8 +1957,8 @@ export namespace Thermostat {
              *   2. If the PresetHandle field is not null, the PresetStruct shall be treated as a modification of an
              *      existing preset.
              *
-             *     a. If the value of the PresetHandle field does not match any of the existing presets, a response
-             *        with the status code NOT_FOUND shall be returned.
+             *     a. If the value of the PresetHandle field does not match any of the existing presets, a response with
+             *        the status code NOT_FOUND shall be returned.
              *
              *     b. If the value of the PresetHandle field is duplicated on multiple presets in the updated list, a
              *        response with the status code CONSTRAINT_ERROR shall be returned.
@@ -1986,8 +1984,8 @@ export namespace Thermostat {
              *   6. If appending the received PresetStruct to the pending list of Presets would cause the total number
              *      of pending presets whose PresetScenario field matches the appended preset’s PresetScenario field to
              *      exceed the value of the NumberOfPresets field on the PresetTypeStruct whose PresetScenario matches
-             *      the appended preset’s PresetScenario field, a response with the status code RESOURCE_EXHAUSTED
-             *      shall be returned.
+             *      the appended preset’s PresetScenario field, a response with the status code RESOURCE_EXHAUSTED shall
+             *      be returned.
              *
              *   7. Otherwise, the write shall be pended until receipt of a commit request, and the status code SUCCESS
              *      shall be returned.
@@ -2012,8 +2010,8 @@ export namespace Thermostat {
              *            CONSTRAINT_ERROR.
              *
              *       ii. If the MSCH feature is supported and the removed PresetHandle would be referenced by any
-             *            PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value of
-             *            the Schedules attribute, the attribute status shall be INVALID_IN_STATE.
+             *            PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value of the
+             *            Schedules attribute, the attribute status shall be INVALID_IN_STATE.
              *
              *       iii. If the removed PresetHandle is equal to the value of the ActivePresetHandle attribute, the
              *            attribute status shall be INVALID_IN_STATE.
@@ -2087,8 +2085,8 @@ export namespace Thermostat {
              *
              *   1. For all schedules in the write request:
              *
-             *     a. If the ScheduleHandle field is null, the ScheduleStruct shall be treated as an added schedule,
-             *        and the device shall create a new unique value for the ScheduleHandle field.
+             *     a. If the ScheduleHandle field is null, the ScheduleStruct shall be treated as an added schedule, and
+             *        the device shall create a new unique value for the ScheduleHandle field.
              *
              *       i. If the BuiltIn field is true, a response with the status code CONSTRAINT_ERROR shall be
              *          returned.
@@ -2124,14 +2122,14 @@ export namespace Thermostat {
              *        attribute would not contain a PresetStruct whose PresetHandle field matches the value of the
              *        PresetHandle field, a response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             *     h. If the Name is set, but the associated ScheduleTypeStruct does not have the SupportsNames bit
-             *        set, a response with the status code CONSTRAINT_ERROR shall be returned.
+             *     h. If the Name is set, but the associated ScheduleTypeStruct does not have the SupportsNames bit set,
+             *        a response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *       i. For all transitions in all schedules in the write request:
              *
              *       i. If the PresetHandle field is present, but the ScheduleTypeStruct matching the value of the
-             *          SystemMode field on the encompassing ScheduleStruct does not have the SupportsPresets bit set,
-             *          a response with the status code CONSTRAINT_ERROR shall be returned.
+             *          SystemMode field on the encompassing ScheduleStruct does not have the SupportsPresets bit set, a
+             *          response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *     j. If the PresetHandle field is present, but after applying all pending changes, the Presets
              *        attribute would not contain a PresetStruct whose PresetHandle field matches the value of the
@@ -2146,12 +2144,12 @@ export namespace Thermostat {
              *           SupportsOff bit set, a response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *     k. If the HeatingSetpoint field is present, but the ScheduleTypeStruct matching the value of the
-             *        SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit set,
-             *        a response with the status code CONSTRAINT_ERROR shall be returned.
+             *        SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit set, a
+             *        response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *     l. If the CoolingSetpoint field is present, but the ScheduleTypeStruct matching the value of the
-             *        SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit set,
-             *        a response with the status code CONSTRAINT_ERROR shall be returned.
+             *        SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit set, a
+             *        response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *   2. If appending the received ScheduleStruct to the pending list of Schedules would cause the total
              *      number of pending schedules to exceed the value of the NumberOfSchedules attribute, a response with
@@ -2160,8 +2158,8 @@ export namespace Thermostat {
              *   3. If appending the received ScheduleStruct to the pending list of Schedules would cause the total
              *      number of pending schedules whose SystemMode field matches the appended schedule’s SystemMode field
              *      to exceed the value of the NumberOfSchedules field on the ScheduleTypeStruct whose SystemMode field
-             *      matches the appended schedule’s SystemMode field, a response with the status code
-             *      RESOURCE_EXHAUSTED shall be returned.
+             *      matches the appended schedule’s SystemMode field, a response with the status code RESOURCE_EXHAUSTED
+             *      shall be returned.
              *
              *   4. Otherwise, the write shall be pended until receipt of a commit request, and the attribute status
              *      shall be SUCCESS.
@@ -2310,8 +2308,8 @@ export namespace Thermostat {
             outdoorTemperature: OptionalAttribute(0x1, TlvNullable(TlvInt16), { default: null }),
 
             /**
-             * Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP
-             * switches to set these parameters, this information shall be available read-only
+             * Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP switches
+             * to set these parameters, this information shall be available read-only
              *
              * from the DIP switches. If these parameters are set via software, there shall be read/write access in
              * order to provide remote programming capability.
@@ -2373,9 +2371,9 @@ export namespace Thermostat {
 
             /**
              * Indicates the temperature hold status on the thermostat. If hold status is on, the thermostat SHOULD
-             * maintain the temperature setpoint for the current mode until a system mode change. If hold status is
-             * off, the thermostat SHOULD follow the setpoint transitions specified by its internal scheduling program.
-             * If the thermostat supports setpoint hold for a specific duration, it SHOULD also implement the
+             * maintain the temperature setpoint for the current mode until a system mode change. If hold status is off,
+             * the thermostat SHOULD follow the setpoint transitions specified by its internal scheduling program. If
+             * the thermostat supports setpoint hold for a specific duration, it SHOULD also implement the
              * TemperatureSetpointHoldDuration attribute.
              *
              * If the server supports a setpoint hold for a specific duration, it SHOULD also implement the
@@ -2402,10 +2400,9 @@ export namespace Thermostat {
              * specified duration SHOULD implement this attribute. The null value indicates the field is unused. All
              * other values are reserved.
              *
-             * If this attribute is updated to a non-null value and the TemperatureSetpointHold is set to
-             * SetpointHoldOn and the SetpointHoldExpiryTimestamp is supported, the server shall update
-             * SetpointHoldExpiryTimestamp with a value of current UTC timestamp, in seconds, plus the new value of
-             * this attribute multiplied by 60.
+             * If this attribute is updated to a non-null value and the TemperatureSetpointHold is set to SetpointHoldOn
+             * and the SetpointHoldExpiryTimestamp is supported, the server shall update SetpointHoldExpiryTimestamp
+             * with a value of current UTC timestamp, in seconds, plus the new value of this attribute multiplied by 60.
              *
              * If this attribute is set to null and the SetpointHoldExpiryTimestamp is supported, the server shall set
              * the SetpointHoldExpiryTimestamp to null.
@@ -2425,8 +2422,8 @@ export namespace Thermostat {
              * ProgrammingOperationModeBitmap. For example, the thermostat may operate simultaneously in Schedule
              * Programming Mode and Recovery Mode.
              *
-             * Thermostats which contain a schedule may use this attribute to control how that schedule is used, even
-             * if they do not support the ScheduleConfiguration feature.
+             * Thermostats which contain a schedule may use this attribute to control how that schedule is used, even if
+             * they do not support the ScheduleConfiguration feature.
              *
              * When ScheduleActive is not set, the setpoint is altered only by manual up/down changes at the thermostat
              * or remotely, not by internal schedule programming.
@@ -2470,8 +2467,8 @@ export namespace Thermostat {
             ),
 
             /**
-             * Indicates the delta between the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint and
-             * the previous active setpoint. This attribute is meant to accompany the SetpointChangeSource attribute;
+             * Indicates the delta between the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint and the
+             * previous active setpoint. This attribute is meant to accompany the SetpointChangeSource attribute;
              * devices implementing SetpointChangeAmount SHOULD also implement SetpointChangeSource.
              *
              * The null value indicates that the previous setpoint was unknown.
@@ -2493,8 +2490,8 @@ export namespace Thermostat {
              *
              * If the difference between the Calculated Local Temperature and OccupiedCoolingSetpoint or
              * UnoccupiedCoolingSetpoint is greater than or equal to the EmergencyHeatDelta and the Thermostat server’s
-             * SystemMode attribute is in a heating-related mode, then the Thermostat server shall immediately switch
-             * to the SystemMode attribute value that provides the highest stage of heating (e.g., emergency heat) and
+             * SystemMode attribute is in a heating-related mode, then the Thermostat server shall immediately switch to
+             * the SystemMode attribute value that provides the highest stage of heating (e.g., emergency heat) and
              * continue operating in that running state until the OccupiedHeatingSetpoint value is reached. For example:
              *
              *   • Calculated Local Temperature = 10.0°C
@@ -2611,9 +2608,9 @@ export namespace Thermostat {
              * the timestamp in UTC indicating when that will happen. If there is no such known time, this attribute
              * shall be null.
              *
-             * If the TemperatureSetpointHold is set to SetpointHoldOff or the TemperatureSetpointHoldDuration is set
-             * to null, this attribute shall be set to null indicating there is no hold on the Thermostat either with
-             * or without a duration.
+             * If the TemperatureSetpointHold is set to SetpointHoldOff or the TemperatureSetpointHoldDuration is set to
+             * null, this attribute shall be set to null indicating there is no hold on the Thermostat either with or
+             * without a duration.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.3.9.62
              */
@@ -2900,8 +2897,8 @@ export namespace Thermostat {
     /**
      * This cluster supports all Thermostat features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

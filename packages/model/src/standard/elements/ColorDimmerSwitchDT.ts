@@ -50,6 +50,6 @@ export const ColorDimmerSwitchDt = DeviceType(
         name: "ColorControl", id: 0x300, conformance: "M", element: "clientCluster",
         xref: { document: "device", section: "6.3.4" }
     })
-)
+);
 
 MatterDefinition.children.push(ColorDimmerSwitchDt);

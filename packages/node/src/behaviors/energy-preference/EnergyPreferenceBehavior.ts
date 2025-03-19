@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * EnergyPreferenceBehavior is the base class for objects that support interaction with {@link
- * EnergyPreference.Cluster}.
+ * EnergyPreferenceBehavior is the base class for objects that support interaction with
+ * {@link EnergyPreference.Cluster}.
  *
- * EnergyPreference.Cluster requires you to enable one or more optional features. You can do so using {@link
- * EnergyPreferenceBehavior.with}.
+ * EnergyPreference.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link EnergyPreferenceBehavior.with}.
  */
 export const EnergyPreferenceBehavior = ClusterBehavior.for(ClusterType(EnergyPreference.Base));
 

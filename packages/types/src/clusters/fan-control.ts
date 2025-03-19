@@ -272,8 +272,8 @@ export namespace FanControl {
     export const MultiSpeedComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates that the fan has one speed (value of 1) or the maximum speed, if the fan is capable of
-             * multiple speeds.
+             * Indicates that the fan has one speed (value of 1) or the maximum speed, if the fan is capable of multiple
+             * speeds.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.5
              */
@@ -285,17 +285,17 @@ export namespace FanControl {
              * shall return INVALID_IN_STATE to indicate that the fan is not in a state where the SpeedSetting can be
              * changed to the requested value.
              *
-             * If this is successfully written to 0, the server shall set the FanMode attribute value to Off. Please
-             * see the Section 4.4.6.6.1 for details on other values.
+             * If this is successfully written to 0, the server shall set the FanMode attribute value to Off. Please see
+             * the Section 4.4.6.6.1 for details on other values.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.6
              */
             speedSetting: WritableAttribute(0x5, TlvNullable(TlvUInt8), { default: 0 }),
 
             /**
-             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may
-             * be a temporary mismatch between the value of this attribute and the value of the SpeedSetting attribute
-             * due to other system requirements that would not allow the fan to operate at the requested setting.
+             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may be
+             * a temporary mismatch between the value of this attribute and the value of the SpeedSetting attribute due
+             * to other system requirements that would not allow the fan to operate at the requested setting.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.7
              */
@@ -320,9 +320,9 @@ export namespace FanControl {
              * only be set to 1, if the corresponding bit in the RockSupport attribute is set to 1, otherwise a status
              * code of CONSTRAINT_ERROR shall be returned.
              *
-             * If a combination of supported bits is set by the client, and the server does not support the
-             * combination, the lowest supported single bit in the combination shall be set and active, and all other
-             * bits shall indicate zero.
+             * If a combination of supported bits is set by the client, and the server does not support the combination,
+             * the lowest supported single bit in the combination shall be set and active, and all other bits shall
+             * indicate zero.
              *
              * For example: If RockUpDown and RockRound are both set, but this combination is not possible, then only
              * RockUpDown becomes active.
@@ -339,8 +339,8 @@ export namespace FanControl {
     export const WindComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute is a bitmap that indicates what wind modes the server supports. At least one wind mode
-             * bit shall be set.
+             * This attribute is a bitmap that indicates what wind modes the server supports. At least one wind mode bit
+             * shall be set.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.10
              */
@@ -351,9 +351,9 @@ export namespace FanControl {
              * only be set to 1, if the corresponding bit in the WindSupport attribute is set to 1, otherwise a status
              * code of CONSTRAINT_ERROR shall be returned.
              *
-             * If a combination of supported bits is set by the client, and the server does not support the
-             * combination, the lowest supported single bit in the combination shall be set and active, and all other
-             * bits shall indicate zero.
+             * If a combination of supported bits is set by the client, and the server does not support the combination,
+             * the lowest supported single bit in the combination shall be set and active, and all other bits shall
+             * indicate zero.
              *
              * For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then only
              * Sleep Wind becomes active.
@@ -417,11 +417,11 @@ export namespace FanControl {
              *
              * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed
              * control but left it up to the implementer to decide what was supported. Therefore, it is assumed that
-             * legacy client implementations are capable of determining, from the server, the number of speeds
-             * supported between 1, 2, or 3, and whether automatic speed control is supported.
+             * legacy client implementations are capable of determining, from the server, the number of speeds supported
+             * between 1, 2, or 3, and whether automatic speed control is supported.
              *
-             * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to
-             * SpeedMax, which has a maximum of 100.
+             * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to SpeedMax,
+             * which has a maximum of 100.
              *
              * See Section 4.4.6.6.1 for more details.
              *
@@ -507,10 +507,10 @@ export namespace FanControl {
             percentSetting: WritableAttribute(0x2, TlvNullable(TlvPercent), { default: 0 }),
 
             /**
-             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may
-             * be a temporary mismatch between the value of this attribute and the value of the PercentSetting
-             * attribute due to other system requirements that would not allow the fan to operate at the requested
-             * setting. See Section 4.4.6.3.1 for more details.
+             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may be
+             * a temporary mismatch between the value of this attribute and the value of the PercentSetting attribute
+             * due to other system requirements that would not allow the fan to operate at the requested setting. See
+             * Section 4.4.6.3.1 for more details.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.4
              */
@@ -588,8 +588,8 @@ export namespace FanControl {
     /**
      * This cluster supports all FanControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

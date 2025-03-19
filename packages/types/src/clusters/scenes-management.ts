@@ -96,10 +96,10 @@ export namespace ScenesManagement {
          * CurrentScene and CurrentGroup fields of the SceneInfoStruct they belong to. TRUE indicates that these fields
          * are valid, FALSE indicates that they are not valid.
          *
-         * This field shall be set to False for all other fabrics when an attribute with the Scenes ("S") designation
-         * in the Quality column of another cluster present on the same endpoint is modified or when the current scene
-         * is modified by a fabric through the RecallScene or StoreScene commands, regardless of the fabric-scoped
-         * access quality of the command.
+         * This field shall be set to False for all other fabrics when an attribute with the Scenes ("S") designation in
+         * the Quality column of another cluster present on the same endpoint is modified or when the current scene is
+         * modified by a fabric through the RecallScene or StoreScene commands, regardless of the fabric-scoped access
+         * quality of the command.
          *
          * In the event where the SceneValid field is set to False for a fabric, the CurrentScene and CurrentGroup
          * fields shall be the last invoked scene and group for that fabric. In the event where no scene was previously
@@ -166,22 +166,22 @@ export namespace ScenesManagement {
          *
          *   • Data types int40, int48, int56 and int64 shall map to ValueSigned64.
          *
-         *   • For derived types, the mapping shall be based on the base type. For example, an attribute of type
-         *     percent shall be treated as if it were of type uint8, whereas an attribute of type percent100ths shall
-         *     be treated as if it were of type uint16.
+         *   • For derived types, the mapping shall be based on the base type. For example, an attribute of type percent
+         *     shall be treated as if it were of type uint8, whereas an attribute of type percent100ths shall be treated
+         *     as if it were of type uint16.
          *
          *   • For boolean nullable attributes, any value that is not 0 or 1 shall be considered to have the null value.
          *
          *   • For boolean non-nullable attributes, any value that is not 0 or 1 shall be considered to have the value
          *     FALSE.
          *
-         *   • For non-boolean nullable attributes, any value that is not a valid numeric value for the attribute’s
-         *     type after accounting for range reductions due to being nullable and constraints shall be considered to
-         *     have the null value for the type.
+         *   • For non-boolean nullable attributes, any value that is not a valid numeric value for the attribute’s type
+         *     after accounting for range reductions due to being nullable and constraints shall be considered to have
+         *     the null value for the type.
          *
          *   • For non-boolean non-nullable attributes, any value that is not a valid numeric value for the attribute’s
-         *     type after accounting for constraints shall be considered to be the valid attribute value that is
-         *     closest to the provided value.
+         *     type after accounting for constraints shall be considered to be the valid attribute value that is closest
+         *     to the provided value.
          *
          *     ◦ In the event that an invalid provided value is of equal numerical distance to the two closest valid
          *       values, the lowest of those values shall be considered the closest valid attribute value.
@@ -715,16 +715,16 @@ export namespace ScenesManagement {
         mode: TlvField(0, TlvBitmap(TlvUInt8, CopyMode)),
 
         /**
-         * This field shall indicate the identifier of the group from which the scene is to be copied. Together with
-         * the SceneIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene Table.
+         * This field shall indicate the identifier of the group from which the scene is to be copied. Together with the
+         * SceneIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene Table.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.9.15.2
          */
         groupIdentifierFrom: TlvField(1, TlvGroupId),
 
         /**
-         * This field shall indicate the identifier of the scene from which the scene is to be copied. Together with
-         * the GroupIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene Table.
+         * This field shall indicate the identifier of the scene from which the scene is to be copied. Together with the
+         * GroupIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene Table.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.9.15.3
          */
@@ -786,14 +786,14 @@ export namespace ScenesManagement {
     export interface CopySceneResponse extends TypeFromSchema<typeof TlvCopySceneResponse> {}
 
     /**
-     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene
-     * is defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
+     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene is
+     * defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
      * understanding the underlying data to be stored when scenes are defined. Though the Scene Table is defined here
      * using the data model architecture rules and format, the design is not normative.
      *
-     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry
-     * struct are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster
-     * implemented on the same endpoint.
+     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry struct
+     * are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster implemented
+     * on the same endpoint.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5
      */
@@ -816,8 +816,8 @@ export namespace ScenesManagement {
         /**
          * The field is the name of the scene.
          *
-         * If scene names are not supported, any commands that write a scene name shall simply discard the name, and
-         * any command that returns a scene name shall return an empty string.
+         * If scene names are not supported, any commands that write a scene name shall simply discard the name, and any
+         * command that returns a scene name shall return an empty string.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.3
          */
@@ -833,9 +833,9 @@ export namespace ScenesManagement {
 
         /**
          * See the Scene Table Extensions subsections of individual clusters. A Scene Table Extension shall only use
-         * attributes with the Scene quality. Each ExtensionFieldSetStruct holds a set of values of these attributes
-         * for a cluster implemented on the same endpoint where the Scene ("S") designation appears in the quality
-         * column. A scene is the aggregate of all such fields across all clusters on the endpoint.
+         * attributes with the Scene quality. Each ExtensionFieldSetStruct holds a set of values of these attributes for
+         * a cluster implemented on the same endpoint where the Scene ("S") designation appears in the quality column. A
+         * scene is the aggregate of all such fields across all clusters on the endpoint.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.5
          */
@@ -843,14 +843,14 @@ export namespace ScenesManagement {
     });
 
     /**
-     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene
-     * is defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
+     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene is
+     * defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
      * understanding the underlying data to be stored when scenes are defined. Though the Scene Table is defined here
      * using the data model architecture rules and format, the design is not normative.
      *
-     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry
-     * struct are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster
-     * implemented on the same endpoint.
+     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry struct
+     * are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster implemented
+     * on the same endpoint.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5
      */
@@ -879,8 +879,8 @@ export namespace ScenesManagement {
             /**
              * Indicates the Node ID of the node that last configured the Scene Table.
              *
-             * The null value indicates that the server has not been configured, or that the identifier of the node
-             * that last configured the Scenes Management cluster is not known.
+             * The null value indicates that the server has not been configured, or that the identifier of the node that
+             * last configured the Scenes Management cluster is not known.
              *
              * The Node ID is scoped to the accessing fabric.
              *
@@ -1003,10 +1003,10 @@ export namespace ScenesManagement {
      * corresponds to a set of stored values of specified attributes for one or more clusters on the same end point as
      * the Scenes Management cluster.
      *
-     * In most cases scenes are associated with a particular group identifier. Scenes may also exist without a group,
-     * in which case the value 0 replaces the group identifier. Note that extra care is required in these cases to
-     * avoid a scene identifier collision, and that commands related to scenes without a group may only be unicast,
-     * i.e., they shall NOT be multicast or broadcast.
+     * In most cases scenes are associated with a particular group identifier. Scenes may also exist without a group, in
+     * which case the value 0 replaces the group identifier. Note that extra care is required in these cases to avoid a
+     * scene identifier collision, and that commands related to scenes without a group may only be unicast, i.e., they
+     * shall NOT be multicast or broadcast.
      *
      * NOTE Support for Scenes Management cluster is provisional.
      *

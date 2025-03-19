@@ -138,16 +138,16 @@ export namespace AdministratorCommissioning {
         iterations: TlvField(3, TlvUInt32.bound({ min: 1000, max: 100000 })),
 
         /**
-         * This field shall be used by the Node as the PAKE Salt associated with the ephemeral PAKE passcode verifier
-         * to be used for this commissioning, which shall be sent by the Node to the new Administrator’s software as
+         * This field shall be used by the Node as the PAKE Salt associated with the ephemeral PAKE passcode verifier to
+         * be used for this commissioning, which shall be sent by the Node to the new Administrator’s software as
          * response to the PBKDFParamRequest during PASE negotiation. The constraints on the value shall match those
          * specified in Section 3.9, “Password-Based Key Derivation Function (PBKDF)”, within the definition of the
          * Crypto_PBKDFParameterSet.
          *
-         * When a Node receives the Open Commissioning Window command, it shall begin advertising on DNS-SD as
-         * described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in
-         * CommissioningTimeout. When the command is received by a ICD, it shall enter into active mode. The ICD shall
-         * remain in Active Mode as long as one of these conditions is met:
+         * When a Node receives the Open Commissioning Window command, it shall begin advertising on DNS-SD as described
+         * in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in CommissioningTimeout.
+         * When the command is received by a ICD, it shall enter into active mode. The ICD shall remain in Active Mode
+         * as long as one of these conditions is met:
          *
          *   • A commissioning window is open.
          *
@@ -199,15 +199,15 @@ export namespace AdministratorCommissioning {
              * If a commissioning window is already currently open, this command shall fail with a cluster specific
              * status code of Busy.
              *
-             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code
-             * of Busy, since it is likely that concurrent commissioning operations from multiple separate
-             * Commissioners are about to take place.
+             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code of
+             * Busy, since it is likely that concurrent commissioning operations from multiple separate Commissioners
+             * are about to take place.
              *
              * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
              *
-             * The commissioning into a new Fabric completes when the Node successfully receives a
-             * CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The new Administrator shall
-             * discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.
+             * The commissioning into a new Fabric completes when the Node successfully receives a CommissioningComplete
+             * command, see Section 5.5, “Commissioning Flows”. The new Administrator shall discover the Node on the IP
+             * network using DNS-based Service Discovery (DNS-SD) for commissioning.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.19.8.2
              */
@@ -305,15 +305,15 @@ export namespace AdministratorCommissioning {
              * Administrator shall discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for
              * commissioning.
              *
-             * If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments
-             * arise, this command shall fail with a cluster specific status code of PAKEParameterError.
+             * If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments arise,
+             * this command shall fail with a cluster specific status code of PAKEParameterError.
              *
              * If a commissioning window is already currently open, this command shall fail with a cluster specific
              * status code of Busy.
              *
-             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code
-             * of Busy, since it is likely that concurrent commissioning operations from multiple separate
-             * Commissioners are about to take place.
+             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code of
+             * Busy, since it is likely that concurrent commissioning operations from multiple separate Commissioners
+             * are about to take place.
              *
              * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
              *
@@ -370,8 +370,8 @@ export namespace AdministratorCommissioning {
      * Commands and Responses needed for this purpose.
      *
      * There are two methods of commissioning, Basic Commissioning which may be supported and is described in Section
-     * 5.6.2, “Basic Commissioning Method (BCM)” and Enhanced Commissioning which shall be supported and is described
-     * in Section 5.6.3, “Enhanced Commissioning Method (ECM)”.
+     * 5.6.2, “Basic Commissioning Method (BCM)” and Enhanced Commissioning which shall be supported and is described in
+     * Section 5.6.3, “Enhanced Commissioning Method (ECM)”.
      *
      * For the management of Operational Credentials and Trusted Root Certificates, the Node Operational Credentials
      * cluster is used.
@@ -383,8 +383,8 @@ export namespace AdministratorCommissioning {
      *
      *   • The attributes shall indicate the state of the node that the Root Node endpoint is on.
      *
-     * If the Administrator Commissioning Cluster server instance is present on an endpoint with the Bridged Node
-     * device type in the Descriptor cluster DeviceTypeList, then:
+     * If the Administrator Commissioning Cluster server instance is present on an endpoint with the Bridged Node device
+     * type in the Descriptor cluster DeviceTypeList, then:
      *
      *   • The Commissioning Window shall be opened or closed on the node represented by the Bridged Node.
      *
@@ -422,8 +422,8 @@ export namespace AdministratorCommissioning {
     /**
      * This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

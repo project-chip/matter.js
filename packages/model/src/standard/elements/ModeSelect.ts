@@ -51,8 +51,8 @@ export const ModeSelect = Cluster(
 
         Field({
             name: "DEPONOFF", constraint: "0", description: "OnOff",
-            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
-                "the same endpoint. See OnMode for more information.",
+            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on the " +
+                "same endpoint. See OnMode for more information.",
             xref: { document: "cluster", section: "1.9.4.1" }
         })
     ),
@@ -76,9 +76,9 @@ export const ModeSelect = Cluster(
         constraint: "desc", default: null, quality: "X F",
         details: "This attribute, when not null, shall indicate a single standard namespace for any standard semantic " +
             "tag value supported in this or any other cluster instance with the same value of this attribute. A " +
-            "null value indicates no standard namespace, and therefore, no standard semantic tags are provided " +
-            "in this cluster instance. Each standard namespace and corresponding values and value meanings shall " +
-            "be defined in another document.",
+            "null value indicates no standard namespace, and therefore, no standard semantic tags are provided in " +
+            "this cluster instance. Each standard namespace and corresponding values and value meanings shall be " +
+            "defined in another document.",
         xref: { document: "cluster", section: "1.9.6.2" }
     }),
 
@@ -113,9 +113,9 @@ export const ModeSelect = Cluster(
         details: "The StartUpMode attribute value indicates the desired startup mode for the server when it is " +
             "supplied with power." +
             "\n" +
-            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, " +
-            "when the server is powered up, except in the case when the OnMode attribute overrides the " +
-            "StartUpMode attribute (see OnModeWithPowerUp)." +
+            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, when " +
+            "the server is powered up, except in the case when the OnMode attribute overrides the StartUpMode " +
+            "attribute (see OnModeWithPowerUp)." +
             "\n" +
             "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode " +
             "attribute shall return to its value prior to the restart." +
@@ -134,8 +134,8 @@ export const ModeSelect = Cluster(
         constraint: "desc", default: null, quality: "X N",
 
         details: "Indicates the value of CurrentMode that depends on the state of the On/Off cluster on the same " +
-            "endpoint. If this attribute is not present or is set to null, it shall NOT have an effect, " +
-            "otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster" +
+            "endpoint. If this attribute is not present or is set to null, it shall NOT have an effect, otherwise " +
+            "the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster" +
             "\n" +
             "The value of this field shall match the Mode field of one of the entries in the SupportedModes" +
             "\n" +
@@ -212,8 +212,8 @@ export const ModeSelect = Cluster(
                 details: "This field is a list of semantic tags that map to the mode option. This may be used by clients to " +
                     "determine the meaning of the mode option as defined in a standard or manufacturer specific " +
                     "namespace. Semantic tags can help clients look for options that meet certain criteria. A semantic " +
-                    "tag shall be either a standard tag or manufacturer specific tag as defined in each " +
-                    "SemanticTagStruct list entry." +
+                    "tag shall be either a standard tag or manufacturer specific tag as defined in each SemanticTagStruct " +
+                    "list entry." +
                     "\n" +
                     "A mode option may have more than one semantic tag. A mode option may be mapped to a mixture of " +
                     "standard and manufacturer specific semantic tags." +

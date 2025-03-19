@@ -20,8 +20,8 @@ export const NetworkCommissioning = Cluster(
         name: "NetworkCommissioning", id: 0x31, classification: "node", pics: "CNET",
 
         details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
-            "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network " +
-            "interfaces. These network interfaces can include the following types." +
+            "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network interfaces. " +
+            "These network interfaces can include the following types." +
             "\n" +
             "  • Wi-Fi (IEEE 802.11-2020)" +
             "\n" +
@@ -29,9 +29,9 @@ export const NetworkCommissioning = Cluster(
             "\n" +
             "  • Thread (802.15.4)" +
             "\n" +
-            "An instance of the Network Commissioning Cluster only applies to a single network interface " +
-            "instance present. An interface, in this context, is a unique entity that can have an IPv6 address " +
-            "assigned to it and ingress and egress IP packets.",
+            "An instance of the Network Commissioning Cluster only applies to a single network interface instance " +
+            "present. An interface, in this context, is a unique entity that can have an IPv6 address assigned to " +
+            "it and ingress and egress IP packets.",
 
         xref: { document: "core", section: "11.9" }
     },
@@ -58,8 +58,8 @@ export const NetworkCommissioning = Cluster(
         name: "MaxNetworks", id: 0x0, type: "uint8", access: "R A", conformance: "M", constraint: "min 1",
         quality: "F",
         details: "This shall indicate the maximum number of network configuration entries that can be added, based on " +
-            "available device resources. The length of the Networks attribute shall be less than or equal to " +
-            "this value.",
+            "available device resources. The length of the Networks attribute shall be less than or equal to this " +
+            "value.",
         xref: { document: "core", section: "11.9.6.1" }
     }),
 
@@ -128,8 +128,8 @@ export const NetworkCommissioning = Cluster(
             "\n" +
             "It may be possible to disable Ethernet interfaces but it is implementation-defined. If not " +
             "supported, a write to this attribute with a value of false shall fail with a status of " +
-            "INVALID_ACTION. When disabled, an Ethernet interface would longer employ media detection. That is, " +
-            "a simple unplug and replug of the cable shall NOT re-enable the interface." +
+            "INVALID_ACTION. When disabled, an Ethernet interface would longer employ media detection. That is, a " +
+            "simple unplug and replug of the cable shall NOT re-enable the interface." +
             "\n" +
             "On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server " +
             "cluster instances with InterfaceEnabled set to true.",
@@ -175,11 +175,10 @@ export const NetworkCommissioning = Cluster(
         name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A", conformance: "M",
         default: null, quality: "X",
 
-        details: "Indicates the ErrorValue used in the last failed attempt to connect to an operational network, " +
-            "using this interface, whether by invocation of the ConnectNetwork command or by autonomous " +
-            "connection after loss of connectivity or during initial establishment. If no such attempt was made, " +
-            "or no network configurations exist in the Networks attribute, then this attribute shall be set to " +
-            "null." +
+        details: "Indicates the ErrorValue used in the last failed attempt to connect to an operational network, using " +
+            "this interface, whether by invocation of the ConnectNetwork command or by autonomous connection " +
+            "after loss of connectivity or during initial establishment. If no such attempt was made, or no " +
+            "network configurations exist in the Networks attribute, then this attribute shall be set to null." +
             "\n" +
             "If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus " +
             "attribute, then this field shall be set to null." +
@@ -221,8 +220,8 @@ export const NetworkCommissioning = Cluster(
         name: "ThreadVersion", id: 0xa, type: "uint16", access: "R V", conformance: "TH", quality: "F",
         details: "Indicates the Thread version supported by the Thread interface configured by the cluster instance." +
             "\n" +
-            "The format shall match the value mapping found in the \"Version TLV\" section of Thread " +
-            "specification. For example, Thread 1.3.0 would have ThreadVersion set to 4.",
+            "The format shall match the value mapping found in the \"Version TLV\" section of Thread specification. " +
+            "For example, Thread 1.3.0 would have ThreadVersion set to 4.",
         xref: { document: "core", section: "11.9.6.11" }
     }),
 
@@ -237,14 +236,14 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "  • Specific networks (directed scanning)" +
                 "\n" +
-                "Scanning for available networks detects all networks of the type corresponding to the cluster " +
-                "server instance’s associated network interface that are possible to join, such as all visible Wi-Fi " +
-                "access points for Wi-Fi cluster server instances, all Thread PANs for Thread cluster server " +
-                "instances, within bounds of the maximum response size." +
+                "Scanning for available networks detects all networks of the type corresponding to the cluster server " +
+                "instance’s associated network interface that are possible to join, such as all visible Wi-Fi access " +
+                "points for Wi-Fi cluster server instances, all Thread PANs for Thread cluster server instances, " +
+                "within bounds of the maximum response size." +
                 "\n" +
                 "Scanning for a specific network (i.e. directed scanning) takes place if a network identifier (e.g. " +
-                "Wi-Fi SSID) is provided in the command arguments. Directed scanning shall restrict the result set " +
-                "to the specified network only." +
+                "Wi-Fi SSID) is provided in the command arguments. Directed scanning shall restrict the result set to " +
+                "the specified network only." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
                 "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
@@ -260,16 +259,16 @@ export const NetworkCommissioning = Cluster(
                 "operation." +
                 "\n" +
                 "For Wi-Fi-supporting servers (WI feature) the server shall always honor directed scans, and attempt " +
-                "to provide all matching BSSID which are reachable on the bands which would otherwise be attempted " +
-                "if a ConnectNetwork having the specified SSID were to take place. This command is useful for " +
-                "clients to determine reachability capabilities as seen by the server’s own radios." +
+                "to provide all matching BSSID which are reachable on the bands which would otherwise be attempted if " +
+                "a ConnectNetwork having the specified SSID were to take place. This command is useful for clients to " +
+                "determine reachability capabilities as seen by the server’s own radios." +
                 "\n" +
                 "For Wi-Fi-supporting servers the server shall always scan on all bands supported by the interface " +
                 "associated with the cluster instance on which the command was invoked." +
                 "\n" +
                 "If the command was invoked over the same link whose configuration is managed by a given server " +
-                "cluster instance, there may be an impact on other communication from the invoking client, as well " +
-                "as other clients, while the network interface is processing the scan. Clients SHOULD NOT use this " +
+                "cluster instance, there may be an impact on other communication from the invoking client, as well as " +
+                "other clients, while the network interface is processing the scan. Clients SHOULD NOT use this " +
                 "command unless actively in the process of re-configuring network connectivity.",
 
             xref: { document: "core", section: "11.9.7.1" }
@@ -312,8 +311,8 @@ export const NetworkCommissioning = Cluster(
             name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M",
             constraint: "desc",
 
-            details: "The NetworkingStatus field shall indicate the status of the last scan operation, taking one of " +
-                "these values:" +
+            details: "The NetworkingStatus field shall indicate the status of the last scan operation, taking one of these " +
+                "values:" +
                 "\n" +
                 "  • Success: Scanning succeeded." +
                 "\n" +
@@ -332,8 +331,8 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512",
-            details: "This field, if present and non-empty, may contain error information which may be communicated to " +
-                "the user in case the NetworkingStatus was not Success. Its purpose is to help developers in " +
+            details: "This field, if present and non-empty, may contain error information which may be communicated to the " +
+                "user in case the NetworkingStatus was not Success. Its purpose is to help developers in " +
                 "troubleshooting errors and may go into logs or crash reports.",
             xref: { document: "core", section: "11.9.7.2.2" }
         }),
@@ -352,8 +351,8 @@ export const NetworkCommissioning = Cluster(
                     "Requirements”)." +
                     "\n" +
                     "The order in which results are reported is implementation-specific. Results SHOULD be reported in " +
-                    "decreasing RSSI order, even if RSSI is not reported in the response, to maximize the likelihood " +
-                    "that most likely to be reachable elements are included within the size limits of the response.",
+                    "decreasing RSSI order, even if RSSI is not reported in the response, to maximize the likelihood that " +
+                    "most likely to be reachable elements are included within the size limits of the response.",
 
                 xref: { document: "core", section: "11.9.7.2.3" }
             },
@@ -400,8 +399,8 @@ export const NetworkCommissioning = Cluster(
                 "If this command contains a ClientIdentifier, and the Networks list does not contain an entry with a " +
                 "matching ClientIdentifier, then this command shall fail with a status of NOT_FOUND." +
                 "\n" +
-                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
-                "for behavior of addition/update.",
+                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for " +
+                "behavior of addition/update.",
 
             xref: { document: "core", section: "11.9.7.3" }
         },
@@ -418,10 +417,10 @@ export const NetworkCommissioning = Cluster(
 
             details: "Credentials is the passphrase or PSK for the network (if any is needed)." +
                 "\n" +
-                "Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- " +
-                "selected during execution of the ConnectNetwork Command and during subsequent operational state " +
-                "network connections, based on the most secure Wi-Fi security type available within beacons and " +
-                "probe responses for the set of all discovered BSSIDs for the configured SSID. The type of PSK or " +
+                "Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- selected " +
+                "during execution of the ConnectNetwork Command and during subsequent operational state network " +
+                "connections, based on the most secure Wi-Fi security type available within beacons and probe " +
+                "responses for the set of all discovered BSSIDs for the configured SSID. The type of PSK or " +
                 "passphrase used shall be inferred based on the length and contents of the Credentials field " +
                 "provided, matching the security type chosen." +
                 "\n" +
@@ -472,8 +471,8 @@ export const NetworkCommissioning = Cluster(
                 "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
                 "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
                 "\n" +
-                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
-                "for behavior of addition/update." +
+                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for " +
+                "behavior of addition/update." +
                 "\n" +
                 "The XPAN ID in the OperationalDataset serves as the NetworkID for the network configuration to be " +
                 "added or updated." +
@@ -487,8 +486,8 @@ export const NetworkCommissioning = Cluster(
 
         Field({
             name: "OperationalDataset", id: 0x0, type: "octstr", conformance: "M", constraint: "max 254",
-            details: "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN " +
-                "ID, and Extended PAN ID." +
+            details: "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN ID, " +
+                "and Extended PAN ID." +
                 "\n" +
                 "The encoding for the OperationalDataset field is defined in the Thread specification. The client " +
                 "shall pass the OperationalDataset as an opaque octet string.",
@@ -550,8 +549,8 @@ export const NetworkCommissioning = Cluster(
                 "Before generating a NetworkConfigResponse, the server shall set the LastNetworkingStatus attribute " +
                 "value to the NetworkingStatus matching the response." +
                 "\n" +
-                "Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value " +
-                "to the NetworkID that was used in the command for which an invocation caused the response to be " +
+                "Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to " +
+                "the NetworkID that was used in the command for which an invocation caused the response to be " +
                 "generated.",
 
             xref: { document: "core", section: "11.9.7.7" }
@@ -587,8 +586,8 @@ export const NetworkCommissioning = Cluster(
         Field({
             name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O", constraint: "max maxNetworks - 1",
             details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
-                "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
-                "by the associated request command.",
+                "index of the entry in the Networks attribute that was last added, updated or removed successfully by " +
+                "the associated request command.",
             xref: { document: "core", section: "11.9.7.7.3" }
         })
     ),
@@ -599,12 +598,12 @@ export const NetworkCommissioning = Cluster(
             response: "ConnectNetworkResponse",
 
             details: "This command shall attempt to connect to a network whose configuration was previously added by " +
-                "either the AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by " +
-                "its NetworkID." +
+                "either the AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by its " +
+                "NetworkID." +
                 "\n" +
-                "This command shall fail with a BUSY status code returned to the initiator if the server is " +
-                "currently unable to proceed with such an operation, such as if it is currently attempting to " +
-                "connect in the background, or is already proceeding with a prior ConnectNetwork." +
+                "This command shall fail with a BUSY status code returned to the initiator if the server is currently " +
+                "unable to proceed with such an operation, such as if it is currently attempting to connect in the " +
+                "background, or is already proceeding with a prior ConnectNetwork." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
                 "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
@@ -613,10 +612,10 @@ export const NetworkCommissioning = Cluster(
                 "managed by any other Network Commissioning cluster instances (whether under the Root Node or a " +
                 "Secondary Network Interface), where those connections are not represented by an entry in the " +
                 "Networks attribute of the corresponding cluster instance. This ensures that an Administrator or " +
-                "Commissioner can reliably reconfigure the operational network connection of a device that has one " +
-                "or more Secondary Network interfaces, for example by removing the active network configuration from " +
-                "one cluster instance, followed by adding a new configuration and calling ConnectNetwork on a " +
-                "different cluster instance." +
+                "Commissioner can reliably reconfigure the operational network connection of a device that has one or " +
+                "more Secondary Network interfaces, for example by removing the active network configuration from one " +
+                "cluster instance, followed by adding a new configuration and calling ConnectNetwork on a different " +
+                "cluster instance." +
                 "\n" +
                 "Success or failure of this command shall be communicated by the ConnectNetworkResponse command, " +
                 "unless some data model validations caused a FAILURE status to be sent prior to finishing execution " +
@@ -627,12 +626,12 @@ export const NetworkCommissioning = Cluster(
                 "The amount of time needed to determine successful or failing connectivity on the cluster server’s " +
                 "associated interface is provided by the ConnectMaxTimeSeconds attribute. Clients shall NOT consider " +
                 "the connection to have timed-out until at least that duration has taken place. For non-concurrent " +
-                "commissioning situations, the client SHOULD allow additional margin of time to account for its " +
-                "delay in executing operational discovery of the Node once it is connected to the new network." +
+                "commissioning situations, the client SHOULD allow additional margin of time to account for its delay " +
+                "in executing operational discovery of the Node once it is connected to the new network." +
                 "\n" +
                 "On successful connection, the entry associated with the given Network configuration in the Networks " +
-                "attribute shall indicate its Connected field set to true, and all other entries, if any exist, " +
-                "shall indicate their Connected field set to false." +
+                "attribute shall indicate its Connected field set to true, and all other entries, if any exist, shall " +
+                "indicate their Connected field set to false." +
                 "\n" +
                 "On failure to connect, the entry associated with the given Network configuration in the Networks " +
                 "attribute shall indicate its Connected field set to false." +
@@ -655,8 +654,8 @@ export const NetworkCommissioning = Cluster(
                 "ConnectNetwork command, the client SHOULD re-invoke the Arm Fail-Safe command with a duration that " +
                 "meets the following:" +
                 "\n" +
-                "  1. Sufficient time to meet the minimum required time (see ConnectMaxTimeSeconds) that may be " +
-                "     taken by the server to connect to the desired network." +
+                "  1. Sufficient time to meet the minimum required time (see ConnectMaxTimeSeconds) that may be taken " +
+                "     by the server to connect to the desired network." +
                 "\n" +
                 "  2. Sufficient time to account for possible message-layer retries when a response is requested." +
                 "\n" +
@@ -704,8 +703,8 @@ export const NetworkCommissioning = Cluster(
                 "  • Set the LastNetworkID attribute value to the NetworkID that was used in the ConnectNetwork " +
                 "    command which caused the response to be generated." +
                 "\n" +
-                "  • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, " +
-                "    including setting it to null if the ErrorValue is not applicable.",
+                "  • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including " +
+                "    setting it to null if the ErrorValue is not applicable.",
 
             xref: { document: "core", section: "11.9.7.9" }
         },
@@ -966,9 +965,9 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "  • Network interface instance name at operating system (or equivalent unique name) for Ethernet." +
                 "\n" +
-                "The semantics of the NetworkID field therefore varies between network types accordingly. It " +
-                "contains SSID for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for " +
-                "Ethernet networks." +
+                "The semantics of the NetworkID field therefore varies between network types accordingly. It contains " +
+                "SSID for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet " +
+                "networks." +
                 "\n" +
                 "NOTE" +
                 "\n" +
@@ -988,8 +987,8 @@ export const NetworkCommissioning = Cluster(
         Field({
             name: "Connected", id: 0x1, type: "bool", conformance: "M",
             details: "This field shall indicate the connected status of the associated network, where \"connected\" means " +
-                "currently linked to the network technology (e.g. Associated for a Wi-Fi network, media connected " +
-                "for an Ethernet network).",
+                "currently linked to the network technology (e.g. Associated for a Wi-Fi network, media connected for " +
+                "an Ethernet network).",
             xref: { document: "core", section: "11.9.5.5.2" }
         })
     ),

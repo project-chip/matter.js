@@ -55,10 +55,10 @@ export namespace LaundryDryerControls {
 
         attributes: {
             /**
-             * Indicates the list of supported dryness levels available to the appliance in the currently selected
-             * mode. The dryness level values are determined by the manufacturer. At least one dryness level value
-             * shall be provided in the SupportedDrynessLevels list. The list of dryness levels may change depending on
-             * the currently-selected Laundry Dryer mode.
+             * Indicates the list of supported dryness levels available to the appliance in the currently selected mode.
+             * The dryness level values are determined by the manufacturer. At least one dryness level value shall be
+             * provided in the SupportedDrynessLevels list. The list of dryness levels may change depending on the
+             * currently-selected Laundry Dryer mode.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.9.5.1
              */

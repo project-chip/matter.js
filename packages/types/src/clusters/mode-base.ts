@@ -155,9 +155,9 @@ export namespace ModeBase {
         mode: TlvField(1, TlvUInt8),
 
         /**
-         * This field shall contain a list of tags that are associated with the mode option. This may be used by
-         * clients to determine the full or the partial semantics of a certain mode, depending on which tags they
-         * understand, using standard definitions and/or manufacturer specific namespace definitions.
+         * This field shall contain a list of tags that are associated with the mode option. This may be used by clients
+         * to determine the full or the partial semantics of a certain mode, depending on which tags they understand,
+         * using standard definitions and/or manufacturer specific namespace definitions.
          *
          * The standard mode tags are defined in this cluster specification. For the derived cluster instances, if the
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
@@ -168,8 +168,8 @@ export namespace ModeBase {
          * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
-         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard
-         * and manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
+         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
+         * manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
          *
          * A few examples are provided below.
          *
@@ -219,11 +219,11 @@ export namespace ModeBase {
          *
          *   • Provide a human readable string in the StatusText field.
          *
-         * If the NewMode field matches the Mode field of one entry of the SupportedModes list and the device is able
-         * to transition as requested, the server shall transition into the mode associated with NewMode, the
-         * ChangeToModeResponse command shall have the Status field set to Success, the StatusText field may be
-         * supplied with a human readable string or include an empty string and the CurrentMode field shall be set to
-         * the value of the NewMode field.
+         * If the NewMode field matches the Mode field of one entry of the SupportedModes list and the device is able to
+         * transition as requested, the server shall transition into the mode associated with NewMode, the
+         * ChangeToModeResponse command shall have the Status field set to Success, the StatusText field may be supplied
+         * with a human readable string or include an empty string and the CurrentMode field shall be set to the value
+         * of the NewMode field.
          *
          * If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeResponse command
          * shall have the Status field set to Success and the StatusText field may be supplied with a human readable
@@ -325,8 +325,8 @@ export namespace ModeBase {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
+             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
+             * endpoint. See OnMode for more information.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
              */
@@ -418,8 +418,8 @@ export namespace ModeBase {
     /**
      * This cluster supports all ModeBase features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

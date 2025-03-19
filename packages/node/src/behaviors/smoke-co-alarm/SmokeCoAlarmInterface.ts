@@ -17,10 +17,10 @@ export namespace SmokeCoAlarmInterface {
          * device shall NOT execute the self-test, and shall return status code BUSY.
          *
          * Upon successful acceptance of SelfTestRequest, the TestInProgress attribute shall be set to True and
-         * ExpressedState attribute shall be set to Testing. Any faults identified during the test shall be reflected
-         * in the appropriate attributes and events. Upon completion of the self test procedure, the SelfTestComplete
-         * event shall be generated, the TestInProgress attribute shall be set to False and ExpressedState attribute
-         * shall be updated to reflect the current state of the server.
+         * ExpressedState attribute shall be set to Testing. Any faults identified during the test shall be reflected in
+         * the appropriate attributes and events. Upon completion of the self test procedure, the SelfTestComplete event
+         * shall be generated, the TestInProgress attribute shall be set to False and ExpressedState attribute shall be
+         * updated to reflect the current state of the server.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.11.7.1
          */

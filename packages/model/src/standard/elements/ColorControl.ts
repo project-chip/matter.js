@@ -20,8 +20,8 @@ export const ColorControl = Cluster(
         name: "ColorControl", id: 0x300, classification: "application", pics: "CC",
 
         details: "This cluster provides an interface for changing the color of a light. Color is specified according " +
-            "to the CIE 1931 Color space. Color control is carried out in terms of x,y values, as defined by " +
-            "this specification." +
+            "to the CIE 1931 Color space. Color control is carried out in terms of x,y values, as defined by this " +
+            "specification." +
             "\n" +
             "Additionally, color may optionally be controlled in terms of color temperature, or as hue and " +
             "saturation values based on optionally variable RGB and W color points. It is recommended that the " +
@@ -124,8 +124,8 @@ export const ColorControl = Cluster(
             "\n" +
             "  • When it changes to 0." +
             "\n" +
-            "For commands with a transition time or changes to the transition time less than 1 second, changes " +
-            "to this attribute shall NOT be reported." +
+            "For commands with a transition time or changes to the transition time less than 1 second, changes to " +
+            "this attribute shall NOT be reported." +
             "\n" +
             "As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the " +
             "reporting of this attribute in order to keep track of the remaining duration.",
@@ -190,8 +190,8 @@ export const ColorControl = Cluster(
     Attribute({
         name: "CompensationText", id: 0x6, type: "string", access: "R V", conformance: "O",
         constraint: "max 254",
-        details: "This attribute shall contain a textual indication of what mechanism, if any, is in use to " +
-            "compensate for color/intensity drift over time.",
+        details: "This attribute shall contain a textual indication of what mechanism, if any, is in use to compensate " +
+            "for color/intensity drift over time.",
         xref: { document: "cluster", section: "3.2.7.8" }
     }),
 
@@ -282,8 +282,8 @@ export const ColorControl = Cluster(
             details: "Indicates the normalized chromaticity value x for this primary, as defined in the CIE xyY Color " +
                 "Space." +
                 "\n" +
-                "The value of x shall be related to the Primary1X attribute by the relationship x = Primary1X / " +
-                "65536 (Primary1X in the range 0 to 65279 inclusive)",
+                "The value of x shall be related to the Primary1X attribute by the relationship x = Primary1X / 65536 " +
+                "(Primary1X in the range 0 to 65279 inclusive)",
             xref: { document: "cluster", section: "3.2.7.25" }
         }
     ),
@@ -295,8 +295,8 @@ export const ColorControl = Cluster(
             details: "Indicates the normalized chromaticity value y for this primary, as defined in the CIE xyY Color " +
                 "Space." +
                 "\n" +
-                "The value of y shall be related to the Primary1Y attribute by the relationship y = Primary1Y / " +
-                "65536 (Primary1Y in the range 0 to 65279 inclusive)",
+                "The value of y shall be related to the Primary1Y attribute by the relationship y = Primary1Y / 65536 " +
+                "(Primary1Y in the range 0 to 65279 inclusive)",
             xref: { document: "cluster", section: "3.2.7.26" }
         }
     ),
@@ -306,8 +306,8 @@ export const ColorControl = Cluster(
         conformance: "NumberOfPrimaries > 0", quality: "X F",
 
         details: "Indicates a representation of the maximum intensity of this primary as defined in the Dimming Light " +
-            "Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such " +
-            "that the primary with the highest maximum intensity contains the value 254." +
+            "Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that " +
+            "the primary with the highest maximum intensity contains the value 254." +
             "\n" +
             "A value of null shall indicate that this primary is not available." +
             "\n" +
@@ -315,8 +315,8 @@ export const ColorControl = Cluster(
             "Primary4X, Primary4Y, Primary4Intensity, Primary5X, Primary5Y, Primary5Intensity, Primary6X, " +
             "Primary6Y and Primary6Intensity Attributes" +
             "\n" +
-            "These attributes shall represent the capabilities of the 2nd, 3rd, 4th, 5th and 6th primaries, " +
-            "where present, in the same way as for the Primary1X, Primary1Y and Primary1Intensity attributes.",
+            "These attributes shall represent the capabilities of the 2nd, 3rd, 4th, 5th and 6th primaries, where " +
+            "present, in the same way as for the Primary1X, Primary1Y and Primary1Intensity attributes.",
 
         xref: { document: "cluster", section: "3.2.7.27" }
     }),
@@ -401,8 +401,8 @@ export const ColorControl = Cluster(
         {
             name: "WhitePointX", id: 0x30, type: "uint16", access: "RW VM", conformance: "O",
             constraint: "max 65279",
-            details: "Indicates the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the " +
-                "current white point of the device." +
+            details: "Indicates the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the current " +
+                "white point of the device." +
                 "\n" +
                 "The value of x shall be related to the WhitePointX attribute by the relationship x = WhitePointX / " +
                 "65536 (WhitePointX in the range 0 to 65279 inclusive)",
@@ -414,8 +414,8 @@ export const ColorControl = Cluster(
         {
             name: "WhitePointY", id: 0x31, type: "uint16", access: "RW VM", conformance: "O",
             constraint: "max 65279",
-            details: "Indicates the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the " +
-                "current white point of the device." +
+            details: "Indicates the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the current " +
+                "white point of the device." +
                 "\n" +
                 "The value of y shall be related to the WhitePointY attribute by the relationship y = WhitePointY / " +
                 "65536 (WhitePointY in the range 0 to 65279 inclusive)",
@@ -430,8 +430,8 @@ export const ColorControl = Cluster(
             details: "Indicates the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the red " +
                 "color point of the device." +
                 "\n" +
-                "The value of x shall be related to the ColorPointRX attribute by the relationship x = ColorPointRX " +
-                "/ 65536 (ColorPointRX in the range 0 to 65279 inclusive)",
+                "The value of x shall be related to the ColorPointRX attribute by the relationship x = ColorPointRX / " +
+                "65536 (ColorPointRX in the range 0 to 65279 inclusive)",
             xref: { document: "cluster", section: "3.2.7.31" }
         }
     ),
@@ -443,8 +443,8 @@ export const ColorControl = Cluster(
             details: "Indicates the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the red " +
                 "color point of the device." +
                 "\n" +
-                "The value of y shall be related to the ColorPointRY attribute by the relationship y = ColorPointRY " +
-                "/ 65536 (ColorPointRY in the range 0 to 65279 inclusive)",
+                "The value of y shall be related to the ColorPointRY attribute by the relationship y = ColorPointRY / " +
+                "65536 (ColorPointRY in the range 0 to 65279 inclusive)",
             xref: { document: "cluster", section: "3.2.7.32" }
         }
     ),
@@ -462,9 +462,8 @@ export const ColorControl = Cluster(
             "3.2.7.34. ColorPointGX, ColorPointGY, ColorPointGIntensity, ColorPointBX, ColorPointBY and " +
             "ColorPointBIntensity Attributes" +
             "\n" +
-            "These attributes shall represent the chromaticity values and intensities of the green and blue " +
-            "color points, in the same way as for the ColorPointRX, ColorPointRY and ColorPointRIntensity " +
-            "attributes." +
+            "These attributes shall represent the chromaticity values and intensities of the green and blue color " +
+            "points, in the same way as for the ColorPointRX, ColorPointRY and ColorPointRIntensity attributes." +
             "\n" +
             "If any one of these red, green or blue color point attributes is implemented then they shall all be " +
             "implemented.",
@@ -634,8 +633,8 @@ export const ColorControl = Cluster(
 
             details: "Indicates a lower bound on the value of the ColorTemperatureMireds attribute for the purposes of " +
                 "coupling the ColorTemperatureMireds attribute to the CurrentLevel attribute when the " +
-                "CoupleColorTempToLevel bit of the Options attribute of the Level Control cluster is equal to 1. " +
-                "When coupling the ColorTemperatureMireds attribute to the CurrentLevel attribute, this value shall " +
+                "CoupleColorTempToLevel bit of the Options attribute of the Level Control cluster is equal to 1. When " +
+                "coupling the ColorTemperatureMireds attribute to the CurrentLevel attribute, this value shall " +
                 "correspond to a CurrentLevel value of 254 (100%)." +
                 "\n" +
                 "This attribute shall be set such that the following relationship exists: ColorTempPhysicalMinMireds " +
@@ -657,8 +656,8 @@ export const ColorControl = Cluster(
         conformance: "CT & ColorTemperatureMireds", constraint: "1 to 65279", quality: "X N",
         details: "Indicates the desired startup color temperature value the light shall use when it is supplied with " +
             "power and this value shall be reflected in the ColorTemperatureMireds attribute. In addition, the " +
-            "ColorMode and EnhancedColorMode attributes shall be set to 2 (ColorTemperatureMireds). The values " +
-            "of the StartUpColorTemperatureMireds attribute are listed in the table below,",
+            "ColorMode and EnhancedColorMode attributes shall be set to 2 (ColorTemperatureMireds). The values of " +
+            "the StartUpColorTemperatureMireds attribute are listed in the table below,",
         xref: { document: "cluster", section: "3.2.7.23" }
     }),
 
@@ -806,8 +805,8 @@ export const ColorControl = Cluster(
         Field({
             name: "TransitionTime", id: 0x2, type: "uint8", conformance: "M",
 
-            details: "This field shall indicate, in 1/10ths of a second, the time that shall be taken to perform the " +
-                "step. A step is a change in the device’s saturation of Step size units." +
+            details: "This field shall indicate, in 1/10ths of a second, the time that shall be taken to perform the step. " +
+                "A step is a change in the device’s saturation of Step size units." +
                 "\n" +
                 "NOTE" +
                 "\n" +
@@ -1103,15 +1102,15 @@ export const ColorControl = Cluster(
             name: "ColorTemperatureMinimumMireds", id: 0x2, type: "uint16", conformance: "M",
             constraint: "max 65279",
 
-            details: "This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound " +
-                "on the color temperature in kelvins) for the current move operation" +
+            details: "This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound on " +
+                "the color temperature in kelvins) for the current move operation" +
                 "\n" +
                 "ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds" +
                 "\n" +
                 "As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the " +
-                "ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. " +
-                "If the ColorTemperatureMinimumMireds field is set to 0, ColorTempPhysicalMinMireds shall be used as " +
-                "the lower bound for the ColorTemperatureMireds attribute.",
+                "ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. If " +
+                "the ColorTemperatureMinimumMireds field is set to 0, ColorTempPhysicalMinMireds shall be used as the " +
+                "lower bound for the ColorTemperatureMireds attribute.",
 
             xref: { document: "cluster", section: "3.2.8.21.3" }
         }),
@@ -1120,15 +1119,15 @@ export const ColorControl = Cluster(
             name: "ColorTemperatureMaximumMireds", id: 0x3, type: "uint16", conformance: "M",
             constraint: "max 65279",
 
-            details: "This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound " +
-                "on the color temperature in kelvins) for the current move operation" +
+            details: "This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound on " +
+                "the color temperature in kelvins) for the current move operation" +
                 "\n" +
                 "ColorTemperatureMireds <= ColorTemperatureMaximumMireds field <= ColorTempPhysicalMaxMireds" +
                 "\n" +
                 "As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the " +
-                "ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. " +
-                "If the ColorTemperatureMaximumMireds field is set to 0, ColorTempPhysicalMaxMireds shall be used as " +
-                "the upper bound for the ColorTemperatureMireds attribute.",
+                "ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. If " +
+                "the ColorTemperatureMaximumMireds field is set to 0, ColorTempPhysicalMaxMireds shall be used as the " +
+                "upper bound for the ColorTemperatureMireds attribute.",
 
             xref: { document: "cluster", section: "3.2.8.21.4" }
         }),
@@ -1170,15 +1169,15 @@ export const ColorControl = Cluster(
             name: "ColorTemperatureMinimumMireds", id: 0x3, type: "uint16", conformance: "M",
             constraint: "max 65279",
 
-            details: "This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound " +
-                "on the color temperature in kelvins) for the current step operation" +
+            details: "This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound on " +
+                "the color temperature in kelvins) for the current step operation" +
                 "\n" +
                 "ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds" +
                 "\n" +
                 "As such if the step operation takes the ColorTemperatureMireds attribute towards the value of the " +
-                "ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. " +
-                "If the ColorTemperatureMinimumMireds field is set to 0, ColorTempPhysicalMinMireds shall be used as " +
-                "the lower bound for the ColorTemperatureMireds attribute.",
+                "ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. If " +
+                "the ColorTemperatureMinimumMireds field is set to 0, ColorTempPhysicalMinMireds shall be used as the " +
+                "lower bound for the ColorTemperatureMireds attribute.",
 
             xref: { document: "cluster", section: "3.2.8.22.4" }
         }),
@@ -1187,15 +1186,15 @@ export const ColorControl = Cluster(
             name: "ColorTemperatureMaximumMireds", id: 0x4, type: "uint16", conformance: "M",
             constraint: "max 65279",
 
-            details: "This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound " +
-                "on the color temperature in kelvins) for the current step operation" +
+            details: "This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound on " +
+                "the color temperature in kelvins) for the current step operation" +
                 "\n" +
                 "ColorTemperatureMireds ≤ ColorTemperatureMaximumMireds field ≤ ColorTempPhysicalMaxMireds" +
                 "\n" +
                 "As such if the step operation takes the ColorTemperatureMireds attribute towards the value of the " +
-                "ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. " +
-                "If the ColorTemperatureMaximumMireds field is set to 0, ColorTempPhysicalMaxMireds shall be used as " +
-                "the upper bound for the ColorTemperatureMireds attribute.",
+                "ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. If " +
+                "the ColorTemperatureMaximumMireds field is set to 0, ColorTempPhysicalMaxMireds shall be used as the " +
+                "upper bound for the ColorTemperatureMireds attribute.",
 
             xref: { document: "cluster", section: "3.2.8.22.5" }
         }),

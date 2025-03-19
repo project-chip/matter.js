@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OtaSoftwareUpdateProviderInterface } from "./OtaSoftwareUpdateProviderInterface.js";
 
 /**
- * OtaSoftwareUpdateProviderBehavior is the base class for objects that support interaction with {@link
- * OtaSoftwareUpdateProvider.Cluster}.
+ * OtaSoftwareUpdateProviderBehavior is the base class for objects that support interaction with
+ * {@link OtaSoftwareUpdateProvider.Cluster}.
  */
 export const OtaSoftwareUpdateProviderBehavior = ClusterBehavior
     .withInterface<OtaSoftwareUpdateProviderInterface>()

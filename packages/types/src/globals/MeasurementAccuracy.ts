@@ -48,9 +48,9 @@ export const TlvMeasurementAccuracy = TlvObject({
      * The value of the RangeMax field on the last MeasurementAccuracyRangeStruct in this list shall be less than or
      * equal to the value of the MaxMeasuredValue field.
      *
-     * The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the first shall
-     * be one more the value of the RangeMax field on the previous MeasurementAccuracyRangeStruct in this list (i.e.
-     * there shall be no gaps in the accuracy ranges, and the ranges shall be in increasing order).
+     * The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the first shall be
+     * one more the value of the RangeMax field on the previous MeasurementAccuracyRangeStruct in this list (i.e. there
+     * shall be no gaps in the accuracy ranges, and the ranges shall be in increasing order).
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.5
      */

@@ -47,8 +47,8 @@ export const SmokeCoAlarm = Cluster(
             "beyond the one indicated in ExpressedState." +
             "\n" +
             "Visible expression is typically a LED light pattern. Audible expression is a horn or speaker " +
-            "pattern. Audible expression shall BE suppressed if the DeviceMuted attribute is supported and set " +
-            "to Muted.",
+            "pattern. Audible expression shall BE suppressed if the DeviceMuted attribute is supported and set to " +
+            "Muted.",
 
         xref: { document: "cluster", section: "2.11.6.1" }
     }),
@@ -69,18 +69,17 @@ export const SmokeCoAlarm = Cluster(
     Attribute({
         name: "BatteryAlert", id: 0x3, type: "AlarmStateEnum", access: "R V", conformance: "M",
         quality: "N",
-        details: "Indicates whether the power resource fault detection mechanism is currently triggered at the " +
-            "device. If the detection mechanism is triggered, this attribute shall be set to Warning or " +
-            "Critical, otherwise it shall be set to Normal. The battery state shall also be reflected in the " +
-            "Power Source cluster representing the device’s battery using the appropriate supported attributes " +
-            "and events.",
+        details: "Indicates whether the power resource fault detection mechanism is currently triggered at the device. " +
+            "If the detection mechanism is triggered, this attribute shall be set to Warning or Critical, " +
+            "otherwise it shall be set to Normal. The battery state shall also be reflected in the Power Source " +
+            "cluster representing the device’s battery using the appropriate supported attributes and events.",
         xref: { document: "cluster", section: "2.11.6.4" }
     }),
 
     Attribute({
         name: "DeviceMuted", id: 0x4, type: "MuteStateEnum", access: "R V", conformance: "O", quality: "N",
-        details: "Indicates the whether the audible expression of the device is currently muted. Audible expression " +
-            "is typically a horn or speaker pattern.",
+        details: "Indicates the whether the audible expression of the device is currently muted. Audible expression is " +
+            "typically a horn or speaker pattern.",
         xref: { document: "cluster", section: "2.11.6.5" }
     }),
 
@@ -116,8 +115,8 @@ export const SmokeCoAlarm = Cluster(
 
     Attribute({
         name: "InterconnectCoAlarm", id: 0x9, type: "AlarmStateEnum", access: "R V", conformance: "O",
-        details: "Indicates whether the interconnected CO alarm is currently triggering by branching devices. When " +
-            "the interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical, " +
+        details: "Indicates whether the interconnected CO alarm is currently triggering by branching devices. When the " +
+            "interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical, " +
             "otherwise it shall be set to Normal.",
         xref: { document: "cluster", section: "2.11.6.10" }
     }),
@@ -263,11 +262,11 @@ export const SmokeCoAlarm = Cluster(
             "the ExpressedState attribute is any of SmokeAlarm, COAlarm, Testing, InterconnectSmoke, " +
             "InterconnectCO, the device shall NOT execute the self-test, and shall return status code BUSY." +
             "\n" +
-            "Upon successful acceptance of SelfTestRequest, the TestInProgress attribute shall be set to True " +
-            "and ExpressedState attribute shall be set to Testing. Any faults identified during the test shall " +
-            "be reflected in the appropriate attributes and events. Upon completion of the self test procedure, " +
-            "the SelfTestComplete event shall be generated, the TestInProgress attribute shall be set to False " +
-            "and ExpressedState attribute shall be updated to reflect the current state of the server.",
+            "Upon successful acceptance of SelfTestRequest, the TestInProgress attribute shall be set to True and " +
+            "ExpressedState attribute shall be set to Testing. Any faults identified during the test shall be " +
+            "reflected in the appropriate attributes and events. Upon completion of the self test procedure, the " +
+            "SelfTestComplete event shall be generated, the TestInProgress attribute shall be set to False and " +
+            "ExpressedState attribute shall be updated to reflect the current state of the server.",
 
         xref: { document: "cluster", section: "2.11.7.1" }
     }),
@@ -411,8 +410,8 @@ export const SmokeCoAlarm = Cluster(
     Datatype(
         {
             name: "ContaminationStateEnum", type: "enum8",
-            details: "This value shall indicate that the smoke sensor has nominal contamination levels, no customer " +
-                "action is required.",
+            details: "This value shall indicate that the smoke sensor has nominal contamination levels, no customer action " +
+                "is required.",
             xref: { document: "cluster", section: "2.11.5.6" }
         },
 
@@ -427,8 +426,8 @@ export const SmokeCoAlarm = Cluster(
 
         Field({
             name: "Warning", id: 0x2, conformance: "O", description: "Warning state",
-            details: "This value shall indicate that the smoke sensor has contamination levels in a warning state. At " +
-                "this level, the contamination may cause a visible or audible alarm. User intervention is suggested.",
+            details: "This value shall indicate that the smoke sensor has contamination levels in a warning state. At this " +
+                "level, the contamination may cause a visible or audible alarm. User intervention is suggested.",
             xref: { document: "cluster", section: "2.11.5.6.3" }
         }),
 

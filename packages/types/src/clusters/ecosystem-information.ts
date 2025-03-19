@@ -25,8 +25,8 @@ export namespace EcosystemInformation {
      */
     export const TlvEcosystemDevice = TlvObject({
         /**
-         * This field shall indicate the device’s name, which is provided externally if the user consents. (For
-         * example, provided by the user in an ecosystem specific interface.)
+         * This field shall indicate the device’s name, which is provided externally if the user consents. (For example,
+         * provided by the user in an ecosystem specific interface.)
          *
          * @see {@link MatterSpecification.v13.Core} § 9.18.4.1.1
          */
@@ -108,18 +108,18 @@ export namespace EcosystemInformation {
          * This field shall indicate a unique identifier for a specific Ecosystem Information Cluster server instance
          * representing the location independent of its LocationDescriptor field.
          *
-         * UniqueLocationID can be used by the client to determine if the change is a relocation of the device or just
-         * a renaming of the location.
+         * UniqueLocationID can be used by the client to determine if the change is a relocation of the device or just a
+         * renaming of the location.
          *
          * No guarantees are given for consistency of the ID between server instances. The same location may be
-         * represented by different IDs on different Ecosystem Information Cluster server instances, so only the
-         * history from a single server instance should be considered when evaluating a change.
+         * represented by different IDs on different Ecosystem Information Cluster server instances, so only the history
+         * from a single server instance should be considered when evaluating a change.
          *
          * UniqueLocationID shall be changed when the LocationDescriptor changes from one existing location to another
          * location as a result of an external interaction. (For example, the user changes the location assignment.)
          *
-         * UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still represents the
-         * same location. (For example, the user renames a room.)
+         * UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still represents the same
+         * location. (For example, the user renames a room.)
          *
          * UniqueLocationID shall be changed when LocationDescriptor changes as a result of another Ecosystem
          * Information Cluster server instance changing and the UniqueLocationID on the remote server instance also
@@ -159,10 +159,10 @@ export namespace EcosystemInformation {
     export const ClusterInstance = MutableCluster({ id: 0x750, name: "EcosystemInformation", revision: 1 });
 
     /**
-     * The Ecosystem Information Cluster provides extended device information for all the logical devices represented
-     * by a Bridged Node. The Ecosystem Information Cluster presents the view of device name and location metadata for
-     * presentation by a client of the cluster to a user. This cluster is intended to support Fabric Synchronization
-     * and be present on an endpoint with the BridgedNode device type listed in the DeviceTypeList of the endpoint’s
+     * The Ecosystem Information Cluster provides extended device information for all the logical devices represented by
+     * a Bridged Node. The Ecosystem Information Cluster presents the view of device name and location metadata for
+     * presentation by a client of the cluster to a user. This cluster is intended to support Fabric Synchronization and
+     * be present on an endpoint with the BridgedNode device type listed in the DeviceTypeList of the endpoint’s
      * Descriptor cluster.
      *
      * This augments the Bridged Device Basic Information Cluster in the following ways:
@@ -174,8 +174,8 @@ export namespace EcosystemInformation {
      *   • The Ecosystem Information Cluster adds metadata to support conflict resolution between multiple sources of
      *     the name and location data.
      *
-     *   • The Ecosystem Information Cluster supports user control for the presence of the name and location
-     *     information by specifying more restricted access.
+     *   • The Ecosystem Information Cluster supports user control for the presence of the name and location information
+     *     by specifying more restricted access.
      *
      * A client SHOULD use the information provided by the Ecosystem Information Cluster to help the user organize and
      * interact with their devices. Some examples may include:

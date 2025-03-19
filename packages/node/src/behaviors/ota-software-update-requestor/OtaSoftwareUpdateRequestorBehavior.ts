@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OtaSoftwareUpdateRequestorInterface } from "./OtaSoftwareUpdateRequestorInterface.js";
 
 /**
- * OtaSoftwareUpdateRequestorBehavior is the base class for objects that support interaction with {@link
- * OtaSoftwareUpdateRequestor.Cluster}.
+ * OtaSoftwareUpdateRequestorBehavior is the base class for objects that support interaction with
+ * {@link OtaSoftwareUpdateRequestor.Cluster}.
  */
 export const OtaSoftwareUpdateRequestorBehavior = ClusterBehavior
     .withInterface<OtaSoftwareUpdateRequestorInterface>()

@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OperationalStateInterface } from "./OperationalStateInterface.js";
 
 /**
- * OperationalStateBehavior is the base class for objects that support interaction with {@link
- * OperationalState.Cluster}.
+ * OperationalStateBehavior is the base class for objects that support interaction with
+ * {@link OperationalState.Cluster}.
  */
 export const OperationalStateBehavior = ClusterBehavior
     .withInterface<OperationalStateInterface>()

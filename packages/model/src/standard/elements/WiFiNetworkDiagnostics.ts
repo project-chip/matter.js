@@ -37,8 +37,8 @@ export const WiFiNetworkDiagnostics = Cluster(
         }),
         Field({
             name: "ERRCNT", constraint: "1", description: "ErrorCounts",
-            details: "Node makes available the counts for the number of errors that have occurred during the reception " +
-                "and transmission of packets on the Wi-Fi interface."
+            details: "Node makes available the counts for the number of errors that have occurred during the reception and " +
+                "transmission of packets on the Wi-Fi interface."
         })
     ),
 
@@ -60,8 +60,8 @@ export const WiFiNetworkDiagnostics = Cluster(
     Attribute({
         name: "WiFiVersion", id: 0x2, type: "WiFiVersionEnum", access: "R V", conformance: "M",
         default: null, quality: "X",
-        details: "The WiFiVersion attribute shall indicate the current 802.11 standard version in use by the Node, " +
-            "per the table below.",
+        details: "The WiFiVersion attribute shall indicate the current 802.11 standard version in use by the Node, per " +
+            "the table below.",
         xref: { document: "core", section: "11.15.6.3" }
     }),
 
@@ -142,9 +142,9 @@ export const WiFiNetworkDiagnostics = Cluster(
     Attribute({
         name: "OverrunCount", id: 0xc, type: "uint64", access: "R V", conformance: "ERRCNT", default: 0,
         quality: "X C",
-        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or " +
-            "egress, due to lack of buffer memory to retain all packets on the network interface. The " +
-            "OverrunCount attribute shall be reset to 0 upon a reboot of the Node.",
+        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, " +
+            "due to lack of buffer memory to retain all packets on the network interface. The OverrunCount " +
+            "attribute shall be reset to 0 upon a reboot of the Node.",
         xref: { document: "core", section: "11.15.6.13" }
     }),
 
@@ -159,8 +159,8 @@ export const WiFiNetworkDiagnostics = Cluster(
         Field({
             name: "ReasonCode", id: 0x0, type: "uint16", conformance: "M",
             details: "This field shall contain the Reason Code field value for the Disassociation or Deauthentication " +
-                "event that caused the disconnection and the value shall align with Table 9-49 \"Reason codes\" of " +
-                "IEEE 802.11-2020.",
+                "event that caused the disconnection and the value shall align with Table 9-49 \"Reason codes\" of IEEE " +
+                "802.11-2020.",
             xref: { document: "core", section: "11.15.8.1.1" }
         })
     ),
@@ -168,8 +168,8 @@ export const WiFiNetworkDiagnostics = Cluster(
     Event(
         {
             name: "AssociationFailure", id: 0x1, access: "V", conformance: "O", priority: "info",
-            details: "The AssociationFailure event shall indicate that a Node has attempted to connect, or reconnect, to " +
-                "a Wi-Fi access point, but is unable to successfully associate or authenticate, after exhausting all " +
+            details: "The AssociationFailure event shall indicate that a Node has attempted to connect, or reconnect, to a " +
+                "Wi-Fi access point, but is unable to successfully associate or authenticate, after exhausting all " +
                 "internal retries of its supplicant.",
             xref: { document: "core", section: "11.15.8.2" }
         },
@@ -183,8 +183,8 @@ export const WiFiNetworkDiagnostics = Cluster(
         Field({
             name: "Status", id: 0x1, type: "uint16", conformance: "M",
 
-            details: "The Status field shall be set to the Status Code value that was present in the last frame related " +
-                "to association where Status Code was not equal to zero and which caused the failure of a last trial " +
+            details: "The Status field shall be set to the Status Code value that was present in the last frame related to " +
+                "association where Status Code was not equal to zero and which caused the failure of a last trial " +
                 "attempt, if this last failure was due to one of the following Management frames:" +
                 "\n" +
                 "  • Association Response (Type 0, Subtype 1)" +

@@ -87,8 +87,8 @@ export namespace ServiceArea {
      */
     export enum OperationalStatus {
         /**
-         * The device has not yet started operating at the given area, or has not finished operating at that area but
-         * it is not currently operating at the area
+         * The device has not yet started operating at the given area, or has not finished operating at that area but it
+         * is not currently operating at the area
          */
         Pending = 0,
 
@@ -509,8 +509,8 @@ export namespace ServiceArea {
          *
          * If the Status field is not set to Success or InvalidAreaList, the StatusText field shall include a vendor
          * defined error description which can be used to explain the error to the user. For example, if the Status
-         * field is set to InvalidInMode, the StatusText field SHOULD indicate why the request is not allowed, given
-         * the current mode of the device, which may involve other clusters.
+         * field is set to InvalidInMode, the StatusText field SHOULD indicate why the request is not allowed, given the
+         * current mode of the device, which may involve other clusters.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.17.7.4.1
          */
@@ -549,9 +549,9 @@ export namespace ServiceArea {
              * Each map includes one or more areas - see the SupportedAreas attribute. In the context of this cluster
              * specification, a map is effectively a group label for a set of areas, rather than a graphical
              * representation that the clients can display to the users. The clients that present the list of available
-             * areas for user selection (see the SelectAreas command) may choose to filter the SupportedAreas list
-             * based on the associated map. For example, the clients may allow the user to indicate that the device is
-             * to operate on the first floor, and allow the user to choose only from the areas situated on that level.
+             * areas for user selection (see the SelectAreas command) may choose to filter the SupportedAreas list based
+             * on the associated map. For example, the clients may allow the user to indicate that the device is to
+             * operate on the first floor, and allow the user to choose only from the areas situated on that level.
              *
              * If empty, that indicates that the device is currently unable to provide this information. Each entry in
              * this list shall have a unique value for the MapID field.
@@ -568,8 +568,8 @@ export namespace ServiceArea {
              * such as interactions with a user interface.
              *
              * When updating the SupportedMaps attribute list by deleting entries, or by setting the attribute to an
-             * empty list, the SupportedLocations attribute shall be updated such that all entries in that list meet
-             * the constraints indicated in the description of the SupportedLocations attribute. This may result in
+             * empty list, the SupportedLocations attribute shall be updated such that all entries in that list meet the
+             * constraints indicated in the description of the SupportedLocations attribute. This may result in
              *
              * the server removing entries from the SupportedAreas attribute list. See the SupportedAreas attribute
              * description for the implications of changing that attribute.
@@ -694,10 +694,10 @@ export namespace ServiceArea {
              * When removing entries in the SupportedAreas attribute list the server shall adjust the values of the
              * SelectedAreas, CurrentArea, and Progress attributes such that they only reference valid entries in the
              * updated SupportedAreas attribute list. These changes to the SelectedAreas, CurrentArea, and Progress
-             * attributes may result in the server setting some or all of them to empty (for SelectedAreas and
-             * Progress) or null (for CurrentArea), or updating them with data that matches the constraints from the
-             * description of the respective attributes. These actions are required to ensure having a consistent
-             * representation of the maps and locations available to the clients.
+             * attributes may result in the server setting some or all of them to empty (for SelectedAreas and Progress)
+             * or null (for CurrentArea), or updating them with data that matches the constraints from the description
+             * of the respective attributes. These actions are required to ensure having a consistent representation of
+             * the maps and locations available to the clients.
              *
              * The SupportedAreas attribute list changes mentioned above SHOULD NOT be allowed while the device is
              * operating, to reduce the impact on the clients, and the potential confusion for the users.
@@ -739,11 +739,11 @@ export namespace ServiceArea {
              * If the device is mobile, this attribute shall indicate the area where the device is currently located,
              * regardless of whether it is operating or not, such as while traveling between areas.
              *
-             * If the device is not mobile and can operate at multiple areas sequentially, this attribute shall
-             * indicate the area which is currently being serviced, or the area which is currently traversed by the
-             * device. For example, a camera device may use this attribute to indicate which area it currently takes
-             * video of (serviced area) or which area it currently has in view but not taking video of (e.g. an area
-             * which is traversed while panning).
+             * If the device is not mobile and can operate at multiple areas sequentially, this attribute shall indicate
+             * the area which is currently being serviced, or the area which is currently traversed by the device. For
+             * example, a camera device may use this attribute to indicate which area it currently takes video of
+             * (serviced area) or which area it currently has in view but not taking video of (e.g. an area which is
+             * traversed while panning).
              *
              * NOTE
              *
@@ -776,9 +776,9 @@ export namespace ServiceArea {
              *
              * Null if the CurrentArea attribute is null.
              *
-             * If the Progress attribute is available, and it contains an entry matching CurrentArea, the server may
-             * use the time estimate provided in the InitialTimeEstimate field of that entry to compute the
-             * EstimatedEndTime attribute.
+             * If the Progress attribute is available, and it contains an entry matching CurrentArea, the server may use
+             * the time estimate provided in the InitialTimeEstimate field of that entry to compute the EstimatedEndTime
+             * attribute.
              *
              * The value of this attribute shall only be reported in the following cases:
              *
@@ -891,8 +891,8 @@ export namespace ServiceArea {
     /**
      * This cluster supports all ServiceArea features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

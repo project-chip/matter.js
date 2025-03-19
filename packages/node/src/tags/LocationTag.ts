@@ -9,8 +9,8 @@
 import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
 
 /**
- * The tags contained in this namespace may be used in any domain or context, to indicate an association with a
- * location of a device (e.g. an outdoor temperature sensor).
+ * The tags contained in this namespace may be used in any domain or context, to indicate an association with a location
+ * of a device (e.g. an outdoor temperature sensor).
  *
  * @see {@link MatterSpecification.v13.Namespace} § 7
  */

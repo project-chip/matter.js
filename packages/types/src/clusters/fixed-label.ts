@@ -31,8 +31,8 @@ export namespace FixedLabel {
     });
 
     /**
-     * This cluster is derived from the Label cluster and provides a feature for the device to tag an endpoint with
-     * zero or more read-only labels.
+     * This cluster is derived from the Label cluster and provides a feature for the device to tag an endpoint with zero
+     * or more read-only labels.
      *
      * Examples:
      *
@@ -47,8 +47,8 @@ export namespace FixedLabel {
      * knows which of the endpoints is which of the lights.
      *
      * Note that the TagList in the Descriptor cluster provides an alternative mechanism for such self- description
-     * using standardized tags rather than manufacturer-selected strings, yielding a standardized mechanism for
-     * features defined in the various namespaces. The second example above can be implemented using semantic tags
+     * using standardized tags rather than manufacturer-selected strings, yielding a standardized mechanism for features
+     * defined in the various namespaces. The second example above can be implemented using semantic tags
      * Direction.Upward and Direction.Downward instead of (or in addition to) the Fixed Label cluster.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.8

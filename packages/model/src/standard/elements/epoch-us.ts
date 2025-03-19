@@ -26,11 +26,11 @@ export const epochUs = Datatype(
             "A given Epoch Time value may be interpreted in at least two ways:" +
             "\n" +
             "  1. The value can be converted to a local clock date/time (year, month, day, hours, minutes, " +
-            "     seconds, microseconds) by treating the local time offset as 0 and finding the UTC (year, " +
-            "     month, day, hours, minutes, seconds, microseconds) tuple that corresponds to an elapsed time " +
-            "     since the epoch time equal to the given value. The value then represents that tuple, but " +
-            "     interpreted in the specific timezone and DST situation associated with the value. This " +
-            "     procedure does not require knowing the local time offset of the value." +
+            "     seconds, microseconds) by treating the local time offset as 0 and finding the UTC (year, month, " +
+            "     day, hours, minutes, seconds, microseconds) tuple that corresponds to an elapsed time since the " +
+            "     epoch time equal to the given value. The value then represents that tuple, but interpreted in " +
+            "     the specific timezone and DST situation associated with the value. This procedure does not " +
+            "     require knowing the local time offset of the value." +
             "\n" +
             "  2. The value can be converted to a UTC time by subtracting the associated local time offset from " +
             "     the Epoch Time value and then treating the resulting value as an elapsed count of microseconds " +
@@ -42,13 +42,13 @@ export const epochUs = Datatype(
             "\n" +
             "  • 2000-06-01T00:00Z if the associated local time offset is 0 (i.e. the value is in UTC)." +
             "\n" +
-            "  • 2000-05-31T23:00Z if the associated local time offset is +1 hour (e.g. the CET timezone, " +
-            "    without daylight savings)." +
+            "  • 2000-05-31T23:00Z if the associated local time offset is +1 hour (e.g. the CET timezone, without " +
+            "    daylight savings)." +
             "\n" +
             "  • 2000-06-01T00:00+02 if the associated local time offset is +1 hour." +
             "\n" +
-            "  • 2000-06-01T04:00Z if the associated local time offset is -4 hours (e.g. the EDT time zone, " +
-            "    which includes daylight savings)." +
+            "  • 2000-06-01T04:00Z if the associated local time offset is -4 hours (e.g. the EDT time zone, which " +
+            "    includes daylight savings)." +
             "\n" +
             "  • 2000-06-01T00:00-04 if the associated local time offset is -4 hours." +
             "\n" +

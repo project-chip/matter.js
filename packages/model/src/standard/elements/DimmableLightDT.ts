@@ -70,6 +70,6 @@ export const DimmableLightDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "4.2.4" }
     })
-)
+);
 
 MatterDefinition.children.push(DimmableLightDt);

@@ -23,8 +23,8 @@ export const UnitLocalization = Cluster(
             "user. As such, Nodes that visually or audibly convey measurable values to the user need a mechanism " +
             "by which they can be configured to use a user’s preferred unit." +
             "\n" +
-            "This cluster supports an interface to a Node. It provides attributes for determining and " +
-            "configuring the units that a Node shall utilize when conveying values in communication to a user.",
+            "This cluster supports an interface to a Node. It provides attributes for determining and configuring " +
+            "the units that a Node shall utilize when conveying values in communication to a user.",
 
         xref: { document: "core", section: "11.5" }
     },

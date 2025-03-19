@@ -49,6 +49,6 @@ export const NetworkInfrastructureManagerDt = DeviceType(
         name: "ThreadNetworkDirectory", id: 0x453, conformance: "M", element: "serverCluster",
         xref: { document: "device", section: "15.2.4" }
     })
-)
+);
 
 MatterDefinition.children.push(NetworkInfrastructureManagerDt);

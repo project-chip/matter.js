@@ -34,8 +34,8 @@ export namespace OnOffInterface {
 
         /**
          * This command allows devices to be turned on for a specific duration with a guarded off duration so that
-         * SHOULD the device be subsequently turned off, further OnWithTimedOff commands, received during this time,
-         * are prevented from turning the devices back on. Further OnWithTimedOff commands received while the server is
+         * SHOULD the device be subsequently turned off, further OnWithTimedOff commands, received during this time, are
+         * prevented from turning the devices back on. Further OnWithTimedOff commands received while the server is
          * turned on, will update the period that the device is turned on.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6

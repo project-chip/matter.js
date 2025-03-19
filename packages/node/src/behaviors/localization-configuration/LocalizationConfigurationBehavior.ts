@@ -10,8 +10,8 @@ import { LocalizationConfiguration } from "#clusters/localization-configuration"
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * LocalizationConfigurationBehavior is the base class for objects that support interaction with {@link
- * LocalizationConfiguration.Cluster}.
+ * LocalizationConfigurationBehavior is the base class for objects that support interaction with
+ * {@link LocalizationConfiguration.Cluster}.
  */
 export const LocalizationConfigurationBehavior = ClusterBehavior.for(LocalizationConfiguration.Cluster);
 

@@ -14,8 +14,8 @@ export const RoomAirConditionerDt = DeviceType(
         name: "RoomAirConditioner", id: 0x72, category: "Appliances", classification: "simple",
         details: "This defines conformance to the Room Air Conditioner device type." +
             "\n" +
-            "A Room Air Conditioner is a device with the primary function of controlling the air temperature in " +
-            "a single room.",
+            "A Room Air Conditioner is a device with the primary function of controlling the air temperature in a " +
+            "single room.",
         xref: { document: "device", section: "13.3" }
     },
 

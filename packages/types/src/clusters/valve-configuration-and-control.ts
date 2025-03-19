@@ -267,8 +267,8 @@ export namespace ValveConfigurationAndControl {
              * Indicates the default value used for the TargetLevel attribute, when a valve transitions from the closed
              * to the open state, caused by an Open command, if a TargetLevel field is not present in the Open command.
              *
-             * If the LevelStep attribute is present and the value of a write interaction to this attribute field is
-             * not 100, the value shall be a supported value as defined by the LevelStep attribute, such that (Value
+             * If the LevelStep attribute is present and the value of a write interaction to this attribute field is not
+             * 100, the value shall be a supported value as defined by the LevelStep attribute, such that (Value
              * received in the write interaction) % (Value of LevelStep attribute) equals 0. If the resulting value is
              * not 0, the requested DefaultOpenLevel value is considered an unsupported value and a CONSTRAINT_ERROR
              * status shall be returned.
@@ -284,9 +284,9 @@ export namespace ValveConfigurationAndControl {
             /**
              * Indicates the step size the valve can support.
              *
-             * The step size defined by this attribute is counted from 0 and the final step towards 100 may be
-             * different than what is defined in this attribute. For example, if the value of this attribute is 15, it
-             * results in these target values being supported; 0, 15, 30, 45, 60, 75, 90 and 100.
+             * The step size defined by this attribute is counted from 0 and the final step towards 100 may be different
+             * than what is defined in this attribute. For example, if the value of this attribute is 15, it results in
+             * these target values being supported; 0, 15, 30, 45, 60, 75, 90 and 100.
              *
              * The values of 0 and 100 shall always be supported, regardless of the value of this attribute.
              *
@@ -376,9 +376,9 @@ export namespace ValveConfigurationAndControl {
              *
              * When reading this attribute it shall return the remaining duration, in seconds, until the valve closes.
              *
-             * When the value of this attribute counts down to 0, the valve shall automatically transition to its
-             * closed position. The behavior of transitioning to the closed position shall match the behavior described
-             * in the Close command.
+             * When the value of this attribute counts down to 0, the valve shall automatically transition to its closed
+             * position. The behavior of transitioning to the closed position shall match the behavior described in the
+             * Close command.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.4
              */
@@ -429,8 +429,8 @@ export namespace ValveConfigurationAndControl {
 
         events: {
             /**
-             * This event shall be generated when the valve state changed. For level changes, after the end of
-             * movement, for state changes when the new state has been reached.
+             * This event shall be generated when the valve state changed. For level changes, after the end of movement,
+             * for state changes when the new state has been reached.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1
              */
@@ -505,8 +505,8 @@ export namespace ValveConfigurationAndControl {
     /**
      * This cluster supports all ValveConfigurationAndControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

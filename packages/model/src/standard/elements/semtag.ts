@@ -55,13 +55,13 @@ export const semtag = Datatype(
         name: "Label", id: 0x3, type: "string", conformance: "O", constraint: "max 64", default: null,
         quality: "X",
 
-        details: "The Label field, if present, shall contain human-readable text suitable for display on a client. " +
-            "The content of the Label field is defined by the manufacturer." +
+        details: "The Label field, if present, shall contain human-readable text suitable for display on a client. The " +
+            "content of the Label field is defined by the manufacturer." +
             "\n" +
             "This field shall be present when the MfgCode is not null. This field SHOULD NOT be used if the Tag " +
-            "is from a standard namespace, unless the Tag requires further qualification. For example: A Tag " +
-            "that has the meaning of \"room\" in a location namespace, would require the a label string to qualify " +
-            "the type of room, such as \"1\", \"2b\", \"Bathroom\", etc.",
+            "is from a standard namespace, unless the Tag requires further qualification. For example: A Tag that " +
+            "has the meaning of \"room\" in a location namespace, would require the a label string to qualify the " +
+            "type of room, such as \"1\", \"2b\", \"Bathroom\", etc.",
 
         xref: { document: "core", section: "7.19.2.42.4" }
     })

@@ -21,8 +21,8 @@ export const CommissionerControl = Cluster(
         name: "CommissionerControl", id: 0x751, classification: "node", pics: "CCTRL",
 
         details: "The Commissioner Control Cluster supports the ability for clients to request the commissioning of " +
-            "themselves or other nodes onto a fabric which the cluster server can commission onto. An example " +
-            "use case is ecosystem to ecosystem Fabric Synchronization setup." +
+            "themselves or other nodes onto a fabric which the cluster server can commission onto. An example use " +
+            "case is ecosystem to ecosystem Fabric Synchronization setup." +
             "\n" +
             "The generalized flow supported by the Commissioner Control Cluster can be seen in the following " +
             "diagram." +
@@ -94,9 +94,9 @@ export const CommissionerControl = Cluster(
                 "accessing fabric once the result is ready." +
                 "\n" +
                 "Clients SHOULD avoid using the same RequestID. If the RequestID and client NodeID of a " +
-                "RequestCommissioningApproval match a previously received RequestCommissioningApproval and the " +
-                "server has not returned an error or completed commissioning of a device for the prior request, then " +
-                "the server SHOULD return FAILURE." +
+                "RequestCommissioningApproval match a previously received RequestCommissioningApproval and the server " +
+                "has not returned an error or completed commissioning of a device for the prior request, then the " +
+                "server SHOULD return FAILURE." +
                 "\n" +
                 "The parameters for RequestCommissioningApproval command are as follows:",
 
@@ -126,13 +126,13 @@ export const CommissionerControl = Cluster(
                 "UNSUPPORTED_ACCESS." +
                 "\n" +
                 "Upon receipt, the server shall respond with ReverseOpenCommissioningWindow if " +
-                "CommissioningRequestResult was generated with StatusCode of SUCCESS for the matching RequestID " +
-                "field and NodeID of the client." +
+                "CommissioningRequestResult was generated with StatusCode of SUCCESS for the matching RequestID field " +
+                "and NodeID of the client." +
                 "\n" +
                 "The server shall return FAILURE if the CommissionNode command is received after the server has " +
-                "already responded to a client with ReverseOpenCommissioningWindow for a matching RequestID field " +
-                "and NodeID of the client unless the client has sent another RequestCommissioningApproval and " +
-                "received an additional CommissioningRequestResult." +
+                "already responded to a client with ReverseOpenCommissioningWindow for a matching RequestID field and " +
+                "NodeID of the client unless the client has sent another RequestCommissioningApproval and received an " +
+                "additional CommissioningRequestResult." +
                 "\n" +
                 "The parameters for CommissionNode command are as follows:",
 
@@ -154,11 +154,11 @@ export const CommissionerControl = Cluster(
                 "the client shall open a commissioning window on a node which matches the VendorID and ProductID " +
                 "provided in the associated RequestCommissioningApproval command." +
                 "\n" +
-                "When commissioning this node, the server shall check that the VendorID and ProductID fields " +
-                "provided in the RequestCommissioningApproval command match the VendorID and ProductID attributes of " +
-                "the Basic Information Cluster which have already been verified during the Device Attestation " +
-                "Procedure. If they do not match, the server shall NOT complete commissioning and SHOULD indicate an " +
-                "error to the user." +
+                "When commissioning this node, the server shall check that the VendorID and ProductID fields provided " +
+                "in the RequestCommissioningApproval command match the VendorID and ProductID attributes of the Basic " +
+                "Information Cluster which have already been verified during the Device Attestation Procedure. If " +
+                "they do not match, the server shall NOT complete commissioning and SHOULD indicate an error to the " +
+                "user." +
                 "\n" +
                 "NOTE" +
                 "\n" +

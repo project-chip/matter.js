@@ -58,10 +58,10 @@ export const BallastConfiguration = Cluster(
             "(see Dimming Curve) when the Level Control Cluster’s CurrentLevel attribute equals to 1 (and the " +
             "On/Off Cluster’s OnOff attribute equals to TRUE)." +
             "\n" +
-            "The value of this attribute shall be both greater than or equal to PhysicalMinLevel and less than " +
-            "or equal to MaxLevel. If an attempt is made to set this attribute to a level where these conditions " +
-            "are not met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level " +
-            "shall NOT be set.",
+            "The value of this attribute shall be both greater than or equal to PhysicalMinLevel and less than or " +
+            "equal to MaxLevel. If an attempt is made to set this attribute to a level where these conditions are " +
+            "not met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall " +
+            "NOT be set.",
 
         xref: { document: "cluster", section: "3.3.6.4" }
     }),
@@ -154,8 +154,8 @@ export const BallastConfiguration = Cluster(
         quality: "X",
 
         details: "This attribute shall specify the length of time, in hours, the currently connected lamps have been " +
-            "operated, cumulative since the last re-lamping. Burn hours shall NOT be accumulated if the lamps " +
-            "are off." +
+            "operated, cumulative since the last re-lamping. Burn hours shall NOT be accumulated if the lamps are " +
+            "off." +
             "\n" +
             "This attribute SHOULD be reset to zero (e.g., remotely) when the lamps are changed. If partially " +
             "used lamps are connected, LampBurnHours SHOULD be updated to reflect the burn hours of the lamps." +

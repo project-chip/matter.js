@@ -10,8 +10,8 @@ import { EcosystemInformation } from "#clusters/ecosystem-information";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * EcosystemInformationBehavior is the base class for objects that support interaction with {@link
- * EcosystemInformation.Cluster}.
+ * EcosystemInformationBehavior is the base class for objects that support interaction with
+ * {@link EcosystemInformation.Cluster}.
  */
 export const EcosystemInformationBehavior = ClusterBehavior.for(EcosystemInformation.Cluster);
 

@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ValveConfigurationAndControlInterface } from "./ValveConfigurationAndControlInterface.js";
 
 /**
- * ValveConfigurationAndControlBehavior is the base class for objects that support interaction with {@link
- * ValveConfigurationAndControl.Cluster}.
+ * ValveConfigurationAndControlBehavior is the base class for objects that support interaction with
+ * {@link ValveConfigurationAndControl.Cluster}.
  *
- * This class does not have optional features of ValveConfigurationAndControl.Cluster enabled. You can enable
- * additional features using ValveConfigurationAndControlBehavior.with.
+ * This class does not have optional features of ValveConfigurationAndControl.Cluster enabled. You can enable additional
+ * features using ValveConfigurationAndControlBehavior.with.
  */
 export const ValveConfigurationAndControlBehavior = ClusterBehavior
     .withInterface<ValveConfigurationAndControlInterface>()

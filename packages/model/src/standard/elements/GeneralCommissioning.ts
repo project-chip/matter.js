@@ -40,12 +40,12 @@ export const GeneralCommissioning = Cluster(
         name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M", default: 0,
 
         details: "This attribute allows for the storage of a client-provided small payload which Administrators and " +
-            "Commissioners may write and then subsequently read, to keep track of their own progress. This may " +
-            "be used by the Commissioner to avoid repeating already-executed actions upon re-establishing a " +
+            "Commissioners may write and then subsequently read, to keep track of their own progress. This may be " +
+            "used by the Commissioner to avoid repeating already-executed actions upon re-establishing a " +
             "commissioning link after an error." +
             "\n" +
-            "On start/restart of the server, such as when a device is power-cycled, this attribute shall be " +
-            "reset to zero." +
+            "On start/restart of the server, such as when a device is power-cycled, this attribute shall be reset " +
+            "to zero." +
             "\n" +
             "Some commands related to commissioning also have a side-effect of updating or resetting this " +
             "attribute and this is specified in their respective functional descriptions." +
@@ -60,8 +60,8 @@ export const GeneralCommissioning = Cluster(
     Attribute({
         name: "BasicCommissioningInfo", id: 0x1, type: "BasicCommissioningInfo", access: "R V",
         conformance: "M", constraint: "desc", quality: "F",
-        details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. " +
-            "See BasicCommissioningInfo for more information.",
+        details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. See " +
+            "BasicCommissioningInfo for more information.",
         xref: { document: "core", section: "11.10.6.2" }
     }),
 
@@ -79,9 +79,9 @@ export const GeneralCommissioning = Cluster(
         name: "LocationCapability", id: 0x3, type: "RegulatoryLocationTypeEnum", access: "R V",
         conformance: "M", default: 2, quality: "F",
 
-        details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be " +
-            "told an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified " +
-            "for outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
+        details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be told " +
+            "an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified for " +
+            "outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
             "whether the device will be used inside or outside. However a device which states its capability is" +
             "\n" +
             "\"Indoor/Outdoor\" means it would like clarification if possible." +
@@ -113,9 +113,9 @@ export const GeneralCommissioning = Cluster(
             "factory reset this field shall be reset to 0." +
             "\n" +
             "When Custom Commissioning Flow is used to obtain user consent (e. g. because the Commissioner does " +
-            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall " +
-            "ensure that this attribute is set to a value which is greater than or equal to TCMinRequiredVersion " +
-            "before returning the user back to the originating Commissioner (see Enhanced Setup Flow).",
+            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall ensure " +
+            "that this attribute is set to a value which is greater than or equal to TCMinRequiredVersion before " +
+            "returning the user back to the originating Commissioner (see Enhanced Setup Flow).",
 
         xref: { document: "core", section: "11.10.6.6" }
     }),
@@ -140,10 +140,10 @@ export const GeneralCommissioning = Cluster(
 
         details: "Indicates the user’s response to the presented terms. Each bit position corresponds to a user " +
             "response for the associated index of matching text, such that bit 0 (bit value 1) is for text index " +
-            "0. Bit 15 (bit value 0x8000) is for text index 15. A bit value of 1 indicates acceptance and a " +
-            "value of 0 indicates non-acceptance. For example, if there are two texts that were presented where " +
-            "the first (bit 0, value 1) was declined and the second accepted (bit 1, value 2), we would expect " +
-            "the resulting value of the map to be 2." +
+            "0. Bit 15 (bit value 0x8000) is for text index 15. A bit value of 1 indicates acceptance and a value " +
+            "of 0 indicates non-acceptance. For example, if there are two texts that were presented where the " +
+            "first (bit 0, value 1) was declined and the second accepted (bit 1, value 2), we would expect the " +
+            "resulting value of the map to be 2." +
             "\n" +
             "Whenever a user provides responses to newly presented terms and conditions, this attribute shall be " +
             "updated with the latest responses. This may happen in response to updated terms that were presented " +
@@ -168,9 +168,9 @@ export const GeneralCommissioning = Cluster(
             "Upon Factory Data Reset, this attribute shall be set to a value of True." +
             "\n" +
             "When Custom Commissioning Flow is used to obtain user consent (e.g. because the Commissioner does " +
-            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall " +
-            "ensure that this attribute is set to False before returning the user back to the original " +
-            "Commissioner (see Enhanced Setup Flow).",
+            "not support the TC feature), the manufacturer-provided means for obtaining user consent shall ensure " +
+            "that this attribute is set to False before returning the user back to the original Commissioner (see " +
+            "Enhanced Setup Flow).",
 
         xref: { document: "core", section: "11.10.6.9" }
     }),
@@ -195,11 +195,11 @@ export const GeneralCommissioning = Cluster(
                 "some data model validations caused a failure status code to be issued during the processing of the " +
                 "command." +
                 "\n" +
-                "If the fail-safe timer is not currently armed, the commissioning window is open, and the command " +
-                "was received over a CASE session, the command shall leave the current fail-safe state unchanged and " +
-                "immediately respond with an ArmFailSafeResponse containing an ErrorCode value of " +
-                "BusyWithOtherAdmin. This is done to allow commissioners, which use PASE connections, the " +
-                "opportunity to use the failsafe during the relatively short commissioning window." +
+                "If the fail-safe timer is not currently armed, the commissioning window is open, and the command was " +
+                "received over a CASE session, the command shall leave the current fail-safe state unchanged and " +
+                "immediately respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. " +
+                "This is done to allow commissioners, which use PASE connections, the opportunity to use the failsafe " +
+                "during the relatively short commissioning window." +
                 "\n" +
                 "Otherwise, the command shall arm or re-arm the \"fail-safe timer\" with an expiry time set for a " +
                 "duration of ExpiryLengthSeconds, or disarm it, depending on the situation:" +
@@ -218,16 +218,16 @@ export const GeneralCommissioning = Cluster(
                 "    accessing Fabric matches the fail-safe context’s associated Fabric, then the fail-safe timer " +
                 "    shall be re- armed to expire in ExpiryLengthSeconds." +
                 "\n" +
-                "  • Otherwise, the command shall leave the current fail-safe state unchanged and immediately " +
-                "    respond with ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, " +
-                "    indicating a likely conflict between commissioners." +
+                "  • Otherwise, the command shall leave the current fail-safe state unchanged and immediately respond " +
+                "    with ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, indicating a " +
+                "    likely conflict between commissioners." +
                 "\n" +
                 "The value of the Breadcrumb field shall be written to the Breadcrumb on successful execution of the " +
                 "command." +
                 "\n" +
-                "If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) " +
-                "the receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up " +
-                "steps listed below." +
+                "If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) the " +
+                "receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps " +
+                "listed below." +
                 "\n" +
                 "On successful execution of the command, the ErrorCode field of the ArmFailSafeResponse shall be set " +
                 "to OK." +
@@ -244,10 +244,9 @@ export const GeneralCommissioning = Cluster(
                 "\n" +
                 "  • Whether an AddNOC command or UpdateNOC command has taken place." +
                 "\n" +
-                "  • A Fabric Index for the fabric-scoping of the context, starting at the accessing fabric index " +
-                "    for the ArmFailSafe command, and updated with the Fabric Index associated with an AddNOC " +
-                "    command or an UpdateNOC command being invoked successfully during the ongoing Fail-Safe timer " +
-                "    period." +
+                "  • A Fabric Index for the fabric-scoping of the context, starting at the accessing fabric index for " +
+                "    the ArmFailSafe command, and updated with the Fabric Index associated with an AddNOC command or " +
+                "    an UpdateNOC command being invoked successfully during the ongoing Fail-Safe timer period." +
                 "\n" +
                 "  • The operational credentials associated with any Fabric whose configuration is affected by the " +
                 "    UpdateNOC command." +
@@ -269,20 +268,20 @@ export const GeneralCommissioning = Cluster(
                 "On creation of the Fail Safe Context a second timer shall be created to expire at " +
                 "MaxCumulativeFailsafeSeconds as specified in BasicCommissioningInfo. This Cumulative Fail Safe " +
                 "Context timer (CFSC timer) serves to limit the lifetime of any particular Fail Safe Context; it " +
-                "shall NOT be extended or modified on subsequent invocations of ArmFailSafe associated with this " +
-                "Fail Safe Context. Upon expiry of the CFSC timer, the receiver shall execute cleanup behavior " +
-                "equivalent to that of fail-safe timer expiration as detailed in Section 11.10.7.2.2, “Behavior on " +
-                "expiry of Fail-Safe timer”. Termination of the session prior to the expiration of that timer for " +
-                "any reason (including a successful end of commissioning or an expiry of a fail-safe timer) shall " +
-                "also delete the CFSC timer." +
+                "shall NOT be extended or modified on subsequent invocations of ArmFailSafe associated with this Fail " +
+                "Safe Context. Upon expiry of the CFSC timer, the receiver shall execute cleanup behavior equivalent " +
+                "to that of fail-safe timer expiration as detailed in Section 11.10.7.2.2, “Behavior on expiry of " +
+                "Fail-Safe timer”. Termination of the session prior to the expiration of that timer for any reason " +
+                "(including a successful end of commissioning or an expiry of a fail-safe timer) shall also delete " +
+                "the CFSC timer." +
                 "\n" +
                 "### Behavior on expiry of Fail-Safe timer" +
                 "\n" +
-                "If the fail-safe timer expires before the CommissioningComplete command is successfully invoked, " +
-                "the following sequence of clean-up steps shall be executed, in order, by the receiver:" +
+                "If the fail-safe timer expires before the CommissioningComplete command is successfully invoked, the " +
+                "following sequence of clean-up steps shall be executed, in order, by the receiver:" +
                 "\n" +
-                "  1. Terminate any open PASE secure session by clearing any associated Secure Session Context at " +
-                "      the Server." +
+                "  1. Terminate any open PASE secure session by clearing any associated Secure Session Context at the " +
+                "      Server." +
                 "\n" +
                 "  2. Revoke the temporary administrative privileges granted to any open PASE session (see Section " +
                 "      6.6.2.9, “Bootstrapping of the Access Control Cluster”) at the Server." +
@@ -291,8 +290,8 @@ export const GeneralCommissioning = Cluster(
                 "      associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see " +
                 "      ArmFailSafe) by clearing any associated Secure Session Context at the Server." +
                 "\n" +
-                "  4. Reset the configuration of all Network Commissioning Networks attribute to their state prior " +
-                "      to the Fail-Safe being armed." +
+                "  4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to " +
+                "      the Fail-Safe being armed." +
                 "\n" +
                 "  5. If an UpdateNOC command had been successfully invoked, revert the state of operational key " +
                 "      pair, NOC and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for " +
@@ -300,15 +299,15 @@ export const GeneralCommissioning = Cluster(
                 "\n" +
                 "  6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking " +
                 "      the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the " +
-                "      Fabric Index that was the subject of the AddNOC command. This shall remove all associations " +
-                "      to that Fabric including all fabric-scoped data, and may possibly factory-reset the device " +
-                "      depending on current device state. This shall only apply to Fabrics added during the " +
-                "      fail-safe period as the result of the AddNOC command." +
+                "      Fabric Index that was the subject of the AddNOC command. This shall remove all associations to " +
+                "      that Fabric including all fabric-scoped data, and may possibly factory-reset the device " +
+                "      depending on current device state. This shall only apply to Fabrics added during the fail-safe " +
+                "      period as the result of the AddNOC command." +
                 "\n" +
-                "  7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command " +
-                "      had been successfully invoked, then the new operational key pair temporarily generated for " +
-                "      the purposes of NOC addition or update (see Node Operational CSR Procedure) shall be removed " +
-                "      as it is no longer needed." +
+                "  7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had " +
+                "      been successfully invoked, then the new operational key pair temporarily generated for the " +
+                "      purposes of NOC addition or update (see Node Operational CSR Procedure) shall be removed as it " +
+                "      is no longer needed." +
                 "\n" +
                 "  8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently " +
                 "      referenced by any entry in the Fabrics attribute." +
@@ -350,12 +349,12 @@ export const GeneralCommissioning = Cluster(
             name: "SetRegulatoryConfig", id: 0x2, access: "A", conformance: "M", direction: "request",
             response: "SetRegulatoryConfigResponse",
 
-            details: "This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the " +
-                "value provided in the NewRegulatoryConfig field." +
+            details: "This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the value " +
+                "provided in the NewRegulatoryConfig field." +
                 "\n" +
-                "Success or failure of this command shall be communicated by the SetRegulatoryConfigResponse " +
-                "command, unless some data model validations caused a failure status code to be issued during the " +
-                "processing of the command." +
+                "Success or failure of this command shall be communicated by the SetRegulatoryConfigResponse command, " +
+                "unless some data model validations caused a failure status code to be issued during the processing " +
+                "of the command." +
                 "\n" +
                 "The CountryCode field shall conforms to ISO 3166-1 alpha-2 and shall be used to set the Location " +
                 "attribute reflected by the Basic Information Cluster." +
@@ -375,8 +374,8 @@ export const GeneralCommissioning = Cluster(
                 "If the LocationCapability attribute is set to Indoor/Outdoor, then the RegulatoryConfig attribute " +
                 "shall be set to match the NewRegulatoryConfig field." +
                 "\n" +
-                "On successful execution of the command, the ErrorCode field of the SetRegulatoryConfigResponse " +
-                "shall be set to OK." +
+                "On successful execution of the command, the ErrorCode field of the SetRegulatoryConfigResponse shall " +
+                "be set to OK." +
                 "\n" +
                 "The Breadcrumb field shall be used to atomically set the Breadcrumb attribute on success of this " +
                 "command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, " +
@@ -421,12 +420,12 @@ export const GeneralCommissioning = Cluster(
             "processing of the command." +
             "\n" +
             "This command signals the Server that the Commissioner or Administrator has successfully completed " +
-            "all steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, " +
-            "“Commissioning Flows”) or other Administrator operations requiring usage of the Fail Safe timer. It " +
-            "ensures that the Server is configured in a state such that it still has all necessary elements to " +
-            "be fully operable within a Fabric, such as ACL entries (see Section 9.10, “Access Control Cluster”) " +
-            "and operational credentials (see Section 6.4, “Node Operational Credentials Specification”), and " +
-            "that the Node is reachable using CASE" +
+            "all steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, “Commissioning " +
+            "Flows”) or other Administrator operations requiring usage of the Fail Safe timer. It ensures that " +
+            "the Server is configured in a state such that it still has all necessary elements to be fully " +
+            "operable within a Fabric, such as ACL entries (see Section 9.10, “Access Control Cluster”) and " +
+            "operational credentials (see Section 6.4, “Node Operational Credentials Specification”), and that " +
+            "the Node is reachable using CASE" +
             "\n" +
             "(CASE)”) over an operational network." +
             "\n" +
@@ -446,8 +445,8 @@ export const GeneralCommissioning = Cluster(
             "AddNOC), or if the accessing fabric is not the one associated with the ongoing Fail-Safe context." +
             "\n" +
             "This command shall only result in success with an ErrorCode value of OK in the " +
-            "CommissioningCompleteResponse if received over a CASE session and the accessing fabric index " +
-            "matches the Fabric Index associated with the current Fail-Safe context. In other words:" +
+            "CommissioningCompleteResponse if received over a CASE session and the accessing fabric index matches " +
+            "the Fabric Index associated with the current Fail-Safe context. In other words:" +
             "\n" +
             "  • If no AddNOC command had been successfully invoked, the CommissioningComplete command must " +
             "    originate from the Fabric that initiated the Fail-Safe context." +
@@ -464,8 +463,8 @@ export const GeneralCommissioning = Cluster(
             "\n" +
             "  2. The commissioning window at the Server shall be closed." +
             "\n" +
-            "  3. Any temporary administrative privileges automatically granted to any open PASE session shall " +
-            "     be revoked (see Section 6.6.2.9, “Bootstrapping of the Access Control Cluster”)." +
+            "  3. Any temporary administrative privileges automatically granted to any open PASE session shall be " +
+            "     revoked (see Section 6.6.2.9, “Bootstrapping of the Access Control Cluster”)." +
             "\n" +
             "  4. The Secure Session Context of any PASE session still established at the Server shall be " +
             "     cleared." +
@@ -524,14 +523,14 @@ export const GeneralCommissioning = Cluster(
                 "\n" +
                 "### Effect on Receipt" +
                 "\n" +
-                "This command shall copy the user responses and accepted version to the presented Enhanced Setup " +
-                "Flow Terms & Conditions from the values provided in the TCUserResponse and TCVersion fields to the " +
+                "This command shall copy the user responses and accepted version to the presented Enhanced Setup Flow " +
+                "Terms & Conditions from the values provided in the TCUserResponse and TCVersion fields to the " +
                 "TCAcknowledgements Attribute and the TCAcceptedVersion Attribute fields respectively." +
                 "\n" +
                 "This command shall result in success with an ErrorCode value of OK in the " +
                 "SetTCAcknowledgementsResponse if all required terms were accepted by the user. Specifically, all " +
-                "bits have a value of 1 in TCAcknowledgements whose ordinal is marked as required in the file " +
-                "located at EnhancedSe" +
+                "bits have a value of 1 in TCAcknowledgements whose ordinal is marked as required in the file located " +
+                "at EnhancedSe" +
                 "\n" +
                 "tupFlowTCUrl." +
                 "\n" +
@@ -620,11 +619,11 @@ export const GeneralCommissioning = Cluster(
 
         Field({
             name: "FailSafeExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
-            details: "This field shall contain a conservative initial duration (in seconds) to set in the FailSafe for " +
-                "the commissioning flow to complete successfully. This may vary depending on the speed or sleepiness " +
-                "of the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field " +
-                "SHOULD allow a Commissioner to proceed with a nominal commissioning without having to-rearm the " +
-                "fail-safe, with some margin.",
+            details: "This field shall contain a conservative initial duration (in seconds) to set in the FailSafe for the " +
+                "commissioning flow to complete successfully. This may vary depending on the speed or sleepiness of " +
+                "the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field SHOULD " +
+                "allow a Commissioner to proceed with a nominal commissioning without having to-rearm the fail-safe, " +
+                "with some margin.",
             xref: { document: "core", section: "11.10.5.3.1" }
         }),
 

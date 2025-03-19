@@ -17,8 +17,8 @@ export const string = Datatype({
         "\n" +
         "Note that the character string type is a bounded sequence of characters whose size bound format is " +
         "not specified in the data model, but rather a property of the underlying encoding. Therefore, no " +
-        "assumptions are to be made about the presence or absence of a length prefix or null-terminator " +
-        "byte, or other implementation considerations." +
+        "assumptions are to be made about the presence or absence of a length prefix or null-terminator byte, " +
+        "or other implementation considerations." +
         "\n" +
         "It is recommended to define constraints on the maximum possible string length." +
         "\n" +

@@ -113,9 +113,9 @@ export namespace ThermostatUserInterfaceConfiguration {
             ),
 
             /**
-             * This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat
-             * from a user to prevent local user programming of the weekly schedule. The schedule programming may still
-             * be performed via a remote interface, and the thermostat may operate in schedule programming mode.
+             * This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat from
+             * a user to prevent local user programming of the weekly schedule. The schedule programming may still be
+             * performed via a remote interface, and the thermostat may operate in schedule programming mode.
              *
              * This attribute is designed to prevent local tampering with or disabling of schedules that may have been
              * programmed by users or service providers via a more capable remote interface. The programming schedule
@@ -132,8 +132,8 @@ export namespace ThermostatUserInterfaceConfiguration {
     });
 
     /**
-     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a
-     * thermostat controller device, that supports a keypad and LCD screen.
+     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a thermostat
+     * controller device, that supports a keypad and LCD screen.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 4.5
      */

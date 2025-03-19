@@ -38,8 +38,8 @@ export namespace TimeSynchronizationInterface {
         /**
          * This command shall set the TrustedTimeSource attribute. Upon receipt of this command:
          *
-         *   • If the TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource
-         *     attribute to null and shall generate a MissingTrustedTimeSource event.
+         *   • If the TrustedTimeSource field in the command is null, the node shall set the TrustedTimeSource attribute
+         *     to null and shall generate a MissingTrustedTimeSource event.
          *
          *   • Otherwise, the node shall set the TrustedTimeSource attribute to a struct which has NodeID and Endpoint
          *     fields matching those in the TrustedTimeSource field and has its FabricIndex field set to the command’s
@@ -52,8 +52,8 @@ export namespace TimeSynchronizationInterface {
 
     export interface NtpClient {
         /**
-         * This command is used to set the DefaultNTP attribute. If the DefaultNTP Address field does not conform to
-         * the requirements in the DefaultNTP attribute description, the command shall fail with a status code of
+         * This command is used to set the DefaultNTP attribute. If the DefaultNTP Address field does not conform to the
+         * requirements in the DefaultNTP attribute description, the command shall fail with a status code of
          * INVALID_COMMAND. If the node does not support DNS resolution (as specified in SupportsDNSResolve) and the
          * provided Address is a domain name, the command shall fail with a status code of INVALID_COMMAND. Otherwise,
          * the node shall set the DefaultNTP attribute to match the DefaultNTP provided in this command.
@@ -70,16 +70,16 @@ export namespace TimeSynchronizationInterface {
          * If the given list is larger than the TimeZoneListMaxSize, the node shall respond with RESOURCE_EXHAUSTED and
          * the TimeZone attribute shall NOT be updated.
          *
-         * If the given list does not conform to the list requirements in TimeZone attribute the node shall respond
-         * with a CONSTRAINT_ERROR and the TimeZone attribute shall NOT be updated.
+         * If the given list does not conform to the list requirements in TimeZone attribute the node shall respond with
+         * a CONSTRAINT_ERROR and the TimeZone attribute shall NOT be updated.
          *
          * If there are no errors in the list, the TimeZone field shall be copied to the TimeZone attribute. A
          * TimeZoneStatus event shall be generated with the new time zone information.
          *
          * If the node supports a time zone database and it has information available for the time zone that will be
-         * applied, it may set its DSTOffset attribute, otherwise the DSTOffset attribute shall be set to an empty
-         * list. A DSTTableEmpty event shall be generated if the DSTOffset attribute is empty. A DSTStatus event shall
-         * be generated if the node was previously applying a DST offset.
+         * applied, it may set its DSTOffset attribute, otherwise the DSTOffset attribute shall be set to an empty list.
+         * A DSTTableEmpty event shall be generated if the DSTOffset attribute is empty. A DSTStatus event shall be
+         * generated if the node was previously applying a DST offset.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.3
          */

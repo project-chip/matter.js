@@ -168,8 +168,8 @@ export namespace RefrigeratorAlarm {
             state: Attribute(0x2, TlvBitmap(TlvUInt32, Alarm)),
 
             /**
-             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of
-             * true means the alarm is supported, otherwise the alarm is not supported.
+             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of true
+             * means the alarm is supported, otherwise the alarm is not supported.
              *
              * If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.
              *
@@ -203,8 +203,8 @@ export namespace RefrigeratorAlarm {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is a derived cluster of Alarm Base cluster and provides the alarm definition related to
-     * refrigerator and temperature controlled cabinet devices.
+     * This cluster is a derived cluster of Alarm Base cluster and provides the alarm definition related to refrigerator
+     * and temperature controlled cabinet devices.
      *
      * RefrigeratorAlarmCluster supports optional features that you can enable with the RefrigeratorAlarmCluster.with()
      * factory method.
@@ -235,8 +235,8 @@ export namespace RefrigeratorAlarm {
     /**
      * This cluster supports all RefrigeratorAlarm features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

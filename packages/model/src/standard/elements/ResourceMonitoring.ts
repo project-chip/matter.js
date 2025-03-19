@@ -107,8 +107,8 @@ export const ResourceMonitoring = Cluster(
         name: "ResetCondition", id: 0x0, access: "O", conformance: "O", direction: "request",
         response: "status",
         details: "Upon receipt, the device shall reset the Condition and ChangeIndicator attributes, indicating full " +
-            "resource availability and readiness for use, as initially configured. Invocation of this command " +
-            "may cause the LastChangedTime to be updated automatically based on the clock of the server, if the " +
+            "resource availability and readiness for use, as initially configured. Invocation of this command may " +
+            "cause the LastChangedTime to be updated automatically based on the clock of the server, if the " +
             "server supports setting the attribute.",
         xref: { document: "cluster", section: "2.8.7.1" }
     }),
@@ -148,8 +148,8 @@ export const ResourceMonitoring = Cluster(
     Datatype(
         {
             name: "ProductIdentifierTypeEnum", type: "enum8",
-            details: "Indicate the type of identifier used to describe the product. Devices SHOULD use " +
-                "globally-recognized IDs over OEM specific ones.",
+            details: "Indicate the type of identifier used to describe the product. Devices SHOULD use globally-recognized " +
+                "IDs over OEM specific ones.",
             xref: { document: "cluster", section: "2.8.5.3" }
         },
 

@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { JointFabricDatastoreClusterInterface } from "./JointFabricDatastoreClusterInterface.js";
 
 /**
- * JointFabricDatastoreClusterBehavior is the base class for objects that support interaction with {@link
- * JointFabricDatastoreCluster.Cluster}.
+ * JointFabricDatastoreClusterBehavior is the base class for objects that support interaction with
+ * {@link JointFabricDatastoreCluster.Cluster}.
  */
 export const JointFabricDatastoreClusterBehavior = ClusterBehavior
     .withInterface<JointFabricDatastoreClusterInterface>()

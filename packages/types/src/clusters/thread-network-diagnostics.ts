@@ -75,8 +75,8 @@ export namespace ThreadNetworkDiagnostics {
         Unspecified = 0,
 
         /**
-         * The Node does not currently have a role as a result of the Thread interface not currently being configured
-         * or operational.
+         * The Node does not currently have a role as a result of the Thread interface not currently being configured or
+         * operational.
          */
         Unassigned = 1,
 
@@ -556,17 +556,16 @@ export namespace ThreadNetworkDiagnostics {
         attributes: {
             /**
              * The DetachedRoleCount attribute shall indicate the number of times the Node entered the
-             * OT_DEVICE_ROLE_DETACHED role as specified within the Thread specification. This value shall only be
-             * reset upon a Node reboot.
+             * OT_DEVICE_ROLE_DETACHED role as specified within the Thread specification. This value shall only be reset
+             * upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.15
              */
             detachedRoleCount: OptionalAttribute(0xe, TlvUInt16, { omitChanges: true, default: 0 }),
 
             /**
-             * The ChildRoleCount attribute shall indicate the number of times the Node entered the
-             * OT_DEVICE_ROLE_CHILD role as specified within the Thread specification. This value shall only be reset
-             * upon a Node reboot.
+             * The ChildRoleCount attribute shall indicate the number of times the Node entered the OT_DEVICE_ROLE_CHILD
+             * role as specified within the Thread specification. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.16
              */
@@ -591,9 +590,9 @@ export namespace ThreadNetworkDiagnostics {
             leaderRoleCount: OptionalAttribute(0x11, TlvUInt16, { omitChanges: true, default: 0 }),
 
             /**
-             * The AttachAttemptCount attribute shall indicate the number of attempts that have been made to attach to
-             * a Thread network while the Node was detached from all Thread networks. This value shall only be reset
-             * upon a Node reboot.
+             * The AttachAttemptCount attribute shall indicate the number of attempts that have been made to attach to a
+             * Thread network while the Node was detached from all Thread networks. This value shall only be reset upon
+             * a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.19
              */
@@ -632,10 +631,10 @@ export namespace ThreadNetworkDiagnostics {
     export const MacCountsComponent = MutableCluster.Component({
         attributes: {
             /**
-             * The TxTotalCount attribute shall indicate the total number of unique MAC frame transmission requests.
-             * The TxTotalCount attribute shall only be incremented by 1 for each MAC transmission request regardless
-             * of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This value shall only be reset upon
-             * a Node reboot.
+             * The TxTotalCount attribute shall indicate the total number of unique MAC frame transmission requests. The
+             * TxTotalCount attribute shall only be incremented by 1 for each MAC transmission request regardless of the
+             * amount of CCA failures, CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node
+             * reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.23
              */
@@ -652,10 +651,10 @@ export namespace ThreadNetworkDiagnostics {
             txUnicastCount: OptionalAttribute(0x17, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxBroadcastCount attribute shall indicate the total number of unique broadcast MAC frame
-             * transmission requests. The TxBroadcastCount attribute shall only be incremented by 1 for each broadcast
-             * MAC transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.
-             * This value shall only be reset upon a Node reboot.
+             * The TxBroadcastCount attribute shall indicate the total number of unique broadcast MAC frame transmission
+             * requests. The TxBroadcastCount attribute shall only be incremented by 1 for each broadcast MAC
+             * transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This
+             * value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.25
              */
@@ -664,18 +663,18 @@ export namespace ThreadNetworkDiagnostics {
             /**
              * The TxAckRequestedCount attribute shall indicate the total number of unique MAC frame transmission
              * requests with requested acknowledgment. The TxAckRequestedCount attribute shall only be incremented by 1
-             * for each MAC transmission request with requested acknowledgment regardless of the amount of CCA
-             * failures, CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node reboot.
+             * for each MAC transmission request with requested acknowledgment regardless of the amount of CCA failures,
+             * CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.26
              */
             txAckRequestedCount: OptionalAttribute(0x19, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxAckedCount attribute shall indicate the total number of unique MAC frame transmission requests
-             * that were acked. The TxAckedCount attribute shall only be incremented by 1 for each MAC transmission
-             * request that is acked regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.
-             * This value shall only be reset upon a Node reboot.
+             * The TxAckedCount attribute shall indicate the total number of unique MAC frame transmission requests that
+             * were acked. The TxAckedCount attribute shall only be incremented by 1 for each MAC transmission request
+             * that is acked regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This value
+             * shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.27
              */
@@ -684,19 +683,19 @@ export namespace ThreadNetworkDiagnostics {
             /**
              * The TxNoAckRequestedCount attribute shall indicate the total number of unique MAC frame
              *
-             * transmission requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only
-             * be incremented by 1 for each MAC transmission request that is does not request acknowledgement
-             * regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.
+             * transmission requests without requested acknowledgment. The TxNoAckRequestedCount attribute shall only be
+             * incremented by 1 for each MAC transmission request that is does not request acknowledgement regardless of
+             * the amount of CCA failures, CSMA-CA attempts, or retransmissions.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.28
              */
             txNoAckRequestedCount: OptionalAttribute(0x1b, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxDataCount attribute shall indicate the total number of unique MAC Data frame transmission
-             * requests. The TxDataCount attribute shall only be incremented by 1 for each MAC Data frame transmission
-             * request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This value shall
-             * only be reset upon a Node reboot.
+             * The TxDataCount attribute shall indicate the total number of unique MAC Data frame transmission requests.
+             * The TxDataCount attribute shall only be incremented by 1 for each MAC Data frame transmission request
+             * regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This value shall only be
+             * reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.29
              */
@@ -705,8 +704,8 @@ export namespace ThreadNetworkDiagnostics {
             /**
              * The TxDataPollCount attribute shall indicate the total number of unique MAC Data Poll frame transmission
              * requests. The TxDataPollCount attribute shall only be incremented by 1 for each MAC Data Poll frame
-             * transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions.
-             * This value shall only be reset upon a Node reboot.
+             * transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. This
+             * value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.30
              */
@@ -732,9 +731,9 @@ export namespace ThreadNetworkDiagnostics {
             txBeaconRequestCount: OptionalAttribute(0x1f, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxOtherCount attribute shall indicate the total number of unique MAC frame transmission requests
-             * that are not counted by any other attribute. The TxOtherCount attribute shall only be incremented by 1
-             * for each MAC frame transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or
+             * The TxOtherCount attribute shall indicate the total number of unique MAC frame transmission requests that
+             * are not counted by any other attribute. The TxOtherCount attribute shall only be incremented by 1 for
+             * each MAC frame transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or
              * retransmissions. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.33
@@ -782,9 +781,9 @@ export namespace ThreadNetworkDiagnostics {
             txErrCcaCount: OptionalAttribute(0x24, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The TxErrAbortCount attribute shall indicate the total number of unique MAC transmission request
-             * failures caused by an abort error. The TxErrAbortCount attribute shall only be incremented by 1 for each
-             * unique MAC transmission request failure caused by an abort error.
+             * The TxErrAbortCount attribute shall indicate the total number of unique MAC transmission request failures
+             * caused by an abort error. The TxErrAbortCount attribute shall only be incremented by 1 for each unique
+             * MAC transmission request failure caused by an abort error.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.38
              */
@@ -858,8 +857,8 @@ export namespace ThreadNetworkDiagnostics {
             rxBeaconRequestCount: OptionalAttribute(0x2d, TlvUInt32, { omitChanges: true, default: 0 }),
 
             /**
-             * The RxOtherCount attribute shall indicate the total number of received unique MAC frame requests that
-             * are not counted by any other attribute. This value shall only be reset upon a Node reboot.
+             * The RxOtherCount attribute shall indicate the total number of received unique MAC frame requests that are
+             * not counted by any other attribute. This value shall only be reset upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.47
              */
@@ -894,8 +893,8 @@ export namespace ThreadNetworkDiagnostics {
 
             /**
              * The RxErrNoFrameCount attribute shall indicate the total number of received unique MAC frame requests
-             * that have been dropped as a result of missing or malformed frame contents. This value shall only be
-             * reset upon a Node reboot.
+             * that have been dropped as a result of missing or malformed frame contents. This value shall only be reset
+             * upon a Node reboot.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.51
              */
@@ -1085,8 +1084,8 @@ export namespace ThreadNetworkDiagnostics {
             dataVersion: Attribute(0xb, TlvNullable(TlvUInt16.bound({ max: 255 }))),
 
             /**
-             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of data
-             * the Node currently uses. Null if not attached to a Thread network.
+             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of data the
+             * Node currently uses. Null if not attached to a Thread network.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.13
              */
@@ -1204,9 +1203,8 @@ export namespace ThreadNetworkDiagnostics {
 
     /**
      * The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be
-     * used by a Node to assist a user or Administrator in diagnosing potential problems. The Thread Network
-     * Diagnostics Cluster attempts to centralize all metrics that are relevant to a potential Thread radio running on
-     * a Node.
+     * used by a Node to assist a user or Administrator in diagnosing potential problems. The Thread Network Diagnostics
+     * Cluster attempts to centralize all metrics that are relevant to a potential Thread radio running on a Node.
      *
      * ThreadNetworkDiagnosticsCluster supports optional features that you can enable with the
      * ThreadNetworkDiagnosticsCluster.with() factory method.
@@ -1418,8 +1416,8 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * This cluster supports all ThreadNetworkDiagnostics features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

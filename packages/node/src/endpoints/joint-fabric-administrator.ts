@@ -17,8 +17,8 @@ import { Identity } from "#general";
  * signed by the Joint Fabric Anchor Root CA.
  *
  * A client wanting to access the capabilities of the Joint Fabric Administrator may use the Joint Commissioning Method
- * to be commissioned onto the Joint Fabric. Once commissioned, a client may access the capabilities of the Joint
- * Fabric Administrator.
+ * to be commissioned onto the Joint Fabric. Once commissioned, a client may access the capabilities of the Joint Fabric
+ * Administrator.
  *
  * @see {@link MatterSpecification.v13.Device} § 2.9
  */

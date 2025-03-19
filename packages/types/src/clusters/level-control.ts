@@ -155,8 +155,8 @@ export namespace LevelControl {
          * This field shall indicate the rate of movement in units per second. The actual rate of movement SHOULD be as
          * close to this rate as the device is able. If the Rate field is null, then the value of the DefaultMoveRate
          * attribute shall be used if that attribute is supported and its value is not null. If the Rate field is null
-         * and the DefaultMoveRate attribute is either not supported or set to null, then the device SHOULD move as
-         * fast as it is able. If the device is not able to move at a variable rate, this
+         * and the DefaultMoveRate attribute is either not supported or set to null, then the device SHOULD move as fast
+         * as it is able. If the device is not able to move at a variable rate, this
          *
          * field may be disregarded.
          *
@@ -268,8 +268,8 @@ export namespace LevelControl {
              *
              *   • When it changes to 0.
              *
-             * For commands with a transition time or changes to the transition time less than 1 second, changes to
-             * this attribute shall NOT be reported.
+             * For commands with a transition time or changes to the transition time less than 1 second, changes to this
+             * attribute shall NOT be reported.
              *
              * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
              * reporting of this attribute in order to keep track of the remaining duration.
@@ -387,8 +387,8 @@ export namespace LevelControl {
              * A value of 0x00 shall NOT be used.
              *
              * A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE shall
-             * indicate the maximum level that can be attained on a device. A value of null shall represent an
-             * undefined value.
+             * indicate the maximum level that can be attained on a device. A value of null shall represent an undefined
+             * value.
              *
              * All other values are application specific gradations from the minimum to the maximum level.
              *
@@ -468,8 +468,8 @@ export namespace LevelControl {
             /**
              * Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off
              * cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. If the
-             * OnLevel attribute is not implemented, or is set to the null value, it has no effect. For more details
-             * see Effect of On/Off Commands on the CurrentLevel attribute.
+             * OnLevel attribute is not implemented, or is set to the null value, it has no effect. For more details see
+             * Effect of On/Off Commands on the CurrentLevel attribute.
              *
              * OnLevel represents a mandatory field that was previously not present or optional. Implementers should be
              * aware that older devices may not implement it.
@@ -479,10 +479,10 @@ export namespace LevelControl {
             onLevel: WritableAttribute(0x11, TlvNullable(TlvUInt8), { default: null }),
 
             /**
-             * Indicates the time taken to move the current level from the minimum level to the maximum level when an
-             * On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a
-             * second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime shall be
-             * used instead.
+             * Indicates the time taken to move the current level from the minimum level to the maximum level when an On
+             * command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second. If
+             * this attribute is not implemented, or contains a null value, the OnOffTransitionTime shall be used
+             * instead.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.6.6.12
              */
@@ -629,8 +629,8 @@ export namespace LevelControl {
     /**
      * This cluster supports all LevelControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

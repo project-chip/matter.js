@@ -19,11 +19,11 @@ export namespace ApplicationLauncherInterface {
          *
          *   • otherwise the application corresponding to the endpoint.
          *
-         * The endpoint shall launch and bring to foreground the requisite application if the application is not
-         * already launched and in foreground. The Status attribute shall be updated to ActiveVisibleFocus on the
-         * Application Basic cluster of the Endpoint corresponding to the launched application. The Status attribute
-         * shall be updated on any other application whose Status may have changed as a result of this command. The
-         * CurrentApp attribute, if supported, shall be updated to reflect the new application in the foreground.
+         * The endpoint shall launch and bring to foreground the requisite application if the application is not already
+         * launched and in foreground. The Status attribute shall be updated to ActiveVisibleFocus on the Application
+         * Basic cluster of the Endpoint corresponding to the launched application. The Status attribute shall be
+         * updated on any other application whose Status may have changed as a result of this command. The CurrentApp
+         * attribute, if supported, shall be updated to reflect the new application in the foreground.
          *
          * This command returns a Launcher Response.
          *
@@ -57,10 +57,10 @@ export namespace ApplicationLauncherInterface {
          *   • otherwise the application corresponding to the endpoint.
          *
          * The endpoint may decide to stop the application based on manufacturer specific behavior or resource
-         * constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on the
-         * action taken, on the Application Basic cluster of the Endpoint corresponding to the application on which the
-         * action was taken. The Status attribute shall be updated on any other application whose Status may have
-         * changed as a result of this command.
+         * constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on the action
+         * taken, on the Application Basic cluster of the Endpoint corresponding to the application on which the action
+         * was taken. The Status attribute shall be updated on any other application whose Status may have changed as a
+         * result of this command.
          *
          * This command returns a Launcher Response.
          *

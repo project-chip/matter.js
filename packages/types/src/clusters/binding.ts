@@ -49,9 +49,9 @@ export namespace Binding {
         endpoint: TlvOptionalField(3, TlvEndpointNumber),
 
         /**
-         * This field is the cluster ID (client & server) on the local and target endpoint(s). If this field is
-         * present, the client cluster shall also exist on this endpoint (with this Binding cluster). If this field is
-         * present, the target shall be this cluster on the target endpoint(s).
+         * This field is the cluster ID (client & server) on the local and target endpoint(s). If this field is present,
+         * the client cluster shall also exist on this endpoint (with this Binding cluster). If this field is present,
+         * the target shall be this cluster on the target endpoint(s).
          *
          * @see {@link MatterSpecification.v13.Core} § 9.6.5.1.4
          */

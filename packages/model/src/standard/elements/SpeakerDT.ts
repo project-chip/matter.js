@@ -13,8 +13,8 @@ export const SpeakerDt = DeviceType(
     {
         name: "Speaker", id: 0x22, category: "Media", classification: "simple",
 
-        details: "This defines conformance to the Speaker device type. This feature controls the speaker volume of " +
-            "the device." +
+        details: "This defines conformance to the Speaker device type. This feature controls the speaker volume of the " +
+            "device." +
             "\n" +
             "To control unmute/mute, the On/Off cluster shall be used. A value of TRUE for the OnOff attribute " +
             "shall represent the volume on (not muted) state, while a value of FALSE shall represent the volume " +

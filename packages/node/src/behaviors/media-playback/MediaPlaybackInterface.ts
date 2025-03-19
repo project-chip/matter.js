@@ -42,8 +42,8 @@ export namespace MediaPlaybackInterface {
         startOver(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
-         * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
-         * context-specific. This will often Go back to the previous media playback item.
+         * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is context-specific.
+         * This will often Go back to the previous media playback item.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.5
          */
@@ -97,8 +97,8 @@ export namespace MediaPlaybackInterface {
         /**
          * Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in the Track
          * catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond
-         * to the streaming media OR no media is being streamed at the time of receipt of this command, the server
-         * shall return an error status of INVALID_ARGUMENT.
+         * to the streaming media OR no media is being streamed at the time of receipt of this command, the server shall
+         * return an error status of INVALID_ARGUMENT.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.14
          */
@@ -121,11 +121,11 @@ export namespace MediaPlaybackInterface {
          *
          * Different "rewind" speeds may be reflected on the media playback device based upon the number of sequential
          * calls to this function and the capability of the device. This is to avoid needing to define every speed
-         * (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
-         * reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for
-         * example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the
-         * playback speed has reached the maximum supported speed for media playing backwards, the status of
-         * SPEED_OUT_OF_RANGE shall be returned.
+         * (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to reflect
+         * the new speed of playback. If the playback speed cannot be changed for the media being played(for example, in
+         * live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the playback
+         * speed has reached the maximum supported speed for media playing backwards, the status of SPEED_OUT_OF_RANGE
+         * shall be returned.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.7
          */
