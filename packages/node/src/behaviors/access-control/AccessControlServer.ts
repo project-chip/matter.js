@@ -112,13 +112,6 @@ export class AccessControlServer extends AccessControlBehavior.with("Extension")
         }
 
         for (const entry of fabricAcls) {
-            // We need to convert empty arrays to null because expected by chip tests
-            if (entry.subjects !== null && entry.subjects.length === 0) {
-                entry.subjects = null;
-            }
-            if (entry.targets !== null && entry.targets.length === 0) {
-                entry.targets = null;
-            }
             const { privilege, subjects, targets, authMode } = entry;
             if (subjects !== null && subjects.length > this.state.subjectsPerAccessControlEntry) {
                 throw new StatusResponseError("SubjectsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);

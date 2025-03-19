@@ -82,6 +82,7 @@ jobs:
       - name: Verify that Matter.js controller was used
         shell: bash
         run: |
+          cd connectedhomeip
           ls -la test_controller.log
           if [ ! -f ./test_controller.log ]; then
               exit 1
