@@ -5,7 +5,6 @@
  */
 
 import { generateMatterjsMainForwards } from "#forwards/matterjs-main.js";
-import { generateProjectChipMatterjsForwards } from "#forwards/project-chip-matterjs.js";
 import { Progress } from "@matter/tools";
 
 /**
@@ -14,8 +13,6 @@ import { Progress } from "@matter/tools";
 const progress = new Progress();
 
 progress.startup(`Generating ${progress.emphasize("sub-module forwards")}`, false);
-
-await progress.run("@project-chip/matter.js", generateProjectChipMatterjsForwards);
 
 await progress.run("@matter/main", generateMatterjsMainForwards);
 
