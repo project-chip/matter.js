@@ -66,12 +66,6 @@ export class MatterNode {
             }
             this.storageContext = controllerStore.storage.createContext("Node");
 
-            if (await this.Store.has("ControllerFabricLabel")) {
-                await this.commissioningController.updateFabricLabel(
-                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
-                );
-            }
-
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
             if (baseLocation !== undefined) {
@@ -114,6 +108,12 @@ export class MatterNode {
 
         if (this.commissioningController !== undefined) {
             await this.commissioningController.start();
+
+            if (await this.Store.has("ControllerFabricLabel")) {
+                await this.commissioningController.updateFabricLabel(
+                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                );
+            }
         } else {
             throw new Error("No controller initialized");
         }
