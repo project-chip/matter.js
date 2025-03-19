@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { FixedAttribute, Attribute, Command, TlvNoResponse } from "../cluster/Cluster.js";
+import { FixedAttribute, Attribute, Command } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
@@ -265,7 +265,7 @@ export namespace LaundryWasherMode {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
              */
-            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x0, TlvNoResponse)
+            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, ModeBase.TlvChangeToModeResponse)
         },
 
         /**

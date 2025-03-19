@@ -141,7 +141,7 @@ export class ClusterComponentGenerator {
             // it makes a difference and neither we nor CHIP implement it yet
             let responseModel;
             if (model.response && model.response !== "status") {
-                responseModel = this.cluster.get(CommandModel, model.response);
+                responseModel = this.cluster.member(model.response, [ElementTag.Command]) as CommandModel | undefined;
             }
             if (responseModel) {
                 block.atom(hex(responseModel.id));
