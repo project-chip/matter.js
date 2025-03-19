@@ -82,13 +82,13 @@ describe("TlvNullable", () => {
             expect(schemaWithConstraint.decode(encoded)).equal(null);
         });
 
-        it("decodes zero length array with minlength 0 as nully", () => {
+        it("decodes zero length array with minlength 0 as empty array", () => {
             const encoded = schemaArray.encode([]);
             const schemaWithConstraint = TlvNullable(TlvArray(TlvString, { minLength: 0 }));
-            expect(schemaWithConstraint.decode(encoded)).deep.equal(null);
+            expect(schemaWithConstraint.decode(encoded)).deep.equal([]);
         });
 
-        it("decodes zero length string with constraint as null", () => {
+        it("decodes zero length array with constraint as null", () => {
             const encoded = schemaArray.encode([]);
             const schemaWithConstraint = TlvNullable(TlvArray(TlvString, { minLength: 1 }));
             expect(schemaWithConstraint.decode(encoded)).equal(null);
