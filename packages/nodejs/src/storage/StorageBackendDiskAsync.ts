@@ -163,6 +163,8 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         const fd = await open(this.#path, "r");
         try {
             await fd.sync();
+        } catch (error) {
+            logger.warn(`Failed to fsync storage directory ${this.#path}`, error);
         } finally {
             await fd.close();
         }
