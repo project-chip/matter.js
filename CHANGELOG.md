@@ -19,12 +19,16 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/general
     - Breaking: Renaming `getLoggerforIdentifier()` to `getLoggerForIdentifier()` to be consistent with other method names
     - Feature: Adding `hasLoggerForIdentifier()` method to Logger to check if a logger for a specific identifier exists
+    - Fix: Correctly MDNS records with not-existing QNames
 
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
 -   @matter/nodejs
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
+
+-   @matter/nodejs-shell
+    - Fix: Prevents crash on startup when having set a Fabric label in config
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
