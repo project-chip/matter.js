@@ -17,6 +17,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
 
 -   @matter/general
+    - Breaking: Renaming `getLoggerforIdentifier()` to `getLoggerForIdentifier()` to be consistent with other method names
+    - Feature: Adding `hasLoggerForIdentifier()` method to Logger to check if a logger for a specific identifier exists
     - Fix: Correctly MDNS records with not-existing QNames
 
 -   @matter/main
