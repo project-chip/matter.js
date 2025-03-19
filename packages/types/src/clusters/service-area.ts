@@ -161,7 +161,7 @@ export namespace ServiceArea {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.17.5.5.4
          */
-        initialTimeEstimate: TlvOptionalField(3, TlvNullable(TlvUInt32))
+        estimatedTime: TlvOptionalField(3, TlvNullable(TlvUInt32))
     });
 
     /**

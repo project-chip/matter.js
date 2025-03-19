@@ -625,7 +625,7 @@ export const ServiceArea = Cluster(
         }),
 
         Field({
-            name: "InitialTimeEstimate", id: 0x3, type: "elapsed-s", conformance: "O", quality: "X",
+            name: "EstimatedTime", id: 0x3, type: "elapsed-s", conformance: "O", quality: "X",
 
             details: "This field shall indicate the estimated time for the operation, in seconds, from when the device " +
                 "will start operating at the area indicated by the AreaID field, until the operation completes, " +

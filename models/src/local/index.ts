@@ -31,6 +31,7 @@ import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesManagementOverrides.js";
 import "./ScenesOverrides.js";
 import "./semtag.js";
+import "./ServiceAreaOverrides.js";
 import "./subject-id.js";
 import "./tag.js";
 import "./TemperatureMeasurementOverrides.js";
