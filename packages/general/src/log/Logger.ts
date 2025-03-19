@@ -131,10 +131,18 @@ export class Logger {
     }
 
     /**
+     * Check if a logger with the matching identifier exists.
+     * @param identifier The identifier of the logger
+     */
+    public static hasLoggerForIdentifier(identifier: string) {
+        return Logger.logger.some(logger => logger.logIdentifier === identifier);
+    }
+
+    /**
      * Get the logger with the matching identifier.
      * @param identifier The identifier of the logger
      */
-    public static getLoggerforIdentifier(identifier: string) {
+    public static getLoggerForIdentifier(identifier: string) {
         const logger = Logger.logger.find(logger => logger.logIdentifier === identifier);
         if (logger === undefined) {
             throw new NotImplementedError(`Unknown logger "${identifier}"`);
@@ -192,7 +200,7 @@ export class Logger {
      * Get facility loglevels for the default logger.
      */
     public static get logLevels() {
-        return Logger.getLoggerforIdentifier("default").logLevels;
+        return Logger.getLoggerForIdentifier("default").logLevels;
     }
 
     /**
@@ -208,7 +216,7 @@ export class Logger {
      * Get default loglevel for the default logger.
      */
     public static get defaultLogLevel() {
-        return Logger.getLoggerforIdentifier("default").defaultLogLevel;
+        return Logger.getLoggerForIdentifier("default").defaultLogLevel;
     }
 
     /**
@@ -224,7 +232,7 @@ export class Logger {
      * Get the log function for the default logger.
      */
     public static get log() {
-        return Logger.getLoggerforIdentifier("default").log;
+        return Logger.getLoggerForIdentifier("default").log;
     }
 
     /**
@@ -242,7 +250,7 @@ export class Logger {
      * Get the log formatter for the default logger.
      */
     public static get logFormatter() {
-        return Logger.getLoggerforIdentifier("default").logFormatter;
+        return Logger.getLoggerForIdentifier("default").logFormatter;
     }
 
     /**
@@ -418,7 +426,7 @@ export class Logger {
         if (!Logger) {
             throw new Error("No logger loaded, cannot capture logs");
         }
-        const logger = Logger.getLoggerforIdentifier(fromLogger);
+        const logger = Logger.getLoggerForIdentifier(fromLogger);
         const actualLogSettings = {
             logFormatter: logger.logFormatter,
             log: logger.log,
