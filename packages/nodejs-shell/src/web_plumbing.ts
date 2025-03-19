@@ -78,7 +78,7 @@ export function initializeWebPlumbing(
         ws.on("close", () => {
             process.stdout.write("Client disconnected\n");
             try {
-                if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
+                if (Logger.getLoggerForIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
             } catch (err) {
@@ -90,7 +90,7 @@ export function initializeWebPlumbing(
         ws.on("error", err => {
             process.stderr.write("WebSocket error: " + err.message + "\n");
             try {
-                if (Logger.getLoggerforIdentifier(socketLogger) !== undefined) {
+                if (Logger.getLoggerForIdentifier(socketLogger) !== undefined) {
                     Logger.removeLogger(socketLogger);
                 }
             } catch (err) {
