@@ -28,6 +28,7 @@ import "./ModeSelectOverrides.js";
 import "./namespace.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
+import "./ScenesManagementOverrides.js";
 import "./ScenesOverrides.js";
 import "./semtag.js";
 import "./subject-id.js";
