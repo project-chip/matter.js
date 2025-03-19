@@ -11,7 +11,7 @@ import { DatatypeElement as Datatype, FieldElement as Field } from "../../elemen
 
 export const WildcardPathFlagsBitmap = Datatype(
     {
-        name: "WildcardPathFlagsBitmap", type: "map8",
+        name: "WildcardPathFlagsBitmap", type: "map16",
         details: "The WildcardPathFlagsBitmap indicates flags that apply to the path, affecting wildcard expansion. " +
             "The following flags are defined:",
         xref: { document: "core", section: "8.9.2.3" }

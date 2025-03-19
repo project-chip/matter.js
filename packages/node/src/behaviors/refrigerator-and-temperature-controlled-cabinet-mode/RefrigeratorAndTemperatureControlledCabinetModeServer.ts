@@ -6,9 +6,7 @@
 
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
-import {
-    RefrigeratorAndTemperatureControlledCabinetModeBehavior
-} from "./RefrigeratorAndTemperatureControlledCabinetModeBehavior.js";
+import { RefrigeratorAndTemperatureControlledCabinetModeBehavior } from "./RefrigeratorAndTemperatureControlledCabinetModeBehavior.js";
 
 /**
  * This is the default server implementation of {@link RefrigeratorAndTemperatureControlledCabinetModeBehavior}.

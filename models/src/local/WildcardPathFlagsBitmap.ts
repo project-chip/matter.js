@@ -8,6 +8,7 @@ import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
     tag: "datatype",
+    type: "map16",
     name: "WildcardPathFlagsBitmap",
 
     children: [
