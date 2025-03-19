@@ -155,15 +155,14 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
      * We do this as best effort to ensure that all writes are persisted to disk.
      */
     async #fsyncStorageDir() {
+        if (process.platform === "win32") {
+            // Windows will cause `EPERM: operation not permitted, fsync`
+            // for directories, so lets catch this generically
+            return;
+        }
         const fd = await open(this.#path, "r");
         try {
             await fd.sync();
-        } catch (error) {
-            // Windows will cause `EPERM: operation not permitted, fsync`
-            // for directories, so lets catch this generically
-            if ((error as any).code !== "EPERM") {
-                throw error;
-            }
         } finally {
             await fd.close();
         }
