@@ -24,8 +24,8 @@ export const ContentLauncher = Cluster(
             "\n" +
             "This cluster would be supported on a Video Player device or devices that can playback content, such " +
             "as a Streaming Media Player, Smart TV or Smart Screen. This cluster supports playing back content " +
-            "referenced by URL. It supports finding content by type and global identifier, and either playing " +
-            "the content or displaying the search results." +
+            "referenced by URL. It supports finding content by type and global identifier, and either playing the " +
+            "content or displaying the search results." +
             "\n" +
             "The cluster server for Content Launcher is implemented by an endpoint that can launch content, such " +
             "as a Video Player, or an endpoint representing a Content App on such a device." +
@@ -114,13 +114,13 @@ export const ContentLauncher = Cluster(
 
             details: "This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition " +
                 "for the media, sent from the client to the server. If the server does not find an available track " +
-                "for the title being played exactly matching a Track requested here, in the list of available " +
-                "tracks, it may default to picking another track that closely matches the requested track. " +
-                "Alternately, it may go with user preferences set on the server side (it will use this option if " +
-                "these PlaybackPreferences are not specified). In the case of text tracks, that may mean that the " +
-                "subtitle text is not displayed at all. In the cases where the preferred Text/AudioTracks are not " +
-                "available, the server shall return the TextTrackNotAvailable and/or AudioTrackNotAvailable " +
-                "Status(es) in the LauncherResponse.",
+                "for the title being played exactly matching a Track requested here, in the list of available tracks, " +
+                "it may default to picking another track that closely matches the requested track. Alternately, it " +
+                "may go with user preferences set on the server side (it will use this option if these " +
+                "PlaybackPreferences are not specified). In the case of text tracks, that may mean that the subtitle " +
+                "text is not displayed at all. In the cases where the preferred Text/AudioTracks are not available, " +
+                "the server shall return the TextTrackNotAvailable and/or AudioTrackNotAvailable Status(es) in the " +
+                "LauncherResponse.",
 
             xref: { document: "cluster", section: "6.7.7.1.4" }
         }),
@@ -155,9 +155,9 @@ export const ContentLauncher = Cluster(
                 "When playing a video stream in response to this command, an indication (ex. visual) of the identity " +
                 "of the origin node of the video stream shall be provided. This could be in the form of a friendly " +
                 "name label which uniquely identifies the node to the user. This friendly name label is typically " +
-                "assigned by the Matter Admin (ex. TV) at the time of commissioning and, when it’s a device, is " +
-                "often editable by the user. It might be a combination of a company name and friendly name, for " +
-                "example, ”Acme” or “Acme Streaming Service on Alice’s Phone”." +
+                "assigned by the Matter Admin (ex. TV) at the time of commissioning and, when it’s a device, is often " +
+                "editable by the user. It might be a combination of a company name and friendly name, for example, " +
+                "”Acme” or “Acme Streaming Service on Alice’s Phone”." +
                 "\n" +
                 "This command returns a Launch Response.",
 
@@ -192,13 +192,13 @@ export const ContentLauncher = Cluster(
 
             details: "This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition " +
                 "for the media, sent from the client to the server. If the server does not find an available track " +
-                "for the title being played exactly matching a Track requested here, in the list of available " +
-                "tracks, it may default to picking another track that closely matches the requested track. " +
-                "Alternately, it may go with user preferences set on the server side (it will use this option if " +
-                "these PlaybackPreferences are not specified). In the case of text tracks, that may mean that the " +
-                "subtitle text is not displayed at all. In the cases where the preferred Text/AudioTracks are not " +
-                "available, the server shall return the TextTrackNotAvailable and/or AudioTrackNotAvailable " +
-                "Status(es) in the LauncherResponse.",
+                "for the title being played exactly matching a Track requested here, in the list of available tracks, " +
+                "it may default to picking another track that closely matches the requested track. Alternately, it " +
+                "may go with user preferences set on the server side (it will use this option if these " +
+                "PlaybackPreferences are not specified). In the case of text tracks, that may mean that the subtitle " +
+                "text is not displayed at all. In the cases where the preferred Text/AudioTracks are not available, " +
+                "the server shall return the TextTrackNotAvailable and/or AudioTrackNotAvailable Status(es) in the " +
+                "LauncherResponse.",
 
             xref: { document: "cluster", section: "6.7.7.2.4" }
         })
@@ -328,11 +328,11 @@ export const ContentLauncher = Cluster(
 
         Field({
             name: "Percentage", id: 0x1, conformance: "M", description: "Dimensions defined as a percentage",
-            details: "This value is for dimensions defined as a percentage of the overall display dimensions. For " +
-                "example, if using a Percentage Metric type for a Width measurement of 50.0, against a display width " +
-                "of 1920 pixels, then the resulting value used would be 960 pixels (50.0% of 1920) for that " +
-                "dimension. Whenever a measurement uses this Metric type, the resulting values shall be rounded " +
-                "(\"floored\") towards 0 if the measurement requires an integer final value.",
+            details: "This value is for dimensions defined as a percentage of the overall display dimensions. For example, " +
+                "if using a Percentage Metric type for a Width measurement of 50.0, against a display width of 1920 " +
+                "pixels, then the resulting value used would be 960 pixels (50.0% of 1920) for that dimension. " +
+                "Whenever a measurement uses this Metric type, the resulting values shall be rounded (\"floored\") " +
+                "towards 0 if the measurement requires an integer final value.",
             xref: { document: "cluster", section: "6.7.5.4.2" }
         })
     ),
@@ -393,8 +393,8 @@ export const ContentLauncher = Cluster(
             {
                 name: "ParameterList", id: 0x0, type: "list", conformance: "M",
                 details: "This field shall indicate the list of parameters comprising the search. If multiple parameters are " +
-                    "provided, the search parameters shall be joined with 'AND' logic. e.g. action movies with Tom " +
-                    "Cruise will be represented as [{Actor: 'Tom Cruise'}, {Type: 'Movie'}, {Genre: 'Action'}]",
+                    "provided, the search parameters shall be joined with 'AND' logic. e.g. action movies with Tom Cruise " +
+                    "will be represented as [{Actor: 'Tom Cruise'}, {Type: 'Movie'}, {Genre: 'Action'}]",
                 xref: { document: "cluster", section: "6.7.5.7.1" }
             },
 
@@ -446,9 +446,8 @@ export const ContentLauncher = Cluster(
                 name: "Color", id: 0x1, type: "string", conformance: "O", constraint: "7, 9",
 
                 details: "This field shall indicate the color, in RGB or RGBA, used for styling different Video Player " +
-                    "sections like Logo, Watermark, etc. The value shall conform to the 6-digit or 8-digit format " +
-                    "defined for CSS sRGB hexadecimal color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. " +
-                    "Examples:" +
+                    "sections like Logo, Watermark, etc. The value shall conform to the 6-digit or 8-digit format defined " +
+                    "for CSS sRGB hexadecimal color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. Examples:" +
                     "\n" +
                     "  • #76DE19 for R=0x76, G=0xDE, B=0x19, A absent" +
                     "\n" +
@@ -485,8 +484,8 @@ export const ContentLauncher = Cluster(
         Field({
             name: "Background", id: 0x1, type: "StyleInformationStruct", conformance: "O",
             details: "This field shall indicate background of the Video Player while content launch request is being " +
-                "processed by it. This background information may also be used by the Video Player when it is in " +
-                "idle state.",
+                "processed by it. This background information may also be used by the Video Player when it is in idle " +
+                "state.",
             xref: { document: "cluster", section: "6.7.5.10.2" }
         }),
 
@@ -531,9 +530,9 @@ export const ContentLauncher = Cluster(
             details: "This field shall indicate the preferred position (in milliseconds) in the media to launch playback " +
                 "from. In case the position falls in the middle of a frame, the server shall set the position to the " +
                 "beginning of that frame and set the SampledPosition attribute on the MediaPlayback cluster " +
-                "accordingly. A value of null shall indicate that playback position is not applicable for the " +
-                "current state of the media playback. (For example : Live media with no known duration and where " +
-                "seek is not supported).",
+                "accordingly. A value of null shall indicate that playback position is not applicable for the current " +
+                "state of the media playback. (For example : Live media with no known duration and where seek is not " +
+                "supported).",
 
             xref: { document: "cluster", section: "6.7.5.11.1" }
         }),
@@ -550,9 +549,9 @@ export const ContentLauncher = Cluster(
             {
                 name: "AudioTracks", id: 0x2, type: "list", conformance: "AT", quality: "X",
                 details: "This field shall indicate the list of the user’s preferred Audio Tracks. If the list contains " +
-                    "multiple values, each AudioTrack must also specify a unique audioOutputIndex to play the track on. " +
-                    "A value of null shall indicate that the user did not specify a preferred Audio Track on the client. " +
-                    "In such a case, the decision to play and select an Audio Track is up to the server.",
+                    "multiple values, each AudioTrack must also specify a unique audioOutputIndex to play the track on. A " +
+                    "value of null shall indicate that the user did not specify a preferred Audio Track on the client. In " +
+                    "such a case, the decision to play and select an Audio Track is up to the server.",
                 xref: { document: "cluster", section: "6.7.5.11.3" }
             },
 
@@ -589,9 +588,8 @@ export const ContentLauncher = Cluster(
         Field({
             name: "AudioOutputIndex", id: 0x2, type: "uint8", conformance: "AT", quality: "X",
 
-            details: "This field if present shall indicate the index of the OutputInfoStruct from the OutputList " +
-                "attribute (from the AudioOutput cluster) and indicates which audio output the Audio Track should be " +
-                "played on." +
+            details: "This field if present shall indicate the index of the OutputInfoStruct from the OutputList attribute " +
+                "(from the AudioOutput cluster) and indicates which audio output the Audio Track should be played on." +
                 "\n" +
                 "This field shall NOT be present if the track is not an audio track." +
                 "\n" +

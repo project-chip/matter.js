@@ -34,8 +34,8 @@ export const DishwasherMode = Cluster(
 
     Attribute({
         name: "SupportedModes", id: 0x0, conformance: "M",
-        details: "At least one entry in the SupportedModes attribute shall include the Normal mode tag in the " +
-            "ModeTags field list.",
+        details: "At least one entry in the SupportedModes attribute shall include the Normal mode tag in the ModeTags " +
+            "field list.",
         xref: { document: "cluster", section: "8.3.6.1" }
     }),
 

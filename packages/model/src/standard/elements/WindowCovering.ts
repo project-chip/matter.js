@@ -50,8 +50,8 @@ export const WindowCovering = Cluster(
             name: "ABS", conformance: "O", constraint: "3", description: "AbsolutePosition",
 
             details: "The percentage attributes shall indicate the position as a percentage between the " +
-                "InstalledOpenLimits and InstalledClosedLimits attributes of the window covering starting at the " +
-                "open (0.00%)." +
+                "InstalledOpenLimits and InstalledClosedLimits attributes of the window covering starting at the open " +
+                "(0.00%)." +
                 "\n" +
                 "As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be " +
                 "supported for new implementations.",
@@ -83,8 +83,8 @@ export const WindowCovering = Cluster(
     Attribute({
         name: "PhysicalClosedLimitTilt", id: 0x2, type: "uint16", access: "R V",
         conformance: "[TL & PA_TL & ABS]", default: 0, quality: "F",
-        details: "Indicates the maximum possible encoder position possible (Unit 0.1°, tenths of a degree) to " +
-            "position the angle of the window covering tilt.",
+        details: "Indicates the maximum possible encoder position possible (Unit 0.1°, tenths of a degree) to position " +
+            "the angle of the window covering tilt.",
         xref: { document: "cluster", section: "5.3.6.3" }
     }),
 
@@ -92,8 +92,8 @@ export const WindowCovering = Cluster(
         name: "CurrentPositionLift", id: 0x3, type: "uint16", access: "R V",
         conformance: "[LF & PA_LF & ABS]", constraint: "installedOpenLimitLift to installedClosedLimitLift",
         default: null, quality: "X N",
-        details: "Indicates the actual lift position (Unit cm, centimeters) of the window covering from the " +
-            "fully-open position.",
+        details: "Indicates the actual lift position (Unit cm, centimeters) of the window covering from the fully-open " +
+            "position.",
         xref: { document: "cluster", section: "5.3.6.4" }
     }),
 
@@ -259,9 +259,9 @@ export const WindowCovering = Cluster(
     Attribute({
         name: "SafetyStatus", id: 0x1a, type: "SafetyStatusBitmap", access: "R V", conformance: "O",
         constraint: "desc", default: 0, quality: "P",
-        details: "The SafetyStatus attribute reflects the state of the safety sensors and the common issues " +
-            "preventing movements. By default for nominal operation all flags are cleared (0). A device might " +
-            "support none, one or several bit flags from this attribute (all optional).",
+        details: "The SafetyStatus attribute reflects the state of the safety sensors and the common issues preventing " +
+            "movements. By default for nominal operation all flags are cleared (0). A device might support none, " +
+            "one or several bit flags from this attribute (all optional).",
         xref: { document: "cluster", section: "5.3.6.22" }
     }),
 
@@ -373,16 +373,16 @@ export const WindowCovering = Cluster(
             details: "Upon receipt of this command, the server will adjust the window covering to the lift/slide " +
                 "percentage specified in the payload of this command." +
                 "\n" +
-                "If the command includes LiftPercent100thsValue, then TargetPositionLiftPercent100ths attribute " +
-                "shall be set to LiftPercent100thsValue. Otherwise the TargetPositionLiftPercent100ths attribute " +
-                "shall be set to LiftPercentageValue * 100." +
+                "If the command includes LiftPercent100thsValue, then TargetPositionLiftPercent100ths attribute shall " +
+                "be set to LiftPercent100thsValue. Otherwise the TargetPositionLiftPercent100ths attribute shall be " +
+                "set to LiftPercentageValue * 100." +
                 "\n" +
                 "If a client includes LiftPercent100thsValue in the command, the LiftPercentageValue shall be set to " +
                 "LiftPercent100thsValue / 100, so a legacy server which only supports LiftPercentageValue (not " +
                 "LiftPercent100thsValue) has a value to set the target position." +
                 "\n" +
-                "If the server does not support the PositionAware feature, then a zero percentage shall be treated " +
-                "as a UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the " +
+                "If the server does not support the PositionAware feature, then a zero percentage shall be treated as " +
+                "a UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the " +
                 "device is only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND " +
                 "status SHOULD be returned.",
 
@@ -416,16 +416,16 @@ export const WindowCovering = Cluster(
             details: "Upon receipt of this command, the server will adjust the window covering to the tilt percentage " +
                 "specified in the payload of this command." +
                 "\n" +
-                "If the command includes TiltPercent100thsValue, then TargetPositionTiltPercent100ths attribute " +
-                "shall be set to TiltPercent100thsValue. Otherwise the TargetPositionTiltPercent100ths attribute " +
-                "shall be set to TiltPercentageValue * 100." +
+                "If the command includes TiltPercent100thsValue, then TargetPositionTiltPercent100ths attribute shall " +
+                "be set to TiltPercent100thsValue. Otherwise the TargetPositionTiltPercent100ths attribute shall be " +
+                "set to TiltPercentageValue * 100." +
                 "\n" +
                 "If a client includes TiltPercent100thsValue in the command, the TiltPercentageValue shall be set to " +
                 "TiltPercent100thsValue / 100, so a legacy server which only supports TiltPercentageValue (not " +
                 "TiltPercent100thsValue) has a value to set the target position." +
                 "\n" +
-                "If the server does not support the PositionAware feature, then a zero percentage shall be treated " +
-                "as a UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the " +
+                "If the server does not support the PositionAware feature, then a zero percentage shall be treated as " +
+                "a UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the " +
                 "device is only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND " +
                 "status SHOULD be returned.",
 

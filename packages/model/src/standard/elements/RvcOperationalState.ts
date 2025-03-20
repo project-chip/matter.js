@@ -43,8 +43,8 @@ export const RvcOperationalState = Cluster(
             "other effect." +
             "\n" +
             "A device that receives this command in any state which does not allow seeking the charger, such as " +
-            "Charging or Docked, shall respond with an OperationalCommandResponse command with an ErrorStateID " +
-            "of CommandInvalidInState and shall have no other effect." +
+            "Charging or Docked, shall respond with an OperationalCommandResponse command with an ErrorStateID of " +
+            "CommandInvalidInState and shall have no other effect." +
             "\n" +
             "Otherwise, on success:" +
             "\n" +
@@ -77,8 +77,8 @@ export const RvcOperationalState = Cluster(
                 "transitioned to those states while operating and can resume, such as, for example, if it is " +
                 "recharging while in a cleaning cycle. Else, if the operational state is Charging or Docked but " +
                 "there’s no operation to resume or the operation can’t be resumed, the device shall respond with an " +
-                "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no " +
-                "further action.",
+                "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no further " +
+                "action.",
 
             xref: { document: "cluster", section: "7.4.4.1" }
         },

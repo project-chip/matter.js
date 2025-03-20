@@ -42,8 +42,8 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Casting Video Client device type.
  *
- * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker
- * or a Content Provider phone app.
+ * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker or
+ * a Content Provider phone app.
  *
  * @see {@link MatterSpecification.v13.Device} § 10.6
  */

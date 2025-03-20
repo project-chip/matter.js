@@ -10,8 +10,8 @@ import { DeviceEnergyManagementMode } from "#clusters/device-energy-management-m
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * DeviceEnergyManagementModeBehavior is the base class for objects that support interaction with {@link
- * DeviceEnergyManagementMode.Cluster}.
+ * DeviceEnergyManagementModeBehavior is the base class for objects that support interaction with
+ * {@link DeviceEnergyManagementMode.Cluster}.
  */
 export const DeviceEnergyManagementModeBehavior = ClusterBehavior.for(DeviceEnergyManagementMode.Cluster);
 

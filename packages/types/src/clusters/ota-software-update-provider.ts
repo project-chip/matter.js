@@ -108,8 +108,8 @@ export namespace OtaSoftwareUpdateProvider {
         /**
          * The location, if present, shall provide the same value as the Basic Information Cluster Location
          *
-         * attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow
-         * per-region selection of the Software Image.
+         * attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow per-region
+         * selection of the Software Image.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.6
          */
@@ -127,9 +127,9 @@ export namespace OtaSoftwareUpdateProvider {
 
         /**
          * This optional field, if present, shall consist of a top-level anonymous list; each list element shall have a
-         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a
-         * manufacturer-specific payload, which the OTA Requestor invoking this command wants to expose to the
-         * receiving OTA Provider. This payload may be used for any purpose and SHOULD be as small as practical.
+         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a manufacturer-specific
+         * payload, which the OTA Requestor invoking this command wants to expose to the receiving OTA Provider. This
+         * payload may be used for any purpose and SHOULD be as small as practical.
          *
          * The use of this field SHOULD be restricted to Vendor-specific usage and shall NOT be used as a selector
          * required to match for the selection of a Software Image in production environments, unless absolutely
@@ -234,9 +234,9 @@ export namespace OtaSoftwareUpdateProvider {
          *
          *   1. The URI’s scheme field shall be exactly bdx in lowercase characters.
          *
-         *   2. The URI’s authority field shall contain only the host portion and shall use string representation of
-         *      the Operational Node ID of the Node where to proceed with the download, on the same Fabric on which the
-         *      OTA Requestor received the QueryImageResponse.
+         *   2. The URI’s authority field shall contain only the host portion and shall use string representation of the
+         *      Operational Node ID of the Node where to proceed with the download, on the same Fabric on which the OTA
+         *      Requestor received the QueryImageResponse.
          *
          *   3. The encoding of the Node ID in the host field shall use an uppercase hexadecimal format, using exactly
          *      16 characters to encode the network byte order value of the NodeID, in a similar fashion as the Node
@@ -261,14 +261,14 @@ export namespace OtaSoftwareUpdateProvider {
          *      software image to download at the BDX server. When used with the BDX server, the leading / separating
          *      the URI authority from the path shall be omitted. When contacting the BDX server, further processing of
          *      the file designator shall NOT be done, including handling of URL-encoded escape sequences. Rather, the
-         *      exact octets of the path, as received shall be the values used by both client and server in handling
-         *      the file designator.
+         *      exact octets of the path, as received shall be the values used by both client and server in handling the
+         *      file designator.
          *
          *     a. The path shall only contain valid URI characters.
          *
          * These rules above for BDX URIs simplify parsing for OTA Requestors receiving Image URIs. The following
-         * example procedure shows how the format constraints simplify the extraction of the necessary data to reach
-         * the BDX server for download.
+         * example procedure shows how the format constraints simplify the extraction of the necessary data to reach the
+         * BDX server for download.
          *
          *   1. Verify that the URI is 24 characters or longer, which is the minimum length of a valid BDX URI with all
          *      elements present, for example bdx://00112233AABBCCDD/0.
@@ -374,16 +374,16 @@ export namespace OtaSoftwareUpdateProvider {
 
         /**
          * This optional field, if present, shall consist of a top-level anonymous list; each list element shall have a
-         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a
-         * manufacturer-specific payload, which the OTA Provider wants to expose to the receiving OTA Requestor. This
-         * payload may be used for any purpose and SHOULD be as small as practical.
+         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a manufacturer-specific
+         * payload, which the OTA Provider wants to expose to the receiving OTA Requestor. This payload may be used for
+         * any purpose and SHOULD be as small as practical.
          *
          * The presence of this field shall NOT be required for correct operation of any OTA Provider compliant with
          * this Cluster specification.
          *
-         * The data for this field does not exist in any Distributed Compliance Ledger record and SHOULD only be
-         * emitted by an OTA Provider with this additional knowledge if it has knowledge that the receiving OTA
-         * Requestor may be able to use it.
+         * The data for this field does not exist in any Distributed Compliance Ledger record and SHOULD only be emitted
+         * by an OTA Provider with this additional knowledge if it has knowledge that the receiving OTA Requestor may be
+         * able to use it.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.8
          */
@@ -402,9 +402,9 @@ export namespace OtaSoftwareUpdateProvider {
      */
     export const TlvApplyUpdateRequest = TlvObject({
         /**
-         * This field shall contain the UpdateToken as specified in Section 11.20.3.6.1, “UpdateToken usage”. This
-         * field may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling of
-         * the application of Software Images by OTA Requestors.
+         * This field shall contain the UpdateToken as specified in Section 11.20.3.6.1, “UpdateToken usage”. This field
+         * may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling of the
+         * application of Software Images by OTA Requestors.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3.1
          */
@@ -477,8 +477,8 @@ export namespace OtaSoftwareUpdateProvider {
     export const TlvApplyUpdateResponse = TlvObject({
         /**
          * The Action field shall express the action that the OTA Provider requests from the OTA Requestor. See Section
-         * 11.20.3.6, “Applying a software update” for a description of the Action values provided in response to an
-         * OTA Provider receiving an invocation of this command.
+         * 11.20.3.6, “Applying a software update” for a description of the Action values provided in response to an OTA
+         * Provider receiving an invocation of this command.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.4.1
          */
@@ -565,8 +565,8 @@ export namespace OtaSoftwareUpdateProvider {
 
         commands: {
             /**
-             * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA
-             * Provider to match the OTA Requestor’s constraints provided in the payload fields.
+             * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider
+             * to match the OTA Requestor’s constraints provided in the payload fields.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
              */

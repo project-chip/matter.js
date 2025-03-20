@@ -20,8 +20,8 @@ export const ScenesManagement = Cluster(
         name: "ScenesManagement", id: 0x62, classification: "application", pics: "S",
 
         details: "The Scenes Management cluster provides attributes and commands for setting up and recalling scenes. " +
-            "Each scene corresponds to a set of stored values of specified attributes for one or more clusters " +
-            "on the same end point as the Scenes Management cluster." +
+            "Each scene corresponds to a set of stored values of specified attributes for one or more clusters on " +
+            "the same end point as the Scenes Management cluster." +
             "\n" +
             "In most cases scenes are associated with a particular group identifier. Scenes may also exist " +
             "without a group, in which case the value 0 replaces the group identifier. Note that extra care is " +
@@ -50,8 +50,8 @@ export const ScenesManagement = Cluster(
 
         details: "Indicates the Node ID of the node that last configured the Scene Table." +
             "\n" +
-            "The null value indicates that the server has not been configured, or that the identifier of the " +
-            "node that last configured the Scenes Management cluster is not known." +
+            "The null value indicates that the server has not been configured, or that the identifier of the node " +
+            "that last configured the Scenes Management cluster is not known." +
             "\n" +
             "The Node ID is scoped to the accessing fabric.",
 
@@ -88,8 +88,8 @@ export const ScenesManagement = Cluster(
             name: "AddScene", id: 0x0, access: "F M", conformance: "M", direction: "request",
             response: "AddSceneResponse",
             details: "It is not mandatory for an extension field set to be included in the command for every cluster on " +
-                "that endpoint that has a defined extension field set. Extension field sets may be omitted, " +
-                "including the case of no extension field sets at all.",
+                "that endpoint that has a defined extension field set. Extension field sets may be omitted, including " +
+                "the case of no extension field sets at all.",
             xref: { document: "cluster", section: "1.4.9.2" }
         },
 
@@ -116,7 +116,7 @@ export const ScenesManagement = Cluster(
 
         Field(
             {
-                name: "ExtensionFieldSetStructs", id: 0x4, type: "list", conformance: "M", constraint: "desc",
+                name: "ExtensionFieldSets", id: 0x4, type: "list", conformance: "M", constraint: "desc",
                 details: "This field shall contains the list of extension fields.",
                 xref: { document: "cluster", section: "1.4.9.2.5" }
             },
@@ -187,23 +187,23 @@ export const ScenesManagement = Cluster(
 
         Field({
             name: "TransitionTime", id: 0x3, type: "uint32", conformance: "desc", constraint: "max 60000000",
-            details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene " +
-                "Table entry, otherwise it shall be omitted.",
+            details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene Table " +
+                "entry, otherwise it shall be omitted.",
             xref: { document: "cluster", section: "1.4.9.5.4" }
         }),
 
         Field({
             name: "SceneName", id: 0x4, type: "string", conformance: "desc", constraint: "max 16",
-            details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene " +
-                "Table entry, otherwise it shall be omitted.",
+            details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene Table " +
+                "entry, otherwise it shall be omitted.",
             xref: { document: "cluster", section: "1.4.9.5.5" }
         }),
 
         Field(
             {
-                name: "ExtensionFieldSetStructs", id: 0x5, type: "list", conformance: "desc",
-                details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene " +
-                    "Table entry, otherwise it shall be omitted.",
+                name: "ExtensionFieldSets", id: 0x5, type: "list", conformance: "desc",
+                details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene Table " +
+                    "entry, otherwise it shall be omitted.",
                 xref: { document: "cluster", section: "1.4.9.5.6" }
             },
 
@@ -376,8 +376,8 @@ export const ScenesManagement = Cluster(
         Field({
             name: "Capacity", id: 0x1, type: "uint8", conformance: "M", quality: "X",
 
-            details: "This field shall contain the remaining capacity of the Scene Table of the server (for all groups " +
-                "for the accessing fabric). The following values apply:" +
+            details: "This field shall contain the remaining capacity of the Scene Table of the server (for all groups for " +
+                "the accessing fabric). The following values apply:" +
                 "\n" +
                 "  • 0 - No further scenes may be added." +
                 "\n" +
@@ -422,24 +422,24 @@ export const ScenesManagement = Cluster(
             details: "This field shall contain the information of how the scene copy is to proceed." +
                 "\n" +
                 "The CopyAllScenes bit of the Mode indicates whether all scenes are to be copied. If this value is " +
-                "set to 1, all scenes are to be copied and the SceneIdentifierFrom and SceneIdentifierTo fields " +
-                "shall be ignored. Otherwise this bit is set to 0.",
+                "set to 1, all scenes are to be copied and the SceneIdentifierFrom and SceneIdentifierTo fields shall " +
+                "be ignored. Otherwise this bit is set to 0.",
             xref: { document: "cluster", section: "1.4.9.15.1" }
         }),
 
         Field({
             name: "GroupIdentifierFrom", id: 0x1, type: "group-id", conformance: "M",
-            details: "This field shall indicate the identifier of the group from which the scene is to be copied. " +
-                "Together with the SceneIdentifierFrom field, this field uniquely identifies the scene to copy from " +
-                "the Scene Table.",
+            details: "This field shall indicate the identifier of the group from which the scene is to be copied. Together " +
+                "with the SceneIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene " +
+                "Table.",
             xref: { document: "cluster", section: "1.4.9.15.2" }
         }),
 
         Field({
             name: "SceneIdentifierFrom", id: 0x2, type: "uint8", conformance: "M", constraint: "max 254",
-            details: "This field shall indicate the identifier of the scene from which the scene is to be copied. " +
-                "Together with the GroupIdentifierFrom field, this field uniquely identifies the scene to copy from " +
-                "the Scene Table.",
+            details: "This field shall indicate the identifier of the scene from which the scene is to be copied. Together " +
+                "with the GroupIdentifierFrom field, this field uniquely identifies the scene to copy from the Scene " +
+                "Table.",
             xref: { document: "cluster", section: "1.4.9.15.3" }
         }),
 
@@ -531,8 +531,8 @@ export const ScenesManagement = Cluster(
                 "regardless of the fabric-scoped access quality of the command." +
                 "\n" +
                 "In the event where the SceneValid field is set to False for a fabric, the CurrentScene and " +
-                "CurrentGroup fields shall be the last invoked scene and group for that fabric. In the event where " +
-                "no scene was previously invoked for that fabric, the CurrentScene and CurrentGroup fields shall be " +
+                "CurrentGroup fields shall be the last invoked scene and group for that fabric. In the event where no " +
+                "scene was previously invoked for that fabric, the CurrentScene and CurrentGroup fields shall be " +
                 "their default values.",
 
             xref: { document: "cluster", section: "1.4.7.2.4" }
@@ -572,8 +572,8 @@ export const ScenesManagement = Cluster(
                 "### 1.4.7.3.2. ValueUnsigned8, ValueSigned8, ValueUnsigned16, ValueSigned16, ValueUnsigned32, " +
                 "ValueSigned32, ValueUnsigned64, ValueSigned64 Fields" +
                 "\n" +
-                "These fields shall indicate the attribute value as part of an extension field set, associated with " +
-                "a given AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall" +
+                "These fields shall indicate the attribute value as part of an extension field set, associated with a " +
+                "given AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall" +
                 "\n" +
                 "be determined by the type of the attribute indicated by AttributeID as follows:" +
                 "\n" +
@@ -624,8 +624,8 @@ export const ScenesManagement = Cluster(
                 "\n" +
                 "    ◦ ValueUnsigned16 of 0xAB12 would be used as-is, as it is in range." +
                 "\n" +
-                "    ◦ ValueUnsigned16 of 0xFF80 is outside of the range allowed for attribute CurrentX, and would " +
-                "      be saturated to the closest valid value, which is the maximum of the attribute’s constraint " +
+                "    ◦ ValueUnsigned16 of 0xFF80 is outside of the range allowed for attribute CurrentX, and would be " +
+                "      saturated to the closest valid value, which is the maximum of the attribute’s constraint " +
                 "      range: 0xFEFF." +
                 "\n" +
                 "  • LevelControl cluster CurrentLevel (AttributeID 0x0000) has a type of uint8 and is nullable." +
@@ -686,8 +686,8 @@ export const ScenesManagement = Cluster(
                 "Though the Scene Table is defined here using the data model architecture rules and format, the " +
                 "design is not normative." +
                 "\n" +
-                "The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene " +
-                "Table entry struct are illustrated below. An ExtensionFieldSetStruct may be present for each " +
+                "The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table " +
+                "entry struct are illustrated below. An ExtensionFieldSetStruct may be present for each " +
                 "Scenes-supporting cluster implemented on the same endpoint.",
 
             xref: { document: "cluster", section: "1.4.7.5" }
@@ -695,8 +695,8 @@ export const ScenesManagement = Cluster(
 
         Field({
             name: "SceneGroupId", id: 0x0, type: "group-id", conformance: "M",
-            details: "This field is the group identifier for which this scene applies, or 0 if the scene is not " +
-                "associated with a group.",
+            details: "This field is the group identifier for which this scene applies, or 0 if the scene is not associated " +
+                "with a group.",
             xref: { document: "cluster", section: "1.4.7.5.1" }
         }),
 

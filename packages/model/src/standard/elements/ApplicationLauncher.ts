@@ -22,9 +22,8 @@ export const ApplicationLauncher = Cluster(
         details: "This cluster provides an interface for launching applications on a Video Player device such as a TV." +
             "\n" +
             "This cluster is supported on endpoints that can launch Applications, such as a Casting Video Player " +
-            "device with a Content App Platform. It supports identifying an Application by global identifier " +
-            "from a given catalog, and launching it. It also supports tracking the currently in-focus " +
-            "Application." +
+            "device with a Content App Platform. It supports identifying an Application by global identifier from " +
+            "a given catalog, and launching it. It also supports tracking the currently in-focus Application." +
             "\n" +
             "Depending on the support for the Application Platform feature, the cluster can either support " +
             "launching the application corresponding to the endpoint on which the cluster is supported (AP " +
@@ -85,8 +84,8 @@ export const ApplicationLauncher = Cluster(
                 "The endpoint shall launch and bring to foreground the requisite application if the application is " +
                 "not already launched and in foreground. The Status attribute shall be updated to ActiveVisibleFocus " +
                 "on the Application Basic cluster of the Endpoint corresponding to the launched application. The " +
-                "Status attribute shall be updated on any other application whose Status may have changed as a " +
-                "result of this command. The CurrentApp attribute, if supported, shall be updated to reflect the new " +
+                "Status attribute shall be updated on any other application whose Status may have changed as a result " +
+                "of this command. The CurrentApp attribute, if supported, shall be updated to reflect the new " +
                 "application in the foreground." +
                 "\n" +
                 "This command returns a Launcher Response.",
@@ -223,8 +222,8 @@ export const ApplicationLauncher = Cluster(
 
         Field({
             name: "ApplicationId", id: 0x1, type: "string", conformance: "M",
-            details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" " +
-                "or \"Company X\". This field shall be unique within a catalog." +
+            details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" or " +
+                "\"Company X\". This field shall be unique within a catalog." +
                 "\n" +
                 "For the DIAL registry catalog, this value shall be the DIAL prefix (see [DIAL Registry]).",
             xref: { document: "cluster", section: "6.4.5.2.2" }

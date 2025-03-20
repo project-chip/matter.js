@@ -82,8 +82,8 @@ export namespace IlluminanceMeasurement {
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 })),
 
             /**
-             * Indicates the electronic type of the light sensor. This attribute shall be set to one of the
-             * non-reserved values listed in LightSensorTypeEnum or null in case the sensor type is unknown.
+             * Indicates the electronic type of the light sensor. This attribute shall be set to one of the non-reserved
+             * values listed in LightSensorTypeEnum or null in case the sensor type is unknown.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.2.5.5
              */

@@ -29,9 +29,9 @@ export const DeviceEnergyManagement = Cluster(
             "\n" +
             "Figure 17. Example of the how an EMS is a client of multiple ESAs Device Energy Management clusters." +
             "\n" +
-            "This cluster is intended to be generic in nature and could apply to any electrical load or " +
-            "generator (e.g. a Battery Electric Storage System - BESS, solar PV inverter, EVSE, HVAC, heat pump, " +
-            "hot water heater, white goods appliances etc)." +
+            "This cluster is intended to be generic in nature and could apply to any electrical load or generator " +
+            "(e.g. a Battery Electric Storage System - BESS, solar PV inverter, EVSE, HVAC, heat pump, hot water " +
+            "heater, white goods appliances etc)." +
             "\n" +
             "It consists of the following areas which shall be supported by all devices implementing this " +
             "cluster:" +
@@ -52,9 +52,9 @@ export const DeviceEnergyManagement = Cluster(
             "optimizing the home energy to minimize cost, reduce CO2 impact, maximize self-consumption of solar " +
             "PV and provide Demand Side Response (DSR) Grid services." +
             "\n" +
-            "It is likely that the ESA may also use the Pricing Cluster to obtain incentive signals such as " +
-            "'grid carbon intensity', 'time of use' or 'type of use' tariffs to schedule its operation to run at " +
-            "the cheapest and greenest times." +
+            "It is likely that the ESA may also use the Pricing Cluster to obtain incentive signals such as 'grid " +
+            "carbon intensity', 'time of use' or 'type of use' tariffs to schedule its operation to run at the " +
+            "cheapest and greenest times." +
             "\n" +
             "Figure 18. Example of the how an HVAC may use multiple clusters" +
             "\n" +
@@ -91,8 +91,8 @@ export const DeviceEnergyManagement = Cluster(
                 "EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and " +
                 "can start charging the vehicle, and periodically modify the charging power depending on PV " +
                 "generation and other home loads, so as to minimize import and export to the grid. An EMS may also " +
-                "use this feature to control the discharging (and re-charging) of the vehicle if the EVSE and " +
-                "vehicle support the V2X feature of the EVSE cluster of the associated EVSE device.",
+                "use this feature to control the discharging (and re-charging) of the vehicle if the EVSE and vehicle " +
+                "support the V2X feature of the EVSE cluster of the associated EVSE device.",
 
             xref: { document: "cluster", section: "9.2.4.1" }
         }),
@@ -101,9 +101,9 @@ export const DeviceEnergyManagement = Cluster(
             name: "PFR", conformance: "[!PA].a, STA | PAU | FA | CON, O", constraint: "1",
             description: "PowerForecastReporting",
 
-            details: "For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report " +
-                "their indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs " +
-                "this is highly predictable (in terms of both power and time), in other appliances this is more " +
+            details: "For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report their " +
+                "indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs this " +
+                "is highly predictable (in terms of both power and time), in other appliances this is more " +
                 "challenging and only a basic level of forecast is possible." +
                 "\n" +
                 "Forecasts are defined from a current time, using a slot format, where the slot is akin to a " +
@@ -153,12 +153,11 @@ export const DeviceEnergyManagement = Cluster(
                 "An external observing EMS may have access to real-time meter readings, and could learn the typical " +
                 "power consumption based on the advertised internal state of the ESA." +
                 "\n" +
-                "To enable this capability, the ESA shall report its internal operational state using an " +
-                "manufacturer specific value." +
+                "To enable this capability, the ESA shall report its internal operational state using an manufacturer " +
+                "specific value." +
                 "\n" +
-                "Once the EMS has built a model of the state vs observed power consumption, it may request a " +
-                "forecast adjustment for particular times of the day, encouraging the ESA to use power at " +
-                "alternative times.",
+                "Once the EMS has built a model of the state vs observed power consumption, it may request a forecast " +
+                "adjustment for particular times of the day, encouraging the ESA to use power at alternative times.",
 
             xref: { document: "cluster", section: "9.2.4.3" }
         }),
@@ -197,8 +196,8 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "Washing machine example: A Washing Machine is in operation, and starting its water heating step." +
                 "\n" +
-                "However, the EMS becomes aware from the smart meter that the total home load on the grid is close " +
-                "to exceeding its allowed total grid load." +
+                "However, the EMS becomes aware from the smart meter that the total home load on the grid is close to " +
+                "exceeding its allowed total grid load." +
                 "\n" +
                 "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
                 "washing machine has a power profile suggesting its current step in the wash cycle is using power to " +
@@ -207,8 +206,8 @@ export const DeviceEnergyManagement = Cluster(
                 "The EMS can then reduce the grid load by asking the washing machine to pause the wash cycle for a " +
                 "short duration." +
                 "\n" +
-                "It does this by sending a PauseRequest to the washing machine to request pausing the current step " +
-                "of the forecast power usage for a period to allow other home loads to finish before resuming the " +
+                "It does this by sending a PauseRequest to the washing machine to request pausing the current step of " +
+                "the forecast power usage for a period to allow other home loads to finish before resuming the " +
                 "washing cycle.",
 
             xref: { document: "cluster", section: "9.2.4.5" }
@@ -217,9 +216,9 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "FA", conformance: "O", constraint: "5", description: "ForecastAdjustment",
 
-            details: "ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the " +
-                "start, duration and/or power level limits of the steps of the power profile that the ESA has " +
-                "previously suggested it would use." +
+            details: "ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start, " +
+                "duration and/or power level limits of the steps of the power profile that the ESA has previously " +
+                "suggested it would use." +
                 "\n" +
                 "Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as " +
                 "heating the home. The heat pump scheduling system may have determined that the home will be " +
@@ -232,15 +231,15 @@ export const DeviceEnergyManagement = Cluster(
                 "\n" +
                 "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
                 "heat pump has a power profile suggesting it needs to heat hot water around 6pm. The solar PV " +
-                "inverter has forecast that it will generate 3.6kW of power during the middle of the day and into " +
-                "the afternoon before the sun goes down." +
+                "inverter has forecast that it will generate 3.6kW of power during the middle of the day and into the " +
+                "afternoon before the sun goes down." +
                 "\n" +
-                "The EMS can then optimize the home considering other non-ESA loads and can ask the heat pump to " +
-                "heat the hot water around 3pm when it has forecast that excess solar power will be available." +
+                "The EMS can then optimize the home considering other non-ESA loads and can ask the heat pump to heat " +
+                "the hot water around 3pm when it has forecast that excess solar power will be available." +
                 "\n" +
-                "It does this by sending a ModifyForecastRequest to the heat pump and asks the heat pump to expect " +
-                "to run at a lower power consumption (within the solar excess power) which requires the heat pump to " +
-                "run for a longer duration to achieve its required energy demand.",
+                "It does this by sending a ModifyForecastRequest to the heat pump and asks the heat pump to expect to " +
+                "run at a lower power consumption (within the solar excess power) which requires the heat pump to run " +
+                "for a longer duration to achieve its required energy demand.",
 
             xref: { document: "cluster", section: "9.2.4.6" }
         }),
@@ -248,15 +247,15 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "CON", conformance: "O", constraint: "6", description: "ConstraintBasedAdjustment",
 
-            details: "ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of " +
-                "periods during which power usage should be modified (for example when the EMS has been made aware " +
-                "that the grid supplier has requested reduced energy usage due to overall peak grid demand)" +
+            details: "ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods " +
+                "during which power usage should be modified (for example when the EMS has been made aware that the " +
+                "grid supplier has requested reduced energy usage due to overall peak grid demand)" +
                 "\n" +
                 "and may cause the ESA to modify the intended power profile has previously suggested it would use." +
                 "\n" +
                 "EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged " +
-                "starting at a moderate rate at 1am, so that it has enough charge by the time it is needed later " +
-                "that morning." +
+                "starting at a moderate rate at 1am, so that it has enough charge by the time it is needed later that " +
+                "morning." +
                 "\n" +
                 "However, the DSR service provider has informed the EMS that due to high forecast winds it is now " +
                 "forecast that there will be very cheap energy available from wind generation between 2am and 3am." +
@@ -281,13 +280,12 @@ export const DeviceEnergyManagement = Cluster(
 
         details: "Indicates the type of ESA." +
             "\n" +
-            "This attribute enables an EMS to understand some of the basic properties about how the energy may " +
-            "be consumed, generated, and stored by the ESA." +
+            "This attribute enables an EMS to understand some of the basic properties about how the energy may be " +
+            "consumed, generated, and stored by the ESA." +
             "\n" +
-            "For example, the heat energy converted by a heat pump will naturally be lost through the building " +
-            "to the outdoor environment relatively quickly, compared to storing heat in a well-insulated hot " +
-            "water tank. Similarly, battery storage and EVs can store electrical energy for much longer " +
-            "durations." +
+            "For example, the heat energy converted by a heat pump will naturally be lost through the building to " +
+            "the outdoor environment relatively quickly, compared to storing heat in a well-insulated hot water " +
+            "tank. Similarly, battery storage and EVs can store electrical energy for much longer durations." +
             "\n" +
             "This attribute can also help the EMS display information to a user and to make basic assumptions " +
             "about typical best use of energy. For example, an EVSE may not always have an EV plugged in, so " +
@@ -310,10 +308,10 @@ export const DeviceEnergyManagement = Cluster(
                 "power to the consumers may need to present a positive solar production value to the consumer." +
                 "\n" +
                 "For example, a home battery storage system (BESS) which needs to charge the battery and then " +
-                "discharge to the home loads, would be classed as a generator. These types of devices shall have " +
-                "this field set to true. When generating its forecast or advertising its PowerAdjustmentCapability, " +
-                "the power values shall be negative to indicate discharging to the loads in the home, and positive " +
-                "to indicate when it is charging its battery." +
+                "discharge to the home loads, would be classed as a generator. These types of devices shall have this " +
+                "field set to true. When generating its forecast or advertising its PowerAdjustmentCapability, the " +
+                "power values shall be negative to indicate discharging to the loads in the home, and positive to " +
+                "indicate when it is charging its battery." +
                 "\n" +
                 "GRID meter = Σ LoadPowers + Σ GeneratorPowers" +
                 "\n" +
@@ -349,8 +347,8 @@ export const DeviceEnergyManagement = Cluster(
             "NOTE" +
             "\n" +
             "For Generator ESAs that can discharge an internal battery (such as a battery storage inverter) to " +
-            "loads in the home, the AbsMinPower will be a negative number representing the maximum power that " +
-            "the ESA can discharge its internal battery.",
+            "loads in the home, the AbsMinPower will be a negative number representing the maximum power that the " +
+            "ESA can discharge its internal battery.",
 
         xref: { document: "cluster", section: "9.2.8.4" }
     }),
@@ -366,8 +364,8 @@ export const DeviceEnergyManagement = Cluster(
             "at which the ESA can charge its internal battery." +
             "\n" +
             "For example, a battery storage inverter that can charge its battery at a maximum power of 2000W and " +
-            "can discharge the battery at a maximum power of 3000W, would have a AbsMinPower: -3000, " +
-            "AbsMaxPower: 2000W.",
+            "can discharge the battery at a maximum power of 3000W, would have a AbsMinPower: -3000, AbsMaxPower: " +
+            "2000W.",
 
         xref: { document: "cluster", section: "9.2.8.5" }
     }),
@@ -400,8 +398,8 @@ export const DeviceEnergyManagement = Cluster(
         details: "This attribute allows an ESA to share its intended forecast with a client (such as an Energy " +
             "Management System)." +
             "\n" +
-            "A null value indicates that there is no forecast currently available (for example, a program has " +
-            "not yet been selected by the user)." +
+            "A null value indicates that there is no forecast currently available (for example, a program has not " +
+            "yet been selected by the user)." +
             "\n" +
             "A server may reset this value attribute to null on a reboot, and it does not need to persist any " +
             "previous forecasts." +
@@ -414,8 +412,8 @@ export const DeviceEnergyManagement = Cluster(
             "\n" +
             "  • As a result of a command which causes the forecast to be updated, or" +
             "\n" +
-            "  • As a result of a change in the opt-out status which in turn may cause the ESA to recalculate " +
-            "    its forecast.",
+            "  • As a result of a change in the opt-out status which in turn may cause the ESA to recalculate its " +
+            "    forecast.",
 
         xref: { document: "cluster", section: "9.2.8.7" }
     }),
@@ -424,8 +422,8 @@ export const DeviceEnergyManagement = Cluster(
         name: "OptOutState", id: 0x7, type: "OptOutStateEnum", access: "R V",
         conformance: "PA | STA | PAU | FA | CON", constraint: "desc", default: 0,
 
-        details: "Indicates the current Opt-Out state of the ESA. The ESA may have a local user interface to allow " +
-            "the user to control this OptOutState. An EMS may subscribe to the OptOutState to get notified about " +
+        details: "Indicates the current Opt-Out state of the ESA. The ESA may have a local user interface to allow the " +
+            "user to control this OptOutState. An EMS may subscribe to the OptOutState to get notified about " +
             "changes in operational state." +
             "\n" +
             "If the ESA is in the LocalOptOut or OptOut states, so it cannot be controlled by an EMS for local " +
@@ -435,17 +433,17 @@ export const DeviceEnergyManagement = Cluster(
             "AdjustmentCauseEnum value GridOptimization." +
             "\n" +
             "If the user changes the Opt-Out state of the ESA which is currently operating with a Forecast that " +
-            "is due to a previous StartTimeAdjustRequest, ModifyForecastRequest or " +
-            "RequestConstraintBasedForecast command that would now not be permitted due to the new Opt-out state" +
+            "is due to a previous StartTimeAdjustRequest, ModifyForecastRequest or RequestConstraintBasedForecast " +
+            "command that would now not be permitted due to the new Opt-out state" +
             "\n" +
             "attribute ForecastUpdateReason field currently contains a reason which is now opted out), the ESA " +
             "shall behave as if it had received a CancelRequest command." +
             "\n" +
             "If the user changes the Opt-Out state of the ESA which currently has the ESAStateEnum with value " +
-            "Paused due to a previous PauseRequest command that would now not be permitted due to the new " +
-            "Opt-out state, and the ESA supports the PFR or SFR features (i.e. the Forecast attribute " +
-            "ForecastUpdateReason field currently contains a reason which is now opted out), the ESA shall " +
-            "behave as if it had received a ResumeRequest command." +
+            "Paused due to a previous PauseRequest command that would now not be permitted due to the new Opt-out " +
+            "state, and the ESA supports the PFR or SFR features (i.e. the Forecast attribute " +
+            "ForecastUpdateReason field currently contains a reason which is now opted out), the ESA shall behave " +
+            "as if it had received a ResumeRequest command." +
             "\n" +
             "If the user changes the Opt-Out state of the ESA which currently has the ESAStateEnum with value " +
             "PowerAdjustActive due to a previous PowerAdjustRequest command that would now not be permitted due " +
@@ -567,14 +565,14 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "RequestedStartTime", id: 0x0, type: "epoch-s", conformance: "M", constraint: "desc",
 
-            details: "This field shall indicate the requested start time, in UTC, that the client would like the " +
-                "appliance to shift its Forecast to. This value MUST be in the future." +
+            details: "This field shall indicate the requested start time, in UTC, that the client would like the appliance " +
+                "to shift its Forecast to. This value MUST be in the future." +
                 "\n" +
                 "A client can estimate the entire Forecast sequence duration by computing the EndTime - StartTime " +
                 "fields from the Forecast attribute, and therefore avoid scheduling the start time too late." +
                 "\n" +
-                "This value shall be after the EarliestStartTime in the Forecast attribute. The new EndTime, that " +
-                "can be computed from the RequestedStartTime and the Forecast sequence duration, shall be before the " +
+                "This value shall be after the EarliestStartTime in the Forecast attribute. The new EndTime, that can " +
+                "be computed from the RequestedStartTime and the Forecast sequence duration, shall be before the " +
                 "LatestEndTime.",
 
             xref: { document: "cluster", section: "9.2.9.3.1" }
@@ -597,9 +595,9 @@ export const DeviceEnergyManagement = Cluster(
 
         Field({
             name: "Duration", id: 0x0, type: "elapsed-s", conformance: "M", constraint: "desc",
-            details: "This field shall indicate the duration that the ESA shall be paused for. This value shall be " +
-                "between the MinPauseDuration and MaxPauseDuration indicated in the ActiveSlotNumber index in the " +
-                "Slots list in the Forecast.",
+            details: "This field shall indicate the duration that the ESA shall be paused for. This value shall be between " +
+                "the MinPauseDuration and MaxPauseDuration indicated in the ActiveSlotNumber index in the Slots list " +
+                "in the Forecast.",
             xref: { document: "cluster", section: "9.2.9.4.1" }
         }),
 
@@ -665,9 +663,9 @@ export const DeviceEnergyManagement = Cluster(
                     "asked to constrain its operation within. These requests shall be in the future, shall be in " +
                     "chronological order, starting with the earliest start time, and shall NOT overlap in time." +
                     "\n" +
-                    "For example, a grid event which requires devices to reduce power (turn down) between 4pm and 6pm " +
-                    "and due to excess power on the grid overnight, may request ESAs to increase their power demand " +
-                    "(turn up) between midnight and 6am." +
+                    "For example, a grid event which requires devices to reduce power (turn down) between 4pm and 6pm and " +
+                    "due to excess power on the grid overnight, may request ESAs to increase their power demand (turn up) " +
+                    "between midnight and 6am." +
                     "\n" +
                     "If this ESA supports PFR this would have 2 entries in the list as follows:" +
                     "\n" +
@@ -715,8 +713,8 @@ export const DeviceEnergyManagement = Cluster(
             details: "This value shall indicate that the cost is related to some abstract sense of comfort expressed by " +
                 "the consumer; a higher value indicates more discomfort. For example, a consumer may be more " +
                 "comfortable knowing that their EV is charged earlier in the day in case there is a sudden need to " +
-                "depart and drive to the hospital. Or the consumer may feel inconvenienced by the fact that they " +
-                "need to wait for the washing machine to finish its load so that they can use it again.",
+                "depart and drive to the hospital. Or the consumer may feel inconvenienced by the fact that they need " +
+                "to wait for the washing machine to finish its load so that they can use it again.",
             xref: { document: "cluster", section: "9.2.7.1.3" }
         }),
 
@@ -875,16 +873,15 @@ export const DeviceEnergyManagement = Cluster(
 
         Field({
             name: "DecimalPoints", id: 0x2, type: "uint8", conformance: "M", default: 0,
-            details: "This field shall indicate the number of digits to the right of the decimal point in the Value " +
-                "field. For example, if the Value was 102 and DecimalPoints was 2, then this would represent a cost " +
-                "of 1.02.",
+            details: "This field shall indicate the number of digits to the right of the decimal point in the Value field. " +
+                "For example, if the Value was 102 and DecimalPoints was 2, then this would represent a cost of 1.02.",
             xref: { document: "cluster", section: "9.2.7.9.3" }
         }),
 
         Field({
             name: "Currency", id: 0x3, type: "uint16", conformance: "O", constraint: "max 999", default: 0,
-            details: "Indicates the currency for the value in the Value field. The value of the currency field shall " +
-                "match the values defined by [ISO 4217]." +
+            details: "Indicates the currency for the value in the Value field. The value of the currency field shall match " +
+                "the values defined by [ISO 4217]." +
                 "\n" +
                 "This is an optional field. It shall be included if CostType is Financial.",
             xref: { document: "cluster", section: "9.2.7.9.4" }
@@ -981,9 +978,9 @@ export const DeviceEnergyManagement = Cluster(
         {
             name: "ForecastStruct", type: "struct",
 
-            details: "This indicates a list of 'slots' describing the overall timing of the ESA’s planned energy and " +
-                "power use, with different power and energy demands per slot. For example, slots might be used to " +
-                "describe the distinct stages of a washing machine cycle." +
+            details: "This indicates a list of 'slots' describing the overall timing of the ESA’s planned energy and power " +
+                "use, with different power and energy demands per slot. For example, slots might be used to describe " +
+                "the distinct stages of a washing machine cycle." +
                 "\n" +
                 "Where an ESA does not know the actual power and energy use of the system, it may support the SFR" +
                 "\n" +
@@ -1043,9 +1040,9 @@ export const DeviceEnergyManagement = Cluster(
 
         Field({
             name: "IsPausable", id: 0x6, type: "bool", conformance: "M",
-            details: "This field shall indicate that some part of the Forecast can be paused. It aims to allow a client " +
-                "to read this flag and if it is false, then none of the slots contain SlotIsPausable set to true. " +
-                "This can save a client from having to check each slot in the list.",
+            details: "This field shall indicate that some part of the Forecast can be paused. It aims to allow a client to " +
+                "read this flag and if it is false, then none of the slots contain SlotIsPausable set to true. This " +
+                "can save a client from having to check each slot in the list.",
             xref: { document: "cluster", section: "9.2.7.13.7" }
         }),
 
@@ -1099,8 +1096,8 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "ElapsedSlotTime", id: 0x3, type: "elapsed-s", conformance: "M",
 
-            details: "This field shall indicate the time (in seconds) that has already elapsed whilst in this slot. If " +
-                "the slot has not yet been started, then it shall be 0. Once the slot has been completed, then this " +
+            details: "This field shall indicate the time (in seconds) that has already elapsed whilst in this slot. If the " +
+                "slot has not yet been started, then it shall be 0. Once the slot has been completed, then this " +
                 "reflects how much time was spent in this slot." +
                 "\n" +
                 "When subscribed to, a change in this field value shall NOT cause the Forecast attribute to be " +
@@ -1160,9 +1157,9 @@ export const DeviceEnergyManagement = Cluster(
                 "Some appliances, such as smart thermostats, may not know how much power is being drawn by the HVAC " +
                 "system, but do know what they have asked the HVAC system to do." +
                 "\n" +
-                "Manufacturers can use this value to indicate a variety of states in an unspecified way. For " +
-                "example, they may choose to use values between 0-100 as a percentage of compressor modulation, or " +
-                "could use these values as Enum states meaning heating with fan, heating without fan etc." +
+                "Manufacturers can use this value to indicate a variety of states in an unspecified way. For example, " +
+                "they may choose to use values between 0-100 as a percentage of compressor modulation, or could use " +
+                "these values as Enum states meaning heating with fan, heating without fan etc." +
                 "\n" +
                 "NOTE An ESA shall always use the same value to represent the same operating state." +
                 "\n" +
@@ -1177,16 +1174,16 @@ export const DeviceEnergyManagement = Cluster(
 
         Field({
             name: "NominalPower", id: 0x9, type: "power-mW", conformance: "PFR",
-            details: "This field shall indicate the expected power that the appliance will use during this slot. It may " +
-                "be considered the average value over the slot, and some variation from this would be expected (for " +
+            details: "This field shall indicate the expected power that the appliance will use during this slot. It may be " +
+                "considered the average value over the slot, and some variation from this would be expected (for " +
                 "example, as it is ramping up).",
             xref: { document: "cluster", section: "9.2.7.14.10" }
         }),
 
         Field({
             name: "MinPower", id: 0xa, type: "power-mW", conformance: "PFR",
-            details: "This field shall indicate the lowest power that the appliance expects to use during this slot. " +
-                "(e.g. during a ramp up it may be 0W)." +
+            details: "This field shall indicate the lowest power that the appliance expects to use during this slot. (e.g. " +
+                "during a ramp up it may be 0W)." +
                 "\n" +
                 "Some appliances (e.g. battery inverters which can charge and discharge) may have a negative power.",
             xref: { document: "cluster", section: "9.2.7.14.11" }
@@ -1220,8 +1217,8 @@ export const DeviceEnergyManagement = Cluster(
                     "to estimate the cost of energy for this slot in the power forecast." +
                     "\n" +
                     "When an Energy Management System requests a change in the schedule, then the device may suggest a " +
-                    "change in the cost as a result of shifting its energy. This can allow a demand side response " +
-                    "service to be informed of the relative cost to use energy at a different time." +
+                    "change in the cost as a result of shifting its energy. This can allow a demand side response service " +
+                    "to be informed of the relative cost to use energy at a different time." +
                     "\n" +
                     "The Costs field is a list of CostStruct structures which allows multiple CostTypeEnum and Values to " +
                     "be shared by the energy appliance. These could be based on GHG emissions, comfort value for the " +
@@ -1232,8 +1229,8 @@ export const DeviceEnergyManagement = Cluster(
                     "require a top-up heating event to occur later in the day (which may incur additional cost)." +
                     "\n" +
                     "If the ESA cannot calculate its cost for any reason (such as losing its connection to a Price " +
-                    "server) it may omit this field. This is treated as extra meta data that an EMS may use to optimize " +
-                    "a system.",
+                    "server) it may omit this field. This is treated as extra meta data that an EMS may use to optimize a " +
+                    "system.",
 
                 xref: { document: "cluster", section: "9.2.7.14.14" }
             },
@@ -1273,9 +1270,9 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the minimum time, in seconds, that the slot can be requested to shortened " +
                 "to." +
                 "\n" +
-                "For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), " +
-                "this would allow an ESA to specify the minimum time it could be switched on for. This is to help " +
-                "protect the appliance from being damaged by short cycling times." +
+                "For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this " +
+                "would allow an ESA to specify the minimum time it could be switched on for. This is to help protect " +
+                "the appliance from being damaged by short cycling times." +
                 "\n" +
                 "For example, a heat pump compressor may have a minimum cycle time of order a few minutes.",
 
@@ -1288,11 +1285,11 @@ export const DeviceEnergyManagement = Cluster(
             details: "This field shall indicate the maximum time, in seconds, that the slot can be requested to extended " +
                 "to." +
                 "\n" +
-                "For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), " +
-                "this allows an ESA to specify the maximum time it could be switched on for. This may allow a " +
-                "battery or water heater to indicate the maximum duration that it can charge for before becoming " +
-                "full. In the case of a battery inverter which can be discharged, it may equally indicate the " +
-                "maximum time the battery could be discharged for (at the MaxPowerAdjustment power level).",
+                "For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this " +
+                "allows an ESA to specify the maximum time it could be switched on for. This may allow a battery or " +
+                "water heater to indicate the maximum duration that it can charge for before becoming full. In the " +
+                "case of a battery inverter which can be discharged, it may equally indicate the maximum time the " +
+                "battery could be discharged for (at the MaxPowerAdjustment power level).",
 
             xref: { document: "cluster", section: "9.2.7.14.18" }
         })
@@ -1304,8 +1301,8 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "SlotIndex", id: 0x0, type: "uint8", conformance: "M", constraint: "desc",
             details: "This field shall indicate the index into the Slots list within the Forecast that is to be modified. " +
-                "It shall be less than the actual length of the Slots list (implicitly it must be in the range 0 to " +
-                "9 based on the maximum length of the Slots list constraint).",
+                "It shall be less than the actual length of the Slots list (implicitly it must be in the range 0 to 9 " +
+                "based on the maximum length of the Slots list constraint).",
             xref: { document: "cluster", section: "9.2.7.15.1" }
         }),
 
@@ -1322,8 +1319,8 @@ export const DeviceEnergyManagement = Cluster(
         Field({
             name: "Duration", id: 0x2, type: "elapsed-s", conformance: "M", constraint: "desc",
             details: "This field shall indicate the new requested duration, in seconds, that the ESA shall extend or " +
-                "shorten the slot duration to. It MUST be between the MinDurationAdjustment and " +
-                "MaxDurationAdjustment for the slot as advertised by the ESA.",
+                "shorten the slot duration to. It MUST be between the MinDurationAdjustment and MaxDurationAdjustment " +
+                "for the slot as advertised by the ESA.",
             xref: { document: "cluster", section: "9.2.7.15.3" }
         })
     ),
@@ -1378,8 +1375,8 @@ export const DeviceEnergyManagement = Cluster(
                 "ESA during the constraint period." +
                 "\n" +
                 "This is expressed as a signed value between -100 to +100. A value of 0 would indicate no bias to " +
-                "using more or less energy. A negative value indicates a request to use less energy. A positive " +
-                "value indicates a request to use more energy." +
+                "using more or less energy. A negative value indicates a request to use less energy. A positive value " +
+                "indicates a request to use more energy." +
                 "\n" +
                 "Note that the mapping between values and operation is manufacturer specific.",
 

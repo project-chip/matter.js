@@ -319,9 +319,8 @@ export namespace BasicInformation {
 
         attributes: {
             /**
-             * This attribute shall be set to the revision number of the Data Model against which the Node is
-             * certified. The value of this attribute shall be one of the valid values listed in Section 7.1.1,
-             * “Revision History”.
+             * This attribute shall be set to the revision number of the Data Model against which the Node is certified.
+             * The value of this attribute shall be one of the valid values listed in Section 7.1.1, “Revision History”.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.1
              */
@@ -350,16 +349,16 @@ export namespace BasicInformation {
             productName: FixedAttribute(0x3, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * This attribute shall specify the Product ID assigned by the vendor that is unique to the specific
-             * product of the Node.
+             * This attribute shall specify the Product ID assigned by the vendor that is unique to the specific product
+             * of the Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.5
              */
             productId: FixedAttribute(0x4, TlvUInt16),
 
             /**
-             * Indicates a user defined name for the Node. This attribute SHOULD be set during initial commissioning
-             * and may be updated by further reconfigurations.
+             * Indicates a user defined name for the Node. This attribute SHOULD be set during initial commissioning and
+             * may be updated by further reconfigurations.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.6
              */
@@ -373,11 +372,11 @@ export namespace BasicInformation {
              * This attribute shall be an ISO 3166-1 alpha-2 code to represent the country, dependent territory, or
              * special area of geographic interest in which the Node is located at the time of the attribute being set.
              * This attribute shall be set during initial commissioning (unless already set) and may be updated by
-             * further reconfigurations. This attribute may affect some regulatory aspects of the Node’s operation,
-             * such as radio transmission power levels in given spectrum allocation bands if technologies where this is
-             * applicable are used. The Location’s region code shall be interpreted in a case-insensitive manner. If
-             * the Node cannot understand the location code with which it was configured, or the location code has not
-             * yet been configured, it shall configure itself in a region- agnostic manner as determined by the vendor,
+             * further reconfigurations. This attribute may affect some regulatory aspects of the Node’s operation, such
+             * as radio transmission power levels in given spectrum allocation bands if technologies where this is
+             * applicable are used. The Location’s region code shall be interpreted in a case-insensitive manner. If the
+             * Node cannot understand the location code with which it was configured, or the location code has not yet
+             * been configured, it shall configure itself in a region- agnostic manner as determined by the vendor,
              * avoiding region-specific assumptions as much as is practical. The special value XX shall indicate that
              * region-agnostic mode is used.
              *
@@ -453,10 +452,10 @@ export namespace BasicInformation {
             partNumber: OptionalFixedAttribute(0xc, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * This attribute shall specify a link to a product specific web page. The specified URL SHOULD resolve to
-             * a maintained web page available for the lifetime of the product. The syntax of this attribute shall
-             * follow the syntax as specified in RFC 1738 and shall use the https scheme. The maximum length of this
-             * attribute is 256 ASCII characters.
+             * This attribute shall specify a link to a product specific web page. The specified URL SHOULD resolve to a
+             * maintained web page available for the lifetime of the product. The syntax of this attribute shall follow
+             * the syntax as specified in RFC 1738 and shall use the https scheme. The maximum length of this attribute
+             * is 256 ASCII characters.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.14
              */
@@ -497,8 +496,8 @@ export namespace BasicInformation {
              * This attribute (when used) shall indicate whether the Node can be reached. For a native Node this is
              * implicitly True (and its use is optional).
              *
-             * Its main use case is in the derived Bridged Device Basic Information cluster where it is used to
-             * indicate whether the bridged device is reachable by the bridge over the non-native network.
+             * Its main use case is in the derived Bridged Device Basic Information cluster where it is used to indicate
+             * whether the bridged device is reachable by the bridge over the non-native network.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.18
              */
@@ -507,8 +506,8 @@ export namespace BasicInformation {
             /**
              * Indicates a unique identifier for the device, which is constructed in a manufacturer specific manner.
              *
-             * It may be constructed using a permanent device identifier (such as device MAC address) as basis. In
-             * order to prevent tracking,
+             * It may be constructed using a permanent device identifier (such as device MAC address) as basis. In order
+             * to prevent tracking,
              *
              *   • it SHOULD NOT be identical to (or easily derived from) such permanent device identifier
              *
@@ -535,10 +534,10 @@ export namespace BasicInformation {
             uniqueId: FixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * This attribute shall provide the minimum guaranteed value for some system-wide resource capabilities
-             * that are not otherwise cluster-specific and do not appear elsewhere. This attribute may be used by
-             * clients to optimize communication with Nodes by allowing them to use more than the strict minimum values
-             * required by this specification, wherever available.
+             * This attribute shall provide the minimum guaranteed value for some system-wide resource capabilities that
+             * are not otherwise cluster-specific and do not appear elsewhere. This attribute may be used by clients to
+             * optimize communication with Nodes by allowing them to use more than the strict minimum values required by
+             * this specification, wherever available.
              *
              * The values supported by the server in reality may be larger than the values provided in this attribute,
              * such as if a server is not resource-constrained at all. However, clients SHOULD only rely on the amounts
@@ -567,8 +566,8 @@ export namespace BasicInformation {
 
             /**
              * This attribute shall contain the current version number for the specification version this Node was
-             * certified against. The version number can be compared using a total ordering to determine if a version
-             * is logically newer than another one. A larger value of SpecificationVersion is newer than a lower value.
+             * certified against. The version number can be compared using a total ordering to determine if a version is
+             * logically newer than another one. A larger value of SpecificationVersion is newer than a lower value.
              *
              * Nodes may query this field to determine the currently supported version of the specification on another
              * given Node.
@@ -576,8 +575,8 @@ export namespace BasicInformation {
              * The format of this number is segmented as its four component bytes. Bit positions for the fields are as
              * follows:
              *
-             * For example, a SpecificationVersion value of 0x0102AA00 is composed of 4 version components,
-             * representing a version 1.2.170.0.
+             * For example, a SpecificationVersion value of 0x0102AA00 is composed of 4 version components, representing
+             * a version 1.2.170.0.
              *
              * In the example above:
              *
@@ -620,8 +619,8 @@ export namespace BasicInformation {
         events: {
             /**
              * The StartUp event shall be generated by a Node as soon as reasonable after completing a boot or reboot
-             * process. The StartUp event SHOULD be the first Data Model event recorded by the Node after it completes
-             * a boot or reboot process.
+             * process. The StartUp event SHOULD be the first Data Model event recorded by the Node after it completes a
+             * boot or reboot process.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.6.1
              */
@@ -641,11 +640,11 @@ export namespace BasicInformation {
              * The Leave event SHOULD be generated by a Node prior to permanently leaving a given Fabric, such as when
              * the RemoveFabric command is invoked for a given fabric, or triggered by factory reset or some other
              * manufacturer specific action to disable or reset the operational data in the Node. When a Leave event is
-             * generated, it SHOULD be assumed that the fabric recorded in the event is no longer usable, and
-             * subsequent interactions targeting that fabric will most likely fail.
+             * generated, it SHOULD be assumed that the fabric recorded in the event is no longer usable, and subsequent
+             * interactions targeting that fabric will most likely fail.
              *
-             * Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the fabric
-             * by removing related bindings, access control list entries and other data referencing the leaving Node.
+             * Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the fabric by
+             * removing related bindings, access control list entries and other data referencing the leaving Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.6.3
              */

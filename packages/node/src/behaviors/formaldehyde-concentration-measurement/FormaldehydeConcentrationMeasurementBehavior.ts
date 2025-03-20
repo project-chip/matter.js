@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * FormaldehydeConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link
- * FormaldehydeConcentrationMeasurement.Cluster}.
+ * FormaldehydeConcentrationMeasurementBehavior is the base class for objects that support interaction with
+ * {@link FormaldehydeConcentrationMeasurement.Cluster}.
  *
  * FormaldehydeConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so
  * using {@link FormaldehydeConcentrationMeasurementBehavior.with}.

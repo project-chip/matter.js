@@ -12,8 +12,8 @@ import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } fr
 export const FanDt = DeviceType(
     {
         name: "Fan", id: 0x2b, category: "HVAC", classification: "simple",
-        details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air " +
-            "in a room.",
+        details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air in " +
+            "a room.",
         xref: { document: "device", section: "9.2" }
     },
 

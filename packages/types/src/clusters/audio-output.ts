@@ -131,8 +131,8 @@ export namespace AudioOutput {
             /**
              * Upon receipt, this shall rename the output at a specific index in the Output List.
              *
-             * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically
-             * be sent to the actual device to which the output connects.
+             * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically be
+             * sent to the actual device to which the output connects.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.2
              */
@@ -201,8 +201,8 @@ export namespace AudioOutput {
     /**
      * This cluster provides an interface for controlling the Output on a Video Player device such as a TV.
      *
-     * This cluster would be supported on a device with audio outputs like a Video Player device (Smart TV, TV Setup
-     * Top Box, Smart Speaker, etc).
+     * This cluster would be supported on a device with audio outputs like a Video Player device (Smart TV, TV Setup Top
+     * Box, Smart Speaker, etc).
      *
      * This cluster provides the list of available outputs and provides commands for selecting and renaming them.
      *
@@ -240,8 +240,8 @@ export namespace AudioOutput {
     /**
      * This cluster supports all AudioOutput features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

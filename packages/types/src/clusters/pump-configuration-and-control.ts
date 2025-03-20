@@ -153,8 +153,8 @@ export namespace PumpConfigurationAndControl {
         /**
          * A remote temperature sensor is used as the sensor for the regulation of the pump.
          *
-         * If this bit is set, EffectiveControlMode is ConstantTemperature, and the setpoint for the pump is
-         * interpreted as a percentage of the range of the remote sensor ([MinMeasuredValue – MaxMeasuredValue])
+         * If this bit is set, EffectiveControlMode is ConstantTemperature, and the setpoint for the pump is interpreted
+         * as a percentage of the range of the remote sensor ([MinMeasuredValue – MaxMeasuredValue])
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.1.6
          */
@@ -209,10 +209,10 @@ export namespace PumpConfigurationAndControl {
         /**
          * The pump will regulate its speed to maintain a constant differential pressure over its flanges.
          *
-         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case
-         * of the internal pressure sensor, this will be the range derived from the [MinConstPressure –
-         * MaxConstPressure] attributes. In case of a remote pressure sensor, this will be the range derived from the
-         * [MinMeasuredValue – MaxMeasuredValue] attributes of the remote pressure sensor.
+         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case of
+         * the internal pressure sensor, this will be the range derived from the [MinConstPressure – MaxConstPressure]
+         * attributes. In case of a remote pressure sensor, this will be the range derived from the [MinMeasuredValue –
+         * MaxMeasuredValue] attributes of the remote pressure sensor.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.3.2
          */
@@ -233,9 +233,9 @@ export namespace PumpConfigurationAndControl {
         /**
          * The pump will regulate its speed to maintain a constant flow through the pump.
          *
-         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case
-         * of the internal flow sensor, this will be the range derived from the [MinConstFlow – MaxConstFlow]
-         * attributes. In case of a remote flow sensor, this will be the range derived from the [MinMeasuredValue –
+         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case of
+         * the internal flow sensor, this will be the range derived from the [MinConstFlow – MaxConstFlow] attributes.
+         * In case of a remote flow sensor, this will be the range derived from the [MinMeasuredValue –
          * MaxMeasuredValue] attributes of the remote flow sensor.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.3.4
@@ -245,22 +245,22 @@ export namespace PumpConfigurationAndControl {
         /**
          * The pump will regulate its speed to maintain a constant temperature.
          *
-         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case
-         * of the internal temperature sensor, this will be the range derived from the [MinConstTemp – MaxConstTemp]
-         * attributes. In case of a remote temperature sensor, this will be the range derived from the
-         * [MinMeasuredValue – MaxMeasuredValue] attributes of the remote temperature sensor.
+         * The setpoint is interpreted as a percentage of the range of the sensor used for this control mode. In case of
+         * the internal temperature sensor, this will be the range derived from the [MinConstTemp – MaxConstTemp]
+         * attributes. In case of a remote temperature sensor, this will be the range derived from the [MinMeasuredValue
+         * – MaxMeasuredValue] attributes of the remote temperature sensor.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.3.5
          */
         ConstantTemperature = 5,
 
         /**
-         * The operation of the pump is automatically optimized to provide the most suitable performance with respect
-         * to comfort and energy savings.
+         * The operation of the pump is automatically optimized to provide the most suitable performance with respect to
+         * comfort and energy savings.
          *
          * This behavior is manufacturer defined. The pump can be stopped by setting the setpoint of the level control
-         * cluster to 0, or by using the On/Off cluster. If the pump is started (at any setpoint), the speed of the
-         * pump is entirely determined by the pump.
+         * cluster to 0, or by using the On/Off cluster. If the pump is started (at any setpoint), the speed of the pump
+         * is entirely determined by the pump.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.3.6
          */
@@ -606,8 +606,8 @@ export namespace PumpConfigurationAndControl {
             maxFlow: FixedAttribute(0x2, TlvNullable(TlvUInt16), { default: null }),
 
             /**
-             * This attribute specifies the activity status of the pump functions as listed in PumpStatusBitmap. Where
-             * a pump controller function is active, the corresponding bit shall be set to 1. Where a pump
+             * This attribute specifies the activity status of the pump functions as listed in PumpStatusBitmap. Where a
+             * pump controller function is active, the corresponding bit shall be set to 1. Where a pump
              *
              * controller function is not active, the corresponding bit shall be set to 0.
              *
@@ -642,8 +642,8 @@ export namespace PumpConfigurationAndControl {
              *     shall match the behavior of the pump.
              *
              *   • A remote sensor is used as the sensor for regulation of the pump. In this case, EffectiveControlMode
-             *     will display ConstantPressure, ConstantFlow or ConstantTemperature if the remote sensor is a
-             *     pressure sensor, a flow sensor or a temperature sensor respectively, regardless of the value of the
+             *     will display ConstantPressure, ConstantFlow or ConstantTemperature if the remote sensor is a pressure
+             *     sensor, a flow sensor or a temperature sensor respectively, regardless of the value of the
              *     ControlMode attribute.
              *
              * In case the ControlMode attribute is not included on the device and no remote sensors are connected, the
@@ -684,9 +684,9 @@ export namespace PumpConfigurationAndControl {
             speed: OptionalAttribute(0x14, TlvNullable(TlvUInt16), { default: null }),
 
             /**
-             * This attribute specifies the accumulated number of hours that the pump has been powered and the motor
-             * has been running. It is updated dynamically as it increases. It is preserved over power cycles of the
-             * pump. If LifeTimeRunningHours rises above maximum value it “rolls over” and starts at 0 (zero).
+             * This attribute specifies the accumulated number of hours that the pump has been powered and the motor has
+             * been running. It is updated dynamically as it increases. It is preserved over power cycles of the pump.
+             * If LifeTimeRunningHours rises above maximum value it “rolls over” and starts at 0 (zero).
              *
              * This attribute is writeable, in order to allow setting to an appropriate value after maintenance. If the
              * value is not available, this attribute will indicate the null value.
@@ -751,8 +751,8 @@ export namespace PumpConfigurationAndControl {
              * control mode Constant pressure and vice versa for flow and temperature type sensors. This is regardless
              * of the setting of the ControlMode attribute.
              *
-             * If this attribute is Normal and no remote sensor is connected, the control mode of the pump is decided
-             * by the ControlMode attribute.
+             * If this attribute is Normal and no remote sensor is connected, the control mode of the pump is decided by
+             * the ControlMode attribute.
              *
              * OperationMode may be changed at any time, even when the pump is running. The behavior of the pump at the
              * point of changing the value of this attribute is vendor-specific.
@@ -1005,8 +1005,8 @@ export namespace PumpConfigurationAndControl {
     /**
      * This cluster supports all PumpConfigurationAndControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

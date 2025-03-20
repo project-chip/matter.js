@@ -144,8 +144,8 @@ export namespace JointFabricPki {
 
         commands: {
             /**
-             * This command shall be generated and executed during the Joint Commissioning Method steps and
-             * subsequently respond in the form of an ICACSRResponse command.
+             * This command shall be generated and executed during the Joint Commissioning Method steps and subsequently
+             * respond in the form of an ICACSRResponse command.
              *
              * Check ICA Cross Signing for details about the generation and contents of the ICACSR.
              *

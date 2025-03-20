@@ -26,8 +26,8 @@ export const ModeBase = Cluster(
             "The server allows the client to set a mode on the server. A mode is one of a list of options that " +
             "may be presented by a client for a user choice, or understood by the client, via the mode’s tags." +
             "\n" +
-            "A mode tag is either a standard tag within a standard category namespace, or a manufacturer " +
-            "specific tag, within the namespace of the vendor ID of the manufacturer." +
+            "A mode tag is either a standard tag within a standard category namespace, or a manufacturer specific " +
+            "tag, within the namespace of the vendor ID of the manufacturer." +
             "\n" +
             "Any derived cluster specification based on this cluster shall support the standard mode tag value " +
             "definitions and command status definitions defined in this cluster and may define additional " +
@@ -51,8 +51,8 @@ export const ModeBase = Cluster(
 
         Field({
             name: "DEPONOFF", constraint: "0", description: "OnOff",
-            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
-                "the same endpoint. See OnMode for more information.",
+            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on the " +
+                "same endpoint. See OnMode for more information.",
             xref: { document: "cluster", section: "1.10.4.1" }
         })
     ),
@@ -98,9 +98,9 @@ export const ModeBase = Cluster(
 
         details: "Indicates the desired startup mode for the server when it is supplied with power." +
             "\n" +
-            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, " +
-            "when the server is powered up, except in the case when the OnMode attribute overrides the " +
-            "StartUpMode attribute (see OnModeWithPowerUp)." +
+            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, when " +
+            "the server is powered up, except in the case when the OnMode attribute overrides the StartUpMode " +
+            "attribute (see OnModeWithPowerUp)." +
             "\n" +
             "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode " +
             "attribute shall return to its value prior to the restart." +
@@ -142,22 +142,22 @@ export const ModeBase = Cluster(
 
             details: "If the NewMode field doesn’t match the Mode field of any entry of the SupportedModes list, the " +
                 "ChangeToModeResponse command’s Status field shall indicate UnsupportedMode and the StatusText field " +
-                "shall be included and may be used to indicate the issue, with a human readable string, or include " +
-                "an empty string." +
+                "shall be included and may be used to indicate the issue, with a human readable string, or include an " +
+                "empty string." +
                 "\n" +
                 "If the NewMode field matches the Mode field of one entry of the SupportedModes list, but the device " +
                 "is not able to transition as requested, the ChangeToModeResponse command shall:" +
                 "\n" +
-                "  • Have the Status set to a product-specific Status value representing the error, or " +
-                "    GenericFailure if a more specific error cannot be provided. See Status field for details." +
+                "  • Have the Status set to a product-specific Status value representing the error, or GenericFailure " +
+                "    if a more specific error cannot be provided. See Status field for details." +
                 "\n" +
                 "  • Provide a human readable string in the StatusText field." +
                 "\n" +
                 "If the NewMode field matches the Mode field of one entry of the SupportedModes list and the device " +
                 "is able to transition as requested, the server shall transition into the mode associated with " +
-                "NewMode, the ChangeToModeResponse command shall have the Status field set to Success, the " +
-                "StatusText field may be supplied with a human readable string or include an empty string and the " +
-                "CurrentMode field shall be set to the value of the NewMode field." +
+                "NewMode, the ChangeToModeResponse command shall have the Status field set to Success, the StatusText " +
+                "field may be supplied with a human readable string or include an empty string and the CurrentMode " +
+                "field shall be set to the value of the NewMode field." +
                 "\n" +
                 "If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeResponse " +
                 "command shall have the Status field set to Success and the StatusText field may be supplied with a " +
@@ -224,8 +224,8 @@ export const ModeBase = Cluster(
 
         Field({
             name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 64", quality: "F",
-            details: "This field shall indicate readable text that describes the mode option, so that a client can " +
-                "provide it to the user to indicate what this option means. This field is meant to be readable and " +
+            details: "This field shall indicate readable text that describes the mode option, so that a client can provide " +
+                "it to the user to indicate what this option means. This field is meant to be readable and " +
                 "understandable by the user.",
             xref: { document: "cluster", section: "1.10.5.2.1" }
         }),
@@ -241,12 +241,12 @@ export const ModeBase = Cluster(
                 name: "ModeTags", id: 0x2, type: "list", conformance: "M", constraint: "max 8", quality: "F",
 
                 details: "This field shall contain a list of tags that are associated with the mode option. This may be used " +
-                    "by clients to determine the full or the partial semantics of a certain mode, depending on which " +
-                    "tags they understand, using standard definitions and/or manufacturer specific namespace definitions." +
+                    "by clients to determine the full or the partial semantics of a certain mode, depending on which tags " +
+                    "they understand, using standard definitions and/or manufacturer specific namespace definitions." +
                     "\n" +
-                    "The standard mode tags are defined in this cluster specification. For the derived cluster " +
-                    "instances, if the specification of the derived cluster defines a namespace, the set of standard " +
-                    "mode tags also includes the mode tag values from that namespace." +
+                    "The standard mode tags are defined in this cluster specification. For the derived cluster instances, " +
+                    "if the specification of the derived cluster defines a namespace, the set of standard mode tags also " +
+                    "includes the mode tag values from that namespace." +
                     "\n" +
                     "Mode tags can help clients look for options that meet certain criteria, render the user interface, " +
                     "use" +

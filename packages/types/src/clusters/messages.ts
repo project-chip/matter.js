@@ -57,8 +57,8 @@ export namespace Messages {
         /**
          * ProtectedMessages (PROT)
          *
-         * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing
-         * a message; e.g. entering a PIN or password before viewing a message with billing information.
+         * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing a
+         * message; e.g. entering a PIN or password before viewing a message with billing information.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.4
          */
@@ -450,8 +450,8 @@ export namespace Messages {
         responseId: TlvOptionalField(1, TlvNullable(TlvUInt32)),
 
         /**
-         * This field shall indicate a user-provided reply to the message. If there was no reply, or the message did
-         * not have the ReplyRequired bit set, this field shall be null.
+         * This field shall indicate a user-provided reply to the message. If there was no reply, or the message did not
+         * have the ReplyRequired bit set, this field shall be null.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.16.8.3.3
          */
@@ -564,8 +564,8 @@ export namespace Messages {
              * NOTE
              *
              * It is currently not specified where the friendly name label can be found on the node, meaning that
-             * clients SHOULD NOT rely on a certain method they happen to observe in a particular server instance,
-             * since other instances could employ a different method.
+             * clients SHOULD NOT rely on a certain method they happen to observe in a particular server instance, since
+             * other instances could employ a different method.
              *
              * The device SHOULD make it possible for the user to view which nodes have access to this cluster and to
              * individually remove privileges for each node.

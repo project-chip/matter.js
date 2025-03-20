@@ -21,8 +21,8 @@ export const Switch = Cluster(
         details: "This cluster exposes interactions with a switch device, for the purpose of using those interactions " +
             "by other devices." +
             "\n" +
-            "Two types of switch devices are supported: latching switch (e.g. rocker switch) and momentary " +
-            "switch (e.g. push button), distinguished with their feature flags." +
+            "Two types of switch devices are supported: latching switch (e.g. rocker switch) and momentary switch " +
+            "(e.g. push button), distinguished with their feature flags." +
             "\n" +
             "Interactions with the switch device are exposed as attributes (for the latching switch) and as " +
             "events (for both types of switches)." +
@@ -106,8 +106,8 @@ export const Switch = Cluster(
         details: "Indicates how many consecutive presses can be detected and reported by a momentary switch which " +
             "supports multi-press (MSM feature flag set)." +
             "\n" +
-            "For example, a momentary switch supporting single press, double press and triple press, but not " +
-            "quad press and beyond, would return the value 3." +
+            "For example, a momentary switch supporting single press, double press and triple press, but not quad " +
+            "press and beyond, would return the value 3." +
             "\n" +
             "When more than MultiPressMax presses are detected within a multi-press sequence:" +
             "\n" +
@@ -118,13 +118,13 @@ export const Switch = Cluster(
             "\n" +
             "  • The server for cluster revision >= 2 shall generate a MultiPressComplete event with the " +
             "    TotalNumberOfPressesCounted field set to zero (indicating an aborted sequence), and shall NOT " +
-            "    generate any further InitialPress and MultiPressOngoing events until the switch has become " +
-            "    fully idle (i.e. no longer in the process of counting presses within the multipress)." +
+            "    generate any further InitialPress and MultiPressOngoing events until the switch has become fully " +
+            "    idle (i.e. no longer in the process of counting presses within the multipress)." +
             "\n" +
             "This approach avoids unintentionally causing intermediate actions where there is a very long " +
-            "sequence of presses beyond MultiPressMax that may be taken in account specially by switches (e.g. " +
-            "to trigger special behavior such as factory reset for which generating events towards the client is " +
-            "not appropriate).",
+            "sequence of presses beyond MultiPressMax that may be taken in account specially by switches (e.g. to " +
+            "trigger special behavior such as factory reset for which generating events towards the client is not " +
+            "appropriate).",
 
         xref: { document: "cluster", section: "1.13.5.3" }
     }),
@@ -132,8 +132,8 @@ export const Switch = Cluster(
     Event(
         {
             name: "SwitchLatched", id: 0x0, access: "V", conformance: "LS", priority: "info",
-            details: "This event shall be generated, when the latching switch is moved to a new position. It may have " +
-                "been delayed by debouncing within the switch.",
+            details: "This event shall be generated, when the latching switch is moved to a new position. It may have been " +
+                "delayed by debouncing within the switch.",
             xref: { document: "cluster", section: "1.13.6.1" }
         },
 
@@ -164,8 +164,8 @@ export const Switch = Cluster(
         {
             name: "LongPress", id: 0x2, access: "V", conformance: "MSL", priority: "info",
 
-            details: "This event shall be generated when the momentary switch has been pressed for a \"long\" time. The " +
-                "time interval constituting a \"long\" time is manufacturer-determined, since it depends on the switch " +
+            details: "This event shall be generated when the momentary switch has been pressed for a \"long\" time. The time " +
+                "interval constituting a \"long\" time is manufacturer-determined, since it depends on the switch " +
                 "physics." +
                 "\n" +
                 "  • When the AS feature flag is set, this event:" +
@@ -212,10 +212,10 @@ export const Switch = Cluster(
         {
             name: "ShortRelease", id: 0x3, access: "V", conformance: "MSR", priority: "info",
 
-            details: "If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at " +
-                "all, since setting the Action Switch feature flag forbids the Momentary Switch ShortRelease (MSR) " +
-                "feature flag from being set. Otherwise, the following paragraphs describe the situations where this " +
-                "event is generated." +
+            details: "If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at all, " +
+                "since setting the Action Switch feature flag forbids the Momentary Switch ShortRelease (MSR) feature " +
+                "flag from being set. Otherwise, the following paragraphs describe the situations where this event is " +
+                "generated." +
                 "\n" +
                 "This event shall be generated, when the momentary switch has been released (after debouncing)." +
                 "\n" +
@@ -263,8 +263,8 @@ export const Switch = Cluster(
     Event(
         {
             name: "MultiPressOngoing", id: 0x5, access: "V", conformance: "MSM & !AS", priority: "info",
-            details: "If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at " +
-                "all. Otherwise, the following paragraphs describe the situations where this event is generated." +
+            details: "If the server has the Action Switch (AS) feature flag set, this event shall NOT be generated at all. " +
+                "Otherwise, the following paragraphs describe the situations where this event is generated." +
                 "\n" +
                 "This event shall be generated to indicate how many times the momentary switch has been pressed in a " +
                 "multi-press sequence, during that sequence. See Multi Press Details below.",
@@ -313,8 +313,8 @@ export const Switch = Cluster(
                 "  • a value of 1 when there was exactly one press in a multi-press sequence (and the sequence has " +
                 "    ended), i.e. there was no double press (or more)," +
                 "\n" +
-                "  • a value of 2 when there were exactly two presses in a multi-press sequence (and the sequence " +
-                "    has ended)," +
+                "  • a value of 2 when there were exactly two presses in a multi-press sequence (and the sequence has " +
+                "    ended)," +
                 "\n" +
                 "  • a value of 3 when there were exactly three presses in a multi-press sequence (and the sequence " +
                 "    has ended)," +

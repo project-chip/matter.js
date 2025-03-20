@@ -20,8 +20,8 @@ export const DoorLock = Cluster(
     {
         name: "DoorLock", id: 0x101, classification: "application", pics: "DRLK",
         details: "The door lock cluster provides an interface to a generic way to secure a door. The physical object " +
-            "that provides the locking functionality is abstracted from the cluster. The cluster has a small " +
-            "list of mandatory attributes and functions and a list of optional features." +
+            "that provides the locking functionality is abstracted from the cluster. The cluster has a small list " +
+            "of mandatory attributes and functions and a list of optional features." +
             "\n" +
             "Figure 16. Typical Usage of the Door Lock Cluster",
         xref: { document: "cluster", section: "5.2" }
@@ -132,8 +132,8 @@ export const DoorLock = Cluster(
         Field({
             name: "YDSCH", conformance: "O", constraint: "10", description: "YearDayAccessSchedules",
 
-            details: "If the User feature is supported then Year Day Schedules are applied to a User and not a " +
-                "credential. Year Day Schedules are used to restrict access to a specified date and time window." +
+            details: "If the User feature is supported then Year Day Schedules are applied to a User and not a credential. " +
+                "Year Day Schedules are used to restrict access to a specified date and time window." +
                 "\n" +
                 "The lock may automatically adjust the UserType when a schedule is created or cleared." +
                 "\n" +
@@ -183,8 +183,8 @@ export const DoorLock = Cluster(
         constraint: "desc", quality: "X P",
 
         details: "This attribute may be NULL if the lock hardware does not currently know the status of the locking " +
-            "mechanism. For example, a lock may not know the LockState status after a power cycle until the " +
-            "first lock actuation is completed." +
+            "mechanism. For example, a lock may not know the LockState status after a power cycle until the first " +
+            "lock actuation is completed." +
             "\n" +
             "The Not Fully Locked value is used by a lock to indicate that the state of the lock is somewhere " +
             "between Locked and Unlocked so it is only partially secured. For example, a deadbolt could be " +
@@ -293,16 +293,16 @@ export const DoorLock = Cluster(
     Attribute({
         name: "MaxRfidCodeLength", id: 0x19, type: "uint8", access: "R V", conformance: "RID", quality: "F",
         details: "Indicates the maximum length in bytes of a RFID Code on this device. The value depends on the RFID " +
-            "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
-            "RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
+            "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as RFID " +
+            "code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
         xref: { document: "cluster", section: "5.2.9.16" }
     }),
 
     Attribute({
         name: "MinRfidCodeLength", id: 0x1a, type: "uint8", access: "R V", conformance: "RID", quality: "F",
         details: "Indicates the minimum length in bytes of a RFID Code on this device. The value depends on the RFID " +
-            "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
-            "RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
+            "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as RFID " +
+            "code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
         xref: { document: "cluster", section: "5.2.9.17" }
     }),
 
@@ -372,8 +372,8 @@ export const DoorLock = Cluster(
         name: "SupportedOperatingModes", id: 0x26, type: "OperatingModesBitmap", access: "R V",
         conformance: "M", default: 65526, quality: "F",
         details: "This attribute shall contain a bitmap with all operating bits of the OperatingMode attribute " +
-            "supported by the lock. All operating modes NOT supported by a lock shall be set to one. The value " +
-            "of the OperatingMode enumeration defines the related bit to be set.",
+            "supported by the lock. All operating modes NOT supported by a lock shall be set to one. The value of " +
+            "the OperatingMode enumeration defines the related bit to be set.",
         xref: { document: "cluster", section: "5.2.9.25" }
     }),
 
@@ -381,16 +381,16 @@ export const DoorLock = Cluster(
         name: "DefaultConfigurationRegister", id: 0x27, type: "ConfigurationRegisterBitmap", access: "R V",
         conformance: "O", default: 0, quality: "P",
 
-        details: "Indicates the default configurations as they are physically set on the device (example: hardware " +
-            "dip switch setting, etc…) and represents the default setting for some of the" +
+        details: "Indicates the default configurations as they are physically set on the device (example: hardware dip " +
+            "switch setting, etc…) and represents the default setting for some of the" +
             "\n" +
             "attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode " +
             "attributes)." +
             "\n" +
-            "This is a read-only attribute and is intended to allow clients to determine what changes may need " +
-            "to be made without having to query all the included attributes. It may be beneficial for the " +
-            "clients to know what the device’s original settings were in the event that the device needs to be " +
-            "restored to factory default settings." +
+            "This is a read-only attribute and is intended to allow clients to determine what changes may need to " +
+            "be made without having to query all the included attributes. It may be beneficial for the clients to " +
+            "know what the device’s original settings were in the event that the device needs to be restored to " +
+            "factory default settings." +
             "\n" +
             "If the Client device would like to query and modify the door lock server’s operating settings, it " +
             "SHOULD send read and write attribute requests to the specific attributes." +
@@ -441,11 +441,11 @@ export const DoorLock = Cluster(
         name: "LocalProgrammingFeatures", id: 0x2c, type: "LocalProgrammingFeaturesBitmap",
         access: "R[W] VA", conformance: "O", default: 0, quality: "P",
 
-        details: "Indicates the local programming features that will be disabled when EnableLocalProgramming " +
-            "attribute is set to False. If a door lock doesn’t support disabling one aspect of local programming " +
-            "it shall return CONSTRAINT_ERROR during a write operation of this attribute. If the " +
-            "EnableLocalProgramming attribute is set to True then all local programming features shall be " +
-            "enabled regardless of the bits set to 0 in this attribute." +
+        details: "Indicates the local programming features that will be disabled when EnableLocalProgramming attribute " +
+            "is set to False. If a door lock doesn’t support disabling one aspect of local programming it shall " +
+            "return CONSTRAINT_ERROR during a write operation of this attribute. If the EnableLocalProgramming " +
+            "attribute is set to True then all local programming features shall be enabled regardless of the bits " +
+            "set to 0 in this attribute." +
             "\n" +
             "The features that can be disabled from local programming are defined in " +
             "LocalProgrammingFeaturesBitmap.",
@@ -502,9 +502,9 @@ export const DoorLock = Cluster(
     Attribute({
         name: "RequirePinForRemoteOperation", id: 0x33, type: "bool", access: "R[W] VA",
         conformance: "COTA & PIN", default: true, quality: "P",
-        details: "Indicates if the door lock requires an optional PIN. If this attribute is set to True, the door " +
-            "lock server requires that an optional PINs be included in the payload of remote lock operation " +
-            "events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
+        details: "Indicates if the door lock requires an optional PIN. If this attribute is set to True, the door lock " +
+            "server requires that an optional PINs be included in the payload of remote lock operation events " +
+            "like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
         xref: { document: "cluster", section: "5.2.9.35" }
     }),
 
@@ -516,10 +516,9 @@ export const DoorLock = Cluster(
     Attribute({
         name: "ExpiringUserTimeout", id: 0x35, type: "uint16", access: "R[W] VA", conformance: "[USR]",
         constraint: "1 to 2880", quality: "P",
-        details: "Indicates the number of minutes a PIN, RFID, Fingerprint, or other credential associated with a " +
-            "user of type ExpiringUser shall remain valid after its first use before expiring. When the " +
-            "credential expires the UserStatus for the corresponding user record shall be set to " +
-            "OccupiedDisabled.",
+        details: "Indicates the number of minutes a PIN, RFID, Fingerprint, or other credential associated with a user " +
+            "of type ExpiringUser shall remain valid after its first use before expiring. When the credential " +
+            "expires the UserStatus for the corresponding user record shall be set to OccupiedDisabled.",
         xref: { document: "cluster", section: "5.2.9.36" }
     }),
 
@@ -620,11 +619,11 @@ export const DoorLock = Cluster(
             "\n" +
             "NOTE" +
             "\n" +
-            "The credential indices used for these two credential types are independent of each other, similar " +
-            "to all other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a client " +
+            "The credential indices used for these two credential types are independent of each other, similar to " +
+            "all other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a client " +
             "could add a credential of type AliroEvictableEndpointKey at any index from 1 to " +
-            "NumberOfAliroEndpointKeysSupported and also add a credential of type AliroNonEvictableEndpointKey " +
-            "at the same index, and both credentials would exist on the server.",
+            "NumberOfAliroEndpointKeysSupported and also add a credential of type AliroNonEvictableEndpointKey at " +
+            "the same index, and both credentials would exist on the server.",
 
         xref: { document: "cluster", section: "5.2.9.46" }
     }),
@@ -632,8 +631,8 @@ export const DoorLock = Cluster(
     Event(
         {
             name: "DoorLockAlarm", id: 0x0, access: "V", conformance: "M", priority: "critical",
-            details: "The door lock server provides several alarms which can be sent when there is a critical state on " +
-                "the door lock. The alarms available for the door lock server are listed in AlarmCodeEnum.",
+            details: "The door lock server provides several alarms which can be sent when there is a critical state on the " +
+                "door lock. The alarms available for the door lock server are listed in AlarmCodeEnum.",
             xref: { document: "cluster", section: "5.2.11.1" }
         },
 
@@ -661,29 +660,29 @@ export const DoorLock = Cluster(
         {
             name: "LockOperation", id: 0x2, access: "V", conformance: "M", priority: "critical",
 
-            details: "The door lock server sends out a LockOperation event when the event is triggered by the various " +
-                "lock operation sources." +
+            details: "The door lock server sends out a LockOperation event when the event is triggered by the various lock " +
+                "operation sources." +
                 "\n" +
                 "  • If the door lock server supports the Unbolt Door command, it shall generate a LockOperation " +
                 "    event with LockOperationType set to Unlock after an Unbolt Door command succeeds." +
                 "\n" +
                 "  • If the door lock server supports the Unbolting feature and an Unlock Door command is performed, " +
-                "    it shall generate a LockOperation event with LockOperationType set to Unlatch when the " +
-                "    unlatched state is reached and a LockOperation event with LockOperationType set to Unlock when " +
-                "    the lock successfully completes the unlock → hold latch → release latch and return to unlock " +
-                "    state operation." +
+                "    it shall generate a LockOperation event with LockOperationType set to Unlatch when the unlatched " +
+                "    state is reached and a LockOperation event with LockOperationType set to Unlock when the lock " +
+                "    successfully completes the unlock → hold latch → release latch and return to unlock state " +
+                "    operation." +
                 "\n" +
-                "  • If the command fails during holding or releasing the latch but after passing the unlocked " +
-                "    state, the door lock server shall generate a LockOperationError event with LockOperationType " +
-                "    set to Unlatch and a LockOperation event with LockOperationType set to Unlock." +
+                "  • If the command fails during holding or releasing the latch but after passing the unlocked state, " +
+                "    the door lock server shall generate a LockOperationError event with LockOperationType set to " +
+                "    Unlatch and a LockOperation event with LockOperationType set to Unlock." +
                 "\n" +
                 "    ◦ If it fails before reaching the unlocked state, the door lock server shall generate only a " +
                 "      LockOperationError event with LockOperationType set to Unlock." +
                 "\n" +
                 "  • Upon manual actuation, a door lock server that supports the Unbolting feature:" +
                 "\n" +
-                "    ◦ shall generate a LockOperation event of LockOperationType Unlatch when it is actuated from " +
-                "      the outside." +
+                "    ◦ shall generate a LockOperation event of LockOperationType Unlatch when it is actuated from the " +
+                "      outside." +
                 "\n" +
                 "    ◦ may generate a LockOperation event of LockOperationType Unlatch when it is actuated" +
                 "\n" +
@@ -706,8 +705,8 @@ export const DoorLock = Cluster(
         Field({
             name: "UserIndex", id: 0x2, type: "uint16", conformance: "M", quality: "X",
             details: "This field shall indicate the UserIndex who performed the lock operation. This shall be null if " +
-                "there is no user index that can be determined for the given operation source. This shall NOT be " +
-                "null if a user index can be determined. In particular, this shall NOT be null if the operation was " +
+                "there is no user index that can be determined for the given operation source. This shall NOT be null " +
+                "if a user index can be determined. In particular, this shall NOT be null if the operation was " +
                 "associated with a valid credential.",
             xref: { document: "cluster", section: "5.2.11.3.3" }
         }),
@@ -767,8 +766,8 @@ export const DoorLock = Cluster(
 
         Field({
             name: "UserIndex", id: 0x3, type: "uint16", conformance: "M", quality: "X",
-            details: "This field shall indicate the lock UserIndex who performed the lock operation. This shall be null " +
-                "if there is no user id that can be determined for the given operation source.",
+            details: "This field shall indicate the lock UserIndex who performed the lock operation. This shall be null if " +
+                "there is no user id that can be determined for the given operation source.",
             xref: { document: "cluster", section: "5.2.11.4.4" }
         }),
 
@@ -829,17 +828,17 @@ export const DoorLock = Cluster(
 
         Field({
             name: "UserIndex", id: 0x3, type: "uint16", conformance: "M", quality: "X",
-            details: "This field shall indicate the lock UserIndex associated with the change (if any). This shall be " +
-                "null if there is no specific user associated with the data operation. This shall be 0xFFFE if all " +
-                "users are affected (e.g. Clear Users).",
+            details: "This field shall indicate the lock UserIndex associated with the change (if any). This shall be null " +
+                "if there is no specific user associated with the data operation. This shall be 0xFFFE if all users " +
+                "are affected (e.g. Clear Users).",
             xref: { document: "cluster", section: "5.2.11.5.4" }
         }),
 
         Field({
             name: "FabricIndex", id: 0x4, type: "fabric-idx", conformance: "M", quality: "X",
             details: "This field shall indicate the fabric index of the fabric that performed the change (if any). This " +
-                "shall be null if there is no fabric that can be determined to have caused the change. This shall " +
-                "NOT be null if the operation source is \"Remote\".",
+                "shall be null if there is no fabric that can be determined to have caused the change. This shall NOT " +
+                "be null if the operation source is \"Remote\".",
             xref: { document: "cluster", section: "5.2.11.5.5" }
         }),
 
@@ -853,10 +852,10 @@ export const DoorLock = Cluster(
 
         Field({
             name: "DataIndex", id: 0x6, type: "uint16", conformance: "M", quality: "X",
-            details: "This field shall indicate the index of the specific item that was changed (e.g. schedule, PIN, " +
-                "RFID, etc.) in the list of items identified by LockDataType. This shall be null if the LockDataType " +
-                "does not correspond to a list that can be indexed into (e.g. ProgrammingUser). This shall be 0xFFFE " +
-                "if all indices are affected (e.g. ClearPINCode, ClearRFIDCode, ClearWeekDaySchedule, " +
+            details: "This field shall indicate the index of the specific item that was changed (e.g. schedule, PIN, RFID, " +
+                "etc.) in the list of items identified by LockDataType. This shall be null if the LockDataType does " +
+                "not correspond to a list that can be indexed into (e.g. ProgrammingUser). This shall be 0xFFFE if " +
+                "all indices are affected (e.g. ClearPINCode, ClearRFIDCode, ClearWeekDaySchedule, " +
                 "ClearYearDaySchedule, etc.).",
             xref: { document: "cluster", section: "5.2.11.5.7" }
         })
@@ -866,9 +865,9 @@ export const DoorLock = Cluster(
         {
             name: "LockDoor", id: 0x0, access: "O T", conformance: "M", direction: "request",
             response: "status",
-            details: "This command causes the lock device to lock the door. This command includes an optional code for " +
-                "the lock. The door lock may require a PIN depending on the value of the " +
-                "RequirePINForRemoteOperation attribute.",
+            details: "This command causes the lock device to lock the door. This command includes an optional code for the " +
+                "lock. The door lock may require a PIN depending on the value of the RequirePINForRemoteOperation " +
+                "attribute.",
             xref: { document: "cluster", section: "5.2.10.1" }
         },
 
@@ -881,8 +880,8 @@ export const DoorLock = Cluster(
                 "If the PINCode field is provided, the door lock shall verify PINCode before granting access " +
                 "regardless of the value of RequirePINForRemoteOperation attribute." +
                 "\n" +
-                "When the PINCode field is provided an invalid PIN will count towards the WrongCodeEntryLimit and " +
-                "the UserCodeTemporaryDisableTime will be triggered if the WrongCodeEntryLimit is exceeded. The lock " +
+                "When the PINCode field is provided an invalid PIN will count towards the WrongCodeEntryLimit and the " +
+                "UserCodeTemporaryDisableTime will be triggered if the WrongCodeEntryLimit is exceeded. The lock " +
                 "shall ignore any attempts to lock/unlock the door until the UserCodeTemporaryDisableTime expires.",
 
             xref: { document: "cluster", section: "5.2.10.1.1" }
@@ -925,8 +924,8 @@ export const DoorLock = Cluster(
             details: "This command causes the lock device to unlock the door with a timeout parameter. After the time in " +
                 "seconds specified in the timeout field, the lock device will relock itself automatically. This " +
                 "timeout parameter is only temporary for this message transition and overrides the default relock " +
-                "time as specified in the AutoRelockTime attribute. If the door lock device is not capable of or " +
-                "does not want to support temporary Relock Timeout, it SHOULD NOT support this optional command.",
+                "time as specified in the AutoRelockTime attribute. If the door lock device is not capable of or does " +
+                "not want to support temporary Relock Timeout, it SHOULD NOT support this optional command.",
             xref: { document: "cluster", section: "5.2.10.3" }
         },
 
@@ -1401,8 +1400,8 @@ export const DoorLock = Cluster(
             name: "LocalEndTime", id: 0x3, type: "epoch-s", conformance: "O",
             details: "This field shall indicate the ending time for the Year Day schedule in Epoch Time in Seconds with " +
                 "local time offset based on the local timezone and DST offset on the day represented by the value. " +
-                "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set " +
-                "for the YearDayIndex and UserIndex provided.",
+                "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set for " +
+                "the YearDayIndex and UserIndex provided.",
             xref: { document: "cluster", section: "5.2.10.18.5" }
         })
     ),
@@ -1461,9 +1460,9 @@ export const DoorLock = Cluster(
 
         Field({
             name: "LocalEndTime", id: 0x2, type: "epoch-s", conformance: "M",
-            details: "This field shall indicate the ending time for the Holiday Day schedule in Epoch Time in Seconds " +
-                "with local time offset based on the local timezone and DST offset on the day represented by the " +
-                "value. LocalEndTime shall be greater than LocalStartTime.",
+            details: "This field shall indicate the ending time for the Holiday Day schedule in Epoch Time in Seconds with " +
+                "local time offset based on the local timezone and DST offset on the day represented by the value. " +
+                "LocalEndTime shall be greater than LocalStartTime.",
             xref: { document: "cluster", section: "5.2.10.20.3" }
         }),
 
@@ -1534,8 +1533,8 @@ export const DoorLock = Cluster(
             name: "LocalEndTime", id: 0x3, type: "epoch-s", conformance: "O", quality: "X",
             details: "This field shall indicate the ending time for the Holiday schedule in Epoch Time in Seconds with " +
                 "local time offset based on the local timezone and DST offset on the day represented by the value. " +
-                "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set " +
-                "for the HolidayIndex provided.",
+                "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set for " +
+                "the HolidayIndex provided.",
             xref: { document: "cluster", section: "5.2.10.22.4" }
         }),
 
@@ -1678,8 +1677,8 @@ export const DoorLock = Cluster(
                 "If the requested User ID is valid and the Code doesn’t exist, Get RFID Code Response shall have the " +
                 "following format:" +
                 "\n" +
-                "User ID = requested User ID UserStatus = 0 (available) UserType = 0xFF (not supported) RFID Code = " +
-                "0 (zero length)" +
+                "User ID = requested User ID UserStatus = 0 (available) UserType = 0xFF (not supported) RFID Code = 0 " +
+                "(zero length)" +
                 "\n" +
                 "If requested User ID is invalid, send Default Response with an error status. The error status shall " +
                 "be equal to CONSTRAINT_ERROR when User_ID is less than the max number of users supported, and " +
@@ -1747,8 +1746,8 @@ export const DoorLock = Cluster(
                 "\n" +
                 "  • OCCUPIED, if OperationType is Add and UserIndex points to an occupied slot." +
                 "\n" +
-                "  • INVALID_COMMAND, if one or more fields violate constraints or are invalid or if OperationType " +
-                "    is Modify and UserIndex points to an available slot.",
+                "  • INVALID_COMMAND, if one or more fields violate constraints or are invalid or if OperationType is " +
+                "    Modify and UserIndex points to an available slot.",
 
             xref: { document: "cluster", section: "5.2.10.32" }
         },
@@ -1770,8 +1769,8 @@ export const DoorLock = Cluster(
         Field({
             name: "UserName", id: 0x2, type: "string", conformance: "M", constraint: "max 10", quality: "X",
 
-            details: "This field shall contain a string to use as a human readable identifier for the user. If UserName " +
-                "is null then:" +
+            details: "This field shall contain a string to use as a human readable identifier for the user. If UserName is " +
+                "null then:" +
                 "\n" +
                 "  • If the OperationType is Add, the UserName in the resulting user record shall be set to an empty " +
                 "    string." +
@@ -1810,8 +1809,8 @@ export const DoorLock = Cluster(
             details: "This field shall indicate the UserStatus to assign to this user when created or modified. If " +
                 "UserStatus is null then:" +
                 "\n" +
-                "  • If the OperationType is Add, the UserStatus in the resulting user record shall be set to " +
-                "    default value specified above." +
+                "  • If the OperationType is Add, the UserStatus in the resulting user record shall be set to default " +
+                "    value specified above." +
                 "\n" +
                 "  • If the OperationType is Modify, the UserStatus in the user record shall NOT be changed from the " +
                 "    current value." +
@@ -1890,9 +1889,9 @@ export const DoorLock = Cluster(
             name: "GetUserResponse", id: 0x1c, conformance: "USR", direction: "response",
             details: "Returns the user for the specified UserIndex." +
                 "\n" +
-                "If the requested UserIndex is valid and the UserStatus is Available for the requested UserIndex " +
-                "then UserName, UserUniqueID, UserStatus, UserType, CredentialRule, Credentials, CreatorFabricIndex, " +
-                "and LastModifiedFabricIndex shall all be null in the response.",
+                "If the requested UserIndex is valid and the UserStatus is Available for the requested UserIndex then " +
+                "UserName, UserUniqueID, UserStatus, UserType, CredentialRule, Credentials, CreatorFabricIndex, and " +
+                "LastModifiedFabricIndex shall all be null in the response.",
             xref: { document: "cluster", section: "5.2.10.34" }
         },
 
@@ -1946,8 +1945,8 @@ export const DoorLock = Cluster(
             name: "CreatorFabricIndex", id: 0x7, type: "fabric-idx", conformance: "M", quality: "X",
             details: "This field shall indicate the user’s creator fabric index. CreatorFabricIndex shall be null if " +
                 "UserStatus is set to Available or when the creator fabric cannot be determined (for example, when " +
-                "user was created outside the Interaction Model) and shall NOT be null otherwise. This value shall " +
-                "be set to 0 if the original creator fabric was deleted.",
+                "user was created outside the Interaction Model) and shall NOT be null otherwise. This value shall be " +
+                "set to 0 if the original creator fabric was deleted.",
             xref: { document: "cluster", section: "5.2.10.34.8" }
         }),
 
@@ -1955,8 +1954,8 @@ export const DoorLock = Cluster(
             name: "LastModifiedFabricIndex", id: 0x8, type: "fabric-idx", conformance: "M", quality: "X",
             details: "This field shall indicate the user’s last modifier fabric index. LastModifiedFabricIndex shall be " +
                 "null if UserStatus is set to Available or when the modifier fabric cannot be determined (for " +
-                "example, when user was modified outside the Interaction Model) and shall NOT be null otherwise. " +
-                "This value shall be set to 0 if the last modifier fabric was deleted.",
+                "example, when user was modified outside the Interaction Model) and shall NOT be null otherwise. This " +
+                "value shall be set to 0 if the last modifier fabric was deleted.",
             xref: { document: "cluster", section: "5.2.10.34.9" }
         }),
 
@@ -2000,8 +1999,8 @@ export const DoorLock = Cluster(
         {
             name: "SetCredential", id: 0x22, access: "A T", conformance: "USR", direction: "request",
             response: "SetCredentialResponse",
-            details: "Set a credential (e.g. PIN, RFID, Fingerprint, etc.) into the lock for a new user, existing user, " +
-                "or ProgrammingUser." +
+            details: "Set a credential (e.g. PIN, RFID, Fingerprint, etc.) into the lock for a new user, existing user, or " +
+                "ProgrammingUser." +
                 "\n" +
                 "Fields used for different use cases:",
             xref: { document: "cluster", section: "5.2.10.36" }
@@ -2023,9 +2022,9 @@ export const DoorLock = Cluster(
 
         Field({
             name: "CredentialData", id: 0x2, type: "octstr", conformance: "M", constraint: "desc",
-            details: "This field shall indicate the credential data to set for the credential being added or modified. " +
-                "The length of the credential data shall conform to the limits of the CredentialType specified in " +
-                "the Credential structure otherwise an INVALID_COMMAND status shall be returned in the " +
+            details: "This field shall indicate the credential data to set for the credential being added or modified. The " +
+                "length of the credential data shall conform to the limits of the CredentialType specified in the " +
+                "Credential structure otherwise an INVALID_COMMAND status shall be returned in the " +
                 "SetCredentialResponse command.",
             xref: { document: "cluster", section: "5.2.10.36.3" }
         }),
@@ -2033,9 +2032,9 @@ export const DoorLock = Cluster(
         Field({
             name: "UserIndex", id: 0x3, type: "uint16", conformance: "M",
             constraint: "1 to numberOfTotalUsersSupported", quality: "X",
-            details: "This field shall indicate the user index to the user record that corresponds to the credential " +
-                "being added or modified. This shall be null if OperationType is add and a new credential and user " +
-                "is being added at the same time.",
+            details: "This field shall indicate the user index to the user record that corresponds to the credential being " +
+                "added or modified. This shall be null if OperationType is add and a new credential and user is being " +
+                "added at the same time.",
             xref: { document: "cluster", section: "5.2.10.36.4" }
         }),
 
@@ -2110,8 +2109,8 @@ export const DoorLock = Cluster(
             details: "This field shall indicate the user index that was created with the new credential. If the status " +
                 "being returned is not success then this shall be null. This shall be null if OperationType was " +
                 "Modify; if the OperationType was Add and a new User was created this shall NOT be null and shall " +
-                "provide the UserIndex created. If the OperationType was Add and an existing User was associated " +
-                "with the new credential then this shall be null.",
+                "provide the UserIndex created. If the OperationType was Add and an existing User was associated with " +
+                "the new credential then this shall be null.",
             xref: { document: "cluster", section: "5.2.10.37.2" }
         }),
 
@@ -2137,8 +2136,8 @@ export const DoorLock = Cluster(
             details: "Retrieve the status of a particular credential (e.g. PIN, RFID, Fingerprint, etc.) by index." +
                 "\n" +
                 "An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, " +
-                "etc.) as needed otherwise the GetCredentialStatusResponse command shall be sent implying a status " +
-                "of SUCCESS.",
+                "etc.) as needed otherwise the GetCredentialStatusResponse command shall be sent implying a status of " +
+                "SUCCESS.",
             xref: { document: "cluster", section: "5.2.10.38" }
         },
 
@@ -2159,8 +2158,8 @@ export const DoorLock = Cluster(
 
         Field({
             name: "CredentialExists", id: 0x0, type: "bool", conformance: "M",
-            details: "This field shall indicate if the requested credential type and index exists and is populated for " +
-                "the requested user index.",
+            details: "This field shall indicate if the requested credential type and index exists and is populated for the " +
+                "requested user index.",
             xref: { document: "cluster", section: "5.2.10.39.1" }
         }),
 
@@ -2176,18 +2175,18 @@ export const DoorLock = Cluster(
 
         Field({
             name: "CreatorFabricIndex", id: 0x2, type: "fabric-idx", conformance: "M", quality: "X",
-            details: "This field shall indicate the credential’s creator fabric index. CreatorFabricIndex shall be null " +
-                "if CredentialExists is set to False or when the creator fabric cannot be determined (for example, " +
-                "when credential was created outside the Interaction Model) and shall NOT be null otherwise. This " +
-                "value shall be set to 0 if the original creator fabric was deleted.",
+            details: "This field shall indicate the credential’s creator fabric index. CreatorFabricIndex shall be null if " +
+                "CredentialExists is set to False or when the creator fabric cannot be determined (for example, when " +
+                "credential was created outside the Interaction Model) and shall NOT be null otherwise. This value " +
+                "shall be set to 0 if the original creator fabric was deleted.",
             xref: { document: "cluster", section: "5.2.10.39.3" }
         }),
 
         Field({
             name: "LastModifiedFabricIndex", id: 0x3, type: "fabric-idx", conformance: "M", quality: "X",
-            details: "This field shall indicate the credential’s last modifier fabric index. LastModifiedFabricIndex " +
-                "shall be null if CredentialExists is set to False or when the modifier fabric cannot be determined " +
-                "(for example, when credential was modified outside the Interaction Model) and shall NOT be null " +
+            details: "This field shall indicate the credential’s last modifier fabric index. LastModifiedFabricIndex shall " +
+                "be null if CredentialExists is set to False or when the modifier fabric cannot be determined (for " +
+                "example, when credential was modified outside the Interaction Model) and shall NOT be null " +
                 "otherwise. This value shall be set to 0 if the last modifier fabric was deleted.",
             xref: { document: "cluster", section: "5.2.10.39.4" }
         }),
@@ -2196,10 +2195,10 @@ export const DoorLock = Cluster(
             name: "NextCredentialIndex", id: 0x4, type: "uint16", conformance: "O", constraint: "desc",
             quality: "X",
 
-            details: "This field shall indicate the next occupied index in the database for the credential type " +
-                "requested, which is useful for quickly identifying occupied credential slots in the database. This " +
-                "shall NOT be null if there is at least one occupied entry after the requested credential index in " +
-                "the corresponding" +
+            details: "This field shall indicate the next occupied index in the database for the credential type requested, " +
+                "which is useful for quickly identifying occupied credential slots in the database. This shall NOT be " +
+                "null if there is at least one occupied entry after the requested credential index in the " +
+                "corresponding" +
                 "\n" +
                 "database and shall be null if there are no more occupied entries. The NextCredentialIndex reported " +
                 "shall NOT exceed the maximum number of credentials for a particular credential type.",
@@ -2239,10 +2238,10 @@ export const DoorLock = Cluster(
                 "\n" +
                 "Fields used for different use cases:" +
                 "\n" +
-                "For each credential cleared whose user doesn’t have another valid credential, the corresponding " +
-                "user record shall be reset back to default values and its UserStatus value shall be set to " +
-                "Available and UserType value shall be set to UnrestrictedUser and all schedules shall be cleared. " +
-                "In this case a LockUserChange event shall be generated for the user being cleared." +
+                "For each credential cleared whose user doesn’t have another valid credential, the corresponding user " +
+                "record shall be reset back to default values and its UserStatus value shall be set to Available and " +
+                "UserType value shall be set to UnrestrictedUser and all schedules shall be cleared. In this case a " +
+                "LockUserChange event shall be generated for the user being cleared." +
                 "\n" +
                 "Return status shall be one of the following values:",
 
@@ -2253,8 +2252,8 @@ export const DoorLock = Cluster(
             name: "Credential", id: 0x0, type: "CredentialStruct", conformance: "M", constraint: "desc",
             quality: "X",
             details: "This field shall contain a credential structure that contains the CredentialTypeEnum and the " +
-                "credential index (0xFFFE for all credentials or 0 if not applicable) to clear. This shall be null " +
-                "if clearing all credential types otherwise it shall NOT be null.",
+                "credential index (0xFFFE for all credentials or 0 if not applicable) to clear. This shall be null if " +
+                "clearing all credential types otherwise it shall NOT be null.",
             xref: { document: "cluster", section: "5.2.10.40.1" }
         })
     ),
@@ -2355,12 +2354,23 @@ export const DoorLock = Cluster(
     ),
 
     Datatype(
-        { name: "OperatingModesBitmap", type: "map16", xref: { document: "cluster", section: "5.2.6.3" } },
-        Field({ name: "Normal", constraint: "0", description: "Normal operation mode" }),
-        Field({ name: "Vacation", constraint: "1", description: "Vacation operation mode" }),
-        Field({ name: "Privacy", constraint: "2", description: "Privacy operation mode" }),
-        Field({ name: "NoRemoteLockUnlock", constraint: "3", description: "No remote lock and unlock operation mode" }),
-        Field({ name: "Passage", constraint: "4", description: "Passage operation mode" })
+        {
+            name: "OperatingModesBitmap", type: "map16",
+            description: "For the OperatingModesBitmap, a bit SET indicates that the operating mode IS NOT supported. A bit CLEAR indicates that the operating mode IS supported. This is the inverse of most bitmaps in this specification, and it is RECOMMENDED that clients carefully take this into consideration.",
+            xref: { document: "cluster", section: "5.2.6.3" }
+        },
+        Field({ name: "Normal", constraint: "0", description: "Normal operation mode is NOT supported" }),
+        Field({ name: "Vacation", constraint: "1", description: "Vacation operation mode is NOT supported" }),
+        Field({ name: "Privacy", constraint: "2", description: "Privacy operation mode is NOT supported" }),
+        Field({
+            name: "NoRemoteLockUnlock", constraint: "3",
+            description: "No remote lock and unlock operation mode is NOT supported"
+        }),
+        Field({ name: "Passage", constraint: "4", description: "Passage operation mode is NOT supported" }),
+        Field({
+            name: "AlwaysSet", conformance: "M", constraint: "5 to 16",
+            description: "This needs always be set because this bitmap is inverse.!"
+        })
     ),
 
     Datatype(
@@ -2584,14 +2594,14 @@ export const DoorLock = Cluster(
                 "AliroCredentialIssuerKey." +
                 "\n" +
                 "When a new credential of type AliroEvictableEndpointKey is added in this manner, it shall be " +
-                "associated with the same user record as the AliroCredentialIssuerKey credential that allowed the " +
-                "new credential to be added." +
+                "associated with the same user record as the AliroCredentialIssuerKey credential that allowed the new " +
+                "credential to be added." +
                 "\n" +
                 "If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. " +
                 "either the NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has " +
-                "been reached) but there exist credentials of type AliroEvictableEndpointKey associated with the " +
-                "user record, the server shall remove one of those credentials using the same procedure it would " +
-                "follow for the ClearCredential command before adding the new credential." +
+                "been reached) but there exist credentials of type AliroEvictableEndpointKey associated with the user " +
+                "record, the server shall remove one of those credentials using the same procedure it would follow " +
+                "for the ClearCredential command before adding the new credential." +
                 "\n" +
                 "If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. " +
                 "either the NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has " +
@@ -2604,8 +2614,8 @@ export const DoorLock = Cluster(
                 "If the step-up process results in the lock state changing (e.g. locking or unlocking), the " +
                 "credential associated with those changes in the LockOperation events shall be the newly provisioned " +
                 "AliroEvictableEndpointKey credential if one was created. If no new AliroEvictableEndpointKey " +
-                "credential was created, the credential associated with the changes in the LockOperation events " +
-                "shall be the AliroCredentialIssuerKey credential used for the step-up.",
+                "credential was created, the credential associated with the changes in the LockOperation events shall " +
+                "be the AliroCredentialIssuerKey credential used for the step-up.",
 
             xref: { document: "cluster", section: "5.2.6.9.1" }
         }),
@@ -2780,9 +2790,9 @@ export const DoorLock = Cluster(
                 "NOTE" +
                 "\n" +
                 "For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, " +
-                "and Unlock with Timeout commands with a response status Failure and not take the action requested " +
-                "by those commands. The door lock shall NOT disable the radio or otherwise unbind or leave the " +
-                "network. It shall still respond to all other commands and requests.",
+                "and Unlock with Timeout commands with a response status Failure and not take the action requested by " +
+                "those commands. The door lock shall NOT disable the radio or otherwise unbind or leave the network. " +
+                "It shall still respond to all other commands and requests.",
 
             xref: { document: "cluster", section: "5.2.6.15" }
         },
@@ -2801,8 +2811,8 @@ export const DoorLock = Cluster(
         Field({
             name: "Privacy", id: 0x2, conformance: "O",
             details: "This mode is only possible if the door is locked. Manual unlocking changes the mode to Normal " +
-                "operating mode. All external interaction with the door lock is disabled. This mode is intended to " +
-                "be used so that users, presumably inside the property, will have control over the entrance.",
+                "operating mode. All external interaction with the door lock is disabled. This mode is intended to be " +
+                "used so that users, presumably inside the property, will have control over the entrance.",
             xref: { document: "cluster", section: "5.2.6.15.3" }
         }),
 
@@ -2894,16 +2904,16 @@ export const DoorLock = Cluster(
         Field({
             name: "YearDayScheduleUser", id: 0x1, conformance: "O", description: "The user ID type is schedule",
 
-            details: "This value shall indicate the user has the ability to open lock within a specific time period " +
-                "(e.g., guest)." +
+            details: "This value shall indicate the user has the ability to open lock within a specific time period (e.g., " +
+                "guest)." +
                 "\n" +
                 "When UserType is set to YearDayScheduleUser, user access shall be restricted as follows:" +
                 "\n" +
                 "  • If no YearDaySchedules are set for the user, then access shall be denied" +
                 "\n" +
-                "  • If one or more YearDaySchedules are set, user access shall be granted if and only if the " +
-                "    current time falls within at least one of the YearDaySchedules. If current time is not known, " +
-                "    user access shall NOT be granted.",
+                "  • If one or more YearDaySchedules are set, user access shall be granted if and only if the current " +
+                "    time falls within at least one of the YearDaySchedules. If current time is not known, user " +
+                "    access shall NOT be granted.",
 
             xref: { document: "cluster", section: "5.2.6.18.2" }
         }),
@@ -2911,16 +2921,16 @@ export const DoorLock = Cluster(
         Field({
             name: "WeekDayScheduleUser", id: 0x2, conformance: "O", description: "The user ID type is schedule",
 
-            details: "This value shall indicate the user has the ability to open lock based on specific time period " +
-                "within a reoccurring weekly schedule (e.g., cleaning worker)." +
+            details: "This value shall indicate the user has the ability to open lock based on specific time period within " +
+                "a reoccurring weekly schedule (e.g., cleaning worker)." +
                 "\n" +
                 "When UserType is set to WeekDayScheduleUser, user access shall be restricted as follows:" +
                 "\n" +
                 "  • If no WeekDaySchedules are set for the user, then access shall be denied" +
                 "\n" +
-                "  • If one or more WeekDaySchedules are set, user access shall be granted if and only if the " +
-                "    current time falls within at least one of the WeekDaySchedules. If current time is not known, " +
-                "    user access shall NOT be granted.",
+                "  • If one or more WeekDaySchedules are set, user access shall be granted if and only if the current " +
+                "    time falls within at least one of the WeekDaySchedules. If current time is not known, user " +
+                "    access shall NOT be granted.",
 
             xref: { document: "cluster", section: "5.2.6.18.3" }
         }),
@@ -2977,11 +2987,11 @@ export const DoorLock = Cluster(
                 "\n" +
                 "  • If no WeekDaySchedules and no YearDaySchedules are set for the user, then access shall be denied" +
                 "\n" +
-                "  • If one or more WeekDaySchedules are set, but no YearDaySchedules are set for the user, then " +
-                "    user access shall be equivalent to the WeekDayScheduleUser UserType" +
+                "  • If one or more WeekDaySchedules are set, but no YearDaySchedules are set for the user, then user " +
+                "    access shall be equivalent to the WeekDayScheduleUser UserType" +
                 "\n" +
-                "  • If one or more YearDaySchedules are set, but no WeekDaySchedules are set for the user, then " +
-                "    user access shall be equivalent to the YearDayScheduleUser UserType" +
+                "  • If one or more YearDaySchedules are set, but no WeekDaySchedules are set for the user, then user " +
+                "    access shall be equivalent to the YearDayScheduleUser UserType" +
                 "\n" +
                 "  • If one or WeekDaySchedules are set AND one or more YearDaySchedules are set, then user access " +
                 "    shall be granted if and only if the current time falls within at least one of the " +

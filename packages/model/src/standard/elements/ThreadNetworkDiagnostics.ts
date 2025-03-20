@@ -96,16 +96,16 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "MeshLocalPrefix", id: 0x5, type: "ipv6pre", access: "R V", conformance: "M", quality: "X",
         details: "The MeshLocalPrefix attribute shall indicate the mesh-local IPv6 prefix for the Thread network that " +
-            "the Node has been configured to join to. A value of null shall indicate that the Thread interface " +
-            "is not currently configured or operational.",
+            "the Node has been configured to join to. A value of null shall indicate that the Thread interface is " +
+            "not currently configured or operational.",
         xref: { document: "core", section: "11.14.6.6" }
     }),
 
     Attribute({
         name: "OverrunCount", id: 0x6, type: "uint64", access: "R V", conformance: "ERRCNT", default: 0,
         quality: "C",
-        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or " +
-            "egress, due to lack of buffer memory to retain all packets on the ethernet network interface. The " +
+        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, " +
+            "due to lack of buffer memory to retain all packets on the ethernet network interface. The " +
             "OverrunCount attribute shall be reset to 0 upon a reboot of the Node.",
         xref: { document: "core", section: "11.14.6.7" }
     }),
@@ -150,8 +150,8 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "DataVersion", id: 0xb, type: "uint16", access: "R V", conformance: "M",
         constraint: "max 255", quality: "X",
-        details: "The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. " +
-            "Null if not attached to a Thread network.",
+        details: "The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. Null " +
+            "if not attached to a Thread network.",
         xref: { document: "core", section: "11.14.6.12" }
     }),
 
@@ -211,18 +211,18 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "AttachAttemptCount", id: 0x12, type: "uint16", access: "R V", conformance: "[MLECNT]",
         default: 0, quality: "C",
-        details: "The AttachAttemptCount attribute shall indicate the number of attempts that have been made to " +
-            "attach to a Thread network while the Node was detached from all Thread networks. This value shall " +
-            "only be reset upon a Node reboot.",
+        details: "The AttachAttemptCount attribute shall indicate the number of attempts that have been made to attach " +
+            "to a Thread network while the Node was detached from all Thread networks. This value shall only be " +
+            "reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.19" }
     }),
 
     Attribute({
         name: "PartitionIdChangeCount", id: 0x13, type: "uint16", access: "R V", conformance: "[MLECNT]",
         default: 0, quality: "C",
-        details: "The PartitionIdChangeCount attribute shall indicate the number of times that the Thread network " +
-            "that the Node is connected to has changed its Partition ID. This value shall only be reset upon a " +
-            "Node reboot.",
+        details: "The PartitionIdChangeCount attribute shall indicate the number of times that the Thread network that " +
+            "the Node is connected to has changed its Partition ID. This value shall only be reset upon a Node " +
+            "reboot.",
         xref: { document: "core", section: "11.14.6.20" }
     }),
 
@@ -278,18 +278,17 @@ export const ThreadNetworkDiagnostics = Cluster(
         default: 0, quality: "C",
         details: "The TxAckRequestedCount attribute shall indicate the total number of unique MAC frame transmission " +
             "requests with requested acknowledgment. The TxAckRequestedCount attribute shall only be incremented " +
-            "by 1 for each MAC transmission request with requested acknowledgment regardless of the amount of " +
-            "CCA failures, CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node " +
-            "reboot.",
+            "by 1 for each MAC transmission request with requested acknowledgment regardless of the amount of CCA " +
+            "failures, CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.26" }
     }),
 
     Attribute({
         name: "TxAckedCount", id: 0x1a, type: "uint32", access: "R V", conformance: "[MACCNT]", default: 0,
         quality: "C",
-        details: "The TxAckedCount attribute shall indicate the total number of unique MAC frame transmission " +
-            "requests that were acked. The TxAckedCount attribute shall only be incremented by 1 for each MAC " +
-            "transmission request that is acked regardless of the amount of CCA failures, CSMA-CA attempts, or " +
+        details: "The TxAckedCount attribute shall indicate the total number of unique MAC frame transmission requests " +
+            "that were acked. The TxAckedCount attribute shall only be incremented by 1 for each MAC transmission " +
+            "request that is acked regardless of the amount of CCA failures, CSMA-CA attempts, or " +
             "retransmissions. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.27" }
     }),
@@ -310,8 +309,8 @@ export const ThreadNetworkDiagnostics = Cluster(
         quality: "C",
         details: "The TxDataCount attribute shall indicate the total number of unique MAC Data frame transmission " +
             "requests. The TxDataCount attribute shall only be incremented by 1 for each MAC Data frame " +
-            "transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or " +
-            "retransmissions. This value shall only be reset upon a Node reboot.",
+            "transmission request regardless of the amount of CCA failures, CSMA-CA attempts, or retransmissions. " +
+            "This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.29" }
     }),
 
@@ -339,18 +338,18 @@ export const ThreadNetworkDiagnostics = Cluster(
         default: 0, quality: "C",
         details: "The TxBeaconRequestCount attribute shall indicate the total number of unique MAC Beacon Request " +
             "frame transmission requests. The TxBeaconRequestCount attribute shall only be incremented by 1 for " +
-            "each MAC Beacon Request frame transmission request regardless of the amount of CCA failures, " +
-            "CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node reboot.",
+            "each MAC Beacon Request frame transmission request regardless of the amount of CCA failures, CSMA-CA " +
+            "attempts, or retransmissions. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.32" }
     }),
 
     Attribute({
         name: "TxOtherCount", id: 0x20, type: "uint32", access: "R V", conformance: "[MACCNT]", default: 0,
         quality: "C",
-        details: "The TxOtherCount attribute shall indicate the total number of unique MAC frame transmission " +
-            "requests that are not counted by any other attribute. The TxOtherCount attribute shall only be " +
-            "incremented by 1 for each MAC frame transmission request regardless of the amount of CCA failures, " +
-            "CSMA-CA attempts, or retransmissions. This value shall only be reset upon a Node reboot.",
+        details: "The TxOtherCount attribute shall indicate the total number of unique MAC frame transmission requests " +
+            "that are not counted by any other attribute. The TxOtherCount attribute shall only be incremented by " +
+            "1 for each MAC frame transmission request regardless of the amount of CCA failures, CSMA-CA " +
+            "attempts, or retransmissions. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.33" }
     }),
 
@@ -372,8 +371,8 @@ export const ThreadNetworkDiagnostics = Cluster(
             "\n" +
             "transmission packets that meet maximal retry limit for direct packets. The " +
             "TxDirectMaxRetryExpiryCount attribute shall only be incremented by 1 for each unique MAC " +
-            "transmission packets that meets the maximal retry limit for direct packets. This value shall only " +
-            "be reset upon a Node reboot.",
+            "transmission packets that meets the maximal retry limit for direct packets. This value shall only be " +
+            "reset upon a Node reboot.",
 
         xref: { document: "core", section: "11.14.6.35" }
     }),
@@ -420,8 +419,8 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "RxTotalCount", id: 0x27, type: "uint32", access: "R V", conformance: "[MACCNT]", default: 0,
         quality: "C",
-        details: "The RxTotalCount attribute shall indicate the total number of received unique MAC frames. This " +
-            "value shall only be reset upon a Node reboot.",
+        details: "The RxTotalCount attribute shall indicate the total number of received unique MAC frames. This value " +
+            "shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.40" }
     }),
 
@@ -495,8 +494,8 @@ export const ThreadNetworkDiagnostics = Cluster(
         name: "RxDestAddrFilteredCount", id: 0x30, type: "uint32", access: "R V", conformance: "[MACCNT]",
         default: 0, quality: "C",
         details: "The RxDestAddrFilteredCount attribute shall indicate the total number of received unique MAC frame " +
-            "requests that have been dropped as a result of a destination address check. This value shall only " +
-            "be reset upon a Node reboot.",
+            "requests that have been dropped as a result of a destination address check. This value shall only be " +
+            "reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.49" }
     }),
 
@@ -513,16 +512,16 @@ export const ThreadNetworkDiagnostics = Cluster(
         name: "RxErrNoFrameCount", id: 0x32, type: "uint32", access: "R V", conformance: "[MACCNT]",
         default: 0, quality: "C",
         details: "The RxErrNoFrameCount attribute shall indicate the total number of received unique MAC frame " +
-            "requests that have been dropped as a result of missing or malformed frame contents. This value " +
-            "shall only be reset upon a Node reboot.",
+            "requests that have been dropped as a result of missing or malformed frame contents. This value shall " +
+            "only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.51" }
     }),
 
     Attribute({
         name: "RxErrUnknownNeighborCount", id: 0x33, type: "uint32", access: "R V", conformance: "[MACCNT]",
         default: 0, quality: "C",
-        details: "The RxErrUnknownNeighborCount attribute shall indicate the total number of received unique MAC " +
-            "frame requests that have been dropped as a result of originating from an unknown neighbor" +
+        details: "The RxErrUnknownNeighborCount attribute shall indicate the total number of received unique MAC frame " +
+            "requests that have been dropped as a result of originating from an unknown neighbor" +
             "\n" +
             "device. This value shall only be reset upon a Node reboot.",
         xref: { document: "core", section: "11.14.6.52" }
@@ -595,11 +594,11 @@ export const ThreadNetworkDiagnostics = Cluster(
     Attribute({
         name: "ChannelPage0Mask", id: 0x3c, type: "octstr", access: "R V", conformance: "M",
         constraint: "4", quality: "X",
-        details: "The ChannelPage0Mask attribute indicates the channels within channel page 0, in the 2.4GHz ISM " +
-            "band. The channels are represented in most significant bit order, with bit value 1 meaning " +
-            "selected, bit value 0 meaning unselected. For example, the most significant bit of the left-most " +
-            "byte indicates channel 0. If channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. " +
-            "Null when there is no dataset configured.",
+        details: "The ChannelPage0Mask attribute indicates the channels within channel page 0, in the 2.4GHz ISM band. " +
+            "The channels are represented in most significant bit order, with bit value 1 meaning selected, bit " +
+            "value 0 meaning unselected. For example, the most significant bit of the left-most byte indicates " +
+            "channel 0. If channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. Null when there " +
+            "is no dataset configured.",
         xref: { document: "core", section: "11.14.6.61" }
     }),
 
@@ -643,8 +642,8 @@ export const ThreadNetworkDiagnostics = Cluster(
     Event(
         {
             name: "NetworkFaultChange", id: 0x1, access: "V", conformance: "O", priority: "info",
-            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently " +
-                "detected by the Node.",
+            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected " +
+                "by the Node.",
             xref: { document: "core", section: "11.14.8.1" }
         },
 
@@ -679,8 +678,8 @@ export const ThreadNetworkDiagnostics = Cluster(
             "\n" +
             "  • OverrunCount" +
             "\n" +
-            "This command has no associated data. Upon completion, this command shall send a status code set to " +
-            "a value of SUCCESS back to the initiator.",
+            "This command has no associated data. Upon completion, this command shall send a status code set to a " +
+            "value of SUCCESS back to the initiator.",
 
         xref: { document: "core", section: "11.14.7.1" }
     }),
@@ -800,8 +799,8 @@ export const ThreadNetworkDiagnostics = Cluster(
 
         Field({
             name: "RxOnWhenIdle", id: 0xa, type: "bool", conformance: "M",
-            details: "This field shall specify if the neighboring Node is capable of receiving frames while the Node is " +
-                "in an idle state.",
+            details: "This field shall specify if the neighboring Node is capable of receiving frames while the Node is in " +
+                "an idle state.",
             xref: { document: "core", section: "11.14.5.4.11" }
         }),
 
@@ -891,8 +890,8 @@ export const ThreadNetworkDiagnostics = Cluster(
 
         Field({
             name: "LinkEstablished", id: 0x9, type: "bool", conformance: "M",
-            details: "This field shall specify if a link has been established to the Node for which this route table " +
-                "entry corresponds.",
+            details: "This field shall specify if a link has been established to the Node for which this route table entry " +
+                "corresponds.",
             xref: { document: "core", section: "11.14.5.5.10" }
         })
     ),
@@ -902,8 +901,8 @@ export const ThreadNetworkDiagnostics = Cluster(
 
         Field({
             name: "RotationTime", id: 0x0, type: "uint16", conformance: "M",
-            details: "This field shall specify the interval of time, in hours, that Thread security keys are rotated. " +
-                "Null when there is no dataset configured.",
+            details: "This field shall specify the interval of time, in hours, that Thread security keys are rotated. Null " +
+                "when there is no dataset configured.",
             xref: { document: "core", section: "11.14.5.6.1" }
         }),
 

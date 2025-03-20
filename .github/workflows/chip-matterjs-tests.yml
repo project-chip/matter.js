@@ -17,8 +17,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  head-commit-message:
+    if: github.repository == 'project-chip/matter.js'
+    name: get head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      head-commit-message: ${{ steps.get_head_commit_message.outputs.headCommitMsg }}
+    steps:
+      - name: Get repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Print head git commit message
+        id: get_head_commit_message
+        run: echo "headCommitMsg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
+  # Find out what is needed to be done by this test workflow
+  tests-needed:
+    needs: [head-commit-message]
+    if: github.repository == 'project-chip/matter.js'
+    runs-on: ubuntu-latest
+    outputs:
+      controller-tests-required: ${{ steps.check-trigger.outputs.controller-tests-required }}
+
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || ((github.event_name == 'push' || github.event_name == 'pull_request') && contains(needs.head-commit-message.outputs.head-commit-message, '[execute-controllertests]') == true) }}
+        name: Controller tests required to run?
+        id: check-trigger
+        run: echo "controller-tests-required=true" >> $GITHUB_OUTPUT
+
   # If we need to do anything make sure that chip binaries are build and environment can be set up
   prepare-chip-build:
+    needs: [tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
@@ -32,8 +66,8 @@ jobs:
 
   matterjs-all-chip-apps:
     needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -68,7 +102,7 @@ jobs:
               --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_*,}" \
-              --target-skip-glob "{Test_TC_ACE_1_6,Test_TC_BDX_*,Test_TC_DEMM_2_1,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_DRLK_2_7,Test_TC_DRLK_2_8,Test_TC_EEVSEM_2_1,Test_TC_LVL_9_1,Test_TC_LWM_2_1,Test_TC_OO_2_7,Test_TC_SC_5_2,Test_TC_S_2_2,Test_TC_S_2_3,Test_TC_S_2_4,Test_TC_WIFINM_2_1}" \
+              --target-skip-glob "{Test_TC_BDX_*,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_DRLK_2_7,Test_TC_ACE_1_6,Test_TC_SC_5_2,Test_TC_S_2_3}" \
               run \
               --all-clusters-app ../bin/chip-all-clusters-app \
               --lock-app ../bin/chip-lock-app \
@@ -79,3 +113,11 @@ jobs:
               --rvc-app ../bin/chip-rvc-app \
               --network-manager-app ../bin/matter-network-manager-app \
             '
+      - name: Verify that Matter.js controller was used
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ls -la test_controller.log
+          if [ ! -f ./test_controller.log ]; then
+              exit 1
+          fi

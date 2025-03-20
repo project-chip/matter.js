@@ -36,8 +36,8 @@ export const LaundryWasherControls = Cluster(
 
         Field({
             name: "RINSE", conformance: "O.a+", constraint: "1", description: "Rinse",
-            details: "This feature indicates multiple rinse cycles are supported in at least one supported mode. Note " +
-                "that some modes may not support selection of the number of rinse cycles even if this feature is " +
+            details: "This feature indicates multiple rinse cycles are supported in at least one supported mode. Note that " +
+                "some modes may not support selection of the number of rinse cycles even if this feature is " +
                 "supported.",
             xref: { document: "cluster", section: "8.6.4.2" }
         })

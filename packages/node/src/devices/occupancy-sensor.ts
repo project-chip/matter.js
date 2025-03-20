@@ -21,8 +21,8 @@ import { Identity } from "#general";
  * An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting the occupancy
  * state in a designated area.
  *
- * OccupancySensorDevice requires OccupancySensing cluster but OccupancySensing is not added by default because you
- * must select the features your device supports. You can add manually using OccupancySensorDevice.with().
+ * OccupancySensorDevice requires OccupancySensing cluster but OccupancySensing is not added by default because you must
+ * select the features your device supports. You can add manually using OccupancySensorDevice.with().
  *
  * @see {@link MatterSpecification.v13.Device} § 7.3
  */

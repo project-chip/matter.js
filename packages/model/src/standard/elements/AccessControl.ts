@@ -26,8 +26,8 @@ export const AccessControl = Cluster(
             "Administer privilege level, such that only Nodes granted such privilege (hereafter termed " +
             "\"Administrators\") can manage the Access Control Cluster." +
             "\n" +
-            "The Access Control Cluster shall be present on the root node endpoint of each Node, and shall NOT " +
-            "be present on any other Endpoint of any Node.",
+            "The Access Control Cluster shall be present on the root node endpoint of each Node, and shall NOT be " +
+            "present on any other Endpoint of any Node.",
 
         xref: { document: "core", section: "9.10" }
     },
@@ -47,13 +47,12 @@ export const AccessControl = Cluster(
 
             details: "This feature is for a device that is managed by a service associated with the device vendor and " +
                 "which imposes default access restrictions upon each new fabric added to it. This could arise, for " +
-                "example, if the device is managed by a service provider under contract to an end-user, in such a " +
-                "way that the manager of the device does not unconditionally grant universal access to all of a " +
-                "device’s functionality, even for fabric administrators. For example, many Home Routers are managed " +
-                "by an Internet Service Provider (a service), and these services often have a policy that requires " +
-                "them to obtain user consent before certain administrative functions can be delegated to a third " +
-                "party (e.g., a fabric Administrator). These restrictions are expressed using an Access Restriction " +
-                "List (ARL)." +
+                "example, if the device is managed by a service provider under contract to an end-user, in such a way " +
+                "that the manager of the device does not unconditionally grant universal access to all of a device’s " +
+                "functionality, even for fabric administrators. For example, many Home Routers are managed by an " +
+                "Internet Service Provider (a service), and these services often have a policy that requires them to " +
+                "obtain user consent before certain administrative functions can be delegated to a third party (e.g., " +
+                "a fabric Administrator). These restrictions are expressed using an Access Restriction List (ARL)." +
                 "\n" +
                 "The purpose of this feature on the Access Control cluster is to indicate to a fabric Administrator " +
                 "that access by it to specific attributes, commands and/or events for specific clusters is currently " +
@@ -69,21 +68,21 @@ export const AccessControl = Cluster(
                 "\n" +
                 "Controllers and clients SHOULD incorporate generic handling of the ACCESS_RESTRICTED error code, " +
                 "when it appears in allowed contexts, in order to gracefully handle situations where this feature is " +
-                "encountered. Device vendors that adopt this feature SHOULD be judicious in its use given the risk " +
-                "of unexpected behavior in controllers and clients." +
+                "encountered. Device vendors that adopt this feature SHOULD be judicious in its use given the risk of " +
+                "unexpected behavior in controllers and clients." +
                 "\n" +
                 "For certification testing, a device that implements this feature shall provide a way for all " +
                 "restrictions to be removed." +
                 "\n" +
                 "The ARL attribute provides the set of restrictions currently applied to this fabric." +
                 "\n" +
-                "The ReviewFabricRestrictions command provides a way for the fabric Administrator to request that " +
-                "the server triggers a review of the current fabric restrictions, by involving external entities " +
-                "such as end-users, or other services associated with the manager of the device hosting the server. " +
-                "This review process may involve communication between external services and the user, and may take " +
-                "an unpredictable amount of time to complete since an end-user may need to visit some resources, " +
-                "such as a mobile application or web site. A FabricRestrictionReviewUpdate event will be generated " +
-                "by the device within a predictable time period of the ReviewFabricRestrictionsResponse (see " +
+                "The ReviewFabricRestrictions command provides a way for the fabric Administrator to request that the " +
+                "server triggers a review of the current fabric restrictions, by involving external entities such as " +
+                "end-users, or other services associated with the manager of the device hosting the server. This " +
+                "review process may involve communication between external services and the user, and may take an " +
+                "unpredictable amount of time to complete since an end-user may need to visit some resources, such as " +
+                "a mobile application or web site. A FabricRestrictionReviewUpdate event will be generated by the " +
+                "device within a predictable time period of the ReviewFabricRestrictionsResponse (see " +
                 "ReviewFabricRestrictions for specification of this time period), and this event can be correlated " +
                 "with the ReviewFabricRestrictionsResponse using a token provided in both. The device may provide " +
                 "instructions or a Redirect URL in the FabricRestrictionReviewUpdate event in order to help the user " +
@@ -94,8 +93,8 @@ export const AccessControl = Cluster(
                 "### Managed Device Feature Usage Restrictions" +
                 "\n" +
                 "Use of this feature shall be limited to the mandatory clusters of endpoints having a device type " +
-                "that explicitly permits its use in the Device Library Specification. As a reminder, the device " +
-                "types associated with an endpoint are listed in the Descriptor cluster of the endpoint." +
+                "that explicitly permits its use in the Device Library Specification. As a reminder, the device types " +
+                "associated with an endpoint are listed in the Descriptor cluster of the endpoint." +
                 "\n" +
                 "In addition, use of this feature shall NOT restrict the following clusters on any endpoint:" +
                 "\n" +
@@ -131,8 +130,8 @@ export const AccessControl = Cluster(
                 "fabric supported by the server." +
                 "\n" +
                 "Each Access Control Entry codifies a single grant of privilege on this Node, and is used by the " +
-                "Access Control Privilege Granting algorithm to determine if a subject has privilege to interact " +
-                "with targets on the Node.",
+                "Access Control Privilege Granting algorithm to determine if a subject has privilege to interact with " +
+                "targets on the Node.",
 
             xref: { document: "core", section: "9.10.6.3" }
         },
@@ -160,10 +159,10 @@ export const AccessControl = Cluster(
         details: "This attribute shall provide the minimum number of Subjects per entry that are supported by this " +
             "server." +
             "\n" +
-            "Since reducing this value over time may invalidate ACL entries already written, this value shall " +
-            "NOT decrease across time as software updates occur that could impact this value. If this is a " +
-            "concern for a given implementation, it is recommended to only use the minimum value required and " +
-            "avoid reporting a higher value than the required minimum.",
+            "Since reducing this value over time may invalidate ACL entries already written, this value shall NOT " +
+            "decrease across time as software updates occur that could impact this value. If this is a concern " +
+            "for a given implementation, it is recommended to only use the minimum value required and avoid " +
+            "reporting a higher value than the required minimum.",
 
         xref: { document: "core", section: "9.10.6.5" }
     }),
@@ -175,10 +174,10 @@ export const AccessControl = Cluster(
         details: "This attribute shall provide the minimum number of Targets per entry that are supported by this " +
             "server." +
             "\n" +
-            "Since reducing this value over time may invalidate ACL entries already written, this value shall " +
-            "NOT decrease across time as software updates occur that could impact this value. If this is a " +
-            "concern for a given implementation, it is recommended to only use the minimum value required and " +
-            "avoid reporting a higher value than the required minimum.",
+            "Since reducing this value over time may invalidate ACL entries already written, this value shall NOT " +
+            "decrease across time as software updates occur that could impact this value. If this is a concern " +
+            "for a given implementation, it is recommended to only use the minimum value required and avoid " +
+            "reporting a higher value than the required minimum.",
 
         xref: { document: "core", section: "9.10.6.6" }
     }),
@@ -187,13 +186,13 @@ export const AccessControl = Cluster(
         name: "AccessControlEntriesPerFabric", id: 0x4, type: "uint16", access: "R V", conformance: "M",
         constraint: "min 4", default: 4, quality: "F",
 
-        details: "This attribute shall provide the minimum number of ACL Entries per fabric that are supported by " +
-            "this server." +
+        details: "This attribute shall provide the minimum number of ACL Entries per fabric that are supported by this " +
+            "server." +
             "\n" +
-            "Since reducing this value over time may invalidate ACL entries already written, this value shall " +
-            "NOT decrease across time as software updates occur that could impact this value. If this is a " +
-            "concern for a given implementation, it is recommended to only use the minimum value required and " +
-            "avoid reporting a higher value than the required minimum.",
+            "Since reducing this value over time may invalidate ACL entries already written, this value shall NOT " +
+            "decrease across time as software updates occur that could impact this value. If this is a concern " +
+            "for a given implementation, it is recommended to only use the minimum value required and avoid " +
+            "reporting a higher value than the required minimum.",
 
         xref: { document: "core", section: "9.10.6.7" }
     }),
@@ -235,14 +234,14 @@ export const AccessControl = Cluster(
                 "fabric. In contrast, the CommissioningARL attribute indicates the accessing restrictions that apply " +
                 "when there is no accessing fabric, such as during commissioning." +
                 "\n" +
-                "The access restrictions are externally added/removed based on the particular relationship the " +
-                "device hosting this server has with external entities such as its owner, external service provider, " +
-                "or end-user." +
+                "The access restrictions are externally added/removed based on the particular relationship the device " +
+                "hosting this server has with external entities such as its owner, external service provider, or " +
+                "end-user." +
                 "\n" +
                 "Attempts to access data model elements described by an entry in the ARL attribute for the accessing " +
                 "fabric shall result in an error of ACCESS_RESTRICTED. See Access Control Model for more information " +
-                "about the features related to controlling access to a Node’s Endpoint Clusters (\"Targets\" " +
-                "hereafter) from other Nodes." +
+                "about the features related to controlling access to a Node’s Endpoint Clusters (\"Targets\" hereafter) " +
+                "from other Nodes." +
                 "\n" +
                 "See Section 9.10.4.2.1, “Managed Device Feature Usage Restrictions” for limitations on the use of " +
                 "access restrictions.",
@@ -386,8 +385,8 @@ export const AccessControl = Cluster(
 
         Field({
             name: "Token", id: 0x0, type: "uint64", access: "S", conformance: "M",
-            details: "This field shall indicate the Token that can be used to correlate a " +
-                "ReviewFabricRestrictionsResponse with a FabricRestrictionReviewUpdate event.",
+            details: "This field shall indicate the Token that can be used to correlate a ReviewFabricRestrictionsResponse " +
+                "with a FabricRestrictionReviewUpdate event.",
             xref: { document: "core", section: "9.10.9.3.1" }
         }),
 
@@ -429,21 +428,21 @@ export const AccessControl = Cluster(
                     "  • The device using this mechanism shall provide a service at the URL that can accept requests for " +
                     "    additional access and return responses indicating whether the requests were granted or denied." +
                     "\n" +
-                    "  • This URL will typically lead to a server which (e.g. by looking at the User-Agent) redirects " +
-                    "    the user to allow viewing, downloading, installing or using a manufacturer-provided means for " +
+                    "  • This URL will typically lead to a server which (e.g. by looking at the User-Agent) redirects the " +
+                    "    user to allow viewing, downloading, installing or using a manufacturer-provided means for " +
                     "    guiding the user through the process to review and approve or deny the request. The device " +
                     "    manufacturer may choose to use a constructed URL which is valid in a HTTP GET request (i.e. " +
                     "    dedicated for the product) such as, for example, https://domain.example/arl-app?vid=FFF1& " +
-                    "    pid=1234. If a client follows or launches the ARLRequestFlowUrl, it shall expand it as " +
-                    "    described in Section 9.10.9.3.4, “ARLRequestFlowUrl format”." +
+                    "    pid=1234. If a client follows or launches the ARLRequestFlowUrl, it shall expand it as described " +
+                    "    in Section 9.10.9.3.4, “ARLRequestFlowUrl format”." +
                     "\n" +
                     "  • A manufacturer contemplating using this flow should realize that" +
                     "\n" +
                     "    ◦ This flow typically requires internet access to access the URL, and access extension may fail " +
                     "      when internet connectivity is not available." +
                     "\n" +
-                    "    ◦ If the flow prefers to redirect the user to an app which is available on popular platforms, " +
-                    "      it SHOULD also provide a fallback option such as a web browser interface to ensure users can " +
+                    "    ◦ If the flow prefers to redirect the user to an app which is available on popular platforms, it " +
+                    "      SHOULD also provide a fallback option such as a web browser interface to ensure users can " +
                     "      complete access extension." +
                     "\n" +
                     "### ARLRequestFlowUrl format" +
@@ -462,8 +461,8 @@ export const AccessControl = Cluster(
                     "backUrl) placeholder\"." +
                     "\n" +
                     "  • Any key whose name begins with MT not mentioned in the previous bullets shall be reserved for " +
-                    "    future use by this specification. Manufacturers shall NOT include query keys starting with MT " +
-                    "    in the ARLRequestFlowUrl unless they are referenced by a version of this specification." +
+                    "    future use by this specification. Manufacturers shall NOT include query keys starting with MT in " +
+                    "    the ARLRequestFlowUrl unless they are referenced by a version of this specification." +
                     "\n" +
                     "Any other element in the ARLRequestFlowUrl query field not covered by the above rules, as well as " +
                     "the fragment field (if present), shall remain including the order of query key/value pairs present." +
@@ -483,10 +482,9 @@ export const AccessControl = Cluster(
                     "\n" +
                     "### CallbackUrl format for ARL Request Flow response" +
                     "\n" +
-                    "If a CallbackUrl field (i.e. MTcu=) query field placeholder is present in the ARLRequestFlowUrl, " +
-                    "the client may replace the placeholder value \"_\" in the ExpandedARLRequestFlowUrl with a URL that " +
-                    "the manufacturer flow can use to make a smooth return to the client when the ARL flow has " +
-                    "terminated." +
+                    "If a CallbackUrl field (i.e. MTcu=) query field placeholder is present in the ARLRequestFlowUrl, the " +
+                    "client may replace the placeholder value \"_\" in the ExpandedARLRequestFlowUrl with a URL that the " +
+                    "manufacturer flow can use to make a smooth return to the client when the ARL flow has terminated." +
                     "\n" +
                     "This URL field may contain a query component (see RFC 3986 section 3.4). If a query is present, it " +
                     "shall be composed of one or more key-value pairs:" +
@@ -515,14 +513,14 @@ export const AccessControl = Cluster(
                     "### Expansion of CallbackUrl by the manufacturer custom flow" +
                     "\n" +
                     "Once the CallbackUrl is obtained by the manufacturer flow, it may be expanded to form a final " +
-                    "ExpandedARLRequestCallbackUrl URL to be used by proceeding with the following substitution " +
-                    "algorithm on the provided CallbackUrl:" +
+                    "ExpandedARLRequestCallbackUrl URL to be used by proceeding with the following substitution algorithm " +
+                    "on the provided CallbackUrl:" +
                     "\n" +
                     "  • If key MTaer is present, the manufacturer custom flow having received the initial query " +
                     "    containing the CallbackUrl shall substitute the placeholder value \"_\" (i.e. in MTaer=_) in the " +
-                    "    CallbackUrl with the final status of the access extension request flow which shall be one of " +
-                    "    the following. Any value returned in the MTaer field not listed above shall be considered an " +
-                    "    error and shall be treated as GeneralFailure." +
+                    "    CallbackUrl with the final status of the access extension request flow which shall be one of the " +
+                    "    following. Any value returned in the MTaer field not listed above shall be considered an error " +
+                    "    and shall be treated as GeneralFailure." +
                     "\n" +
                     "    ◦ Success - The flow completed successfully and the ARL attribute was updated. The client may " +
                     "      now read the ARL attribute to determine the new access restrictions." +
@@ -537,8 +535,8 @@ export const AccessControl = Cluster(
                     "    ◦ NotFound - Access extension failed because the target fabric was not found." +
                     "\n" +
                     "A manufacturer custom flow having received an ExpandedARLRequestFlowUrl SHOULD attempt to open the " +
-                    "ExpandedARLRequestCallbackUrl, on completion of the request, if an ExpandedARLRequestCallbackUrl " +
-                    "was computed from the CallbackUrl and opening such a URL is supported." +
+                    "ExpandedARLRequestCallbackUrl, on completion of the request, if an ExpandedARLRequestCallbackUrl was " +
+                    "computed from the CallbackUrl and opening such a URL is supported." +
                     "\n" +
                     "Examples of ARLRequestFlowUrl URLs" +
                     "\n" +
@@ -603,15 +601,15 @@ export const AccessControl = Cluster(
                 "In response, a ReviewFabricRestrictionsResponse is sent which contains a token that can be used to " +
                 "correlate a review request with a FabricRestrictionReviewUpdate event." +
                 "\n" +
-                "Within 1 hour of the ReviewFabricRestrictionsResponse, the FabricRestrictionReviewUpdate event " +
-                "shall be generated, in order to indicate completion of the review and any additional steps required " +
-                "by the user for the review." +
+                "Within 1 hour of the ReviewFabricRestrictionsResponse, the FabricRestrictionReviewUpdate event shall " +
+                "be generated, in order to indicate completion of the review and any additional steps required by the " +
+                "user for the review." +
                 "\n" +
-                "A review may include obtaining consent from the user, which can take time. For example, the user " +
-                "may need to respond to an email or a push notification." +
+                "A review may include obtaining consent from the user, which can take time. For example, the user may " +
+                "need to respond to an email or a push notification." +
                 "\n" +
-                "The ARL attribute may change at any time due to actions taken by the user, or the service " +
-                "associated with the device vendor.",
+                "The ARL attribute may change at any time due to actions taken by the user, or the service associated " +
+                "with the device vendor.",
 
             xref: { document: "core", section: "9.10.8.1" }
         },
@@ -781,8 +779,8 @@ export const AccessControl = Cluster(
                     "\n" +
                     "Subject Semantics" +
                     "\n" +
-                    "An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node " +
-                    "that successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s " +
+                    "An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node that " +
+                    "successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s " +
                     "AuthMode is PASE." +
                     "\n" +
                     "The PASE AuthMode is reserved for future use (see Section 6.6.2.9, “Bootstrapping of the Access " +
@@ -855,8 +853,8 @@ export const AccessControl = Cluster(
                 "profile-specific tag encoded in fully-qualified form." +
                 "\n" +
                 "Administrators may iterate over this list of elements, and interpret selected elements at their " +
-                "discretion. The content of each element is not specified, but may be coordinated among " +
-                "manufacturers at their discretion.",
+                "discretion. The content of each element is not specified, but may be coordinated among manufacturers " +
+                "at their discretion.",
 
             xref: { document: "core", section: "9.10.5.7.1" }
         }),

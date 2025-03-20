@@ -9,9 +9,9 @@
 import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
 
 /**
- * The tags contained in this namespace may be used in any domain or context, to indicate an association with a
- * movement in a certain direction relative to the device. Note the difference with Chapter 9, Common Position Semantic
- * Tag Namespace.
+ * The tags contained in this namespace may be used in any domain or context, to indicate an association with a movement
+ * in a certain direction relative to the device. Note the difference with Chapter 9, Common Position Semantic Tag
+ * Namespace.
  *
  * @see {@link MatterSpecification.v13.Namespace} § 5
  */

@@ -148,8 +148,8 @@ export namespace ElectricalPowerMeasurement {
         measurementType: TlvField(0, TlvEnum<MeasurementType>()),
 
         /**
-         * This field shall be the smallest measured value for the associated measurement over either the period
-         * between StartTimestamp and EndTimestamp, or the period between StartSystime and EndSystime, or both.
+         * This field shall be the smallest measured value for the associated measurement over either the period between
+         * StartTimestamp and EndTimestamp, or the period between StartSystime and EndSystime, or both.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2.2
          */
@@ -166,8 +166,8 @@ export namespace ElectricalPowerMeasurement {
         /**
          * This field shall be the timestamp in UTC of the beginning of the measurement period.
          *
-         * If the server had not yet determined the time in UTC at or before the beginning of the measurement period,
-         * or does not have the capability of determining the time in UTC, this field shall be omitted.
+         * If the server had not yet determined the time in UTC at or before the beginning of the measurement period, or
+         * does not have the capability of determining the time in UTC, this field shall be omitted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2.4
          */
@@ -176,8 +176,8 @@ export namespace ElectricalPowerMeasurement {
         /**
          * This field shall be the timestamp in UTC of the end of the measurement period.
          *
-         * If the server had not yet determined the time in UTC at or before the beginning of the measurement period,
-         * or does not have the capability of determining the time in UTC, this field shall be omitted.
+         * If the server had not yet determined the time in UTC at or before the beginning of the measurement period, or
+         * does not have the capability of determining the time in UTC, this field shall be omitted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2.5
          */
@@ -195,8 +195,8 @@ export namespace ElectricalPowerMeasurement {
 
         /**
          * This field shall be the most recent timestamp in UTC of the value in the Max field. This field shall be
-         * greater than or equal to the value of the StartTimestamp field. This field shall be less than or equal to
-         * the value of the EndTimestamp field.
+         * greater than or equal to the value of the StartTimestamp field. This field shall be less than or equal to the
+         * value of the EndTimestamp field.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2.7
          */
@@ -205,8 +205,8 @@ export namespace ElectricalPowerMeasurement {
         /**
          * This field shall be the time since boot of the beginning of the measurement period.
          *
-         * If the server had determined the time in UTC at or before the start of the measurement period, this field
-         * may be omitted along with the EndSystime, MinSystime, and MaxSystime fields.
+         * If the server had determined the time in UTC at or before the start of the measurement period, this field may
+         * be omitted along with the EndSystime, MinSystime, and MaxSystime fields.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2.8
          */
@@ -522,8 +522,8 @@ export namespace ElectricalPowerMeasurement {
     export const PolyphasePowerComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This shall indicate the most recent NeutralCurrent reading in milliamps (mA). Typically this is a
-             * derived value, taking the magnitude of the vector sum of phase currents.
+             * This shall indicate the most recent NeutralCurrent reading in milliamps (mA). Typically this is a derived
+             * value, taking the magnitude of the vector sum of phase currents.
              *
              * If the neutral current cannot be measured or derived, a value of null shall be returned.
              *
@@ -819,8 +819,8 @@ export namespace ElectricalPowerMeasurement {
     /**
      * This cluster supports all ElectricalPowerMeasurement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { RvcOperationalStateInterface } from "./RvcOperationalStateInterface.js";
 
 /**
- * RvcOperationalStateBehavior is the base class for objects that support interaction with {@link
- * RvcOperationalState.Cluster}.
+ * RvcOperationalStateBehavior is the base class for objects that support interaction with
+ * {@link RvcOperationalState.Cluster}.
  */
 export const RvcOperationalStateBehavior = ClusterBehavior
     .withInterface<RvcOperationalStateInterface>()

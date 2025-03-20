@@ -24,8 +24,8 @@ export const WaterHeaterManagement = Cluster(
             "that it can be used with energy management." +
             "\n" +
             "Heating of hot water is one of the main energy uses in homes, and when coupled with the Energy " +
-            "Management cluster, it can help consumers save cost (e.g. using power at cheaper times or from " +
-            "local solar PV generation).",
+            "Management cluster, it can help consumers save cost (e.g. using power at cheaper times or from local " +
+            "solar PV generation).",
 
         xref: { document: "cluster", section: "9.5" }
     },
@@ -74,8 +74,8 @@ export const WaterHeaterManagement = Cluster(
             constraint: "min 0", default: 0,
 
             details: "Indicates the estimated heat energy needed to raise the water temperature to the target setpoint. " +
-                "This can be computed by taking the specific heat capacity of water (4182 J/kg °C) and by knowing " +
-                "the current temperature of the water, the tank volume and target temperature." +
+                "This can be computed by taking the specific heat capacity of water (4182 J/kg °C) and by knowing the " +
+                "current temperature of the water, the tank volume and target temperature." +
                 "\n" +
                 "For example, if the target temperature was 60°C, the current temperature was 20°C and the tank " +
                 "volume was 100L:" +
@@ -123,17 +123,17 @@ export const WaterHeaterManagement = Cluster(
                 "cooler layer of water below. For this reason cold water is fed in at the bottom of the tank and the " +
                 "hot water is drawn from the top." +
                 "\n" +
-                "Some water tanks might use multiple temperature probes to estimate the level of the hot water " +
-                "layer. A water heater with multiple temperature probes is likely to implement an algorithm to " +
-                "estimate the hot water tank percentage by taking into account the temperature values of each probe " +
-                "to determine the height of the hot water." +
+                "Some water tanks might use multiple temperature probes to estimate the level of the hot water layer. " +
+                "A water heater with multiple temperature probes is likely to implement an algorithm to estimate the " +
+                "hot water tank percentage by taking into account the temperature values of each probe to determine " +
+                "the height of the hot water." +
                 "\n" +
                 "However it might be possible with a single temperature probe to estimate how much hot water is left " +
                 "using a simpler algorithm:" +
                 "\n" +
                 "For example, if the target temperature was 60°C, the CurrentTemperature was 40°C from a single " +
-                "temperature probe measuring the average water temperature and the temperature of incoming cold " +
-                "water (COLD_WATER_TEMP) was assumed to be 20°C:" +
+                "temperature probe measuring the average water temperature and the temperature of incoming cold water " +
+                "(COLD_WATER_TEMP) was assumed to be 20°C:" +
                 "\n" +
                 "TankPercentage = int(((current temperature - COLD_WATER_TEMP) / (target temperature - " +
                 "COLD_WATER_TEMP)) * 100)" +
@@ -217,8 +217,8 @@ export const WaterHeaterManagement = Cluster(
         Field({
             name: "OneShot", id: 0x1, type: "bool", conformance: "[!TP], [TP].a-", default: false,
 
-            details: "This field shall indicate whether the boost state shall be automatically canceled once the hot " +
-                "water has reached either:" +
+            details: "This field shall indicate whether the boost state shall be automatically canceled once the hot water " +
+                "has reached either:" +
                 "\n" +
                 "  • the set point temperature (from the thermostat cluster)" +
                 "\n" +
@@ -264,13 +264,13 @@ export const WaterHeaterManagement = Cluster(
             name: "TargetReheat", id: 0x5, type: "percent", conformance: "[TP].a-",
             constraint: "max targetPercentage",
 
-            details: "This field shall indicate the percentage to which the hot water in the tank shall be allowed to " +
-                "fall before again beginning to reheat it." +
+            details: "This field shall indicate the percentage to which the hot water in the tank shall be allowed to fall " +
+                "before again beginning to reheat it." +
                 "\n" +
                 "For example if the TargetPercentage was 80%, and the TargetReheat was 40%, then after initial " +
-                "heating to 80% hot water, the tank may have hot water drawn off until only 40% hot water remains. " +
-                "At this point the heater will begin to heat back up to 80% of hot water. If this field and the " +
-                "OneShot field were both omitted, heating would begin again after any water draw which reduced the " +
+                "heating to 80% hot water, the tank may have hot water drawn off until only 40% hot water remains. At " +
+                "this point the heater will begin to heat back up to 80% of hot water. If this field and the OneShot " +
+                "field were both omitted, heating would begin again after any water draw which reduced the " +
                 "TankPercentage below 80%." +
                 "\n" +
                 "This field shall be less than or equal to the TargetPercentage field.",

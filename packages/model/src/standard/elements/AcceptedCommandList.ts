@@ -26,8 +26,8 @@ export const AcceptedCommandList = Attribute(
             "\n" +
             "response command shall be indicated in the GeneratedCommandList attribute." +
             "\n" +
-            "If any attribute on a server supports atomic writes, this attribute shall contain the command ID " +
-            "for AtomicRequest.",
+            "If any attribute on a server supports atomic writes, this attribute shall contain the command ID for " +
+            "AtomicRequest.",
 
         xref: { document: "core", section: "7.13.4" }
     },

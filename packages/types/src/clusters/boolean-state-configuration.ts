@@ -51,9 +51,8 @@ export namespace BooleanStateConfiguration {
          * AlarmSuppress (SPRS)
          *
          * This feature shall indicate that the device is able to suppress the supported alarm modes, when the user
-         * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become
-         * aware that the sensor is triggered, but it is no longer desired to have the alarm modes active on the
-         * device, e.g.:
+         * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become aware
+         * that the sensor is triggered, but it is no longer desired to have the alarm modes active on the device, e.g.:
          *
          *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting the
          *     triggering cause.
@@ -64,8 +63,8 @@ export namespace BooleanStateConfiguration {
          * Acknowledge of alarms will for the remainder of this cluster be referred to as suppress.
          *
          * A suppressed alarm is still considered active and will remain so unless it is actively disabled or the
-         * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to
-         * and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not impact
+         * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to and
+         * is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not impact
          * alarm reporting in AlarmsActive.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.8.4.1
@@ -124,8 +123,8 @@ export namespace BooleanStateConfiguration {
      */
     export const TlvAlarmsStateChangedEvent = TlvObject({
         /**
-         * This field shall indicate the state of active alarm modes, as indicated by the AlarmsActive attribute, at
-         * the time the event was generated.
+         * This field shall indicate the state of active alarm modes, as indicated by the AlarmsActive attribute, at the
+         * time the event was generated.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1.1
          */
@@ -313,9 +312,9 @@ export namespace BooleanStateConfiguration {
     export const AlarmSuppressComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no
-             * longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, for
-             * all supported alarm modes.
+             * Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no longer
+             * triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, for all
+             * supported alarm modes.
              *
              * If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall
              * indicate whether the alarm mode is suppressed or not:
@@ -368,8 +367,8 @@ export namespace BooleanStateConfiguration {
              * aware that the sensor is triggered, but it is no longer desired to have the alarm modes active on the
              * device, e.g.:
              *
-             *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting
-             *     the triggering cause.
+             *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting the
+             *     triggering cause.
              *
              *   • The user is not able to address the triggering cause, but is aware of the alarm and
              *     suppress/acknowledge it be addressed at a later point.
@@ -377,8 +376,8 @@ export namespace BooleanStateConfiguration {
              * Acknowledge of alarms will for the remainder of this cluster be referred to as suppress.
              *
              * A suppressed alarm is still considered active and will remain so unless it is actively disabled or the
-             * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable
-             * to and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not
+             * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to
+             * and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not
              * impact alarm reporting in AlarmsActive.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.8.4.1
@@ -510,8 +509,8 @@ export namespace BooleanStateConfiguration {
     /**
      * This cluster supports all BooleanStateConfiguration features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

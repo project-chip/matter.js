@@ -30,8 +30,8 @@ export namespace ThreadBorderRouterManagement {
         /**
          * PanChange (PC)
          *
-         * This feature shall indicate the ability of the Border Router to change its already configured PAN to
-         * another, by setting a pending dataset.
+         * This feature shall indicate the ability of the Border Router to change its already configured PAN to another,
+         * by setting a pending dataset.
          *
          * NOTE
          *
@@ -92,9 +92,8 @@ export namespace ThreadBorderRouterManagement {
      */
     export const TlvSetActiveDatasetRequest = TlvObject({
         /**
-         * This field shall contain the active dataset to set of the Thread network to configure in the Border Router
-         * as an octet string containing the raw Thread TLV value of the dataset, as defined in the Thread
-         * specification.
+         * This field shall contain the active dataset to set of the Thread network to configure in the Border Router as
+         * an octet string containing the raw Thread TLV value of the dataset, as defined in the Thread specification.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 10.3.6.4.1
          */
@@ -121,8 +120,8 @@ export namespace ThreadBorderRouterManagement {
     export const PanChangeComponent = MutableCluster.Component({
         commands: {
             /**
-             * This command shall be used to set or update the pending Dataset of the Thread network to which the
-             * Border Router is connected, if the Border Router supports PAN Change.
+             * This command shall be used to set or update the pending Dataset of the Thread network to which the Border
+             * Router is connected, if the Border Router supports PAN Change.
              *
              * If the command is not executed via a CASE session, the command shall fail with a status code of
              * UNSUPPORTED_ACCESS.
@@ -306,9 +305,9 @@ export namespace ThreadBorderRouterManagement {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster provides an interface for managing a Thread Border Router and the Thread network that it belongs
-     * to. Privileged nodes within the same fabric as a Thread Border Router can use these interfaces to request and
-     * set credentials information to the Thread network.
+     * This cluster provides an interface for managing a Thread Border Router and the Thread network that it belongs to.
+     * Privileged nodes within the same fabric as a Thread Border Router can use these interfaces to request and set
+     * credentials information to the Thread network.
      *
      * ThreadBorderRouterManagementCluster supports optional features that you can enable with the
      * ThreadBorderRouterManagementCluster.with() factory method.
@@ -342,8 +341,8 @@ export namespace ThreadBorderRouterManagement {
     /**
      * This cluster supports all ThreadBorderRouterManagement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

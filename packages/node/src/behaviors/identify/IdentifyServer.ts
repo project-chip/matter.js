@@ -19,8 +19,9 @@ import { IdentifyBehavior } from "./IdentifyBehavior.js";
  * * `isIdentifying` - Indicates if the device is currently identifying.
  *
  * Beside the standard events the following additional events are available:
- * * `startIdentifying` - Emitted when the device starts identifying. Use it e.g to start your own identifying logic.
- * * `stopIdentifying` - Emitted when the device stops identifying.
+ * * `startIdentifying` - Emitted when the device starts identifying. Use it to start your own identifying logic. This is mandatory.
+ * * `stopIdentifying` - Emitted when the device stops identifying. This is mandatory.
+ * * `effectTriggered` - Emitted when an effect should be triggered. Use it to trigger the effect. Depending on the device type this is mandatory!
  */
 export class IdentifyServer extends IdentifyBehavior {
     declare protected internal: IdentifyServer.Internal;
@@ -82,6 +83,10 @@ export class IdentifyServer extends IdentifyBehavior {
     override identify({ identifyTime }: Identify.IdentifyRequest) {
         this.state.identifyTime = identifyTime;
     }
+
+    override triggerEffect(effect: Identify.TriggerEffectRequest) {
+        this.events.effectTriggered.emit(effect);
+    }
 }
 
 export namespace IdentifyServer {
@@ -96,5 +101,6 @@ export namespace IdentifyServer {
     export class Events extends IdentifyBehavior.Events {
         startIdentifying = Observable();
         stopIdentifying = Observable();
+        effectTriggered = Observable<[effect: Identify.TriggerEffectRequest]>();
     }
 }

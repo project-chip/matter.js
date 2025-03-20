@@ -67,7 +67,7 @@ export const TlvSemtag = TlvObject({
      * @see {@link MatterSpecification.v13.Core} § 7.19.2.42.4
      */
     label: TlvOptionalField(3, TlvNullable(TlvString.bound({ maxLength: 64 })))
-})
+});
 
 /**
  * Semantic Tag

@@ -67,8 +67,8 @@ export namespace IcdManagement {
         /**
          * DynamicSitLitSupport (DSLS)
          *
-         * This feature is supported if and only if the device can switch between SIT and LIT operating modes even if
-         * it has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
+         * This feature is supported if and only if the device can switch between SIT and LIT operating modes even if it
+         * has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.17.4.4
          */
@@ -229,9 +229,9 @@ export namespace IcdManagement {
 
         /**
          * This field shall provide the verification key associated with the CheckInNodeID to remove from storage. The
-         * verification key represents the key already stored on the server. The verification key provided in this
-         * field shall be used by the server to guarantee that a client with manage permissions can only remove entries
-         * that contain a Key equal to the stored key. The verification key shall be provided for clients with manage
+         * verification key represents the key already stored on the server. The verification key provided in this field
+         * shall be used by the server to guarantee that a client with manage permissions can only remove entries that
+         * contain a Key equal to the stored key. The verification key shall be provided for clients with manage
          * permissions. The verification key SHOULD NOT be provided by clients with administrator permissions for the
          * server cluster. The verification key shall be ignored by the server if it is provided by a client with
          * administrator permissions for the server cluster.
@@ -370,8 +370,8 @@ export namespace IcdManagement {
     export interface StayActiveRequest extends TypeFromSchema<typeof TlvStayActiveRequest> {}
 
     /**
-     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the
-     * computed duration (in milliseconds) that the ICD intends to stay active for.
+     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the computed
+     * duration (in milliseconds) that the ICD intends to stay active for.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.17.7.5
      */
@@ -391,8 +391,8 @@ export namespace IcdManagement {
     });
 
     /**
-     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the
-     * computed duration (in milliseconds) that the ICD intends to stay active for.
+     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the computed
+     * duration (in milliseconds) that the ICD intends to stay active for.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.17.7.5
      */
@@ -471,9 +471,8 @@ export namespace IcdManagement {
 
             /**
              * This command allows a client to unregister itself with the ICD. Example: a client that is leaving the
-             * network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions
-             * and send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent
-             * client.
+             * network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and
+             * send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.17.7.3
              */
@@ -535,8 +534,8 @@ export namespace IcdManagement {
              * This command allows a client to request that the server stays in active mode for at least a given time
              * duration (in milliseconds) from when this command is received.
              *
-             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used
-             * by the client to request the server to stay active and responsive for this period to allow a sequence of
+             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
+             * the client to request the server to stay active and responsive for this period to allow a sequence of
              * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD
              * to be active for, in order to account for network delays.
              *
@@ -625,18 +624,18 @@ export namespace IcdManagement {
              * UserActiveModeTriggerInstruction attribute may give additional information on how to transition the
              * device to Active Mode. If the attribute is present, the value shall be encoded as a valid UTF-8 string
              * with a maximum length of 128 bytes. If the UserActiveModeTriggerHint has the ActuateSensorSeconds,
-             * ActuateSensorTimes, ResetButtonSeconds, ResetButtonTimes, SetupButtonSeconds or SetupButtonTimes set,
-             * the string shall consist solely of an encoding of N as a decimal unsigned integer using the ASCII digits
-             * 0-9, and without leading zeros.
+             * ActuateSensorTimes, ResetButtonSeconds, ResetButtonTimes, SetupButtonSeconds or SetupButtonTimes set, the
+             * string shall consist solely of an encoding of N as a decimal unsigned integer using the ASCII digits 0-9,
+             * and without leading zeros.
              *
-             * For example, given UserActiveModeTriggerHint="2048", ResetButtonTimes is set which indicates "Press
-             * Reset Button for N seconds". Therefore, a value of UserActiveModeTriggerInstruction="10" would indicate
-             * that N is 10 in that context.
+             * For example, given UserActiveModeTriggerHint="2048", ResetButtonTimes is set which indicates "Press Reset
+             * Button for N seconds". Therefore, a value of UserActiveModeTriggerInstruction="10" would indicate that N
+             * is 10 in that context.
              *
-             * When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indicating presence of a
-             * custom string, the ICD SHOULD perform localization (translation to user’s preferred language, as
-             * indicated in the Device’s currently configured locale). The Custom Instruction option SHOULD NOT be used
-             * by an ICD that does not have knowledge of the user’s language preference.
+             * When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indicating presence of a custom
+             * string, the ICD SHOULD perform localization (translation to user’s preferred language, as indicated in
+             * the Device’s currently configured locale). The Custom Instruction option SHOULD NOT be used by an ICD
+             * that does not have knowledge of the user’s language preference.
              *
              * When the UserActiveModeTriggerHint key indicates a light to blink (ActuateSensorLightsBlink,
              * ResetButtonLightsBlink or SetupButtonLightsBlink), information on color of light may be made available
@@ -658,8 +657,8 @@ export namespace IcdManagement {
              * This command allows a client to request that the server stays in active mode for at least a given time
              * duration (in milliseconds) from when this command is received.
              *
-             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used
-             * by the client to request the server to stay active and responsive for this period to allow a sequence of
+             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
+             * the client to request the server to stay active and responsive for this period to allow a sequence of
              * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD
              * to be active for, in order to account for network delays.
              *
@@ -762,8 +761,8 @@ export namespace IcdManagement {
     /**
      * This cluster supports all IcdManagement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

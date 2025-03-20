@@ -27,15 +27,14 @@ export const Groups = Cluster(
             "\n" +
             "The Groups cluster is scoped to the endpoint. Groups cluster commands support discovering the " +
             "endpoint membership in a group, adding the endpoint to a group, removing the endpoint from a group, " +
-            "removing endpoint membership from all groups. All commands defined in this cluster shall only " +
-            "affect groups scoped to the accessing fabric." +
+            "removing endpoint membership from all groups. All commands defined in this cluster shall only affect " +
+            "groups scoped to the accessing fabric." +
             "\n" +
-            "When group names are supported, the server stores a name string, which is set by the client for " +
-            "each assigned group and indicated in response to a client request." +
+            "When group names are supported, the server stores a name string, which is set by the client for each " +
+            "assigned group and indicated in response to a client request." +
             "\n" +
-            "Note that configuration of group addresses for outgoing commands is achieved using the Message " +
-            "Layer mechanisms where the Group Table is not involved. Hence this cluster does not play a part in " +
-            "that.",
+            "Note that configuration of group addresses for outgoing commands is achieved using the Message Layer " +
+            "mechanisms where the Group Table is not involved. Hence this cluster does not play a part in that.",
 
         xref: { document: "cluster", section: "1.3" }
     },
@@ -143,8 +142,8 @@ export const Groups = Cluster(
             response: "status",
 
             details: "The AddGroupIfIdentifying command allows a client to add group membership in a particular group for " +
-                "the server endpoint, on condition that the endpoint is identifying itself. Identifying " +
-                "functionality is controlled using the Identify cluster, (see Identify Cluster)." +
+                "the server endpoint, on condition that the endpoint is identifying itself. Identifying functionality " +
+                "is controlled using the Identify cluster, (see Identify Cluster)." +
                 "\n" +
                 "For correct operation of the AddGroupIfIdentifying command, any endpoint that supports the Groups " +
                 "server cluster shall also support the Identify server cluster." +
@@ -229,8 +228,8 @@ export const Groups = Cluster(
         Field({
             name: "Capacity", id: 0x0, type: "uint8", conformance: "M", quality: "X",
 
-            details: "This field shall contain the remaining capacity of the Group Table of the node. The following " +
-                "values apply:" +
+            details: "This field shall contain the remaining capacity of the Group Table of the node. The following values " +
+                "apply:" +
                 "\n" +
                 "  • 0 - No further groups may be added." +
                 "\n" +
@@ -250,9 +249,9 @@ export const Groups = Cluster(
                 details: "The GroupList field shall contain either the group IDs of all the groups in the Group Table for " +
                     "which the server endpoint is a member of the group (in the case where the GroupList field of the " +
                     "received GetGroupMembership command was empty), or the group IDs of all the groups in the Group " +
-                    "Table for which the server endpoint is a member of the group and for which the group ID was " +
-                    "included in the the GroupList field of the received GetGroupMembership command (in the case where " +
-                    "the GroupList field of the received GetGroupMembership command was not empty)." +
+                    "Table for which the server endpoint is a member of the group and for which the group ID was included " +
+                    "in the the GroupList field of the received GetGroupMembership command (in the case where the " +
+                    "GroupList field of the received GetGroupMembership command was not empty)." +
                     "\n" +
                     "Zigbee: If the total number of groups will cause the maximum payload length of a frame to be " +
                     "exceeded, then the GroupList field shall contain only as many groups as will fit.",

@@ -242,8 +242,8 @@ export namespace DishwasherAlarm {
             state: Attribute(0x2, TlvBitmap(TlvUInt32, Alarm)),
 
             /**
-             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of
-             * true means the alarm is supported, otherwise the alarm is not supported.
+             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of true
+             * means the alarm is supported, otherwise the alarm is not supported.
              *
              * If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.
              *
@@ -318,8 +318,8 @@ export namespace DishwasherAlarm {
     /**
      * This cluster supports all DishwasherAlarm features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -70,10 +70,10 @@ export namespace OperationalCredentials {
      */
     export const TlvFabricDescriptor = TlvObject({
         /**
-         * This field shall contain the public key for the trusted root that scopes the fabric referenced by
-         * FabricIndex and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA Certificates”).
-         * The format for the key shall be the same as that used in the ec-pub-key field of the Matter Certificate
-         * Encoding for the root in the operational certificate chain.
+         * This field shall contain the public key for the trusted root that scopes the fabric referenced by FabricIndex
+         * and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA Certificates”). The format
+         * for the key shall be the same as that used in the ec-pub-key field of the Matter Certificate Encoding for the
+         * root in the operational certificate chain.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.1
          */
@@ -83,8 +83,8 @@ export namespace OperationalCredentials {
          * This field shall contain the value of AdminVendorID provided in the AddNOC command that led to the creation
          * of this FabricDescriptorStruct. The set of allowed values is defined in AdminVendorID.
          *
-         * The intent is to provide some measure of user transparency about which entities have Administer privileges
-         * on the Node.
+         * The intent is to provide some measure of user transparency about which entities have Administer privileges on
+         * the Node.
          *
          * Clients shall consider the VendorID field value to be untrustworthy until the NOC chain associated with the
          * fabric has passed the Vendor ID Validation Procedure against the associated RCAC.
@@ -104,16 +104,16 @@ export namespace OperationalCredentials {
 
         /**
          * This field shall contain the NodeID in use within the fabric referenced by FabricIndex. This field shall
-         * match the value found in the matter-node-id field from the operational certificate providing this
-         * operational identity.
+         * match the value found in the matter-node-id field from the operational certificate providing this operational
+         * identity.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.4
          */
         nodeId: TlvField(4, TlvNodeId),
 
         /**
-         * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is
-         * set by the UpdateFabricLabel command.
+         * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is set
+         * by the UpdateFabricLabel command.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.5
          */
@@ -330,10 +330,10 @@ export namespace OperationalCredentials {
          * caller on its given Fabric to eventually add another Access Control Entry for CASE authentication mode, to
          * enable the new Administrator to administer the device, since the Fabric Scoping of the Access Control List
          * prevents the current Node from being able to write new entries scoped to that Fabric, if the session is
-         * established from CASE. While a session established from PASE does gain Fabric Scope of a newly-joined
-         * Fabric, this argument is made mandatory to provide symmetry between both types of session establishment,
-         * both of which need to eventually add an "Administer Node over CASE" Access Control Entry to finalize new
-         * Fabric configuration and subsequently be able to call the CommissioningComplete command.
+         * established from CASE. While a session established from PASE does gain Fabric Scope of a newly-joined Fabric,
+         * this argument is made mandatory to provide symmetry between both types of session establishment, both of
+         * which need to eventually add an "Administer Node over CASE" Access Control Entry to finalize new Fabric
+         * configuration and subsequently be able to call the CommissioningComplete command.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.2
          */
@@ -348,8 +348,8 @@ export namespace OperationalCredentials {
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
-         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
-         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+         * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
          * If the prior CSRRequest state that preceded AddNOC had the IsForUpdateNOC field indicated as true, then this
          * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -364,8 +364,8 @@ export namespace OperationalCredentials {
          * already present on the device, then the device shall process the error by responding with a StatusCode of
          * FabricConflict as described in Section 11.18.6.7.2, “Handling Errors”.
          *
-         * If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics attribute, then
-         * the device’s operational credentials table is considered full and the device shall process the error by
+         * If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics attribute, then the
+         * device’s operational credentials table is considered full and the device shall process the error by
          * responding with a StatusCode of TableFull as described in Section 11.18.6.7.2, “Handling Errors”.
          *
          * If the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE, such as not
@@ -404,17 +404,17 @@ export namespace OperationalCredentials {
          *
          *   7. The receiver shall create and add a new Access Control Entry using the CaseAdminSubject field to grant
          *       subsequent Administer access to an Administrator member of the new Fabric. It is recommended that the
-         *       Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking
-         *       the AddNOC command, within another of the Fabrics of which it is a member.
+         *       Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
+         *       AddNOC command, within another of the Fabrics of which it is a member.
          *
-         *     a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL entries with
-         *        the new FabricIndex may be added to the ARL attribute.
+         *     a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL entries with the
+         *        new FabricIndex may be added to the ARL attribute.
          *
          *   8. The incoming IPKValue shall be stored in the Fabric-scoped slot within the Group Key Management cluster
          *       (see KeySetWrite), for subsequent use during CASE.
          *
-         *   9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be updated to
-         *       match the Fabric Index just allocated.
+         *   9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be updated to match
+         *       the Fabric Index just allocated.
          *
          *   10. If the current secure session was established with PASE, the receiver shall:
          *
@@ -422,8 +422,8 @@ export namespace OperationalCredentials {
          *        interactions have the proper accessing fabric.
          *
          *   11. If the current secure session was established with CASE, subsequent configuration of the newly
-         *       installed Fabric requires the opening of a new CASE session from the Administrator from the Fabric
-         *       just installed. This Administrator is the one listed in the CaseAdminSubject argument.
+         *       installed Fabric requires the opening of a new CASE session from the Administrator from the Fabric just
+         *       installed. This Administrator is the one listed in the CaseAdminSubject argument.
          *
          * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
          * matching the FabricIndex under which the new Node Operational Certificate (NOC) is scoped.
@@ -441,8 +441,8 @@ export namespace OperationalCredentials {
     export interface AddNocRequest extends TypeFromSchema<typeof TlvAddNocRequest> {}
 
     /**
-     * This enumeration is used by the NOCResponse common response command to convey detailed outcome of several of
-     * this cluster’s operations.
+     * This enumeration is used by the NOCResponse common response command to convey detailed outcome of several of this
+     * cluster’s operations.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.18.4.3
      */
@@ -585,9 +585,9 @@ export namespace OperationalCredentials {
          *
          * Effect on Receipt
          *
-         * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not
-         * the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the
-         * command and there shall NOT be any permanent changes to any Fabric data.
+         * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not the
+         * accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the command
+         * and there shall NOT be any permanent changes to any Fabric data.
          *
          * Otherwise, the Label field for the accessing fabric shall immediately be updated to reflect the Label
          * argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
@@ -618,8 +618,8 @@ export namespace OperationalCredentials {
      */
     export const TlvRemoveFabricRequest = TlvObject({
         /**
-         * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is
-         * to be removed from the device.
+         * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is to
+         * be removed from the device.
          *
          * Effect on Receipt
          *
@@ -639,25 +639,24 @@ export namespace OperationalCredentials {
          *      current set of exchanges, the Node invoking the command SHOULD NOT expect a response before terminating
          *      its secure session with the target.
          *
-         *   2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process
-         *      of irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, Access
-         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots
-         *      no longer referenced by any operational certificate shall also be removed. If a time synchronization
-         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex,
-         *      the TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model
-         *      constructs related to the Operational Identity under the given Fabric shall also be removed. Following
-         *      the removal, an NOCResponse with a StatusCode of OK shall be returned.
+         *   2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
+         *      irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, Access
+         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no
+         *      longer referenced by any operational certificate shall also be removed. If a time synchronization
+         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the
+         *      TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model constructs
+         *      related to the Operational Identity under the given Fabric shall also be removed. Following the removal,
+         *      an NOCResponse with a StatusCode of OK shall be returned.
          *
          *   3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
          *      irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, Access
-         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots
-         *      no longer referenced by any operational certificate shall also be removed. If a time synchronization
-         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex,
-         *      the TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model
-         *      constructs related to the Operational Identity under the given Fabric shall also be removed. Since this
-         *      operation involves the removal of the secure session data that may underpin the current set of
-         *      exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its secure
-         *      session with the target.
+         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no
+         *      longer referenced by any operational certificate shall also be removed. If a time synchronization
+         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the
+         *      TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model constructs
+         *      related to the Operational Identity under the given Fabric shall also be removed. Since this operation
+         *      involves the removal of the secure session data that may underpin the current set of exchanges, the Node
+         *      invoking the command SHOULD NOT expect a response before terminating its secure session with the target.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.18.6.12.1
          */
@@ -734,8 +733,8 @@ export namespace OperationalCredentials {
             fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptor), { persistent: true, default: [] }),
 
             /**
-             * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for
-             * a particular device.
+             * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for a
+             * particular device.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.18.5.3
              */
@@ -808,8 +807,8 @@ export namespace OperationalCredentials {
             ),
 
             /**
-             * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail
-             * with a Status Code of INVALID_COMMAND.
+             * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with
+             * a Status Code of INVALID_COMMAND.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
              */
@@ -822,30 +821,30 @@ export namespace OperationalCredentials {
             ),
 
             /**
-             * This command shall be generated to execute the Node Operational CSR Procedure and subsequently return
-             * the NOCSR Information, in the form of a CSRResponse Command.
+             * This command shall be generated to execute the Node Operational CSR Procedure and subsequently return the
+             * NOCSR Information, in the form of a CSRResponse Command.
              *
              * The CSRNonce field shall be used in the computation of the NOCSR Information. If the CSRNonce is
              * malformed, then this command shall fail with an INVALID_COMMAND status code.
              *
-             * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE
-             * session, the command shall fail with an INVALID_COMMAND status code, as it would never be possible to
-             * use a resulting subsequent certificate issued from the CSR with the UpdateNOC command, which is
-             * forbidden over PASE sessions.
+             * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE session,
+             * the command shall fail with an INVALID_COMMAND status code, as it would never be possible to use a
+             * resulting subsequent certificate issued from the CSR with the UpdateNOC command, which is forbidden over
+             * PASE sessions.
              *
              * If the IsForUpdateNOC field is present and set to true, the internal state of the CSR associated keypair
              * shall be tagged as being for a subsequent UpdateNOC, otherwise the internal state of the CSR shall be
              * tagged as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about the processing.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
              * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
              *
              * If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is
-             * found to collide with an existing key pair already previously generated and installed, and that check
-             * had been executed, then this command shall fail with a FAILURE status code sent back to the initiator.
+             * found to collide with an existing key pair already previously generated and installed, and that check had
+             * been executed, then this command shall fail with a FAILURE status code sent back to the initiator.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
              */
@@ -878,8 +877,8 @@ export namespace OperationalCredentials {
              *
              * Effect When Received
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
              * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -897,8 +896,8 @@ export namespace OperationalCredentials {
              *   • The NOC provided in the NOCValue does not refer in its subject to the FabricID associated with the
              *     accessing fabric.
              *
-             *   • The ICAC provided in the ICACValue (if present) has a FabricID in its subject that does not match
-             *     the FabricID associated with the accessing fabric.
+             *   • The ICAC provided in the ICACValue (if present) has a FabricID in its subject that does not match the
+             *     FabricID associated with the accessing fabric.
              *
              * Otherwise, the command is considered an update of existing credentials for a given Fabric, and the
              * following shall apply:
@@ -926,17 +925,17 @@ export namespace OperationalCredentials {
             updateNoc: Command(0x7, TlvUpdateNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
-             * This command shall be used by an Administrator to set the user-visible Label field for a given Fabric,
-             * as reflected by entries in the Fabrics attribute. An Administrator shall use this command to set the
-             * Label to a string (possibly selected by the user themselves) that the user can recognize and relate to
-             * this Administrator
+             * This command shall be used by an Administrator to set the user-visible Label field for a given Fabric, as
+             * reflected by entries in the Fabrics attribute. An Administrator shall use this command to set the Label
+             * to a string (possibly selected by the user themselves) that the user can recognize and relate to this
+             * Administrator
              *
              *   • during the commissioning process, and
              *
              *   • whenever the user chooses to update this string.
              *
-             * The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD be
-             * used by Administrators to provide additional per-fabric context when operations such as RemoveFabric are
+             * The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD be used
+             * by Administrators to provide additional per-fabric context when operations such as RemoveFabric are
              * considered or used.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
@@ -953,8 +952,8 @@ export namespace OperationalCredentials {
              * This command is used by Administrators to remove a given Fabric and delete all associated fabric-scoped
              * data.
              *
-             * If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate
-             * stored in the Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
+             * If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate stored
+             * in the Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
              *
              * WARNING
              *
@@ -986,8 +985,8 @@ export namespace OperationalCredentials {
              * If the certificate from the RootCACertificate field is already installed, based on exact byte-for-byte
              * equality, then this command shall succeed with no change to the list.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period,
              * which would cause the new invocation to add a second root certificate within a given fail-

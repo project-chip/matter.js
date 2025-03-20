@@ -144,7 +144,7 @@ function detectStructure(text: string): TextStructure {
 }
 
 function wrapParagraph(input: string, into: string[], wrapWidth: number, padding: number, prefixWidth: number) {
-    const segments = input.match(/\s+/g);
+    const segments = input.split(/\s+/g);
     if (!segments) {
         return;
     }
@@ -205,10 +205,12 @@ function wrapParagraph(input: string, into: string[], wrapWidth: number, padding
 
         // Add to the line
         line.push(s);
-        length += segmentLength;
+        line.push(" ");
+        length += segmentLength + 1;
     }
 
     // If there is a remaining line, add it
+    line.length = line.length - 1; // Remove ending space
     if (line.length) {
         addLine();
     }

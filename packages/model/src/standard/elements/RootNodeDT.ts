@@ -17,9 +17,9 @@ export const RootNodeDt = DeviceType(
     {
         name: "RootNode", id: 0x16, category: "Utility", classification: "node",
 
-        details: "This defines conformance for a root node endpoint (see System Model specification). This endpoint " +
-            "is akin to a \"read me first\" endpoint that describes itself and the other endpoints that make up " +
-            "the node." +
+        details: "This defines conformance for a root node endpoint (see System Model specification). This endpoint is " +
+            "akin to a \"read me first\" endpoint that describes itself and the other endpoints that make up the " +
+            "node." +
             "\n" +
             "  • Device types with Endpoint scope shall NOT be supported on the same endpoint as this device " +
             "    type." +

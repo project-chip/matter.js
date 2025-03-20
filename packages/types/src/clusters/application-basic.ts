@@ -106,8 +106,8 @@ export namespace ApplicationBasic {
 
             /**
              * This attribute shall specify a human readable (displayable) name of the Content App assigned by the
-             * vendor. For example, "NPR On Demand". The maximum length of the ApplicationName attribute is 256 bytes
-             * of UTF-8 characters.
+             * vendor. For example, "NPR On Demand". The maximum length of the ApplicationName attribute is 256 bytes of
+             * UTF-8 characters.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.3.5.3
              */
@@ -158,12 +158,11 @@ export namespace ApplicationBasic {
     });
 
     /**
-     * This cluster provides information about a Content App running on a Video Player device which is represented as
-     * an endpoint (see Device Type Library document).
+     * This cluster provides information about a Content App running on a Video Player device which is represented as an
+     * endpoint (see Device Type Library document).
      *
-     * The cluster server for this cluster should be supported on each endpoint that represents a Content App on a
-     * Video Player device. This cluster provides identification information about the Content App such as vendor and
-     * product.
+     * The cluster server for this cluster should be supported on each endpoint that represents a Content App on a Video
+     * Player device. This cluster provides identification information about the Content App such as vendor and product.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.3
      */

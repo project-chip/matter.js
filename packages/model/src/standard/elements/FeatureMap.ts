@@ -41,14 +41,14 @@ export const FeatureMap = Attribute({
         "supported in the cluster instance." +
         "\n" +
         "Each feature set shall be well defined within the cluster specification. Each feature shall be " +
-        "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag " +
-        "in the cluster specification text, including the Conformance columns defining the elements of the " +
+        "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag in " +
+        "the cluster specification text, including the Conformance columns defining the elements of the " +
         "cluster." +
         "\n" +
         "If a cluster defines more than 32 feature sets, then it will be necessary to add another feature " +
-        "bitmap attribute. Any client trying to reference the new feature set will know about the new " +
-        "bitmap, because it knows about the new feature set(s). Legacy products will not know about the new " +
-        "feature set nor the new bitmap." +
+        "bitmap attribute. Any client trying to reference the new feature set will know about the new bitmap, " +
+        "because it knows about the new feature set(s). Legacy products will not know about the new feature " +
+        "set nor the new bitmap." +
         "\n" +
         "For a cluster whose definition which does not define a FeatureMap, the server shall set this " +
         "attribute to 0 (zero)." +

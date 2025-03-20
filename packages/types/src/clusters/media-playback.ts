@@ -37,9 +37,9 @@ export namespace MediaPlayback {
         /**
          * AdvancedSeek (AS)
          *
-         * This feature provides access to the time offset location within current playback media and allows for
-         * jumping to a specific location using time offsets. This enables clients to implement more advanced media
-         * seeking behavior in their user interface, for instance a "seek bar".
+         * This feature provides access to the time offset location within current playback media and allows for jumping
+         * to a specific location using time offsets. This enables clients to implement more advanced media seeking
+         * behavior in their user interface, for instance a "seek bar".
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.1
          */
@@ -306,9 +306,9 @@ export namespace MediaPlayback {
         EnhancedAudioIntelligibility = 15,
 
         /**
-         * Experience that provides information, about a current emergency, that is intended to enable the protection
-         * of life, health, safety, and property, and may also include critical details regarding the emergency and how
-         * to respond to the emergency.
+         * Experience that provides information, about a current emergency, that is intended to enable the protection of
+         * life, health, safety, and property, and may also include critical details regarding the emergency and how to
+         * respond to the emergency.
          */
         Emergency = 16,
 
@@ -402,8 +402,8 @@ export namespace MediaPlayback {
         /**
          * This value is the index field of the OutputInfoStruct from the OutputList attribute (from the AudioOutput
          * cluster) and indicates which audio output the Audio Track should be played on. This field is absent for Text
-         * Tracks and only present for Audio Tracks. A value of null shall indicate that the server can choose the
-         * audio output(s) to play the Audio Track on.
+         * Tracks and only present for Audio Tracks. A value of null shall indicate that the server can choose the audio
+         * output(s) to play the Audio Track on.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.13.2
          */
@@ -447,8 +447,8 @@ export namespace MediaPlayback {
         /**
          * This field shall indicate whether audio should be unmuted by the player during rewind.
          *
-         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted,
-         * turned down to a low level and/or unplugged.
+         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted, turned
+         * down to a low level and/or unplugged.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.7.1
          */
@@ -471,8 +471,8 @@ export namespace MediaPlayback {
         /**
          * This field shall indicate whether audio should be unmuted by the player during fast forward.
          *
-         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted,
-         * turned down to a low level and/or unplugged.
+         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted, turned
+         * down to a low level and/or unplugged.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.8.1
          */
@@ -548,8 +548,8 @@ export namespace MediaPlayback {
          * case the resulting position falls in the middle of a frame, the server shall set the position to the
          * beginning of that frame and set the SampledPosition attribute on the cluster accordingly. If the resultant
          * position falls before the earliest valid position to which a client may seek back to, the position should be
-         * set to that earliest valid position. If the SampledPosition attribute is supported it shall be updated on
-         * the cluster accordingly.
+         * set to that earliest valid position. If the SampledPosition attribute is supported it shall be updated on the
+         * cluster accordingly.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.10.1
          */
@@ -638,8 +638,8 @@ export namespace MediaPlayback {
          * Typically the value will be false (muted), however, some players will play audio during certain fast forward
          * and rewind speeds, and in these cases, the value will be true (not muted).
          *
-         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted,
-         * turned down to a low level and/or unplugged.
+         * A value of true does not guarantee that audio can be heard by the user since the speaker may be muted, turned
+         * down to a low level and/or unplugged.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.8.1.9
          */
@@ -659,10 +659,10 @@ export namespace MediaPlayback {
     export const AdvancedSeekComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the start time of the media, in case the media has a fixed start time (for example, live
-             * stream or television broadcast), or null when start time does not apply to the current media (for
-             * example, video-on-demand). This time is a UTC time. The client needs to handle conversion to local time,
-             * as required, taking in account time zone and possible local DST offset.
+             * Indicates the start time of the media, in case the media has a fixed start time (for example, live stream
+             * or television broadcast), or null when start time does not apply to the current media (for example,
+             * video-on-demand). This time is a UTC time. The client needs to handle conversion to local time, as
+             * required, taking in account time zone and possible local DST offset.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.2
              */
@@ -722,8 +722,8 @@ export namespace MediaPlayback {
              *   • A value for PlaybackSpeed which is greater than 0 shall indicate that as playback is happening the
              *     media is currently advancing in time within the duration of the media.
              *
-             *   • A value for PlaybackSpeed which is less than 0 shall indicate that as playback is happening the
-             *     media is currently going back in time within the duration of the media.
+             *   • A value for PlaybackSpeed which is less than 0 shall indicate that as playback is happening the media
+             *     is currently going back in time within the duration of the media.
              *
              *   • A value for PlaybackSpeed of 0 shall indicate that the media is currently not playing back. When the
              *     CurrentState attribute has the value of PAUSED, NOT_PLAYING or BUFFERING, the PlaybackSpeed shall be
@@ -737,8 +737,8 @@ export namespace MediaPlayback {
 
             /**
              * Indicates the furthest forward valid position to which a client may seek forward, in milliseconds from
-             * the start of the media. When the media has an associated StartTime, a value of null shall indicate that
-             * a seek forward is valid only until the current time within the media, using a position computed from the
+             * the start of the media. When the media has an associated StartTime, a value of null shall indicate that a
+             * seek forward is valid only until the current time within the media, using a position computed from the
              * difference between the current time offset and StartTime, in milliseconds from start of the media,
              * truncating fractional milliseconds towards 0. A value of Nas when StartTime is not specified shall
              * indicate that seeking forward is not allowed.
@@ -860,10 +860,10 @@ export namespace MediaPlayback {
              * Different "rewind" speeds may be reflected on the media playback device based upon the number of
              * sequential calls to this function and the capability of the device. This is to avoid needing to define
              * every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be
-             * updated to reflect the new speed of playback. If the playback speed cannot be changed for the media
-             * being played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED
-             * shall be returned. If the playback speed has reached the maximum supported speed for media playing
-             * backwards, the status of SPEED_OUT_OF_RANGE shall be returned.
+             * updated to reflect the new speed of playback. If the playback speed cannot be changed for the media being
+             * played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be
+             * returned. If the playback speed has reached the maximum supported speed for media playing backwards, the
+             * status of SPEED_OUT_OF_RANGE shall be returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.7
              */
@@ -878,10 +878,10 @@ export namespace MediaPlayback {
              * Different "fast-forward" speeds may be reflected on the media playback device based upon the number of
              * sequential calls to this function and the capability of the device. This is to avoid needing to define
              * every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be
-             * updated to reflect the new speed of playback. If the playback speed cannot be changed for the media
-             * being played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED
-             * shall be returned. If the playback speed has reached the maximum supported speed for media playing
-             * forward, the status of SPEED_OUT_OF_RANGE shall be returned.
+             * updated to reflect the new speed of playback. If the playback speed cannot be changed for the media being
+             * played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be
+             * returned. If the playback speed has reached the maximum supported speed for media playing forward, the
+             * status of SPEED_OUT_OF_RANGE shall be returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.8
              */
@@ -964,8 +964,8 @@ export namespace MediaPlayback {
 
         commands: {
             /**
-             * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play
-             * shall return media to normal playback speed.
+             * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall
+             * return media to normal playback speed.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.1
              */
@@ -1146,8 +1146,8 @@ export namespace MediaPlayback {
     /**
      * This cluster supports all MediaPlayback features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

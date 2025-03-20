@@ -38,8 +38,8 @@ export namespace ProxyDiscovery {
         numAttributePaths: TlvField(1, TlvUInt16),
 
         /**
-         * The number of event paths the client will have in the subscription request. This is a heuristic/hint to
-         * allow a Proxy to better ascertain whether it can support the ensuing subscription.
+         * The number of event paths the client will have in the subscription request. This is a heuristic/hint to allow
+         * a Proxy to better ascertain whether it can support the ensuing subscription.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1.3
          */
@@ -74,8 +74,8 @@ export namespace ProxyDiscovery {
 
     /**
      * This cluster contains commands needed to do proxy discovery as defined in the Section 9.15.7.3, “Step 2: Proxy
-     * Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery
-     * & Assignment Flow”.
+     * Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery &
+     * Assignment Flow”.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.15.12
      */

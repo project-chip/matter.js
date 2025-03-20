@@ -28,9 +28,9 @@ export const OtaSoftwareUpdateRequestor = Cluster(
             name: "DefaultOtaProviders", id: 0x0, type: "list", access: "RW F VA", conformance: "M",
             constraint: "desc", default: [], quality: "N",
 
-            details: "This field is a list of ProviderLocation whose entries shall be set by Administrators, either " +
-                "during Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider " +
-                "Node to use for software updates on a given Fabric." +
+            details: "This field is a list of ProviderLocation whose entries shall be set by Administrators, either during " +
+                "Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider Node to " +
+                "use for software updates on a given Fabric." +
                 "\n" +
                 "There shall NOT be more than one entry per Fabric. On a list update that would introduce more than " +
                 "one entry per fabric, the write shall fail with CONSTRAINT_ERROR status code." +
@@ -112,8 +112,8 @@ export const OtaSoftwareUpdateRequestor = Cluster(
             name: "TargetSoftwareVersion", id: 0x3, type: "uint32", conformance: "M", default: null,
             quality: "X",
             details: "This field shall be set to the target SoftwareVersion which is the subject of the operation, " +
-                "whenever the NewState is Downloading, Applying or RollingBack. Otherwise TargetSoftwareVersion " +
-                "shall be null.",
+                "whenever the NewState is Downloading, Applying or RollingBack. Otherwise TargetSoftwareVersion shall " +
+                "be null.",
             xref: { document: "core", section: "11.20.7.7.1.4" }
         })
     ),
@@ -160,8 +160,8 @@ export const OtaSoftwareUpdateRequestor = Cluster(
 
         Field({
             name: "BytesDownloaded", id: 0x1, type: "uint64", conformance: "M",
-            details: "This field shall be set to the number of bytes that have been downloaded during the failing " +
-                "transfer that caused this event to be generated.",
+            details: "This field shall be set to the number of bytes that have been downloaded during the failing transfer " +
+                "that caused this event to be generated.",
             xref: { document: "core", section: "11.20.7.7.3.2" }
         }),
 
@@ -221,13 +221,13 @@ export const OtaSoftwareUpdateRequestor = Cluster(
             constraint: "max 512",
 
             details: "This optional field, if present, shall consist of a top-level anonymous list; each list element " +
-                "shall have a profile-specific tag encoded in fully-qualified form. Each list element shall contain " +
-                "a manufacturer-specific payload, which the Node invoking this command wants to expose to the " +
-                "receiving Node. This payload may be used for any purpose and SHOULD be as small as practical, " +
-                "especially if invoked to groups, in order to reduce networking burden of these payloads." +
+                "shall have a profile-specific tag encoded in fully-qualified form. Each list element shall contain a " +
+                "manufacturer-specific payload, which the Node invoking this command wants to expose to the receiving " +
+                "Node. This payload may be used for any purpose and SHOULD be as small as practical, especially if " +
+                "invoked to groups, in order to reduce networking burden of these payloads." +
                 "\n" +
-                "This field SHOULD only be included if the sending OTA Provider has knowledge that some recipient " +
-                "can make use of it.",
+                "This field SHOULD only be included if the sending OTA Provider has knowledge that some recipient can " +
+                "make use of it.",
 
             xref: { document: "core", section: "11.20.7.6.1.4" }
         }),
@@ -235,15 +235,15 @@ export const OtaSoftwareUpdateRequestor = Cluster(
         Field({
             name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M",
 
-            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA " +
-                "Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to " +
-                "do discovery of the location of that endpoint by walking over all endpoints and checking their " +
+            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA Software " +
+                "Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do " +
+                "discovery of the location of that endpoint by walking over all endpoints and checking their " +
                 "Descriptor Cluster." +
                 "\n" +
                 "When Generated" +
                 "\n" +
-                "An OTA Provider may invoke this command directly to an OTA Requestor, to announce its presence as " +
-                "an OTA Provider on the Fabric." +
+                "An OTA Provider may invoke this command directly to an OTA Requestor, to announce its presence as an " +
+                "OTA Provider on the Fabric." +
                 "\n" +
                 "These announcements, if made, SHOULD be made at most once every 24 hours for any given target Node, " +
                 "to assist OTA Requestors in discovering available OTA Provider resources, unless the " +
@@ -251,8 +251,8 @@ export const OtaSoftwareUpdateRequestor = Cluster(
                 "\n" +
                 "Any invocation shall be made with a delay of at least 1 second between invocations from a given OTA " +
                 "Provider, to reduce burden on the networking infrastructure and affect a form of serialized jitter. " +
-                "It is recommended to offset the first announcement of a round (i.e. new set of announcements after " +
-                "a previous complete set) by a random delay time with a distribution span of >= 60 seconds to jitter " +
+                "It is recommended to offset the first announcement of a round (i.e. new set of announcements after a " +
+                "previous complete set) by a random delay time with a distribution span of >= 60 seconds to jitter " +
                 "announcement schedules over time." +
                 "\n" +
                 "Effect on Receipt" +
@@ -271,11 +271,10 @@ export const OtaSoftwareUpdateRequestor = Cluster(
                 "Provider. See Section 11.20.7.6.1.3, “AnnouncementReason Field” for the different values and their " +
                 "meaning." +
                 "\n" +
-                "If present, the MetadataForNode field’s may be used by a receiving OTA Requestor in any way it " +
-                "deems satisfactory. The MetadataForNode field SHOULD be empty under most normal operational " +
-                "circumstance, but can be useful in environments such as field trials or integration test " +
-                "environments to hint at additional capabilities which OTA Requestors may use in a particular " +
-                "Vendor-specific context.",
+                "If present, the MetadataForNode field’s may be used by a receiving OTA Requestor in any way it deems " +
+                "satisfactory. The MetadataForNode field SHOULD be empty under most normal operational circumstance, " +
+                "but can be useful in environments such as field trials or integration test environments to hint at " +
+                "additional capabilities which OTA Requestors may use in a particular Vendor-specific context.",
 
             xref: { document: "core", section: "11.20.7.6.1.5" }
         }),
@@ -313,8 +312,8 @@ export const OtaSoftwareUpdateRequestor = Cluster(
                 "only be obtained by executing a OTA Software Update Query procedure. A receiving OTA Requestor " +
                 "SHOULD query the indicated OTA Provider at the ProviderLocation after a random jitter delay between " +
                 "1 and 600 seconds. This particular reason SHOULD only be employed when an urgent update is " +
-                "available, such as an important security update, or just after initial commissioning of a device, " +
-                "to assist OTA Requestors in more rapidly obtaining updated software.",
+                "available, such as an important security update, or just after initial commissioning of a device, to " +
+                "assist OTA Requestors in more rapidly obtaining updated software.",
 
             xref: { document: "core", section: "11.20.7.4.1.3" }
         })
@@ -341,8 +340,8 @@ export const OtaSoftwareUpdateRequestor = Cluster(
         Field({
             name: "Querying", id: 0x2, conformance: "M",
             description: "Indicate a Node in the process of querying an OTA Provider.",
-            details: "This value shall indicate a Node in the process of querying an OTA Provider with QueryImage " +
-                "command, including during the process of awaiting a response to that command.",
+            details: "This value shall indicate a Node in the process of querying an OTA Provider with QueryImage command, " +
+                "including during the process of awaiting a response to that command.",
             xref: { document: "core", section: "11.20.7.4.2.3" }
         }),
 
@@ -450,9 +449,9 @@ export const OtaSoftwareUpdateRequestor = Cluster(
 
         Field({
             name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M",
-            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA " +
-                "Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to " +
-                "do discovery of the location of that endpoint by walking over all endpoints and checking their " +
+            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA Software " +
+                "Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do " +
+                "discovery of the location of that endpoint by walking over all endpoints and checking their " +
                 "Descriptor Cluster.",
             xref: { document: "core", section: "11.20.7.4.4.2" }
         }),

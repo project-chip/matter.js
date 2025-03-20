@@ -12,9 +12,9 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * An oven represents a device that contains one or more cabinets, and optionally a single cooktop, that are all
- * capable of heating food. Examples of consumer products implementing this device type include ovens, wall ovens,
- * convection ovens, etc.
+ * An oven represents a device that contains one or more cabinets, and optionally a single cooktop, that are all capable
+ * of heating food. Examples of consumer products implementing this device type include ovens, wall ovens, convection
+ * ovens, etc.
  *
  * @see {@link MatterSpecification.v13.Device} § 13.9
  */

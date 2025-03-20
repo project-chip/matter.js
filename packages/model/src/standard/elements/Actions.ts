@@ -33,12 +33,12 @@ export const Actions = Cluster(
             "  • Events to receive feedback on the state of such actions." +
             "\n" +
             "The information on grouping and available actions is typically provided by the user or Bridge " +
-            "manufacturer via some means not defined in Matter, and therefore provided as read-only to Nodes. " +
-            "For example: a manufacturer-provided app allows a user to set up logical grouping and create/assign " +
+            "manufacturer via some means not defined in Matter, and therefore provided as read-only to Nodes. For " +
+            "example: a manufacturer-provided app allows a user to set up logical grouping and create/assign " +
             "scene for such groups." +
             "\n" +
-            "Using this cluster, a Node can learn about such logical grouping, provided actions, and trigger " +
-            "such actions." +
+            "Using this cluster, a Node can learn about such logical grouping, provided actions, and trigger such " +
+            "actions." +
             "\n" +
             "While the origin of this cluster stems from use cases with a Bridge, its server side may also be " +
             "implemented on any Node which can expose certain grouping, actions or automations to other users." +
@@ -46,8 +46,8 @@ export const Actions = Cluster(
             "After defining the attributes, commands and events for this cluster, and the associated data types, " +
             "several examples are provided to illustrate the capabilities of this cluster." +
             "\n" +
-            "Actions can be defined in a flexible manner to suit the needs of the various nodes implementing " +
-            "this cluster. For each action, the commands available for that particular action are defined." +
+            "Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this " +
+            "cluster. For each action, the commands available for that particular action are defined." +
             "\n" +
             "This cluster can be used to expose only the grouping of endpoints without any actions defined by " +
             "populating the EndpointList attribute accordingly and providing an empty list for ActionList." +
@@ -96,8 +96,8 @@ export const Actions = Cluster(
                 "    cluster provides." +
                 "\n" +
                 "    ◦ Example: SetupURL could take the value of example://Actions or https://domain.example/ " +
-                "      Matter/bridgev1/Actions for this generic case (access generic info how to use actions " +
-                "      provided by this cluster)." +
+                "      Matter/bridgev1/Actions for this generic case (access generic info how to use actions provided " +
+                "      by this cluster)." +
                 "\n" +
                 "  • When used with a suffix of \"/?a=\" and the decimal value of ActionID for one of the actions, it " +
                 "    may provide information about that particular action. This could be a deeplink to " +
@@ -122,8 +122,8 @@ export const Actions = Cluster(
                 "\n" +
                 "It provides feedback to the client about the progress of the action." +
                 "\n" +
-                "Example: When InstantActionWithTransition is invoked (with an InvokeID data field), two " +
-                "StateChanged events will be generated:" +
+                "Example: When InstantActionWithTransition is invoked (with an InvokeID data field), two StateChanged " +
+                "events will be generated:" +
                 "\n" +
                 "  • one when the transition starts (NewState=Active)" +
                 "\n" +
@@ -169,8 +169,8 @@ export const Actions = Cluster(
                 "\n" +
                 "  • ActionFailed when the interrupting command occurs (NewState=Inactive, Error=interrupted)" +
                 "\n" +
-                "Example: When InstantActionWithTransition is invoked (with an InvokeID data field = 1), and the " +
-                "same client invokes an InstantAction with (the same or another ActionId and) InvokeID = 2, and this " +
+                "Example: When InstantActionWithTransition is invoked (with an InvokeID data field = 1), and the same " +
+                "client invokes an InstantAction with (the same or another ActionId and) InvokeID = 2, and this " +
                 "second command interrupts the transition triggered by the first command, these events would be " +
                 "generated:" +
                 "\n" +
@@ -279,8 +279,8 @@ export const Actions = Cluster(
             response: "status",
 
             details: "This command triggers the commencement of an action on the involved endpoints, and shall change the " +
-                "action’s state to Active. After the specified Duration, the action will stop, and the action’s " +
-                "state shall change to Inactive." +
+                "action’s state to Active. After the specified Duration, the action will stop, and the action’s state " +
+                "shall change to Inactive." +
                 "\n" +
                 "Example: start a dynamic lighting pattern (such as gradually rotating the colors around the " +
                 "setpoints of the scene) on a set of lights for 1 hour (Duration=3600).",
@@ -367,8 +367,8 @@ export const Actions = Cluster(
                 "The difference between ResumeAction and StartAction is that ResumeAction will continue the action " +
                 "from the state where it was paused, while StartAction will start the action from the beginning." +
                 "\n" +
-                "Example: resume a dynamic lighting effect (the lights' colors will change gradually, continuing " +
-                "from the point they were paused).",
+                "Example: resume a dynamic lighting effect (the lights' colors will change gradually, continuing from " +
+                "the point they were paused).",
 
             xref: { document: "core", section: "9.14.6.8" }
         },
@@ -440,9 +440,9 @@ export const Actions = Cluster(
                 "Disabled. After the specified Duration, the action or automation will re-start, and the action’s " +
                 "state shall change to either Inactive or Active, depending on the actions (see examples 4 and 6)." +
                 "\n" +
-                "Example: disable a \"wakeup\" experience for a period of 1 week when going on holiday (to prevent " +
-                "them from turning on in the morning while you’re not at home). After this period, the wakeup " +
-                "experience will control the lights as before.",
+                "Example: disable a \"wakeup\" experience for a period of 1 week when going on holiday (to prevent them " +
+                "from turning on in the morning while you’re not at home). After this period, the wakeup experience " +
+                "will control the lights as before.",
 
             xref: { document: "core", section: "9.14.6.12" }
         },
@@ -502,9 +502,9 @@ export const Actions = Cluster(
             name: "Scene", id: 0x1, conformance: "M", description: "Bring the endpoints into a certain state",
 
             details: "Can be used to set a static state of the associated endpoints (typically using InstantAction or " +
-                "InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically " +
-                "using StartAction), where the endpoints would e.g. gradually cycle through certain colors for a " +
-                "pleasing effect. A voice controller could use \"set\" (to map to InstantAction) or \"play\" (to map to " +
+                "InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically using " +
+                "StartAction), where the endpoints would e.g. gradually cycle through certain colors for a pleasing " +
+                "effect. A voice controller could use \"set\" (to map to InstantAction) or \"play\" (to map to " +
                 "StartAction) to trig" +
                 "\n" +
                 "ger such actions." +
@@ -598,8 +598,8 @@ export const Actions = Cluster(
             name: "Other", id: 0x0, conformance: "M", description: "Another group of endpoints",
             details: "This value is provided for the case of an endpoint list which is tied specifically to this action " +
                 "i.e. not independently created by the user. For Type=Other the Name may be empty. A Matter " +
-                "controller would typically not use this for anything else than just to know which endpoints would " +
-                "be affected by the action.",
+                "controller would typically not use this for anything else than just to know which endpoints would be " +
+                "affected by the action.",
             xref: { document: "core", section: "9.14.4.5.1" }
         }),
 
@@ -607,10 +607,10 @@ export const Actions = Cluster(
             name: "Room", id: 0x1, conformance: "M",
             description: "User-configured group of endpoints where an endpoint can be in only one room",
             details: "Is used for the situation where an endpoint can only be part of one such rooms (e.g. physical " +
-                "mapping). Using these exposed logical groups, a Matter controller who has a similar grouping " +
-                "concept can use it to place each endpoint (bridged device) in the right room automatically, without " +
-                "user having to redo that setup for each device in each system - both at first contact and upon " +
-                "later updates to the endpoints (e.g. user adds a bridged device or creates a new room).",
+                "mapping). Using these exposed logical groups, a Matter controller who has a similar grouping concept " +
+                "can use it to place each endpoint (bridged device) in the right room automatically, without user " +
+                "having to redo that setup for each device in each system - both at first contact and upon later " +
+                "updates to the endpoints (e.g. user adds a bridged device or creates a new room).",
             xref: { document: "core", section: "9.14.4.5.2" }
         }),
 
@@ -623,9 +623,9 @@ export const Actions = Cluster(
                 "\n" +
                 "room can be part of the \"reading corner\" zone (subset of the lights in the living room) but also " +
                 "part of the \"downstairs\" zone which contains all the lights on a floor, e.g. combining living room, " +
-                "kitchen and hallway. This indicates that a user has defined this list of endpoints as something " +
-                "they logically would like to control as a group, so Matter controllers could provide the user with " +
-                "a way to do as such.",
+                "kitchen and hallway. This indicates that a user has defined this list of endpoints as something they " +
+                "logically would like to control as a group, so Matter controllers could provide the user with a way " +
+                "to do as such.",
 
             xref: { document: "core", section: "9.14.4.5.3" }
         })
@@ -668,9 +668,9 @@ export const Actions = Cluster(
 
         Field({
             name: "SupportedCommands", id: 0x4, type: "CommandBits", conformance: "M", constraint: "0 to 4095",
-            details: "This field is a bitmap which shall be used to indicate which of the cluster’s commands are " +
-                "supported for this particular action, with a bit set to 1 for each supported command according to " +
-                "the table below. Other bits shall be set to 0.",
+            details: "This field is a bitmap which shall be used to indicate which of the cluster’s commands are supported " +
+                "for this particular action, with a bit set to 1 for each supported command according to the table " +
+                "below. Other bits shall be set to 0.",
             xref: { document: "core", section: "9.14.4.6.5" }
         }),
 
@@ -684,8 +684,8 @@ export const Actions = Cluster(
     Datatype(
         {
             name: "EndpointListStruct", type: "struct",
-            details: "This data type holds the details of a single endpoint list, which relates to a set of endpoints " +
-                "that have some logical relation, and contains the data fields below.",
+            details: "This data type holds the details of a single endpoint list, which relates to a set of endpoints that " +
+                "have some logical relation, and contains the data fields below.",
             xref: { document: "core", section: "9.14.4.7" }
         },
 

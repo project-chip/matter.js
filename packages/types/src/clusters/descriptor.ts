@@ -30,8 +30,8 @@ export namespace Descriptor {
         /**
          * TagList (TAGLIST)
          *
-         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
-         * the corresponding attribute.
+         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and the
+         * corresponding attribute.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
          */
@@ -81,11 +81,11 @@ export namespace Descriptor {
              * device with two buttons, with this attribute being used to indicate which of the two endpoints
              * corresponds to the button on the left side.
              *
-             * It may also be used to provide information about an endpoint (e.g. the relative location of a
-             * Temperature sensor in a Temperature Controlled Cabinet).
+             * It may also be used to provide information about an endpoint (e.g. the relative location of a Temperature
+             * sensor in a Temperature Controlled Cabinet).
              *
-             *   • A client SHOULD use these tags to convey disambiguation information and other relevant information
-             *     to the user (e.g. showing it in a user interface), as appropriate.
+             *   • A client SHOULD use these tags to convey disambiguation information and other relevant information to
+             *     the user (e.g. showing it in a user interface), as appropriate.
              *
              *   • A client SHOULD use these tags in its logic to make decisions, as appropriate.
              *
@@ -112,8 +112,8 @@ export namespace Descriptor {
             /**
              * TagList
              *
-             * See the Disambiguation section in the System Model spec for conformance requirements for this feature
-             * and the corresponding attribute.
+             * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
+             * the corresponding attribute.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
              */
@@ -125,8 +125,8 @@ export namespace Descriptor {
              * This is a list of device types and corresponding revisions declaring endpoint conformance (see
              * DeviceTypeStruct). At least one device type entry shall be present.
              *
-             * An endpoint shall conform to all device types listed in the DeviceTypeList. A cluster instance that is
-             * in common for more than one device type in the DeviceTypeList shall be supported as a shared cluster
+             * An endpoint shall conform to all device types listed in the DeviceTypeList. A cluster instance that is in
+             * common for more than one device type in the DeviceTypeList shall be supported as a shared cluster
              * instance on the endpoint.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.5.6.1
@@ -173,8 +173,8 @@ export namespace Descriptor {
     /**
      * NOTE
      *
-     * The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a
-     * node, its endpoints and clusters.
+     * The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a node,
+     * its endpoints and clusters.
      *
      * This cluster describes an endpoint instance on the node, independently from other endpoints, but also allows
      * composition of endpoints to conform to complex device type patterns.
@@ -212,8 +212,8 @@ export namespace Descriptor {
     /**
      * This cluster supports all Descriptor features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

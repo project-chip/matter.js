@@ -10,8 +10,8 @@ import { ProxyConfiguration } from "#clusters/proxy-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * ProxyConfigurationBehavior is the base class for objects that support interaction with {@link
- * ProxyConfiguration.Cluster}.
+ * ProxyConfigurationBehavior is the base class for objects that support interaction with
+ * {@link ProxyConfiguration.Cluster}.
  */
 export const ProxyConfigurationBehavior = ClusterBehavior.for(ProxyConfiguration.Cluster);
 

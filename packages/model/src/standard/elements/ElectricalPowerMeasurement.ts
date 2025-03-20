@@ -60,8 +60,8 @@ export const ElectricalPowerMeasurement = Cluster(
 
     Attribute({
         name: "PowerMode", id: 0x0, type: "PowerModeEnum", access: "R V", conformance: "M",
-        details: "This shall indicate the current mode of the server. For some servers, such as an EV, this may " +
-            "change depending on the mode of charging or discharging.",
+        details: "This shall indicate the current mode of the server. For some servers, such as an EV, this may change " +
+            "depending on the mode of charging or discharging.",
         xref: { document: "cluster", section: "2.13.6.1" }
     }),
 
@@ -90,9 +90,9 @@ export const ElectricalPowerMeasurement = Cluster(
             name: "Ranges", id: 0x3, type: "list", access: "R V", conformance: "O",
             constraint: "0 to numberOfMeasurementTypes", default: [], quality: "Q",
 
-            details: "This shall indicate a list of measured ranges for different measurement types. Each measurement " +
-                "type shall have at most one entry in this list, representing the range of measurements in the most " +
-                "recent measurement period." +
+            details: "This shall indicate a list of measured ranges for different measurement types. Each measurement type " +
+                "shall have at most one entry in this list, representing the range of measurements in the most recent " +
+                "measurement period." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -474,8 +474,8 @@ export const ElectricalPowerMeasurement = Cluster(
             details: "This struct shall indicate the maximum and minimum values of a given measurement type during a " +
                 "measurement period, along with the observation times of these values." +
                 "\n" +
-                "A server which does not have the ability to determine the time in UTC, or has not yet done so, " +
-                "shall use the system time fields to specify the measurement period and observation times." +
+                "A server which does not have the ability to determine the time in UTC, or has not yet done so, shall " +
+                "use the system time fields to specify the measurement period and observation times." +
                 "\n" +
                 "A server which has determined the time in UTC shall use the timestamp fields to specify the " +
                 "measurement period and observation times. Such a server may also include the systime fields to " +
@@ -502,8 +502,8 @@ export const ElectricalPowerMeasurement = Cluster(
         Field({
             name: "Max", id: 0x2, type: "int64", conformance: "M",
             details: "This field shall be the largest measured value for the associated measurement over the period " +
-                "between either StartTimestamp and EndTimestamp or the period between StartSystime and EndSystime, " +
-                "or both.",
+                "between either StartTimestamp and EndTimestamp or the period between StartSystime and EndSystime, or " +
+                "both.",
             xref: { document: "cluster", section: "2.13.5.2.3" }
         }),
 
@@ -530,17 +530,17 @@ export const ElectricalPowerMeasurement = Cluster(
             name: "MinTimestamp", id: 0x5, type: "epoch-s", conformance: "EndTimestamp",
             details: "This field shall be the most recent timestamp in UTC that the value in the Min field was measured." +
                 "\n" +
-                "This field shall be greater than or equal to the value of the StartTimestamp field. This field " +
-                "shall be less than or equal to the value of the EndTimestamp field.",
+                "This field shall be greater than or equal to the value of the StartTimestamp field. This field shall " +
+                "be less than or equal to the value of the EndTimestamp field.",
             xref: { document: "cluster", section: "2.13.5.2.6" }
         }),
 
         Field({
             name: "MaxTimestamp", id: 0x6, type: "epoch-s", conformance: "EndTimestamp",
             constraint: "min minTimestamp + 1",
-            details: "This field shall be the most recent timestamp in UTC of the value in the Max field. This field " +
-                "shall be greater than or equal to the value of the StartTimestamp field. This field shall be less " +
-                "than or equal to the value of the EndTimestamp field.",
+            details: "This field shall be the most recent timestamp in UTC of the value in the Max field. This field shall " +
+                "be greater than or equal to the value of the StartTimestamp field. This field shall be less than or " +
+                "equal to the value of the EndTimestamp field.",
             xref: { document: "cluster", section: "2.13.5.2.7" }
         }),
 
@@ -558,15 +558,15 @@ export const ElectricalPowerMeasurement = Cluster(
             constraint: "min startSystime + 1",
             details: "This field shall be the time since boot of the end of the measurement period." +
                 "\n" +
-                "If the server had determined the time in UTC at the end of the measurement period, this field may " +
-                "be omitted along with the StartSystime field, MinSystime, and MaxSystime fields.",
+                "If the server had determined the time in UTC at the end of the measurement period, this field may be " +
+                "omitted along with the StartSystime field, MinSystime, and MaxSystime fields.",
             xref: { document: "cluster", section: "2.13.5.2.9" }
         }),
 
         Field({
             name: "MinSystime", id: 0x9, type: "systime-ms", conformance: "EndSystime",
-            details: "This field shall be the measurement time since boot of the value in the Min field was measured. " +
-                "This field shall be greater than or equal to the value of the StartSystime field." +
+            details: "This field shall be the measurement time since boot of the value in the Min field was measured. This " +
+                "field shall be greater than or equal to the value of the StartSystime field." +
                 "\n" +
                 "This field shall be less than or equal to the value of the EndSystime field.",
             xref: { document: "cluster", section: "2.13.5.2.10" }

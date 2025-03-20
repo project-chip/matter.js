@@ -12,8 +12,8 @@ import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } fr
 export const OnOffSensorDt = DeviceType(
     {
         name: "OnOffSensor", id: 0x850, category: "Sensor", classification: "simple",
-        details: "An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as " +
-            "a Dimmable Light, is capable of being used to switch the device on or off.",
+        details: "An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as a " +
+            "Dimmable Light, is capable of being used to switch the device on or off.",
         xref: { document: "device", section: "7.8" }
     },
 

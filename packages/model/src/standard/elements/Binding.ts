@@ -93,9 +93,9 @@ export const Binding = Cluster(
 
         Field({
             name: "Cluster", id: 0x4, type: "cluster-id", access: "F", conformance: "O",
-            details: "This field is the cluster ID (client & server) on the local and target endpoint(s). If this field " +
-                "is present, the client cluster shall also exist on this endpoint (with this Binding cluster). If " +
-                "this field is present, the target shall be this cluster on the target endpoint(s).",
+            details: "This field is the cluster ID (client & server) on the local and target endpoint(s). If this field is " +
+                "present, the client cluster shall also exist on this endpoint (with this Binding cluster). If this " +
+                "field is present, the target shall be this cluster on the target endpoint(s).",
             xref: { document: "core", section: "9.6.5.1.4" }
         }),
 

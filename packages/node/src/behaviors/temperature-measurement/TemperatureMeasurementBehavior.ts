@@ -10,8 +10,8 @@ import { TemperatureMeasurement } from "#clusters/temperature-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * TemperatureMeasurementBehavior is the base class for objects that support interaction with {@link
- * TemperatureMeasurement.Cluster}.
+ * TemperatureMeasurementBehavior is the base class for objects that support interaction with
+ * {@link TemperatureMeasurement.Cluster}.
  */
 export const TemperatureMeasurementBehavior = ClusterBehavior.for(TemperatureMeasurement.Cluster);
 

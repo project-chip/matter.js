@@ -372,9 +372,9 @@ export namespace Channel {
         endTime: TlvField(1, TlvEpochS),
 
         /**
-         * This field shall indicate the set of channels for which program guide entries should be fetched. By
-         * providing a list of channels in this field, the response will only include entries corresponding to the
-         * specified channels.
+         * This field shall indicate the set of channels for which program guide entries should be fetched. By providing
+         * a list of channels in this field, the response will only include entries corresponding to the specified
+         * channels.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.5.3
          */
@@ -628,8 +628,8 @@ export namespace Channel {
         posterArtUrl: TlvOptionalField(10, TlvString.bound({ maxLength: 8192 })),
 
         /**
-         * This field shall represent the DVB-I URL associated to the program. The syntax of this field shall follow
-         * the syntax as specified in RFC 1738 and shall use the https scheme.
+         * This field shall represent the DVB-I URL associated to the program. The syntax of this field shall follow the
+         * syntax as specified in RFC 1738 and shall use the https scheme.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.12
          */
@@ -668,8 +668,8 @@ export namespace Channel {
         seriesInfo: TlvOptionalField(15, TlvNullable(TlvSeriesInfo)),
 
         /**
-         * This field shall represent the category of a particular program. This field is optional but shall be
-         * provided if known.
+         * This field shall represent the category of a particular program. This field is optional but shall be provided
+         * if known.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.17
          */
@@ -705,8 +705,8 @@ export namespace Channel {
      */
     export const TlvProgramGuideResponse = TlvObject({
         /**
-         * This field shall indicate the necessary pagination attributes that define information for both the
-         * succeeding and preceding data pages.
+         * This field shall indicate the necessary pagination attributes that define information for both the succeeding
+         * and preceding data pages.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.6.1
          */
@@ -742,9 +742,9 @@ export namespace Channel {
         programIdentifier: TlvField(0, TlvString.bound({ maxLength: 255 })),
 
         /**
-         * This field shall indicate whether the whole series associated to the program should be recorded. For
-         * example, invoking record program on an episode with that flag set to true, the target should schedule record
-         * the whole series.
+         * This field shall indicate whether the whole series associated to the program should be recorded. For example,
+         * invoking record program on an episode with that flag set to true, the target should schedule record the whole
+         * series.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.7.2
          */
@@ -852,8 +852,8 @@ export namespace Channel {
      */
     export const TlvSkipChannelRequest = TlvObject({
         /**
-         * This field shall indicate the number of steps to increase (Count is positive) or decrease (Count is
-         * negative) the current channel.
+         * This field shall indicate the number of steps to increase (Count is positive) or decrease (Count is negative)
+         * the current channel.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.4.1
          */
@@ -1050,9 +1050,9 @@ export namespace Channel {
      *
      * This cluster server would be supported on Video Player devices or endpoints that allow Channel control such as a
      * Content App. This cluster provides a list of available channels and provides commands for absolute and relative
-     * channel changes. Some of these commands and/or their responses may be large (see Large Message Quality under
-     * Data Model section in [MatterCore]), but they do not have the Large quality indicator (L) because they can also
-     * be transferred over MRP (see Message Reliability Protocol in [MatterCore]) in pages that fit within the MRP MTU
+     * channel changes. Some of these commands and/or their responses may be large (see Large Message Quality under Data
+     * Model section in [MatterCore]), but they do not have the Large quality indicator (L) because they can also be
+     * transferred over MRP (see Message Reliability Protocol in [MatterCore]) in pages that fit within the MRP MTU
      * limit. However, an implementation may leverage a transport like TCP that allows large payloads, if available, to
      * minimize the number of messages required to transfer the corresponding payload.
      *
@@ -1112,8 +1112,8 @@ export namespace Channel {
     /**
      * This cluster supports all Channel features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

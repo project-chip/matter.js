@@ -79,14 +79,14 @@ export namespace CommissionerControl {
      * RequestCommissioningApproval command.
      *
      * When commissioning this node, the server shall check that the VendorID and ProductID fields provided in the
-     * RequestCommissioningApproval command match the VendorID and ProductID attributes of the Basic Information
-     * Cluster which have already been verified during the Device Attestation Procedure. If they do not match, the
-     * server shall NOT complete commissioning and SHOULD indicate an error to the user.
+     * RequestCommissioningApproval command match the VendorID and ProductID attributes of the Basic Information Cluster
+     * which have already been verified during the Device Attestation Procedure. If they do not match, the server shall
+     * NOT complete commissioning and SHOULD indicate an error to the user.
      *
      * NOTE
      *
-     * This is an alias onto the Open Commissioning Window command within the Administrator Commissioning Cluster.
-     * Refer to the Open Commissioning Window command for a description of the command behavior and parameters.
+     * This is an alias onto the Open Commissioning Window command within the Administrator Commissioning Cluster. Refer
+     * to the Open Commissioning Window command for a description of the command behavior and parameters.
      *
      * The parameters for ReverseOpenCommissioningWindow command are as follows:
      *
@@ -106,14 +106,14 @@ export namespace CommissionerControl {
      * RequestCommissioningApproval command.
      *
      * When commissioning this node, the server shall check that the VendorID and ProductID fields provided in the
-     * RequestCommissioningApproval command match the VendorID and ProductID attributes of the Basic Information
-     * Cluster which have already been verified during the Device Attestation Procedure. If they do not match, the
-     * server shall NOT complete commissioning and SHOULD indicate an error to the user.
+     * RequestCommissioningApproval command match the VendorID and ProductID attributes of the Basic Information Cluster
+     * which have already been verified during the Device Attestation Procedure. If they do not match, the server shall
+     * NOT complete commissioning and SHOULD indicate an error to the user.
      *
      * NOTE
      *
-     * This is an alias onto the Open Commissioning Window command within the Administrator Commissioning Cluster.
-     * Refer to the Open Commissioning Window command for a description of the command behavior and parameters.
+     * This is an alias onto the Open Commissioning Window command within the Administrator Commissioning Cluster. Refer
+     * to the Open Commissioning Window command for a description of the command behavior and parameters.
      *
      * The parameters for ReverseOpenCommissioningWindow command are as follows:
      *
@@ -176,8 +176,8 @@ export namespace CommissionerControl {
              *
              * The server may request approval from the user, but it is not required.
              *
-             * The server shall always return SUCCESS to a correctly formatted RequestCommissioningApproval command,
-             * and then generate a CommissioningRequestResult event associated with the command’s
+             * The server shall always return SUCCESS to a correctly formatted RequestCommissioningApproval command, and
+             * then generate a CommissioningRequestResult event associated with the command’s
              *
              * accessing fabric once the result is ready.
              *
@@ -202,9 +202,9 @@ export namespace CommissionerControl {
              * This command is sent by a client to request that the server begins commissioning a previously approved
              * request.
              *
-             * The server shall return FAILURE if the CommissionNode command is not sent from the same NodeID and on
-             * the same fabric as the RequestCommissioningApproval or if the provided RequestID to CommissionNode does
-             * not match the value provided to RequestCommissioningApproval.
+             * The server shall return FAILURE if the CommissionNode command is not sent from the same NodeID and on the
+             * same fabric as the RequestCommissioningApproval or if the provided RequestID to CommissionNode does not
+             * match the value provided to RequestCommissioningApproval.
              *
              * If the command is not executed via a CASE session, the command shall fail with a status code of
              *

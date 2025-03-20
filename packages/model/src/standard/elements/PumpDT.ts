@@ -74,6 +74,6 @@ export const PumpDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "5.5.4" }
     })
-)
+);
 
 MatterDefinition.children.push(PumpDt);

@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * LaundryWasherControlsBehavior is the base class for objects that support interaction with {@link
- * LaundryWasherControls.Cluster}.
+ * LaundryWasherControlsBehavior is the base class for objects that support interaction with
+ * {@link LaundryWasherControls.Cluster}.
  *
- * LaundryWasherControls.Cluster requires you to enable one or more optional features. You can do so using {@link
- * LaundryWasherControlsBehavior.with}.
+ * LaundryWasherControls.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link LaundryWasherControlsBehavior.with}.
  */
 export const LaundryWasherControlsBehavior = ClusterBehavior.for(ClusterType(LaundryWasherControls.Base));
 

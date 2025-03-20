@@ -378,8 +378,8 @@ export namespace Groups {
             ),
 
             /**
-             * The RemoveAllGroups command allows a client to direct the server to remove all group associations for
-             * the server endpoint.
+             * The RemoveAllGroups command allows a client to direct the server to remove all group associations for the
+             * server endpoint.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.3.7.5
              */
@@ -418,16 +418,15 @@ export namespace Groups {
     export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { groupNames: true } });
 
     /**
-     * The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of the
-     * underlying interaction layer.
+     * The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of the underlying
+     * interaction layer.
      *
      * In a network supporting fabrics, group IDs referenced by attributes or other elements of this cluster are scoped
      * to the accessing fabric.
      *
-     * The Groups cluster is scoped to the endpoint. Groups cluster commands support discovering the endpoint
-     * membership in a group, adding the endpoint to a group, removing the endpoint from a group, removing endpoint
-     * membership from all groups. All commands defined in this cluster shall only affect groups scoped to the
-     * accessing fabric.
+     * The Groups cluster is scoped to the endpoint. Groups cluster commands support discovering the endpoint membership
+     * in a group, adding the endpoint to a group, removing the endpoint from a group, removing endpoint membership from
+     * all groups. All commands defined in this cluster shall only affect groups scoped to the accessing fabric.
      *
      * When group names are supported, the server stores a name string, which is set by the client for each assigned
      * group and indicated in response to a client request.

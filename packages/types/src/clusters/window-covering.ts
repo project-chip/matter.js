@@ -560,8 +560,8 @@ export namespace WindowCovering {
         remoteLockout: BitFlag(0),
 
         /**
-         * Tampering detected on sensors or any other safety equipment. Ex: a device has been forcedly moved without
-         * its actuator(s).
+         * Tampering detected on sensors or any other safety equipment. Ex: a device has been forcedly moved without its
+         * actuator(s).
          */
         tamperDetection: BitFlag(1),
 
@@ -625,8 +625,8 @@ export namespace WindowCovering {
     export const LiftAndPositionAwareLiftAndAbsolutePositionComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the maximum possible encoder position possible (Unit cm, centimeters) to position the height
-             * of the window covering lift.
+             * Indicates the maximum possible encoder position possible (Unit cm, centimeters) to position the height of
+             * the window covering lift.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.2
              */
@@ -735,8 +735,8 @@ export namespace WindowCovering {
              *
              * If the server does not support the PositionAware feature, then a zero percentage shall be treated as a
              * UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the device is
-             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
-             * be returned.
+             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
+             * returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
              */
@@ -760,8 +760,8 @@ export namespace WindowCovering {
 
         commands: {
             /**
-             * Upon receipt of this command, the server will adjust the window covering to the tilt percentage
-             * specified in the payload of this command.
+             * Upon receipt of this command, the server will adjust the window covering to the tilt percentage specified
+             * in the payload of this command.
              *
              * If the command includes TiltPercent100thsValue, then TargetPositionTiltPercent100ths attribute shall be
              * set to TiltPercent100thsValue. Otherwise the TargetPositionTiltPercent100ths attribute shall be set to
@@ -773,8 +773,8 @@ export namespace WindowCovering {
              *
              * If the server does not support the PositionAware feature, then a zero percentage shall be treated as a
              * UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the device is
-             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
-             * be returned.
+             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
+             * returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.7
              */
@@ -834,8 +834,8 @@ export namespace WindowCovering {
              *
              * If the server does not support the PositionAware feature, then a zero percentage shall be treated as a
              * UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the device is
-             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
-             * be returned.
+             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
+             * returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
              */
@@ -882,8 +882,8 @@ export namespace WindowCovering {
 
         commands: {
             /**
-             * Upon receipt of this command, the server will adjust the window covering to the tilt percentage
-             * specified in the payload of this command.
+             * Upon receipt of this command, the server will adjust the window covering to the tilt percentage specified
+             * in the payload of this command.
              *
              * If the command includes TiltPercent100thsValue, then TargetPositionTiltPercent100ths attribute shall be
              * set to TiltPercent100thsValue. Otherwise the TargetPositionTiltPercent100ths attribute shall be set to
@@ -895,8 +895,8 @@ export namespace WindowCovering {
              *
              * If the server does not support the PositionAware feature, then a zero percentage shall be treated as a
              * UpOrOpen command and a non-zero percentage shall be treated as an DownOrClose command. If the device is
-             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
-             * be returned.
+             * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
+             * returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.7
              */
@@ -967,8 +967,8 @@ export namespace WindowCovering {
             /**
              * AbsolutePosition
              *
-             * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits
-             * and InstalledClosedLimits attributes of the window covering starting at the open (0.00%).
+             * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits and
+             * InstalledClosedLimits attributes of the window covering starting at the open (0.00%).
              *
              * As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be supported
              * for new implementations.
@@ -1022,13 +1022,13 @@ export namespace WindowCovering {
 
             /**
              * The Mode attribute allows configuration of the window covering, such as: reversing the motor direction,
-             * placing the window covering into calibration mode, placing the motor into maintenance mode, disabling
-             * the network, and disabling status LEDs.
+             * placing the window covering into calibration mode, placing the motor into maintenance mode, disabling the
+             * network, and disabling status LEDs.
              *
              * In the case a device does not support or implement a specific mode, e.g. the device has a specific
              * installation method and reversal is not relevant or the device does not include a maintenance mode, any
-             * write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set,
-             * must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.
+             * write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set, must
+             * be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.3.6.21
              */
@@ -1050,8 +1050,8 @@ export namespace WindowCovering {
 
         commands: {
             /**
-             * Upon receipt of this command, the window covering will adjust its position so the physical lift/slide
-             * and tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes
+             * Upon receipt of this command, the window covering will adjust its position so the physical lift/slide and
+             * tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes
              * shall be updated as follows:
              *
              * if the PositionAware feature is supported:
@@ -1060,8 +1060,8 @@ export namespace WindowCovering {
              *
              *   • TargetPositionTiltPercent100ths attribute shall be set to 0.00%.
              *
-             * The server positioning attributes will follow the movements, once the movement has successfully
-             * finished, the server attributes shall be updated as follows:
+             * The server positioning attributes will follow the movements, once the movement has successfully finished,
+             * the server attributes shall be updated as follows:
              *
              * if the PositionAware feature is supported:
              *
@@ -1082,9 +1082,9 @@ export namespace WindowCovering {
             upOrOpen: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
 
             /**
-             * Upon receipt of this command, the window covering will adjust its position so the physical lift/slide
-             * and tilt is at the maximum closed/down position. This will happen as fast as possible. The server
-             * attributes supported shall be updated as follows:
+             * Upon receipt of this command, the window covering will adjust its position so the physical lift/slide and
+             * tilt is at the maximum closed/down position. This will happen as fast as possible. The server attributes
+             * supported shall be updated as follows:
              *
              * if the PositionAware feature is supported:
              *
@@ -1092,8 +1092,8 @@ export namespace WindowCovering {
              *
              *   • TargetPositionTiltPercent100ths attribute shall be set to 100.00%.
              *
-             * The server positioning attributes will follow the movements, once the movement has successfully
-             * finished, the server attributes shall be updated as follows:
+             * The server positioning attributes will follow the movements, once the movement has successfully finished,
+             * the server attributes shall be updated as follows:
              *
              * if the PositionAware feature is supported:
              *
@@ -1280,8 +1280,8 @@ export namespace WindowCovering {
     /**
      * This cluster supports all WindowCovering features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

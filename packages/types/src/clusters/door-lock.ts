@@ -24,7 +24,7 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { AccessLevel } from "#model";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { BitFlag, BitsFromPartial } from "../schema/BitmapSchema.js";
+import { BitFlag, BitsFromPartial, BitField } from "../schema/BitmapSchema.js";
 import { TlvString, TlvByteString } from "../tlv/TlvString.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
@@ -48,8 +48,8 @@ export namespace DoorLock {
          *
          * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a User.
          *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a PIN index. A User index may have
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus and
+         * Schedules are all associated with a User index and not directly with a PIN index. A User index may have
          * several credentials associated with it.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.1
@@ -62,8 +62,8 @@ export namespace DoorLock {
          * If the User Feature is also supported then any RFID credential stored in the lock shall be associated with a
          * User.
          *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a RFID index. A User Index may have
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus and
+         * Schedules are all associated with a User index and not directly with a RFID index. A User Index may have
          * several credentials associated with it.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.2
@@ -74,13 +74,13 @@ export namespace DoorLock {
          * FingerCredentials (FGP)
          *
          * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
-         * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
-         * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
-         * associated with can also have its UserType, UserStatus and Schedule modified.
+         * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein credentials.
+         * If the Users feature is also supported then the User that a fingerprint/finger vein is associated with can
+         * also have its UserType, UserStatus and Schedule modified.
          *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a Finger index. A User Index may
-         * have several credentials associated with it.
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus and
+         * Schedules are all associated with a User index and not directly with a Finger index. A User Index may have
+         * several credentials associated with it.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.3
          */
@@ -120,8 +120,8 @@ export namespace DoorLock {
          * retina credentials. If the Users feature is also supported then the User that a face recognition, iris, or
          * retina credential is associated with can also have its UserType, UserStatus and Schedule modified.
          *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User and not directly with a credential.
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus and
+         * Schedules are all associated with a User and not directly with a credential.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.6
          */
@@ -142,9 +142,9 @@ export namespace DoorLock {
         /**
          * User (USR)
          *
-         * If the User Feature is supported then a lock employs a User database. A User within the User database is
-         * used to associate credentials and schedules to single user record within the lock. This also means the
-         * UserType and UserStatus fields are associated with a User and not a credential.
+         * If the User Feature is supported then a lock employs a User database. A User within the User database is used
+         * to associate credentials and schedules to single user record within the lock. This also means the UserType
+         * and UserStatus fields are associated with a User and not a credential.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.8
          */
@@ -153,8 +153,8 @@ export namespace DoorLock {
         /**
          * YearDayAccessSchedules (YDSCH)
          *
-         * If the User feature is supported then Year Day Schedules are applied to a User and not a credential. Year
-         * Day Schedules are used to restrict access to a specified date and time window.
+         * If the User feature is supported then Year Day Schedules are applied to a User and not a credential. Year Day
+         * Schedules are used to restrict access to a specified date and time window.
          *
          * The lock may automatically adjust the UserType when a schedule is created or cleared.
          *
@@ -180,10 +180,10 @@ export namespace DoorLock {
          * Unbolting (UBOLT)
          *
          * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
-         * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
-         * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
-         * Locks without unbolting support don’t differentiate between unbolting and unlocking and perform the same
-         * operation for both commands.
+         * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting the
+         * bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched. Locks
+         * without unbolting support don’t differentiate between unbolting and unlocking and perform the same operation
+         * for both commands.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.11
          */
@@ -192,8 +192,8 @@ export namespace DoorLock {
         /**
          * AliroProvisioning (ALIRO)
          *
-         * Locks that support this feature implement the Aliro specification as defined in [Aliro] and support Matter
-         * as a method for provisioning Aliro credentials.
+         * Locks that support this feature implement the Aliro specification as defined in [Aliro] and support Matter as
+         * a method for provisioning Aliro credentials.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.12
          */
@@ -356,8 +356,8 @@ export namespace DoorLock {
          *   • If no YearDaySchedules are set for the user, then access shall be denied
          *
          *   • If one or more YearDaySchedules are set, user access shall be granted if and only if the current time
-         *     falls within at least one of the YearDaySchedules. If current time is not known, user access shall NOT
-         *     be granted.
+         *     falls within at least one of the YearDaySchedules. If current time is not known, user access shall NOT be
+         *     granted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.18.2
          */
@@ -374,8 +374,8 @@ export namespace DoorLock {
          *   • If no WeekDaySchedules are set for the user, then access shall be denied
          *
          *   • If one or more WeekDaySchedules are set, user access shall be granted if and only if the current time
-         *     falls within at least one of the WeekDaySchedules. If current time is not known, user access shall NOT
-         *     be granted.
+         *     falls within at least one of the WeekDaySchedules. If current time is not known, user access shall NOT be
+         *     granted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.18.3
          */
@@ -385,8 +385,8 @@ export namespace DoorLock {
          * The user ID type is programming
          *
          * This value shall indicate the user has the ability to both program and operate the door lock. This user can
-         * manage the users and user schedules. In all other respects this user matches the unrestricted (default)
-         * user. ProgrammingUser is the only user that can disable the user interface (keypad, remote, etc…).
+         * manage the users and user schedules. In all other respects this user matches the unrestricted (default) user.
+         * ProgrammingUser is the only user that can disable the user interface (keypad, remote, etc…).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.18.4
          */
@@ -450,8 +450,8 @@ export namespace DoorLock {
          *     shall be equivalent to the YearDayScheduleUser UserType
          *
          *   • If one or WeekDaySchedules are set AND one or more YearDaySchedules are set, then user access shall be
-         *     granted if and only if the current time falls within at least one of the WeekDaySchedules AND the
-         *     current time falls within at least one of the YearDaySchedules.
+         *     granted if and only if the current time falls within at least one of the WeekDaySchedules AND the current
+         *     time falls within at least one of the YearDaySchedules.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.18.9
          */
@@ -536,8 +536,8 @@ export namespace DoorLock {
          *   • If the OperationType is Add, the UserUniqueID in the resulting user record shall be set to default value
          *     specified above.
          *
-         *   • If the OperationType is Modify, the UserUniqueID in the user record shall NOT be changed from the
-         *     current value.
+         *   • If the OperationType is Modify, the UserUniqueID in the user record shall NOT be changed from the current
+         *     value.
          *
          * If UserUniqueID is not null, the UserUniqueID in the user record shall be set to the provided value.
          *
@@ -580,8 +580,8 @@ export namespace DoorLock {
         /**
          * This field shall indicate the CredentialRule to use for this user.
          *
-         * The valid CredentialRule enumeration values depends on the bits in the CredentialRulesBitmap map. Each bit
-         * in the map identifies a valid CredentialRule that can be used.
+         * The valid CredentialRule enumeration values depends on the bits in the CredentialRulesBitmap map. Each bit in
+         * the map identifies a valid CredentialRule that can be used.
          *
          * If CredentialRule is null then:
          *
@@ -658,8 +658,8 @@ export namespace DoorLock {
         /**
          * A Credential Issuer public key as defined in [Aliro]
          *
-         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section
-         * 2.3.3 of SEC 1.
+         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section 2.3.3
+         * of SEC 1.
          *
          * Credentials of this type shall NOT be used to allow operating the lock. They shall be used, as defined in
          * [Aliro], to create new credentials of type AliroEvictableEndpointKey via a step-up transaction.
@@ -671,15 +671,15 @@ export namespace DoorLock {
          * When a new credential of type AliroEvictableEndpointKey is added in this manner, it shall be associated with
          * the same user record as the AliroCredentialIssuerKey credential that allowed the new credential to be added.
          *
-         * If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. either
-         * the NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has been reached)
-         * but there exist credentials of type AliroEvictableEndpointKey associated with the user record, the server
-         * shall remove one of those credentials using the same procedure it would follow for the ClearCredential
-         * command before adding the new credential.
+         * If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. either the
+         * NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has been reached) but
+         * there exist credentials of type AliroEvictableEndpointKey associated with the user record, the server shall
+         * remove one of those credentials using the same procedure it would follow for the ClearCredential command
+         * before adding the new credential.
          *
-         * If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. either
-         * the NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has been reached)
-         * and there do not exist credentials of type AliroEvictableEndpointKey associated with the user record, a new
+         * If there are no available credential slots to add a new AliroEvictableEndpointKey credential (i.e. either the
+         * NumberOfCredentialsSupportedPerUser or the NumberOfAliroEndpointKeysSupported limit has been reached) and
+         * there do not exist credentials of type AliroEvictableEndpointKey associated with the user record, a new
          * AliroEvictableEndpointKey credential shall NOT be created.
          *
          * If the step-up process results in addition of new credentials, the corresponding LockUserChange event shall
@@ -698,8 +698,8 @@ export namespace DoorLock {
         /**
          * An Endpoint public key as defined in [Aliro] which can be evicted if space is needed for another endpoint key
          *
-         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section
-         * 2.3.3 of SEC 1.
+         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section 2.3.3
+         * of SEC 1.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.9.2
          */
@@ -709,8 +709,8 @@ export namespace DoorLock {
          * An Endpoint public key as defined in [Aliro] which cannot be evicted if space is needed for another endpoint
          * key
          *
-         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section
-         * 2.3.3 of SEC 1.
+         * Credentials of this type shall be 65-byte uncompressed elliptic curve public keys as defined in section 2.3.3
+         * of SEC 1.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.9.3
          */
@@ -829,10 +829,9 @@ export namespace DoorLock {
         lastModifiedFabricIndex: TlvField(8, TlvNullable(TlvFabricIndex)),
 
         /**
-         * This field shall indicate the next occupied UserIndex in the database which is useful for quickly
-         * identifying occupied user slots in the database. This shall NOT be null if there is at least one occupied
-         * entry after the requested UserIndex in the User database and shall be null if there are no more occupied
-         * entries.
+         * This field shall indicate the next occupied UserIndex in the database which is useful for quickly identifying
+         * occupied user slots in the database. This shall NOT be null if there is at least one occupied entry after the
+         * requested UserIndex in the User database and shall be null if there are no more occupied entries.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.34.10
          */
@@ -885,8 +884,8 @@ export namespace DoorLock {
         operationType: TlvField(0, TlvEnum<DataOperationType>()),
 
         /**
-         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential
-         * index (if applicable or 0 if not) to set.
+         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential index
+         * (if applicable or 0 if not) to set.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.36.2
          */
@@ -902,9 +901,9 @@ export namespace DoorLock {
         credentialData: TlvField(2, TlvByteString),
 
         /**
-         * This field shall indicate the user index to the user record that corresponds to the credential being added
-         * or modified. This shall be null if OperationType is add and a new credential and user is being added at the
-         * same time.
+         * This field shall indicate the user index to the user record that corresponds to the credential being added or
+         * modified. This shall be null if OperationType is add and a new credential and user is being added at the same
+         * time.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.36.4
          */
@@ -989,10 +988,10 @@ export namespace DoorLock {
 
         /**
          * This field shall indicate the next available index in the database for the credential type set, which is
-         * useful for quickly identifying available credential slots in the database. This shall NOT be null if there
-         * is at least one available entry after the requested credential index in the corresponding database and shall
-         * be null if there are no more available entries. The NextCredentialIndex reported shall NOT exceed the
-         * maximum number of credentials for a particular credential type.
+         * useful for quickly identifying available credential slots in the database. This shall NOT be null if there is
+         * at least one available entry after the requested credential index in the corresponding database and shall be
+         * null if there are no more available entries. The NextCredentialIndex reported shall NOT exceed the maximum
+         * number of credentials for a particular credential type.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.37.3
          */
@@ -1013,8 +1012,8 @@ export namespace DoorLock {
      */
     export const TlvGetCredentialStatusRequest = TlvObject({
         /**
-         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential
-         * index (if applicable or 0 if not) to retrieve the status for.
+         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential index
+         * (if applicable or 0 if not) to retrieve the status for.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.38.1
          */
@@ -1072,9 +1071,9 @@ export namespace DoorLock {
         lastModifiedFabricIndex: TlvField(3, TlvNullable(TlvFabricIndex)),
 
         /**
-         * This field shall indicate the next occupied index in the database for the credential type requested, which
-         * is useful for quickly identifying occupied credential slots in the database. This shall NOT be null if there
-         * is at least one occupied entry after the requested credential index in the corresponding
+         * This field shall indicate the next occupied index in the database for the credential type requested, which is
+         * useful for quickly identifying occupied credential slots in the database. This shall NOT be null if there is
+         * at least one occupied entry after the requested credential index in the corresponding
          *
          * database and shall be null if there are no more occupied entries. The NextCredentialIndex reported shall NOT
          * exceed the maximum number of credentials for a particular credential type.
@@ -1118,9 +1117,9 @@ export namespace DoorLock {
      */
     export const TlvClearCredentialRequest = TlvObject({
         /**
-         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential
-         * index (0xFFFE for all credentials or 0 if not applicable) to clear. This shall be null if clearing all
-         * credential types otherwise it shall NOT be null.
+         * This field shall contain a credential structure that contains the CredentialTypeEnum and the credential index
+         * (0xFFFE for all credentials or 0 if not applicable) to clear. This shall be null if clearing all credential
+         * types otherwise it shall NOT be null.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.40.1
          */
@@ -1302,9 +1301,9 @@ export namespace DoorLock {
         operationSource: TlvField(2, TlvEnum<OperationSource>()),
 
         /**
-         * This field shall indicate the lock UserIndex associated with the change (if any). This shall be null if
-         * there is no specific user associated with the data operation. This shall be 0xFFFE if all users are affected
-         * (e.g. Clear Users).
+         * This field shall indicate the lock UserIndex associated with the change (if any). This shall be null if there
+         * is no specific user associated with the data operation. This shall be 0xFFFE if all users are affected (e.g.
+         * Clear Users).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.5.4
          */
@@ -1329,10 +1328,10 @@ export namespace DoorLock {
         sourceNode: TlvField(5, TlvNullable(TlvNodeId)),
 
         /**
-         * This field shall indicate the index of the specific item that was changed (e.g. schedule, PIN, RFID, etc.)
-         * in the list of items identified by LockDataType. This shall be null if the LockDataType does not correspond
-         * to a list that can be indexed into (e.g. ProgrammingUser). This shall be 0xFFFE if all indices are affected
-         * (e.g. ClearPINCode, ClearRFIDCode, ClearWeekDaySchedule, ClearYearDaySchedule, etc.).
+         * This field shall indicate the index of the specific item that was changed (e.g. schedule, PIN, RFID, etc.) in
+         * the list of items identified by LockDataType. This shall be null if the LockDataType does not correspond to a
+         * list that can be indexed into (e.g. ProgrammingUser). This shall be 0xFFFE if all indices are affected (e.g.
+         * ClearPINCode, ClearRFIDCode, ClearWeekDaySchedule, ClearYearDaySchedule, etc.).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.5.7
          */
@@ -1692,8 +1691,8 @@ export namespace DoorLock {
         /**
          * This field shall indicate the ending time for the Year Day schedule in Epoch Time in Seconds with local time
          * offset based on the local timezone and DST offset on the day represented by the value. LocalEndTime shall be
-         * greater than LocalStartTime. This shall be null if the schedule is not set for the YearDayIndex and
-         * UserIndex provided.
+         * greater than LocalStartTime. This shall be null if the schedule is not set for the YearDayIndex and UserIndex
+         * provided.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18.5
          */
@@ -1745,10 +1744,10 @@ export namespace DoorLock {
      *
      * NOTE
      *
-     * For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and Unlock
-     * with Timeout commands with a response status Failure and not take the action requested by those commands. The
-     * door lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to all
-     * other commands and requests.
+     * For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and Unlock with
+     * Timeout commands with a response status Failure and not take the action requested by those commands. The door
+     * lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to all other
+     * commands and requests.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.15
      */
@@ -1768,18 +1767,17 @@ export namespace DoorLock {
         Vacation = 1,
 
         /**
-         * This mode is only possible if the door is locked. Manual unlocking changes the mode to Normal operating
-         * mode. All external interaction with the door lock is disabled. This mode is intended to be used so that
-         * users, presumably inside the property, will have control over the entrance.
+         * This mode is only possible if the door is locked. Manual unlocking changes the mode to Normal operating mode.
+         * All external interaction with the door lock is disabled. This mode is intended to be used so that users,
+         * presumably inside the property, will have control over the entrance.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.15.3
          */
         Privacy = 2,
 
         /**
-         * This mode only disables remote interaction with the lock. This does not apply to any remote proprietary
-         * means of communication. It specifically applies to the Lock, Unlock, Toggle, and Unlock with Timeout
-         * Commands.
+         * This mode only disables remote interaction with the lock. This does not apply to any remote proprietary means
+         * of communication. It specifically applies to the Lock, Unlock, Toggle, and Unlock with Timeout Commands.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.15.4
          */
@@ -1886,9 +1884,9 @@ export namespace DoorLock {
         status: TlvField(1, TlvEnum<Status>()),
 
         /**
-         * This field shall indicate the starting time for the Holiday schedule in Epoch Time in Seconds with local
-         * time offset based on the local timezone and DST offset on the day represented by the value. This shall be
-         * null if the schedule is not set for the HolidayIndex provided.
+         * This field shall indicate the starting time for the Holiday schedule in Epoch Time in Seconds with local time
+         * offset based on the local timezone and DST offset on the day represented by the value. This shall be null if
+         * the schedule is not set for the HolidayIndex provided.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.22.3
          */
@@ -1955,8 +1953,8 @@ export namespace DoorLock {
         userId: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall indicate the user status. Only the values 1 (Occupied/Enabled) and 3 (Occupied/Disabled)
-         * are allowed for UserStatus.
+         * This field shall indicate the user status. Only the values 1 (Occupied/Enabled) and 3 (Occupied/Disabled) are
+         * allowed for UserStatus.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.4.2
          */
@@ -2004,8 +2002,8 @@ export namespace DoorLock {
      * UserID = requested User ID UserStatus = 0 (Available) UserType = Null (Not supported) PINCode = 0 (zero length)
      *
      * If the requested UserID is invalid, send Default Response with an error status. The error status shall be equal
-     * to CONSTRAINT_ERROR when User_ID is less than the max number of users supported, and NOT_FOUND if greater than
-     * or equal to the max number of users supported.
+     * to CONSTRAINT_ERROR when User_ID is less than the max number of users supported, and NOT_FOUND if greater than or
+     * equal to the max number of users supported.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.6
      */
@@ -2025,8 +2023,8 @@ export namespace DoorLock {
      * UserID = requested User ID UserStatus = 0 (Available) UserType = Null (Not supported) PINCode = 0 (zero length)
      *
      * If the requested UserID is invalid, send Default Response with an error status. The error status shall be equal
-     * to CONSTRAINT_ERROR when User_ID is less than the max number of users supported, and NOT_FOUND if greater than
-     * or equal to the max number of users supported.
+     * to CONSTRAINT_ERROR when User_ID is less than the max number of users supported, and NOT_FOUND if greater than or
+     * equal to the max number of users supported.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.6
      */
@@ -2521,33 +2519,42 @@ export namespace DoorLock {
     }
 
     /**
+     * For the OperatingModesBitmap, a bit SET indicates that the operating mode IS NOT supported. A bit CLEAR indicates
+     * that the operating mode IS supported. This is the inverse of most bitmaps in this specification, and it is
+     * RECOMMENDED that clients carefully take this into consideration.
+     *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.3
      */
     export const OperatingModes = {
         /**
-         * Normal operation mode
+         * Normal operation mode is NOT supported
          */
         normal: BitFlag(0),
 
         /**
-         * Vacation operation mode
+         * Vacation operation mode is NOT supported
          */
         vacation: BitFlag(1),
 
         /**
-         * Privacy operation mode
+         * Privacy operation mode is NOT supported
          */
         privacy: BitFlag(2),
 
         /**
-         * No remote lock and unlock operation mode
+         * No remote lock and unlock operation mode is NOT supported
          */
         noRemoteLockUnlock: BitFlag(3),
 
         /**
-         * Passage operation mode
+         * Passage operation mode is NOT supported
          */
-        passage: BitFlag(4)
+        passage: BitFlag(4),
+
+        /**
+         * This needs always be set because this bitmap is inverse.!
+         */
+        alwaysSet: BitField(5, 11)
     };
 
     /**
@@ -2735,8 +2742,8 @@ export namespace DoorLock {
          * If the RequirePINforRemoteOperation attribute is True then PINCode field shall be provided and the door lock
          * shall NOT grant access if it is not provided.
          *
-         * If the PINCode field is provided, the door lock shall verify PINCode before granting access regardless of
-         * the value of RequirePINForRemoteOperation attribute.
+         * If the PINCode field is provided, the door lock shall verify PINCode before granting access regardless of the
+         * value of RequirePINForRemoteOperation attribute.
          *
          * When the PINCode field is provided an invalid PIN will count towards the WrongCodeEntryLimit and the
          * UserCodeTemporaryDisableTime will be triggered if the WrongCodeEntryLimit is exceeded. The lock shall ignore
@@ -3027,8 +3034,8 @@ export namespace DoorLock {
         operationError: TlvField(2, TlvEnum<OperationError>()),
 
         /**
-         * This field shall indicate the lock UserIndex who performed the lock operation. This shall be null if there
-         * is no user id that can be determined for the given operation source.
+         * This field shall indicate the lock UserIndex who performed the lock operation. This shall be null if there is
+         * no user id that can be determined for the given operation source.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.4.4
          */
@@ -3163,8 +3170,8 @@ export namespace DoorLock {
             numberOfTotalUsersSupported: FixedAttribute(0x11, TlvUInt16, { default: 0 }),
 
             /**
-             * This attribute shall contain a bitmap with the bits set for the values of CredentialRuleEnum supported
-             * on this device.
+             * This attribute shall contain a bitmap with the bits set for the values of CredentialRuleEnum supported on
+             * this device.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.18
              */
@@ -3177,8 +3184,8 @@ export namespace DoorLock {
             /**
              * Indicates the number of credentials that could be assigned for each user.
              *
-             * Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be
-             * possible to assign that number of credentials for a user.
+             * Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be possible
+             * to assign that number of credentials for a user.
              *
              * For example, if the device supports only PIN and RFID credential types,
              * NumberOfCredentialsSupportedPerUser is set to 10, NumberOfPINUsersSupported is set to 5 and
@@ -3191,8 +3198,8 @@ export namespace DoorLock {
 
             /**
              * Indicates the number of minutes a PIN, RFID, Fingerprint, or other credential associated with a user of
-             * type ExpiringUser shall remain valid after its first use before expiring. When the credential expires
-             * the UserStatus for the corresponding user record shall be set to OccupiedDisabled.
+             * type ExpiringUser shall remain valid after its first use before expiring. When the credential expires the
+             * UserStatus for the corresponding user record shall be set to OccupiedDisabled.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.36
              */
@@ -3605,10 +3612,10 @@ export namespace DoorLock {
             ),
 
             /**
-             * Indicates the number of seconds that the lock shuts down following wrong code entry. Valid range is
-             * 1-255 seconds. Device can shut down to lock user out for specified amount of time. (Makes it difficult
-             * to try and guess a PIN for the device.) If the attribute accepts writes and an attempt to write the
-             * attribute to 0 is made, the device shall respond with CONSTRAINT_ERROR.
+             * Indicates the number of seconds that the lock shuts down following wrong code entry. Valid range is 1-255
+             * seconds. Device can shut down to lock user out for specified amount of time. (Makes it difficult to try
+             * and guess a PIN for the device.) If the attribute accepts writes and an attempt to write the attribute to
+             * 0 is made, the device shall respond with CONSTRAINT_ERROR.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.33
              */
@@ -3833,8 +3840,8 @@ export namespace DoorLock {
              * NOTE
              *
              * Using this command will revoke the ability of all existing Aliro user devices that have the old
-             * verification key to interact with the lock. This effect is not restricted to a single fabric or
-             * otherwise scoped in any way.
+             * verification key to interact with the lock. This effect is not restricted to a single fabric or otherwise
+             * scoped in any way.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.43
              */
@@ -4065,9 +4072,9 @@ export namespace DoorLock {
              * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a
              * User.
              *
-             * A lock may support multiple credential types so if the User feature is supported the UserType,
-             * UserStatus and Schedules are all associated with a User index and not directly with a PIN index. A User
-             * index may have several credentials associated with it.
+             * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+             * and Schedules are all associated with a User index and not directly with a PIN index. A User index may
+             * have several credentials associated with it.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.1
              */
@@ -4079,9 +4086,9 @@ export namespace DoorLock {
              * If the User Feature is also supported then any RFID credential stored in the lock shall be associated
              * with a User.
              *
-             * A lock may support multiple credential types so if the User feature is supported the UserType,
-             * UserStatus and Schedules are all associated with a User index and not directly with a RFID index. A User
-             * Index may have several credentials associated with it.
+             * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+             * and Schedules are all associated with a User index and not directly with a RFID index. A User Index may
+             * have several credentials associated with it.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.2
              */
@@ -4095,9 +4102,9 @@ export namespace DoorLock {
              * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
              * associated with can also have its UserType, UserStatus and Schedule modified.
              *
-             * A lock may support multiple credential types so if the User feature is supported the UserType,
-             * UserStatus and Schedules are all associated with a User index and not directly with a Finger index. A
-             * User Index may have several credentials associated with it.
+             * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+             * and Schedules are all associated with a User index and not directly with a Finger index. A User Index may
+             * have several credentials associated with it.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.3
              */
@@ -4139,8 +4146,8 @@ export namespace DoorLock {
              * recognition, iris, or retina credential is associated with can also have its UserType, UserStatus and
              * Schedule modified.
              *
-             * A lock may support multiple credential types so if the User feature is supported the UserType,
-             * UserStatus and Schedules are all associated with a User and not directly with a credential.
+             * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+             * and Schedules are all associated with a User and not directly with a credential.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.6
              */
@@ -4172,8 +4179,8 @@ export namespace DoorLock {
             /**
              * YearDayAccessSchedules
              *
-             * If the User feature is supported then Year Day Schedules are applied to a User and not a credential.
-             * Year Day Schedules are used to restrict access to a specified date and time window.
+             * If the User feature is supported then Year Day Schedules are applied to a User and not a credential. Year
+             * Day Schedules are used to restrict access to a specified date and time window.
              *
              * The lock may automatically adjust the UserType when a schedule is created or cleared.
              *
@@ -4200,10 +4207,10 @@ export namespace DoorLock {
              * Unbolting
              *
              * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
-             * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by
-             * retracting the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to
-             * Unlatched. Locks without unbolting support don’t differentiate between unbolting and unlocking and
-             * perform the same operation for both commands.
+             * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
+             * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
+             * Locks without unbolting support don’t differentiate between unbolting and unlocking and perform the same
+             * operation for both commands.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.11
              */
@@ -4233,8 +4240,8 @@ export namespace DoorLock {
         attributes: {
             /**
              * This attribute may be NULL if the lock hardware does not currently know the status of the locking
-             * mechanism. For example, a lock may not know the LockState status after a power cycle until the first
-             * lock actuation is completed.
+             * mechanism. For example, a lock may not know the LockState status after a power cycle until the first lock
+             * actuation is completed.
              *
              * The Not Fully Locked value is used by a lock to indicate that the state of the lock is somewhere between
              * Locked and Unlocked so it is only partially secured. For example, a deadbolt could be partially extended
@@ -4284,8 +4291,8 @@ export namespace DoorLock {
 
             /**
              * Indicates the number of seconds to wait after unlocking a lock before it automatically locks again.
-             * 0=disabled. If set, unlock operations from any source will be timed. For one time unlock with timeout
-             * use the specific command.
+             * 0=disabled. If set, unlock operations from any source will be timed. For one time unlock with timeout use
+             * the specific command.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.22
              */
@@ -4314,16 +4321,18 @@ export namespace DoorLock {
             ),
 
             /**
-             * This attribute shall contain a bitmap with all operating bits of the OperatingMode attribute supported
-             * by the lock. All operating modes NOT supported by a lock shall be set to one. The value of the
-             * OperatingMode enumeration defines the related bit to be set.
+             * This attribute shall contain a bitmap with all operating bits of the OperatingMode attribute supported by
+             * the lock. All operating modes NOT supported by a lock shall be set to one. The value of the OperatingMode
+             * enumeration defines the related bit to be set.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.25
              */
             supportedOperatingModes: FixedAttribute(
                 0x26,
                 TlvBitmap(TlvUInt16, OperatingModes),
-                { default: BitsFromPartial(OperatingModes, { vacation: true, privacy: true, passage: true }) }
+                {
+                    default: BitsFromPartial(OperatingModes, { vacation: true, privacy: true, passage: true, alwaysSet: 2047 })
+                }
             ),
 
             /**
@@ -4352,9 +4361,9 @@ export namespace DoorLock {
             /**
              * This attribute shall enable/disable local programming on the door lock of certain features (see
              * LocalProgrammingFeatures attribute). If this value is set to TRUE then local programming is enabled on
-             * the door lock for all features. If it is set to FALSE then local programming is disabled on the door
-             * lock for those features whose bit is set to 0 in the LocalProgrammingFeatures attribute. Local
-             * programming shall be enabled by default.
+             * the door lock for all features. If it is set to FALSE then local programming is disabled on the door lock
+             * for those features whose bit is set to 0 in the LocalProgrammingFeatures attribute. Local programming
+             * shall be enabled by default.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.9.27
              */
@@ -4418,10 +4427,10 @@ export namespace DoorLock {
             ),
 
             /**
-             * This attribute is only supported if the Alarms cluster is on the same endpoint. The alarm mask is used
-             * to turn on/off alarms for particular functions. Alarms for an alarm group are enabled if the associated
-             * alarm mask bit is set. Each bit represents a group of alarms. Entire alarm groups can be turned on or
-             * off by setting or clearing the associated bit in the alarm mask.
+             * This attribute is only supported if the Alarms cluster is on the same endpoint. The alarm mask is used to
+             * turn on/off alarms for particular functions. Alarms for an alarm group are enabled if the associated
+             * alarm mask bit is set. Each bit represents a group of alarms. Entire alarm groups can be turned on or off
+             * by setting or clearing the associated bit in the alarm mask.
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
@@ -4475,8 +4484,8 @@ export namespace DoorLock {
 
         events: {
             /**
-             * The door lock server provides several alarms which can be sent when there is a critical state on the
-             * door lock. The alarms available for the door lock server are listed in AlarmCodeEnum.
+             * The door lock server provides several alarms which can be sent when there is a critical state on the door
+             * lock. The alarms available for the door lock server are listed in AlarmCodeEnum.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.1
              */
@@ -4857,8 +4866,8 @@ export namespace DoorLock {
     /**
      * This cluster supports all DoorLock features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 
