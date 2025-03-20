@@ -31,6 +31,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
 
 -   @matter/nodejs-shell
+    - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
     - Fix: Prevents crash on startup when having set a Fabric label in config
 
 -   @matter/node
@@ -58,6 +59,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @project-chip/* packages (beside above)
     - Breaking: Packages are removed! Please use the new packages under @matter/* if needed
+
+## 0.12.6 (2025-03-20)
+
+-   @matter/protocol
+    - Fix: Fixes BLE commissioning for Controller
 
 ### 0.12.5 (2025-03-02)
 
