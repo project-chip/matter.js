@@ -144,7 +144,7 @@ function detectStructure(text: string): TextStructure {
 }
 
 function wrapParagraph(input: string, into: string[], wrapWidth: number, padding: number, prefixWidth: number) {
-    const segments = input.split(/\s+/g);
+    const segments = input.split(/\s+/);
     if (!segments) {
         return;
     }

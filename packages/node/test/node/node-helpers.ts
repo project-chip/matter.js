@@ -15,10 +15,14 @@ import {
     InteractionServer,
     InteractionServerMessenger,
     Message,
+    MessageType,
     SessionType,
 } from "#protocol";
 import {
+    AttributeReport,
+    EventReport,
     NodeId,
+    TlvDataReport,
     TlvInvokeRequest,
     TlvInvokeResponseData,
     TlvInvokeResponseForSend,
@@ -63,7 +67,7 @@ export async function testFactoryReset(mode: "online" | "offline-after-commissio
     const oldUniqueId = "asdf";
     await node.set({ basicInformation: { uniqueId: oldUniqueId } });
 
-    await MockTime.resolve(node.erase());
+    await MockTime.resolve(node.erase(), { macrotasks: true });
 
     // Confirm previous online state is resumed
     expect(node.lifecycle.isOnline).equals(mode === "online");
@@ -297,6 +301,35 @@ export namespace interaction {
         channels.getChannel = () => exchange.channel;
 
         await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
+    }
+
+    export function receiveDataReport(node: MockServerNode) {
+        return node.handleExchange().then(async exchange => {
+            const {
+                payloadHeader: { messageType },
+                payload,
+            } = await exchange.read();
+            expect(messageType).equals(MessageType.ReportData);
+            await exchange.writeStatus();
+            return TlvDataReport.decode(payload, false);
+        });
+    }
+
+    export async function receiveData(node: MockServerNode, attributeCount: number, eventCount: number) {
+        const attributes = Array<AttributeReport>();
+        const events = Array<EventReport>();
+
+        while (attributes.length < attributeCount || events.length < eventCount) {
+            const { attributeReports, eventReports } = await receiveDataReport(node);
+            if (attributeReports) {
+                attributes.push(...attributeReports);
+            }
+            if (eventReports) {
+                events.push(...eventReports);
+            }
+        }
+
+        return { attributes, events };
     }
 }
 
