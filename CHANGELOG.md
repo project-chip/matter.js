@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.12.6 (2025-03-20)
 
 -   @matter/protocol
     - Fix: Fixes BLE commissioning for Controller
