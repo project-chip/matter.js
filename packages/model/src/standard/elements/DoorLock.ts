@@ -1389,7 +1389,7 @@ export const DoorLock = Cluster(
         }),
 
         Field({
-            name: "LocalStartTime", id: 0x2, type: "epoch-s", conformance: "O",
+            name: "LocalStartTime", id: 0x3, type: "epoch-s", conformance: "O",
             details: "This field shall indicate the starting time for the Year Day schedule in Epoch Time in Seconds with " +
                 "local time offset based on the local timezone and DST offset on the day represented by the value. " +
                 "This shall be null if the schedule is not set for the YearDayIndex and UserIndex provided.",
@@ -1397,7 +1397,7 @@ export const DoorLock = Cluster(
         }),
 
         Field({
-            name: "LocalEndTime", id: 0x3, type: "epoch-s", conformance: "O",
+            name: "LocalEndTime", id: 0x4, type: "epoch-s", conformance: "O",
             details: "This field shall indicate the ending time for the Year Day schedule in Epoch Time in Seconds with " +
                 "local time offset based on the local timezone and DST offset on the day represented by the value. " +
                 "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set for " +

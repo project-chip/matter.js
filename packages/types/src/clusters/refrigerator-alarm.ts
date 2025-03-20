@@ -75,14 +75,14 @@ export namespace RefrigeratorAlarm {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.1
          */
-        active: TlvField(1, TlvBitmap(TlvUInt32, Alarm)),
+        active: TlvField(0, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall indicate those alarms that have become inactive.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.2
          */
-        inactive: TlvField(2, TlvBitmap(TlvUInt32, Alarm)),
+        inactive: TlvField(1, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall be a copy of the new State attribute value that resulted in the event being generated. That
@@ -90,14 +90,14 @@ export namespace RefrigeratorAlarm {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.4
          */
-        state: TlvField(3, TlvBitmap(TlvUInt32, Alarm)),
+        state: TlvField(2, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall be a copy of the Mask attribute when this event was generated.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.3
          */
-        mask: TlvField(4, TlvBitmap(TlvUInt32, Alarm))
+        mask: TlvField(3, TlvBitmap(TlvUInt32, Alarm))
     });
 
     /**
