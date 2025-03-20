@@ -562,7 +562,7 @@ export namespace MyLevelControlServer {
     }
 }
 
-const endpoint = new Endpoint(DimmableLightDeviec.with(MyLevelControlServer), {
+const endpoint = new Endpoint(DimmableLightDevice.with(MyLevelControlServer), {
     levelControl: {
         currentLevel: 0,
         remainingTime: 0,

@@ -21,6 +21,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Renaming `getLoggerforIdentifier()` to `getLoggerForIdentifier()` to be consistent with other method names
     - Feature: Adding `hasLoggerForIdentifier()` method to Logger to check if a logger for a specific identifier exists
     - Fix: Correctly MDNS records with not-existing QNames
+    -   Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
+    -   Enhancement: Transaction participants no longer need implement commit-related methods if they do not participate in persistence
 
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
@@ -30,6 +32,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs-shell
     - Fix: Prevents crash on startup when having set a Fabric label in config
+
+-   @matter/node
+    -   Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
+    -   Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
+    -   Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
+    -   Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
+    -   Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
+    -   Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
