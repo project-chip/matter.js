@@ -35,6 +35,9 @@ export function generateElement(target: Block, importFrom: string, element: Mode
         delete fields.type;
     }
 
+    // This is for codegen only
+    delete fields.matchTo;
+
     // Next: Other fields
     properties.push(
         ...Object.entries(fields)

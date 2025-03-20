@@ -1686,7 +1686,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18.4
          */
-        localStartTime: TlvOptionalField(2, TlvEpochS),
+        localStartTime: TlvOptionalField(3, TlvEpochS),
 
         /**
          * This field shall indicate the ending time for the Year Day schedule in Epoch Time in Seconds with local time
@@ -1696,7 +1696,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18.5
          */
-        localEndTime: TlvOptionalField(3, TlvEpochS)
+        localEndTime: TlvOptionalField(4, TlvEpochS)
     });
 
     /**
