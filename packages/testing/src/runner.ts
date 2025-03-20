@@ -115,7 +115,7 @@ export class TestRunner {
     }
 
     #parseMarkerArgs(args: string, filename: string) {
-        const parts = args.match(/[a-z]+=(?:"(?:[^"]|\\\\|\\")+"|[^"]\S+)/g);
+        const parts = args.match(/[a-z]+=(?:"(?:[^"\\]|\\.)+"|[^"]\S+)/g);
         if (!parts) {
             throw new Error("No matter-test parameters detected");
         }

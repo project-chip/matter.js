@@ -458,7 +458,7 @@ export class EventEmitter {
             throw new ImplementationError(`No such event ${name}`);
         }
 
-        return this.events[name] ?? (this.events[name] = new Observable());
+        return this.events[name] ?? (this.events[name] = Observable());
     }
 
     hasEvent(name: string, onlyIfInitialized = false) {
