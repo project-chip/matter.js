@@ -861,8 +861,12 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError("No network features or status collected. This should never happen.");
         }
         if (
-            this.commissioningOptions.wifiNetwork === undefined &&
-            this.commissioningOptions.threadNetwork === undefined
+            (this.commissioningOptions.wifiNetwork === undefined ||
+                !this.commissioningOptions.wifiNetwork.wifiSsid ||
+                !this.commissioningOptions.wifiNetwork.wifiCredentials) &&
+            (this.commissioningOptions.threadNetwork === undefined ||
+                !this.commissioningOptions.threadNetwork.networkName ||
+                !this.commissioningOptions.threadNetwork.operationalDataset)
         ) {
             // Check if we have no networkCommissioning cluster or an Ethernet one
             const anyEthernetInterface =
@@ -1019,7 +1023,7 @@ export class ControllerCommissioningFlow {
 
     async #configureNetworkThread() {
         if (this.collectedCommissioningData.successfullyConnectedToNetwork) {
-            logger.debug("Node is already connected to a network. Skipping Thread configuration.");
+            logger.info("Node is already connected to a network. Skipping Thread configuration.");
             return {
                 code: CommissioningStepResultCode.Skipped,
                 breadcrumb: this.lastBreadcrumb,
