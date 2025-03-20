@@ -9,16 +9,7 @@ import { OnOffServer } from "#behaviors/on-off";
 import { ColorControl } from "#clusters/color-control";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { RootEndpoint } from "#endpoints/root";
-import {
-    addValueWithOverflow,
-    cropValueRange,
-    ImplementationError,
-    InternalError,
-    Logger,
-    MaybePromise,
-    Time,
-    Timer,
-} from "#general";
+import { addValueWithOverflow, cropValueRange, ImplementationError, Logger, MaybePromise, Time, Timer } from "#general";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 import {
@@ -1612,12 +1603,12 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * Do not override this method! Please use the {@link syncColorTemperatureWithLevelLogic} method instead which is
      * called by this method if a sync is needed.
      */
-    syncColorTemperatureWithLevel(level: number) {
+    syncColorTemperatureWithLevel(level: number): MaybePromise {
         if (
             this.state.colorMode === ColorControl.ColorMode.ColorTemperatureMireds ||
             this.state.enhancedColorMode === ColorControl.EnhancedColorMode.ColorTemperatureMireds
         ) {
-            this.syncColorTemperatureWithLevelLogic(level);
+            return this.syncColorTemperatureWithLevelLogic(level);
         }
     }
 
@@ -1630,7 +1621,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @param level The current level value from the LevelControl cluster
      * @protected
      */
-    protected syncColorTemperatureWithLevelLogic(level: number) {
+    protected syncColorTemperatureWithLevelLogic(level: number): MaybePromise {
         if (
             this.state.colorMode !== ColorControl.ColorMode.ColorTemperatureMireds &&
             this.state.enhancedColorMode !== ColorControl.EnhancedColorMode.ColorTemperatureMireds
@@ -1666,11 +1657,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
 
         logger.debug(`Synced color temperature with level: ${level}, new color temperature: ${newColorTemp}`);
 
-        const promise = this.moveToColorTemperatureLogic(newColorTemp, 0);
-
-        if (promise !== undefined) {
-            throw new InternalError("Color temperature sync improperly implemented as async");
-        }
+        return this.moveToColorTemperatureLogic(newColorTemp, 0);
     }
 
     #assertRate(mode: ColorControl.MoveMode, rate: number) {

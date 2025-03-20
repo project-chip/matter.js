@@ -89,14 +89,6 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             suppressionEnabled: false,
         };
 
-        // Wire in logic triggered by level changes
-        this.events.currentLevel$Changed.on((value, oldValue) => {
-            // Spec mandates emit when level changes to/from null
-            if ((value === null || oldValue === null) && value !== oldValue) {
-                this.events.currentLevel$Changed.quiet.emitNow();
-            }
-        });
-
         // Configure transition management
         this.internal.transitions = this.initializeTransitions();
 
@@ -210,7 +202,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     /**
      * Default command implementation.
      *
-     * After checking input we the {@link moveToLevelLogic} method to set the level.  To replace the default logic,
+     * After checking input we use {@link moveToLevelLogic} method to set the level.  To replace the default logic,
      * override {@link moveToLevelLogic} which also implements {@link moveToLevelWithOnOff}.
      */
     override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: LevelControl.MoveToLevelRequest) {
@@ -478,7 +470,10 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
                     const colorControl = this.agent.get(ColorControlServer);
                     const prevTemp = colorControl.mireds;
 
-                    colorControl.syncColorTemperatureWithLevel(this.currentLevel);
+                    const promise = colorControl.syncColorTemperatureWithLevel(this.currentLevel);
+                    if (promise) {
+                        return promise.then(() => colorControl.mireds !== prevTemp);
+                    }
 
                     return colorControl.mireds !== prevTemp;
                 },

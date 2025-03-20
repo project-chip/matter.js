@@ -30,7 +30,8 @@ const logger = Logger.get("Transition");
  *    device state updates instantly.
  *
  * 2. If you enable transition management but provide no other options, matter.js will perform transitions for you,
- *    updating values using a timer.
+ *    updating values using a timer.  You probably do not want to use this option if your device supports transitions
+ *    natively.
  *
  * 3. If you implement transitions in hardware or a bridged device, you can still use matter.js to track ongoing
  *    transitions and report remaining time.  To do this, extend this class and implement {@link transitionImmediately}

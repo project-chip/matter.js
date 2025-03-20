@@ -16,10 +16,5 @@ LocalMatter.children.push({
         { tag: "command", id: 5, name: "MoveWithOnOff", type: "Move" },
         { tag: "command", id: 6, name: "StepWithOnOff", type: "Step" },
         { tag: "command", id: 7, name: "StopWithOnOff", type: "Stop" },
-
-        // These are temporary until we move to 1.4 where "Q" is dictated by the spec
-        { tag: "attribute", id: 0, name: "CurrentLevel", quality: "Q X N S" },
-        { tag: "attribute", id: 1, name: "RemainingTime", quality: "Q" },
-        { tag: "attribute", id: 4, name: "CurrentFrequency", quality: "P S Q" },
     ],
 });

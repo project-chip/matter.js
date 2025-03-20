@@ -179,15 +179,27 @@ export class OnlineEvent<T extends any[] = any[], S extends ValueModel = ValueMo
 
 /**
  * An {@link OnlineEvent} for elements marked with {@link Quality#quieter}.
+ *
+ * Quiet events provide a second observable for {@link online} that implements configurable rate limiting.
  */
 export class QuietEvent<T extends any[] = any[], S extends ValueModel = ValueModel> extends OnlineEvent<T, S> {
     override readonly isQuieter = true;
 
     #quiet: QuietObservable<T>;
 
-    constructor(schema: S, owner: Events) {
+    constructor(schema: S, owner: Events, config?: QuietObservable.Configuration<T>) {
         super(schema, owner);
-        this.#quiet = new QuietObservable({ source: this });
+        this.#quiet = new QuietObservable({
+            shouldEmit(...args: T) {
+                const [oldValue, newValue] = args;
+
+                return oldValue === null || (newValue === null && oldValue !== newValue) ? "now" : true;
+            },
+
+            ...config,
+
+            source: this,
+        });
     }
 
     override get online(): Observable<T> {
