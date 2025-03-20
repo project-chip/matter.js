@@ -65,7 +65,7 @@ LocalMatter.children.push({
         { tag: "attribute", id: 0x33, name: "RequirePinForRemoteOperation" },
 
         // Because of the special definition of this BitMap (being inverse as usual) we enhance the descriptions
-        // and add the other bits as an own entry to set the in a convenient way.
+        // and add the other bits as an own entry to set in a convenient way.
         {
             tag: "datatype",
             name: "OperatingModesBitmap",
@@ -114,67 +114,40 @@ LocalMatter.children.push({
             ],
         },
 
-        /*
-        TODO: This override is needed to correctly assign the field IDs to the fields in the command. But it does not work
+        // In 1.4 the IDS in GetYearDayScheduleResponse are borked so we force match and override
         {
             tag: "command",
             id: 0xf,
             name: "GetYearDayScheduleResponse",
+
             children: [
                 {
                     tag: "field",
                     name: "Status",
                     id: 0x2,
-                    type: "status",
-                    conformance: "M",
-                    constraint: "desc",
-                    default: 0,
-
-                    details:
-                        "Status shall be one of the following values:" +
-                        "\n" +
-                        "  • SUCCESS if both YearDayIndex and UserIndex are valid and there is a corresponding schedule " +
-                        "    entry." +
-                        "\n" +
-                        "  • INVALID_COMMAND if either YearDayIndex and/or UserIndex values are not within valid range" +
-                        "\n" +
-                        "  • NOT_FOUND if no corresponding schedule entry found for YearDayIndex." +
-                        "\n" +
-                        "  • NOT_FOUND if no corresponding user entry found for UserIndex." +
-                        "\n" +
-                        "If this field is SUCCESS, the optional fields for this command shall be present. For other (error) " +
-                        "status values, only the fields up to the status field shall be present.",
-
-                    xref: { document: "cluster", section: "5.2.10.18.3" },
+                    matchTo: {
+                        name: "Status",
+                    },
                 },
 
                 {
                     tag: "field",
                     name: "LocalStartTime",
                     id: 0x3,
-                    type: "epoch-s",
-                    conformance: "O",
-                    details:
-                        "This field shall indicate the starting time for the Year Day schedule in Epoch Time in Seconds with " +
-                        "local time offset based on the local timezone and DST offset on the day represented by the value. " +
-                        "This shall be null if the schedule is not set for the YearDayIndex and UserIndex provided.",
-                    xref: { document: "cluster", section: "5.2.10.18.4" },
+                    matchTo: {
+                        name: "LocalStartTime",
+                    },
                 },
 
                 {
                     tag: "field",
                     name: "LocalEndTime",
                     id: 0x4,
-                    type: "epoch-s",
-                    conformance: "O",
-                    details:
-                        "This field shall indicate the ending time for the Year Day schedule in Epoch Time in Seconds with " +
-                        "local time offset based on the local timezone and DST offset on the day represented by the value. " +
-                        "LocalEndTime shall be greater than LocalStartTime. This shall be null if the schedule is not set " +
-                        "for the YearDayIndex and UserIndex provided.",
-                    xref: { document: "cluster", section: "5.2.10.18.5" },
+                    matchTo: {
+                        name: "LocalEndTime",
+                    },
                 },
             ],
-        },*/
+        },
     ],
 });

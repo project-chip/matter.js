@@ -73,6 +73,11 @@ export interface BaseElement {
      * The Matter specification revision in which this element was removed.
      */
     until?: Specification.Revision;
+
+    /**
+     * Force match to other elements with the specified name or ID.
+     */
+    matchTo?: BaseElement.MatchDirective;
 }
 
 export function BaseElement(tag: ElementTag, definition: BaseElement, children: BaseElement[]) {
@@ -101,4 +106,12 @@ export namespace BaseElement {
     export type Properties<T extends BaseElement> = T extends { tag: `${ElementTag}` }
         ? Omit<T, "tag"> & Partial<Pick<T, "tag">>
         : T;
+
+    /**
+     * An explicit ID and/or name that override normal matching heuristics.
+     */
+    export interface MatchDirective {
+        id?: string | number;
+        name?: string;
+    }
 }

@@ -111,14 +111,14 @@ export namespace AlarmBase {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.1
          */
-        active: TlvField(1, TlvUInt32),
+        active: TlvField(0, TlvUInt32),
 
         /**
          * This field shall indicate those alarms that have become inactive.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.2
          */
-        inactive: TlvField(2, TlvUInt32),
+        inactive: TlvField(1, TlvUInt32),
 
         /**
          * This field shall be a copy of the new State attribute value that resulted in the event being generated. That
@@ -126,14 +126,14 @@ export namespace AlarmBase {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.4
          */
-        state: TlvField(3, TlvUInt32),
+        state: TlvField(2, TlvUInt32),
 
         /**
          * This field shall be a copy of the Mask attribute when this event was generated.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.3
          */
-        mask: TlvField(4, TlvUInt32)
+        mask: TlvField(3, TlvUInt32)
     });
 
     /**
