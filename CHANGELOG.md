@@ -37,6 +37,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
     - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
     - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
+    - Fix: Enhances checks for Wi-Fi/Thread credentials in config for CommissioningFlow
 
 -   @project-chip/matter.js
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
