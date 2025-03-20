@@ -35,6 +35,13 @@ export class DataReadQueue<T> implements Stream<T> {
     }
 
     async write(data: T) {
+        this.push(data);
+    }
+
+    /**
+     * Same as write but doesn't require the await required to satisfy {@link Stream#write}.
+     */
+    push(data: T) {
         if (this.#closed) throw new EndOfStreamError();
         if (this.#pendingRead !== undefined) {
             this.#pendingRead.timeoutTimer?.stop();

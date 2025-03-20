@@ -90,11 +90,11 @@ export class Package {
     }
 
     get name() {
-        return this.json.name;
+        return this.json.name ?? `<${this.path}>`;
     }
 
     get version() {
-        return this.json.version;
+        return this.json.version ?? "?";
     }
 
     get exports() {
@@ -218,9 +218,9 @@ export class Package {
         if (!name.startsWith(".")) {
             name = `./${name}`;
         }
-        const exportDetail = this.exports?.[name];
+        const exportDetail = typeof this.exports === "object" ? this.exports?.[name] : undefined;
 
-        if (exportDetail) {
+        if (typeof exportDetail === "object") {
             const exp = findExportCondition(exportDetail, type);
             if (exp) {
                 return this.resolve(exp);
@@ -386,14 +386,20 @@ export class Package {
 }
 
 export type PackageJson = {
-    name: string;
-    version: string;
-    imports: Record<string, string>;
+    name?: string;
+    version?: string;
+    imports?: Record<string, string>;
     matter?: {
         test?: boolean;
     };
     scripts?: Record<string, string>;
-    [key: string]: any;
+    exports?: Exports;
+    module?: string;
+    main?: string;
+    workspaces?: Array<string>;
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+    [key: string]: unknown;
 };
 
 let workingDir = ".";
@@ -408,8 +414,12 @@ function find(startDir: string, selector: (pkg: Package) => boolean): Package {
     return pkg;
 }
 
-function selectFormats(json: any) {
+function selectFormats(json: Record<string, unknown>) {
     let esm: boolean, cjs: boolean;
+
+    if (typeof json !== "object") {
+        throw new Error(`Invalid package JSON ${typeof json}`);
+    }
 
     if (json.type === "module") {
         esm = true;
@@ -455,7 +465,7 @@ function findModules(
     target: Record<string, string>,
     prefix: string,
     path: string,
-    exports: Exports,
+    exports?: Exports,
 ) {
     if (typeof exports === "string") {
         addModuleGlobs(source, target, prefix, path, exports);

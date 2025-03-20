@@ -5,9 +5,10 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { OnlineEvent } from "#behavior/Events.js";
 import { BasicInformation } from "#clusters/basic-information";
-import { Base64, Crypto, Diagnostic, InternalError, Logger, Observable } from "#general";
-import { AttributeModel, Schema, Specification } from "#model";
+import { Base64, Crypto, Diagnostic, ImplementationError, InternalError, Logger } from "#general";
+import { AttributeModel, EventModel, Schema, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager } from "#protocol";
 import { DEFAULT_MAX_PATHS_PER_INVOKE, VendorId } from "#types";
@@ -67,13 +68,23 @@ export class BasicInformationServer extends Base {
         this.reactTo(lifecycle.goingOffline, this.#goingOffline);
 
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
-            // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
-            if (this.events.reachableChanged === undefined) {
-                this.events.reachableChanged = Observable<
-                    [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
-                    void
-                >();
+            const reachableChangedSchema = BasicInformationBehavior.schema!.get(
+                EventModel,
+                BasicInformation.Cluster.events.reachableChanged.id,
+            );
+            if (reachableChangedSchema === undefined) {
+                throw new ImplementationError("Reachable Changed event schema is missing");
             }
+
+            // Manually enable the reachableChanged event if not yet existing when reachable attribute exists (TODO -
+            // make a more elegant way of doing this once introspection API is fleshed out)
+            if (this.events.reachableChanged === undefined) {
+                this.events.reachableChanged = new OnlineEvent<
+                    [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
+                    EventModel
+                >(reachableChangedSchema, this.events);
+            }
+
             this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
         }
 

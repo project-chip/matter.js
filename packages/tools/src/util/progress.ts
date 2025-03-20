@@ -14,7 +14,7 @@ const SPINNER = "◐◓◑◒"; //"⡜⠔⠢⢣"; //["⚫︎", "⚪︎"]; "⡈�
 const SPINNER_INTERVAL = 100;
 
 function packageIdentity(pkg: Package) {
-    let identity = ansi.bold(pkg.json.name).toString();
+    let identity = ansi.bold(pkg.name).toString();
     if (pkg.json.version) {
         identity = `${identity}@${pkg.json.version}`;
     }

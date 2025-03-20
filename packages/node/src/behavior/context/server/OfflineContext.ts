@@ -93,6 +93,7 @@ export namespace OfflineContext {
      */
     export interface Options {
         trace?: ActionTracer.Action;
+        command?: boolean;
     }
 }
 

@@ -114,7 +114,7 @@ export class Versioner {
                 continue;
             }
 
-            if (this.#applyToDeps(deps)) {
+            if (this.#applyToDeps(deps as Record<string, string>)) {
                 changed = true;
             }
         }
