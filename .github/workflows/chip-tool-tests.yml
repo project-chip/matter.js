@@ -429,4 +429,4 @@ jobs:
       - name: Execute tests
         run: |
           cd chip-testing
-          npm run ci-test
+          npm run ci-test -- --all-logs
