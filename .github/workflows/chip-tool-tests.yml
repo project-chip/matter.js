@@ -430,3 +430,35 @@ jobs:
         run: |
           cd chip-testing
           npm run ci-test -- --all-logs
+
+  docker-chip-tests-fast:
+    #needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' }}
+    #if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip-testing
+          npm run ci-test-fast -- --all-logs
+
+  docker-chip-tests-slow:
+    #needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' }}
+    #if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip-testing
+          npm run ci-test-slow -- --all-logs
