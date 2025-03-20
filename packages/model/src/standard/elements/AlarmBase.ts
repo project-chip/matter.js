@@ -76,18 +76,18 @@ export const AlarmBase = Cluster(
             xref: { document: "cluster", section: "1.15.8.1" }
         },
         Field({
-            name: "Active", id: 0x1, type: "AlarmBitmap", conformance: "M", default: 0,
+            name: "Active", id: 0x0, type: "AlarmBitmap", conformance: "M", default: 0,
             details: "This field shall indicate those alarms that have become active.",
             xref: { document: "cluster", section: "1.15.8.1.1" }
         }),
         Field({
-            name: "Inactive", id: 0x2, type: "AlarmBitmap", conformance: "M", default: 0,
+            name: "Inactive", id: 0x1, type: "AlarmBitmap", conformance: "M", default: 0,
             details: "This field shall indicate those alarms that have become inactive.",
             xref: { document: "cluster", section: "1.15.8.1.2" }
         }),
 
         Field({
-            name: "State", id: 0x3, type: "AlarmBitmap", conformance: "M", default: 0,
+            name: "State", id: 0x2, type: "AlarmBitmap", conformance: "M", default: 0,
             details: "This field shall be a copy of the new State attribute value that resulted in the event being " +
                 "generated. That is, this field shall have all the bits in Active set and shall NOT have any of the " +
                 "bits in Inactive set.",
@@ -95,7 +95,7 @@ export const AlarmBase = Cluster(
         }),
 
         Field({
-            name: "Mask", id: 0x4, type: "AlarmBitmap", conformance: "M", default: 0,
+            name: "Mask", id: 0x3, type: "AlarmBitmap", conformance: "M", default: 0,
             details: "This field shall be a copy of the Mask attribute when this event was generated.",
             xref: { document: "cluster", section: "1.15.8.1.3" }
         })
