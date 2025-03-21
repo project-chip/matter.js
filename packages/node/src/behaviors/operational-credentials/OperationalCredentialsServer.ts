@@ -321,6 +321,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         if (timedOp.rootCertSet) {
+            // CERTIFICATION BUG WORKAROUND
             // This should be a ConstraintError but tests require this error
             // See https://github.com/CHIP-Specifications/chip-test-plans/issues/4807
             return {
@@ -329,6 +330,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         if (timedOp.forUpdateNoc === undefined) {
+            // CERTIFICATION BUG WORKAROUND
             // This should be a ConstraintError but tests require this error
             // See https://github.com/CHIP-Specifications/chip-test-plans/issues/4807
             return {
