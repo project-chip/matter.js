@@ -19,21 +19,15 @@ export class PowerSourceServerLogic extends PowerSourceLevelBase {
         (await this.agent.load(DescriptorServer)).addDeviceTypes("PowerSource");
 
         // According to specs changes to these attributes should not occur more often than every 10 seconds
-        if (this.events.batPercentRemaining$Changed !== undefined) {
-            this.events.batPercentRemaining$Changed.quiet.config = {
-                minimumEmitIntervalMs: 10_000,
-            };
-        }
-        if (this.events.batTimeRemaining$Changed !== undefined) {
-            this.events.batTimeRemaining$Changed.quiet.config = {
-                minimumEmitIntervalMs: 10_000,
-            };
-        }
-        if (this.events.batTimeToFullCharge$Changed !== undefined) {
-            this.events.batTimeToFullCharge$Changed.quiet.config = {
-                minimumEmitIntervalMs: 10_000,
-            };
-        }
+        [
+            this.events.batPercentRemaining$Changed,
+            this.events.batTimeRemaining$Changed,
+            this.events.batTimeToFullCharge$Changed,
+        ].forEach(event => {
+            if (event !== undefined) {
+                event.quiet.minimumEmitIntervalMs = 10_000;
+            }
+        });
     }
 }
 
