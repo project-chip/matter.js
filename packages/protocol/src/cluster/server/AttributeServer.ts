@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, ImplementationError, InternalError, Logger, MatterError, MaybePromise, camelize, isDeepEqual } from "#general";
+import {
+    Diagnostic,
+    ImplementationError,
+    InternalError,
+    Logger,
+    MatterError,
+    MaybePromise,
+    camelize,
+    isDeepEqual,
+} from "#general";
 import { AccessLevel, AttributeModel, ClusterModel, DatatypeModel, FabricIndex, MatterModel } from "#model";
 import {
     Attribute,

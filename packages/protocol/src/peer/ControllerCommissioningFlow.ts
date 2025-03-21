@@ -10,7 +10,17 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
-import { Bytes, ChannelType, Crypto, Diagnostic, Logger, MatterError, repackErrorAs, Time, UnexpectedDataError } from "#general";
+import {
+    Bytes,
+    ChannelType,
+    Crypto,
+    Diagnostic,
+    Logger,
+    MatterError,
+    repackErrorAs,
+    Time,
+    UnexpectedDataError,
+} from "#general";
 import {
     ClusterId,
     ClusterType,

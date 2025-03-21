@@ -77,10 +77,13 @@ export class ProcessManager implements Destructable {
                 if (this.#signalHandlersInstalled) {
                     return;
                 }
-                process.on("SIGINT", this.interruptHandler);
-                process.on("SIGTERM", this.interruptHandler);
+
+                this.installInterruptHandlers();
+
                 process.on("SIGUSR2", this.diagnosticHandler);
                 process.on("exit", this.exitHandler);
+
+                this.#signalHandlersInstalled = true;
             } else {
                 this.#ignoreSignals();
             }
@@ -101,9 +104,10 @@ export class ProcessManager implements Destructable {
         }
     };
 
-    protected interruptHandler = (signal: string) => {
+    protected interruptHandler = () => {
+        this.uninstallInterruptHandlers();
         if (this.runtime.interrupt()) {
-            process.on(signal, this.interruptHandler);
+            this.installInterruptHandlers();
         }
     };
 
@@ -117,10 +121,19 @@ export class ProcessManager implements Destructable {
         this.env.diagnose();
     };
 
+    protected installInterruptHandlers = () => {
+        process.on("SIGINT", this.interruptHandler);
+        process.on("SIGTERM", this.interruptHandler);
+    };
+
+    protected uninstallInterruptHandlers = () => {
+        process.off("SIGINT", this.interruptHandler);
+        process.off("SIGTERM", this.interruptHandler);
+    };
+
     #ignoreSignals() {
         if (this.#signalHandlersInstalled) {
-            process.off("SIGINT", this.interruptHandler);
-            process.off("SIGTERM", this.interruptHandler);
+            this.uninstallInterruptHandlers();
             process.off("SIGUSR2", this.diagnosticHandler);
             process.off("exit", this.exitHandler);
             this.#signalHandlersInstalled = false;

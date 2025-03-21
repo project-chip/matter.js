@@ -17,7 +17,7 @@ import { writeFileSync } from "node:fs";
 import { ControllerTestInstance, startControllerTestApp } from "./ControllerTestInstance.js";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 
-Logger.log = await createFileLogger("./test_controller.log");
+Logger.destinations.default.write = await createFileLogger("./test_controller.log");
 
 const logger = Logger.get("ControllerWebSocketTestApp");
 logger.info("Start Controller WebSocket App");
