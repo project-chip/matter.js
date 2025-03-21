@@ -321,17 +321,15 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         if (timedOp.rootCertSet) {
-            throw new StatusResponseError(
-                "UpdateNoc is illegal after AddTrustedRootCertificate in same failsafe context",
-                StatusCode.ConstraintError,
-            );
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
+            };
         }
 
         if (timedOp.forUpdateNoc === undefined) {
-            throw new StatusResponseError(
-                "UpdateNoc is illegal before CsrRequest in same failsafe context",
-                StatusCode.ConstraintError,
-            );
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
+            };
         }
 
         if (this.session.associatedFabric.fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
