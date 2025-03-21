@@ -14,7 +14,7 @@ import {
     fromJson,
     toJson,
 } from "@matter/general";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, rename, writeFile } from "node:fs/promises";
 
 export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
@@ -113,13 +113,19 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
 
         const { promise, rejecter, resolver } = createPromise<void>();
         const json = this.toJson(this.store.data);
-        writeFile(this.path, json, "utf8")
+        this.#writeAndMoveFile(this.path, json)
             .then(resolver, rejecter)
             .finally(() => {
                 this.currentStoreItPromise = undefined;
             });
         this.currentStoreItPromise = promise;
         return promise;
+    }
+
+    async #writeAndMoveFile(filepath: string, value: string): Promise<void> {
+        const tmpName = `${filepath}.tmp`;
+        await writeFile(tmpName, value, { encoding: "utf8", flush: true }); // flush does fsync after write
+        await rename(tmpName, filepath);
     }
 
     override async close() {
