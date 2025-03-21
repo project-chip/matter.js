@@ -68,6 +68,7 @@ jobs:
       uses: ./.github/actions/prepare-chip-testing
       with:
         build-matter-js: "false"
+        patch-test-yaml: "true"
 
     - name: chip-tool-test execution
       if: ${{ steps.changes.outputs.result == 'ok' && !inputs.skipChipTests }}
