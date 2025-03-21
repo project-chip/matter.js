@@ -429,7 +429,7 @@ jobs:
       - name: Execute tests
         run: |
           cd chip-testing
-          npm run ci-test -- --all-logs
+          npm run ci-test-core -- --all-logs
 
   docker-chip-tests-fast:
     #needs: [chip-tests-needed]
