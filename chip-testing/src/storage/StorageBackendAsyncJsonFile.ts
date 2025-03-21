@@ -99,7 +99,7 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         await this.storeIt();
     }
 
-    private async storeIt(forced = false) {
+    async storeIt(forced = false) {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
