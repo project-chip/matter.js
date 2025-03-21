@@ -328,11 +328,11 @@ function loggerSetup(): {
 
     const defaultLog = Logger.log;
 
-    function passMessage(args: [number, string, string?]) {
+    function passMessage(args: [LogLevel, string, string?]) {
         defaultLog.apply(Logger, args);
     }
 
-    function interceptingLogger(level: number, message: string, facility?: string) {
+    function interceptingLogger(level: LogLevel, message: string, facility?: string) {
         if (messageBuffer) {
             messageBuffer.push({
                 module: facility ?? "CNTRL",

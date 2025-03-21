@@ -15,6 +15,7 @@ import {
     DerKey,
     DerObject,
     DerType,
+    Diagnostic,
     ImplementationError,
     Key,
     Logger,
@@ -788,13 +789,13 @@ export namespace CertificateManager {
         if (rootCert.subject.fabricId !== undefined) {
             if (Array.isArray(rootCert.subject.fabricId)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(rootCert.subject.fabricId)}`,
                 );
             }
             // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
             if (rootCert.subject.fabricId === FabricId(0)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(rootCert.subject.fabricId)}`,
                 );
             }
         }
@@ -806,7 +807,9 @@ export namespace CertificateManager {
 
         // The subject DN SHALL encode exactly one matter-rcac-id attribute.
         if (rootCert.subject.rcacId === undefined || Array.isArray(rootCert.subject.rcacId)) {
-            throw new CertificateError(`Invalid rcacId in Root certificate: ${Logger.toJSON(rootCert.subject.rcacId)}`);
+            throw new CertificateError(
+                `Invalid rcacId in Root certificate: ${Diagnostic.json(rootCert.subject.rcacId)}`,
+            );
         }
 
         // The subject DN SHALL NOT encode any matter-noc-cat attribute.
@@ -874,23 +877,23 @@ export namespace CertificateManager {
 
         // The subject DN SHALL encode exactly one matter-node-id attribute.
         if (nocCert.subject.nodeId === undefined || Array.isArray(nocCert.subject.nodeId)) {
-            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Diagnostic.json(nocCert.subject.nodeId)}`);
         }
         // The matter-node-id attribute’s value SHALL be in the Operational Node ID
         if (!NodeId.isOperationalNodeId(nocCert.subject.nodeId)) {
-            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Diagnostic.json(nocCert.subject.nodeId)}`);
         }
 
         // The subject DN SHALL encode exactly one matter-fabric-id attribute.
         if (nocCert.subject.fabricId === undefined || Array.isArray(nocCert.subject.fabricId)) {
             throw new CertificateError(
-                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                `Invalid fabricId in NoC certificate: ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
         // The matter-fabric-id attribute’s value SHALL NOT be 0
         if (nocCert.subject.fabricId === FabricId(0)) {
             throw new CertificateError(
-                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                `Invalid fabricId in NoC certificate: ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
 
@@ -914,9 +917,9 @@ export namespace CertificateManager {
         // the same certificate chain.
         if (rootCert.subject.fabricId !== undefined && rootCert.subject.fabricId !== nocCert.subject.fabricId) {
             throw new CertificateError(
-                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
                     rootCert.subject.fabricId,
-                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                )} !== ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
         if (
@@ -925,9 +928,9 @@ export namespace CertificateManager {
             icaCert.subject.fabricId !== nocCert.subject.fabricId
         ) {
             throw new CertificateError(
-                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
                     icaCert.subject.fabricId,
-                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                )} !== ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
 
@@ -950,7 +953,7 @@ export namespace CertificateManager {
             (!nocCert.extensions.extendedKeyUsage.includes(1) && !nocCert.extensions.extendedKeyUsage.includes(2))
         ) {
             throw new CertificateError(
-                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Logger.toJSON(nocCert.extensions.extendedKeyUsage)}`,
+                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Diagnostic.json(nocCert.extensions.extendedKeyUsage)}`,
             );
         }
 
@@ -1005,20 +1008,20 @@ export namespace CertificateManager {
         if (icaCert.subject.fabricId !== undefined) {
             if (Array.isArray(icaCert.subject.fabricId)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(icaCert.subject.fabricId)}`,
                 );
             }
             // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
             if (icaCert.subject.fabricId === FabricId(0)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(icaCert.subject.fabricId)}`,
                 );
             }
         }
 
         // The subject DN SHALL encode exactly one matter-icac-id attribute.
         if (icaCert.subject.icacId === undefined || Array.isArray(icaCert.subject.icacId)) {
-            throw new CertificateError(`Invalid icacId in Ica certificate: ${Logger.toJSON(icaCert.subject.icacId)}`);
+            throw new CertificateError(`Invalid icacId in Ica certificate: ${Diagnostic.json(icaCert.subject.icacId)}`);
         }
 
         // The subject DN SHALL NOT encode any matter-rcac-id attribute.
@@ -1041,18 +1044,18 @@ export namespace CertificateManager {
             rootCert.subject.fabricId !== icaCert.subject.fabricId
         ) {
             throw new CertificateError(
-                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
                     rootCert.subject.fabricId,
-                )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                )} !== ${Diagnostic.json(icaCert.subject.fabricId)}`,
             );
         }
 
         // Verify the certificate chain by checking rcac ids in subject and issuer
         if (rootCert.subject.rcacId !== icaCert.issuer.rcacId) {
             throw new CertificateError(
-                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Logger.toJSON(
+                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Diagnostic.json(
                     rootCert.subject.rcacId,
-                )} !== ${Logger.toJSON(icaCert.issuer.rcacId)}`,
+                )} !== ${Diagnostic.json(icaCert.issuer.rcacId)}`,
             );
         }
 

@@ -10,7 +10,7 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
-import { Bytes, ChannelType, Crypto, Logger, MatterError, repackErrorAs, Time, UnexpectedDataError } from "#general";
+import { Bytes, ChannelType, Crypto, Diagnostic, Logger, MatterError, repackErrorAs, Time, UnexpectedDataError } from "#general";
 import {
     ClusterId,
     ClusterType,
@@ -184,7 +184,7 @@ export class ControllerCommissioningFlow {
         this.fabric = fabric;
         this.transitionToCase = transitionToCase;
         this.commissioningOptions = commissioningOptions;
-        logger.debug(`Commissioning options: ${Logger.toJSON(commissioningOptions)}`);
+        logger.debug(`Commissioning options: ${Diagnostic.json(commissioningOptions)}`);
         this.#initializeCommissioningSteps();
     }
 
@@ -912,7 +912,7 @@ export class ControllerCommissioningFlow {
             )?.value;
 
             logger.debug(
-                `Root Networks found: ${Logger.toJSON(rootNetworkFeatures)} - ${Logger.toJSON(rootNetworkStatus)}`,
+                `Root Networks found: ${Diagnostic.json(rootNetworkFeatures)} - ${Diagnostic.json(rootNetworkStatus)}`,
             );
 
             if (rootNetworkFeatures?.wiFiNetworkInterface !== true) {
@@ -1048,7 +1048,7 @@ export class ControllerCommissioningFlow {
             )?.value;
 
             logger.debug(
-                `Root Networks found: ${Logger.toJSON(rootNetworkFeatures)} - ${Logger.toJSON(rootNetworkStatus)}`,
+                `Root Networks found: ${Diagnostic.json(rootNetworkFeatures)} - ${Diagnostic.json(rootNetworkStatus)}`,
             );
 
             if (rootNetworkFeatures?.threadNetworkInterface !== true) {
@@ -1093,13 +1093,13 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError(
                 `Commissionee did not return the requested Network ${
                     this.commissioningOptions.threadNetwork.networkName
-                }: ${Logger.toJSON(threadScanResults)}`,
+                }: ${Diagnostic.json(threadScanResults)}`,
             );
         }
         logger.debug(
             `Commissionee found wanted Thread network ${
                 this.commissioningOptions.threadNetwork.networkName
-            }: ${Logger.toJSON(wantedNetworkFound)}`,
+            }: ${Diagnostic.json(wantedNetworkFound)}`,
         );
 
         const {

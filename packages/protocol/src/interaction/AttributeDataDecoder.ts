@@ -107,7 +107,7 @@ export function expandPathsInAttributeData(
                 dataVersion: value.dataVersion,
             };
         } else if (!acceptWildcardPaths) {
-            throw new UnexpectedDataError("Tag compression disabled, but path is incomplete: " + Logger.toJSON(path));
+            throw new UnexpectedDataError("Tag compression disabled, but path is incomplete: " + Diagnostic.json(path));
         }
     });
     return data;

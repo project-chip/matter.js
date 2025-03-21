@@ -7,6 +7,7 @@
 import {
     Channel,
     Crypto,
+    Diagnostic,
     Environment,
     Environmental,
     ImplementationError,
@@ -314,7 +315,7 @@ export class ExchangeManager {
                     logger.info(
                         `Discarding unexpected message ${messageId} for protocol ${
                             message.payloadHeader.protocolId
-                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} on channel ${channel.name}: ${Logger.toJSON(message)}`,
+                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} on channel ${channel.name}: ${Diagnostic.json(message)}`,
                     );
                 }
             }

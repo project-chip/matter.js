@@ -5,6 +5,7 @@
  */
 
 import {
+    Diagnostic,
     Environment,
     Environmental,
     ImplementationError,
@@ -549,7 +550,7 @@ export class InteractionClient {
             `Sending write request: ${attributes
                 .map(
                     ({ endpointId, clusterId, attribute: { id }, value, dataVersion }) =>
-                        `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Logger.toJSON(
+                        `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Diagnostic.json(
                             value,
                         )} (version=${dataVersion})`,
                 )
@@ -973,7 +974,7 @@ export class InteractionClient {
                 let maxEventNumber = this.#nodeStore?.maxEventNumber ?? eventReports[0].events[0].eventNumber;
                 eventReports.forEach(data => {
                     logger.debug(
-                        `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
+                        `Received event update: ${resolveEventName(data.path)}: ${Diagnostic.json(data.events)}`,
                     );
                     const { events } = data;
 
@@ -1001,7 +1002,7 @@ export class InteractionClient {
                             endpointId,
                             clusterId,
                             attributeId,
-                        })} = ${Logger.toJSON(value)} (version=${version})`,
+                        })} = ${Diagnostic.json(value)} (version=${version})`,
                     );
                     if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
                     const { value: oldValue } =
@@ -1091,7 +1092,7 @@ export class InteractionClient {
                 endpointId,
                 clusterId,
                 commandId: requestId,
-            })} with ${Logger.toJSON(request)}`,
+            })} with ${Diagnostic.json(request)}`,
         );
 
         if (!skipValidation) {
@@ -1160,7 +1161,7 @@ export class InteractionClient {
                     endpointId,
                     clusterId,
                     commandId: requestId,
-                })} with ${Logger.toJSON(response)})}`,
+                })} with ${Diagnostic.json(response)})}`,
             );
             return response;
         }
@@ -1196,7 +1197,7 @@ export class InteractionClient {
                 endpointId,
                 clusterId,
                 commandId: requestId,
-            })} with ${Logger.toJSON(request)}`,
+            })} with ${Diagnostic.json(request)}`,
         );
         const commandFields = requestSchema.encodeTlv(request);
 

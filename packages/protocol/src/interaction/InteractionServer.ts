@@ -365,7 +365,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         logger.debug(
                             `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
                                 path,
-                            )}=${Logger.toJSON(matchingEvents)}`,
+                            )}=${Diagnostic.json(matchingEvents)}`,
                         );
                         const { schema } = event;
                         reportsForPath.push(
@@ -523,7 +523,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         logger.debug(
                             `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                                 path,
-                            )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
+                            )}=${Diagnostic.json(value)} (version=${version}) ignored because of dataVersionFilter`,
                         );
                         continue;
                     }
@@ -531,7 +531,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     logger.debug(
                         `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
-                        )}=${Logger.toJSON(value)} (version=${version})`,
+                        )}=${Diagnostic.json(value)} (version=${version})`,
                     );
 
                     const { schema } = attribute;
@@ -878,7 +878,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     logger.debug(
                         `Handle write request from ${
                             exchange.channel.name
-                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Diagnostic.json(
                             value,
                         )} (listIndex=${listIndex}, for-version=${dataVersion})`,
                     );
@@ -960,7 +960,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                     ? `with following errors: ${errorResults
                           .map(
                               ({ path, statusCode }) =>
-                                  `${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`,
+                                  `${this.#endpointStructure.resolveAttributeName(path)}=${Diagnostic.json(statusCode)}`,
                           )
                           .join(", ")}`
                     : "without errors"

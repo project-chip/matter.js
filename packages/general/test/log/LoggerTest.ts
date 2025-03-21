@@ -4,36 +4,68 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Console } from "#log/Console.js";
 import { Diagnostic } from "#log/Diagnostic.js";
+import { LogDestination } from "#log/LogDestination.js";
 import { LogFormat } from "#log/LogFormat.js";
 import { LogLevel } from "#log/LogLevel.js";
-import { Logger, consoleLogger } from "#log/Logger.js";
+import { Logger } from "#log/Logger.js";
 import { Bytes } from "#util/Bytes.js";
 
 const LOGGER_NAME = "UnitTest";
 
 type LogOptions = {
-    format?: LogFormat.Type;
+    format?: string;
     levels?: typeof Logger.logLevels;
     method?: "notice" | "info" | "debug" | "warn" | "error" | "fatal";
-    fromLogger?: string;
+    destination?: string;
 };
 
-function captureOne(fn: () => void, fromLogger?: string) {
-    return Logger.capture(fn, fromLogger)[0];
+/**
+ * Invoke logic and return any log messages produced.
+ */
+function captureAll(fn: () => void, destination = "default") {
+    if (!Logger) {
+        throw new Error("No logger loaded, cannot capture logs");
+    }
+
+    const dest = Logger.destinations[destination];
+
+    const originalDestProps = { ...dest };
+
+    try {
+        const captured = new Array<{ level: LogLevel; message: string }>();
+        dest.format = LogFormat.formats.plain;
+        dest.write = (message: string, { level }: Diagnostic.Message) => {
+            captured.push({
+                level,
+                message: message.replace(/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d/, "xxxx-xx-xx xx:xx:xx.xxx"),
+            });
+        };
+        fn();
+        return captured;
+    } finally {
+        Object.assign(Logger.destinations[destination], originalDestProps);
+    }
+}
+
+function captureOne(fn: () => void, destination = "default") {
+    return captureAll(fn, destination)[0];
 }
 
 describe("Logger", () => {
     const logger = Logger.get(LOGGER_NAME);
 
-    function capture(fn: () => void, { format, levels, fromLogger = "default" }: LogOptions) {
+    function capture(fn: () => void, { format, levels, destination = "default" }: LogOptions) {
+        const dest = Logger.destinations[destination];
+
         return captureOne(() => {
-            Logger.setFormatForLogger(fromLogger, format ?? LogFormat.PLAIN);
+            dest.format = LogFormat(format ?? LogFormat.PLAIN);
             if (levels) {
-                Logger.setLogLevelsForLogger(fromLogger, levels);
+                dest.facilityLevels = { ...dest.facilityLevels, ...levels };
             }
             fn();
-        }, fromLogger);
+        }, destination);
     }
 
     function logTestLine(options: LogOptions = {}) {
@@ -61,7 +93,7 @@ describe("Logger", () => {
         });
 
         it("doesn't log a message if level is above debug", () => {
-            const result = Logger.capture(() => {
+            const result = captureAll(() => {
                 logTestLine({ levels: { [LOGGER_NAME]: LogLevel.INFO } });
             });
 
@@ -138,13 +170,13 @@ describe("Logger", () => {
 
     describe("second logger with info/debug mix", () => {
         before(() => {
-            Logger.addLogger("second", () => {}, { defaultLogLevel: LogLevel.INFO });
+            Logger.destinations.second = LogDestination();
         });
 
         it("logs a message if level is info", () => {
             const result = logTestLine({
                 method: "info",
-                fromLogger: "second",
+                destination: "second",
             });
 
             expect(result?.level).equal(LogLevel.INFO);
@@ -154,14 +186,14 @@ describe("Logger", () => {
             const result = logTestLine({
                 method: "info",
                 levels: { [LOGGER_NAME]: LogLevel.ERROR },
-                fromLogger: "second",
+                destination: "second",
             });
 
             expect(result).equal(undefined);
         });
 
         after(() => {
-            Logger.removeLogger("second");
+            delete Logger.destinations.second;
         });
     });
 
@@ -379,11 +411,11 @@ describe("Logger", () => {
 
     describe("toJSON", () => {
         it("works", () => {
-            expect(Logger.toJSON("foo")).equal('"foo"');
+            expect(Diagnostic.json("foo")).equal('"foo"');
         });
 
         it("handles BigInt", () => {
-            expect(Logger.toJSON(BigInt(4))).equal('"4"');
+            expect(Diagnostic.json(BigInt(4))).equal('"4"');
         });
     });
 
@@ -420,8 +452,8 @@ describe("Logger", () => {
 
     function itUsesCorrectConsoleMethod(sourceName: string, sinkName: string = sourceName) {
         it(`maps logger.${sourceName} to console.${sinkName}`, () => {
-            const actualLogger = Logger.log;
-            const actualConsole = consoleLogger.console;
+            const actualWrite = Logger.destinations.default.write;
+            const actualConsole = Console.console;
 
             let result: string | undefined = undefined;
             let calls = 0;
@@ -431,14 +463,14 @@ describe("Logger", () => {
             };
 
             try {
-                Logger.log = consoleLogger;
-                consoleLogger.console = {
+                Logger.destinations.default.write = Console.write;
+                Console.console = {
                     [sinkName]: mock,
                 } as any;
                 (<any>logger)[sourceName].call(logger, "test");
             } finally {
-                Logger.log = actualLogger;
-                consoleLogger.console = actualConsole;
+                Logger.destinations.default.write = actualWrite;
+                Console.console = actualConsole;
             }
 
             expect(calls).equal(1);
