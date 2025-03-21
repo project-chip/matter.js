@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Logger, LogLevel } from "@matter/general";
+import { Bytes, Diagnostic, Logger, LogLevel } from "@matter/general";
 import {
     AttributeId,
     camelize,
@@ -326,24 +326,20 @@ function loggerSetup(): {
         return result ?? [];
     };
 
-    const defaultLog = Logger.log;
+    const defaultWriter = Logger.destinations.default.write;
 
-    function passMessage(args: [LogLevel, string, string?]) {
-        defaultLog.apply(Logger, args);
-    }
-
-    function interceptingLogger(level: LogLevel, message: string, facility?: string) {
+    function interceptingWriter(text: string, message: Diagnostic.Message) {
         if (messageBuffer) {
             messageBuffer.push({
-                module: facility ?? "CNTRL",
-                category: LogLevelMap[level] ?? "Unknown",
-                message: Buffer.from(message).toString("base64"),
+                module: message.facility,
+                category: LogLevelMap[message.level] ?? "Unknown",
+                message: Buffer.from(text).toString("base64"),
             });
         }
 
-        passMessage([level, message, facility]);
+        defaultWriter(text, message);
     }
-    Logger.log = interceptingLogger;
+    Logger.destinations.default.write = interceptingWriter;
 
     return { startRecording, stopRecording };
 }

@@ -25,7 +25,7 @@ logger.info(process.pid);
 logger.info(process.argv);
 
 process.on("unhandledRejection", reason => {
-    writeFileSync("error.log", `Rejection: ${reason}\n`);
+    writeFileSync("error.log", `Rejection: ${(reason as Error)?.stack ?? reason}\n`);
 });
 process.on("uncaughtException", error => {
     writeFileSync("error.log", `Exception: ${error.stack}\n`);
