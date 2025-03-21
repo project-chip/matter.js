@@ -14,15 +14,7 @@ import { OperationalCredentials } from "#clusters/operational-credentials";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Bytes } from "#general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
-import {
-    ExchangeManager,
-    Fabric,
-    FabricBuilder,
-    FabricManager,
-    Message,
-    MessageExchange,
-    MessageType,
-} from "#protocol";
+import { Fabric, FabricBuilder, FabricManager } from "#protocol";
 import {
     AttributeId,
     ClusterId,
@@ -31,15 +23,12 @@ import {
     FabricIndex,
     NodeId,
     Status,
-    StatusCode,
     TlvArray,
-    TlvDataReport,
     TlvEnum,
     TlvField,
     TlvInvokeResponseData,
     TlvNullable,
     TlvObject,
-    TlvStatusResponse,
     TlvSubjectId,
     TypeFromSchema,
     VendorId,
@@ -176,6 +165,8 @@ describe("BehaviorServer", () => {
 
         const fabric1 = await createFabric(node, 1);
 
+        // We ignore the initial data report other than confirming receipt
+
         // Create a subscription to a couple of attributes and an event
         await interaction.subscribe(node, fabric1, {
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -187,74 +178,43 @@ describe("BehaviorServer", () => {
             maxIntervalCeilingSeconds: 2,
         });
 
-        // State for the mock method we create below -- the last data report and a promise to notify us of its arrival
-        let promise: Promise<void>;
-        let resolve: () => void;
-        let report: TypeFromSchema<typeof TlvDataReport> | undefined;
+        // Should already be resolved
+        const exchange = await node.handleExchange();
+        await exchange.writeStatus();
 
-        // Mock ExchangeManager's "initiateExchange" method
-        node.env.get(ExchangeManager).initiateExchange = address => {
-            expect(address.fabricIndex).equals(FabricIndex(1));
-            expect(address.nodeId).equals(NodeId(0));
-
-            return {
-                async nextMessage() {
-                    return {
-                        payloadHeader: {
-                            messageType: MessageType.StatusResponse,
-                        },
-                        payload: TlvStatusResponse.encode({
-                            status: StatusCode.Success,
-                            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                        }),
-                    } as Message;
-                },
-                async send(messageType, payload, _options) {
-                    expect(messageType).equals(MessageType.ReportData);
-                    report = TlvDataReport.decode(payload, false);
-                    if (!report.attributeReports && !report.eventReports) {
-                        return;
-                    }
-                    resolve();
-                },
-                async close() {},
-            } as MessageExchange;
-        };
+        // Handle updated report
+        const fabricAdded = interaction.receiveData(node, 2, 0);
 
         // Create another fabric so we can capture subscription messages
-        promise = new Promise(r => (resolve = r));
         const fabric2 = await createFabric(node, 2);
-        await MockTime.resolve(promise);
+        let report = await MockTime.resolve(fabricAdded);
 
-        expect(report?.attributeReports?.length).equals(2);
-        expect(report?.eventReports).equals(undefined);
-
-        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
+        const fabricsReport = report.attributes[0]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
         const decodedFabrics =
             fabricsReport?.data &&
             OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
         expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
+        const commissionedFabricsReport = report.attributes[1]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
-        expect(
+
+        const commissionedFabricCount =
             commissionedFabricsReport?.data &&
-                OperationalCredentials.Cluster.attributes.commissionedFabrics.schema.decodeTlv(
-                    commissionedFabricsReport.data,
-                ),
-        ).deep.equals(2);
+            OperationalCredentials.Cluster.attributes.commissionedFabrics.schema.decodeTlv(
+                commissionedFabricsReport.data,
+            );
+        expect(commissionedFabricCount).deep.equals(2);
 
         // Remove the second fabric so we can capture the leave event notification
-        promise = new Promise(r => (resolve = r));
-        await fabric2.remove();
-        await MockTime.resolve(promise);
+        const fabricRemoved = interaction.receiveData(node, 2, 1);
 
-        expect(report?.attributeReports?.length).equals(2);
-        expect(report?.eventReports?.length).equals(1);
+        await MockTime.resolve(fabric2.remove());
+
+        report = await MockTime.resolve(fabricRemoved);
 
         // Confirm we received leave event for second fabric
-        const leaveReport = report?.eventReports?.[0]?.eventData;
+        const leaveReport = report.events[0]?.eventData;
         expect(leaveReport?.path).deep.equals(LEAVE_PATH);
         expect(
             leaveReport?.data && BasicInformation.Cluster.events.leave.schema.decodeTlv(leaveReport?.data),

@@ -249,7 +249,7 @@ export abstract class FailsafeContext {
     }
 
     async #failSafeExpired() {
-        logger.info("Failsafe timer expired, Reset fabric builder.");
+        logger.info("Failsafe timer expired; resetting fabric builder");
 
         await this.close();
     }
