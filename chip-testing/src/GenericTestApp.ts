@@ -199,6 +199,12 @@ export async function startTestApp(testInstance: TestInstance) {
 
     function exitHandler(signal: string) {
         logger.info(`Closing test instance because of ${signal} ...`);
+
+        // Trigger storing current data because later it could be too late and testrunner already did things
+        if (testInstance.storage instanceof StorageBackendAsyncJsonFile) {
+            testInstance.storage.storeIt(true).catch(error => logger.info(error.stack));
+        }
+
         testInstance
             .stop()
             .then(() => {
