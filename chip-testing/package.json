@@ -22,8 +22,9 @@
         "build": "matter-build",
         "build-clean": "matter-build --clean",
         "ci-test": "matter-test",
-        "ci-test-fast": "matter-test",
-        "ci-test-slow": "matter-test"
+        "ci-test-core": "matter-test --spec 'test/core/**/*.test.ts'",
+        "ci-test-fast": "matter-test --spec 'test/app-fast/**/*.test.ts'",
+        "ci-test-slow": "matter-test --spec 'test/app-slow/**/*.test.ts'"
     },
     "dependencies": {
         "@matter/main": "*",
