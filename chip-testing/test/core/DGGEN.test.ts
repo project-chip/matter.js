@@ -16,6 +16,8 @@ describe("DGGEN", () => {
         ),
     );
 
-    // DGGEN 2-4 requires the Time Synchronization cluster
-    chip("DGGEN/*").exclude("DGGEN/2.4");
+    chip("DGGEN/*").exclude(
+        // Needs time sync cluster
+        "DGGEN/2.4",
+    );
 });

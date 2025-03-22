@@ -27,7 +27,7 @@ export const CommissionerControl = Cluster(
             "The generalized flow supported by the Commissioner Control Cluster can be seen in the following " +
             "diagram." +
             "\n" +
-            "Figure 101. Commissioner Control Cluster - General Flow",
+            "Figure 103. Commissioner Control Cluster - General Flow",
 
         xref: { document: "core", section: "11.26" }
     },
