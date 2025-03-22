@@ -146,7 +146,7 @@ export const Code = (el: HTMLElement) => {
             const beginning = parts[i].replace(/^.*([A-Z])/, "$1");
 
             // Get ending of word from next part
-            const ending = parts[i + 1].replace(/^([a-z]).*/, "$1");
+            const ending = parts[i + 1].replace(/^([a-z]+).*/, "$1");
 
             // If the concatenation is a word, assume it should be joined
             if (Words.has(`${beginning}${ending}`.toLowerCase())) {
@@ -180,7 +180,7 @@ export const Identifier = (el: HTMLElement) => {
     let str = Code(el);
 
     // Strip everything following a subset of characters known to be inside what is properly a "key"
-    str = str.replace(/^([\w :.,/\-$]+)/, "$1");
+    str = str.replace(/^([\w :.,/\-$]+).*/, "$1");
 
     return camelize(str, true);
 };

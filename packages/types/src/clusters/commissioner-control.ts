@@ -267,7 +267,7 @@ export namespace CommissionerControl {
      *
      * The generalized flow supported by the Commissioner Control Cluster can be seen in the following diagram.
      *
-     * Figure 101. Commissioner Control Cluster - General Flow
+     * Figure 103. Commissioner Control Cluster - General Flow
      *
      * @see {@link MatterSpecification.v13.Core} § 11.26
      */

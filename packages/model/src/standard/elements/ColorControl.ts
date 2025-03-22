@@ -685,8 +685,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.4.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -707,8 +707,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.5.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -744,8 +744,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.6.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -756,8 +756,8 @@ export const ColorControl = Cluster(
         },
         Field({ name: "Saturation", id: 0x0, type: "uint8", conformance: "M", constraint: "max 254" }),
         Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", constraint: "max 65534" }),
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -779,8 +779,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.8.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -816,8 +816,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.9.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -829,8 +829,8 @@ export const ColorControl = Cluster(
         Field({ name: "Hue", id: 0x0, type: "uint8", conformance: "M", constraint: "max 254" }),
         Field({ name: "Saturation", id: 0x1, type: "uint8", conformance: "M", constraint: "max 254" }),
         Field({ name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", constraint: "max 65534" }),
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -842,8 +842,8 @@ export const ColorControl = Cluster(
         Field({ name: "ColorX", id: 0x0, type: "uint16", conformance: "M", constraint: "max 65279" }),
         Field({ name: "ColorY", id: 0x1, type: "uint16", conformance: "M", constraint: "max 65279" }),
         Field({ name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", constraint: "max 65534" }),
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -867,8 +867,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.12.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -887,8 +887,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.13.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -899,8 +899,8 @@ export const ColorControl = Cluster(
         },
         Field({ name: "ColorTemperatureMireds", id: 0x0, type: "uint16", conformance: "M", constraint: "max 65279" }),
         Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", constraint: "max 65534" }),
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -927,8 +927,8 @@ export const ColorControl = Cluster(
             details: "This field shall indicate the transition time, as described in the MoveToHue command.",
             xref: { document: "cluster", section: "3.2.8.15.3" }
         }),
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -952,8 +952,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.16.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -993,8 +993,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.17.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -1021,8 +1021,8 @@ export const ColorControl = Cluster(
             details: "This field shall indicate the transition time, as described in the MoveToHue command.",
             xref: { document: "cluster", section: "3.2.8.18.3" }
         }),
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -1057,8 +1057,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.19.4" }
         }),
         Field({ name: "StartHue", id: 0x4, type: "uint16", conformance: "M" }),
-        Field({ name: "OptionsMask", id: 0x5, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x6, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x5, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x6, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -1073,8 +1073,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.20" }
         },
 
-        Field({ name: "OptionsMask", id: 0x0, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x1, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x0, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x1, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -1132,8 +1132,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.21.4" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x5, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x5, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -1199,8 +1199,8 @@ export const ColorControl = Cluster(
             xref: { document: "cluster", section: "3.2.8.22.5" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x5, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x6, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x5, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x6, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Datatype(

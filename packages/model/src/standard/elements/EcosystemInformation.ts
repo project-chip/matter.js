@@ -10,8 +10,8 @@ import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    DatatypeElement as Datatype,
-    FieldElement as Field
+    FieldElement as Field,
+    DatatypeElement as Datatype
 } from "../../elements/index.js";
 
 export const EcosystemInformation = Cluster(
@@ -51,6 +51,40 @@ export const EcosystemInformation = Cluster(
     },
 
     Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+
+    Attribute(
+        {
+            name: "DeviceDirectory", id: 0x0, type: "list", access: "R F M", conformance: "M", quality: "N",
+            details: "This attribute shall contain the list of logical devices represented by a Bridged Node. Most of the " +
+                "time this will contain a single entry, but may grow with more complex device compositions (e.g. " +
+                "another bridge.)" +
+                "\n" +
+                "An empty list indicates that the information is not available.",
+            xref: { document: "core", section: "9.18.5.1" }
+        },
+
+        Field({ name: "entry", type: "EcosystemDeviceStruct" })
+    ),
+
+    Attribute(
+        {
+            name: "LocationDirectory", id: 0x1, type: "list", access: "R F M", conformance: "M", quality: "N",
+
+            details: "This attribute shall contain the list of rooms, areas and groups associated with the DeviceDirectory " +
+                "entries, and shall NOT contain locations which are dynamically generated and removed by an " +
+                "ecosystem. (E.g. a location that is generated and removed based on the user being home is not " +
+                "permitted. However, an initially generated location name that does not quickly change is " +
+                "acceptable.)" +
+                "\n" +
+                "An empty list indicates that the information is not available." +
+                "\n" +
+                "LocationDirectory entries shall be removed if there is no DeviceDirectory that references it.",
+
+            xref: { document: "core", section: "9.18.5.2" }
+        },
+
+        Field({ name: "entry", type: "EcosystemLocationStruct" })
+    ),
 
     Datatype(
         { name: "EcosystemDeviceStruct", type: "struct", xref: { document: "core", section: "9.18.4.1" } },
@@ -183,7 +217,13 @@ export const EcosystemInformation = Cluster(
             xref: { document: "core", section: "9.18.4.2.2" }
         }),
 
-        Field({ name: "LocationDescriptorLastEdit", id: 0x2, type: "epoch-us", access: "S", conformance: "M", default: 0 }),
+        Field({
+            name: "LocationDescriptorLastEdit", id: 0x2, type: "epoch-us", access: "S", conformance: "M",
+            default: 0,
+            details: "This field shall indicate the timestamp of when the LocationDescriptor was last modified.",
+            xref: { document: "core", section: "9.18.4.2.3" }
+        }),
+
         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
     )
 );

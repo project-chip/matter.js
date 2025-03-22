@@ -8,7 +8,7 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "generate-spec": "matter-run bin/generate-spec.js",
+        "generate-spec": "matter-run --max-old-space-size=6144 bin/generate-spec.js",
         "generate-chip": "matter-run bin/generate-chip.js",
         "generate-model": "matter-run bin/generate-model.js",
         "generate-clusters": "matter-run bin/generate-clusters.js",

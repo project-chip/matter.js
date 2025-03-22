@@ -101,15 +101,7 @@ RUN case ${TARGETPLATFORM} in \
           /bins build \
     ;; \
     esac
-RUN cp out/*/chip-tool out
-RUN cp out/*/chip-all-clusters-app out
-RUN cp out/*/chip-bridge-app out
-RUN cp out/*/chip-lock-app out
-RUN cp out/*/chip-tv-app out
-RUN cp out/*/lit-icd-app out
-RUN cp out/*/chip-microwave-oven-app out
-RUN cp out/*/chip-rvc-app out
-RUN cp out/*/matter-network-manager-app out
+RUN cp out/*/chip-tool out/*/*-app out
 
 # Build python wheels
 RUN scripts/build_python.sh --chip_mdns platform
