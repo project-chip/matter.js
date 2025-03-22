@@ -258,8 +258,8 @@ export const LevelControl = Cluster(
         },
         Field({ name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "max 254" }),
         Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" }),
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -288,8 +288,8 @@ export const LevelControl = Cluster(
             xref: { document: "cluster", section: "1.6.7.2.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -322,8 +322,8 @@ export const LevelControl = Cluster(
             xref: { document: "cluster", section: "1.6.7.3.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -331,8 +331,8 @@ export const LevelControl = Cluster(
             name: "Stop", id: 0x3, access: "O", conformance: "M", direction: "request", response: "status",
             xref: { document: "cluster", section: "1.6.7.4" }
         },
-        Field({ name: "OptionsMask", id: 0x0, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x1, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x0, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x1, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command({
