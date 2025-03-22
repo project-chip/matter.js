@@ -51,7 +51,7 @@ Command({
         const fromModel = await loadModel(from);
 
         const diff = ModelDiff(fromModel, toModel, depth);
-        this.out(LogFormat.ansi(ModelDiff.diagnosticOf(diff)));
+        this.out(LogFormat.formats.ansi(ModelDiff.diagnosticOf(diff)));
     },
 });
 

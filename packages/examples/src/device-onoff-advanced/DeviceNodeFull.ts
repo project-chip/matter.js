@@ -26,13 +26,13 @@ import {
     Endpoint,
     EndpointServer,
     Environment,
+    LogDestination,
     LogLevel,
     Logger,
     ServerNode,
     StorageService,
     Time,
     VendorId,
-    logLevelFromString,
     singleton,
 } from "@matter/main";
 import { OnOffServer } from "@matter/main/behaviors";
@@ -97,8 +97,9 @@ function executeCommand(scriptParamName: string) {
 
 const logFile = environment.vars.string("logfile.filename");
 if (logFile !== undefined) {
-    Logger.addLogger("filelogger", await createFileLogger(logFile), {
-        defaultLogLevel: logLevelFromString(environment.vars.string("logfile.loglevel")) ?? LogLevel.DEBUG,
+    Logger.destinations.filelogger = LogDestination({
+        write: await createFileLogger(logFile),
+        level: LogLevel(environment.vars.get("logfile.loglevel", "debug")),
     });
 }
 

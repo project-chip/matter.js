@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, UnexpectedDataError } from "#general";
+import { Diagnostic, UnexpectedDataError } from "#general";
 import { ValidationDatatypeMismatchError } from "../common/ValidationError.js";
 import { TlvCodec, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvArrayReader, TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
@@ -120,7 +120,9 @@ export class AnySchema extends TlvSchema<TlvStream> {
         const result = this.decodeGenericElement(reader);
         const nextElement = reader.readTagType();
         if (nextElement !== undefined) {
-            throw new UnexpectedDataError(`Unexpected data left after parsing all data: ${Logger.toJSON(nextElement)}`);
+            throw new UnexpectedDataError(
+                `Unexpected data left after parsing all data: ${Diagnostic.json(nextElement)}`,
+            );
         }
         return result;
     }
@@ -141,7 +143,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
             case TlvType.Utf8String:
             case TlvType.ByteString:
                 if (tag !== undefined && !allowTag) {
-                    throw new UnexpectedDataError(`Tag detected for a native type: ${Logger.toJSON(element)}`);
+                    throw new UnexpectedDataError(`Tag detected for a native type: ${Diagnostic.json(element)}`);
                 }
                 return reader.readPrimitive(element.typeLength);
             case TlvType.Array:
@@ -164,7 +166,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
             } = element;
             if (type === TlvType.EndOfContainer) break;
             if (tag !== undefined && !allowTag) {
-                throw new UnexpectedDataError(`Tag detected : ${Logger.toJSON(element)}`);
+                throw new UnexpectedDataError(`Tag detected : ${Diagnostic.json(element)}`);
             }
             result.push(this.decodeGenericElement(reader, element, allowTag));
         }
@@ -181,7 +183,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
             } = element;
             if (type === TlvType.EndOfContainer) break;
             if (tag === undefined || tag.id === undefined) {
-                throw new UnexpectedDataError(`Tag missing for a structure: ${Logger.toJSON(element)}`);
+                throw new UnexpectedDataError(`Tag missing for a structure: ${Diagnostic.json(element)}`);
             }
             result[tag.id] = this.decodeGenericElement(reader, element, true);
         }

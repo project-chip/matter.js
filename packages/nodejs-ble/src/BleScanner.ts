@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, ChannelType, createPromise, Logger, Time, Timer } from "@matter/general";
+import { Bytes, ChannelType, createPromise, Diagnostic, Logger, Time, Timer } from "@matter/general";
 import { BleError, BtpCodec, CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@matter/protocol";
 import { VendorId } from "@matter/types";
 import type { Peripheral } from "@stoprocent/noble";
@@ -115,7 +115,7 @@ export class BleScanner implements Scanner {
             const deviceExisting = this.discoveredMatterDevices.has(address);
 
             logger.debug(
-                `${deviceExisting ? "Re-" : ""}Discovered device ${address} data: ${Logger.toJSON(deviceData)}`,
+                `${deviceExisting ? "Re-" : ""}Discovered device ${address} data: ${Diagnostic.json(deviceData)}`,
             );
 
             if (deviceExisting) {

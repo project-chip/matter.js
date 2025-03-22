@@ -205,8 +205,8 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
                 if (!MatterHooks) {
                     throw new Error("Matter hooks not loaded");
                 }
-                MatterHooks.loggerSink = (_, message) => {
-                    logs.push(message);
+                MatterHooks.loggerSink = text => {
+                    logs.push(text);
                 };
                 reporter.beginRun(title, this.translatedStats);
             });
@@ -294,8 +294,8 @@ async function onlyLogFailure(fn: () => any) {
     const logs = Array<string>();
     const existingSink = MatterHooks.loggerSink;
     try {
-        MatterHooks.loggerSink = (_, message) => {
-            logs.push(message);
+        MatterHooks.loggerSink = text => {
+            logs.push(text);
         };
         return await fn();
     } catch (e) {

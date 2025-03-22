@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogFormat, LogLevel, Logger, singleton } from "@matter/general";
+import { LogDestination, LogFormat, LogLevel, Logger, singleton } from "@matter/general";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
 import { Ble } from "@matter/protocol";
@@ -102,9 +102,10 @@ async function main() {
                 if (await theNode.Store.has("LogFile")) {
                     const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
-                        Logger.addLogger("file", await createFileLogger(storedLogFileName), {
-                            defaultLogLevel: await theNode.Store.get<LogLevel>("LoglevelFile", LogLevel.DEBUG),
-                            logFormat: LogFormat.PLAIN,
+                        Logger.destinations.file = LogDestination({
+                            write: await createFileLogger(storedLogFileName),
+                            level: LogLevel(await theNode.Store.get<LogLevel>("LoglevelFile", LogLevel.DEBUG)),
+                            format: LogFormat("plain"),
                         });
                     }
                 }

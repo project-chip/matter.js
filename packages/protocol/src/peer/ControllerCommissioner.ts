@@ -12,6 +12,7 @@ import {
     Channel,
     ChannelType,
     ClassExtends,
+    Diagnostic,
     Environment,
     Environmental,
     isIPv6,
@@ -220,9 +221,9 @@ export class ControllerCommissioner {
         const scannersToUse = this.#context.scanners.select(discoveryCapabilities);
 
         logger.info(
-            `Connecting to device with identifier ${Logger.toJSON(identifierData)} and ${
+            `Connecting to device with identifier ${Diagnostic.json(identifierData)} and ${
                 scannersToUse.length
-            } scanners and knownAddress ${Logger.toJSON(knownAddress)}`,
+            } scanners and knownAddress ${Diagnostic.json(knownAddress)}`,
         );
 
         // If we have a known address we try this first before we discover the device

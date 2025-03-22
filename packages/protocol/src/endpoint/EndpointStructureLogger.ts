@@ -52,7 +52,7 @@ function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: En
             attributeValue !== null &&
             options.logAttributeObjectValues !== false
         ) {
-            value = Logger.toJSON(attributeValue);
+            value = Diagnostic.json(attributeValue);
         }
     } catch (error) {
         if (error instanceof FabricScopeError) {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "#general";
+import { Diagnostic, Logger } from "#general";
 import { AccessLevel, FabricIndex } from "#model";
 import { CommandId, StatusCode, TlvSchema, TlvStream } from "#types";
 import { Message } from "../../codec/MessageCodec.js";
@@ -69,9 +69,9 @@ export class CommandServer<RequestT = any, ResponseT = any> {
         }
 
         this.requestSchema.validate(request);
-        this.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
+        this.debug(`Invoke ${this.name} with data ${Diagnostic.json(request)}`);
         const response = await this.handler(request, session, message, endpoint);
-        this.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);
+        this.debug(`Invoke ${this.name} response : ${Diagnostic.json(response)}`);
         return {
             code: StatusCode.Success,
             responseId: this.responseId,

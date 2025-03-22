@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@matter/general";
+import { Diagnostic } from "@matter/general";
 import { AttributeModel, ClusterModel, MatterModel } from "@matter/model";
 import { SupportedAttributeClient } from "@matter/protocol";
 import { AttributeId, ClusterId, EndpointNumber, ValidationError } from "@matter/types";
@@ -67,7 +67,7 @@ function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode
                     value,
                 } of result) {
                     console.log(
-                        `    ${Diagnostic.hex(attributeId)}${attributeName !== undefined ? ` (${attributeName})` : ""}: ${Logger.toJSON(value)}`,
+                        `    ${Diagnostic.hex(attributeId)}${attributeName !== undefined ? ` (${attributeName})` : ""}: ${Diagnostic.json(value)}`,
                     );
                 }
             } catch (error) {
@@ -140,7 +140,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                     continue;
                                 }
                                 console.log(
-                                    `    ${attributeName} (${attribute.id}): ${Logger.toJSON(await attributeClient.get(requestRemote))}`,
+                                    `    ${attributeName} (${attribute.id}): ${Diagnostic.json(await attributeClient.get(requestRemote))}`,
                                 );
                             }
                         },
@@ -234,7 +234,7 @@ function generateAttributeReadHandler(
             }
             try {
                 console.log(
-                    `Attribute value for ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id}: ${Logger.toJSON(await attributeClient.get(requestRemote))}`,
+                    `Attribute value for ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id}: ${Diagnostic.json(await attributeClient.get(requestRemote))}`,
                 );
             } catch (error) {
                 console.log(`ERROR: Could not get attribute ${attribute.name}: ${error}`);
@@ -310,16 +310,16 @@ function generateAttributeWriteHandler(
 
                 await attributeClient.set(parsedValue);
                 console.log(
-                    `Attribute ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} set to ${Logger.toJSON(value)}`,
+                    `Attribute ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${attribute.id} set to ${Diagnostic.json(value)}`,
                 );
             } catch (error) {
                 if (error instanceof ValidationError) {
                     console.log(
-                        `ERROR: Could not validate data for attribute ${attribute.name} to ${Logger.toJSON(parsedValue)}: ${error}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
+                        `ERROR: Could not validate data for attribute ${attribute.name} to ${Diagnostic.json(parsedValue)}: ${error}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
                     );
                 } else {
                     console.log(
-                        `ERROR: Could not set attribute ${attribute.name} to ${Logger.toJSON(parsedValue)}: ${error}`,
+                        `ERROR: Could not set attribute ${attribute.name} to ${Diagnostic.json(parsedValue)}: ${error}`,
                     );
                 }
             }

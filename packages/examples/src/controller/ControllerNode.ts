@@ -11,7 +11,7 @@
  * because you need to adjust the code in any way depending on your use case.
  */
 
-import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
+import { Diagnostic, Environment, Logger, singleton, StorageService, Time } from "@matter/main";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/main/clusters";
 import { Ble, ClusterClientObj } from "@matter/main/protocol";
 import { ManualPairingCodeCodec, NodeId } from "@matter/main/types";
@@ -78,7 +78,7 @@ class ControllerNode {
             shortDiscriminator = pairingCodeCodec.shortDiscriminator;
             longDiscriminator = undefined;
             setupPin = pairingCodeCodec.passcode;
-            logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
+            logger.debug(`Data extracted from pairing code: ${Diagnostic.json(pairingCodeCodec)}`);
         } else {
             longDiscriminator =
                 environment.vars.number("longDiscriminator") ??
@@ -152,7 +152,7 @@ class ControllerNode {
                 },
                 passcode: setupPin,
             };
-            logger.info(`Commissioning ... ${Logger.toJSON(options)}`);
+            logger.info(`Commissioning ... ${Diagnostic.json(options)}`);
             const nodeId = await commissioningController.commissionNode(options);
 
             console.log(`Commissioning successfully done with nodeId ${nodeId}`);
@@ -161,7 +161,7 @@ class ControllerNode {
         // After commissioning or if we have a commissioned node we can connect to it
         try {
             const nodes = commissioningController.getCommissionedNodes();
-            console.log("Found commissioned nodes:", Logger.toJSON(nodes));
+            console.log("Found commissioned nodes:", Diagnostic.json(nodes));
 
             const nodeId = NodeId(environment.vars.number("nodeid") ?? nodes[0]);
             if (!nodes.includes(nodeId)) {
@@ -169,7 +169,10 @@ class ControllerNode {
             }
 
             const nodeDetails = commissioningController.getCommissionedNodesDetails();
-            console.log("Commissioned nodes details:", Logger.toJSON(nodeDetails.find(node => node.nodeId === nodeId)));
+            console.log(
+                "Commissioned nodes details:",
+                Diagnostic.json(nodeDetails.find(node => node.nodeId === nodeId)),
+            );
 
             // Get the node instance
             const node = await commissioningController.getNode(nodeId);
@@ -177,14 +180,14 @@ class ControllerNode {
             // Subscribe to events of the node
             node.events.attributeChanged.on(({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
                 console.log(
-                    `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                    `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                         value,
                     )}`,
                 ),
             );
             node.events.eventTriggered.on(({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
                 console.log(
-                    `eventTriggeredCallback ${nodeId}: Event ${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                    `eventTriggeredCallback ${nodeId}: Event ${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                         events,
                     )}`,
                 ),
@@ -246,7 +249,7 @@ class ControllerNode {
 
             // Example to get all Attributes of the commissioned node: */*/*
             //const attributesAll = await interactionClient.getAllAttributes();
-            //console.log("Attributes-All:", Logger.toJSON(attributesAll));
+            //console.log("Attributes-All:", Diagnostic.json(attributesAll));
 
             // Example to get all Attributes of all Descriptor Clusters of the commissioned node: */DescriptorCluster/*
             //const attributesAllDescriptor = await interactionClient.getMultipleAttributes([{ clusterId: DescriptorCluster.id} ]);
@@ -260,7 +263,7 @@ class ControllerNode {
             if (devices[0] && devices[0].number === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
-                //    console.log("Subscribe-All Data:", Logger.toJSON(data));
+                //    console.log("Subscribe-All Data:", Diagnostic.json(data));
                 //});
 
                 const onOff: ClusterClientObj<OnOff.Complete> | undefined = devices[0].getClusterClient(OnOff.Complete);

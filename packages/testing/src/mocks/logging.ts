@@ -6,9 +6,18 @@
 
 import { ansi, Wrapper } from "#tools/ansi-text";
 
+export interface DiagnosticMessageLike {
+    level: number;
+}
+
 interface LoggerLike {
     format: string;
-    log(level: number, message: string): void;
+    destinations: Record<
+        string,
+        {
+            write(text: string, message: DiagnosticMessageLike): void;
+        }
+    >;
 }
 
 export interface MockLogger {
@@ -49,15 +58,15 @@ export function loggerSetup(Logger: LoggerLike) {
     // Should this become a PITA we can add an option to disable
     Logger.format = "ansi";
 
-    let messageBuffer: [number, string][] | undefined;
+    let messageBuffer: [string, DiagnosticMessageLike][] | undefined;
 
-    const defaultLog = Logger.log;
+    const defaultWrite = Logger.destinations.default.write;
 
-    function passMessage(args: [number, string]) {
-        defaultLog.apply(Logger, args);
+    function passMessage(args: [string, DiagnosticMessageLike]) {
+        defaultWrite.apply(Logger, args);
     }
 
-    function interceptingLogger(...args: [number, string]) {
+    function interceptingWriter(...args: [string, DiagnosticMessageLike]) {
         let emitAll = TheMockLogger.emitAll;
         if (MatterHooks?.loggerSink) {
             MatterHooks.loggerSink(...args);
@@ -74,9 +83,10 @@ export function loggerSetup(Logger: LoggerLike) {
         }
     }
 
-    TheMockLogger.injectExternalMessage = (source, text) => interceptingLogger(0, formatExternalMessage(source, text));
+    TheMockLogger.injectExternalMessage = (source, text) =>
+        interceptingWriter(formatExternalMessage(source, text), { level: 0 });
 
-    Logger.log = interceptingLogger;
+    Logger.destinations.default.write = interceptingWriter;
 
     // Divert log messages for test duration
     LoggerHooks.beforeEach.push(function () {

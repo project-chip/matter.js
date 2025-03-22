@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, decamelize, Logger } from "@matter/general";
+import { capitalize, decamelize, Diagnostic } from "@matter/general";
 import { NodeId } from "@matter/types";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
@@ -14,13 +14,13 @@ export function createDiagnosticCallbacks(): Partial<CommissioningControllerNode
     return {
         attributeChangedCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
             console.log(
-                `attributeChangedCallback ${peerNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                `attributeChangedCallback ${peerNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                     value,
                 )}`,
             ),
         eventTriggeredCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, eventName }, events }) =>
             console.log(
-                `eventTriggeredCallback ${peerNodeId}: Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                `eventTriggeredCallback ${peerNodeId}: Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                     events,
                 )}`,
             ),

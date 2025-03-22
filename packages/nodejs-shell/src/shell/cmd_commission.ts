@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterError } from "@matter/general";
+import { Diagnostic, MatterError } from "@matter/general";
 import { DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, NodeId, QrCode, QrPairingCodeCodec } from "@matter/types";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@matter/types/clusters";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
@@ -136,7 +136,7 @@ export default function commands(theNode: MatterNode) {
                                         regulatoryCountryCode: "XX",
                                     };
 
-                                    console.log(Logger.toJSON(options));
+                                    console.log(Diagnostic.json(options));
 
                                     if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
                                         options.commissioning.wifiNetwork = {

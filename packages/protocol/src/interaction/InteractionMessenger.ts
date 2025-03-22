@@ -633,7 +633,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
         const encodedMessage = TlvDataReportForSend.encode(dataReportToSend);
         if (encodedMessage.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `DataReport with ${encodedMessage.length}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Logger.toJSON(
+                `DataReport with ${encodedMessage.length}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Diagnostic.json(
                     dataReportToSend,
                 )}`,
             );
@@ -856,7 +856,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         });
         if (requestWithoutDataVersionFilters.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `Request is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(request)}`,
+                `Request is too long to fit in a single chunk, This should not happen! Data: ${Diagnostic.json(request)}`,
             );
         }
 

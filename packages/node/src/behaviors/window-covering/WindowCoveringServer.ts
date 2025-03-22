@@ -5,7 +5,7 @@
  */
 
 import { WindowCovering } from "#clusters/window-covering";
-import { ImplementationError, isDeepEqual, Logger, MaybePromise } from "#general";
+import { Diagnostic, ImplementationError, isDeepEqual, Logger, MaybePromise } from "#general";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
 import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
 
@@ -198,7 +198,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
         }
 
         logger.debug(
-            `Mode changed to ${Logger.toJSON(mode)} and config status to ${Logger.toJSON(configStatus)} and internal calibration mode to ${this.internal.calibrationMode}`,
+            `Mode changed to ${Diagnostic.json(mode)} and config status to ${Diagnostic.json(configStatus)} and internal calibration mode to ${this.internal.calibrationMode}`,
         );
     }
 
@@ -213,7 +213,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 : operationalStatus.tilt;
         operationalStatus.global = globalStatus;
         logger.debug(
-            `Operational status changed to ${Logger.toJSON(operationalStatus)} with new global status ${globalStatus}`,
+            `Operational status changed to ${Diagnostic.json(operationalStatus)} with new global status ${globalStatus}`,
         );
         this.state.operationalStatus = operationalStatus;
     }

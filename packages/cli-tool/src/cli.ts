@@ -82,7 +82,7 @@ export async function main(argv: string[]) {
             domain.out(domain.inspect(result), "\n");
         }
     } catch (e) {
-        domain.err(LogFormat.ansi(e), "\n");
+        domain.err(LogFormat.formats.ansi(e), "\n");
         process.exitCode = 1;
     }
 }

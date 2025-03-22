@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError, Logger, MatterError, MaybePromise, camelize, isDeepEqual } from "#general";
+import {
+    Diagnostic,
+    ImplementationError,
+    InternalError,
+    Logger,
+    MatterError,
+    MaybePromise,
+    camelize,
+    isDeepEqual,
+} from "#general";
 import { AccessLevel, AttributeModel, ClusterModel, DatatypeModel, FabricIndex, MatterModel } from "#model";
 import {
     Attribute,
@@ -165,9 +174,9 @@ export abstract class BaseAttributeServer<T> {
             this.value = initValue;
         } catch (error) {
             logger.warn(
-                `Attribute value to initialize for ${name} has an invalid value ${Logger.toJSON(
+                `Attribute value to initialize for ${name} has an invalid value ${Diagnostic.json(
                     initValue,
-                )}. Restore to default ${Logger.toJSON(defaultValue)}`,
+                )}. Restore to default ${Diagnostic.json(defaultValue)}`,
             );
             if (defaultValue === undefined) {
                 throw new ImplementationError(`Attribute value to initialize for ${name} cannot be undefined.`);
@@ -524,7 +533,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
                 newValue: value,
                 changed: !!this.delayedChangeData?.changed || valueChanged, // We combine the changed flag
             };
-            logger.info(`Delay change for attribute "${this.name}" with value ${Logger.toJSON(value)}`);
+            logger.info(`Delay change for attribute "${this.name}" with value ${Diagnostic.json(value)}`);
         } else {
             this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
         }
@@ -534,7 +543,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         if (this.delayedChangeData !== undefined) {
             const { oldValue, newValue, changed } = this.delayedChangeData;
             this.delayedChangeData = undefined;
-            logger.info(`Trigger delayed change for attribute "${this.name}" with value ${Logger.toJSON(newValue)}`);
+            logger.info(`Trigger delayed change for attribute "${this.name}" with value ${Diagnostic.json(newValue)}`);
             this.handleVersionAndTriggerListeners(newValue, oldValue, changed);
         }
     }
@@ -909,7 +918,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             () => !preserveFabricIndex, // No one should send any index and if we simply SHALL ignore it,  but internally we might need it
         );
         logger.info(
-            `Set remote value for fabric scoped attribute "${this.name}" to ${Logger.toJSON(value)} (delayed=${delayChangeEvents})`,
+            `Set remote value for fabric scoped attribute "${this.name}" to ${Diagnostic.json(value)} (delayed=${delayChangeEvents})`,
         );
 
         super.setRemote(value, session, message, delayChangeEvents);

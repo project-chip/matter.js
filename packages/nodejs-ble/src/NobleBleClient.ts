@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Diagnostic, Logger } from "@matter/general";
 import { require } from "@matter/nodejs-ble/require";
 import { BLE_MATTER_SERVICE_UUID } from "@matter/protocol";
 import type { Peripheral } from "@stoprocent/noble";
@@ -117,7 +117,7 @@ export class NobleBleClient {
 
         const address = peripheral.address;
         logger.debug(
-            `Found peripheral ${address} (${peripheral.advertisement.localName}): ${Logger.toJSON(
+            `Found peripheral ${address} (${peripheral.advertisement.localName}): ${Diagnostic.json(
                 peripheral.advertisement,
             )}`,
         );
