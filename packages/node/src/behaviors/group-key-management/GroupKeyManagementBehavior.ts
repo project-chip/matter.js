@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { GroupKeyManagementInterface } from "./GroupKeyManagementInterface.js";
 
 /**
- * GroupKeyManagementBehavior is the base class for objects that support interaction with {@link
- * GroupKeyManagement.Cluster}.
+ * GroupKeyManagementBehavior is the base class for objects that support interaction with
+ * {@link GroupKeyManagement.Cluster}.
  */
 export const GroupKeyManagementBehavior = ClusterBehavior
     .withInterface<GroupKeyManagementInterface>()

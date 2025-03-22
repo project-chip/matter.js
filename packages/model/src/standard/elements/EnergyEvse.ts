@@ -21,8 +21,8 @@ export const EnergyEvse = Cluster(
         name: "EnergyEvse", id: 0x99, classification: "application", pics: "EEVSE",
 
         details: "Electric Vehicle Supply Equipment (EVSE) is equipment used to charge an Electric Vehicle (EV) or " +
-            "Plug-In Hybrid Electric Vehicle. This cluster provides an interface to the functionality of " +
-            "Electric Vehicle Supply Equipment (EVSE) management." +
+            "Plug-In Hybrid Electric Vehicle. This cluster provides an interface to the functionality of Electric " +
+            "Vehicle Supply Equipment (EVSE) management." +
             "\n" +
             "Devices targeted by this cluster include Electric Vehicle Supply Equipment (EVSE). The cluster " +
             "generically assumes a signaling protocol (J1772 in NA and IEC61851 in Europe and Asia) between the " +
@@ -43,9 +43,8 @@ export const EnergyEvse = Cluster(
             "\n" +
             "This cluster supports a safety mechanism that may lockout remote operation until the initial " +
             "latching conditions have been met. Some of the fault conditions defined in SAE J1772, such as " +
-            "Ground- Fault Circuit Interrupter (GFCI) or Charging Circuit Interrupting Device (CCID), may " +
-            "require clearing by an operator by, for example, pressing a button on the equipment or breaker " +
-            "panel." +
+            "Ground- Fault Circuit Interrupter (GFCI) or Charging Circuit Interrupting Device (CCID), may require " +
+            "clearing by an operator by, for example, pressing a button on the equipment or breaker panel." +
             "\n" +
             "This EVSE cluster is written around support of a single EVSE. Having multiple EVSEs at home or a " +
             "business is managed by backend system and outside scope of this cluster." +
@@ -108,14 +107,11 @@ export const EnergyEvse = Cluster(
 
         Field({
             name: "PNC", conformance: "P, O", constraint: "2", description: "PlugAndCharge",
-
-            details: "If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may " +
-                "allow the vehicle ID to be obtained which may allow an energy management system to track energy " +
-                "usage per vehicle (e.g. to give the owner an indicative cost of charging, or for work place " +
-                "charging)." +
+            details: "If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow " +
+                "the vehicle ID to be obtained which may allow an energy management system to track energy usage per " +
+                "vehicle (e.g. to give the owner an indicative cost of charging, or for work place charging)." +
                 "\n" +
                 "If the EVSE supports the Plug and Charge feature, it will only work if a compatible EV is connected.",
-
             xref: { document: "cluster", section: "9.3.4.3" }
         }),
 
@@ -123,13 +119,12 @@ export const EnergyEvse = Cluster(
             name: "RFID", conformance: "O", constraint: "3", description: "Rfid",
 
             details: "If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from " +
-                "an RFID card. This may be used to record a charging session against a specific charging account, " +
-                "and may optionally be used to authorize a charging session." +
+                "an RFID card. This may be used to record a charging session against a specific charging account, and " +
+                "may optionally be used to authorize a charging session." +
                 "\n" +
-                "An RFID event can be generated when a user taps an RFID card onto the RFID reader. The event must " +
-                "be subscribed to by the EVSE Management cluster client. This client may use this to enable the EV " +
-                "to charge or discharge. The lookup and authorization of RIFD UID is outside the scope of this " +
-                "cluster.",
+                "An RFID event can be generated when a user taps an RFID card onto the RFID reader. The event must be " +
+                "subscribed to by the EVSE Management cluster client. This client may use this to enable the EV to " +
+                "charge or discharge. The lookup and authorization of RIFD UID is outside the scope of this cluster.",
 
             xref: { document: "cluster", section: "9.3.4.4" }
         }),
@@ -195,11 +190,11 @@ export const EnergyEvse = Cluster(
             "\n" +
             "A null value indicates the EVSE is always enabled for charging." +
             "\n" +
-            "A value in the past or 0x0 indicates that EVSE charging shall be disabled. The attribute is only " +
-            "set via the payload of the EnableCharging command." +
+            "A value in the past or 0x0 indicates that EVSE charging shall be disabled. The attribute is only set " +
+            "via the payload of the EnableCharging command." +
             "\n" +
-            "This attribute shall be persisted, for example a temporary power failure should not stop the " +
-            "vehicle from being charged.",
+            "This attribute shall be persisted, for example a temporary power failure should not stop the vehicle " +
+            "from being charged.",
 
         xref: { document: "cluster", section: "9.3.8.4" }
     }),
@@ -215,8 +210,8 @@ export const EnergyEvse = Cluster(
             "A value in the past or 0x0 indicates that EVSE discharging shall be disabled. The attribute is only " +
             "set via the payload of the EnableDischarging command." +
             "\n" +
-            "This attribute shall be persisted, for example a temporary power failure should not stop the " +
-            "vehicle from being discharged.",
+            "This attribute shall be persisted, for example a temporary power failure should not stop the vehicle " +
+            "from being discharged.",
 
         xref: { document: "cluster", section: "9.3.8.5" }
     }),
@@ -224,9 +219,9 @@ export const EnergyEvse = Cluster(
     Attribute({
         name: "CircuitCapacity", id: 0x5, type: "amperage-mA", access: "R V", conformance: "M",
         constraint: "min 0", default: 0, quality: "N",
-        details: "Indicates the capacity that the circuit that the EVSE is connected to can provide. It is intended " +
-            "to allow implementation of a self-managed network of EVSEs. It is assumed that the device will " +
-            "allow the setting of such values by an installer.",
+        details: "Indicates the capacity that the circuit that the EVSE is connected to can provide. It is intended to " +
+            "allow implementation of a self-managed network of EVSEs. It is assumed that the device will allow " +
+            "the setting of such values by an installer.",
         xref: { document: "cluster", section: "9.3.8.6" }
     }),
 
@@ -300,8 +295,8 @@ export const EnergyEvse = Cluster(
             "command." +
             "\n" +
             "Its default value SHOULD be initialized to the same as the CircuitCapacity attribute. This value " +
-            "shall be persisted across reboots to ensure it does not cause charging issues during temporary " +
-            "power failures.",
+            "shall be persisted across reboots to ensure it does not cause charging issues during temporary power " +
+            "failures.",
 
         xref: { document: "cluster", section: "9.3.8.10" }
     }),
@@ -316,9 +311,9 @@ export const EnergyEvse = Cluster(
             "This is a feature that is mandated in some markets (such as UK) where the EVSE should by default " +
             "randomize its start time within the randomization window. By default in the UK this should be 600s." +
             "\n" +
-            "For example, if the RandomizationDelayWindow is 600s (i.e. 10 minutes) and if there was a cheap " +
-            "rate energy starting at 00:30, then the EVSE must compute a random delay between 0-599s and add " +
-            "this to its initial planned start time.",
+            "For example, if the RandomizationDelayWindow is 600s (i.e. 10 minutes) and if there was a cheap rate " +
+            "energy starting at 00:30, then the EVSE must compute a random delay between 0-599s and add this to " +
+            "its initial planned start time.",
 
         xref: { document: "cluster", section: "9.3.8.11" }
     }),
@@ -330,8 +325,8 @@ export const EnergyEvse = Cluster(
         details: "Indicates the time, in UTC, when the EVSE plans to start the next scheduled charge based on the " +
             "charging preferences." +
             "\n" +
-            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to " +
-            "use Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
+            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use " +
+            "Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
             "charging is enabled.",
 
         xref: { document: "cluster", section: "9.3.8.12" }
@@ -344,8 +339,8 @@ export const EnergyEvse = Cluster(
         details: "Indicates the time, in UTC, when the EVSE SHOULD complete the next scheduled charge based on the " +
             "charging preferences." +
             "\n" +
-            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to " +
-            "use Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
+            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use " +
+            "Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
             "charging is enabled.",
 
         xref: { document: "cluster", section: "9.3.8.13" }
@@ -358,8 +353,8 @@ export const EnergyEvse = Cluster(
         details: "Indicates the amount of energy that the EVSE is going to attempt to add to the vehicle in the next " +
             "charging target." +
             "\n" +
-            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to " +
-            "use Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
+            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use " +
+            "Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
             "charging is enabled, or that the next ChargingTargetStruct is using the TargetSoC value to charge " +
             "the vehicle.",
 
@@ -564,9 +559,9 @@ export const EnergyEvse = Cluster(
             details: "This field shall indicate the value of the maximum charging current at the time the event was " +
                 "generated." +
                 "\n" +
-                "A non-zero value indicates that the EV has been enabled for charging and the value is taken " +
-                "directly from the MaximumChargeCurrent attribute. A zero value indicates that the EV has not been " +
-                "enabled for charging.",
+                "A non-zero value indicates that the EV has been enabled for charging and the value is taken directly " +
+                "from the MaximumChargeCurrent attribute. A zero value indicates that the EV has not been enabled for " +
+                "charging.",
 
             xref: { document: "cluster", section: "9.3.10.3.3" }
         }),
@@ -579,8 +574,8 @@ export const EnergyEvse = Cluster(
                 "generated." +
                 "\n" +
                 "A non-zero value indicates that the EV has been enabled for discharging and the value is taken " +
-                "directly from the MaximumDischargeCurrent attribute. A zero value indicates that the EV has not " +
-                "been enabled for discharging.",
+                "directly from the MaximumDischargeCurrent attribute. A zero value indicates that the EV has not been " +
+                "enabled for discharging.",
 
             xref: { document: "cluster", section: "9.3.10.3.4" }
         })
@@ -640,8 +635,8 @@ export const EnergyEvse = Cluster(
                 "from NoError to any other state and if the error then clears, this would generate 2 events." +
                 "\n" +
                 "It is assumed that the fault will be cleared locally on the EVSE device. When all faults have been " +
-                "cleared, the EVSE device shall set the FaultState attribute to NoError and the SupplyState " +
-                "attribute shall be set back to its previous state.",
+                "cleared, the EVSE device shall set the FaultState attribute to NoError and the SupplyState attribute " +
+                "shall be set back to its previous state.",
 
             xref: { document: "cluster", section: "9.3.10.5" }
         },
@@ -715,8 +710,8 @@ export const EnergyEvse = Cluster(
 
         Field({
             name: "MinimumChargeCurrent", id: 0x1, type: "amperage-mA", conformance: "M", constraint: "min 0",
-            details: "This field shall indicate the minimum current that can be delivered by the EVSE to the EV in " +
-                "trickle mode. The EVSE current limit can be advertised to an EV in 0.6A steps." +
+            details: "This field shall indicate the minimum current that can be delivered by the EVSE to the EV in trickle " +
+                "mode. The EVSE current limit can be advertised to an EV in 0.6A steps." +
                 "\n" +
                 "The value of the MinimumChargeCurrent attribute shall be set to the value of this field (see " +
                 "MinimumChargeCurrent attribute for further details).",
@@ -760,10 +755,9 @@ export const EnergyEvse = Cluster(
         Field({
             name: "MaximumDischargeCurrent", id: 0x1, type: "amperage-mA", conformance: "M",
             constraint: "min 0",
-            details: "This field shall indicate the maximum current that can be received by the EVSE from the EV. The " +
-                "EVSE current limit can be advertised to an EV in 0.6A steps. The value of the " +
-                "MaximumDischargeCurrent attribute shall be stored and persisted across reboots by the EVSE to the " +
-                "value of this field.",
+            details: "This field shall indicate the maximum current that can be received by the EVSE from the EV. The EVSE " +
+                "current limit can be advertised to an EV in 0.6A steps. The value of the MaximumDischargeCurrent " +
+                "attribute shall be stored and persisted across reboots by the EVSE to the value of this field.",
             xref: { document: "cluster", section: "9.3.9.3.2" }
         })
     ),
@@ -955,9 +949,9 @@ export const EnergyEvse = Cluster(
 
             details: "This represents a single user specified charging target for an EV." +
                 "\n" +
-                "An EVSE or EMS system optimizer may use this information to take the Time of Use Tariff, grid " +
-                "carbon intensity, local generation (solar PV) into account to provide the cheapest and cleanest " +
-                "energy to the EV." +
+                "An EVSE or EMS system optimizer may use this information to take the Time of Use Tariff, grid carbon " +
+                "intensity, local generation (solar PV) into account to provide the cheapest and cleanest energy to " +
+                "the EV." +
                 "\n" +
                 "The optimization strategy is not defined here, however in simple terms, the AddedEnergy requirement " +
                 "can be fulfilled by knowing the charging Power (W) and the time needed to charge." +
@@ -980,8 +974,8 @@ export const EnergyEvse = Cluster(
                 "minutes since midnight." +
                 "\n" +
                 "This field is based on local wall clock time. In case of Daylight Savings Time transition which may " +
-                "result in an extra hour or one hour less in the day, the charging algorithm should take into " +
-                "account the shift appropriately." +
+                "result in an extra hour or one hour less in the day, the charging algorithm should take into account " +
+                "the shift appropriately." +
                 "\n" +
                 "Note that if the TargetTimeMinutesPastMidnight values are too close together (e.g. 2 per day) these " +
                 "may overlap. The EVSE may have to coalesce the charging targets into a single target. e.g. if the " +
@@ -995,8 +989,8 @@ export const EnergyEvse = Cluster(
                 "charge more slowly than the electrical supply may provide power (especially if it is cold)." +
                 "\n" +
                 "If the user configures large charging targets (e.g. high values of AddedEnergy or SoC) then it is " +
-                "expected that the EVSE may need to begin charging immediately, and may not be able to guarantee " +
-                "that the vehicle will be able to reach the target.",
+                "expected that the EVSE may need to begin charging immediately, and may not be able to guarantee that " +
+                "the vehicle will be able to reach the target.",
 
             xref: { document: "cluster", section: "9.3.7.6.1" }
         }),
@@ -1011,8 +1005,8 @@ export const EnergyEvse = Cluster(
                 "\n" +
                 "  • the TargetSoC field shall take precedence over the AddedEnergy field." +
                 "\n" +
-                "  • the EVSE SHOULD charge to the TargetSoC and then stop the charging automatically when it " +
-                "    reaches that point." +
+                "  • the EVSE SHOULD charge to the TargetSoC and then stop the charging automatically when it reaches " +
+                "    that point." +
                 "\n" +
                 "  • if the TargetSoC value is set to 100% then the EVSE SHOULD continue to charge the vehicle until " +
                 "    the vehicle decides to stop charging." +
@@ -1036,9 +1030,9 @@ export const EnergyEvse = Cluster(
             details: "This field represents the amount of energy that the user would like to have added to the vehicle " +
                 "before the TargetTimeMinutesPastMidnight." +
                 "\n" +
-                "This represents a positive value in mWh that SHOULD be added during the session (i.e. if the " +
-                "vehicle charging is stopped and started several times, this equates to the total energy since the " +
-                "vehicle has been plugged in)." +
+                "This represents a positive value in mWh that SHOULD be added during the session (i.e. if the vehicle " +
+                "charging is stopped and started several times, this equates to the total energy since the vehicle " +
+                "has been plugged in)." +
                 "\n" +
                 "The maximum value (500kWh) is much larger than most EV batteries on the market today. If the client " +
                 "tries to set this value too high then the EVSE will need to start charging immediately and continue " +
@@ -1073,8 +1067,8 @@ export const EnergyEvse = Cluster(
         Field(
             {
                 name: "ChargingTargets", id: 0x1, type: "list", conformance: "M", constraint: "max 10",
-                details: "This field shall indicate a list of up to 10 charging targets for each of the associated days of " +
-                    "the week.",
+                details: "This field shall indicate a list of up to 10 charging targets for each of the associated days of the " +
+                    "week.",
                 xref: { document: "cluster", section: "9.3.7.9" }
             },
 

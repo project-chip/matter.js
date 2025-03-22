@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * Pm25ConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link
- * Pm25ConcentrationMeasurement.Cluster}.
+ * Pm25ConcentrationMeasurementBehavior is the base class for objects that support interaction with
+ * {@link Pm25ConcentrationMeasurement.Cluster}.
  *
  * Pm25ConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link Pm25ConcentrationMeasurementBehavior.with}.

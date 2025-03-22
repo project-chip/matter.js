@@ -55,9 +55,9 @@ export namespace UnitLocalization {
     export const TemperatureUnitComponent = MutableCluster.Component({
         attributes: {
             /**
-             * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying
-             * temperature in communication to the user. If provided, this value shall take priority over any unit
-             * implied through the ActiveLocale Attribute.
+             * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying temperature
+             * in communication to the user. If provided, this value shall take priority over any unit implied through
+             * the ActiveLocale Attribute.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.5.6.1
              */
@@ -137,8 +137,8 @@ export namespace UnitLocalization {
     /**
      * This cluster supports all UnitLocalization features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

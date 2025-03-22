@@ -31,14 +31,14 @@ export const ThreadBorderRouterManagement = Cluster(
         Field({
             name: "PC", conformance: "O", constraint: "0", description: "PanChange",
 
-            details: "This feature shall indicate the ability of the Border Router to change its already configured PAN " +
-                "to another, by setting a pending dataset." +
+            details: "This feature shall indicate the ability of the Border Router to change its already configured PAN to " +
+                "another, by setting a pending dataset." +
                 "\n" +
                 "NOTE" +
                 "\n" +
-                "This feature flag can be used to protect an already-configured network from accidental " +
-                "configuration change, e.g. when the Thread Border Router serves non-Matter devices that do not " +
-                "support PAN change for an implementation-specific reason.",
+                "This feature flag can be used to protect an already-configured network from accidental configuration " +
+                "change, e.g. when the Thread Border Router serves non-Matter devices that do not support PAN change " +
+                "for an implementation-specific reason.",
 
             xref: { document: "cluster", section: "10.3.4.1" }
         })
@@ -92,8 +92,8 @@ export const ThreadBorderRouterManagement = Cluster(
         default: 0, quality: "X N",
         details: "Null if the Thread Border Router has no Pending dataset configured, otherwise it shall be the " +
             "timestamp value extracted from the Pending Dataset value configured by the Thread Node to which the " +
-            "border router is connected. This attribute shall be updated when a new Pending dataset is " +
-            "configured on the Thread network to which the border router is connected.",
+            "border router is connected. This attribute shall be updated when a new Pending dataset is configured " +
+            "on the Thread network to which the border router is connected.",
         xref: { document: "cluster", section: "10.3.5.6" }
     }),
 
@@ -144,9 +144,9 @@ export const ThreadBorderRouterManagement = Cluster(
             name: "Dataset", id: 0x0, type: "octstr", conformance: "M", constraint: "max 254",
             details: "If no dataset (active or pending as requested) is configured, this field shall be set to empty." +
                 "\n" +
-                "Otherwise, this field shall contain the active or pending dataset of the Thread network to which " +
-                "the Border Router is connected as an octet string containing the raw Thread TLV value of the " +
-                "dataset, as defined in the Thread specification.",
+                "Otherwise, this field shall contain the active or pending dataset of the Thread network to which the " +
+                "Border Router is connected as an octet string containing the raw Thread TLV value of the dataset, as " +
+                "defined in the Thread specification.",
             xref: { document: "cluster", section: "10.3.6.3.1" }
         })
     ),

@@ -11,6 +11,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     Bytes,
     Crypto,
+    DataReadQueue,
     Environment,
     Key,
     MaybePromise,
@@ -22,8 +23,9 @@ import {
 } from "#general";
 import { Node } from "#node/Node.js";
 import { ServerNode } from "#node/ServerNode.js";
-import { MessageExchange, SessionManager } from "#protocol";
+import { ExchangeManager, MessageExchange, SessionManager } from "#protocol";
 import { FabricIndex, NodeId } from "#types";
+import { MockExchange } from "./mock-exchange.js";
 
 // These are temporary until we get proper crypto.subtle support
 Crypto.get().sign = () => {
@@ -44,6 +46,7 @@ Crypto.get().hkdf = async () => {
 };
 
 export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
+    #newExchanges = new DataReadQueue<MockExchange>();
     #simulator = new NetworkSimulator();
 
     constructor(type?: T, options?: Node.Options<T>, simulator?: NetworkSimulator);
@@ -120,11 +123,23 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
 
         await node.start();
 
+        node.env.get(ExchangeManager).initiateExchange = address => {
+            const exchange = new MockExchange(address);
+
+            node.#newExchanges.push(exchange);
+
+            return exchange;
+        };
+
         if (!node.lifecycle.isOnline) {
             await node.lifecycle.online;
         }
 
         return node;
+    }
+
+    async handleExchange(): Promise<MockExchange> {
+        return await this.#newExchanges.read();
     }
 
     async createSession(options?: Partial<Parameters<SessionManager["createSecureSession"]>[0]>) {
@@ -157,8 +172,8 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         await MockTime.resolve(super.cancel());
     }
 
-    override async close() {
-        await MockTime.resolve(super.close());
+    override async close(stepMs?: number) {
+        await MockTime.resolve(super.close(), { macrotasks: true, stepMs });
     }
 }
 

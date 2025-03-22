@@ -37,9 +37,9 @@ export namespace EnergyPreference {
         /**
          * LowPowerModeSensitivity (LPMS)
          *
-         * This feature allows the user to select a condition or set of conditions which will cause the device to
-         * switch to a mode using less power. For example, a device might provide a scale of durations that must elapse
-         * without user interaction before it goes to sleep.
+         * This feature allows the user to select a condition or set of conditions which will cause the device to switch
+         * to a mode using less power. For example, a device might provide a scale of durations that must elapse without
+         * user interaction before it goes to sleep.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.7.4.2
          */
@@ -119,10 +119,10 @@ export namespace EnergyPreference {
     export const EnergyBalanceComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates a list of BalanceStructs, each representing a step along a linear scale of relative
-             * priorities. A Step field with a value of zero shall indicate that the device SHOULD entirely favor the
-             * priority specified by the first element in EnergyPriorities; whereas a Step field with a value of 100
-             * shall indicate that the device SHOULD entirely favor the priority specified by the second element in
+             * Indicates a list of BalanceStructs, each representing a step along a linear scale of relative priorities.
+             * A Step field with a value of zero shall indicate that the device SHOULD entirely favor the priority
+             * specified by the first element in EnergyPriorities; whereas a Step field with a value of 100 shall
+             * indicate that the device SHOULD entirely favor the priority specified by the second element in
              * EnergyPriorities. The midpoint value of 50 shall indicate an even split between the two priorities.
              *
              * This shall contain at least two BalanceStructs.
@@ -193,8 +193,8 @@ export namespace EnergyPreference {
 
             /**
              * Indicates the current preference of the user for determining when the device should enter a low power
-             * mode. The value of this attribute is the index, 0-based, into the LowPowerModeSensitivities attribute
-             * for the currently selected preference.
+             * mode. The value of this attribute is the index, 0-based, into the LowPowerModeSensitivities attribute for
+             * the currently selected preference.
              *
              * If an attempt is made to set this attribute to an index outside the maximum index for
              * LowPowerModeSensitivities, a response with the status code CONSTRAINT_ERROR shall be returned.
@@ -221,8 +221,8 @@ export namespace EnergyPreference {
             /**
              * EnergyBalance
              *
-             * This feature allows a user to select from a list of energy balances with associated descriptions of
-             * which strategies a device will use to target the specified balance.
+             * This feature allows a user to select from a list of energy balances with associated descriptions of which
+             * strategies a device will use to target the specified balance.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.7.4.1
              */
@@ -308,8 +308,8 @@ export namespace EnergyPreference {
     /**
      * This cluster supports all EnergyPreference features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

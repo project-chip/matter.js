@@ -32,8 +32,8 @@ export namespace ActivatedCarbonFilterMonitoring {
     /**
      * This cluster supports all ActivatedCarbonFilterMonitoring features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export const CompleteInstance = MutableCluster({
         ...ResourceMonitoring.Complete,

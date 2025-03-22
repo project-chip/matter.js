@@ -45,8 +45,8 @@ export const OccupancySensing = Cluster(
         }),
         Field({
             name: "AIR", conformance: "O.a+", constraint: "4", description: "ActiveInfrared",
-            details: "Supports sensing using Active InfraRed measurement (e.g. time-of- flight or " +
-                "transflective/reflective IR sensing)"
+            details: "Supports sensing using Active InfraRed measurement (e.g. time-of- flight or transflective/reflective " +
+                "IR sensing)"
         }),
         Field({
             name: "RAD", conformance: "O.a+", constraint: "5", description: "Radar",
@@ -65,8 +65,8 @@ export const OccupancySensing = Cluster(
     Attribute({
         name: "Occupancy", id: 0x0, type: "OccupancyBitmap", access: "R V", conformance: "M",
         constraint: "0 to 1", quality: "P",
-        details: "Indicates the sensed (processed) status of occupancy. For compatibility reasons this is expressed " +
-            "as a bitmap where the status is indicated in bit 0: a value of 1 means occupied, and 0 means " +
+        details: "Indicates the sensed (processed) status of occupancy. For compatibility reasons this is expressed as " +
+            "a bitmap where the status is indicated in bit 0: a value of 1 means occupied, and 0 means " +
             "unoccupied, with the other bits set to 0; this can be considered equivalent to a boolean.",
         xref: { document: "cluster", section: "2.7.6.1" }
     }),
@@ -86,29 +86,29 @@ export const OccupancySensing = Cluster(
         name: "HoldTime", id: 0x3, type: "uint16", access: "RW VM", conformance: "O", constraint: "desc",
         quality: "N",
 
-        details: "This attribute shall specify the time delay, in seconds, before the sensor changes to its " +
-            "unoccupied state after the last detection of occupancy in the sensed area. This is equivalent to " +
-            "the legacy *OccupiedToUnoccupiedDelay attributes." +
+        details: "This attribute shall specify the time delay, in seconds, before the sensor changes to its unoccupied " +
+            "state after the last detection of occupancy in the sensed area. This is equivalent to the legacy " +
+            "*OccupiedToUnoccupiedDelay attributes." +
             "\n" +
             "The value of HoldTime shall be within the limits provided in the HoldTimeLimits attribute, i.e. " +
             "HoldTimeMin <= HoldTime <= HoldTimeMax" +
             "\n" +
-            "Low values of HoldTime SHOULD be avoided since they could lead to many reporting messages. A value " +
-            "0 for HoldTime shall NOT be used." +
+            "Low values of HoldTime SHOULD be avoided since they could lead to many reporting messages. A value 0 " +
+            "for HoldTime shall NOT be used." +
             "\n" +
-            "The figure below illustrates this with an example of how this attribute is used for a PIR sensor. " +
-            "It uses threshold detection to generate an \"internal detection\" signal, which needs post-processing " +
-            "to become usable for transmission (traffic shaping). The bit in the Occupancy attribute will be set " +
-            "to 1 when the internal detection signal goes high, and will stay at 1 for HoldTime after the (last) " +
+            "The figure below illustrates this with an example of how this attribute is used for a PIR sensor. It " +
+            "uses threshold detection to generate an \"internal detection\" signal, which needs post-processing to " +
+            "become usable for transmission (traffic shaping). The bit in the Occupancy attribute will be set to " +
+            "1 when the internal detection signal goes high, and will stay at 1 for HoldTime after the (last) " +
             "instance where the internal detection signal goes low." +
             "\n" +
             "The top half of the figure shows the case of a single trigger: the bit in the Occupancy attribute " +
             "will be 1 for the duration of the PIR signal exceeding the threshold plus HoldTime. The bottom half " +
             "of the figure shows the case of multiple triggers: the second trigger starts before the HoldTime of " +
-            "the first trigger has expired; this results in a single period of the bit in the Occupancy " +
-            "attribute being 1. The bit in the Occupancy attribute will be set to 1 from the start of the first " +
-            "period where the PIR signal exceeds the threshold until HoldTime after the last moment where the " +
-            "PIR exceeded the threshold." +
+            "the first trigger has expired; this results in a single period of the bit in the Occupancy attribute " +
+            "being 1. The bit in the Occupancy attribute will be set to 1 from the start of the first period " +
+            "where the PIR signal exceeds the threshold until HoldTime after the last moment where the PIR " +
+            "exceeded the threshold." +
             "\n" +
             "Figure 13. Processing of PIR signal towards Occupancy attribute using HoldTime",
 
@@ -151,8 +151,8 @@ export const OccupancySensing = Cluster(
     Attribute({
         name: "UltrasonicOccupiedToUnoccupiedDelay", id: 0x20, type: "uint16", access: "RW VM",
         conformance: "[HoldTime & US], D", default: 0, quality: "N",
-        details: "This attribute shall specify the time delay, in seconds, before the Ultrasonic sensor changes to " +
-            "its unoccupied state after the last detection of occupancy in the sensed area.",
+        details: "This attribute shall specify the time delay, in seconds, before the Ultrasonic sensor changes to its " +
+            "unoccupied state after the last detection of occupancy in the sensed area.",
         xref: { document: "cluster", section: "2.7.6.9" }
     }),
 
@@ -160,8 +160,8 @@ export const OccupancySensing = Cluster(
         name: "UltrasonicUnoccupiedToOccupiedDelay", id: 0x21, type: "uint16", access: "RW VM",
         conformance: "HoldTime & US & UltrasonicUnoccupiedToOccupiedThreshold, [HoldTime & US], D",
         default: 0, quality: "N",
-        details: "This attribute shall specify the time delay, in seconds, before the Ultrasonic sensor changes to " +
-            "its occupied state after the first detection of occupancy in the sensed area.",
+        details: "This attribute shall specify the time delay, in seconds, before the Ultrasonic sensor changes to its " +
+            "occupied state after the first detection of occupancy in the sensed area.",
         xref: { document: "cluster", section: "2.7.6.10" }
     }),
 
@@ -249,8 +249,8 @@ export const OccupancySensing = Cluster(
                 "\n" +
                 "This enum is as defined in ClusterRevision 4 and its definition shall NOT be" +
                 "\n" +
-                "extended; the feature flags provide the sensor modality (or modalities) for later cluster " +
-                "revisions. See Backward Compatibility section.",
+                "extended; the feature flags provide the sensor modality (or modalities) for later cluster revisions. " +
+                "See Backward Compatibility section.",
 
             xref: { document: "cluster", section: "2.7.5.3" }
         },

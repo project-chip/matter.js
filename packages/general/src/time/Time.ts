@@ -85,6 +85,10 @@ export class Time {
     static unregister(timer: Timer) {
         registry.delete(timer);
     }
+
+    static get timers() {
+        return registry;
+    }
 }
 
 const time = new Time();

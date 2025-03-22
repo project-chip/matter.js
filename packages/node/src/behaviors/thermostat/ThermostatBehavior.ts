@@ -14,8 +14,8 @@ import { ClusterType } from "#types";
 /**
  * ThermostatBehavior is the base class for objects that support interaction with {@link Thermostat.Cluster}.
  *
- * Thermostat.Cluster requires you to enable one or more optional features. You can do so using {@link
- * ThermostatBehavior.with}.
+ * Thermostat.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link ThermostatBehavior.with}.
  */
 export const ThermostatBehavior = ClusterBehavior
     .withInterface<ThermostatInterface>()

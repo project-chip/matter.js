@@ -28,6 +28,6 @@ export const OvenCavityOperationalState = Cluster(
     Command({ name: "Start", id: 0x2, xref: { document: "cluster", section: "8.10.5" } }),
     Command({ name: "Resume", id: 0x3, conformance: "X", xref: { document: "cluster", section: "8.10.5" } }),
     Command({ name: "OperationalCommandResponse", id: 0x4, xref: { document: "cluster", section: "8.10.5" } })
-)
+);
 
 MatterDefinition.children.push(OvenCavityOperationalState);

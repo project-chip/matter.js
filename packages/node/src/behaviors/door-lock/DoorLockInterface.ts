@@ -188,8 +188,8 @@ export namespace DoorLockInterface {
 
     export interface HolidaySchedules {
         /**
-         * Set the holiday Schedule by specifying local start time and local end time with respect to any Lock
-         * Operating Mode.
+         * Set the holiday Schedule by specifying local start time and local end time with respect to any Lock Operating
+         * Mode.
          *
          * Return status shall be one of the following values:
          *
@@ -216,8 +216,8 @@ export namespace DoorLockInterface {
         /**
          * Set a PIN Code into the lock.
          *
-         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
-         * shall be one of the following values:
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and shall
+         * be one of the following values:
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.4
          */
@@ -234,8 +234,8 @@ export namespace DoorLockInterface {
          * Clear a PIN code or all PIN codes.
          *
          * For each PIN Code cleared whose user doesn’t have a RFID Code or other credential type, then corresponding
-         * user record’s UserStatus value shall be set to Available, and UserType value shall be set to
-         * UnrestrictedUser and all schedules shall be cleared.
+         * user record’s UserStatus value shall be set to Available, and UserType value shall be set to UnrestrictedUser
+         * and all schedules shall be cleared.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.7
          */
@@ -315,8 +315,8 @@ export namespace DoorLockInterface {
         /**
          * Set an ID for RFID access into the lock.
          *
-         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
-         * shall be one of the following values:
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and shall
+         * be one of the following values:
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.27
          */

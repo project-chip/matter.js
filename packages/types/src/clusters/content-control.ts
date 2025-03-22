@@ -245,8 +245,8 @@ export namespace ContentControl {
         minorNumber: TlvField(2, TlvUInt16),
 
         /**
-         * This field shall indicate the unique identifier for a specific channel. This field is optional, but SHOULD
-         * be provided when MajorNumber and MinorNumber are not available.
+         * This field shall indicate the unique identifier for a specific channel. This field is optional, but SHOULD be
+         * provided when MajorNumber and MinorNumber are not available.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3.4
          */
@@ -318,8 +318,8 @@ export namespace ContentControl {
         catalogVendorId: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or
-         * "Company X". This field shall be unique within a catalog.
+         * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or "Company
+         * X". This field shall be unique within a catalog.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.2
          */
@@ -440,9 +440,9 @@ export namespace ContentControl {
         endHour: TlvField(2, TlvUInt8.bound({ max: 23 })),
 
         /**
-         * This field shall indicate the ending minute. If EndHour is equal to StartHour then EndMinute shall be
-         * greater than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all contents shall
-         * be blocked until 23:59:59.
+         * This field shall indicate the ending minute. If EndHour is equal to StartHour then EndMinute shall be greater
+         * than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all contents shall be
+         * blocked until 23:59:59.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.6.4
          */
@@ -657,11 +657,10 @@ export namespace ContentControl {
             onDemandRatings: Attribute(0x1, TlvArray(TlvRatingName), { default: [] }),
 
             /**
-             * Indicates a threshold rating as a content filter which is compared with the rating for on-demand
-             * content. For example, if the on-demand content rating is greater than or equal to
-             * OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher viewer age,
-             * then on-demand content is not appropriate for the User and the Node shall prevent the playback of
-             * content.
+             * Indicates a threshold rating as a content filter which is compared with the rating for on-demand content.
+             * For example, if the on-demand content rating is greater than or equal to OnDemandRatingThreshold, for a
+             * rating system that is ordered from lower viewer age to higher viewer age, then on-demand content is not
+             * appropriate for the User and the Node shall prevent the playback of content.
              *
              * This attribute shall be set to one of the values present in the OnDemandRatings attribute.
              *
@@ -782,9 +781,9 @@ export namespace ContentControl {
             /**
              * The purpose of this command is to add the extra screen time for the user.
              *
-             * If a client with Operate privilege invokes this command, the media device shall check whether the
-             * PINCode passed in the command matches the current PINCode value. If these match, then the
-             * RemainingScreenTime attribute shall be increased by the specified BonusTime value.
+             * If a client with Operate privilege invokes this command, the media device shall check whether the PINCode
+             * passed in the command matches the current PINCode value. If these match, then the RemainingScreenTime
+             * attribute shall be increased by the specified BonusTime value.
              *
              * If the PINs do not match, then a response with InvalidPINCode error status shall be returned, and no
              * changes shall be made to RemainingScreenTime.
@@ -792,8 +791,8 @@ export namespace ContentControl {
              * If a client with Manage privilege or greater invokes this command, the media device shall ignore the
              * PINCode field and directly increase the RemainingScreenTime attribute by the specified BonusTime value.
              *
-             * A server that does not support the PM feature shall respond with InvalidPINCode to clients that only
-             * have Operate privilege unless:
+             * A server that does not support the PM feature shall respond with InvalidPINCode to clients that only have
+             * Operate privilege unless:
              *
              *   • It has been provided with the PIN value to expect via an out of band mechanism, and
              *
@@ -851,19 +850,19 @@ export namespace ContentControl {
 
         commands: {
             /**
-             * The purpose of this command is to specify whether programs with no Content rating must be blocked by
-             * this media device.
+             * The purpose of this command is to specify whether programs with no Content rating must be blocked by this
+             * media device.
              *
-             * Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated attribute
-             * to TRUE.
+             * Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated attribute to
+             * TRUE.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.8
              */
             blockUnratedContent: Command(0x7, TlvNoArguments, 0x7, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
 
             /**
-             * The purpose of this command is to specify whether programs with no Content rating must be blocked by
-             * this media device.
+             * The purpose of this command is to specify whether programs with no Content rating must be blocked by this
+             * media device.
              *
              * Upon receipt of the UnblockUnratedContent command, the media device shall set the BlockUnrated attribute
              * to FALSE.
@@ -919,8 +918,8 @@ export namespace ContentControl {
              *
              * Upon receipt of the RemoveBlockChannels command, the media device shall check if the channels indicated
              * by ChannelIndexes passed in this command are present in BlockChannelList attribute. If one or more
-             * channels indicated by ChannelIndexes passed in this command field are not present in the
-             * BlockChannelList attribute, then a response with ChannelNotExist error Status shall be returned.
+             * channels indicated by ChannelIndexes passed in this command field are not present in the BlockChannelList
+             * attribute, then a response with ChannelNotExist error Status shall be returned.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.13
              */
@@ -951,9 +950,9 @@ export namespace ContentControl {
             /**
              * The purpose of this command is to set applications to the BlockApplicationList attribute.
              *
-             * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications
-             * passed in this command are installed. If there is an application in Applications field which is not
-             * identified by media device, then a response with UnidentifiableApplication error Status may be
+             * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications passed
+             * in this command are installed. If there is an application in Applications field which is not identified
+             * by media device, then a response with UnidentifiableApplication error Status may be
              *
              * returned.
              *
@@ -1000,11 +999,11 @@ export namespace ContentControl {
     export const BlockContentTimeWindowComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates a set of periods during which the playback of content on media device shall be blocked when
-             * the Content Control feature is activated. The media device shall reject any request to play content
-             * during one period of this attribute. If it is entering any one period of this attribute, the media
-             * device shall block content which is playing and generate an event EnteringBlockContentTimeWindow. There
-             * shall NOT be multiple entries in this attribute list for the same day of week.
+             * Indicates a set of periods during which the playback of content on media device shall be blocked when the
+             * Content Control feature is activated. The media device shall reject any request to play content during
+             * one period of this attribute. If it is entering any one period of this attribute, the media device shall
+             * block content which is playing and generate an event EnteringBlockContentTimeWindow. There shall NOT be
+             * multiple entries in this attribute list for the same day of week.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.11
              */
@@ -1039,8 +1038,8 @@ export namespace ContentControl {
              * The purpose of this command is to remove the selected time windows from the BlockContentTimeWindow
              * attribute.
              *
-             * Upon receipt of the RemoveBlockContentTimeWindow command, the media device shall check if the time
-             * window index passed in this command presents in the BlockContentTimeWindow attribute.
+             * Upon receipt of the RemoveBlockContentTimeWindow command, the media device shall check if the time window
+             * index passed in this command presents in the BlockContentTimeWindow attribute.
              *
              * If one or more time window indexes passed in this command are not present in BlockContentTimeWindow
              * attribute, then a response with TimeWindowNotExist error status shall be returned.
@@ -1073,8 +1072,8 @@ export namespace ContentControl {
     export const PinManagementComponent = MutableCluster.Component({
         commands: {
             /**
-             * The purpose of this command is to update the PIN used for protecting configuration of the content
-             * control settings. Upon success, the old PIN shall no longer work.
+             * The purpose of this command is to update the PIN used for protecting configuration of the content control
+             * settings. Upon success, the old PIN shall no longer work.
              *
              * The PIN is used to ensure that only the Node (or User) with the PIN code can make changes to the Content
              * Control settings, for example, turn off Content Controls or modify the ScreenDailyTime. The PIN is
@@ -1085,9 +1084,9 @@ export namespace ContentControl {
              * response with InvalidPINCode error status shall be returned.
              *
              * The media device may provide a default PIN to the User via an out of band mechanism. For security
-             * reasons, it is recommended that a client encourage the user to update the PIN from its default value
-             * when performing configuration of the Content Control settings exposed by this cluster. The ResetPIN
-             * command can also be used to obtain the default PIN.
+             * reasons, it is recommended that a client encourage the user to update the PIN from its default value when
+             * performing configuration of the Content Control settings exposed by this cluster. The ResetPIN command
+             * can also be used to obtain the default PIN.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.1
              */
@@ -1384,8 +1383,8 @@ export namespace ContentControl {
     /**
      * This cluster supports all ContentControl features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

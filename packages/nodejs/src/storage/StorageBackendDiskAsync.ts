@@ -13,7 +13,7 @@ import {
     SupportedStorageTypes,
     toJson,
 } from "#general";
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, open, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const logger = new Logger("StorageBackendDiskAsync");
@@ -53,6 +53,7 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
                 return;
             }
         }
+        await this.#fsyncStorageDir();
     }
 
     async close() {
@@ -134,12 +135,39 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
             return this.#writeFile(fileName, value);
         }
 
-        const promise = writeFile(this.filePath(fileName), value, "utf8").finally(() => {
+        // TODO write temp, fsync, move
+        const promise = this.#writeAndMoveFile(this.filePath(fileName), value).finally(() => {
             this.#writeFileBlocker.delete(fileName);
         });
         this.#writeFileBlocker.set(fileName, promise);
 
         return promise;
+    }
+
+    async #writeAndMoveFile(filepath: string, value: string): Promise<void> {
+        const tmpName = `${filepath}.tmp`;
+        await writeFile(tmpName, value, { encoding: "utf8", flush: true }); // flush does fsync after write
+        await rename(tmpName, filepath);
+    }
+
+    /**
+     * fsync on a directory ensures there are no rename operations etc. which haven't been persisted to disk.
+     * We do this as best effort to ensure that all writes are persisted to disk.
+     */
+    async #fsyncStorageDir() {
+        if (process.platform === "win32") {
+            // Windows will cause `EPERM: operation not permitted, fsync`
+            // for directories, so lets catch this generically
+            return;
+        }
+        const fd = await open(this.#path, "r");
+        try {
+            await fd.sync();
+        } catch (error) {
+            logger.warn(`Failed to fsync storage directory ${this.#path}`, error);
+        } finally {
+            await fd.close();
+        }
     }
 
     async delete(contexts: string[], key: string) {

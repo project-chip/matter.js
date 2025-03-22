@@ -56,8 +56,8 @@ export const Identify = Cluster(
         constraint: "desc",
         details: "Indicates how the identification state is presented to the user." +
             "\n" +
-            "This attribute shall contain one of the values defined in IdentifyTypeEnum. The value None shall " +
-            "NOT be used if the device is capable of presenting its identification state using one of the other " +
+            "This attribute shall contain one of the values defined in IdentifyTypeEnum. The value None shall NOT " +
+            "be used if the device is capable of presenting its identification state using one of the other " +
             "methods defined in IdentifyTypeEnum.",
         xref: { document: "cluster", section: "1.2.5.2" }
     }),
@@ -80,8 +80,8 @@ export const Identify = Cluster(
                 "to allow an implementation to provide visual feedback to the user under certain circumstances such " +
                 "as a color light turning green when it has successfully connected to a network. The use of this " +
                 "command and the effects themselves are entirely up to the implementer to use whenever a visual " +
-                "feedback is useful but it is not the same as and does not replace the identify mechanism used " +
-                "during commissioning.",
+                "feedback is useful but it is not the same as and does not replace the identify mechanism used during " +
+                "commissioning.",
 
             xref: { document: "cluster", section: "1.2.6.2" }
         },
@@ -93,9 +93,9 @@ export const Identify = Cluster(
             details: "This field shall indicate the identify effect to use and shall contain one of the non-reserved " +
                 "values in EffectIdentifierEnum." +
                 "\n" +
-                "All values of the EffectIdentifierEnum shall be supported. Implementors may deviate from the " +
-                "example light effects in EffectIdentifierEnum, but they SHOULD indicate during testing how they " +
-                "handle each effect.",
+                "All values of the EffectIdentifierEnum shall be supported. Implementors may deviate from the example " +
+                "light effects in EffectIdentifierEnum, but they SHOULD indicate during testing how they handle each " +
+                "effect.",
 
             xref: { document: "cluster", section: "1.2.6.2.1" }
         }),

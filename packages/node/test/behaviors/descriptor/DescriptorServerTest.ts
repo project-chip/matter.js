@@ -123,6 +123,8 @@ describe("DescriptorServer", () => {
         const light = await MockEndpoint.create(ColorTemperatureLightDevice, {
             colorControl: {
                 colorMode: 0,
+                colorTempPhysicalMinMireds: 1,
+                colorTempPhysicalMaxMireds: 65279,
                 coupleColorTempToLevelMinMireds: 1,
                 startUpColorTemperatureMireds: null,
             },

@@ -12,11 +12,11 @@ import { DeviceEnergyManagementInterface } from "./DeviceEnergyManagementInterfa
 import { ClusterType } from "#types";
 
 /**
- * DeviceEnergyManagementBehavior is the base class for objects that support interaction with {@link
- * DeviceEnergyManagement.Cluster}.
+ * DeviceEnergyManagementBehavior is the base class for objects that support interaction with
+ * {@link DeviceEnergyManagement.Cluster}.
  *
- * DeviceEnergyManagement.Cluster requires you to enable one or more optional features. You can do so using {@link
- * DeviceEnergyManagementBehavior.with}.
+ * DeviceEnergyManagement.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link DeviceEnergyManagementBehavior.with}.
  */
 export const DeviceEnergyManagementBehavior = ClusterBehavior
     .withInterface<DeviceEnergyManagementInterface>()

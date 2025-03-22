@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { EthernetNetworkDiagnosticsInterface } from "./EthernetNetworkDiagnosticsInterface.js";
 
 /**
- * EthernetNetworkDiagnosticsBehavior is the base class for objects that support interaction with {@link
- * EthernetNetworkDiagnostics.Cluster}.
+ * EthernetNetworkDiagnosticsBehavior is the base class for objects that support interaction with
+ * {@link EthernetNetworkDiagnostics.Cluster}.
  *
  * This class does not have optional features of EthernetNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using EthernetNetworkDiagnosticsBehavior.with.

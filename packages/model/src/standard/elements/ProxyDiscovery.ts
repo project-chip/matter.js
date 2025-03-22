@@ -48,8 +48,8 @@ export const ProxyDiscovery = Cluster(
 
         Field({
             name: "NumEventPaths", id: 0x2, type: "uint16", conformance: "M", constraint: "desc",
-            details: "The number of event paths the client will have in the subscription request. This is a " +
-                "heuristic/hint to allow a Proxy to better ascertain whether it can support the ensuing subscription.",
+            details: "The number of event paths the client will have in the subscription request. This is a heuristic/hint " +
+                "to allow a Proxy to better ascertain whether it can support the ensuing subscription.",
             xref: { document: "core", section: "9.15.12.4.1.3" }
         })
     ),
@@ -74,9 +74,9 @@ export const ProxyDiscovery = Cluster(
 
             details: "If the proxy currently subscribes to the source (either directly or indirectly), this indicates the " +
                 "number of hops to the source. Sensible values start at 1, with 1 being used for a proxy that " +
-                "subscribes directly to the source. If the proxy is not subscribed directly to the source, this " +
-                "value shall be one greater than the NumHopsToSource for the given Node ID of the proxy it is " +
-                "subscribed to." +
+                "subscribes directly to the source. If the proxy is not subscribed directly to the source, this value " +
+                "shall be one greater than the NumHopsToSource for the given Node ID of the proxy it is subscribed " +
+                "to." +
                 "\n" +
                 "0 indicates that the proxy currently does not have a subscription to the source.",
 

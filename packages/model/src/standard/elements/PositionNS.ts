@@ -17,8 +17,8 @@ export const PositionNs = SemanticNamespace(
         name: "Position", id: 0x8,
 
         details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
-            "association with a position relative to the device (e.g. the temperature sensor in the top drawer " +
-            "of a refrigerator, or location of the buttons on a multi-button switch device). Note the difference " +
+            "association with a position relative to the device (e.g. the temperature sensor in the top drawer of " +
+            "a refrigerator, or location of the buttons on a multi-button switch device). Note the difference " +
             "with Chapter 5, Common Direction Semantic Tag Namespace." +
             "\n" +
             "When multiple endpoints are used for device types, and the associated consumer-facing locations of " +

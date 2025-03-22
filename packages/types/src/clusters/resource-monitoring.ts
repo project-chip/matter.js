@@ -73,8 +73,8 @@ export namespace ResourceMonitoring {
     }
 
     /**
-     * Indicate the type of identifier used to describe the product. Devices SHOULD use globally-recognized IDs over
-     * OEM specific ones.
+     * Indicate the type of identifier used to describe the product. Devices SHOULD use globally-recognized IDs over OEM
+     * specific ones.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.8.5.3
      */
@@ -232,8 +232,8 @@ export namespace ResourceMonitoring {
             inPlaceIndicator: OptionalAttribute(0x3, TlvBoolean),
 
             /**
-             * This attribute may indicates the time at which the resource has been changed, if supported by the
-             * server. The attribute shall be null if it was never set or is unknown.
+             * This attribute may indicates the time at which the resource has been changed, if supported by the server.
+             * The attribute shall be null if it was never set or is unknown.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.8.6.5
              */
@@ -296,8 +296,8 @@ export namespace ResourceMonitoring {
     /**
      * This cluster supports all ResourceMonitoring features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

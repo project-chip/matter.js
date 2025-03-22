@@ -12,9 +12,9 @@ import { ModeSelect } from "#clusters/mode-select";
 export namespace ModeSelectInterface {
     export interface Base {
         /**
-         * On receipt of this command, if the NewMode field indicates a valid mode transition within the supported
-         * list, the server shall set the CurrentMode attribute to the NewMode value, otherwise, the server shall
-         * respond with an INVALID_COMMAND status response.
+         * On receipt of this command, if the NewMode field indicates a valid mode transition within the supported list,
+         * the server shall set the CurrentMode attribute to the NewMode value, otherwise, the server shall respond with
+         * an INVALID_COMMAND status response.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.9.7.1
          */

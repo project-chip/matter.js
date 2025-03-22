@@ -74,6 +74,6 @@ export const RefrigeratorAndTemperatureControlledCabinetMode = Cluster(
             xref: { document: "cluster", section: "8.7.7.1.2" }
         })
     )
-)
+);
 
 MatterDefinition.children.push(RefrigeratorAndTemperatureControlledCabinetMode);

@@ -129,8 +129,8 @@ export namespace OtaSoftwareUpdateRequestor {
         /**
          * Indicate a Node waiting caused by AwaitNextAction response.
          *
-         * This value shall indicate a Node waiting because it received a prior ApplyUpdateResponse with an Action
-         * field set to AwaitNextAction.
+         * This value shall indicate a Node waiting because it received a prior ApplyUpdateResponse with an Action field
+         * set to AwaitNextAction.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.4.2.7
          */
@@ -185,8 +185,8 @@ export namespace OtaSoftwareUpdateRequestor {
          * be available, which contains an update that needs to be applied urgently.
          *
          * An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software Image may
-         * be available, which contains an update that needs to be applied urgently. The details may only be obtained
-         * by executing a OTA Software Update Query procedure. A receiving OTA Requestor SHOULD query the indicated OTA
+         * be available, which contains an update that needs to be applied urgently. The details may only be obtained by
+         * executing a OTA Software Update Query procedure. A receiving OTA Requestor SHOULD query the indicated OTA
          * Provider at the ProviderLocation after a random jitter delay between 1 and 600 seconds. This particular
          * reason SHOULD only be employed when an urgent update is available, such as an important security update, or
          * just after initial commissioning of a device, to assist OTA Requestors in more rapidly obtaining updated
@@ -204,16 +204,16 @@ export namespace OtaSoftwareUpdateRequestor {
      */
     export const TlvAnnounceOtaProviderRequest = TlvObject({
         /**
-         * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the
-         * accessing fabric.
+         * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the accessing
+         * fabric.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.6.1.1
          */
         providerNodeId: TlvField(0, TlvNodeId),
 
         /**
-         * This field shall contain the assigned Vendor ID of the Node invoking this command, as it would appear in
-         * that Node’s Basic Information Cluster VendorID attribute.
+         * This field shall contain the assigned Vendor ID of the Node invoking this command, as it would appear in that
+         * Node’s Basic Information Cluster VendorID attribute.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.6.1.2
          */
@@ -228,13 +228,13 @@ export namespace OtaSoftwareUpdateRequestor {
 
         /**
          * This optional field, if present, shall consist of a top-level anonymous list; each list element shall have a
-         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a
-         * manufacturer-specific payload, which the Node invoking this command wants to expose to the receiving Node.
-         * This payload may be used for any purpose and SHOULD be as small as practical, especially if invoked to
-         * groups, in order to reduce networking burden of these payloads.
+         * profile-specific tag encoded in fully-qualified form. Each list element shall contain a manufacturer-specific
+         * payload, which the Node invoking this command wants to expose to the receiving Node. This payload may be used
+         * for any purpose and SHOULD be as small as practical, especially if invoked to groups, in order to reduce
+         * networking burden of these payloads.
          *
-         * This field SHOULD only be included if the sending OTA Provider has knowledge that some recipient can make
-         * use of it.
+         * This field SHOULD only be included if the sending OTA Provider has knowledge that some recipient can make use
+         * of it.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.6.1.4
          */
@@ -250,20 +250,19 @@ export namespace OtaSoftwareUpdateRequestor {
          * An OTA Provider may invoke this command directly to an OTA Requestor, to announce its presence as an OTA
          * Provider on the Fabric.
          *
-         * These announcements, if made, SHOULD be made at most once every 24 hours for any given target Node, to
-         * assist OTA Requestors in discovering available OTA Provider resources, unless the AnnouncementReason is
+         * These announcements, if made, SHOULD be made at most once every 24 hours for any given target Node, to assist
+         * OTA Requestors in discovering available OTA Provider resources, unless the AnnouncementReason is
          * UrgentUpdateAvailable, in which case this command may be more frequent.
          *
-         * Any invocation shall be made with a delay of at least 1 second between invocations from a given OTA
-         * Provider, to reduce burden on the networking infrastructure and affect a form of serialized jitter. It is
-         * recommended to offset the first announcement of a round (i.e. new set of announcements after a previous
-         * complete set) by a random delay time with a distribution span of >= 60 seconds to jitter announcement
-         * schedules over time.
+         * Any invocation shall be made with a delay of at least 1 second between invocations from a given OTA Provider,
+         * to reduce burden on the networking infrastructure and affect a form of serialized jitter. It is recommended
+         * to offset the first announcement of a round (i.e. new set of announcements after a previous complete set) by
+         * a random delay time with a distribution span of >= 60 seconds to jitter announcement schedules over time.
          *
          * Effect on Receipt
          *
-         * On receipt of this command, an OTA Requestor SHOULD consider the new ProviderNodeID and AnnouncementReason
-         * to possibly query for new software sooner than it would have with its default behavior.
+         * On receipt of this command, an OTA Requestor SHOULD consider the new ProviderNodeID and AnnouncementReason to
+         * possibly query for new software sooner than it would have with its default behavior.
          *
          * The OTA Requestor SHOULD NOT update entries in the DefaultOTAProviders list based on announcements.
          *
@@ -271,8 +270,8 @@ export namespace OtaSoftwareUpdateRequestor {
          * OTA Providers temporarily, or if its provider list is full. If the announcement is ignored, the response
          * SHOULD be SUCCESS.
          *
-         * Depending on the value of the AnnouncementReason field, the OTA Requestor may have to query the OTA
-         * Provider. See Section 11.20.7.6.1.3, “AnnouncementReason Field” for the different values and their meaning.
+         * Depending on the value of the AnnouncementReason field, the OTA Requestor may have to query the OTA Provider.
+         * See Section 11.20.7.6.1.3, “AnnouncementReason Field” for the different values and their meaning.
          *
          * If present, the MetadataForNode field’s may be used by a receiving OTA Requestor in any way it deems
          * satisfactory. The MetadataForNode field SHOULD be empty under most normal operational circumstance, but can
@@ -327,8 +326,8 @@ export namespace OtaSoftwareUpdateRequestor {
         /**
          * The reason for a state change is a time-out.
          *
-         * This value shall indicate that the reason for a state change is a time-out condition as determined by the
-         * OTA Requestor.
+         * This value shall indicate that the reason for a state change is a time-out condition as determined by the OTA
+         * Requestor.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.4.3.4
          */
@@ -352,8 +351,8 @@ export namespace OtaSoftwareUpdateRequestor {
      */
     export const TlvStateTransitionEvent = TlvObject({
         /**
-         * This field shall be set to the state that preceded the transition causing this event to be generated, if
-         * such a state existed. If no previous state exists, the value shall be Unknown.
+         * This field shall be set to the state that preceded the transition causing this event to be generated, if such
+         * a state existed. If no previous state exists, the value shall be Unknown.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.7.1.1
          */
@@ -396,8 +395,8 @@ export namespace OtaSoftwareUpdateRequestor {
      */
     export const TlvVersionAppliedEvent = TlvObject({
         /**
-         * This field shall be set to the same value as the one available in the Software Version attribute of the
-         * Basic Information Cluster for the newly executing version.
+         * This field shall be set to the same value as the one available in the Software Version attribute of the Basic
+         * Information Cluster for the newly executing version.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.20.7.7.2.1
          */
@@ -498,10 +497,10 @@ export namespace OtaSoftwareUpdateRequestor {
             ),
 
             /**
-             * This field shall be set to True if the OTA Requestor is currently able to be updated. Otherwise, it
-             * shall be set to False in case of any condition preventing update being possible, such as insufficient
-             * capacity of an internal battery. This field is merely informational for diagnostics purposes and shall
-             * NOT affect the responses provided by an OTA Provider to an OTA Requestor.
+             * This field shall be set to True if the OTA Requestor is currently able to be updated. Otherwise, it shall
+             * be set to False in case of any condition preventing update being possible, such as insufficient capacity
+             * of an internal battery. This field is merely informational for diagnostics purposes and shall NOT affect
+             * the responses provided by an OTA Provider to an OTA Requestor.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.20.7.5.2
              */
@@ -563,8 +562,8 @@ export namespace OtaSoftwareUpdateRequestor {
 
             /**
              * This event shall be generated whenever a new version starts executing after being applied due to a
-             * software update. This event SHOULD be generated even if a software update was done using means outside
-             * of this cluster.
+             * software update. This event SHOULD be generated even if a software update was done using means outside of
+             * this cluster.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.20.7.7.2
              */

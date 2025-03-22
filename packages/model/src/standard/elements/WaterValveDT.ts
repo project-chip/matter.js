@@ -37,6 +37,6 @@ export const WaterValveDt = DeviceType(
         name: "FlowMeasurement", id: 0x404, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "5.6.4" }
     })
-)
+);
 
 MatterDefinition.children.push(WaterValveDt);

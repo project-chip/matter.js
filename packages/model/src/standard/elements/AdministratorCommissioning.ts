@@ -65,8 +65,8 @@ export const AdministratorCommissioning = Cluster(
             "NOTE" +
             "\n" +
             "An initial commissioning window is not opened using either the OpenCommissioningWindow command or " +
-            "the OpenBasicCommissioningWindow command, and therefore this attribute shall be set to " +
-            "WindowNotOpen on initial commissioning.",
+            "the OpenBasicCommissioningWindow command, and therefore this attribute shall be set to WindowNotOpen " +
+            "on initial commissioning.",
 
         xref: { document: "core", section: "11.19.7.1" }
     }),
@@ -76,8 +76,8 @@ export const AdministratorCommissioning = Cluster(
         quality: "X",
 
         details: "When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the " +
-            "FabricIndex associated with the Fabric scoping of the Administrator that opened the window. This " +
-            "may be used to cross-reference in the Fabrics attribute of the Node Operational Credentials cluster." +
+            "FabricIndex associated with the Fabric scoping of the Administrator that opened the window. This may " +
+            "be used to cross-reference in the Fabrics attribute of the Node Operational Credentials cluster." +
             "\n" +
             "If, during an open commissioning window, the fabric for the Administrator that opened the window is " +
             "removed, then this attribute shall be set to null." +
@@ -91,11 +91,11 @@ export const AdministratorCommissioning = Cluster(
         name: "AdminVendorId", id: 0x2, type: "vendor-id", access: "R V", conformance: "M", quality: "X",
 
         details: "When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the " +
-            "Vendor ID associated with the Fabric scoping of the Administrator that opened the window. This " +
-            "field shall match the VendorID field of the Fabrics attribute list entry associated with the " +
-            "Administrator having opened the window, at the time of window opening. If the fabric for the " +
-            "Administrator that opened the window is removed from the node while the commissioning window is " +
-            "still open, this attribute shall NOT be updated." +
+            "Vendor ID associated with the Fabric scoping of the Administrator that opened the window. This field " +
+            "shall match the VendorID field of the Fabrics attribute list entry associated with the Administrator " +
+            "having opened the window, at the time of window opening. If the fabric for the Administrator that " +
+            "opened the window is removed from the node while the commissioning window is still open, this " +
+            "attribute shall NOT be updated." +
             "\n" +
             "When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.",
 
@@ -116,8 +116,8 @@ export const AdministratorCommissioning = Cluster(
                 "the Passcode by deleting the PAKE passcode verifier as well as stop publishing the DNS-SD record " +
                 "corresponding to this command as described in Section 4.3.1, “Commissionable" +
                 "\n" +
-                "Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives " +
-                "a CommissioningComplete command, see Section 5.5, “Commissioning Flows”." +
+                "Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives a " +
+                "CommissioningComplete command, see Section 5.5, “Commissioning Flows”." +
                 "\n" +
                 "The parameters for OpenCommissioningWindow command are as follows:" +
                 "\n" +
@@ -130,8 +130,8 @@ export const AdministratorCommissioning = Cluster(
                 "If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments " +
                 "arise, this command shall fail with a cluster specific status code of PAKEParameterError." +
                 "\n" +
-                "If a commissioning window is already currently open, this command shall fail with a cluster " +
-                "specific status code of Busy." +
+                "If a commissioning window is already currently open, this command shall fail with a cluster specific " +
+                "status code of Busy." +
                 "\n" +
                 "If the fail-safe timer is currently armed, this command shall fail with a cluster specific status " +
                 "code of Busy, since it is likely that concurrent commissioning operations from multiple separate " +
@@ -179,9 +179,9 @@ export const AdministratorCommissioning = Cluster(
             name: "Iterations", id: 0x3, type: "uint32", conformance: "M", constraint: "1000 to 100000",
             details: "This field shall be used by the Node as the PAKE iteration count associated with the ephemeral PAKE " +
                 "passcode verifier to be used for this commissioning, which shall be sent by the Node to the new " +
-                "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The " +
-                "permitted range of values shall match the range specified in Section 3.9, “Password-Based Key " +
-                "Derivation Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet.",
+                "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The permitted " +
+                "range of values shall match the range specified in Section 3.9, “Password-Based Key Derivation " +
+                "Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet.",
             xref: { document: "core", section: "11.19.8.1.4" }
         }),
 
@@ -218,8 +218,8 @@ export const AdministratorCommissioning = Cluster(
                 "Administrator shall specify a timeout value for the duration of the OpenBasicCommissioningWindow " +
                 "command." +
                 "\n" +
-                "If a commissioning window is already currently open, this command shall fail with a cluster " +
-                "specific status code of Busy." +
+                "If a commissioning window is already currently open, this command shall fail with a cluster specific " +
+                "status code of Busy." +
                 "\n" +
                 "If the fail-safe timer is currently armed, this command shall fail with a cluster specific status " +
                 "code of Busy, since it is likely that concurrent commissioning operations from multiple separate " +
@@ -242,9 +242,9 @@ export const AdministratorCommissioning = Cluster(
                 "Duration." +
                 "\n" +
                 "When a Node receives the OpenBasicCommissioningWindow command, it shall begin advertising on DNS-SD " +
-                "as described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described " +
-                "in CommissioningTimeout. When the command is received by a ICD, it shall enter into active mode. " +
-                "The ICD shall remain in Active Mode as long as one of these conditions is met:" +
+                "as described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in " +
+                "CommissioningTimeout. When the command is received by a ICD, it shall enter into active mode. The " +
+                "ICD shall remain in Active Mode as long as one of these conditions is met:" +
                 "\n" +
                 "  • A commissioning window is open." +
                 "\n" +

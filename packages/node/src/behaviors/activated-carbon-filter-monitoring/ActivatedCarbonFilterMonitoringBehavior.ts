@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMonitoringInterface.js";
 
 /**
- * ActivatedCarbonFilterMonitoringBehavior is the base class for objects that support interaction with {@link
- * ActivatedCarbonFilterMonitoring.Cluster}.
+ * ActivatedCarbonFilterMonitoringBehavior is the base class for objects that support interaction with
+ * {@link ActivatedCarbonFilterMonitoring.Cluster}.
  *
  * This class does not have optional features of ActivatedCarbonFilterMonitoring.Cluster enabled. You can enable
  * additional features using ActivatedCarbonFilterMonitoringBehavior.with.

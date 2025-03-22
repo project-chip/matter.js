@@ -12,21 +12,21 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 export namespace GeneralCommissioningInterface {
     export interface Base {
         /**
-         * Success or failure of this command shall be communicated by the ArmFailSafeResponse command, unless some
-         * data model validations caused a failure status code to be issued during the processing of the command.
+         * Success or failure of this command shall be communicated by the ArmFailSafeResponse command, unless some data
+         * model validations caused a failure status code to be issued during the processing of the command.
          *
-         * If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
-         * received over a CASE session, the command shall leave the current fail-safe state unchanged and immediately
-         * respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This is done to
-         * allow commissioners, which use PASE connections, the opportunity to use the failsafe during the relatively
-         * short commissioning window.
+         * If the fail-safe timer is not currently armed, the commissioning window is open, and the command was received
+         * over a CASE session, the command shall leave the current fail-safe state unchanged and immediately respond
+         * with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This is done to allow
+         * commissioners, which use PASE connections, the opportunity to use the failsafe during the relatively short
+         * commissioning window.
          *
          * Otherwise, the command shall arm or re-arm the "fail-safe timer" with an expiry time set for a duration of
          * ExpiryLengthSeconds, or disarm it, depending on the situation:
          *
          *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric matches
-         *     the Fabric currently associated with the fail-safe context, then the fail-safe timer shall be
-         *     immediately expired (see further below for side-effects of expiration).
+         *     the Fabric currently associated with the fail-safe context, then the fail-safe timer shall be immediately
+         *     expired (see further below for side-effects of expiration).
          *
          *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation shall
          *     lead to a success response with no side-effects against the fail-safe context.
@@ -44,9 +44,8 @@ export namespace GeneralCommissioningInterface {
          *
          * The value of the Breadcrumb field shall be written to the Breadcrumb on successful execution of the command.
          *
-         * If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) the
-         * receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps listed
-         * below.
+         * If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) the receiver
+         * shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps listed below.
          *
          * On successful execution of the command, the ErrorCode field of the ArmFailSafeResponse shall be set to OK.
          *
@@ -86,9 +85,9 @@ export namespace GeneralCommissioningInterface {
          * (CFSC timer) serves to limit the lifetime of any particular Fail Safe Context; it shall NOT be extended or
          * modified on subsequent invocations of ArmFailSafe associated with this Fail Safe Context. Upon expiry of the
          * CFSC timer, the receiver shall execute cleanup behavior equivalent to that of fail-safe timer expiration as
-         * detailed in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”. Termination of the session prior
-         * to the expiration of that timer for any reason (including a successful end of commissioning or an expiry of
-         * a fail-safe timer) shall also delete the CFSC timer.
+         * detailed in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”. Termination of the session prior to
+         * the expiration of that timer for any reason (including a successful end of commissioning or an expiry of a
+         * fail-safe timer) shall also delete the CFSC timer.
          *
          * ### Behavior on expiry of Fail-Safe timer
          *
@@ -107,23 +106,22 @@ export namespace GeneralCommissioningInterface {
          *   4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
          *       Fail-Safe being armed.
          *
-         *   5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC
-         *       and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index
-         *       that was the subject of the UpdateNOC command.
+         *   5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
+         *       ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that
+         *       was the subject of the UpdateNOC command.
          *
          *   6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the
-         *       RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index
-         *       that was the subject of the AddNOC command. This shall remove all associations to that Fabric
-         *       including all fabric-scoped data, and may possibly factory-reset the device depending on current
-         *       device state. This shall only apply to Fabrics added during the fail-safe period as the result of the
-         *       AddNOC command.
+         *       RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that
+         *       was the subject of the AddNOC command. This shall remove all associations to that Fabric including all
+         *       fabric-scoped data, and may possibly factory-reset the device depending on current device state. This
+         *       shall only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
          *
          *   7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had been
          *       successfully invoked, then the new operational key pair temporarily generated for the purposes of NOC
          *       addition or update (see Node Operational CSR Procedure) shall be removed as it is no longer needed.
          *
-         *   8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by
-         *       any entry in the Fabrics attribute.
+         *   8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any
+         *       entry in the Fabrics attribute.
          *
          *   9. Reset the Breadcrumb attribute to zero.
          *
@@ -135,8 +133,8 @@ export namespace GeneralCommissioningInterface {
         armFailSafe(request: GeneralCommissioning.ArmFailSafeRequest): MaybePromise<GeneralCommissioning.ArmFailSafeResponse>;
 
         /**
-         * This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the value
-         * provided in the NewRegulatoryConfig field.
+         * This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the value provided
+         * in the NewRegulatoryConfig field.
          *
          * Success or failure of this command shall be communicated by the SetRegulatoryConfigResponse command, unless
          * some data model validations caused a failure status code to be issued during the processing of the command.
@@ -145,9 +143,9 @@ export namespace GeneralCommissioningInterface {
          * reflected by the Basic Information Cluster.
          *
          * If the server limits some of the values (e.g. locked to a particular country, with no regulatory data for
-         * others), then setting regulatory information outside a valid country or location shall still set the
-         * Location attribute reflected by the Basic Information Cluster configuration, but the
-         * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error.
+         * others), then setting regulatory information outside a valid country or location shall still set the Location
+         * attribute reflected by the Basic Information Cluster configuration, but the SetRegulatoryConfigResponse
+         * replied shall have the ErrorCode field set to ValueOutsideRange error.
          *
          * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value
          *
@@ -172,9 +170,8 @@ export namespace GeneralCommissioningInterface {
         /**
          * This command has no data.
          *
-         * Success or failure of this command shall be communicated by the CommissioningCompleteResponse command,
-         * unless some data model validations caused a failure status code to be issued during the processing of the
-         * command.
+         * Success or failure of this command shall be communicated by the CommissioningCompleteResponse command, unless
+         * some data model validations caused a failure status code to be issued during the processing of the command.
          *
          * This command signals the Server that the Commissioner or Administrator has successfully completed all steps
          * needed during the Fail-Safe period, such as commissioning (see Section 5.5, “Commissioning Flows”) or other
@@ -195,17 +192,17 @@ export namespace GeneralCommissioningInterface {
          *
          * This command is fabric-scoped, so cannot be issued over a session that does not have an associated fabric,
          * i.e. over PASE session prior to an AddNOC command. In addition, this command is only permitted over CASE and
-         * must be issued by a node associated with the ongoing Fail-Safe context. An ErrorCode of
-         * InvalidAuthentication shall be responded to the invoker if the CommissioningComplete command was received
-         * outside a CASE session (e.g., over Group messaging, or PASE session after AddNOC), or if the accessing
-         * fabric is not the one associated with the ongoing Fail-Safe context.
+         * must be issued by a node associated with the ongoing Fail-Safe context. An ErrorCode of InvalidAuthentication
+         * shall be responded to the invoker if the CommissioningComplete command was received outside a CASE session
+         * (e.g., over Group messaging, or PASE session after AddNOC), or if the accessing fabric is not the one
+         * associated with the ongoing Fail-Safe context.
          *
          * This command shall only result in success with an ErrorCode value of OK in the CommissioningCompleteResponse
          * if received over a CASE session and the accessing fabric index matches the Fabric Index associated with the
          * current Fail-Safe context. In other words:
          *
-         *   • If no AddNOC command had been successfully invoked, the CommissioningComplete command must originate
-         *     from the Fabric that initiated the Fail-Safe context.
+         *   • If no AddNOC command had been successfully invoked, the CommissioningComplete command must originate from
+         *     the Fabric that initiated the Fail-Safe context.
          *
          *   • After an AddNOC command has been successfully invoked, the CommissioningComplete command must originate
          *     from the Fabric which was joined through the execution of that command, which updated the Fail-Safe

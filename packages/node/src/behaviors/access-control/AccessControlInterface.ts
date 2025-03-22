@@ -26,8 +26,8 @@ export namespace AccessControlInterface {
          * A review may include obtaining consent from the user, which can take time. For example, the user may need to
          * respond to an email or a push notification.
          *
-         * The ARL attribute may change at any time due to actions taken by the user, or the service associated with
-         * the device vendor.
+         * The ARL attribute may change at any time due to actions taken by the user, or the service associated with the
+         * device vendor.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.10.8.1
          */

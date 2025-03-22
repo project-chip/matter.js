@@ -10,8 +10,8 @@ import { BasicInformation } from "#clusters/basic-information";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * BasicInformationBehavior is the base class for objects that support interaction with {@link
- * BasicInformation.Cluster}.
+ * BasicInformationBehavior is the base class for objects that support interaction with
+ * {@link BasicInformation.Cluster}.
  */
 export const BasicInformationBehavior = ClusterBehavior.for(BasicInformation.Cluster);
 

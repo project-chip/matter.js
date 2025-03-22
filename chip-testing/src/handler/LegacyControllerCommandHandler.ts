@@ -168,7 +168,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
     async handleSubscribeAttribute(data: SubscribeAttributeRequest): Promise<SubscribeAttributeResponse> {
         const { nodeId, endpointId, clusterId, attributeId, minInterval, maxInterval, changeListener } = data;
         const client = await (await this.#controllerInstance.getNode(nodeId)).getInteractionClient();
-        const updated = new Observable<[void]>();
+        const updated = Observable<[void]>();
         let ignoreData = true; // We ignore data coming in during initial seeding
         const { attributeReports = [] } = await client.subscribeMultipleAttributesAndEvents({
             attributes: [
@@ -214,7 +214,7 @@ export class LegacyControllerCommandHandler extends CommandHandler {
     async handleSubscribeEvent(data: SubscribeEventRequest): Promise<SubscribeEventResponse> {
         const { nodeId, endpointId, clusterId, eventId, minInterval, maxInterval, changeListener } = data;
         const client = await (await this.#controllerInstance.getNode(nodeId)).getInteractionClient();
-        const updated = new Observable<[void]>();
+        const updated = Observable<[void]>();
         let ignoreData = true; // We ignore data coming in during initial seeding
         const { eventReports = [] } = await client.subscribeMultipleAttributesAndEvents({
             events: [

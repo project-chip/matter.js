@@ -12,9 +12,9 @@ import { CommissionerControl } from "#clusters/commissioner-control";
 export namespace CommissionerControlInterface {
     export interface Base {
         /**
-         * This command is sent by a client to request approval for a future CommissionNode call. This is required to
-         * be a separate step in order to provide the server time for interacting with a user before informing the
-         * client that the CommissionNode operation may be successful.
+         * This command is sent by a client to request approval for a future CommissionNode call. This is required to be
+         * a separate step in order to provide the server time for interacting with a user before informing the client
+         * that the CommissionNode operation may be successful.
          *
          * If the command is not executed via a CASE session, the command shall fail with a status code of
          * UNSUPPORTED_ACCESS.
@@ -28,8 +28,8 @@ export namespace CommissionerControlInterface {
          *
          * Clients SHOULD avoid using the same RequestID. If the RequestID and client NodeID of a
          * RequestCommissioningApproval match a previously received RequestCommissioningApproval and the server has not
-         * returned an error or completed commissioning of a device for the prior request, then the server SHOULD
-         * return FAILURE.
+         * returned an error or completed commissioning of a device for the prior request, then the server SHOULD return
+         * FAILURE.
          *
          * The parameters for RequestCommissioningApproval command are as follows:
          *
@@ -42,8 +42,8 @@ export namespace CommissionerControlInterface {
          * request.
          *
          * The server shall return FAILURE if the CommissionNode command is not sent from the same NodeID and on the
-         * same fabric as the RequestCommissioningApproval or if the provided RequestID to CommissionNode does not
-         * match the value provided to RequestCommissioningApproval.
+         * same fabric as the RequestCommissioningApproval or if the provided RequestID to CommissionNode does not match
+         * the value provided to RequestCommissioningApproval.
          *
          * If the command is not executed via a CASE session, the command shall fail with a status code of
          *

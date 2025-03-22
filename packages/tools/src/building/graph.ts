@@ -48,7 +48,7 @@ export class Graph {
         const nodeMap = await this.#loadNodes(workspace);
 
         const rootPkg = new Package({ path: path });
-        const rootNode = nodeMap[rootPkg.json.name];
+        const rootNode = nodeMap[rootPkg.name];
         if (!rootNode) {
             // Project resides under a workspace but is not part of the workspace
             return;
@@ -174,13 +174,16 @@ export class Graph {
 
     static async #loadNodes(workspace: Package) {
         const workspaces = workspace.json.workspaces;
+        if (workspaces === undefined) {
+            throw new Error(`No workspaces defined in ${workspace.name}`);
+        }
 
         const nodeMap = {} as Record<string, Graph.Node>;
         const allDeps = {} as Record<string, string[]>;
         for (const path of workspaces.values()) {
             const pkg = new Package({ path: workspace.resolve(path) });
-            allDeps[pkg.json.name] = pkg.dependencies;
-            nodeMap[pkg.json.name] = {
+            allDeps[pkg.name] = pkg.dependencies;
+            nodeMap[pkg.name] = {
                 pkg,
                 project: new Project(pkg),
                 dependencies: [],

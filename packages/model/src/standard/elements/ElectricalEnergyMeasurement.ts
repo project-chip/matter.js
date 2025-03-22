@@ -18,8 +18,8 @@ import {
 export const ElectricalEnergyMeasurement = Cluster(
     {
         name: "ElectricalEnergyMeasurement", id: 0x91, classification: "application", pics: "EEM",
-        details: "This cluster provides a mechanism for querying data about the electrical energy imported or " +
-            "provided by the server.",
+        details: "This cluster provides a mechanism for querying data about the electrical energy imported or provided " +
+            "by the server.",
         xref: { document: "cluster", section: "2.12" }
     },
 
@@ -208,8 +208,8 @@ export const ElectricalEnergyMeasurement = Cluster(
 
             details: "This struct shall indicate the amount of energy measured during a given measurement period." +
                 "\n" +
-                "A server which does not have the ability to determine the time in UTC, or has not yet done so, " +
-                "shall use the system time fields to specify the measurement period and observation times." +
+                "A server which does not have the ability to determine the time in UTC, or has not yet done so, shall " +
+                "use the system time fields to specify the measurement period and observation times." +
                 "\n" +
                 "A server which has determined the time in UTC shall use the timestamp fields to specify the " +
                 "measurement period. Such a server may also include the systime fields to indicate how many seconds " +
@@ -238,8 +238,8 @@ export const ElectricalEnergyMeasurement = Cluster(
         Field({
             name: "StartTimestamp", id: 0x1, type: "epoch-s", conformance: "desc",
 
-            details: "This field shall indicate the timestamp in UTC of the beginning of the period during which the " +
-                "value of the Energy field was measured." +
+            details: "This field shall indicate the timestamp in UTC of the beginning of the period during which the value " +
+                "of the Energy field was measured." +
                 "\n" +
                 "If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted." +
                 "\n" +
@@ -247,8 +247,8 @@ export const ElectricalEnergyMeasurement = Cluster(
                 "measurement period, this field shall be indicated." +
                 "\n" +
                 "Otherwise, if the server had not yet determined the time in UTC at or before the beginning of the " +
-                "measurement period, or does not have the capability of determining the time in UTC, this field " +
-                "shall be omitted.",
+                "measurement period, or does not have the capability of determining the time in UTC, this field shall " +
+                "be omitted.",
 
             xref: { document: "cluster", section: "2.12.5.1.2" }
         }),
@@ -309,8 +309,8 @@ export const ElectricalEnergyMeasurement = Cluster(
     Datatype(
         {
             name: "CumulativeEnergyResetStruct", type: "struct",
-            details: "This struct shall represent the times at which cumulative measurements were last zero, either due " +
-                "to initialization of the device, or an internal reset of the cumulative value.",
+            details: "This struct shall represent the times at which cumulative measurements were last zero, either due to " +
+                "initialization of the device, or an internal reset of the cumulative value.",
             xref: { document: "cluster", section: "2.12.5.2" }
         },
 
@@ -325,11 +325,11 @@ export const ElectricalEnergyMeasurement = Cluster(
                 "CumulativeEnergyImported attribute was most recently zero, this field shall be indicated." +
                 "\n" +
                 "Otherwise, if the server had not yet determined the time in UTC when the value of the Energy field " +
-                "on the CumulativeEnergyImported attribute was most recently zero, or does not have the capability " +
-                "of determining the time in UTC, this field shall be omitted." +
+                "on the CumulativeEnergyImported attribute was most recently zero, or does not have the capability of " +
+                "determining the time in UTC, this field shall be omitted." +
                 "\n" +
-                "If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyImported " +
-                "attribute was most recently zero cannot currently be determined, a value of null shall be returned.",
+                "If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyImported attribute " +
+                "was most recently zero cannot currently be determined, a value of null shall be returned.",
 
             xref: { document: "cluster", section: "2.12.5.2.1" }
         }),
@@ -345,11 +345,11 @@ export const ElectricalEnergyMeasurement = Cluster(
                 "CumulativeEnergyExported attribute was most recently zero, this field shall be indicated." +
                 "\n" +
                 "Otherwise, if the server had not yet determined the time in UTC when the value of the Energy field " +
-                "on the CumulativeEnergyExported attribute was most recently zero, or does not have the capability " +
-                "of determining the time in UTC, this field shall be omitted." +
+                "on the CumulativeEnergyExported attribute was most recently zero, or does not have the capability of " +
+                "determining the time in UTC, this field shall be omitted." +
                 "\n" +
-                "If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyExported " +
-                "attribute was most recently zero cannot currently be determined, a value of null shall be returned.",
+                "If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyExported attribute " +
+                "was most recently zero cannot currently be determined, a value of null shall be returned.",
 
             xref: { document: "cluster", section: "2.12.5.2.2" }
         }),

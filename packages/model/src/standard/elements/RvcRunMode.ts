@@ -41,8 +41,8 @@ export const RvcRunMode = Cluster(
             "At least one entry in the SupportedModes attribute (different from the one above) shall include the " +
             "Cleaning mode tag in the ModeTags field." +
             "\n" +
-            "The Mapping, Cleaning, and Idle mode tags are mutually exclusive and shall NOT be used together in " +
-            "a mode’s ModeTags.",
+            "The Mapping, Cleaning, and Idle mode tags are mutually exclusive and shall NOT be used together in a " +
+            "mode’s ModeTags.",
 
         xref: { document: "cluster", section: "7.2.6.1" }
     }),
@@ -88,16 +88,16 @@ export const RvcRunMode = Cluster(
             details: "The device is not performing any of the main operations of the other modes. However, auxiliary " +
                 "actions, such as seeking the charger or charging, may occur." +
                 "\n" +
-                "For example, the device has completed cleaning, successfully or not, on its own or due to a " +
-                "command, or has not been asked to clean after a restart.",
+                "For example, the device has completed cleaning, successfully or not, on its own or due to a command, " +
+                "or has not been asked to clean after a restart.",
             xref: { document: "cluster", section: "7.2.7.2.1" }
         }),
 
         Field({
             name: "Cleaning", id: 0x4001,
             details: "The device was asked to clean so it may be actively running, or paused due to an error, due to a " +
-                "pause command, or for recharging etc. If currently paused and the device can resume it will " +
-                "continue to clean.",
+                "pause command, or for recharging etc. If currently paused and the device can resume it will continue " +
+                "to clean.",
             xref: { document: "cluster", section: "7.2.7.2.2" }
         }),
 

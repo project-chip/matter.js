@@ -10,8 +10,8 @@ import { ThermostatUserInterfaceConfiguration } from "#clusters/thermostat-user-
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * ThermostatUserInterfaceConfigurationBehavior is the base class for objects that support interaction with {@link
- * ThermostatUserInterfaceConfiguration.Cluster}.
+ * ThermostatUserInterfaceConfigurationBehavior is the base class for objects that support interaction with
+ * {@link ThermostatUserInterfaceConfiguration.Cluster}.
  */
 export const ThermostatUserInterfaceConfigurationBehavior = ClusterBehavior
     .for(ThermostatUserInterfaceConfiguration.Cluster);

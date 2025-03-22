@@ -7,6 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "#general";
+import { WiFiNetworkManagement } from "#clusters/wi-fi-network-management";
 
 export namespace WiFiNetworkManagementInterface {
     export interface Base {
@@ -24,7 +25,7 @@ export namespace WiFiNetworkManagementInterface {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 10.2.5.1
          */
-        networkPassphraseRequest(): MaybePromise;
+        networkPassphraseRequest(): MaybePromise<WiFiNetworkManagement.NetworkPassphraseResponse>;
     }
 }
 

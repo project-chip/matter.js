@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * RadonConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link
- * RadonConcentrationMeasurement.Cluster}.
+ * RadonConcentrationMeasurementBehavior is the base class for objects that support interaction with
+ * {@link RadonConcentrationMeasurement.Cluster}.
  *
  * RadonConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using
  * {@link RadonConcentrationMeasurementBehavior.with}.

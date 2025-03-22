@@ -238,8 +238,8 @@ export namespace ConcentrationMeasurement {
         attributes: {
             /**
              * Indicates the average value of MeasuredValue that has been measured during the
-             * AverageMeasuredValueWindow. If this attribute is provided, the AverageMeasuredValueWindow attribute
-             * shall also be provided.
+             * AverageMeasuredValueWindow. If this attribute is provided, the AverageMeasuredValueWindow attribute shall
+             * also be provided.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.10.6.6
              */
@@ -407,8 +407,8 @@ export namespace ConcentrationMeasurement {
     /**
      * This cluster supports all ConcentrationMeasurement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { WaterHeaterManagementInterface } from "./WaterHeaterManagementInterface.js";
 
 /**
- * WaterHeaterManagementBehavior is the base class for objects that support interaction with {@link
- * WaterHeaterManagement.Cluster}.
+ * WaterHeaterManagementBehavior is the base class for objects that support interaction with
+ * {@link WaterHeaterManagement.Cluster}.
  *
  * This class does not have optional features of WaterHeaterManagement.Cluster enabled. You can enable additional
  * features using WaterHeaterManagementBehavior.with.

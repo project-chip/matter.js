@@ -13,8 +13,8 @@ import { ClusterType } from "#types";
 /**
  * PowerSourceBehavior is the base class for objects that support interaction with {@link PowerSource.Cluster}.
  *
- * PowerSource.Cluster requires you to enable one or more optional features. You can do so using {@link
- * PowerSourceBehavior.with}.
+ * PowerSource.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link PowerSourceBehavior.with}.
  */
 export const PowerSourceBehavior = ClusterBehavior.for(ClusterType(PowerSource.Base));
 

@@ -27,10 +27,10 @@ export namespace OvenCavityOperationalState {
 
         attributes: {
             /**
-             * Indicates a list of names of different phases that the device can go through for the selected function
-             * or mode. The list may not be in sequence order. For example in a washing machine this could include
-             * items such as "pre-soak", "rinse", and "spin". These phases are manufacturer specific and may change
-             * when a different function or mode is selected.
+             * Indicates a list of names of different phases that the device can go through for the selected function or
+             * mode. The list may not be in sequence order. For example in a washing machine this could include items
+             * such as "pre-soak", "rinse", and "spin". These phases are manufacturer specific and may change when a
+             * different function or mode is selected.
              *
              * A null value indicates that the device does not present phases during its operation. When this
              * attribute’s value is null, the CurrentPhase attribute shall also be set to null.
@@ -40,8 +40,8 @@ export namespace OvenCavityOperationalState {
             phaseList: Attribute(0x0, TlvNullable(TlvArray(TlvString, { maxLength: 32 }))),
 
             /**
-             * This attribute represents the current phase of operation being performed by the server. This shall be
-             * the positional index representing the value from the set provided in the PhaseList Attribute,
+             * This attribute represents the current phase of operation being performed by the server. This shall be the
+             * positional index representing the value from the set provided in the PhaseList Attribute,
              *
              * where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value that
              * is "length(PhaseList) - 1".
@@ -75,8 +75,8 @@ export namespace OvenCavityOperationalState {
              *
              *   • When it changes at a rate significantly different from one unit per second.
              *
-             * Changes to this attribute merely due to the normal passage of time with no other dynamic change of
-             * device state shall NOT be reported.
+             * Changes to this attribute merely due to the normal passage of time with no other dynamic change of device
+             * state shall NOT be reported.
              *
              * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
              * reporting of this attribute in order to keep track of the remaining duration.
@@ -121,8 +121,8 @@ export namespace OvenCavityOperationalState {
 
         events: {
             /**
-             * This event is generated when a reportable error condition is detected. A device that generates this
-             * event shall also set the OperationalState attribute to Error, indicating an error condition.
+             * This event is generated when a reportable error condition is detected. A device that generates this event
+             * shall also set the OperationalState attribute to Error, indicating an error condition.
              *
              * This event shall contain the following fields:
              *

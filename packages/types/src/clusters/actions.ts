@@ -54,8 +54,8 @@ export namespace Actions {
         /**
          * A sequence of states with a certain time pattern
          *
-         * Indicates an action which involves a sequence of events/states of the associated endpoints, such as a
-         * wake-up experience.
+         * Indicates an action which involves a sequence of events/states of the associated endpoints, such as a wake-up
+         * experience.
          *
          * Example: see example 4.
          *
@@ -76,8 +76,8 @@ export namespace Actions {
         /**
          * Sequence that will run when something doesn’t happen
          *
-         * Indicates some action which the server will execute when a certain condition (which normally does not
-         * happen) is not met.
+         * Indicates some action which the server will execute when a certain condition (which normally does not happen)
+         * is not met.
          *
          * Example: lock the doors when the server’s system has detected no one is at home while the doors are in the
          * 'unlocked' state.
@@ -244,9 +244,9 @@ export namespace Actions {
         endpointListId: TlvField(3, TlvUInt16),
 
         /**
-         * This field is a bitmap which shall be used to indicate which of the cluster’s commands are supported for
-         * this particular action, with a bit set to 1 for each supported command according to the table below. Other
-         * bits shall be set to 0.
+         * This field is a bitmap which shall be used to indicate which of the cluster’s commands are supported for this
+         * particular action, with a bit set to 1 for each supported command according to the table below. Other bits
+         * shall be set to 0.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.14.4.6.5
          */
@@ -288,11 +288,11 @@ export namespace Actions {
         /**
          * User-configured group of endpoints where an endpoint can be in only one room
          *
-         * Is used for the situation where an endpoint can only be part of one such rooms (e.g. physical mapping).
-         * Using these exposed logical groups, a Matter controller who has a similar grouping concept can use it to
-         * place each endpoint (bridged device) in the right room automatically, without user having to redo that setup
-         * for each device in each system - both at first contact and upon later updates to the endpoints (e.g. user
-         * adds a bridged device or creates a new room).
+         * Is used for the situation where an endpoint can only be part of one such rooms (e.g. physical mapping). Using
+         * these exposed logical groups, a Matter controller who has a similar grouping concept can use it to place each
+         * endpoint (bridged device) in the right room automatically, without user having to redo that setup for each
+         * device in each system - both at first contact and upon later updates to the endpoints (e.g. user adds a
+         * bridged device or creates a new room).
          *
          * @see {@link MatterSpecification.v13.Core} § 9.14.4.5.2
          */
@@ -731,13 +731,13 @@ export namespace Actions {
              *
              *   • When used with a suffix of "/?a=" and the decimal value of ActionID for one of the actions, it may
              *     provide information about that particular action. This could be a deeplink to
-             *     manufacturer-app/website (associated somehow to the server node) with the information/edit-screen
-             *     for this action so that the user can view and update details of the action, e.g. edit the scene, or
+             *     manufacturer-app/website (associated somehow to the server node) with the information/edit-screen for
+             *     this action so that the user can view and update details of the action, e.g. edit the scene, or
              *     change the wake-up experience time period.
              *
              *     ◦ Example of SetupURL with suffix added: example://Actions/?a=12345 or
-             *       https://domain.example/Matter/bridgev1/Actions/?a=12345 for linking to specific info/editing of
-             *       the action with ActionID 0x3039.
+             *       https://domain.example/Matter/bridgev1/Actions/?a=12345 for linking to specific info/editing of the
+             *       action with ActionID 0x3039.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.5.3
              */
@@ -822,18 +822,18 @@ export namespace Actions {
             pauseAction: OptionalCommand(0x5, TlvPauseActionRequest, 0x5, TlvNoResponse),
 
             /**
-             * This command pauses an ongoing action, and shall change the action’s state to Paused. After the
-             * specified Duration, the ongoing action will be automatically resumed. which shall change the action’s
-             * state to Active.
+             * This command pauses an ongoing action, and shall change the action’s state to Paused. After the specified
+             * Duration, the ongoing action will be automatically resumed. which shall change the action’s state to
+             * Active.
              *
              * Example: pause a dynamic lighting effect (the lights stay at their current color) for 10 minutes
              * (Duration=600).
              *
-             * The difference between Pause/Resume and Disable/Enable is on the one hand semantic (the former is more
-             * of a transitionary nature while the latter is more permanent) and on the other hand these can be
-             * implemented slightly differently in the implementation of the action (e.g. a Pause would be
-             * automatically resumed after some hours or during a nightly reset, while an Disable would remain in
-             * effect until explicitly enabled again).
+             * The difference between Pause/Resume and Disable/Enable is on the one hand semantic (the former is more of
+             * a transitionary nature while the latter is more permanent) and on the other hand these can be implemented
+             * slightly differently in the implementation of the action (e.g. a Pause would be automatically resumed
+             * after some hours or during a nightly reset, while an Disable would remain in effect until explicitly
+             * enabled again).
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.6.7
              */
@@ -867,8 +867,8 @@ export namespace Actions {
              * Disabled.
              *
              * Example: enable a "presence mimicking" behavior for the lights in your home during a vacation; the
-             * Duration field is used to indicated the length of your absence from home. After that period, the
-             * presence mimicking behavior will no longer control these lights.
+             * Duration field is used to indicated the length of your absence from home. After that period, the presence
+             * mimicking behavior will no longer control these lights.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.6.10
              */
@@ -885,11 +885,11 @@ export namespace Actions {
 
             /**
              * This command disables a certain action or automation, and shall change the action’s state to Disabled.
-             * After the specified Duration, the action or automation will re-start, and the action’s state shall
-             * change to either Inactive or Active, depending on the actions (see examples 4 and 6).
+             * After the specified Duration, the action or automation will re-start, and the action’s state shall change
+             * to either Inactive or Active, depending on the actions (see examples 4 and 6).
              *
-             * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them
-             * from turning on in the morning while you’re not at home). After this period, the wakeup experience will
+             * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from
+             * turning on in the morning while you’re not at home). After this period, the wakeup experience will
              * control the lights as before.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.6.12
@@ -970,14 +970,14 @@ export namespace Actions {
      * After defining the attributes, commands and events for this cluster, and the associated data types, several
      * examples are provided to illustrate the capabilities of this cluster.
      *
-     * Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this cluster.
-     * For each action, the commands available for that particular action are defined.
+     * Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this cluster. For
+     * each action, the commands available for that particular action are defined.
      *
      * This cluster can be used to expose only the grouping of endpoints without any actions defined by populating the
      * EndpointList attribute accordingly and providing an empty list for ActionList.
      *
-     * The term 'action' in the description of this cluster should not be confused with the term 'action' as used in
-     * the Interaction Model.
+     * The term 'action' in the description of this cluster should not be confused with the term 'action' as used in the
+     * Interaction Model.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.14
      */

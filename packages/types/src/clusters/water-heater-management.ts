@@ -217,8 +217,8 @@ export namespace WaterHeaterManagement {
              * can be computed by taking the specific heat capacity of water (4182 J/kg °C) and by knowing the current
              * temperature of the water, the tank volume and target temperature.
              *
-             * For example, if the target temperature was 60°C, the current temperature was 20°C and the tank volume
-             * was 100L:
+             * For example, if the target temperature was 60°C, the current temperature was 20°C and the tank volume was
+             * 100L:
              *
              * Mass of water = 1kg per Litre
              *
@@ -243,9 +243,9 @@ export namespace WaterHeaterManagement {
              * For example, a direct electric immersion heating element can be close to 100% efficient, so the
              * electrical energy needed to heat the hot water is nearly the same as the EstimatedHeatEnergyRequired.
              * However some forms of heating, such as an air-source heat pump which extracts heat from ambient air,
-             * requires much less electrical energy to heat hot water. Heat pumps can be produce 3kWh of heat output
-             * for 1kWh of electrical energy input. The conversion between heat energy and electrical energy is outside
-             * the scope of this cluster.
+             * requires much less electrical energy to heat hot water. Heat pumps can be produce 3kWh of heat output for
+             * 1kWh of electrical energy input. The conversion between heat energy and electrical energy is outside the
+             * scope of this cluster.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.5.7.4
              */
@@ -259,27 +259,27 @@ export namespace WaterHeaterManagement {
     export const TankPercentComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates an approximate level of hot water stored in the tank, which might help consumers understand
-             * the amount of hot water remaining in the tank. The accuracy of this attribute is manufacturer specific.
+             * Indicates an approximate level of hot water stored in the tank, which might help consumers understand the
+             * amount of hot water remaining in the tank. The accuracy of this attribute is manufacturer specific.
              *
              * In most hot water tanks, there is a stratification effect where the hot water layer rests above a cooler
-             * layer of water below. For this reason cold water is fed in at the bottom of the tank and the hot water
-             * is drawn from the top.
+             * layer of water below. For this reason cold water is fed in at the bottom of the tank and the hot water is
+             * drawn from the top.
              *
              * Some water tanks might use multiple temperature probes to estimate the level of the hot water layer. A
              * water heater with multiple temperature probes is likely to implement an algorithm to estimate the hot
-             * water tank percentage by taking into account the temperature values of each probe to determine the
-             * height of the hot water.
+             * water tank percentage by taking into account the temperature values of each probe to determine the height
+             * of the hot water.
              *
-             * However it might be possible with a single temperature probe to estimate how much hot water is left
-             * using a simpler algorithm:
+             * However it might be possible with a single temperature probe to estimate how much hot water is left using
+             * a simpler algorithm:
              *
              * For example, if the target temperature was 60°C, the CurrentTemperature was 40°C from a single
              * temperature probe measuring the average water temperature and the temperature of incoming cold water
              * (COLD_WATER_TEMP) was assumed to be 20°C:
              *
-             * TankPercentage = int(((current temperature - COLD_WATER_TEMP) / (target temperature - COLD_WATER_TEMP))
-             * * 100)
+             * TankPercentage = int(((current temperature - COLD_WATER_TEMP) / (target temperature - COLD_WATER_TEMP)) *
+             * 100)
              *
              * TankPercentage = min( max(TankPercentage,0), 100)
              *
@@ -395,8 +395,8 @@ export namespace WaterHeaterManagement {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is used to allow clients to control the operation of a hot water heating appliance so that it can
-     * be used with energy management.
+     * This cluster is used to allow clients to control the operation of a hot water heating appliance so that it can be
+     * used with energy management.
      *
      * Heating of hot water is one of the main energy uses in homes, and when coupled with the Energy Management
      * cluster, it can help consumers save cost (e.g. using power at cheaper times or from local solar PV generation).
@@ -444,8 +444,8 @@ export namespace WaterHeaterManagement {
     /**
      * This cluster supports all WaterHeaterManagement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, camelize, GeneratedClass, ImplementationError } from "#general";
-import type { Schema } from "#model";
+import { Events, OfflineEvent, OnlineEvent, QuietEvent } from "#behavior/Events.js";
+import { AsyncObservable, camelize, EventEmitter, GeneratedClass, ImplementationError, Observable } from "#general";
 import {
     ClusterModel,
     DefaultValue,
@@ -14,6 +14,7 @@ import {
     FeatureSet,
     Matter,
     Metatype,
+    Schema,
     Scope,
     ValueModel,
 } from "#model";
@@ -46,7 +47,7 @@ export function introspectionInstanceOf(type: Behavior.Type) {
 /**
  * This is the actual implementation of ClusterBehavior.for().  The result must match {@link ClusterBehavior.Type}<C>.
  */
-export function createType(cluster: ClusterType, base: Behavior.Type, schema?: Schema) {
+export function createType<const C extends ClusterType>(cluster: C, base: Behavior.Type, schema?: Schema) {
     if (schema === undefined) {
         if (base.schema) {
             schema = base.schema;
@@ -73,7 +74,9 @@ export function createType(cluster: ClusterType, base: Behavior.Type, schema?: S
     // Mutation of schema will almost certainly result in logic errors so ensure that can't happen
     schema.freeze();
 
-    const namesUsed = new Set<string>();
+    const newProps = {} as Record<string, ValueModel>;
+    const scope = Scope(schema);
+
     const type = GeneratedClass({
         name,
         base,
@@ -82,9 +85,9 @@ export function createType(cluster: ClusterType, base: Behavior.Type, schema?: S
         // namespace overrides.  If we instead override as static properties then we lose the automatic interface type.
         // So just publish as static properties.
         staticProperties: {
-            State: createDerivedState(cluster, schema, base, namesUsed),
+            State: createDerivedState(cluster, scope, base, newProps),
 
-            Events: createDerivedEvents(cluster, base, namesUsed),
+            Events: createDerivedEvents(cluster, scope, base, newProps),
         },
 
         staticDescriptors: {
@@ -131,21 +134,24 @@ export type ExtensionInterfaceOf<B extends Behavior.Type> = B extends { Extensio
  *
  * Note - we only use the cluster here for default values
  */
-function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior.Type, namesUsed: Set<string>) {
+function createDerivedState(
+    cluster: ClusterType,
+    scope: Scope,
+    base: Behavior.Type,
+    newProps: Record<string, ValueModel>,
+) {
     const BaseState = base["State"];
     if (BaseState === undefined) {
         throw new ImplementationError(`No state class defined for behavior class ${base.name}`);
     }
-
-    const scope = Scope(schema);
 
     const oldDefaults = new BaseState() as Record<string, any>;
     let knownDefaults = (BaseState as HasKnownDefaults)[KNOWN_DEFAULTS];
 
     // Determine the set of features so we can test attribute applicability
     let featuresAvailable, featuresSupported;
-    if (schema instanceof ClusterModel) {
-        const normalized = FeatureSet.normalize(schema.featureMap, schema.supportedFeatures);
+    if (scope.owner instanceof ClusterModel) {
+        const normalized = FeatureSet.normalize(scope.owner.featureMap, scope.owner.supportedFeatures);
         featuresAvailable = normalized.featuresAvailable;
         featuresSupported = normalized.featuresSupported;
     } else {
@@ -155,12 +161,12 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
 
     // Index schema members by name
     const props = {} as Record<string, ValueModel[]>;
-    for (const member of scope.membersOf(schema, { conformance: "deconflicted" })) {
+    for (const member of scope.membersOf(scope.owner, { conformance: "deconflicted" })) {
         const name = camelize(member.name);
         if (props[name]) {
-            props[name].push(member);
+            props[name].push(member as ValueModel);
         } else {
-            props[name] = [member];
+            props[name] = [member as ValueModel];
         }
     }
 
@@ -170,20 +176,18 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
         // Determine whether attribute applies based on conformance.  If it doesn't, make sure to overwrite any existing
         // value from previous configurations as otherwise conformance may not pass
         const attrs = props[name];
-        let propSchema;
-        let applies = false;
+        let propSchema: ValueModel | undefined;
 
         // Determine whether the attribute applies
         for (const attr of attrs) {
             if (attr.effectiveConformance.isApplicable(featuresAvailable, featuresSupported)) {
                 propSchema = attr;
-                applies = true;
                 break;
             }
         }
 
         // If the attribute doesn't apply, erase any previous default
-        if (!applies) {
+        if (propSchema === undefined) {
             if (oldDefaults[name] !== undefined) {
                 // Save the default value so we can recreate it if a future derivative re-enables this element
                 if (!knownDefaults) {
@@ -200,6 +204,7 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
         }
 
         // Attribute applies
+        newProps[name] = propSchema;
         const attribute = cluster.attributes[name];
 
         // The feature map value requires a special case because it's encoded in the "supportedFeatures" cluster
@@ -218,11 +223,6 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
         );
     }
 
-    for (const name in defaults) {
-        // Convey the name to the event generator
-        namesUsed.add(name);
-    }
-
     const StateType = DerivedState({
         name: `${cluster.name}$State`,
         base: base.State,
@@ -239,30 +239,53 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
 /**
  * Extend events with additional implementations.
  */
-function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNames: Set<string>) {
-    const names = new Set<string>(["interactionBegin", "interactionEnd"]);
+function createDerivedEvents(
+    cluster: ClusterType,
+    scope: Scope,
+    base: Behavior.Type,
+    newProps: Record<string, ValueModel>,
+) {
+    const instanceDescriptors = {} as PropertyDescriptorMap;
 
     const baseInstance = new base.Events() as unknown as Record<string, unknown>;
 
+    const eventNames = new Set<string>();
+
     // Add mandatory events that are not present in the base class
     const applicableClusterEvents = new Set();
-    for (const name in cluster.events) {
+    for (const event of scope.membersOf(scope.owner as Schema, {
+        conformance: "conformant",
+        tags: [ElementTag.Event],
+    })) {
+        const name = camelize(event.name);
         applicableClusterEvents.add(name);
-        if (!cluster.events[name].optional && baseInstance[name] === undefined) {
-            names.add(name);
+        if (!cluster.events[name]?.optional && baseInstance[name] === undefined) {
+            eventNames.add(name);
+            instanceDescriptors[name] = createEventDescriptor(
+                name,
+                event,
+                event.quality.quieter ? QuietEvent : OnlineEvent,
+            );
         }
     }
 
     // Add events for mandatory attributes that are not present in the base class
-    for (const attrName of stateNames) {
+    for (const attrName in newProps) {
         const changing = `${attrName}$Changing`;
+        const prop = newProps[attrName];
         if (baseInstance[changing] === undefined) {
-            names.add(changing);
+            eventNames.add(changing);
+            instanceDescriptors[changing] = createEventDescriptor(changing, prop, OfflineEvent);
         }
 
         const changed = `${attrName}$Changed`;
         if (baseInstance[changed] === undefined) {
-            names.add(changed);
+            eventNames.add(changed);
+            instanceDescriptors[changed] = createEventDescriptor(
+                changed,
+                prop,
+                prop.quality.quieter ? QuietEvent : OnlineEvent,
+            );
         }
     }
 
@@ -272,9 +295,14 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
         name: `${cluster.name}$Events`,
         base: base.Events,
 
-        initialize() {
-            for (const name of names) {
-                (this as Record<string, AsyncObservable>)[name] = AsyncObservable();
+        instanceDescriptors,
+
+        initialize(this: EventEmitter) {
+            (this as unknown as Record<string, AsyncObservable>).interactionBegin = new AsyncObservable();
+            (this as unknown as Record<string, AsyncObservable>).interactionEnd = new AsyncObservable();
+
+            for (const name of eventNames) {
+                this.addEvent(name);
             }
         },
     });
@@ -410,4 +438,24 @@ function selectDefaultValue(scope: Scope, oldDefault: Val, clusterAttr?: Attribu
             // Same
             return [];
     }
+}
+
+function createEventDescriptor(
+    name: string,
+    schema: ValueModel,
+    constructor: new <T extends any[]>(schema: ValueModel, owner: Events) => Observable<T>,
+) {
+    return {
+        get(this: EventEmitter) {
+            if (this.hasEvent(name, true)) {
+                return this.getEvent(name);
+            }
+
+            const event = new constructor(schema, this as unknown as Events);
+            this.addEvent(name, event);
+
+            return event;
+        },
+        enumerable: true,
+    };
 }

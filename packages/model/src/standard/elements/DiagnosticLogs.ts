@@ -21,8 +21,8 @@ export const DiagnosticLogs = Cluster(
         details: "This Cluster supports an interface to a Node. It provides commands for retrieving unstructured " +
             "diagnostic logs from a Node that may be used to aid in diagnostics. It will often be the case that " +
             "unstructured diagnostic logs will be Node-wide and not specific to any subset of Endpoints. When " +
-            "present, this Cluster shall be implemented once for the Node. The Node SHOULD also implement the " +
-            "BDX Initiator and BDX Sender roles as defined in the BDX Protocol.",
+            "present, this Cluster shall be implemented once for the Node. The Node SHOULD also implement the BDX " +
+            "Initiator and BDX Sender roles as defined in the BDX Protocol.",
         xref: { document: "core", section: "11.11" }
     },
 
@@ -59,8 +59,8 @@ export const DiagnosticLogs = Cluster(
         Field({
             name: "TransferFileDesignator", id: 0x2, type: "string", conformance: "O", constraint: "max 32",
 
-            details: "This field shall be present if the RequestedProtocol is BDX. The TransferFileDesignator shall be " +
-                "set as the File Designator of the BDX transfer if initiated." +
+            details: "This field shall be present if the RequestedProtocol is BDX. The TransferFileDesignator shall be set " +
+                "as the File Designator of the BDX transfer if initiated." +
                 "\n" +
                 "Effect on Receipt" +
                 "\n" +
@@ -70,23 +70,23 @@ export const DiagnosticLogs = Cluster(
                 "command by initiating a BDX Transfer, sending a BDX SendInit message with the File Designator field " +
                 "of the message set to the value of the TransferFileDesignator field of the RetrieveLogsRequest. On " +
                 "reception of a BDX SendAccept message the Node shall send a RetrieveLogsResponse command with a " +
-                "Status field set to Success and proceed with the log transfer over BDX. If a failure StatusReport " +
-                "is received in response to the SendInit message, the Node shall send a RetrieveLogsResponse command " +
+                "Status field set to Success and proceed with the log transfer over BDX. If a failure StatusReport is " +
+                "received in response to the SendInit message, the Node shall send a RetrieveLogsResponse command " +
                 "with a Status of Denied. In the case where the Node is able to fit the entirety of the requested " +
                 "logs within the LogContent field, the Status field of the RetrieveLogsResponse shall be set to " +
                 "Exhausted and a BDX session shall NOT be initiated." +
                 "\n" +
                 "If the RequestedProtocol is set to BDX and either the Node does not support BDX or it is not " +
                 "possible for the Node to establish a BDX session, then the Node shall utilize the LogContent field " +
-                "of the RetrieveLogsResponse command to transfer as much of the current logs as it can fit within " +
-                "the response, and the Status field of the RetrieveLogsResponse shall be set to Exhausted." +
+                "of the RetrieveLogsResponse command to transfer as much of the current logs as it can fit within the " +
+                "response, and the Status field of the RetrieveLogsResponse shall be set to Exhausted." +
                 "\n" +
                 "If the RequestedProtocol is set to ResponsePayload the Node shall utilize the LogContent field of " +
                 "the RetrieveLogsResponse command to transfer as much of the current logs as it can fit within the " +
                 "response, and a BDX session shall NOT be initiated." +
                 "\n" +
-                "If the RequestedProtocol is set to BDX and there is no TransferFileDesignator the command shall " +
-                "fail with a Status Code of INVALID_COMMAND." +
+                "If the RequestedProtocol is set to BDX and there is no TransferFileDesignator the command shall fail " +
+                "with a Status Code of INVALID_COMMAND." +
                 "\n" +
                 "If the Intent and/or the RequestedProtocol arguments contain invalid (out of range) values the " +
                 "command shall fail with a Status Code of INVALID_COMMAND.",
@@ -98,8 +98,8 @@ export const DiagnosticLogs = Cluster(
     Command(
         {
             name: "RetrieveLogsResponse", id: 0x1, conformance: "M", direction: "response",
-            details: "This shall be generated as a response to the RetrieveLogsRequest. The data for this command is " +
-                "shown in the following.",
+            details: "This shall be generated as a response to the RetrieveLogsRequest. The data for this command is shown " +
+                "in the following.",
             xref: { document: "core", section: "11.11.5.2" }
         },
 
@@ -111,17 +111,17 @@ export const DiagnosticLogs = Cluster(
 
         Field({
             name: "LogContent", id: 0x1, type: "octstr", conformance: "M", constraint: "max 1024",
-            details: "This field shall be included in the command if the Status field has a value of Success or " +
-                "Exhausted. A Node SHOULD utilize this field to transfer the newest diagnostic log entries. This " +
-                "field shall be empty if BDX is requested and the Status field has a value of Success.",
+            details: "This field shall be included in the command if the Status field has a value of Success or Exhausted. " +
+                "A Node SHOULD utilize this field to transfer the newest diagnostic log entries. This field shall be " +
+                "empty if BDX is requested and the Status field has a value of Success.",
             xref: { document: "core", section: "11.11.5.2.2" }
         }),
 
         Field({
             name: "UtcTimeStamp", id: 0x2, type: "epoch-us", conformance: "O",
-            details: "This field SHOULD be included in the command if the Status field has a value of Success and the " +
-                "Node maintains a wall clock. When included, the UTCTimeStamp field shall contain the value of the " +
-                "oldest log entry in the diagnostic logs that are being transferred.",
+            details: "This field SHOULD be included in the command if the Status field has a value of Success and the Node " +
+                "maintains a wall clock. When included, the UTCTimeStamp field shall contain the value of the oldest " +
+                "log entry in the diagnostic logs that are being transferred.",
             xref: { document: "core", section: "11.11.5.2.3" }
         }),
 
@@ -156,8 +156,8 @@ export const DiagnosticLogs = Cluster(
 
         Field({
             name: "CrashLogs", id: 0x2, conformance: "M", description: "Obtain crash logs from the Node",
-            details: "shall indicate that the purpose of the log request is to retrieve any crash logs that may be " +
-                "present on a Node.",
+            details: "shall indicate that the purpose of the log request is to retrieve any crash logs that may be present " +
+                "on a Node.",
             xref: { document: "core", section: "11.11.4.1.3" }
         })
     ),
@@ -179,8 +179,8 @@ export const DiagnosticLogs = Cluster(
 
         Field({
             name: "NoLogs", id: 0x2, conformance: "M", description: "No logs of the requested type available",
-            details: "shall be used if the Node does not currently have any diagnostic logs of the requested type " +
-                "(Intent) to transfer.",
+            details: "shall be used if the Node does not currently have any diagnostic logs of the requested type (Intent) " +
+                "to transfer.",
             xref: { document: "core", section: "11.11.4.2.3" }
         }),
 
@@ -205,8 +205,8 @@ export const DiagnosticLogs = Cluster(
         Field({
             name: "ResponsePayload", id: 0x0, conformance: "M",
             description: "Logs to be returned as a response",
-            details: "shall be used by a Client to request that logs are transferred using the LogContent attribute of " +
-                "the response",
+            details: "shall be used by a Client to request that logs are transferred using the LogContent attribute of the " +
+                "response",
             xref: { document: "core", section: "11.11.4.3.1" }
         }),
 

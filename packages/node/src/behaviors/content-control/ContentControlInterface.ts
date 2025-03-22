@@ -122,8 +122,8 @@ export namespace ContentControlInterface {
          *
          * Upon receipt of the AddBlockChannels command, the media device shall check if the channels
          *
-         * passed in this command are valid. If the channel is invalid, then a response with InvalidChannel error
-         * Status shall be returned.
+         * passed in this command are valid. If the channel is invalid, then a response with InvalidChannel error Status
+         * shall be returned.
          *
          * If there is at least one channel in Channels field which is not in the BlockChannelList attribute, the media
          * device shall process the request by adding these new channels into the BlockChannelList attribute and return
@@ -155,8 +155,8 @@ export namespace ContentControlInterface {
          * The purpose of this command is to set applications to the BlockApplicationList attribute.
          *
          * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications passed in
-         * this command are installed. If there is an application in Applications field which is not identified by
-         * media device, then a response with UnidentifiableApplication error Status may be
+         * this command are installed. If there is an application in Applications field which is not identified by media
+         * device, then a response with UnidentifiableApplication error Status may be
          *
          * returned.
          *
@@ -225,12 +225,12 @@ export namespace ContentControlInterface {
          * Control settings, for example, turn off Content Controls or modify the ScreenDailyTime. The PIN is composed
          * of a numeric string of up to 6 human readable characters (displayable) .
          *
-         * Upon receipt of this command, the media device shall check if the OldPIN field of this command is the same
-         * as the current PIN. If the PINs are the same, then the PIN code shall be set to NewPIN. Otherwise a response
+         * Upon receipt of this command, the media device shall check if the OldPIN field of this command is the same as
+         * the current PIN. If the PINs are the same, then the PIN code shall be set to NewPIN. Otherwise a response
          * with InvalidPINCode error status shall be returned.
          *
-         * The media device may provide a default PIN to the User via an out of band mechanism. For security reasons,
-         * it is recommended that a client encourage the user to update the PIN from its default value when performing
+         * The media device may provide a default PIN to the User via an out of band mechanism. For security reasons, it
+         * is recommended that a client encourage the user to update the PIN from its default value when performing
          * configuration of the Content Control settings exposed by this cluster. The ResetPIN command can also be used
          * to obtain the default PIN.
          *

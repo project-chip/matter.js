@@ -15,8 +15,8 @@ import {
 export const RefrigeratorNs = SemanticNamespace(
     {
         name: "Refrigerator", id: 0x41,
-        details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall " +
-            "NOT be used in any other domain or context.",
+        details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall NOT " +
+            "be used in any other domain or context.",
         xref: { document: "namespace", section: "16" }
     },
 

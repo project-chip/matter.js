@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMonitoringInterface.js";
 
 /**
- * HepaFilterMonitoringBehavior is the base class for objects that support interaction with {@link
- * HepaFilterMonitoring.Cluster}.
+ * HepaFilterMonitoringBehavior is the base class for objects that support interaction with
+ * {@link HepaFilterMonitoring.Cluster}.
  *
  * This class does not have optional features of HepaFilterMonitoring.Cluster enabled. You can enable additional
  * features using HepaFilterMonitoringBehavior.with.

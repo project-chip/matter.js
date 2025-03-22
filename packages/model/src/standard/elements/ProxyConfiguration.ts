@@ -48,8 +48,8 @@ export const ProxyConfiguration = Cluster(
             {
                 name: "SourceList", id: 0x2, type: "list", access: "RW", conformance: "M", constraint: "desc",
                 default: [],
-                details: "When ProxyAllNodes is false, this list contains the set of Node IDs of sources that this proxy " +
-                    "shall specifically proxy.",
+                details: "When ProxyAllNodes is false, this list contains the set of Node IDs of sources that this proxy shall " +
+                    "specifically proxy.",
                 xref: { document: "core", section: "9.15.13.4.1.2" }
             },
 

@@ -15,8 +15,8 @@ export namespace ThreadNetworkDiagnosticsInterface {
          *
          *   • OverrunCount
          *
-         * This command has no associated data. Upon completion, this command shall send a status code set to a value
-         * of SUCCESS back to the initiator.
+         * This command has no associated data. Upon completion, this command shall send a status code set to a value of
+         * SUCCESS back to the initiator.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.14.7.1
          */

@@ -77,15 +77,15 @@ export const DeviceEnergyManagementMode = Cluster(
 
         Field({
             name: "NoOptimization", id: 0x4000,
-            details: "The device prohibits optimization of energy usage management: its energy usage is determined only " +
-                "by the user configuration and internal device needs.",
+            details: "The device prohibits optimization of energy usage management: its energy usage is determined only by " +
+                "the user configuration and internal device needs.",
             xref: { document: "cluster", section: "9.8.7.1.1" }
         }),
 
         Field({
             name: "DeviceOptimization", id: 0x4001,
-            details: "The device is permitted to manage its own energy usage. For example, using tariff information it " +
-                "may obtain.",
+            details: "The device is permitted to manage its own energy usage. For example, using tariff information it may " +
+                "obtain.",
             xref: { document: "cluster", section: "9.8.7.1.2" }
         }),
 

@@ -35,13 +35,13 @@ export const EnergyEvseMode = Cluster(
     Attribute({
         name: "SupportedModes", id: 0x0,
 
-        details: "At least one entry in the SupportedModes attribute shall include the Manual mode tag in the " +
-            "ModeTags field list." +
+        details: "At least one entry in the SupportedModes attribute shall include the Manual mode tag in the ModeTags " +
+            "field list." +
             "\n" +
             "Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting" +
             "\n" +
-            "charging or discharging under different conditions shall permit the charging or discharging to " +
-            "occur if any of the conditions are satisfied." +
+            "charging or discharging under different conditions shall permit the charging or discharging to occur " +
+            "if any of the conditions are satisfied." +
             "\n" +
             "Modes shall NOT have both the Manual tag and the TimeOfUse or SolarCharging tags defined in the " +
             "SupportedModes attribute.",
@@ -75,16 +75,16 @@ export const EnergyEvseMode = Cluster(
 
         Field({
             name: "Manual", id: 0x4000,
-            details: "While in modes with this tag, and once enabled with the EnableCharging command, the EVSE will " +
-                "permit charging based on demand from the EV.",
+            details: "While in modes with this tag, and once enabled with the EnableCharging command, the EVSE will permit " +
+                "charging based on demand from the EV.",
             xref: { document: "cluster", section: "9.4.7.1.1" }
         }),
 
         Field({
             name: "TimeOfUse", id: 0x4001,
             details: "While in modes with this tag, and once enabled with the EnableCharging command, the EVSE will " +
-                "attempt to automatically start charging based on the user’s charging targets (for example, set " +
-                "based on a Time of Use tariff to charge at the cheapest times of the day).",
+                "attempt to automatically start charging based on the user’s charging targets (for example, set based " +
+                "on a Time of Use tariff to charge at the cheapest times of the day).",
             xref: { document: "cluster", section: "9.4.7.1.2" }
         }),
 

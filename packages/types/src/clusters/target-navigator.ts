@@ -181,8 +181,8 @@ export namespace TargetNavigator {
 
         events: {
             /**
-             * This event shall be generated when there is a change in either the active target or the list of
-             * available targets or both.
+             * This event shall be generated when there is a change in either the active target or the list of available
+             * targets or both.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.11.7.1
              */

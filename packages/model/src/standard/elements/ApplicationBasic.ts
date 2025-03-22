@@ -22,8 +22,8 @@ export const ApplicationBasic = Cluster(
             "represented as an endpoint (see Device Type Library document)." +
             "\n" +
             "The cluster server for this cluster should be supported on each endpoint that represents a Content " +
-            "App on a Video Player device. This cluster provides identification information about the Content " +
-            "App such as vendor and product.",
+            "App on a Video Player device. This cluster provides identification information about the Content App " +
+            "such as vendor and product.",
 
         xref: { document: "cluster", section: "6.3" }
     },
@@ -39,8 +39,8 @@ export const ApplicationBasic = Cluster(
 
     Attribute({
         name: "VendorId", id: 0x1, type: "vendor-id", access: "R V", conformance: "O", quality: "F",
-        details: "This attribute, if present, shall specify the Connectivity Standards Alliance assigned Vendor ID " +
-            "for the Content App.",
+        details: "This attribute, if present, shall specify the Connectivity Standards Alliance assigned Vendor ID for " +
+            "the Content App.",
         xref: { document: "cluster", section: "6.3.5.2" }
     }),
 
@@ -55,9 +55,9 @@ export const ApplicationBasic = Cluster(
 
     Attribute({
         name: "ProductId", id: 0x3, type: "uint16", access: "R V", conformance: "O", quality: "F",
-        details: "This attribute, if present, shall specify a numeric ID assigned by the vendor to identify a " +
-            "specific Content App made by them. If the Content App is certified by the Connectivity Standards " +
-            "Alliance, then this would be the Product ID as specified by the vendor for the certification.",
+        details: "This attribute, if present, shall specify a numeric ID assigned by the vendor to identify a specific " +
+            "Content App made by them. If the Content App is certified by the Connectivity Standards Alliance, " +
+            "then this would be the Product ID as specified by the vendor for the certification.",
         xref: { document: "cluster", section: "6.3.5.4" }
     }),
 

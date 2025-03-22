@@ -39,8 +39,8 @@ export namespace LowPower {
      * command here to wake up a sleeping device because that operation often involves other protocols such as Wake On
      * LAN. Most devices automatically enter low power mode based upon inactivity.
      *
-     * The cluster server for Low Power is implemented by a device that supports a low power mode, such as a TV,
-     * Set-top box, or Smart Speaker.
+     * The cluster server for Low Power is implemented by a device that supports a low power mode, such as a TV, Set-top
+     * box, or Smart Speaker.
      *
      * NOTE
      *

@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * ElectricalPowerMeasurementBehavior is the base class for objects that support interaction with {@link
- * ElectricalPowerMeasurement.Cluster}.
+ * ElectricalPowerMeasurementBehavior is the base class for objects that support interaction with
+ * {@link ElectricalPowerMeasurement.Cluster}.
  *
- * ElectricalPowerMeasurement.Cluster requires you to enable one or more optional features. You can do so using {@link
- * ElectricalPowerMeasurementBehavior.with}.
+ * ElectricalPowerMeasurement.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link ElectricalPowerMeasurementBehavior.with}.
  */
 export const ElectricalPowerMeasurementBehavior = ClusterBehavior.for(ClusterType(ElectricalPowerMeasurement.Base));
 

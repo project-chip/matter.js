@@ -161,8 +161,8 @@ export namespace BallastConfiguration {
             ),
 
             /**
-             * This attribute shall specify the number of lamps connected to this ballast. (Note 1: this number does
-             * not take into account whether lamps are actually in their sockets or not).
+             * This attribute shall specify the number of lamps connected to this ballast. (Note 1: this number does not
+             * take into account whether lamps are actually in their sockets or not).
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.3.6.8
              */
@@ -235,8 +235,8 @@ export namespace BallastConfiguration {
             ),
 
             /**
-             * This attribute shall specify the number of hours the LampBurnHours attribute may reach before an alarm
-             * is generated.
+             * This attribute shall specify the number of hours the LampBurnHours attribute may reach before an alarm is
+             * generated.
              *
              * If the Alarms cluster is not present on the same device this attribute is not used and thus may be
              * omitted (see Dependencies).

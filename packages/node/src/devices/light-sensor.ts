@@ -15,8 +15,8 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity
- * of light (illuminance) to which the sensor is being subjected.
+ * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity of
+ * light (illuminance) to which the sensor is being subjected.
  *
  * @see {@link MatterSpecification.v13.Device} § 7.2
  */

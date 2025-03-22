@@ -15,10 +15,10 @@ export namespace IcdManagementInterface {
          * This command allows a client to request that the server stays in active mode for at least a given time
          * duration (in milliseconds) from when this command is received.
          *
-         * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
-         * the client to request the server to stay active and responsive for this period to allow a sequence of
-         * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD to
-         * be active for, in order to account for network delays.
+         * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by the
+         * client to request the server to stay active and responsive for this period to allow a sequence of message
+         * exchanges during that period. The client may slightly overestimate the duration it wants the ICD to be active
+         * for, in order to account for network delays.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
          */
@@ -35,9 +35,9 @@ export namespace IcdManagementInterface {
         registerClient(request: IcdManagement.RegisterClientRequest): MaybePromise<IcdManagement.RegisterClientResponse>;
 
         /**
-         * This command allows a client to unregister itself with the ICD. Example: a client that is leaving the
-         * network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and
-         * send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
+         * This command allows a client to unregister itself with the ICD. Example: a client that is leaving the network
+         * (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and send this
+         * UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.17.7.3
          */
@@ -49,10 +49,10 @@ export namespace IcdManagementInterface {
          * This command allows a client to request that the server stays in active mode for at least a given time
          * duration (in milliseconds) from when this command is received.
          *
-         * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
-         * the client to request the server to stay active and responsive for this period to allow a sequence of
-         * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD to
-         * be active for, in order to account for network delays.
+         * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by the
+         * client to request the server to stay active and responsive for this period to allow a sequence of message
+         * exchanges during that period. The client may slightly overestimate the duration it wants the ICD to be active
+         * for, in order to account for network delays.
          *
          * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
          */

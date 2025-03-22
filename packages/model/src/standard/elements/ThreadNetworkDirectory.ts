@@ -30,11 +30,11 @@ export const ThreadNetworkDirectory = Cluster(
         name: "PreferredExtendedPanId", id: 0x0, type: "octstr", access: "RW VM", conformance: "M",
         constraint: "8", default: null, quality: "X N",
 
-        details: "Indicates the Thread Extended PAN ID value for the Thread network designated by the user to be " +
-            "their preferred network for commissioning of Thread devices. If not null, the value of this " +
-            "attribute shall match the ExtendedPanID of a network in the ThreadNetworks attribute. A write " +
-            "operation with a non-null value that does not match any network in the ThreadNetworks list shall be " +
-            "rejected with a status of CONSTRAINT_ERROR." +
+        details: "Indicates the Thread Extended PAN ID value for the Thread network designated by the user to be their " +
+            "preferred network for commissioning of Thread devices. If not null, the value of this attribute " +
+            "shall match the ExtendedPanID of a network in the ThreadNetworks attribute. A write operation with a " +
+            "non-null value that does not match any network in the ThreadNetworks list shall be rejected with a " +
+            "status of CONSTRAINT_ERROR." +
             "\n" +
             "The purpose of designating one Thread network as preferred is to help a commissioner to select a " +
             "Thread network when a Thread device is within suitable range of more than one Thread network which " +
@@ -64,11 +64,11 @@ export const ThreadNetworkDirectory = Cluster(
                 "\n" +
                 "The list can be modified via the AddNetwork and RemoveNetwork commands." +
                 "\n" +
-                "For each entry in the list, the cluster server also stores a Thread Operational Dataset. Clients " +
-                "use the GetOperationalDataset command to obtain the Operational Dataset for an entry in this list." +
+                "For each entry in the list, the cluster server also stores a Thread Operational Dataset. Clients use " +
+                "the GetOperationalDataset command to obtain the Operational Dataset for an entry in this list." +
                 "\n" +
-                "On a factory reset this list shall be cleared, and any Thread Operational datasets previously " +
-                "stored shall be removed from the Node.",
+                "On a factory reset this list shall be cleared, and any Thread Operational datasets previously stored " +
+                "shall be removed from the Node.",
 
             xref: { document: "cluster", section: "10.4.5.2" }
         },
@@ -92,8 +92,8 @@ export const ThreadNetworkDirectory = Cluster(
             details: "Adds an entry to the ThreadNetworks attribute with the specified Thread Operational Dataset." +
                 "\n" +
                 "If there is an existing entry with the Extended PAN ID then the Thread Operational Dataset for that " +
-                "entry is replaced. As a result, changes to the network parameters (e.g. Channel, Network Name, " +
-                "PSKc, …) of an existing entry with a given Extended PAN ID can be made using this command.",
+                "entry is replaced. As a result, changes to the network parameters (e.g. Channel, Network Name, PSKc, " +
+                "…) of an existing entry with a given Extended PAN ID can be made using this command.",
             xref: { document: "cluster", section: "10.4.6.1" }
         },
 

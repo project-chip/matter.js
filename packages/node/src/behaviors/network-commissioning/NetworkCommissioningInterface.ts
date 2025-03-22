@@ -20,8 +20,8 @@ export namespace NetworkCommissioningInterface {
          *
          * Scanning for available networks detects all networks of the type corresponding to the cluster server
          * instance’s associated network interface that are possible to join, such as all visible Wi-Fi access points
-         * for Wi-Fi cluster server instances, all Thread PANs for Thread cluster server instances, within bounds of
-         * the maximum response size.
+         * for Wi-Fi cluster server instances, all Thread PANs for Thread cluster server instances, within bounds of the
+         * maximum response size.
          *
          * Scanning for a specific network (i.e. directed scanning) takes place if a network identifier (e.g. Wi-Fi
          * SSID) is provided in the command arguments. Directed scanning shall restrict the result set to the specified
@@ -90,8 +90,8 @@ export namespace NetworkCommissioningInterface {
          * by any other Network Commissioning cluster instances (whether under the Root Node or a Secondary Network
          * Interface), where those connections are not represented by an entry in the Networks attribute of the
          * corresponding cluster instance. This ensures that an Administrator or Commissioner can reliably reconfigure
-         * the operational network connection of a device that has one or more Secondary Network interfaces, for
-         * example by removing the active network configuration from one cluster instance, followed by adding a new
+         * the operational network connection of a device that has one or more Secondary Network interfaces, for example
+         * by removing the active network configuration from one cluster instance, followed by adding a new
          * configuration and calling ConnectNetwork on a different cluster instance.
          *
          * Success or failure of this command shall be communicated by the ConnectNetworkResponse command, unless some
@@ -102,13 +102,13 @@ export namespace NetworkCommissioningInterface {
          *
          * The amount of time needed to determine successful or failing connectivity on the cluster server’s associated
          * interface is provided by the ConnectMaxTimeSeconds attribute. Clients shall NOT consider the connection to
-         * have timed-out until at least that duration has taken place. For non-concurrent commissioning situations,
-         * the client SHOULD allow additional margin of time to account for its delay in executing operational
-         * discovery of the Node once it is connected to the new network.
+         * have timed-out until at least that duration has taken place. For non-concurrent commissioning situations, the
+         * client SHOULD allow additional margin of time to account for its delay in executing operational discovery of
+         * the Node once it is connected to the new network.
          *
-         * On successful connection, the entry associated with the given Network configuration in the Networks
-         * attribute shall indicate its Connected field set to true, and all other entries, if any exist, shall
-         * indicate their Connected field set to false.
+         * On successful connection, the entry associated with the given Network configuration in the Networks attribute
+         * shall indicate its Connected field set to true, and all other entries, if any exist, shall indicate their
+         * Connected field set to false.
          *
          * On failure to connect, the entry associated with the given Network configuration in the Networks attribute
          * shall indicate its Connected field set to false.
@@ -142,8 +142,8 @@ export namespace NetworkCommissioningInterface {
          *      commissioning with a previous configuration would cause significant user-perceived delay.
          *
          * Note as well that the CommissioningTimeout duration provided in a prior OpenCommissioningWindow or
-         * OpenBasicCommissioningWindow command may impact the total time available to proceed with error recovery
-         * after a connection failure.
+         * OpenBasicCommissioningWindow command may impact the total time available to proceed with error recovery after
+         * a connection failure.
          *
          * The LastNetworkingStatus, LastNetworkID and LastConnectErrorValue attributes may assist the client in
          * determining the reason for a failure after reconnecting over a Commissioning channel, especially in
@@ -175,8 +175,8 @@ export namespace NetworkCommissioningInterface {
          * If this command contains a ClientIdentifier, and the Networks list does not contain an entry with a matching
          * ClientIdentifier, then this command shall fail with a status of NOT_FOUND.
          *
-         * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
-         * behavior of addition/update.
+         * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for behavior
+         * of addition/update.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.3
          */
@@ -190,8 +190,8 @@ export namespace NetworkCommissioningInterface {
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
-         * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
-         * behavior of addition/update.
+         * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for behavior
+         * of addition/update.
          *
          * The XPAN ID in the OperationalDataset serves as the NetworkID for the network configuration to be added or
          * updated.

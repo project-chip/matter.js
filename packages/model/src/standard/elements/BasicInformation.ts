@@ -75,16 +75,16 @@ export const BasicInformation = Cluster(
         name: "Location", id: 0x6, type: "string", access: "RW VA", conformance: "M", constraint: "2",
         default: "XX", quality: "N",
 
-        details: "This attribute shall be an ISO 3166-1 alpha-2 code to represent the country, dependent territory, " +
-            "or special area of geographic interest in which the Node is located at the time of the attribute " +
-            "being set. This attribute shall be set during initial commissioning (unless already set) and may be " +
-            "updated by further reconfigurations. This attribute may affect some regulatory aspects of the " +
-            "Node’s operation, such as radio transmission power levels in given spectrum allocation bands if " +
-            "technologies where this is applicable are used. The Location’s region code shall be interpreted in " +
-            "a case-insensitive manner. If the Node cannot understand the location code with which it was " +
-            "configured, or the location code has not yet been configured, it shall configure itself in a " +
-            "region- agnostic manner as determined by the vendor, avoiding region-specific assumptions as much " +
-            "as is practical. The special value XX shall indicate that region-agnostic mode is used.",
+        details: "This attribute shall be an ISO 3166-1 alpha-2 code to represent the country, dependent territory, or " +
+            "special area of geographic interest in which the Node is located at the time of the attribute being " +
+            "set. This attribute shall be set during initial commissioning (unless already set) and may be " +
+            "updated by further reconfigurations. This attribute may affect some regulatory aspects of the Node’s " +
+            "operation, such as radio transmission power levels in given spectrum allocation bands if " +
+            "technologies where this is applicable are used. The Location’s region code shall be interpreted in a " +
+            "case-insensitive manner. If the Node cannot understand the location code with which it was " +
+            "configured, or the location code has not yet been configured, it shall configure itself in a region- " +
+            "agnostic manner as determined by the vendor, avoiding region-specific assumptions as much as is " +
+            "practical. The special value XX shall indicate that region-agnostic mode is used.",
 
         xref: { document: "core", section: "11.1.5.7" }
     }),
@@ -124,11 +124,11 @@ export const BasicInformation = Cluster(
         name: "SoftwareVersionString", id: 0xa, type: "string", access: "R V", conformance: "M",
         constraint: "1 to 64", quality: "F",
 
-        details: "This attribute shall contain a current human-readable representation for the software running on " +
-            "the Node. This version information may be conveyed to users. The maximum length of the " +
-            "SoftwareVersionString attribute is 64 bytes of UTF-8 characters. The contents SHOULD only use " +
-            "simple 7-bit ASCII alphanumeric and punctuation characters, so as to simplify the conveyance of the " +
-            "value to a variety of cultures." +
+        details: "This attribute shall contain a current human-readable representation for the software running on the " +
+            "Node. This version information may be conveyed to users. The maximum length of the " +
+            "SoftwareVersionString attribute is 64 bytes of UTF-8 characters. The contents SHOULD only use simple " +
+            "7-bit ASCII alphanumeric and punctuation characters, so as to simplify the conveyance of the value " +
+            "to a variety of cultures." +
             "\n" +
             "Examples of version strings include \"1.0\", \"1.2.3456\", \"1.2-2\", \"1.0b123\", \"1.2_3\".",
 
@@ -150,8 +150,8 @@ export const BasicInformation = Cluster(
         name: "PartNumber", id: 0xc, type: "string", access: "R V", conformance: "O", constraint: "max 32",
         quality: "F",
 
-        details: "This attribute shall specify a human-readable (displayable) vendor assigned part number for the " +
-            "Node whose meaning and numbering scheme is vendor defined." +
+        details: "This attribute shall specify a human-readable (displayable) vendor assigned part number for the Node " +
+            "whose meaning and numbering scheme is vendor defined." +
             "\n" +
             "Multiple products (and hence PartNumbers) can share a ProductID. For instance, there may be " +
             "different packaging (with different PartNumbers) for different regions; also different colors of a " +
@@ -163,10 +163,10 @@ export const BasicInformation = Cluster(
     Attribute({
         name: "ProductUrl", id: 0xd, type: "string", access: "R V", conformance: "O", constraint: "max 256",
         quality: "F",
-        details: "This attribute shall specify a link to a product specific web page. The specified URL SHOULD " +
-            "resolve to a maintained web page available for the lifetime of the product. The syntax of this " +
-            "attribute shall follow the syntax as specified in RFC 1738 and shall use the https scheme. The " +
-            "maximum length of this attribute is 256 ASCII characters.",
+        details: "This attribute shall specify a link to a product specific web page. The specified URL SHOULD resolve " +
+            "to a maintained web page available for the lifetime of the product. The syntax of this attribute " +
+            "shall follow the syntax as specified in RFC 1738 and shall use the https scheme. The maximum length " +
+            "of this attribute is 256 ASCII characters.",
         xref: { document: "core", section: "11.1.5.14" }
     }),
 
@@ -191,16 +191,16 @@ export const BasicInformation = Cluster(
         name: "LocalConfigDisabled", id: 0x10, type: "bool", access: "RW VM", conformance: "O",
         default: false, quality: "N",
         details: "This attribute shall allow a local Node configuration to be disabled. When this attribute is set to " +
-            "True the Node shall disable the ability to configure the Node through an on-Node user interface. " +
-            "The value of the LocalConfigDisabled attribute shall NOT in any way modify, disable, or otherwise " +
-            "affect the user’s ability to trigger a factory reset on the Node.",
+            "True the Node shall disable the ability to configure the Node through an on-Node user interface. The " +
+            "value of the LocalConfigDisabled attribute shall NOT in any way modify, disable, or otherwise affect " +
+            "the user’s ability to trigger a factory reset on the Node.",
         xref: { document: "core", section: "11.1.5.17" }
     }),
 
     Attribute({
         name: "Reachable", id: 0x11, type: "bool", access: "R V", conformance: "O", default: true,
-        details: "This attribute (when used) shall indicate whether the Node can be reached. For a native Node this " +
-            "is implicitly True (and its use is optional)." +
+        details: "This attribute (when used) shall indicate whether the Node can be reached. For a native Node this is " +
+            "implicitly True (and its use is optional)." +
             "\n" +
             "Its main use case is in the derived Bridged Device Basic Information cluster where it is used to " +
             "indicate whether the bridged device is reachable by the bridge over the non-native network.",
@@ -244,14 +244,14 @@ export const BasicInformation = Cluster(
         name: "CapabilityMinima", id: 0x13, type: "CapabilityMinimaStruct", access: "R V", conformance: "M",
         quality: "F",
 
-        details: "This attribute shall provide the minimum guaranteed value for some system-wide resource " +
-            "capabilities that are not otherwise cluster-specific and do not appear elsewhere. This attribute " +
-            "may be used by clients to optimize communication with Nodes by allowing them to use more than the " +
-            "strict minimum values required by this specification, wherever available." +
+        details: "This attribute shall provide the minimum guaranteed value for some system-wide resource capabilities " +
+            "that are not otherwise cluster-specific and do not appear elsewhere. This attribute may be used by " +
+            "clients to optimize communication with Nodes by allowing them to use more than the strict minimum " +
+            "values required by this specification, wherever available." +
             "\n" +
             "The values supported by the server in reality may be larger than the values provided in this " +
-            "attribute, such as if a server is not resource-constrained at all. However, clients SHOULD only " +
-            "rely on the amounts provided in this attribute." +
+            "attribute, such as if a server is not resource-constrained at all. However, clients SHOULD only rely " +
+            "on the amounts provided in this attribute." +
             "\n" +
             "Note that since the fixed values within this attribute may change over time, both increasing and " +
             "decreasing, as software versions change for a given Node, clients SHOULD take care not to assume" +
@@ -281,8 +281,8 @@ export const BasicInformation = Cluster(
             "Nodes may query this field to determine the currently supported version of the specification on " +
             "another given Node." +
             "\n" +
-            "The format of this number is segmented as its four component bytes. Bit positions for the fields " +
-            "are as follows:" +
+            "The format of this number is segmented as its four component bytes. Bit positions for the fields are " +
+            "as follows:" +
             "\n" +
             "For example, a SpecificationVersion value of 0x0102AA00 is composed of 4 version components, " +
             "representing a version 1.2.170.0." +
@@ -314,14 +314,14 @@ export const BasicInformation = Cluster(
         name: "MaxPathsPerInvoke", id: 0x16, type: "uint16", access: "R V", conformance: "M",
         constraint: "min 1", default: 1, quality: "F",
 
-        details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, " +
-            "“Invoke Request Action”) that the Node is able to process. Note that since this attribute may " +
-            "change over time, both increasing and decreasing, as software versions change for a given Node, " +
-            "clients SHOULD take care not to assume forever unchanging values and SHOULD NOT cache this value " +
-            "permanently at Commissioning time." +
+        details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, “Invoke " +
+            "Request Action”) that the Node is able to process. Note that since this attribute may change over " +
+            "time, both increasing and decreasing, as software versions change for a given Node, clients SHOULD " +
+            "take care not to assume forever unchanging values and SHOULD NOT cache this value permanently at " +
+            "Commissioning time." +
             "\n" +
-            "If the MaxPathsPerInvoke attribute is absent or zero, such as in Basic Information cluster " +
-            "revisions prior to Revision 3, clients shall assume a value of 1.",
+            "If the MaxPathsPerInvoke attribute is absent or zero, such as in Basic Information cluster revisions " +
+            "prior to Revision 3, clients shall assume a value of 1.",
 
         xref: { document: "core", section: "11.1.5.23" }
     }),
@@ -330,8 +330,8 @@ export const BasicInformation = Cluster(
         {
             name: "StartUp", id: 0x0, access: "V", conformance: "M", priority: "critical",
             details: "The StartUp event shall be generated by a Node as soon as reasonable after completing a boot or " +
-                "reboot process. The StartUp event SHOULD be the first Data Model event recorded by the Node after " +
-                "it completes a boot or reboot process.",
+                "reboot process. The StartUp event SHOULD be the first Data Model event recorded by the Node after it " +
+                "completes a boot or reboot process.",
             xref: { document: "core", section: "11.1.6.1" }
         },
 

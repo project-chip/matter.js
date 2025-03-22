@@ -37,8 +37,8 @@ export namespace RefrigeratorRequirements {
     /**
      * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification.
      *
-     * We provide this alias to the default implementation
-     * {@link RefrigeratorAndTemperatureControlledCabinetModeServer} for convenience.
+     * We provide this alias to the default implementation {@link RefrigeratorAndTemperatureControlledCabinetModeServer}
+     * for convenience.
      */
     export const RefrigeratorAndTemperatureControlledCabinetModeServer = BaseRefrigeratorAndTemperatureControlledCabinetModeServer;
 

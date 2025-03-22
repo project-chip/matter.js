@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ThreadNetworkDirectoryInterface } from "./ThreadNetworkDirectoryInterface.js";
 
 /**
- * ThreadNetworkDirectoryBehavior is the base class for objects that support interaction with {@link
- * ThreadNetworkDirectory.Cluster}.
+ * ThreadNetworkDirectoryBehavior is the base class for objects that support interaction with
+ * {@link ThreadNetworkDirectory.Cluster}.
  */
 export const ThreadNetworkDirectoryBehavior = ClusterBehavior
     .withInterface<ThreadNetworkDirectoryInterface>()

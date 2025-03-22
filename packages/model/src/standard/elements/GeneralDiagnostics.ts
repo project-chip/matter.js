@@ -117,8 +117,8 @@ export const GeneralDiagnostics = Cluster(
 
             details: "The ActiveRadioFaults attribute shall indicate the set of faults currently detected by the Node. " +
                 "When the Node detects a fault has been raised, the appropriate RadioFaultEnum value shall be added " +
-                "to this list. This list shall NOT contain more than one instance of a specific RadioFaultEnum " +
-                "value. When the Node detects that all conditions contributing to a fault has been cleared, the " +
+                "to this list. This list shall NOT contain more than one instance of a specific RadioFaultEnum value. " +
+                "When the Node detects that all conditions contributing to a fault has been cleared, the " +
                 "corresponding RadioFaultEnum value shall be removed from this list. An empty list shall indicate " +
                 "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
                 "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
@@ -136,13 +136,13 @@ export const GeneralDiagnostics = Cluster(
             constraint: "max 4",
 
             details: "The ActiveNetworkFaults attribute shall indicate the set of faults currently detected by the Node. " +
-                "When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be " +
-                "added to this list. This list shall NOT contain more than one instance of a specific " +
-                "NetworkFaultEnum value. When the Node detects that all conditions contributing to a fault has been " +
-                "cleared, the corresponding NetworkFaultEnum value shall be removed from this list. An empty list " +
-                "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
-                "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
-                "attribute, or they may subscribe to NetworkFaultChange.",
+                "When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be added " +
+                "to this list. This list shall NOT contain more than one instance of a specific NetworkFaultEnum " +
+                "value. When the Node detects that all conditions contributing to a fault has been cleared, the " +
+                "corresponding NetworkFaultEnum value shall be removed from this list. An empty list shall indicate " +
+                "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
+                "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
+                "subscribe to NetworkFaultChange.",
 
             xref: { document: "core", section: "11.12.6.8" }
         },
@@ -226,8 +226,8 @@ export const GeneralDiagnostics = Cluster(
     Event(
         {
             name: "NetworkFaultChange", id: 0x2, access: "V", conformance: "O", priority: "critical",
-            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently " +
-                "detected by the Node.",
+            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected " +
+                "by the Node.",
             xref: { document: "core", section: "11.12.8.3" }
         },
 
@@ -291,9 +291,8 @@ export const GeneralDiagnostics = Cluster(
                 "\n" +
                 "The EnableKey SHOULD be unique per exact set of devices going to a certification test." +
                 "\n" +
-                "Devices not targeted towards going to a certification test event shall NOT have a non-zero " +
-                "EnableKey value configured, so that only devices in test environments are responsive to this " +
-                "command." +
+                "Devices not targeted towards going to a certification test event shall NOT have a non-zero EnableKey " +
+                "value configured, so that only devices in test environments are responsive to this command." +
                 "\n" +
                 "In order to prevent unwittingly actuating a particular trigger, this command shall respond with a " +
                 "response status of CONSTRAINT_ERROR if the EnableKey field does not match the a-priori value " +
@@ -311,8 +310,8 @@ export const GeneralDiagnostics = Cluster(
                 "described within appropriate certification test literature provided to manufacturers by the " +
                 "Connectivity Standards Alliance, in conjunction with certification test cases documentation." +
                 "\n" +
-                "Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are " +
-                "reserved for testing use by manufacturers and will not appear in CSA certification test literature." +
+                "Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved " +
+                "for testing use by manufacturers and will not appear in CSA certification test literature." +
                 "\n" +
                 "If the value of EventTrigger received is not supported by the receiving Node, this command shall" +
                 "\n" +
@@ -428,8 +427,8 @@ export const GeneralDiagnostics = Cluster(
                 "  • The TestEventTriggersEnabled field is currently false." +
                 "\n" +
                 "Otherwise, the server shall respond with a PayloadTestResponse command with a Payload field value " +
-                "containing Count instances of the Value byte. If the response is too large to send, the server " +
-                "shall fail the command and respond with a response status of RESOURCE_EXHAUSTED." +
+                "containing Count instances of the Value byte. If the response is too large to send, the server shall " +
+                "fail the command and respond with a response status of RESOURCE_EXHAUSTED." +
                 "\n" +
                 "For example:" +
                 "\n" +

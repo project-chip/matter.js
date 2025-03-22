@@ -14,9 +14,9 @@ export const MountedDimmableLoadControlDt = DeviceType(
         name: "MountedDimmableLoadControl", id: 0x110, category: "Smart Plugs/Outlets and other Actuators",
         classification: "simple",
         details: "A Mounted Dimmable Load Control is a fixed device that provides power to another device that is " +
-            "plugged into it, and is capable of being switched on or off and have its level adjusted. The " +
-            "Mounted Dimmable Load Control is typically used to control a conventional non-communicating light " +
-            "through its mains connection using phase cutting.",
+            "plugged into it, and is capable of being switched on or off and have its level adjusted. The Mounted " +
+            "Dimmable Load Control is typically used to control a conventional non-communicating light through " +
+            "its mains connection using phase cutting.",
         xref: { document: "device", section: "5.4" }
     },
 
@@ -70,6 +70,6 @@ export const MountedDimmableLoadControlDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "5.4.4" }
     })
-)
+);
 
 MatterDefinition.children.push(MountedDimmableLoadControlDt);

@@ -9,10 +9,10 @@
 import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
 
 /**
- * The tags contained in this namespace are restricted for use in the switches domain and shall NOT be used in any
- * other domain or context. They are intended to indicate the function of a button on a switch device to allow a client
- * to make an optimized user interface which matches the actual device without requiring a-priori knowledge of the
- * layout of each specific switch device.
+ * The tags contained in this namespace are restricted for use in the switches domain and shall NOT be used in any other
+ * domain or context. They are intended to indicate the function of a button on a switch device to allow a client to
+ * make an optimized user interface which matches the actual device without requiring a-priori knowledge of the layout
+ * of each specific switch device.
  *
  * Please see the rules for applying these and other tags for switch devices, e.g. from the Common Position Namespace
  * and the Common Number Namespace in the Generic Switch device type section in the Device Library.

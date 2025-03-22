@@ -85,8 +85,8 @@ export namespace TimeSynchronization {
      */
     export const TlvTrustedTimeSource = TlvObject({
         /**
-         * The Fabric Index associated with the Fabric of the client which last set the value of the trusted time
-         * source node.
+         * The Fabric Index associated with the Fabric of the client which last set the value of the trusted time source
+         * node.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.6.4.1
          */
@@ -168,8 +168,8 @@ export namespace TimeSynchronization {
      */
     export const TlvSetDefaultNtpRequest = TlvObject({
         /**
-         * This field contains the address of an NTP server than can be used as a fallback for time synchronization.
-         * The format of this field shall follow the requirements in the DefaultNTP attribute description.
+         * This field contains the address of an NTP server than can be used as a fallback for time synchronization. The
+         * format of this field shall follow the requirements in the DefaultNTP attribute description.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.6.1
          */
@@ -223,8 +223,8 @@ export namespace TimeSynchronization {
     export const TlvDstOffset = TlvObject({
         /**
          * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
-         * accept any values in the int32 range to accommodate potential future legislation that does not fit with
-         * these assumptions.
+         * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
+         * assumptions.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.6.7.1
          */
@@ -252,9 +252,9 @@ export namespace TimeSynchronization {
     export interface DstOffset extends TypeFromSchema<typeof TlvDstOffset> {}
 
     /**
-     * It indicates what the device knows about the contents of the IANA Time Zone Database. Partial support on a
-     * device may be used to omit historical data, less commonly used time zones, and/or time zones not related to the
-     * region a product is sold in.
+     * It indicates what the device knows about the contents of the IANA Time Zone Database. Partial support on a device
+     * may be used to omit historical data, less commonly used time zones, and/or time zones not related to the region a
+     * product is sold in.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.3
      */
@@ -298,8 +298,8 @@ export namespace TimeSynchronization {
      */
     export const TlvSetTimeZoneResponse = TlvObject({
         /**
-         * If the node supports a time zone database with information for the time zone that will be applied, it may
-         * use this information to set the DSTOffset attribute. If the node is setting its own DSTOffset attribute, the
+         * If the node supports a time zone database with information for the time zone that will be applied, it may use
+         * this information to set the DSTOffset attribute. If the node is setting its own DSTOffset attribute, the
          * DSTOffsetsRequired field shall be set to false, otherwise it shall be set to true.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.4.1
@@ -595,9 +595,9 @@ export namespace TimeSynchronization {
              * SetTrustedTimeSource command.
              *
              * This event shall also be generated if the node has not generated a MissingTrustedTimeSource event in the
-             * last hour, and the node fails to update its time from the TrustedTimeSource because the
-             * TrustedTimeSource is null or the specified peer cannot be reached. MissingTrustedTimeSource events
-             * corresponding to a time update SHOULD NOT be generated more often than once per hour.
+             * last hour, and the node fails to update its time from the TrustedTimeSource because the TrustedTimeSource
+             * is null or the specified peer cannot be reached. MissingTrustedTimeSource events corresponding to a time
+             * update SHOULD NOT be generated more often than once per hour.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.10.5
              */
@@ -612,9 +612,9 @@ export namespace TimeSynchronization {
         attributes: {
             /**
              * The default NTP server that this Node may use if other time sources are unavailable. This attribute is
-             * settable by an Administrator using the SetDefaultNTP command. It SHOULD be set by the Commissioner
-             * during commissioning. If no default NTP server is available, the Commissioner may set this value to
-             * null. The default IANA assigned NTP port of 123 shall be used to access the NTP server.
+             * settable by an Administrator using the SetDefaultNTP command. It SHOULD be set by the Commissioner during
+             * commissioning. If no default NTP server is available, the Commissioner may set this value to null. The
+             * default IANA assigned NTP port of 123 shall be used to access the NTP server.
              *
              * If set, the format of this attribute shall be a domain name or a static IPv6 address with no port, in
              * text format, as specified in RFC 5952. The address format shall follow the recommendations in Section 4
@@ -639,10 +639,10 @@ export namespace TimeSynchronization {
 
         commands: {
             /**
-             * This command is used to set the DefaultNTP attribute. If the DefaultNTP Address field does not conform
-             * to the requirements in the DefaultNTP attribute description, the command shall fail with a status code
-             * of INVALID_COMMAND. If the node does not support DNS resolution (as specified in SupportsDNSResolve) and
-             * the provided Address is a domain name, the command shall fail with a status code of INVALID_COMMAND.
+             * This command is used to set the DefaultNTP attribute. If the DefaultNTP Address field does not conform to
+             * the requirements in the DefaultNTP attribute description, the command shall fail with a status code of
+             * INVALID_COMMAND. If the node does not support DNS resolution (as specified in SupportsDNSResolve) and the
+             * provided Address is a domain name, the command shall fail with a status code of INVALID_COMMAND.
              * Otherwise, the node shall set the DefaultNTP attribute to match the DefaultNTP provided in this command.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.9.6
@@ -665,8 +665,8 @@ export namespace TimeSynchronization {
             /**
              * A list of time zone offsets from UTC and when they shall take effect. This attribute uses a list of time
              * offset configurations to allow Nodes to handle scheduled regulatory time zone changes. This attribute
-             * shall NOT be used to indicate daylight savings time changes (see DSTOffset attribute for daylight
-             * savings time).
+             * shall NOT be used to indicate daylight savings time changes (see DSTOffset attribute for daylight savings
+             * time).
              *
              * The first entry shall have a ValidAt entry of 0. If there is a second entry, it shall have a non-zero
              * ValidAt time.
@@ -689,8 +689,8 @@ export namespace TimeSynchronization {
              * time for the currently used TimeZoneStruct list item to zero.
              *
              * This attribute shall have at least one entry. If the node does not have a default time zone and no time
-             * zone has been set, it may set this value to a list containing a single TimeZoneStruct with an offset of
-             * 0 (UTC) and a ValidAt time of 0.
+             * zone has been set, it may set this value to a list containing a single TimeZoneStruct with an offset of 0
+             * (UTC) and a ValidAt time of 0.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.6
              */
@@ -704,9 +704,9 @@ export namespace TimeSynchronization {
              * A list of offsets to apply for daylight savings time, and their validity period. List entries shall be
              * sorted by ValidStarting time.
              *
-             * A list entry shall NOT have a ValidStarting time that is smaller than the ValidUntil time of the
-             * previous entry. There shall be at most one list entry with a null ValidUntil time and, if such an entry
-             * is present, it shall appear last in the list.
+             * A list entry shall NOT have a ValidStarting time that is smaller than the ValidUntil time of the previous
+             * entry. There shall be at most one list entry with a null ValidUntil time and, if such an entry is
+             * present, it shall appear last in the list.
              *
              * Over time, the node SHOULD remove any entries which are no longer active from the list.
              *
@@ -734,9 +734,9 @@ export namespace TimeSynchronization {
             localTime: Attribute(0x7, TlvNullable(TlvEpochUs), { omitChanges: true, default: null }),
 
             /**
-             * Indicates whether the node has access to a time zone database. Nodes with a time zone database may
-             * update their own DSTOffset attribute to add new entries and may push DSTOffset updates to other Nodes in
-             * the same time zone as required.
+             * Indicates whether the node has access to a time zone database. Nodes with a time zone database may update
+             * their own DSTOffset attribute to add new entries and may push DSTOffset updates to other Nodes in the
+             * same time zone as required.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.9
              */
@@ -771,10 +771,10 @@ export namespace TimeSynchronization {
              * If there are no errors in the list, the TimeZone field shall be copied to the TimeZone attribute. A
              * TimeZoneStatus event shall be generated with the new time zone information.
              *
-             * If the node supports a time zone database and it has information available for the time zone that will
-             * be applied, it may set its DSTOffset attribute, otherwise the DSTOffset attribute shall be set to an
-             * empty list. A DSTTableEmpty event shall be generated if the DSTOffset attribute is empty. A DSTStatus
-             * event shall be generated if the node was previously applying a DST offset.
+             * If the node supports a time zone database and it has information available for the time zone that will be
+             * applied, it may set its DSTOffset attribute, otherwise the DSTOffset attribute shall be set to an empty
+             * list. A DSTTableEmpty event shall be generated if the DSTOffset attribute is empty. A DSTStatus event
+             * shall be generated if the node was previously applying a DST offset.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.9.3
              */
@@ -798,8 +798,8 @@ export namespace TimeSynchronization {
              *
              * If there are no errors in the list, the DSTOffset field shall be copied to the DSTOffset attribute.
              *
-             * If the DSTOffset attribute change causes a corresponding change to the DST state, a DSTStatus event
-             * shall be generated. If the list is empty, the node shall generate a DSTTableEmpty event.
+             * If the DSTOffset attribute change causes a corresponding change to the DST state, a DSTStatus event shall
+             * be generated. If the list is empty, the node shall generate a DSTTableEmpty event.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.9.5
              */
@@ -808,10 +808,10 @@ export namespace TimeSynchronization {
 
         events: {
             /**
-             * This event shall be generated when the node stops applying the current DSTOffset and there are no
-             * entries in the list with a larger ValidStarting time, indicating the need to possibly get new DST data.
-             * This event shall also be generated if the DSTOffset list is cleared either by a SetTimeZone command, or
-             * by a SetDSTOffset command with an empty list.
+             * This event shall be generated when the node stops applying the current DSTOffset and there are no entries
+             * in the list with a larger ValidStarting time, indicating the need to possibly get new DST data. This
+             * event shall also be generated if the DSTOffset list is cleared either by a SetTimeZone command, or by a
+             * SetDSTOffset command with an empty list.
              *
              * The node shall generate this event if the node has not generated a DSTTableEmpty event in the last hour,
              * and the DSTOffset list is empty when the node attempts to update its time. DSTTableEmpty events
@@ -869,8 +869,8 @@ export namespace TimeSynchronization {
              *
              * Allows a server to translate a UTC time to a local time using the time zone and daylight savings time
              * (DST) offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and
-             * SetDSTOffset commands, and TimeZone and DSTOffset attributes, and shall expose the local time through
-             * the LocalTime attribute.
+             * SetDSTOffset commands, and TimeZone and DSTOffset attributes, and shall expose the local time through the
+             * LocalTime attribute.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.5.1
              */
@@ -921,8 +921,8 @@ export namespace TimeSynchronization {
              * The granularity of the error that the node is willing to guarantee on the time synchronization. It is of
              * type GranularityEnum.
              *
-             * This value shall be set to NoTimeGranularity if UTCTime is null and shall NOT be set to
-             * NoTimeGranularity if UTCTime is non-null.
+             * This value shall be set to NoTimeGranularity if UTCTime is null and shall NOT be set to NoTimeGranularity
+             * if UTCTime is non-null.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.2
              */
@@ -970,9 +970,9 @@ export namespace TimeSynchronization {
 
         events: {
             /**
-             * This event shall be generated if the node has not generated a TimeFailure event in the last hour, and
-             * the node is unable to get a time from any source. This event SHOULD NOT be generated more often than
-             * once per hour.
+             * This event shall be generated if the node has not generated a TimeFailure event in the last hour, and the
+             * node is unable to get a time from any source. This event SHOULD NOT be generated more often than once per
+             * hour.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.10.4
              */
@@ -1093,8 +1093,8 @@ export namespace TimeSynchronization {
     /**
      * This cluster supports all TimeSynchronization features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

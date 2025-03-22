@@ -17,8 +17,8 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
- * a remote method.
+ * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or a
+ * remote method.
  *
  * @see {@link MatterSpecification.v13.Device} § 8.1
  */

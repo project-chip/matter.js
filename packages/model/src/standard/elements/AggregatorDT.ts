@@ -24,8 +24,8 @@ export const AggregatorDt = DeviceType(
             "The purpose of this device type is to aggregate functionality for a collection of endpoints. The " +
             "definition of the collection or functionality is not defined here." +
             "\n" +
-            "When using this device type as a collection of bridged nodes, please see the \"Bridge\" section in " +
-            "the System Model specification.",
+            "When using this device type as a collection of bridged nodes, please see the \"Bridge\" section in the " +
+            "System Model specification.",
 
         xref: { document: "device", section: "11.2" }
     },

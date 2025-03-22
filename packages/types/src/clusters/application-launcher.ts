@@ -52,8 +52,8 @@ export namespace ApplicationLauncher {
         catalogVendorId: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or
-         * "Company X". This field shall be unique within a catalog.
+         * This field shall indicate the application identifier, expressed as a string, such as "PruneVideo" or "Company
+         * X". This field shall be unique within a catalog.
          *
          * For the DIAL registry catalog, this value shall be the DIAL prefix (see [DIAL Registry]).
          *
@@ -256,8 +256,8 @@ export namespace ApplicationLauncher {
             /**
              * ApplicationPlatform
              *
-             * Support for attributes and commands required for endpoint to support launching any application within
-             * the supported application catalogs
+             * Support for attributes and commands required for endpoint to support launching any application within the
+             * supported application catalogs
              */
             applicationPlatform: BitFlag(0)
         },
@@ -275,8 +275,8 @@ export namespace ApplicationLauncher {
 
         commands: {
             /**
-             * Upon receipt of this command, the server shall launch the application with optional data. The
-             * application shall be either
+             * Upon receipt of this command, the server shall launch the application with optional data. The application
+             * shall be either
              *
              *   • the specified application, if the Application Platform feature is supported;
              *
@@ -284,10 +284,9 @@ export namespace ApplicationLauncher {
              *
              * The endpoint shall launch and bring to foreground the requisite application if the application is not
              * already launched and in foreground. The Status attribute shall be updated to ActiveVisibleFocus on the
-             * Application Basic cluster of the Endpoint corresponding to the launched application. The Status
-             * attribute shall be updated on any other application whose Status may have changed as a result of this
-             * command. The CurrentApp attribute, if supported, shall be updated to reflect the new application in the
-             * foreground.
+             * Application Basic cluster of the Endpoint corresponding to the launched application. The Status attribute
+             * shall be updated on any other application whose Status may have changed as a result of this command. The
+             * CurrentApp attribute, if supported, shall be updated to reflect the new application in the foreground.
              *
              * This command returns a Launcher Response.
              *
@@ -350,8 +349,8 @@ export namespace ApplicationLauncher {
     /**
      * This cluster provides an interface for launching applications on a Video Player device such as a TV.
      *
-     * This cluster is supported on endpoints that can launch Applications, such as a Casting Video Player device with
-     * a Content App Platform. It supports identifying an Application by global identifier from a given catalog, and
+     * This cluster is supported on endpoints that can launch Applications, such as a Casting Video Player device with a
+     * Content App Platform. It supports identifying an Application by global identifier from a given catalog, and
      * launching it. It also supports tracking the currently in-focus Application.
      *
      * Depending on the support for the Application Platform feature, the cluster can either support launching the
@@ -391,8 +390,8 @@ export namespace ApplicationLauncher {
     /**
      * This cluster supports all ApplicationLauncher features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

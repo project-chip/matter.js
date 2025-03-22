@@ -160,9 +160,9 @@ export namespace MicrowaveOvenMode {
         mode: TlvField(1, TlvUInt8),
 
         /**
-         * This field shall contain a list of tags that are associated with the mode option. This may be used by
-         * clients to determine the full or the partial semantics of a certain mode, depending on which tags they
-         * understand, using standard definitions and/or manufacturer specific namespace definitions.
+         * This field shall contain a list of tags that are associated with the mode option. This may be used by clients
+         * to determine the full or the partial semantics of a certain mode, depending on which tags they understand,
+         * using standard definitions and/or manufacturer specific namespace definitions.
          *
          * The standard mode tags are defined in this cluster specification. For the derived cluster instances, if the
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
@@ -173,8 +173,8 @@ export namespace MicrowaveOvenMode {
          * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
-         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard
-         * and manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
+         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
+         * manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
          *
          * A few examples are provided below.
          *

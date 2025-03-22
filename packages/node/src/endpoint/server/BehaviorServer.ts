@@ -215,7 +215,7 @@ function createAttributeServer(
 
     // Wire events (FixedAttributeServer is not an AttributeServer so we skip that)
     if (server instanceof AttributeServer) {
-        const observable = observables[`${name}$Changed`] as ClusterEvents.AttributeObservable;
+        const observable = (observables[`${name}$Changed`] as ClusterEvents.ChangedObservable | undefined)?.online;
         if (observable !== undefined) {
             observers.on(observable, (_value, _oldValue, context) => {
                 const session = context.session;
@@ -360,7 +360,7 @@ function createEventServer(
     );
 
     if (observable !== undefined) {
-        observers.on(observable, (payload, _context) => {
+        observers.on(observable.online, (payload, _context) => {
             const maybePromise = server.triggerEvent(payload);
             if (MaybePromise.is(maybePromise)) {
                 endpoint.env.runtime.add(maybePromise);

@@ -92,9 +92,9 @@ export const SoftwareDiagnostics = Cluster(
 
         Field({
             name: "FaultRecording", id: 0x2, type: "octstr", conformance: "O", constraint: "max 1024",
-            details: "The FaultRecording field shall be a manufacturer-specified payload intended to convey information " +
-                "to assist in further diagnosing or debugging a software fault. The FaultRecording field may be used " +
-                "to convey information such as, but not limited to, thread backtraces or register contents.",
+            details: "The FaultRecording field shall be a manufacturer-specified payload intended to convey information to " +
+                "assist in further diagnosing or debugging a software fault. The FaultRecording field may be used to " +
+                "convey information such as, but not limited to, thread backtraces or register contents.",
             xref: { document: "core", section: "11.13.8.1.3" }
         })
     ),
@@ -117,8 +117,8 @@ export const SoftwareDiagnostics = Cluster(
             "If implemented, the server shall set the value of the CurrentHeapHighWatermark attribute to the " +
             "value of the CurrentHeapUsed attribute." +
             "\n" +
-            "If implemented, the server shall set the value of the StackFreeMinimum field for every thread to " +
-            "the value of the corresponding thread’s StackFreeCurrent field.",
+            "If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the " +
+            "value of the corresponding thread’s StackFreeCurrent field.",
 
         xref: { document: "core", section: "11.13.7.1" }
     }),
@@ -135,15 +135,15 @@ export const SoftwareDiagnostics = Cluster(
 
         Field({
             name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8",
-            details: "The Name field shall be set to a vendor defined name or prefix of the software thread that is " +
-                "static for the duration of the thread.",
+            details: "The Name field shall be set to a vendor defined name or prefix of the software thread that is static " +
+                "for the duration of the thread.",
             xref: { document: "core", section: "11.13.5.1.2" }
         }),
 
         Field({
             name: "StackFreeCurrent", id: 0x2, type: "uint32", conformance: "O",
-            details: "The StackFreeCurrent field shall indicate the current amount of stack memory, in bytes, that are " +
-                "not being utilized on the respective thread.",
+            details: "The StackFreeCurrent field shall indicate the current amount of stack memory, in bytes, that are not " +
+                "being utilized on the respective thread.",
             xref: { document: "core", section: "11.13.5.1.3" }
         }),
 
@@ -151,15 +151,15 @@ export const SoftwareDiagnostics = Cluster(
             name: "StackFreeMinimum", id: 0x3, type: "uint32", conformance: "O",
             details: "The StackFreeMinimum field shall indicate the minimum amount of stack memory, in bytes, that has " +
                 "been available at any point between the current time and this attribute being reset or initialized " +
-                "on the respective thread. This value shall only be reset upon a Node reboot or upon receiving of " +
-                "the ResetWatermarks command.",
+                "on the respective thread. This value shall only be reset upon a Node reboot or upon receiving of the " +
+                "ResetWatermarks command.",
             xref: { document: "core", section: "11.13.5.1.4" }
         }),
 
         Field({
             name: "StackSize", id: 0x4, type: "uint32", conformance: "O",
-            details: "The StackSize field shall indicate the amount of stack memory, in bytes, that has been allocated " +
-                "for use by the respective thread.",
+            details: "The StackSize field shall indicate the amount of stack memory, in bytes, that has been allocated for " +
+                "use by the respective thread.",
             xref: { document: "core", section: "11.13.5.1.5" }
         })
     )

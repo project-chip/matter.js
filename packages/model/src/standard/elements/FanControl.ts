@@ -29,10 +29,10 @@ export const FanControl = Cluster(
         Field({
             name: "SPD", constraint: "0", description: "MultiSpeed",
 
-            details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic " +
-                "speed control but left it up to the implementer to decide what was supported. Therefore, it is " +
-                "assumed that legacy client implementations are capable of determining, from the server, the number " +
-                "of speeds supported between 1, 2, or 3, and whether automatic speed control is supported." +
+            details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed " +
+                "control but left it up to the implementer to decide what was supported. Therefore, it is assumed " +
+                "that legacy client implementations are capable of determining, from the server, the number of speeds " +
+                "supported between 1, 2, or 3, and whether automatic speed control is supported." +
                 "\n" +
                 "The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to " +
                 "SpeedMax, which has a maximum of 100." +
@@ -58,10 +58,10 @@ export const FanControl = Cluster(
 
         details: "Indicates the current speed mode of the fan. This attribute may be written by the client to request " +
             "a different fan mode. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-            "state where the FanMode can be changed to the requested value. A server may have FanMode values " +
-            "that it can never be set to. For example, where this cluster appears on the same or another " +
-            "endpoint as other clusters with a system dependency, for example the Thermostat cluster, attempting " +
-            "to set the FanMode attribute of this cluster to Off may not be allowed by the system." +
+            "state where the FanMode can be changed to the requested value. A server may have FanMode values that " +
+            "it can never be set to. For example, where this cluster appears on the same or another endpoint as " +
+            "other clusters with a system dependency, for example the Thermostat cluster, attempting to set the " +
+            "FanMode attribute of this cluster to Off may not be allowed by the system." +
             "\n" +
             "This attribute shall be set to one of the values in FanModeEnum." +
             "\n" +
@@ -151,8 +151,8 @@ export const FanControl = Cluster(
         constraint: "desc", default: 0, quality: "P",
 
         details: "This attribute is a bitmap that indicates the current active fan rocking motion settings. Each bit " +
-            "shall only be set to 1, if the corresponding bit in the RockSupport attribute is set to 1, " +
-            "otherwise a status code of CONSTRAINT_ERROR shall be returned." +
+            "shall only be set to 1, if the corresponding bit in the RockSupport attribute is set to 1, otherwise " +
+            "a status code of CONSTRAINT_ERROR shall be returned." +
             "\n" +
             "If a combination of supported bits is set by the client, and the server does not support the " +
             "combination, the lowest supported single bit in the combination shall be set and active, and all " +
@@ -177,15 +177,15 @@ export const FanControl = Cluster(
         constraint: "desc", default: 0, quality: "P",
 
         details: "This attribute is a bitmap that indicates the current active fan wind feature settings. Each bit " +
-            "shall only be set to 1, if the corresponding bit in the WindSupport attribute is set to 1, " +
-            "otherwise a status code of CONSTRAINT_ERROR shall be returned." +
+            "shall only be set to 1, if the corresponding bit in the WindSupport attribute is set to 1, otherwise " +
+            "a status code of CONSTRAINT_ERROR shall be returned." +
             "\n" +
             "If a combination of supported bits is set by the client, and the server does not support the " +
             "combination, the lowest supported single bit in the combination shall be set and active, and all " +
             "other bits shall indicate zero." +
             "\n" +
-            "For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then " +
-            "only Sleep Wind becomes active.",
+            "For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then only " +
+            "Sleep Wind becomes active.",
 
         xref: { document: "cluster", section: "4.4.6.11" }
     }),

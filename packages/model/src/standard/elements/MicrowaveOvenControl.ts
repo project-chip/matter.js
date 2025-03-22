@@ -102,8 +102,8 @@ export const MicrowaveOvenControl = Cluster(
         name: "PowerStep", id: 0x5, type: "uint8", access: "R V", conformance: "PWRLMTS",
         constraint: "desc", default: 10, quality: "F",
 
-        details: "Indicates the increment of power that can be set on the server. The value of this attribute shall " +
-            "be between 1 and MaxPower inclusive." +
+        details: "Indicates the increment of power that can be set on the server. The value of this attribute shall be " +
+            "between 1 and MaxPower inclusive." +
             "\n" +
             "The value of this attribute shall be such that (MaxPower - MinPower) % PowerStep == 0" +
             "\n" +
@@ -146,8 +146,8 @@ export const MicrowaveOvenControl = Cluster(
         {
             name: "SetCookingParameters", id: 0x0, access: "O", conformance: "M", direction: "request",
             response: "status",
-            details: "This command is used to set the cooking parameters associated with the operation of the device. " +
-                "This command supports the following fields:",
+            details: "This command is used to set the cooking parameters associated with the operation of the device. This " +
+                "command supports the following fields:",
             xref: { document: "cluster", section: "8.13.6.2" }
         },
 
@@ -155,8 +155,8 @@ export const MicrowaveOvenControl = Cluster(
             name: "CookMode", id: 0x0, type: "uint8", conformance: "O.b+", constraint: "desc",
 
             details: "This field shall indicate the value to which the CurrentMode attribute of the Microwave Oven Mode " +
-                "cluster should be set. The value of this field shall be one from the list of SupportedModes from " +
-                "the Microwave Oven Mode cluster." +
+                "cluster should be set. The value of this field shall be one from the list of SupportedModes from the " +
+                "Microwave Oven Mode cluster." +
                 "\n" +
                 "If this field is missing, the CurrentMode attribute shall be set to a mode having the Normal mode " +
                 "tag.",
@@ -178,10 +178,10 @@ export const MicrowaveOvenControl = Cluster(
             name: "PowerSetting", id: 0x2, type: "uint8", conformance: "[PWRNUM].b+",
             constraint: "minPower to maxPower", default: { type: "reference", name: "MaxPower" },
 
-            details: "This field shall indicate the PowerSetting associated with the operation of the device. The value " +
-                "of this field shall be subject to the constraints of the PowerSetting attribute of this cluster. If " +
-                "the PowerSetting field does not conform to the constraints of the PowerSetting attribute, the " +
-                "server shall return a CONSTRAINT_ERROR status." +
+            details: "This field shall indicate the PowerSetting associated with the operation of the device. The value of " +
+                "this field shall be subject to the constraints of the PowerSetting attribute of this cluster. If the " +
+                "PowerSetting field does not conform to the constraints of the PowerSetting attribute, the server " +
+                "shall return a CONSTRAINT_ERROR status." +
                 "\n" +
                 "If this field is missing, the PowerSetting attribute shall be set to 100 if MaxPower is not " +
                 "supported by the server, otherwise it shall be set to MaxPower if the MaxPower attribute is " +
@@ -193,10 +193,10 @@ export const MicrowaveOvenControl = Cluster(
         Field({
             name: "WattSettingIndex", id: 0x3, type: "uint8", conformance: "[WATTS].b+", constraint: "desc",
 
-            details: "This field shall indicate the value to which the SelectedWattIndex attribute is set. If the value " +
-                "of this field is greater than or equal to the length of the SupportedWatts attribute list, the " +
-                "server shall return a CONSTRAINT_ERROR status and the value of the SelectedWattIndex attribute " +
-                "shall be unchanged." +
+            details: "This field shall indicate the value to which the SelectedWattIndex attribute is set. If the value of " +
+                "this field is greater than or equal to the length of the SupportedWatts attribute list, the server " +
+                "shall return a CONSTRAINT_ERROR status and the value of the SelectedWattIndex attribute shall be " +
+                "unchanged." +
                 "\n" +
                 "If this field is missing, the SelectedWattIndex attribute shall be set by the server to the index " +
                 "associated with the highest Watt setting for the selected CookMode.",
@@ -216,8 +216,8 @@ export const MicrowaveOvenControl = Cluster(
         {
             name: "AddMoreTime", id: 0x1, access: "O", conformance: "O", direction: "request",
             response: "status",
-            details: "This command is used to add more time to the CookTime attribute of the server. This command " +
-                "supports these fields:",
+            details: "This command is used to add more time to the CookTime attribute of the server. This command supports " +
+                "these fields:",
             xref: { document: "cluster", section: "8.13.6.3" }
         },
 

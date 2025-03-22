@@ -32,8 +32,8 @@ import { Identity } from "#general";
 /**
  * A Thermostat device is capable of having either built-in or separate sensors for temperature, humidity or occupancy.
  * It allows the desired temperature to be set either remotely or locally. The thermostat is capable of sending heating
- * and/or cooling requirement notifications to a heating/cooling unit (for example, an indoor air handler) or is
- * capable of including a mechanism to control a heating or cooling unit directly.
+ * and/or cooling requirement notifications to a heating/cooling unit (for example, an indoor air handler) or is capable
+ * of including a mechanism to control a heating or cooling unit directly.
  *
  * ThermostatDevice requires Thermostat cluster but Thermostat is not added by default because you must select the
  * features your device supports. You can add manually using ThermostatDevice.with().

@@ -106,7 +106,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context: ActionContext]>;
                 };
             };
 

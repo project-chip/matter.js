@@ -55,7 +55,7 @@ export async function before({ project }: Project.Context) {
                     continue;
                 }
 
-                const version = examplesPkg.json.dependencies[pkgName];
+                const version = examplesPkg.json.dependencies?.[pkgName];
                 if (version !== undefined) {
                     dependencies[pkgName] = version;
                 }
@@ -79,8 +79,8 @@ export async function before({ project }: Project.Context) {
     }
 
     const tools = project.pkg.findPackage("@matter/tools").json;
-    const typescriptVersion = tools.dependencies.typescript;
-    const nodeTypesVersion = tools.devDependencies["@types/node"];
+    const typescriptVersion = tools.dependencies?.typescript as string;
+    const nodeTypesVersion = tools.devDependencies?.["@types/node"] as string;
 
     const config: Config = {
         typescriptVersion,

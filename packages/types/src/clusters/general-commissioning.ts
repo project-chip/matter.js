@@ -42,16 +42,16 @@ export namespace GeneralCommissioning {
      */
     export const TlvSetTcAcknowledgementsRequest = TlvObject({
         /**
-         * This field shall contain the version of the Enhanced Setup Flow Terms & Conditions that were presented to
-         * the user.
+         * This field shall contain the version of the Enhanced Setup Flow Terms & Conditions that were presented to the
+         * user.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.10.7.8.1
          */
         tcVersion: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall contain the user responses to the Enhanced Setup Flow Terms & Conditions as a map where
-         * each bit set in the bitmap corresponds to an accepted term in the file located at EnhancedSetupFlowTCUrl.
+         * This field shall contain the user responses to the Enhanced Setup Flow Terms & Conditions as a map where each
+         * bit set in the bitmap corresponds to an accepted term in the file located at EnhancedSetupFlowTCUrl.
          *
          * ### Effect on Receipt
          *
@@ -112,8 +112,8 @@ export namespace GeneralCommissioning {
         NoFailSafe = 3,
 
         /**
-         * Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one
-         * associated with the current fail- safe context.
+         * Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated
+         * with the current fail- safe context.
          */
         BusyWithOtherAdmin = 4,
 
@@ -172,8 +172,8 @@ export namespace GeneralCommissioning {
         failSafeExpiryLengthSeconds: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall contain a conservative value in seconds denoting the maximum total duration for which a
-         * fail safe timer can be re-armed. See Section 11.10.7.2.1, “Fail Safe Context”.
+         * This field shall contain a conservative value in seconds denoting the maximum total duration for which a fail
+         * safe timer can be re-armed. See Section 11.10.7.2.1, “Fail Safe Context”.
          *
          * The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent additional
          * guidelines, it is recommended that the value of this field be aligned with the initial Announcement Duration
@@ -364,11 +364,11 @@ export namespace GeneralCommissioning {
 
             /**
              * Indicates the user’s response to the presented terms. Each bit position corresponds to a user response
-             * for the associated index of matching text, such that bit 0 (bit value 1) is for text index 0. Bit 15
-             * (bit value 0x8000) is for text index 15. A bit value of 1 indicates acceptance and a value of 0
-             * indicates non-acceptance. For example, if there are two texts that were presented where the first (bit
-             * 0, value 1) was declined and the second accepted (bit 1, value 2), we would expect the resulting value
-             * of the map to be 2.
+             * for the associated index of matching text, such that bit 0 (bit value 1) is for text index 0. Bit 15 (bit
+             * value 0x8000) is for text index 15. A bit value of 1 indicates acceptance and a value of 0 indicates
+             * non-acceptance. For example, if there are two texts that were presented where the first (bit 0, value 1)
+             * was declined and the second accepted (bit 1, value 2), we would expect the resulting value of the map to
+             * be 2.
              *
              * Whenever a user provides responses to newly presented terms and conditions, this attribute shall be
              * updated with the latest responses. This may happen in response to updated terms that were presented to
@@ -386,11 +386,11 @@ export namespace GeneralCommissioning {
              * Indicates whether SetTCAcknowledgements is currently required to be called with the inclusion of
              * mandatory terms accepted.
              *
-             * This attribute may be present and False in the case where no terms and conditions are currently
-             * mandatory to accept for CommissioningComplete to succeed.
+             * This attribute may be present and False in the case where no terms and conditions are currently mandatory
+             * to accept for CommissioningComplete to succeed.
              *
-             * This attribute may appear, or become True after commissioning (e.g. due to a firmware update) to
-             * indicate that new Terms & Conditions are available that the user must accept.
+             * This attribute may appear, or become True after commissioning (e.g. due to a firmware update) to indicate
+             * that new Terms & Conditions are available that the user must accept.
              *
              * Upon Factory Data Reset, this attribute shall be set to a value of True.
              *
@@ -460,9 +460,9 @@ export namespace GeneralCommissioning {
         attributes: {
             /**
              * This attribute allows for the storage of a client-provided small payload which Administrators and
-             * Commissioners may write and then subsequently read, to keep track of their own progress. This may be
-             * used by the Commissioner to avoid repeating already-executed actions upon re-establishing a
-             * commissioning link after an error.
+             * Commissioners may write and then subsequently read, to keep track of their own progress. This may be used
+             * by the Commissioner to avoid repeating already-executed actions upon re-establishing a commissioning link
+             * after an error.
              *
              * On start/restart of the server, such as when a device is power-cycled, this attribute shall be reset to
              * zero.
@@ -535,37 +535,37 @@ export namespace GeneralCommissioning {
              *
              * If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
              * received over a CASE session, the command shall leave the current fail-safe state unchanged and
-             * immediately respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin.
-             * This is done to allow commissioners, which use PASE connections, the opportunity to use the failsafe
-             * during the relatively short commissioning window.
+             * immediately respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This
+             * is done to allow commissioners, which use PASE connections, the opportunity to use the failsafe during
+             * the relatively short commissioning window.
              *
              * Otherwise, the command shall arm or re-arm the "fail-safe timer" with an expiry time set for a duration
              * of ExpiryLengthSeconds, or disarm it, depending on the situation:
              *
              *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric
-             *     matches the Fabric currently associated with the fail-safe context, then the fail-safe timer shall
-             *     be immediately expired (see further below for side-effects of expiration).
+             *     matches the Fabric currently associated with the fail-safe context, then the fail-safe timer shall be
+             *     immediately expired (see further below for side-effects of expiration).
              *
-             *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation
-             *     shall lead to a success response with no side-effects against the fail-safe context.
+             *   • If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation shall
+             *     lead to a success response with no side-effects against the fail-safe context.
              *
              *   • If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the
              *     fail-safe timer shall be armed for that duration.
              *
              *   • If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing
-             *     Fabric matches the fail-safe context’s associated Fabric, then the fail-safe timer shall be re-
-             *     armed to expire in ExpiryLengthSeconds.
+             *     Fabric matches the fail-safe context’s associated Fabric, then the fail-safe timer shall be re- armed
+             *     to expire in ExpiryLengthSeconds.
              *
-             *   • Otherwise, the command shall leave the current fail-safe state unchanged and immediately respond
-             *     with ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, indicating a likely
-             *     conflict between commissioners.
+             *   • Otherwise, the command shall leave the current fail-safe state unchanged and immediately respond with
+             *     ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, indicating a likely conflict
+             *     between commissioners.
              *
              * The value of the Breadcrumb field shall be written to the Breadcrumb on successful execution of the
              * command.
              *
              * If the receiver restarts unexpectedly (e.g., power interruption, software crash, or other reset) the
-             * receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps
-             * listed below.
+             * receiver shall behave as if the fail-safe timer expired and perform the sequence of clean-up steps listed
+             * below.
              *
              * On successful execution of the command, the ErrorCode field of the ArmFailSafeResponse shall be set to
              * OK.
@@ -628,8 +628,8 @@ export namespace GeneralCommissioning {
              *   4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
              *       Fail-Safe being armed.
              *
-             *   5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair,
-             *       NOC and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric
+             *   5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC
+             *       and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric
              *       Index that was the subject of the UpdateNOC command.
              *
              *   6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the
@@ -639,13 +639,13 @@ export namespace GeneralCommissioning {
              *       device state. This shall only apply to Fabrics added during the fail-safe period as the result of
              *       the AddNOC command.
              *
-             *   7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had
-             *       been successfully invoked, then the new operational key pair temporarily generated for the
-             *       purposes of NOC addition or update (see Node Operational CSR Procedure) shall be removed as it is
-             *       no longer needed.
+             *   7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had been
+             *       successfully invoked, then the new operational key pair temporarily generated for the purposes of
+             *       NOC addition or update (see Node Operational CSR Procedure) shall be removed as it is no longer
+             *       needed.
              *
-             *   8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced
-             *       by any entry in the Fabrics attribute.
+             *   8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by
+             *       any entry in the Fabrics attribute.
              *
              *   9. Reset the Breadcrumb attribute to zero.
              *
@@ -667,22 +667,22 @@ export namespace GeneralCommissioning {
              * provided in the NewRegulatoryConfig field.
              *
              * Success or failure of this command shall be communicated by the SetRegulatoryConfigResponse command,
-             * unless some data model validations caused a failure status code to be issued during the processing of
-             * the command.
+             * unless some data model validations caused a failure status code to be issued during the processing of the
+             * command.
              *
              * The CountryCode field shall conforms to ISO 3166-1 alpha-2 and shall be used to set the Location
              * attribute reflected by the Basic Information Cluster.
              *
-             * If the server limits some of the values (e.g. locked to a particular country, with no regulatory data
-             * for others), then setting regulatory information outside a valid country or location shall still set the
+             * If the server limits some of the values (e.g. locked to a particular country, with no regulatory data for
+             * others), then setting regulatory information outside a valid country or location shall still set the
              * Location attribute reflected by the Basic Information Cluster configuration, but the
              * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error.
              *
              * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value
              *
              * received does not match either the Indoor or Outdoor fixed value in LocationCapability, then the
-             * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error and
-             * the RegulatoryConfig attribute and associated internal radio configuration shall remain unchanged.
+             * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error and the
+             * RegulatoryConfig attribute and associated internal radio configuration shall remain unchanged.
              *
              * If the LocationCapability attribute is set to Indoor/Outdoor, then the RegulatoryConfig attribute shall
              * be set to match the NewRegulatoryConfig field.
@@ -690,9 +690,9 @@ export namespace GeneralCommissioning {
              * On successful execution of the command, the ErrorCode field of the SetRegulatoryConfigResponse shall be
              * set to OK.
              *
-             * The Breadcrumb field shall be used to atomically set the Breadcrumb attribute on success of this
-             * command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the
-             * Breadcrumb attribute shall be left unchanged.
+             * The Breadcrumb field shall be used to atomically set the Breadcrumb attribute on success of this command,
+             * when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the Breadcrumb
+             * attribute shall be left unchanged.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.10.7.4
              */
@@ -708,16 +708,15 @@ export namespace GeneralCommissioning {
              * This command has no data.
              *
              * Success or failure of this command shall be communicated by the CommissioningCompleteResponse command,
-             * unless some data model validations caused a failure status code to be issued during the processing of
-             * the command.
+             * unless some data model validations caused a failure status code to be issued during the processing of the
+             * command.
              *
              * This command signals the Server that the Commissioner or Administrator has successfully completed all
              * steps needed during the Fail-Safe period, such as commissioning (see Section 5.5, “Commissioning Flows”)
              * or other Administrator operations requiring usage of the Fail Safe timer. It ensures that the Server is
-             * configured in a state such that it still has all necessary elements to be fully operable within a
-             * Fabric, such as ACL entries (see Section 9.10, “Access Control Cluster”) and operational credentials
-             * (see Section 6.4, “Node Operational Credentials Specification”), and that the Node is reachable using
-             * CASE
+             * configured in a state such that it still has all necessary elements to be fully operable within a Fabric,
+             * such as ACL entries (see Section 9.10, “Access Control Cluster”) and operational credentials (see Section
+             * 6.4, “Node Operational Credentials Specification”), and that the Node is reachable using CASE
              *
              * (CASE)”) over an operational network.
              *
@@ -732,9 +731,9 @@ export namespace GeneralCommissioning {
              * This command is fabric-scoped, so cannot be issued over a session that does not have an associated
              * fabric, i.e. over PASE session prior to an AddNOC command. In addition, this command is only permitted
              * over CASE and must be issued by a node associated with the ongoing Fail-Safe context. An ErrorCode of
-             * InvalidAuthentication shall be responded to the invoker if the CommissioningComplete command was
-             * received outside a CASE session (e.g., over Group messaging, or PASE session after AddNOC), or if the
-             * accessing fabric is not the one associated with the ongoing Fail-Safe context.
+             * InvalidAuthentication shall be responded to the invoker if the CommissioningComplete command was received
+             * outside a CASE session (e.g., over Group messaging, or PASE session after AddNOC), or if the accessing
+             * fabric is not the one associated with the ongoing Fail-Safe context.
              *
              * This command shall only result in success with an ErrorCode value of OK in the
              * CommissioningCompleteResponse if received over a CASE session and the accessing fabric index matches the
@@ -747,8 +746,8 @@ export namespace GeneralCommissioning {
              *     originate from the Fabric which was joined through the execution of that command, which updated the
              *     Fail-Safe context’s Fabric Index.
              *
-             * On successful execution of the CommissioningComplete command, where the CommissioningCompleteResponse
-             * has an ErrorCode of OK, the following actions shall be undertaken on the Server:
+             * On successful execution of the CommissioningComplete command, where the CommissioningCompleteResponse has
+             * an ErrorCode of OK, the following actions shall be undertaken on the Server:
              *
              *   1. The Fail-Safe timer associated with the current Fail-Safe context shall be disarmed.
              *
@@ -852,8 +851,8 @@ export namespace GeneralCommissioning {
     /**
      * This cluster supports all GeneralCommissioning features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

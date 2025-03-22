@@ -67,8 +67,8 @@ export namespace JointFabricDatastoreCluster {
         groupCatVersion: TlvField(4, TlvUInt16.bound({ min: 1 })),
 
         /**
-         * The permission level associated with ACL entries for this group. There should be only one Administrator
-         * group per fabric, and at most one Manage group per Ecosystem (Vendor Entry).
+         * The permission level associated with ACL entries for this group. There should be only one Administrator group
+         * per fabric, and at most one Manage group per Ecosystem (Vendor Entry).
          *
          * @see {@link MatterSpecification.v13.Core} § 11.24.5.4.6
          */
@@ -639,8 +639,8 @@ export namespace JointFabricDatastoreCluster {
      * Anchor Administrator. When not acting as the Joint Fabric Anchor Administrator, the Joint Fabric Datastore
      * cluster shall NOT be accessible.
      *
-     * The Admin level of access to the Joint Fabric Datastore cluster server shall be limited to JF Administrator
-     * Nodes identified using the Administrator CAT.
+     * The Admin level of access to the Joint Fabric Datastore cluster server shall be limited to JF Administrator Nodes
+     * identified using the Administrator CAT.
      *
      * NOTE Support for Joint Fabric Datastore cluster is provisional.
      *

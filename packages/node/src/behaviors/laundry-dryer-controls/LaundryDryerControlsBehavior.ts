@@ -10,8 +10,8 @@ import { LaundryDryerControls } from "#clusters/laundry-dryer-controls";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * LaundryDryerControlsBehavior is the base class for objects that support interaction with {@link
- * LaundryDryerControls.Cluster}.
+ * LaundryDryerControlsBehavior is the base class for objects that support interaction with
+ * {@link LaundryDryerControls.Cluster}.
  */
 export const LaundryDryerControlsBehavior = ClusterBehavior.for(LaundryDryerControls.Cluster);
 

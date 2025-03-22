@@ -26,9 +26,9 @@ export namespace ActionsInterface {
          * gradual transition SHOULD take place from the old to the new state over this time period. However, the exact
          * transition is manufacturer dependent.
          *
-         * This command triggers an action (state change) on the involved endpoints, with a specified time to
-         * transition from the current state to the new state. During the transition, the action’s state shall be
-         * Active. Afterwards, the action’s state shall be Inactive.
+         * This command triggers an action (state change) on the involved endpoints, with a specified time to transition
+         * from the current state to the new state. During the transition, the action’s state shall be Active.
+         * Afterwards, the action’s state shall be Inactive.
          *
          * Example: recall a scene on a number of lights, with a specified transition time.
          *
@@ -37,8 +37,8 @@ export namespace ActionsInterface {
         instantActionWithTransition(request: Actions.InstantActionWithTransitionRequest): MaybePromise;
 
         /**
-         * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s
-         * state shall be Active.
+         * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s state
+         * shall be Active.
          *
          * Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of the
          * scene) on a set of lights.
@@ -144,8 +144,8 @@ export namespace ActionsInterface {
 
         /**
          * This command disables a certain action or automation, and shall change the action’s state to Disabled. After
-         * the specified Duration, the action or automation will re-start, and the action’s state shall change to
-         * either Inactive or Active, depending on the actions (see examples 4 and 6).
+         * the specified Duration, the action or automation will re-start, and the action’s state shall change to either
+         * Inactive or Active, depending on the actions (see examples 4 and 6).
          *
          * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from
          * turning on in the morning while you’re not at home). After this period, the wakeup experience will control

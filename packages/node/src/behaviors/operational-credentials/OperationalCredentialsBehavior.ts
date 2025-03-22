@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OperationalCredentialsInterface } from "./OperationalCredentialsInterface.js";
 
 /**
- * OperationalCredentialsBehavior is the base class for objects that support interaction with {@link
- * OperationalCredentials.Cluster}.
+ * OperationalCredentialsBehavior is the base class for objects that support interaction with
+ * {@link OperationalCredentials.Cluster}.
  */
 export const OperationalCredentialsBehavior = ClusterBehavior
     .withInterface<OperationalCredentialsInterface>()

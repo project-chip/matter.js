@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { BooleanStateConfigurationInterface } from "./BooleanStateConfigurationInterface.js";
 
 /**
- * BooleanStateConfigurationBehavior is the base class for objects that support interaction with {@link
- * BooleanStateConfiguration.Cluster}.
+ * BooleanStateConfigurationBehavior is the base class for objects that support interaction with
+ * {@link BooleanStateConfiguration.Cluster}.
  *
  * This class does not have optional features of BooleanStateConfiguration.Cluster enabled. You can enable additional
  * features using BooleanStateConfigurationBehavior.with.

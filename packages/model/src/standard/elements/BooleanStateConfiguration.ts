@@ -103,8 +103,8 @@ export const BooleanStateConfiguration = Cluster(
                 "longer triggered, this attribute shall be set to the inactive state, by setting the bit to 0, for " +
                 "all supported alarm modes." +
                 "\n" +
-                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
-                "shall indicate whether the alarm mode inactive or not:" +
+                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall " +
+                "indicate whether the alarm mode inactive or not:" +
                 "\n" +
                 "  • 0 = Inactive" +
                 "\n" +
@@ -123,8 +123,8 @@ export const BooleanStateConfiguration = Cluster(
                 "longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, " +
                 "for all supported alarm modes." +
                 "\n" +
-                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
-                "shall indicate whether the alarm mode is suppressed or not:" +
+                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall " +
+                "indicate whether the alarm mode is suppressed or not:" +
                 "\n" +
                 "  • 0 = Not suppressed" +
                 "\n" +

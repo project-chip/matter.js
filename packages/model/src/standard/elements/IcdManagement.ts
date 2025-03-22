@@ -87,10 +87,10 @@ export const IcdManagement = Cluster(
         {
             name: "RegisteredClients", id: 0x3, type: "list", access: "R F A", conformance: "CIP",
             constraint: "desc", default: [], quality: "N",
-            details: "This attribute shall contain all clients registered to receive notification if their subscription " +
-                "is lost. The maximum number of entries that can be in the list shall be ClientsSupportedPerFabric " +
-                "for each fabric supported on the server, as indicated by the value of the SupportedFabrics " +
-                "attribute in the Operational Credentials cluster.",
+            details: "This attribute shall contain all clients registered to receive notification if their subscription is " +
+                "lost. The maximum number of entries that can be in the list shall be ClientsSupportedPerFabric for " +
+                "each fabric supported on the server, as indicated by the value of the SupportedFabrics attribute in " +
+                "the Operational Credentials cluster.",
             xref: { document: "core", section: "9.17.6.4" }
         },
 
@@ -118,17 +118,17 @@ export const IcdManagement = Cluster(
 
         details: "Indicates which user action(s) will trigger the ICD to switch to Active mode. If the attribute " +
             "indicates support for a trigger that is dependent on the UserActiveModeTriggerInstruction in the " +
-            "UserActiveModeTriggerHint table, the UserActiveModeTriggerInstruction attribute shall be " +
-            "implemented and shall provide the required information, unless specified otherwise in the " +
-            "requirement column of the UserActiveModeTriggerHint table." +
+            "UserActiveModeTriggerHint table, the UserActiveModeTriggerInstruction attribute shall be implemented " +
+            "and shall provide the required information, unless specified otherwise in the requirement column of " +
+            "the UserActiveModeTriggerHint table." +
             "\n" +
             "ActuateSensorLightsBlink, ResetButtonLightsBlink and SetupButtonLightsBlink (i.e. bits 7, 9 and 14) " +
-            "have a dependency on the UserActiveModeTriggerInstruction attribute but do not require the " +
-            "attribute to be present." +
+            "have a dependency on the UserActiveModeTriggerInstruction attribute but do not require the attribute " +
+            "to be present." +
             "\n" +
             "### An ICD can indicate multiple ways of being put into Active Mode by setting multiple bits in the " +
-            "bitmap at the same time. However, a device shall NOT set more than one bit which has a dependency " +
-            "on the UserActiveModeTriggerInstruction attribute.",
+            "bitmap at the same time. However, a device shall NOT set more than one bit which has a dependency on " +
+            "the UserActiveModeTriggerInstruction attribute.",
 
         xref: { document: "core", section: "9.17.6.7" }
     }),
@@ -195,8 +195,8 @@ export const IcdManagement = Cluster(
 
         Field({
             name: "CheckInNodeId", id: 0x0, type: "node-id", conformance: "M",
-            details: "This field shall provide the node ID to which a Check-In message will be sent if there are no " +
-                "active subscriptions matching MonitoredSubject.",
+            details: "This field shall provide the node ID to which a Check-In message will be sent if there are no active " +
+                "subscriptions matching MonitoredSubject.",
             xref: { document: "core", section: "9.17.7.1.1" }
         }),
 
@@ -220,9 +220,9 @@ export const IcdManagement = Cluster(
                 "stored on the server. The verification key provided in this field shall be used by the server to " +
                 "guarantee that a client with manage permissions can only modify entries that contain a Key equal to " +
                 "the verification key. The verification key shall be provided for clients with manage permissions. " +
-                "The verification key SHOULD NOT be provided by clients with administrator permissions for the " +
-                "server cluster. The verification key shall be ignored by the server if it is provided by a client " +
-                "with administrator permissions for the server cluster.",
+                "The verification key SHOULD NOT be provided by clients with administrator permissions for the server " +
+                "cluster. The verification key shall be ignored by the server if it is provided by a client with " +
+                "administrator permissions for the server cluster.",
 
             xref: { document: "core", section: "9.17.7.1.4" }
         }),
@@ -251,8 +251,8 @@ export const IcdManagement = Cluster(
             response: "status",
             details: "This command allows a client to unregister itself with the ICD. Example: a client that is leaving " +
                 "the network (e.g. running on a phone which is leaving the home) can (and should) remove its " +
-                "subscriptions and send this UnregisterClient command before leaving to prevent the burden on the " +
-                "ICD of an absent client.",
+                "subscriptions and send this UnregisterClient command before leaving to prevent the burden on the ICD " +
+                "of an absent client.",
             xref: { document: "core", section: "9.17.7.3" }
         },
 
@@ -268,11 +268,11 @@ export const IcdManagement = Cluster(
             details: "This field shall provide the verification key associated with the CheckInNodeID to remove from " +
                 "storage. The verification key represents the key already stored on the server. The verification key " +
                 "provided in this field shall be used by the server to guarantee that a client with manage " +
-                "permissions can only remove entries that contain a Key equal to the stored key. The verification " +
-                "key shall be provided for clients with manage permissions. The verification key SHOULD NOT be " +
-                "provided by clients with administrator permissions for the server cluster. The verification key " +
-                "shall be ignored by the server if it is provided by a client with administrator permissions for the " +
-                "server cluster.",
+                "permissions can only remove entries that contain a Key equal to the stored key. The verification key " +
+                "shall be provided for clients with manage permissions. The verification key SHOULD NOT be provided " +
+                "by clients with administrator permissions for the server cluster. The verification key shall be " +
+                "ignored by the server if it is provided by a client with administrator permissions for the server " +
+                "cluster.",
 
             xref: { document: "core", section: "9.17.7.3.2" }
         })
@@ -300,8 +300,8 @@ export const IcdManagement = Cluster(
     Command(
         {
             name: "StayActiveResponse", id: 0x4, conformance: "LITS, O", direction: "response",
-            details: "This message shall be sent by the ICD in response to the StayActiveRequest command and shall " +
-                "contain the computed duration (in milliseconds) that the ICD intends to stay active for.",
+            details: "This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain " +
+                "the computed duration (in milliseconds) that the ICD intends to stay active for.",
             xref: { document: "core", section: "9.17.7.5" }
         },
 
@@ -313,8 +313,8 @@ export const IcdManagement = Cluster(
                 "\n" +
                 "### Minimum Value for PromisedActiveDuration" +
                 "\n" +
-                "The minimum value of the PromisedActiveDuration field shall be equal to either 30000 milliseconds " +
-                "or StayActiveDuration (from the received StayActiveRequest command), whichever is smaller.",
+                "The minimum value of the PromisedActiveDuration field shall be equal to either 30000 milliseconds or " +
+                "StayActiveDuration (from the received StayActiveRequest command), whichever is smaller.",
 
             xref: { document: "core", section: "9.17.7.5.1" }
         })
@@ -425,9 +425,9 @@ export const IcdManagement = Cluster(
             name: "MonitoredSubject", id: 0x2, type: "subject-id", access: "S", conformance: "M", quality: "N",
 
             details: "This field shall indicate the monitored Subject ID. This field shall be used to determine if a " +
-                "particular client has an active subscription for the given entry. The MonitoredSubject, when it is " +
-                "a NodeID, may be the same as the CheckInNodeID. The MonitoredSubject gives the registering client " +
-                "the flexibility of having a different CheckInNodeID from the MonitoredSubject. A subscription shall " +
+                "particular client has an active subscription for the given entry. The MonitoredSubject, when it is a " +
+                "NodeID, may be the same as the CheckInNodeID. The MonitoredSubject gives the registering client the " +
+                "flexibility of having a different CheckInNodeID from the MonitoredSubject. A subscription shall " +
                 "count as an active subscription for this entry if:" +
                 "\n" +
                 "  • It is on the associated fabric of this entry, and" +
@@ -436,8 +436,8 @@ export const IcdManagement = Cluster(
                 "    subscription. Matching shall be determined using the subject_matches function defined in the " +
                 "    Access Control Privilege Granting Algorithm." +
                 "\n" +
-                "For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers " +
-                "to the server on the entry’s associated fabric bears that Node ID, then the entry matches." +
+                "For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers to " +
+                "the server on the entry’s associated fabric bears that Node ID, then the entry matches." +
                 "\n" +
                 "Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the" +
                 "\n" +

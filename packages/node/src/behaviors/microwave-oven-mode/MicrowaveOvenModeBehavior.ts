@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { MicrowaveOvenModeInterface } from "./MicrowaveOvenModeInterface.js";
 
 /**
- * MicrowaveOvenModeBehavior is the base class for objects that support interaction with {@link
- * MicrowaveOvenMode.Cluster}.
+ * MicrowaveOvenModeBehavior is the base class for objects that support interaction with
+ * {@link MicrowaveOvenMode.Cluster}.
  */
 export const MicrowaveOvenModeBehavior = ClusterBehavior
     .withInterface<MicrowaveOvenModeInterface>()

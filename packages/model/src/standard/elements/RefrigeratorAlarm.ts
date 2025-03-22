@@ -19,8 +19,8 @@ export const RefrigeratorAlarm = Cluster(
     {
         name: "RefrigeratorAlarm", id: 0x57, type: "AlarmBase", classification: "application",
         pics: "REFALM",
-        details: "This cluster is a derived cluster of Alarm Base cluster and provides the alarm definition related " +
-            "to refrigerator and temperature controlled cabinet devices.",
+        details: "This cluster is a derived cluster of Alarm Base cluster and provides the alarm definition related to " +
+            "refrigerator and temperature controlled cabinet devices.",
         xref: { document: "cluster", section: "8.8" }
     },
 

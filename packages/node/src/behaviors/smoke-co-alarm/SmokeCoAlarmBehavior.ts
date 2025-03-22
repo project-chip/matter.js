@@ -14,8 +14,8 @@ import { ClusterType } from "#types";
 /**
  * SmokeCoAlarmBehavior is the base class for objects that support interaction with {@link SmokeCoAlarm.Cluster}.
  *
- * SmokeCoAlarm.Cluster requires you to enable one or more optional features. You can do so using {@link
- * SmokeCoAlarmBehavior.with}.
+ * SmokeCoAlarm.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link SmokeCoAlarmBehavior.with}.
  */
 export const SmokeCoAlarmBehavior = ClusterBehavior
     .withInterface<SmokeCoAlarmInterface>()

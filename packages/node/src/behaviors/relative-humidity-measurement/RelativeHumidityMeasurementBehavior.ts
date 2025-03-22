@@ -10,8 +10,8 @@ import { RelativeHumidityMeasurement } from "#clusters/relative-humidity-measure
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * RelativeHumidityMeasurementBehavior is the base class for objects that support interaction with {@link
- * RelativeHumidityMeasurement.Cluster}.
+ * RelativeHumidityMeasurementBehavior is the base class for objects that support interaction with
+ * {@link RelativeHumidityMeasurement.Cluster}.
  */
 export const RelativeHumidityMeasurementBehavior = ClusterBehavior.for(RelativeHumidityMeasurement.Cluster);
 

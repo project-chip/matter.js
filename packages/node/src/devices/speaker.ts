@@ -15,9 +15,9 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Speaker device type. This feature controls the speaker volume of the device.
  *
- * To control unmute/mute, the On/Off cluster shall be used. A value of TRUE for the OnOff attribute shall represent
- * the volume on (not muted) state, while a value of FALSE shall represent the volume off (muted) state. For volume
- * level control, the Level cluster shall be used.
+ * To control unmute/mute, the On/Off cluster shall be used. A value of TRUE for the OnOff attribute shall represent the
+ * volume on (not muted) state, while a value of FALSE shall represent the volume off (muted) state. For volume level
+ * control, the Level cluster shall be used.
  *
  * A dedicated endpoint is needed because the On/Off cluster can also be used for other purposes, such as for power
  * control.

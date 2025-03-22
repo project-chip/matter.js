@@ -32,8 +32,8 @@ export namespace Pm25ConcentrationMeasurement {
     /**
      * This cluster supports all Pm25ConcentrationMeasurement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export const CompleteInstance = MutableCluster({
         ...ConcentrationMeasurement.Complete,

@@ -24,10 +24,10 @@ export const JointFabricDatastoreCluster = Cluster(
             "Fabric." +
             "\n" +
             "When an Ecosystem Administrator Node is commissioned onto the Joint Fabric, the Ecosystem " +
-            "Administrator Node has no knowledge of what Nodes and Groups are present, or what set-up " +
-            "information related to the Joint Fabric is provided by the user. To address lack of knowledge, the " +
-            "Joint Fabric Datastore provides the information required for all Ecosystem Administrators to " +
-            "maintain a consistent view of the Joint Fabric including Nodes, Groups, settings and privileges." +
+            "Administrator Node has no knowledge of what Nodes and Groups are present, or what set-up information " +
+            "related to the Joint Fabric is provided by the user. To address lack of knowledge, the Joint Fabric " +
+            "Datastore provides the information required for all Ecosystem Administrators to maintain a " +
+            "consistent view of the Joint Fabric including Nodes, Groups, settings and privileges." +
             "\n" +
             "The Joint Fabric Datastore cluster server shall only be accessible on a Node which is acting as the " +
             "Joint Fabric Anchor Administrator. When not acting as the Joint Fabric Anchor Administrator, the " +
@@ -120,9 +120,9 @@ export const JointFabricDatastoreCluster = Cluster(
         conformance: "M",
         details: "This shall indicate the current state of the Joint Fabric Datastore Cluster." +
             "\n" +
-            "The Committed status indicates the DataStore is ready for use. The Pending status indicates that " +
-            "the DataStore is not yet ready for use. The DeletePending status indicates that the DataStore is in " +
-            "the process of being transferred to another Joint Fabric Anchor Administrator.",
+            "The Committed status indicates the DataStore is ready for use. The Pending status indicates that the " +
+            "DataStore is not yet ready for use. The DeletePending status indicates that the DataStore is in the " +
+            "process of being transferred to another Joint Fabric Anchor Administrator.",
         xref: { document: "core", section: "11.24.6.9" }
     }),
 
@@ -377,8 +377,8 @@ export const JointFabricDatastoreCluster = Cluster(
         Field(
             {
                 name: "GroupIdList", id: 0x4, type: "list", access: "R F V", conformance: "M",
-                details: "List of Group IDs that this endpoint is a member of. Any changes to Group Id List (add/remove " +
-                    "entry) must follow the pending→committed workflow with current state reflected in the Status Entry.",
+                details: "List of Group IDs that this endpoint is a member of. Any changes to Group Id List (add/remove entry) " +
+                    "must follow the pending→committed workflow with current state reflected in the Status Entry.",
                 xref: { document: "core", section: "11.24.5.6.5" }
             },
 
@@ -473,9 +473,9 @@ export const JointFabricDatastoreCluster = Cluster(
         Field(
             {
                 name: "EndpointList", id: 0x6, type: "list", access: "R F V", conformance: "M",
-                details: "The list of endpoints for this node. Any changes to Endpoint List (add/remove entry) must follow " +
-                    "the pending→committed workflow with current state reflected in the Status Entry for the " +
-                    "corresponding entry in the list.",
+                details: "The list of endpoints for this node. Any changes to Endpoint List (add/remove entry) must follow the " +
+                    "pending→committed workflow with current state reflected in the Status Entry for the corresponding " +
+                    "entry in the list.",
                 xref: { document: "core", section: "11.24.5.8.6" }
             },
 

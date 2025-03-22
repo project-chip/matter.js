@@ -98,8 +98,8 @@ export namespace SmokeCoAlarm {
         /**
          * Low contamination
          *
-         * This value shall indicate that the smoke sensor has detectable contamination levels, but the contamination
-         * is too low to cause a visible or audible alarm.
+         * This value shall indicate that the smoke sensor has detectable contamination levels, but the contamination is
+         * too low to cause a visible or audible alarm.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.11.5.6.2
          */
@@ -321,8 +321,8 @@ export namespace SmokeCoAlarm {
          * Interconnected CO Alarm State
          *
          * This value shall indicate that this alarm is currently expressing visual indication of CO Alarm caused by
-         * Interconnect. This value shall indicate that the alarm is currently expressing audible indication of CO
-         * Alarm caused by Interconnect unless the DeviceMuted attribute is supported and set to Muted.
+         * Interconnect. This value shall indicate that the alarm is currently expressing audible indication of CO Alarm
+         * caused by Interconnect unless the DeviceMuted attribute is supported and set to Muted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.11.5.3.9
          */
@@ -503,13 +503,13 @@ export namespace SmokeCoAlarm {
 
         attributes: {
             /**
-             * Indicates the visibly- and audibly-expressed state of the alarm. When multiple alarm conditions are
-             * being reflected in the server, this attribute shall indicate the condition with the highest priority.
-             * Priority order of conditions is determined by the manufacturer and shall be supplied as a part of
-             * certification procedure. If the value of ExpressedState is not Normal, the attribute corresponding to
-             * the value shall NOT be Normal. For example, if the ExpressedState is set to SmokeAlarm, the value of the
-             * SmokeState will indicate the severity of the alarm (Warning or Critical). Clients SHOULD also read the
-             * other attributes to be aware of further alarm conditions beyond the one indicated in ExpressedState.
+             * Indicates the visibly- and audibly-expressed state of the alarm. When multiple alarm conditions are being
+             * reflected in the server, this attribute shall indicate the condition with the highest priority. Priority
+             * order of conditions is determined by the manufacturer and shall be supplied as a part of certification
+             * procedure. If the value of ExpressedState is not Normal, the attribute corresponding to the value shall
+             * NOT be Normal. For example, if the ExpressedState is set to SmokeAlarm, the value of the SmokeState will
+             * indicate the severity of the alarm (Warning or Critical). Clients SHOULD also read the other attributes
+             * to be aware of further alarm conditions beyond the one indicated in ExpressedState.
              *
              * Visible expression is typically a LED light pattern. Audible expression is a horn or speaker pattern.
              * Audible expression shall BE suppressed if the DeviceMuted attribute is supported and set to Muted.
@@ -571,19 +571,18 @@ export namespace SmokeCoAlarm {
 
             /**
              * Indicates whether the interconnected CO alarm is currently triggering by branching devices. When the
-             * interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical,
-             * otherwise it shall be set to Normal.
+             * interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical, otherwise
+             * it shall be set to Normal.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.11.6.10
              */
             interconnectCoAlarm: OptionalAttribute(0x9, TlvEnum<AlarmState>()),
 
             /**
-             * Indicates the date when the device reaches its stated expiry date. After the ExpiryDate has been
-             * reached, the EndOfServiceAlert shall start to be triggered. To account for better customer experience
-             * across time zones, the EndOfServiceAlert may be delayed by up to 24 hours after the ExpiryDate.
-             * Similarly, clients may delay any actions based on the ExpiryDate by up to 24 hours to best align with
-             * the local time zone.
+             * Indicates the date when the device reaches its stated expiry date. After the ExpiryDate has been reached,
+             * the EndOfServiceAlert shall start to be triggered. To account for better customer experience across time
+             * zones, the EndOfServiceAlert may be delayed by up to 24 hours after the ExpiryDate. Similarly, clients
+             * may delay any actions based on the ExpiryDate by up to 24 hours to best align with the local time zone.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.11.6.13
              */
@@ -737,8 +736,8 @@ export namespace SmokeCoAlarm {
     /**
      * This cluster supports all SmokeCoAlarm features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

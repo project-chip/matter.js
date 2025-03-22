@@ -10,8 +10,8 @@
  * Priority
  *
  * This is an enumeration of priority used to tag events and possibly other data. The data type does not define any
- * particular ordering among the values. Specific uses of the data type may assign semantics to the values that imply
- * an ordering relationship.
+ * particular ordering among the values. Specific uses of the data type may assign semantics to the values that imply an
+ * ordering relationship.
  *
  * @see {@link MatterSpecification.v13.Core} § 7.19.2.17
  */

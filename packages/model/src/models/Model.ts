@@ -32,6 +32,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     errors?: DefinitionError[];
     asOf?: Specification.Revision;
     until?: Specification.Revision;
+    matchTo?: {
+        id?: string | number;
+        name?: string;
+    };
     declare id?: number;
     declare name: string;
 

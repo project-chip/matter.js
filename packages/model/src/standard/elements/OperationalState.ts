@@ -23,20 +23,20 @@ export const OperationalState = Cluster(
         details: "This cluster supports remotely monitoring and, where supported, changing the operational state of " +
             "any device where a state machine is a part of the operation." +
             "\n" +
-            "This cluster defines common states, scoped to this cluster (e.g. Stopped, Running, Paused, Error). " +
-            "A derived cluster specification may define more states scoped to the derivation. Manufacturer " +
-            "specific states are supported in this cluster and any derived clusters thereof. When defined in a " +
-            "derived instance, such states are scoped to the derivation." +
+            "This cluster defines common states, scoped to this cluster (e.g. Stopped, Running, Paused, Error). A " +
+            "derived cluster specification may define more states scoped to the derivation. Manufacturer specific " +
+            "states are supported in this cluster and any derived clusters thereof. When defined in a derived " +
+            "instance, such states are scoped to the derivation." +
             "\n" +
             "Actual state transitions are dependent on both the implementation, and the requirements that may " +
             "additionally be imposed by a derived cluster." +
             "\n" +
-            "An implementation that supports remotely starting its operation can make use of this cluster’s " +
-            "Start command to do so. A device that supports remote pause or stop of its currently selected " +
-            "operation can similarly make use of this cluster’s Pause and Stop commands to do so. The ability to " +
-            "remotely pause or stop is independent of how the operation was started (for example, an operation " +
-            "started by using a manual button press can be stopped by using a Stop command if the device " +
-            "supports remotely stopping the operation)." +
+            "An implementation that supports remotely starting its operation can make use of this cluster’s Start " +
+            "command to do so. A device that supports remote pause or stop of its currently selected operation " +
+            "can similarly make use of this cluster’s Pause and Stop commands to do so. The ability to remotely " +
+            "pause or stop is independent of how the operation was started (for example, an operation started by " +
+            "using a manual button press can be stopped by using a Stop command if the device supports remotely " +
+            "stopping the operation)." +
             "\n" +
             "Additionally, this cluster provides events for monitoring the operational state of the device.",
 
@@ -51,9 +51,9 @@ export const OperationalState = Cluster(
             constraint: "max 32[max 64]", quality: "X",
 
             details: "Indicates a list of names of different phases that the device can go through for the selected " +
-                "function or mode. The list may not be in sequence order. For example in a washing machine this " +
-                "could include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are manufacturer specific " +
-                "and may change when a different function or mode is selected." +
+                "function or mode. The list may not be in sequence order. For example in a washing machine this could " +
+                "include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are manufacturer specific and " +
+                "may change when a different function or mode is selected." +
                 "\n" +
                 "A null value indicates that the device does not present phases during its operation. When this " +
                 "attribute’s value is null, the CurrentPhase attribute shall also be set to null.",
@@ -175,8 +175,8 @@ export const OperationalState = Cluster(
                 "wash cycle in a Washing Machine." +
                 "\n" +
                 "It is highly recommended that appliances device types employing the Operational State cluster " +
-                "support this event, even if it is optional. This assists clients in executing automations or " +
-                "issuing notifications at critical points in the device operation cycles." +
+                "support this event, even if it is optional. This assists clients in executing automations or issuing " +
+                "notifications at critical points in the device operation cycles." +
                 "\n" +
                 "This event shall contain the following fields:",
 
@@ -241,8 +241,8 @@ export const OperationalState = Cluster(
             "  • For manufacturer-specific states, by the manufacturer." +
             "\n" +
             "A device that is unable to honor the Pause command for whatever reason shall respond with an " +
-            "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no " +
-            "further action." +
+            "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no further " +
+            "action." +
             "\n" +
             "Otherwise, on success:" +
             "\n" +
@@ -273,8 +273,8 @@ export const OperationalState = Cluster(
             "OperationalCommandResponse command with an ErrorStateID of NoError but take no further action." +
             "\n" +
             "A device that is unable to honor the Stop command for whatever reason shall respond with an " +
-            "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no " +
-            "further action." +
+            "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState but take no further " +
+            "action." +
             "\n" +
             "Otherwise, on success:" +
             "\n" +
@@ -295,17 +295,17 @@ export const OperationalState = Cluster(
             "\n" +
             "On receipt of this command, the device shall start its operation if it is safe to do so and the " +
             "device is in an operational state from which it can be started. There may be either regulatory or " +
-            "manufacturer-imposed safety and security requirements that first necessitate some specific action " +
-            "at the device before a Start command can be honored. In such instances, a device shall respond with " +
-            "a status code of CommandInvalidInState if a Start command is received prior to the required on- " +
-            "device action." +
+            "manufacturer-imposed safety and security requirements that first necessitate some specific action at " +
+            "the device before a Start command can be honored. In such instances, a device shall respond with a " +
+            "status code of CommandInvalidInState if a Start command is received prior to the required on- device " +
+            "action." +
             "\n" +
             "If this command is received when already in the Running state the device shall respond with an " +
             "OperationalCommandResponse command with an ErrorStateID of NoError but take no further action." +
             "\n" +
             "A device that is unable to honor the Start command for whatever reason shall respond with an " +
-            "OperationalCommandResponse command with an ErrorStateID of UnableToStartOrResume but take no " +
-            "further action." +
+            "OperationalCommandResponse command with an ErrorStateID of UnableToStartOrResume but take no further " +
+            "action." +
             "\n" +
             "Otherwise, on success:" +
             "\n" +
@@ -348,13 +348,13 @@ export const OperationalState = Cluster(
             "### Table 4. Resume Compatibility" +
             "\n" +
             "A device that is unable to honor the Resume command for any other reason shall respond with an " +
-            "OperationalCommandResponse command with an ErrorStateID of UnableToStartOrResume but take no " +
-            "further action." +
+            "OperationalCommandResponse command with an ErrorStateID of UnableToStartOrResume but take no further " +
+            "action." +
             "\n" +
             "Otherwise, on success:" +
             "\n" +
-            "  • The OperationalState attribute shall be set to the most recent non-Error operational state " +
-            "    prior to entering the Paused state." +
+            "  • The OperationalState attribute shall be set to the most recent non-Error operational state prior " +
+            "    to entering the Paused state." +
             "\n" +
             "  • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of " +
             "    NoError.",
@@ -401,8 +401,8 @@ export const OperationalState = Cluster(
                 "semantics as the general states defined below." +
                 "\n" +
                 "A manufacturer-specific state definition shall NOT duplicate the general state definitions or " +
-                "derived cluster state definitions. That is, a manufacturer-defined state defined for this cluster " +
-                "or a derived cluster thereof cannot define a state with the same semantics as the general states " +
+                "derived cluster state definitions. That is, a manufacturer-defined state defined for this cluster or " +
+                "a derived cluster thereof cannot define a state with the same semantics as the general states " +
                 "defined below or states defined in a derived cluster. Such manufacturer-specific state definitions " +
                 "shall be scoped in the context of the Vendor ID present in the Basic Information cluster." +
                 "\n" +

@@ -95,10 +95,10 @@ export namespace ContentLauncher {
         /**
          * Dimensions defined as a percentage
          *
-         * This value is for dimensions defined as a percentage of the overall display dimensions. For example, if
-         * using a Percentage Metric type for a Width measurement of 50.0, against a display width of 1920 pixels, then
-         * the resulting value used would be 960 pixels (50.0% of 1920) for that dimension. Whenever a measurement uses
-         * this Metric type, the resulting values shall be rounded ("floored") towards 0 if the measurement requires an
+         * This value is for dimensions defined as a percentage of the overall display dimensions. For example, if using
+         * a Percentage Metric type for a Width measurement of 50.0, against a display width of 1920 pixels, then the
+         * resulting value used would be 960 pixels (50.0% of 1920) for that dimension. Whenever a measurement uses this
+         * Metric type, the resulting values shall be rounded ("floored") towards 0 if the measurement requires an
          * integer final value.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.4.2
@@ -211,8 +211,8 @@ export namespace ContentLauncher {
         background: TlvOptionalField(1, TlvStyleInformation),
 
         /**
-         * This field shall indicate the logo shown when the Video Player is launching. This is also used when the
-         * Video Player is in the idle state and Splash field is not available.
+         * This field shall indicate the logo shown when the Video Player is launching. This is also used when the Video
+         * Player is in the idle state and Splash field is not available.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.3
          */
@@ -226,8 +226,8 @@ export namespace ContentLauncher {
         progressBar: TlvOptionalField(3, TlvStyleInformation),
 
         /**
-         * This field shall indicate the screen shown when the Video Player is in an idle state. If this property is
-         * not populated, the Video Player shall default to logo or the provider name.
+         * This field shall indicate the screen shown when the Video Player is in an idle state. If this property is not
+         * populated, the Video Player shall default to logo or the provider name.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.5
          */
@@ -304,8 +304,8 @@ export namespace ContentLauncher {
          * This field shall indicate the preferred position (in milliseconds) in the media to launch playback from. In
          * case the position falls in the middle of a frame, the server shall set the position to the beginning of that
          * frame and set the SampledPosition attribute on the MediaPlayback cluster accordingly. A value of null shall
-         * indicate that playback position is not applicable for the current state of the media playback. (For example
-         * : Live media with no known duration and where seek is not supported).
+         * indicate that playback position is not applicable for the current state of the media playback. (For example :
+         * Live media with no known duration and where seek is not supported).
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11.1
          */
@@ -354,8 +354,8 @@ export namespace ContentLauncher {
         contentUrl: TlvField(0, TlvString),
 
         /**
-         * This field, if present, shall provide a string that may be used to describe the content being accessed at
-         * the given URL.
+         * This field, if present, shall provide a string that may be used to describe the content being accessed at the
+         * given URL.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2.2
          */
@@ -371,12 +371,12 @@ export namespace ContentLauncher {
 
         /**
          * This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition for the
-         * media, sent from the client to the server. If the server does not find an available track for the title
-         * being played exactly matching a Track requested here, in the list of available tracks, it may default to
-         * picking another track that closely matches the requested track. Alternately, it may go with user preferences
-         * set on the server side (it will use this option if these PlaybackPreferences are not specified). In the case
-         * of text tracks, that may mean that the subtitle text is not displayed at all. In the cases where the
-         * preferred Text/AudioTracks are not available, the server shall return the TextTrackNotAvailable and/or
+         * media, sent from the client to the server. If the server does not find an available track for the title being
+         * played exactly matching a Track requested here, in the list of available tracks, it may default to picking
+         * another track that closely matches the requested track. Alternately, it may go with user preferences set on
+         * the server side (it will use this option if these PlaybackPreferences are not specified). In the case of text
+         * tracks, that may mean that the subtitle text is not displayed at all. In the cases where the preferred
+         * Text/AudioTracks are not available, the server shall return the TextTrackNotAvailable and/or
          * AudioTrackNotAvailable Status(es) in the LauncherResponse.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2.4
@@ -667,12 +667,12 @@ export namespace ContentLauncher {
 
         /**
          * This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition for the
-         * media, sent from the client to the server. If the server does not find an available track for the title
-         * being played exactly matching a Track requested here, in the list of available tracks, it may default to
-         * picking another track that closely matches the requested track. Alternately, it may go with user preferences
-         * set on the server side (it will use this option if these PlaybackPreferences are not specified). In the case
-         * of text tracks, that may mean that the subtitle text is not displayed at all. In the cases where the
-         * preferred Text/AudioTracks are not available, the server shall return the TextTrackNotAvailable and/or
+         * media, sent from the client to the server. If the server does not find an available track for the title being
+         * played exactly matching a Track requested here, in the list of available tracks, it may default to picking
+         * another track that closely matches the requested track. Alternately, it may go with user preferences set on
+         * the server side (it will use this option if these PlaybackPreferences are not specified). In the case of text
+         * tracks, that may mean that the subtitle text is not displayed at all. In the cases where the preferred
+         * Text/AudioTracks are not available, the server shall return the TextTrackNotAvailable and/or
          * AudioTrackNotAvailable Status(es) in the LauncherResponse.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1.4
@@ -730,9 +730,9 @@ export namespace ContentLauncher {
              * A check shall be made to ensure the URL is secure (uses HTTPS).
              *
              * When playing a video stream in response to this command, an indication (ex. visual) of the identity of
-             * the origin node of the video stream shall be provided. This could be in the form of a friendly name
-             * label which uniquely identifies the node to the user. This friendly name label is typically assigned by
-             * the Matter Admin (ex. TV) at the time of commissioning and, when it’s a device, is often editable by the
+             * the origin node of the video stream shall be provided. This could be in the form of a friendly name label
+             * which uniquely identifies the node to the user. This friendly name label is typically assigned by the
+             * Matter Admin (ex. TV) at the time of commissioning and, when it’s a device, is often editable by the
              * user. It might be a combination of a company name and friendly name, for example, ”Acme” or “Acme
              * Streaming Service on Alice’s Phone”.
              *
@@ -750,8 +750,8 @@ export namespace ContentLauncher {
     export const ContentSearchComponent = MutableCluster.Component({
         commands: {
             /**
-             * Upon receipt, this shall launch the specified content with optional search criteria. This command
-             * returns a Launch Response.
+             * Upon receipt, this shall launch the specified content with optional search criteria. This command returns
+             * a Launch Response.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1
              */
@@ -886,8 +886,8 @@ export namespace ContentLauncher {
     /**
      * This cluster supports all ContentLauncher features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

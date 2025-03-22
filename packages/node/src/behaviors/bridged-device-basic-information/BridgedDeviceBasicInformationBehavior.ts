@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { BridgedDeviceBasicInformationInterface } from "./BridgedDeviceBasicInformationInterface.js";
 
 /**
- * BridgedDeviceBasicInformationBehavior is the base class for objects that support interaction with {@link
- * BridgedDeviceBasicInformation.Cluster}.
+ * BridgedDeviceBasicInformationBehavior is the base class for objects that support interaction with
+ * {@link BridgedDeviceBasicInformation.Cluster}.
  *
  * This class does not have optional features of BridgedDeviceBasicInformation.Cluster enabled. You can enable
  * additional features using BridgedDeviceBasicInformationBehavior.with.

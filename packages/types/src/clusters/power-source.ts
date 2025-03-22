@@ -944,10 +944,9 @@ export namespace PowerSource {
     export const WiredComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV
-             * (millivolts). A value of NULL shall indicate the Node is currently unable to assess the value. If the
-             * wired source is not connected, but the Node is still able to assess a value, then the assessed value may
-             * be reported.
+             * Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV (millivolts).
+             * A value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is
+             * not connected, but the Node is still able to assess a value, then the assessed value may be reported.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.4
              */
@@ -955,8 +954,8 @@ export namespace PowerSource {
 
             /**
              * Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in Hz. A
-             * value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is
-             * not connected, but the Node is still able to assess a value, then the assessed value may be reported.
+             * value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is not
+             * connected, but the Node is still able to assess a value, then the assessed value may be reported.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.5
              */
@@ -1006,12 +1005,12 @@ export namespace PowerSource {
             /**
              * Indicates the set of wired faults currently detected by the Node on this power source. This set is
              * represented as a list of WiredFaultEnum. When the Node detects a fault has been raised, the appropriate
-             * WiredFaultEnum value shall be added to this list, provided it is not already present. This list shall
-             * NOT contain more than one instance of a specific WiredFaultEnum value. When the Node detects all
-             * conditions contributing to a fault have been cleared, the corresponding WiredFaultEnum value shall be
-             * removed from this list. An empty list shall indicate there are currently no active faults. The order of
-             * this list SHOULD have no significance. Clients interested in monitoring changes in active faults may
-             * subscribe to this attribute, or they may subscribe to WiredFaultChange.
+             * WiredFaultEnum value shall be added to this list, provided it is not already present. This list shall NOT
+             * contain more than one instance of a specific WiredFaultEnum value. When the Node detects all conditions
+             * contributing to a fault have been cleared, the corresponding WiredFaultEnum value shall be removed from
+             * this list. An empty list shall indicate there are currently no active faults. The order of this list
+             * SHOULD have no significance. Clients interested in monitoring changes in active faults may subscribe to
+             * this attribute, or they may subscribe to WiredFaultChange.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.11
              */
@@ -1024,8 +1023,8 @@ export namespace PowerSource {
 
         events: {
             /**
-             * The WiredFaultChange Event shall be generated when the set of wired faults currently detected by the
-             * Node on this wired power source changes. This event shall correspond to a change in value of
+             * The WiredFaultChange Event shall be generated when the set of wired faults currently detected by the Node
+             * on this wired power source changes. This event shall correspond to a change in value of
              * ActiveWiredFaults.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.8.1
@@ -1066,8 +1065,8 @@ export namespace PowerSource {
             batPercentRemaining: OptionalAttribute(0xc, TlvNullable(TlvUInt8.bound({ max: 200 }))),
 
             /**
-             * Indicates the estimated time in seconds before the battery will no longer be able to provide power to
-             * the Node. A value of NULL shall indicate the Node is currently unable to assess the value.
+             * Indicates the estimated time in seconds before the battery will no longer be able to provide power to the
+             * Node. A value of NULL shall indicate the Node is currently unable to assess the value.
              *
              * Changes to this attribute shall only be marked as reportable in the following cases:
              *
@@ -1091,8 +1090,8 @@ export namespace PowerSource {
 
             /**
              * Indicates if the battery needs to be replaced. Replacement may be simple routine maintenance, such as
-             * with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, or
-             * serious fault with a rechargeable or even non-replaceable cell.
+             * with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, or serious
+             * fault with a rechargeable or even non-replaceable cell.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.16
              */
@@ -1131,8 +1130,8 @@ export namespace PowerSource {
 
         events: {
             /**
-             * The BatFaultChange Event shall be generated when the set of battery faults currently detected by the
-             * Node on this battery power source changes. This event shall correspond to a change in value of
+             * The BatFaultChange Event shall be generated when the set of battery faults currently detected by the Node
+             * on this battery power source changes. This event shall correspond to a change in value of
              * ActiveBatFaults.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.8.2
@@ -1200,8 +1199,8 @@ export namespace PowerSource {
     export const ReplaceableOrRechargeableComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the preferred minimum charge capacity rating in mAh of individual, user- or
-             * factory-serviceable battery cells or packs in the battery source.
+             * Indicates the preferred minimum charge capacity rating in mAh of individual, user- or factory-serviceable
+             * battery cells or packs in the battery source.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.25
              */
@@ -1223,8 +1222,8 @@ export namespace PowerSource {
             batChargeState: Attribute(0x1a, TlvEnum<BatChargeState>()),
 
             /**
-             * Indicates the estimated time in seconds before the battery source will be at full charge. A value of
-             * NULL shall indicate the Node is currently unable to assess the value.
+             * Indicates the estimated time in seconds before the battery source will be at full charge. A value of NULL
+             * shall indicate the Node is currently unable to assess the value.
              *
              * Changes to this attribute shall only be marked as reportable in the following cases:
              *
@@ -1259,9 +1258,9 @@ export namespace PowerSource {
              * appropriate BatChargeFaultEnum value shall be added to this list, provided it is not already present.
              * This list shall NOT contain more than one instance of a specific BatChargeFaultEnum value. When the Node
              * detects all conditions contributing to a fault have been cleared, the corresponding BatChargeFaultEnum
-             * value shall be removed from this list. An empty list shall indicate there are currently no active
-             * faults. The order of this list SHOULD have no significance. Clients interested in monitoring changes in
-             * active faults may subscribe to this attribute, or they may subscribe to the BatFaultChange event.
+             * value shall be removed from this list. An empty list shall indicate there are currently no active faults.
+             * The order of this list SHOULD have no significance. Clients interested in monitoring changes in active
+             * faults may subscribe to this attribute, or they may subscribe to the BatFaultChange event.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.7.31
              */
@@ -1274,8 +1273,8 @@ export namespace PowerSource {
 
         events: {
             /**
-             * The BatChargeFaultChange Event shall be generated when the set of charge faults currently detected by
-             * the Node on this battery power source changes. This event shall correspond to a change in value of
+             * The BatChargeFaultChange Event shall be generated when the set of charge faults currently detected by the
+             * Node on this battery power source changes. This event shall correspond to a change in value of
              * ActiveBatChargeFaults.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.7.8.3
@@ -1353,8 +1352,8 @@ export namespace PowerSource {
 
             /**
              * Indicates a list of endpoints that are powered by the source defined by this cluster. Multiple instances
-             * of this cluster may list the same endpoint, because it is possible for power for an endpoint to come
-             * from multiple sources. In that case the Order attribute indicates their priority.
+             * of this cluster may list the same endpoint, because it is possible for power for an endpoint to come from
+             * multiple sources. In that case the Order attribute indicates their priority.
              *
              * For each power source on a node, there shall only be one instance of this cluster.
              *
@@ -1410,8 +1409,8 @@ export namespace PowerSource {
 
     /**
      * This cluster is used to describe the configuration and capabilities of a physical power source that provides
-     * power to one or more endpoints on a node. In case the node has multiple power sources, each shall be described
-     * by its own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the
+     * power to one or more endpoints on a node. In case the node has multiple power sources, each shall be described by
+     * its own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the
      * entire node.
      *
      * Per the Matter specification you cannot use {@link PowerSourceCluster} without enabling certain feature
@@ -1559,8 +1558,8 @@ export namespace PowerSource {
     /**
      * This cluster supports all PowerSource features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

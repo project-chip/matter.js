@@ -35,14 +35,14 @@ export const WaterHeaterMode = Cluster(
     Attribute({
         name: "SupportedModes", id: 0x0,
 
-        details: "At least one entry in the SupportedModes attribute shall include the Manual mode tag in the " +
-            "ModeTags field list." +
+        details: "At least one entry in the SupportedModes attribute shall include the Manual mode tag in the ModeTags " +
+            "field list." +
             "\n" +
             "At least one entry in the SupportedModes attribute shall include the Off mode tag in the ModeTags " +
             "field list." +
             "\n" +
-            "An entry in the SupportedModes attribute that includes one of an Off, Manual, or Timed tag shall " +
-            "NOT also include an additional instance of any one of these tag types.",
+            "An entry in the SupportedModes attribute that includes one of an Off, Manual, or Timed tag shall NOT " +
+            "also include an additional instance of any one of these tag types.",
 
         xref: { document: "cluster", section: "9.6.6.1" }
     }),

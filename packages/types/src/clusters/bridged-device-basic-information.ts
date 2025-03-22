@@ -56,9 +56,9 @@ export namespace BridgedDeviceBasicInformation {
          * This field shall indicate the duration, in milliseconds, that the device is requested to remain active, once
          * the device becomes active again.
          *
-         * The value of this field may be longer than the value supported by the bridged device and would, typically,
-         * be used by the client to request the server of the bridged device to stay active and responsive for this
-         * period to allow a sequence of message exchanges during that period.
+         * The value of this field may be longer than the value supported by the bridged device and would, typically, be
+         * used by the client to request the server of the bridged device to stay active and responsive for this period
+         * to allow a sequence of message exchanges during that period.
          *
          * The client may slightly overestimate the duration it wants the bridged device to be active for, in order to
          * account for network delays.
@@ -100,8 +100,8 @@ export namespace BridgedDeviceBasicInformation {
          * This field shall indicate the minimum duration, in milliseconds, that the bridged device will remain active
          * after receiving the initial request from the KeepActive processing steps.
          *
-         * If the bridged device is a Matter Intermittently Connected Device, PromisedActiveDuration shall be set to
-         * the PromisedActiveDuration value returned in the StayActiveResponse command.
+         * If the bridged device is a Matter Intermittently Connected Device, PromisedActiveDuration shall be set to the
+         * PromisedActiveDuration value returned in the StayActiveResponse command.
          *
          * If the bridged device is not a Matter Intermittently Connected Device, the implementation of this is
          * best-effort since it may interact with non-native protocol.
@@ -183,12 +183,12 @@ export namespace BridgedDeviceBasicInformation {
              *
              * In order to avoid unnecessary power consumption in the bridged device:
              *
-             *   • The server shall enter a "pending active" state for the associated device when the KeepActive
-             *     command is received. The server "pending active" state shall expire after the amount of time defined
-             *     by the TimeoutMs field, in milliseconds, if no subsequent KeepActive command is received. When a
-             *     KeepActive command is received, the "pending active" state is set, the StayActiveDuration is updated
-             *     to the greater of the new value and the previously stored value, and the TimeoutMs is updated to the
-             *     greater of the new value and the remaining time until the prior "pending active" state expires.
+             *   • The server shall enter a "pending active" state for the associated device when the KeepActive command
+             *     is received. The server "pending active" state shall expire after the amount of time defined by the
+             *     TimeoutMs field, in milliseconds, if no subsequent KeepActive command is received. When a KeepActive
+             *     command is received, the "pending active" state is set, the StayActiveDuration is updated to the
+             *     greater of the new value and the previously stored value, and the TimeoutMs is updated to the greater
+             *     of the new value and the remaining time until the prior "pending active" state expires.
              *
              *   • The server shall only keep the bridged device active once for a request. (The server shall only
              *     consider the operation performed if an associated ActiveChanged event was generated.)
@@ -309,9 +309,9 @@ export namespace BridgedDeviceBasicInformation {
              * (when the attribute is False). Determination of reachability might not be perfect (e.g. depending on
              * technology employed), so the Matter Node SHOULD be aware of the risk of false positives and negatives on
              * reachability determination. For example, a bridged device may be marked as unreachable while it could
-             * actually be reached, and vice-versa. Also, detection (and indication) that a bridged device is not
-             * longer reachable may be delayed due to the technique employed (e.g. detecting that a number of expected
-             * messages from the bridged device did not arrive). Also see event ReachableChanged below.
+             * actually be reached, and vice-versa. Also, detection (and indication) that a bridged device is not longer
+             * reachable may be delayed due to the technique employed (e.g. detecting that a number of expected messages
+             * from the bridged device did not arrive). Also see event ReachableChanged below.
              *
              * @see {@link MatterSpecification.v13.Core} § 9.13.5.1
              */
@@ -347,8 +347,8 @@ export namespace BridgedDeviceBasicInformation {
             shutDown: OptionalEvent(0x1, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * The Leave event SHOULD be generated by the bridge when it detects that the associated device has left
-             * the non-Matter network.
+             * The Leave event SHOULD be generated by the bridge when it detects that the associated device has left the
+             * non-Matter network.
              *
              * NOTE
              *
@@ -399,8 +399,8 @@ export namespace BridgedDeviceBasicInformation {
      * functionality of a Bridged Device is represented using a set of Endpoints, this cluster shall only be exposed on
      * the Endpoint which is at the top of the hierarchy for the functionality of that Bridged Device.
      *
-     * This cluster shall NOT be used on an endpoint that is not in the Descriptor cluster PartsList of an endpoint
-     * with an Aggregator device type.
+     * This cluster shall NOT be used on an endpoint that is not in the Descriptor cluster PartsList of an endpoint with
+     * an Aggregator device type.
      *
      * This cluster has been derived from the Basic Information Cluster, and provides generic information about the
      * Bridged Device. Not all of the attributes in the Basic Information Cluster are relevant for a Bridged Device
@@ -449,8 +449,8 @@ export namespace BridgedDeviceBasicInformation {
     /**
      * This cluster supports all BridgedDeviceBasicInformation features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

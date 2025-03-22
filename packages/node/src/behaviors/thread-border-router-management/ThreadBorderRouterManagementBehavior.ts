@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ThreadBorderRouterManagementInterface } from "./ThreadBorderRouterManagementInterface.js";
 
 /**
- * ThreadBorderRouterManagementBehavior is the base class for objects that support interaction with {@link
- * ThreadBorderRouterManagement.Cluster}.
+ * ThreadBorderRouterManagementBehavior is the base class for objects that support interaction with
+ * {@link ThreadBorderRouterManagement.Cluster}.
  *
- * This class does not have optional features of ThreadBorderRouterManagement.Cluster enabled. You can enable
- * additional features using ThreadBorderRouterManagementBehavior.with.
+ * This class does not have optional features of ThreadBorderRouterManagement.Cluster enabled. You can enable additional
+ * features using ThreadBorderRouterManagementBehavior.with.
  */
 export const ThreadBorderRouterManagementBehavior = ClusterBehavior
     .withInterface<ThreadBorderRouterManagementInterface>()

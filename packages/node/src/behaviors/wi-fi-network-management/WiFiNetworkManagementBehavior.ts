@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { WiFiNetworkManagementInterface } from "./WiFiNetworkManagementInterface.js";
 
 /**
- * WiFiNetworkManagementBehavior is the base class for objects that support interaction with {@link
- * WiFiNetworkManagement.Cluster}.
+ * WiFiNetworkManagementBehavior is the base class for objects that support interaction with
+ * {@link WiFiNetworkManagement.Cluster}.
  */
 export const WiFiNetworkManagementBehavior = ClusterBehavior
     .withInterface<WiFiNetworkManagementInterface>()

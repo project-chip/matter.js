@@ -83,8 +83,8 @@ export namespace OperationalState {
 
         /**
          * This field shall be present if the OperationalStateID is from the set reserved for Manufacturer Specific
-         * States, otherwise it shall NOT be present. If present, this shall contain a human-readable description of
-         * the operational state.
+         * States, otherwise it shall NOT be present. If present, this shall contain a human-readable description of the
+         * operational state.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.2.2
          */
@@ -190,8 +190,8 @@ export namespace OperationalState {
     export const TlvOperationalCommandResponse = TlvObject({
         /**
          * This shall indicate the success or otherwise of the attempted command invocation. On a successful invocation
-         * of the attempted command, the ErrorStateID shall be populated with NoError. Please see the individual
-         * command sections for additional specific requirements on population.
+         * of the attempted command, the ErrorStateID shall be populated with NoError. Please see the individual command
+         * sections for additional specific requirements on population.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.5.1
          */
@@ -275,10 +275,10 @@ export namespace OperationalState {
 
         attributes: {
             /**
-             * Indicates a list of names of different phases that the device can go through for the selected function
-             * or mode. The list may not be in sequence order. For example in a washing machine this could include
-             * items such as "pre-soak", "rinse", and "spin". These phases are manufacturer specific and may change
-             * when a different function or mode is selected.
+             * Indicates a list of names of different phases that the device can go through for the selected function or
+             * mode. The list may not be in sequence order. For example in a washing machine this could include items
+             * such as "pre-soak", "rinse", and "spin". These phases are manufacturer specific and may change when a
+             * different function or mode is selected.
              *
              * A null value indicates that the device does not present phases during its operation. When this
              * attribute’s value is null, the CurrentPhase attribute shall also be set to null.
@@ -288,8 +288,8 @@ export namespace OperationalState {
             phaseList: Attribute(0x0, TlvNullable(TlvArray(TlvString, { maxLength: 32 }))),
 
             /**
-             * This attribute represents the current phase of operation being performed by the server. This shall be
-             * the positional index representing the value from the set provided in the PhaseList Attribute,
+             * This attribute represents the current phase of operation being performed by the server. This shall be the
+             * positional index representing the value from the set provided in the PhaseList Attribute,
              *
              * where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value that
              * is "length(PhaseList) - 1".
@@ -323,8 +323,8 @@ export namespace OperationalState {
              *
              *   • When it changes at a rate significantly different from one unit per second.
              *
-             * Changes to this attribute merely due to the normal passage of time with no other dynamic change of
-             * device state shall NOT be reported.
+             * Changes to this attribute merely due to the normal passage of time with no other dynamic change of device
+             * state shall NOT be reported.
              *
              * As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the
              * reporting of this attribute in order to keep track of the remaining duration.
@@ -369,8 +369,8 @@ export namespace OperationalState {
 
         commands: {
             /**
-             * This command shall be supported if the device supports remotely pausing the operation. If this command
-             * is supported, the Resume command shall also be supported.
+             * This command shall be supported if the device supports remotely pausing the operation. If this command is
+             * supported, the Resume command shall also be supported.
              *
              * On receipt of this command, the device shall pause its operation if it is possible based on the current
              * function of the server. For example, if it is at a point where it is safe to do so and/or permitted, but
@@ -439,8 +439,8 @@ export namespace OperationalState {
              * This command shall be supported if the device supports remotely starting the operation. If this command
              * is supported, the 'Stop command shall also be supported.
              *
-             * On receipt of this command, the device shall start its operation if it is safe to do so and the device
-             * is in an operational state from which it can be started. There may be either regulatory or
+             * On receipt of this command, the device shall start its operation if it is safe to do so and the device is
+             * in an operational state from which it can be started. There may be either regulatory or
              * manufacturer-imposed safety and security requirements that first necessitate some specific action at the
              * device before a Start command can be honored. In such instances, a device shall respond with a status
              * code of CommandInvalidInState if a Start command is received prior to the required on- device action.
@@ -507,8 +507,8 @@ export namespace OperationalState {
 
         events: {
             /**
-             * This event is generated when a reportable error condition is detected. A device that generates this
-             * event shall also set the OperationalState attribute to Error, indicating an error condition.
+             * This event is generated when a reportable error condition is detected. A device that generates this event
+             * shall also set the OperationalState attribute to Error, indicating an error condition.
              *
              * This event shall contain the following fields:
              *
@@ -538,9 +538,9 @@ export namespace OperationalState {
      * where a state machine is a part of the operation.
      *
      * This cluster defines common states, scoped to this cluster (e.g. Stopped, Running, Paused, Error). A derived
-     * cluster specification may define more states scoped to the derivation. Manufacturer specific states are
-     * supported in this cluster and any derived clusters thereof. When defined in a derived instance, such states are
-     * scoped to the derivation.
+     * cluster specification may define more states scoped to the derivation. Manufacturer specific states are supported
+     * in this cluster and any derived clusters thereof. When defined in a derived instance, such states are scoped to
+     * the derivation.
      *
      * Actual state transitions are dependent on both the implementation, and the requirements that may additionally be
      * imposed by a derived cluster.
@@ -548,8 +548,8 @@ export namespace OperationalState {
      * An implementation that supports remotely starting its operation can make use of this cluster’s Start command to
      * do so. A device that supports remote pause or stop of its currently selected operation can similarly make use of
      * this cluster’s Pause and Stop commands to do so. The ability to remotely pause or stop is independent of how the
-     * operation was started (for example, an operation started by using a manual button press can be stopped by using
-     * a Stop command if the device supports remotely stopping the operation).
+     * operation was started (for example, an operation started by using a manual button press can be stopped by using a
+     * Stop command if the device supports remotely stopping the operation).
      *
      * Additionally, this cluster provides events for monitoring the operational state of the device.
      *

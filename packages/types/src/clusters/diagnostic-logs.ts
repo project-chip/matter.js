@@ -23,8 +23,8 @@ export namespace DiagnosticLogs {
         /**
          * Logs to be used for end- user support
          *
-         * shall indicate that the purpose of the log request is to retrieve logs for the intention of providing
-         * support to an end-user.
+         * shall indicate that the purpose of the log request is to retrieve logs for the intention of providing support
+         * to an end-user.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.11.4.1.1
          */
@@ -89,9 +89,9 @@ export namespace DiagnosticLogs {
         intent: TlvField(0, TlvEnum<Intent>()),
 
         /**
-         * This field shall be used to indicate how the log transfer is to be realized. If the field is set to BDX,
-         * then if the receiving Node supports BDX it shall attempt to use BDX to transfer any potential diagnostic
-         * logs; if the receiving Node does not support BDX then the Node shall follow the requirements defined for a
+         * This field shall be used to indicate how the log transfer is to be realized. If the field is set to BDX, then
+         * if the receiving Node supports BDX it shall attempt to use BDX to transfer any potential diagnostic logs; if
+         * the receiving Node does not support BDX then the Node shall follow the requirements defined for a
          * TransferProtocolEnum of ResponsePayload. If this field is set to ResponsePayload the receiving Node shall
          * only utilize the LogContent field of the RetrieveLogsResponse command to transfer diagnostic log information.
          *
@@ -116,14 +116,14 @@ export namespace DiagnosticLogs {
          * Node is able to fit the entirety of the requested logs within the LogContent field, the Status field of the
          * RetrieveLogsResponse shall be set to Exhausted and a BDX session shall NOT be initiated.
          *
-         * If the RequestedProtocol is set to BDX and either the Node does not support BDX or it is not possible for
-         * the Node to establish a BDX session, then the Node shall utilize the LogContent field of the
-         * RetrieveLogsResponse command to transfer as much of the current logs as it can fit within the response, and
-         * the Status field of the RetrieveLogsResponse shall be set to Exhausted.
+         * If the RequestedProtocol is set to BDX and either the Node does not support BDX or it is not possible for the
+         * Node to establish a BDX session, then the Node shall utilize the LogContent field of the RetrieveLogsResponse
+         * command to transfer as much of the current logs as it can fit within the response, and the Status field of
+         * the RetrieveLogsResponse shall be set to Exhausted.
          *
          * If the RequestedProtocol is set to ResponsePayload the Node shall utilize the LogContent field of the
-         * RetrieveLogsResponse command to transfer as much of the current logs as it can fit within the response, and
-         * a BDX session shall NOT be initiated.
+         * RetrieveLogsResponse command to transfer as much of the current logs as it can fit within the response, and a
+         * BDX session shall NOT be initiated.
          *
          * If the RequestedProtocol is set to BDX and there is no TransferFileDesignator the command shall fail with a
          * Status Code of INVALID_COMMAND.
@@ -221,8 +221,8 @@ export namespace DiagnosticLogs {
 
         /**
          * This field SHOULD be included in the command if the Status field has a value of Success and the Node
-         * maintains a wall clock. When included, the UTCTimeStamp field shall contain the value of the oldest log
-         * entry in the diagnostic logs that are being transferred.
+         * maintains a wall clock. When included, the UTCTimeStamp field shall contain the value of the oldest log entry
+         * in the diagnostic logs that are being transferred.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.11.5.2.3
          */

@@ -68,6 +68,6 @@ export const MountedOnOffControlDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "5.3.4" }
     })
-)
+);
 
 MatterDefinition.children.push(MountedOnOffControlDt);

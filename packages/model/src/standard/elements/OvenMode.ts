@@ -70,8 +70,8 @@ export const OvenMode = Cluster(
 
         Field({
             name: "Convection", id: 0x4001,
-            details: "This mode sets the device into convection mode which creates an airflow within the device during " +
-                "the cooking duration.",
+            details: "This mode sets the device into convection mode which creates an airflow within the device during the " +
+                "cooking duration.",
             xref: { document: "cluster", section: "8.11.7.1.2" }
         }),
 

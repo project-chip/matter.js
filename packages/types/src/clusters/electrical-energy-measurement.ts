@@ -45,10 +45,10 @@ export namespace ElectricalEnergyMeasurement {
         /**
          * CumulativeEnergy (CUME)
          *
-         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
-         * the server over the device’s lifetime. This measurement may start from when a device’s firmware is updated
-         * to include this feature, when a device’s firmware is updated to correct measurement errors, or when a device
-         * is factory reset.
+         * The feature indicates the server is capable of measuring how much energy has been imported or exported by the
+         * server over the device’s lifetime. This measurement may start from when a device’s firmware is updated to
+         * include this feature, when a device’s firmware is updated to correct measurement errors, or when a device is
+         * factory reset.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.3
          */
@@ -57,9 +57,9 @@ export namespace ElectricalEnergyMeasurement {
         /**
          * PeriodicEnergy (PERE)
          *
-         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
-         * the server during a certain period of time. The start and end times for measurement periods shall be
-         * determined by the server, and may represent overlapping periods.
+         * The feature indicates the server is capable of measuring how much energy has been imported or exported by the
+         * server during a certain period of time. The start and end times for measurement periods shall be determined
+         * by the server, and may represent overlapping periods.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.4
          */
@@ -86,8 +86,8 @@ export namespace ElectricalEnergyMeasurement {
          * recorded at either the value of the EndTimestamp field or the value of the EndSystime field, or both.
          *
          * If the EnergyMeasurementStruct represents periodic energy, then this shall represent the energy recorded
-         * during the period specified by either the StartTimestamp and EndTimestamp fields, the period specified by
-         * the StartSystime and EndSystime fields, or both.
+         * during the period specified by either the StartTimestamp and EndTimestamp fields, the period specified by the
+         * StartSystime and EndSystime fields, or both.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.1
          */
@@ -99,12 +99,11 @@ export namespace ElectricalEnergyMeasurement {
          *
          * If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted.
          *
-         * Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement
-         * period, this field shall be indicated.
+         * Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement period,
+         * this field shall be indicated.
          *
-         * Otherwise, if the server had not yet determined the time in UTC at or before the beginning of the
-         * measurement period, or does not have the capability of determining the time in UTC, this field shall be
-         * omitted.
+         * Otherwise, if the server had not yet determined the time in UTC at or before the beginning of the measurement
+         * period, or does not have the capability of determining the time in UTC, this field shall be omitted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.2
          */
@@ -117,8 +116,8 @@ export namespace ElectricalEnergyMeasurement {
          * If the server had determined the time in UTC by the end of the measurement period, this field shall be
          * indicated.
          *
-         * Otherwise, if the server had not yet determined the time in UTC by the end of the measurement period, or
-         * does not have the capability of determining the time in UTC, this field shall be omitted.
+         * Otherwise, if the server had not yet determined the time in UTC by the end of the measurement period, or does
+         * not have the capability of determining the time in UTC, this field shall be omitted.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.3
          */
@@ -133,9 +132,9 @@ export namespace ElectricalEnergyMeasurement {
          *
          * period, or does not have the capability of determining the time in UTC, this field shall be indicated.
          *
-         * Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement
-         * period, this field may be omitted; if it is indicated, its value shall be the time elapsed since boot at the
-         * UTC time indicated in StartTimestamp.
+         * Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement period,
+         * this field may be omitted; if it is indicated, its value shall be the time elapsed since boot at the UTC time
+         * indicated in StartTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1.4
          */
@@ -186,11 +185,11 @@ export namespace ElectricalEnergyMeasurement {
          * CumulativeEnergyImported attribute was most recently zero, this field shall be indicated.
          *
          * Otherwise, if the server had not yet determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyImported attribute was most recently zero, or does not have the capability of determining
-         * the time in UTC, this field shall be omitted.
+         * CumulativeEnergyImported attribute was most recently zero, or does not have the capability of determining the
+         * time in UTC, this field shall be omitted.
          *
-         * If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyImported attribute was
-         * most recently zero cannot currently be determined, a value of null shall be returned.
+         * If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyImported attribute was most
+         * recently zero cannot currently be determined, a value of null shall be returned.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.1
          */
@@ -204,11 +203,11 @@ export namespace ElectricalEnergyMeasurement {
          * CumulativeEnergyExported attribute was most recently zero, this field shall be indicated.
          *
          * Otherwise, if the server had not yet determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining
-         * the time in UTC, this field shall be omitted.
+         * CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining the
+         * time in UTC, this field shall be omitted.
          *
-         * If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyExported attribute was
-         * most recently zero cannot currently be determined, a value of null shall be returned.
+         * If the timestamp in UTC when the value of the Energy field on the CumulativeEnergyExported attribute was most
+         * recently zero cannot currently be determined, a value of null shall be returned.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.2
          */
@@ -219,12 +218,12 @@ export namespace ElectricalEnergyMeasurement {
          * CumulativeEnergyImported attribute was most recently zero.
          *
          * If the server had not yet determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyImported attribute was most recently zero, or does not have the capability of determining
-         * the time in UTC, this field shall be indicated.
+         * CumulativeEnergyImported attribute was most recently zero, or does not have the capability of determining the
+         * time in UTC, this field shall be indicated.
          *
          * Otherwise, if the server had determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyImported attribute was most recently zero, this field may be omitted; if it is indicated,
-         * its value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
+         * CumulativeEnergyImported attribute was most recently zero, this field may be omitted; if it is indicated, its
+         * value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.3
          */
@@ -235,12 +234,12 @@ export namespace ElectricalEnergyMeasurement {
          * CumulativeEnergyExported attribute was most recently zero.
          *
          * If the server had not yet determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining
-         * the time in UTC, this field shall be indicated.
+         * CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining the
+         * time in UTC, this field shall be indicated.
          *
          * Otherwise, if the server had determined the time in UTC when the value of the Energy field on the
-         * CumulativeEnergyExported attribute was most recently zero, this field may be omitted; if it is indicated,
-         * its value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
+         * CumulativeEnergyExported attribute was most recently zero, this field may be omitted; if it is indicated, its
+         * value shall be the time elapsed since boot at the UTC time indicated in ImportedResetTimestamp.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2.4
          */
@@ -376,8 +375,8 @@ export namespace ElectricalEnergyMeasurement {
     export const ImportedEnergyAndPeriodicEnergyComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the most recent measurement of energy imported by the server and the period during which it
-             * was measured.
+             * Indicates the most recent measurement of energy imported by the server and the period during which it was
+             * measured.
              *
              * The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit
              * publication of deltas considered not meaningful.
@@ -403,8 +402,8 @@ export namespace ElectricalEnergyMeasurement {
     export const ExportedEnergyAndPeriodicEnergyComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the most recent measurement of energy exported by the server and the period during which it
-             * was measured.
+             * Indicates the most recent measurement of energy exported by the server and the period during which it was
+             * measured.
              *
              * The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit
              * publication of deltas considered not meaningful.
@@ -493,8 +492,8 @@ export namespace ElectricalEnergyMeasurement {
             /**
              * CumulativeEnergy
              *
-             * The feature indicates the server is capable of measuring how much energy has been imported or exported
-             * by the server over the device’s lifetime. This measurement may start from when a device’s firmware is
+             * The feature indicates the server is capable of measuring how much energy has been imported or exported by
+             * the server over the device’s lifetime. This measurement may start from when a device’s firmware is
              * updated to include this feature, when a device’s firmware is updated to correct measurement errors, or
              * when a device is factory reset.
              *
@@ -505,8 +504,8 @@ export namespace ElectricalEnergyMeasurement {
             /**
              * PeriodicEnergy
              *
-             * The feature indicates the server is capable of measuring how much energy has been imported or exported
-             * by the server during a certain period of time. The start and end times for measurement periods shall be
+             * The feature indicates the server is capable of measuring how much energy has been imported or exported by
+             * the server during a certain period of time. The start and end times for measurement periods shall be
              * determined by the server, and may represent overlapping periods.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.4
@@ -624,8 +623,8 @@ export namespace ElectricalEnergyMeasurement {
     /**
      * This cluster supports all ElectricalEnergyMeasurement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

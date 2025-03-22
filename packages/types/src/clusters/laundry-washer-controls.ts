@@ -90,12 +90,12 @@ export namespace LaundryWasherControls {
 
             /**
              * Indicates the currently selected spin speed. It is the index into the SpinSpeeds list of the selected
-             * spin speed, as such, this attribute can be an integer between 0 and the number of entries in SpinSpeeds
-             * - 1. If a value is received that is outside of the defined constraints, a CONSTRAINT_ERROR shall be sent
-             * as the response. If a value is attempted to be written that doesn’t match a valid index (e.g. an index
-             * of 5 when the list has 4 values), a CONSTRAINT_ERROR shall be sent as the response. If null is written
-             * to this attribute, there will be no spin speed for the selected cycle. If the value is null, there will
-             * be no spin speed on the current mode.
+             * spin speed, as such, this attribute can be an integer between 0 and the number of entries in SpinSpeeds -
+             * 1. If a value is received that is outside of the defined constraints, a CONSTRAINT_ERROR shall be sent as
+             * the response. If a value is attempted to be written that doesn’t match a valid index (e.g. an index of 5
+             * when the list has 4 values), a CONSTRAINT_ERROR shall be sent as the response. If null is written to this
+             * attribute, there will be no spin speed for the selected cycle. If the value is null, there will be no
+             * spin speed on the current mode.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.6.2
              */
@@ -110,8 +110,8 @@ export namespace LaundryWasherControls {
         attributes: {
             /**
              * Indicates how many times a rinse cycle shall be performed on a device for the current mode of operation.
-             * A value of None shall indicate that no rinse cycle will be performed. This value may be set by the
-             * client to adjust the number of rinses that are performed for
+             * A value of None shall indicate that no rinse cycle will be performed. This value may be set by the client
+             * to adjust the number of rinses that are performed for
              *
              * the current mode of operation. If the device is not in a compatible state to accept the provided value,
              * an INVALID_IN_STATE error shall be sent as the response.
@@ -122,8 +122,8 @@ export namespace LaundryWasherControls {
 
             /**
              * Indicates the amount of rinses allowed for a specific mode. Each entry shall indicate a
-             * NumberOfRinsesEnum value that is possible in the selected mode on the device. The value of this
-             * attribute may change at runtime based on the currently selected mode. Each entry shall be distinct.
+             * NumberOfRinsesEnum value that is possible in the selected mode on the device. The value of this attribute
+             * may change at runtime based on the currently selected mode. Each entry shall be distinct.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.6.4
              */
@@ -153,8 +153,8 @@ export namespace LaundryWasherControls {
             /**
              * Rinse
              *
-             * This feature indicates multiple rinse cycles are supported in at least one supported mode. Note that
-             * some modes may not support selection of the number of rinse cycles even if this feature is supported.
+             * This feature indicates multiple rinse cycles are supported in at least one supported mode. Note that some
+             * modes may not support selection of the number of rinse cycles even if this feature is supported.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 8.6.4.2
              */
@@ -180,8 +180,8 @@ export namespace LaundryWasherControls {
     /**
      * This cluster provides a way to access options associated with the operation of a laundry washer device type.
      *
-     * Per the Matter specification you cannot use {@link LaundryWasherControlsCluster} without enabling certain
-     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
+     * Per the Matter specification you cannot use {@link LaundryWasherControlsCluster} without enabling certain feature
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.6
      */
@@ -220,8 +220,8 @@ export namespace LaundryWasherControls {
     /**
      * This cluster supports all LaundryWasherControls features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

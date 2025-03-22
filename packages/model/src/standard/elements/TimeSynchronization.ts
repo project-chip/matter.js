@@ -99,8 +99,8 @@ export const TimeSynchronization = Cluster(
             "attribute may be used by a client to determine its level of trust in the UTCTime. It is of type " +
             "TimeSourceEnum." +
             "\n" +
-            "If a node is unsure if the selected NTP server is within the Matter network, it SHOULD select one " +
-            "of the NonMatter* values." +
+            "If a node is unsure if the selected NTP server is within the Matter network, it SHOULD select one of " +
+            "the NonMatter* values." +
             "\n" +
             "This value shall be set to None if UTCTime is null and shall NOT be set to None if UTCTime is " +
             "non-null.",
@@ -112,9 +112,9 @@ export const TimeSynchronization = Cluster(
         name: "TrustedTimeSource", id: 0x3, type: "TrustedTimeSourceStruct", access: "R V",
         conformance: "TSC", default: null, quality: "X N",
         details: "A Node ID, endpoint, and associated fabric index of a Node that may be used as trusted time source. " +
-            "See Section 11.17.13, “Time source prioritization”. This attribute reflects the last value set by " +
-            "an administrator using the SetTrustedTimeSource command. If the value is null, no trusted time " +
-            "source has yet been set.",
+            "See Section 11.17.13, “Time source prioritization”. This attribute reflects the last value set by an " +
+            "administrator using the SetTrustedTimeSource command. If the value is null, no trusted time source " +
+            "has yet been set.",
         xref: { document: "core", section: "11.17.8.4" }
     }),
 
@@ -205,9 +205,9 @@ export const TimeSynchronization = Cluster(
         name: "LocalTime", id: 0x7, type: "epoch-us", access: "R V", conformance: "TZ", default: null,
         quality: "X C",
 
-        details: "The computed current local time of the node as a epoch-us (Epoch Time in Microseconds). The value " +
-            "of LocalTime shall be the sum of the UTCTime, the offset of the currently valid TimeZoneStruct from " +
-            "the TimeZone attribute (converted to microseconds), and the offset of the currently valid " +
+        details: "The computed current local time of the node as a epoch-us (Epoch Time in Microseconds). The value of " +
+            "LocalTime shall be the sum of the UTCTime, the offset of the currently valid TimeZoneStruct from the " +
+            "TimeZone attribute (converted to microseconds), and the offset of the currently valid " +
             "DSTOffsetStruct from the DSTOffset attribute (converted to microseconds), if such an entry exists." +
             "\n" +
             "If the node has not achieved time synchronization, this shall be null. If the node has an empty " +
@@ -284,8 +284,8 @@ export const TimeSynchronization = Cluster(
 
         Field({
             name: "DstOffsetActive", id: 0x0, type: "bool", conformance: "M",
-            details: "Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, " +
-                "as opposed to standard time).",
+            details: "Indicates whether the current DST offset is being applied (i.e, daylight savings time is applied, as " +
+                "opposed to standard time).",
             xref: { document: "core", section: "11.17.10.2.1" }
         })
     ),
@@ -306,8 +306,8 @@ export const TimeSynchronization = Cluster(
 
         Field({
             name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "0 to 64",
-            details: "Current time zone name. This name SHOULD use the country/city format specified by the IANA Time " +
-                "Zone Database.",
+            details: "Current time zone name. This name SHOULD use the country/city format specified by the IANA Time Zone " +
+                "Database.",
             xref: { document: "core", section: "11.17.10.3.2" }
         })
     ),
@@ -326,8 +326,8 @@ export const TimeSynchronization = Cluster(
         details: "This event shall be generated if the TrustedTimeSource is set to null upon fabric removal or by a " +
             "SetTrustedTimeSource command." +
             "\n" +
-            "This event shall also be generated if the node has not generated a MissingTrustedTimeSource event " +
-            "in the last hour, and the node fails to update its time from the TrustedTimeSource because the " +
+            "This event shall also be generated if the node has not generated a MissingTrustedTimeSource event in " +
+            "the last hour, and the node fails to update its time from the TrustedTimeSource because the " +
             "TrustedTimeSource is null or the specified peer cannot be reached. MissingTrustedTimeSource events " +
             "corresponding to a time update SHOULD NOT be generated more often than once per hour.",
 
@@ -350,12 +350,12 @@ export const TimeSynchronization = Cluster(
                 "If the time is updated, the node shall also update its Granularity attribute based on the " +
                 "granularity specified in the command and the expected clock drift of the node. This SHOULD normally " +
                 "be one level lower than the stated command Granularity. It shall also update its TimeSource " +
-                "attribute to Admin. It shall also update its Last Known Good UTC Time as defined in Section " +
-                "3.5.6.1, “Last Known Good UTC Time”." +
+                "attribute to Admin. It shall also update its Last Known Good UTC Time as defined in Section 3.5.6.1, " +
+                "“Last Known Good UTC Time”." +
                 "\n" +
                 "If the node updates its UTCTime attribute, it shall accept the command with a status code of " +
-                "SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific " +
-                "Status Code of TimeNotAccepted.",
+                "SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status " +
+                "Code of TimeNotAccepted.",
 
             xref: { document: "core", section: "11.17.9.1" }
         },
@@ -444,9 +444,8 @@ export const TimeSynchronization = Cluster(
         Field({
             name: "DstOffsetsRequired", id: 0x0, type: "bool", conformance: "M", default: true,
             details: "If the node supports a time zone database with information for the time zone that will be applied, " +
-                "it may use this information to set the DSTOffset attribute. If the node is setting its own " +
-                "DSTOffset attribute, the DSTOffsetsRequired field shall be set to false, otherwise it shall be set " +
-                "to true.",
+                "it may use this information to set the DSTOffset attribute. If the node is setting its own DSTOffset " +
+                "attribute, the DSTOffsetsRequired field shall be set to false, otherwise it shall be set to true.",
             xref: { document: "core", section: "11.17.9.4.1" }
         })
     ),
@@ -642,9 +641,9 @@ export const TimeSynchronization = Cluster(
 
         Field({
             name: "Endpoint", id: 0x1, type: "endpoint-no", conformance: "M",
-            details: "Endpoint on the trusted time source node that contains the Time Synchronization cluster server. " +
-                "This is provided to avoid having to do discovery of the location of that endpoint by walking over " +
-                "all endpoints and checking their Descriptor Cluster.",
+            details: "Endpoint on the trusted time source node that contains the Time Synchronization cluster server. This " +
+                "is provided to avoid having to do discovery of the location of that endpoint by walking over all " +
+                "endpoints and checking their Descriptor Cluster.",
             xref: { document: "core", section: "11.17.6.5.2" }
         })
     ),
@@ -664,10 +663,10 @@ export const TimeSynchronization = Cluster(
 
         Field({
             name: "Name", id: 0x2, type: "string", conformance: "O", constraint: "0 to 64",
-            details: "The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the " +
-                "country/city format specified by the IANA Time Zone Database. The Name field may be used for " +
-                "display. If the node supports a TimeZoneDatabase it may use the Name field to set its own DST " +
-                "offsets if it has database information for the supplied time zone Name and the given Offset matches.",
+            details: "The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the country/city " +
+                "format specified by the IANA Time Zone Database. The Name field may be used for display. If the node " +
+                "supports a TimeZoneDatabase it may use the Name field to set its own DST offsets if it has database " +
+                "information for the supplied time zone Name and the given Offset matches.",
             xref: { document: "core", section: "11.17.6.6.3" }
         })
     ),

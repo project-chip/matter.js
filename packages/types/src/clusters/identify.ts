@@ -83,8 +83,8 @@ export namespace Identify {
         Okay = 2,
 
         /**
-         * e.g., Colored light turns orange for 8 seconds; non-colored light switches to the maximum brightness for
-         * 0.5s and then minimum brightness for 7.5s.
+         * e.g., Colored light turns orange for 8 seconds; non-colored light switches to the maximum brightness for 0.5s
+         * and then minimum brightness for 7.5s.
          */
         ChannelChange = 11,
 
@@ -129,8 +129,8 @@ export namespace Identify {
 
         /**
          * This field shall indicate which variant of the effect, indicated in the EffectIdentifier field, SHOULD be
-         * triggered. If a device does not support the given variant, it shall use the default variant. This field
-         * shall contain one of the values in EffectVariantEnum.
+         * triggered. If a device does not support the given variant, it shall use the default variant. This field shall
+         * contain one of the values in EffectVariantEnum.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.2.6.2.2
          */
@@ -156,10 +156,10 @@ export namespace Identify {
             /**
              * Indicates the remaining length of time, in seconds, that the endpoint will continue to identify itself.
              *
-             * If this attribute is set to a value other than 0 then the device shall enter its identification state,
-             * in order to indicate to an observer which of several nodes and/or endpoints it is. It is recommended
-             * that this state consists of flashing a light with a period of 0.5 seconds. The IdentifyTime attribute
-             * shall be decremented every second while in this state.
+             * If this attribute is set to a value other than 0 then the device shall enter its identification state, in
+             * order to indicate to an observer which of several nodes and/or endpoints it is. It is recommended that
+             * this state consists of flashing a light with a period of 0.5 seconds. The IdentifyTime attribute shall be
+             * decremented every second while in this state.
              *
              * If this attribute reaches or is set to the value 0 then the device shall terminate its identification
              * state.
@@ -192,8 +192,8 @@ export namespace Identify {
              * This command allows the support of feedback to the user, such as a certain light effect. It is used to
              * allow an implementation to provide visual feedback to the user under certain circumstances such as a
              * color light turning green when it has successfully connected to a network. The use of this command and
-             * the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful
-             * but it is not the same as and does not replace the identify mechanism used during commissioning.
+             * the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but
+             * it is not the same as and does not replace the identify mechanism used during commissioning.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.2.6.2
              */
@@ -209,8 +209,8 @@ export namespace Identify {
 
     /**
      * This cluster supports an endpoint identification state (e.g., flashing a light), that indicates to an observer
-     * (e.g., an installer) which of several nodes and/or endpoints it is. It also supports a multicast request that
-     * any endpoint that is identifying itself to respond to the initiator.
+     * (e.g., an installer) which of several nodes and/or endpoints it is. It also supports a multicast request that any
+     * endpoint that is identifying itself to respond to the initiator.
      *
      * The state of this cluster may be shared on more than one endpoint on a node.
      *

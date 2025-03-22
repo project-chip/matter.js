@@ -10,8 +10,8 @@ import { BallastConfiguration } from "#clusters/ballast-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * BallastConfigurationBehavior is the base class for objects that support interaction with {@link
- * BallastConfiguration.Cluster}.
+ * BallastConfigurationBehavior is the base class for objects that support interaction with
+ * {@link BallastConfiguration.Cluster}.
  */
 export const BallastConfigurationBehavior = ClusterBehavior.for(BallastConfiguration.Cluster);
 

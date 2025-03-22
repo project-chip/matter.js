@@ -21,8 +21,8 @@ export const EcosystemInformation = Cluster(
         details: "The Ecosystem Information Cluster provides extended device information for all the logical devices " +
             "represented by a Bridged Node. The Ecosystem Information Cluster presents the view of device name " +
             "and location metadata for presentation by a client of the cluster to a user. This cluster is " +
-            "intended to support Fabric Synchronization and be present on an endpoint with the BridgedNode " +
-            "device type listed in the DeviceTypeList of the endpoint’s Descriptor cluster." +
+            "intended to support Fabric Synchronization and be present on an endpoint with the BridgedNode device " +
+            "type listed in the DeviceTypeList of the endpoint’s Descriptor cluster." +
             "\n" +
             "This augments the Bridged Device Basic Information Cluster in the following ways:" +
             "\n" +
@@ -57,8 +57,8 @@ export const EcosystemInformation = Cluster(
 
         Field({
             name: "DeviceName", id: 0x0, type: "string", access: "S", conformance: "O", constraint: "max 64",
-            details: "This field shall indicate the device’s name, which is provided externally if the user consents. " +
-                "(For example, provided by the user in an ecosystem specific interface.)",
+            details: "This field shall indicate the device’s name, which is provided externally if the user consents. (For " +
+                "example, provided by the user in an ecosystem specific interface.)",
             xref: { document: "core", section: "9.18.4.1.1" }
         }),
 
@@ -83,19 +83,19 @@ export const EcosystemInformation = Cluster(
         Field({
             name: "OriginalEndpoint", id: 0x3, type: "endpoint-no", access: "S", conformance: "desc",
             constraint: "desc",
-            details: "This field shall indicate the endpoint this EcosystemDeviceStruct is associated with on the " +
-                "original device represented by this bridge’s Bridged Node. If this bridge is receiving the device " +
-                "from another bridge, then the OriginalEndpoint field value would be the same on both bridges. This " +
-                "field shall be present and set to a valid endpoint on the original device if that device is a " +
-                "Matter device.",
+            details: "This field shall indicate the endpoint this EcosystemDeviceStruct is associated with on the original " +
+                "device represented by this bridge’s Bridged Node. If this bridge is receiving the device from " +
+                "another bridge, then the OriginalEndpoint field value would be the same on both bridges. This field " +
+                "shall be present and set to a valid endpoint on the original device if that device is a Matter " +
+                "device.",
             xref: { document: "core", section: "9.18.4.1.4" }
         }),
 
         Field(
             {
                 name: "DeviceTypes", id: 0x4, type: "list", access: "S", conformance: "M", constraint: "desc",
-                details: "This field shall indicate all of the DeviceTypes within the DeviceTypeList in the Descriptor " +
-                    "Cluster associated with this EcosystemDeviceStruct entry." +
+                details: "This field shall indicate all of the DeviceTypes within the DeviceTypeList in the Descriptor Cluster " +
+                    "associated with this EcosystemDeviceStruct entry." +
                     "\n" +
                     "This field shall contain a list of valid device type ids.",
                 xref: { document: "core", section: "9.18.4.1.5" }
@@ -124,10 +124,10 @@ export const EcosystemInformation = Cluster(
                 "\n" +
                 "NOTE" +
                 "\n" +
-                "If multiple server instances update the UniqueLocationIDs field at the same time, it is possible " +
-                "one of the updates will be missed. This is considered an acceptable limitation to reduce the " +
-                "complexity of the design. Since this is meant to be provided from user input, it is unlikely these " +
-                "signals would be happening at one time.",
+                "If multiple server instances update the UniqueLocationIDs field at the same time, it is possible one " +
+                "of the updates will be missed. This is considered an acceptable limitation to reduce the complexity " +
+                "of the design. Since this is meant to be provided from user input, it is unlikely these signals " +
+                "would be happening at one time.",
 
             xref: { document: "core", section: "9.18.4.1.7" }
         }),
@@ -148,24 +148,24 @@ export const EcosystemInformation = Cluster(
                 "UniqueLocationID can be used by the client to determine if the change is a relocation of the device " +
                 "or just a renaming of the location." +
                 "\n" +
-                "No guarantees are given for consistency of the ID between server instances. The same location may " +
-                "be represented by different IDs on different Ecosystem Information Cluster server instances, so " +
-                "only the history from a single server instance should be considered when evaluating a change." +
+                "No guarantees are given for consistency of the ID between server instances. The same location may be " +
+                "represented by different IDs on different Ecosystem Information Cluster server instances, so only " +
+                "the history from a single server instance should be considered when evaluating a change." +
                 "\n" +
                 "UniqueLocationID shall be changed when the LocationDescriptor changes from one existing location to " +
-                "another location as a result of an external interaction. (For example, the user changes the " +
-                "location assignment.)" +
+                "another location as a result of an external interaction. (For example, the user changes the location " +
+                "assignment.)" +
                 "\n" +
-                "UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still " +
-                "represents the same location. (For example, the user renames a room.)" +
+                "UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still represents " +
+                "the same location. (For example, the user renames a room.)" +
                 "\n" +
                 "UniqueLocationID shall be changed when LocationDescriptor changes as a result of another Ecosystem " +
                 "Information Cluster server instance changing and the UniqueLocationID on the remote server instance " +
                 "also changes." +
                 "\n" +
                 "UniqueLocationID shall NOT be changed when LocationDescriptor changes as a result of another " +
-                "Ecosystem Information Cluster server instance changing and the UniqueLocationID on the remote " +
-                "server instance does not change.",
+                "Ecosystem Information Cluster server instance changing and the UniqueLocationID on the remote server " +
+                "instance does not change.",
 
             xref: { document: "core", section: "9.18.4.2.1" }
         }),

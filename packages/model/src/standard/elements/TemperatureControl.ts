@@ -27,8 +27,8 @@ export const TemperatureControl = Cluster(
             "\n" +
             "The values and constraints of the attributes communicated to clients SHOULD match the controls on " +
             "any physical interface on a device implementing this server. For example, the value of the Step " +
-            "attribute SHOULD match the incremental value by which the temperature setpoint can be changed on " +
-            "the physical device.",
+            "attribute SHOULD match the incremental value by which the temperature setpoint can be changed on the " +
+            "physical device.",
 
         xref: { document: "cluster", section: "8.2" }
     },
@@ -95,9 +95,9 @@ export const TemperatureControl = Cluster(
         details: "Indicates the discrete value by which the TemperatureSetpoint attribute can be changed via the " +
             "SetTemperature command." +
             "\n" +
-            "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), " +
-            "valid values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), " +
-            "26.00C (2600), 26.50C (2650), etc.",
+            "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), valid " +
+            "values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), 26.00C " +
+            "(2600), 26.50C (2650), etc.",
 
         xref: { document: "cluster", section: "8.2.5.4" }
     }),

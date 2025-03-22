@@ -9,9 +9,9 @@
 import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
 
 /**
- * The tags contained in this namespace may be used in any domain or context, to indicate an association with a
- * position in a certain compass direction (e.g. an outdoor sensor in the North garden). Note the difference with
- * Chapter 3, Common Compass Direction Semantic Tag Namespace.
+ * The tags contained in this namespace may be used in any domain or context, to indicate an association with a position
+ * in a certain compass direction (e.g. an outdoor sensor in the North garden). Note the difference with Chapter 3,
+ * Common Compass Direction Semantic Tag Namespace.
  *
  * @see {@link MatterSpecification.v13.Namespace} § 4
  */

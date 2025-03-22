@@ -244,8 +244,8 @@ export namespace WiFiNetworkDiagnostics {
         attributes: {
             /**
              * The BeaconLostCount attribute shall indicate the count of the number of missed beacons the Node has
-             * detected. If the Node does not have an ability to count beacons expected and not received, this value
-             * may remain set to zero.
+             * detected. If the Node does not have an ability to count beacons expected and not received, this value may
+             * remain set to zero.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.15.6.6
              */
@@ -253,8 +253,8 @@ export namespace WiFiNetworkDiagnostics {
 
             /**
              * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due
-             * to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute
-             * shall be reset to 0 upon a reboot of the Node.
+             * to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute shall
+             * be reset to 0 upon a reboot of the Node.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.15.6.13
              */
@@ -293,8 +293,8 @@ export namespace WiFiNetworkDiagnostics {
             /**
              * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total number
              * of expected beacons that could have been received during the interval since association SHOULD match the
-             * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of
-             * beacons received, this value may remain set to zero.
+             * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of beacons
+             * received, this value may remain set to zero.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.15.6.7
              */
@@ -427,9 +427,9 @@ export namespace WiFiNetworkDiagnostics {
             associationFailure: OptionalEvent(0x1, EventPriority.Info, TlvAssociationFailureEvent),
 
             /**
-             * The ConnectionStatus Event shall indicate that a Node’s connection status to a Wi-Fi network has
-             * changed. Connected, in this context, shall mean that a Node acting as a Wi-Fi station is successfully
-             * associated to a Wi-Fi Access Point.
+             * The ConnectionStatus Event shall indicate that a Node’s connection status to a Wi-Fi network has changed.
+             * Connected, in this context, shall mean that a Node acting as a Wi-Fi station is successfully associated
+             * to a Wi-Fi Access Point.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.15.8.3
              */
@@ -521,8 +521,8 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * This cluster supports all WiFiNetworkDiagnostics features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

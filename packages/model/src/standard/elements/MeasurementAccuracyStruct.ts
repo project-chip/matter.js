@@ -26,8 +26,8 @@ export const MeasurementAccuracyStruct = Datatype(
 
     Field({
         name: "Measured", id: 0x1, type: "bool", conformance: "M", default: false, quality: "F",
-        details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
-            "is not set to true, then the associated measurement was estimated.",
+        details: "This field shall indicate whether the associated measurement was directly measured. If this field is " +
+            "not set to true, then the associated measurement was estimated.",
         xref: { document: "cluster", section: "2.1.4.4.2" }
     }),
 
@@ -48,8 +48,8 @@ export const MeasurementAccuracyStruct = Datatype(
                 "\n" +
                 "The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the " +
                 "first shall be one more the value of the RangeMax field on the previous " +
-                "MeasurementAccuracyRangeStruct in this list (i.e. there shall be no gaps in the accuracy ranges, " +
-                "and the ranges shall be in increasing order).",
+                "MeasurementAccuracyRangeStruct in this list (i.e. there shall be no gaps in the accuracy ranges, and " +
+                "the ranges shall be in increasing order).",
 
             xref: { document: "cluster", section: "2.1.4.4.5" }
         },

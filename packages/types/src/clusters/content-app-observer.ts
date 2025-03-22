@@ -145,15 +145,15 @@ export namespace ContentAppObserver {
      *   2. The Content App Platform is able to easily identify commands that are allowed to be sent by the Content App
      *      to a client node because those commands use the Content App Observer cluster.
      *
-     *   3. The Content App is able to easily determine that a node supports the Content App Observer cluster because
-     *      it has received a binding which specifies the Content App Observer cluster.
+     *   3. The Content App is able to easily determine that a node supports the Content App Observer cluster because it
+     *      has received a binding which specifies the Content App Observer cluster.
      *
-     *   4. The Casting Video Client is able to support a single cluster for receiving commands from any Content App
-     *      and does not need to explicitly list every Content App it understands.
+     *   4. The Casting Video Client is able to support a single cluster for receiving commands from any Content App and
+     *      does not need to explicitly list every Content App it understands.
      *
      * A Content App Observer SHOULD ignore the Data and EncodingHint field values in commands from a Content App it
-     * does not recognize. A Content App SHOULD ignore the Data field values in responses when the EncodingHint value
-     * is blank or not recognized.
+     * does not recognize. A Content App SHOULD ignore the Data field values in responses when the EncodingHint value is
+     * blank or not recognized.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.12
      */

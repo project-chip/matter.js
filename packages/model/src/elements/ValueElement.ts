@@ -9,7 +9,7 @@ import { ElementTag, FieldValue } from "../common/index.js";
 import { BaseElement } from "./BaseElement.js";
 
 /**
- * A base element for all elements that represent data values.
+ * A base element for all {@link BaseElement}s that represent data values.
  */
 export type ValueElement = BaseElement & {
     /**

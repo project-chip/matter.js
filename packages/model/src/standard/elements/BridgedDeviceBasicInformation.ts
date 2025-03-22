@@ -20,8 +20,8 @@ export const BridgedDeviceBasicInformation = Cluster(
         name: "BridgedDeviceBasicInformation", id: 0x39, type: "BasicInformation",
         classification: "endpoint", pics: "BRBINFO",
 
-        details: "This cluster is a derived cluster of the Basic Information cluster and serves two purposes towards " +
-            "a Node communicating with a Bridge:" +
+        details: "This cluster is a derived cluster of the Basic Information cluster and serves two purposes towards a " +
+            "Node communicating with a Bridge:" +
             "\n" +
             "  • Indicate that the functionality on the Endpoint where it is placed (and its Parts) is bridged, " +
             "    and" +
@@ -30,9 +30,9 @@ export const BridgedDeviceBasicInformation = Cluster(
             "    information regarding the Bridged Device to a user, such as the vendor name, the model name, or " +
             "    user-assigned name." +
             "\n" +
-            "This cluster shall be exposed by a Bridge on the Endpoint representing each Bridged Device. When " +
-            "the functionality of a Bridged Device is represented using a set of Endpoints, this cluster shall " +
-            "only be exposed on the Endpoint which is at the top of the hierarchy for the functionality of that " +
+            "This cluster shall be exposed by a Bridge on the Endpoint representing each Bridged Device. When the " +
+            "functionality of a Bridged Device is represented using a set of Endpoints, this cluster shall only " +
+            "be exposed on the Endpoint which is at the top of the hierarchy for the functionality of that " +
             "Bridged Device." +
             "\n" +
             "This cluster shall NOT be used on an endpoint that is not in the Descriptor cluster PartsList of an " +
@@ -81,15 +81,15 @@ export const BridgedDeviceBasicInformation = Cluster(
     Attribute({
         name: "Reachable", id: 0x11, conformance: "M",
 
-        details: "This attribute shall be used to indicate whether the bridged device is reachable by the bridge, so " +
-            "a Matter Node which wants to communicate with a bridged device can get an indication that this " +
-            "might fail (when the attribute is False). Determination of reachability might not be perfect (e.g. " +
-            "depending on technology employed), so the Matter Node SHOULD be aware of the risk of false " +
-            "positives and negatives on reachability determination. For example, a bridged device may be marked " +
-            "as unreachable while it could actually be reached, and vice-versa. Also, detection (and indication) " +
+        details: "This attribute shall be used to indicate whether the bridged device is reachable by the bridge, so a " +
+            "Matter Node which wants to communicate with a bridged device can get an indication that this might " +
+            "fail (when the attribute is False). Determination of reachability might not be perfect (e.g. " +
+            "depending on technology employed), so the Matter Node SHOULD be aware of the risk of false positives " +
+            "and negatives on reachability determination. For example, a bridged device may be marked as " +
+            "unreachable while it could actually be reached, and vice-versa. Also, detection (and indication) " +
             "that a bridged device is not longer reachable may be delayed due to the technique employed (e.g. " +
-            "detecting that a number of expected messages from the bridged device did not arrive). Also see " +
-            "event ReachableChanged below.",
+            "detecting that a number of expected messages from the bridged device did not arrive). Also see event " +
+            "ReachableChanged below.",
 
         xref: { document: "core", section: "9.13.5.1" }
     }),
@@ -150,8 +150,8 @@ export const BridgedDeviceBasicInformation = Cluster(
     Event(
         {
             name: "ActiveChanged", id: 0x80, access: "V", conformance: "BIS", priority: "info",
-            details: "This event (when supported) shall be generated the next time a bridged device becomes active after " +
-                "a KeepActive command is received." +
+            details: "This event (when supported) shall be generated the next time a bridged device becomes active after a " +
+                "KeepActive command is received." +
                 "\n" +
                 "See KeepActive for more details.",
             xref: { document: "core", section: "9.13.7.3" }
@@ -160,14 +160,14 @@ export const BridgedDeviceBasicInformation = Cluster(
         Field({
             name: "PromisedActiveDuration", id: 0x0, type: "uint32", conformance: "M", constraint: "desc",
 
-            details: "This field shall indicate the minimum duration, in milliseconds, that the bridged device will " +
-                "remain active after receiving the initial request from the KeepActive processing steps." +
+            details: "This field shall indicate the minimum duration, in milliseconds, that the bridged device will remain " +
+                "active after receiving the initial request from the KeepActive processing steps." +
                 "\n" +
                 "If the bridged device is a Matter Intermittently Connected Device, PromisedActiveDuration shall be " +
                 "set to the PromisedActiveDuration value returned in the StayActiveResponse command." +
                 "\n" +
-                "If the bridged device is not a Matter Intermittently Connected Device, the implementation of this " +
-                "is best-effort since it may interact with non-native protocol.",
+                "If the bridged device is not a Matter Intermittently Connected Device, the implementation of this is " +
+                "best-effort since it may interact with non-native protocol.",
 
             xref: { document: "core", section: "9.13.7.3.1" }
         })
@@ -228,8 +228,8 @@ export const BridgedDeviceBasicInformation = Cluster(
         Field({
             name: "TimeoutMs", id: 0x1, type: "uint32", conformance: "M", constraint: "30000 to 3600000",
 
-            details: "This field shall indicate the period, in milliseconds, that the server will wait before the " +
-                "\"pending active\" state expires. See the KeepActive Command description for details." +
+            details: "This field shall indicate the period, in milliseconds, that the server will wait before the \"pending " +
+                "active\" state expires. See the KeepActive Command description for details." +
                 "\n" +
                 "NOTE" +
                 "\n" +
@@ -241,6 +241,6 @@ export const BridgedDeviceBasicInformation = Cluster(
             xref: { document: "core", section: "9.13.6.1.2" }
         })
     )
-)
+);
 
 MatterDefinition.children.push(BridgedDeviceBasicInformation);

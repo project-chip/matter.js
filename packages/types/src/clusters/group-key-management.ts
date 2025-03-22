@@ -381,9 +381,8 @@ export namespace GroupKeyManagement {
             maxGroupsPerFabric: FixedAttribute(0x2, TlvUInt16, { default: 0 }),
 
             /**
-             * Indicates the maximum number of group key sets this node supports per fabric. The value of this
-             * attribute shall be set according to the minimum number of group key sets to support as specified in
-             * Group Limits.
+             * Indicates the maximum number of group key sets this node supports per fabric. The value of this attribute
+             * shall be set according to the minimum number of group key sets to support as specified in Group Limits.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.2.6.4
              */
@@ -407,14 +406,14 @@ export namespace GroupKeyManagement {
              *
              *   • If the EpochStartTime0 is set to 0, then this command shall fail with an INVALID_COMMAND status code
              *     responded to the client. Note that internally, a GroupKeySetStruct’s EpochStartTime0 may be set to
-             *     zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct (see
-             *     IPKValue). However, the value 0 is illegal in the GroupKeySet field sent by a client.
+             *     zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct (see IPKValue).
+             *     However, the value 0 is illegal in the GroupKeySet field sent by a client.
              *
              *   • If the EpochKey1 field is not null, then the EpochKey0 field shall NOT be null. Otherwise this
              *     command shall fail with an INVALID_COMMAND status code responded to the client.
              *
-             *   • If the EpochKey1 field is not null, and the field’s length is not exactly 16 bytes, then this
-             *     command shall fail with a CONSTRAINT_ERROR status code responded to the client.
+             *   • If the EpochKey1 field is not null, and the field’s length is not exactly 16 bytes, then this command
+             *     shall fail with a CONSTRAINT_ERROR status code responded to the client.
              *
              *   • If the EpochKey1 field is not null, its associated EpochStartTime1 field shall NOT be null and shall
              *     contain a later epoch start time than the epoch start time found in the EpochStartTime0 field.
@@ -426,8 +425,8 @@ export namespace GroupKeyManagement {
              *   • If the EpochKey2 field is not null, then the EpochKey1 and EpochKey0 fields shall NOT be null.
              *     Otherwise this command shall fail with an INVALID_COMMAND status code responded to the client.
              *
-             *   • If the EpochKey2 field is not null, and the field’s length is not exactly 16 bytes, then this
-             *     command shall fail with a CONSTRAINT_ERROR status code responded to the client.
+             *   • If the EpochKey2 field is not null, and the field’s length is not exactly 16 bytes, then this command
+             *     shall fail with a CONSTRAINT_ERROR status code responded to the client.
              *
              *   • If the EpochKey2 field is not null, its associated EpochStartTime2 field shall NOT be null and shall
              *     contain a later epoch start time than the epoch start time found in the EpochStartTime1 field.
@@ -439,8 +438,8 @@ export namespace GroupKeyManagement {
              * If there exists a Group Key Set associated with the accessing fabric which has the same GroupKeySetID as
              * that provided in the GroupKeySet field, then the contents of that group key set shall be
              *
-             * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous
-             * Group Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
+             * replaced. A replacement shall be done by executing the equivalent of entirely removing the previous Group
+             * Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the provided
              * configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group Key Set
              * associated with the accessing fabric shall be created with the provided data. The Group Key Set shall be
              * written to non-volatile storage.

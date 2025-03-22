@@ -134,6 +134,7 @@ export class ChannelManager {
             async () => void this.#paseChannels.delete(session),
         );
         this.#paseChannels.set(session, msgChannel);
+        session.destroyed.on(() => msgChannel.close());
         return msgChannel;
     }
 
@@ -157,9 +158,12 @@ export class ChannelManager {
         }
 
         // Need to create
-        const result = new MessageChannel(byteArrayChannel, session, async () => this.removeChannel(address, session));
-        await this.setChannel(address, result);
-        return result;
+        const msgChannel = new MessageChannel(byteArrayChannel, session, async () =>
+            this.removeChannel(address, session),
+        );
+        await this.setChannel(address, msgChannel);
+        session.destroyed.on(() => msgChannel.close());
+        return msgChannel;
     }
 
     async close() {

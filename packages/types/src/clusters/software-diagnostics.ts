@@ -46,8 +46,8 @@ export namespace SoftwareDiagnostics {
      */
     export const TlvThreadMetrics = TlvObject({
         /**
-         * The Id field shall be a server-assigned per-thread unique ID that is constant for the duration of the
-         * thread. Efforts SHOULD be made to avoid reusing ID values when possible.
+         * The Id field shall be a server-assigned per-thread unique ID that is constant for the duration of the thread.
+         * Efforts SHOULD be made to avoid reusing ID values when possible.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.1
          */
@@ -72,8 +72,8 @@ export namespace SoftwareDiagnostics {
         /**
          * The StackFreeMinimum field shall indicate the minimum amount of stack memory, in bytes, that has been
          * available at any point between the current time and this attribute being reset or initialized on the
-         * respective thread. This value shall only be reset upon a Node reboot or upon receiving of the
-         * ResetWatermarks command.
+         * respective thread. This value shall only be reset upon a Node reboot or upon receiving of the ResetWatermarks
+         * command.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.4
          */
@@ -235,8 +235,8 @@ export namespace SoftwareDiagnostics {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be used
-     * by a Node to assist a user or Administrator in diagnosing potential problems. The Software Diagnostics Cluster
+     * The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be used by
+     * a Node to assist a user or Administrator in diagnosing potential problems. The Software Diagnostics Cluster
      * attempts to centralize all metrics that are relevant to the software that may be running on a Node.
      *
      * SoftwareDiagnosticsCluster supports optional features that you can enable with the
@@ -279,8 +279,8 @@ export namespace SoftwareDiagnostics {
     /**
      * This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

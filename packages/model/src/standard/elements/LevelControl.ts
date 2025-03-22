@@ -18,9 +18,9 @@ import {
 export const LevelControl = Cluster(
     {
         name: "LevelControl", id: 0x8, classification: "application", pics: "LVL",
-        details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
-            "a level, for example the brightness of a light, the degree of closure of a door, or the power " +
-            "output of a heater.",
+        details: "This cluster provides an interface for controlling a characteristic of a device that can be set to a " +
+            "level, for example the brightness of a light, the degree of closure of a door, or the power output " +
+            "of a heater.",
         xref: { document: "cluster", section: "1.6" }
     },
 
@@ -36,8 +36,8 @@ export const LevelControl = Cluster(
         Field({
             name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
 
-            details: "This feature supports an interface for controlling the level of a light source. For the " +
-                "CurrentLevel attribute:" +
+            details: "This feature supports an interface for controlling the level of a light source. For the CurrentLevel " +
+                "attribute:" +
                 "\n" +
                 "A value of 0x00 shall NOT be used." +
                 "\n" +
@@ -78,8 +78,8 @@ export const LevelControl = Cluster(
         name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
         quality: "Q",
 
-        details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
-            "a second." +
+        details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of a " +
+            "second." +
             "\n" +
             "Changes to this attribute shall only be marked as reportable in the following cases:" +
             "\n" +
@@ -89,8 +89,8 @@ export const LevelControl = Cluster(
             "\n" +
             "  • When it changes to 0." +
             "\n" +
-            "For commands with a transition time or changes to the transition time less than 1 second, changes " +
-            "to this attribute shall NOT be reported." +
+            "For commands with a transition time or changes to the transition time less than 1 second, changes to " +
+            "this attribute shall NOT be reported." +
             "\n" +
             "As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the " +
             "reporting of this attribute in order to keep track of the remaining duration.",
@@ -155,8 +155,8 @@ export const LevelControl = Cluster(
         name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
         default: 0,
 
-        details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
-            "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
+        details: "Indicates the time taken to move to or from the target level when On or Off commands are received by " +
+            "an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
             "\n" +
             "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
             "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
@@ -170,9 +170,9 @@ export const LevelControl = Cluster(
         constraint: "minLevel to maxLevel", default: null, quality: "X",
 
         details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
-            "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
-            "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
-            "more details see Effect of On/Off Commands on the CurrentLevel attribute." +
+            "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. If " +
+            "the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For more " +
+            "details see Effect of On/Off Commands on the CurrentLevel attribute." +
             "\n" +
             "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
             "should be aware that older devices may not implement it.",
@@ -184,8 +184,8 @@ export const LevelControl = Cluster(
         name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
         default: null, quality: "X",
         details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
-            "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
-            "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+            "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a " +
+            "second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
             "shall be used instead.",
         xref: { document: "cluster", section: "1.6.6.12" }
     }),
@@ -217,8 +217,8 @@ export const LevelControl = Cluster(
             "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
             "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
             "bitmap that is in effect during the command processing. The temporary Options bitmap has the same " +
-            "format and meaning as the Options attribute, but includes any bits that may be overridden by " +
-            "command fields." +
+            "format and meaning as the Options attribute, but includes any bits that may be overridden by command " +
+            "fields." +
             "\n" +
             "This attribute is meant to be changed only during commissioning." +
             "\n" +
@@ -240,9 +240,9 @@ export const LevelControl = Cluster(
         name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
         constraint: "desc", quality: "X N",
 
-        details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
-            "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
-            "are listed below:" +
+        details: "Indicates the desired startup level for a device when it is supplied with power and this level shall " +
+            "be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute are " +
+            "listed below:" +
             "\n" +
             "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
             "attribute shall return to its value prior to the restart.",
@@ -311,9 +311,8 @@ export const LevelControl = Cluster(
         Field({
             name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X",
 
-            details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. " +
-                "A step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close " +
-                "to" +
+            details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. A " +
+                "step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to" +
                 "\n" +
                 "this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as " +
                 "fast as it is able." +

@@ -13,8 +13,8 @@ export const SecondaryNetworkInterfaceDt = DeviceType(
     {
         name: "SecondaryNetworkInterface", id: 0x19, category: "Utility", classification: "utility",
 
-        details: "A Secondary Network Interface device provides an additional network interface supported by the " +
-            "Node, supplementing the primary interface hosted by the Root Node endpoint." +
+        details: "A Secondary Network Interface device provides an additional network interface supported by the Node, " +
+            "supplementing the primary interface hosted by the Root Node endpoint." +
             "\n" +
             "A Node supporting multiple network interfaces shall include the primary interface on the Root Node " +
             "endpoint, along with secondary interfaces on other endpoints. The priorities of these network " +

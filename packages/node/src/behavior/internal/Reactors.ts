@@ -277,9 +277,11 @@ class ReactorBacking<T extends any[], R> {
      * If the reaction is asynchronous it is tracked via {@link #reactAsync}.
      */
     #react(args: T): MaybePromise<Awaited<R> | undefined> {
+        const originalContext = Contextual.contextOf(args[args.length - 1]);
+
         let context: undefined | ActionContext;
         if (!this.#offline) {
-            context = Contextual.contextOf(args[args.length - 1]);
+            context = originalContext;
         }
 
         // If the emitter's context is available, execute in that
@@ -299,6 +301,7 @@ class ReactorBacking<T extends any[], R> {
         }
 
         // Otherwise run in independent context and errors do not interfere with emitter
+        const command = originalContext?.command;
         try {
             const reactor = (context: ActionContext) => {
                 return this.#reactWithContext(context, this.#owner.backing, args);
@@ -308,7 +311,9 @@ class ReactorBacking<T extends any[], R> {
             // construction and destruction
             //
             // Also, do not inject activity here.  No reason to have both the reactor and the context registered
-            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), undefined, reactor);
+            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), undefined, reactor, {
+                command,
+            });
 
             if (MaybePromise.is(result)) {
                 result = result.then(undefined, this.#unhandledError.bind(this)) as PromiseLike<undefined>;

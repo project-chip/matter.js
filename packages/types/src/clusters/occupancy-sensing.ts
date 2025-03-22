@@ -108,8 +108,8 @@ export namespace OccupancySensing {
      *
      * This enum is as defined in ClusterRevision 4 and its definition shall NOT be
      *
-     * extended; the feature flags provide the sensor modality (or modalities) for later cluster revisions. See
-     * Backward Compatibility section.
+     * extended; the feature flags provide the sensor modality (or modalities) for later cluster revisions. See Backward
+     * Compatibility section.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.3
      */
@@ -447,18 +447,18 @@ export namespace OccupancySensing {
              * Low values of HoldTime SHOULD be avoided since they could lead to many reporting messages. A value 0 for
              * HoldTime shall NOT be used.
              *
-             * The figure below illustrates this with an example of how this attribute is used for a PIR sensor. It
-             * uses threshold detection to generate an "internal detection" signal, which needs post-processing to
-             * become usable for transmission (traffic shaping). The bit in the Occupancy attribute will be set to 1
-             * when the internal detection signal goes high, and will stay at 1 for HoldTime after the (last) instance
-             * where the internal detection signal goes low.
+             * The figure below illustrates this with an example of how this attribute is used for a PIR sensor. It uses
+             * threshold detection to generate an "internal detection" signal, which needs post-processing to become
+             * usable for transmission (traffic shaping). The bit in the Occupancy attribute will be set to 1 when the
+             * internal detection signal goes high, and will stay at 1 for HoldTime after the (last) instance where the
+             * internal detection signal goes low.
              *
-             * The top half of the figure shows the case of a single trigger: the bit in the Occupancy attribute will
-             * be 1 for the duration of the PIR signal exceeding the threshold plus HoldTime. The bottom half of the
-             * figure shows the case of multiple triggers: the second trigger starts before the HoldTime of the first
-             * trigger has expired; this results in a single period of the bit in the Occupancy attribute being 1. The
-             * bit in the Occupancy attribute will be set to 1 from the start of the first period where the PIR signal
-             * exceeds the threshold until HoldTime after the last moment where the PIR exceeded the threshold.
+             * The top half of the figure shows the case of a single trigger: the bit in the Occupancy attribute will be
+             * 1 for the duration of the PIR signal exceeding the threshold plus HoldTime. The bottom half of the figure
+             * shows the case of multiple triggers: the second trigger starts before the HoldTime of the first trigger
+             * has expired; this results in a single period of the bit in the Occupancy attribute being 1. The bit in
+             * the Occupancy attribute will be set to 1 from the start of the first period where the PIR signal exceeds
+             * the threshold until HoldTime after the last moment where the PIR exceeded the threshold.
              *
              * Figure 13. Processing of PIR signal towards Occupancy attribute using HoldTime
              *
@@ -585,8 +585,8 @@ export namespace OccupancySensing {
     /**
      * This cluster supports all OccupancySensing features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

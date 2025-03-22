@@ -66,8 +66,8 @@ export namespace NetworkCommissioning {
 
         /**
          * The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the General
-         * Commissioning cluster on success of the associated command. If the command fails, the Breadcrumb attribute
-         * in the General Commissioning cluster shall be left unchanged.
+         * Commissioning cluster on success of the associated command. If the command fails, the Breadcrumb attribute in
+         * the General Commissioning cluster shall be left unchanged.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.1.2
          */
@@ -234,8 +234,8 @@ export namespace NetworkCommissioning {
         channel: TlvOptionalField(3, TlvUInt16),
 
         /**
-         * This field, if present, may be used to differentiate overlapping channel number values across different
-         * Wi-Fi frequency bands.
+         * This field, if present, may be used to differentiate overlapping channel number values across different Wi-Fi
+         * frequency bands.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.5.6.1
          */
@@ -303,8 +303,8 @@ export namespace NetworkCommissioning {
          *
          *   • Success: Scanning succeeded.
          *
-         *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the scan.
-         *     This error cannot occur if no network identifier was provided, such as when scanning for all available
+         *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the scan. This
+         *     error cannot occur if no network identifier was provided, such as when scanning for all available
          *     networks.
          *
          *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
@@ -473,8 +473,8 @@ export namespace NetworkCommissioning {
      */
     export const TlvConnectNetworkRequest = TlvObject({
         /**
-         * This field shall contain the NetworkID for the entry used to configure the connection: the SSID for Wi-Fi
-         * and XPAN ID for Thread.
+         * This field shall contain the NetworkID for the entry used to configure the connection: the SSID for Wi-Fi and
+         * XPAN ID for Thread.
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.8.1
          */
@@ -515,8 +515,8 @@ export namespace NetworkCommissioning {
          *
          *   • Success: Connection succeeded.
          *
-         *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt
-         *     to join the network.
+         *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
+         *     join the network.
          *
          *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
          *
@@ -681,8 +681,8 @@ export namespace NetworkCommissioning {
          * Credentials is the passphrase or PSK for the network (if any is needed).
          *
          * Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- selected during
-         * execution of the ConnectNetwork Command and during subsequent operational state network connections, based
-         * on the most secure Wi-Fi security type available within beacons and probe responses for the set of all
+         * execution of the ConnectNetwork Command and during subsequent operational state network connections, based on
+         * the most secure Wi-Fi security type available within beacons and probe responses for the set of all
          * discovered BSSIDs for the configured SSID. The type of PSK or passphrase used shall be inferred based on the
          * length and contents of the Credentials field provided, matching the security type chosen.
          *
@@ -702,8 +702,8 @@ export namespace NetworkCommissioning {
          *
          *   • 64 bytes: WPA/WPA2/WPA3 raw hex PSK
          *
-         * These lengths shall be contextually interpreted based on the security type of the BSSID where connection
-         * will occur.
+         * These lengths shall be contextually interpreted based on the security type of the BSSID where connection will
+         * occur.
          *
          * When the length of Credentials and available set of BSSID admits more than one option, such as the presence
          * of both WPA2 and WPA security type within the result set, WPA2 shall be considered more secure.
@@ -816,8 +816,8 @@ export namespace NetworkCommissioning {
          *
          *   • Network interface instance name at operating system (or equivalent unique name) for Ethernet.
          *
-         * The semantics of the NetworkID field therefore varies between network types accordingly. It contains SSID
-         * for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet networks.
+         * The semantics of the NetworkID field therefore varies between network types accordingly. It contains SSID for
+         * Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet networks.
          *
          * NOTE
          *
@@ -897,17 +897,16 @@ export namespace NetworkCommissioning {
              * SSID) is provided in the command arguments. Directed scanning shall restrict the result set to the
              * specified network only.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * The client shall NOT expect the server to be done scanning and have responded with ScanNetworksResponse
              * before ScanMaxTimeSeconds seconds have elapsed. Enough transport time affordances for retries SHOULD be
              * expected before a client determines the operation to have timed-out.
              *
-             * This command shall fail with a status code of BUSY if the server determines that it will fail to
-             * reliably send a response due to changes of networking interface configuration at runtime for the
-             * interface over which the command was invoked, or if it is currently unable to proceed with such an
-             * operation.
+             * This command shall fail with a status code of BUSY if the server determines that it will fail to reliably
+             * send a response due to changes of networking interface configuration at runtime for the interface over
+             * which the command was invoked, or if it is currently unable to proceed with such an operation.
              *
              * For Wi-Fi-supporting servers (WI feature) the server shall always honor directed scans, and attempt to
              * provide all matching BSSID which are reachable on the bands which would otherwise be attempted if a
@@ -938,15 +937,15 @@ export namespace NetworkCommissioning {
              *
              * attribute shall remain unchanged, except for the removal of the requested network configuration.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If the Networks attribute does not contain a matching entry, the command shall immediately respond with
              * NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
              *
-             * On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based
-             * index of the entry in the Networks attribute that was just removed, and a NetworkingStatus status field
-             * set to Success.
+             * On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based index
+             * of the entry in the Networks attribute that was just removed, and a NetworkingStatus status field set to
+             * Success.
              *
              * @see {@link MatterSpecification.v13.Core} § 11.9.7.6
              */
@@ -959,15 +958,15 @@ export namespace NetworkCommissioning {
             ),
 
             /**
-             * This command shall attempt to connect to a network whose configuration was previously added by either
-             * the AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by its NetworkID.
+             * This command shall attempt to connect to a network whose configuration was previously added by either the
+             * AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by its NetworkID.
              *
              * This command shall fail with a BUSY status code returned to the initiator if the server is currently
              * unable to proceed with such an operation, such as if it is currently attempting to connect in the
              * background, or is already proceeding with a prior ConnectNetwork.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * Before connecting to the new network, the Node shall disconnect the operational network connections
              * managed by any other Network Commissioning cluster instances (whether under the Root Node or a Secondary
@@ -1007,11 +1006,11 @@ export namespace NetworkCommissioning {
              *
              * nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
              * commissioning channel, even if not yet connected to the operational network, unless the device would be
-             * incapable of joining that network, in which case the usual failure path described in the prior
-             * paragraphs shall be followed. Once the commissioning channel is closed, the operational channel will be
-             * started. It is possible that the only method to determine success of the operation is operational
-             * discovery of the Node on the new operational network. Therefore, before invoking the ConnectNetwork
-             * command, the client SHOULD re-invoke the Arm Fail-Safe command with a duration that meets the following:
+             * incapable of joining that network, in which case the usual failure path described in the prior paragraphs
+             * shall be followed. Once the commissioning channel is closed, the operational channel will be started. It
+             * is possible that the only method to determine success of the operation is operational discovery of the
+             * Node on the new operational network. Therefore, before invoking the ConnectNetwork command, the client
+             * SHOULD re-invoke the Arm Fail-Safe command with a duration that meets the following:
              *
              *   1. Sufficient time to meet the minimum required time (see ConnectMaxTimeSeconds) that may be taken by
              *      the server to connect to the desired network.
@@ -1077,8 +1076,8 @@ export namespace NetworkCommissioning {
             /**
              * This command shall be used to add or modify Wi-Fi network configurations.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * The Credentials associated with the network are not readable after execution of this command, as they do
              * not appear in the Networks attribute, for security reasons.
@@ -1134,8 +1133,8 @@ export namespace NetworkCommissioning {
             /**
              * This command shall be used to add or modify Thread network configurations.
              *
-             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command
-             * shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
              * behavior of addition/update.
@@ -1205,8 +1204,8 @@ export namespace NetworkCommissioning {
             ),
 
             /**
-             * Indicates the network configurations that are usable on the network interface represented by this
-             * cluster server instance.
+             * Indicates the network configurations that are usable on the network interface represented by this cluster
+             * server instance.
              *
              * The order of configurations in the list reflects precedence. That is, any time the Node attempts to
              * connect to the network it shall attempt to do so using the configurations in Networks Attribute in the
@@ -1277,8 +1276,8 @@ export namespace NetworkCommissioning {
              * connectivity or during initial establishment. If no such attempt was made, or no network configurations
              * exist in the Networks attribute, then this attribute shall be set to null.
              *
-             * If a network configuration is removed from the Networks attribute using the RemoveNetwork command after
-             * a connection attempt, this field may indicate a NetworkID that is no longer configured on the Node.
+             * If a network configuration is removed from the Networks attribute using the RemoveNetwork command after a
+             * connection attempt, this field may indicate a NetworkID that is no longer configured on the Node.
              *
              * This attribute is present to assist with error recovery during Network commissioning and to assist in
              * non-concurrent networking commissioning flows.
@@ -1292,10 +1291,10 @@ export namespace NetworkCommissioning {
             ),
 
             /**
-             * Indicates the ErrorValue used in the last failed attempt to connect to an operational network, using
-             * this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after
-             * loss of connectivity or during initial establishment. If no such attempt was made, or no network
-             * configurations exist in the Networks attribute, then this attribute shall be set to null.
+             * Indicates the ErrorValue used in the last failed attempt to connect to an operational network, using this
+             * interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of
+             * connectivity or during initial establishment. If no such attempt was made, or no network configurations
+             * exist in the Networks attribute, then this attribute shall be set to null.
              *
              * If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus
              * attribute, then this field shall be set to null.
@@ -1429,8 +1428,8 @@ export namespace NetworkCommissioning {
     /**
      * This cluster supports all NetworkCommissioning features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

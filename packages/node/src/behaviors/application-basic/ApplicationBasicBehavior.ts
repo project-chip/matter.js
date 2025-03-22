@@ -10,8 +10,8 @@ import { ApplicationBasic } from "#clusters/application-basic";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * ApplicationBasicBehavior is the base class for objects that support interaction with {@link
- * ApplicationBasic.Cluster}.
+ * ApplicationBasicBehavior is the base class for objects that support interaction with
+ * {@link ApplicationBasic.Cluster}.
  */
 export const ApplicationBasicBehavior = ClusterBehavior.for(ApplicationBasic.Cluster);
 

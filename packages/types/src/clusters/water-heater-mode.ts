@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { FixedAttribute, Attribute, Command, TlvNoResponse } from "../cluster/Cluster.js";
+import { FixedAttribute, Attribute, Command } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
@@ -101,8 +101,8 @@ export namespace WaterHeaterMode {
         Manual = 16385,
 
         /**
-         * While in modes with this tag, the device will attempt to keep the water warm based on the Schedules
-         * attribute of the associated Thermostat cluster.
+         * While in modes with this tag, the device will attempt to keep the water warm based on the Schedules attribute
+         * of the associated Thermostat cluster.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.6.7.1.3
          */
@@ -170,9 +170,9 @@ export namespace WaterHeaterMode {
         mode: TlvField(1, TlvUInt8),
 
         /**
-         * This field shall contain a list of tags that are associated with the mode option. This may be used by
-         * clients to determine the full or the partial semantics of a certain mode, depending on which tags they
-         * understand, using standard definitions and/or manufacturer specific namespace definitions.
+         * This field shall contain a list of tags that are associated with the mode option. This may be used by clients
+         * to determine the full or the partial semantics of a certain mode, depending on which tags they understand,
+         * using standard definitions and/or manufacturer specific namespace definitions.
          *
          * The standard mode tags are defined in this cluster specification. For the derived cluster instances, if the
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
@@ -183,8 +183,8 @@ export namespace WaterHeaterMode {
          * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
-         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard
-         * and manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
+         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
+         * manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
          *
          * A few examples are provided below.
          *
@@ -241,8 +241,8 @@ export namespace WaterHeaterMode {
              * At least one entry in the SupportedModes attribute shall include the Off mode tag in the ModeTags field
              * list.
              *
-             * An entry in the SupportedModes attribute that includes one of an Off, Manual, or Timed tag shall NOT
-             * also include an additional instance of any one of these tag types.
+             * An entry in the SupportedModes attribute that includes one of an Off, Manual, or Timed tag shall NOT also
+             * include an additional instance of any one of these tag types.
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.6.6.1
              */
@@ -266,7 +266,7 @@ export namespace WaterHeaterMode {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
              */
-            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x0, TlvNoResponse)
+            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, ModeBase.TlvChangeToModeResponse)
         },
 
         /**

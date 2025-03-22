@@ -37,8 +37,8 @@ export namespace MediaInputInterface {
 
     export interface NameUpdates {
         /**
-         * Upon receipt, this command shall rename the input at a specific index in the Input List. Updates to the
-         * input name shall appear in the device’s settings menus.
+         * Upon receipt, this command shall rename the input at a specific index in the Input List. Updates to the input
+         * name shall appear in the device’s settings menus.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.4
          */

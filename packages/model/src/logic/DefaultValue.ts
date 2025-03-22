@@ -241,7 +241,7 @@ function decodeBitmap(model: ValueModel, value: number | bigint) {
         } else if (constraint.min !== undefined) {
             // Bit range
             const fieldBit = 1 << (bit - (constraint.min as number));
-            fields.set(definition, ((fields.get(definition) as number) ?? 0) & fieldBit);
+            fields.set(definition, ((fields.get(definition) as number) ?? 0) | fieldBit);
         }
     }
 

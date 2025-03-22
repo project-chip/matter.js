@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { WiFiNetworkDiagnosticsInterface } from "./WiFiNetworkDiagnosticsInterface.js";
 
 /**
- * WiFiNetworkDiagnosticsBehavior is the base class for objects that support interaction with {@link
- * WiFiNetworkDiagnostics.Cluster}.
+ * WiFiNetworkDiagnosticsBehavior is the base class for objects that support interaction with
+ * {@link WiFiNetworkDiagnostics.Cluster}.
  *
  * This class does not have optional features of WiFiNetworkDiagnostics.Cluster enabled. You can enable additional
  * features using WiFiNetworkDiagnosticsBehavior.with.

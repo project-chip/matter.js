@@ -27,11 +27,11 @@ export const ContentAppObserver = Cluster(
             "\n" +
             "The cluster client for Content App Observer is implemented by a Content App endpoint." +
             "\n" +
-            "A Content App is informed of the NodeId of an Observer when a binding is set on the Content App. " +
-            "For a Content App Platform, the binding is set by the platform when a CastingVideoClient is granted " +
-            "access to the Content App, and the CastingVideoClient supports the Content App Observer cluster. " +
-            "The Content App can then send the ContentAppMessage to the Observer (server cluster), and the " +
-            "Observer responds with a ContentAppMessageResponse." +
+            "A Content App is informed of the NodeId of an Observer when a binding is set on the Content App. For " +
+            "a Content App Platform, the binding is set by the platform when a CastingVideoClient is granted " +
+            "access to the Content App, and the CastingVideoClient supports the Content App Observer cluster. The " +
+            "Content App can then send the ContentAppMessage to the Observer (server cluster), and the Observer " +
+            "responds with a ContentAppMessageResponse." +
             "\n" +
             "The Data and EncodingHint fields of the ContentAppMessage and ContentAppMessageResponse contain " +
             "content app-specific values, the format and interpretation of which is defined by the Content App " +
@@ -47,8 +47,8 @@ export const ContentAppObserver = Cluster(
             "     App endpoint because it can recognize the Content App Observer cluster implemented by a client " +
             "     node." +
             "\n" +
-            "  2. The Content App Platform is able to easily identify commands that are allowed to be sent by " +
-            "     the Content App to a client node because those commands use the Content App Observer cluster." +
+            "  2. The Content App Platform is able to easily identify commands that are allowed to be sent by the " +
+            "     Content App to a client node because those commands use the Content App Observer cluster." +
             "\n" +
             "  3. The Content App is able to easily determine that a node supports the Content App Observer " +
             "     cluster because it has received a binding which specifies the Content App Observer cluster." +

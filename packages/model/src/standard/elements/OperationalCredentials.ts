@@ -32,8 +32,8 @@ export const OperationalCredentials = Cluster(
 
             details: "This attribute contains all NOCs applicable to this Node, encoded as a read-only list of NOCStruct." +
                 "\n" +
-                "Operational Certificates shall be added through the AddNOC command, and shall be removed through " +
-                "the RemoveFabric command." +
+                "Operational Certificates shall be added through the AddNOC command, and shall be removed through the " +
+                "RemoveFabric command." +
                 "\n" +
                 "Upon Factory Data Reset, this attribute shall be set to a default value of an empty list." +
                 "\n" +
@@ -50,8 +50,8 @@ export const OperationalCredentials = Cluster(
             name: "Fabrics", id: 0x1, type: "list", access: "R F V", conformance: "M",
             constraint: "max supportedFabrics", quality: "N",
 
-            details: "This attribute describes all fabrics to which this Node is commissioned, encoded as a read-only " +
-                "list of FabricDescriptorStruct. This information may be computed directly from the NOCs attribute." +
+            details: "This attribute describes all fabrics to which this Node is commissioned, encoded as a read-only list " +
+                "of FabricDescriptorStruct. This information may be computed directly from the NOCs attribute." +
                 "\n" +
                 "Upon Factory Data Reset, this attribute shall be set to a default value of an empty list." +
                 "\n" +
@@ -129,9 +129,9 @@ export const OperationalCredentials = Cluster(
             name: "AttestationRequest", id: 0x0, access: "A", conformance: "M", direction: "request",
             response: "AttestationResponse",
             details: "This command shall be generated to request the Attestation Information, in the form of an " +
-                "AttestationResponse Command. If the AttestationNonce that is provided in the command is malformed, " +
-                "a recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce " +
-                "field shall be used in the computation of the Attestation Information.",
+                "AttestationResponse Command. If the AttestationNonce that is provided in the command is malformed, a " +
+                "recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field " +
+                "shall be used in the computation of the Attestation Information.",
             xref: { document: "core", section: "11.18.6.1" }
         },
 
@@ -171,8 +171,8 @@ export const OperationalCredentials = Cluster(
         {
             name: "CertificateChainRequest", id: 0x2, access: "A", conformance: "M", direction: "request",
             response: "CertificateChainResponse",
-            details: "If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall " +
-                "fail with a Status Code of INVALID_COMMAND.",
+            details: "If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail " +
+                "with a Status Code of INVALID_COMMAND.",
             xref: { document: "core", section: "11.18.6.3" }
         },
 
@@ -211,9 +211,9 @@ export const OperationalCredentials = Cluster(
                 "forbidden over PASE sessions." +
                 "\n" +
                 "If the IsForUpdateNOC field is present and set to true, the internal state of the CSR associated " +
-                "keypair shall be tagged as being for a subsequent UpdateNOC, otherwise the internal state of the " +
-                "CSR shall be tagged as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about " +
-                "the processing." +
+                "keypair shall be tagged as being for a subsequent UpdateNOC, otherwise the internal state of the CSR " +
+                "shall be tagged as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about the " +
+                "processing." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
                 "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
@@ -287,9 +287,9 @@ export const OperationalCredentials = Cluster(
         Field({
             name: "IpkValue", id: 0x2, type: "octstr", conformance: "M", constraint: "16",
 
-            details: "This field shall contain the value of the Epoch Key for the Identity Protection Key (IPK) to set " +
-                "for the Fabric which is to be added. This is needed to bootstrap a necessary configuration value " +
-                "for subsequent CASE to succeed. See Section 4.14.2.6.1, “Identity Protection Key (IPK)” for details." +
+            details: "This field shall contain the value of the Epoch Key for the Identity Protection Key (IPK) to set for " +
+                "the Fabric which is to be added. This is needed to bootstrap a necessary configuration value for " +
+                "subsequent CASE to succeed. See Section 4.14.2.6.1, “Identity Protection Key (IPK)” for details." +
                 "\n" +
                 "The IPK shall be provided as an octet string of length CRYPTO_SYMMETRIC_KEY_LENGTH_BYTES." +
                 "\n" +
@@ -313,8 +313,8 @@ export const OperationalCredentials = Cluster(
                 "\n" +
                 "NOTE" +
                 "\n" +
-                "Unless such an Access Control Entry is added atomically as described here, there would be no way " +
-                "for the caller on its given Fabric to eventually add another Access Control Entry for CASE " +
+                "Unless such an Access Control Entry is added atomically as described here, there would be no way for " +
+                "the caller on its given Fabric to eventually add another Access Control Entry for CASE " +
                 "authentication mode, to enable the new Administrator to administer the device, since the Fabric " +
                 "Scoping of the Access Control List prevents the current Node from being able to write new entries " +
                 "scoped to that Fabric, if the session is established from CASE. While a session established from " +
@@ -354,10 +354,10 @@ export const OperationalCredentials = Cluster(
                 "FabricID> pair already present on the device, then the device shall process the error by responding " +
                 "with a StatusCode of FabricConflict as described in Section 11.18.6.7.2, “Handling Errors”." +
                 "\n" +
-                "If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics " +
-                "attribute, then the device’s operational credentials table is considered full and the device shall " +
-                "process the error by responding with a StatusCode of TableFull as described in Section 11.18.6.7.2, " +
-                "“Handling Errors”." +
+                "If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics attribute, " +
+                "then the device’s operational credentials table is considered full and the device shall process the " +
+                "error by responding with a StatusCode of TableFull as described in Section 11.18.6.7.2, “Handling " +
+                "Errors”." +
                 "\n" +
                 "If the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE, " +
                 "such as not being in either the Operational or CASE Authenticated Tag range, then the device shall " +
@@ -367,22 +367,21 @@ export const OperationalCredentials = Cluster(
                 "Otherwise, the command is considered an addition of credentials, also known as \"joining a fabric\", " +
                 "and the following shall apply:" +
                 "\n" +
-                "  1. A new FabricIndex shall be allocated, taking the next valid fabric-index value in " +
-                "      monotonically incrementing order, wrapping around from 254 (0xFE) to 1, since value 0 is " +
-                "      reserved and using 255 (0xFF) would prevent cluster specifications from using nullable " +
-                "      fabric-idx fields." +
+                "  1. A new FabricIndex shall be allocated, taking the next valid fabric-index value in monotonically " +
+                "      incrementing order, wrapping around from 254 (0xFE) to 1, since value 0 is reserved and using " +
+                "      255 (0xFF) would prevent cluster specifications from using nullable fabric-idx fields." +
                 "\n" +
-                "  2. An entry within the Fabrics attribute table shall be added, reflecting the matter-fabric-id " +
-                "      RDN within the NOC’s subject, along with the public key of the trusted root of the chain and " +
-                "      the AdminVendorID field." +
+                "  2. An entry within the Fabrics attribute table shall be added, reflecting the matter-fabric-id RDN " +
+                "      within the NOC’s subject, along with the public key of the trusted root of the chain and the " +
+                "      AdminVendorID field." +
                 "\n" +
                 "  3. The operational key pair associated with the incoming NOC from the NOCValue, and generated by " +
                 "      the prior CSRRequest command, shall be recorded for subsequent use during CASE within the " +
                 "      fail-safe timer period (see Section 5.5, “Commissioning Flows”)." +
                 "\n" +
                 "  4. The incoming NOCValue and ICACValue (if present) shall be stored under the FabricIndex " +
-                "      associated with the new Fabric Scope, along with the RootCACertificate provided with the " +
-                "      prior successful AddTrustedRootCertificate command invoked in the same fail-safe period." +
+                "      associated with the new Fabric Scope, along with the RootCACertificate provided with the prior " +
+                "      successful AddTrustedRootCertificate command invoked in the same fail-safe period." +
                 "\n" +
                 "    a. Implementation of certificate chain storage may separate or otherwise encode the components " +
                 "       of the array in implementation-specific ways, as long as they follow the correct format when " +
@@ -401,24 +400,23 @@ export const OperationalCredentials = Cluster(
                 "      that is currently invoking the AddNOC command, within another of the Fabrics of which it is a " +
                 "      member." +
                 "\n" +
-                "    a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL " +
-                "       entries with the new FabricIndex may be added to the ARL attribute." +
+                "    a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL entries " +
+                "       with the new FabricIndex may be added to the ARL attribute." +
                 "\n" +
-                "  8. The incoming IPKValue shall be stored in the Fabric-scoped slot within the Group Key " +
-                "      Management cluster (see KeySetWrite), for subsequent use during CASE." +
+                "  8. The incoming IPKValue shall be stored in the Fabric-scoped slot within the Group Key Management " +
+                "      cluster (see KeySetWrite), for subsequent use during CASE." +
                 "\n" +
-                "  9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be " +
-                "      updated to match the Fabric Index just allocated." +
+                "  9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be updated " +
+                "      to match the Fabric Index just allocated." +
                 "\n" +
                 "  10. If the current secure session was established with PASE, the receiver shall:" +
                 "\n" +
-                "    a. Augment the secure session context with the FabricIndex generated above, such that " +
-                "       subsequent interactions have the proper accessing fabric." +
+                "    a. Augment the secure session context with the FabricIndex generated above, such that subsequent " +
+                "       interactions have the proper accessing fabric." +
                 "\n" +
-                "  11. If the current secure session was established with CASE, subsequent configuration of the " +
-                "      newly installed Fabric requires the opening of a new CASE session from the Administrator from " +
-                "      the Fabric just installed. This Administrator is the one listed in the CaseAdminSubject " +
-                "      argument." +
+                "  11. If the current secure session was established with CASE, subsequent configuration of the newly " +
+                "      installed Fabric requires the opening of a new CASE session from the Administrator from the " +
+                "      Fabric just installed. This Administrator is the one listed in the CaseAdminSubject argument." +
                 "\n" +
                 "Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex " +
                 "field matching the FabricIndex under which the new Node Operational Certificate (NOC) is scoped.",
@@ -451,8 +449,8 @@ export const OperationalCredentials = Cluster(
                 "then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
                 "\n" +
                 "If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer " +
-                "period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the " +
-                "initiator, since the only valid following logical operation is invoking the AddNOC command." +
+                "period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator, " +
+                "since the only valid following logical operation is invoking the AddNOC command." +
                 "\n" +
                 "If the prior CSRRequest state that preceded UpdateNOC had the IsForUpdateNOC field indicated as " +
                 "false, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
@@ -473,8 +471,8 @@ export const OperationalCredentials = Cluster(
                 "     to match the incoming NOCValue and ICACValue (if present), such that the Node’s Operational " +
                 "     Identifier within the Fabric immediately changes." +
                 "\n" +
-                "    a. The operational key pair associated with the incoming NOC from the NOCValue, and generated " +
-                "       by the prior CSRRequest command, shall be committed to permanent storage, for subsequent use " +
+                "    a. The operational key pair associated with the incoming NOC from the NOCValue, and generated by " +
+                "       the prior CSRRequest command, shall be committed to permanent storage, for subsequent use " +
                 "       during CASE." +
                 "\n" +
                 "    b. The operational discovery service record shall immediately reflect the new Operational " +
@@ -482,9 +480,9 @@ export const OperationalCredentials = Cluster(
                 "\n" +
                 "    c. All internal data reflecting the prior operational identifier of the Node within the Fabric " +
                 "       shall be revoked and removed, to an outcome equivalent to the disappearance of the prior " +
-                "       Node, except for the ongoing CASE session context, which shall temporarily remain valid " +
-                "       until the NOCResponse has been successfully delivered or until the next transport-layer " +
-                "       error, so that the response can be received by the Administrator invoking the command." +
+                "       Node, except for the ongoing CASE session context, which shall temporarily remain valid until " +
+                "       the NOCResponse has been successfully delivered or until the next transport-layer error, so " +
+                "       that the response can be received by the Administrator invoking the command." +
                 "\n" +
                 "Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex " +
                 "field matching the FabricIndex under which the updated NOC is scoped.",
@@ -532,8 +530,8 @@ export const OperationalCredentials = Cluster(
         Field({
             name: "DebugText", id: 0x2, type: "string", conformance: "O", constraint: "max 128",
             details: "This field may contain debugging textual information from the cluster implementation, which SHOULD " +
-                "NOT be presented to user interfaces in any way. Its purpose is to help developers in " +
-                "troubleshooting errors and the contents may go into logs or crash reports.",
+                "NOT be presented to user interfaces in any way. Its purpose is to help developers in troubleshooting " +
+                "errors and the contents may go into logs or crash reports.",
             xref: { document: "core", section: "11.18.6.10.3" }
         })
     ),
@@ -544,17 +542,17 @@ export const OperationalCredentials = Cluster(
             response: "NocResponse",
 
             details: "This command shall be used by an Administrator to set the user-visible Label field for a given " +
-                "Fabric, as reflected by entries in the Fabrics attribute. An Administrator shall use this command " +
-                "to set the Label to a string (possibly selected by the user themselves) that the user can recognize " +
-                "and relate to this Administrator" +
+                "Fabric, as reflected by entries in the Fabrics attribute. An Administrator shall use this command to " +
+                "set the Label to a string (possibly selected by the user themselves) that the user can recognize and " +
+                "relate to this Administrator" +
                 "\n" +
                 "  • during the commissioning process, and" +
                 "\n" +
                 "  • whenever the user chooses to update this string." +
                 "\n" +
-                "The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD " +
-                "be used by Administrators to provide additional per-fabric context when operations such as " +
-                "RemoveFabric are considered or used.",
+                "The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD be " +
+                "used by Administrators to provide additional per-fabric context when operations such as RemoveFabric " +
+                "are considered or used.",
 
             xref: { document: "core", section: "11.18.6.11" }
         },
@@ -574,8 +572,8 @@ export const OperationalCredentials = Cluster(
                 "Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be " +
                 "returned." +
                 "\n" +
-                "If the command was invoked within a fail-safe context after a successful UpdateNOC command, then " +
-                "the label update shall apply to the pending update state that will be reverted if fail-safe expires " +
+                "If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the " +
+                "label update shall apply to the pending update state that will be reverted if fail-safe expires " +
                 "prior to a CommissioningComplete command. In other words, label updates apply to the state of the " +
                 "Fabrics Attribute as currently visible, even for an existing fabric currently in process of being " +
                 "updated.",
@@ -600,14 +598,14 @@ export const OperationalCredentials = Cluster(
                 "WARNING" +
                 "\n" +
                 "This command, if referring to an already existing Fabric not under the control of the invoking " +
-                "Administrator, shall ONLY be invoked after obtaining some form of explicit user consent through " +
-                "some method executed by the Administrator or Commissioner. This method of obtaining consent SHOULD " +
-                "employ as much data as possible about the existing Fabric associations within the Fabrics list, so " +
-                "that likelihood is as small as possible of a user removing a Fabric unwittingly. If a method exists " +
-                "for an Administrator or Commissioner to convey Fabric Removal to an entity related to that Fabric, " +
+                "Administrator, shall ONLY be invoked after obtaining some form of explicit user consent through some " +
+                "method executed by the Administrator or Commissioner. This method of obtaining consent SHOULD employ " +
+                "as much data as possible about the existing Fabric associations within the Fabrics list, so that " +
+                "likelihood is as small as possible of a user removing a Fabric unwittingly. If a method exists for " +
+                "an Administrator or Commissioner to convey Fabric Removal to an entity related to that Fabric, " +
                 "whether in-band or out-of-band, then this method SHOULD be used to notify the other Administrative " +
-                "Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric " +
-                "association as persistently failing attempts to reach a Node operationally.",
+                "Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric association " +
+                "as persistently failing attempts to reach a Node operationally.",
 
             xref: { document: "core", section: "11.18.6.12" }
         },
@@ -632,10 +630,10 @@ export const OperationalCredentials = Cluster(
                 "     bindings, scenes, group keys, operational certificates, etc. All Trusted Roots shall also be " +
                 "     removed. If a time synchronization cluster is present on the Node, the TrustedTimeSource and " +
                 "     DefaultNtp shall be set to null. Any Matter related data including logs, secure sessions, " +
-                "     exchanges and interaction model constructs shall also be removed. Since this operation " +
-                "     involves the removal of the secure session data that may underpin the current set of " +
-                "     exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its " +
-                "     secure session with the target." +
+                "     exchanges and interaction model constructs shall also be removed. Since this operation involves " +
+                "     the removal of the secure session data that may underpin the current set of exchanges, the Node " +
+                "     invoking the command SHOULD NOT expect a response before terminating its secure session with " +
+                "     the target." +
                 "\n" +
                 "  2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the " +
                 "     process of irrevocably deleting all associated Fabric-Scoped data, including Access Control " +
@@ -643,20 +641,20 @@ export const OperationalCredentials = Cluster(
                 "     remaining Trusted Roots no longer referenced by any operational certificate shall also be " +
                 "     removed. If a time synchronization cluster is present on the Node, and the TrustedTimeSource " +
                 "     FabricIndex matches the given FabricIndex, the TrustedTimeSource shall be set to null. All " +
-                "     secure sessions, exchanges and interaction model constructs related to the Operational " +
-                "     Identity under the given Fabric shall also be removed. Following the removal, an NOCResponse " +
-                "     with a StatusCode of OK shall be returned." +
+                "     secure sessions, exchanges and interaction model constructs related to the Operational Identity " +
+                "     under the given Fabric shall also be removed. Following the removal, an NOCResponse with a " +
+                "     StatusCode of OK shall be returned." +
                 "\n" +
                 "  3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process " +
                 "     of irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, " +
                 "     Access Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining " +
                 "     Trusted Roots no longer referenced by any operational certificate shall also be removed. If a " +
                 "     time synchronization cluster is present on the Node, and the TrustedTimeSource FabricIndex " +
-                "     matches the given FabricIndex, the TrustedTimeSource shall be set to null. All secure " +
-                "     sessions, exchanges and interaction model constructs related to the Operational Identity under " +
-                "     the given Fabric shall also be removed. Since this operation involves the removal of the " +
-                "     secure session data that may underpin the current set of exchanges, the Node invoking the " +
-                "     command SHOULD NOT expect a response before terminating its secure session with the target.",
+                "     matches the given FabricIndex, the TrustedTimeSource shall be set to null. All secure sessions, " +
+                "     exchanges and interaction model constructs related to the Operational Identity under the given " +
+                "     Fabric shall also be removed. Since this operation involves the removal of the secure session " +
+                "     data that may underpin the current set of exchanges, the Node invoking the command SHOULD NOT " +
+                "     expect a response before terminating its secure session with the target.",
 
             xref: { document: "core", section: "11.18.6.12.1" }
         })
@@ -680,8 +678,8 @@ export const OperationalCredentials = Cluster(
                 "If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer " +
                 "period, which would cause the new invocation to add a second root certificate within a given fail-" +
                 "\n" +
-                "safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to " +
-                "the initiator." +
+                "safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the " +
+                "initiator." +
                 "\n" +
                 "If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, " +
                 "then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator." +
@@ -703,8 +701,8 @@ export const OperationalCredentials = Cluster(
     Datatype(
         {
             name: "CertificateChainTypeEnum", type: "enum8",
-            details: "This enumeration is used by the CertificateChainRequest command to convey which certificate from " +
-                "the device attestation certificate chain to transmit back to the client.",
+            details: "This enumeration is used by the CertificateChainRequest command to convey which certificate from the " +
+                "device attestation certificate chain to transmit back to the client.",
             xref: { document: "core", section: "11.18.4.2" }
         },
 
@@ -753,8 +751,8 @@ export const OperationalCredentials = Cluster(
             details: "This encodes a fabric sensitive NOC chain, underpinning a commissioned Operational Identity for a " +
                 "given Node." +
                 "\n" +
-                "Note that the Trusted Root CA Certificate is not included in this structure. The roots are " +
-                "available in the TrustedRootCertificates attribute of the Node Operational Credentials cluster.",
+                "Note that the Trusted Root CA Certificate is not included in this structure. The roots are available " +
+                "in the TrustedRootCertificates attribute of the Node Operational Credentials cluster.",
             xref: { document: "core", section: "11.18.4.4" }
         },
 
@@ -788,8 +786,8 @@ export const OperationalCredentials = Cluster(
             name: "RootPublicKey", id: 0x1, type: "octstr", access: "F", conformance: "M", constraint: "65",
             details: "This field shall contain the public key for the trusted root that scopes the fabric referenced by " +
                 "FabricIndex and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA " +
-                "Certificates”). The format for the key shall be the same as that used in the ec-pub-key field of " +
-                "the Matter Certificate Encoding for the root in the operational certificate chain.",
+                "Certificates”). The format for the key shall be the same as that used in the ec-pub-key field of the " +
+                "Matter Certificate Encoding for the root in the operational certificate chain.",
             xref: { document: "core", section: "11.18.4.5.1" }
         }),
 
@@ -811,8 +809,8 @@ export const OperationalCredentials = Cluster(
         Field({
             name: "FabricId", id: 0x3, type: "fabric-id", access: "F", conformance: "M",
             details: "This field shall contain the FabricID allocated to the fabric referenced by FabricIndex. This field " +
-                "shall match the value found in the matter-fabric-id field from the operational certificate " +
-                "providing the operational identity under this Fabric.",
+                "shall match the value found in the matter-fabric-id field from the operational certificate providing " +
+                "the operational identity under this Fabric.",
             xref: { document: "core", section: "11.18.4.5.3" }
         }),
 

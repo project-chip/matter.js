@@ -55,7 +55,7 @@ export interface Transaction {
     readonly waitingOn: Iterable<Transaction> | undefined;
 
     /**
-     * Listen for transaction commit or roll back.  This may occur more than once for a given.
+     * Listen for transaction commit or roll back.  This may occur more than once for a given transaction.
      */
     onShared(actor: () => void, once?: boolean): void;
 

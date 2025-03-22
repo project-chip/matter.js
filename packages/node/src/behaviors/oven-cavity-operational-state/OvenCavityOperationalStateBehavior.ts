@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OvenCavityOperationalStateInterface } from "./OvenCavityOperationalStateInterface.js";
 
 /**
- * OvenCavityOperationalStateBehavior is the base class for objects that support interaction with {@link
- * OvenCavityOperationalState.Cluster}.
+ * OvenCavityOperationalStateBehavior is the base class for objects that support interaction with
+ * {@link OvenCavityOperationalState.Cluster}.
  */
 export const OvenCavityOperationalStateBehavior = ClusterBehavior
     .withInterface<OvenCavityOperationalStateInterface>()

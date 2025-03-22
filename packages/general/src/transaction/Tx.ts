@@ -564,7 +564,7 @@ class Tx implements Transaction {
             };
 
             try {
-                const result = participant.commit1();
+                const result = participant.commit1?.();
                 if (MaybePromise.is(result)) {
                     if (!asyncCommits) {
                         asyncCommits = [];
@@ -605,7 +605,7 @@ class Tx implements Transaction {
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
             const promise = MaybePromise.then(
-                () => participant.commit2(),
+                () => participant.commit2?.(),
                 undefined,
                 error => {
                     logger.error(`Error committing (phase two) ${participant}, state inconsistency possible:`, error);
@@ -671,7 +671,7 @@ class Tx implements Transaction {
         for (const participant of this.participants) {
             // Perform rollback
             const promise = MaybePromise.then(
-                () => participant.rollback(),
+                () => participant.rollback?.(),
                 undefined,
                 error => {
                     logger.error(`Error rolling back ${participant}, state inconsistency possible:`, error);

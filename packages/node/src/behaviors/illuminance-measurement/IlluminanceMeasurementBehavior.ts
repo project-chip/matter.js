@@ -10,8 +10,8 @@ import { IlluminanceMeasurement } from "#clusters/illuminance-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * IlluminanceMeasurementBehavior is the base class for objects that support interaction with {@link
- * IlluminanceMeasurement.Cluster}.
+ * IlluminanceMeasurementBehavior is the base class for objects that support interaction with
+ * {@link IlluminanceMeasurement.Cluster}.
  */
 export const IlluminanceMeasurementBehavior = ClusterBehavior.for(IlluminanceMeasurement.Cluster);
 

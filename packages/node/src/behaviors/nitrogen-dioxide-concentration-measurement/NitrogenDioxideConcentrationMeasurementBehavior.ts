@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * NitrogenDioxideConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link
- * NitrogenDioxideConcentrationMeasurement.Cluster}.
+ * NitrogenDioxideConcentrationMeasurementBehavior is the base class for objects that support interaction with
+ * {@link NitrogenDioxideConcentrationMeasurement.Cluster}.
  *
  * NitrogenDioxideConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so
  * using {@link NitrogenDioxideConcentrationMeasurementBehavior.with}.

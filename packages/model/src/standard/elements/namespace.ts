@@ -13,5 +13,5 @@ export const namespace = Datatype({
     name: "namespace", type: "uint8", description: "Namespace", isSeed: true,
     details: "The Namespace type identifies the namespace used for a semantic tag.",
     xref: { document: "core", section: "7.19.2.43" }
-})
+});
 MatterDefinition.children.push(namespace);

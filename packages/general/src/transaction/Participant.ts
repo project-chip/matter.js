@@ -35,12 +35,12 @@ export interface Participant {
     /**
      * Commit phase one.
      */
-    commit1(): MaybePromise;
+    commit1?: () => MaybePromise;
 
     /**
      * Commit phase two.
      */
-    commit2(): MaybePromise;
+    commit2?: () => MaybePromise;
 
     /**
      * Post-commit logic.
@@ -50,5 +50,5 @@ export interface Participant {
     /**
      * Drop isolated writes and revert to original canonical source.
      */
-    rollback(): MaybePromise;
+    rollback?: () => MaybePromise;
 }
