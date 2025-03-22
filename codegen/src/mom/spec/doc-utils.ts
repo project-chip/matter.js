@@ -90,7 +90,8 @@ export function identifyDocument(path: string): IndexDetail {
         if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
             throw new Error(`No version found for ${title} in ${path}`);
         }
-        version = versionEl.textContent.replace(/.*version ([\d.]).*/i, "$1");
+
+        version = versionEl.textContent.replace(/.*version ([\d.]+)[^\d.]*/i, "$1");
     }
 
     // Drop dotted elements except the first two.  To date these have represented trivial changes

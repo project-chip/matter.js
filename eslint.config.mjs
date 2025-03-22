@@ -141,6 +141,7 @@ export default [
             "no-ex-assign": "off",
             "@typescript-eslint/no-redundant-type-constituents": "off",
             "import/no-unresolved": "off",
+            "regexp/optimal-quantifier-concatenation": "off",
         },
     },
     {

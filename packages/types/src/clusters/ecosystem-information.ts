@@ -7,14 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
+import { FabricScopedAttribute } from "../cluster/Cluster.js";
+import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvOptionalField, TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvEpochUs } from "../tlv/TlvNumber.js";
 import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { TlvArray } from "../tlv/TlvArray.js";
 import { Descriptor } from "./descriptor.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { AccessLevel } from "#model";
 import { TlvLocationdesc } from "../globals/Locationdesc.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
@@ -144,7 +146,13 @@ export namespace EcosystemInformation {
          */
         locationDescriptor: TlvField(1, TlvLocationdesc),
 
+        /**
+         * This field shall indicate the timestamp of when the LocationDescriptor was last modified.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.18.4.2.3
+         */
         locationDescriptorLastEdit: TlvField(2, TlvEpochUs),
+
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
@@ -156,7 +164,46 @@ export namespace EcosystemInformation {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ id: 0x750, name: "EcosystemInformation", revision: 1 });
+    export const ClusterInstance = MutableCluster({
+        id: 0x750,
+        name: "EcosystemInformation",
+        revision: 1,
+
+        attributes: {
+            /**
+             * This attribute shall contain the list of logical devices represented by a Bridged Node. Most of the time
+             * this will contain a single entry, but may grow with more complex device compositions (e.g. another
+             * bridge.)
+             *
+             * An empty list indicates that the information is not available.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 9.18.5.1
+             */
+            deviceDirectory: FabricScopedAttribute(
+                0x0,
+                TlvArray(TlvEcosystemDevice),
+                { persistent: true, default: [], readAcl: AccessLevel.Manage, writeAcl: AccessLevel.Manage }
+            ),
+
+            /**
+             * This attribute shall contain the list of rooms, areas and groups associated with the DeviceDirectory
+             * entries, and shall NOT contain locations which are dynamically generated and removed by an ecosystem.
+             * (E.g. a location that is generated and removed based on the user being home is not permitted. However, an
+             * initially generated location name that does not quickly change is acceptable.)
+             *
+             * An empty list indicates that the information is not available.
+             *
+             * LocationDirectory entries shall be removed if there is no DeviceDirectory that references it.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 9.18.5.2
+             */
+            locationDirectory: FabricScopedAttribute(
+                0x1,
+                TlvArray(TlvEcosystemLocation),
+                { persistent: true, default: [], readAcl: AccessLevel.Manage, writeAcl: AccessLevel.Manage }
+            )
+        }
+    });
 
     /**
      * The Ecosystem Information Cluster provides extended device information for all the logical devices represented by
