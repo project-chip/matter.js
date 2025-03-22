@@ -16,5 +16,8 @@ describe("DGGEN", () => {
         ),
     );
 
-    chip("DGGEN/*");
+    chip("DGGEN/*").exclude(
+        // Needs time sync cluster
+        "DGGEN/2.4",
+    );
 });

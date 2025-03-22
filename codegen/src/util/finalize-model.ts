@@ -203,6 +203,9 @@ function patchClusterTypes(cluster: ClusterModel) {
 /**
  * The optionsMask/OptionsOverrides pattern defined by LevelControl is used by a number of clusters.  These usually
  * specify their type as "map8" rather than the appropriate type.  This function fixes this.
+ *
+ * As of 1.4 the types have been corrected, so this code is only applicable to older versions.  Added tests to detect
+ * type specified as "map8" that effectively disable this logic when not needed.
  */
 function patchOptionsTypes(cluster: ClusterModel) {
     for (const element of cluster.children) {
@@ -215,11 +218,11 @@ function patchOptionsTypes(cluster: ClusterModel) {
         }
 
         const mask = element.get(FieldModel, "OptionsMask");
-        if (mask) {
+        if (mask?.type === "map8") {
             mask.type = "Options";
         }
         const overrides = element.get(FieldModel, "OptionsOverride");
-        if (overrides) {
+        if (overrides?.type === "map8") {
             overrides.type = "Options";
         }
     }
