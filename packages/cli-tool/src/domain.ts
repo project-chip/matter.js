@@ -174,7 +174,7 @@ export async function Domain(context: DomainContext): Promise<Domain> {
                 value !== null &&
                 (Diagnostic.value in value || Diagnostic.presentation in value || value instanceof Error)
             ) {
-                return LogFormat[colors.enabled ? "ansi" : "plain"](value);
+                return LogFormat.formats[colors.enabled ? "ansi" : "plain"](value);
             }
 
             return inspect(value, false, 1, this.colorize);

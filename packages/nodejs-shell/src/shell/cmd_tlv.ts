@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Logger, serialize, UnexpectedDataError } from "#general";
+import { Bytes, Diagnostic, Logger, serialize, UnexpectedDataError } from "#general";
 import { TlvAny, TlvArrayReader, TlvElement, TlvStream, TlvType } from "#types";
 import type { Argv } from "yargs";
 
@@ -32,7 +32,7 @@ function logAnyTlvStream(encoded: TlvStream) {
     logGenericElement(reader);
     const nextElement = reader.readTagType();
     if (nextElement !== undefined) {
-        throw new UnexpectedDataError(`Unexpected data left after parsing all data: ${Logger.toJSON(nextElement)}`);
+        throw new UnexpectedDataError(`Unexpected data left after parsing all data: ${Diagnostic.json(nextElement)}`);
     }
 }
 
@@ -52,7 +52,7 @@ function logGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<a
         case TlvType.Utf8String:
         case TlvType.ByteString:
             if (tag !== undefined && !allowTag) {
-                throw new UnexpectedDataError(`Tag detected for a native type: ${Logger.toJSON(element)}`);
+                throw new UnexpectedDataError(`Tag detected for a native type: ${Diagnostic.json(element)}`);
             }
             const value = reader.readPrimitive(element.typeLength);
             const logValue = value instanceof Uint8Array ? Bytes.toHex(value) : value;
@@ -99,7 +99,7 @@ function logGenericArrayOrList(reader: TlvArrayReader, allowTag = false) {
         } = element;
         if (type === TlvType.EndOfContainer) break;
         if (tag !== undefined && !allowTag) {
-            throw new UnexpectedDataError(`Tag detected : ${Logger.toJSON(element)}`);
+            throw new UnexpectedDataError(`Tag detected : ${Diagnostic.json(element)}`);
         }
         logGenericElement(reader, element, allowTag);
     }
@@ -116,7 +116,7 @@ function logGenericStructure(reader: TlvArrayReader) {
         } = element;
         if (type === TlvType.EndOfContainer) break;
         if (tag === undefined || tag.id === undefined) {
-            throw new UnexpectedDataError(`Tag missing for a structure: ${Logger.toJSON(element)}`);
+            throw new UnexpectedDataError(`Tag missing for a structure: ${Diagnostic.json(element)}`);
         }
         logGenericElement(reader, element, true);
     }

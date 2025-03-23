@@ -550,7 +550,7 @@ export class MyLevelControlServer extends LevelControlServer {
     declare state: LevelControlServerLogic.State;
 
     override async moveToLevel(request: MoveToLevelRequest) {
-        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        logger.info(`TestLevelControlServer move level to ${Diagnostic.json(request)}`);
         await this.state.myDeviceImpl.doTheMove(request.level);
         super.moveToLevel(request);
     }
@@ -594,7 +594,7 @@ export namespace MyDeviceBehavior {
 // Generically extend the cluster implementation(s) and generically use the device implementation
 export class MyLevelControlServer extends LevelControlServer {
     override async moveToLevel(request: MoveToLevelRequest) {
-        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        logger.info(`TestLevelControlServer move level to ${Diagnostic.json(request)}`);
         const myDeviceImpl = this.agent.get(MyDeviceBehavior).state.myDeviceImpl;
         await myDeviceImpl.doTheMove(request.level);
         super.moveToLevel(request);

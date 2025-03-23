@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#util/Bytes.js";
 import type { Lifecycle } from "../util/Lifecycle.js";
 import { LogLevel } from "./LogLevel.js";
 
@@ -372,6 +373,26 @@ export namespace Diagnostic {
      */
     export function hex(value: number | bigint) {
         return `0x${value.toString(16)}`;
+    }
+
+    /**
+     * Convert a value to unstyled JSON.
+     *
+     * Specializes support for bigints and byte arrays.
+     */
+    export function json(data: any) {
+        return JSON.stringify(data, (_, value) => {
+            if (typeof value === "bigint") {
+                return value.toString();
+            }
+            if (value instanceof Uint8Array) {
+                return Bytes.toHex(value);
+            }
+            if (value === undefined) {
+                return "undefined";
+            }
+            return value;
+        });
     }
 
     /**

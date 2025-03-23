@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Diagnostic } from "@matter/general";
 import { ClusterModel, CommandModel, MatterModel } from "@matter/model";
 import { ClusterId, ValidationError } from "@matter/types";
 import type { Argv } from "yargs";
@@ -143,19 +143,19 @@ async function executeCommand(
 
         const result = await clusterClient.commands[commandName](requestData);
         console.log(
-            `Command ${command.name} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${command.id} invoked ${requestData ? `with ${Logger.toJSON(requestData)}` : ""}`,
+            `Command ${command.name} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${command.id} invoked ${requestData ? `with ${Diagnostic.json(requestData)}` : ""}`,
         );
         if (result !== undefined) {
-            console.log(`Result: ${Logger.toJSON(result)}`);
+            console.log(`Result: ${Diagnostic.json(result)}`);
         }
     } catch (error) {
         if (error instanceof ValidationError) {
             console.log(
-                `ERROR: Could not validate data for command ${command.name} with ${Logger.toJSON(requestData)}: ${error}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
+                `ERROR: Could not validate data for command ${command.name} with ${Diagnostic.json(requestData)}: ${error}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
             );
         } else {
             console.log(
-                `ERROR: Could not invoke command ${command.name} ${requestData ? `with ${Logger.toJSON(requestData)}` : ""}: ${error}`,
+                `ERROR: Could not invoke command ${command.name} ${requestData ? `with ${Diagnostic.json(requestData)}` : ""}: ${error}`,
             );
         }
     }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Logger, MatterError } from "#general";
+import { Bytes, Diagnostic, Logger, MatterError } from "#general";
 import { BLE_MATTER_SERVICE_UUID } from "#protocol";
 import { BleError, BleErrorCode, BleManager, State as BluetoothState, Device } from "react-native-ble-plx";
 
@@ -104,7 +104,7 @@ export class ReactNativeBleClient {
         // as well as manufacturer data.
         // {"localName":"MATTER-3840","serviceData":[{"uuid":"fff6","data":{"type":"Buffer","data":[0,0,15,241,255,1,128,0]}}],"serviceUuids":["fff6"],"solicitationServiceUuids":[],"serviceSolicitationUuids":[]}
         logger.debug(
-            `Found peripheral ${peripheral.id} (${peripheral.localName}) with serviceData ${Logger.toJSON(peripheral.serviceData)}`,
+            `Found peripheral ${peripheral.id} (${peripheral.localName}) with serviceData ${Diagnostic.json(peripheral.serviceData)}`,
         );
 
         if (!peripheral.isConnectable) {

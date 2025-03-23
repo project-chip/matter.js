@@ -763,7 +763,7 @@ export class PairedNode {
                     return;
                 }
                 logger.debug(
-                    `Node ${this.nodeId} Trigger attribute update for ${endpointId}.${cluster.name}.${attributeId} to ${Logger.toJSON(
+                    `Node ${this.nodeId} Trigger attribute update for ${endpointId}.${cluster.name}.${attributeId} to ${Diagnostic.json(
                         value,
                     )} (changed: ${changed})`,
                 );
@@ -973,7 +973,7 @@ export class PairedNode {
                 continue;
             }
 
-            logger.debug(`Node ${this.nodeId}: Creating device`, endpointId, Logger.toJSON(clusters));
+            logger.debug(`Node ${this.nodeId}: Creating device`, endpointId, Diagnostic.json(clusters));
             this.#endpoints.set(
                 endpointIdNumber,
                 this.#createDevice(endpointIdNumber, clusters, this.#interactionClient),
@@ -985,7 +985,10 @@ export class PairedNode {
 
     /** Bring the endpoints in a structure based on their partsList attribute. */
     #structureEndpoints(partLists: Map<EndpointNumber, EndpointNumber[]>) {
-        logger.debug(`Node ${this.nodeId}: Endpoints from PartsLists`, Logger.toJSON(Array.from(partLists.entries())));
+        logger.debug(
+            `Node ${this.nodeId}: Endpoints from PartsLists`,
+            Diagnostic.json(Array.from(partLists.entries())),
+        );
 
         const endpointUsages: { [key: EndpointNumber]: EndpointNumber[] } = {};
         Array.from(partLists.entries()).forEach(([parent, partsList]) =>
@@ -1000,7 +1003,7 @@ export class PairedNode {
             }),
         );
 
-        logger.debug(`Node ${this.nodeId}: Endpoint usages`, Logger.toJSON(endpointUsages));
+        logger.debug(`Node ${this.nodeId}: Endpoint usages`, Diagnostic.json(endpointUsages));
 
         while (true) {
             // get all endpoints with only one usage
@@ -1011,7 +1014,7 @@ export class PairedNode {
                 break;
             }
 
-            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${Logger.toJSON(singleUsageEndpoints)}`);
+            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${Diagnostic.json(singleUsageEndpoints)}`);
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
@@ -1033,7 +1036,7 @@ export class PairedNode {
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
-            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, Logger.toJSON(idsToCleanup));
+            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, Diagnostic.json(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
                     const usageId = EndpointNumber(parseInt(id));

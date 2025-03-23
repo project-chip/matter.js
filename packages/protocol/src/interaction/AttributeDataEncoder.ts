@@ -3,7 +3,7 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, MatterFlowError } from "#general";
+import { Diagnostic, MatterFlowError } from "#general";
 import {
     ArraySchema,
     AttributeId,
@@ -77,7 +77,7 @@ export function encodeAttributePayloadData(
     const { attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
-            `Cannot encode Attribute Payload data with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+            `Cannot encode Attribute Payload data with just a attributeStatus: ${Diagnostic.json(attributePayload)}`,
         );
     }
 
@@ -152,13 +152,13 @@ export function chunkAttributePayload(attributePayload: AttributeReportPayload):
     const { hasFabricSensitiveData, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
-            `Cannot chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+            `Cannot chunk an AttributePayload with just a attributeStatus: ${Diagnostic.json(attributePayload)}`,
         );
     }
     const { schema, path, dataVersion, payload } = attributeData;
     if (!(schema instanceof ArraySchema) || !Array.isArray(payload)) {
         throw new MatterFlowError(
-            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
+            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Diagnostic.json(
                 attributePayload,
             )}`,
         );

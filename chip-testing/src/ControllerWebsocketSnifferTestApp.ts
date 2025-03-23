@@ -20,7 +20,7 @@ import { createFileLogger } from "@matter/nodejs";
 import { spawn } from "node:child_process";
 import { WebSocket, WebSocketServer } from "ws";
 
-Logger.log = await createFileLogger("./test_sniffer.log");
+Logger.destinations.default.write = await createFileLogger("./test_sniffer.log");
 
 const logger = Logger.get("ControllerWebSocketSnifferTestApp");
 

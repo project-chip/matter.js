@@ -6,6 +6,7 @@
 
 import { NumberedOccurrence } from "#events/Occurrence.js";
 import {
+    Diagnostic,
     InternalError,
     Logger,
     MatterAggregateError,
@@ -989,7 +990,7 @@ export class ServerSubscription extends Subscription {
                 `Subscription attribute changes for ID ${this.id}: ${attributes
                     .map(
                         ({ path, value, version }) =>
-                            `${this.#structure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`,
+                            `${this.#structure.resolveAttributeName(path)}=${Diagnostic.json(value)} (${version})`,
                     )
                     .join(", ")}`,
             ); // TODO Format path better using endpoint structure
