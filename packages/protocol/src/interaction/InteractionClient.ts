@@ -377,13 +377,13 @@ export class InteractionClient {
         clusterId: ClusterId;
         attribute: A;
         isFabricFiltered?: boolean;
-        alwaysRequestFromRemote?: boolean;
+        requestFromRemote?: boolean;
         executeQueued?: boolean;
     }): Promise<AttributeJsType<A> | undefined> {
-        const { alwaysRequestFromRemote = false } = options;
+        const { requestFromRemote } = options;
         const response = await this.getAttributeWithVersion({
             ...options,
-            alwaysRequestFromRemote,
+            requestFromRemote,
         });
         return response?.value;
     }
@@ -393,22 +393,20 @@ export class InteractionClient {
         clusterId: ClusterId;
         attribute: A;
         isFabricFiltered?: boolean;
-        alwaysRequestFromRemote?: boolean;
+        requestFromRemote?: boolean;
         executeQueued?: boolean;
     }): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
-        const {
-            endpointId,
-            clusterId,
-            attribute,
-            alwaysRequestFromRemote = false,
-            isFabricFiltered,
-            executeQueued,
-        } = options;
+        const { endpointId, clusterId, attribute, requestFromRemote, isFabricFiltered, executeQueued } = options;
         const { id: attributeId } = attribute;
-        if (!alwaysRequestFromRemote && this.#nodeStore !== undefined) {
-            const { value, version } = this.#nodeStore.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
-            if (value !== undefined && version !== undefined) {
-                return { value, version } as { value: AttributeJsType<A>; version: number };
+        if (this.#nodeStore !== undefined) {
+            if (!requestFromRemote) {
+                const { value, version } = this.#nodeStore.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+                if (value !== undefined && version !== undefined) {
+                    return { value, version } as { value: AttributeJsType<A>; version: number };
+                }
+            }
+            if (requestFromRemote === false) {
+                return undefined;
             }
         }
 
