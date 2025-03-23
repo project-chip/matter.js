@@ -57,6 +57,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
     - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.
     - Breaking: Changed signatures of `commissionNode()` and `createInteractionClient()` to provide options as object and not plain parameters
+    - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
 
