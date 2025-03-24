@@ -13,6 +13,7 @@ import {
     Network,
     NetworkInterface,
     NetworkInterfaceDetailed,
+    NoIPv4AddressAvailableError,
     ObserverGroup,
     TransportInterface,
     TransportInterfaceSet,
@@ -158,14 +159,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
 
         if (netconf.ipv4) {
-            interfaces.add(
-                await UdpInterface.create(
-                    this.owner.env.get(Network),
-                    "udp4",
-                    netconf.port,
-                    netconf.listeningAddressIpv4,
-                ),
-            );
+            try {
+                interfaces.add(
+                    await UdpInterface.create(
+                        this.owner.env.get(Network),
+                        "udp4",
+                        netconf.port,
+                        netconf.listeningAddressIpv4,
+                    ),
+                );
+            } catch (error) {
+                NoIPv4AddressAvailableError.accept(error);
+                logger.info(`IPv4 UDP interface not created because IPv4 is not available`);
+            }
         }
 
         if (netconf.ble) {

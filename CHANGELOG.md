@@ -19,13 +19,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/general
     - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
-    - Enhancement: Formalized concept of a logging "destination" and converted API for managing destinations to a simple object interface
     - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
     - Feature: Log formatting is now extensible with custom formats
-    - Enhancement: Modifying log levels and format using the `Logger` static interface now updates defaults and applies changes to all destinations
-    - Fix: Correctly handle MDNS records without QNames
     - Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
+    - Enhancement: Formalized concept of a logging "destination" and converted API for managing destinations to a simple object interface
+    - Enhancement: Modifying log levels and format using the `Logger` static interface now updates defaults and applies changes to all destinations
     - Enhancement: Transaction participants no longer need implement commit-related methods if they do not participate in persistence
+    - Enhancement: Missing IPv4 addresses on network interfaces are now ignored even if IPv4 is not disabled via configuration
+    - Fix: Correctly handle MDNS records without QNames
 
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer

@@ -13,6 +13,7 @@ import {
     Logger,
     MAX_UDP_MESSAGE_SIZE,
     NetworkError,
+    NoIPv4AddressAvailableError,
     repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
@@ -114,7 +115,7 @@ export class UdpChannelReactNative implements UdpChannel {
             if (type === "udp4") {
                 multicastInterface = await NetworkReactNative.getMulticastInterfaceIpv4(netInterface);
                 if (multicastInterface === undefined) {
-                    throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
+                    throw new NoIPv4AddressAvailableError(`No IPv4 addresses on interface "${netInterface}"`);
                 }
             } else {
                 multicastInterface = `::%${netInterfaceZone}`;

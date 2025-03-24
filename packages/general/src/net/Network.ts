@@ -10,6 +10,8 @@ import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
 
 export class NetworkError extends MatterError {}
 
+export class NoIPv4AddressAvailableError extends NetworkError {}
+
 /**
  * @see {@link MatterSpecification.v11.Core} § 11.11.4.4
  * Duplicated from the GeneralDiagnostics cluster to avoid circular dependencies.

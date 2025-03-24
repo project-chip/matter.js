@@ -13,6 +13,7 @@ import {
     Logger,
     NetInterfaceSet,
     Network,
+    NoIPv4AddressAvailableError,
     NoProviderError,
     StorageContext,
     SyncStorage,
@@ -771,7 +772,14 @@ export async function configureNetwork(options: {
     netInterfaces.add(udpInterface);
     if (!ipv4Disabled) {
         // TODO: Add option to transport different ports to broadcaster
-        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4));
+        try {
+            netInterfaces.add(
+                await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4),
+            );
+        } catch (error) {
+            NoIPv4AddressAvailableError.accept(error);
+            logger.info(`IPv4 UDP interface not created because IPv4 is not available`);
+        }
     }
     if (mdnsScanner) {
         scanners.add(mdnsScanner);

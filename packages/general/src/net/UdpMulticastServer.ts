@@ -9,7 +9,7 @@ import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
 import { asError } from "../util/Error.js";
 import { isIPv4 } from "../util/Ip.js";
-import { Network } from "./Network.js";
+import { Network, NoIPv4AddressAvailableError } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
 
 const logger = Logger.get("UdpMulticastServer");
@@ -30,19 +30,27 @@ export class UdpMulticastServer {
         listeningPort,
         network,
     }: UdpMulticastServerOptions) {
+        let ipv4UdpChannel: UdpChannel | undefined = undefined;
+        if (broadcastAddressIpv4 !== undefined) {
+            try {
+                ipv4UdpChannel = await network.createUdpChannel({
+                    type: "udp4",
+                    netInterface,
+                    listeningPort,
+                    membershipAddresses: [broadcastAddressIpv4],
+                });
+            } catch (error) {
+                NoIPv4AddressAvailableError.accept(error);
+                logger.info(`IPv4 UDP channel not created because IPv4 is not available: ${asError(error).message}`);
+            }
+        }
+
         return new UdpMulticastServer(
             network,
             broadcastAddressIpv4,
             broadcastAddressIpv6,
             listeningPort,
-            broadcastAddressIpv4 === undefined
-                ? undefined
-                : await network.createUdpChannel({
-                      type: "udp4",
-                      netInterface,
-                      listeningPort,
-                      membershipAddresses: [broadcastAddressIpv4],
-                  }),
+            ipv4UdpChannel,
             await network.createUdpChannel({
                 type: "udp6",
                 netInterface,
