@@ -9,7 +9,7 @@ import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
 import { asError } from "../util/Error.js";
 import { isIPv4 } from "../util/Ip.js";
-import { Network, NoIPv4AddressAvailableError } from "./Network.js";
+import { Network, NoAddressAvailableError } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
 
 const logger = Logger.get("UdpMulticastServer");
@@ -40,25 +40,31 @@ export class UdpMulticastServer {
                     membershipAddresses: [broadcastAddressIpv4],
                 });
             } catch (error) {
-                NoIPv4AddressAvailableError.accept(error);
+                NoAddressAvailableError.accept(error);
                 logger.info(`IPv4 UDP channel not created because IPv4 is not available: ${asError(error).message}`);
             }
         }
 
-        return new UdpMulticastServer(
-            network,
-            broadcastAddressIpv4,
-            broadcastAddressIpv6,
-            listeningPort,
-            ipv4UdpChannel,
-            await network.createUdpChannel({
-                type: "udp6",
-                netInterface,
+        try {
+            return new UdpMulticastServer(
+                network,
+                broadcastAddressIpv4,
+                broadcastAddressIpv6,
                 listeningPort,
-                membershipAddresses: [broadcastAddressIpv6],
-            }),
-            netInterface,
-        );
+                ipv4UdpChannel,
+                await network.createUdpChannel({
+                    type: "udp6",
+                    netInterface,
+                    listeningPort,
+                    membershipAddresses: [broadcastAddressIpv6],
+                }),
+                netInterface,
+            );
+        } catch (error) {
+            NoAddressAvailableError.accept(error);
+            logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
+            throw error;
+        }
     }
 
     private readonly broadcastChannels = new Cache<Promise<UdpChannel>>(
