@@ -12,6 +12,7 @@ import {
     Logger,
     MAX_UDP_MESSAGE_SIZE,
     NetworkError,
+    NoAddressAvailableError,
     repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
@@ -71,11 +72,11 @@ export class NodeJsUdpChannel implements UdpChannel {
             if (type === "udp4") {
                 multicastInterface = NodeJsNetwork.getMulticastInterfaceIpv4(netInterface);
                 if (multicastInterface === undefined) {
-                    throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
+                    throw new NoAddressAvailableError(`No IPv4 addresses on interface "${netInterface}"`);
                 }
             } else {
                 if (netInterfaceZone === undefined) {
-                    throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
+                    throw new NoAddressAvailableError(`No IPv6 addresses on interface "${netInterface}"`);
                 }
                 multicastInterface = `::%${netInterfaceZone}`;
             }
