@@ -5,5 +5,6 @@
  */
 
 describe("TSUIC", () => {
-    chip("TSUIC/*");
+    chip("TSUIC/2.2");
+    //chip("TSUIC/*");
 });

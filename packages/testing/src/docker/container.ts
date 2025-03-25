@@ -328,20 +328,7 @@ function adaptContainer(docker: Docker, ct: Dockerode.Container): Container {
         },
 
         async follow<T extends Terminal.Factory>(path: string, terminal?: T): Promise<T> {
-            // This is a general purpose utility for reading file output regardless of whether the file has EOF written
-            // or the inode of the input filename changes.
-            //
-            // Originally we read FIFOs in the container using the "read" method, which in theory should work.  However,
-            // the inode would mysteriously change for the FIFO when transitioning between tests.  "Mysterious" in that
-            // I could not identify what was causing it -- AFAICT nothing should be mutating the file.  My best guess is
-            // that it's an oddity with how Docker and/or Python handles FIFOs.
-            //
-            // This also has the beneficial side effect of reducing latency slightly because we do not need to re-run
-            // "cat" after every command.  "tail" streams output continuously and does not exit on EOF
-            //
-            // Note - we use Terminal.StdoutLine to ignore stderr.  "tail -F" writes messages to stderr when the target
-            // appears/disappears/is replaced
-            return this.exec(["tail", "-F", path], terminal ?? Terminal.StdoutLine) as Promise<T>;
+            return this.exec(["tail", "--follow=name", path], terminal ?? Terminal.StdoutLine) as Promise<T>;
         },
 
         async execAndRead<T extends Terminal.Factory>(command: string | string[], terminal?: T): Promise<string | T> {

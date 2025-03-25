@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Graph, Package } from "@matter/tools";
+import { Graph, isDirectory, Package } from "#tools";
 import { basename } from "node:path";
 
 const LAUNCH_TEMPLATE = {
@@ -74,6 +74,21 @@ for (const node of graph.nodes) {
             cwd: Package.workspace.relative(node.pkg.path),
         });
     }
+}
+
+// Generate launches for each CHIP test set
+for (const path of await Package.workspace.glob("chip-testing/test/*")) {
+    if (!isDirectory(path)) {
+        continue;
+    }
+
+    const setName = basename(path);
+
+    addTest({
+        name: `Test chip:${setName}`,
+        cwd: "chip-testing",
+        args: ["--spec", `test/${setName}/**/*.test.ts`, "--all-logs", "esm"],
+    });
 }
 
 // Generate launches for each example
