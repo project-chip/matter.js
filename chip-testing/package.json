@@ -22,10 +22,10 @@
         "build": "matter-build",
         "build-clean": "matter-build --clean",
         "ci-test": "matter-test",
-        "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts",
-        "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts",
-        "test-core": "matter-test --spec=test/core/**/*.test.ts",
-        "test-long": "matter-test --spec=test/long/**/*.test.ts"
+        "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts --report",
+        "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts --report",
+        "test-core": "matter-test --spec=test/core/**/*.test.ts --report",
+        "test-long": "matter-test --spec=test/long/**/*.test.ts --report"
     },
     "dependencies": {
         "@matter/main": "*",
