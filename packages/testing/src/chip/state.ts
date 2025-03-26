@@ -250,7 +250,8 @@ export const State = {
     /**
      * Prepare the test environment for a subject.
      *
-     * On first activation, commissions the subject.  Thereafter the subject is either already active or reactivated here.
+     * On first activation, commissions the subject.  Thereafter the subject is either already active or reactivated
+     * here.
      */
     async activateSubject(
         factory: Subject.Factory,
