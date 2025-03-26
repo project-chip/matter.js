@@ -7,9 +7,9 @@
 import type Chai from "chai";
 import "chai-as-promised";
 import type { Boot } from "./mocks/boot.js";
-import type { MockLogger } from "./mocks/logging.js";
+import type { DiagnosticMessageLike, MockLogger } from "./mocks/logging.js";
 import type { MockTime } from "./mocks/time.js";
-import type { TestDescriptor } from "./test-descriptor.js";
+import type { TestDescriptor, TestSuiteDescriptor } from "./test-descriptor.js";
 
 declare global {
     // Expose Chai globally
@@ -51,7 +51,7 @@ declare global {
               /**
                * Receive intercepted log messages.
                */
-              loggerSink?: (level: number, message: string) => void;
+              loggerSink?: (text: string, message: DiagnosticMessageLike) => void;
 
               /**
                * Extract error details.
@@ -64,7 +64,7 @@ declare global {
 
     namespace Mocha {
         interface Suite {
-            readonly descriptor: TestDescriptor;
+            readonly descriptor: TestSuiteDescriptor;
         }
 
         interface Test {

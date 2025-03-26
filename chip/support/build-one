@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Creates a binary using build-examples.py.  Strips, installs into /dist/bin and removes build artifacts
+
+set -e
+
+NAME=$1
+OPTIONS=ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns-clang
+
+die() {
+    echo $1 >&2
+    exit 1
+}
+
+if [ -e "$NAME" ]; then
+    die "No name supplied"
+fi
+
+case "$TARGETPLATFORM" in
+    "linux/amd64")
+        CPU=x64
+        ;;
+    "linux/arm64")
+        CPU=arm64
+        ;;
+    *)
+        die "Unrecognized target platform \"$TARGETPLATFORM\""
+esac
+
+TARGET=linux-$CPU-$NAME-$OPTIONS
+
+/connectedhomeip/scripts/build/build_examples.py \
+    --target linux-$CPU-$NAME-$OPTIONS \
+    build
+
+BINPATH="$(find "out/$TARGET" -type f -executable)"
+if [ ! -x "$BINPATH" ]; then
+    die "Could not identify executable for target \"$TARGET\""
+fi
+
+strip "$BINPATH"
+mkdir -p /dist/bin
+mv "$BINPATH" /dist/bin
+
+rm -rf "out/$TARGET"

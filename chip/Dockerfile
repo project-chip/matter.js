@@ -8,7 +8,14 @@
 
 # TODO - either finish cross compilation, create CI & manifest for amd64 & arm64, or punt.  Current choice: punt
 
+
+################################################################################
+#
 # STAGE 1 - common base image
+#
+# Includes just a few small tweaks on base Ubuntu
+#
+
 FROM ubuntu:24.04 AS base
 
 SHELL [ "/bin/bash", "-c" ]
@@ -27,30 +34,36 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     apt-get -qq -y install python3 python-is-python3 libavahi-client3 libglib2.0-0
 
 
+################################################################################
+#
 # STAGE 2 - CHIP source code and build tooling
+#
+# Performs git clone, installs build tools and bootstraps CHIP environment
+#
+
 FROM --platform=$BUILDPLATFORM base AS build
 
 ARG TARGETPLATFORM
 
 # Validate platform (must be amd64 or arm64)
 RUN case "${TARGETPLATFORM}" in \
-    "linux/amd64"|"linux/arm64") echo "Targeting ${TARGET_PLATFORM}";; \
+    "linux/amd64"|"linux/arm64") echo "Targeting ${TARGETPLATFORM}";; \
     "") echo "TARGETPLATFORM not set, please build with buildx";; \
     *) echo "Unsupported platform ${TARGETPLATFORM}";; \
     esac
 
 # Configure for cross compilation
 #RUN dpkg --add-architecture arm64
-#COPY ubuntu-arm64.sources /etc/apt/sources.list.d
+#COPY support/ubuntu-arm64.sources /etc/apt/sources.list.d
 
 # Install system packages required for build
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get -qq update && \
-    apt-get -qq -y install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev \
+    apt-get -qq -y install git gcc g++ clang pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev \
         ninja-build python3-venv python3-dev unzip libgirepository1.0-dev libcairo2-dev libreadline-dev python3-pip
 
-# Install x86->arm cross compilers.  Not useful becauserequire installation of lib dependencies which we've not
+# Install x86->arm cross compilers.  Not useful because requires installation of lib dependencies which we've not
 # implemented
 # RUN apt-get -qq -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
@@ -59,56 +72,57 @@ RUN git clone --depth=1 https://github.com/project-chip/connectedhomeip.git
 WORKDIR /connectedhomeip
 RUN ./scripts/checkout_submodules.py --shallow --platform linux
 
+# Bootstrap CHIP environment
+RUN source scripts/bootstrap.sh
 
-# STAGE 3 - build chip-tool and installed python packages
+# Tell build scripts where to find stuff (allows us to skip bootstrap going forward)
+ENV PW_PROJECT_ROOT=/connectedhomeip
+ENV PATH=/connectedhomeip/.environment/pigweed-venv/bin:/connectedhomeip/.environment/cipd/packages/pigweed:/connectedhomeip/.environment/cipd/packages/zap:$PATH
+
+# Install our build script
+COPY support/build-one /bin
+
+# Do not generate debug symbols.  They just slow us down, and we strip anyway because mangled c++ names are huge.
+# Unfortunately build system doesn't offer a way to do this so we monkey patch build file
+RUN sed -i 's/"-g\${symbol_level}"/""/' build/config/compiler/BUILD.gn
+
+
+################################################################################
+#
+# STAGE 3 - builds CHIP and installed python packages
+#
+# Builds chip-tool, CHIP sample apps, and python wheels
+#
 FROM --platform=$BUILDPLATFORM build AS bins
 
-WORKDIR /connectedhomeip
+# Build directory
+RUN mkdir -p out
 
-# Reduce build size, saves about 1/3 of final image
-RUN sed -i "s/is_debug = true/is_debug = false/" build/config/BUILDCONFIG.gn && \
-    sed -i "s/-O2/-Os/" build/config/compiler/BUILD.gn && \
-    sed -i "s/strip_symbols = false/strip_symbols = true/" build/config/compiler/compiler.gni
-
-# Build chip-tool
-RUN case ${TARGETPLATFORM} in \
-    "linux/amd64") \
-        source scripts/activate.sh && \
-        scripts/build/build_examples.py \
-          --target linux-x64-chip-tool-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-all-clusters-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-lock-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-tv-app-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-bridge-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-lit-icd-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-microwave-oven-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-rvc-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-x64-network-manager-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          build \
-    ;; \
-    "linux/arm64") \
-        source scripts/activate.sh && \
-        scripts/build/build_examples.py \
-          --target linux-arm64-chip-tool-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-all-clusters-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-lock-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-tv-app-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-bridge-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-lit-icd-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-microwave-oven-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-rvc-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          --target linux-arm64-network-manager-ipv6only-no-ble-no-wifi-no-thread-no-shell-platform-mdns \
-          /bins build \
-    ;; \
-    esac
-RUN cp out/*/chip-tool out/*/*-app out
+# Build binaries
+RUN build-one chip-tool
+RUN build-one all-clusters
+RUN build-one lock
+RUN build-one tv-app
+RUN build-one bridge
+RUN build-one lit-icd
+RUN build-one microwave-oven
+RUN build-one rvc
+RUN build-one network-manager
 
 # Build python wheels
 RUN scripts/build_python.sh --chip_mdns platform
 
 
+################################################################################
+#
 # STAGE 4 - install into final destination
+#
+# Installs Python packages from build area into destination OS locations
+#
 FROM bins AS install
+
+# Revert to standard path so Python doesn't think packages are already installed
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Install external python dependencies
 RUN pip install --break-system-packages -r src/python_testing/requirements.txt
@@ -118,7 +132,13 @@ RUN pip install --break-system-packages -r scripts/tests/requirements.txt
 RUN find out -name \*.whl | xargs pip install --break-system-packages --upgrade
 
 
+################################################################################
+#
 # STAGE 5 - extract CHIP subset required for runtime
+#
+# For the final working image we revert to the base target then copy over
+# binaries from the bins target
+#
 FROM base AS final
 
 # Install some runtime-only packages
@@ -133,8 +153,8 @@ LABEL org.opencontainers.image.source=https://github.com/project-chip/matter.js/
 
 RUN rm -rf bin.usr-is-merged boot home media mnt opt sbin.usr-is-merged srv
 
-# chip-tool binary
-COPY --from=install /connectedhomeip/out/chip-tool /bin/chip-tool
+# chip-tool and test app binaries
+COPY --from=install /dist/bin/* /bin
 
 # Installed python packages
 COPY --from=install /usr/lib/python3/dist-packages /usr/lib/python3/dist-packages
@@ -143,7 +163,7 @@ COPY --from=install /usr/local/lib /usr/local/lib
 # Other python packages CHIP has scattered randomly and adds to path in relative_importer.py
 WORKDIR /usr/local/lib/python3.12/dist-packages
 COPY --from=build /connectedhomeip/scripts/tests/chiptest chiptest
-COPY --from=build /connectedhomeip/scripts/py_matter_idl/matter_idl matter_idl
+COPY --from=build /connectedhomeip/scripts/py_matter_idl/matter matter
 COPY --from=build /connectedhomeip/scripts/py_matter_yamltests/matter_yamltests matter_yamltests
 COPY --from=build /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
 COPY --from=build /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
@@ -180,7 +200,7 @@ COPY --from=build /connectedhomeip/credentials/development/cd-certs /credentials
 RUN mkdir /run/dbus
 
 # Summarize tests for efficient metadata load at runtime
-COPY generate-test-descriptor /bin/generate-test-descriptor
+COPY support/generate-test-descriptor /bin/generate-test-descriptor
 RUN generate-test-descriptor > /lib/test-descriptor.json
 
 # Include CHIP SHA for diagnostic purposes

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Diagnostic } from "@matter/general";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode.js";
 
@@ -27,13 +27,13 @@ export default function commands(theNode: MatterNode) {
             await node.subscribeAllAttributesAndEvents({
                 attributeChangedCallback: ({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
                     console.log(
-                        `${nodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                        `${nodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                             value,
                         )}`,
                     ),
                 eventTriggeredCallback: ({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
                     console.log(
-                        `${nodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                        `${nodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                             events,
                         )}`,
                     ),

@@ -14,7 +14,7 @@ import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";
-import { defaultDescriptor, inspect } from "./inspect.js";
+import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
 
 enum TestType {
@@ -62,11 +62,12 @@ export async function main(argv = process.argv) {
         .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
+        .option("report", { type: "boolean", describe: "Display test summary after testing" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
         .command("web", "run tests in web browser", () => testTypes.add(TestType.web))
-        .command("inspect", "lists details about defined tests", () => (ls = true))
+        .command("report", "display details about tests", () => (ls = true))
         .command("manual", "start web test server and print URL for manual testing", () => {
             testTypes.add(TestType.web);
             manual = true;
@@ -122,8 +123,9 @@ export async function main(argv = process.argv) {
         if (ls) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
-            inspect(await defaultDescriptor(runner));
+            printReport(await defaultDescriptor(runner), true);
             progress.close();
+            console.log();
             return;
         }
 
@@ -157,6 +159,10 @@ export async function main(argv = process.argv) {
         }
 
         progress.close();
+
+        if (args.report) {
+            printReport(await defaultDescriptor(runner));
+        }
 
         if (args.forceExit) {
             process.exit(0);

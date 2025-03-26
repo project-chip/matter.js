@@ -7,6 +7,7 @@
 import {
     asyncNew,
     Construction,
+    Diagnostic,
     ImplementationError,
     isObject,
     Logger,
@@ -151,7 +152,7 @@ export class OccurrenceManager {
 
         // TODO - log after fabric filtering and include fabric filter in log message?
         logger.debug(
-            `Got ${occurrences.length} events for ${resolveEventName(eventPath)} with filters: ${Logger.toJSON(filters)}`,
+            `Got ${occurrences.length} events for ${resolveEventName(eventPath)} with filters: ${Diagnostic.json(filters)}`,
         );
 
         // Convert from MaybePromise[] to MaybePromise<[]>
@@ -210,7 +211,7 @@ export class OccurrenceManager {
 
     add(occurrence: Occurrence): MaybePromise<NumberedOccurrence> {
         return MaybePromise.then(this.#store.add(occurrence), entry => {
-            logger.debug(`Recorded event #${entry.number}: ${Logger.toJSON(occurrence)}`);
+            logger.debug(`Recorded event #${entry.number}: ${Diagnostic.json(occurrence)}`);
             this.#occurrences[occurrence.priority].push(entry);
             this.#storedEventCount++;
             if (this.#storedEventCount > this.#bufferConfig.maxEventAllowance) {

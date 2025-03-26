@@ -298,31 +298,6 @@
             "presentation": {
                 "clear": true
             },
-            "name": "Test @project-chip/matter.js",
-            "cwd": "${workspaceFolder}/packages/matter.js",
-            "args": [
-                "--clear"
-            ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "runtimeArgs": [
-                "--enable-source-maps"
-            ],
-            "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
-            ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/nodejs",
             "cwd": "${workspaceFolder}/packages/nodejs",
             "args": [
@@ -352,6 +327,122 @@
             "cwd": "${workspaceFolder}/chip-testing",
             "args": [
                 "--clear"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test chip:app-fast",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/app-fast/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test chip:app-slow",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/app-slow/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test chip:core",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/core/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "name": "Test chip:long",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/long/**/*.test.ts",
+                "--all-logs",
+                "esm"
             ],
             "program": "${workspaceFolder}/node_modules/.bin/matter-test"
         },

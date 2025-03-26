@@ -18,11 +18,15 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
 
 -   @matter/general
-    - Breaking: Renaming `getLoggerforIdentifier()` to `getLoggerForIdentifier()` to be consistent with other method names
-    - Feature: Adding `hasLoggerForIdentifier()` method to Logger to check if a logger for a specific identifier exists
-    - Fix: Correctly MDNS records with not-existing QNames
-    -   Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
-    -   Enhancement: Transaction participants no longer need implement commit-related methods if they do not participate in persistence
+    - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
+    - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
+    - Feature: Log formatting is now extensible with custom formats
+    - Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
+    - Enhancement: Formalized concept of a logging "destination" and converted API for managing destinations to a simple object interface
+    - Enhancement: Modifying log levels and format using the `Logger` static interface now updates defaults and applies changes to all destinations
+    - Enhancement: Transaction participants no longer need implement commit-related methods if they do not participate in persistence
+    - Enhancement: Missing IPv4 addresses on network interfaces are now ignored even if IPv4 is not disabled via configuration
+    - Fix: Correctly handle MDNS records without QNames
 
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
@@ -35,12 +39,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Prevents crash on startup when having set a Fabric label in config
 
 -   @matter/node
-    -   Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
-    -   Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
-    -   Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
-    -   Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
-    -   Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
-    -   Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
+    - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
+    - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
+    - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
+    - Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
+    - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
+    - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
@@ -54,6 +58,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
     - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.
     - Breaking: Changed signatures of `commissionNode()` and `createInteractionClient()` to provide options as object and not plain parameters
+    - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
 

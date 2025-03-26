@@ -13,6 +13,7 @@ import {
     Logger,
     NetInterfaceSet,
     Network,
+    NoAddressAvailableError,
     NoProviderError,
     StorageContext,
     SyncStorage,
@@ -767,11 +768,26 @@ export async function configureNetwork(options: {
     const netInterfaces = new NetInterfaceSet();
     const scanners = new ScannerSet();
 
-    const udpInterface = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
-    netInterfaces.add(udpInterface);
+    let udpInterface: UdpInterface;
+    try {
+        udpInterface = await UdpInterface.create(Network.get(), "udp6", localPort, listeningAddressIpv6);
+        netInterfaces.add(udpInterface);
+    } catch (error) {
+        NoAddressAvailableError.accept(error);
+        logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
+        throw error;
+    }
+
     if (!ipv4Disabled) {
         // TODO: Add option to transport different ports to broadcaster
-        netInterfaces.add(await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4));
+        try {
+            netInterfaces.add(
+                await UdpInterface.create(Network.get(), "udp4", udpInterface.port, listeningAddressIpv4),
+            );
+        } catch (error) {
+            NoAddressAvailableError.accept(error);
+            logger.info(`IPv4 UDP interface not created because IPv4 is not available`);
+        }
     }
     if (mdnsScanner) {
         scanners.add(mdnsScanner);

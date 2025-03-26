@@ -7,6 +7,7 @@
 import {
     Channel,
     ChannelType,
+    Diagnostic,
     InternalError,
     Logger,
     NetInterface,
@@ -432,7 +433,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
         logger.debug(
-            `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`,
+            `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Diagnostic.json(btpHandshakeRequest)}`,
         );
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 

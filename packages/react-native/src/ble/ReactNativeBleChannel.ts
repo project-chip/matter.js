@@ -8,6 +8,7 @@ import {
     Bytes,
     Channel,
     ChannelType,
+    Diagnostic,
     InternalError,
     Logger,
     NetInterface,
@@ -176,7 +177,7 @@ export class ReactNativeBleChannel extends BleChannel<Uint8Array> {
             attMtu: mtu,
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
-        logger.debug(`sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`);
+        logger.debug(`sending BTP handshake request: ${Diagnostic.json(btpHandshakeRequest)}`);
         characteristicC1ForWrite = await characteristicC1ForWrite.writeWithResponse(
             Bytes.toBase64(btpHandshakeRequest),
         );

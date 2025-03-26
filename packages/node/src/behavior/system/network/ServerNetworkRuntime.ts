@@ -13,6 +13,7 @@ import {
     Network,
     NetworkInterface,
     NetworkInterfaceDetailed,
+    NoAddressAvailableError,
     ObserverGroup,
     TransportInterface,
     TransportInterfaceSet,
@@ -147,25 +148,36 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         const netconf = this.owner.state.network;
 
         const port = this.owner.state.network.port;
-        const ipv6Intf = await UdpInterface.create(
-            this.owner.env.get(Network),
-            "udp6",
-            port ? port : undefined,
-            netconf.listeningAddressIpv6,
-        );
-        interfaces.add(ipv6Intf);
+        try {
+            const ipv6Intf = await UdpInterface.create(
+                this.owner.env.get(Network),
+                "udp6",
+                port ? port : undefined,
+                netconf.listeningAddressIpv6,
+            );
+            interfaces.add(ipv6Intf);
 
-        await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+            await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+        } catch (error) {
+            NoAddressAvailableError.accept(error);
+            logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
+            throw error;
+        }
 
         if (netconf.ipv4) {
-            interfaces.add(
-                await UdpInterface.create(
-                    this.owner.env.get(Network),
-                    "udp4",
-                    netconf.port,
-                    netconf.listeningAddressIpv4,
-                ),
-            );
+            try {
+                interfaces.add(
+                    await UdpInterface.create(
+                        this.owner.env.get(Network),
+                        "udp4",
+                        netconf.port,
+                        netconf.listeningAddressIpv4,
+                    ),
+                );
+            } catch (error) {
+                NoAddressAvailableError.accept(error);
+                logger.info(`IPv4 UDP interface not created because IPv4 is not available`);
+            }
         }
 
         if (netconf.ble) {

@@ -9,6 +9,8 @@ import { Container } from "../docker/container.js";
 import { Terminal } from "../docker/terminal.js";
 import { CommandPipe } from "./command-pipe.js";
 
+const FIFO_PATH = "/command-pipe.fifo";
+
 /**
  * A command pipe that reads commands from a Docker container.
  */
@@ -23,7 +25,11 @@ export class ContainerCommandPipe extends CommandPipe {
     }
 
     override async initialize() {
-        await this.#container.createPipe(this.filename);
+        // Many test files are hard-coded to /tmp so we swap out temp files to preserve state when we switch test
+        // agents.  This would overwrite our FIFO, however, so we symlink to the real FIFO to prevent it from being
+        // overwritten
+        await this.#container.createPipe(FIFO_PATH);
+        await this.#container.exec(["ln", "-sf", "/command-pipe.fifo", this.filename]);
 
         this.#stopped = this.#processCommands();
     }
@@ -39,7 +45,7 @@ export class ContainerCommandPipe extends CommandPipe {
     async #processCommands() {
         let terminal: Terminal<string> | undefined;
         try {
-            terminal = await this.#container.follow(this.filename);
+            terminal = await this.#container.follow(FIFO_PATH);
 
             const iterator = terminal[Symbol.asyncIterator]();
 
