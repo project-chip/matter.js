@@ -16,6 +16,7 @@ import type { TestRunner } from "./runner.js";
 import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
+import { TestDescriptor, TestSuiteDescriptor } from "./test-descriptor.js";
 
 extendApi(Mocha);
 
@@ -42,9 +43,22 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
         afterRun(() => profiler.stop(runner.pkg.resolve("build/profiles")));
     }
 
+    let report: TestSuiteDescriptor | undefined;
+    afterRun(async () => {
+        if (report === undefined) {
+            return;
+        }
+
+        const path = runner.pkg.resolve(TestDescriptor.DEFAULT_FILENAME);
+        const previous = await TestDescriptor.open(path);
+        const merged = TestDescriptor.merge(previous, report);
+        await TestDescriptor.save(path, merged);
+    });
+
     try {
         const mocha = await createNodejsMocha(runner, format);
         await runMocha(mocha);
+        report = mocha.suite.descriptor;
     } finally {
         process.off("unhandledRejection", unhandledRejection);
 
@@ -58,9 +72,11 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
 }
 
 export async function createNodejsMocha(runner: TestRunner, format: "esm" | "cjs") {
+    const updateStats = runner.pkg.supportsEsm ? format === "esm" : true;
+
     const mocha = new Mocha({
         inlineDiffs: true,
-        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
+        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter, updateStats),
     });
 
     chip.mocha = mocha;

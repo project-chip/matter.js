@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Progress, STATUS_ICON_FAILURE, STATUS_ICON_SUCCESS } from "@matter/tools";
 import colors from "ansi-colors";
 import { chip } from "./chip/chip.js";
 import { InvalidPicsExpressionError, PicsExpression } from "./chip/pics-expression.js";
@@ -14,7 +15,11 @@ import { TestDescriptor } from "./test-descriptor.js";
 /**
  * Dump test details to the console.
  */
-export function inspect(descriptor: TestDescriptor, prefix = "", path?: string) {
+export function printReport(descriptor: TestDescriptor, includeDisabled?: boolean) {
+    printDescriptor(descriptor, includeDisabled);
+}
+
+function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, prefix = "", path?: string) {
     const { members } = descriptor;
     if (!members?.length) {
         return;
@@ -36,15 +41,41 @@ export function inspect(descriptor: TestDescriptor, prefix = "", path?: string) 
         }
 
         if (member.isDisabled) {
+            if (!includeDisabled) {
+                return;
+            }
             title = colors.dim(title);
         }
 
+        if (member.kind === "suite") {
+            if (prefix === "") {
+                console.log();
+            }
+        } else {
+            switch (member.passed) {
+                case true:
+                    title = `${STATUS_ICON_SUCCESS} ${title}`;
+                    break;
+
+                case false:
+                    title = `${STATUS_ICON_FAILURE} ${title}`;
+                    break;
+
+                default:
+                    title = `  ${title}`;
+            }
+        }
+
+        if (member.durationMs !== undefined) {
+            title = `${title} ${Progress.formatDuration(member.durationMs)}`;
+        }
+
         if (member.kind !== "suite") {
-            title = `${title} ${colors.dim.yellow(member.kind)}`;
+            title = `${title} ${colors.cyan(member.kind)}`;
         }
 
         if (steps) {
-            title = `${title} ${colors.dim.yellow(`(${steps} steps)`)}`;
+            title = `${title} ${colors.cyan(`(${steps} steps)`)}`;
         }
 
         if (member.pics) {
@@ -72,10 +103,10 @@ export function inspect(descriptor: TestDescriptor, prefix = "", path?: string) 
             title = colors.strikethrough(title);
         }
 
-        console.log(prefix, title);
+        console.log(`${prefix}${title}`);
 
         if (submembers.length) {
-            inspect(member, `${prefix}    `, member.path ?? path);
+            printDescriptor(member, includeDisabled, `${prefix}    `, member.path ?? path);
         }
     }
 }
@@ -83,7 +114,8 @@ export function inspect(descriptor: TestDescriptor, prefix = "", path?: string) 
 /**
  * Obtain a descriptor describing configured tests.
  *
- * This is the same as {@link Mocha.suite.descriptor} except it includes unused CHIP tests if loaded.
+ * This is the same as {@link Mocha.suite.descriptor} except it includes persisted information and unused CHIP tests if
+ * loaded.
  */
 export async function defaultDescriptor(runner: TestRunner) {
     const mocha = await createNodejsMocha(runner, "esm");
@@ -127,6 +159,10 @@ export async function defaultDescriptor(runner: TestRunner) {
             };
         }
     }
+
+    const previous = await TestDescriptor.open(runner.pkg.resolve(TestDescriptor.DEFAULT_FILENAME));
+
+    descriptor = TestDescriptor.merge(previous, descriptor);
 
     return descriptor;
 }

@@ -10,6 +10,9 @@ import { std } from "../ansi-text/std.js";
 import { ansi } from "../ansi-text/text-builder.js";
 import { Package } from "./package.js";
 
+export const STATUS_ICON_SUCCESS = ansi.green("✓");
+export const STATUS_ICON_FAILURE = ansi.bright.red("✗");
+
 const SPINNER = "◐◓◑◒"; //"⡜⠔⠢⢣"; //["⚫︎", "⚪︎"]; "⡈⠔⠢⢁";
 const SPINNER_INTERVAL = 100;
 
@@ -32,7 +35,9 @@ const writeStatus = (() => {
         const actualWrite = stream.write;
         stream.write = (payload: Uint8Array | string, ...params: any[]) => {
             if (lastStatus) {
-                actualWrite.call(stream, "\n");
+                if (payload[0] !== "\n" && payload[0] !== 0xa) {
+                    actualWrite.call(stream, "\n");
+                }
                 lastStatus = undefined;
             }
 
@@ -41,7 +46,18 @@ const writeStatus = (() => {
             }
 
             // Require a newline for status updates any time the cursor does not end at the beginning of a line
-            needNewline = payload[payload.length - 1] !== "\n" && payload[payload.length - 1] !== "\r";
+            switch (payload[payload.length - 1]) {
+                case "\n":
+                case 0xa:
+                case "\r":
+                case 0xd:
+                    needNewline = false;
+                    break;
+
+                default:
+                    needNewline = true;
+                    break;
+            }
 
             return actualWrite.call(stream, payload, ...params);
         };
@@ -134,13 +150,13 @@ export class Progress {
 
     success(text: string) {
         this.status = Progress.Status.Success;
-        writeStatus(`  ${ansi.green("✓")} ${text} ${this.#duration}`);
+        writeStatus(`  ${STATUS_ICON_SUCCESS} ${text} ${this.#duration}`);
         this.#start = this.#ongoingText = undefined;
     }
 
     failure(text: string) {
         this.status = Progress.Status.Failure;
-        writeStatus(`  ${ansi.bright.red("✗")} ${text} ${this.#duration}`);
+        writeStatus(`  ${STATUS_ICON_FAILURE} ${text} ${this.#duration}`);
         this.#start = this.#ongoingText = undefined;
     }
 
@@ -214,15 +230,8 @@ export class Progress {
     }
 
     get #duration() {
-        let ms = this.#start ? new Date().getTime() - this.#start : 0;
-        if (ms < 1000) {
-            ms = Math.round(ms / 10) / 100;
-        } else if (ms < 10000) {
-            ms = Math.round(ms / 100) / 10;
-        } else {
-            ms = Math.trunc(ms / 1000);
-        }
-        return `${ansi.dim.yellow}(${ms}s)${ansi.not.dim.not.yellow}`;
+        const duration = this.#start ? new Date().getTime() - this.#start : 0;
+        return Progress.formatDuration(duration);
     }
 }
 
@@ -232,5 +241,24 @@ export namespace Progress {
         Ongoing = "ongoing",
         Success = "success",
         Failure = "failure",
+    }
+
+    export function formatDuration(duration: number) {
+        let seconds;
+        if (duration < 10000) {
+            seconds = (duration / 1000).toPrecision(2);
+            if (seconds.startsWith("0.")) {
+                seconds = seconds.slice(1);
+            }
+            while (seconds.endsWith("0")) {
+                seconds = seconds.slice(0, seconds.length - 1);
+            }
+            if (seconds === ".") {
+                seconds = "0";
+            }
+        } else {
+            seconds = Math.trunc(duration / 1000);
+        }
+        return `${ansi.dim.yellow}(${seconds}s)${ansi.not.dim.not.yellow}`;
     }
 }
