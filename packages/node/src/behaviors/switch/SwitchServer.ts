@@ -50,10 +50,10 @@ const schema = SwitchServerBase.schema!.extend({
  *  This defaults to position 0 but can be changed by settings this attribute. it is available as soon as the Momentary
  *  Switch (MS) feature is used.
  */
-export class SwitchServerLogic extends SwitchServerBase {
-    declare protected internal: SwitchServerLogic.Internal;
-    declare state: SwitchServerLogic.State;
-    declare events: SwitchServerLogic.Events;
+export class SwitchBaseServer extends SwitchServerBase {
+    declare protected internal: SwitchBaseServer.Internal;
+    declare state: SwitchBaseServer.State;
+    declare events: SwitchBaseServer.Events;
     schema = schema;
 
     override initialize() {
@@ -223,7 +223,7 @@ export class SwitchServerLogic extends SwitchServerBase {
     }
 }
 
-export namespace SwitchServerLogic {
+export namespace SwitchBaseServer {
     export class Internal {
         /** Timer to debounce the raw position. */
         debounceTimer?: Timer;
@@ -281,4 +281,4 @@ export namespace SwitchServerLogic {
 }
 
 // Reset all Features
-export class SwitchServer extends SwitchServerLogic.for(ClusterType(Switch.Base)) {}
+export class SwitchServer extends SwitchBaseServer.for(ClusterType(Switch.Base)) {}

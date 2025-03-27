@@ -21,7 +21,7 @@ export interface UdpChannelOptions {
 export interface UdpChannel {
     maxPayloadSize: number;
     onData(
-        listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
     ): TransportInterface.Listener;
     send(host: string, port: number, data: Uint8Array): Promise<void>;
     close(): Promise<void>;

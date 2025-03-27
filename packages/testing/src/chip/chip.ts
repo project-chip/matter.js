@@ -71,6 +71,11 @@ export interface Chip extends chip.Builder {
     defaultSubject: Subject.Factory;
 
     /**
+     * Clear the MDNS cache.
+     */
+    clearMdns(): Promise<void>;
+
+    /**
      * The CHIP container.  Must be initialized before access.
      */
     container: Container;
@@ -338,6 +343,7 @@ Object.defineProperties(chipFn, {
     openPipe: { value: State.openPipe.bind(State) },
     onClose: { value: State.onClose.bind(State) },
     testFor: { value: State.testFor.bind(State) },
+    clearMdns: { value: State.clearMdns.bind(State) },
 });
 
 export const chip = chipFn as Chip;

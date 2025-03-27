@@ -8,7 +8,7 @@ import { ElectricalEnergyMeasurement } from "#clusters/electrical-energy-measure
 import { ClusterType } from "#types";
 import { ElectricalEnergyMeasurementBehavior } from "./ElectricalEnergyMeasurementBehavior.js";
 
-const ElectricalEnergyMeasurementServerBase = ElectricalEnergyMeasurementBehavior.for(
+const ElectricalEnergyMeasurementBase = ElectricalEnergyMeasurementBehavior.for(
     ElectricalEnergyMeasurement.Complete,
 ).with(
     ElectricalEnergyMeasurement.Feature.CumulativeEnergy,
@@ -39,7 +39,7 @@ type AtomicElectricalEnergyMeasurement = {
  * default. You should use {@link ElectricalEnergyMeasurementServer.with} to specialize the class for the features your
  * implementation supports.
  */
-export class ElectricalEnergyMeasurementServerLogic extends ElectricalEnergyMeasurementServerBase {
+export class ElectricalEnergyMeasurementBaseServer extends ElectricalEnergyMeasurementBase {
     /**
      * Convenience method to set the measurement values for the cluster in an atomic way. This method updates the
      * attributes with the provided data and also sends the events for the imported and exported energy values.
@@ -86,13 +86,13 @@ export class ElectricalEnergyMeasurementServerLogic extends ElectricalEnergyMeas
     }
 }
 
-export namespace ElectricalEnergyMeasurementServerLogic {
+export namespace ElectricalEnergyMeasurementBaseServer {
     export declare const ExtensionInterface: {
         setMeasurement(measurement: AtomicElectricalEnergyMeasurement): void;
     };
 }
 
 // Reset all Features
-export class ElectricalEnergyMeasurementServer extends ElectricalEnergyMeasurementServerLogic.for(
+export class ElectricalEnergyMeasurementServer extends ElectricalEnergyMeasurementBaseServer.for(
     ClusterType(ElectricalEnergyMeasurement.Base),
 ) {}

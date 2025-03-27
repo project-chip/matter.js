@@ -25,8 +25,8 @@ const OnOffLogicBase = OnOffBehavior.with(OnOff.Feature.Lighting);
  * The default implementation do not contain any logic for the DeadFrontBehavior feature because this is very use case
  * specific, so this needs to be implemented by the device implementor as needed.
  */
-export class OnOffServerLogic extends OnOffLogicBase {
-    declare protected internal: OnOffServerLogic.Internal;
+export class OnOffBaseServer extends OnOffLogicBase {
+    declare protected internal: OnOffBaseServer.Internal;
 
     override initialize() {
         if (this.features.lighting && this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
@@ -195,7 +195,7 @@ export class OnOffServerLogic extends OnOffLogicBase {
     }
 }
 
-export namespace OnOffServerLogic {
+export namespace OnOffBaseServer {
     export class Internal {
         timedOnTimer?: Timer;
         delayedOffTimer?: Timer;
@@ -204,4 +204,4 @@ export namespace OnOffServerLogic {
 
 // We had turned on some more features to provide a default implementation, but export the cluster with default
 // Features again.
-export class OnOffServer extends OnOffServerLogic.for(ClusterType(OnOff.Base)) {}
+export class OnOffServer extends OnOffBaseServer.for(ClusterType(OnOff.Base)) {}

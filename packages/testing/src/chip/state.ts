@@ -28,13 +28,14 @@ import { YamlTest } from "./yaml-test.js";
  */
 const Values = {
     isInitialized: false,
-    maybeRunner: undefined as TestRunner | undefined,
-    maybeMocha: undefined as Mocha | undefined,
-    maybeSubject: undefined as Subject.Factory | undefined,
-    maybeTest: undefined as Test | undefined,
-    maybeContainer: undefined as Container | undefined,
-    maybePics: undefined as PicsFile | undefined,
-    maybeTests: undefined as TestDescriptor.Filesystem | undefined,
+    runner: undefined as TestRunner | undefined,
+    mocha: undefined as Mocha | undefined,
+    subject: undefined as Subject.Factory | undefined,
+    test: undefined as Test | undefined,
+    mainContainer: undefined as Container | undefined,
+    mdnsContainer: undefined as Container | undefined,
+    pics: undefined as PicsFile | undefined,
+    tests: undefined as TestDescriptor.Filesystem | undefined,
     initializedSubjects: new WeakSet<Subject>(),
     activeSubject: undefined as Subject | undefined,
     singleUseSubject: false,
@@ -43,7 +44,7 @@ const Values = {
     subjects: new Map<Subject.Factory, Record<string, Subject>>(),
     snapshots: new Map<Subject, {}>(),
     containerLifecycleInstalled: false,
-    tests: new Map<TestDescriptor, Test>(),
+    testMap: new Map<TestDescriptor, Test>(),
 };
 
 /**
@@ -51,7 +52,7 @@ const Values = {
  */
 export const State = {
     get container() {
-        const container = Values.maybeContainer;
+        const container = Values.mainContainer;
 
         if (container === undefined) {
             throw new Error("Docker container is not initialized");
@@ -61,11 +62,11 @@ export const State = {
     },
 
     set runner(runner: TestRunner) {
-        Values.maybeRunner = runner;
+        Values.runner = runner;
     },
 
     get runner() {
-        const runner = Values.maybeRunner;
+        const runner = Values.runner;
 
         if (runner === undefined) {
             throw new Error("No test runner configured");
@@ -75,11 +76,11 @@ export const State = {
     },
 
     set mocha(mocha: Mocha) {
-        Values.maybeMocha = mocha;
+        Values.mocha = mocha;
     },
 
     get mocha() {
-        const mocha = Values.maybeMocha;
+        const mocha = Values.mocha;
 
         if (mocha === undefined) {
             throw new Error("No mocha instance configured");
@@ -89,11 +90,11 @@ export const State = {
     },
 
     set subject(subject: Subject.Factory) {
-        Values.maybeSubject = subject;
+        Values.subject = subject;
     },
 
     get subject() {
-        const subject = Values.maybeSubject;
+        const subject = Values.subject;
 
         if (subject === undefined) {
             throw new Error("no default subject configured");
@@ -103,26 +104,26 @@ export const State = {
     },
 
     get pics() {
-        if (Values.maybePics === undefined) {
+        if (Values.pics === undefined) {
             throw new Error("PICS not initialized");
         }
 
-        return Values.maybePics;
+        return Values.pics;
     },
 
     get tests() {
-        if (Values.maybeTests === undefined) {
+        if (Values.tests === undefined) {
             throw new Error("CHIP test descriptor not loaded");
         }
-        return Values.maybeTests;
+        return Values.tests;
     },
 
     get test() {
-        if (Values.maybeTest === undefined) {
+        if (Values.test === undefined) {
             throw new Error("No active test");
         }
 
-        return Values.maybeTest;
+        return Values.test;
     },
 
     get isInitialized() {
@@ -187,11 +188,11 @@ export const State = {
         const subject = Values.activeSubject!;
 
         try {
-            Values.maybeTest = test;
+            Values.test = test;
             await beforeTest(subject, test);
             await test.invoke(subject, reporter.beginStep.bind(reporter), args);
         } finally {
-            Values.maybeTest = undefined;
+            Values.test = undefined;
         }
     },
 
@@ -238,10 +239,10 @@ export const State = {
             identifier = maybeDescriptor;
         }
 
-        let test = Values.tests.get(identifier);
+        let test = Values.testMap.get(identifier);
         if (!test) {
             test = createTest(identifier);
-            Values.tests.set(identifier, test);
+            Values.testMap.set(identifier, test);
         }
 
         return test;
@@ -347,6 +348,21 @@ export const State = {
             Values.activeSubject = undefined;
         }
     },
+
+    /**
+     * Clear the MDNS cache.
+     */
+    async clearMdns() {
+        if (!Values.mdnsContainer) {
+            throw new Error("Cannot reset MDNS because MDNS container is not initialized");
+        }
+
+        // Active subjects will not be discoverable after we clear DNS
+        await this.deactivateSubject();
+
+        // Clear DNS
+        await Values.mdnsContainer.exec("/bin/mdns-clear");
+    },
 };
 
 /**
@@ -387,12 +403,12 @@ async function configureContainer() {
         command: ["/usr/bin/dbus-daemon", "--nopidfile", "--system", "--nofork"],
     });
 
-    await composition.add({
+    Values.mdnsContainer = await composition.add({
         name: "mdns",
-        command: ["/usr/sbin/avahi-daemon"],
+        command: ["/bin/mdns-run"],
     });
 
-    Values.maybeContainer = await composition.add({
+    Values.mainContainer = await composition.add({
         name: "chip",
         recreate: true,
     });
@@ -404,7 +420,7 @@ async function configureContainer() {
             console.error("Error terminating containers:", e);
         }
 
-        Values.maybeContainer = undefined;
+        Values.mainContainer = undefined;
     });
 }
 
@@ -419,7 +435,7 @@ async function configurePics() {
     const overrides = new PicsFile(testing.resolve(Constants.localPicsOverrideFile));
     pics.patch(overrides);
 
-    Values.maybePics = pics;
+    Values.pics = pics;
 
     await State.container.write(ContainerPaths.matterJsPics, pics.toString());
 }
@@ -435,7 +451,7 @@ async function configureTests() {
     if (!Array.isArray(descriptor.members)) {
         throw new Error(`CHIP test descriptor has no members`);
     }
-    Values.maybeTests = TestDescriptor.Filesystem(descriptor);
+    Values.tests = TestDescriptor.Filesystem(descriptor);
 }
 
 /**
