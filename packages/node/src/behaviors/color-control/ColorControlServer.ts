@@ -514,6 +514,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepHueRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -687,6 +690,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepSaturationRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1075,6 +1081,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.EnhancedStepHueRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1357,6 +1366,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
     }: ColorControl.StepColorTemperatureRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
