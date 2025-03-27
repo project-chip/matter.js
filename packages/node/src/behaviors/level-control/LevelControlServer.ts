@@ -42,18 +42,18 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * Implementing a cluster in this way will disable much of the logic matter.js implements for you in the default
  * implementations.
  *
- * * {@link LevelControlServerLogic.moveToLevelLogic} moves the value to a defined level with a transition time
- * * {@link LevelControlServerLogic.moveLogic} moves the value up or down with a defined rate
- * * {@link LevelControlServerLogic.stepLogic} steps the value up or down with a defined step size and transition
- * * {@link LevelControlServerLogic.stopLogic} stops any currently running transitions
- * * {@link LevelControlServerLogic.handleOnOffChange} transition to onLevel when device when device turns on or off
+ * * {@link LevelControlBaseServer.moveToLevelLogic} moves the value to a defined level with a transition time
+ * * {@link LevelControlBaseServer.moveLogic} moves the value up or down with a defined rate
+ * * {@link LevelControlBaseServer.stepLogic} steps the value up or down with a defined step size and transition
+ * * {@link LevelControlBaseServer.stopLogic} stops any currently running transitions
+ * * {@link LevelControlBaseServer.handleOnOffChange} transition to onLevel when device when device turns on or off
  *
  * All overridable methods may be implemented sync or async by returning a Promise.
  */
-export class LevelControlServerLogic extends LevelControlLogicBase {
-    declare protected internal: LevelControlServerLogic.Internal;
-    declare state: LevelControlServerLogic.State;
-    declare events: LevelControlServerLogic.Events;
+export class LevelControlBaseServer extends LevelControlLogicBase {
+    declare protected internal: LevelControlBaseServer.Internal;
+    declare state: LevelControlBaseServer.State;
+    declare events: LevelControlBaseServer.Events;
 
     /** Returns the minimum level, including feature specific fallback value handling. */
     get minLevel() {
@@ -107,15 +107,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * Initialize transition management.
      *
      * We manage transitions using {@link Transitions} if
-     * {@link LevelControlServerLogic.State#managedTransitionTimeHandling} is true.
+     * {@link LevelControlBaseServer.State#managedTransitionTimeHandling} is true.
      *
      * You may override this method to replace the {@link Transitions} implementation customized for your application.
      */
     protected initializeTransitions() {
         const { endpoint } = this;
-        const readOnlyState = endpoint.stateOf(LevelControlServerLogic);
+        const readOnlyState = endpoint.stateOf(LevelControlBaseServer);
         return new Transitions(this.endpoint, {
-            type: LevelControlServerLogic,
+            type: LevelControlBaseServer,
 
             remainingTimeEvent: this.events.remainingTime$Changed,
 
@@ -134,11 +134,11 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             properties: {
                 currentLevel: {
                     get min() {
-                        return endpoint.stateOf(LevelControlServerLogic).minLevel;
+                        return endpoint.stateOf(LevelControlBaseServer).minLevel;
                     },
 
                     get max() {
-                        return endpoint.stateOf(LevelControlServerLogic).maxLevel;
+                        return endpoint.stateOf(LevelControlBaseServer).maxLevel;
                     },
                 },
             },
@@ -553,12 +553,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     }
 }
 
-export namespace LevelControlServerLogic {
+export namespace LevelControlBaseServer {
     export class Internal {
         /**
          * Transition management.
          */
-        transitions?: Transitions<LevelControlServerLogic>;
+        transitions?: Transitions<LevelControlBaseServer>;
     }
 
     export class State extends LevelControlLogicBase.State {
@@ -585,14 +585,14 @@ export namespace LevelControlServerLogic {
         [Val.properties](endpoint: Endpoint) {
             return {
                 set remainingTime(value: number) {
-                    const transition = endpoint.behaviors.internalsOf(LevelControlServerLogic).transitions;
+                    const transition = endpoint.behaviors.internalsOf(LevelControlBaseServer).transitions;
                     if (transition) {
                         transition.remainingTime = value;
                     }
                 },
 
                 get remainingTime() {
-                    return endpoint.behaviors.internalsOf(LevelControlServerLogic).transitions?.remainingTime ?? 0;
+                    return endpoint.behaviors.internalsOf(LevelControlBaseServer).transitions?.remainingTime ?? 0;
                 },
             };
         }
@@ -631,7 +631,7 @@ export namespace LevelControlServerLogic {
 
 // We had turned on some more features to provide the default implementation, but export the cluster with default
 // Features again.
-export class LevelControlServer extends LevelControlServerLogic.with(LevelControl.Feature.OnOff) {}
+export class LevelControlServer extends LevelControlBaseServer.with(LevelControl.Feature.OnOff) {}
 
 function asIntOrNull(value: number | null) {
     if (value === null) {

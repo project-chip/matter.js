@@ -142,7 +142,7 @@ describe("LevelControlServer", () => {
         // Close with small step interval because otherwise timer may resolve while awaiting close
         await node.close(10);
 
-        // Ensure ttimers are cleaned up
+        // Ensure timers are cleaned up
         expectTimers(0);
 
         // To be on the safe side, advance time beyond when the timer would trigger.  If nothing blows up, timers were
@@ -152,7 +152,7 @@ describe("LevelControlServer", () => {
 });
 
 function expectTimers(count: number) {
-    expect(MockTime.timerCountFor("transition-node0.part0-LevelControlServerLogic"), "transition timer").equals(count);
+    expect(MockTime.timerCountFor("transition-node0.part0-LevelControlBaseServer"), "transition timer").equals(count);
     expect(MockTime.timerCountFor("delayed emit"), "deferred emit timer").equals(count);
 }
 

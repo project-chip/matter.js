@@ -5,6 +5,7 @@
  */
 
 import type { FilesystemSync } from "#tools";
+import { readFile, writeFile } from "node:fs/promises";
 import { PicsExpression } from "./chip/pics-expression.js";
 import type { PicsFile } from "./chip/pics-file.js";
 
@@ -21,6 +22,10 @@ export interface TestDescriptor {
     description?: string;
     pics?: string;
     config?: Record<string, unknown>;
+    startUncommissioned?: boolean;
+    runAt?: Date;
+    passed?: boolean;
+    durationMs?: number;
 }
 
 export interface TestFileDescriptor extends TestDescriptor {
@@ -33,6 +38,8 @@ export interface TestSuiteDescriptor extends TestDescriptor {
 
 export namespace TestDescriptor {
     export type Kind = "suite" | "js" | "py" | "yaml" | "manual" | "step";
+
+    export const DEFAULT_FILENAME = "build/test-report.json";
 
     export interface Filesystem extends FilesystemSync<Stat> {
         descriptor: TestDescriptor;
@@ -154,6 +161,96 @@ export namespace TestDescriptor {
         for (const member of descriptor.members) {
             visit(member, fn);
         }
+    }
+
+    /**
+     * Load an existing persisted descriptor or create a new one.
+     */
+    export async function open(path: string): Promise<TestSuiteDescriptor> {
+        let descriptor: TestSuiteDescriptor = {
+            name: "?",
+            kind: "suite",
+            members: [],
+        };
+
+        try {
+            const json = await readFile(path, "utf-8");
+            descriptor = JSON.parse(json);
+            if (
+                typeof descriptor?.name !== "string" ||
+                descriptor.kind !== "suite" ||
+                !Array.isArray(descriptor.members)
+            ) {
+                throw new Error(`Invalid test descriptor "${path}"`);
+            }
+        } catch (e) {
+            if ((e as undefined | { code?: string })?.code !== "ENOENT") {
+                throw e;
+            }
+        }
+
+        return descriptor;
+    }
+
+    /**
+     * Persist a descriptor.
+     */
+    export async function save(path: string, descriptor: TestSuiteDescriptor) {
+        await writeFile(path, JSON.stringify(descriptor, undefined, 4));
+    }
+
+    /**
+     * Create a new test descriptor that combines information from a previous run with a new run.
+     *
+     * We do not just overwrite the descriptor because a {@link TestSuiteDescriptor} will not include information about
+     * tests that were excluded from a run.
+     */
+    export function merge<T extends TestDescriptor>(previous: TestDescriptor, updates: T): T {
+        const descriptor = {
+            ...updates,
+        };
+
+        for (const name of ["durationMs", "passed", "runAt"] as const) {
+            if (previous[name] !== undefined && descriptor[name] === undefined) {
+                (descriptor as Record<string, unknown>)[name] = previous[name];
+            }
+        }
+
+        if (previous.members === undefined) {
+            return descriptor;
+        }
+
+        if (updates.members === undefined) {
+            descriptor.members = previous.members;
+            return descriptor;
+        }
+
+        const updatedMembers = {} as Record<string, TestDescriptor>;
+        for (const member of updates.members) {
+            updatedMembers[member.name] = member;
+        }
+
+        const newMembers = Array<TestDescriptor>();
+        for (const member of previous.members) {
+            const update = updatedMembers[member.name];
+
+            if (update === undefined) {
+                newMembers.push({
+                    ...member,
+                    isDisabled: true,
+                });
+                continue;
+            }
+
+            newMembers.push(merge(member, update));
+            delete updatedMembers[member.name];
+        }
+
+        newMembers.push(...Object.values(updatedMembers));
+
+        descriptor.members = newMembers;
+
+        return descriptor;
     }
 
     /**

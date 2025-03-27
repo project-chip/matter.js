@@ -36,7 +36,7 @@ import {
     singleton,
 } from "@matter/main";
 import { OnOffServer } from "@matter/main/behaviors";
-import { GeneralDiagnostics, NetworkCommissioning } from "@matter/main/clusters";
+import { GeneralDiagnostics, NetworkCommissioning, OnOff } from "@matter/main/clusters";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { RootRequirements } from "@matter/main/endpoints";
 import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
@@ -139,7 +139,7 @@ await deviceStorage.set({
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.
-class OnOffShellExecServer extends OnOffServer {
+class OnOffShellExecServer extends OnOffServer.with(OnOff.Feature.Lighting) {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
     override async on() {
         executeCommand("on");

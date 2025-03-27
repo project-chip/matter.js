@@ -16,9 +16,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "All tests",
             "args": [
                 "--clear"
@@ -40,9 +37,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test current file",
             "args": [
                 "--clear",
@@ -68,9 +62,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run current file",
             "args": [
                 "--clear",
@@ -93,9 +84,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run shell",
             "cwd": "${workspaceFolder}/packages/nodejs-shell",
             "args": [
@@ -119,9 +107,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run CLI tool",
             "cwd": "${workspaceFolder}/packages/cli-tool",
             "args": [
@@ -145,9 +130,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/testing",
             "cwd": "${workspaceFolder}/packages/testing",
             "args": [
@@ -170,9 +152,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/general",
             "cwd": "${workspaceFolder}/packages/general",
             "args": [
@@ -195,9 +174,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/model",
             "cwd": "${workspaceFolder}/packages/model",
             "args": [
@@ -220,9 +196,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/types",
             "cwd": "${workspaceFolder}/packages/types",
             "args": [
@@ -245,9 +218,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/protocol",
             "cwd": "${workspaceFolder}/packages/protocol",
             "args": [
@@ -270,9 +240,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/node",
             "cwd": "${workspaceFolder}/packages/node",
             "args": [
@@ -295,34 +262,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
-            "name": "Test @project-chip/matter.js",
-            "cwd": "${workspaceFolder}/packages/matter.js",
-            "args": [
-                "--clear"
-            ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "runtimeArgs": [
-                "--enable-source-maps"
-            ],
-            "outFiles": [
-                "${workspaceFolder}/**/dist/esm/**/*.js",
-                "${workspaceFolder}/**/build/esm/**/*.js"
-            ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/nodejs",
             "cwd": "${workspaceFolder}/packages/nodejs",
             "args": [
@@ -345,9 +284,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Test @matter/chip-testing",
             "cwd": "${workspaceFolder}/chip-testing",
             "args": [
@@ -370,9 +306,84 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
+            "name": "Test chip:app-fast",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/app-fast/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Test chip:app-slow",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/app-slow/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Test chip:core",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/core/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
             "name": "Run ControllerNode",
             "args": [
                 "--clear",
@@ -395,9 +406,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run BridgedDevicesNode",
             "args": [
                 "--clear",
@@ -420,9 +428,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run ComposedDeviceNode",
             "args": [
                 "--clear",
@@ -445,9 +450,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run IlluminatedRollerShade",
             "args": [
                 "--clear",
@@ -470,9 +472,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run MeasuredSocketDevice",
             "args": [
                 "--clear",
@@ -495,9 +494,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run MultiDeviceNode",
             "args": [
                 "--clear",
@@ -520,9 +516,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run DeviceNode",
             "args": [
                 "--clear",
@@ -545,9 +538,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run DeviceNodeFull",
             "args": [
                 "--clear",
@@ -570,9 +560,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run LightDevice",
             "args": [
                 "--clear",
@@ -595,9 +582,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Run SensorDeviceNode",
             "args": [
                 "--clear",
@@ -620,9 +604,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate chip",
             "args": [
                 "--clear",
@@ -645,9 +626,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate clusters",
             "args": [
                 "--clear",
@@ -670,9 +648,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate endpoints",
             "args": [
                 "--clear",
@@ -695,9 +670,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate forwards",
             "args": [
                 "--clear",
@@ -720,9 +692,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate model",
             "args": [
                 "--clear",
@@ -745,9 +714,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate spec",
             "args": [
                 "--clear",
@@ -773,9 +739,6 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
-            "presentation": {
-                "clear": true
-            },
             "name": "Generate vscode",
             "args": [
                 "--clear",

@@ -22,8 +22,9 @@
         "build": "matter-build",
         "build-clean": "matter-build --clean",
         "ci-test": "matter-test",
-        "ci-test-fast": "matter-test",
-        "ci-test-slow": "matter-test"
+        "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts",
+        "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts",
+        "test-core": "matter-test --spec=test/core/**/*.test.ts"
     },
     "dependencies": {
         "@matter/main": "*",
@@ -31,7 +32,7 @@
     },
     "devDependencies": {
         "@matter/testing": "*",
-        "@types/ws": "^8.5.14",
+        "@types/ws": "^8.18.0",
         "ws": "^8.18.1"
     },
     "matter": {

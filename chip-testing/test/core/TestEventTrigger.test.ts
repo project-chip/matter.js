@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-describe("FLABEL", () => {
-    //    chip("FLABEL/*");
+describe("TestEventTrigger", () => {
+    chip("TestEventTrigger");
 });

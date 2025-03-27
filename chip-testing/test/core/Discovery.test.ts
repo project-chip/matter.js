@@ -6,8 +6,7 @@
 
 import { edit } from "@matter/testing";
 
-describe("misc", () => {
-    // TODO - remove when we're on 1.4
+describe("Discovery", () => {
     before(() =>
         chip.testFor("Discovery").edit(
             edit.sed(
@@ -17,5 +16,5 @@ describe("misc", () => {
             ),
         ),
     );
-    chip("CASERecovery", "CommandsById", "DeviceBasicComposition-run1", "Discovery", "TestEventTrigger");
+    chip("Discovery");
 });

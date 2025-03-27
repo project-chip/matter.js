@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Graph, Package } from "@matter/tools";
+import { Graph, isDirectory, Package } from "#tools";
 import { basename } from "node:path";
 
 const LAUNCH_TEMPLATE = {
@@ -40,7 +40,10 @@ const CONFIG_TEMPLATE = {
 
     runtimeArgs: ["--enable-source-maps"],
     outFiles: ["${workspaceFolder}/**/dist/esm/**/*.js", "${workspaceFolder}/**/build/esm/**/*.js"],
-    presentation: { clear: true },
+
+    // This is buggy as of VS Code 1.98.  Sometimes doesn't clear at all, sometimes clears after task completes which is
+    // really annoying.  We already clear manually with escape codes so just omit
+    //presentation: { clear: true },
 };
 
 export type LaunchOptions = {
@@ -74,6 +77,21 @@ for (const node of graph.nodes) {
             cwd: Package.workspace.relative(node.pkg.path),
         });
     }
+}
+
+// Generate launches for each CHIP test set
+for (const path of await Package.workspace.glob("chip-testing/test/*")) {
+    if (!isDirectory(path)) {
+        continue;
+    }
+
+    const setName = basename(path);
+
+    addTest({
+        name: `Test chip:${setName}`,
+        cwd: "chip-testing",
+        args: ["--spec", `test/${setName}/**/*.test.ts`, "--all-logs", "esm"],
+    });
 }
 
 // Generate launches for each example

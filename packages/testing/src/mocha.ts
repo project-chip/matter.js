@@ -192,7 +192,12 @@ function beforeEachFile() {
     Boot.reboot();
 }
 
-export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
+export function adaptReporter(
+    Mocha: typeof MochaType,
+    title: string,
+    reporter: Reporter,
+    updateStats: boolean = false,
+) {
     const RUNNER = Mocha.Runner.constants;
 
     let logs = Array<string>();
@@ -216,11 +221,25 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             });
 
             runner.on(RUNNER.EVENT_TEST_BEGIN, test => {
+                if (updateStats) {
+                    test.descriptor.runAt = new Date();
+                }
                 logs = (test as any).logs = [];
                 reporter.beginTest(test.title, this.translatedStats);
             });
 
+            if (updateStats) {
+                runner.on(RUNNER.EVENT_TEST_PASS, test => {
+                    test.descriptor.durationMs = test.duration;
+                    test.descriptor.passed = true;
+                });
+            }
+
             runner.on(RUNNER.EVENT_TEST_FAIL, (test, error) => {
+                if (updateStats) {
+                    test.descriptor.durationMs = test.duration;
+                    test.descriptor.passed = false;
+                }
                 const logs = (test as any).logs as string[];
                 reporter.failTest(test.title, FailureDetail(error, logs));
                 wtf.dump();
