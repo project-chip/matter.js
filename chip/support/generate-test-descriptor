@@ -169,6 +169,9 @@ def load_python():
 
         steps = instance.get_defined_test_steps(name)
         if steps:
+            if not steps[0].is_commissioning:
+                props["startUncommissioned"] = True
+                
             props["members"] = list(map(lambda step: {
                 "name": step.test_plan_number,
                 "kind": "step",

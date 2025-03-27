@@ -22,6 +22,7 @@ export interface TestDescriptor {
     description?: string;
     pics?: string;
     config?: Record<string, unknown>;
+    startUncommissioned?: boolean;
     runAt?: Date;
     passed?: boolean;
     durationMs?: number;

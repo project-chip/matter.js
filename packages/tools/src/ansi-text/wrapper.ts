@@ -22,6 +22,7 @@ export class Wrapper implements Consumer {
     #target: Consumer;
     #wrapPrefix?: ContiguousOutputSegment;
     #preserveIndent: boolean;
+    #preserveSpace: boolean;
     #splitStyling: boolean;
     #inputState: "newline" | "prefix" | "indent" | "word" | "space" = "newline";
     #outputState: "newline" | "newwrap" | "inline" = "newline";
@@ -34,13 +35,14 @@ export class Wrapper implements Consumer {
     };
 
     constructor(target: Consumer, options: Wrapper.Options) {
-        const { wrapPrefix, preserveIndent, splitStyling } = options;
+        const { wrapPrefix, preserveIndent, splitStyling, preserveSpace } = options;
 
         this.#target = target;
         if (wrapPrefix !== undefined) {
             this.#wrapPrefix = new ContiguousOutputSegment(...tokenize(wrapPrefix));
         }
         this.#preserveIndent = preserveIndent ?? true;
+        this.#preserveSpace = preserveSpace ?? true;
         this.#splitStyling =
             splitStyling ?? !!(this.#preserveIndent || this.#wrapPrefix || !this.#target.state.linePrefix);
 
@@ -129,6 +131,9 @@ export class Wrapper implements Consumer {
                         break;
 
                     case "word":
+                        if (this.#preserveSpace) {
+                            this.#enqueue(token);
+                        }
                         this.#emit();
                         this.#inputState = "space";
                         break;
@@ -160,7 +165,7 @@ export class Wrapper implements Consumer {
 
         // Ideal case - not wrapping or segment fits on current line
         if (remainingWidth === undefined || output.width <= remainingWidth) {
-            if (outputState === "inline") {
+            if (outputState === "inline" && !this.#preserveSpace) {
                 this.#target.write(SPACE);
             }
             this.#target.write(...output.tokens);
@@ -184,7 +189,7 @@ export class Wrapper implements Consumer {
 
         // Third best case - we need to wrap the segment itself
         const scanner = output.scan();
-        if (outputState === "inline") {
+        if (outputState === "inline" && !this.#preserveSpace) {
             this.#target.write(SPACE);
         }
         this.#target.write(...scanner.take(remainingWidth));
@@ -229,6 +234,7 @@ export namespace Wrapper {
     export interface Options {
         wrapPrefix?: string;
         preserveIndent?: boolean;
+        preserveSpace?: boolean;
         splitStyling?: boolean;
     }
 
