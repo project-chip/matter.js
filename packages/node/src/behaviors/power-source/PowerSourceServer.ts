@@ -14,7 +14,7 @@ const PowerSourceLevelBase = PowerSourceBehavior.with(PowerSource.Feature.Batter
 /**
  * This is the default server implementation of {@link PowerSourceBehavior}.
  */
-export class PowerSourceServerLogic extends PowerSourceLevelBase {
+export class PowerSourceBaseServer extends PowerSourceLevelBase {
     override async initialize() {
         (await this.agent.load(DescriptorServer)).addDeviceTypes("PowerSource");
 
@@ -33,4 +33,4 @@ export class PowerSourceServerLogic extends PowerSourceLevelBase {
 
 // We had turned on some more features to provide the default implementation, but export the cluster with default
 // Features again.
-export class PowerSourceServer extends PowerSourceServerLogic.for(ClusterType(PowerSource.Base)) {}
+export class PowerSourceServer extends PowerSourceBaseServer.for(ClusterType(PowerSource.Base)) {}

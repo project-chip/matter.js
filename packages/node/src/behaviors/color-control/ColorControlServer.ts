@@ -24,7 +24,7 @@ import {
 
 const logger = Logger.get("ColorControlServer");
 
-const ColorControlServerBase = ColorControlBehavior.with(
+const ColorControlBase = ColorControlBehavior.with(
     ColorControl.Feature.HueSaturation,
     ColorControl.Feature.EnhancedHue,
     ColorControl.Feature.ColorLoop,
@@ -70,55 +70,55 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
  * already done and you can focus on the actual hardware interaction:
  *
- * * {@link ColorControlServerLogic.moveToHueLogic} Logic to move the hue to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveHueLogic} Logic to move the hue by a defined rate/second
- * * {@link ColorControlServerLogic.stepHueLogic} Logic to move the hue one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
+ * * {@link ColorControlBaseServer.moveToHueLogic} Logic to move the hue to a defined value in a defined time
+ * * {@link ColorControlBaseServer.moveHueLogic} Logic to move the hue by a defined rate/second
+ * * {@link ColorControlBaseServer.stepHueLogic} Logic to move the hue one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
  *   time
- * * {@link ColorControlServerLogic.moveSaturationLogic} Logic to move the saturation by a defined rate/second
- * * {@link ColorControlServerLogic.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
+ * * {@link ColorControlBaseServer.moveSaturationLogic} Logic to move the saturation by a defined rate/second
+ * * {@link ColorControlBaseServer.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
  *   in a defined time
- * * {@link ColorControlServerLogic.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorLogic} Logic to move the x/y color by a defined rate/second
- * * {@link ColorControlServerLogic.stepColorLogic} Logic to move the x/y color one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
+ * * {@link ColorControlBaseServer.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
+ * * {@link ColorControlBaseServer.moveColorLogic} Logic to move the x/y color by a defined rate/second
+ * * {@link ColorControlBaseServer.stepColorLogic} Logic to move the x/y color one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
  *   in a defined time
- * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
+ * * {@link ColorControlBaseServer.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
  *   to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined
+ * * {@link ColorControlBaseServer.moveColorTemperatureLogic} Logic to move the color temperature by a defined
  *   rate/second
- * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
+ * * {@link ColorControlBaseServer.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
  *   defined time
- * * {@link ColorControlServerLogic.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
- * * {@link ColorControlServerLogic.stopAllColorMovement} Logic to stop any color movements
- * * {@link ColorControlServerLogic.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
- * * {@link ColorControlServerLogic.stopColorLoopLogic} Logic to stop the color loop
- * * {@link ColorControlServerLogic.stopMoveStepLogic} Logic to stop all movements beside color loops
- * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of
+ * * {@link ColorControlBaseServer.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
+ * * {@link ColorControlBaseServer.stopAllColorMovement} Logic to stop any color movements
+ * * {@link ColorControlBaseServer.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
+ * * {@link ColorControlBaseServer.stopColorLoopLogic} Logic to stop the color loop
+ * * {@link ColorControlBaseServer.stopMoveStepLogic} Logic to stop all movements beside color loops
+ * * {@link ColorControlBaseServer.switchColorMode} Logic to switch the color mode and to set the current attributes of
  *   the new mode
  *
  * All overridable methods can be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
  *
- * * {@link ColorControlServerLogic#setColorMode} to set the color mode
- * * {@link ColorControlServerLogic#setEnhancedColorMode} to set the enhanced color mode
+ * * {@link ColorControlBaseServer#setColorMode} to set the color mode
+ * * {@link ColorControlBaseServer#setEnhancedColorMode} to set the enhanced color mode
  *
- * The default implementation of {@link ColorControlServerLogic.switchColorMode} tries to convert the color values
+ * The default implementation of {@link ColorControlBaseServer.switchColorMode} tries to convert the color values
  * between the different modi. When switching from color temperature mode to any other mode the value can be converted
  * when the color temperature was between 1000K and 20.000K. For other values no conversion takes place.
  *
- * The method {@link ColorControlServerLogic.syncColorTemperatureWithLevelLogic} is handling the sync between the
+ * The method {@link ColorControlBaseServer.syncColorTemperatureWithLevelLogic} is handling the sync between the
  * LevelControl and ColorControl cluster when the color temperature is used.
  *
  * Additionally there are some convenience properties to access the current attribute values for all relevant color
  * attributes (x,y, hue, saturation, mireds/kelvin, colorTemperatur, ...) in their CIE value format instead the matter
  * data ranges.
  */
-export class ColorControlServerLogic extends ColorControlServerBase {
-    declare protected internal: ColorControlServerLogic.Internal;
-    declare state: ColorControlServerLogic.State;
+export class ColorControlBaseServer extends ColorControlBase {
+    declare protected internal: ColorControlBaseServer.Internal;
+    declare state: ColorControlBaseServer.State;
 
     /*
      * The following block contains some convenience methods to allow to easily work with the CIE color space values
@@ -2105,7 +2105,7 @@ type HueTransitionData = TransitionData & {
     distanceLeft?: number;
 };
 
-export namespace ColorControlServerLogic {
+export namespace ColorControlBaseServer {
     export class Internal {
         /** Timer for the managed hue transition */
         hueTransitionIntervalTimer?: Timer;
@@ -2173,7 +2173,7 @@ export namespace ColorControlServerLogic {
         }
     }
 
-    export class State extends ColorControlServerBase.State {
+    export class State extends ColorControlBase.State {
         /**
          * The default implementation always set the target level immediately and so ignores all transition times
          * requested or configured.
@@ -2238,4 +2238,4 @@ export namespace ColorControlServerLogic {
 
 // We had turned on some more features to provide a default implementation, but export the cluster with default
 // Features again.
-export class ColorControlServer extends ColorControlServerLogic.for(ClusterType(ColorControl.Base)) {}
+export class ColorControlServer extends ColorControlBaseServer.for(ClusterType(ColorControl.Base)) {}
