@@ -85,12 +85,20 @@ export class UdpMulticastServer {
     ) {}
 
     onMessage(listener: (message: Uint8Array, peerAddress: string, netInterface: string) => void) {
-        this.serverIpv4?.onData((netInterface, peerAddress, _port, message) =>
-            listener(message, peerAddress, netInterface),
-        );
-        this.serverIpv6.onData((netInterface, peerAddress, _port, message) =>
-            listener(message, peerAddress, netInterface),
-        );
+        this.serverIpv4?.onData((netInterface, peerAddress, _port, message) => {
+            if (netInterface === undefined) {
+                // Ignore Network packages not coming over any known interface
+                return;
+            }
+            listener(message, peerAddress, netInterface);
+        });
+        this.serverIpv6.onData((netInterface, peerAddress, _port, message) => {
+            if (netInterface === undefined) {
+                // Ignore Network packages not coming over any known interface
+                return;
+            }
+            listener(message, peerAddress, netInterface);
+        });
     }
 
     async send(message: Uint8Array, netInterface?: string, uniCastTarget?: string) {
