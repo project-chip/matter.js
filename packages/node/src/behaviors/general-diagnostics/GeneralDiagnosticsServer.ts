@@ -394,11 +394,24 @@ export namespace GeneralDiagnosticsServer {
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {
                 /**
-                 * Dynamically calculate the upTime. This is ok because the attribute is not sent via subscriptions
-                 * anyway.
+                 * Report uptime
+                 *
+                 * This value is not available for subscription so we compute dynamically.
+                 *
+                 * As of 1.4 the spec does not specify what should be considered the "start time" for computing uptime.
+                 * They just say "since the device's last reboot".  This could be from power on, or from when the device
+                 * is first usable by a user, when it's first available online, etc.
+                 *
+                 * The tests however expect uptime to reset after factory reset.  So we consider "time brought online"
+                 * our boot time.
                  */
                 get upTime() {
-                    return Math.round((Time.nowMs() - Time.startup.systemMs) / 1000);
+                    const onlineAt = (endpoint.lifecycle as NodeLifecycle).onlineAt;
+                    if (onlineAt === undefined) {
+                        return 0;
+                    }
+
+                    return Math.round((Time.nowMs() - onlineAt.getTime()) / 1000);
                 },
 
                 /**

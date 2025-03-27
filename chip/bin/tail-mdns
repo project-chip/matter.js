@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Browse MDNS records in the test MDNS instance using Avahi
+#
+# Requires an active MDNS container
+
+set -e
+
+if [ $# -gt 0 ]; then
+    ARGS=("$@")
+else
+    ARGS=(--all)
+fi
+
+docker run \
+    -it \
+    --rm \
+    --security-opt apparmor:unconfined \
+    -v matter.js-mdns:/run/dbus ghcr.io/matter-js/chip avahi-browse \
+    "${ARGS[@]}"

@@ -203,5 +203,11 @@ RUN mkdir /run/dbus
 COPY support/generate-test-descriptor /bin/generate-test-descriptor
 RUN generate-test-descriptor > /lib/test-descriptor.json
 
+# Install MDNS scripts
+COPY support/mdns-* /bin
+
 # Include CHIP SHA for diagnostic purposes
 COPY --from=build /connectedhomeip/.git/refs/heads/master /etc/chip-version
+
+# Configure avahi
+RUN echo allow-interfaces
