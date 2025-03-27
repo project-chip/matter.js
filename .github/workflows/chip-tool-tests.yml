@@ -437,7 +437,7 @@ jobs:
         run: |
           cd chip
           ./bin/pull
-          cd chip-testing
+          cd ../chip-testing
           npm run test-core
 
   docker-chip-tests-fast:
@@ -455,7 +455,7 @@ jobs:
         run: |
           cd chip
           ./bin/pull
-          cd chip-testing
+          cd ../chip-testing
           npm run test-app-fast
 
   docker-chip-tests-slow:
@@ -473,5 +473,5 @@ jobs:
         run: |
           cd chip
           ./bin/pull
-          cd chip-testing
+          cd ../chip-testing
           npm run test-app-slow

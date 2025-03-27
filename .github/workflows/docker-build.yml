@@ -1,5 +1,5 @@
 # This workflow executed the chip tool tests against matter.js
-name: Chip Tool tests
+name: Testing-Docker Rebuild
 
 on:
   schedule:
