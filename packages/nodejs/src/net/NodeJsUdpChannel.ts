@@ -117,10 +117,11 @@ export class NodeJsUdpChannel implements UdpChannel {
         private readonly netInterface?: string,
     ) {}
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
+    onData(
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+    ) {
         const messageListener = (data: Uint8Array, { address, port }: dgram.RemoteInfo) => {
             const netInterface = this.netInterface ?? NodeJsNetwork.getNetInterfaceForIp(address);
-            if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
         };
 

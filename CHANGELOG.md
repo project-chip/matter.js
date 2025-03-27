@@ -33,6 +33,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
+    - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
 
 -   @matter/nodejs-shell
     - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
