@@ -38,8 +38,7 @@ describe("SC", () => {
     });
 
     // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited
-    // Exclude 4.1 because ICDM TODO check PICS
-    chip("SC/*").exclude("SC/5.1", "SC/5.2", "SC/7.1", "SC/4.1");
+    chip("SC/*").exclude("SC/5.1", "SC/5.2");
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();
