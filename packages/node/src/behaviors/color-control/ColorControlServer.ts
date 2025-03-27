@@ -923,6 +923,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepY,
         transitionTime,
     }: ColorControl.StepColorRequest): MaybePromise {
+        if (stepX === 0 && stepY === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
