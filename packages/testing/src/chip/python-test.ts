@@ -168,27 +168,13 @@ function spiffy(line: string) {
  * or the test will not run.  So we must extract these arguments to pass into the script.
  *
  * A program defining mandatory arguments to itself seems silly but we work with what we've got amiright?
- *
- * We read the entire configuration but all we currently extract are arguments to the first run that aren't
- * "boilerplate" arguments that we don't need.
- *
- * We also use this opportunity to extract PICS which are returned programmatically.  So we use a regexp which has high
- * "eww" factory, but the alternative would be invoking Python and instantiating, which would not be fast.
  */
 async function createCommand(descriptor: TestFileDescriptor, subject: Subject, extraArgs: string[]) {
-    const { path, config } = descriptor;
+    const command = ["python3", descriptor.path, ...Constants.PythonRunnerArgs];
 
-    const command = ["python3", path, ...Constants.PythonRunnerArgs];
-
-    if (config) {
-        let args = config["script-args"] as string;
-        if (typeof args === "string") {
-            args = args.replace(
-                /--(?:storage-path|commissioning-method|discriminator|passcode|trace-to|PICS)\s+\S+\s+/g,
-                "",
-            );
-            command.push(...args.trim().split(/\s+/));
-        }
+    const args = scriptArgsOf(descriptor);
+    if (args !== undefined) {
+        command.push(...args);
     }
 
     command.push(...extraArgs);
@@ -199,4 +185,16 @@ async function createCommand(descriptor: TestFileDescriptor, subject: Subject, e
     }
 
     return command;
+}
+
+function scriptArgsOf(descriptor: TestFileDescriptor) {
+    const scriptArgs = descriptor.config?.["script-args"];
+    if (typeof scriptArgs !== "string") {
+        return;
+    }
+
+    return scriptArgs
+        .replace(/--(?:storage-path|commissioning-method|discriminator|passcode|trace-to|PICS)\s+\S+\s+/g, "")
+        .trim()
+        .split(/\s+/);
 }

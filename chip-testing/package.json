@@ -24,8 +24,7 @@
         "ci-test": "matter-test",
         "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts",
         "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts",
-        "test-core": "matter-test --spec=test/core/**/*.test.ts",
-        "test-long": "matter-test --spec=test/long/**/*.test.ts"
+        "test-core": "matter-test --spec=test/core/**/*.test.ts"
     },
     "dependencies": {
         "@matter/main": "*",
