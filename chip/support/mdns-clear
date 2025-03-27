@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Clear MDNS cache.  This involves killing the Avahi daemon and assumes the daemon runs in a loop
+
+avahi-daemon --kill

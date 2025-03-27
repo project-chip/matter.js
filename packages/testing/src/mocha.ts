@@ -221,7 +221,7 @@ export function adaptReporter(
             });
 
             runner.on(RUNNER.EVENT_TEST_BEGIN, test => {
-                if (updateStats) {
+                if (updateStats && test.descriptor) {
                     test.descriptor.runAt = new Date();
                 }
                 logs = (test as any).logs = [];
@@ -230,13 +230,17 @@ export function adaptReporter(
 
             if (updateStats) {
                 runner.on(RUNNER.EVENT_TEST_PASS, test => {
+                    if (!test.descriptor) {
+                        return;
+                    }
+
                     test.descriptor.durationMs = test.duration;
                     test.descriptor.passed = true;
                 });
             }
 
             runner.on(RUNNER.EVENT_TEST_FAIL, (test, error) => {
-                if (updateStats) {
+                if (updateStats && test.descriptor) {
                     test.descriptor.durationMs = test.duration;
                     test.descriptor.passed = false;
                 }
