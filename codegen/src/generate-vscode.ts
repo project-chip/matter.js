@@ -40,7 +40,10 @@ const CONFIG_TEMPLATE = {
 
     runtimeArgs: ["--enable-source-maps"],
     outFiles: ["${workspaceFolder}/**/dist/esm/**/*.js", "${workspaceFolder}/**/build/esm/**/*.js"],
-    presentation: { clear: true },
+
+    // This is buggy as of VS Code 1.98.  Sometimes doesn't clear at all, sometimes clears after task completes which is
+    // really annoying.  We already clear manually with escape codes so just omit
+    //presentation: { clear: true },
 };
 
 export type LaunchOptions = {
