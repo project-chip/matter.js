@@ -19,6 +19,9 @@ import { Terminal } from "./terminal.js";
  */
 export interface Container {
     docker: Docker;
+
+    imageId: Promise<string>;
+
     start(): Promise<void>;
     kill(): Promise<void>;
     remove(force?: boolean): Promise<void>;
@@ -225,6 +228,10 @@ function configureContainer(options: Container.Configuration) {
 function adaptContainer(docker: Docker, ct: Dockerode.Container): Container {
     return {
         docker,
+
+        get imageId() {
+            return ct.inspect().then(info => info.Image);
+        },
 
         async start() {
             await DockerError.adapt(ct.start());

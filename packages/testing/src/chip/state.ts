@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Package } from "#tools";
+import { ansi, Package } from "#tools";
 import { BackchannelCommand } from "../device/backchannel.js";
 import { Subject } from "../device/subject.js";
 import { Test } from "../device/test.js";
@@ -139,7 +139,23 @@ export const State = {
         }
 
         const { progress } = State.runner;
-        return await progress.run(`Initializing containers`, initialize);
+
+        progress.update("Initializing containers");
+        try {
+            const result = await initialize();
+
+            const imageVersion = formatSha(await State.container.imageId);
+            const chipVersion = formatSha(await State.container.read("/etc/chip-version"));
+
+            progress.success(
+                `Initialized containers from image ${ansi.bold(imageVersion)} for CHIP ${ansi.bold(chipVersion)}`,
+            );
+
+            return result;
+        } catch (e) {
+            progress.failure("Initializing containers");
+            throw e;
+        }
     },
 
     /**
@@ -543,4 +559,11 @@ function createTest(descriptor: TestDescriptor) {
         default:
             throw new Error(`Cannot implement CHIP test ${descriptor.name} of kind ${descriptor.kind}`);
     }
+}
+
+function formatSha(sha: string) {
+    if (sha.startsWith("sha256:")) {
+        sha = sha.substring(7);
+    }
+    return ansi.bold(sha.substring(0, 12));
 }
