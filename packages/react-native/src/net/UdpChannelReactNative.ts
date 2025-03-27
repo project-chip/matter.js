@@ -160,10 +160,11 @@ export class UdpChannelReactNative implements UdpChannel {
         private readonly netInterface?: string,
     ) {}
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
+    onData(
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+    ) {
         const messageListener = async (data: Uint8Array, { address, port }: RemoteInfo) => {
             const netInterface = this.netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
-            if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
         };
 
