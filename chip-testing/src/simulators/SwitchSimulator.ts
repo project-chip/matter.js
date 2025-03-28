@@ -26,7 +26,6 @@ export class SwitchSimulator {
         if (this.#switchActions.length !== 0 || this.#executionDelayTimer !== undefined) {
             throw new Error("Still unprocessed actions existing ... Invalid state!");
         }
-        console.log("SwitchSimulator: executeActions", actions);
         this.#switchActions = actions;
         this.#processNextAction();
     }
