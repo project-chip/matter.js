@@ -16,7 +16,7 @@ import type { TestRunner } from "./runner.js";
 import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
-import { TestDescriptor, TestSuiteDescriptor } from "./test-descriptor.js";
+import { TestDescriptor } from "./test-descriptor.js";
 
 extendApi(Mocha);
 
@@ -43,22 +43,16 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
         afterRun(() => profiler.stop(runner.pkg.resolve("build/profiles")));
     }
 
-    let report: TestSuiteDescriptor | undefined;
-    afterRun(async () => {
-        if (report === undefined) {
-            return;
-        }
+    try {
+        const mocha = await createNodejsMocha(runner, format);
 
+        await runMocha(mocha);
+
+        const report = mocha.suite.descriptor;
         const path = runner.pkg.resolve(TestDescriptor.DEFAULT_FILENAME);
         const previous = await TestDescriptor.open(path);
         const merged = TestDescriptor.merge(previous, report);
         await TestDescriptor.save(path, merged);
-    });
-
-    try {
-        const mocha = await createNodejsMocha(runner, format);
-        await runMocha(mocha);
-        report = mocha.suite.descriptor;
     } finally {
         process.off("unhandledRejection", unhandledRejection);
 
