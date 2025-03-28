@@ -47,6 +47,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
     - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
+    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.

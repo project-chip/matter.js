@@ -72,13 +72,24 @@ jobs:
         run: |
           cd chip
           ./bin/build
-          
-          cd ../chip-testing
+          ./bin/info
+
+      - name: Run tests using the docker image
+        run: |
+          cd chip-testing
           npm run test-core
           npm run test-app-fast
           npm run test-app-slow
-          
-          cd ../chip
+
+      - name: Login to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: Automator77
+          password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
+
+      - name: Rebuild docker image
+        run: |
+          cd chip
+          ./bin/info
           ./bin/publish
-
-
