@@ -28,6 +28,7 @@ export class Wrapper implements Consumer {
     #outputState: "newline" | "newwrap" | "inline" = "newline";
     #indent?: ContiguousOutputSegment;
     #output?: ContiguousOutputSegment;
+
     #onRevert = () => {
         // When state reverts we may have buffered output we have yet to emit.  Do so now to ensure it receives proper
         // styling
@@ -159,7 +160,7 @@ export class Wrapper implements Consumer {
         let remainingWidth = this.#target.state.remainingWidth!;
 
         // Leave room for a space except at the beginning of the line
-        if (remainingWidth !== undefined && outputState === "inline") {
+        if (!this.#preserveSpace && remainingWidth !== undefined && outputState === "inline") {
             remainingWidth--;
         }
 
