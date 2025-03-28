@@ -101,9 +101,14 @@ export interface Chip extends chip.Builder {
     pics: PicsFile;
 
     /**
-     * The timeout for tests without an explicit timeout.
+     * The timeout for tests without an explicit timeout (defaults to 30s).
      */
-    defaultTimeoutMs: 30_000;
+    defaultTimeoutMs: number;
+
+    /**
+     * Set to false to disable container pull before test execution.
+     */
+    pullBeforeTesting: boolean;
 }
 
 function createBuilder(initial: {
@@ -338,6 +343,16 @@ Object.defineProperties(chipFn, {
         get: () => State.pics,
     },
 
+    pullBeforeTesting: {
+        get() {
+            return State.pullBeforeTesting;
+        },
+
+        set(value: boolean) {
+            State.pullBeforeTesting = value;
+        },
+    },
+
     initialize: { value: State.initialize.bind(State) },
     close: { value: State.close.bind(State) },
     openPipe: { value: State.openPipe.bind(State) },
@@ -347,6 +362,8 @@ Object.defineProperties(chipFn, {
 });
 
 export const chip = chipFn as Chip;
+
+chip.defaultTimeoutMs = 30_000;
 
 function runBeforeHooks(hooks: chip.BeforeHook[], ...args: Parameters<chip.BeforeHook>) {
     const promises = new Array<Promise<void>>();

@@ -77,9 +77,9 @@ jobs:
       - name: Run tests using the docker image
         run: |
           cd chip-testing
-          npm run test-core
-          npm run test-app-fast
-          npm run test-app-slow
+          npm run test-core -- --no-pull
+          npm run test-app-fast -- --no-pull
+          npm run test-app-slow -- --no-pull
 
       - name: Login to GitHub Docker Registry
         uses: docker/login-action@v3
