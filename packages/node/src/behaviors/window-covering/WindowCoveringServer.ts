@@ -16,7 +16,6 @@ const WindowCoveringBase = WindowCoveringBehavior.with(
     WindowCovering.Feature.Tilt,
     WindowCovering.Feature.PositionAwareLift,
     WindowCovering.Feature.PositionAwareTilt,
-    WindowCovering.Feature.AbsolutePosition,
 );
 
 /** What element should move? */
@@ -42,11 +41,6 @@ export enum MovementDirection {
     Close,
     DefinedByPosition,
 }
-
-type AbsoluteLimits = {
-    open: number;
-    closed: number;
-};
 
 const WC_PERCENT100THS_MIN_OPEN = 0;
 const WC_PERCENT100THS_MAX_CLOSED = 10000;
@@ -252,11 +246,8 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
                 logger.debug("Lift movement stopped, target value reached");
             }
         }
-        if (this.features.absolutePosition) {
-            this.state.currentPositionLift = percent100ths === null ? null : this.#percent100thsToLift(percent100ths);
-        }
         logger.debug(
-            `Syncing lift position ${this.state.currentPositionLiftPercent100ths === null ? null : (this.state.currentPositionLiftPercent100ths / 100).toFixed(2)} to ${this.state.currentPositionLiftPercentage}% (${this.state.currentPositionLift})`,
+            `Syncing lift position ${this.state.currentPositionLiftPercent100ths === null ? null : (this.state.currentPositionLiftPercent100ths / 100).toFixed(2)} to ${this.state.currentPositionLiftPercentage}%`,
         );
     }
 
@@ -273,11 +264,8 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
                 logger.debug("Tilt movement stopped, target value reached");
             }
         }
-        if (this.features.absolutePosition) {
-            this.state.currentPositionTilt = percent100ths === null ? null : this.#percent100thsToTilt(percent100ths);
-        }
         logger.debug(
-            `Syncing tilt position ${this.state.currentPositionTiltPercent100ths === null ? null : (this.state.currentPositionTiltPercent100ths / 100).toFixed(2)} to ${this.state.currentPositionTiltPercentage}% (${this.state.currentPositionTilt})`,
+            `Syncing tilt position ${this.state.currentPositionTiltPercent100ths === null ? null : (this.state.currentPositionTiltPercent100ths / 100).toFixed(2)} to ${this.state.currentPositionTiltPercentage}%`,
         );
     }
 
@@ -564,17 +552,6 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
     }
 
     /**
-     * Move the WindowCovering to a specific lift value. The default implementation calculates the % value for the
-     * target position. The method calls the handleMovement method to actually move the device to the defined position.
-     */
-    override goToLiftValue({ liftValue }: WindowCovering.GoToLiftValueRequest) {
-        this.#assertMotionLockStatus();
-
-        this.state.targetPositionLiftPercent100ths = this.#liftToPercent100ths(liftValue);
-        this.#triggerLiftMotion(MovementDirection.DefinedByPosition, this.state.targetPositionLiftPercent100ths);
-    }
-
-    /**
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
@@ -597,17 +574,6 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
     }
 
     /**
-     * Move the WindowCovering to a specific tilt value. The default implementation calculates the % value for the target
-     * position. The method calls the handleMovement method to actually move the device to the defined position.
-     */
-    override goToTiltValue({ tiltValue }: WindowCovering.GoToTiltValueRequest) {
-        this.#assertMotionLockStatus();
-
-        this.state.targetPositionTiltPercent100ths = this.#tiltToPercent100ths(tiltValue);
-        this.#triggerTiltMotion(MovementDirection.DefinedByPosition, this.state.targetPositionTiltPercent100ths);
-    }
-
-    /**
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
@@ -627,92 +593,6 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
                 this.downOrClose();
             }
         }
-    }
-
-    /**
-     * ConvertValue: Converts values from one range to another
-     * * Range In  -> from  inputLowValue to   inputHighValue
-     * * Range Out -> from outputLowValue to outputHighValue
-     */
-    #convertValue(
-        inputLowValue: number,
-        inputHighValue: number,
-        outputLowValue: number,
-        outputHighValue: number,
-        value: number,
-    ) {
-        let inputMin = inputLowValue;
-        let inputMax = inputHighValue;
-        let outputMin = outputLowValue;
-        let outputMax = outputHighValue;
-        if (inputLowValue > inputHighValue) {
-            inputMin = inputHighValue;
-            inputMax = inputLowValue;
-        }
-        if (outputLowValue > outputHighValue) {
-            outputMin = outputHighValue;
-            outputMax = outputLowValue;
-        }
-        const inputRange = inputMax - inputMin;
-        const outputRange = outputMax - outputMin;
-        if (value < inputMin) {
-            return outputMin;
-        }
-        if (value > inputMax) {
-            return outputMax;
-        }
-        if (inputRange > 0) {
-            return Math.round(outputMin + (outputRange * (value - inputMin)) / inputRange);
-        }
-        return outputMax;
-    }
-
-    #valueToPercent100ths(limits: AbsoluteLimits, absolute: number) {
-        return this.#convertValue(
-            limits.open,
-            limits.closed,
-            WC_PERCENT100THS_MIN_OPEN,
-            WC_PERCENT100THS_MAX_CLOSED,
-            absolute,
-        );
-    }
-
-    #percent100thsToValue(limits: AbsoluteLimits, relative: number) {
-        return this.#convertValue(
-            WC_PERCENT100THS_MIN_OPEN,
-            WC_PERCENT100THS_MAX_CLOSED,
-            limits.open,
-            limits.closed,
-            relative,
-        );
-    }
-
-    #liftToPercent100ths(lift: number) {
-        return this.#valueToPercent100ths(
-            { open: this.state.installedOpenLimitLift, closed: this.state.installedClosedLimitLift },
-            lift,
-        );
-    }
-
-    #percent100thsToLift(percent100ths: number) {
-        return this.#percent100thsToValue(
-            { open: this.state.installedOpenLimitLift, closed: this.state.installedClosedLimitLift },
-            percent100ths,
-        );
-    }
-
-    #tiltToPercent100ths(tilt: number) {
-        return this.#valueToPercent100ths(
-            { open: this.state.installedOpenLimitTilt, closed: this.state.installedClosedLimitTilt },
-            tilt,
-        );
-    }
-
-    #percent100thsToTilt(percent100ths: number) {
-        return this.#percent100thsToValue(
-            { open: this.state.installedOpenLimitTilt, closed: this.state.installedClosedLimitTilt },
-            percent100ths,
-        );
     }
 }
 
