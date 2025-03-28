@@ -38,7 +38,7 @@ describe("SC", () => {
     });
 
     // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited
-    chip("SC/*").exclude("SC/5.1", "SC/5.2");
+    chip("SC/*").exclude("SC/5.1", "SC/5.2", "SC/7.1");
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();
