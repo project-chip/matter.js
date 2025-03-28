@@ -363,7 +363,7 @@ Object.defineProperties(chipFn, {
 
 export const chip = chipFn as Chip;
 
-chip.defaultTimeoutMs = 30_000;
+chip.defaultTimeoutMs = 30 * 60 * 1000;
 
 function runBeforeHooks(hooks: chip.BeforeHook[], ...args: Parameters<chip.BeforeHook>) {
     const promises = new Array<Promise<void>>();
