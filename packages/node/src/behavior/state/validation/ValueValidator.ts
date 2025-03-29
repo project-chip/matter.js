@@ -189,8 +189,6 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
                 assertNumber(fieldValue, subpath);
 
                 if (fieldValue > field.max) {
-                    console.log(`Field ${key} (${fieldValue}) is out of range (0-${field.max})`);
-                    console.log(fields);
                     throw new DatatypeError(subpath, "in range of bit field", fieldValue);
                 }
             }
