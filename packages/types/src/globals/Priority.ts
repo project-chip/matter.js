@@ -13,7 +13,7 @@
  * particular ordering among the values. Specific uses of the data type may assign semantics to the values that imply an
  * ordering relationship.
  *
- * @see {@link MatterSpecification.v13.Core} § 7.19.2.17
+ * @see {@link MatterSpecification.v14.Core} § 7.19.2.17
  */
 export enum Priority {
     /**

@@ -23,7 +23,7 @@ export namespace OtaSoftwareUpdateProvider {
      * Note that only HTTP over TLS (HTTPS) is supported (see RFC 7230). Using HTTP without TLS shall NOT be supported,
      * as there is no way to authenticate the involved participants.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.4.3
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.3
      */
     export enum DownloadProtocol {
         /**
@@ -50,14 +50,14 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider queryImage command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1
      */
     export const TlvQueryImageRequest = TlvObject({
         /**
          * The value shall be the Vendor ID applying to the OTA Requestor’s Node and shall match the value reported by
          * the Basic Information Cluster VendorID attribute.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.1
          */
         vendorId: TlvField(0, TlvVendorId),
 
@@ -65,7 +65,7 @@ export namespace OtaSoftwareUpdateProvider {
          * The value shall be the Product ID applying to the OTA Requestor’s Node and shall match the value reported by
          * the Basic Information Cluster ProductID attribute.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.2
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.2
          */
         productId: TlvField(1, TlvUInt16),
 
@@ -74,7 +74,7 @@ export namespace OtaSoftwareUpdateProvider {
          * running on the OTA Requestor invoking the command. This version shall be equal to the Software Version
          * attribute of the Basic Information Cluster.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.3
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.3
          */
         softwareVersion: TlvField(2, TlvUInt32),
 
@@ -93,7 +93,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.2, “Querying the OTA Provider” and Section 11.20.3.5, “Transfer of OTA Software Update
          * images” for more details about usage of this field.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.4
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.4
          */
         protocolsSupported: TlvField(3, TlvArray(TlvEnum<DownloadProtocol>(), { maxLength: 8 })),
 
@@ -101,7 +101,7 @@ export namespace OtaSoftwareUpdateProvider {
          * The value of this field, if present, shall contain the OTA Requestor’s hardware version, and shall be equal
          * to the HardwareVersion attribute of the Basic Information Cluster.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.5
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.5
          */
         hardwareVersion: TlvOptionalField(4, TlvUInt16),
 
@@ -111,7 +111,7 @@ export namespace OtaSoftwareUpdateProvider {
          * attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow per-region
          * selection of the Software Image.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.6
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.6
          */
         location: TlvOptionalField(5, TlvString.bound({ length: 2 })),
 
@@ -121,7 +121,7 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.4, “Obtaining user consent for updating software” for application details about usage.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.7
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.7
          */
         requestorCanConsent: TlvOptionalField(6, TlvBoolean),
 
@@ -155,7 +155,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.2, “Querying the OTA Provider” for full details about the OTA Software Update Query flow
          * which makes use of this command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1.8
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1.8
          */
         metadataForProvider: TlvOptionalField(7, TlvByteString.bound({ maxLength: 512 }))
     });
@@ -163,14 +163,14 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider queryImage command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1
      */
     export interface QueryImageRequest extends TypeFromSchema<typeof TlvQueryImageRequest> {}
 
     /**
      * See Section 11.20.3.2, “Querying the OTA Provider” for the semantics of these values.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.4.1
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.1
      */
     export enum Status {
         /**
@@ -195,7 +195,7 @@ export namespace OtaSoftwareUpdateProvider {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2
      */
     export const TlvQueryImageResponse = TlvObject({
         /**
@@ -204,7 +204,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.2, “Querying the OTA Provider” for details about the possible values for this field and
          * their meaning.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.1
          */
         status: TlvField(0, TlvEnum<Status>()),
 
@@ -219,7 +219,7 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.2, “Querying the OTA Provider” for details about the rules regarding this field.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.2
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.2
          */
         delayedActionTime: TlvOptionalField(1, TlvUInt32),
 
@@ -320,7 +320,7 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.3
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.3
          */
         imageUri: TlvOptionalField(2, TlvString.bound({ maxLength: 256 })),
 
@@ -333,7 +333,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow and acceptable
          * values.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.4
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.4
          */
         softwareVersion: TlvOptionalField(3, TlvUInt32),
 
@@ -346,7 +346,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow and acceptable
          * values.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.5
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.5
          */
         softwareVersionString: TlvOptionalField(4, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
@@ -356,7 +356,7 @@ export namespace OtaSoftwareUpdateProvider {
          * See Section 11.20.3.6.1, “UpdateToken usage” for additional details about the generation and usage of
          * UpdateToken.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.6
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.6
          */
         updateToken: TlvOptionalField(5, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
 
@@ -368,7 +368,7 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.4, “Obtaining user consent for updating software” for application details about usage.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.7
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.7
          */
         userConsentNeeded: TlvOptionalField(6, TlvBoolean),
 
@@ -385,20 +385,20 @@ export namespace OtaSoftwareUpdateProvider {
          * by an OTA Provider with this additional knowledge if it has knowledge that the receiving OTA Requestor may be
          * able to use it.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2.8
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2.8
          */
         metadataForRequestor: TlvOptionalField(7, TlvByteString.bound({ maxLength: 512 }))
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.2
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.2
      */
     export interface QueryImageResponse extends TypeFromSchema<typeof TlvQueryImageResponse> {}
 
     /**
      * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3
      */
     export const TlvApplyUpdateRequest = TlvObject({
         /**
@@ -406,7 +406,7 @@ export namespace OtaSoftwareUpdateProvider {
          * may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling of the
          * application of Software Images by OTA Requestors.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3.1
          */
         updateToken: TlvField(0, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
 
@@ -436,7 +436,7 @@ export namespace OtaSoftwareUpdateProvider {
          *
          * See Section 11.20.3.6, “Applying a software update” for all error-handling information.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3.2
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3.2
          */
         newVersion: TlvField(1, TlvUInt32)
     });
@@ -444,7 +444,7 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3
      */
     export interface ApplyUpdateRequest extends TypeFromSchema<typeof TlvApplyUpdateRequest> {}
 
@@ -452,7 +452,7 @@ export namespace OtaSoftwareUpdateProvider {
      * See Section 11.20.3.6, “Applying a software update” for the semantics of the values. This enumeration is used in
      * the Action field of the ApplyUpdateResponse command. See (Action).
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.4.2
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.4.2
      */
     export enum ApplyUpdateAction {
         /**
@@ -472,7 +472,7 @@ export namespace OtaSoftwareUpdateProvider {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.4
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.4
      */
     export const TlvApplyUpdateResponse = TlvObject({
         /**
@@ -480,7 +480,7 @@ export namespace OtaSoftwareUpdateProvider {
          * 11.20.3.6, “Applying a software update” for a description of the Action values provided in response to an OTA
          * Provider receiving an invocation of this command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.4.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.4.1
          */
         action: TlvField(0, TlvEnum<ApplyUpdateAction>()),
 
@@ -490,26 +490,26 @@ export namespace OtaSoftwareUpdateProvider {
          * If this field has a value higher than 86400 seconds (24 hours), then the OTA Requestor may assume a value of
          * 86400, in order to reduce undue Software Image application delays.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.4.2
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.4.2
          */
         delayedActionTime: TlvField(1, TlvUInt32)
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.4
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.4
      */
     export interface ApplyUpdateResponse extends TypeFromSchema<typeof TlvApplyUpdateResponse> {}
 
     /**
      * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5
      */
     export const TlvNotifyUpdateAppliedRequest = TlvObject({
         /**
          * This field shall contain the UpdateToken as specified in Section 11.20.3.6.1, “UpdateToken usage”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5.1
          */
         updateToken: TlvField(0, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
 
@@ -543,7 +543,7 @@ export namespace OtaSoftwareUpdateProvider {
          * On receiving this command, an OTA Provider may use the information to update its bookkeeping of cached
          * Software Images, or use it for other similar administrative purposes.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5.2
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5.2
          */
         softwareVersion: TlvField(1, TlvUInt32)
     });
@@ -551,7 +551,7 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5
      */
     export interface NotifyUpdateAppliedRequest extends TypeFromSchema<typeof TlvNotifyUpdateAppliedRequest> {}
 
@@ -568,24 +568,24 @@ export namespace OtaSoftwareUpdateProvider {
              * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider
              * to match the OTA Requestor’s constraints provided in the payload fields.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
+             * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1
              */
             queryImage: Command(0x0, TlvQueryImageRequest, 0x1, TlvQueryImageResponse),
 
             /**
-             * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3
+             * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3
              */
             applyUpdateRequest: Command(0x2, TlvApplyUpdateRequest, 0x3, TlvApplyUpdateResponse),
 
             /**
-             * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5
+             * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5
              */
             notifyUpdateApplied: Command(0x4, TlvNotifyUpdateAppliedRequest, 0x4, TlvNoResponse)
         }
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.20.6
+     * @see {@link MatterSpecification.v14.Core} § 11.20.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

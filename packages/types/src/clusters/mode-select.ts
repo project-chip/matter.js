@@ -30,7 +30,7 @@ export namespace ModeSelect {
     /**
      * These are optional features supported by ModeSelectCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.4
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.4
      */
     export enum Feature {
         /**
@@ -39,7 +39,7 @@ export namespace ModeSelect {
          * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
          * endpoint. See OnMode for more information.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.4.1
          */
         OnOff = "OnOff"
     }
@@ -47,7 +47,7 @@ export namespace ModeSelect {
     /**
      * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.1
      */
     export const TlvSemanticTag = TlvObject({
         /**
@@ -57,7 +57,7 @@ export namespace ModeSelect {
          * have the same meaning. For example: a manufacturer tag meaning "pinch", has the same meaning in a cluster
          * whose purpose is to choose the amount of sugar, or amount of salt.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.1.2
          */
         mfgCode: TlvField(0, TlvVendorId),
 
@@ -65,7 +65,7 @@ export namespace ModeSelect {
          * This field shall indicate the semantic tag within a semantic tag namespace which is either manufacturer
          * specific or standard. For semantic tags in a standard namespace, see Standard Namespace.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.1.1
          */
         value: TlvField(1, TlvUInt16)
     });
@@ -73,21 +73,21 @@ export namespace ModeSelect {
     /**
      * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.1
      */
     export interface SemanticTag extends TypeFromSchema<typeof TlvSemanticTag> {}
 
     /**
      * This is a struct representing a possible mode of the server.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.2
      */
     export const TlvModeOption = TlvObject({
         /**
          * This field is readable text that describes the mode option that can be used by a client to indicate to the
          * user what this option means. This field is meant to be readable and understandable by the user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.2.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 64 })),
 
@@ -95,7 +95,7 @@ export namespace ModeSelect {
          * The Mode field is used to identify the mode option. The value shall be unique for every item in the
          * SupportedModes attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.2.2
          */
         mode: TlvField(1, TlvUInt8),
 
@@ -113,7 +113,7 @@ export namespace ModeSelect {
          * For example: A mode labeled "100%" can have both the HIGH (MS) and MAX (standard) semantic tag. Clients
          * seeking the option for either HIGH or MAX will find the same option in this case.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.2.3
          */
         semanticTags: TlvField(2, TlvArray(TlvSemanticTag, { maxLength: 64 }))
     });
@@ -121,21 +121,21 @@ export namespace ModeSelect {
     /**
      * This is a struct representing a possible mode of the server.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.5.2
      */
     export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
 
     /**
      * Input to the ModeSelect changeToMode command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.7.1
      */
     export const TlvChangeToModeRequest = TlvObject({ newMode: TlvField(0, TlvUInt8) });
 
     /**
      * Input to the ModeSelect changeToMode command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9.7.1
      */
     export interface ChangeToModeRequest extends TypeFromSchema<typeof TlvChangeToModeRequest> {}
 
@@ -153,7 +153,7 @@ export namespace ModeSelect {
              *
              * attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.6
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.6
              */
             onMode: WritableAttribute(0x5, TlvNullable(TlvUInt8), { persistent: true, default: null })
         }
@@ -174,7 +174,7 @@ export namespace ModeSelect {
              * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
              * endpoint. See OnMode for more information.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.4.1
              */
             onOff: BitFlag(0)
         },
@@ -188,7 +188,7 @@ export namespace ModeSelect {
              * description Milk and the second instance can have the description Sugar. This allows the user to tell the
              * purpose of each of the instances.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.1
              */
             description: FixedAttribute(0x0, TlvString.bound({ maxLength: 64 })),
 
@@ -199,7 +199,7 @@ export namespace ModeSelect {
              * instance. Each standard namespace and corresponding values and value meanings shall be defined in another
              * document.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.2
              */
             standardNamespace: FixedAttribute(0x1, TlvNullable(TlvUInt16), { default: null }),
 
@@ -208,7 +208,7 @@ export namespace ModeSelect {
              * item in this list represents a unique mode as indicated by the Mode field of the ModeOptionStruct. Each
              * entry in this list shall have a unique value for the Mode field.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.3
              */
             supportedModes: FixedAttribute(0x2, TlvArray(TlvModeOption, { maxLength: 255 }), { default: [] }),
 
@@ -219,7 +219,7 @@ export namespace ModeSelect {
              *
              * attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.4
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.4
              */
             currentMode: Attribute(0x3, TlvUInt8, { persistent: true }),
 
@@ -240,7 +240,7 @@ export namespace ModeSelect {
              *
              * If this attribute is not implemented, or is set to the null value, it shall have no effect.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.5
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.6.5
              */
             startUpMode: OptionalWritableAttribute(0x4, TlvNullable(TlvUInt8), { persistent: true })
         },
@@ -251,7 +251,7 @@ export namespace ModeSelect {
              * list, the server shall set the CurrentMode attribute to the NewMode value, otherwise, the server shall
              * respond with an INVALID_COMMAND status response.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.9.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.9.7.1
              */
             changeToMode: Command(0x0, TlvChangeToModeRequest, 0x0, TlvNoResponse)
         },
@@ -292,7 +292,7 @@ export namespace ModeSelect {
      * ModeSelectCluster supports optional features that you can enable with the ModeSelectCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9
+     * @see {@link MatterSpecification.v14.Cluster} § 1.9
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

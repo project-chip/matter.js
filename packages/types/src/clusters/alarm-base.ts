@@ -26,7 +26,7 @@ export namespace AlarmBase {
     /**
      * These are optional features supported by AlarmBaseCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.4
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.4
      */
     export enum Feature {
         /**
@@ -34,7 +34,7 @@ export namespace AlarmBase {
          *
          * This feature indicates that alarms can be reset via the Reset command.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.4.1
          */
         Reset = "Reset"
     }
@@ -42,7 +42,7 @@ export namespace AlarmBase {
     /**
      * Input to the AlarmBase reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export const TlvResetRequest = TlvObject({
         /**
@@ -51,7 +51,7 @@ export namespace AlarmBase {
          * alarms indicated are successfully reset, the response status code shall be SUCCESS, otherwise, the response
          * status code shall be FAILURE.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1.1
          */
         alarms: TlvField(0, TlvUInt32)
     });
@@ -59,14 +59,14 @@ export namespace AlarmBase {
     /**
      * Input to the AlarmBase reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export interface ResetRequest extends TypeFromSchema<typeof TlvResetRequest> {}
 
     /**
      * Input to the AlarmBase modifyEnabledAlarms command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
      */
     export const TlvModifyEnabledAlarmsRequest = TlvObject({
         /**
@@ -88,7 +88,7 @@ export namespace AlarmBase {
          * field from this command. After that the server shall also update the value of its State attribute to reflect
          * the status of the new alarm set as indicated by the new value of the Mask attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2.1
          */
         mask: TlvField(0, TlvUInt32)
     });
@@ -96,27 +96,27 @@ export namespace AlarmBase {
     /**
      * Input to the AlarmBase modifyEnabledAlarms command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
      */
     export interface ModifyEnabledAlarmsRequest extends TypeFromSchema<typeof TlvModifyEnabledAlarmsRequest> {}
 
     /**
      * Body of the AlarmBase notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export const TlvNotifyEvent = TlvObject({
         /**
          * This field shall indicate those alarms that have become active.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.1
          */
         active: TlvField(0, TlvUInt32),
 
         /**
          * This field shall indicate those alarms that have become inactive.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.2
          */
         inactive: TlvField(1, TlvUInt32),
 
@@ -124,14 +124,14 @@ export namespace AlarmBase {
          * This field shall be a copy of the new State attribute value that resulted in the event being generated. That
          * is, this field shall have all the bits in Active set and shall NOT have any of the bits in Inactive set.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.4
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.4
          */
         state: TlvField(2, TlvUInt32),
 
         /**
          * This field shall be a copy of the Mask attribute when this event was generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.3
          */
         mask: TlvField(3, TlvUInt32)
     });
@@ -139,7 +139,7 @@ export namespace AlarmBase {
     /**
      * Body of the AlarmBase notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export interface NotifyEvent extends TypeFromSchema<typeof TlvNotifyEvent> {}
 
@@ -153,7 +153,7 @@ export namespace AlarmBase {
              * will be latched when set, and will not reset to inactive when the underlying condition which caused the
              * alarm is no longer present, and so requires an explicit reset using the Reset command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.2
              */
             latch: FixedAttribute(0x1, TlvUInt32)
         },
@@ -163,7 +163,7 @@ export namespace AlarmBase {
              * This command resets active and latched alarms (if possible). Any generated Notify event shall contain
              * fields that represent the state of the server after the command has been processed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
              */
             reset: Command(0x0, TlvResetRequest, 0x0, TlvNoResponse)
         }
@@ -180,7 +180,7 @@ export namespace AlarmBase {
              *
              * This feature indicates that alarms can be reset via the Reset command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.4.1
              */
             reset: BitFlag(0)
         },
@@ -193,7 +193,7 @@ export namespace AlarmBase {
              * Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be
              * enabled.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.1
              */
             mask: Attribute(0x0, TlvUInt32),
 
@@ -201,7 +201,7 @@ export namespace AlarmBase {
              * Indicates a bitmap where each bit shall represent the state of an alarm. The value of true means the
              * alarm is active, otherwise the alarm is inactive.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.3
              */
             state: Attribute(0x2, TlvUInt32),
 
@@ -211,7 +211,7 @@ export namespace AlarmBase {
              *
              * If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.4
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.4
              */
             supported: FixedAttribute(0x3, TlvUInt32)
         },
@@ -220,7 +220,7 @@ export namespace AlarmBase {
             /**
              * This command allows a client to request that an alarm be enabled or suppressed at the server.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
              */
             modifyEnabledAlarms: OptionalCommand(0x1, TlvModifyEnabledAlarmsRequest, 0x1, TlvNoResponse)
         },
@@ -229,7 +229,7 @@ export namespace AlarmBase {
             /**
              * This event shall be generated when one or more alarms change state, and shall have these fields:
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
              */
             notify: Event(0x0, EventPriority.Info, TlvNotifyEvent)
         },

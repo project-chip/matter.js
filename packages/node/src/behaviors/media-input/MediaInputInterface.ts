@@ -16,21 +16,21 @@ export namespace MediaInputInterface {
          *
          * index in the Input List.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.1
          */
         selectInput(request: MediaInput.SelectInputRequest): MaybePromise;
 
         /**
          * Upon receipt, this command shall display the active status of the input list on screen.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.2
          */
         showInputStatus(): MaybePromise;
 
         /**
          * Upon receipt, this command shall hide the input list from the screen.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.3
+         * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.3
          */
         hideInputStatus(): MaybePromise;
     }
@@ -40,7 +40,7 @@ export namespace MediaInputInterface {
          * Upon receipt, this command shall rename the input at a specific index in the Input List. Updates to the input
          * name shall appear in the device’s settings menus.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.4
+         * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.4
          */
         renameInput(request: MediaInput.RenameInputRequest): MaybePromise;
     }

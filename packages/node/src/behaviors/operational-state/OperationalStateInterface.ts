@@ -48,7 +48,7 @@ export namespace OperationalStateInterface {
          *
          * ### Table 3. Pause Compatibility
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.1
          */
         pause(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
@@ -72,7 +72,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.2
          */
         stop(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
@@ -98,7 +98,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.3
          */
         start(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
@@ -139,7 +139,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.4
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.4
          */
         resume(): MaybePromise<OperationalState.OperationalCommandResponse>;
     }

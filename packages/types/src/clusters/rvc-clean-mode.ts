@@ -23,7 +23,7 @@ export namespace RvcCleanMode {
     /**
      * These are optional features supported by RvcCleanModeCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 7.3.4
+     * @see {@link MatterSpecification.v14.Cluster} § 7.3.4
      */
     export enum Feature {
         /**
@@ -36,71 +36,71 @@ export namespace RvcCleanMode {
 
     export enum ModeTag {
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Auto = 0,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Quick = 1,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Quiet = 2,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         LowNoise = 3,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         LowEnergy = 4,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Vacation = 5,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Min = 6,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Max = 7,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Night = 8,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         Day = 9,
 
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2
          */
         DeepClean = 16384,
 
         /**
          * The device’s vacuuming feature is enabled in this mode.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2.2
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2.2
          */
         Vacuum = 16385,
 
         /**
          * The device’s mopping feature is enabled in this mode.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.2.3
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.2.3
          */
         Mop = 16386
     }
@@ -108,7 +108,7 @@ export namespace RvcCleanMode {
     /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1
      */
     export const TlvModeTagStruct = TlvObject({
         /**
@@ -122,7 +122,7 @@ export namespace RvcCleanMode {
          * whose purpose is to choose the amount of sugar, or in a cluster whose purpose is to choose the amount of
          * salt.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1.1
          */
         mfgCode: TlvOptionalField(0, TlvVendorId),
 
@@ -130,7 +130,7 @@ export namespace RvcCleanMode {
          * This field shall indicate the mode tag within a mode tag namespace which is either manufacturer specific or
          * standard.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1.2
          */
         value: TlvField(1, TlvEnum<ModeTag | ModeBase.ModeTag>())
     });
@@ -138,7 +138,7 @@ export namespace RvcCleanMode {
     /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1
      */
     export interface ModeTagStruct extends TypeFromSchema<typeof TlvModeTagStruct> {}
 
@@ -146,7 +146,7 @@ export namespace RvcCleanMode {
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 7.3.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 7.3.5.1
      */
     export const TlvModeOption = TlvObject({
         /**
@@ -154,14 +154,14 @@ export namespace RvcCleanMode {
          * the user to indicate what this option means. This field is meant to be readable and understandable by the
          * user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 64 })),
 
         /**
          * This field is used to identify the mode option.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.2
          */
         mode: TlvField(1, TlvUInt8),
 
@@ -199,7 +199,7 @@ export namespace RvcCleanMode {
          *   • A mode that includes both a generic Quick tag (defined here), and Vacuum and Mop tags, (defined in the
          *     RVC Clean cluster that is a derivation of this cluster).
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.3
          */
         modeTags: TlvField(2, TlvArray(TlvModeTagStruct, { maxLength: 8 }))
     });
@@ -208,13 +208,13 @@ export namespace RvcCleanMode {
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 7.3.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 7.3.5.1
      */
     export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
 
     export enum ModeChangeStatus {
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 7.3.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 7.3.7.1
          */
         CleaningInProgress = 64
     }
@@ -241,7 +241,7 @@ export namespace RvcCleanMode {
              * At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag in
              * the ModeTags field list.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 7.3.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 7.3.6.1
              */
             supportedModes: FixedAttribute(
                 0x0,
@@ -250,7 +250,7 @@ export namespace RvcCleanMode {
             ),
 
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 7.3.6
+             * @see {@link MatterSpecification.v14.Cluster} § 7.3.6
              */
             currentMode: Attribute(0x1, TlvUInt8, { persistent: true })
         },
@@ -261,7 +261,7 @@ export namespace RvcCleanMode {
              *
              * On receipt of this command the device shall respond with a ChangeToModeResponse command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.1
              */
             changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, ModeBase.TlvChangeToModeResponse)
         },
@@ -285,7 +285,7 @@ export namespace RvcCleanMode {
      * RvcCleanModeCluster supports optional features that you can enable with the RvcCleanModeCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 7.3
+     * @see {@link MatterSpecification.v14.Cluster} § 7.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

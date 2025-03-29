@@ -19,7 +19,7 @@ export namespace GeneralDiagnosticsInterface {
          *
          * The fields for the TestEventTrigger command are as follows:
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.12.7.1
+         * @see {@link MatterSpecification.v14.Core} § 11.12.7.1
          */
         testEventTrigger(request: GeneralDiagnostics.TestEventTriggerRequest): MaybePromise;
 
@@ -31,7 +31,7 @@ export namespace GeneralDiagnosticsInterface {
          *
          * Upon command invocation, the server shall respond with a TimeSnapshotResponse.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.12.7.2
+         * @see {@link MatterSpecification.v14.Core} § 11.12.7.2
          */
         timeSnapshot(): MaybePromise<GeneralDiagnostics.TimeSnapshotResponse>;
     }
@@ -47,7 +47,7 @@ export namespace GeneralDiagnosticsInterface {
          *
          * The fields for the PayloadTestRequest command are as follows:
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.12.7.4
+         * @see {@link MatterSpecification.v14.Core} § 11.12.7.4
          */
         payloadTestRequest(request: GeneralDiagnostics.PayloadTestRequest): MaybePromise<GeneralDiagnostics.PayloadTestResponse>;
     }
