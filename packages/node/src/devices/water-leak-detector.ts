@@ -18,7 +18,7 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Water Leak Detector device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 7.12
+ * @see {@link MatterSpecification.v14.Device} § 7.12
  */
 export interface WaterLeakDetectorDevice extends Identity<typeof WaterLeakDetectorDeviceDefinition> {}
 

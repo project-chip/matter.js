@@ -31,14 +31,14 @@ export namespace OperationalCredentials {
      * Note that the Trusted Root CA Certificate is not included in this structure. The roots are available in the
      * TrustedRootCertificates attribute of the Node Operational Credentials cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.4
      */
     export const TlvNoc = TlvObject({
         /**
          * This field shall contain the NOC for the struct’s associated fabric, encoded using Matter Certificate
          * Encoding.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.4.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.4.1
          */
         noc: TlvField(1, TlvByteString.bound({ maxLength: 400 })),
 
@@ -46,7 +46,7 @@ export namespace OperationalCredentials {
          * This field shall contain the ICAC or the struct’s associated fabric, encoded using Matter Certificate
          * Encoding. If no ICAC is present in the chain, this field shall be set to null.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.4.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.4.2
          */
         icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))),
 
@@ -59,14 +59,14 @@ export namespace OperationalCredentials {
      * Note that the Trusted Root CA Certificate is not included in this structure. The roots are available in the
      * TrustedRootCertificates attribute of the Node Operational Credentials cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.4
      */
     export interface Noc extends TypeFromSchema<typeof TlvNoc> {}
 
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.5
      */
     export const TlvFabricDescriptor = TlvObject({
         /**
@@ -75,7 +75,7 @@ export namespace OperationalCredentials {
          * for the key shall be the same as that used in the ec-pub-key field of the Matter Certificate Encoding for the
          * root in the operational certificate chain.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.1
          */
         rootPublicKey: TlvField(1, TlvByteString.bound({ length: 65 })),
 
@@ -89,7 +89,7 @@ export namespace OperationalCredentials {
          * Clients shall consider the VendorID field value to be untrustworthy until the NOC chain associated with the
          * fabric has passed the Vendor ID Validation Procedure against the associated RCAC.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.2
          */
         vendorId: TlvField(2, TlvVendorId),
 
@@ -98,7 +98,7 @@ export namespace OperationalCredentials {
          * match the value found in the matter-fabric-id field from the operational certificate providing the
          * operational identity under this Fabric.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.3
          */
         fabricId: TlvField(3, TlvFabricId),
 
@@ -107,7 +107,7 @@ export namespace OperationalCredentials {
          * match the value found in the matter-node-id field from the operational certificate providing this operational
          * identity.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.4
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.4
          */
         nodeId: TlvField(4, TlvNodeId),
 
@@ -115,7 +115,7 @@ export namespace OperationalCredentials {
          * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is set
          * by the UpdateFabricLabel command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.5
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.5
          */
         label: TlvField(5, TlvString.bound({ maxLength: 32 })),
 
@@ -125,21 +125,21 @@ export namespace OperationalCredentials {
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.5
      */
     export interface FabricDescriptor extends TypeFromSchema<typeof TlvFabricDescriptor> {}
 
     /**
      * Input to the OperationalCredentials attestationRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
      */
     export const TlvAttestationRequest = TlvObject({ attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 })) });
 
     /**
      * Input to the OperationalCredentials attestationRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
      */
     export interface AttestationRequest extends TypeFromSchema<typeof TlvAttestationRequest> {}
 
@@ -151,13 +151,13 @@ export namespace OperationalCredentials {
      *
      * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.2
      */
     export const TlvAttestationResponse = TlvObject({
         /**
          * This field shall contain the octet string of the serialized attestation_elements_message.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.2.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.2.1
          */
         attestationElements: TlvField(0, TlvByteString.bound({ maxLength: 900 })),
 
@@ -165,7 +165,7 @@ export namespace OperationalCredentials {
          * This field shall contain the octet string of the necessary attestation_signature as described in Section
          * 11.18.4.7, “Attestation Information”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.2.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.2.2
          */
         attestationSignature: TlvField(1, TlvByteString.bound({ length: 64 }))
     });
@@ -178,7 +178,7 @@ export namespace OperationalCredentials {
      *
      * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.2
      */
     export interface AttestationResponse extends TypeFromSchema<typeof TlvAttestationResponse> {}
 
@@ -186,7 +186,7 @@ export namespace OperationalCredentials {
      * This enumeration is used by the CertificateChainRequest command to convey which certificate from the device
      * attestation certificate chain to transmit back to the client.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.2
      */
     export enum CertificateChainType {
         /**
@@ -203,28 +203,28 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials certificateChainRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
      */
     export const TlvCertificateChainRequest = TlvObject({ certificateType: TlvField(0, TlvEnum<CertificateChainType>()) });
 
     /**
      * Input to the OperationalCredentials certificateChainRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
      */
     export interface CertificateChainRequest extends TypeFromSchema<typeof TlvCertificateChainRequest> {}
 
     /**
      * This command shall be generated in response to a CertificateChainRequest command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.4
      */
     export const TlvCertificateChainResponse = TlvObject({
         /**
          * This field shall be the DER encoded certificate corresponding to the CertificateType field in the
          * CertificateChainRequest command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.4.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.4.1
          */
         certificate: TlvField(0, TlvByteString.bound({ maxLength: 600 }))
     });
@@ -232,14 +232,14 @@ export namespace OperationalCredentials {
     /**
      * This command shall be generated in response to a CertificateChainRequest command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.4
      */
     export interface CertificateChainResponse extends TypeFromSchema<typeof TlvCertificateChainResponse> {}
 
     /**
      * Input to the OperationalCredentials csrRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
      */
     export const TlvCsrRequest = TlvObject({
         csrNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
@@ -249,7 +249,7 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials csrRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
      */
     export interface CsrRequest extends TypeFromSchema<typeof TlvCsrRequest> {}
 
@@ -261,13 +261,13 @@ export namespace OperationalCredentials {
      *
      * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.6
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.6
      */
     export const TlvCsrResponse = TlvObject({
         /**
          * This field shall contain the octet string of the serialized nocsr_elements_message.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.6.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.6.1
          */
         nocsrElements: TlvField(0, TlvByteString.bound({ maxLength: 900 })),
 
@@ -275,7 +275,7 @@ export namespace OperationalCredentials {
          * This field shall contain the octet string of the necessary attestation_signature as described in Section
          * 11.18.4.9, “NOCSR Information”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.6.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.6.2
          */
         attestationSignature: TlvField(1, TlvByteString.bound({ length: 64 }))
     });
@@ -288,14 +288,14 @@ export namespace OperationalCredentials {
      *
      * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.6
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.6
      */
     export interface CsrResponse extends TypeFromSchema<typeof TlvCsrResponse> {}
 
     /**
      * Input to the OperationalCredentials addNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
      */
     export const TlvAddNocRequest = TlvObject({
         nocValue: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
@@ -313,7 +313,7 @@ export namespace OperationalCredentials {
          * fabric as the accessing fabric and with the following argument fields (assuming KeySetWrite allowed a
          * GroupKeySetID set to 0):
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.1
          */
         ipkValue: TlvField(2, TlvByteString.bound({ length: 16 })),
 
@@ -335,7 +335,7 @@ export namespace OperationalCredentials {
          * which need to eventually add an "Administer Node over CASE" Access Control Entry to finalize new Fabric
          * configuration and subsequently be able to call the CommissioningComplete command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.2
          */
         caseAdminSubject: TlvField(3, TlvSubjectId),
 
@@ -428,7 +428,7 @@ export namespace OperationalCredentials {
          * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
          * matching the FabricIndex under which the new Node Operational Certificate (NOC) is scoped.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.3
          */
         adminVendorId: TlvField(4, TlvVendorId)
     });
@@ -436,7 +436,7 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials addNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
      */
     export interface AddNocRequest extends TypeFromSchema<typeof TlvAddNocRequest> {}
 
@@ -444,7 +444,7 @@ export namespace OperationalCredentials {
      * This enumeration is used by the NOCResponse common response command to convey detailed outcome of several of this
      * cluster’s operations.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.3
      */
     export enum NodeOperationalCertStatus {
         /**
@@ -511,13 +511,13 @@ export namespace OperationalCredentials {
      *
      * It provides status information about the success or failure of those commands.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.10
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.10
      */
     export const TlvNocResponse = TlvObject({
         /**
          * This field shall contain an NOCStatus value representing the status of an operation involving a NOC.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.1
          */
         statusCode: TlvField(0, TlvEnum<NodeOperationalCertStatus>()),
 
@@ -525,7 +525,7 @@ export namespace OperationalCredentials {
          * This field shall be present whenever StatusCode has a value of OK. If present, it shall contain the Fabric
          * Index of the Fabric last added, removed or updated.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.2
          */
         fabricIndex: TlvOptionalField(1, TlvFabricIndex),
 
@@ -534,7 +534,7 @@ export namespace OperationalCredentials {
          * presented to user interfaces in any way. Its purpose is to help developers in troubleshooting errors and the
          * contents may go into logs or crash reports.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.3
          */
         debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 }))
     });
@@ -552,14 +552,14 @@ export namespace OperationalCredentials {
      *
      * It provides status information about the success or failure of those commands.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.10
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.10
      */
     export interface NocResponse extends TypeFromSchema<typeof TlvNocResponse> {}
 
     /**
      * Input to the OperationalCredentials updateNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
      */
     export const TlvUpdateNocRequest = TlvObject({
         nocValue: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
@@ -570,14 +570,14 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials updateNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
      */
     export interface UpdateNocRequest extends TypeFromSchema<typeof TlvUpdateNocRequest> {}
 
     /**
      * Input to the OperationalCredentials updateFabricLabel command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
      */
     export const TlvUpdateFabricLabelRequest = TlvObject({
         /**
@@ -597,7 +597,7 @@ export namespace OperationalCredentials {
          * CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
          * currently visible, even for an existing fabric currently in process of being updated.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.11.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.11.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 32 })),
 
@@ -607,14 +607,14 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials updateFabricLabel command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
      */
     export interface UpdateFabricLabelRequest extends TypeFromSchema<typeof TlvUpdateFabricLabelRequest> {}
 
     /**
      * Input to the OperationalCredentials removeFabric command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
      */
     export const TlvRemoveFabricRequest = TlvObject({
         /**
@@ -658,7 +658,7 @@ export namespace OperationalCredentials {
          *      involves the removal of the secure session data that may underpin the current set of exchanges, the Node
          *      invoking the command SHOULD NOT expect a response before terminating its secure session with the target.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.12.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.12.1
          */
         fabricIndex: TlvField(0, TlvFabricIndex)
     });
@@ -666,14 +666,14 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials removeFabric command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
      */
     export interface RemoveFabricRequest extends TypeFromSchema<typeof TlvRemoveFabricRequest> {}
 
     /**
      * Input to the OperationalCredentials addTrustedRootCertificate command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
      */
     export const TlvAddTrustedRootCertificateRequest = TlvObject({
         rootCaCertificate: TlvField(0, TlvByteString.bound({ maxLength: 400 }))
@@ -682,7 +682,7 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials addTrustedRootCertificate command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
      */
     export interface AddTrustedRootCertificateRequest extends TypeFromSchema<typeof TlvAddTrustedRootCertificateRequest> {}
 
@@ -705,7 +705,7 @@ export namespace OperationalCredentials {
              *
              * The number of entries in this list shall match the number of entries in the Fabrics attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.1
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.1
              */
             nocs: FabricScopedAttribute(
                 0x0,
@@ -728,7 +728,7 @@ export namespace OperationalCredentials {
              *
              * The number of entries in this list shall match the number of entries in the NOCs attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.2
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.2
              */
             fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptor), { persistent: true, default: [] }),
 
@@ -736,7 +736,7 @@ export namespace OperationalCredentials {
              * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for a
              * particular device.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.3
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.3
              */
             supportedFabrics: FixedAttribute(0x2, TlvUInt8.bound({ min: 5, max: 254 })),
 
@@ -750,7 +750,7 @@ export namespace OperationalCredentials {
              *
              * Upon Factory Data Reset, this attribute shall be set to a default value of 0.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.4
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.4
              */
             commissionedFabrics: Attribute(0x3, TlvUInt8, { persistent: true }),
 
@@ -769,7 +769,7 @@ export namespace OperationalCredentials {
              *
              * Upon Factory Data Reset, this attribute shall be set to a default value whereby the list is empty.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.5
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.5
              */
             trustedRootCertificates: Attribute(
                 0x4,
@@ -784,7 +784,7 @@ export namespace OperationalCredentials {
              * attribute reads, since a given Fabric may be referenced by a different Fabric Index locally on a remote
              * Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.6
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.6
              */
             currentFabricIndex: Attribute(0x5, TlvFabricIndex, { default: FabricIndex(0) })
         },
@@ -796,7 +796,7 @@ export namespace OperationalCredentials {
              * recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall
              * be used in the computation of the Attestation Information.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
              */
             attestationRequest: Command(
                 0x0,
@@ -810,7 +810,7 @@ export namespace OperationalCredentials {
              * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with
              * a Status Code of INVALID_COMMAND.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
              */
             certificateChainRequest: Command(
                 0x2,
@@ -846,7 +846,7 @@ export namespace OperationalCredentials {
              * found to collide with an existing key pair already previously generated and installed, and that check had
              * been executed, then this command shall fail with a FAILURE status code sent back to the initiator.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
              */
             csrRequest: Command(0x4, TlvCsrRequest, 0x5, TlvCsrResponse, { invokeAcl: AccessLevel.Administer }),
 
@@ -861,7 +861,7 @@ export namespace OperationalCredentials {
              *
              * A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
              */
             addNoc: Command(0x6, TlvAddNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
@@ -920,7 +920,7 @@ export namespace OperationalCredentials {
              * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
              * matching the FabricIndex under which the updated NOC is scoped.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
              */
             updateNoc: Command(0x7, TlvUpdateNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
@@ -938,7 +938,7 @@ export namespace OperationalCredentials {
              * by Administrators to provide additional per-fabric context when operations such as RemoveFabric are
              * considered or used.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
              */
             updateFabricLabel: Command(
                 0x9,
@@ -967,7 +967,7 @@ export namespace OperationalCredentials {
              * removal. Otherwise, users may only observe the removal of a Fabric association as persistently failing
              * attempts to reach a Node operationally.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
              */
             removeFabric: Command(
                 0xa,
@@ -1004,7 +1004,7 @@ export namespace OperationalCredentials {
              * Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root
              * of trust using the RemoveFabric command.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
              */
             addTrustedRootCertificate: Command(
                 0xb,
@@ -1020,7 +1020,7 @@ export namespace OperationalCredentials {
      * This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as well as manage
      * the associated Fabrics.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18
+     * @see {@link MatterSpecification.v14.Core} § 11.18
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

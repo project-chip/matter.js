@@ -14,7 +14,7 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Mode Select device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 11.1
+ * @see {@link MatterSpecification.v14.Device} § 11.1
  */
 export interface ModeSelectDevice extends Identity<typeof ModeSelectDeviceDefinition> {}
 

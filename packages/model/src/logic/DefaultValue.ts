@@ -219,8 +219,12 @@ function buildBitmap(scope: Scope, model: ValueModel) {
 function decodeBitmap(model: ValueModel, value: number | bigint) {
     const fields = new Map<ValueModel, number | boolean>();
 
+    // Value is 0, so no bit set
+    if (value === 0) {
+        return {};
+    }
     // Test each bit.  If set, install appropriate value into object
-    for (let bit = 0; Math.pow(bit, 2) <= value; bit++) {
+    for (let bit = 0; Math.pow(2, bit) <= value; bit++) {
         if (typeof value === "bigint") {
             if (!(value & (1n << BigInt(bit)))) {
                 continue;

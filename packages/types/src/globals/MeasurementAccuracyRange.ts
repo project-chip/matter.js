@@ -38,7 +38,7 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
  *
  *     ◦ the reported value shall be greater than or equal to the true value minus FixedMax.
  *
- * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
+ * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3
  */
 export const TlvMeasurementAccuracyRange = TlvObject({
     /**
@@ -50,7 +50,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
      * encompassing MeasurementAccuracyStruct.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.1
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.1
      */
     rangeMin: TlvField(0, TlvInt64),
 
@@ -64,28 +64,28 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
      * encompassing MeasurementAccuracyStruct.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.2
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.2
      */
     rangeMax: TlvField(1, TlvInt64),
 
     /**
      * This field shall indicate the maximum +/- percentage accuracy for the associated measurement.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.3
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.3
      */
     percentMax: TlvOptionalField(2, TlvPercent100ths),
 
     /**
      * This field shall indicate the minimum +/- percentage accuracy for the associated measurement.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.4
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.4
      */
     percentMin: TlvOptionalField(3, TlvPercent100ths),
 
     /**
      * This field shall indicate the typical +/- percentage accuracy for the associated measurement.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.5
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.5
      */
     percentTypical: TlvOptionalField(4, TlvPercent100ths),
 
@@ -93,7 +93,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      * This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit indicated by
      * MeasurementType.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.6
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.6
      */
     fixedMax: TlvOptionalField(5, TlvUInt64),
 
@@ -101,7 +101,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      * This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit indicated by
      * MeasurementType.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.7
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.7
      */
     fixedMin: TlvOptionalField(6, TlvUInt64),
 
@@ -109,7 +109,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      * This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit indicated by
      * MeasurementType.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.8
+     * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3.8
      */
     fixedTypical: TlvOptionalField(7, TlvUInt64)
 });
@@ -142,6 +142,6 @@ export const TlvMeasurementAccuracyRange = TlvObject({
  *
  *     ◦ the reported value shall be greater than or equal to the true value minus FixedMax.
  *
- * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
+ * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.3
  */
 export interface MeasurementAccuracyRange extends TypeFromSchema<typeof TlvMeasurementAccuracyRange> {}

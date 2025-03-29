@@ -15,7 +15,7 @@ export namespace DoorLockInterface {
          * This command causes the lock device to lock the door. This command includes an optional code for the lock.
          * The door lock may require a PIN depending on the value of the RequirePINForRemoteOperation attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.1
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.1
          */
         lockDoor(request: DoorLock.LockDoorRequest): MaybePromise;
 
@@ -28,7 +28,7 @@ export namespace DoorLockInterface {
          * If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
          * relock time has expired.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.2
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.2
          */
         unlockDoor(request: DoorLock.UnlockDoorRequest): MaybePromise;
 
@@ -39,7 +39,7 @@ export namespace DoorLockInterface {
          * AutoRelockTime attribute. If the door lock device is not capable of or does not want to support temporary
          * Relock Timeout, it SHOULD NOT support this optional command.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.3
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.3
          */
         unlockWithTimeout(request: DoorLock.UnlockWithTimeoutRequest): MaybePromise;
     }
@@ -63,7 +63,7 @@ export namespace DoorLockInterface {
          *   • INVALID_COMMAND, if one or more fields violate constraints or are invalid or if OperationType is Modify
          *     and UserIndex points to an available slot.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.32
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.32
          */
         setUser(request: DoorLock.SetUserRequest): MaybePromise;
 
@@ -74,7 +74,7 @@ export namespace DoorLockInterface {
          *
          * COMMAND, etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.33
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.33
          */
         getUser(request: DoorLock.GetUserRequest): MaybePromise<DoorLock.GetUserResponse>;
 
@@ -87,7 +87,7 @@ export namespace DoorLockInterface {
          *
          * A LockUserChange event with the provided UserIndex shall be generated after successfully clearing users.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.35
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.35
          */
         clearUser(request: DoorLock.ClearUserRequest): MaybePromise;
 
@@ -97,7 +97,7 @@ export namespace DoorLockInterface {
          *
          * Fields used for different use cases:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.36
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.36
          */
         setCredential(request: DoorLock.SetCredentialRequest): MaybePromise<DoorLock.SetCredentialResponse>;
 
@@ -107,7 +107,7 @@ export namespace DoorLockInterface {
          * An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, etc.) as
          * needed otherwise the GetCredentialStatusResponse command shall be sent implying a status of SUCCESS.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.38
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.38
          */
         getCredentialStatus(request: DoorLock.GetCredentialStatusRequest): MaybePromise<DoorLock.GetCredentialStatusResponse>;
 
@@ -123,7 +123,7 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.40
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.40
          */
         clearCredential(request: DoorLock.ClearCredentialRequest): MaybePromise;
     }
@@ -136,14 +136,14 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.12
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.12
          */
         setWeekDaySchedule(request: DoorLock.SetWeekDayScheduleRequest): MaybePromise;
 
         /**
          * Retrieve the specific weekly schedule for the specific user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.13
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.13
          */
         getWeekDaySchedule(request: DoorLock.GetWeekDayScheduleRequest): MaybePromise<DoorLock.GetWeekDayScheduleResponse>;
 
@@ -152,7 +152,7 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.15
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.15
          */
         clearWeekDaySchedule(request: DoorLock.ClearWeekDayScheduleRequest): MaybePromise;
     }
@@ -165,14 +165,14 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.16
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.16
          */
         setYearDaySchedule(request: DoorLock.SetYearDayScheduleRequest): MaybePromise;
 
         /**
          * Retrieve the specific year day schedule for the specific schedule and user indexes.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.17
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.17
          */
         getYearDaySchedule(request: DoorLock.GetYearDayScheduleRequest): MaybePromise<DoorLock.GetYearDayScheduleResponse>;
 
@@ -181,7 +181,7 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.19
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.19
          */
         clearYearDaySchedule(request: DoorLock.ClearYearDayScheduleRequest): MaybePromise;
     }
@@ -193,21 +193,21 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.20
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.20
          */
         setHolidaySchedule(request: DoorLock.SetHolidayScheduleRequest): MaybePromise;
 
         /**
          * Get the holiday schedule for the specified index.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.21
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.21
          */
         getHolidaySchedule(request: DoorLock.GetHolidayScheduleRequest): MaybePromise<DoorLock.GetHolidayScheduleResponse>;
 
         /**
          * Clears the holiday schedule or all holiday schedules.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.23
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.23
          */
         clearHolidaySchedule(request: DoorLock.ClearHolidayScheduleRequest): MaybePromise;
     }
@@ -219,14 +219,14 @@ export namespace DoorLockInterface {
          * Return status is a global status code or a cluster-specific status code from the Status Codes table and shall
          * be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.4
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.4
          */
         setPinCode(request: DoorLock.SetPinCodeRequest): MaybePromise;
 
         /**
          * Retrieve a PIN Code.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.5
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.5
          */
         getPinCode(request: DoorLock.GetPinCodeRequest): MaybePromise<DoorLock.GetPinCodeResponse>;
 
@@ -237,7 +237,7 @@ export namespace DoorLockInterface {
          * user record’s UserStatus value shall be set to Available, and UserType value shall be set to UnrestrictedUser
          * and all schedules shall be cleared.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.7
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.7
          */
         clearPinCode(request: DoorLock.ClearPinCodeRequest): MaybePromise;
 
@@ -249,7 +249,7 @@ export namespace DoorLockInterface {
          * On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command with
          * respect to the setting of user status, user type and schedules.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.8
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.8
          */
         clearAllPinCodes(): MaybePromise;
     }
@@ -258,7 +258,7 @@ export namespace DoorLockInterface {
         /**
          * This command allows communicating an Aliro Reader configuration, as defined in [Aliro], to the lock.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.42
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.42
          */
         setAliroReaderConfig(request: DoorLock.SetAliroReaderConfigRequest): MaybePromise;
 
@@ -272,7 +272,7 @@ export namespace DoorLockInterface {
          * key to interact with the lock. This effect is not restricted to a single fabric or otherwise scoped in any
          * way.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.43
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.43
          */
         clearAliroReaderConfig(): MaybePromise;
     }
@@ -281,14 +281,14 @@ export namespace DoorLockInterface {
         /**
          * Set the status of a user ID.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.9
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.9
          */
         setUserStatus(request: DoorLock.SetUserStatusRequest): MaybePromise;
 
         /**
          * Get the status of a user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.10
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.10
          */
         getUserStatus(request: DoorLock.GetUserStatusRequest): MaybePromise<DoorLock.GetUserStatusResponse>;
 
@@ -299,14 +299,14 @@ export namespace DoorLockInterface {
          *
          * Return status shall be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.24
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.24
          */
         setUserType(request: DoorLock.SetUserTypeRequest): MaybePromise;
 
         /**
          * Retrieve the user type for a specific user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.25
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.25
          */
         getUserType(request: DoorLock.GetUserTypeRequest): MaybePromise<DoorLock.GetUserTypeResponse>;
     }
@@ -318,14 +318,14 @@ export namespace DoorLockInterface {
          * Return status is a global status code or a cluster-specific status code from the Status Codes table and shall
          * be one of the following values:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.27
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.27
          */
         setRfidCode(request: DoorLock.SetRfidCodeRequest): MaybePromise;
 
         /**
          * Retrieve an RFID code.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.28
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.28
          */
         getRfidCode(request: DoorLock.GetRfidCodeRequest): MaybePromise<DoorLock.GetRfidCodeResponse>;
 
@@ -336,7 +336,7 @@ export namespace DoorLockInterface {
          * corresponding user record’s UserStatus value shall be set to Available, and UserType value shall be set to
          * UnrestrictedUser and all schedules shall be cleared.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.30
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.30
          */
         clearRfidCode(request: DoorLock.ClearRfidCodeRequest): MaybePromise;
 
@@ -345,7 +345,7 @@ export namespace DoorLockInterface {
          * status has to be set to "0 Available", the user type has to be set to the default value, and all schedules
          * which are supported have to be set to the default values.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.31
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.31
          */
         clearAllRfidCodes(): MaybePromise;
     }
@@ -361,7 +361,7 @@ export namespace DoorLockInterface {
          * If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the auto
          * relock time has expired.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.41
+         * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.41
          */
         unboltDoor(request: DoorLock.UnboltDoorRequest): MaybePromise;
     }

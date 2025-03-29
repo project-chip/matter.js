@@ -17,7 +17,7 @@ import { Identity } from "#general";
  * below the glass surface directly to the magnetic induction cookware placed above or through traditional gas or
  * electric burners.
  *
- * @see {@link MatterSpecification.v13.Device} § 13.8
+ * @see {@link MatterSpecification.v14.Device} § 13.8
  */
 export interface CooktopDevice extends Identity<typeof CooktopDeviceDefinition> {}
 
