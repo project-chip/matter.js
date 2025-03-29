@@ -18,7 +18,7 @@ describe("SC", () => {
                 "s/defaultValue: 65535/defaultValue: 257/",
 
                 // We do not like ridiculously long waits; reduce commissioning timeout.  Unfortunately test framework
-                // is slow so we can't reduce to a reasonable level but 10s. is still way better than 3m.
+                // is slow so we can't reduce to a reasonable level but 10s is still way better than 3m.
                 "s/value: 180/value: 10/",
 
                 // Also reduce the test delay that waits for timeout

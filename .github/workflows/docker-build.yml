@@ -1,0 +1,101 @@
+# This workflow executes the building and testing of new chip test docker image used in matter.js dockerized tests
+# * It automatically runs each night at 3am UTC
+# * It can be triggered manually
+# * It runs on each commit to the main branch when files in the chip directory or the workflow file itself are changed
+# * It runs when the latest commit message contains the string '[rebuild-docker]'
+# The docker image is only pushed to registry after rebuild and successful tests when the workflow is triggered manually, on a schedule or on a commit to the main branch (so PRs are not pushing an updated image)
+name: Testing-Docker Rebuild
+
+on:
+  schedule:
+    - cron: 0 3 * * * # Every day at 03:00
+  workflow_dispatch: # Manually on demand
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  merge_group:
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}-docker-build
+  cancel-in-progress: true
+
+jobs:
+  head-commit-message:
+    name: get head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      head-commit-message: ${{ steps.get_head_commit_message.outputs.headCommitMsg }}
+    steps:
+      - name: Get repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Print head git commit message
+        id: get_head_commit_message
+        run: echo "headCommitMsg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
+  # Find out what is needed to be done by this test workflow
+  docker-build-needed:
+    needs: [head-commit-message]
+    if: github.repository == 'project-chip/matter.js'
+    runs-on: ubuntu-latest
+    outputs:
+      docker-changes: ${{ steps.changes.outputs.src }}
+      docker-rebuild: ${{ steps.check-rebuild.outputs.docker-rebuild }}
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - "chip/**"
+              - ".github/workflows/docker-build.yml"
+
+      - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[rebuild-docker]') == true }}
+        name: Docker Rebuild needed
+        id: check-rebuild
+        run: echo "docker-rebuild=true" >> $GITHUB_OUTPUT
+
+  # If we need to do anything make sure that chip binaries are build and environment can be set up
+  docker-rebuild:
+    needs: [docker-build-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.docker-build-needed.outputs.docker-rebuild == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Prepare matter.js
+        uses: ./.github/actions/prepare-env
+
+      - name: Rebuild docker image
+        run: |
+          cd chip
+          ./bin/build
+          ./bin/info
+
+      - name: Run tests using the docker image
+        run: |
+          cd chip-testing
+          npm run test-core -- --no-pull
+          npm run test-app-fast -- --no-pull
+          npm run test-app-slow -- --no-pull
+
+      - name: Login to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: Automator77
+          password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
+
+      - name: Rebuild docker image
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          cd chip
+          ./bin/info
+          ./bin/publish

@@ -63,6 +63,7 @@ export async function main(argv = process.argv) {
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
         .option("report", { type: "boolean", describe: "Display test summary after testing" })
+        .option("pull", { type: "boolean", describe: "Do not update containers before testing", default: true })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -80,6 +81,8 @@ export async function main(argv = process.argv) {
         const firstSpec = Array.isArray(args.spec) ? args.spec[0] : args.spec;
         packageLocation = firstSpec;
     }
+
+    chip.pullBeforeTesting = args.pull;
 
     const builder = new ProjectBuilder();
     const pkg = new Package({ path: packageLocation });
