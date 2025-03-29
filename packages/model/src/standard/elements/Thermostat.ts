@@ -1388,7 +1388,7 @@ export const Thermostat = Cluster(
 
         Field(
             {
-                name: "CoolingStage", constraint: "1 to 1",
+                name: "CoolingStage", constraint: "0 to 1",
                 description: "Stage of cooling the HVAC system is using.",
 
                 details: "These bits shall indicate what stage of cooling the HVAC system is using." +
@@ -1407,7 +1407,7 @@ export const Thermostat = Cluster(
 
         Field(
             {
-                name: "HeatingStage", constraint: "3 to 3",
+                name: "HeatingStage", constraint: "2 to 3",
                 description: "Stage of heating the HVAC system is using.",
 
                 details: "These bits shall indicate what stage of heating the HVAC system is using." +

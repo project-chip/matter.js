@@ -987,7 +987,7 @@ export namespace Thermostat {
          *
          * @see {@link MatterSpecification.v14.Cluster} § 4.3.8.6.1
          */
-        coolingStage: BitField(1, 0),
+        coolingStage: BitField(0, 2),
 
         /**
          * Stage of heating the HVAC system is using.
@@ -1004,7 +1004,7 @@ export namespace Thermostat {
          *
          * @see {@link MatterSpecification.v14.Cluster} § 4.3.8.6.2
          */
-        heatingStage: BitField(3, 0),
+        heatingStage: BitField(2, 2),
 
         /**
          * Is the heating type Heat Pump.

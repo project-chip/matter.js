@@ -213,9 +213,9 @@ LocalMatter.children.push(
                 type: "map8",
 
                 children: [
-                    { tag: "field", name: "Global", type: "MovementStatus", constraint: "0 to 2" },
-                    { tag: "field", name: "Lift", type: "MovementStatus", constraint: "2 to 4" },
-                    { tag: "field", name: "Tilt", type: "MovementStatus", constraint: "4 to 6" },
+                    { tag: "field", name: "Global", type: "MovementStatus", constraint: "0 to 1" },
+                    { tag: "field", name: "Lift", type: "MovementStatus", constraint: "2 to 3" },
+                    { tag: "field", name: "Tilt", type: "MovementStatus", constraint: "4 to 5" },
                 ],
             },
 
