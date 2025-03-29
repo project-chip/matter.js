@@ -12,7 +12,7 @@ LocalMatter.children.push({
 
     children: [
         /*
-        This Override is currently inactive till it is decided how names will be.
+        This override is currently inactive till it is decided how names will be.
 
         In https://github.com/project-chip/connectedhomeip/pull/38003 SDK was adjusted to be like spec why this
         override is obsolete when it stays that way.
