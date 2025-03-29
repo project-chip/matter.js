@@ -113,7 +113,11 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
      */
     protected initializeTransitions() {
         const { endpoint } = this;
-        const readOnlyState = endpoint.stateOf(LevelControlBaseServer);
+
+        // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
+        // this efficient we use the read-only view of our state provided by the endpoint as it is always available
+        const readOnlyState = (endpoint.state as Record<string, unknown>).levelControl as LevelControlBaseServer.State;
+
         return new Transitions(this.endpoint, {
             type: LevelControlBaseServer,
 
@@ -134,11 +138,11 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
             properties: {
                 currentLevel: {
                     get min() {
-                        return endpoint.stateOf(LevelControlBaseServer).minLevel;
+                        return readOnlyState.minLevel;
                     },
 
                     get max() {
-                        return endpoint.stateOf(LevelControlBaseServer).maxLevel;
+                        return readOnlyState.maxLevel;
                     },
                 },
             },
