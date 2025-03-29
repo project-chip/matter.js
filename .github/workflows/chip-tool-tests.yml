@@ -1,9 +1,14 @@
-# This workflow executed the chip tool tests against matter.js
+# This workflow executes the chip tool tests against matter.js (Dockerized and not dockerized ones)
+# This workflow is triggered by:
+# * A schedule (every day at 5am UTC)
+# * A manual trigger
+# * For commits and pull requests to the main branch
+
 name: Chip Tool tests
 
 on:
   schedule:
-    - cron: 0 2 * * * # Every day at 02:00
+    - cron: 0 5 * * * # Every day at 05:00
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
@@ -283,7 +288,7 @@ jobs:
               --chip-tool ../bin/chip-tool \
               --log-level info \
               --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
-              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_3_2,Test_TC_CC_3_3,Test_TC_CC_4_3,Test_TC_CC_5_3,Test_TC_CC_6_3,Test_TC_CC_7_3}" \
+              --target-skip-glob "{Test_TC_LVL_9_1}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
@@ -354,12 +359,10 @@ jobs:
 
   python-repl-tests:
     needs: [prepare-chip-build, chip-tests-needed]
-
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     env:
       TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -420,3 +423,55 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_7_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SWTCH.py' || true
+
+  # Execute the core cluster tests
+  docker-chip-tests-core:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-core
+
+  docker-chip-tests-fast:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-app-fast
+
+  docker-chip-tests-slow:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-app-slow

@@ -12,7 +12,6 @@ CONTAINER_CREATED=$(docker inspect --format '{{ .Created }}' ghcr.io/matter-js/c
 CONTAINER_SIZE=$(docker inspect --format '{{ .Size }}' ghcr.io/matter-js/chip)
 CHIP_VERSION=$(
     docker run \
-        -it \
         --rm \
         --platform linux/amd64 \
         --entrypoint /usr/bin/cat \
@@ -25,8 +24,14 @@ if [ -x /usr/bin/numfmt ]; then
 fi
 
 cat <<-END
-Container ID:      $CONTAINER_ID
-          Created: $CONTAINER_CREATED
-          Size:    $CONTAINER_SIZE
-CHIP SHA:          $CHIP_VERSION
+{
+    "container": {
+        "id": "$CONTAINER_ID",
+        "created": "$CONTAINER_CREATED",
+        "size": "$CONTAINER_SIZE"
+    },
+    "chip": {
+        "sha": "$CHIP_VERSION"
+    }
+}
 END

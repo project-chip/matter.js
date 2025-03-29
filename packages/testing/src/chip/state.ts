@@ -45,6 +45,7 @@ const Values = {
     snapshots: new Map<Subject, {}>(),
     containerLifecycleInstalled: false,
     testMap: new Map<TestDescriptor, Test>(),
+    pullBeforeTesting: true,
 };
 
 /**
@@ -101,6 +102,14 @@ export const State = {
         }
 
         return subject;
+    },
+
+    get pullBeforeTesting() {
+        return Values.pullBeforeTesting;
+    },
+
+    set pullBeforeTesting(value: boolean) {
+        Values.pullBeforeTesting = value;
     },
 
     get pics() {
@@ -399,7 +408,9 @@ async function initialize() {
 async function configureContainer() {
     const docker = new Docker();
 
-    await docker.pull(Constants.imageName, Constants.platform);
+    if (Values.pullBeforeTesting) {
+        await docker.pull(Constants.imageName, Constants.platform);
+    }
 
     const mdnsVolume = Volume(docker, Constants.mdnsVolumeName);
     await mdnsVolume.open();

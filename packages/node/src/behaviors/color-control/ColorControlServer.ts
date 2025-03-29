@@ -514,6 +514,9 @@ export class ColorControlBaseServer extends ColorControlBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepHueRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -687,6 +690,9 @@ export class ColorControlBaseServer extends ColorControlBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepSaturationRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -917,6 +923,9 @@ export class ColorControlBaseServer extends ColorControlBase {
         stepY,
         transitionTime,
     }: ColorControl.StepColorRequest): MaybePromise {
+        if (stepX === 0 && stepY === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1075,6 +1084,9 @@ export class ColorControlBaseServer extends ColorControlBase {
         stepSize,
         transitionTime,
     }: ColorControl.EnhancedStepHueRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1357,6 +1369,9 @@ export class ColorControlBaseServer extends ColorControlBase {
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
     }: ColorControl.StepColorTemperatureRequest) {
+        if (stepSize === 0) {
+            throw new StatusResponseError("Step size must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
