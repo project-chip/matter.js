@@ -17,17 +17,17 @@ export namespace JointFabricPkiInterface {
          *
          * Check ICA Cross Signing for details about the generation and contents of the ICACSR.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.25.5.1
+         * @see {@link MatterSpecification.v14.Core} § 11.25.5.1
          */
         icacsrRequest(request: JointFabricPki.IcacsrRequest): MaybePromise<JointFabricPki.IcacsrResponse>;
 
         /**
-         * @see {@link MatterSpecification.v13.Core} § 11.25.5
+         * @see {@link MatterSpecification.v14.Core} § 11.25.5
          */
         transferAnchorRequest(): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v13.Core} § 11.25.5
+         * @see {@link MatterSpecification.v14.Core} § 11.25.5
          */
         transferAnchorComplete(): MaybePromise;
     }

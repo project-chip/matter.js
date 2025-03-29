@@ -31,7 +31,7 @@ export namespace ValveConfigurationAndControl {
     /**
      * These are optional features supported by ValveConfigurationAndControlCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.4
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.4
      */
     export enum Feature {
         /**
@@ -42,7 +42,7 @@ export namespace ValveConfigurationAndControl {
          *
          * This feature shall NOT be supported unless the device supports the Time Synchronization cluster.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.4.1
          */
         TimeSync = "TimeSync",
 
@@ -52,13 +52,13 @@ export namespace ValveConfigurationAndControl {
          * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
          * percentage, of its full range of motion.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.2
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.4.2
          */
         Level = "Level"
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.5.2
      */
     export enum ValveState {
         /**
@@ -78,7 +78,7 @@ export namespace ValveConfigurationAndControl {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.5.1
      */
     export const ValveFault = {
         /**
@@ -115,7 +115,7 @@ export namespace ValveConfigurationAndControl {
     /**
      * Input to the ValveConfigurationAndControl open command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.1
      */
     export const TlvOpenRequest = TlvObject({
         /**
@@ -124,14 +124,14 @@ export namespace ValveConfigurationAndControl {
          * A value of null shall indicate the duration is not set, meaning that the valve will remain open until closed
          * by the user or some other automation.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.1.1
          */
         openDuration: TlvOptionalField(0, TlvNullable(TlvUInt32.bound({ min: 1 }))),
 
         /**
          * This field shall indicate the target level used for this specific Open command.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.1.2
          */
         targetLevel: TlvOptionalField(1, TlvPercent.bound({ min: 1 }))
     });
@@ -139,27 +139,27 @@ export namespace ValveConfigurationAndControl {
     /**
      * Input to the ValveConfigurationAndControl open command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.1
      */
     export interface OpenRequest extends TypeFromSchema<typeof TlvOpenRequest> {}
 
     /**
      * Body of the ValveConfigurationAndControl valveStateChanged event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.1
      */
     export const TlvValveStateChangedEvent = TlvObject({
         /**
          * This field shall indicate the new state of the valve.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.1.1
          */
         valveState: TlvField(0, TlvEnum<ValveState>()),
 
         /**
          * This field shall indicate the new level of the valve.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.1.2
          */
         valveLevel: TlvOptionalField(1, TlvPercent)
     });
@@ -167,20 +167,20 @@ export namespace ValveConfigurationAndControl {
     /**
      * Body of the ValveConfigurationAndControl valveStateChanged event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.1
      */
     export interface ValveStateChangedEvent extends TypeFromSchema<typeof TlvValveStateChangedEvent> {}
 
     /**
      * Body of the ValveConfigurationAndControl valveFault event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.2
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.2
      */
     export const TlvValveFaultEvent = TlvObject({
         /**
          * This field shall indicate the value of the ValveFault attribute, at the time this event is generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.2.1
          */
         valveFault: TlvField(0, TlvBitmap(TlvUInt16, ValveFault))
     });
@@ -188,12 +188,12 @@ export namespace ValveConfigurationAndControl {
     /**
      * Body of the ValveConfigurationAndControl valveFault event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.2
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.2
      */
     export interface ValveFaultEvent extends TypeFromSchema<typeof TlvValveFaultEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.6.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6.6.1
      */
     export enum StatusCode {
         /**
@@ -226,7 +226,7 @@ export namespace ValveConfigurationAndControl {
              * modifying the current UTC time of the device, the value of this attribute shall be adjusted to match the
              * new UTC time plus the value of the RemainingDuration attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.3
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.3
              */
             autoCloseTime: Attribute(0x2, TlvNullable(TlvEpochUs), { default: null })
         }
@@ -247,7 +247,7 @@ export namespace ValveConfigurationAndControl {
              *
              * A value of null shall indicate that the current state is not known.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.7
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.7
              */
             currentLevel: Attribute(0x6, TlvNullable(TlvPercent), { default: null }),
 
@@ -259,7 +259,7 @@ export namespace ValveConfigurationAndControl {
              * A value of null shall indicate that no target position is set, since the change of level is either done
              * or failed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.8
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.8
              */
             targetLevel: Attribute(0x7, TlvNullable(TlvPercent), { default: null }),
 
@@ -273,7 +273,7 @@ export namespace ValveConfigurationAndControl {
              * not 0, the requested DefaultOpenLevel value is considered an unsupported value and a CONSTRAINT_ERROR
              * status shall be returned.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.9
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.9
              */
             defaultOpenLevel: OptionalWritableAttribute(
                 0x8,
@@ -290,7 +290,7 @@ export namespace ValveConfigurationAndControl {
              *
              * The values of 0 and 100 shall always be supported, regardless of the value of this attribute.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.11
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.11
              */
             levelStep: OptionalFixedAttribute(0xa, TlvUInt8.bound({ min: 1, max: 50 }), { default: 1 })
         }
@@ -313,7 +313,7 @@ export namespace ValveConfigurationAndControl {
              *
              * This feature shall NOT be supported unless the device supports the Time Synchronization cluster.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.4.1
              */
             timeSync: BitFlag(0),
 
@@ -323,7 +323,7 @@ export namespace ValveConfigurationAndControl {
              * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
              * percentage, of its full range of motion.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.2
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.4.2
              */
             level: BitFlag(1)
         },
@@ -335,7 +335,7 @@ export namespace ValveConfigurationAndControl {
              * A value of null shall indicate the duration is not set, meaning that the valve will remain open until
              * closed by the user or some other automation.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.1
              */
             openDuration: Attribute(0x0, TlvNullable(TlvUInt32.bound({ min: 1 })), { default: null }),
 
@@ -346,7 +346,7 @@ export namespace ValveConfigurationAndControl {
              * A value of null shall indicate the duration is not set, meaning that the valve will remain open until
              * closed by the user or some other automation.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.2
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.2
              */
             defaultOpenDuration: WritableAttribute(
                 0x1,
@@ -380,7 +380,7 @@ export namespace ValveConfigurationAndControl {
              * position. The behavior of transitioning to the closed position shall match the behavior described in the
              * Close command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.4
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.4
              */
             remainingDuration: Attribute(0x3, TlvNullable(TlvUInt32), { default: null }),
 
@@ -389,7 +389,7 @@ export namespace ValveConfigurationAndControl {
              *
              * A value of null shall indicate that the current state is not known.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.5
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.5
              */
             currentState: Attribute(0x4, TlvNullable(TlvEnum<ValveState>()), { default: null }),
 
@@ -399,14 +399,14 @@ export namespace ValveConfigurationAndControl {
              * A value of null shall indicate that no target position is set, since the change in state is either done
              * or failed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.6
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.6
              */
             targetState: Attribute(0x5, TlvNullable(TlvEnum<ValveState>()), { default: null }),
 
             /**
              * Indicates any faults registered by the valve.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.7.10
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.7.10
              */
             valveFault: OptionalAttribute(0x9, TlvBitmap(TlvUInt16, ValveFault))
         },
@@ -415,14 +415,14 @@ export namespace ValveConfigurationAndControl {
             /**
              * This command is used to set the valve to its open position.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.1
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.1
              */
             open: Command(0x0, TlvOpenRequest, 0x0, TlvNoResponse),
 
             /**
              * This command is used to set the valve to its closed position.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.8.2
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.8.2
              */
             close: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse)
         },
@@ -432,7 +432,7 @@ export namespace ValveConfigurationAndControl {
              * This event shall be generated when the valve state changed. For level changes, after the end of movement,
              * for state changes when the new state has been reached.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.1
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.1
              */
             valveStateChanged: OptionalEvent(0x0, EventPriority.Info, TlvValveStateChangedEvent),
 
@@ -440,7 +440,7 @@ export namespace ValveConfigurationAndControl {
              * This event shall be generated when the valve registers or clears a fault, e.g. not being able to
              * transition to the requested target level or state.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.6.9.2
+             * @see {@link MatterSpecification.v14.Cluster} § 4.6.9.2
              */
             valveFault: OptionalEvent(0x1, EventPriority.Info, TlvValveFaultEvent)
         },
@@ -466,7 +466,7 @@ export namespace ValveConfigurationAndControl {
      * ValveConfigurationAndControlCluster supports optional features that you can enable with the
      * ValveConfigurationAndControlCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6
+     * @see {@link MatterSpecification.v14.Cluster} § 4.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

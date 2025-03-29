@@ -15,7 +15,7 @@ export namespace ProxyDiscoveryInterface {
          * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment
          * Flow”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1
+         * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1
          */
         proxyDiscoverRequest(request: ProxyDiscovery.ProxyDiscoverRequest): MaybePromise;
     }

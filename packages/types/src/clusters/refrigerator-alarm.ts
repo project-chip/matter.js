@@ -19,7 +19,7 @@ export namespace RefrigeratorAlarm {
     /**
      * These are optional features supported by RefrigeratorAlarmCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.8.4
+     * @see {@link MatterSpecification.v14.Cluster} § 8.8.4
      */
     export enum Feature {
         /**
@@ -31,7 +31,7 @@ export namespace RefrigeratorAlarm {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 8.8.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 8.8.5.1
      */
     export const Alarm = {
         /**
@@ -43,7 +43,7 @@ export namespace RefrigeratorAlarm {
     /**
      * Input to the RefrigeratorAlarm reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export const TlvResetRequest = TlvObject({
         /**
@@ -52,7 +52,7 @@ export namespace RefrigeratorAlarm {
          * alarms indicated are successfully reset, the response status code shall be SUCCESS, otherwise, the response
          * status code shall be FAILURE.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1.1
          */
         alarms: TlvField(0, TlvBitmap(TlvUInt32, Alarm))
     });
@@ -60,27 +60,27 @@ export namespace RefrigeratorAlarm {
     /**
      * Input to the RefrigeratorAlarm reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export interface ResetRequest extends TypeFromSchema<typeof TlvResetRequest> {}
 
     /**
      * Body of the RefrigeratorAlarm notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export const TlvNotifyEvent = TlvObject({
         /**
          * This field shall indicate those alarms that have become active.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.1
          */
         active: TlvField(0, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall indicate those alarms that have become inactive.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.2
          */
         inactive: TlvField(1, TlvBitmap(TlvUInt32, Alarm)),
 
@@ -88,14 +88,14 @@ export namespace RefrigeratorAlarm {
          * This field shall be a copy of the new State attribute value that resulted in the event being generated. That
          * is, this field shall have all the bits in Active set and shall NOT have any of the bits in Inactive set.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.4
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.4
          */
         state: TlvField(2, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall be a copy of the Mask attribute when this event was generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.3
          */
         mask: TlvField(3, TlvBitmap(TlvUInt32, Alarm))
     });
@@ -103,7 +103,7 @@ export namespace RefrigeratorAlarm {
     /**
      * Body of the RefrigeratorAlarm notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export interface NotifyEvent extends TypeFromSchema<typeof TlvNotifyEvent> {}
 
@@ -117,7 +117,7 @@ export namespace RefrigeratorAlarm {
              * will be latched when set, and will not reset to inactive when the underlying condition which caused the
              * alarm is no longer present, and so requires an explicit reset using the Reset command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.2
              */
             latch: FixedAttribute(0x1, TlvBitmap(TlvUInt32, Alarm))
         },
@@ -127,7 +127,7 @@ export namespace RefrigeratorAlarm {
              * This command resets active and latched alarms (if possible). Any generated Notify event shall contain
              * fields that represent the state of the server after the command has been processed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
              */
             reset: Command(0x0, TlvResetRequest, 0x0, TlvNoResponse)
         }
@@ -155,7 +155,7 @@ export namespace RefrigeratorAlarm {
              * Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be
              * enabled.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.1
              */
             mask: Attribute(0x0, TlvBitmap(TlvUInt32, Alarm)),
 
@@ -163,7 +163,7 @@ export namespace RefrigeratorAlarm {
              * Indicates a bitmap where each bit shall represent the state of an alarm. The value of true means the
              * alarm is active, otherwise the alarm is inactive.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.3
              */
             state: Attribute(0x2, TlvBitmap(TlvUInt32, Alarm)),
 
@@ -173,7 +173,7 @@ export namespace RefrigeratorAlarm {
              *
              * If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.4
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.4
              */
             supported: FixedAttribute(0x3, TlvBitmap(TlvUInt32, Alarm))
         },
@@ -182,7 +182,7 @@ export namespace RefrigeratorAlarm {
             /**
              * This event shall be generated when one or more alarms change state, and shall have these fields:
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
              */
             notify: Event(0x0, EventPriority.Info, TlvNotifyEvent)
         },
@@ -209,7 +209,7 @@ export namespace RefrigeratorAlarm {
      * RefrigeratorAlarmCluster supports optional features that you can enable with the RefrigeratorAlarmCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.8
+     * @see {@link MatterSpecification.v14.Cluster} § 8.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

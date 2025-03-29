@@ -14,7 +14,7 @@ export namespace TargetNavigatorInterface {
         /**
          * Upon receipt, this shall navigation the UX to the target identified.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.11.6.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.11.6.1
          */
         navigateTarget(request: TargetNavigator.NavigateTargetRequest): MaybePromise<TargetNavigator.NavigateTargetResponse>;
     }
