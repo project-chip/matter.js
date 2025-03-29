@@ -14,6 +14,7 @@ import {
     CarbonMonoxideConcentrationMeasurementServer,
     ColorControlServer,
     DescriptorServer,
+    DoorLockServer,
     FixedLabelServer,
     FlowMeasurementServer,
     FormaldehydeConcentrationMeasurementServer,
@@ -48,6 +49,7 @@ import {
     ColorControl,
     ConcentrationMeasurement,
     Descriptor,
+    DoorLock,
     LevelControl,
     ModeSelect,
     OccupancySensing,
@@ -266,6 +268,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ColorControl.Feature.ColorTemperature,
                 ),
                 DescriptorServer.with(Descriptor.Feature.TagList),
+                DoorLockServer,
                 FixedLabelServer,
                 FlowMeasurementServer,
                 FormaldehydeConcentrationMeasurementServer.with(
@@ -441,6 +444,12 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 },
                 descriptor: {
                     tagList: [NumberTag.One],
+                },
+                doorLock: {
+                    lockState: DoorLock.LockState.Unlocked,
+                    lockType: DoorLock.LockType.CylindricalLock,
+                    actuatorEnabled: true,
+                    operatingMode: DoorLock.OperatingMode.Normal,
                 },
                 fixedLabel: {
                     labelList: [
