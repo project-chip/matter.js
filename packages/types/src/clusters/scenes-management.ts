@@ -296,7 +296,7 @@ export namespace ScenesManagement {
          *
          * @see {@link MatterSpecification.v14.Cluster} § 1.4.9.2.5
          */
-        extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet))
+        extensionFieldSetStructs: TlvField(4, TlvArray(TlvExtensionFieldSet))
     });
 
     /**
@@ -412,7 +412,7 @@ export namespace ScenesManagement {
          *
          * @see {@link MatterSpecification.v14.Cluster} § 1.4.9.5.6
          */
-        extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet))
+        extensionFieldSetStructs: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet))
     });
 
     /**
