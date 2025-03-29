@@ -1,9 +1,14 @@
-# This workflow executed the chip tool tests against matter.js
+# This workflow executes the building and testing of new chip test docker image used in matter.js dockerized tests
+# * It automatically runs each night at 3am UTC
+# * It can be triggered manually
+# * It runs on each commit to the main branch when files in the chip directory or the workflow file itself are changed
+# * It runs when the latest commit message contains the string '[rebuild-docker]'
+# The docker image is only pushed to registry after rebuild and successful tests when the workflow is triggered manually, on a schedule or on a commit to the main branch (so PRs are not pushing an updated image)
 name: Testing-Docker Rebuild
 
 on:
   schedule:
-    - cron: 0 0 * * * # Every day at 02:00
+    - cron: 0 3 * * * # Every day at 03:00
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
@@ -89,6 +94,7 @@ jobs:
           password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
 
       - name: Rebuild docker image
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd chip
           ./bin/info
