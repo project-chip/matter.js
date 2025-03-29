@@ -107,7 +107,7 @@ LocalMatter.children.push({
                 {
                     tag: "field",
                     name: "AlwaysSet",
-                    constraint: "5 to 16",
+                    constraint: "5 to 15",
                     conformance: "M",
                     description: "This needs always be set because this bitmap is inverse.!",
                 },

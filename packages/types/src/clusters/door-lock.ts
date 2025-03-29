@@ -2554,7 +2554,7 @@ export namespace DoorLock {
         /**
          * This needs always be set because this bitmap is inverse.!
          */
-        alwaysSet: BitField(5, 11)
+        alwaysSet: BitField(5, 10)
     };
 
     /**
