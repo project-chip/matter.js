@@ -93,7 +93,7 @@ jobs:
           username: Automator77
           password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
 
-      - name: Rebuild docker image
+      - name: Publish docker image
         if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd chip

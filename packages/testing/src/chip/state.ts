@@ -153,12 +153,12 @@ export const State = {
         try {
             const result = await initialize();
 
-            const imageVersion = formatSha(await State.container.imageId);
-            const chipVersion = formatSha(await State.container.read("/etc/chip-version"));
+            const image = await State.container.image;
+            const info = await image.inspect();
+            const chipCommit = formatSha(info.Config.Labels["org.opencontainers.image.revision"] ?? "(unknown)");
+            const imageVersion = info.Config.Labels["org.opencontainers.image.version"] ?? "(unknown)";
 
-            progress.success(
-                `Initialized containers from image ${ansi.bold(imageVersion)} for CHIP ${ansi.bold(chipVersion)}`,
-            );
+            progress.success(`Initialized CHIP ${ansi.bold(chipCommit)} image ${ansi.bold(imageVersion)}`);
 
             return result;
         } catch (e) {
