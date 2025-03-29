@@ -116,7 +116,7 @@ export const ScenesManagement = Cluster(
 
         Field(
             {
-                name: "ExtensionFieldSets", id: 0x4, type: "list", conformance: "M", constraint: "desc",
+                name: "ExtensionFieldSetStructs", id: 0x4, type: "list", conformance: "M", constraint: "desc",
                 details: "This field shall contains the list of extension fields.",
                 xref: { document: "cluster", section: "1.4.9.2.5" }
             },
@@ -201,7 +201,7 @@ export const ScenesManagement = Cluster(
 
         Field(
             {
-                name: "ExtensionFieldSets", id: 0x5, type: "list", conformance: "desc",
+                name: "ExtensionFieldSetStructs", id: 0x5, type: "list", conformance: "desc",
                 details: "If the status is SUCCESS, this field shall be copied from the corresponding field in the Scene Table " +
                     "entry, otherwise it shall be omitted.",
                 xref: { document: "cluster", section: "1.4.9.5.6" }
