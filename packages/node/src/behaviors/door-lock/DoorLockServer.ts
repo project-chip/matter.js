@@ -14,7 +14,7 @@ import LockState = DoorLock.LockState;
  */
 export class DoorLockServer extends DoorLockBehavior {
     override initialize() {
-        if (!this.state.supportedOperatingModes.alwaysSet) {
+        if (this.state.supportedOperatingModes.alwaysSet !== 2047) {
             throw new ImplementationError(
                 `DoorLockServer: The "alwaysSet" bit-range in supportedOperatingModes must be set. Please check the specification about the meaning of this field because bits are inverted here!`,
             );
