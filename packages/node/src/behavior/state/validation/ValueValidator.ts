@@ -182,7 +182,6 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
             if (fieldValue === undefined) {
                 continue;
             }
-            console.log(`Field ${key} (${field.schema.name}) value`, fieldValue, value);
 
             if (field.max === 1) {
                 assertBoolean(fieldValue, subpath);
