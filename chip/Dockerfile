@@ -36,15 +36,12 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 
 ################################################################################
 #
-# STAGE 2 - CHIP source code and build tooling
-#
-# Performs git clone, installs build tools and bootstraps CHIP environment
+# STAGE 2 - OS build tooling
 #
 
 FROM --platform=$BUILDPLATFORM base AS build
 
 ARG TARGETPLATFORM
-ARG CHIP_COMMIT
 
 # Validate platform (must be amd64 or arm64)
 RUN <<EOF
@@ -76,7 +73,7 @@ EOF
 # Pull CHIP source code
 RUN <<EOF
     set -e
-    if [ -e "$CHIP_COMMIT" ]; then
+    if [ -z "$CHIP_COMMIT" ]; then
         CHIP_COMMIT="$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)"
     fi
     mkdir connectedhomeip
@@ -89,6 +86,18 @@ RUN <<EOF
     git checkout FETCH_HEAD
     echo "$CHIP_COMMIT" > /etc/chip-version
 EOF
+
+
+################################################################################
+#
+# STAGE 3 - CHIP source code and environment
+#
+# Performs git clone, installs build tools and bootstraps CHIP environment
+#
+
+FROM --platform=$BUILDPLATFORM build AS source
+
+ARG CHIP_COMMIT
 
 WORKDIR /connectedhomeip
 RUN ./scripts/checkout_submodules.py --shallow --platform linux
@@ -110,11 +119,14 @@ RUN sed -i 's/"-g\${symbol_level}"/""/' build/config/compiler/BUILD.gn
 
 ################################################################################
 #
-# STAGE 3 - builds CHIP and installed python packages
+# STAGE 4 - builds CHIP and installed python packages
 #
 # Builds chip-tool, CHIP sample apps, and python wheels
 #
-FROM --platform=$BUILDPLATFORM build AS bins
+
+FROM --platform=$BUILDPLATFORM source AS bins
+
+ARG SKIP_APPS
 
 # Build directory
 RUN mkdir -p out
@@ -136,7 +148,7 @@ RUN scripts/build_python.sh --chip_mdns platform
 
 ################################################################################
 #
-# STAGE 4 - install into final destination
+# STAGE 5 - install into final destination
 #
 # Installs Python packages from build area into destination OS locations
 #
@@ -155,7 +167,7 @@ RUN find out -name \*.whl | xargs pip install --break-system-packages --upgrade
 
 ################################################################################
 #
-# STAGE 5 - extract CHIP subset required for runtime
+# STAGE 6 - extract CHIP subset required for runtime
 #
 # For the final working image we revert to the base target then copy over
 # binaries from the bins target
@@ -165,7 +177,7 @@ FROM base AS final
 # Install some runtime-only packages
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
-<<EOF \
+<<EOF
     set -e
     apt-get -qq update
     apt-get -qq -y install avahi-daemon avahi-utils iproute2 less vim wget

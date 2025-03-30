@@ -17,7 +17,7 @@ describe("Discovery", () => {
         //
         // We nuke Avahi to compensate
         await chip.clearMdns();
-    });
+    }).timeout(10000);
 
     chip("Discovery");
 });

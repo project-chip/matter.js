@@ -8,6 +8,8 @@ import { edit } from "@matter/testing";
 
 describe("SC", () => {
     before(async () => {
+        await chip.clearMdns();
+
         const sc41 = chip.testFor("SC/4.1");
         await sc41.edit(
             edit.sed(
@@ -35,10 +37,17 @@ describe("SC", () => {
                 "s/, 3840,/, 0000,/",
             ),
         );
-    });
+    }).timeout(10000);
 
-    // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited
-    chip("SC/*").exclude("SC/5.1", "SC/5.2", "SC/7.1");
+    // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited, and 7.1 because we configure separately below
+    chip("SC/*").exclude(
+        // Our GroupKeyManagment is too limited for these
+        "SC/5.1",
+        "SC/5.2",
+
+        // These require additional configuration below
+        "SC/7.1",
+    );
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();
