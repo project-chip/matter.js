@@ -182,7 +182,6 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clu
                 numberValue |= 1 << constraintValue;
             } else {
                 const minBit = FieldValue.numericValue(member.constraint.min) ?? 0;
-                logger.info("bitmap", member.name, memberValue, minBit, numberValue);
                 numberValue |= (typeof memberValue === "boolean" ? 1 : memberValue) << minBit;
             }
         }

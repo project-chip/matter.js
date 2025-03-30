@@ -346,7 +346,7 @@ export class TlvGenerator {
                     type = `BitField`;
                 }
 
-                type = `${type}(${constraint.min}, ${constraint.max - constraint.min})`;
+                type = `${type}(${constraint.min}, ${constraint.max - constraint.min + 1})`;
             } else {
                 // Can't do anything without a property constrained definition
                 continue;

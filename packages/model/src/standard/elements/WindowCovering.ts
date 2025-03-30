@@ -593,7 +593,7 @@ export const WindowCovering = Cluster(
         },
 
         Field({
-            name: "Global", type: "MovementStatus", constraint: "0 to 2",
+            name: "Global", type: "MovementStatus", constraint: "0 to 1",
             description: "Global operational state.",
             details: "These bits shall indicate in which direction the covering is currently moving or if it has stopped. " +
                 "Global operational state shall always reflect the overall motion of the device.",
@@ -601,14 +601,14 @@ export const WindowCovering = Cluster(
         }),
 
         Field({
-            name: "Lift", type: "MovementStatus", constraint: "2 to 4", description: "Lift operational state.",
+            name: "Lift", type: "MovementStatus", constraint: "2 to 3", description: "Lift operational state.",
             details: "These bits shall indicate in which direction the covering’s lift is currently moving or if it has " +
                 "stopped.",
             xref: { document: "cluster", section: "5.3.5.3.2" }
         }),
 
         Field({
-            name: "Tilt", type: "MovementStatus", constraint: "4 to 6", description: "Tilt operational state.",
+            name: "Tilt", type: "MovementStatus", constraint: "4 to 5", description: "Tilt operational state.",
             details: "These bits shall indicate in which direction the covering’s tilt is currently moving or if it has " +
                 "stopped.",
             xref: { document: "cluster", section: "5.3.5.3.3" }
