@@ -45,6 +45,7 @@ const Values = {
     snapshots: new Map<Subject, {}>(),
     containerLifecycleInstalled: false,
     testMap: new Map<TestDescriptor, Test>(),
+    pullBeforeTesting: true,
 };
 
 /**
@@ -103,6 +104,14 @@ export const State = {
         return subject;
     },
 
+    get pullBeforeTesting() {
+        return Values.pullBeforeTesting;
+    },
+
+    set pullBeforeTesting(value: boolean) {
+        Values.pullBeforeTesting = value;
+    },
+
     get pics() {
         if (Values.pics === undefined) {
             throw new Error("PICS not initialized");
@@ -144,12 +153,12 @@ export const State = {
         try {
             const result = await initialize();
 
-            const imageVersion = formatSha(await State.container.imageId);
-            const chipVersion = formatSha(await State.container.read("/etc/chip-version"));
+            const image = await State.container.image;
+            const info = await image.inspect();
+            const chipCommit = formatSha(info.Config.Labels["org.opencontainers.image.revision"] ?? "(unknown)");
+            const imageVersion = info.Config.Labels["org.opencontainers.image.version"] ?? "(unknown)";
 
-            progress.success(
-                `Initialized containers from image ${ansi.bold(imageVersion)} for CHIP ${ansi.bold(chipVersion)}`,
-            );
+            progress.success(`Initialized CHIP ${ansi.bold(chipCommit)} image ${ansi.bold(imageVersion)}`);
 
             return result;
         } catch (e) {
@@ -399,7 +408,9 @@ async function initialize() {
 async function configureContainer() {
     const docker = new Docker();
 
-    await docker.pull(Constants.imageName, Constants.platform);
+    if (Values.pullBeforeTesting) {
+        await docker.pull(Constants.imageName, Constants.platform);
+    }
 
     const mdnsVolume = Volume(docker, Constants.mdnsVolumeName);
     await mdnsVolume.open();

@@ -7,26 +7,24 @@
 THISDIR=$(dirname -- "${BASH_SOURCE[0]}")
 GIT_ROOT=$(realpath "${THISDIR}/../../..")
 
-CONTAINER_ID=$(docker inspect --format '{{ .Id }}' ghcr.io/matter-js/chip)
-CONTAINER_CREATED=$(docker inspect --format '{{ .Created }}' ghcr.io/matter-js/chip)
-CONTAINER_SIZE=$(docker inspect --format '{{ .Size }}' ghcr.io/matter-js/chip)
-CHIP_VERSION=$(
-    docker run \
-        -it \
-        --rm \
-        --platform linux/amd64 \
-        --entrypoint /usr/bin/cat \
-        ghcr.io/matter-js/chip \
-        /etc/chip-version
-)
+IMAGE_VERSION=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.version" }}' ghcr.io/matter-js/chip)
+IMAGE_CREATED=$(docker inspect --format '{{ .Created }}' ghcr.io/matter-js/chip)
+IMAGE_SIZE=$(docker inspect --format '{{ .Size }}' ghcr.io/matter-js/chip)
+CHIP_COMMIT=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' ghcr.io/matter-js/chip | cut -c 1-12)
 
 if [ -x /usr/bin/numfmt ]; then
-    CONTAINER_SIZE=$(numfmt --to=iec <<< "$CONTAINER_SIZE")
+    IMAGE_SIZE=$(numfmt --to=iec <<< "$IMAGE_SIZE")
 fi
 
 cat <<-END
-Container ID:      $CONTAINER_ID
-          Created: $CONTAINER_CREATED
-          Size:    $CONTAINER_SIZE
-CHIP SHA:          $CHIP_VERSION
+{
+    "image": {
+        "version": "$IMAGE_VERSION",
+        "created": "$IMAGE_CREATED",
+        "size": "$IMAGE_SIZE"
+    },
+    "chip": {
+        "commit": "$CHIP_COMMIT"
+    }
+}
 END
