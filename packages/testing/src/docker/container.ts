@@ -11,6 +11,7 @@ import { base64Of } from "../util/text.js";
 import type { Docker } from "./docker.js";
 import { edit } from "./edit.js";
 import { DockerError, NonZeroExitError } from "./errors.js";
+import { Image } from "./image.js";
 import { Network } from "./network.js";
 import { Terminal } from "./terminal.js";
 
@@ -20,7 +21,7 @@ import { Terminal } from "./terminal.js";
 export interface Container {
     docker: Docker;
 
-    imageId: Promise<string>;
+    image: Promise<Image>;
 
     start(): Promise<void>;
     kill(): Promise<void>;
@@ -229,8 +230,8 @@ function adaptContainer(docker: Docker, ct: Dockerode.Container): Container {
     return {
         docker,
 
-        get imageId() {
-            return ct.inspect().then(info => info.Image);
+        get image() {
+            return DockerError.adapt(ct.inspect().then(info => Image(docker, info.Image)));
         },
 
         async start() {
