@@ -212,7 +212,6 @@ export const Bits = (el: HTMLElement) => {
             max = min;
             min = tmp;
         }
-        max++;
         return { min, max };
     }
 };

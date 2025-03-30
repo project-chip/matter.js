@@ -27,19 +27,5 @@ LocalMatter.children.push({
             name: "ControlSequenceOfOperation",
             default: FieldValue.None,
         },
-
-        // Correct the ranges of two bitmaps  because scraping error
-        {
-            tag: "datatype",
-            name: "HVACSystemTypeBitmap",
-
-            // The type is correct but need to set here so model logic knows to use the constraint for matching
-            type: "map8",
-
-            children: [
-                { tag: "field", name: "CoolingStage", constraint: "0 to 1" },
-                { tag: "field", name: "HeatingStage", constraint: "2 to 3" },
-            ],
-        },
     ],
 });
