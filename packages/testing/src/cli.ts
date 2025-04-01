@@ -16,6 +16,7 @@ import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";
 import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
+import { TestDescriptor } from "./test-descriptor.js";
 
 enum TestType {
     esm = "esm",
@@ -126,8 +127,8 @@ export async function main(argv = process.argv) {
         if (ls) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
-            printReport(await defaultDescriptor(runner), true);
             progress.close();
+            printReport(await defaultDescriptor(runner), true);
             console.log();
             return;
         }
@@ -148,9 +149,10 @@ export async function main(argv = process.argv) {
 
         const progress = pkg.start("Testing");
         const runner = new TestRunner(pkg, progress, args);
+        let report: TestDescriptor | undefined;
 
         if (thisTestTypes.has(TestType.esm)) {
-            await runner.runNode("esm");
+            report = await runner.runNode("esm");
         }
 
         if (thisTestTypes.has(TestType.cjs)) {
@@ -163,8 +165,9 @@ export async function main(argv = process.argv) {
 
         progress.close();
 
-        if (args.report) {
-            printReport(await defaultDescriptor(runner));
+        if (args.report && report) {
+            printReport(report);
+            console.log();
         }
 
         if (args.forceExit) {

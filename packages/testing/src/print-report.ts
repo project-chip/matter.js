@@ -25,6 +25,8 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
         return;
     }
 
+    let hasPrinted = false;
+
     for (const member of members) {
         let title = member.name;
 
@@ -42,13 +44,13 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
 
         if (member.isDisabled) {
             if (!includeDisabled) {
-                return;
+                continue;
             }
             title = colors.dim(title);
         }
 
         if (member.kind === "suite") {
-            if (prefix === "") {
+            if (prefix === "" && hasPrinted) {
                 console.log();
             }
         } else {
@@ -104,6 +106,7 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
         }
 
         console.log(`${prefix}${title}`);
+        hasPrinted = true;
 
         if (submembers.length) {
             printDescriptor(member, includeDisabled, `${prefix}    `, member.path ?? path);

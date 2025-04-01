@@ -35,7 +35,7 @@ const writeStatus = (() => {
         const actualWrite = stream.write;
         stream.write = (payload: Uint8Array | string, ...params: any[]) => {
             if (lastStatus) {
-                if (payload[0] !== "\n" && payload[0] !== 0xa) {
+                if (payload[0] !== "\n" && payload[0] !== 0xa && needNewline) {
                     actualWrite.call(stream, "\n");
                 }
                 lastStatus = undefined;
