@@ -52,7 +52,12 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
         const path = runner.pkg.resolve(TestDescriptor.DEFAULT_FILENAME);
         const previous = await TestDescriptor.open(path);
         const merged = TestDescriptor.merge(previous, report);
-        await TestDescriptor.save(path, merged);
+
+        if (format === "esm") {
+            await TestDescriptor.save(path, merged);
+        }
+
+        return merged;
     } finally {
         process.off("unhandledRejection", unhandledRejection);
 

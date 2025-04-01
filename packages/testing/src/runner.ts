@@ -56,7 +56,7 @@ export class TestRunner {
     }
 
     async runNode(format: "esm" | "cjs" = "esm") {
-        await this.#run(this.progress, () => testNodejs(this, format));
+        return await this.#run(this.progress, () => testNodejs(this, format));
     }
 
     async runWeb(manual = false) {
@@ -91,11 +91,14 @@ export class TestRunner {
         return [...listSupportFiles(format), ...tests];
     }
 
-    async #run(progress: Progress, runner: () => Promise<void>) {
-        await runner();
+    async #run<T>(progress: Progress, runner: () => Promise<T>) {
+        const result = await runner();
+
         if (progress.status !== Progress.Status.Success) {
             fatal(`Test ${progress.status.toLowerCase()}, aborting`);
         }
+
+        return result;
     }
 
     async #mapSourceToTest(filename: string) {
