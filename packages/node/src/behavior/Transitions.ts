@@ -50,7 +50,6 @@ export class Transitions<B extends Behavior> {
     #timer?: Timer;
     #config: Transitions.Configuration<B>;
     #outstandingTick?: MaybePromise<void>;
-    #outstandingRemainingTimeUpdate?: MaybePromise<void>;
     #staticRemainingTime = 0;
     #propertyStates = {} as Record<string, Transitions.PropertyState<B>>;
     #observers?: ObserverGroup;
@@ -256,9 +255,7 @@ export class Transitions<B extends Behavior> {
         if (this.#outstandingTick) {
             await this.#outstandingTick;
         }
-        if (this.#outstandingRemainingTimeUpdate) {
-            await this.#outstandingRemainingTimeUpdate;
-        }
+
         if (this.#observers) {
             this.#observers.close();
             this.#observers = undefined;
