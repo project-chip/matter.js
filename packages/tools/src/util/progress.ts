@@ -254,8 +254,12 @@ export namespace Progress {
             while (time.endsWith("0")) {
                 time = time.slice(0, time.length - 1);
             }
-            if (time === ".") {
-                time = "0";
+            if (time.endsWith(".")) {
+                if (time.length === 1) {
+                    time = "0";
+                } else {
+                    time = time.slice(0, time.length - 1);
+                }
             }
             time += "s";
         } else if (duration < 60) {

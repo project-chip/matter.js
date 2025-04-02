@@ -4,6 +4,24 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
-# Clear MDNS cache.  This involves killing the Avahi daemon and assumes the daemon runs in a loop
+# Clear MDNS cache
 
+# Start monitoring avahi "statechanged" event
+coproc {
+    dbus-monitor --system \
+        "type='signal',interface='org.freedesktop.Avahi.Server',member='StateChanged'"
+}
+export MONITOR_FD=${COPROC[0]}
+export MONITOR_PID=$!
+
+# Kill the daemoon (loop in mdns-run will restart)
 avahi-daemon --kill
+
+# Wait for Avahi to report it is ready
+while read -u $MONITOR_FD LINE; do
+    if [[ "$LINE" == *"int32 2"* ]]; then
+        break
+    fi
+done
+
+kill $MONITOR_PID

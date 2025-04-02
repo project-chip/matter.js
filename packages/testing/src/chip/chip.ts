@@ -388,6 +388,10 @@ export namespace chip {
         (subject: Subject, test: Test): void | Promise<void>;
     }
 
+    export interface BeforeHookOptions {
+        timeout?: number;
+    }
+
     export interface Builder {
         /**
          * Add tests to include.

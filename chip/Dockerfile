@@ -36,15 +36,12 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 
 ################################################################################
 #
-# STAGE 2 - CHIP source code and build tooling
-#
-# Performs git clone, installs build tools and bootstraps CHIP environment
+# STAGE 2 - OS build tooling
 #
 
 FROM --platform=$BUILDPLATFORM base AS build
 
 ARG TARGETPLATFORM
-ARG CHIP_COMMIT
 
 # Validate platform (must be amd64 or arm64)
 RUN <<EOF
@@ -73,10 +70,22 @@ EOF
 # implemented
 # RUN apt-get -qq -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
-# Pull CHIP source code
+
+################################################################################
+#
+# STAGE 3 - CHIP source code and environment
+#
+# Performs git clone, installs build tools and bootstraps CHIP environment
+#
+
+FROM --platform=$BUILDPLATFORM build AS source
+
+ARG CHIP_COMMIT
+
+# Pull CHIP source code (which is ugly because we want want to pull a shallow copy of a specific SHA)
 RUN <<EOF
     set -e
-    if [ -e "$CHIP_COMMIT" ]; then
+    if [ -z "$CHIP_COMMIT" ]; then
         CHIP_COMMIT="$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)"
     fi
     mkdir connectedhomeip
@@ -90,6 +99,7 @@ RUN <<EOF
     echo "$CHIP_COMMIT" > /etc/chip-version
 EOF
 
+# Checkout submodules
 WORKDIR /connectedhomeip
 RUN ./scripts/checkout_submodules.py --shallow --platform linux
 
@@ -110,11 +120,14 @@ RUN sed -i 's/"-g\${symbol_level}"/""/' build/config/compiler/BUILD.gn
 
 ################################################################################
 #
-# STAGE 3 - builds CHIP and installed python packages
+# STAGE 4 - builds CHIP and installed python packages
 #
 # Builds chip-tool, CHIP sample apps, and python wheels
 #
-FROM --platform=$BUILDPLATFORM build AS bins
+
+FROM source AS bins
+
+ARG SKIP_APPS
 
 # Build directory
 RUN mkdir -p out
@@ -136,7 +149,7 @@ RUN scripts/build_python.sh --chip_mdns platform
 
 ################################################################################
 #
-# STAGE 4 - install into final destination
+# STAGE 5 - install into final destination
 #
 # Installs Python packages from build area into destination OS locations
 #
@@ -155,7 +168,7 @@ RUN find out -name \*.whl | xargs pip install --break-system-packages --upgrade
 
 ################################################################################
 #
-# STAGE 5 - extract CHIP subset required for runtime
+# STAGE 6 - extract CHIP subset required for runtime
 #
 # For the final working image we revert to the base target then copy over
 # binaries from the bins target
@@ -165,7 +178,7 @@ FROM base AS final
 # Install some runtime-only packages
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
-<<EOF \
+<<EOF
     set -e
     apt-get -qq update
     apt-get -qq -y install avahi-daemon avahi-utils iproute2 less vim wget
@@ -186,12 +199,12 @@ COPY --from=install /usr/local/lib /usr/local/lib
 
 # Other python packages CHIP has scattered randomly and adds to path in relative_importer.py
 WORKDIR /usr/local/lib/python3.12/dist-packages
-COPY --from=build /connectedhomeip/scripts/tests/chiptest chiptest
-COPY --from=build /connectedhomeip/scripts/py_matter_idl/matter matter
-COPY --from=build /connectedhomeip/scripts/py_matter_yamltests/matter_yamltests matter_yamltests
-COPY --from=build /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
-COPY --from=build /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
-COPY --from=build /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
+COPY --from=source /connectedhomeip/scripts/tests/chiptest chiptest
+COPY --from=source /connectedhomeip/scripts/py_matter_idl/matter matter
+COPY --from=source /connectedhomeip/scripts/py_matter_yamltests/matter_yamltests matter_yamltests
+COPY --from=source /connectedhomeip/examples/chip-tool/py_matter_chip_tool_adapter/matter_chip_tool_adapter matter_chip_tool_adapter
+COPY --from=source /connectedhomeip/examples/placeholder/py_matter_placeholder_adapter/matter_placeholder_adapter matter_placeholder_adapter
+COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
 
 # Link various bits to original connectedhomeip locations for discovery and/or convenience
 RUN ln -s "$(realpath chip/testing/data_model)" /data_model
@@ -202,7 +215,7 @@ RUN ln -s "$(realpath matter_yamltests)" /scripts/py_matter_yamltests/matter_yam
 
 # YAML test logic
 WORKDIR /
-COPY --from=build /connectedhomeip/scripts/tests/chipyaml /scripts/tests/chipyaml
+COPY --from=source /connectedhomeip/scripts/tests/chipyaml /scripts/tests/chipyaml
 
 # Ensure python logic can find the data model (spec_parsing.yaml looks for "scraper_version" but the wheels don't
 # include it)
@@ -210,16 +223,16 @@ ENV PW_PROJECT_ROOT=/
 RUN touch /data_model/master/scraper_version
 
 # YAML tests of course use a different data model
-COPY --from=build /connectedhomeip/src/app/zap-templates/zcl/data-model/chip \
+COPY --from=source /connectedhomeip/src/app/zap-templates/zcl/data-model/chip \
     /src/app/zap-templates/zcl/data-model/chip
 
 # Tests
-COPY --from=build /connectedhomeip/src/python_testing /src/python_testing
-COPY --from=build /connectedhomeip/src/app/tests/suites /src/app/tests/suites
+COPY --from=source /connectedhomeip/src/python_testing /src/python_testing
+COPY --from=source /connectedhomeip/src/app/tests/suites /src/app/tests/suites
 
 # Development certs
-COPY --from=build /connectedhomeip/credentials/development/paa-root-certs /credentials/development/paa-root-certs
-COPY --from=build /connectedhomeip/credentials/development/cd-certs /credentials/development/cd-certs
+COPY --from=source /connectedhomeip/credentials/development/paa-root-certs /credentials/development/paa-root-certs
+COPY --from=source /connectedhomeip/credentials/development/cd-certs /credentials/development/cd-certs
 
 RUN mkdir /run/dbus
 
@@ -231,7 +244,7 @@ RUN generate-test-descriptor > /lib/test-descriptor.json
 COPY support/mdns-* /bin
 
 # Include CHIP SHA for diagnostic purposes
-COPY --from=build /etc/chip-version /etc
+COPY --from=source /etc/chip-version /etc
 
 # Configure avahi
 RUN echo allow-interfaces

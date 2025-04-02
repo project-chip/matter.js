@@ -7,5 +7,6 @@
 # Run Avahi in a loop.  This allows us to exec a kill command to clear the DNS cache
 
 while true; do
-    avahi-daemon
+    avahi-daemon --debug
+    echo "*** AVAHI killed, restarting ***"
 done
