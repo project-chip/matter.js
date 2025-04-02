@@ -116,7 +116,7 @@ describe("LevelControlServer", () => {
 
         await complete;
 
-        expect(remainingTimeReports).deep.equals([150, 150, 0]);
+        expect(remainingTimeReports).deep.equals([150, 0]);
 
         await node.close();
     });
@@ -215,7 +215,7 @@ async function initializeDimmableLight() {
         onOff: { onOff: true },
         levelControl: {
             managedTransitionTimeHandling: true,
-            currentLevel: 0,
+            currentLevel: 1,
         },
     });
 
