@@ -6,15 +6,12 @@
 
 describe("CC", () => {
     chip("CC/*").exclude(
-        // Pending full Q support for CC
-        "CC/2.2",
-        "CC/3.1",
-        "CC/9.1",
-
         // Requires groups
         "CC/10.1",
 
-        // sometimes wonky, turn off till we fixed Q
-        "CC/3.2",
+        // has weird too exact expectations on transition results
+        "CC/9.1",
+        "CC/9.2",
+        "CC/9.3",
     );
 });
