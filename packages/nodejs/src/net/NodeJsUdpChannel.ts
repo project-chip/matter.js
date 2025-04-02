@@ -6,6 +6,7 @@
 
 import {
     ChannelType,
+    createPromise,
     Diagnostic,
     isIPv4,
     isIPv6,
@@ -14,6 +15,7 @@ import {
     NetworkError,
     NoAddressAvailableError,
     repackErrorAs,
+    Time,
     UdpChannel,
     UdpChannelOptions,
 } from "#general";
@@ -22,6 +24,8 @@ import * as dgram from "node:dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
 
 const logger = Logger.get("NodejsChannel");
+
+const UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS = 1_000; // UDP should be send out in some ms so if we needed 1s+, we have a problem
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
@@ -111,6 +115,15 @@ export class NodeJsUdpChannel implements UdpChannel {
 
     readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
+    /**
+     * Timer for a maximum interval to check for dangling send calls that are not completed.
+     * The way it is implemented we ensure that any "send" is rejected latest after < 2s
+     */
+    readonly #sendTimer = Time.getTimer("UDPChannel.send timeout check", UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS, () =>
+        this.#rejectDanglingSends(),
+    );
+    readonly #sendsInProgress = new Map<Promise<void>, { sendMs: number; rejecter: (reason?: any) => void }>();
+
     constructor(
         private readonly type: "udp4" | "udp6",
         private readonly socket: dgram.Socket,
@@ -133,29 +146,64 @@ export class NodeJsUdpChannel implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, data: Uint8Array) {
-        return new Promise<void>((resolve, reject) => {
-            try {
-                this.socket.send(data, port, host, error => {
-                    if (error !== null) {
-                        const netError =
-                            "code" in error && error.code === "EHOSTUNREACH"
-                                ? repackErrorAs(
-                                      error,
-                                      // TODO - this is a routing error; current error indicates timeout and is defined
-                                      // in higher-level module (MessageExchange)
-                                      RetransmissionLimitReachedError,
-                                  )
-                                : repackErrorAs(error, NetworkError);
-                        reject(netError);
-                        return;
-                    }
-                    resolve();
-                });
-            } catch (error) {
-                reject(repackErrorAs(error, NetworkError));
+    /**
+     * At minimum once every second we check for dangling sends that are not completed. That means that a dangling send
+     * is removed very latest after <2s.
+     */
+    #rejectDanglingSends() {
+        if (this.#sendsInProgress.size === 0) {
+            // nothing to do
+            return;
+        }
+        const now = Time.nowMs();
+        for (const [promise, { sendMs, rejecter }] of this.#sendsInProgress) {
+            const elapsed = now - sendMs;
+            if (elapsed >= UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS) {
+                this.#sendsInProgress.delete(promise);
+                rejecter(new NetworkError("UDP send timeout"));
             }
-        });
+        }
+        if (this.#sendsInProgress.size > 0) {
+            this.#sendTimer.start();
+        }
+    }
+
+    async send(host: string, port: number, data: Uint8Array) {
+        const { promise, resolver, rejecter } = createPromise<void>();
+
+        const rejectOrResolve = (error?: Error | null) => {
+            if (!this.#sendsInProgress.has(promise)) {
+                // promise already removed, so already handled
+                return;
+            }
+            this.#sendsInProgress.delete(promise);
+            if (!error) {
+                resolver();
+            } else {
+                const netError =
+                    "code" in error && error.code === "EHOSTUNREACH"
+                        ? repackErrorAs(
+                              error,
+                              // TODO - this is a routing error; current error indicates timeout and is defined
+                              //        in higher-level module (MessageExchange)
+                              RetransmissionLimitReachedError,
+                          )
+                        : repackErrorAs(error, NetworkError);
+                rejecter(netError);
+            }
+        };
+
+        this.#sendsInProgress.set(promise, { sendMs: Time.nowMs(), rejecter });
+        if (!this.#sendTimer.isRunning) {
+            this.#sendTimer.start();
+        }
+        try {
+            this.socket.send(data, port, host, error => rejectOrResolve(error));
+        } catch (error) {
+            rejectOrResolve(repackErrorAs(error, NetworkError));
+        }
+
+        return promise;
     }
 
     async close() {
