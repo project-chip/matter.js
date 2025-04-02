@@ -25,7 +25,9 @@ import { NodeJsNetwork } from "./NodeJsNetwork.js";
 
 const logger = Logger.get("NodejsChannel");
 
-const UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS = 1_000; // UDP should be send out in some ms so if we needed 1s+, we have a problem
+// UDP should be sent out in some ms so if we needed 1s+, we have a problem
+// 1s should be fine because we do not require any DNS lookups because we usually work with IPs directly
+const UDP_SEND_TIMEOUT_CHECK_INTERVAL_MS = 1_000;
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
