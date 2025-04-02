@@ -19,7 +19,7 @@ type Cluster = AdministratorCommissioning.Cluster;
 //
 // This is also helpful for diagnosing TS bugs 😐
 
-describe("AdministratorCommissioningCluster", () => {
+describe("Administrator Commissioning Cluster", () => {
     it("defines basic properties correctly", () => {
         type Satisfactory = {
             id: 60;

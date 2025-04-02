@@ -9,7 +9,6 @@ import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { OnOff } from "#clusters/on-off";
 import { RootEndpoint } from "#endpoints/root";
 import { MaybePromise, Time, Timer } from "#general";
-import { ClusterType } from "#types";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 
 const OnOffLogicBase = OnOffBehavior.with(OnOff.Feature.Lighting);
@@ -204,4 +203,4 @@ export namespace OnOffBaseServer {
 
 // We had turned on some more features to provide a default implementation, but export the cluster with default
 // Features again.
-export class OnOffServer extends OnOffBaseServer.for(ClusterType(OnOff.Base)) {}
+export class OnOffServer extends OnOffBaseServer.with() {}
