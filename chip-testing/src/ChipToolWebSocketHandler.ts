@@ -182,7 +182,7 @@ function convertMatterToWebSocketTagBased(value: unknown, model: ValueModel, clu
                 numberValue |= 1 << constraintValue;
             } else {
                 const minBit = FieldValue.numericValue(member.constraint.min) ?? 0;
-                numberValue |= typeof memberValue === "boolean" ? 1 : memberValue << minBit;
+                numberValue |= (typeof memberValue === "boolean" ? 1 : memberValue) << minBit;
             }
         }
 

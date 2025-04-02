@@ -184,21 +184,21 @@ LocalMatter.children.push(
                         tag: "field",
                         name: "Global",
                         type: "MovementStatus",
-                        constraint: "0 to 2",
+                        constraint: "0 to 1",
                         description: "Movement status of the cover",
                     },
                     {
                         tag: "field",
                         name: "Lift",
                         type: "MovementStatus",
-                        constraint: "2 to 4",
+                        constraint: "2 to 3",
                         description: "Movement status of the cover's lift function",
                     },
                     {
                         tag: "field",
                         name: "Tilt",
                         type: "MovementStatus",
-                        constraint: "4 to 6",
+                        constraint: "4 to 5",
                         description: "Movement status of the cover's tilt function",
                     },
                 ],
@@ -213,9 +213,10 @@ LocalMatter.children.push(
                 type: "map8",
 
                 children: [
-                    { tag: "field", name: "Global", type: "MovementStatus", constraint: "0 to 2" },
-                    { tag: "field", name: "Lift", type: "MovementStatus", constraint: "2 to 4" },
-                    { tag: "field", name: "Tilt", type: "MovementStatus", constraint: "4 to 6" },
+                    // Note constraint is correct but we need to include for matching
+                    { tag: "field", name: "Global", type: "MovementStatus", constraint: "0 to 1" },
+                    { tag: "field", name: "Lift", type: "MovementStatus", constraint: "2 to 3" },
+                    { tag: "field", name: "Tilt", type: "MovementStatus", constraint: "4 to 5" },
                 ],
             },
 

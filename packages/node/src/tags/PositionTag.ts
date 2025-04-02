@@ -23,7 +23,7 @@ import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
  * comprised of Arabic numerals encoded as a string to indicate the row/column of the item. Number words (e.g. "one",
  * "two", etc.) shall NOT be used to describe the position of the item. The first row/column shall use Label "1".
  *
- * @see {@link MatterSpecification.v13.Namespace} § 9
+ * @see {@link MatterSpecification.v14.Namespace} § 9
  */
 export const PositionTag = SemanticNamespace({
     id: 0x8,

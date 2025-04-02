@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+THISDIR=$(dirname -- "${BASH_SOURCE[0]}")
+GIT_ROOT=$(realpath "${THISDIR}/../../..")
+
+IMAGE_VERSION=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.version" }}' ghcr.io/matter-js/chip)
+IMAGE_CREATED=$(docker inspect --format '{{ .Created }}' ghcr.io/matter-js/chip)
+IMAGE_SIZE=$(docker inspect --format '{{ .Size }}' ghcr.io/matter-js/chip)
+CHIP_COMMIT=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' ghcr.io/matter-js/chip | cut -c 1-12)
+
+if [ -x /usr/bin/numfmt ]; then
+    IMAGE_SIZE=$(numfmt --to=iec <<< "$IMAGE_SIZE")
+fi
+
+cat <<-END
+{
+    "image": {
+        "version": "$IMAGE_VERSION",
+        "created": "$IMAGE_CREATED",
+        "size": "$IMAGE_SIZE"
+    },
+    "chip": {
+        "commit": "$CHIP_COMMIT"
+    }
+}
+END

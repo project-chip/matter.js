@@ -35,7 +35,7 @@ const writeStatus = (() => {
         const actualWrite = stream.write;
         stream.write = (payload: Uint8Array | string, ...params: any[]) => {
             if (lastStatus) {
-                if (payload[0] !== "\n" && payload[0] !== 0xa) {
+                if (payload[0] !== "\n" && payload[0] !== 0xa && needNewline) {
                     actualWrite.call(stream, "\n");
                 }
                 lastStatus = undefined;
@@ -244,21 +244,25 @@ export namespace Progress {
     }
 
     export function formatDuration(duration: number) {
-        let seconds;
-        if (duration < 10000) {
-            seconds = (duration / 1000).toPrecision(2);
-            if (seconds.startsWith("0.")) {
-                seconds = seconds.slice(1);
+        duration /= 1000;
+        let time;
+        if (duration < 10) {
+            time = duration.toPrecision(2);
+            if (time.startsWith("0.")) {
+                time = time.slice(1);
             }
-            while (seconds.endsWith("0")) {
-                seconds = seconds.slice(0, seconds.length - 1);
+            while (time.endsWith("0")) {
+                time = time.slice(0, time.length - 1);
             }
-            if (seconds === ".") {
-                seconds = "0";
+            if (time === ".") {
+                time = "0";
             }
+            time += "s";
+        } else if (duration < 60) {
+            time = `${Math.trunc(duration)}s`;
         } else {
-            seconds = Math.trunc(duration / 1000);
+            time = `${Math.trunc(duration / 60)}m ${Math.trunc(duration) % 60}s`;
         }
-        return `${ansi.dim.yellow}(${seconds}s)${ansi.not.dim.not.yellow}`;
+        return `${ansi.dim.yellow}(${time})${ansi.not.dim.not.yellow}`;
     }
 }

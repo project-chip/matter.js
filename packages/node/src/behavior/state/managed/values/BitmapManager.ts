@@ -97,7 +97,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
         stopBit = startBit + 1;
     } else if (typeof constraint.min === "number" && typeof constraint.max === "number") {
         startBit = constraint.min;
-        stopBit = constraint.max;
+        stopBit = constraint.max + 1;
 
         if (startBit > stopBit) {
             const temp = startBit;

@@ -11014,7 +11014,7 @@ export const SpecMatter = Matter(
 
             Field(
                 {
-                    name: "CoolingStage", constraint: "1 to 1",
+                    name: "CoolingStage", constraint: "0 to 1",
                     description: "Stage of cooling the HVAC system is using.",
 
                     details: "These bits shall indicate what stage of cooling the HVAC system is using." +
@@ -11033,7 +11033,7 @@ export const SpecMatter = Matter(
 
             Field(
                 {
-                    name: "HeatingStage", constraint: "3 to 3",
+                    name: "HeatingStage", constraint: "2 to 3",
                     description: "Stage of heating the HVAC system is using.",
 
                     details: "These bits shall indicate what stage of heating the HVAC system is using." +
@@ -16034,21 +16034,21 @@ export const SpecMatter = Matter(
             },
 
             Field({
-                name: "Global", constraint: "1 to 1", description: "Global operational state.",
+                name: "Global", constraint: "0 to 1", description: "Global operational state.",
                 details: "These bits shall indicate in which direction the covering is currently moving or if it has stopped. " +
                     "Global operational state shall always reflect the overall motion of the device.",
                 xref: { document: "cluster", section: "5.3.5.3.1" }
             }),
 
             Field({
-                name: "Lift", constraint: "3 to 3", description: "Lift operational state.",
+                name: "Lift", constraint: "2 to 3", description: "Lift operational state.",
                 details: "These bits shall indicate in which direction the covering’s lift is currently moving or if it has " +
                     "stopped.",
                 xref: { document: "cluster", section: "5.3.5.3.2" }
             }),
 
             Field({
-                name: "Tilt", constraint: "5 to 5", description: "Tilt operational state.",
+                name: "Tilt", constraint: "4 to 5", description: "Tilt operational state.",
                 details: "These bits shall indicate in which direction the covering’s tilt is currently moving or if it has " +
                     "stopped.",
                 xref: { document: "cluster", section: "5.3.5.3.3" }

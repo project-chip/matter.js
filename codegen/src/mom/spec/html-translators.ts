@@ -206,6 +206,12 @@ export const Bits = (el: HTMLElement) => {
         return bits[0];
     }
     if (bits.length == 2) {
-        return { min: bits[0], max: bits[1] + 1 };
+        let [min, max] = bits;
+        if (min > max) {
+            const tmp = max;
+            max = min;
+            min = tmp;
+        }
+        return { min, max };
     }
 };

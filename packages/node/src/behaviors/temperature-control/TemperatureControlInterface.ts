@@ -12,7 +12,7 @@ import { TemperatureControl } from "#clusters/temperature-control";
 export namespace TemperatureControlInterface {
     export interface Base {
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 8.2.6.1
+         * @see {@link MatterSpecification.v14.Cluster} § 8.2.6.1
          */
         setTemperature(request: TemperatureControl.SetTemperatureRequest): MaybePromise;
     }

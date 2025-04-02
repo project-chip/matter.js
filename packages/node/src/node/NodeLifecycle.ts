@@ -19,7 +19,7 @@ export class NodeLifecycle extends EndpointLifecycle {
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
     #initialized = Observable<[isCommissioned: boolean]>();
-    #isOnline = false;
+    #onlineAt?: Date;
     #isCommissioned = false;
     #mutex: Mutex;
 
@@ -29,10 +29,10 @@ export class NodeLifecycle extends EndpointLifecycle {
         this.#mutex = new Mutex(endpoint);
 
         this.#online.on(() => {
-            this.#isOnline = true;
+            this.#onlineAt = new Date();
         });
         this.#offline.on(() => {
-            this.#isOnline = false;
+            this.#onlineAt = undefined;
         });
         this.#commissioned.on(() => {
             this.#isCommissioned = true;
@@ -49,7 +49,14 @@ export class NodeLifecycle extends EndpointLifecycle {
      * True when the node is connected to the network.
      */
     get isOnline() {
-        return this.#isOnline;
+        return this.#onlineAt !== undefined;
+    }
+
+    /**
+     * The time the node went online.
+     */
+    get onlineAt() {
+        return this.#onlineAt;
     }
 
     /**

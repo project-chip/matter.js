@@ -33,6 +33,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
+    - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
 
 -   @matter/nodejs-shell
     - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
@@ -41,11 +42,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/node
     - Breaking: The Default `OnOffServer` implementation no longer has the "Lighting" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.OnOffServer` to get the correct features enabled automatically.
     - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
+    - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCOvering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
     - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
     - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
     - Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
     - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
+    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.

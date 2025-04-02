@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LevelControlServer } from "#behaviors/level-control";
 import { DimmableLightDevice } from "#devices/dimmable-light";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { Time } from "#general";
+import { LevelControl } from "@matter/types/clusters/level-control";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 describe("LevelControlServer", () => {
@@ -148,7 +150,21 @@ describe("LevelControlServer", () => {
         // To be on the safe side, advance time beyond when the timer would trigger.  If nothing blows up, timers were
         // correctly shut down
         await MockTime.advance(100_000);
-    }).timeout(200000);
+    });
+
+    it("works with anonymous class and downlevel features", async () => {
+        const endpoint = new Endpoint(
+            DimmableLightDevice.with(createLevelControlServer().with(LevelControl.Feature.Lighting)),
+        );
+
+        function createLevelControlServer() {
+            return class extends LevelControlServer {};
+        }
+
+        const node = await MockServerNode.createOnline({ device: endpoint });
+
+        await node.close();
+    });
 });
 
 function expectTimers(count: number) {

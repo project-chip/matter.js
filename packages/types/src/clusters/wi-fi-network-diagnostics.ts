@@ -29,7 +29,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * These are optional features supported by WiFiNetworkDiagnosticsCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.4
+     * @see {@link MatterSpecification.v14.Core} § 11.15.4
      */
     export enum Feature {
         /**
@@ -49,7 +49,7 @@ export namespace WiFiNetworkDiagnostics {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.15.5.1
+     * @see {@link MatterSpecification.v14.Core} § 11.15.5.1
      */
     export enum SecurityType {
         /**
@@ -84,7 +84,7 @@ export namespace WiFiNetworkDiagnostics {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.15.5.2
+     * @see {@link MatterSpecification.v14.Core} § 11.15.5.2
      */
     export enum WiFiVersion {
         /**
@@ -126,14 +126,14 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * Body of the WiFiNetworkDiagnostics disconnection event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.1
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.1
      */
     export const TlvDisconnectionEvent = TlvObject({
         /**
          * This field shall contain the Reason Code field value for the Disassociation or Deauthentication event that
          * caused the disconnection and the value shall align with Table 9-49 "Reason codes" of IEEE 802.11-2020.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.15.8.1.1
+         * @see {@link MatterSpecification.v14.Core} § 11.15.8.1.1
          */
         reasonCode: TlvField(0, TlvUInt16)
     });
@@ -141,12 +141,12 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * Body of the WiFiNetworkDiagnostics disconnection event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.1
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.1
      */
     export interface DisconnectionEvent extends TypeFromSchema<typeof TlvDisconnectionEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.15.5.3
+     * @see {@link MatterSpecification.v14.Core} § 11.15.5.3
      */
     export enum AssociationFailureCause {
         /**
@@ -173,13 +173,13 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * Body of the WiFiNetworkDiagnostics associationFailure event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.2
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.2
      */
     export const TlvAssociationFailureEvent = TlvObject({
         /**
          * The Status field shall be set to a value from the AssociationFailureCauseEnum.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.15.8.2.1
+         * @see {@link MatterSpecification.v14.Core} § 11.15.8.2.1
          */
         associationFailureCause: TlvField(0, TlvEnum<AssociationFailureCause>()),
 
@@ -196,7 +196,7 @@ export namespace WiFiNetworkDiagnostics {
          *
          * Table 9-50 "Status codes" of IEEE 802.11-2020 contains a description of all values possible.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.15.8.2.2
+         * @see {@link MatterSpecification.v14.Core} § 11.15.8.2.2
          */
         status: TlvField(1, TlvUInt16)
     });
@@ -204,12 +204,12 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * Body of the WiFiNetworkDiagnostics associationFailure event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.2
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.2
      */
     export interface AssociationFailureEvent extends TypeFromSchema<typeof TlvAssociationFailureEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.15.5.4
+     * @see {@link MatterSpecification.v14.Core} § 11.15.5.4
      */
     export enum ConnectionStatus {
         /**
@@ -226,14 +226,14 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * Body of the WiFiNetworkDiagnostics connectionStatus event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.3
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.3
      */
     export const TlvConnectionStatusEvent = TlvObject({ connectionStatus: TlvField(0, TlvEnum<ConnectionStatus>()) });
 
     /**
      * Body of the WiFiNetworkDiagnostics connectionStatus event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.8.3
+     * @see {@link MatterSpecification.v14.Core} § 11.15.8.3
      */
     export interface ConnectionStatusEvent extends TypeFromSchema<typeof TlvConnectionStatusEvent> {}
 
@@ -247,7 +247,7 @@ export namespace WiFiNetworkDiagnostics {
              * detected. If the Node does not have an ability to count beacons expected and not received, this value may
              * remain set to zero.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.6
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.6
              */
             beaconLostCount: Attribute(0x5, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
 
@@ -256,7 +256,7 @@ export namespace WiFiNetworkDiagnostics {
              * to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute shall
              * be reset to 0 upon a reboot of the Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.13
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.13
              */
             overrunCount: Attribute(0xc, TlvNullable(TlvUInt64), { omitChanges: true, default: 0 })
         },
@@ -279,7 +279,7 @@ export namespace WiFiNetworkDiagnostics {
              *
              * This command has no associated data.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.7.1
+             * @see {@link MatterSpecification.v14.Core} § 11.15.7.1
              */
             resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
         }
@@ -296,14 +296,14 @@ export namespace WiFiNetworkDiagnostics {
              * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of beacons
              * received, this value may remain set to zero.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.7
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.7
              */
             beaconRxCount: Attribute(0x6, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
 
             /**
              * The PacketMulticastRxCount attribute shall indicate the number of multicast packets received by the Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.8
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.8
              */
             packetMulticastRxCount: Attribute(0x7, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
 
@@ -311,21 +311,21 @@ export namespace WiFiNetworkDiagnostics {
              * The PacketMulticastTxCount attribute shall indicate the number of multicast packets transmitted by the
              * Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.9
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.9
              */
             packetMulticastTxCount: Attribute(0x8, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
 
             /**
              * The PacketUnicastRxCount attribute shall indicate the number of unicast packets received by the Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.10
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.10
              */
             packetUnicastRxCount: Attribute(0x9, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
 
             /**
              * The PacketUnicastTxCount attribute shall indicate the number of unicast packets transmitted by the Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.11
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.11
              */
             packetUnicastTxCount: Attribute(0xa, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 })
         }
@@ -361,14 +361,14 @@ export namespace WiFiNetworkDiagnostics {
             /**
              * The BSSID attribute shall indicate the BSSID for which the Wi-Fi network the Node is currently connected.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.1
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.1
              */
             bssid: Attribute(0x0, TlvNullable(TlvByteString.bound({ length: 6 })), { default: null }),
 
             /**
              * The SecurityType attribute shall indicate the current type of Wi-Fi security used.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.2
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.2
              */
             securityType: Attribute(0x1, TlvNullable(TlvEnum<SecurityType>()), { default: null }),
 
@@ -376,7 +376,7 @@ export namespace WiFiNetworkDiagnostics {
              * The WiFiVersion attribute shall indicate the current 802.11 standard version in use by the Node, per the
              * table below.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.3
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.3
              */
             wiFiVersion: Attribute(0x2, TlvNullable(TlvEnum<WiFiVersion>()), { default: null }),
 
@@ -384,14 +384,14 @@ export namespace WiFiNetworkDiagnostics {
              * The ChannelNumber attribute shall indicate the channel that Wi-Fi communication is currently operating
              * on.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.4
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.4
              */
             channelNumber: Attribute(0x3, TlvNullable(TlvUInt16), { default: null }),
 
             /**
              * The RSSI attribute shall indicate the current RSSI of the Node’s Wi-Fi radio in dBm.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.5
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.5
              */
             rssi: Attribute(
                 0x4,
@@ -403,7 +403,7 @@ export namespace WiFiNetworkDiagnostics {
              * The CurrentMaxRate attribute shall indicate the current maximum PHY rate of transfer of data in
              * bits-per-second.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.6.12
+             * @see {@link MatterSpecification.v14.Core} § 11.15.6.12
              */
             currentMaxRate: OptionalAttribute(0xb, TlvNullable(TlvUInt64), { omitChanges: true, default: 0 })
         },
@@ -413,7 +413,7 @@ export namespace WiFiNetworkDiagnostics {
              * The Disconnection Event shall indicate that a Node’s Wi-Fi connection has been disconnected as a result
              * of de-authenticated or dis-association and indicates the reason.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.8.1
+             * @see {@link MatterSpecification.v14.Core} § 11.15.8.1
              */
             disconnection: OptionalEvent(0x0, EventPriority.Info, TlvDisconnectionEvent),
 
@@ -422,7 +422,7 @@ export namespace WiFiNetworkDiagnostics {
              * Wi-Fi access point, but is unable to successfully associate or authenticate, after exhausting all
              * internal retries of its supplicant.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.8.2
+             * @see {@link MatterSpecification.v14.Core} § 11.15.8.2
              */
             associationFailure: OptionalEvent(0x1, EventPriority.Info, TlvAssociationFailureEvent),
 
@@ -431,7 +431,7 @@ export namespace WiFiNetworkDiagnostics {
              * Connected, in this context, shall mean that a Node acting as a Wi-Fi station is successfully associated
              * to a Wi-Fi Access Point.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.15.8.3
+             * @see {@link MatterSpecification.v14.Core} § 11.15.8.3
              */
             connectionStatus: OptionalEvent(0x2, EventPriority.Info, TlvConnectionStatusEvent)
         },
@@ -459,7 +459,7 @@ export namespace WiFiNetworkDiagnostics {
      * WiFiNetworkDiagnosticsCluster supports optional features that you can enable with the
      * WiFiNetworkDiagnosticsCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.15
+     * @see {@link MatterSpecification.v14.Core} § 11.15
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

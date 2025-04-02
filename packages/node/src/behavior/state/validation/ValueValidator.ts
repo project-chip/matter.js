@@ -151,7 +151,7 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
         const constraint = field.effectiveConstraint;
         let max;
         if (typeof constraint.min === "number" && typeof constraint.max === "number") {
-            max = constraint.max - constraint.min;
+            max = Math.pow(2, constraint.max - constraint.min + 1) - 1; // e.g bits 0..2 -> 2^3 - 1 = 7 aka 111b
         } else {
             max = 1;
         }

@@ -16,6 +16,7 @@ import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";
 import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
+import { TestDescriptor } from "./test-descriptor.js";
 
 enum TestType {
     esm = "esm",
@@ -63,6 +64,7 @@ export async function main(argv = process.argv) {
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
         .option("report", { type: "boolean", describe: "Display test summary after testing" })
+        .option("pull", { type: "boolean", describe: "Do not update containers before testing", default: true })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -80,6 +82,8 @@ export async function main(argv = process.argv) {
         const firstSpec = Array.isArray(args.spec) ? args.spec[0] : args.spec;
         packageLocation = firstSpec;
     }
+
+    chip.pullBeforeTesting = args.pull;
 
     const builder = new ProjectBuilder();
     const pkg = new Package({ path: packageLocation });
@@ -123,8 +127,8 @@ export async function main(argv = process.argv) {
         if (ls) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
-            printReport(await defaultDescriptor(runner), true);
             progress.close();
+            printReport(await defaultDescriptor(runner), true);
             console.log();
             return;
         }
@@ -145,9 +149,10 @@ export async function main(argv = process.argv) {
 
         const progress = pkg.start("Testing");
         const runner = new TestRunner(pkg, progress, args);
+        let report: TestDescriptor | undefined;
 
         if (thisTestTypes.has(TestType.esm)) {
-            await runner.runNode("esm");
+            report = await runner.runNode("esm");
         }
 
         if (thisTestTypes.has(TestType.cjs)) {
@@ -160,8 +165,9 @@ export async function main(argv = process.argv) {
 
         progress.close();
 
-        if (args.report) {
-            printReport(await defaultDescriptor(runner));
+        if (args.report && report) {
+            printReport(report);
+            console.log();
         }
 
         if (args.forceExit) {
