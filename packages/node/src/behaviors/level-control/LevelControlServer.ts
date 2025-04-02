@@ -233,6 +233,19 @@ export class LevelControlBaseServer extends LevelControlBase {
     }
 
     /**
+     * Assert the rate value, throws error on invalid values and set default value if null
+     */
+    #assertRateValue(rate: number | null) {
+        if (rate === 0) {
+            throw new StatusResponseError(`Illegal move rate of 0`, StatusCode.InvalidCommand);
+        }
+        if (rate === null) {
+            return this.state.defaultMoveRate ?? null;
+        }
+        return rate;
+    }
+
+    /**
      * Default "MoveToLevel" implementation.
      *
      * When a transition time is not null the implementation uses a step based logic to manage the move. It also checks
@@ -267,6 +280,8 @@ export class LevelControlBaseServer extends LevelControlBase {
      * To replace default behavior, override {@link moveLogic} which also implements {@link moveWithOnOff}.
      */
     override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest) {
+        rate = this.#assertRateValue(rate);
+
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -283,6 +298,8 @@ export class LevelControlBaseServer extends LevelControlBase {
      * To replace default behavior, override {@link moveLogic} which also implements {@link move}.
      */
     override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest) {
+        rate = this.#assertRateValue(rate);
+
         return this.moveLogic(moveMode, rate, true);
     }
 
@@ -303,14 +320,6 @@ export class LevelControlBaseServer extends LevelControlBase {
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
     ) {
-        if (rate === 0) {
-            throw new StatusResponseError(`Illegal move rate of 0`, StatusCode.InvalidCommand);
-        }
-
-        if (rate === null) {
-            rate = this.state.defaultMoveRate ?? null;
-        }
-
         let targetLevel;
         if (moveMode === LevelControl.MoveMode.Up) {
             targetLevel = Infinity;
@@ -566,7 +575,7 @@ export namespace LevelControlBaseServer {
         transitions?: Transitions<LevelControlBaseServer>;
     }
 
-    export class State extends LevelControlLogicBase.State {
+    export class State extends LevelControlBase.State {
         /**
          * The default implementation always set the target level immediately and so ignores all transition times
          * requested or configured.
