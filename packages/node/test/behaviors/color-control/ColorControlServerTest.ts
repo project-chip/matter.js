@@ -48,7 +48,7 @@ describe("ColorControlServer", () => {
             { kind: "hue", value: 86, ms: 1000 },
             { kind: "hue", value: 44, ms: 1000 },
             { kind: "hue", value: 1, ms: 1000 },
-            { kind: "hue", value: 214, ms: 1000 },
+            { kind: "hue", value: 213, ms: 1000 },
             { kind: "hue", value: 171, ms: 1000 },
 
             // Transition complete
