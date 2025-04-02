@@ -269,7 +269,7 @@ export class Transitions<B extends Behavior> {
      */
     finish(name?: Transitions.PropertyOf<B>): void {
         /**
-         * Finish a single transition. Returns a boolean weather to emit remaining time of zero or not.
+         * Finish a single transition. Returns a boolean whether to emit remaining time of zero or not.
          */
         const finishOne = (state: Transitions.PropertyState<B>): boolean => {
             const { name } = state;
@@ -445,7 +445,7 @@ export class Transitions<B extends Behavior> {
                 }
 
                 // If there is no target value and no min/max value it is a configuration error and we do not step as this
-                // would be inifinite, which is only allowed for cyclic transitions
+                // would be infinite, which is only allowed for cyclic transitions
                 if (targetValue === undefined) {
                     this.#stepError(prop.name, `there is no target value or ${targetDescription}`);
                     continue;
@@ -718,14 +718,18 @@ export namespace Transitions {
          * The target value for the transition.
          *
          * If the property is not transitioning "cyclic" the following rules apply:
-         * If undefined, transitions to the min/max value.  If no min or max is defined and no target value is
-         * supplied the transition will not run.
+         *
+         * * If undefined, transitions to the min/max value.
+         *
+         * * If no min or max is defined and no target value is supplied the transition will not run.
          *
          * If the property is transitioning "cyclic" the following rules apply:
-         * If undefined, the transition will be endless and needs to be stopped manually.
-         * If a target value is supplied the transition logic calculates the distance to the target value and
-         * stops on target value once this distance was processed. By default, the distance is calculated linearly,
-         * but this behavior can be overwritten by providing the custom function below.
+         *
+         * * If undefined, the transition will be endless and needs to be stopped manually.
+         *
+         * * If a target value is defined, the transition logic calculates the distance to the target value and stops
+         *   on the target value once this distance was processed. By default, the distance is calculated linearly, but
+         *   this behavior can be overridden with the custom function below.
          */
         readonly targetValue?: number;
 
