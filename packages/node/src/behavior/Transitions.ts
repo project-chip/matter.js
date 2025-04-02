@@ -86,6 +86,29 @@ export class Transitions<B extends Behavior> {
     }
 
     /**
+     * Calculate the distance between two values in a cyclic range. This is the default implementation only caring
+     * about normal upwards and downwards transitions.
+     */
+    protected calculateCyclicDistance(
+        currentValue: number,
+        targetValue: number,
+        changePerS: number,
+        min: number,
+        max: number,
+    ): number {
+        if (changePerS > 0) {
+            // We want to transition upwards to target value or to max and then from min to target value
+            if (currentValue > targetValue) {
+                return Math.abs(currentValue - max) + Math.abs(max - targetValue);
+            }
+        } else if (currentValue < targetValue) {
+            // We want to transition downwards to target value or to min and then from max to target value
+            return Math.abs(currentValue - min) + Math.abs(min - targetValue);
+        }
+        return Math.abs(currentValue - targetValue);
+    }
+
+    /**
      * Initiate transition of an attribute.
      */
     start(transition: Transitions.Transition<B>) {
@@ -127,18 +150,8 @@ export class Transitions<B extends Behavior> {
             }
             if (!transition.calculateCyclicDistance) {
                 // Install default cyclic distance function if not customized
-                transition.calculateCyclicDistance = (currentValue, targetValue) => {
-                    if (changePerS > 0) {
-                        // We want to transition upwards to target value or to max and then from min to target value
-                        if (currentValue > targetValue) {
-                            return Math.abs(currentValue - max) + Math.abs(max - targetValue);
-                        }
-                    } else if (currentValue < targetValue) {
-                        // We want to transition downwards to target value or to min and then from max to target value
-                        return Math.abs(currentValue - min) + Math.abs(min - targetValue);
-                    }
-                    return Math.abs(currentValue - targetValue);
-                };
+                transition.calculateCyclicDistance = (currentValue, targetValue) =>
+                    this.calculateCyclicDistance(currentValue, targetValue, changePerS, min, max);
             }
             distanceLeft = Math.abs(transition.calculateCyclicDistance(currentValue, targetValue));
             if (distanceLeft === 0) {
