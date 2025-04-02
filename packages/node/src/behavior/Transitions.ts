@@ -476,7 +476,13 @@ export class Transitions<B extends Behavior> {
         const state = behavior.state as Record<string, number>;
 
         for (const prop of this) {
-            state[prop.name] = Math.round(prop.currentValue);
+            const { name, currentValue } = prop;
+
+            const nextValue = Math.round(currentValue);
+            if (state[name] !== nextValue) {
+                //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
+                state[name] = nextValue;
+            }
         }
     }
 
