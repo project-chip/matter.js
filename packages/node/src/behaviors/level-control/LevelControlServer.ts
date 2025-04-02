@@ -86,9 +86,11 @@ export class LevelControlBaseServer extends LevelControlBase {
         // as a continuous value it should only emit under limited circumstances defined by spec
         //
         // We disable normal "quieter" suppression so it always emits when we emit manually
-        this.events.remainingTime$Changed.quiet.config = {
-            suppressionEnabled: false,
-        };
+        if (this.events.remainingTime$Changed !== undefined) {
+            this.events.remainingTime$Changed.quiet.config = {
+                suppressionEnabled: false,
+            };
+        }
 
         // Configure transition management
         this.internal.transitions = this.initializeTransitions();
@@ -597,6 +599,15 @@ export namespace LevelControlBaseServer {
         transitionStepIntervalMs = 100;
 
         [Val.properties](endpoint: Endpoint) {
+            // Only return remaining time if the attribute is defined in the endpoint
+            if (
+                (endpoint.behaviors.optionsFor(LevelControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined &&
+                (endpoint.behaviors.defaultsFor(LevelControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined
+            ) {
+                return {};
+            }
             return {
                 set remainingTime(value: number) {
                     const transition = endpoint.behaviors.internalsOf(LevelControlBaseServer).transitions;
