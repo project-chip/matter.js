@@ -6,7 +6,17 @@
 
 import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { Diagnostic, Logger, MaybePromise, ObserverGroup, Time, Timer } from "#general";
+import {
+    addValueWithOverflow,
+    cropValueRange,
+    Diagnostic,
+    ImplementationError,
+    Logger,
+    MaybePromise,
+    ObserverGroup,
+    Time,
+    Timer,
+} from "#general";
 import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
 import { OfflineContext } from "./context/index.js";
@@ -40,7 +50,7 @@ const logger = Logger.get("Transition");
  *
  * 4. You can also allow matter.js to operate a transition timer but apply value updates directly to hardware by
  *    overriding {@link applyUpdates} or {@link step}.  This is useful if your device does not support transitions
- *    natively but you want to ensure that matter.js does not report values that do not reflect hardware state.
+ *    natively, but you want to ensure that matter.js does not report values that do not reflect hardware state.
  *
  * Whichever approach you take, matter.js attempts to implement the Matter protocol as accurately as possible with the
  * information available.
@@ -273,7 +283,7 @@ export class Transitions<B extends Behavior> {
             this.stop(state.name);
 
             const event = (
-                this.#endpoint.eventsOf(this.#config.type) as unknown as Record<
+                (this.#endpoint.events as Record<string, unknown>)[this.#config.type.id] as unknown as Record<
                     string,
                     ClusterEvents.ChangedObservable<any>
                 >
@@ -382,7 +392,7 @@ export class Transitions<B extends Behavior> {
     /**
      * Update transitioning attributes for a behavior.
      *
-     * You may override this method if you want matter.js to run a timer but you want to handle value updates yourself.
+     * You may override this method if you want matter.js to run a timer, but you want to handle value updates yourself.
      */
     protected async step(behavior: B) {
         const now = Time.nowMs();
@@ -568,7 +578,7 @@ export class Transitions<B extends Behavior> {
         this.#instrumentedProperties.add(name);
 
         const event = (
-            this.#endpoint.eventsOf(this.#config.type) as unknown as Record<
+            (this.#endpoint.events as Record<string, unknown>)[this.#config.type.id] as unknown as Record<
                 string,
                 ClusterEvents.ChangedObservable<any> | undefined
             >
