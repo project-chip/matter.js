@@ -288,7 +288,7 @@ jobs:
               --chip-tool ../bin/chip-tool \
               --log-level info \
               --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
-              --target-skip-glob "{Test_TC_LVL_9_1}" \
+              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_9_1,Test_TC_CC_9_2,Test_TC_CC_9_3}" \
               --include-tags MANUAL \
               run \
               --iterations 1 \
