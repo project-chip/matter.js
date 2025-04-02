@@ -82,7 +82,7 @@ jobs:
       - name: Run tests using the docker image
         run: |
           cd chip-testing
-          npm run test-core -- --no-pull
+          npm run test-core -- --no-pull --all-logs
           npm run test-app-fast -- --no-pull
           npm run test-app-slow -- --no-pull
 
