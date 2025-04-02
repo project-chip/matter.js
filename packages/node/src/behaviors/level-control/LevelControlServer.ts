@@ -16,11 +16,12 @@ import { RootEndpoint } from "#endpoints/root";
 import { AsyncObservable, Logger, MaybePromise } from "#general";
 import { Val } from "#protocol";
 import { StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
+import { ClusterType } from "@matter/types";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
 
 const logger = Logger.get("LevelControlServer");
 
-const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting);
+const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting);
 
 /**
  * This is the default server implementation of {@link LevelControlBehavior}.
@@ -50,7 +51,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  *
  * All overridable methods may be implemented sync or async by returning a Promise.
  */
-export class LevelControlBaseServer extends LevelControlLogicBase {
+export class LevelControlBaseServer extends LevelControlBase {
     declare protected internal: LevelControlBaseServer.Internal;
     declare state: LevelControlBaseServer.State;
     declare events: LevelControlBaseServer.Events;
@@ -602,7 +603,7 @@ export namespace LevelControlBaseServer {
         }
     }
 
-    export class Events extends LevelControlLogicBase.Events {
+    export class Events extends LevelControlBase.Events {
         transitionEndTime$Changed = AsyncObservable<[value: number, oldValue: number, context: ActionContext]>();
     }
 
@@ -633,9 +634,9 @@ export namespace LevelControlBaseServer {
     };
 }
 
-// We had turned on some more features to provide the default implementation, but export the cluster with default
+// We had turned on some more features to provide the default implementation, but export the cluster with no
 // Features again.
-export class LevelControlServer extends LevelControlBaseServer.with(LevelControl.Feature.OnOff) {}
+export class LevelControlServer extends LevelControlBaseServer.for(ClusterType(LevelControl.Base)) {}
 
 function asIntOrNull(value: number | null) {
     if (value === null) {
