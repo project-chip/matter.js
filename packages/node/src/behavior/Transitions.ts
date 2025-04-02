@@ -140,7 +140,7 @@ export class Transitions<B extends Behavior> {
                     return Math.abs(currentValue - targetValue);
                 };
             }
-            distanceLeft = Math.abs(transition.calculateCyclicDistance!(currentValue, targetValue));
+            distanceLeft = Math.abs(transition.calculateCyclicDistance(currentValue, targetValue));
             if (distanceLeft === 0) {
                 return;
             }
@@ -280,11 +280,8 @@ export class Transitions<B extends Behavior> {
             this.stop(state.name);
 
             const event = (
-                (this.#endpoint.events as Record<string, unknown>)[this.#config.type.id] as unknown as Record<
-                    string,
-                    ClusterEvents.ChangedObservable<any>
-                >
-            )[`${name}$Changed`];
+                this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any>>>
+            )[this.#config.type.id][`${name}$Changed`];
 
             // Per specification, quieter events always emit at end of transition.  This will need an option in the
             // property configuration if this is ever not the case
@@ -414,7 +411,7 @@ export class Transitions<B extends Behavior> {
             let nextValue = cyclic
                 ? addValueWithOverflow(currentValue, changeSinceLastStep, min!, max!)
                 : min !== undefined && max !== undefined
-                  ? cropValueRange(currentValue + changeSinceLastStep, min!, max!)
+                  ? cropValueRange(currentValue + changeSinceLastStep, min, max)
                   : currentValue + changeSinceLastStep;
 
             const { targetValue, targetDescription } = this.#determineTargetValue(prop);
@@ -581,11 +578,8 @@ export class Transitions<B extends Behavior> {
         this.#instrumentedProperties.add(name);
 
         const event = (
-            (this.#endpoint.events as Record<string, unknown>)[this.#config.type.id] as unknown as Record<
-                string,
-                ClusterEvents.ChangedObservable<any> | undefined
-            >
-        )[`${name}$Changed`];
+            this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any> | undefined>>
+        )[this.#config.type.id][`${name}$Changed`];
         if (!event) {
             return;
         }
