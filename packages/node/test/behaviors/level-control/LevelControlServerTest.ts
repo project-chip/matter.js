@@ -19,6 +19,8 @@ describe("LevelControlServer", () => {
 
         await complete;
 
+        await node.close();
+
         expect(events).deep.equals([
             { kind: "time", ms: 0, value: 150 },
             { kind: "level", ms: 300, value: 4 },
@@ -40,8 +42,6 @@ describe("LevelControlServer", () => {
             { kind: "level", ms: 200, value: 254 },
             { kind: "time", ms: 0, value: 0 },
         ]);
-
-        await node.close();
     });
 
     it("transitions to off with correct events", async () => {
@@ -73,6 +73,8 @@ describe("LevelControlServer", () => {
         await MockTime.resolve(complete, { stepMs: 10 });
 
         expect(endpoint.state.levelControl.currentLevel).equals(1);
+
+        await node.close();
 
         expect(events).deep.equals([
             // Startup

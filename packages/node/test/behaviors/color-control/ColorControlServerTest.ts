@@ -36,6 +36,8 @@ describe("ColorControlServer", () => {
 
         await MockTime.resolve(complete, { stepMs: 10 });
 
+        await node.close();
+
         // 253 in 6s aka 42/s
         expect(events).deep.equals([
             // Startup
