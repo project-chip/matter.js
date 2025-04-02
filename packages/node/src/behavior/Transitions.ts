@@ -51,6 +51,7 @@ export class Transitions<B extends Behavior> {
     #config: Transitions.Configuration<B>;
     #outstandingTick?: MaybePromise<void>;
     #staticRemainingTime = 0;
+    #prevPublishedRemainingTime = 0;
     #propertyStates = {} as Record<string, Transitions.PropertyState<B>>;
     #observers?: ObserverGroup;
     #instrumentedProperties?: Set<string>;
@@ -171,13 +172,34 @@ export class Transitions<B extends Behavior> {
             return;
         }
 
-        if (this.#outstandingRemainingTimeUpdate || this.remainingTime - remainingTimeBeforeStart < 1) {
+        const remainingTime = this.remainingTime;
+        if (remainingTime < 10) {
+            // For commands with a transition time or changes to the transition time less than 1 second, changes
+            // to this attribute SHALL NOT be reported.
+            attr.suppressReportingRemainingTimeOnFinish = true;
+            return;
+        }
+        this.#updateRemainingTime(remainingTime, true);
+    }
+
+    #updateRemainingTime(newRemainingTime?: number, fromCommand = false) {
+        if (newRemainingTime === undefined) {
+            newRemainingTime = this.remainingTime;
+        }
+
+        // Only report if it changes from 0 to any value higher than 10
+        if (this.#prevPublishedRemainingTime === 0 && newRemainingTime <= 10) {
             return;
         }
 
-        this.#outstandingRemainingTimeUpdate = this.#endpoint.act("remaining-time-update", agent => {
-            remainingTimeEvent.emit(this.remainingTime, -1, agent.context);
-        });
+        // Only report if it changes, with a delta larger than 10, caused by the invoke of a command
+        if (fromCommand && Math.abs(this.#prevPublishedRemainingTime - newRemainingTime) <= 10) {
+            return;
+        }
+
+        const previousRemainingTime = this.#prevPublishedRemainingTime;
+        this.#prevPublishedRemainingTime = newRemainingTime;
+        this.#config.remainingTimeEvent?.emit(newRemainingTime, previousRemainingTime, OfflineContext.ReadOnly);
     }
 
     /**
@@ -239,8 +261,14 @@ export class Transitions<B extends Behavior> {
      * Stop a transition of one or more attributes that has completed successfully.
      */
     finish(name?: Transitions.PropertyOf<B>): void {
-        const finishOne = (state: Transitions.PropertyState<B>) => {
-            logger.debug(this.#logPrefix, "Transition of", Diagnostic.strong(state.name), "finished");
+        /**
+         * Finish a single transition. Returns a boolean weather to emit remaining time of zero or not.
+         */
+        const finishOne = (state: Transitions.PropertyState<B>): boolean => {
+            const { name } = state;
+            logger.debug(this.#logPrefix, "Transition of", Diagnostic.strong(name), "finished");
+
+            const { suppressReportingRemainingTimeOnFinish } = this.#propertyStates[name] ?? {};
 
             this.stop(state.name);
 
@@ -256,24 +284,26 @@ export class Transitions<B extends Behavior> {
             if (event?.isQuieter) {
                 event.quiet.emitNow();
             }
+            return !suppressReportingRemainingTimeOnFinish;
         };
 
+        let reportRemainingTime = false;
         if (typeof name === "string") {
             const state = this.#propertyStates[name];
             if (state === undefined) {
                 return;
             }
 
-            finishOne(state);
+            reportRemainingTime = finishOne(state);
         } else {
             for (const state of this) {
-                finishOne(state);
+                reportRemainingTime = reportRemainingTime || finishOne(state);
             }
         }
 
         // When all transitions are finished, emit remaining time of zero per specification
-        if (!Object.keys(this.#propertyStates).length) {
-            this.#config.remainingTimeEvent?.emit(0, -1, OfflineContext.ReadOnly);
+        if (!Object.keys(this.#propertyStates).length && reportRemainingTime) {
+            this.#updateRemainingTime(0);
         }
     }
 
@@ -739,5 +769,11 @@ export namespace Transitions {
          * The time of the last step.
          */
         prevStepAt: number;
+
+        /**
+         * Set to true when the reporting of remaining time should be suppressed when finishing the transition.
+         * This usually is used for transitions that are faster than 1s.
+         */
+        suppressReportingRemainingTimeOnFinish?: boolean;
     }
 }
