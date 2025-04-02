@@ -1305,6 +1305,24 @@ export class InteractionClient {
     }
 
     /**
+     * Allows to add the data received by e.g. a Read request to the cache
+     */
+    async addAttributesToCache(attributeReports: DecodedAttributeReportValue<any>[]) {
+        for (const data of attributeReports) {
+            const {
+                path: { endpointId, clusterId, attributeId },
+                value,
+            } = data;
+            if (value === undefined) continue;
+            const { value: oldValue } = this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+            const changed = oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined;
+            if (changed !== false) {
+                await this.#nodeStore?.persistAttributes([data]);
+            }
+        }
+    }
+
+    /**
      * Returns the list (optionally filtered by endpointId and/or clusterId) of the dataVersions of the currently cached
      * values to use them as knownDataVersion for read or subscription requests.
      */
