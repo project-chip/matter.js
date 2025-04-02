@@ -831,6 +831,16 @@ export class PairedNode {
         this.#currentSubscriptionHandler = subscriptionHandler;
 
         const maxKnownEventNumber = this.#interactionClient.maxKnownEventNumber;
+
+        // We first update all values by doing a read all on the device
+        // We do not enrich existing data because we just want to store updated data
+        const attributeData = await this.#interactionClient.getAllAttributes({
+            dataVersionFilters: this.#interactionClient.getCachedClusterDataVersions(),
+            executeQueued: !!threadConnected, // We queue subscriptions for thread devices
+        });
+        await this.#interactionClient.addAttributesToCache(attributeData);
+        attributeData.length = 0; // Clear the array to save memory
+
         // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
         const initialSubscriptionData = await this.#interactionClient.subscribeAllAttributesAndEvents({
             isUrgent: true,
