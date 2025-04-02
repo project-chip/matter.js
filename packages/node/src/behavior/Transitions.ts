@@ -90,7 +90,7 @@ export class Transitions<B extends Behavior> {
         }
 
         // Handle immediate transition
-        if (!this.#config.manageTransitions || !changePerS) {
+        if (!this.#config.manageTransitions || !changePerS || !Number.isFinite(changePerS)) {
             if (targetValue === undefined || targetValue === null) {
                 return;
             }
@@ -108,7 +108,36 @@ export class Transitions<B extends Behavior> {
             return;
         }
 
-        const remainingTimeBeforeStart = this.remainingTime;
+        const { min, max, cyclic } = this.#config.properties[name] ?? {};
+        let distanceLeft: number | undefined = undefined;
+        if (cyclic && targetValue !== undefined) {
+            if (min === undefined || max === undefined) {
+                throw new ImplementationError("Cyclic transition requires min and max values");
+            }
+            if (!transition.calculateCyclicDistance) {
+                // Install default cyclic distance function if not customized
+                transition.calculateCyclicDistance = (currentValue, targetValue) => {
+                    if (changePerS > 0) {
+                        // We want to transition upwards to target value or to max and then from min to target value
+                        if (currentValue > targetValue) {
+                            return Math.abs(currentValue - max) + Math.abs(max - targetValue);
+                        }
+                    } else if (currentValue < targetValue) {
+                        // We want to transition downwards to target value or to min and then from max to target value
+                        return Math.abs(currentValue - min) + Math.abs(min - targetValue);
+                    }
+                    return Math.abs(currentValue - targetValue);
+                };
+            }
+            distanceLeft = Math.abs(transition.calculateCyclicDistance!(currentValue, targetValue));
+            if (distanceLeft === 0) {
+                return;
+            }
+        } else if (min !== undefined && max !== undefined) {
+            if ((changePerS < 0 && currentValue === min) || (changePerS > 0 && currentValue === max)) {
+                return;
+            }
+        }
 
         this.#instrumentProperty(name);
 
@@ -118,6 +147,7 @@ export class Transitions<B extends Behavior> {
             currentValue,
             changePerMs: changePerS / 1000,
             prevStepAt: Time.nowMs() - (this.#config.stepIntervalMs ?? Transitions.DEFAULT_STEP_INTERVAL_MS),
+            distanceLeft,
         };
 
         this.#propertyStates[name] = attr;
@@ -129,7 +159,8 @@ export class Transitions<B extends Behavior> {
             Diagnostic.dict({
                 from: currentValue,
                 to: targetValue,
-                rate: `${changePerS.toPrecision(3)}/s`,
+                rate: `${changePerS.toFixed(3)}/s`,
+                distance: cyclic ? distanceLeft : undefined,
             }),
         );
 
@@ -292,18 +323,30 @@ export class Transitions<B extends Behavior> {
 
         for (const name in this.#propertyStates) {
             const attrState = this.#propertyStates[name];
-            const { targetValue } = this.#determineTargetValue(attrState);
-            if (targetValue === undefined) {
+
+            const distanceLeft = this.#determineDistanceLeft(attrState);
+            if (distanceLeft === undefined) {
                 continue;
             }
-
-            const attrRemainingTime = Math.abs((attrState.currentValue - targetValue) / attrState.changePerMs);
+            const attrRemainingTime = Math.abs(distanceLeft / attrState.changePerMs);
             if (attrRemainingTime > remainingTime) {
                 remainingTime = attrRemainingTime;
             }
         }
 
         return this.#externalTimeOf(remainingTime);
+    }
+
+    #determineDistanceLeft(state: Transitions.PropertyState<B>) {
+        const { distanceLeft, currentValue } = state;
+        if (distanceLeft !== undefined) {
+            return distanceLeft;
+        }
+        const { targetValue } = this.#determineTargetValue(state);
+        if (targetValue === undefined) {
+            return undefined;
+        }
+        return Math.abs(currentValue - targetValue);
     }
 
     /**
@@ -316,38 +359,63 @@ export class Transitions<B extends Behavior> {
 
         // Compute updated values for all transitioning attributes
         for (const prop of this) {
-            const { currentValue } = prop;
+            const { currentValue, name, changePerMs } = prop;
             if (typeof currentValue !== "number") {
                 this.#stepError(prop.name, "value is not numeric");
+                continue;
+            }
+            const { cyclic, min, max } = this.#config.properties[name] ?? {};
+
+            if (cyclic && (min === undefined || max === undefined)) {
+                this.#stepError(prop.name, "min/max defined for cyclic property must be set");
                 continue;
             }
 
             // Determine the unclamped next value
             const msSinceLastStep = now - prop.prevStepAt;
-            let nextValue = currentValue + prop.changePerMs * msSinceLastStep;
+            const changeSinceLastStep = changePerMs * msSinceLastStep;
+            let nextValue = cyclic
+                ? addValueWithOverflow(currentValue, changeSinceLastStep, min!, max!)
+                : min !== undefined && max !== undefined
+                  ? cropValueRange(currentValue + changeSinceLastStep, min!, max!)
+                  : currentValue + changeSinceLastStep;
 
             const { targetValue, targetDescription } = this.#determineTargetValue(prop);
 
-            // Clamp nextValue to valid range
-            if (prop.changePerMs < 0) {
-                if (targetValue !== undefined && Math.round(nextValue) < targetValue) {
-                    nextValue = targetValue;
-                }
-            } else if (prop.changePerMs > 0) {
-                if (targetValue !== undefined && Math.round(nextValue) > targetValue) {
-                    nextValue = targetValue;
+            if (cyclic) {
+                let distanceLeft = this.#determineDistanceLeft(prop);
+                if (distanceLeft !== undefined && targetValue !== undefined) {
+                    distanceLeft -= Math.abs(changeSinceLastStep);
+                    if (distanceLeft <= 0) {
+                        // We reached the target value
+                        nextValue = targetValue;
+                        prop.distanceLeft = 0;
+                    } else {
+                        prop.distanceLeft = distanceLeft;
+                    }
                 }
             } else {
-                // This shouldn't happen
-                this.#stepError(prop.name, "rate is zero");
-                continue;
-            }
+                // Clamp nextValue to valid range
+                if (prop.changePerMs < 0) {
+                    if (targetValue !== undefined && nextValue < targetValue) {
+                        nextValue = targetValue;
+                    }
+                } else if (prop.changePerMs > 0) {
+                    if (targetValue !== undefined && nextValue > targetValue) {
+                        nextValue = targetValue;
+                    }
+                } else {
+                    // This shouldn't happen
+                    this.#stepError(prop.name, "rate is zero");
+                    continue;
+                }
 
-            // If there is no target value and no min/max value it is a configuration error and we do not step as this
-            // would be inifinite
-            if (targetValue === undefined) {
-                this.#stepError(prop.name, `there is no target value or ${targetDescription}`);
-                continue;
+                // If there is no target value and no min/max value it is a configuration error and we do not step as this
+                // would be inifinite, which is only allowed for cyclic transitions
+                if (targetValue === undefined) {
+                    this.#stepError(prop.name, `there is no target value or ${targetDescription}`);
+                    continue;
+                }
             }
 
             prop.currentValue = nextValue;
@@ -416,22 +484,21 @@ export class Transitions<B extends Behavior> {
     #determineTargetValue(state: Transitions.PropertyState<B>) {
         const { name } = state.configuration;
         let { targetValue } = state.configuration;
+        const { cyclic, min: minValue, max: maxValue } = this.#config.properties[name] ?? {};
         let targetDescription = "target value";
 
-        // Determine the actual target value and clamp nextValue to valid range
-        if (state.changePerMs < 0) {
-            const minValue = this.#config.properties[name]?.min;
-
-            if (targetValue === undefined || (minValue !== undefined && targetValue < minValue)) {
-                targetDescription = "min value";
-                targetValue = minValue;
-            }
-        } else if (state.changePerMs > 0) {
-            const maxValue = this.#config.properties[name]?.max;
-
-            if (targetValue === undefined || (maxValue !== undefined && targetValue > maxValue)) {
-                targetDescription = "min value";
-                targetValue = maxValue;
+        if (!cyclic) {
+            // Determine the actual target value and clamp nextValue to valid range
+            if (state.changePerMs < 0) {
+                if (targetValue === undefined || (minValue !== undefined && targetValue < minValue)) {
+                    targetDescription = "min value";
+                    targetValue = minValue;
+                }
+            } else if (state.changePerMs > 0) {
+                if (targetValue === undefined || (maxValue !== undefined && targetValue > maxValue)) {
+                    targetDescription = "max value";
+                    targetValue = maxValue;
+                }
             }
         }
 
@@ -580,6 +647,11 @@ export namespace Transitions {
          * An upper bound on the transition value.
          */
         readonly max?: number | undefined;
+
+        /**
+         * Is the property transitioning ina cyclic manner? means it overflows to the min value when it reaches the max
+         */
+        cyclic?: boolean;
     }
 
     export type PropertyOf<B extends Behavior> = keyof {
@@ -606,10 +678,24 @@ export namespace Transitions {
         readonly changePerS?: number | null;
 
         /**
-         * The target value for the transition.  If undefined, transitions to the min/max value.  If no min or max is
-         * defined and no target value is supplied the transition will not run.
+         * The target value for the transition.
+         *
+         * If the property is not transitioning "cyclic" the following rules apply:
+         * If undefined, transitions to the min/max value.  If no min or max is defined and no target value is
+         * supplied the transition will not run.
+         *
+         * If the property is transitioning "cyclic" the following rules apply:
+         * If undefined, the transition will be endless and needs to be stopped manually.
+         * If a target value is supplied the transition logic calculates the distance to the target value and
+         * stops on target value once this distance was processed. By default, the distance is calculated linearly,
+         * but this behavior can be overwritten by providing the custom function below.
          */
         readonly targetValue?: number;
+
+        /**
+         * A function to calculate the distance between the current value and the target value.
+         */
+        calculateCyclicDistance?: (currentValue: number, targetValue: number) => number;
 
         /**
          * Invoked every time the transitioning value changes before committing the mutating transaction.
@@ -643,6 +729,11 @@ export namespace Transitions {
          * The change in value per millisecond.
          */
         changePerMs: number;
+
+        /**
+         * The distance left in the transition for cyclic properties.
+         */
+        distanceLeft?: number;
 
         /**
          * The time of the last step.
