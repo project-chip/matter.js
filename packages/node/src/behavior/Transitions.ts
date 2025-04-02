@@ -235,9 +235,6 @@ export class Transitions<B extends Behavior> {
             );
 
             this.#timer.start();
-
-            // Perform first step immediately
-            this.#step();
         }
     }
 
