@@ -16,8 +16,13 @@ die() {
     exit 1
 }
 
-if [ -e "$NAME" ]; then
+if [ -z "$NAME" ]; then
     die "No name supplied"
+fi
+
+if [ "$SKIP_APPS" -a "$NAME" != "chip-tool" ]; then
+    echo "Skipping app $NAME"
+    exit
 fi
 
 case "$TARGETPLATFORM" in

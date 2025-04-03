@@ -7,7 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { OnlineEvent } from "#behavior/Events.js";
 import { BasicInformation } from "#clusters/basic-information";
-import { Base64, Crypto, Diagnostic, ImplementationError, InternalError, Logger } from "#general";
+import { Diagnostic, ImplementationError, InternalError, Logger } from "#general";
 import { AttributeModel, EventModel, Schema, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager } from "#protocol";
@@ -108,7 +108,13 @@ export class BasicInformationServer extends Base {
     }
 
     static createUniqueId() {
-        return Base64.encode(Crypto.getRandomData(24));
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charLength = chars.length;
+        let id = "";
+        for (let i = 0; i < 32; i++) {
+            id += chars.charAt(Math.floor(Math.random() * charLength));
+        }
+        return id;
     }
 
     #online() {

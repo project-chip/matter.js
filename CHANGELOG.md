@@ -16,6 +16,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   chip-testing
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
+    -   Feature: Added Docker based own Test Runner and execute all tests there too with chip-tool against matter.js test device
 
 -   @matter/general
     - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
@@ -32,6 +33,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
 -   @matter/nodejs
+    - Enhancement: Added a UDP send guard to reject hanging send calls after maximum 1-2s
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
     - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
 
@@ -41,11 +43,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/node
     - Breaking: The Default `OnOffServer` implementation no longer has the "Lighting" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.OnOffServer` to get the correct features enabled automatically.
+    - Breaking: The Default `LevelControlServer` implementation no longer has the "OnOff" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.LevelControlServer` to get the correct features enabled automatically.
     - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
     - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCOvering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
     - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
     - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
-    - Feature: `LevelControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
+    - Feature: `LevelControlServer` and `ColorControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
     - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
     - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
@@ -66,6 +69,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
+    - Enhancement: Adjusted the initial Deice connection to Read-All before subscribing to also have initial values for not-changed attributes
 
 -   @project-chip/* packages (beside above)
     - Breaking: Packages are removed! Please use the new packages under @matter/* if needed

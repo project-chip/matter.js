@@ -6,7 +6,17 @@
 
 import { Agent } from "#endpoint/Agent.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { Diagnostic, Logger, MaybePromise, ObserverGroup, Time, Timer } from "#general";
+import {
+    addValueWithOverflow,
+    cropValueRange,
+    Diagnostic,
+    ImplementationError,
+    Logger,
+    MaybePromise,
+    ObserverGroup,
+    Time,
+    Timer,
+} from "#general";
 import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
 import { OfflineContext } from "./context/index.js";
@@ -40,7 +50,7 @@ const logger = Logger.get("Transition");
  *
  * 4. You can also allow matter.js to operate a transition timer but apply value updates directly to hardware by
  *    overriding {@link applyUpdates} or {@link step}.  This is useful if your device does not support transitions
- *    natively but you want to ensure that matter.js does not report values that do not reflect hardware state.
+ *    natively, but you want to ensure that matter.js does not report values that do not reflect hardware state.
  *
  * Whichever approach you take, matter.js attempts to implement the Matter protocol as accurately as possible with the
  * information available.
@@ -50,8 +60,8 @@ export class Transitions<B extends Behavior> {
     #timer?: Timer;
     #config: Transitions.Configuration<B>;
     #outstandingTick?: MaybePromise<void>;
-    #outstandingRemainingTimeUpdate?: MaybePromise<void>;
     #staticRemainingTime = 0;
+    #prevPublishedRemainingTime = 0;
     #propertyStates = {} as Record<string, Transitions.PropertyState<B>>;
     #observers?: ObserverGroup;
     #instrumentedProperties?: Set<string>;
@@ -76,6 +86,29 @@ export class Transitions<B extends Behavior> {
     }
 
     /**
+     * Calculate the distance between two values in a cyclic range. This is the default implementation only caring
+     * about normal upwards and downwards transitions.
+     */
+    protected calculateCyclicDistance(
+        currentValue: number,
+        targetValue: number,
+        changePerS: number,
+        min: number,
+        max: number,
+    ): number {
+        if (changePerS > 0) {
+            // We want to transition upwards to target value or to max and then from min to target value
+            if (currentValue > targetValue) {
+                return Math.abs(currentValue - max) + Math.abs(max - targetValue);
+            }
+        } else if (currentValue < targetValue) {
+            // We want to transition downwards to target value or to min and then from max to target value
+            return Math.abs(currentValue - min) + Math.abs(min - targetValue);
+        }
+        return Math.abs(currentValue - targetValue);
+    }
+
+    /**
      * Initiate transition of an attribute.
      */
     start(transition: Transitions.Transition<B>) {
@@ -91,7 +124,7 @@ export class Transitions<B extends Behavior> {
         }
 
         // Handle immediate transition
-        if (!this.#config.manageTransitions || !changePerS) {
+        if (!this.#config.manageTransitions || !changePerS || !Number.isFinite(changePerS)) {
             if (targetValue === undefined || targetValue === null) {
                 return;
             }
@@ -109,7 +142,26 @@ export class Transitions<B extends Behavior> {
             return;
         }
 
-        const remainingTimeBeforeStart = this.remainingTime;
+        const { min, max, cyclic } = this.#config.properties[name] ?? {};
+        let distanceLeft: number | undefined = undefined;
+        if (cyclic && targetValue !== undefined) {
+            if (min === undefined || max === undefined) {
+                throw new ImplementationError("Cyclic transition requires min and max values");
+            }
+            if (!transition.calculateCyclicDistance) {
+                // Install default cyclic distance function if not customized
+                transition.calculateCyclicDistance = (currentValue, targetValue) =>
+                    this.calculateCyclicDistance(currentValue, targetValue, changePerS, min, max);
+            }
+            distanceLeft = Math.abs(transition.calculateCyclicDistance(currentValue, targetValue));
+            if (distanceLeft === 0) {
+                return;
+            }
+        } else if (min !== undefined && max !== undefined) {
+            if ((changePerS < 0 && currentValue === min) || (changePerS > 0 && currentValue === max)) {
+                return;
+            }
+        }
 
         this.#instrumentProperty(name);
 
@@ -119,6 +171,7 @@ export class Transitions<B extends Behavior> {
             currentValue,
             changePerMs: changePerS / 1000,
             prevStepAt: Time.nowMs() - (this.#config.stepIntervalMs ?? Transitions.DEFAULT_STEP_INTERVAL_MS),
+            distanceLeft,
         };
 
         this.#propertyStates[name] = attr;
@@ -130,7 +183,8 @@ export class Transitions<B extends Behavior> {
             Diagnostic.dict({
                 from: currentValue,
                 to: targetValue,
-                rate: `${changePerS.toPrecision(3)}/s`,
+                rate: `${changePerS.toFixed(3)}/s`,
+                distance: cyclic ? distanceLeft : undefined,
             }),
         );
 
@@ -141,13 +195,34 @@ export class Transitions<B extends Behavior> {
             return;
         }
 
-        if (this.#outstandingRemainingTimeUpdate || this.remainingTime - remainingTimeBeforeStart < 1) {
+        const remainingTime = this.remainingTime;
+        if (remainingTime < 10) {
+            // For commands with a transition time or changes to the transition time less than 1 second, changes
+            // to this attribute SHALL NOT be reported.
+            attr.suppressReportingRemainingTimeOnFinish = true;
+            return;
+        }
+        this.#updateRemainingTime(remainingTime, true);
+    }
+
+    #updateRemainingTime(newRemainingTime?: number, fromCommand = false) {
+        if (newRemainingTime === undefined) {
+            newRemainingTime = this.remainingTime;
+        }
+
+        // Only report if it changes from 0 to any value higher than 10
+        if (this.#prevPublishedRemainingTime === 0 && newRemainingTime <= 10) {
             return;
         }
 
-        this.#outstandingRemainingTimeUpdate = this.#endpoint.act("remaining-time-update", agent => {
-            remainingTimeEvent.emit(this.remainingTime, -1, agent.context);
-        });
+        // Only report if it changes, with a delta larger than 10, caused by the invoke of a command
+        if (fromCommand && Math.abs(this.#prevPublishedRemainingTime - newRemainingTime) <= 10) {
+            return;
+        }
+
+        const previousRemainingTime = this.#prevPublishedRemainingTime;
+        this.#prevPublishedRemainingTime = newRemainingTime;
+        this.#config.remainingTimeEvent?.emit(newRemainingTime, previousRemainingTime, OfflineContext.ReadOnly);
     }
 
     /**
@@ -173,9 +248,6 @@ export class Transitions<B extends Behavior> {
             );
 
             this.#timer.start();
-
-            // Perform first step immediately
-            this.#step();
         }
     }
 
@@ -209,41 +281,46 @@ export class Transitions<B extends Behavior> {
      * Stop a transition of one or more attributes that has completed successfully.
      */
     finish(name?: Transitions.PropertyOf<B>): void {
-        const finishOne = (state: Transitions.PropertyState<B>) => {
-            logger.debug(this.#logPrefix, "Transition of", Diagnostic.strong(state.name), "finished");
+        /**
+         * Finish a single transition. Returns a boolean whether to emit remaining time of zero or not.
+         */
+        const finishOne = (state: Transitions.PropertyState<B>): boolean => {
+            const { name } = state;
+            logger.debug(this.#logPrefix, "Transition of", Diagnostic.strong(name), "finished");
+
+            const { suppressReportingRemainingTimeOnFinish } = this.#propertyStates[name] ?? {};
 
             this.stop(state.name);
 
             const event = (
-                this.#endpoint.eventsOf(this.#config.type) as unknown as Record<
-                    string,
-                    ClusterEvents.ChangedObservable<any>
-                >
-            )[`${name}$Changed`];
+                this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any>>>
+            )[this.#config.type.id][`${name}$Changed`];
 
             // Per specification, quieter events always emit at end of transition.  This will need an option in the
             // property configuration if this is ever not the case
             if (event?.isQuieter) {
                 event.quiet.emitNow();
             }
+            return !suppressReportingRemainingTimeOnFinish;
         };
 
+        let reportRemainingTime = false;
         if (typeof name === "string") {
             const state = this.#propertyStates[name];
             if (state === undefined) {
                 return;
             }
 
-            finishOne(state);
+            reportRemainingTime = finishOne(state);
         } else {
             for (const state of this) {
-                finishOne(state);
+                reportRemainingTime = reportRemainingTime || finishOne(state);
             }
         }
 
         // When all transitions are finished, emit remaining time of zero per specification
-        if (!Object.keys(this.#propertyStates).length) {
-            this.#config.remainingTimeEvent?.emit(0, -1, OfflineContext.ReadOnly);
+        if (!Object.keys(this.#propertyStates).length && reportRemainingTime) {
+            this.#updateRemainingTime(0);
         }
     }
 
@@ -256,9 +333,7 @@ export class Transitions<B extends Behavior> {
         if (this.#outstandingTick) {
             await this.#outstandingTick;
         }
-        if (this.#outstandingRemainingTimeUpdate) {
-            await this.#outstandingRemainingTimeUpdate;
-        }
+
         if (this.#observers) {
             this.#observers.close();
             this.#observers = undefined;
@@ -295,12 +370,12 @@ export class Transitions<B extends Behavior> {
 
         for (const name in this.#propertyStates) {
             const attrState = this.#propertyStates[name];
-            const { targetValue } = this.#determineTargetValue(attrState);
-            if (targetValue === undefined) {
+
+            const distanceLeft = this.#determineDistanceLeft(attrState);
+            if (distanceLeft === undefined) {
                 continue;
             }
-
-            const attrRemainingTime = Math.abs((attrState.currentValue - targetValue) / attrState.changePerMs);
+            const attrRemainingTime = Math.abs(distanceLeft / attrState.changePerMs);
             if (attrRemainingTime > remainingTime) {
                 remainingTime = attrRemainingTime;
             }
@@ -309,48 +384,85 @@ export class Transitions<B extends Behavior> {
         return this.#externalTimeOf(remainingTime);
     }
 
+    #determineDistanceLeft(state: Transitions.PropertyState<B>) {
+        const { distanceLeft, currentValue } = state;
+        if (distanceLeft !== undefined) {
+            return distanceLeft;
+        }
+        const { targetValue } = this.#determineTargetValue(state);
+        if (targetValue === undefined) {
+            return undefined;
+        }
+        return Math.abs(currentValue - targetValue);
+    }
+
     /**
      * Update transitioning attributes for a behavior.
      *
-     * You may override this method if you want matter.js to run a timer but you want to handle value updates yourself.
+     * You may override this method if you want matter.js to run a timer, but you want to handle value updates yourself.
      */
     protected async step(behavior: B) {
         const now = Time.nowMs();
 
         // Compute updated values for all transitioning attributes
         for (const prop of this) {
-            const { currentValue } = prop;
+            const { currentValue, name, changePerMs } = prop;
             if (typeof currentValue !== "number") {
                 this.#stepError(prop.name, "value is not numeric");
+                continue;
+            }
+            const { cyclic, min, max } = this.#config.properties[name] ?? {};
+
+            if (cyclic && (min === undefined || max === undefined)) {
+                this.#stepError(prop.name, "min/max defined for cyclic property must be set");
                 continue;
             }
 
             // Determine the unclamped next value
             const msSinceLastStep = now - prop.prevStepAt;
-            let nextValue = currentValue + prop.changePerMs * msSinceLastStep;
+            const changeSinceLastStep = changePerMs * msSinceLastStep;
+            let nextValue = cyclic
+                ? addValueWithOverflow(currentValue, changeSinceLastStep, min!, max!)
+                : min !== undefined && max !== undefined
+                  ? cropValueRange(currentValue + changeSinceLastStep, min, max)
+                  : currentValue + changeSinceLastStep;
 
             const { targetValue, targetDescription } = this.#determineTargetValue(prop);
 
-            // Clamp nextValue to valid range
-            if (prop.changePerMs < 0) {
-                if (targetValue !== undefined && Math.round(nextValue) < targetValue) {
-                    nextValue = targetValue;
-                }
-            } else if (prop.changePerMs > 0) {
-                if (targetValue !== undefined && Math.round(nextValue) > targetValue) {
-                    nextValue = targetValue;
+            if (cyclic) {
+                let distanceLeft = this.#determineDistanceLeft(prop);
+                if (distanceLeft !== undefined && targetValue !== undefined) {
+                    distanceLeft -= Math.abs(changeSinceLastStep);
+                    if (distanceLeft <= 0) {
+                        // We reached the target value
+                        nextValue = targetValue;
+                        prop.distanceLeft = 0;
+                    } else {
+                        prop.distanceLeft = distanceLeft;
+                    }
                 }
             } else {
-                // This shouldn't happen
-                this.#stepError(prop.name, "rate is zero");
-                continue;
-            }
+                // Clamp nextValue to valid range
+                if (prop.changePerMs < 0) {
+                    if (targetValue !== undefined && nextValue < targetValue) {
+                        nextValue = targetValue;
+                    }
+                } else if (prop.changePerMs > 0) {
+                    if (targetValue !== undefined && nextValue > targetValue) {
+                        nextValue = targetValue;
+                    }
+                } else {
+                    // This shouldn't happen
+                    this.#stepError(prop.name, "rate is zero");
+                    continue;
+                }
 
-            // If there is no target value and no min/max value it is a configuration error and we do not step as this
-            // would be inifinite
-            if (targetValue === undefined) {
-                this.#stepError(prop.name, `there is no target value or ${targetDescription}`);
-                continue;
+                // If there is no target value and no min/max value it is a configuration error and we do not step as this
+                // would be infinite, which is only allowed for cyclic transitions
+                if (targetValue === undefined) {
+                    this.#stepError(prop.name, `there is no target value or ${targetDescription}`);
+                    continue;
+                }
             }
 
             prop.currentValue = nextValue;
@@ -374,7 +486,13 @@ export class Transitions<B extends Behavior> {
         const state = behavior.state as Record<string, number>;
 
         for (const prop of this) {
-            state[prop.name] = Math.round(prop.currentValue);
+            const { name, currentValue } = prop;
+
+            const nextValue = Math.round(currentValue);
+            if (state[name] !== nextValue) {
+                //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
+                state[name] = nextValue;
+            }
         }
     }
 
@@ -419,22 +537,21 @@ export class Transitions<B extends Behavior> {
     #determineTargetValue(state: Transitions.PropertyState<B>) {
         const { name } = state.configuration;
         let { targetValue } = state.configuration;
+        const { cyclic, min: minValue, max: maxValue } = this.#config.properties[name] ?? {};
         let targetDescription = "target value";
 
-        // Determine the actual target value and clamp nextValue to valid range
-        if (state.changePerMs < 0) {
-            const minValue = this.#config.properties[name]?.min;
-
-            if (targetValue === undefined || (minValue !== undefined && targetValue < minValue)) {
-                targetDescription = "min value";
-                targetValue = minValue;
-            }
-        } else if (state.changePerMs > 0) {
-            const maxValue = this.#config.properties[name]?.max;
-
-            if (targetValue === undefined || (maxValue !== undefined && targetValue > maxValue)) {
-                targetDescription = "min value";
-                targetValue = maxValue;
+        if (!cyclic) {
+            // Determine the actual target value and clamp nextValue to valid range
+            if (state.changePerMs < 0) {
+                if (targetValue === undefined || (minValue !== undefined && targetValue < minValue)) {
+                    targetDescription = "min value";
+                    targetValue = minValue;
+                }
+            } else if (state.changePerMs > 0) {
+                if (targetValue === undefined || (maxValue !== undefined && targetValue > maxValue)) {
+                    targetDescription = "max value";
+                    targetValue = maxValue;
+                }
             }
         }
 
@@ -474,11 +591,8 @@ export class Transitions<B extends Behavior> {
         this.#instrumentedProperties.add(name);
 
         const event = (
-            this.#endpoint.eventsOf(this.#config.type) as unknown as Record<
-                string,
-                ClusterEvents.ChangedObservable<any> | undefined
-            >
-        )[`${name}$Changed`];
+            this.#endpoint.events as Record<string, Record<string, ClusterEvents.ChangedObservable<any> | undefined>>
+        )[this.#config.type.id][`${name}$Changed`];
         if (!event) {
             return;
         }
@@ -583,6 +697,11 @@ export namespace Transitions {
          * An upper bound on the transition value.
          */
         readonly max?: number | undefined;
+
+        /**
+         * Is the property transitioning ina cyclic manner? means it overflows to the min value when it reaches the max
+         */
+        cyclic?: boolean;
     }
 
     export type PropertyOf<B extends Behavior> = keyof {
@@ -609,10 +728,28 @@ export namespace Transitions {
         readonly changePerS?: number | null;
 
         /**
-         * The target value for the transition.  If undefined, transitions to the min/max value.  If no min or max is
-         * defined and no target value is supplied the transition will not run.
+         * The target value for the transition.
+         *
+         * If the property is not transitioning "cyclic" the following rules apply:
+         *
+         * * If undefined, transitions to the min/max value.
+         *
+         * * If no min or max is defined and no target value is supplied the transition will not run.
+         *
+         * If the property is transitioning "cyclic" the following rules apply:
+         *
+         * * If undefined, the transition will be endless and needs to be stopped manually.
+         *
+         * * If a target value is defined, the transition logic calculates the distance to the target value and stops
+         *   on the target value once this distance was processed. By default, the distance is calculated linearly, but
+         *   this behavior can be overridden with the custom function below.
          */
         readonly targetValue?: number;
+
+        /**
+         * A function to calculate the distance between the current value and the target value.
+         */
+        calculateCyclicDistance?: (currentValue: number, targetValue: number) => number;
 
         /**
          * Invoked every time the transitioning value changes before committing the mutating transaction.
@@ -648,8 +785,19 @@ export namespace Transitions {
         changePerMs: number;
 
         /**
+         * The distance left in the transition for cyclic properties.
+         */
+        distanceLeft?: number;
+
+        /**
          * The time of the last step.
          */
         prevStepAt: number;
+
+        /**
+         * Set to true when the reporting of remaining time should be suppressed when finishing the transition.
+         * This usually is used for transitions that are faster than 1s.
+         */
+        suppressReportingRemainingTimeOnFinish?: boolean;
     }
 }

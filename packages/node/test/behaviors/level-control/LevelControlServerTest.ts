@@ -19,29 +19,29 @@ describe("LevelControlServer", () => {
 
         await complete;
 
+        await node.close();
+
         expect(events).deep.equals([
             { kind: "time", ms: 0, value: 150 },
-            { kind: "level", ms: 100, value: 2 },
-            { kind: "level", ms: 1000, value: 10 },
-            { kind: "level", ms: 1000, value: 32 },
-            { kind: "level", ms: 1000, value: 42 },
-            { kind: "level", ms: 1000, value: 66 },
-            { kind: "level", ms: 1000, value: 76 },
-            { kind: "level", ms: 1000, value: 100 },
-            { kind: "level", ms: 1000, value: 110 },
-            { kind: "level", ms: 1000, value: 134 },
-            { kind: "level", ms: 1000, value: 144 },
-            { kind: "level", ms: 1000, value: 168 },
-            { kind: "level", ms: 1000, value: 178 },
+            { kind: "level", ms: 300, value: 4 },
+            { kind: "level", ms: 1000, value: 14 },
+            { kind: "level", ms: 1000, value: 35 },
+            { kind: "level", ms: 1000, value: 45 },
+            { kind: "level", ms: 1000, value: 65 },
+            { kind: "level", ms: 1000, value: 85 },
+            { kind: "level", ms: 1000, value: 95 },
+            { kind: "level", ms: 1000, value: 116 },
+            { kind: "level", ms: 1000, value: 138 },
+            { kind: "level", ms: 1000, value: 148 },
+            { kind: "level", ms: 1000, value: 171 },
+            { kind: "level", ms: 1000, value: 181 },
             { kind: "level", ms: 1000, value: 202 },
-            { kind: "level", ms: 1000, value: 212 },
-            { kind: "level", ms: 1000, value: 235 },
-            { kind: "level", ms: 1000, value: 246 },
-            { kind: "level", ms: 200, value: 254 },
+            { kind: "level", ms: 1000, value: 222 },
+            { kind: "level", ms: 1000, value: 232 },
+            { kind: "level", ms: 1000, value: 252 },
+            { kind: "level", ms: 300, value: 254 },
             { kind: "time", ms: 0, value: 0 },
         ]);
-
-        await node.close();
     });
 
     it("transitions to off with correct events", async () => {
@@ -73,6 +73,8 @@ describe("LevelControlServer", () => {
         await MockTime.resolve(complete, { stepMs: 10 });
 
         expect(endpoint.state.levelControl.currentLevel).equals(1);
+
+        await node.close();
 
         expect(events).deep.equals([
             // Startup
@@ -116,7 +118,7 @@ describe("LevelControlServer", () => {
 
         await complete;
 
-        expect(remainingTimeReports).deep.equals([150, 150, 0]);
+        expect(remainingTimeReports).deep.equals([150, 0]);
 
         await node.close();
     });
@@ -186,13 +188,15 @@ async function setup() {
     let last = Time.nowMs();
 
     endpoint.events.levelControl.remainingTime$Changed.online.on(value => {
-        events.push({ kind: "time", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        const now = Time.nowMs();
+        events.push({ kind: "time", value, ms: now - last });
+        last = now;
     });
 
     endpoint.events.levelControl.currentLevel$Changed.online.on(value => {
-        events.push({ kind: "level", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        const now = Time.nowMs();
+        events.push({ kind: "level", value, ms: now - last });
+        last = now;
     });
 
     const complete = new Promise<void>(resolve =>
@@ -215,7 +219,7 @@ async function initializeDimmableLight() {
         onOff: { onOff: true },
         levelControl: {
             managedTransitionTimeHandling: true,
-            currentLevel: 0,
+            currentLevel: 1,
         },
     });
 
@@ -238,6 +242,6 @@ async function changeLevel(endpoint: Endpoint<DimmableLightDevice>, steps = 200)
     });
 
     for (let i = 0; i < steps; i++) {
-        await MockTime.advance(100);
+        await MockTime.advance(99);
     }
 }

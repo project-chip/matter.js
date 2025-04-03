@@ -121,6 +121,10 @@ export async function main(argv = process.argv) {
 
     await chip.close();
 
+    if (args.forceExit) {
+        process.exit(0);
+    }
+
     async function test(pkg: Package, detectWeb: boolean) {
         process.chdir(pkg.path);
 
@@ -168,10 +172,6 @@ export async function main(argv = process.argv) {
         if (args.report && report) {
             printReport(report);
             console.log();
-        }
-
-        if (args.forceExit) {
-            process.exit(0);
         }
     }
 }

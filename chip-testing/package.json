@@ -21,7 +21,7 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "ci-test": "matter-test",
+        "test": "matter-test",
         "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts --report",
         "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts --report",
         "test-core": "matter-test --spec=test/core/**/*.test.ts --report"

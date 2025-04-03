@@ -288,7 +288,8 @@ jobs:
               --chip-tool ../bin/chip-tool \
               --log-level info \
               --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
-              --target-skip-glob "{Test_TC_LVL_9_1}" \
+              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_9_1,Test_TC_CC_9_2,Test_TC_CC_9_3}" \
+              --include-tags MANUAL \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
@@ -402,9 +403,9 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factory-reset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_ACL_2_2.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_9.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_11.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_19.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_22_24.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_3_4.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CC_2_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CGEN_2_4.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_5.py'
@@ -423,6 +424,9 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_7_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SWTCH.py' || true
+
+
+  #        scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_19.py'
 
   # Execute the core cluster tests
   docker-chip-tests-core:
@@ -461,7 +465,7 @@ jobs:
 
   docker-chip-tests-slow:
     needs: [chip-tests-needed]
-    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -301,6 +301,9 @@ export const State = {
         const { progress } = State.runner;
 
         await progress.subtask("activating subject", async () => {
+            // Avahi restarts too slowly currently to do this for every test
+            //await this.clearMdns();
+
             await State.container.exec(["bash", "-c", 'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*']);
 
             if (!startCommissioned) {

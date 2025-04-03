@@ -16,11 +16,12 @@ import { RootEndpoint } from "#endpoints/root";
 import { AsyncObservable, Logger, MaybePromise } from "#general";
 import { Val } from "#protocol";
 import { StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
+import { ClusterType } from "@matter/types";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
 
 const logger = Logger.get("LevelControlServer");
 
-const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting);
+const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting);
 
 /**
  * This is the default server implementation of {@link LevelControlBehavior}.
@@ -50,7 +51,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  *
  * All overridable methods may be implemented sync or async by returning a Promise.
  */
-export class LevelControlBaseServer extends LevelControlLogicBase {
+export class LevelControlBaseServer extends LevelControlBase {
     declare protected internal: LevelControlBaseServer.Internal;
     declare state: LevelControlBaseServer.State;
     declare events: LevelControlBaseServer.Events;
@@ -85,9 +86,11 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
         // as a continuous value it should only emit under limited circumstances defined by spec
         //
         // We disable normal "quieter" suppression so it always emits when we emit manually
-        this.events.remainingTime$Changed.quiet.config = {
-            suppressionEnabled: false,
-        };
+        if (this.events.remainingTime$Changed !== undefined) {
+            this.events.remainingTime$Changed.quiet.config = {
+                suppressionEnabled: false,
+            };
+        }
 
         // Configure transition management
         this.internal.transitions = this.initializeTransitions();
@@ -232,6 +235,19 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
     }
 
     /**
+     * Assert the rate value, throws error on invalid values and set default value if null
+     */
+    #assertRateValue(rate: number | null) {
+        if (rate === 0) {
+            throw new StatusResponseError(`Illegal move rate of 0`, StatusCode.InvalidCommand);
+        }
+        if (rate === null) {
+            return this.state.defaultMoveRate ?? null;
+        }
+        return rate;
+    }
+
+    /**
      * Default "MoveToLevel" implementation.
      *
      * When a transition time is not null the implementation uses a step based logic to manage the move. It also checks
@@ -266,6 +282,8 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
      * To replace default behavior, override {@link moveLogic} which also implements {@link moveWithOnOff}.
      */
     override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest) {
+        rate = this.#assertRateValue(rate);
+
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -282,6 +300,8 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
      * To replace default behavior, override {@link moveLogic} which also implements {@link move}.
      */
     override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest) {
+        rate = this.#assertRateValue(rate);
+
         return this.moveLogic(moveMode, rate, true);
     }
 
@@ -302,14 +322,6 @@ export class LevelControlBaseServer extends LevelControlLogicBase {
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
     ) {
-        if (rate === 0) {
-            throw new StatusResponseError(`Illegal move rate of 0`, StatusCode.InvalidCommand);
-        }
-
-        if (rate === null) {
-            rate = this.state.defaultMoveRate ?? null;
-        }
-
         let targetLevel;
         if (moveMode === LevelControl.MoveMode.Up) {
             targetLevel = Infinity;
@@ -565,7 +577,7 @@ export namespace LevelControlBaseServer {
         transitions?: Transitions<LevelControlBaseServer>;
     }
 
-    export class State extends LevelControlLogicBase.State {
+    export class State extends LevelControlBase.State {
         /**
          * The default implementation always set the target level immediately and so ignores all transition times
          * requested or configured.
@@ -587,6 +599,15 @@ export namespace LevelControlBaseServer {
         transitionStepIntervalMs = 100;
 
         [Val.properties](endpoint: Endpoint) {
+            // Only return remaining time if the attribute is defined in the endpoint
+            if (
+                (endpoint.behaviors.optionsFor(LevelControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined &&
+                (endpoint.behaviors.defaultsFor(LevelControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined
+            ) {
+                return {};
+            }
             return {
                 set remainingTime(value: number) {
                     const transition = endpoint.behaviors.internalsOf(LevelControlBaseServer).transitions;
@@ -602,7 +623,7 @@ export namespace LevelControlBaseServer {
         }
     }
 
-    export class Events extends LevelControlLogicBase.Events {
+    export class Events extends LevelControlBase.Events {
         transitionEndTime$Changed = AsyncObservable<[value: number, oldValue: number, context: ActionContext]>();
     }
 
@@ -633,9 +654,9 @@ export namespace LevelControlBaseServer {
     };
 }
 
-// We had turned on some more features to provide the default implementation, but export the cluster with default
+// We had turned on some more features to provide the default implementation, but export the cluster with no
 // Features again.
-export class LevelControlServer extends LevelControlBaseServer.with(LevelControl.Feature.OnOff) {}
+export class LevelControlServer extends LevelControlBaseServer.for(ClusterType(LevelControl.Base)) {}
 
 function asIntOrNull(value: number | null) {
     if (value === null) {
