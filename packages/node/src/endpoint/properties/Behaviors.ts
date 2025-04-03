@@ -10,6 +10,7 @@ import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
+import { Events } from "#behavior/Events.js";
 import { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import {
@@ -622,6 +623,10 @@ export class Behaviors {
             get: () => {
                 if (!events) {
                     events = new type.Events();
+
+                    if (typeof (events as Events).setContext === "function") {
+                        (events as Events).setContext(this.#endpoint, type);
+                    }
                 }
                 return events;
             },
