@@ -24,22 +24,22 @@ describe("LevelControlServer", () => {
         expect(events).deep.equals([
             { kind: "time", ms: 0, value: 150 },
             { kind: "level", ms: 300, value: 4 },
-            { kind: "level", ms: 1000, value: 16 },
-            { kind: "level", ms: 1000, value: 26 },
-            { kind: "level", ms: 1000, value: 48 },
-            { kind: "level", ms: 1000, value: 70 },
-            { kind: "level", ms: 1000, value: 80 },
-            { kind: "level", ms: 1000, value: 104 },
-            { kind: "level", ms: 1000, value: 114 },
+            { kind: "level", ms: 1000, value: 14 },
+            { kind: "level", ms: 1000, value: 35 },
+            { kind: "level", ms: 1000, value: 45 },
+            { kind: "level", ms: 1000, value: 65 },
+            { kind: "level", ms: 1000, value: 85 },
+            { kind: "level", ms: 1000, value: 95 },
+            { kind: "level", ms: 1000, value: 116 },
             { kind: "level", ms: 1000, value: 138 },
             { kind: "level", ms: 1000, value: 148 },
             { kind: "level", ms: 1000, value: 171 },
             { kind: "level", ms: 1000, value: 181 },
-            { kind: "level", ms: 1000, value: 205 },
-            { kind: "level", ms: 1000, value: 215 },
-            { kind: "level", ms: 1000, value: 239 },
-            { kind: "level", ms: 1000, value: 249 },
-            { kind: "level", ms: 200, value: 254 },
+            { kind: "level", ms: 1000, value: 202 },
+            { kind: "level", ms: 1000, value: 222 },
+            { kind: "level", ms: 1000, value: 232 },
+            { kind: "level", ms: 1000, value: 252 },
+            { kind: "level", ms: 300, value: 254 },
             { kind: "time", ms: 0, value: 0 },
         ]);
     });
@@ -188,13 +188,15 @@ async function setup() {
     let last = Time.nowMs();
 
     endpoint.events.levelControl.remainingTime$Changed.online.on(value => {
-        events.push({ kind: "time", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        const now = Time.nowMs();
+        events.push({ kind: "time", value, ms: now - last });
+        last = now;
     });
 
     endpoint.events.levelControl.currentLevel$Changed.online.on(value => {
-        events.push({ kind: "level", value, ms: Time.nowMs() - last });
-        last = Time.nowMs();
+        const now = Time.nowMs();
+        events.push({ kind: "level", value, ms: now - last });
+        last = now;
     });
 
     const complete = new Promise<void>(resolve =>
@@ -240,6 +242,6 @@ async function changeLevel(endpoint: Endpoint<DimmableLightDevice>, steps = 200)
     });
 
     for (let i = 0; i < steps; i++) {
-        await MockTime.advance(100);
+        await MockTime.advance(99);
     }
 }

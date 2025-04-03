@@ -206,6 +206,7 @@ export class DeviceAdvertiser {
     }
 
     async close() {
+        this.#isClosing = true;
         await this.#mutex;
         this.#observers.close();
         this.#interval.stop();

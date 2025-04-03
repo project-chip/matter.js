@@ -444,7 +444,7 @@ jobs:
           cd chip
           ./bin/pull
           cd ../chip-testing
-          npm run test-core -- --all-logs
+          npm run test-core
 
   docker-chip-tests-fast:
     needs: [chip-tests-needed]
@@ -465,7 +465,7 @@ jobs:
 
   docker-chip-tests-slow:
     needs: [chip-tests-needed]
-    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
