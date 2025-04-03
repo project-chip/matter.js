@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-module.exports = require("@matter/testing").mocharc();
+module.exports = require("@matter/testing").mocharc("esm");

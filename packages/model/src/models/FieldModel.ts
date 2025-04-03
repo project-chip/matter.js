@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Mei } from "../common/Mei.js";
 import { Metatype } from "../common/index.js";
 import { FieldElement } from "../elements/index.js";
-import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 import { ValueModel } from "./ValueModel.js";
 
@@ -45,7 +44,7 @@ export class FieldModel<T extends FieldElement = FieldElement> extends PropertyM
         return super.key;
     }
 
-    static {
-        Model.types[FieldElement.Tag] = this;
-    }
+    static Tag = FieldElement.Tag;
 }
+
+FieldModel.register();

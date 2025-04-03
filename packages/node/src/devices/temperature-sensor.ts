@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ import { Identity } from "#general";
 /**
  * A Temperature Sensor device reports measurements of temperature.
  *
- * @see {@link MatterSpecification.v13.Device} § 7.4
+ * @see {@link MatterSpecification.v14.Device} § 7.4
  */
 export interface TemperatureSensorDevice extends Identity<typeof TemperatureSensorDeviceDefinition> {}
 

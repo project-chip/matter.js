@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,9 +13,9 @@ export const attribId = Datatype({
     name: "attrib-id", type: "uint32", description: "Attribute ID", isSeed: true,
     details: "An identifier that indicates an attribute defined in a cluster specification." +
         "\n" +
-        "Attribute IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
-        "are described in Data Model Types.",
-    xref: { document: "core", section: "7.18.2.27" }
+        "Attribute IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
+        "described in Data Model Types.",
+    xref: { document: "core", section: "7.19.2.27" }
 });
 
 MatterDefinition.children.push(attribId);

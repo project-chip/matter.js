@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -198,7 +198,7 @@ export class BtpSessionHandler {
                 }
             }
             const btpPacket = BtpCodec.decodeBtpPacket(data);
-            logger.debug(`Received BTP packet: ${Logger.toJSON(btpPacket)}`);
+            logger.debug(`Received BTP packet: ${Diagnostic.json(btpPacket)}`);
             const {
                 header: {
                     hasAckNumber,
@@ -382,7 +382,7 @@ export class BtpSessionHandler {
                 },
             };
 
-            logger.debug(`Sending BTP packet: ${Logger.toJSON(btpPacket)}`);
+            logger.debug(`Sending BTP packet: ${Diagnostic.json(btpPacket)}`);
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             logger.debug(`Sending BTP packet raw: ${Bytes.toHex(packet)}`);
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,8 +13,8 @@ export namespace WindowCoveringInterface {
     export interface Base {
         /**
          * Upon receipt of this command, the window covering will adjust its position so the physical lift/slide and
-         * tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes shall
-         * be updated as follows:
+         * tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes shall be
+         * updated as follows:
          *
          * if the PositionAware feature is supported:
          *
@@ -22,8 +22,8 @@ export namespace WindowCoveringInterface {
          *
          *   • TargetPositionTiltPercent100ths attribute shall be set to 0.00%.
          *
-         * The server positioning attributes will follow the movements, once the movement has successfully finished,
-         * the server attributes shall be updated as follows:
+         * The server positioning attributes will follow the movements, once the movement has successfully finished, the
+         * server attributes shall be updated as follows:
          *
          * if the PositionAware feature is supported:
          *
@@ -39,7 +39,7 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.1
          */
         upOrOpen(): MaybePromise;
 
@@ -54,8 +54,8 @@ export namespace WindowCoveringInterface {
          *
          *   • TargetPositionTiltPercent100ths attribute shall be set to 100.00%.
          *
-         * The server positioning attributes will follow the movements, once the movement has successfully finished,
-         * the server attributes shall be updated as follows:
+         * The server positioning attributes will follow the movements, once the movement has successfully finished, the
+         * server attributes shall be updated as follows:
          *
          * if the PositionAware feature is supported:
          *
@@ -71,13 +71,13 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.2
          */
         downOrClose(): MaybePromise;
 
         /**
-         * Upon receipt of this command, the window covering will stop any adjusting to the physical tilt and
-         * lift/slide that is currently occurring. The server attributes supported shall be updated as follows:
+         * Upon receipt of this command, the window covering will stop any adjusting to the physical tilt and lift/slide
+         * that is currently occurring. The server attributes supported shall be updated as follows:
          *
          *   • TargetPositionLiftPercent100ths attribute will be set to CurrentPositionLiftPercent100ths attribute
          *     value.
@@ -85,7 +85,7 @@ export namespace WindowCoveringInterface {
          *   • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute
          *     value.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.3
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.3
          */
         stopMotion(): MaybePromise;
     }
@@ -108,7 +108,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.5
          */
         goToLiftPercentage(request: WindowCovering.GoToLiftPercentageRequest): MaybePromise;
     }
@@ -131,7 +131,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.7
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.7
          */
         goToTiltPercentage(request: WindowCovering.GoToTiltPercentageRequest): MaybePromise;
     }
@@ -154,7 +154,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.5
          */
         goToLiftPercentage(request: WindowCovering.GoToLiftPercentageRequest): MaybePromise;
     }
@@ -177,21 +177,21 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.7
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.7
          */
         goToTiltPercentage(request: WindowCovering.GoToTiltPercentageRequest): MaybePromise;
     }
 
     export interface LiftAndAbsolutePosition {
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.4
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.4
          */
         goToLiftValue(request: WindowCovering.GoToLiftValueRequest): MaybePromise;
     }
 
     export interface TiltAndAbsolutePosition {
         /**
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.6
+         * @see {@link MatterSpecification.v14.Cluster} § 5.3.7.6
          */
         goToTiltValue(request: WindowCovering.GoToTiltValueRequest): MaybePromise;
     }

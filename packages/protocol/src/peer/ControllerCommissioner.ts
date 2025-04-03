@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,8 @@ import { Fabric } from "#fabric/Fabric.js";
 import {
     Channel,
     ChannelType,
+    ClassExtends,
+    Diagnostic,
     Environment,
     Environmental,
     isIPv6,
@@ -27,11 +29,11 @@ import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { PaseClient } from "#session/index.js";
 import { SessionManager } from "#session/SessionManager.js";
 import { DiscoveryCapabilitiesBitmap, NodeId, SECURE_CHANNEL_PROTOCOL_ID, TypeFromPartialBitSchema } from "#types";
-import { InteractionClient } from "../interaction/InteractionClient.js";
+import { InteractionClient, InteractionClientProvider } from "../interaction/InteractionClient.js";
 import { ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { PeerAddress } from "./PeerAddress.js";
-import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
+import { NodeDiscoveryType } from "./PeerSet.js";
 
 const logger = Logger.get("PeerCommissioner");
 
@@ -55,6 +57,12 @@ export interface CommissioningOptions extends Partial<ControllerCommissioningFlo
      * not throw, the commissioner considers commissioning complete.
      */
     finalizeCommissioning?: (peerAddress: PeerAddress, discoveryData?: DiscoveryData) => Promise<void>;
+
+    /**
+     * Commissioning Flow Implementation as class that extends the official implementation to use for commissioning.
+     * Defaults to the matter.js default implementation {@link ControllerCommissioningFlow}.
+     */
+    commissioningFlowImpl?: ClassExtends<ControllerCommissioningFlow>;
 }
 
 /**
@@ -108,7 +116,7 @@ export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
  * Interfaces {@link ControllerCommissioner} with other components.
  */
 export interface ControllerCommissionerContext {
-    peers: PeerSet;
+    clients: InteractionClientProvider;
     scanners: ScannerSet;
     netInterfaces: NetInterfaceSet;
     sessions: SessionManager;
@@ -130,7 +138,7 @@ export class ControllerCommissioner {
 
     static [Environmental.create](env: Environment) {
         const instance = new ControllerCommissioner({
-            peers: env.get(PeerSet),
+            clients: env.get(InteractionClientProvider),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
             sessions: env.get(SessionManager),
@@ -169,9 +177,11 @@ export class ControllerCommissioner {
     }
 
     /**
-     * Commission a node with discovery.
+     * Discover and establish a PASE channel with a device.
      */
-    async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
+    async discoverAndEstablishPase(
+        options: DiscoveryAndCommissioningOptions,
+    ): Promise<{ paseSecureChannel: MessageChannel; discoveryData?: DiscoveryData }> {
         const {
             discovery: { timeoutSeconds = 30 },
             passcode,
@@ -211,9 +221,9 @@ export class ControllerCommissioner {
         const scannersToUse = this.#context.scanners.select(discoveryCapabilities);
 
         logger.info(
-            `Commissioning device with identifier ${Logger.toJSON(identifierData)} and ${
+            `Connecting to device with identifier ${Diagnostic.json(identifierData)} and ${
                 scannersToUse.length
-            } scanners and knownAddress ${Logger.toJSON(knownAddress)}`,
+            } scanners and knownAddress ${Diagnostic.json(knownAddress)}`,
         );
 
         // If we have a known address we try this first before we discover the device
@@ -251,6 +261,17 @@ export class ControllerCommissioner {
             paseSecureChannel = result;
         }
 
+        return { paseSecureChannel, discoveryData };
+    }
+
+    /**
+     * Commission a node with discovery.
+     */
+    async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
+        // Establish PASE channel
+        const { paseSecureChannel, discoveryData } = await this.discoverAndEstablishPase(options);
+
+        // Commission the node
         return await this.#commissionConnectedNode(paseSecureChannel, options, discoveryData);
     }
 
@@ -266,7 +287,7 @@ export class ControllerCommissioner {
     ): Promise<MessageChannel> {
         let paseChannel: Channel<Uint8Array>;
         if (device !== undefined) {
-            logger.info(`Commissioning device`, MdnsScanner.discoveryDataDiagnostics(device));
+            logger.info(`Establish PASE to device`, MdnsScanner.discoveryDataDiagnostics(device));
         }
         if (address.type === "udp") {
             const { ip } = address;
@@ -347,7 +368,11 @@ export class ControllerCommissioner {
             ...options,
         };
 
-        const { fabric, finalizeCommissioning: performCaseCommissioning } = commissioningOptions;
+        const {
+            fabric,
+            finalizeCommissioning: performCaseCommissioning,
+            commissioningFlowImpl = ControllerCommissioningFlow,
+        } = commissioningOptions;
 
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -381,10 +406,11 @@ export class ControllerCommissioner {
         logger.info(
             `Start commissioning of node ${address.nodeId} into fabric ${fabric.fabricId} (index ${address.fabricIndex})`,
         );
-        const commissioningManager = new ControllerCommissioningFlow(
+        const commissioningManager = new commissioningFlowImpl(
             // Use the created secure session to do the commissioning
             new InteractionClient(
                 new DedicatedChannelExchangeProvider(this.#context.exchanges, paseSecureMessageChannel),
+                this.#context.clients.peers.subscriptionClient,
                 address,
             ),
             this.#context.ca,
@@ -406,15 +432,14 @@ export class ControllerCommissioner {
                 }
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.#context.peers.connect(
-                    address,
-                    {
+                return await this.#context.clients.connect(address, {
+                    discoveryOptions: {
                         discoveryType: NodeDiscoveryType.TimedDiscovery,
                         timeoutSeconds: 120,
                         discoveryData,
                     },
-                    true,
-                ); // Wait maximum 120s to find the operational device for commissioning process
+                    allowUnknownPeer: true,
+                }); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
@@ -422,7 +447,7 @@ export class ControllerCommissioner {
             await commissioningManager.executeCommissioning();
         } catch (error) {
             // We might have added data for an operational address that we need to cleanup
-            await this.#context.peers.delete(address);
+            await this.#context.clients.peers.delete(address);
             throw error;
         } finally {
             if (!paseSecureMessageChannel.closed) {

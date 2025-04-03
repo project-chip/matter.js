@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -129,11 +129,11 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         return currentValue;
     }
 
-    encodeAsChunkedArray(value: T[]): ArrayAsChunked {
+    encodeAsChunkedArray(value: T[], options?: TlvEncodingOptions): ArrayAsChunked {
         const result: ArrayAsChunked = [];
-        result.push({ listIndex: undefined, element: this.encodeTlv([]) });
+        result.push({ listIndex: undefined, element: this.encodeTlv([], options) });
         value.forEach(element => {
-            const elementStream = this.elementSchema.encodeTlv(element);
+            const elementStream = this.elementSchema.encodeTlv(element, options);
             result.push({ listIndex: null, element: elementStream });
         });
         return result;

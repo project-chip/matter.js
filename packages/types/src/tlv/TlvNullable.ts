@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,7 +38,16 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
             (this.schema instanceof ArraySchema || this.schema instanceof StringSchema) &&
             (value as any).length === 0
         ) {
-            return null;
+            // But because of Spec vs SDK interpretation issues we only map empty data where the min length is >0 as null
+            // and leave the handling of null vs "" (and only for empty strings and arrays) to the implementation.
+            // see https://github.com/CHIP-Specifications/connectedhomeip-spec/issues/11387
+            // Empty UInt8Arrays are mapped to null as before for convenience until this also makes issues in the future.
+            if (
+                (this.schema instanceof StringSchema && this.schema.type === TlvType.ByteString) ||
+                (this.schema.minLength !== undefined && this.schema.minLength > 0)
+            ) {
+                return null;
+            }
         }
         return value;
     }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -46,8 +46,9 @@ export interface GeneratorScope {
      *
      * @param model the model to name
      * @param tlv structs have both Name and TlvName defined; this selects the latter
+     * @param specific if true retrieves the name for this specific model rather than any canonical override
      */
-    nameFor(model: Model, tlv?: boolean): string;
+    nameFor(model: Model, tlv?: boolean, specific?: boolean): string;
 
     /**
      * Obtain the location of a model's definition.
@@ -55,8 +56,9 @@ export interface GeneratorScope {
      * Throws an error if the model is not referenced in this scope.
      *
      * @param model the model whose location we load
+     * @param specific if true retrieves the name for this specific model rather than any canonical override
      */
-    locationOf(model: Model): GeneratorScope.Location;
+    locationOf(model: Model, specific?: boolean): GeneratorScope.Location;
 
     /**
      * Obtain the canonical model for a definition.
@@ -133,8 +135,8 @@ function allocateScope(scope: Scope): GeneratorScope {
         owner,
         scope,
 
-        nameFor(model: Model, tlv: boolean) {
-            const { definition: definer } = this.locationOf(model);
+        nameFor(model: Model, tlv: boolean, specific = false) {
+            const { definition: definer } = this.locationOf(model, specific);
             const name = names.get(definer);
             if (name === undefined) {
                 throw new InternalError(`No name assigned to ${model} in scope ${owner}`);
@@ -145,8 +147,11 @@ function allocateScope(scope: Scope): GeneratorScope {
             return name;
         },
 
-        locationOf(model: Model) {
-            const location = locations.get(scope.modelFor(model));
+        locationOf(model: Model, specific = false) {
+            if (!specific) {
+                model = scope.modelFor(model);
+            }
+            const location = locations.get(model);
             if (location === undefined) {
                 throw new InternalError(`No location identified for ${model} from scope ${owner}`);
             }
@@ -242,7 +247,7 @@ function identifyNamedModels(scope: Scope): Locations {
     /**
      * Set the location for a model and, if the model is not local, its scope
      */
-    function define(model: Model) {
+    function define(model: Model, specific = false) {
         if (!(model instanceof ValueModel)) {
             return;
         }
@@ -273,14 +278,16 @@ function identifyNamedModels(scope: Scope): Locations {
             return;
         }
 
-        const extension = scope.extensionOf(definer);
-        if (extension === model) {
-            // The model is the definer even if it doesn't provide fields of its own
-            definer = model;
-        } else if (extension) {
-            // Only the extension appears in the file
-            define(extension);
-            return;
+        if (!specific) {
+            const extension = scope.extensionOf(definer);
+            if (extension === model) {
+                // The model is the definer even if it doesn't provide fields of its own
+                definer = model;
+            } else if (extension) {
+                // Only the extension appears in the file
+                define(extension);
+                return;
+            }
         }
 
         if (locations.has(definer)) {
@@ -303,12 +310,12 @@ function identifyNamedModels(scope: Scope): Locations {
         locations.set(definer, location);
 
         // The model is not defined locally but we need to import any subtree that references shadowed elements.
-        if (definer instanceof ValueModel && referencesShadows(definer)) {
+        if (definer instanceof ValueModel && !specific && referencesShadows(definer)) {
             location.isLocal = true;
             modelScope = owner;
 
             // Now localize any sub-references
-            definer.members.forEach(define);
+            definer.members.forEach(m => define(m));
         }
 
         if (modelScope instanceof ClusterModel && modelScope !== owner) {
@@ -318,6 +325,14 @@ function identifyNamedModels(scope: Scope): Locations {
                 isLocal: false,
                 isGlobal: true,
             });
+        }
+
+        // For enums any base that contributes values must be defined as well as it will be referenced in the type
+        if (metatype === Metatype.enum) {
+            const { base } = definer;
+            if (base && base.metatype === undefined) {
+                define(base, true);
+            }
         }
     }
 

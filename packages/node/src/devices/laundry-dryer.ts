@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,7 +27,7 @@ import { Identity } from "#general";
 /**
  * A Laundry Dryer represents a device that is capable of drying laundry items.
  *
- * @see {@link MatterSpecification.v13.Device} § 13.6
+ * @see {@link MatterSpecification.v14.Device} § 13.6
  */
 export interface LaundryDryerDevice extends Identity<typeof LaundryDryerDeviceDefinition> {}
 

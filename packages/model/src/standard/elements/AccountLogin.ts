@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,8 +21,8 @@ export const AccountLogin = Cluster(
 
         details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
             "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
-            "Device Type Library document), can use this cluster to help make the user account on the Content " +
-            "App match the user account on the Client." +
+            "Device Type Library document), can use this cluster to help make the user account on the Content App " +
+            "match the user account on the Client." +
             "\n" +
             "Often a fabric administrator will facilitate commissioning of a Client (such as a Casting Video " +
             "Client), and invoke commands on the AccountLogin cluster on the Content App associated with that " +
@@ -42,8 +42,8 @@ export const AccountLogin = Cluster(
             "\n" +
             "See Device Type Library document for details of how a Content App, represented as an endpoint on" +
             "\n" +
-            "the Video Player device, may implement the cluster server for this cluster to simplify account " +
-            "login for its users.",
+            "the Video Player device, may implement the cluster server for this cluster to simplify account login " +
+            "for its users.",
 
         xref: { document: "cluster", section: "6.2" }
     },
@@ -83,9 +83,9 @@ export const AccountLogin = Cluster(
                 "by the Video Player to commission the Phone App without requiring the user to physically input a " +
                 "setup code." +
                 "\n" +
-                "The account match is determined by the Content App using a method which is outside the scope of " +
-                "this specification and will typically involve a central service which is in communication with both " +
-                "the Content App and the Commissionee. The GetSetupPIN command is needed in order to provide the " +
+                "The account match is determined by the Content App using a method which is outside the scope of this " +
+                "specification and will typically involve a central service which is in communication with both the " +
+                "Content App and the Commissionee. The GetSetupPIN command is needed in order to provide the " +
                 "Commissioner/Admin with a Setup PIN when this Commissioner/Admin is operated by a different vendor " +
                 "from the Content App." +
                 "\n" +
@@ -103,8 +103,8 @@ export const AccountLogin = Cluster(
                 "The Temporary Account Identifier for a Commissionee may be populated with the Rotating ID field of " +
                 "the client’s commissionable node advertisement (see Rotating Device Identifier section in " +
                 "[MatterCore]) encoded as an octet string where the octets of the Rotating Device Identifier are " +
-                "encoded as 2-character sequences by representing each octet’s value as a 2-digit hexadecimal " +
-                "number, using uppercase letters." +
+                "encoded as 2-character sequences by representing each octet’s value as a 2-digit hexadecimal number, " +
+                "using uppercase letters." +
                 "\n" +
                 "The Setup PIN is a character string so that it can accommodate different future formats, including " +
                 "alpha-numeric encodings. For a Commissionee it shall be populated with the Manual Pairing Code (see " +
@@ -195,8 +195,8 @@ export const AccountLogin = Cluster(
                 "for additional commands received within the 10 minute period. Because access to this command is " +
                 "limited to nodes with Admin-level access, and the user is involved when obtaining the SetupPIN, " +
                 "there are in place multiple obstacles to successfully mounting a brute force attack. A Content App " +
-                "that supports this command shall ensure that the Temporary Account Identifier used by its clients " +
-                "is not valid for more than 10 minutes.",
+                "that supports this command shall ensure that the Temporary Account Identifier used by its clients is " +
+                "not valid for more than 10 minutes.",
 
             xref: { document: "cluster", section: "6.2.4.3" }
         },

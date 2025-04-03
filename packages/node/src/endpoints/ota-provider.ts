@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@ import { Identity } from "#general";
 /**
  * An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the same fabric.
  *
- * @see {@link MatterSpecification.v13.Device} § 2.4
+ * @see {@link MatterSpecification.v14.Device} § 2.4
  */
 export interface OtaProviderEndpoint extends Identity<typeof OtaProviderEndpointDefinition> {}
 

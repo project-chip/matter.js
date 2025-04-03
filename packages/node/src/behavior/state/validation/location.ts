@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { DataModelPath } from "#model";
-import { Val } from "../Val.js";
+import { Val } from "#protocol";
 
 /**
  * Contextual information tracked during validation.
@@ -42,5 +42,6 @@ export namespace ValidationLocation {
         count: number;
         target: number;
         orMore: boolean;
+        orLess: boolean;
     }
 }

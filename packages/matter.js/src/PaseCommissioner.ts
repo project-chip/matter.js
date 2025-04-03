@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Environment, ImplementationError, Logger } from "#general";
@@ -119,7 +119,7 @@ export class PaseCommissioner {
     ) {
         const controller = this.assertControllerIsStarted();
 
-        return await controller.commission(nodeOptions, completeCommissioningCallback);
+        return await controller.commission(nodeOptions, { completeCommissioningCallback });
     }
 
     /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */

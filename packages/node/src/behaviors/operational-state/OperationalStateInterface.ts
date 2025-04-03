@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -48,17 +48,17 @@ export namespace OperationalStateInterface {
          *
          * ### Table 3. Pause Compatibility
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.1
          */
         pause(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
         /**
          * This command shall be supported if the device supports remotely stopping the operation.
          *
-         * On receipt of this command, the device shall stop its operation if it is at a position where it is safe to
-         * do so and/or permitted. Restart of the device following the receipt of the Stop command shall require
-         * attended operation unless remote start is allowed by the device type and any jurisdiction governing remote
-         * operation of the device.
+         * On receipt of this command, the device shall stop its operation if it is at a position where it is safe to do
+         * so and/or permitted. Restart of the device following the receipt of the Stop command shall require attended
+         * operation unless remote start is allowed by the device type and any jurisdiction governing remote operation
+         * of the device.
          *
          * If this command is received when already in the Stopped state the device shall respond with an
          * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.
@@ -72,7 +72,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.2
          */
         stop(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
@@ -83,8 +83,8 @@ export namespace OperationalStateInterface {
          * On receipt of this command, the device shall start its operation if it is safe to do so and the device is in
          * an operational state from which it can be started. There may be either regulatory or manufacturer-imposed
          * safety and security requirements that first necessitate some specific action at the device before a Start
-         * command can be honored. In such instances, a device shall respond with a status code of
-         * CommandInvalidInState if a Start command is received prior to the required on- device action.
+         * command can be honored. In such instances, a device shall respond with a status code of CommandInvalidInState
+         * if a Start command is received prior to the required on- device action.
          *
          * If this command is received when already in the Running state the device shall respond with an
          * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.
@@ -98,7 +98,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.3
          */
         start(): MaybePromise<OperationalState.OperationalCommandResponse>;
 
@@ -139,7 +139,7 @@ export namespace OperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.4
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.4
          */
         resume(): MaybePromise<OperationalState.OperationalCommandResponse>;
     }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,8 +10,8 @@ import { UnitLocalization } from "#clusters/unit-localization";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * UnitLocalizationBehavior is the base class for objects that support interaction with {@link
- * UnitLocalization.Cluster}.
+ * UnitLocalizationBehavior is the base class for objects that support interaction with
+ * {@link UnitLocalization.Cluster}.
  *
  * This class does not have optional features of UnitLocalization.Cluster enabled. You can enable additional features
  * using UnitLocalizationBehavior.with.

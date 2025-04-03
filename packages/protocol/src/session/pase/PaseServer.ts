@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -33,8 +33,10 @@ const PASE_COMMISSIONING_MAX_ERRORS = 20;
 export class MaximumPasePairingErrorsReachedError extends MatterFlowError {}
 
 export class PaseServer implements ProtocolHandler {
-    private pairingTimer: Timer | undefined;
-    private pairingErrors = 0;
+    readonly id = SECURE_CHANNEL_PROTOCOL_ID;
+
+    #pairingTimer: Timer | undefined;
+    #pairingErrors = 0;
 
     static async fromPin(sessions: SessionManager, setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
@@ -58,18 +60,14 @@ export class PaseServer implements ProtocolHandler {
         private readonly pbkdfParameters?: PbkdfParameters,
     ) {}
 
-    getId(): number {
-        return SECURE_CHANNEL_PROTOCOL_ID;
-    }
-
     async onNewExchange(exchange: MessageExchange) {
         const messenger = new PaseServerMessenger(exchange);
         try {
             await this.handlePairingRequest(messenger);
         } catch (error) {
-            this.pairingErrors++;
+            this.#pairingErrors++;
             logger.error(
-                `An error occurred during the PASE commissioning (${this.pairingErrors}/${PASE_COMMISSIONING_MAX_ERRORS}):`,
+                `An error occurred during the PASE commissioning (${this.#pairingErrors}/${PASE_COMMISSIONING_MAX_ERRORS}):`,
                 error,
             );
 
@@ -77,7 +75,7 @@ export class PaseServer implements ProtocolHandler {
             const sendError = !(error instanceof ChannelStatusResponseError);
             await this.cancelPairing(messenger, sendError);
 
-            if (this.pairingErrors >= PASE_COMMISSIONING_MAX_ERRORS) {
+            if (this.#pairingErrors >= PASE_COMMISSIONING_MAX_ERRORS) {
                 throw new MaximumPasePairingErrorsReachedError(
                     `Pase server: Too many errors during PASE commissioning, aborting commissioning window`,
                 );
@@ -99,7 +97,7 @@ export class PaseServer implements ProtocolHandler {
             );
         }
 
-        if (this.pairingTimer !== undefined && this.pairingTimer.isRunning) {
+        if (this.#pairingTimer !== undefined && this.#pairingTimer.isRunning) {
             throw new MatterFlowError(
                 "Pase server: Pairing already in progress (PASE establishment Timer running), ignoring new exchange.",
             );
@@ -107,7 +105,7 @@ export class PaseServer implements ProtocolHandler {
 
         logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
 
-        this.pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
+        this.#pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
             this.cancelPairing(messenger),
         ).start();
 
@@ -129,12 +127,22 @@ export class PaseServer implements ProtocolHandler {
         const responderSessionId = await this.sessions.getNextAvailableSessionId(); // Responder Session Id
         const responderRandom = Crypto.getRandom();
 
+        const responderSessionParams = this.sessions.sessionParameters;
+        const tcpSupported =
+            responderSessionParams.supportedTransports?.tcpClient ||
+            responderSessionParams.supportedTransports?.tcpServer ||
+            false;
         const responsePayload = await messenger.sendPbkdfParamResponse({
             initiatorRandom,
             responderRandom,
             responderSessionId,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
-            responderSessionParams: this.sessions.sessionParameters, // responder session parameters
+            responderSessionParams: {
+                ...responderSessionParams,
+                // The MAX_TCP_MESSAGE_SIZE field SHALL only be present if the SUPPORTED_TRANSPORTS field
+                // indicates that TCP is supported.
+                maxTcpMessageSize: tcpSupported ? responderSessionParams.maxTcpMessageSize : undefined,
+            },
         });
 
         // Process pake1 and send pake2
@@ -167,13 +175,13 @@ export class PaseServer implements ProtocolHandler {
         await messenger.sendSuccess();
         await messenger.close();
 
-        this.pairingTimer?.stop();
-        this.pairingTimer = undefined;
+        this.#pairingTimer?.stop();
+        this.#pairingTimer = undefined;
     }
 
     async cancelPairing(messenger: PaseServerMessenger, sendError = true) {
-        this.pairingTimer?.stop();
-        this.pairingTimer = undefined;
+        this.#pairingTimer?.stop();
+        this.#pairingTimer = undefined;
 
         if (sendError) {
             await messenger.sendError(ProtocolStatusCode.InvalidParam);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -233,6 +233,7 @@ export class MessageExchange {
                 maxTrans: this.#maxTransmissions,
                 exchangeFlags: Diagnostic.asFlags({
                     MRP: this.#useMRP,
+                    I: this.isInitiator,
                 }),
             }),
         );
@@ -646,8 +647,16 @@ export class MessageExchange {
         return this.#timedInteractionTimer !== undefined && !this.#timedInteractionTimer.isRunning;
     }
 
-    async close() {
-        if (this.#closeTimer !== undefined) return; // close was already called
+    async close(force = false) {
+        if (this.#closeTimer !== undefined) {
+            if (force) {
+                // Force close does not wait any longer
+                this.#closeTimer.stop();
+                return this.#close();
+            }
+            // close was already called, so let retries happen because close not forced
+            return;
+        }
         this.#isClosing = true;
 
         if (this.#receivedMessageToAck !== undefined) {
@@ -659,7 +668,11 @@ export class MessageExchange {
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
-        } else if (this.#sentMessageToAck === undefined) {
+            if (force) {
+                // We have sent the Ack, so close here, no retries because close is forced
+                return this.#close();
+            }
+        } else if (this.#sentMessageToAck === undefined || force) {
             // No message left that we need to ack and no sent message left that waits for an ack, close directly
             return this.#close();
         }

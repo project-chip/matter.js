@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ import { Identity } from "#general";
  * GenericSwitchDevice requires Switch cluster but Switch is not added by default because you must select the features
  * your device supports. You can add manually using GenericSwitchDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 6.6
+ * @see {@link MatterSpecification.v14.Device} § 6.6
  */
 export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDeviceDefinition> {}
 

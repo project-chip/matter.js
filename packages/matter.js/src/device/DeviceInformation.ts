@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,20 +13,13 @@ import {
     ThreadNetworkDiagnostics,
 } from "#clusters";
 import { Logger, SupportedStorageTypes } from "@matter/general";
-import { InteractionClient, SupportedAttributeClient } from "@matter/protocol";
+import { InteractionClient, PhysicalDeviceProperties, SupportedAttributeClient } from "@matter/protocol";
 import { EndpointNumber, GlobalAttributes, NodeId, TypeFromPartialBitSchema, TypeFromSchema } from "@matter/types";
 import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("DeviceInformation");
 
-export type DeviceMetaInformation = {
-    threadConnected: boolean;
-    wifiConnected: boolean;
-    ethernetConnected: boolean;
-    rootEndpointServerList: number[];
-    isBatteryPowered: boolean;
-    isIntermittentlyConnected: boolean;
-    isThreadSleepyEndDevice: boolean;
+export type DeviceMetaInformation = PhysicalDeviceProperties & {
     dataRevision: number;
 };
 
@@ -38,13 +31,6 @@ export type DeviceInformationData = {
 };
 
 export const DEVICE_DATA_REVISION = 1;
-
-const DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S = 1;
-const DEFAULT_SUBSCRIPTION_FLOOR_ICD_S = 0;
-const DEFAULT_SUBSCRIPTION_CEILING_WIFI_S = 60;
-const DEFAULT_SUBSCRIPTION_CEILING_THREAD_S = 60;
-const DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S = 180;
-const DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S = 600;
 
 const GlobalAttributeKeys = Object.keys(GlobalAttributes({}));
 
@@ -140,27 +126,36 @@ export class DeviceInformation {
                 const networks = await networkCluster.getNetworksAttribute();
                 if (networks) {
                     if (networks.some(network => network.connected)) {
-                        const features = await networkCluster.getFeatureMapAttribute();
-                        if (features) {
-                            if (features.ethernetNetworkInterface) {
-                                deviceData.ethernetConnected = true;
-                            } else if (features.wiFiNetworkInterface) {
-                                deviceData.wifiConnected = true;
-                            } else if (features.threadNetworkInterface) {
-                                deviceData.threadConnected = true;
-                            }
+                        const features = networkCluster.supportedFeatures;
+                        if (features.ethernetNetworkInterface) {
+                            deviceData.ethernetConnected = true;
+                        } else if (features.wiFiNetworkInterface) {
+                            deviceData.wifiConnected = true;
+                        } else if (features.threadNetworkInterface) {
+                            deviceData.threadConnected = true;
                         }
                     }
                 }
             }
         }
 
-        const powerSourceCluster = endpoint.getClusterClient(PowerSource.Cluster);
-        if (powerSourceCluster !== undefined) {
-            if ((await powerSourceCluster.getStatusAttribute()) === PowerSource.PowerSourceStatus.Active) {
-                const features = await powerSourceCluster.getFeatureMapAttribute();
-                if (features?.battery) {
-                    deviceData.isBatteryPowered = true;
+        if (!deviceData.isBatteryPowered) {
+            // Only query if PowerSource with Battery not already found
+            const powerSourceCluster = endpoint.getClusterClient(PowerSource.Complete);
+            if (powerSourceCluster !== undefined) {
+                const features = powerSourceCluster.supportedFeatures;
+                if (
+                    features.battery ||
+                    !features.wired ||
+                    powerSourceCluster.isAttributeSupportedByName("batChargeLevel") // We saw devices with wrong features
+                ) {
+                    const status = await powerSourceCluster.getStatusAttribute();
+                    if (
+                        status === PowerSource.PowerSourceStatus.Active ||
+                        status === PowerSource.PowerSourceStatus.Unspecified
+                    ) {
+                        deviceData.isBatteryPowered = true;
+                    }
                 }
             }
         }
@@ -192,11 +187,11 @@ export class DeviceInformation {
                 },
                 {
                     clusterId: PowerSource.Cluster.id,
-                    attributeId: PowerSource.Cluster.attributes.featureMap.id,
+                    attributeId: PowerSource.Complete.attributes.featureMap.id,
                 },
                 {
                     clusterId: PowerSource.Cluster.id,
-                    attributeId: PowerSource.Cluster.attributes.status.id,
+                    attributeId: PowerSource.Complete.attributes.status.id,
                 },
                 {
                     endpointId: EndpointNumber(0),
@@ -261,9 +256,9 @@ export class DeviceInformation {
                     break;
                 case PowerSource.Cluster.id:
                     const powerSourceEntry = powerSourceData.get(endpointId) ?? {};
-                    if (attributeId === PowerSource.Cluster.attributes.featureMap.id) {
+                    if (attributeId === PowerSource.Complete.attributes.featureMap.id) {
                         powerSourceEntry.features = value;
-                    } else if (attributeId === PowerSource.Cluster.attributes.status.id) {
+                    } else if (attributeId === PowerSource.Complete.attributes.status.id) {
                         powerSourceEntry.status = value;
                     }
                     powerSourceData.set(endpointId, powerSourceEntry);
@@ -306,43 +301,11 @@ export class DeviceInformation {
         subscribeMinIntervalFloorSeconds?: number;
         subscribeMaxIntervalCeilingSeconds?: number;
     }) {
-        let {
-            subscribeMinIntervalFloorSeconds: minIntervalFloorSeconds,
-            subscribeMaxIntervalCeilingSeconds: maxIntervalCeilingSeconds,
-        } = options;
-
-        const { isBatteryPowered, isIntermittentlyConnected, threadConnected, isThreadSleepyEndDevice } =
-            this.#deviceMeta ?? {};
-
-        if (isIntermittentlyConnected) {
-            if (minIntervalFloorSeconds !== undefined && minIntervalFloorSeconds !== DEFAULT_SUBSCRIPTION_FLOOR_ICD_S) {
-                logger.info(
-                    `Node ${this.nodeId}: Overwriting minIntervalFloorSeconds for intermittently connected device to 0`,
-                );
-                minIntervalFloorSeconds = DEFAULT_SUBSCRIPTION_FLOOR_ICD_S;
-            }
-        }
-
-        const defaultCeiling = isBatteryPowered
-            ? DEFAULT_SUBSCRIPTION_CEILING_BATTERY_POWERED_S
-            : isThreadSleepyEndDevice
-              ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_SLEEPY_S
-              : threadConnected
-                ? DEFAULT_SUBSCRIPTION_CEILING_THREAD_S
-                : DEFAULT_SUBSCRIPTION_CEILING_WIFI_S;
-        if (maxIntervalCeilingSeconds === undefined) {
-            maxIntervalCeilingSeconds = defaultCeiling;
-        }
-        if (maxIntervalCeilingSeconds < defaultCeiling) {
-            logger.debug(
-                `Node ${this.nodeId}: maxIntervalCeilingSeconds should idealy be set to ${defaultCeiling}s instead of ${maxIntervalCeilingSeconds}s because of device type`,
-            );
-        }
-
-        return {
-            minIntervalFloorSeconds: minIntervalFloorSeconds ?? DEFAULT_SUBSCRIPTION_FLOOR_DEFAULT_S,
-            maxIntervalCeilingSeconds,
-        };
+        return PhysicalDeviceProperties.determineSubscriptionParameters({
+            properties: this.#deviceMeta,
+            description: `Node ${this.nodeId}`,
+            ...options,
+        });
     }
 
     toStorageData(): DeviceInformationData {

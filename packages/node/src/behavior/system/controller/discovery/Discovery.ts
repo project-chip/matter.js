@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { CancelablePromise, MatterAggregateError, MatterError, MaybePromise } from "#general";
 import { ClientNodeFactory } from "#node/client/ClientNodeFactory.js";
-import { ClientNode } from "#node/ClientNode.js";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ClientNode } from "#node/ClientNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { CommissionableDeviceIdentifiers, ScannerSet } from "#protocol";
 import { ControllerBehavior } from "../ControllerBehavior.js";
 import { ActiveDiscoveries } from "./ActiveDiscoveries.js";

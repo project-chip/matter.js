@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,10 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * @see {@link MatterSpecification.v13.Device} § 2.2
+ * PowerSourceEndpoint requires PowerSource cluster but PowerSource is not added by default because you must select the
+ * features your device supports. You can add manually using PowerSourceEndpoint.with().
+ *
+ * @see {@link MatterSpecification.v14.Device} § 2.2
  */
 export interface PowerSourceEndpoint extends Identity<typeof PowerSourceEndpointDefinition> {}
 
@@ -37,7 +40,7 @@ export const PowerSourceEndpointDefinition = MutableEndpoint({
     deviceRevision: 1,
     deviceClass: DeviceClassification.Utility,
     requirements: PowerSourceRequirements,
-    behaviors: SupportedBehaviors(PowerSourceRequirements.server.mandatory.PowerSource)
+    behaviors: SupportedBehaviors()
 });
 
 export const PowerSourceEndpoint: PowerSourceEndpoint = PowerSourceEndpointDefinition;

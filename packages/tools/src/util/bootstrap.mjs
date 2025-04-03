@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -73,7 +73,14 @@ async function bootstrap() {
         await new Promise(resolve => {
             const proc = spawn(
                 esbuild,
-                ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning", "--sourcemap=inline"],
+                [
+                    "src/**/*.ts",
+                    "--outdir=dist/esm",
+                    "--format=esm",
+                    "--log-level=warning",
+                    "--sourcemap=inline",
+                    "--target=es2022",
+                ],
                 options,
             );
 

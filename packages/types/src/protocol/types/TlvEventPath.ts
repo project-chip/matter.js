@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvEventId } from "../../datatype/EventId.js";
@@ -21,3 +22,5 @@ export const TlvEventPath = TlvTaggedList({
     eventId: TlvOptionalField(3, TlvEventId),
     isUrgent: TlvOptionalField(4, TlvBoolean),
 });
+
+export type EventPath = TypeFromSchema<typeof TlvEventPath>;

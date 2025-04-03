@@ -1,18 +1,17 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Endpoint } from "#endpoint/Endpoint.js";
-import type { Observable, Observer } from "#general";
-import { asError, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
-import { Reactor } from "../Reactor.js";
-import { ActionContext } from "../context/ActionContext.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
+import type { Observable, Observer, Transaction } from "#general";
+import { asError, ImplementationError, InternalError, Logger, MatterAggregateError, MaybePromise } from "#general";
+import type { Reactor } from "../Reactor.js";
+import type { ActionContext } from "../context/ActionContext.js";
 import { Contextual } from "../context/Contextual.js";
 import { NodeActivity } from "../context/NodeActivity.js";
 import { OfflineContext } from "../context/server/OfflineContext.js";
-import { Resource } from "../state/transaction/Resource.js";
 import type { BehaviorBacking } from "./BehaviorBacking.js";
 
 const logger = Logger.get("Reactors");
@@ -59,7 +58,20 @@ export class Reactors {
         this.#backings.add(new ReactorBacking(this, observable, reactor, options ?? {}));
     }
 
-    remove(backing: ReactorBacking<any, any>) {
+    remove(selector: Reactor.Selector) {
+        const toRemove = Array<ReactorBacking<any, any>>();
+        for (const backing of this.#backings) {
+            if (backing.is(selector.observable, selector.reactor)) {
+                toRemove.push(backing);
+            }
+        }
+        return MatterAggregateError.allSettled(
+            toRemove.map(backing => backing.close()),
+            "Error removing reactors",
+        );
+    }
+
+    deleteClosedBacking(backing: ReactorBacking<any, any>) {
         this.#backings.delete(backing);
         if (!this.#backings.size) {
             this.#destructionComplete?.();
@@ -82,7 +94,7 @@ class ReactorBacking<T extends any[], R> {
     #observable: Observable<T, R>;
     #offline?: boolean;
     #closing?: boolean;
-    #lock?: Iterable<Resource>;
+    #lock?: Iterable<Transaction.Resource>;
     #deferred = Array<() => Promise<void>>();
     #trampoline?: Promise<void>;
     #resolveTrampoline?: () => void;
@@ -107,7 +119,7 @@ class ReactorBacking<T extends any[], R> {
             } else if (!Array.isArray(lock)) {
                 lock = [lock];
             }
-            this.#lock = lock as Resource[];
+            this.#lock = lock as Transaction.Resource[];
         }
 
         const reactorListener = ((...args: T) => {
@@ -193,8 +205,12 @@ class ReactorBacking<T extends any[], R> {
         observable.on((this.#listener = reactorListener));
     }
 
-    is(observable: Observable<unknown[], unknown>, reactor: Reactor) {
-        return this.#observable === observable && this.#reactor === reactor && !this.#closing;
+    is(observable?: Observable<unknown[], unknown>, reactor?: Reactor) {
+        return (
+            (observable === undefined || this.#observable === observable) &&
+            (reactor === undefined || this.#reactor === reactor) &&
+            !this.#closing
+        );
     }
 
     close() {
@@ -218,9 +234,9 @@ class ReactorBacking<T extends any[], R> {
         this.#observable.off(this.#listener);
         this.#closing = true;
         if (this.#trampoline) {
-            this.#trampoline = this.#trampoline.finally(() => this.#owner.remove(this));
+            this.#trampoline = this.#trampoline.finally(() => this.#owner.deleteClosedBacking(this));
         } else {
-            this.#owner.remove(this);
+            this.#owner.deleteClosedBacking(this);
         }
     }
 
@@ -261,9 +277,11 @@ class ReactorBacking<T extends any[], R> {
      * If the reaction is asynchronous it is tracked via {@link #reactAsync}.
      */
     #react(args: T): MaybePromise<Awaited<R> | undefined> {
+        const originalContext = Contextual.contextOf(args[args.length - 1]);
+
         let context: undefined | ActionContext;
         if (!this.#offline) {
-            context = Contextual.contextOf(args[args.length - 1]);
+            context = originalContext;
         }
 
         // If the emitter's context is available, execute in that
@@ -283,12 +301,8 @@ class ReactorBacking<T extends any[], R> {
         }
 
         // Otherwise run in independent context and errors do not interfere with emitter
+        const command = originalContext?.command;
         try {
-            let purpose = "react";
-            if (this.#reactor.name) {
-                purpose = `${purpose}<${this.#reactor.name}>`;
-            }
-
             const reactor = (context: ActionContext) => {
                 return this.#reactWithContext(context, this.#owner.backing, args);
             };
@@ -297,7 +311,9 @@ class ReactorBacking<T extends any[], R> {
             // construction and destruction
             //
             // Also, do not inject activity here.  No reason to have both the reactor and the context registered
-            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), undefined, reactor);
+            let result: MaybePromise<Awaited<R> | undefined> = OfflineContext.act(this.toString(), undefined, reactor, {
+                command,
+            });
 
             if (MaybePromise.is(result)) {
                 result = result.then(undefined, this.#unhandledError.bind(this)) as PromiseLike<undefined>;

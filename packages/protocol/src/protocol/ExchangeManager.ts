@@ -1,12 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
     Channel,
     Crypto,
+    Diagnostic,
     Environment,
     Environmental,
     ImplementationError,
@@ -117,6 +118,7 @@ export class ExchangeManager {
     readonly #listeners = new Map<TransportInterface, TransportInterface.Listener>();
     readonly #closers = new Set<Promise<void>>();
     readonly #observers = new ObserverGroup(this);
+    #closing = false;
 
     constructor(context: ExchangeManagerContext) {
         this.#transportInterfaces = context.transportInterfaces;
@@ -148,6 +150,10 @@ export class ExchangeManager {
         return instance;
     }
 
+    get channels() {
+        return this.#channelManager;
+    }
+
     hasProtocolHandler(protocolId: number) {
         return this.#protocols.has(protocolId);
     }
@@ -157,10 +163,10 @@ export class ExchangeManager {
     }
 
     addProtocolHandler(protocol: ProtocolHandler) {
-        if (this.hasProtocolHandler(protocol.getId())) {
-            throw new ImplementationError(`Handler for protocol ${protocol.getId()} already registered.`);
+        if (this.hasProtocolHandler(protocol.id)) {
+            throw new ImplementationError(`Handler for protocol ${protocol.id} already registered.`);
         }
-        this.#protocols.set(protocol.getId(), protocol);
+        this.#protocols.set(protocol.id, protocol);
     }
 
     initiateExchange(address: PeerAddress, protocolId: number) {
@@ -176,6 +182,7 @@ export class ExchangeManager {
     }
 
     async close() {
+        this.#closing = true;
         for (const protocol of this.#protocols.values()) {
             await protocol.close();
         }
@@ -185,9 +192,10 @@ export class ExchangeManager {
         await MatterAggregateError.allSettled(this.#closers, "Error closing exchanges").catch(error =>
             logger.error(error),
         );
-        await MatterAggregateError.allSettled(this.#exchanges.values(), "Error closing exchanges").catch(error =>
-            logger.error(error),
-        );
+        await MatterAggregateError.allSettled(
+            Array.from(this.#exchanges.values()).map(exchange => exchange.close(true)),
+            "Error closing exchanges",
+        ).catch(error => logger.error(error));
         this.#exchanges.clear();
     }
 
@@ -200,6 +208,7 @@ export class ExchangeManager {
         let session: Session | undefined;
         if (packet.header.sessionType === SessionType.Unicast) {
             if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
+                if (this.#closing) return;
                 const initiatorNodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
                 session =
                     this.#sessionManager.getUnsecureSession(initiatorNodeId) ??
@@ -210,6 +219,7 @@ export class ExchangeManager {
                 session = this.#sessionManager.getSession(packet.header.sessionId);
             }
         } else if (packet.header.sessionType === SessionType.Group) {
+            if (this.#closing) return;
             if (packet.header.sourceNodeId !== undefined) {
                 //session = this.sessionManager.findGroupSession(packet.header.destGroupId, packet.header.sessionId);
             }
@@ -252,6 +262,7 @@ export class ExchangeManager {
         if (exchange !== undefined) {
             await exchange.onMessageReceived(message, isDuplicate);
         } else {
+            if (this.#closing) return;
             if (session.closingAfterExchangeFinished) {
                 throw new MatterFlowError(
                     `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,
@@ -266,7 +277,7 @@ export class ExchangeManager {
                     !message.payloadHeader.requiresAck
                 ) {
                     logger.debug(
-                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId}.`,
+                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name}`,
                     );
                     return;
                 }
@@ -289,7 +300,7 @@ export class ExchangeManager {
                 });
                 await exchange.close();
                 logger.debug(
-                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId}.`,
+                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
                 );
             } else {
                 if (protocolHandler === undefined) {
@@ -297,14 +308,14 @@ export class ExchangeManager {
                 }
                 if (isDuplicate) {
                     logger.info(
-                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId}.`,
+                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId} on channel ${channel.name}`,
                     );
                     return;
                 } else {
                     logger.info(
                         `Discarding unexpected message ${messageId} for protocol ${
                             message.payloadHeader.protocolId
-                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} : ${Logger.toJSON(message)}`,
+                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} on channel ${channel.name}: ${Diagnostic.json(message)}`,
                     );
                 }
             }
@@ -349,11 +360,11 @@ export class ExchangeManager {
         }
         if (session.sendCloseMessageWhenClosing) {
             const channel = this.#channelManager.getChannelForSession(session);
-            logger.debug(`Channel for session ${session.name} is ${channel?.name}`);
+            logger.debug(`Channel for session ${sessionName} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-                logger.debug(`Initiated exchange ${!!exchange} to close session ${sessionName}`);
                 if (exchange !== undefined) {
+                    logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
                     try {
                         const messenger = new SecureChannelMessenger(exchange);
                         await messenger.sendCloseSession();
@@ -416,18 +427,21 @@ export class ExchangeManager {
             transportInterface.onData((socket, data) => {
                 if (udpInterface && data.length > socket.maxPayloadSize) {
                     logger.warn(
-                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
+                        `Ignoring UDP message on channel ${socket.name} with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
                     );
                     return;
                 }
 
                 try {
                     this.onMessage(socket, data).catch(error =>
-                        logger.info(error instanceof MatterError ? error.message : error),
+                        logger.info(
+                            `Error on channel ${socket.name}:`,
+                            error instanceof MatterError ? error.message : error,
+                        ),
                     );
                 } catch (error) {
                     logger.info(
-                        "Ignoring UDP message with error",
+                        `Ignoring UDP message on channel ${socket.name} with error`,
                         error instanceof MatterError ? error.message : error,
                     );
                 }

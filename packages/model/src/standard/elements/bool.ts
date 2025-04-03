@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@ export const bool = Datatype({
         "  • FALSE shall be equivalent to the value 0 (zero)." +
         "\n" +
         "  • TRUE shall be equivalent to the value 1 (one).",
-    xref: { document: "core", section: "7.18.1.1" }
+    xref: { document: "core", section: "7.19.1.1" }
 });
 
 MatterDefinition.children.push(bool);

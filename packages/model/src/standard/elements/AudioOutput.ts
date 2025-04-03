@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,11 +21,11 @@ export const AudioOutput = Cluster(
 
         details: "This cluster provides an interface for controlling the Output on a Video Player device such as a TV." +
             "\n" +
-            "This cluster would be supported on a device with audio outputs like a Video Player device (Smart " +
-            "TV, TV Setup Top Box, Smart Speaker, etc)." +
+            "This cluster would be supported on a device with audio outputs like a Video Player device (Smart TV, " +
+            "TV Setup Top Box, Smart Speaker, etc)." +
             "\n" +
-            "This cluster provides the list of available outputs and provides commands for selecting and " +
-            "renaming them." +
+            "This cluster provides the list of available outputs and provides commands for selecting and renaming " +
+            "them." +
             "\n" +
             "The cluster server for Audio Output is implemented by a device that has configurable audio output.",
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -55,15 +55,16 @@ export class ScopeFile extends TsFile {
      *
      * @param model the model to reference
      * @param tlv in the case of structs we define both "TlvFoo" and "Foo".  This designates which to import
+     * @param specific designates the specific instance of the model rather than any scope override
      */
-    reference(model: Model, tlv = false) {
+    reference(model: Model, tlv = false, specific = false) {
         let sourceScope;
         if (this.#scope) {
-            const location = this.#scope.locationOf(model);
+            const location = this.#scope.locationOf(model, specific);
             if (location.isLocal) {
                 if (this.#definesScope) {
                     // Model is defined locally, no import required
-                    return this.#scope.nameFor(model, tlv);
+                    return this.#scope.nameFor(model, tlv, specific);
                 }
                 sourceScope = this.#scope;
             }

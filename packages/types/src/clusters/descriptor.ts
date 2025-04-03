@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,16 +24,16 @@ export namespace Descriptor {
     /**
      * These are optional features supported by DescriptorCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.5.4
+     * @see {@link MatterSpecification.v14.Core} § 9.5.4
      */
     export enum Feature {
         /**
          * TagList (TAGLIST)
          *
-         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
-         * the corresponding attribute.
+         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and the
+         * corresponding attribute.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
+         * @see {@link MatterSpecification.v14.Core} § 9.5.4.1
          */
         TagList = "TagList"
     }
@@ -42,14 +42,14 @@ export namespace Descriptor {
      * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
      * Model specification for more information.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.5.5.1
+     * @see {@link MatterSpecification.v14.Core} § 9.5.5.1
      */
     export const TlvDeviceType = TlvObject({
         /**
          * This shall indicate the device type definition. The endpoint shall conform to the device type definition and
          * cluster specifications required by the device type.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.5.5.1.1
+         * @see {@link MatterSpecification.v14.Core} § 9.5.5.1.1
          */
         deviceType: TlvField(0, TlvDeviceTypeId),
 
@@ -57,7 +57,7 @@ export namespace Descriptor {
          * This is the implemented revision of the device type definition. The endpoint shall conform to this revision
          * of the device type.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.5.5.1.2
+         * @see {@link MatterSpecification.v14.Core} § 9.5.5.1.2
          */
         revision: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
@@ -66,7 +66,7 @@ export namespace Descriptor {
      * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
      * Model specification for more information.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.5.5.1
+     * @see {@link MatterSpecification.v14.Core} § 9.5.5.1
      */
     export interface DeviceType extends TypeFromSchema<typeof TlvDeviceType> {}
 
@@ -81,11 +81,11 @@ export namespace Descriptor {
              * device with two buttons, with this attribute being used to indicate which of the two endpoints
              * corresponds to the button on the left side.
              *
-             * It may also be used to provide information about an endpoint (e.g. the relative location of a
-             * Temperature sensor in a Temperature Controlled Cabinet).
+             * It may also be used to provide information about an endpoint (e.g. the relative location of a Temperature
+             * sensor in a Temperature Controlled Cabinet).
              *
-             *   • A client SHOULD use these tags to convey disambiguation information and other relevant information
-             *     to the user (e.g. showing it in a user interface), as appropriate.
+             *   • A client SHOULD use these tags to convey disambiguation information and other relevant information to
+             *     the user (e.g. showing it in a user interface), as appropriate.
              *
              *   • A client SHOULD use these tags in its logic to make decisions, as appropriate.
              *
@@ -94,7 +94,7 @@ export namespace Descriptor {
              * A client may use the Label field of each SemanticTagStruct, if present in each structure, to indicate
              * characteristics of an endpoint, or to augment what is provided in the TagID field of the same structure.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.6.5
+             * @see {@link MatterSpecification.v14.Core} § 9.5.6.5
              */
             tagList: FixedAttribute(0x4, TlvArray(TlvSemtag, { minLength: 1, maxLength: 6 }))
         }
@@ -112,10 +112,10 @@ export namespace Descriptor {
             /**
              * TagList
              *
-             * See the Disambiguation section in the System Model spec for conformance requirements for this feature
-             * and the corresponding attribute.
+             * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
+             * the corresponding attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
+             * @see {@link MatterSpecification.v14.Core} § 9.5.4.1
              */
             tagList: BitFlag(0)
         },
@@ -125,25 +125,25 @@ export namespace Descriptor {
              * This is a list of device types and corresponding revisions declaring endpoint conformance (see
              * DeviceTypeStruct). At least one device type entry shall be present.
              *
-             * An endpoint shall conform to all device types listed in the DeviceTypeList. A cluster instance that is
-             * in common for more than one device type in the DeviceTypeList shall be supported as a shared cluster
+             * An endpoint shall conform to all device types listed in the DeviceTypeList. A cluster instance that is in
+             * common for more than one device type in the DeviceTypeList shall be supported as a shared cluster
              * instance on the endpoint.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.6.1
+             * @see {@link MatterSpecification.v14.Core} § 9.5.6.1
              */
             deviceTypeList: FixedAttribute(0x0, TlvArray(TlvDeviceType, { minLength: 1 })),
 
             /**
              * This attribute shall list each cluster ID for the server clusters present on the endpoint instance.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.6.2
+             * @see {@link MatterSpecification.v14.Core} § 9.5.6.2
              */
             serverList: FixedAttribute(0x1, TlvArray(TlvClusterId), { default: [] }),
 
             /**
              * This attribute shall list each cluster ID for the client clusters present on the endpoint instance.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.6.3
+             * @see {@link MatterSpecification.v14.Core} § 9.5.6.3
              */
             clientList: FixedAttribute(0x2, TlvArray(TlvClusterId), { default: [] }),
 
@@ -153,7 +153,7 @@ export namespace Descriptor {
              *
              * See Endpoint Composition for more information about which endpoints to include in this list.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.5.6.4
+             * @see {@link MatterSpecification.v14.Core} § 9.5.6.4
              */
             partsList: Attribute(0x3, TlvArray(TlvEndpointNumber), { default: [] })
         },
@@ -173,8 +173,8 @@ export namespace Descriptor {
     /**
      * NOTE
      *
-     * The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a
-     * node, its endpoints and clusters.
+     * The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a node,
+     * its endpoints and clusters.
      *
      * This cluster describes an endpoint instance on the node, independently from other endpoints, but also allows
      * composition of endpoints to conform to complex device type patterns.
@@ -188,7 +188,7 @@ export namespace Descriptor {
      * DescriptorCluster supports optional features that you can enable with the DescriptorCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.5
+     * @see {@link MatterSpecification.v14.Core} § 9.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -212,8 +212,8 @@ export namespace Descriptor {
     /**
      * This cluster supports all Descriptor features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

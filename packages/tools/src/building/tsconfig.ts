@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { relative, resolve } from "path";
+import { relative, resolve } from "node:path";
 import { Graph } from "./graph.js";
 
 /**
@@ -50,16 +50,8 @@ async function syncSubproject(node: Graph.Node, path: string, ...extraRefs: stri
 
     const tsconfig = await node.pkg.readJson(tsconfigPath);
 
-    let refs = tsconfig.refs as undefined | { path: string }[];
-
-    if (refs === undefined) {
-        refs = [];
-    }
-
-    const deps = node.dependencies
-        .filter(dep => dep.pkg.isLibrary)
-        .map(dep => dep.pkg.resolve("src"))
-        .filter(p => !p.match(/packages[\\/]tools/));
+    const deps = node.dependencies.filter(dep => dep.pkg.isLibrary).map(dep => dep.pkg.resolve("src"));
+    //.filter(p => !p.match(/packages[\\/]tools/));
 
     const desired = [...new Set([...deps, ...extraRefs])];
 

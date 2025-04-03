@@ -1,17 +1,16 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize } from "#general";
+import type { Schema } from "#model";
 import { AttributeModel, ClusterModel, DataModelPath, FeatureMap, Metatype, ValueModel } from "#model";
+import { ConformanceError, DatatypeError, SchemaImplementationError, Val } from "#protocol";
 import { StatusCode } from "#types";
-import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
-import { Schema } from "../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import { Val } from "../Val.js";
 import { Internal } from "../managed/Internal.js";
 import {
     assertArray,
@@ -152,7 +151,7 @@ function createBitmapValidator(schema: ValueModel, supervisor: RootSupervisor): 
         const constraint = field.effectiveConstraint;
         let max;
         if (typeof constraint.min === "number" && typeof constraint.max === "number") {
-            max = constraint.max - constraint.min;
+            max = Math.pow(2, constraint.max - constraint.min + 1) - 1; // e.g bits 0..2 -> 2^3 - 1 = 7 aka 111b
         } else {
             max = 1;
         }
@@ -260,7 +259,7 @@ function createStructValidator(schema: Schema, supervisor: RootSupervisor): Valu
         for (const name in sublocation.choices) {
             const choice = sublocation.choices[name];
 
-            if (choice.count < choice.target) {
+            if (choice.count < choice.target && !choice.orLess) {
                 throw new ConformanceError(
                     schema,
                     location,

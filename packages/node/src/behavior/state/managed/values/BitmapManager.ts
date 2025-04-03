@@ -1,16 +1,15 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize, GeneratedClass, isObject } from "#general";
+import type { Schema } from "#model";
 import { DataModelPath, FeatureMap, ValueModel } from "#model";
-import { ConstraintError, PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
+import { ConstraintError, PhantomReferenceError, SchemaImplementationError, Val } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 import { assertBoolean, assertNumber } from "../../validation/assertions.js";
 import { Instrumentation } from "../Instrumentation.js";
 import { Internal } from "../Internal.js";
@@ -98,7 +97,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
         stopBit = startBit + 1;
     } else if (typeof constraint.min === "number" && typeof constraint.max === "number") {
         startBit = constraint.min;
-        stopBit = constraint.max;
+        stopBit = constraint.max + 1;
 
         if (startBit > stopBit) {
             const temp = startBit;

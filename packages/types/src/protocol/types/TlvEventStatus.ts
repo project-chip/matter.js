@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvEventPath } from "./TlvEventPath.js";
 import { TlvStatus } from "./TlvStatus.js";
@@ -15,3 +16,5 @@ export const TlvEventStatus = TlvObject({
     path: TlvField(0, TlvEventPath),
     status: TlvField(1, TlvStatus),
 });
+
+export type EventStatus = TypeFromSchema<typeof TlvEventStatus>;

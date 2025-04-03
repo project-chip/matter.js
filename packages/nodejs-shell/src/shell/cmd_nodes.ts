@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, decamelize, Logger } from "@matter/general";
-import { NodeId } from "@project-chip/matter.js/datatype";
+import { capitalize, decamelize, Diagnostic } from "@matter/general";
+import { NodeId } from "@matter/types";
 import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
@@ -14,13 +14,13 @@ export function createDiagnosticCallbacks(): Partial<CommissioningControllerNode
     return {
         attributeChangedCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
             console.log(
-                `attributeChangedCallback ${peerNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                `attributeChangedCallback ${peerNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                     value,
                 )}`,
             ),
         eventTriggeredCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, eventName }, events }) =>
             console.log(
-                `eventTriggeredCallback ${peerNodeId}: Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                `eventTriggeredCallback ${peerNodeId}: Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                     events,
                 )}`,
             ),
@@ -156,7 +156,8 @@ export default function commands(theNode: MatterNode) {
                         const autoSubscribe = minSubscriptionInterval !== undefined;
 
                         for (const nodeIdToProcess of nodeIds) {
-                            await theNode.commissioningController.connectNode(nodeIdToProcess, {
+                            const node = await theNode.commissioningController.getNode(nodeIdToProcess);
+                            node.connect({
                                 autoSubscribe,
                                 subscribeMinIntervalFloorSeconds: autoSubscribe ? minSubscriptionInterval : undefined,
                                 subscribeMaxIntervalCeilingSeconds: autoSubscribe ? maxSubscriptionInterval : undefined,

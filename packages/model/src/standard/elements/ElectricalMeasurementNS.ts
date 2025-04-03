@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,9 +15,9 @@ import {
 export const ElectricalMeasurementNs = SemanticNamespace(
     {
         name: "ElectricalMeasurement", id: 0xa,
-        details: "The tags contained in this namespace are restricted for use in the electrical measurement domain " +
-            "and shall NOT be used in any other domain or context.",
-        xref: { document: "namespace", section: "10" }
+        details: "The tags contained in this namespace are restricted for use in the electrical measurement domain and " +
+            "shall NOT be used in any other domain or context.",
+        xref: { document: "namespace", section: "12" }
     },
 
     SemanticTag({ name: "DC", id: 0x0, description: "Indicates values measured for a DC load" }),

@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
-import { ServerNode } from "#node/ServerNode.js";
-import { Discovery } from "./Discovery.js";
+import type { CommissioningClient } from "#behavior/system/commissioning/CommissioningClient.js";
+import type { ServerNode } from "#node/ServerNode.js";
+import type { Discovery } from "./Discovery.js";
 import { InstanceDiscovery } from "./InstanceDiscovery.js";
 
 /**

@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EventId } from "#types";
+import { EventId, TlvEventPath, TypeFromSchema } from "#types";
 import { BasePath } from "./BasePath.js";
 
 export namespace EventPath {
@@ -33,3 +33,5 @@ export namespace EventPath {
         event: Address;
     };
 }
+
+export type EventPath = TypeFromSchema<typeof TlvEventPath>;

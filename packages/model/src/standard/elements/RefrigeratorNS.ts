@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,9 +15,9 @@ import {
 export const RefrigeratorNs = SemanticNamespace(
     {
         name: "Refrigerator", id: 0x41,
-        details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall " +
-            "NOT be used in any other domain or context.",
-        xref: { document: "namespace", section: "13" }
+        details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall NOT " +
+            "be used in any other domain or context.",
+        xref: { document: "namespace", section: "16" }
     },
 
     SemanticTag({ name: "Refrigerator", id: 0x0 }),

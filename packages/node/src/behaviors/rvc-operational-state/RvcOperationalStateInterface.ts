@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,7 +29,7 @@ export namespace RvcOperationalStateInterface {
          *
          *   • The device shall respond with an OperationalCommandResponse command with an ErrorStateID of NoError.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 7.4.5.1
+         * @see {@link MatterSpecification.v14.Cluster} § 7.4.5.1
          */
         goHome(): MaybePromise<RvcOperationalState.OperationalCommandResponse>;
     }

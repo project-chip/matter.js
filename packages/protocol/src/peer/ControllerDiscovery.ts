@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { anyPromise, ClassExtends, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
+import { anyPromise, ClassExtends, Diagnostic, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
 import { NodeId } from "#types";
 import {
     AddressTypeFromDevice,
@@ -40,7 +40,7 @@ export class ControllerDiscovery {
         identifier: CommissionableDeviceIdentifiers,
         timeoutSeconds = 30,
     ): Promise<CommissionableDevice[]> {
-        logger.info(`Start Discovering devices using identifier ${Logger.toJSON(identifier)} ...`);
+        logger.info(`Start Discovering devices using identifier ${Diagnostic.json(identifier)} ...`);
 
         const scanResults = scanners.map(async scanner => {
             const foundDevices = await scanner.findCommissionableDevices(
@@ -48,10 +48,10 @@ export class ControllerDiscovery {
                 timeoutSeconds,
                 scanner.type === "ble", // Force rediscovery for BLE
             );
-            logger.info(`Found ${foundDevices.length} devices using identifier ${Logger.toJSON(identifier)}`);
+            logger.info(`Found ${foundDevices.length} devices using identifier ${Diagnostic.json(identifier)}`);
             if (foundDevices.length === 0) {
                 throw new CommissioningError(
-                    `No device discovered using identifier ${Logger.toJSON(
+                    `No device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}! Please check that the relevant device is online.`,
                 );
@@ -60,7 +60,7 @@ export class ControllerDiscovery {
             const devices = foundDevices.filter(device => device.addresses.length > 0);
             if (devices.length === 0) {
                 throw new CommissioningError(
-                    `Device discovered using identifier ${Logger.toJSON(
+                    `Device discovered using identifier ${Diagnostic.json(
                         identifier,
                     )}, but no Network addresses discovered.`,
                 );

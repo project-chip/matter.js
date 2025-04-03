@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,7 +8,7 @@ import { Environment, RuntimeService, StorageBackendMemory } from "@matter/main"
 import { Subject } from "@matter/testing";
 import { AllClustersTestInstance } from "../src/AllClustersTestInstance.js";
 import { BridgeTestInstance } from "../src/BridgeTestInstance.js";
-import { TestInstanceConstructor } from "../src/GenericTestApp.js";
+import { DeviceTestInstanceConstructor } from "../src/GenericTestApp.js";
 import { NodeTestInstance } from "../src/NodeTestInstance.js";
 import { TvTestInstance } from "../src/TvTestInstance.js";
 
@@ -21,7 +21,7 @@ NodeTestInstance.forceFastTimeouts = true;
 NodeTestInstance.nonvolatileEvents = true;
 NodeTestInstance.testEnableKey = "000102030405060708090a0b0c0d0e0f";
 
-export function App(implementation: TestInstanceConstructor<NodeTestInstance>): (domain: string) => Subject {
+export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstance>): (domain: string) => Subject {
     return (domain: string) => {
         return new implementation({
             domain,

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,8 @@ export const ResourceMonitoring = Cluster(
     {
         name: "ResourceMonitoring", classification: "application", pics: "REPM",
 
-        details: "This generic cluster provides an interface to the current condition of a resource. A resource is a " +
+        details: "This generic cluster provides an interface to the current condition of a resource. A resource is a" +
+            "\n" +
             "component of a device that is designed to be replaced, refilled, or emptied when exhausted or full. " +
             "Examples of resources include filters, cartridges, and water tanks. While batteries fit this " +
             "definition they are not intended to be used with this cluster. Use the power source cluster for " +
@@ -106,8 +107,8 @@ export const ResourceMonitoring = Cluster(
         name: "ResetCondition", id: 0x0, access: "O", conformance: "O", direction: "request",
         response: "status",
         details: "Upon receipt, the device shall reset the Condition and ChangeIndicator attributes, indicating full " +
-            "resource availability and readiness for use, as initially configured. Invocation of this command " +
-            "may cause the LastChangedTime to be updated automatically based on the clock of the server, if the " +
+            "resource availability and readiness for use, as initially configured. Invocation of this command may " +
+            "cause the LastChangedTime to be updated automatically based on the clock of the server, if the " +
             "server supports setting the attribute.",
         xref: { document: "cluster", section: "2.8.7.1" }
     }),
@@ -147,8 +148,8 @@ export const ResourceMonitoring = Cluster(
     Datatype(
         {
             name: "ProductIdentifierTypeEnum", type: "enum8",
-            details: "Indicate the type of identifier used to describe the product. Devices SHOULD use " +
-                "globally-recognized IDs over OEM specific ones.",
+            details: "Indicate the type of identifier used to describe the product. Devices SHOULD use globally-recognized " +
+                "IDs over OEM specific ones.",
             xref: { document: "cluster", section: "2.8.5.3" }
         },
 

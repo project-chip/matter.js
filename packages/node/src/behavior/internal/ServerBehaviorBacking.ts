@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,9 +11,9 @@ import type { SupportedElements } from "#endpoint/index.js";
 import { camelize } from "#general";
 import { FieldValue } from "#model";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
+import { Val } from "#protocol";
 import { ClusterType, TlvNoResponse } from "#types";
 import { Behavior } from "../Behavior.js";
-import { Val } from "../state/Val.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,7 +21,7 @@ export const FabricIndex = Field({
         "after receipt of the interaction. For a read interaction this field shall be included in all " +
         "reported data that is defined as fabric-scoped.",
 
-    xref: { document: "core", section: "7.13.7" }
+    xref: { document: "core", section: "7.13.6" }
 });
 
 MatterDefinition.children.push(FabricIndex);

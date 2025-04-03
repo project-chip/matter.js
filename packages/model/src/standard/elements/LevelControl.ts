@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,13 +18,13 @@ import {
 export const LevelControl = Cluster(
     {
         name: "LevelControl", id: 0x8, classification: "application", pics: "LVL",
-        details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
-            "a level, for example the brightness of a light, the degree of closure of a door, or the power " +
-            "output of a heater.",
+        details: "This cluster provides an interface for controlling a characteristic of a device that can be set to a " +
+            "level, for example the brightness of a light, the degree of closure of a door, or the power output " +
+            "of a heater.",
         xref: { document: "cluster", section: "1.6" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 5 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 6 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "cluster", section: "1.6.4" } },
@@ -36,8 +36,8 @@ export const LevelControl = Cluster(
         Field({
             name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
 
-            details: "This feature supports an interface for controlling the level of a light source. For the " +
-                "CurrentLevel attribute:" +
+            details: "This feature supports an interface for controlling the level of a light source. For the CurrentLevel " +
+                "attribute:" +
                 "\n" +
                 "A value of 0x00 shall NOT be used." +
                 "\n" +
@@ -59,28 +59,55 @@ export const LevelControl = Cluster(
 
     Attribute({
         name: "CurrentLevel", id: 0x0, type: "uint8", access: "R V", conformance: "M",
-        constraint: "minLevel to maxLevel", default: null, quality: "X N S",
-        details: "Indicates the current level of this device. The meaning of 'level' is device dependent.",
+        constraint: "minLevel to maxLevel", default: null, quality: "X N S Q",
+
+        details: "Indicates the current level of this device. The meaning of 'level' is device dependent." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once per second, or" +
+            "\n" +
+            "  • At the end of the movement/transition, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa.",
+
         xref: { document: "cluster", section: "1.6.6.2" }
     }),
 
     Attribute({
         name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
-        details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
-            "a second.",
+        quality: "Q",
+
+        details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of a " +
+            "second." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • When it changes from 0 to any value higher than 10, or" +
+            "\n" +
+            "  • When it changes, with a delta larger than 10, caused by the invoke of a command, or" +
+            "\n" +
+            "  • When it changes to 0." +
+            "\n" +
+            "For commands with a transition time or changes to the transition time less than 1 second, changes to " +
+            "this attribute shall NOT be reported." +
+            "\n" +
+            "As this attribute is not being reported during a regular countdown, clients SHOULD NOT rely on the " +
+            "reporting of this attribute in order to keep track of the remaining duration.",
+
         xref: { document: "cluster", section: "1.6.6.3" }
     }),
 
     Attribute({
         name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[LT]",
-        constraint: "1 to maxLevel", default: 1,
+        constraint: "1 to 254", default: 1,
         details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
         xref: { document: "cluster", section: "1.6.6.4" }
     }),
 
     Attribute({
         name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
-        constraint: "0 to maxLevel", default: 0,
+        constraint: "max 254", default: 0,
         details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
         xref: { document: "cluster", section: "1.6.6.4" }
     }),
@@ -94,14 +121,23 @@ export const LevelControl = Cluster(
 
     Attribute({
         name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
-        constraint: "minFrequency to maxFrequency", default: 0, quality: "S P",
-        details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.",
+        constraint: "minFrequency to maxFrequency", default: 0, quality: "S P Q",
+
+        details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once per second, or" +
+            "\n" +
+            "  • At the start of the movement/transition, or" +
+            "\n" +
+            "  • At the end of the movement/transition.",
+
         xref: { document: "cluster", section: "1.6.6.6" }
     }),
 
     Attribute({
-        name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ",
-        constraint: "0 to maxFrequency", default: 0,
+        name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ", default: 0,
         details: "Indicates the minimum value of CurrentFrequency that is capable of being assigned. MinFrequency " +
             "shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.",
         xref: { document: "cluster", section: "1.6.6.7" }
@@ -119,8 +155,8 @@ export const LevelControl = Cluster(
         name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
         default: 0,
 
-        details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
-            "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
+        details: "Indicates the time taken to move to or from the target level when On or Off commands are received by " +
+            "an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
             "\n" +
             "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
             "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
@@ -134,9 +170,9 @@ export const LevelControl = Cluster(
         constraint: "minLevel to maxLevel", default: null, quality: "X",
 
         details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
-            "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
-            "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
-            "more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
+            "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. If " +
+            "the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For more " +
+            "details see Effect of On/Off Commands on the CurrentLevel attribute." +
             "\n" +
             "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
             "should be aware that older devices may not implement it.",
@@ -148,8 +184,8 @@ export const LevelControl = Cluster(
         name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
         default: null, quality: "X",
         details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
-            "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
-            "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+            "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a " +
+            "second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
             "shall be used instead.",
         xref: { document: "cluster", section: "1.6.6.12" }
     }),
@@ -165,7 +201,8 @@ export const LevelControl = Cluster(
     }),
 
     Attribute({
-        name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O", quality: "X",
+        name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O",
+        constraint: "min 1", quality: "X",
         details: "Indicates the movement rate, in units per second, when a Move command is received with a null value " +
             "Rate parameter.",
         xref: { document: "cluster", section: "1.6.6.14" }
@@ -180,8 +217,8 @@ export const LevelControl = Cluster(
             "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
             "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
             "bitmap that is in effect during the command processing. The temporary Options bitmap has the same " +
-            "format and meaning as the Options attribute, but includes any bits that may be overridden by " +
-            "command fields." +
+            "format and meaning as the Options attribute, but includes any bits that may be overridden by command " +
+            "fields." +
             "\n" +
             "This attribute is meant to be changed only during commissioning." +
             "\n" +
@@ -203,9 +240,9 @@ export const LevelControl = Cluster(
         name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
         constraint: "desc", quality: "X N",
 
-        details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
-            "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
-            "are listed below:" +
+        details: "Indicates the desired startup level for a device when it is supplied with power and this level shall " +
+            "be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute are " +
+            "listed below:" +
             "\n" +
             "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
             "attribute shall return to its value prior to the restart.",
@@ -219,10 +256,10 @@ export const LevelControl = Cluster(
             response: "status",
             xref: { document: "cluster", section: "1.6.7.1" }
         },
-        Field({ name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" }),
+        Field({ name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "max 254" }),
         Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" }),
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -240,17 +277,19 @@ export const LevelControl = Cluster(
             name: "Rate", id: 0x1, type: "uint8", conformance: "M", quality: "X",
 
             details: "This field shall indicate the rate of movement in units per second. The actual rate of movement " +
-                "SHOULD be as close to this rate as the device is able. If the Rate field is equal to null, then the " +
-                "value in DefaultMoveRate attribute shall be used. However, if the Rate field is equal to null and " +
-                "the DefaultMoveRate attribute is not supported, or if the Rate field is equal to null and the value " +
-                "of the DefaultMoveRate attribute is equal to null, then the device SHOULD move as fast as it is " +
-                "able. If the device is not able to move at a variable rate, this field may be disregarded.",
+                "SHOULD be as close to this rate as the device is able. If the Rate field is null, then the value of " +
+                "the DefaultMoveRate attribute shall be used if that attribute is supported and its value is not " +
+                "null. If the Rate field is null and the DefaultMoveRate attribute is either not supported or set to " +
+                "null, then the device SHOULD move as fast as it is able. If the device is not able to move at a " +
+                "variable rate, this" +
+                "\n" +
+                "field may be disregarded.",
 
             xref: { document: "cluster", section: "1.6.7.2.2" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x2, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -272,18 +311,19 @@ export const LevelControl = Cluster(
         Field({
             name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X",
 
-            details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. " +
-                "A step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close " +
-                "to this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move " +
-                "as fast as it is able." +
+            details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. A " +
+                "step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to" +
+                "\n" +
+                "this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as " +
+                "fast as it is able." +
                 "\n" +
                 "If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.",
 
             xref: { document: "cluster", section: "1.6.7.3.3" }
         }),
 
-        Field({ name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x3, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x4, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command(
@@ -291,8 +331,8 @@ export const LevelControl = Cluster(
             name: "Stop", id: 0x3, access: "O", conformance: "M", direction: "request", response: "status",
             xref: { document: "cluster", section: "1.6.7.4" }
         },
-        Field({ name: "OptionsMask", id: 0x0, type: "Options", conformance: "M", constraint: "desc", default: 0 }),
-        Field({ name: "OptionsOverride", id: 0x1, type: "Options", conformance: "M", constraint: "desc", default: 0 })
+        Field({ name: "OptionsMask", id: 0x0, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 }),
+        Field({ name: "OptionsOverride", id: 0x1, type: "OptionsBitmap", conformance: "M", constraint: "desc", default: 0 })
     ),
 
     Command({

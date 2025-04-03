@@ -1,38 +1,27 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import colors from "ansi-colors";
 
 export interface FailureDetail {
     message: string;
     stack?: string;
-    diff?: string;
+    stackLines?: string[];
+    actual?: string;
+    expected?: string;
     logs?: string;
     cause?: FailureDetail;
     errors?: FailureDetail[];
 }
 
-export function FailureDetail(error: any, logs?: string[]) {
-    let diff: string | undefined;
-
-    const { message, stack, cause, errors } = parseError(error);
-
-    if (error.expected && error.actual) {
-        if (FailureDetail.diff === undefined) {
-            diff = "(no diff implementation installed)";
-        } else {
-            diff = FailureDetail.diff(error.actual.toString(), error.expected.toString());
-            diff = diff.trim().replace(/^ {6}/gms, "");
-        }
-    }
-
+/**
+ * Captures all pertinent information about a failed test.
+ */
+export function FailureDetail(error: any, logs?: string[], parentStack?: string[]) {
+    const { message, stack, stackLines, cause, errors } = parseError(error, parentStack);
     const result = { message } as FailureDetail;
-    if (diff) {
-        result.diff = diff;
-    }
+
     if (stack) {
         result.stack = stack;
     }
@@ -45,46 +34,32 @@ export function FailureDetail(error: any, logs?: string[]) {
     if (errors) {
         result.errors = errors;
     }
+    if (stackLines) {
+        result.stackLines = stackLines;
+    }
+
+    const { actual, expected } = error;
+    if (actual) {
+        result.actual = actual;
+    }
+    if (expected) {
+        result.expected = expected;
+    }
 
     return result;
 }
 
-export namespace FailureDetail {
-    export function dump(failure: FailureDetail, prefix: string = "") {
-        process.stdout.write(colors.redBright(`${prefix}${failure.message}\n\n`));
-
-        if (failure.diff) {
-            process.stdout.write(`${prefix}    ${failure.diff.replace(/\n/gm, "\n      ")}\n\n`);
-        }
-
-        if (failure.stack) {
-            process.stdout.write(`${prefix}${colors.dim(failure.stack.replace(/\n/gm, `\n${prefix}`))}\n\n`);
-        }
-
-        if (failure.cause) {
-            process.stdout.write(`${prefix}Caused by:\n\n`);
-            dump(failure.cause, prefix);
-        }
-
-        if (failure.errors?.length) {
-            let num = 0;
-            for (const cause of failure.errors) {
-                process.stdout.write(`${prefix}Cause #${++num}:\n\n`);
-                dump(cause, `${prefix}  `);
-            }
-        }
-
-        if (failure.logs) {
-            process.stdout.write(`  ${failure.logs.replace(/\n/gm, "\n  ")}\n\n`);
-        }
+function messageAndStackFor(
+    error: Error,
+    parentStack?: string[],
+): { message: string; stack?: string; stackLines?: string[] } {
+    // If an error formatting hook is installed, use that
+    if (MatterHooks?.messageAndStackFor) {
+        return MatterHooks.messageAndStackFor(error, parentStack);
     }
 
-    export let diff: undefined | ((actual: string, expected: string) => string);
-}
-
-function parseError(error: Error) {
-    let message, stack, cause: FailureDetail | undefined, errors: FailureDetail[] | undefined;
-
+    // Fallback message formatting
+    let message, stack;
     if (error === undefined || error === null) {
         message = `(error is ${error})`;
     } else {
@@ -100,27 +75,29 @@ function parseError(error: Error) {
         if (lines.length) {
             stack = lines.map(line => line.trim()).join("\n");
         }
-    } else if (error.message) {
-        message = error.message;
-    } else {
+    }
+
+    if (!message) {
         message = error.toString();
     }
 
-    message = message.trim().replace(/Error: /, "");
+    return { message, stack };
+}
 
-    if (message.endsWith(":")) {
-        message = message.slice(0, message.length - 1);
-    }
+function parseError(error: Error, parentStack?: string[]) {
+    const { message, stack, stackLines } = messageAndStackFor(error, parentStack);
+
+    let cause: FailureDetail | undefined, errors: FailureDetail[] | undefined;
 
     const errorCause = error.cause;
     if (errorCause) {
-        cause = FailureDetail(errorCause);
+        cause = FailureDetail(errorCause, undefined, stackLines);
     }
 
     const errorErrors = (error as AggregateError).errors;
     if (Array.isArray(errorErrors)) {
-        errors = errorErrors.map(e => FailureDetail(e));
+        errors = errorErrors.map(e => FailureDetail(e, undefined, stackLines));
     }
 
-    return { message, stack, cause, errors };
+    return { message, stack, stackLines, cause, errors };
 }

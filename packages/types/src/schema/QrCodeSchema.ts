@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -156,7 +156,7 @@ export class QrCodeSchema extends Schema<string, string> {
 
         //qrCode.forEach((line, x) => line.forEach((_v, y) => qrCode[x][y] = 1))
 
-        // Gererate the bit string
+        // Generate the bit string
         const bitString = bitStringBuilder.join("");
 
         // Xor the bits
@@ -181,7 +181,10 @@ export class QrCodeSchema extends Schema<string, string> {
                     if (y === 20 || qrCode[y + 1][x] === 1) {
                         result.push("▄");
                     } else {
-                        result.push(" ");
+                        result.push(
+                            // Use a braille blank rather than a space to ensure no wrapping/whitespace collapsing
+                            "\u2800",
+                        );
                     }
                 } else {
                     if (y === 20 || qrCode[y + 1][x] === 1) {
@@ -193,7 +196,9 @@ export class QrCodeSchema extends Schema<string, string> {
             }
             result.push("█\n");
         }
+
         result.push("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n");
+
         return result.join("");
     }
 

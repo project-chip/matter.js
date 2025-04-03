@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,12 +26,12 @@ export const LaundryDryerControls = Cluster(
 
     Attribute(
         {
-            name: "SupportedDrynessLevels", id: 0x0, type: "list", conformance: "M", constraint: "1 to 4",
-            details: "Indicates the list of supported dryness levels available to the appliance in the" +
-                "\n" +
-                "currently selected mode. The dryness level values are determined by the manufacturer. At least one " +
-                "dryness level value shall be provided in the SupportedDrynessLevels list. The list of dryness " +
-                "levels may change depending on the currently-selected Laundry Dryer mode.",
+            name: "SupportedDrynessLevels", id: 0x0, type: "list", access: "R V", conformance: "M",
+            constraint: "1 to 4",
+            details: "Indicates the list of supported dryness levels available to the appliance in the currently selected " +
+                "mode. The dryness level values are determined by the manufacturer. At least one dryness level value " +
+                "shall be provided in the SupportedDrynessLevels list. The list of dryness levels may change " +
+                "depending on the currently-selected Laundry Dryer mode.",
             xref: { document: "cluster", section: "8.9.5.1" }
         },
 

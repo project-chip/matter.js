@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -116,16 +116,15 @@ interface ConstructorOptions {
 
 function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
     // CJS Transpilation renames this symbol so bring it local to access
+    // @ts-expect-error this is used by generated code that TS knows nothing of
     const _InternalError = InternalError;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    _InternalError;
 
     // Have to use eval if we don't want every class to be called "GeneratedClass" in the debugger but we can ensure
     // this won't be abused.
     //
     // "name" is the only input to this function that appears textually in the eval.  We limit it to letters, numbers,
     // "$" and "_".
-    if (!name.match(/^(?:\p{L}|[0-9$_])+$/u)) {
+    if (!name.match(/^[\p{L}0-9$_]+$/u)) {
         throw new InternalError("Refusing to generate class with untrustworthy name");
     }
 

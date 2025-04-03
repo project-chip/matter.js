@@ -23,6 +23,9 @@
             "path": "../../protocol/src"
         },
         {
+            "path": "../../tools/src"
+        },
+        {
             "path": "../../types/src"
         }
     ]

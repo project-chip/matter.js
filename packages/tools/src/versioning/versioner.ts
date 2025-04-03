@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
-import { existsSync, readFileSync } from "fs";
-import { cp, writeFile } from "fs/promises";
+import { existsSync, readFileSync } from "node:fs";
+import { cp, writeFile } from "node:fs/promises";
+import { ansi } from "../ansi-text/text-builder.js";
 import { Graph } from "../building/graph.js";
 import { execute } from "../running/execute.js";
 import { Package } from "../util/package.js";
@@ -54,7 +54,7 @@ export class Versioner {
         this.#members = new Set(graph.nodes.map(node => node.pkg.name));
 
         for (const node of graph.nodes) {
-            const what = `Apply ${colors.bold(this.#definiteVersion)} to ${colors.bold(node.pkg.name)}`;
+            const what = `Apply ${ansi.bold(this.#definiteVersion)} to ${ansi.bold(node.pkg.name)}`;
             progress?.update(what);
             if (this.#applyOne(node.pkg)) {
                 progress?.success(what);
@@ -114,7 +114,7 @@ export class Versioner {
                 continue;
             }
 
-            if (this.#applyToDeps(deps)) {
+            if (this.#applyToDeps(deps as Record<string, string>)) {
                 changed = true;
             }
         }

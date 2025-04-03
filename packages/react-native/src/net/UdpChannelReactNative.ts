@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 import dgram from "react-native-udp";
@@ -13,6 +13,7 @@ import {
     Logger,
     MAX_UDP_MESSAGE_SIZE,
     NetworkError,
+    NoAddressAvailableError,
     repackErrorAs,
     UdpChannel,
     UdpChannelOptions,
@@ -114,7 +115,7 @@ export class UdpChannelReactNative implements UdpChannel {
             if (type === "udp4") {
                 multicastInterface = await NetworkReactNative.getMulticastInterfaceIpv4(netInterface);
                 if (multicastInterface === undefined) {
-                    throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
+                    throw new NoAddressAvailableError(`No IPv4 addresses on interface "${netInterface}"`);
                 }
             } else {
                 multicastInterface = `::%${netInterfaceZone}`;
@@ -159,10 +160,11 @@ export class UdpChannelReactNative implements UdpChannel {
         private readonly netInterface?: string,
     ) {}
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
+    onData(
+        listener: (netInterface: string | undefined, peerAddress: string, peerPort: number, data: Uint8Array) => void,
+    ) {
         const messageListener = async (data: Uint8Array, { address, port }: RemoteInfo) => {
             const netInterface = this.netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
-            if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
         };
 

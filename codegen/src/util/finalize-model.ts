@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,7 @@ import {
     ClusterModel,
     CommandModel,
     DatatypeModel,
+    ElementTag,
     FieldModel,
     MatterModel,
     Metatype,
@@ -26,13 +27,16 @@ const logger = Logger.get("create-model");
  * Create and validate the final model for export
  **/
 export function finalizeModel(matter: MatterModel) {
-    matter.children.forEach(c => {
-        if (c instanceof ClusterModel) {
-            patchClusterTypes(c);
-            patchOptionsTypes(c);
-            patchStatusTypes(c);
+    const scopedDatatypes = collectScopedDatatypes(matter);
+
+    for (const child of matter.children) {
+        if (child instanceof ClusterModel) {
+            patchIllegalCrossClusterReferences(child, scopedDatatypes);
+            patchClusterTypes(child);
+            patchOptionsTypes(child);
+            patchStatusTypes(child);
         }
-    });
+    }
 
     ejectZigbee(matter);
 
@@ -41,6 +45,29 @@ export function finalizeModel(matter: MatterModel) {
     return Logger.nest(() => {
         return ValidateModel(matter);
     });
+}
+
+export type ScopedDatatypes = Record<string, Model | undefined>;
+
+function collectScopedDatatypes(matter: MatterModel) {
+    const scopedDatatypes = {} as ScopedDatatypes;
+
+    for (const cluster of matter.children) {
+        for (const child of cluster.children) {
+            if (child.tag !== ElementTag.Datatype) {
+                continue;
+            }
+
+            if (child.name in scopedDatatypes) {
+                scopedDatatypes[child.name] = undefined;
+                continue;
+            }
+
+            scopedDatatypes[child.name] = child;
+        }
+    }
+
+    return scopedDatatypes;
 }
 
 /**
@@ -52,6 +79,38 @@ function childrenIdentity(model: ValueModel) {
         delete properties.xref;
         delete (properties as any).conformance;
         return properties;
+    });
+}
+
+/**
+ * CHIP defines datatypes in a global scope.  This is not how the specification actually works but the behavior
+ * continually leaks into cluster definitions where clusters reference datatypes defined in other clusters.
+ *
+ * Repair this by identifying missing datatypes that have a corresponding datatype definition of the same name in
+ * exactly one other cluster.  When detected, replace the datatype name with a qualified name referencing the other
+ * cluster.
+ */
+function patchIllegalCrossClusterReferences(cluster: ClusterModel, scopedDatatypes: ScopedDatatypes) {
+    cluster.visit(model => {
+        // Only applies to models with a defined type
+        if (model.type === undefined) {
+            return;
+        }
+
+        // If there is a base the type name is already valid
+        const base = model.base;
+        if (base !== undefined) {
+            return;
+        }
+
+        // Look for the datatype in other clusters
+        const datatype = scopedDatatypes[model.type];
+        if (datatype === undefined) {
+            return;
+        }
+
+        // Add qualified name
+        model.type = `${datatype.parent!.name}.${datatype.name}`;
     });
 }
 
@@ -144,6 +203,9 @@ function patchClusterTypes(cluster: ClusterModel) {
 /**
  * The optionsMask/OptionsOverrides pattern defined by LevelControl is used by a number of clusters.  These usually
  * specify their type as "map8" rather than the appropriate type.  This function fixes this.
+ *
+ * As of 1.4 the types have been corrected, so this code is only applicable to older versions.  Added tests to detect
+ * type specified as "map8" that effectively disable this logic when not needed.
  */
 function patchOptionsTypes(cluster: ClusterModel) {
     for (const element of cluster.children) {
@@ -156,11 +218,11 @@ function patchOptionsTypes(cluster: ClusterModel) {
         }
 
         const mask = element.get(FieldModel, "OptionsMask");
-        if (mask) {
+        if (mask?.type === "map8") {
             mask.type = "Options";
         }
         const overrides = element.get(FieldModel, "OptionsOverride");
-        if (overrides) {
+        if (overrides?.type === "map8") {
             overrides.type = "Options";
         }
     }

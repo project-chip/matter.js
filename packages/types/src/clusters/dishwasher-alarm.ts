@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,7 +27,7 @@ export namespace DishwasherAlarm {
     /**
      * These are optional features supported by DishwasherAlarmCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.4
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.4
      */
     export enum Feature {
         /**
@@ -35,13 +35,13 @@ export namespace DishwasherAlarm {
          *
          * This feature indicates that alarms can be reset via the Reset command.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.4.1
          */
         Reset = "Reset"
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 8.4.4.1
+     * @see {@link MatterSpecification.v14.Cluster} § 8.4.4.1
      */
     export const Alarm = {
         /**
@@ -78,7 +78,7 @@ export namespace DishwasherAlarm {
     /**
      * Input to the DishwasherAlarm reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export const TlvResetRequest = TlvObject({
         /**
@@ -87,7 +87,7 @@ export namespace DishwasherAlarm {
          * alarms indicated are successfully reset, the response status code shall be SUCCESS, otherwise, the response
          * status code shall be FAILURE.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1.1
          */
         alarms: TlvField(0, TlvBitmap(TlvUInt32, Alarm))
     });
@@ -95,14 +95,14 @@ export namespace DishwasherAlarm {
     /**
      * Input to the DishwasherAlarm reset command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
      */
     export interface ResetRequest extends TypeFromSchema<typeof TlvResetRequest> {}
 
     /**
      * Input to the DishwasherAlarm modifyEnabledAlarms command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
      */
     export const TlvModifyEnabledAlarmsRequest = TlvObject({
         /**
@@ -120,12 +120,11 @@ export namespace DishwasherAlarm {
          * alarm shall respond with a status code of FAILURE; otherwise the server shall respond with a status code of
          * SUCCESS.
          *
-         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the
+         * On a SUCCESS case, the server shall also change the value of the Mask attribute to the value of the Mask
+         * field from this command. After that the server shall also update the value of its State attribute to reflect
+         * the status of the new alarm set as indicated by the new value of the Mask attribute.
          *
-         * Mask field from this command. After that the server shall also update the value of its State attribute to
-         * reflect the status of the new alarm set as indicated by the new value of the Mask attribute.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2.1
          */
         mask: TlvField(0, TlvBitmap(TlvUInt32, Alarm))
     });
@@ -133,50 +132,50 @@ export namespace DishwasherAlarm {
     /**
      * Input to the DishwasherAlarm modifyEnabledAlarms command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
      */
     export interface ModifyEnabledAlarmsRequest extends TypeFromSchema<typeof TlvModifyEnabledAlarmsRequest> {}
 
     /**
      * Body of the DishwasherAlarm notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export const TlvNotifyEvent = TlvObject({
         /**
          * This field shall indicate those alarms that have become active.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.1
          */
-        active: TlvField(1, TlvBitmap(TlvUInt32, Alarm)),
+        active: TlvField(0, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall indicate those alarms that have become inactive.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.2
          */
-        inactive: TlvField(2, TlvBitmap(TlvUInt32, Alarm)),
+        inactive: TlvField(1, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall be a copy of the new State attribute value that resulted in the event being generated. That
          * is, this field shall have all the bits in Active set and shall NOT have any of the bits in Inactive set.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.4
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.4
          */
-        state: TlvField(3, TlvBitmap(TlvUInt32, Alarm)),
+        state: TlvField(2, TlvBitmap(TlvUInt32, Alarm)),
 
         /**
          * This field shall be a copy of the Mask attribute when this event was generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1.3
          */
-        mask: TlvField(4, TlvBitmap(TlvUInt32, Alarm))
+        mask: TlvField(3, TlvBitmap(TlvUInt32, Alarm))
     });
 
     /**
      * Body of the DishwasherAlarm notify event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
      */
     export interface NotifyEvent extends TypeFromSchema<typeof TlvNotifyEvent> {}
 
@@ -190,7 +189,7 @@ export namespace DishwasherAlarm {
              * will be latched when set, and will not reset to inactive when the underlying condition which caused the
              * alarm is no longer present, and so requires an explicit reset using the Reset command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.2
              */
             latch: FixedAttribute(0x1, TlvBitmap(TlvUInt32, Alarm))
         },
@@ -200,7 +199,7 @@ export namespace DishwasherAlarm {
              * This command resets active and latched alarms (if possible). Any generated Notify event shall contain
              * fields that represent the state of the server after the command has been processed.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
              */
             reset: Command(0x0, TlvResetRequest, 0x0, TlvNoResponse)
         }
@@ -220,7 +219,7 @@ export namespace DishwasherAlarm {
              *
              * This feature indicates that alarms can be reset via the Reset command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.4.1
              */
             reset: BitFlag(0)
         },
@@ -230,7 +229,7 @@ export namespace DishwasherAlarm {
              * Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be
              * enabled.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.1
              */
             mask: Attribute(0x0, TlvBitmap(TlvUInt32, Alarm)),
 
@@ -238,17 +237,17 @@ export namespace DishwasherAlarm {
              * Indicates a bitmap where each bit shall represent the state of an alarm. The value of true means the
              * alarm is active, otherwise the alarm is inactive.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.3
              */
             state: Attribute(0x2, TlvBitmap(TlvUInt32, Alarm)),
 
             /**
-             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of
-             * true means the alarm is supported, otherwise the alarm is not supported.
+             * Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value of true
+             * means the alarm is supported, otherwise the alarm is not supported.
              *
              * If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.6.4
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.6.4
              */
             supported: FixedAttribute(0x3, TlvBitmap(TlvUInt32, Alarm))
         },
@@ -257,7 +256,7 @@ export namespace DishwasherAlarm {
             /**
              * This command allows a client to request that an alarm be enabled or suppressed at the server.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
              */
             modifyEnabledAlarms: OptionalCommand(0x1, TlvModifyEnabledAlarmsRequest, 0x1, TlvNoResponse)
         },
@@ -266,7 +265,7 @@ export namespace DishwasherAlarm {
             /**
              * This event shall be generated when one or more alarms change state, and shall have these fields:
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.15.8.1
              */
             notify: Event(0x0, EventPriority.Info, TlvNotifyEvent)
         },
@@ -284,12 +283,13 @@ export namespace DishwasherAlarm {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is a derived cluster of the Alarm Base cluster.
+     * This cluster is a derived cluster of the Alarm Base cluster and provides the alarm definition related to
+     * dishwasher devices.
      *
      * DishwasherAlarmCluster supports optional features that you can enable with the DishwasherAlarmCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.4
+     * @see {@link MatterSpecification.v14.Cluster} § 8.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -318,8 +318,8 @@ export namespace DishwasherAlarm {
     /**
      * This cluster supports all DishwasherAlarm features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

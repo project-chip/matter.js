@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -34,11 +34,6 @@ LocalMatter.children.push({
             id: 0x8,
             name: "ColorMode",
             default: FieldValue.None,
-            children: [
-                { tag: "field", name: "CurrentHueAndCurrentSaturation", id: 0x0, conformance: "HS" },
-                { tag: "field", name: "CurrentXAndCurrentY", id: 0x1, conformance: "XY" },
-                { tag: "field", name: "ColorTemperatureMireds", id: 0x2, conformance: "CT" },
-            ],
         },
 
         // Override primary conformance using our ">" extension to conformance syntax
@@ -79,10 +74,20 @@ LocalMatter.children.push({
             id: 0x4003,
             name: "ColorLoopDirection",
             type: "enum16",
+            until: "1.4",
             children: [
                 { tag: "field", name: "Decrement", id: 0 },
                 { tag: "field", name: "Increment", id: 1 },
             ],
+        },
+
+        // In 1.4 they created ColorLoopDirectionEnum but left the type of ColorLoopDirection attribute as uint8
+        {
+            tag: "attribute",
+            id: 0x4003,
+            asOf: "1.4",
+            name: "ColorLoopDirection",
+            type: "ColorLoopDirectionEnum",
         },
 
         // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't make sense because
@@ -140,9 +145,10 @@ LocalMatter.children.push({
             tag: "command",
             id: 0x4b,
             name: "MoveColorTemperature",
+            until: "1.3",
 
             children: [
-                { tag: "field", name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc" },
+                { tag: "field", name: "MoveMode", id: 0x0, type: "MoveModeEnum", conformance: "M", constraint: "desc" },
             ],
         },
 
@@ -151,9 +157,10 @@ LocalMatter.children.push({
             tag: "command",
             id: 0x4c,
             name: "StepColorTemperature",
+            until: "1.3",
 
             children: [
-                { tag: "field", name: "StepMode", id: 0x0, type: "StepMode", conformance: "M", constraint: "desc" },
+                { tag: "field", name: "StepMode", id: 0x0, type: "StepModeEnum", conformance: "M", constraint: "desc" },
             ],
         },
     ],

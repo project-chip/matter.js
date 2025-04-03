@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { NetworkServer } from "#behavior/system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
@@ -14,7 +13,7 @@ import { Endpoint } from "#endpoint/Endpoint.js";
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
 import { FieldElement, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { MdnsService } from "#protocol";
+import { MdnsService, Val } from "#protocol";
 import { CommandId, StatusCode, StatusResponseError, TlvInvokeResponse } from "#types";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
 
@@ -368,7 +367,7 @@ export class GeneralDiagnosticsServer extends Base {
                 isOperational: isOperationalReachable(name),
                 offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                 offPremiseServicesReachableIPv6: null, // null means unknown or not supported
-                hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
+                hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-f]/gi, "")),
                 iPv4Addresses: ipV4.slice(0, 4).map(ip => ipv4ToBytes(ip)),
                 iPv6Addresses: ipV6.slice(0, 8).map(ip => ipv4ToBytes(ip)),
                 type: type ?? networkType,
@@ -395,11 +394,24 @@ export namespace GeneralDiagnosticsServer {
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {
                 /**
-                 * Dynamically calculate the upTime. This is ok because the attribute is not sent via subscriptions
-                 * anyway.
+                 * Report uptime
+                 *
+                 * This value is not available for subscription so we compute dynamically.
+                 *
+                 * As of 1.4 the spec does not specify what should be considered the "start time" for computing uptime.
+                 * They just say "since the device's last reboot".  This could be from power on, or from when the device
+                 * is first usable by a user, when it's first available online, etc.
+                 *
+                 * The tests however expect uptime to reset after factory reset.  So we consider "time brought online"
+                 * our boot time.
                  */
                 get upTime() {
-                    return Math.round((Time.nowMs() - Time.startup.systemMs) / 1000);
+                    const onlineAt = (endpoint.lifecycle as NodeLifecycle).onlineAt;
+                    if (onlineAt === undefined) {
+                        return 0;
+                    }
+
+                    return Math.round((Time.nowMs() - onlineAt.getTime()) / 1000);
                 },
 
                 /**

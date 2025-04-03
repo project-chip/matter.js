@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -84,5 +84,19 @@ export class PeerAddressMap<T> extends Map<PeerAddress, T> {
 
     override get(key: PeerAddress) {
         return super.get(PeerAddress(key));
+    }
+}
+
+export class PeerAddressSet extends Set<PeerAddress> {
+    override add(value: PeerAddress) {
+        return super.add(PeerAddress(value));
+    }
+
+    override has(value: PeerAddress) {
+        return super.has(PeerAddress(value));
+    }
+
+    override delete(value: PeerAddress) {
+        return super.delete(PeerAddress(value));
     }
 }

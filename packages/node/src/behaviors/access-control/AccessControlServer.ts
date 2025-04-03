@@ -1,16 +1,21 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "#behavior/AccessControl.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
 import { deepCopy, InternalError, isDeepEqual, Logger } from "#general";
 import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { AccessControlManager, EndpointInterface, FabricManager, IncomingSubjectDescriptor } from "#protocol";
+import {
+    AccessControl,
+    AccessControlManager,
+    AclEndpointContext,
+    FabricManager,
+    IncomingSubjectDescriptor,
+} from "#protocol";
 import {
     CaseAuthenticatedTag,
     ClusterId,
@@ -30,7 +35,7 @@ const logger = Logger.get("AccessControlServer");
 /**
  * This is the default server implementation of AccessControlBehavior.
  */
-export class AccessControlServer extends AccessControlBehavior {
+export class AccessControlServer extends AccessControlBehavior.with("Extension") {
     declare internal: AccessControlServer.Internal;
 
     override initialize() {
@@ -107,6 +112,13 @@ export class AccessControlServer extends AccessControlBehavior {
         }
 
         for (const entry of fabricAcls) {
+            // We need to convert empty arrays to null because expected by chip tests
+            if (entry.subjects !== null && entry.subjects.length === 0) {
+                entry.subjects = null;
+            }
+            if (entry.targets !== null && entry.targets.length === 0) {
+                entry.targets = null;
+            }
             const { privilege, subjects, targets, authMode } = entry;
             if (subjects !== null && subjects.length > this.state.subjectsPerAccessControlEntry) {
                 throw new StatusResponseError("SubjectsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);
@@ -332,7 +344,7 @@ export class AccessControlServer extends AccessControlBehavior {
     accessLevelsFor(
         context: ActionContext,
         location: AccessControl.Location,
-        endpoint?: EndpointInterface,
+        endpoint?: AclEndpointContext,
     ): AccessLevel[] {
         if (location.cluster === undefined) {
             // Without a cluster, internal behaviors are only accessible internally so this is an irrelevant placeholder
@@ -385,7 +397,7 @@ export class AccessControlServer extends AccessControlBehavior {
         _aclList: AccessControlTypes.AccessControlEntry[],
         _aclEntry: AccessControlTypes.AccessControlEntry,
         _subjectDesc: IncomingSubjectDescriptor,
-        _endpoint: EndpointInterface,
+        _endpoint: AclEndpointContext,
         _clusterId: ClusterId,
     ) {
         return true;

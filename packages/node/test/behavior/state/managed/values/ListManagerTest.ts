@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,14 +38,14 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         fabricFiltered: true,
         fabric: FabricIndex(1),
         subject: NodeId(1),
-        root: aclEndpoint([1, 3]),
+        node: aclEndpoint([1, 3]),
     };
 
     const cx2 = {
         fabricFiltered: true,
         fabric: FabricIndex(2),
         subject: NodeId(2),
-        root: aclEndpoint([1, 3]),
+        node: aclEndpoint([1, 3]),
     };
 
     return struct.online2(cx1, cx2, async ({ cx1, cx2, ref1, ref2 }) => {
@@ -69,7 +69,7 @@ describe("ListManager", () => {
     it("basic get/set", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) }, async ref => {
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) }, async ref => {
             const list = ref.list as string[];
 
             list[0] = "hi";
@@ -88,7 +88,7 @@ describe("ListManager", () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
         await struct.online(
-            { subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) },
+            { subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) },
             async (ref, cx) => {
                 const list = ref.list as string[];
 
@@ -118,7 +118,7 @@ describe("ListManager", () => {
     it("basic array iteration", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) }, async ref => {
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), node: aclEndpoint([1, 3]) }, async ref => {
             const list = ref.list as string[];
 
             (list[0] = "hi"), (list[1] = "there");

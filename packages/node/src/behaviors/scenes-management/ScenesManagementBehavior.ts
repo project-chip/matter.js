@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ScenesManagementInterface } from "./ScenesManagementInterface.js";
 
 /**
- * ScenesManagementBehavior is the base class for objects that support interaction with {@link
- * ScenesManagement.Cluster}.
+ * ScenesManagementBehavior is the base class for objects that support interaction with
+ * {@link ScenesManagement.Cluster}.
  */
 export const ScenesManagementBehavior = ClusterBehavior
     .withInterface<ScenesManagementInterface>()

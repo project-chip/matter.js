@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ export namespace ActionsInterface {
          *
          * Example: recall a scene on a number of lights.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.1
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.1
          */
         instantAction(request: Actions.InstantActionRequest): MaybePromise;
 
@@ -26,19 +26,19 @@ export namespace ActionsInterface {
          * gradual transition SHOULD take place from the old to the new state over this time period. However, the exact
          * transition is manufacturer dependent.
          *
-         * This command triggers an action (state change) on the involved endpoints, with a specified time to
-         * transition from the current state to the new state. During the transition, the action’s state shall be
-         * Active. Afterwards, the action’s state shall be Inactive.
+         * This command triggers an action (state change) on the involved endpoints, with a specified time to transition
+         * from the current state to the new state. During the transition, the action’s state shall be Active.
+         * Afterwards, the action’s state shall be Inactive.
          *
          * Example: recall a scene on a number of lights, with a specified transition time.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.2
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.2
          */
         instantActionWithTransition(request: Actions.InstantActionWithTransitionRequest): MaybePromise;
 
         /**
-         * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s
-         * state shall be Active.
+         * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s state
+         * shall be Active.
          *
          * Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of the
          * scene) on a set of lights.
@@ -46,7 +46,7 @@ export namespace ActionsInterface {
          * Example: start a sequence of events such as a wake-up experience involving lights moving through several
          * brightness/color combinations and the window covering gradually opening.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.3
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.3
          */
         startAction(request: Actions.StartActionRequest): MaybePromise;
 
@@ -58,7 +58,7 @@ export namespace ActionsInterface {
          * Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of the
          * scene) on a set of lights for 1 hour (Duration=3600).
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.4
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.4
          */
         startActionWithDuration(request: Actions.StartActionWithDurationRequest): MaybePromise;
 
@@ -68,7 +68,7 @@ export namespace ActionsInterface {
          *
          * Example: stop a dynamic lighting pattern which was previously started with StartAction.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.5
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.5
          */
         stopAction(request: Actions.StopActionRequest): MaybePromise;
 
@@ -78,7 +78,7 @@ export namespace ActionsInterface {
          * Example: pause a dynamic lighting effect (the lights stay at their current color) which was previously
          * started with StartAction.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.6
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.6
          */
         pauseAction(request: Actions.PauseActionRequest): MaybePromise;
 
@@ -95,7 +95,7 @@ export namespace ActionsInterface {
          * some hours or during a nightly reset, while an Disable would remain in effect until explicitly enabled
          * again).
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.7
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.7
          */
         pauseActionWithDuration(request: Actions.PauseActionWithDurationRequest): MaybePromise;
 
@@ -108,7 +108,7 @@ export namespace ActionsInterface {
          * Example: resume a dynamic lighting effect (the lights' colors will change gradually, continuing from the
          * point they were paused).
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.8
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.8
          */
         resumeAction(request: Actions.ResumeActionRequest): MaybePromise;
 
@@ -117,7 +117,7 @@ export namespace ActionsInterface {
          *
          * Example: enable a motion sensor to control the lights in an area.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.9
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.9
          */
         enableAction(request: Actions.EnableActionRequest): MaybePromise;
 
@@ -129,7 +129,7 @@ export namespace ActionsInterface {
          * field is used to indicated the length of your absence from home. After that period, the presence mimicking
          * behavior will no longer control these lights.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.10
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.10
          */
         enableActionWithDuration(request: Actions.EnableActionWithDurationRequest): MaybePromise;
 
@@ -138,20 +138,20 @@ export namespace ActionsInterface {
          *
          * Example: disable a motion sensor to no longer control the lights in an area.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.11
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.11
          */
         disableAction(request: Actions.DisableActionRequest): MaybePromise;
 
         /**
          * This command disables a certain action or automation, and shall change the action’s state to Disabled. After
-         * the specified Duration, the action or automation will re-start, and the action’s state shall change to
-         * either Inactive or Active, depending on the actions (see examples 4 and 6).
+         * the specified Duration, the action or automation will re-start, and the action’s state shall change to either
+         * Inactive or Active, depending on the actions (see examples 4 and 6).
          *
          * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from
          * turning on in the morning while you’re not at home). After this period, the wakeup experience will control
          * the lights as before.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.14.6.12
+         * @see {@link MatterSpecification.v14.Core} § 9.14.6.12
          */
         disableActionWithDuration(request: Actions.DisableActionWithDurationRequest): MaybePromise;
     }

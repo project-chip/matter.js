@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -28,18 +28,9 @@ export const WindowCoveringDt = DeviceType(
         xref: { document: "device", section: "8.3.4" }
     }),
     Requirement({
-        name: "ScenesManagement", id: 0x62, conformance: "P, Active, O", element: "serverCluster",
+        name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
         xref: { document: "device", section: "8.3.4" }
-    }),
-
-    Requirement(
-        {
-            name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "8.3.4" }
-        },
-        Requirement({ name: "GoToLiftPercentageLiftPercent100thsValue", conformance: "Matter", element: "commandField" }),
-        Requirement({ name: "GoToTiltPercentageTiltPercent100thsValue", conformance: "Matter", element: "commandField" })
-    )
+    })
 );
 
 MatterDefinition.children.push(WindowCoveringDt);

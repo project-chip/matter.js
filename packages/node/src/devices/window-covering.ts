@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,9 +9,6 @@
 import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/IdentifyServer.js";
 import { WindowCoveringServer as BaseWindowCoveringServer } from "../behaviors/window-covering/WindowCoveringServer.js";
 import { GroupsServer as BaseGroupsServer } from "../behaviors/groups/GroupsServer.js";
-import {
-    ScenesManagementServer as BaseScenesManagementServer
-} from "../behaviors/scenes-management/ScenesManagementServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -22,7 +19,7 @@ import { Identity } from "#general";
  * WindowCoveringDevice requires WindowCovering cluster but WindowCovering is not added by default because you must
  * select the features your device supports. You can add manually using WindowCoveringDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 8.3
+ * @see {@link MatterSpecification.v14.Device} § 8.3
  */
 export interface WindowCoveringDevice extends Identity<typeof WindowCoveringDeviceDefinition> {}
 
@@ -49,18 +46,11 @@ export namespace WindowCoveringRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification.
-     *
-     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
-     */
-    export const ScenesManagementServer = BaseScenesManagementServer;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, WindowCovering: WindowCoveringServer },
-        optional: { Groups: GroupsServer, ScenesManagement: ScenesManagementServer }
+        optional: { Groups: GroupsServer }
     };
 }
 

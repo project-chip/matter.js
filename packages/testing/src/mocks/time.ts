@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,12 @@ type TimerCallback = () => any;
 type MockTimeLike = typeof MockTime;
 export interface MockTime extends MockTimeLike {}
 
+const registry = {
+    timers: new Set<MockTimer>(),
+    register(_timer: MockTimer) {},
+    unregister(_timer: MockTimer) {},
+};
+
 // Must match matter.js Timer interface
 class MockTimer {
     name = "Test";
@@ -18,14 +24,18 @@ class MockTimer {
     intervalMs = 0;
     isPeriodic = false;
 
+    #mockTime: MockTime;
+    #durationMs: number;
+
     isRunning = false;
     private readonly callback: TimerCallback;
 
-    constructor(
-        private readonly mockTime: MockTime,
-        private readonly durationMs: number,
-        callback: TimerCallback,
-    ) {
+    constructor(mockTime: MockTime, name: string, durationMs: number, callback: TimerCallback) {
+        this.name = name;
+
+        this.#mockTime = mockTime;
+        this.#durationMs = durationMs;
+
         if (this instanceof MockInterval) {
             this.callback = callback;
         } else {
@@ -37,25 +47,27 @@ class MockTimer {
     }
 
     start() {
-        this.mockTime.callbackAtTime(this.mockTime.nowMs() + this.durationMs, this.callback);
+        registry.register(this);
+        this.#mockTime.callbackAtTime(this.#mockTime.nowMs() + this.#durationMs, this.callback);
         this.isRunning = true;
         return this;
     }
 
     stop() {
-        this.mockTime.removeCallback(this.callback);
+        registry.unregister(this);
+        this.#mockTime.removeCallback(this.callback);
         this.isRunning = false;
         return this;
     }
 }
 
 class MockInterval extends MockTimer {
-    constructor(mockTime: MockTime, durationMs: number, callback: TimerCallback) {
+    constructor(mockTime: MockTime, name: string, durationMs: number, callback: TimerCallback) {
         const intervalCallback = async () => {
             mockTime.callbackAtTime(mockTime.nowMs() + durationMs, intervalCallback);
             await callback();
         };
-        super(mockTime, durationMs, intervalCallback);
+        super(mockTime, name, durationMs, intervalCallback);
     }
 }
 
@@ -105,12 +117,12 @@ export const MockTime = {
         return nowMs;
     },
 
-    getTimer(_name: string, durationMs: number, callback: TimerCallback): MockTimer {
-        return new MockTimer(this, durationMs, callback);
+    getTimer(name: string, durationMs: number, callback: TimerCallback): MockTimer {
+        return new MockTimer(this, name, durationMs, callback);
     },
 
-    getPeriodicTimer(_name: string, intervalMs: number, callback: TimerCallback): MockTimer {
-        return new MockInterval(this, intervalMs, callback);
+    getPeriodicTimer(name: string, intervalMs: number, callback: TimerCallback): MockTimer {
+        return new MockInterval(this, name, intervalMs, callback);
     },
 
     /**
@@ -118,7 +130,7 @@ export const MockTime = {
      *
      * Moves time forward until the promise resolves.
      */
-    async resolve<T>(promise: PromiseLike<T>) {
+    async resolve<T>(promise: PromiseLike<T>, { stepMs, macrotasks }: { stepMs?: number; macrotasks?: boolean } = {}) {
         let resolved = false;
         let result: T | undefined;
         let error: any;
@@ -137,10 +149,14 @@ export const MockTime = {
         let timeAdvanced = 0;
         while (!resolved) {
             // Interestingly, a Time.yield() works in almost every case.  However, on Node SubtleCrypto.deriveBits hangs
-            // if you only yield via microtask.  It seems to require yielding via macrotask.  So we use setTimeout here.
-            // Probably related to entropy collection but I think it's safe to classify as a Node bug.  Tested on
-            // version 20.11.0
-            await new Promise<void>(resolve => setTimeout(() => resolve(), 0));
+            // if you only yield via microtask.  It seems to require yielding via macrotask.  So we optionally use
+            // setTimeout here. Probably related to entropy collection but I think it's safe to classify as a Node bug.
+            // Tested on version 20.11.0
+            if (macrotasks) {
+                await new Promise<void>(resolve => setTimeout(() => resolve(), 0));
+            } else {
+                await MockTime.yield();
+            }
 
             if (resolved) {
                 break;
@@ -153,12 +169,16 @@ export const MockTime = {
                 );
             }
 
-            // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only
-            // advancing time but also yielding event loop.  So it's possible if we run out of time it's just because
-            // there were too few yields in one virtual hour.  As designed currently it's 360 macrotasks and 360
-            // microtasks (360 loops w/ 1 macro- and 1 micro-yield)
-            await this.advance(1000);
-            timeAdvanced += 1000;
+            if (stepMs) {
+                await this.advance(stepMs);
+            } else {
+                // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only
+                // advancing time but also yielding event loop.  So it's possible if we run out of time it's just because
+                // there were too few yields in one virtual hour.  As designed currently it's 360 macrotasks and 360
+                // microtasks (360 loops w/ 1 macro- and 1 micro-yield)
+                await this.advance(1000);
+                timeAdvanced += 1000;
+            }
 
             if (resolved) {
                 break;
@@ -180,8 +200,7 @@ export const MockTime = {
     async advance(ms: number) {
         const newTimeMs = nowMs + ms;
 
-        while (true) {
-            if (callbacks.length === 0) break;
+        while (callbacks.length) {
             const { atMs, callback } = callbacks[0];
             if (atMs > newTimeMs) break;
             callbacks.shift();
@@ -193,21 +212,18 @@ export const MockTime = {
     },
 
     /**
-     * Yield to scheduled microtasks.  This means that all code paths waiting
-     * on resolved promises (including await) will proceed before this method
-     * returns.
+     * Yield to scheduled microtasks.  This means that all code paths waiting on resolved promises (including await)
+     * will proceed before this method returns.
      */
     async yield() {
         await Promise.resolve();
     },
 
     /**
-     * Due to its implementation, an older version of yield() would actually
-     * yield to microtasks three times.  Our tests then depended on this
-     * functionality -- one yield could trigger up to three nested awaits.
+     * Due to its implementation, an older version of yield() would actually yield to microtasks three times.  Our tests
+     * then depended on this functionality -- one yield could trigger up to three nested awaits.
      *
-     * To make this clear, the version of yield() that emulates old behavior
-     * is called "yield3".
+     * To make this clear, the version of yield() that emulates old behavior is called "yield3".
      */
     async yield3() {
         await Promise.resolve();
@@ -216,14 +232,12 @@ export const MockTime = {
     },
 
     /**
-     * Hook a method and invoke a callback just before the method completes.
-     * Unhooks after completion.
+     * Hook a method and invoke a callback just before the method completes. Unhooks after completion.
      *
-     * Handles both synchronous and asynchronous methods.  The interceptor
-     * should match the async-ness of the intercepted method.
+     * Handles both synchronous and asynchronous methods.  The interceptor should match the async-ness of the
+     * intercepted method.
      *
-     * The interceptor can optionally access and/or replace the resolve/reject
-     * value.
+     * The interceptor can optionally access and/or replace the resolve/reject value.
      */
     interceptOnce<NameT extends string, ReturnT, ObjT extends { [N in NameT]: (...args: any) => ReturnT }>(
         obj: ObjT,
@@ -272,6 +286,13 @@ export const MockTime = {
         }
     },
 
+    /**
+     * Count the number of registered timers with a specific name.
+     */
+    timerCountFor(name: string) {
+        return [...registry.timers].filter(timer => timer.name === name).length;
+    },
+
     callbackAtTime(atMs: number, callback: TimerCallback) {
         callbacks.push({ atMs, callback });
         callbacks.sort(({ atMs: atMsA }, { atMs: atMsB }) => atMsA - atMsB);
@@ -286,7 +307,16 @@ export const MockTime = {
 
 let reinstallTime: undefined | (() => void);
 
-export function timeSetup(Time: { startup: { systemMs: number; processMs: number }; get(): unknown }) {
+export function timeSetup(Time: {
+    startup: { systemMs: number; processMs: number };
+    get(): unknown;
+    register(timer: MockTimer): void;
+    unregister(timer: MockTimer): void;
+    timers: Set<MockTimer>;
+}) {
+    registry.register = Time.register;
+    registry.unregister = Time.unregister;
+    registry.timers = Time.timers;
     Time.startup.systemMs = Time.startup.processMs = 0;
     real = Time.get();
     (MockTime as any).sleep = (real as any).sleep;

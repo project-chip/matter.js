@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -30,6 +30,10 @@ export function CommandId(commandId: number, validate = true): CommandId {
 
 export namespace CommandId {
     export const isValid = validatorOf(CommandId);
+
+    export const isGlobalCommand = (commandId: CommandId): boolean => {
+        return commandId >= 0xe0 && commandId <= 0xff;
+    };
 }
 
 /** Tlv schema for an Command Id. */

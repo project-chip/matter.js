@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,7 +24,7 @@ export const Str = (el: HTMLElement) => {
             // P starts with text
             child.firstChild?.nodeType === 3 /** TEXT_CONTENT */ &&
             // Containing a single digit
-            child.firstChild.textContent?.match(/^[0-9]$/) &&
+            child.firstChild.textContent?.match(/^\d$/) &&
             // Followed by a span
             (child.firstChild.nextSibling as Element)?.tagName === "SPAN" &&
             // That doesn't indicate numeric arity
@@ -180,7 +180,7 @@ export const Identifier = (el: HTMLElement) => {
     let str = Code(el);
 
     // Strip everything following a subset of characters known to be inside what is properly a "key"
-    str = str.replace(/^([a-z0-9 _:.,/\-$]+).*/i, "$1");
+    str = str.replace(/^([\w :.,/\-$]+).*/, "$1");
 
     return camelize(str, true);
 };
@@ -206,6 +206,12 @@ export const Bits = (el: HTMLElement) => {
         return bits[0];
     }
     if (bits.length == 2) {
-        return { min: bits[0], max: bits[1] + 1 };
+        let [min, max] = bits;
+        if (min > max) {
+            const tmp = max;
+            max = min;
+            min = tmp;
+        }
+        return { min, max };
     }
 };

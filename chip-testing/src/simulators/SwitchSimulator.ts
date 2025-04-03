@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,7 +26,6 @@ export class SwitchSimulator {
         if (this.#switchActions.length !== 0 || this.#executionDelayTimer !== undefined) {
             throw new Error("Still unprocessed actions existing ... Invalid state!");
         }
-        console.log("SwitchSimulator: executeActions", actions);
         this.#switchActions = actions;
         this.#processNextAction();
     }

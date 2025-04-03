@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,11 +12,10 @@ import { MicrowaveOvenControl } from "#clusters/microwave-oven-control";
 export namespace MicrowaveOvenControlInterface {
     export interface Base {
         /**
-         * This command is used to set the cooking parameters associated with the operation of the device.
+         * This command is used to set the cooking parameters associated with the operation of the device. This command
+         * supports the following fields:
          *
-         * This command supports the following fields:
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.13.6.2
+         * @see {@link MatterSpecification.v14.Cluster} § 8.13.6.2
          */
         setCookingParameters(request: MicrowaveOvenControl.SetCookingParametersRequest): MaybePromise;
 
@@ -24,7 +23,7 @@ export namespace MicrowaveOvenControlInterface {
          * This command is used to add more time to the CookTime attribute of the server. This command supports these
          * fields:
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.13.6.3
+         * @see {@link MatterSpecification.v14.Cluster} § 8.13.6.3
          */
         addMoreTime(request: MicrowaveOvenControl.AddMoreTimeRequest): MaybePromise;
     }

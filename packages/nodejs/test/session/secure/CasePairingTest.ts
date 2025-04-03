@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
 import { Bytes, PublicKey } from "#general";
 import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "#protocol";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 const crypto = new NodeJsCrypto();
 

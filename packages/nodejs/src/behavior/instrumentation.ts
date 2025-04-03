@@ -1,11 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Instrumentation, Val } from "#node";
-import { inspect } from "util";
+import { Instrumentation } from "#node";
+import { Val } from "#protocol";
+import { inspect } from "node:util";
 
 /**
  * Node's default console formatting makes it difficult to view the value of managed collections.  This function

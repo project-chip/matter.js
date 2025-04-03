@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Diagnostic, Logger } from "#general";
 import { Specification } from "#model";
-import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
+import { readFileSync } from "node:fs";
 import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
 
@@ -82,7 +82,7 @@ export function identifyDocument(path: string): IndexDetail {
 
     let version;
     const titleAndVersion = title.split(/ version /i);
-    if (titleAndVersion.length === 2 && titleAndVersion[1].match(/(?:\d\.)+/i)) {
+    if (titleAndVersion.length === 2 && titleAndVersion[1].match(/(?:\d\.)+/)) {
         title = titleAndVersion[0];
         version = titleAndVersion[1];
     } else {
@@ -90,7 +90,8 @@ export function identifyDocument(path: string): IndexDetail {
         if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
             throw new Error(`No version found for ${title} in ${path}`);
         }
-        version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
+
+        version = versionEl.textContent.replace(/.*version ([\d.]+)[^\d.]*/i, "$1");
     }
 
     // Drop dotted elements except the first two.  To date these have represented trivial changes

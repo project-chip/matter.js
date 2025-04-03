@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 import { CompilerOptions, createIncrementalCompilerHost, createIncrementalProgram } from "typescript";
 import { Package } from "../../util/package.js";
 import { InternalBuildError } from "../error.js";

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,7 +9,7 @@ import { Logger } from "../log/Logger.js";
 import { Cache } from "../util/Cache.js";
 import { asError } from "../util/Error.js";
 import { isIPv4 } from "../util/Ip.js";
-import { Network } from "./Network.js";
+import { Network, NoAddressAvailableError } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
 
 const logger = Logger.get("UdpMulticastServer");
@@ -30,27 +30,41 @@ export class UdpMulticastServer {
         listeningPort,
         network,
     }: UdpMulticastServerOptions) {
-        return new UdpMulticastServer(
-            network,
-            broadcastAddressIpv4,
-            broadcastAddressIpv6,
-            listeningPort,
-            broadcastAddressIpv4 === undefined
-                ? undefined
-                : await network.createUdpChannel({
-                      type: "udp4",
-                      netInterface,
-                      listeningPort,
-                      membershipAddresses: [broadcastAddressIpv4],
-                  }),
-            await network.createUdpChannel({
-                type: "udp6",
-                netInterface,
+        let ipv4UdpChannel: UdpChannel | undefined = undefined;
+        if (broadcastAddressIpv4 !== undefined) {
+            try {
+                ipv4UdpChannel = await network.createUdpChannel({
+                    type: "udp4",
+                    netInterface,
+                    listeningPort,
+                    membershipAddresses: [broadcastAddressIpv4],
+                });
+            } catch (error) {
+                NoAddressAvailableError.accept(error);
+                logger.info(`IPv4 UDP channel not created because IPv4 is not available: ${asError(error).message}`);
+            }
+        }
+
+        try {
+            return new UdpMulticastServer(
+                network,
+                broadcastAddressIpv4,
+                broadcastAddressIpv6,
                 listeningPort,
-                membershipAddresses: [broadcastAddressIpv6],
-            }),
-            netInterface,
-        );
+                ipv4UdpChannel,
+                await network.createUdpChannel({
+                    type: "udp6",
+                    netInterface,
+                    listeningPort,
+                    membershipAddresses: [broadcastAddressIpv6],
+                }),
+                netInterface,
+            );
+        } catch (error) {
+            NoAddressAvailableError.accept(error);
+            logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
+            throw error;
+        }
     }
 
     private readonly broadcastChannels = new Cache<Promise<UdpChannel>>(
@@ -71,12 +85,20 @@ export class UdpMulticastServer {
     ) {}
 
     onMessage(listener: (message: Uint8Array, peerAddress: string, netInterface: string) => void) {
-        this.serverIpv4?.onData((netInterface, peerAddress, _port, message) =>
-            listener(message, peerAddress, netInterface),
-        );
-        this.serverIpv6.onData((netInterface, peerAddress, _port, message) =>
-            listener(message, peerAddress, netInterface),
-        );
+        this.serverIpv4?.onData((netInterface, peerAddress, _port, message) => {
+            if (netInterface === undefined) {
+                // Ignore Network packages not coming over any known interface
+                return;
+            }
+            listener(message, peerAddress, netInterface);
+        });
+        this.serverIpv6.onData((netInterface, peerAddress, _port, message) => {
+            if (netInterface === undefined) {
+                // Ignore Network packages not coming over any known interface
+                return;
+            }
+            listener(message, peerAddress, netInterface);
+        });
     }
 
     async send(message: Uint8Array, netInterface?: string, uniCastTarget?: string) {

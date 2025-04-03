@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,39 +10,51 @@ import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    DatatypeElement as Datatype,
-    FieldElement as Field
+    FieldElement as Field,
+    DatatypeElement as Datatype
 } from "../../elements/index.js";
 
 export const RvcRunMode = Cluster(
     {
         name: "RvcRunMode", id: 0x54, type: "ModeBase", classification: "application", pics: "RVCRUNM",
-        details: "This cluster is derived from the Mode Base cluster to define specifics for Robotic Vacuum Cleaner " +
-            "devices. It also defines a namespace for the running modes of these devices.",
+        details: "This cluster is derived from the Mode Base cluster and defines additional mode tags and namespaced " +
+            "enumerated values for the running modes of robotic vacuum cleaner devices.",
         xref: { document: "cluster", section: "7.2" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
-    Attribute({ name: "SupportedModes", id: 0x0, xref: { document: "cluster", section: "7.2.6" } }),
-    Attribute({ name: "CurrentMode", id: 0x1, xref: { document: "cluster", section: "7.2.6" } }),
-    Attribute({ name: "StartUpMode", id: 0x2, conformance: "X", xref: { document: "cluster", section: "7.2.6" } }),
-    Attribute({ name: "OnMode", id: 0x3, conformance: "D", xref: { document: "cluster", section: "7.2.6" } }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
-    Datatype({
-        name: "ModeOptionStruct", type: "ModeOptionStruct",
+    Attribute(
+        { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "cluster", section: "7.2.4" } },
+        Field({
+            name: "DEPONOFF", conformance: "X", constraint: "0", description: "OnOff",
+            details: "Dependency with the OnOff cluster"
+        })
+    ),
 
-        details: "The table below lists the changes relative to the Mode Base cluster for the fields of the " +
-            "ModeOptionStruct type. A blank field indicates no change." +
-            "\n" +
-            "At least one entry in the SupportedModes attribute shall include the Idle mode tag in the ModeTags " +
+    Attribute({
+        name: "SupportedModes", id: 0x0,
+
+        details: "At least one entry in the SupportedModes attribute shall include the Idle mode tag in the ModeTags " +
             "field." +
             "\n" +
             "At least one entry in the SupportedModes attribute (different from the one above) shall include the " +
             "Cleaning mode tag in the ModeTags field." +
             "\n" +
-            "The Mapping, Cleaning, and Idle mode tags are mutually exclusive and shall NOT be used together in " +
-            "a mode’s ModeTags.",
+            "The Mapping, Cleaning, and Idle mode tags are mutually exclusive and shall NOT be used together in a " +
+            "mode’s ModeTags.",
 
+        xref: { document: "cluster", section: "7.2.6.1" }
+    }),
+
+    Attribute({ name: "CurrentMode", id: 0x1, xref: { document: "cluster", section: "7.2.6" } }),
+    Attribute({ name: "StartUpMode", id: 0x2, conformance: "X", xref: { document: "cluster", section: "7.2.6" } }),
+    Attribute({ name: "OnMode", id: 0x3, conformance: "X", xref: { document: "cluster", section: "7.2.6" } }),
+
+    Datatype({
+        name: "ModeOptionStruct", type: "ModeOptionStruct",
+        details: "The table below lists the changes relative to the Mode Base cluster for the fields of the " +
+            "ModeOptionStruct type. A blank field indicates no change.",
         xref: { document: "cluster", section: "7.2.5.1" }
     }),
 
@@ -60,22 +72,32 @@ export const RvcRunMode = Cluster(
 
     Datatype(
         { name: "ModeTag", type: "enum16" },
+        Field({ name: "Auto", id: 0x0, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Quick", id: 0x1, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Quiet", id: 0x2, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "LowNoise", id: 0x3, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "LowEnergy", id: 0x4, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Vacation", id: 0x5, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Min", id: 0x6, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Max", id: 0x7, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Night", id: 0x8, xref: { document: "cluster", section: "7.2.7.2" } }),
+        Field({ name: "Day", id: 0x9, xref: { document: "cluster", section: "7.2.7.2" } }),
 
         Field({
             name: "Idle", id: 0x4000,
             details: "The device is not performing any of the main operations of the other modes. However, auxiliary " +
                 "actions, such as seeking the charger or charging, may occur." +
                 "\n" +
-                "For example, the device has completed cleaning, successfully or not, on its own or due to a " +
-                "command, or has not been asked to clean after a restart.",
+                "For example, the device has completed cleaning, successfully or not, on its own or due to a command, " +
+                "or has not been asked to clean after a restart.",
             xref: { document: "cluster", section: "7.2.7.2.1" }
         }),
 
         Field({
             name: "Cleaning", id: 0x4001,
             details: "The device was asked to clean so it may be actively running, or paused due to an error, due to a " +
-                "pause command, or for recharging etc. If currently paused and the device can resume it will " +
-                "continue to clean.",
+                "pause command, or for recharging etc. If currently paused and the device can resume it will continue " +
+                "to clean.",
             xref: { document: "cluster", section: "7.2.7.2.2" }
         }),
 

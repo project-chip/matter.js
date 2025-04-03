@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -30,7 +30,7 @@ import { Identity } from "#general";
  * capable of being used to switch the device on or off, adjust the intensity of the light being emitted and adjust the
  * color of the light being emitted. In addition, a Control Bridge device is capable of being used for setting scenes.
  *
- * @see {@link MatterSpecification.v13.Device} § 6.4
+ * @see {@link MatterSpecification.v14.Device} § 6.4
  */
 export interface ControlBridgeDevice extends Identity<typeof ControlBridgeDeviceDefinition> {}
 

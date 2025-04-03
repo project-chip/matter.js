@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,13 +16,20 @@ import { isIPv4, isIPv6 } from "../util/Ip.js";
  */
 export const MAX_MDNS_MESSAGE_SIZE = 1232; // 1280bytes (IPv6 packet size) - 8bytes (UDP header) - 40bytes (IPv6 IP header, IPv4 is only 20bytes)
 
-export const PtrRecord = (name: string, ptr: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
+export const PtrRecord = (
+    name: string,
+    ptr: string,
+    forInstance?: string,
+    ttl = 120,
+    flushCache = false,
+): DnsRecord<string> => ({
     name,
     value: ptr,
     ttl,
     recordType: DnsRecordType.PTR,
     recordClass: DnsRecordClass.IN,
     flushCache,
+    forInstance,
 });
 export const ARecord = (name: string, ip: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
     name,
@@ -40,17 +47,25 @@ export const AAAARecord = (name: string, ip: string, ttl = 120, flushCache = fal
     recordClass: DnsRecordClass.IN,
     flushCache,
 });
-export const TxtRecord = (name: string, entries: string[], ttl = 120, flushCache = false): DnsRecord<string[]> => ({
+export const TxtRecord = (
+    name: string,
+    entries: string[],
+    forInstance?: string,
+    ttl = 120,
+    flushCache = false,
+): DnsRecord<string[]> => ({
     name,
     value: entries,
     ttl,
     recordType: DnsRecordType.TXT,
     recordClass: DnsRecordClass.IN,
     flushCache,
+    forInstance,
 });
 export const SrvRecord = (
     name: string,
     srv: SrvRecordValue,
+    forInstance?: string,
     ttl = 120,
     flushCache = false,
 ): DnsRecord<SrvRecordValue> => ({
@@ -60,6 +75,7 @@ export const SrvRecord = (
     recordType: DnsRecordType.SRV,
     recordClass: DnsRecordClass.IN,
     flushCache,
+    forInstance,
 });
 
 export type SrvRecordValue = {
@@ -83,6 +99,7 @@ export type DnsRecord<T> = {
     flushCache?: boolean;
     ttl: number;
     value: T;
+    forInstance?: string;
 };
 
 export type DnsMessage = {
@@ -394,7 +411,7 @@ export class DnsCodec {
 
     static encodeQName(qname: string) {
         const writer = new DataWriter(Endian.Big);
-        if (qname.length > 0) {
+        if (qname !== undefined && qname.length > 0) {
             // TODO: Implement compression
             qname.split(".").forEach(label => {
                 const labelData = Bytes.fromString(label);

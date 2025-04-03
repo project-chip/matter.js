@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ export namespace AlarmBaseInterface {
         /**
          * This command allows a client to request that an alarm be enabled or suppressed at the server.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.2
          */
         modifyEnabledAlarms(request: AlarmBase.ModifyEnabledAlarmsRequest): MaybePromise;
     }
@@ -24,7 +24,7 @@ export namespace AlarmBaseInterface {
          * This command resets active and latched alarms (if possible). Any generated Notify event shall contain fields
          * that represent the state of the server after the command has been processed.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.15.7.1
          */
         reset(request: AlarmBase.ResetRequest): MaybePromise;
     }

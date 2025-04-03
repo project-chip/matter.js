@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,44 +20,47 @@ const INDENT_SPACES = 2;
  * A "diagnostic formatter" converts arbitrary values into a formatted string.  Formatting is controlled by type and the
  * {@link Diagnostic.presentation} and {@link Diagnostic.value} properties.
  */
-export function LogFormat(format: string) {
-    if (format === undefined) {
-        format = LogFormat.ANSI;
+export function LogFormat(format: string | LogFormat.Formatter): LogFormat.Formatter {
+    if (typeof format === "function") {
+        return format;
     }
 
-    switch (format) {
-        case LogFormat.PLAIN:
-            return LogFormat.plain;
-
-        case LogFormat.ANSI:
-            return LogFormat.ansi;
-
-        case LogFormat.HTML:
-            return LogFormat.html;
-
-        default:
-            throw new ImplementationError(`Unsupported log format "${format}"`);
+    const fn = LogFormat.formats[format];
+    if (fn === undefined) {
+        throw new ImplementationError(`Unsupported log format "${format}"`);
     }
+
+    return fn;
 }
 
 /**
  * Log stylization support.
  */
 export namespace LogFormat {
-    export type Type = typeof PLAIN | typeof ANSI | typeof HTML;
+    /**
+     * A function that formats a log message.
+     */
+    export type Formatter = (diagnostic: unknown, indents?: number) => string;
 
-    /** Generate text only */
+    /**
+     * Supported formats.  You may add to this object to register new named formats.
+     */
+    export const formats: Record<string, Formatter> = {};
+
+    /**
+     * Built in formatter that produces plaintext.
+     */
     export const PLAIN = "plain";
 
-    /** Format log messages using ANSI escape codes */
+    /**
+     * Built in formatter that produces text styled using ANSI escapes.
+     **/
     export const ANSI = "ansi";
 
-    /** Format log messages using HTML tags */
+    /**
+     * Built in formatter that produces HTML.
+     */
     export const HTML = "html";
-
-    export const plain = formatPlain;
-    export const ansi = formatAnsi;
-    export const html = formatHtml;
 }
 
 export type DiagnosticProducer = () => string;
@@ -122,7 +125,7 @@ function statusIcon(status: Lifecycle.Status) {
     return LifecycleIcons[status] ?? LifecycleIcons[Lifecycle.Status.Unknown];
 }
 
-function formatPlain(diagnostic: unknown, indents = 0) {
+LogFormat.formats.plain = function plain(diagnostic: unknown, indents = 0) {
     const creator = plaintextCreator(indents);
 
     const formatter = {
@@ -130,9 +133,9 @@ function formatPlain(diagnostic: unknown, indents = 0) {
         message: message => {
             const formattedValues = ensureIndented(renderDiagnostic(message.values, formatter));
 
-            return `${formatTime(message.now)} ${
-                LogLevel[message.level]
-            } ${message.facility} ${message.prefix}${formattedValues}`;
+            return `${formatTime(message.now)} ${LogLevel[
+                message.level
+            ].toUpperCase()} ${message.facility} ${message.prefix}${formattedValues}`;
         },
         key: text => creator.text(`${text}: `),
         keylike: text => creator.text(`${text}`),
@@ -147,7 +150,7 @@ function formatPlain(diagnostic: unknown, indents = 0) {
     } satisfies Formatter;
 
     return renderDiagnostic(diagnostic, formatter);
-}
+};
 
 const ANSI_CODES = {
     reset: 0,
@@ -220,7 +223,7 @@ const Styles = {
 
 type StyleName = keyof typeof Styles;
 
-function formatAnsi(diagnostic: unknown, indents = 0) {
+LogFormat.formats.ansi = function ansi(diagnostic: unknown, indents = 0) {
     let baseStyleChanged = false;
     const creator = plaintextCreator(indents);
     const currentStyle: Style = {
@@ -239,7 +242,7 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
             baseStyleChanged = true;
             styles[0] = (LogLevel[level] ?? "default").toLowerCase() as StyleName;
 
-            const prefix = style("prefix", `${formatTime(now)} ${LogLevel[level].padEnd(6)}`);
+            const prefix = style("prefix", `${formatTime(now)} ${LogLevel[level].toUpperCase().padEnd(6)}`);
 
             facility = style(
                 "facility",
@@ -384,7 +387,7 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
         if (text === "") {
             return text;
         }
-        const segments = text.match(/([^✓✔✗✘]+|[✓✔✗✘])/g);
+        const segments = text.match(/[^✓✔✗✘]+|[✓✔✗✘]/g);
         if (segments === null) {
             throw new InternalError("ANSI text processing regex failure");
         }
@@ -410,13 +413,13 @@ function formatAnsi(diagnostic: unknown, indents = 0) {
             })
             .join("");
     }
-}
+};
 
 function htmlSpan(type: string, inner: string) {
     return `<span class="matter-log-${type}">${inner}</span>`;
 }
 
-function formatHtml(diagnostic: unknown) {
+LogFormat.formats.html = function html(diagnostic: unknown) {
     function escape(text: string) {
         return text.toString().replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
@@ -428,7 +431,7 @@ function formatHtml(diagnostic: unknown) {
 
             return htmlSpan(
                 `line ${LogLevel[level].toLowerCase()}`,
-                `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", LogLevel[level])} ${htmlSpan(
+                `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", LogLevel[level].toUpperCase())} ${htmlSpan(
                     "facility",
                     facility,
                 )} ${prefix}${formattedValues}`,
@@ -450,7 +453,7 @@ function formatHtml(diagnostic: unknown) {
     } satisfies Formatter;
 
     return renderDiagnostic(diagnostic, formatter);
-}
+};
 
 /**
  * Render a value based on its JS type.
@@ -682,12 +685,25 @@ function formatTime(time: Date) {
  * Multiline messages should always have whitespace as the first character after newlines.  Ensure this is so.
  */
 function ensureIndented(text: string) {
-    if (text.match(/\n\S/s)) {
-        return text.replace(/\n/gs, "\n  ");
+    if (text.match(/\n\S/)) {
+        return text.replace(/\n/g, "\n  ");
     }
     return text;
 }
 
 if (MatterError.formatterFor === MatterError.defaultFormatterFactory) {
     MatterError.formatterFor = LogFormat;
+}
+
+if (typeof MatterHooks !== "undefined") {
+    MatterHooks.messageAndStackFor = (error: unknown, parentStack?: string[]) => {
+        const { message, stack, stackLines } = Diagnostic.messageAndStackFor(error, parentStack);
+
+        let stackStr;
+        if (stack) {
+            stackStr = stack.map(frame => LogFormat.formats.ansi(frame).trim()).join("\n");
+        }
+
+        return { message, stack: stackStr, stackLines };
+    };
 }

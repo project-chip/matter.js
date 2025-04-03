@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,6 +9,7 @@
 import { IdentifyServer as BaseIdentifyServer } from "../behaviors/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../behaviors/groups/GroupsServer.js";
 import { FanControlServer as BaseFanControlServer } from "../behaviors/fan-control/FanControlServer.js";
+import { OnOffServer as BaseOnOffServer } from "../behaviors/on-off/OnOffServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -16,7 +17,7 @@ import { Identity } from "#general";
 /**
  * A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air in a room.
  *
- * @see {@link MatterSpecification.v13.Device} § 9.2
+ * @see {@link MatterSpecification.v14.Device} § 9.2
  */
 export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
 
@@ -43,15 +44,25 @@ export namespace FanRequirements {
     export const FanControlServer = BaseFanControlServer;
 
     /**
+     * The OnOff cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer } };
+    export const server = {
+        mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer },
+        optional: { OnOff: OnOffServer }
+    };
 }
 
 export const FanDeviceDefinition = MutableEndpoint({
     name: "Fan",
     deviceType: 0x2b,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: FanRequirements,
     behaviors: SupportedBehaviors(
         FanRequirements.server.mandatory.Identify,

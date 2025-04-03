@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,10 +15,10 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity
- * of light (illuminance) to which the sensor is being subjected.
+ * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity of
+ * light (illuminance) to which the sensor is being subjected.
  *
- * @see {@link MatterSpecification.v13.Device} § 7.2
+ * @see {@link MatterSpecification.v14.Device} § 7.2
  */
 export interface LightSensorDevice extends Identity<typeof LightSensorDeviceDefinition> {}
 

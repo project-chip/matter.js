@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,14 +31,14 @@ export namespace OperationalCredentials {
      * Note that the Trusted Root CA Certificate is not included in this structure. The roots are available in the
      * TrustedRootCertificates attribute of the Node Operational Credentials cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.4
      */
     export const TlvNoc = TlvObject({
         /**
          * This field shall contain the NOC for the struct’s associated fabric, encoded using Matter Certificate
          * Encoding.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.4.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.4.1
          */
         noc: TlvField(1, TlvByteString.bound({ maxLength: 400 })),
 
@@ -46,7 +46,7 @@ export namespace OperationalCredentials {
          * This field shall contain the ICAC or the struct’s associated fabric, encoded using Matter Certificate
          * Encoding. If no ICAC is present in the chain, this field shall be set to null.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.4.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.4.2
          */
         icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))),
 
@@ -59,23 +59,23 @@ export namespace OperationalCredentials {
      * Note that the Trusted Root CA Certificate is not included in this structure. The roots are available in the
      * TrustedRootCertificates attribute of the Node Operational Credentials cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.4
      */
     export interface Noc extends TypeFromSchema<typeof TlvNoc> {}
 
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.5
      */
     export const TlvFabricDescriptor = TlvObject({
         /**
-         * This field shall contain the public key for the trusted root that scopes the fabric referenced by
-         * FabricIndex and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA Certificates”).
-         * The format for the key shall be the same as that used in the ec-pub-key field of the Matter Certificate
-         * Encoding for the root in the operational certificate chain.
+         * This field shall contain the public key for the trusted root that scopes the fabric referenced by FabricIndex
+         * and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA Certificates”). The format
+         * for the key shall be the same as that used in the ec-pub-key field of the Matter Certificate Encoding for the
+         * root in the operational certificate chain.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.1
          */
         rootPublicKey: TlvField(1, TlvByteString.bound({ length: 65 })),
 
@@ -83,10 +83,13 @@ export namespace OperationalCredentials {
          * This field shall contain the value of AdminVendorID provided in the AddNOC command that led to the creation
          * of this FabricDescriptorStruct. The set of allowed values is defined in AdminVendorID.
          *
-         * The intent is to provide some measure of user transparency about which entities have Administer privileges
-         * on the Node.
+         * The intent is to provide some measure of user transparency about which entities have Administer privileges on
+         * the Node.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.2
+         * Clients shall consider the VendorID field value to be untrustworthy until the NOC chain associated with the
+         * fabric has passed the Vendor ID Validation Procedure against the associated RCAC.
+         *
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.2
          */
         vendorId: TlvField(2, TlvVendorId),
 
@@ -95,24 +98,24 @@ export namespace OperationalCredentials {
          * match the value found in the matter-fabric-id field from the operational certificate providing the
          * operational identity under this Fabric.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.3
          */
         fabricId: TlvField(3, TlvFabricId),
 
         /**
          * This field shall contain the NodeID in use within the fabric referenced by FabricIndex. This field shall
-         * match the value found in the matter-node-id field from the operational certificate providing this
-         * operational identity.
+         * match the value found in the matter-node-id field from the operational certificate providing this operational
+         * identity.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.4
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.4
          */
         nodeId: TlvField(4, TlvNodeId),
 
         /**
-         * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is
-         * set by the UpdateFabricLabel command.
+         * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is set
+         * by the UpdateFabricLabel command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.4.5.5
+         * @see {@link MatterSpecification.v14.Core} § 11.18.4.5.5
          */
         label: TlvField(5, TlvString.bound({ maxLength: 32 })),
 
@@ -122,21 +125,21 @@ export namespace OperationalCredentials {
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.5
      */
     export interface FabricDescriptor extends TypeFromSchema<typeof TlvFabricDescriptor> {}
 
     /**
      * Input to the OperationalCredentials attestationRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
      */
     export const TlvAttestationRequest = TlvObject({ attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 })) });
 
     /**
      * Input to the OperationalCredentials attestationRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
      */
     export interface AttestationRequest extends TypeFromSchema<typeof TlvAttestationRequest> {}
 
@@ -148,13 +151,13 @@ export namespace OperationalCredentials {
      *
      * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.2
      */
     export const TlvAttestationResponse = TlvObject({
         /**
          * This field shall contain the octet string of the serialized attestation_elements_message.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.2.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.2.1
          */
         attestationElements: TlvField(0, TlvByteString.bound({ maxLength: 900 })),
 
@@ -162,7 +165,7 @@ export namespace OperationalCredentials {
          * This field shall contain the octet string of the necessary attestation_signature as described in Section
          * 11.18.4.7, “Attestation Information”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.2.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.2.2
          */
         attestationSignature: TlvField(1, TlvByteString.bound({ length: 64 }))
     });
@@ -175,7 +178,7 @@ export namespace OperationalCredentials {
      *
      * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.2
      */
     export interface AttestationResponse extends TypeFromSchema<typeof TlvAttestationResponse> {}
 
@@ -183,7 +186,7 @@ export namespace OperationalCredentials {
      * This enumeration is used by the CertificateChainRequest command to convey which certificate from the device
      * attestation certificate chain to transmit back to the client.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.2
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.2
      */
     export enum CertificateChainType {
         /**
@@ -200,28 +203,28 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials certificateChainRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
      */
     export const TlvCertificateChainRequest = TlvObject({ certificateType: TlvField(0, TlvEnum<CertificateChainType>()) });
 
     /**
      * Input to the OperationalCredentials certificateChainRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
      */
     export interface CertificateChainRequest extends TypeFromSchema<typeof TlvCertificateChainRequest> {}
 
     /**
      * This command shall be generated in response to a CertificateChainRequest command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.4
      */
     export const TlvCertificateChainResponse = TlvObject({
         /**
          * This field shall be the DER encoded certificate corresponding to the CertificateType field in the
          * CertificateChainRequest command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.4.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.4.1
          */
         certificate: TlvField(0, TlvByteString.bound({ maxLength: 600 }))
     });
@@ -229,14 +232,14 @@ export namespace OperationalCredentials {
     /**
      * This command shall be generated in response to a CertificateChainRequest command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.4
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.4
      */
     export interface CertificateChainResponse extends TypeFromSchema<typeof TlvCertificateChainResponse> {}
 
     /**
      * Input to the OperationalCredentials csrRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
      */
     export const TlvCsrRequest = TlvObject({
         csrNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
@@ -246,7 +249,7 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials csrRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
      */
     export interface CsrRequest extends TypeFromSchema<typeof TlvCsrRequest> {}
 
@@ -258,13 +261,13 @@ export namespace OperationalCredentials {
      *
      * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.6
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.6
      */
     export const TlvCsrResponse = TlvObject({
         /**
          * This field shall contain the octet string of the serialized nocsr_elements_message.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.6.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.6.1
          */
         nocsrElements: TlvField(0, TlvByteString.bound({ maxLength: 900 })),
 
@@ -272,7 +275,7 @@ export namespace OperationalCredentials {
          * This field shall contain the octet string of the necessary attestation_signature as described in Section
          * 11.18.4.9, “NOCSR Information”.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.6.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.6.2
          */
         attestationSignature: TlvField(1, TlvByteString.bound({ length: 64 }))
     });
@@ -285,14 +288,14 @@ export namespace OperationalCredentials {
      *
      * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.6
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.6
      */
     export interface CsrResponse extends TypeFromSchema<typeof TlvCsrResponse> {}
 
     /**
      * Input to the OperationalCredentials addNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
      */
     export const TlvAddNocRequest = TlvObject({
         nocValue: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
@@ -310,7 +313,7 @@ export namespace OperationalCredentials {
          * fabric as the accessing fabric and with the following argument fields (assuming KeySetWrite allowed a
          * GroupKeySetID set to 0):
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.1
          */
         ipkValue: TlvField(2, TlvByteString.bound({ length: 16 })),
 
@@ -327,12 +330,12 @@ export namespace OperationalCredentials {
          * caller on its given Fabric to eventually add another Access Control Entry for CASE authentication mode, to
          * enable the new Administrator to administer the device, since the Fabric Scoping of the Access Control List
          * prevents the current Node from being able to write new entries scoped to that Fabric, if the session is
-         * established from CASE. While a session established from PASE does gain Fabric Scope of a newly-joined
-         * Fabric, this argument is made mandatory to provide symmetry between both types of session establishment,
-         * both of which need to eventually add an "Administer Node over CASE" Access Control Entry to finalize new
-         * Fabric configuration and subsequently be able to call the CommissioningComplete command.
+         * established from CASE. While a session established from PASE does gain Fabric Scope of a newly-joined Fabric,
+         * this argument is made mandatory to provide symmetry between both types of session establishment, both of
+         * which need to eventually add an "Administer Node over CASE" Access Control Entry to finalize new Fabric
+         * configuration and subsequently be able to call the CommissioningComplete command.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.2
          */
         caseAdminSubject: TlvField(3, TlvSubjectId),
 
@@ -342,11 +345,11 @@ export namespace OperationalCredentials {
          *
          * ### Effect When Received
          *
-         * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-         * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+         * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+         * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
-         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
-         * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+         * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+         * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
          * If the prior CSRRequest state that preceded AddNOC had the IsForUpdateNOC field indicated as true, then this
          * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -357,13 +360,12 @@ export namespace OperationalCredentials {
          * provides the root of trust certificate within the same Fail- Safe context as the rest of the new fabric’s
          * operational credentials, even if some other fabric already uses the exact same root of trust certificate.
          *
-         * If the NOC provided in the NOCValue encodes an Operational Identifier for a <Root Public Key, Fab
+         * If the NOC provided in the NOCValue encodes an Operational Identifier for a <Root Public Key, FabricID> pair
+         * already present on the device, then the device shall process the error by responding with a StatusCode of
+         * FabricConflict as described in Section 11.18.6.7.2, “Handling Errors”.
          *
-         * ricID> pair already present on the device, then the device shall process the error by responding with a
-         * StatusCode of FabricConflict as described in Section 11.18.6.7.2, “Handling Errors”.
-         *
-         * If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics attribute, then
-         * the device’s operational credentials table is considered full and the device shall process the error by
+         * If the device already has the CommissionedFabrics attribute equal to the SupportedFabrics attribute, then the
+         * device’s operational credentials table is considered full and the device shall process the error by
          * responding with a StatusCode of TableFull as described in Section 11.18.6.7.2, “Handling Errors”.
          *
          * If the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE, such as not
@@ -402,14 +404,17 @@ export namespace OperationalCredentials {
          *
          *   7. The receiver shall create and add a new Access Control Entry using the CaseAdminSubject field to grant
          *       subsequent Administer access to an Administrator member of the new Fabric. It is recommended that the
-         *       Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking
-         *       the AddNOC command, within another of the Fabrics of which it is a member.
+         *       Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
+         *       AddNOC command, within another of the Fabrics of which it is a member.
+         *
+         *     a. If the Managed Device Feature is implemented by the ACL cluster, then one or more ARL entries with the
+         *        new FabricIndex may be added to the ARL attribute.
          *
          *   8. The incoming IPKValue shall be stored in the Fabric-scoped slot within the Group Key Management cluster
          *       (see KeySetWrite), for subsequent use during CASE.
          *
-         *   9. The Fabric Index associated with the armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-         *       Command”) shall be updated to match the Fabric Index just allocated.
+         *   9. The Fabric Index associated with the armed fail-safe context (see ArmFailSafe) shall be updated to match
+         *       the Fabric Index just allocated.
          *
          *   10. If the current secure session was established with PASE, the receiver shall:
          *
@@ -417,13 +422,13 @@ export namespace OperationalCredentials {
          *        interactions have the proper accessing fabric.
          *
          *   11. If the current secure session was established with CASE, subsequent configuration of the newly
-         *       installed Fabric requires the opening of a new CASE session from the Administrator from the Fabric
-         *       just installed. This Administrator is the one listed in the CaseAdminSubject argument.
+         *       installed Fabric requires the opening of a new CASE session from the Administrator from the Fabric just
+         *       installed. This Administrator is the one listed in the CaseAdminSubject argument.
          *
          * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
          * matching the FabricIndex under which the new Node Operational Certificate (NOC) is scoped.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.8.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.8.3
          */
         adminVendorId: TlvField(4, TlvVendorId)
     });
@@ -431,15 +436,15 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials addNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
      */
     export interface AddNocRequest extends TypeFromSchema<typeof TlvAddNocRequest> {}
 
     /**
-     * This enumeration is used by the NOCResponse common response command to convey detailed outcome of several of
-     * this cluster’s operations.
+     * This enumeration is used by the NOCResponse common response command to convey detailed outcome of several of this
+     * cluster’s operations.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.4.3
+     * @see {@link MatterSpecification.v14.Core} § 11.18.4.3
      */
     export enum NodeOperationalCertStatus {
         /**
@@ -506,13 +511,13 @@ export namespace OperationalCredentials {
      *
      * It provides status information about the success or failure of those commands.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.10
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.10
      */
     export const TlvNocResponse = TlvObject({
         /**
          * This field shall contain an NOCStatus value representing the status of an operation involving a NOC.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.1
          */
         statusCode: TlvField(0, TlvEnum<NodeOperationalCertStatus>()),
 
@@ -520,7 +525,7 @@ export namespace OperationalCredentials {
          * This field shall be present whenever StatusCode has a value of OK. If present, it shall contain the Fabric
          * Index of the Fabric last added, removed or updated.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.2
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.2
          */
         fabricIndex: TlvOptionalField(1, TlvFabricIndex),
 
@@ -529,7 +534,7 @@ export namespace OperationalCredentials {
          * presented to user interfaces in any way. Its purpose is to help developers in troubleshooting errors and the
          * contents may go into logs or crash reports.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.10.3
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.10.3
          */
         debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 }))
     });
@@ -547,14 +552,14 @@ export namespace OperationalCredentials {
      *
      * It provides status information about the success or failure of those commands.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.10
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.10
      */
     export interface NocResponse extends TypeFromSchema<typeof TlvNocResponse> {}
 
     /**
      * Input to the OperationalCredentials updateNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
      */
     export const TlvUpdateNocRequest = TlvObject({
         nocValue: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
@@ -565,14 +570,14 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials updateNoc command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
      */
     export interface UpdateNocRequest extends TypeFromSchema<typeof TlvUpdateNocRequest> {}
 
     /**
      * Input to the OperationalCredentials updateFabricLabel command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
      */
     export const TlvUpdateFabricLabelRequest = TlvObject({
         /**
@@ -580,9 +585,9 @@ export namespace OperationalCredentials {
          *
          * Effect on Receipt
          *
-         * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not
-         * the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the
-         * command and there shall NOT be any permanent changes to any Fabric data.
+         * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not the
+         * accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the command
+         * and there shall NOT be any permanent changes to any Fabric data.
          *
          * Otherwise, the Label field for the accessing fabric shall immediately be updated to reflect the Label
          * argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
@@ -592,7 +597,7 @@ export namespace OperationalCredentials {
          * CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
          * currently visible, even for an existing fabric currently in process of being updated.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.11.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.11.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 32 })),
 
@@ -602,58 +607,58 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials updateFabricLabel command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
      */
     export interface UpdateFabricLabelRequest extends TypeFromSchema<typeof TlvUpdateFabricLabelRequest> {}
 
     /**
      * Input to the OperationalCredentials removeFabric command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
      */
     export const TlvRemoveFabricRequest = TlvObject({
         /**
-         * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is
-         * to be removed from the device.
+         * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is to
+         * be removed from the device.
          *
          * Effect on Receipt
          *
          * If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an
-         * NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be
-         * any permanent changes to any device data.
+         * NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and
          *
-         * Otherwise, one of the following outcomes shall occur:
+         * there shall NOT be any permanent changes to any device data. Otherwise, one of the following outcomes shall
+         * occur:
          *
          *   1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete
-         *      all Matter related data on the node which was created since it was commissioned. This
+         *      all Matter related data on the node which was created since it was commissioned. This includes all
+         *      Fabric-Scoped data, including Access Control List, Access Restriction List, bindings, scenes, group
+         *      keys, operational certificates, etc. All Trusted Roots shall also be removed. If a time synchronization
+         *      cluster is present on the Node, the TrustedTimeSource and DefaultNtp shall be set to null. Any Matter
+         *      related data including logs, secure sessions, exchanges and interaction model constructs shall also be
+         *      removed. Since this operation involves the removal of the secure session data that may underpin the
+         *      current set of exchanges, the Node invoking the command SHOULD NOT expect a response before terminating
+         *      its secure session with the target.
          *
-         * includes all Fabric-Scoped data, including Access Control List, bindings, scenes, group keys, operational
-         * certificates, etc. All Trusted Roots shall also be removed. If a time synchronization cluster is present on
-         * the Node, the TrustedTimeSource and DefaultNtp shall be set to null. Any Matter related data including logs,
-         * secure sessions, exchanges and interaction model constructs shall also be removed. Since this operation
-         * involves the removal of the secure session data that may underpin the current set of exchanges, the Node
-         * invoking the command SHOULD NOT expect a response before terminating its secure session with the target.
+         *   2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
+         *      irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, Access
+         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no
+         *      longer referenced by any operational certificate shall also be removed. If a time synchronization
+         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the
+         *      TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model constructs
+         *      related to the Operational Identity under the given Fabric shall also be removed. Following the removal,
+         *      an NOCResponse with a StatusCode of OK shall be returned.
          *
-         * 2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
-         * irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
-         * operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-         * certificate shall also be removed. If a time synchronization cluster is present on the Node, and the
-         * TrustedTimeSource FabricIndex matches the given FabricIndex, the TrustedTimeSource shall be set to null. All
-         * secure sessions, exchanges and interaction model constructs related to the Operational Identity under the
-         * given Fabric shall also be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be
-         * returned.
+         *   3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
+         *      irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, Access
+         *      Restriction Entries, bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no
+         *      longer referenced by any operational certificate shall also be removed. If a time synchronization
+         *      cluster is present on the Node, and the TrustedTimeSource FabricIndex matches the given FabricIndex, the
+         *      TrustedTimeSource shall be set to null. All secure sessions, exchanges and interaction model constructs
+         *      related to the Operational Identity under the given Fabric shall also be removed. Since this operation
+         *      involves the removal of the secure session data that may underpin the current set of exchanges, the Node
+         *      invoking the command SHOULD NOT expect a response before terminating its secure session with the target.
          *
-         * 3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
-         * irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group
-         * keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-         * certificate shall also be removed. If a time synchronization cluster is present on the Node, and the
-         * TrustedTimeSource FabricIndex matches the given FabricIndex, the TrustedTimeSource shall be set to null. All
-         * secure sessions, exchanges and interaction model constructs related to the Operational Identity under the
-         * given Fabric shall also be removed. Since this operation involves the removal of the secure session data
-         * that may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response
-         * before terminating its secure session with the target.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.18.6.12.1
+         * @see {@link MatterSpecification.v14.Core} § 11.18.6.12.1
          */
         fabricIndex: TlvField(0, TlvFabricIndex)
     });
@@ -661,14 +666,14 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials removeFabric command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
      */
     export interface RemoveFabricRequest extends TypeFromSchema<typeof TlvRemoveFabricRequest> {}
 
     /**
      * Input to the OperationalCredentials addTrustedRootCertificate command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
      */
     export const TlvAddTrustedRootCertificateRequest = TlvObject({
         rootCaCertificate: TlvField(0, TlvByteString.bound({ maxLength: 400 }))
@@ -677,7 +682,7 @@ export namespace OperationalCredentials {
     /**
      * Input to the OperationalCredentials addTrustedRootCertificate command
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+     * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
      */
     export interface AddTrustedRootCertificateRequest extends TypeFromSchema<typeof TlvAddTrustedRootCertificateRequest> {}
 
@@ -700,7 +705,7 @@ export namespace OperationalCredentials {
              *
              * The number of entries in this list shall match the number of entries in the Fabrics attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.1
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.1
              */
             nocs: FabricScopedAttribute(
                 0x0,
@@ -723,15 +728,15 @@ export namespace OperationalCredentials {
              *
              * The number of entries in this list shall match the number of entries in the NOCs attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.2
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.2
              */
             fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptor), { persistent: true, default: [] }),
 
             /**
-             * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for
-             * a particular device.
+             * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for a
+             * particular device.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.3
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.3
              */
             supportedFabrics: FixedAttribute(0x2, TlvUInt8.bound({ min: 5, max: 254 })),
 
@@ -745,13 +750,13 @@ export namespace OperationalCredentials {
              *
              * Upon Factory Data Reset, this attribute shall be set to a default value of 0.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.4
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.4
              */
             commissionedFabrics: Attribute(0x3, TlvUInt8, { persistent: true }),
 
             /**
-             * This attribute shall contain a read-only list of Trusted Root CA Certificates installed on the Node, as
-             * octet strings containing their Matter Certificate Encoding representation.
+             * This attribute shall contain a read-only list of Trusted Root CA Certificates (RCAC) installed on the
+             * Node, as octet strings containing their Matter Certificate Encoding representation.
              *
              * These certificates are installed through the AddTrustedRootCertificate command.
              *
@@ -764,7 +769,7 @@ export namespace OperationalCredentials {
              *
              * Upon Factory Data Reset, this attribute shall be set to a default value whereby the list is empty.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.5
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.5
              */
             trustedRootCertificates: Attribute(
                 0x4,
@@ -779,7 +784,7 @@ export namespace OperationalCredentials {
              * attribute reads, since a given Fabric may be referenced by a different Fabric Index locally on a remote
              * Node.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.5.6
+             * @see {@link MatterSpecification.v14.Core} § 11.18.5.6
              */
             currentFabricIndex: Attribute(0x5, TlvFabricIndex, { default: FabricIndex(0) })
         },
@@ -791,7 +796,7 @@ export namespace OperationalCredentials {
              * recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall
              * be used in the computation of the Attestation Information.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.1
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.1
              */
             attestationRequest: Command(
                 0x0,
@@ -802,10 +807,10 @@ export namespace OperationalCredentials {
             ),
 
             /**
-             * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail
-             * with a Status Code of INVALID_COMMAND.
+             * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with
+             * a Status Code of INVALID_COMMAND.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.3
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.3
              */
             certificateChainRequest: Command(
                 0x2,
@@ -816,32 +821,32 @@ export namespace OperationalCredentials {
             ),
 
             /**
-             * This command shall be generated to execute the Node Operational CSR Procedure and subsequently return
-             * the NOCSR Information, in the form of a CSRResponse Command.
+             * This command shall be generated to execute the Node Operational CSR Procedure and subsequently return the
+             * NOCSR Information, in the form of a CSRResponse Command.
              *
              * The CSRNonce field shall be used in the computation of the NOCSR Information. If the CSRNonce is
              * malformed, then this command shall fail with an INVALID_COMMAND status code.
              *
-             * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE
-             * session, the command shall fail with an INVALID_COMMAND status code, as it would never be possible to
-             * use a resulting subsequent certificate issued from the CSR with the UpdateNOC command, which is
-             * forbidden over PASE sessions.
+             * If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE session,
+             * the command shall fail with an INVALID_COMMAND status code, as it would never be possible to use a
+             * resulting subsequent certificate issued from the CSR with the UpdateNOC command, which is forbidden over
+             * PASE sessions.
              *
              * If the IsForUpdateNOC field is present and set to true, the internal state of the CSR associated keypair
              * shall be tagged as being for a subsequent UpdateNOC, otherwise the internal state of the CSR shall be
              * tagged as being for a subsequent AddNOC. See AddNOC and UpdateNOC for details about the processing.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
              * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
              *
              * If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is
-             * found to collide with an existing key pair already previously generated and installed, and that check
-             * had been executed, then this command shall fail with a FAILURE status code sent back to the initiator.
+             * found to collide with an existing key pair already previously generated and installed, and that check had
+             * been executed, then this command shall fail with a FAILURE status code sent back to the initiator.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.5
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.5
              */
             csrRequest: Command(0x4, TlvCsrRequest, 0x5, TlvCsrResponse, { invokeAcl: AccessLevel.Administer }),
 
@@ -856,7 +861,7 @@ export namespace OperationalCredentials {
              *
              * A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.8
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.8
              */
             addNoc: Command(0x6, TlvAddNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
@@ -872,8 +877,8 @@ export namespace OperationalCredentials {
              *
              * Effect When Received
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
              * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -886,14 +891,13 @@ export namespace OperationalCredentials {
              * then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
              *
              * If any of the following conditions arise, the Node shall process an error by responding with an
-             *
              * NOCResponse with a StatusCode of InvalidNOC as described in Section 11.18.6.7.2, “Handling Errors”:
              *
              *   • The NOC provided in the NOCValue does not refer in its subject to the FabricID associated with the
              *     accessing fabric.
              *
-             *   • The ICAC provided in the ICACValue (if present) has a FabricID in its subject that does not match
-             *     the FabricID associated with the accessing fabric.
+             *   • The ICAC provided in the ICACValue (if present) has a FabricID in its subject that does not match the
+             *     FabricID associated with the accessing fabric.
              *
              * Otherwise, the command is considered an update of existing credentials for a given Fabric, and the
              * following shall apply:
@@ -916,25 +920,25 @@ export namespace OperationalCredentials {
              * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
              * matching the FabricIndex under which the updated NOC is scoped.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.9
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.9
              */
             updateNoc: Command(0x7, TlvUpdateNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
-             * This command shall be used by an Administrator to set the user-visible Label field for a given Fabric,
-             * as reflected by entries in the Fabrics attribute. An Administrator shall use this command to set the
-             * Label to a string (possibly selected by the user themselves) that the user can recognize and relate to
-             * this Administrator
+             * This command shall be used by an Administrator to set the user-visible Label field for a given Fabric, as
+             * reflected by entries in the Fabrics attribute. An Administrator shall use this command to set the Label
+             * to a string (possibly selected by the user themselves) that the user can recognize and relate to this
+             * Administrator
              *
              *   • during the commissioning process, and
              *
              *   • whenever the user chooses to update this string.
              *
-             * The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD be
-             * used by Administrators to provide additional per-fabric context when operations such as RemoveFabric are
+             * The Label field, along with the VendorID field in the same entry of the Fabrics attribute, SHOULD be used
+             * by Administrators to provide additional per-fabric context when operations such as RemoveFabric are
              * considered or used.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.11
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.11
              */
             updateFabricLabel: Command(
                 0x9,
@@ -948,8 +952,8 @@ export namespace OperationalCredentials {
              * This command is used by Administrators to remove a given Fabric and delete all associated fabric-scoped
              * data.
              *
-             * If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate
-             * stored in the Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
+             * If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate stored
+             * in the Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
              *
              * WARNING
              *
@@ -963,7 +967,7 @@ export namespace OperationalCredentials {
              * removal. Otherwise, users may only observe the removal of a Fabric association as persistently failing
              * attempts to reach a Node operationally.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.12
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.12
              */
             removeFabric: Command(
                 0xa,
@@ -981,12 +985,14 @@ export namespace OperationalCredentials {
              * If the certificate from the RootCACertificate field is already installed, based on exact byte-for-byte
              * equality, then this command shall succeed with no change to the list.
              *
-             * If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe
-             * Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+             * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
+             * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
              *
              * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period,
-             * which would cause the new invocation to add a second root certificate within a given fail- safe timer
-             * period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+             * which would cause the new invocation to add a second root certificate within a given fail-
+             *
+             * safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the
+             * initiator.
              *
              * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then
              * this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
@@ -998,7 +1004,7 @@ export namespace OperationalCredentials {
              * Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root
              * of trust using the RemoveFabric command.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.18.6.13
+             * @see {@link MatterSpecification.v14.Core} § 11.18.6.13
              */
             addTrustedRootCertificate: Command(
                 0xb,
@@ -1014,7 +1020,7 @@ export namespace OperationalCredentials {
      * This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as well as manage
      * the associated Fabrics.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.18
+     * @see {@link MatterSpecification.v14.Core} § 11.18
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

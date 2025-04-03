@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,10 +17,10 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
- * a remote method.
+ * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or a
+ * remote method.
  *
- * @see {@link MatterSpecification.v13.Device} § 8.1
+ * @see {@link MatterSpecification.v14.Device} § 8.1
  */
 export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition> {}
 

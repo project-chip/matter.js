@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,17 @@ import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { TimeSynchronizationCluster } from "#clusters/time-synchronization";
-import { Bytes, ChannelType, Crypto, Logger, MatterError, Time, UnexpectedDataError, repackErrorAs } from "#general";
+import {
+    Bytes,
+    ChannelType,
+    Crypto,
+    Diagnostic,
+    Logger,
+    MatterError,
+    repackErrorAs,
+    Time,
+    UnexpectedDataError,
+} from "#general";
 import {
     ClusterId,
     ClusterType,
@@ -107,6 +117,9 @@ type CommissioningStep = {
 
     /** Logic function to execute */
     stepLogic: () => Promise<CommissioningStepResult>;
+
+    /** Optional flag to indicate that the failsafe timer should be rearmed in any case before this step. */
+    reArmFailsafe?: boolean;
 };
 
 /** Data that are collected initially or through the commissioning process and can be used also by other steps. */
@@ -139,22 +152,22 @@ const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
  */
 export class ControllerCommissioningFlow {
-    #interactionClient: InteractionClient;
-    readonly #ca: CertificateAuthority;
-    readonly #fabric: Fabric;
-    readonly #transitionToCase: (
+    protected interactionClient: InteractionClient;
+    protected readonly ca: CertificateAuthority;
+    protected readonly fabric: Fabric;
+    protected readonly transitionToCase: (
         peerAddress: PeerAddress,
         supportsConcurrentConnections: boolean,
     ) => Promise<InteractionClient | undefined>;
-    readonly #commissioningOptions: ControllerCommissioningFlowOptions;
-    readonly #commissioningSteps = new Array<CommissioningStep>();
-    readonly #commissioningStepResults = new Map<string, CommissioningStepResult>();
+    protected readonly commissioningOptions: ControllerCommissioningFlowOptions;
+    protected readonly commissioningSteps = new Array<CommissioningStep>();
+    protected readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
     readonly #clusterClients = new Map<ClusterId, ClusterClientObj>();
     #commissioningStartedTime: number | undefined;
     #commissioningExpiryTime: number | undefined;
     #lastFailSafeTime: number | undefined;
-    #lastBreadcrumb = 1;
-    #collectedCommissioningData: CollectedCommissioningData = {};
+    protected lastBreadcrumb = 1;
+    protected collectedCommissioningData: CollectedCommissioningData = {};
     #failSafeTimeMs = DEFAULT_FAILSAFE_TIME_MS;
 
     constructor(
@@ -176,12 +189,12 @@ export class ControllerCommissioningFlow {
             supportsConcurrentConnections: boolean,
         ) => Promise<InteractionClient | undefined>,
     ) {
-        this.#interactionClient = interactionClient;
-        this.#ca = ca;
-        this.#fabric = fabric;
-        this.#transitionToCase = transitionToCase;
-        this.#commissioningOptions = commissioningOptions;
-        logger.debug(`Commissioning options: ${Logger.toJSON(commissioningOptions)}`);
+        this.interactionClient = interactionClient;
+        this.ca = ca;
+        this.fabric = fabric;
+        this.transitionToCase = transitionToCase;
+        this.commissioningOptions = commissioningOptions;
+        logger.debug(`Commissioning options: ${Diagnostic.json(commissioningOptions)}`);
         this.#initializeCommissioningSteps();
     }
 
@@ -194,9 +207,15 @@ export class ControllerCommissioningFlow {
     async executeCommissioning() {
         this.#sortSteps();
 
-        for (const step of this.#commissioningSteps) {
+        let failSafeTimerReArmedAfterPreviousStep = false;
+        for (const step of this.commissioningSteps) {
             logger.info(`Executing commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name}`);
             try {
+                if (step.reArmFailsafe && !failSafeTimerReArmedAfterPreviousStep) {
+                    logger.debug(`Re-Arming failsafe timer before executing step`);
+                    await this.#armFailsafe();
+                }
+                failSafeTimerReArmedAfterPreviousStep = false;
                 const result = await step.stepLogic();
                 this.#setCommissioningStepResult(step, result);
 
@@ -222,6 +241,7 @@ export class ControllerCommissioningFlow {
                             )}s elapsed since last arm failsafe, re-arming failsafe`,
                         );
                         await this.#armFailsafe();
+                        failSafeTimerReArmedAfterPreviousStep = true;
                     }
                 }
 
@@ -284,7 +304,7 @@ export class ControllerCommissioningFlow {
         logger.debug(
             `Creating new cluster client for cluster ${cluster.name} (endpoint ${endpointId}, isFeatureSpecific ${isFeatureSpecific})`,
         );
-        const client = ClusterClient(cluster, endpointId, this.#interactionClient);
+        const client = ClusterClient(cluster, endpointId, this.interactionClient);
         this.#clusterClients.set(cluster.id, client);
         return client;
     }
@@ -294,7 +314,7 @@ export class ControllerCommissioningFlow {
      * @see {@link MatterSpecification.v13.Core} § 5.5
      */
     #initializeCommissioningSteps() {
-        this.#commissioningSteps.push({
+        this.commissioningSteps.push({
             stepNumber: 0, // Preparation
             subStepNumber: 1,
             name: "GetInitialData",
@@ -303,117 +323,123 @@ export class ControllerCommissioningFlow {
 
         // Step 1: is outside of this class and requires to have relevant information needed by next steps
         // Step 2: is about discovery which is already done before this starts here
-        // Step 3: is the PASE session establishment which is done before this starts here
+        // TODO Step 3-5: Commissioner handles/prepares for T&C Ack, if supported
+        // Step 6: is the PASE session establishment which is done before this starts here
 
-        this.#commissioningSteps.push({
-            stepNumber: 4,
+        this.commissioningSteps.push({
+            stepNumber: 7,
             subStepNumber: 1,
             name: "GeneralCommissioning.ArmFailsafe",
             stepLogic: () => this.#armFailsafe(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 5,
+        this.commissioningSteps.push({
+            stepNumber: 8,
             subStepNumber: 1,
             name: "GeneralCommissioning.ConfigureRegulatoryInformation",
             stepLogic: () => this.#configureRegulatoryInformation(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 5,
+        this.commissioningSteps.push({
+            stepNumber: 8,
             subStepNumber: 2,
             name: "TimeSynchronization.SynchronizeTime",
             stepLogic: () => this.#synchronizeTime(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 6,
+        // TODO Step 9: If device and Controller supports T&C Feature then User consent is handled
+
+        this.commissioningSteps.push({
+            stepNumber: 10,
             subStepNumber: 1,
             name: "OperationalCredentials.DeviceAttestation",
             stepLogic: () => this.#deviceAttestation(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 7, // includes 7-9
+        this.commissioningSteps.push({
+            stepNumber: 11, // includes 11-13
             subStepNumber: 1,
             name: "OperationalCredentials.Certificates",
             stepLogic: () => this.#certificates(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 9,
-            subStepNumber: 2,
-            name: "OperationalCredentials.UpdateFabricLabel",
-            stepLogic: () => this.#updateFabricLabel(),
-        });
+        // TODO Step 14: TimeSynchronization.SetTrustedTimeSource if supported
 
-        // TODO Step 10: TimeSynchronization.SetTrustedTimeSource if supported
-
-        this.#commissioningSteps.push({
-            stepNumber: 11,
+        this.commissioningSteps.push({
+            stepNumber: 15,
             subStepNumber: 1,
             name: "AccessControl",
             stepLogic: () => this.#configureAccessControlLists(),
         });
 
         // Care about Network commissioning only when we are on BLE, because else we are already on IP network
-        if (this.#interactionClient.channelType === ChannelType.BLE) {
-            this.#commissioningSteps.push({
-                stepNumber: 12,
+        if (this.interactionClient.channelType === ChannelType.BLE) {
+            this.commissioningSteps.push({
+                stepNumber: 16,
                 subStepNumber: 1,
                 name: "NetworkCommissioning.Validate",
                 stepLogic: () => this.#validateNetwork(),
             });
-            if (this.#commissioningOptions.wifiNetwork !== undefined) {
-                this.#commissioningSteps.push({
-                    stepNumber: 12, // includes step 13
+            if (this.commissioningOptions.wifiNetwork !== undefined) {
+                this.commissioningSteps.push({
+                    stepNumber: 16, // includes step 17
                     subStepNumber: 2,
                     name: "NetworkCommissioning.Wifi",
+                    reArmFailsafe: true,
                     stepLogic: () => this.#configureNetworkWifi(),
                 });
             }
-            if (this.#commissioningOptions.threadNetwork !== undefined) {
-                this.#commissioningSteps.push({
-                    stepNumber: 12, // includes step 13
+            if (this.commissioningOptions.threadNetwork !== undefined) {
+                this.commissioningSteps.push({
+                    stepNumber: 16, // includes step 17
                     subStepNumber: 3,
                     name: "NetworkCommissioning.Thread",
+                    reArmFailsafe: true,
                     stepLogic: () => this.#configureNetworkThread(),
                 });
             }
         } else {
             logger.info(
-                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.#interactionClient.channelType})`,
+                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.interactionClient.channelType})`,
             );
         }
 
-        this.#commissioningSteps.push({
-            stepNumber: 14, // includes step 15 (CASE connection)
+        this.commissioningSteps.push({
+            stepNumber: 18, // includes step 19 (CASE connection)
             subStepNumber: 1,
             name: "Reconnect",
+            reArmFailsafe: true,
             stepLogic: () => this.#reconnectWithDevice(),
         });
 
-        this.#commissioningSteps.push({
-            stepNumber: 16,
+        this.commissioningSteps.push({
+            stepNumber: 20,
             subStepNumber: 1,
             name: "GeneralCommissioning.Complete",
             stepLogic: () => this.#completeCommissioning(),
         });
+
+        this.commissioningSteps.push({
+            stepNumber: 99, // Should be allowed in Step 13, but Tasmota is not supporting this
+            subStepNumber: 1,
+            name: "OperationalCredentials.UpdateFabricLabel",
+            stepLogic: () => this.#updateFabricLabel(),
+        });
     }
 
     #sortSteps() {
-        this.#commissioningSteps.sort((a, b) => {
+        this.commissioningSteps.sort((a, b) => {
             if (a.stepNumber !== b.stepNumber) return a.stepNumber - b.stepNumber;
             return a.subStepNumber - b.subStepNumber;
         });
     }
 
     #setCommissioningStepResult(step: CommissioningStep, result: CommissioningStepResult) {
-        this.#commissioningStepResults.set(`${step.stepNumber}-${step.subStepNumber}`, result);
+        this.commissioningStepResults.set(`${step.stepNumber}-${step.subStepNumber}`, result);
     }
 
     getCommissioningStepResult(stepNumber: number, subStepNumber: number) {
-        return this.#commissioningStepResults.get(`${stepNumber}-${subStepNumber}`);
+        return this.commissioningStepResults.get(`${stepNumber}-${subStepNumber}`);
     }
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
@@ -428,6 +454,12 @@ export class ControllerCommissioningFlow {
         );
 
         if (statusCode === OperationalCredentials.NodeOperationalCertStatus.Ok) return;
+        if (context === "addNoc" && statusCode === OperationalCredentials.NodeOperationalCertStatus.FabricConflict) {
+            // Let's return a bit more convenient error in this case
+            throw new CommissioningError(
+                `Commission error: This device is already commissioned into this fabric. You can not commission it again.`,
+            );
+        }
         throw new CommissioningError(
             `Commission error for "${context}": ${statusCode}, ${debugText}${
                 fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
@@ -440,7 +472,9 @@ export class ControllerCommissioningFlow {
         logger.debug(`Commissioning step ${context} returned ${errorCode}, ${debugText}`);
 
         if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
-        throw new CommissioningError(`Commission error for "${context}": ${errorCode}, ${debugText}`);
+        throw new CommissioningError(
+            `Commission error for "${context}": ${errorCode}${debugText ? `, ${debugText}` : ""}`,
+        );
     }
 
     /**
@@ -448,10 +482,10 @@ export class ControllerCommissioningFlow {
      */
     async #getInitialData() {
         const descriptorClient = this.#getClusterClient(Descriptor.Cluster);
-        this.#collectedCommissioningData.rootPartsList = await descriptorClient.getPartsListAttribute();
-        this.#collectedCommissioningData.rootServerList = await descriptorClient.getServerListAttribute();
+        this.collectedCommissioningData.rootPartsList = await descriptorClient.getPartsListAttribute();
+        this.collectedCommissioningData.rootServerList = await descriptorClient.getServerListAttribute();
 
-        const networkData = await this.#interactionClient.getMultipleAttributes({
+        const networkData = await this.interactionClient.getMultipleAttributes({
             attributes: [
                 {
                     clusterId: NetworkCommissioning.Complete.id,
@@ -481,16 +515,16 @@ export class ControllerCommissioningFlow {
                 networkStatus.push({ endpointId, value });
             }
         }
-        this.#collectedCommissioningData.networkFeatures = networkFeatures;
-        this.#collectedCommissioningData.networkStatus = networkStatus;
+        this.collectedCommissioningData.networkFeatures = networkFeatures;
+        this.collectedCommissioningData.networkStatus = networkStatus;
 
         const basicInfoClient = this.#getClusterClient(BasicInformation.Cluster);
-        this.#collectedCommissioningData.vendorId = await basicInfoClient.getVendorIdAttribute();
-        this.#collectedCommissioningData.productId = await basicInfoClient.getProductIdAttribute();
-        this.#collectedCommissioningData.productName = await basicInfoClient.getProductNameAttribute();
+        this.collectedCommissioningData.vendorId = await basicInfoClient.getVendorIdAttribute();
+        this.collectedCommissioningData.productId = await basicInfoClient.getProductIdAttribute();
+        this.collectedCommissioningData.productName = await basicInfoClient.getProductNameAttribute();
 
         const generalCommissioningClient = this.#getClusterClient(GeneralCommissioning.Cluster);
-        this.#collectedCommissioningData.supportsConcurrentConnection =
+        this.collectedCommissioningData.supportsConcurrentConnection =
             await generalCommissioningClient.getSupportsConcurrentConnectionAttribute();
 
         /*
@@ -505,12 +539,12 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 4
+     * Step 7
      * Commissioner SHALL re-arm the Fail-safe timer on the Commissionee to the desired commissioning
      * timeout within 60 seconds of the completion of PASE session establishment, using the
      * ArmFailSafe command (see Section 11.10.6.2, “ArmFailSafe Command”). A Commissioner MAY
@@ -520,9 +554,9 @@ export class ControllerCommissioningFlow {
      */
     async #armFailsafe() {
         const client = this.#getClusterClient(GeneralCommissioning.Cluster);
-        if (this.#collectedCommissioningData.basicCommissioningInfo === undefined) {
+        if (this.collectedCommissioningData.basicCommissioningInfo === undefined) {
             const basicCommissioningInfo = await client.getBasicCommissioningInfoAttribute();
-            this.#collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
+            this.collectedCommissioningData.basicCommissioningInfo = basicCommissioningInfo;
             this.#failSafeTimeMs = basicCommissioningInfo.failSafeExpiryLengthSeconds * 1000;
             this.#commissioningStartedTime = Time.nowMs();
             this.#commissioningExpiryTime =
@@ -531,15 +565,15 @@ export class ControllerCommissioningFlow {
         this.#ensureGeneralCommissioningSuccess(
             "armFailSafe",
             await client.armFailSafe({
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
                 expiryLengthSeconds:
-                    this.#collectedCommissioningData.basicCommissioningInfo?.failSafeExpiryLengthSeconds,
+                    this.collectedCommissioningData.basicCommissioningInfo?.failSafeExpiryLengthSeconds,
             }),
         );
         this.#lastFailSafeTime = Time.nowMs();
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
@@ -548,7 +582,7 @@ export class ControllerCommissioningFlow {
         try {
             const client = this.#getClusterClient(GeneralCommissioning.Cluster);
             await client.armFailSafe({
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
                 expiryLengthSeconds: 0,
             });
             this.#lastFailSafeTime = undefined; // No failsafe active anymore
@@ -558,18 +592,18 @@ export class ControllerCommissioningFlow {
     }
 
     /**
-     * Step 5 - 1
+     * Step 8 - 1
      * Commissioner SHALL configure regulatory information if the Commissionee has at least one instance of
      * the Network Commissioning cluster on any endpoint with either the WI (i.e. Wi-Fi) or TH (i.e. Thread)
      * feature flags set in its FeatureMap, Commissioner SHALL configure regulatory information in the
      * Commissionee using the SetRegulatoryConfig command.
      */
     async #configureRegulatoryInformation() {
-        if (this.#collectedCommissioningData.networkFeatures === undefined) {
+        if (this.collectedCommissioningData.networkFeatures === undefined) {
             throw new CommissioningError("No network features collected. This should never happen.");
         }
         // Read the infos for all Network Commissioning clusters
-        const hasRadioNetwork = this.#collectedCommissioningData.networkFeatures.some(
+        const hasRadioNetwork = this.collectedCommissioningData.networkFeatures.some(
             ({ value: { wiFiNetworkInterface, threadNetworkInterface } }) =>
                 wiFiNetworkInterface || threadNetworkInterface,
         );
@@ -578,7 +612,7 @@ export class ControllerCommissioningFlow {
             const client = this.#getClusterClient(GeneralCommissioning.Cluster);
             let locationCapability = await client.getLocationCapabilityAttribute();
             if (locationCapability === GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor) {
-                locationCapability = this.#commissioningOptions.regulatoryLocation;
+                locationCapability = this.commissioningOptions.regulatoryLocation;
             } else {
                 logger.debug(
                     `Device does not support a configurable regulatory location type. Location is set to "${
@@ -586,10 +620,10 @@ export class ControllerCommissioningFlow {
                     }"`,
                 );
             }
-            let countryCode = this.#commissioningOptions.regulatoryCountryCode;
+            let countryCode = this.commissioningOptions.regulatoryCountryCode;
             const regulatoryResult = await client.setRegulatoryConfig(
                 {
-                    breadcrumb: this.#lastBreadcrumb++,
+                    breadcrumb: this.lastBreadcrumb++,
                     newRegulatoryConfig: locationCapability,
                     countryCode,
                 },
@@ -607,7 +641,7 @@ export class ControllerCommissioningFlow {
                     "setRegulatoryConfig",
                     await client.setRegulatoryConfig(
                         {
-                            breadcrumb: this.#lastBreadcrumb,
+                            breadcrumb: this.lastBreadcrumb,
                             newRegulatoryConfig: locationCapability,
                             countryCode,
                         },
@@ -619,17 +653,17 @@ export class ControllerCommissioningFlow {
             }
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 5 - 2
+     * Step 8 - 2
      * Commissioner SHOULD configure UTC time, timezone, and DST offset, if the Commissionee supports the
      * time synchronization cluster.
      * ▪ The Commissioner SHOULD configure UTC time using the SetUTCTime command.
@@ -639,8 +673,8 @@ export class ControllerCommissioningFlow {
      */
     async #synchronizeTime() {
         if (
-            this.#collectedCommissioningData.rootServerList !== undefined &&
-            this.#collectedCommissioningData.rootServerList.find(
+            this.collectedCommissioningData.rootServerList !== undefined &&
+            this.collectedCommissioningData.rootServerList.find(
                 clusterId => clusterId === TimeSynchronizationCluster.id,
             )
         ) {
@@ -649,12 +683,12 @@ export class ControllerCommissioningFlow {
         }
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 6
+     * Step 10
      * Commissioner SHALL establish the authenticity of the Commissionee as a certified Matter device
      * (see Section 6.2.3, “Device Attestation Procedure”).
      */
@@ -693,27 +727,27 @@ export class ControllerCommissioningFlow {
         }
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
 
         // TODO consider Distributed Compliance Ledger Info about Commissioning Flow
     }
 
     /**
-     * Step 7-9
-     * 7: Following the Device Attestation Procedure yielding a decision to proceed with commissioning, the Commissioner
-     * SHALL request operational CSR from Commissionee using the CSRRequest command (see Section 11.17.6.5,
-     * “CSRRequest Command”). The CSRRequest command will cause the generation of a new operational key pair at the
-     * Commissionee.
-     * 8: Commissioner SHALL generate or otherwise obtain an Operational Certificate containing Operational ID after
-     * receiving the CSRResponse command from the Commissionee (see Section 11.17.6.5, “CSRRequest Command”), using
-     * implementation-specific means.
-     * 9: Commissioner SHALL install operational credentials (see Figure 40, “Node Operational Credentials
-     * flow”) on the Commissionee using the AddTrustedRootCertificate and AddNOC commands,
-     * and SHALL use the UpdateFabricLabel command to set a string that the user can recognize and
-     * relate to this Commissioner/Administrator.
-     * The AdminVendorId field of the AddNOC command SHALL be set to a value for which the Vendor Schema in
-     * DCL contains the name and other information of the Commissioner’s manufacturer.
+     * Step 11-13
+     * 11: Following the Device Attestation Procedure yielding a decision to proceed with commissioning, the Commissioner
+     *     SHALL request operational CSR from Commissionee using the CSRRequest command (see Section 11.17.6.5,
+     *     “CSRRequest Command”). The CSRRequest command will cause the generation of a new operational key pair at the
+     *     Commissionee.
+     * 12: Commissioner SHALL generate or otherwise obtain an Operational Certificate containing Operational ID after
+     *     receiving the CSRResponse command from the Commissionee (see Section 11.17.6.5, “CSRRequest Command”), using
+     *     implementation-specific means.
+     * 13: Commissioner SHALL install operational credentials (see Figure 40, “Node Operational Credentials
+     *     flow”) on the Commissionee using the AddTrustedRootCertificate and AddNOC commands,
+     *     and SHALL use the UpdateFabricLabel command to set a string that the user can recognize and
+     *     relate to this Commissioner/Administrator.
+     *     The AdminVendorId field of the AddNOC command SHALL be set to a value for which the Vendor Schema in
+     *     DCL contains the name and other information of the Commissioner’s manufacturer.
      */
     async #certificates() {
         const operationalCredentialsClusterClient = this.#getClusterClient(OperationalCredentials.Cluster);
@@ -732,23 +766,23 @@ export class ControllerCommissioningFlow {
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
-                rootCaCertificate: this.#ca.rootCert,
+                rootCaCertificate: this.ca.rootCert,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerOperationalCert = this.#ca.generateNoc(
+        const peerOperationalCert = this.ca.generateNoc(
             operationalPublicKey,
-            this.#fabric.fabricId,
-            this.#interactionClient.address.nodeId,
+            this.fabric.fabricId,
+            this.interactionClient.address.nodeId,
         );
 
         const addNocResponse = await operationalCredentialsClusterClient.addNoc(
             {
                 nocValue: peerOperationalCert,
                 icacValue: new Uint8Array(0),
-                ipkValue: this.#fabric.identityProtectionKey,
-                adminVendorId: this.#fabric.rootVendorId,
-                caseAdminSubject: this.#fabric.rootNodeId,
+                ipkValue: this.fabric.identityProtectionKey,
+                adminVendorId: this.fabric.rootVendorId,
+                caseAdminSubject: this.fabric.rootNodeId,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -756,28 +790,28 @@ export class ControllerCommissioningFlow {
         this.#ensureOperationalCredentialsSuccess("addNoc", addNocResponse);
 
         const { fabricIndex } = addNocResponse;
-        this.#collectedCommissioningData.fabricIndex = fabricIndex;
+        this.collectedCommissioningData.fabricIndex = fabricIndex;
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 9 - 2
+     * Step 13-2 (we do as 99 at the end because)
      * The Administrator having established a CASE session with the Commissionee over the operational network in the
      * previous steps SHALL invoke the CommissioningComplete command (see Section 11.9.6.6,
      * “CommissioningComplete Command”). A success response after invocation of the CommissioningComplete command ends
      * the commissioning process.
      */
     async #updateFabricLabel() {
-        const { fabricIndex } = this.#collectedCommissioningData;
+        const { fabricIndex } = this.collectedCommissioningData;
         if (fabricIndex === undefined) {
             logger.error("No fabric index available after addNoc. This should never happen.");
             return {
                 code: CommissioningStepResultCode.Failure,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         const operationalCredentialCluster = this.#getClusterClient(OperationalCredentials.Cluster);
@@ -785,26 +819,23 @@ export class ControllerCommissioningFlow {
             this.#ensureOperationalCredentialsSuccess(
                 "updateFabricLabel",
                 await operationalCredentialCluster.updateFabricLabel({
-                    label: this.#fabric.label,
+                    label: this.fabric.label,
                     fabricIndex,
                 }),
             );
         } catch (error) {
-            CommissioningError.accept(error);
-            return {
-                code: CommissioningStepResultCode.Failure,
-                breadcrumb: this.#lastBreadcrumb,
-            };
+            // convert error
+            throw repackErrorAs(error, RecoverableCommissioningError);
         }
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 11
+     * Step 15
      * Commissioner MAY configure the Access Control List (see Access Control Cluster) on the Commissionee in any way
      * it sees fit, if the singular entry added by the AddNOC command in the previous step granting Administer
      * privilege over CASE authentication type for the Node ID provided with the command is not sufficient to express
@@ -815,42 +846,47 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Skipped,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 12-13
-     * 12: If the Commissionee both supports it and requires it, the Commissioner SHALL configure the operational network
-     * at the Commissionee using commands such as AddOrUpdateWiFiNetwork (see Section 11.8.7.3, “AddOrUpdateWiFiNetwork
-     * Command”) and AddOrUpdateThreadNetwork (see Section 11.8.7.4, “AddOrUpdateThreadNetwork Command”).
-     * A Commissionee requires network commissioning if it is not already on the desired operational network.
-     * A Commissionee supports network commissioning if it has any NetworkCommissioning cluster instances.
-     * A Commissioner MAY learn about the networks visible to the Commissionee using ScanNetworks command
-     * (see Section 11.8.7.1, “ScanNetworks Command”).
-     * 13: The Commissioner SHALL trigger the Commissionee to connect to the operational network using ConnectNetwork
-     * command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissionee is already on the desired operational network.
+     * Step 16-17
+     * 16: If the Commissionee both supports it and requires it, the Commissioner SHALL configure the operational network
+     *     at the Commissionee using commands such as AddOrUpdateWiFiNetwork (see Section 11.8.7.3, “AddOrUpdateWiFiNetwork
+     *     Command”) and AddOrUpdateThreadNetwork (see Section 11.8.7.4, “AddOrUpdateThreadNetwork Command”).
+     *     A Commissionee requires network commissioning if it is not already on the desired operational network.
+     *     A Commissionee supports network commissioning if it has any NetworkCommissioning cluster instances.
+     *     A Commissioner MAY learn about the networks visible to the Commissionee using ScanNetworks command
+     *     (see Section 11.8.7.1, “ScanNetworks Command”).
+     * 17: The Commissioner SHALL trigger the Commissionee to connect to the operational network using ConnectNetwork
+     *     command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissionee is already on the desired
+     *     operational network.
      */
     async #validateNetwork() {
         if (
-            this.#collectedCommissioningData.networkFeatures === undefined ||
-            this.#collectedCommissioningData.networkStatus === undefined
+            this.collectedCommissioningData.networkFeatures === undefined ||
+            this.collectedCommissioningData.networkStatus === undefined
         ) {
             throw new CommissioningError("No network features or status collected. This should never happen.");
         }
         if (
-            this.#commissioningOptions.wifiNetwork === undefined &&
-            this.#commissioningOptions.threadNetwork === undefined
+            (this.commissioningOptions.wifiNetwork === undefined ||
+                !this.commissioningOptions.wifiNetwork.wifiSsid ||
+                !this.commissioningOptions.wifiNetwork.wifiCredentials) &&
+            (this.commissioningOptions.threadNetwork === undefined ||
+                !this.commissioningOptions.threadNetwork.networkName ||
+                !this.commissioningOptions.threadNetwork.operationalDataset)
         ) {
             // Check if we have no networkCommissioning cluster or an Ethernet one
             const anyEthernetInterface =
-                this.#collectedCommissioningData.networkFeatures.length === 0 ||
-                this.#collectedCommissioningData.networkFeatures.some(
+                this.collectedCommissioningData.networkFeatures.length === 0 ||
+                this.collectedCommissioningData.networkFeatures.some(
                     ({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true,
                 );
             const anyInterfaceConnected =
-                this.#collectedCommissioningData.networkStatus.length === 0 ||
-                this.#collectedCommissioningData.networkStatus.some(({ value }) =>
+                this.collectedCommissioningData.networkStatus.length === 0 ||
+                this.collectedCommissioningData.networkStatus.some(({ value }) =>
                     value.some(({ connected }) => connected),
                 );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
@@ -862,46 +898,46 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     async #configureNetworkWifi() {
-        if (this.#commissioningOptions.wifiNetwork === undefined) {
+        if (this.commissioningOptions.wifiNetwork === undefined) {
             logger.debug("WiFi network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         if (
-            this.#collectedCommissioningData.networkFeatures !== undefined &&
-            this.#collectedCommissioningData.networkStatus !== undefined
+            this.collectedCommissioningData.networkFeatures !== undefined &&
+            this.collectedCommissioningData.networkStatus !== undefined
         ) {
-            const rootNetworkFeatures = this.#collectedCommissioningData.networkFeatures.find(
+            const rootNetworkFeatures = this.collectedCommissioningData.networkFeatures.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
-            const rootNetworkStatus = this.#collectedCommissioningData.networkStatus.find(
+            const rootNetworkStatus = this.collectedCommissioningData.networkStatus.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
 
             logger.debug(
-                `Root Networks found: ${Logger.toJSON(rootNetworkFeatures)} - ${Logger.toJSON(rootNetworkStatus)}`,
+                `Root Networks found: ${Diagnostic.json(rootNetworkFeatures)} - ${Diagnostic.json(rootNetworkStatus)}`,
             );
 
             if (rootNetworkFeatures?.wiFiNetworkInterface !== true) {
                 logger.debug("Commissionee does not support any WiFi network interface");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
             if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the WiFi network");
-                this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+                this.collectedCommissioningData.successfullyConnectedToNetwork = true;
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
         }
@@ -912,13 +948,13 @@ export class ControllerCommissioningFlow {
             EndpointNumber(0),
             true,
         );
-        const ssid = Bytes.fromString(this.#commissioningOptions.wifiNetwork.wifiSsid);
-        const credentials = Bytes.fromString(this.#commissioningOptions.wifiNetwork.wifiCredentials);
+        const ssid = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
+        const credentials = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
 
         const { networkingStatus, wiFiScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
             {
                 ssid,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -927,7 +963,7 @@ export class ControllerCommissioningFlow {
         }
         if (wiFiScanResults === undefined || wiFiScanResults.length === 0) {
             throw new CommissioningError(
-                `Commissionee did not return any WiFi networks for the requested SSID ${this.#commissioningOptions.wifiNetwork.wifiSsid}`,
+                `Commissionee did not return any WiFi networks for the requested SSID ${this.commissioningOptions.wifiNetwork.wifiSsid}`,
             );
         }
 
@@ -939,7 +975,7 @@ export class ControllerCommissioningFlow {
             {
                 ssid,
                 credentials,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -950,7 +986,7 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError(`Commissionee did not return network index`);
         }
         logger.debug(
-            `Commissionee added WiFi network ${this.#commissioningOptions.wifiNetwork.wifiSsid} with network index ${networkIndex}`,
+            `Commissionee added WiFi network ${this.commissioningOptions.wifiNetwork.wifiSsid} with network index ${networkIndex}`,
         );
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
@@ -959,22 +995,22 @@ export class ControllerCommissioningFlow {
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
         if (connected) {
-            this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+            this.collectedCommissioningData.successfullyConnectedToNetwork = true;
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
-                    this.#commissioningOptions.wifiNetwork.wifiSsid
+                    this.commissioningOptions.wifiNetwork.wifiSsid
                 } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -982,61 +1018,61 @@ export class ControllerCommissioningFlow {
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to connect to WiFi network: ${connectResult.debugText}`);
         }
-        this.#collectedCommissioningData.successfullyConnectedToNetwork = true;
+        this.collectedCommissioningData.successfullyConnectedToNetwork = true;
         logger.debug(
             `Commissionee successfully connected to WiFi network ${
-                this.#commissioningOptions.wifiNetwork.wifiSsid
+                this.commissioningOptions.wifiNetwork.wifiSsid
             } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     async #configureNetworkThread() {
-        if (this.#collectedCommissioningData.successfullyConnectedToNetwork) {
-            logger.debug("Node is already connected to a network. Skipping Thread configuration.");
+        if (this.collectedCommissioningData.successfullyConnectedToNetwork) {
+            logger.info("Node is already connected to a network. Skipping Thread configuration.");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
-        if (this.#commissioningOptions.threadNetwork === undefined) {
+        if (this.commissioningOptions.threadNetwork === undefined) {
             logger.debug("Thread network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
         if (
-            this.#collectedCommissioningData.networkFeatures !== undefined &&
-            this.#collectedCommissioningData.networkStatus !== undefined
+            this.collectedCommissioningData.networkFeatures !== undefined &&
+            this.collectedCommissioningData.networkStatus !== undefined
         ) {
-            const rootNetworkFeatures = this.#collectedCommissioningData.networkFeatures.find(
+            const rootNetworkFeatures = this.collectedCommissioningData.networkFeatures.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
-            const rootNetworkStatus = this.#collectedCommissioningData.networkStatus.find(
+            const rootNetworkStatus = this.collectedCommissioningData.networkStatus.find(
                 ({ endpointId }) => endpointId === 0,
             )?.value;
 
             logger.debug(
-                `Root Networks found: ${Logger.toJSON(rootNetworkFeatures)} - ${Logger.toJSON(rootNetworkStatus)}`,
+                `Root Networks found: ${Diagnostic.json(rootNetworkFeatures)} - ${Diagnostic.json(rootNetworkStatus)}`,
             );
 
             if (rootNetworkFeatures?.threadNetworkInterface !== true) {
                 logger.debug("Commissionee does not support any Thread network interface");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
             if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the Thread network");
                 return {
                     code: CommissioningStepResultCode.Skipped,
-                    breadcrumb: this.#lastBreadcrumb,
+                    breadcrumb: this.lastBreadcrumb,
                 };
             }
         }
@@ -1049,7 +1085,7 @@ export class ControllerCommissioningFlow {
         );
 
         const { networkingStatus, threadScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
-            { breadcrumb: this.#lastBreadcrumb++ },
+            { breadcrumb: this.lastBreadcrumb++ },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
@@ -1057,23 +1093,23 @@ export class ControllerCommissioningFlow {
         }
         if (threadScanResults === undefined || threadScanResults.length === 0) {
             throw new CommissioningError(
-                `Commissionee did not return any Thread networks for the requested Network ${this.#commissioningOptions.threadNetwork.networkName}`,
+                `Commissionee did not return any Thread networks for the requested Network ${this.commissioningOptions.threadNetwork.networkName}`,
             );
         }
         const wantedNetworkFound = threadScanResults.find(
-            ({ networkName }) => networkName === this.#commissioningOptions.threadNetwork?.networkName,
+            ({ networkName }) => networkName === this.commissioningOptions.threadNetwork?.networkName,
         );
         if (wantedNetworkFound === undefined) {
             throw new CommissioningError(
                 `Commissionee did not return the requested Network ${
-                    this.#commissioningOptions.threadNetwork.networkName
-                }: ${Logger.toJSON(threadScanResults)}`,
+                    this.commissioningOptions.threadNetwork.networkName
+                }: ${Diagnostic.json(threadScanResults)}`,
             );
         }
         logger.debug(
             `Commissionee found wanted Thread network ${
-                this.#commissioningOptions.threadNetwork.networkName
-            }: ${Logger.toJSON(wantedNetworkFound)}`,
+                this.commissioningOptions.threadNetwork.networkName
+            }: ${Diagnostic.json(wantedNetworkFound)}`,
         );
 
         const {
@@ -1082,8 +1118,8 @@ export class ControllerCommissioningFlow {
             networkIndex,
         } = await networkCommissioningClusterClient.addOrUpdateThreadNetwork(
             {
-                operationalDataset: Bytes.fromHex(this.#commissioningOptions.threadNetwork.operationalDataset),
-                breadcrumb: this.#lastBreadcrumb++,
+                operationalDataset: Bytes.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -1094,7 +1130,7 @@ export class ControllerCommissioningFlow {
             throw new CommissioningError(`Commissionee did not return network index`);
         }
         logger.debug(
-            `Commissionee added Thread network ${this.#commissioningOptions.threadNetwork.networkName} with network index ${networkIndex}`,
+            `Commissionee added Thread network ${this.commissioningOptions.threadNetwork.networkName} with network index ${networkIndex}`,
         );
 
         const updatedNetworks = await networkCommissioningClusterClient.getNetworksAttribute();
@@ -1105,19 +1141,19 @@ export class ControllerCommissioningFlow {
         if (connected) {
             logger.debug(
                 `Commissionee is already connected to Thread network ${
-                    this.#commissioningOptions.threadNetwork.networkName
+                    this.commissioningOptions.threadNetwork.networkName
                 } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
         const connectResult = await networkCommissioningClusterClient.connectNetwork(
             {
                 networkId: networkId,
-                breadcrumb: this.#lastBreadcrumb++,
+                breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -1129,54 +1165,85 @@ export class ControllerCommissioningFlow {
         }
         logger.debug(
             `Commissionee successfully connected to Thread network ${
-                this.#commissioningOptions.threadNetwork.networkName
+                this.commissioningOptions.threadNetwork.networkName
             } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 14-15
-     * 14: Finalization of the Commissioning process begins. An Administrator configured in the ACL of the Commissionee
-     * by the Commissioner SHALL use Operational Discovery to discover the Commissionee. This Administrator MAY be
-     * the Commissioner itself, or another Node to which the Commissioner has delegated the task.
-     * 15: The Administrator SHALL open a CASE (see Section 4.13.2, “Certificate Authenticated Session Establishment
-     * (CASE)”) session with the Commissionee over the operational network.
-     *
+     * Step 18-19
+     * 18: Finalization of the Commissioning process begins. An Administrator configured in the ACL of the Commissionee
+     *     by the Commissioner SHALL use Operational Discovery to discover the Commissionee. This Administrator MAY be
+     *     the Commissioner itself, or another Node to which the Commissioner has delegated the task.
+     * 19: The Administrator SHALL open a CASE (see Section 4.13.2, “Certificate Authenticated Session Establishment
+     *     (CASE)”) session with the Commissionee over the operational network.
      */
     async #reconnectWithDevice() {
-        logger.debug("Reconnecting with device ...");
-        const transitionResult = await this.#transitionToCase(
-            this.#interactionClient.address,
-            // Assume concurrent connections are supported if not know (which should not be the case when we came here)
-            this.#collectedCommissioningData.supportsConcurrentConnection ?? true,
+        const isConcurrentFlow = this.collectedCommissioningData.supportsConcurrentConnection !== false;
+
+        logger.debug(`Reconnecting with device with ${isConcurrentFlow ? "concurrent" : "non-concurrent"} flow ...`);
+
+        // Reconnection with discovery could take longer then the default failsafe time, so we need to
+        // re-arm the failsafe when we are in a concurrent commissioning flow also in parallel to
+        // the operative reconnection
+        // TODO: Check whats needed for non-concurrent commissioning flows (maybe arm initially longer?)
+        const reArmFailsafeInterval = Time.getPeriodicTimer(
+            "Re-Arm Failsafe during reconnect",
+            this.#failSafeTimeMs / 2,
+            () => {
+                const now = Time.nowMs();
+                if (this.#commissioningExpiryTime !== undefined && now < this.#commissioningExpiryTime) {
+                    logger.error(
+                        `Re-Arm Failsafe Timer during reconnect with device. Time left: ${Math.round((this.#commissioningExpiryTime - now) / 1000)}s`,
+                    );
+                    this.#armFailsafe().catch(error => {
+                        logger.error("Error while re-arming failsafe during reconnect", error);
+                        reArmFailsafeInterval.stop();
+                    });
+                } else {
+                    // Stop as soon as we are over the maximum commissioning time
+                    reArmFailsafeInterval.stop();
+                }
+            },
         );
+        if (isConcurrentFlow) {
+            reArmFailsafeInterval.start();
+        }
+
+        const transitionResult = await this.transitionToCase(
+            this.interactionClient.address,
+            // Assume concurrent connections are supported if not know (which should not be the case when we came here)
+            isConcurrentFlow,
+        );
+
+        reArmFailsafeInterval.stop();
 
         if (transitionResult === undefined) {
             logger.debug("CASE commissioning handled externally, terminating commissioning flow");
             return {
                 code: CommissioningStepResultCode.Stop,
-                breadcrumb: this.#lastBreadcrumb,
+                breadcrumb: this.lastBreadcrumb,
             };
         }
 
-        this.#interactionClient = transitionResult;
+        this.interactionClient = transitionResult;
         this.#clusterClients.clear();
 
         logger.debug("Successfully reconnected with device ...");
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 
     /**
-     * Step 16
+     * Step 20
      * The Administrator having established a CASE session with the Commissionee over the operational network in the
      * previous steps SHALL invoke the CommissioningComplete command (see Section 11.9.6.6,
      * “CommissioningComplete Command”). A success response after invocation of the CommissioningComplete command ends
@@ -1194,7 +1261,7 @@ export class ControllerCommissioningFlow {
 
         return {
             code: CommissioningStepResultCode.Success,
-            breadcrumb: this.#lastBreadcrumb,
+            breadcrumb: this.lastBreadcrumb,
         };
     }
 }

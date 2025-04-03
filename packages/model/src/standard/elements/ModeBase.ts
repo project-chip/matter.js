@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,8 +26,8 @@ export const ModeBase = Cluster(
             "The server allows the client to set a mode on the server. A mode is one of a list of options that " +
             "may be presented by a client for a user choice, or understood by the client, via the mode’s tags." +
             "\n" +
-            "A mode tag is either a standard tag within a standard category namespace, or a manufacturer " +
-            "specific tag, within the namespace of the vendor ID of the manufacturer." +
+            "A mode tag is either a standard tag within a standard category namespace, or a manufacturer specific " +
+            "tag, within the namespace of the vendor ID of the manufacturer." +
             "\n" +
             "Any derived cluster specification based on this cluster shall support the standard mode tag value " +
             "definitions and command status definitions defined in this cluster and may define additional " +
@@ -51,8 +51,8 @@ export const ModeBase = Cluster(
 
         Field({
             name: "DEPONOFF", constraint: "0", description: "OnOff",
-            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
-                "the same endpoint. See OnMode for more information.",
+            details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on the " +
+                "same endpoint. See OnMode for more information.",
             xref: { document: "cluster", section: "1.10.4.1" }
         })
     ),
@@ -69,7 +69,7 @@ export const ModeBase = Cluster(
                 "Each entry in this list shall have a unique value for the Mode field. Each entry in this list shall " +
                 "have a unique value for the Label field.",
 
-            xref: { document: "cluster", section: "1.10.6.2" }
+            xref: { document: "cluster", section: "1.10.6.1" }
         },
 
         Field({ name: "entry", type: "ModeOptionStruct" })
@@ -77,7 +77,7 @@ export const ModeBase = Cluster(
 
     Attribute({
         name: "CurrentMode", id: 0x1, type: "uint8", access: "R V", conformance: "M", constraint: "desc",
-        quality: "N S",
+        quality: "N",
 
         details: "Indicates the current mode of the server." +
             "\n" +
@@ -89,7 +89,7 @@ export const ModeBase = Cluster(
             "progressing through a sequence of operations, on system time-outs or idle delays, or via " +
             "interactions coming from a fabric other than the one which last executed a ChangeToMode.",
 
-        xref: { document: "cluster", section: "1.10.6.3" }
+        xref: { document: "cluster", section: "1.10.6.2" }
     }),
 
     Attribute({
@@ -98,9 +98,9 @@ export const ModeBase = Cluster(
 
         details: "Indicates the desired startup mode for the server when it is supplied with power." +
             "\n" +
-            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, " +
-            "when the server is powered up, except in the case when the OnMode attribute overrides the " +
-            "StartUpMode attribute (see OnModeWithPowerUp)." +
+            "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, when " +
+            "the server is powered up, except in the case when the OnMode attribute overrides the StartUpMode " +
+            "attribute (see OnModeWithPowerUp)." +
             "\n" +
             "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode " +
             "attribute shall return to its value prior to the restart." +
@@ -110,7 +110,7 @@ export const ModeBase = Cluster(
             "\n" +
             "If this attribute is not implemented, or is set to the null value, it shall have no effect.",
 
-        xref: { document: "cluster", section: "1.10.6.4" }
+        xref: { document: "cluster", section: "1.10.6.3" }
     }),
 
     Attribute({
@@ -124,7 +124,7 @@ export const ModeBase = Cluster(
             "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
             "attribute.",
 
-        xref: { document: "cluster", section: "1.10.6.5" }
+        xref: { document: "cluster", section: "1.10.6.4" }
     }),
 
     Command(
@@ -142,27 +142,26 @@ export const ModeBase = Cluster(
 
             details: "If the NewMode field doesn’t match the Mode field of any entry of the SupportedModes list, the " +
                 "ChangeToModeResponse command’s Status field shall indicate UnsupportedMode and the StatusText field " +
-                "shall be included and may be used to indicate the issue, with a human readable string, or include " +
-                "an empty string." +
+                "shall be included and may be used to indicate the issue, with a human readable string, or include an " +
+                "empty string." +
                 "\n" +
                 "If the NewMode field matches the Mode field of one entry of the SupportedModes list, but the device " +
                 "is not able to transition as requested, the ChangeToModeResponse command shall:" +
                 "\n" +
-                "  • Have the Status set to a product-specific Status value representing the error, or " +
-                "    GenericFailure if a more specific error cannot be provided. See Status Field for details." +
+                "  • Have the Status set to a product-specific Status value representing the error, or GenericFailure " +
+                "    if a more specific error cannot be provided. See Status field for details." +
                 "\n" +
                 "  • Provide a human readable string in the StatusText field." +
                 "\n" +
                 "If the NewMode field matches the Mode field of one entry of the SupportedModes list and the device " +
                 "is able to transition as requested, the server shall transition into the mode associated with " +
-                "NewMode, the ChangeToModeResponse command shall have the Status field set to Success, the " +
-                "StatusText field may be supplied with a human readable string or include an empty string and the " +
-                "CurrentMode field shall be set to the value of the NewMode field." +
+                "NewMode, the ChangeToModeResponse command shall have the Status field set to Success, the StatusText " +
+                "field may be supplied with a human readable string or include an empty string and the CurrentMode " +
+                "field shall be set to the value of the NewMode field." +
                 "\n" +
-                "If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeRe" +
-                "\n" +
-                "sponse command shall have the Status field set to Success and the StatusText field may be supplied " +
-                "with a human readable string or include an empty string.",
+                "If the NewMode field is the same as the value of the CurrentMode attribute the ChangeToModeResponse " +
+                "command shall have the Status field set to Success and the StatusText field may be supplied with a " +
+                "human readable string or include an empty string.",
 
             xref: { document: "cluster", section: "1.10.7.1.1" }
         })
@@ -170,10 +169,13 @@ export const ModeBase = Cluster(
 
     Command(
         {
-            name: "ChangeToModeResponse", id: 0x1, access: "O", conformance: "M", direction: "response",
-            details: "This command is sent by the device on receipt of the ChangeToMode command.",
+            name: "ChangeToModeResponse", id: 0x1, conformance: "M", direction: "response",
+            details: "This command is sent by the device on receipt of the ChangeToMode command. This command" +
+                "\n" +
+                "shall have the following data fields:",
             xref: { document: "cluster", section: "1.10.7.2" }
         },
+
         Field({
             name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc",
             xref: { document: "cluster", section: "1.10.7.2.1" }
@@ -222,8 +224,8 @@ export const ModeBase = Cluster(
 
         Field({
             name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 64", quality: "F",
-            details: "This field shall indicate readable text that describes the mode option, so that a client can " +
-                "provide it to the user to indicate what this option means. This field is meant to be readable and " +
+            details: "This field shall indicate readable text that describes the mode option, so that a client can provide " +
+                "it to the user to indicate what this option means. This field is meant to be readable and " +
                 "understandable by the user.",
             xref: { document: "cluster", section: "1.10.5.2.1" }
         }),
@@ -239,12 +241,12 @@ export const ModeBase = Cluster(
                 name: "ModeTags", id: 0x2, type: "list", conformance: "M", constraint: "max 8", quality: "F",
 
                 details: "This field shall contain a list of tags that are associated with the mode option. This may be used " +
-                    "by clients to determine the full or the partial semantics of a certain mode, depending on which " +
-                    "tags they understand, using standard definitions and/or manufacturer specific namespace definitions." +
+                    "by clients to determine the full or the partial semantics of a certain mode, depending on which tags " +
+                    "they understand, using standard definitions and/or manufacturer specific namespace definitions." +
                     "\n" +
-                    "The standard mode tags are defined in this cluster specification. For the derived cluster " +
-                    "instances, if the specification of the derived cluster defines a namespace, the set of standard " +
-                    "mode tags also includes the mode tag values from that namespace." +
+                    "The standard mode tags are defined in this cluster specification. For the derived cluster instances, " +
+                    "if the specification of the derived cluster defines a namespace, the set of standard mode tags also " +
+                    "includes the mode tag values from that namespace." +
                     "\n" +
                     "Mode tags can help clients look for options that meet certain criteria, render the user interface, " +
                     "use" +
@@ -289,7 +291,7 @@ export const ModeBase = Cluster(
         }),
         Field({
             name: "UnsupportedMode", id: 0x1,
-            description: "The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.",
+            description: "The value of the NewMode field doesn’t match any entries in the SupportedModes attribute.",
             xref: { document: "cluster", section: "1.10.7.2.1.2" }
         }),
         Field({
@@ -306,51 +308,16 @@ export const ModeBase = Cluster(
 
     Datatype(
         { name: "ModeTag", type: "enum16" },
-        Field({
-            name: "Auto", id: 0x0,
-            description: "The device decides which options, features and setting values to use.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Quick", id: 0x1, description: "The mode of the device is optimizing for faster completion.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Quiet", id: 0x2, description: "The device is silent or barely audible while in this mode.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "LowNoise", id: 0x3,
-            description: "Either the mode is inherently low noise or the device optimizes for that.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "LowEnergy", id: 0x4,
-            description: "The device is optimizing for lower energy usage in this mode. Sometimes called \"Eco mode\".",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Vacation", id: 0x5,
-            description: "A mode suitable for use during vacations or other extended absences.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Min", id: 0x6, description: "The mode uses the lowest available setting value.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Max", id: 0x7, description: "The mode uses the highest available setting value.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Night", id: 0x8,
-            description: "The mode is recommended or suitable for use during night time.",
-            xref: { document: "cluster", section: "1.10.8" }
-        }),
-        Field({
-            name: "Day", id: 0x9, description: "The mode is recommended or suitable for use during day time.",
-            xref: { document: "cluster", section: "1.10.8" }
-        })
+        Field({ name: "Auto", id: 0x0, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Quick", id: 0x1, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Quiet", id: 0x2, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "LowNoise", id: 0x3, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "LowEnergy", id: 0x4, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Vacation", id: 0x5, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Min", id: 0x6, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Max", id: 0x7, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Night", id: 0x8, xref: { document: "cluster", section: "1.10.8" } }),
+        Field({ name: "Day", id: 0x9, xref: { document: "cluster", section: "1.10.8" } })
     )
 );
 

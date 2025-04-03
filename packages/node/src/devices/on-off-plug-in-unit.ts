@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,7 +24,7 @@ import { Identity } from "#general";
  * An On/Off Plug-in Unit is a device that provides power to another device that is plugged into it, and is capable of
  * switching that provided power on or off.
  *
- * @see {@link MatterSpecification.v13.Device} § 5.1
+ * @see {@link MatterSpecification.v14.Device} § 5.1
  */
 export interface OnOffPlugInUnitDevice extends Identity<typeof OnOffPlugInUnitDeviceDefinition> {}
 

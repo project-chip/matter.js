@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -51,8 +51,8 @@ export const MeasurementAccuracyRangeStruct = Datatype(
 
         details: "This field shall indicate the minimum measurement value for the specified level of accuracy." +
             "\n" +
-            "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field " +
-            "on the encompassing MeasurementAccuracyStruct." +
+            "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on " +
+            "the encompassing MeasurementAccuracyStruct." +
             "\n" +
             "The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on " +
             "the encompassing MeasurementAccuracyStruct.",
@@ -66,8 +66,8 @@ export const MeasurementAccuracyRangeStruct = Datatype(
         details: "This field shall indicate the maximum measurement value for the specified level of accuracy. The " +
             "value of this field shall be greater than the value of the RangeMin field." +
             "\n" +
-            "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field " +
-            "on the encompassing MeasurementAccuracyStruct." +
+            "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on " +
+            "the encompassing MeasurementAccuracyStruct." +
             "\n" +
             "The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on " +
             "the encompassing MeasurementAccuracyStruct.",
@@ -97,24 +97,24 @@ export const MeasurementAccuracyRangeStruct = Datatype(
 
     Field({
         name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", quality: "F",
-        details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the " +
-            "unit indicated by MeasurementType.",
+        details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit " +
+            "indicated by MeasurementType.",
         xref: { document: "cluster", section: "2.1.4.3.6" }
     }),
 
     Field({
         name: "FixedMin", id: 0x6, type: "uint64", conformance: "[FixedMax]", constraint: "max fixedMax",
         quality: "F",
-        details: "This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the " +
-            "unit indicated by MeasurementType.",
+        details: "This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit " +
+            "indicated by MeasurementType.",
         xref: { document: "cluster", section: "2.1.4.3.7" }
     }),
 
     Field({
         name: "FixedTypical", id: 0x7, type: "uint64", conformance: "[FixedMin]",
         constraint: "fixedMin to fixedMax", quality: "F",
-        details: "This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the " +
-            "unit indicated by MeasurementType.",
+        details: "This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit " +
+            "indicated by MeasurementType.",
         xref: { document: "cluster", section: "2.1.4.3.8" }
     })
 );

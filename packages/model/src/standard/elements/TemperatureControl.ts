@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,8 +27,8 @@ export const TemperatureControl = Cluster(
             "\n" +
             "The values and constraints of the attributes communicated to clients SHOULD match the controls on " +
             "any physical interface on a device implementing this server. For example, the value of the Step " +
-            "attribute SHOULD match the incremental value by which the temperature setpoint can be changed on " +
-            "the physical device.",
+            "attribute SHOULD match the incremental value by which the temperature setpoint can be changed on the " +
+            "physical device.",
 
         xref: { document: "cluster", section: "8.2" }
     },
@@ -70,7 +70,7 @@ export const TemperatureControl = Cluster(
 
     Attribute({
         name: "MinTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "TN",
-        constraint: "max (MaxTemperature - 1)", quality: "F",
+        constraint: "max maxTemperature - 1", quality: "F",
         details: "Indicates the minimum temperature to which the TemperatureSetpoint attribute may be set.",
         xref: { document: "cluster", section: "8.2.5.2" }
     }),
@@ -90,21 +90,21 @@ export const TemperatureControl = Cluster(
 
     Attribute({
         name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP",
-        constraint: "max (MaxTemperature - MinTemperature)", quality: "F",
+        constraint: "max maxTemperature - minTemperature", quality: "F",
 
         details: "Indicates the discrete value by which the TemperatureSetpoint attribute can be changed via the " +
             "SetTemperature command." +
             "\n" +
-            "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), " +
-            "valid values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), " +
-            "26.00C (2600), 26.50C (2650), etc.",
+            "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), valid " +
+            "values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), 26.00C " +
+            "(2600), 26.50C (2650), etc.",
 
         xref: { document: "cluster", section: "8.2.5.4" }
     }),
 
     Attribute({
         name: "SelectedTemperatureLevel", id: 0x4, type: "uint8", access: "R V", conformance: "TL",
-        constraint: "0 to 31",
+        constraint: "max 31",
         details: "Indicates the currently selected temperature level setting of the server. This attribute shall be " +
             "the positional index of the list item in the SupportedTemperatureLevels list that represents the " +
             "currently selected temperature level setting of the server.",

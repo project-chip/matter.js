@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,8 @@ export function repairConstraint(record: { constraint?: string }) {
         .replace(/ octets| entries| bytes| per node/i, "")
         .replace(/ to(\d|max)/i, " to $1")
         .replace(/ValuetoMax/, "Value to Max")
-        .replace(/Sup ported/, "Supported");
+        .replace(/Sup ported/, "Supported")
+        .replace(/N\/A/, "");
 
     // Ignore window covering's bitmap constraints
     if (constraint.match(/^[0x]{4} [0x]{4}$/)) {

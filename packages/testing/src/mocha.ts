@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,9 +11,11 @@ import { FailureDetail } from "./failure-detail.js";
 import { Boot } from "./mocks/boot.js";
 import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
-import { ConsoleProxyReporter, Reporter } from "./reporter.js";
+import { Reporter } from "./reporter.js";
 import type { TestDescriptor } from "./test-descriptor.js";
+import { TextDiff } from "./text-diff.js";
 import { wtf } from "./util/wtf.js";
+import { WebReporter } from "./web-reporter.js";
 
 // We allow fixed 60s. timeout for our extended "before/after each test" hooks.  To make this configurable we'd need
 // to perform timeout handling ourselves so avoiding for now
@@ -92,7 +94,7 @@ export function generalSetup(mocha: Mocha) {
         return (this.currentTest as HookableTest)[afterOneHook]?.call(this, done);
     });
 
-    FailureDetail.diff = Base.generateDiff.bind(Base);
+    TextDiff.generator = Base.generateDiff.bind(Base);
 }
 
 export function extendApi(Mocha: typeof MochaType) {
@@ -190,7 +192,12 @@ function beforeEachFile() {
     Boot.reboot();
 }
 
-export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
+export function adaptReporter(
+    Mocha: typeof MochaType,
+    title: string,
+    reporter: Reporter,
+    updateStats: boolean = false,
+) {
     const RUNNER = Mocha.Runner.constants;
 
     let logs = Array<string>();
@@ -203,8 +210,8 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
                 if (!MatterHooks) {
                     throw new Error("Matter hooks not loaded");
                 }
-                MatterHooks.loggerSink = (_, message) => {
-                    logs.push(message);
+                MatterHooks.loggerSink = text => {
+                    logs.push(text);
                 };
                 reporter.beginRun(title, this.translatedStats);
             });
@@ -214,11 +221,29 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             });
 
             runner.on(RUNNER.EVENT_TEST_BEGIN, test => {
+                if (updateStats && test.descriptor) {
+                    test.descriptor.runAt = new Date();
+                }
                 logs = (test as any).logs = [];
                 reporter.beginTest(test.title, this.translatedStats);
             });
 
+            if (updateStats) {
+                runner.on(RUNNER.EVENT_TEST_PASS, test => {
+                    if (!test.descriptor) {
+                        return;
+                    }
+
+                    test.descriptor.durationMs = test.duration;
+                    test.descriptor.passed = true;
+                });
+            }
+
             runner.on(RUNNER.EVENT_TEST_FAIL, (test, error) => {
+                if (updateStats && test.descriptor) {
+                    test.descriptor.durationMs = test.duration;
+                    test.descriptor.passed = false;
+                }
                 const logs = (test as any).logs as string[];
                 reporter.failTest(test.title, FailureDetail(error, logs));
                 wtf.dump();
@@ -262,7 +287,7 @@ export function browserSetup(mocha: BrowserMocha) {
         // Start Mocha, proxying reporting through console to Playwright and completing once Mocha has finished
         auto: async function (options: TestOptions) {
             TestOptions.apply(mocha, options);
-            mocha.reporter(adaptReporter(Mocha, "Web", new ConsoleProxyReporter()));
+            mocha.reporter(adaptReporter(Mocha, "Web", new WebReporter()));
             return new Promise<void>(accept => {
                 const runner = this.start();
                 runner.on("end", accept);
@@ -292,8 +317,8 @@ async function onlyLogFailure(fn: () => any) {
     const logs = Array<string>();
     const existingSink = MatterHooks.loggerSink;
     try {
-        MatterHooks.loggerSink = (_, message) => {
-            logs.push(message);
+        MatterHooks.loggerSink = text => {
+            logs.push(text);
         };
         return await fn();
     } catch (e) {

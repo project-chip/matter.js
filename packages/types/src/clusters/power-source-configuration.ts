@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,17 +24,16 @@ export namespace PowerSourceConfiguration {
 
         attributes: {
             /**
-             * This list shall contain the set of all power sources capable of participating in the power system of
-             * this Node. Each entry in the list shall be the endpoint number of an endpoint having a Power Source
-             * cluster, which corresponds to a physical power source. The endpoint number shall be unique within the
-             * list.
+             * This list shall contain the set of all power sources capable of participating in the power system of this
+             * Node. Each entry in the list shall be the endpoint number of an endpoint having a Power Source cluster,
+             * which corresponds to a physical power source. The endpoint number shall be unique within the list.
              *
              * The order of power sources on a Node is defined by the Order attribute of its associated Power Source
              * cluster provided on the endpoint. List entries shall be sorted in increasing order, that is, an entry
-             * with a lower order shall have a lower index than any entry with a higher order. Multiple entries may
-             * have the same order, there are no restrictions on their relative sorting.
+             * with a lower order shall have a lower index than any entry with a higher order. Multiple entries may have
+             * the same order, there are no restrictions on their relative sorting.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.6.4.1
+             * @see {@link MatterSpecification.v14.Core} § 11.6.4.1
              */
             sources: Attribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 6 }), { persistent: true, default: [] })
         }
@@ -44,7 +43,7 @@ export namespace PowerSourceConfiguration {
      * This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
      * ordering overview as well as linking to the one or more endpoints each supporting a Power Source cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.6
+     * @see {@link MatterSpecification.v14.Core} § 11.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -1,12 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#general";
 import {
+    BaseDataReport,
     DataReportPayload,
+    DataReportPayloadIterator,
     FabricManager,
     InteractionContext,
     InteractionEndpointStructure,
@@ -26,6 +28,7 @@ import {
 import {
     AttributeId,
     ClusterId,
+    ClusterType,
     CommandId,
     EndpointNumber,
     EventId,
@@ -51,23 +54,20 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
     WildcardPathFlagsBitmap,
+    WritableAttribute,
 } from "#types";
-import { Specification } from "@matter/model";
+import { AccessLevel, Specification } from "@matter/model";
 import {
     AccessControlCluster,
-    AccessLevel,
     AdministratorCommissioning,
     BasicInformation,
     BasicInformationCluster,
-    ClusterServer,
-    ClusterServerObj,
-    ClusterType,
     OnOffCluster,
     WiFiNetworkDiagnosticsCluster,
-    WritableAttribute,
-} from "@project-chip/matter.js/cluster";
+} from "@matter/types/clusters";
+import { ClusterServer, ClusterServerObj } from "@project-chip/matter.js/cluster";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import {
     DummyGroupcastMessage,
     DummyUnicastMessage,
@@ -867,25 +867,25 @@ const wildcardTestCases: {
     wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
     count: number;
 }[] = [
-    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 20 },
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
     { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
     {
         testCase: "skipGlobalAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipGlobalAttributes: true },
-        count: 17,
+        count: 18,
     }, // 4 less
     {
         testCase: "skipAttributeList",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipAttributeList: true },
-        count: 19,
+        count: 20,
     }, // 1 less
     {
         testCase: "skipCommandLists",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipCommandLists: true },
-        count: 18,
+        count: 19,
     }, // 2 less
     {
         testCase: "skipFixedAttributes",
@@ -897,7 +897,7 @@ const wildcardTestCases: {
         testCase: "skipChangesOmittedAttributes",
         clusterId: ClusterId(0x28),
         wildcardPathFilter: { skipChangesOmittedAttributes: true },
-        count: 20,
+        count: 21,
     }, // nothing filtered
     {
         testCase: "no for WiFiDiag",
@@ -918,6 +918,27 @@ const wildcardTestCases: {
         count: 0,
     }, // all filtered
 ];
+
+function fillIterableDataReport(data: {
+    dataReport: BaseDataReport;
+    payload?: DataReportPayloadIterator;
+}): DataReportPayload {
+    const { dataReport: report, payload } = data;
+    const dataReport: DataReportPayload = { ...report };
+
+    if (payload !== undefined) {
+        for (const payloadItem of payload) {
+            if ("attributeData" in payloadItem || "attributeStatus" in payloadItem) {
+                dataReport.attributeReportsPayload = dataReport.attributeReportsPayload ?? [];
+                dataReport.attributeReportsPayload.push(payloadItem);
+            } else if ("eventData" in payloadItem || "eventStatus" in payloadItem) {
+                dataReport.eventReportsPayload = dataReport.eventReportsPayload ?? [];
+                dataReport.eventReportsPayload.push(payloadItem);
+            }
+        }
+    }
+    return dataReport;
+}
 
 describe("InteractionProtocol", () => {
     let realGetRandomData = Crypto.get().getRandomData;
@@ -993,6 +1014,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",
@@ -1042,7 +1064,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
         });
 
         it("replies with attributes and events using (unused) version filter", async () => {
@@ -1057,7 +1079,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
         });
 
         it("replies with attributes and events with active version filter", async () => {
@@ -1072,7 +1094,7 @@ describe("InteractionProtocol", () => {
                 DummyUnicastMessage,
             );
 
-            assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
+            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE_WITH_FILTER);
         });
 
         for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
@@ -1110,7 +1132,7 @@ describe("InteractionProtocol", () => {
                     DummyUnicastMessage,
                 );
 
-                assert.deepEqual(result.attributeReportsPayload?.length, count);
+                assert.deepEqual(fillIterableDataReport(result).attributeReportsPayload?.length || 0, count);
             });
         }
     });
@@ -1164,7 +1186,6 @@ describe("InteractionProtocol", () => {
                 AccessControlCluster,
                 {
                     acl: [],
-                    extension: [],
                     subjectsPerAccessControlEntry: 4,
                     targetsPerAccessControlEntry: 4,
                     accessControlEntriesPerFabric: 4,
@@ -1172,7 +1193,6 @@ describe("InteractionProtocol", () => {
                 {},
                 {
                     accessControlEntryChanged: true,
-                    accessControlExtensionChanged: true,
                 },
             );
 
@@ -1289,6 +1309,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",
@@ -1334,6 +1355,7 @@ describe("InteractionProtocol", () => {
                     productName: "product",
                     productId: 2,
                     nodeLabel: "",
+                    uniqueId: "",
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     location: "US",

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@ export const double = Datatype({
         "\n" +
         "See IEEE 754-2019 for more details on the representable values.",
 
-    xref: { document: "core", section: "7.18.1.6" }
+    xref: { document: "core", section: "7.19.1.6" }
 });
 
 MatterDefinition.children.push(double);

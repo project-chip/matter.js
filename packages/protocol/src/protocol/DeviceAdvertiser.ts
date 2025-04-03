@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -65,6 +65,9 @@ export class DeviceAdvertiser {
             if (this.#context.fabrics.length === 0) {
                 // Last fabric got removed, so expire all announcements
                 await this.#exitOperationalMode();
+            } else {
+                // At least one fabric is still present, so re-announce
+                await this.advertise(true);
             }
         });
 
@@ -164,7 +167,10 @@ export class DeviceAdvertiser {
                 const session = this.#context.sessions.getSessionForNode(fabric.addressOf(fabric.rootNodeId));
                 if (session === undefined || !session.isSecure || session.subscriptions.size === 0) {
                     fabricsWithoutSessions++;
-                    logger.debug("Announcing", Diagnostic.dict({ fabric: fabric.fabricId }));
+                    logger.debug(
+                        "Announcing",
+                        Diagnostic.dict({ fabricIndex: fabric.fabricIndex, fabricId: fabric.fabricId }),
+                    );
                 }
             }
             for (const broadcaster of this.#broadcasters) {
@@ -200,6 +206,7 @@ export class DeviceAdvertiser {
     }
 
     async close() {
+        this.#isClosing = true;
         await this.#mutex;
         this.#observers.close();
         this.#interval.stop();

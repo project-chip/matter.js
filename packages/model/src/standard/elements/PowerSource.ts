@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,18 +19,18 @@ export const PowerSource = Cluster(
     {
         name: "PowerSource", id: 0x2f, classification: "node", pics: "PS",
         details: "This cluster is used to describe the configuration and capabilities of a physical power source that " +
-            "provides power to one or more endpoints on a node. In case the node has multiple power sources, " +
-            "each is described by its own cluster instance. Each instance of this cluster may be associated with " +
+            "provides power to one or more endpoints on a node. In case the node has multiple power sources, each " +
+            "shall be described by its own cluster instance. Each instance of this cluster may be associated with " +
             "one or more endpoints or the entire node.",
         xref: { document: "core", section: "11.7" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.7.4" } },
-        Field({ name: "WIRED", conformance: "O", constraint: "0", description: "Wired", details: "A wired power source" }),
-        Field({ name: "BAT", conformance: "O", constraint: "1", description: "Battery", details: "A battery power source" }),
+        Field({ name: "WIRED", conformance: "O.a", constraint: "0", description: "Wired", details: "A wired power source" }),
+        Field({ name: "BAT", conformance: "O.a", constraint: "1", description: "Battery", details: "A battery power source" }),
         Field({
             name: "RECHG", conformance: "[BAT]", constraint: "2", description: "Rechargeable",
             details: "A rechargeable battery power source"
@@ -84,18 +84,18 @@ export const PowerSource = Cluster(
     Attribute({
         name: "WiredAssessedInputFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "[WIRED]",
         quality: "X C",
-        details: "Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in " +
-            "Hz. A value of NULL shall indicate the Node is currently unable to assess the value. If the wired " +
-            "source is not connected, but the Node is still able to assess a value, then the assessed value may " +
-            "be reported.",
+        details: "Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in Hz. " +
+            "A value of NULL shall indicate the Node is currently unable to assess the value. If the wired source " +
+            "is not connected, but the Node is still able to assess a value, then the assessed value may be " +
+            "reported.",
         xref: { document: "core", section: "11.7.7.5" }
     }),
 
     Attribute({
         name: "WiredCurrentType", id: 0x5, type: "WiredCurrentTypeEnum", access: "R V",
         conformance: "WIRED", constraint: "desc", quality: "F",
-        details: "Indicates the type of current the Node expects to be provided by the hard- wired source as " +
-            "specified in WiredCurrentTypeEnum.",
+        details: "Indicates the type of current the Node expects to be provided by the hard- wired source as specified " +
+            "in WiredCurrentTypeEnum.",
         xref: { document: "core", section: "11.7.7.6" }
     }),
 
@@ -103,9 +103,9 @@ export const PowerSource = Cluster(
         name: "WiredAssessedCurrent", id: 0x6, type: "uint32", access: "R V", conformance: "[WIRED]",
         quality: "X C",
         details: "Indicates the assessed instantaneous current draw of the Node on the hard- wired source, in mA " +
-            "(milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If " +
-            "the wired source is not connected, but the Node is still able to assess a value, then the assessed " +
-            "value may be reported.",
+            "(milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If the " +
+            "wired source is not connected, but the Node is still able to assess a value, then the assessed value " +
+            "may be reported.",
         xref: { document: "core", section: "11.7.7.7" }
     }),
 
@@ -139,12 +139,11 @@ export const PowerSource = Cluster(
             details: "Indicates the set of wired faults currently detected by the Node on this power source. This set is " +
                 "represented as a list of WiredFaultEnum. When the Node detects a fault has been raised, the " +
                 "appropriate WiredFaultEnum value shall be added to this list, provided it is not already present. " +
-                "This list shall NOT contain more than one instance of a specific WiredFaultEnum value. When the " +
-                "Node detects all conditions contributing to a fault have been cleared, the corresponding " +
-                "WiredFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
-                "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
-                "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
-                "WiredFaultChange.",
+                "This list shall NOT contain more than one instance of a specific WiredFaultEnum value. When the Node " +
+                "detects all conditions contributing to a fault have been cleared, the corresponding WiredFaultEnum " +
+                "value shall be removed from this list. An empty list shall indicate there are currently no active " +
+                "faults. The order of this list SHOULD have no significance. Clients interested in monitoring changes " +
+                "in active faults may subscribe to this attribute, or they may subscribe to WiredFaultChange.",
 
             xref: { document: "core", section: "11.7.7.11" }
         },
@@ -161,35 +160,55 @@ export const PowerSource = Cluster(
 
     Attribute({
         name: "BatPercentRemaining", id: 0xc, type: "uint8", access: "R V", conformance: "[BAT]",
-        constraint: "0 to 200", quality: "X C",
+        constraint: "max 200", quality: "X Q",
+
         details: "Indicates the estimated percentage of battery charge remaining until the battery will no longer be " +
             "able to provide power to the Node. Values are expressed in half percent units, ranging from 0 to " +
             "200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently " +
-            "unable to assess the value.",
+            "unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.13" }
     }),
 
     Attribute({
         name: "BatTimeRemaining", id: 0xd, type: "uint32", access: "R V", conformance: "[BAT]",
-        quality: "X C",
+        quality: "X Q",
+
         details: "Indicates the estimated time in seconds before the battery will no longer be able to provide power " +
-            "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value.",
+            "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.14" }
     }),
 
     Attribute({
         name: "BatChargeLevel", id: 0xe, type: "BatChargeLevelEnum", access: "R V", conformance: "BAT",
         constraint: "desc",
-        details: "Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention " +
-            "is required as specified in BatChargeLevelEnum.",
+        details: "Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention is " +
+            "required as specified in BatChargeLevelEnum.",
         xref: { document: "core", section: "11.7.7.15" }
     }),
 
     Attribute({
         name: "BatReplacementNeeded", id: 0xf, type: "bool", access: "R V", conformance: "BAT",
         details: "Indicates if the battery needs to be replaced. Replacement may be simple routine maintenance, such " +
-            "as with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, " +
-            "or serious fault with a rechargeable or even non-replaceable cell.",
+            "as with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, or " +
+            "serious fault with a rechargeable or even non-replaceable cell.",
         xref: { document: "core", section: "11.7.7.16" }
     }),
 
@@ -211,14 +230,16 @@ export const PowerSource = Cluster(
             name: "ActiveBatFaults", id: 0x12, type: "list", access: "R V", conformance: "[BAT]",
             constraint: "max 8",
 
-            details: "Indicates the set of battery faults currently detected by the Node on this power source. This set " +
-                "is represented as a list of BatFaultEnum. When the Node detects a fault has been raised, the " +
-                "appropriate BatFaultEnum value shall be added to this list, provided it is not already present. " +
-                "This list shall NOT contain more than one instance of a specific BatFaultEnum value. When the Node " +
+            details: "Indicates the set of battery faults currently detected by the Node on this power source. This set is " +
+                "represented as a list of BatFaultEnum. When the Node detects a fault has been raised, the " +
+                "appropriate BatFaultEnum value shall be added to this list, provided it is not already present. This " +
+                "list shall NOT contain more than one instance of a specific BatFaultEnum value. When the Node " +
                 "detects all conditions contributing to a fault have been cleared, the corresponding BatFaultEnum " +
                 "value shall be removed from this list. An empty list shall indicate there are currently no active " +
-                "faults. The order of this list SHOULD have no significance. Clients interested in monitoring " +
-                "changes in active faults may subscribe to this attribute, or they may subscribe to BatFaultChange.",
+                "faults. The order of this list SHOULD have no significance. Clients interested in monitoring changes " +
+                "in active faults may subscribe to this attribute, or they may subscribe to Bat" +
+                "\n" +
+                "FaultChange.",
 
             xref: { document: "core", section: "11.7.7.19" }
         },
@@ -290,9 +311,19 @@ export const PowerSource = Cluster(
 
     Attribute({
         name: "BatTimeToFullCharge", id: 0x1b, type: "uint32", access: "R V", conformance: "[RECHG]",
-        quality: "X C",
-        details: "Indicates the estimated time in seconds before the battery source will be at full charge. A value " +
-            "of NULL shall indicate the Node is currently unable to assess the value.",
+        quality: "X Q",
+
+        details: "Indicates the estimated time in seconds before the battery source will be at full charge. A value of " +
+            "NULL shall indicate the Node is currently unable to assess the value." +
+            "\n" +
+            "Changes to this attribute shall only be marked as reportable in the following cases:" +
+            "\n" +
+            "  • At most once every 10 seconds, or" +
+            "\n" +
+            "  • When it changes from null to any other value and vice versa." +
+            "\n" +
+            "Since reporting consumes power, devices SHOULD be careful not to over-report.",
+
         xref: { document: "core", section: "11.7.7.28" }
     }),
 
@@ -322,8 +353,8 @@ export const PowerSource = Cluster(
                 "When the Node detects all conditions contributing to a fault have been cleared, the corresponding " +
                 "BatChargeFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
                 "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
-                "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
-                "the BatFaultChange event.",
+                "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to the " +
+                "BatFaultChange event.",
 
             xref: { document: "core", section: "11.7.7.31" }
         },
@@ -344,8 +375,8 @@ export const PowerSource = Cluster(
                 "A cluster instance with an empty list shall indicate that the power source is for the entire node, " +
                 "which includes all endpoints." +
                 "\n" +
-                "A cluster instance with a non-empty list shall include the endpoint, upon which the cluster " +
-                "instance resides." +
+                "A cluster instance with a non-empty list shall include the endpoint, upon which the cluster instance " +
+                "resides." +
                 "\n" +
                 "The above rules allow that some endpoints can have an unknown power source, and therefore would not " +
                 "be indicated by any instance of this cluster." +
@@ -373,8 +404,8 @@ export const PowerSource = Cluster(
     Event(
         {
             name: "WiredFaultChange", id: 0x0, access: "V", conformance: "[WIRED]", priority: "info",
-            details: "The WiredFaultChange Event shall be generated when the set of wired faults currently detected by " +
-                "the Node on this wired power source changes. This event shall correspond to a change in value of " +
+            details: "The WiredFaultChange Event shall be generated when the set of wired faults currently detected by the " +
+                "Node on this wired power source changes. This event shall correspond to a change in value of " +
                 "ActiveWiredFaults.",
             xref: { document: "core", section: "11.7.8.1" }
         },
@@ -403,8 +434,8 @@ export const PowerSource = Cluster(
     Event(
         {
             name: "BatFaultChange", id: 0x1, access: "V", conformance: "[BAT]", priority: "info",
-            details: "The BatFaultChange Event shall be generated when the set of battery faults currently detected by " +
-                "the Node on this battery power source changes. This event shall correspond to a change in value of " +
+            details: "The BatFaultChange Event shall be generated when the set of battery faults currently detected by the " +
+                "Node on this battery power source changes. This event shall correspond to a change in value of " +
                 "ActiveBatFaults.",
             xref: { document: "core", section: "11.7.8.2" }
         },

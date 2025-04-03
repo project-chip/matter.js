@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvEventData } from "./TlvEventData.js";
 import { TlvEventStatus } from "./TlvEventStatus.js";
@@ -15,3 +16,5 @@ export const TlvEventReport = TlvObject({
     eventStatus: TlvOptionalField(0, TlvEventStatus),
     eventData: TlvOptionalField(1, TlvEventData),
 });
+
+export type EventReport = TypeFromSchema<typeof TlvEventReport>;

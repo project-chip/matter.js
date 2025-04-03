@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,24 +26,24 @@ import {
     Endpoint,
     EndpointServer,
     Environment,
+    LogDestination,
     LogLevel,
     Logger,
     ServerNode,
     StorageService,
     Time,
     VendorId,
-    logLevelFromString,
     singleton,
 } from "@matter/main";
 import { OnOffServer } from "@matter/main/behaviors";
-import { GeneralDiagnostics, NetworkCommissioning } from "@matter/main/clusters";
+import { GeneralDiagnostics, NetworkCommissioning, OnOff } from "@matter/main/clusters";
 import { OnOffLightDevice, OnOffPlugInUnitDevice } from "@matter/main/devices";
 import { RootRequirements } from "@matter/main/endpoints";
 import { Ble, FabricAction, logEndpoint } from "@matter/main/protocol";
 import { QrCode } from "@matter/main/types";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
 import { DummyWifiNetworkCommissioningServer } from "./cluster/DummyWifiNetworkCommissioningServer.js";
 import {
@@ -97,8 +97,9 @@ function executeCommand(scriptParamName: string) {
 
 const logFile = environment.vars.string("logfile.filename");
 if (logFile !== undefined) {
-    Logger.addLogger("filelogger", await createFileLogger(logFile), {
-        defaultLogLevel: logLevelFromString(environment.vars.string("logfile.loglevel")) ?? LogLevel.DEBUG,
+    Logger.destinations.filelogger = LogDestination({
+        write: await createFileLogger(logFile),
+        level: LogLevel(environment.vars.get("logfile.loglevel", "debug")),
     });
 }
 
@@ -138,7 +139,7 @@ await deviceStorage.set({
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.
-class OnOffShellExecServer extends OnOffServer {
+class OnOffShellExecServer extends OnOffServer.with(OnOff.Feature.Lighting) {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
     override async on() {
         executeCommand("on");
@@ -315,7 +316,10 @@ server.lifecycle.commissioned.on(() => console.log("Server was initially commiss
 server.lifecycle.decommissioned.on(() => console.log("Server was fully decommissioned successfully!"));
 
 /** This event is triggered when the device went online. This means that it is discoverable in the network. */
-server.lifecycle.online.on(() => console.log("Server is online"));
+server.lifecycle.online.on(() => {
+    console.log("Server is online");
+    console.log("Initial Fabrics when coming online", server.state.commissioning.fabrics);
+});
 
 /** This event is triggered when the device went offline. It is no longer discoverable or connectable in the network. */
 server.lifecycle.offline.on(() => console.log("Server is offline"));
@@ -380,8 +384,6 @@ logEndpoint(EndpointServer.forEndpoint(server));
  * resolves when the node goes offline again, but we want to execute code afterwards, so we use start() here
  */
 await server.start();
-
-console.log("Initial Fabrics", server.state.operationalCredentials.fabrics);
 
 /**
  * If the node is not commissioned already we display the QR code on console. The QR code is also logged

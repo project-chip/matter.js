@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@ import { WindowCoveringDevice } from "@matter/main/devices/window-covering";
  * Our example device, the Excelsior 1000 EZ-Nite™, is a roller shade with an illuminated valance.
  */
 
-const LiftingWindowCoveringServer = WindowCoveringServer.with("Lift", "AbsolutePosition", "PositionAwareLift");
+const LiftingWindowCoveringServer = WindowCoveringServer.with("Lift", "PositionAwareLift");
 
 /**
  * Implementation of the Matter WindowCovering cluster for the shade motor.

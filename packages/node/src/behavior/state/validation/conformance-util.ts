@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Schema } from "#model";
 import { Conformance, DataModelPath, SchemaErrorPath, SchemaImplementationError } from "#model";
-import { Schema } from "../../supervision/Schema.js";
-import { Val } from "../Val.js";
+import { Val } from "#protocol";
 import { ValidationLocation } from "./location.js";
 
 export class UnsupportedConformanceNodeError extends SchemaImplementationError {
@@ -254,7 +254,6 @@ export function createBooleanTest(node: DynamicNode): DynamicNode {
 
         evaluate: (value, location) => {
             const result = evaluate(value, location);
-            assertValue(location, result, "boolean test");
             return asConformance(result);
         },
     };

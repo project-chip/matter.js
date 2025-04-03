@@ -1,9 +1,14 @@
-# This workflow executed the chip tool tests against matter.js
+# This workflow executes the chip tool tests against matter.js (Dockerized and not dockerized ones)
+# This workflow is triggered by:
+# * A schedule (every day at 5am UTC)
+# * A manual trigger
+# * For commits and pull requests to the main branch
+
 name: Chip Tool tests
 
 on:
   schedule:
-    - cron: 0 2 * * * # Every day at 02:00
+    - cron: 0 5 * * * # Every day at 05:00
   workflow_dispatch: # Manually on demand
   push:
     branches: [ "main" ]
@@ -136,8 +141,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API Core - Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-core
         shell: bash
         run: |
@@ -149,6 +155,39 @@ jobs:
               --log-level info \
               --target-glob "{Test_TC_ACE_*,Test_TC_ACL_*,Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DGGEN_*,Test_TC_DESC_*,Test_TC_OPCREDS_*,TestAccessControlC*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissionerNodeId,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestDiscovery}" \
               --target-skip-glob "{Test_TC_ACE_1_6*}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  matterjs-tests-core:
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
+
+      - name: Run Core cluster tests using the python parser sending commands to matter.js-controller from yaml files
+        id: test-execution-08-core-matterjs
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
+              --log-level info \
+              --target-glob "{Test_TC_ACE_*,Test_TC_ACL_*,Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DGGEN_*,Test_TC_DESC_*,Test_TC_OPCREDS_*,TestAccessControlC*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissionerNodeId,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestDiscovery}" \
+              --target-skip-glob "{TestCASERecovery,TestOperationalCredentialsCluster,Test_TC_ACE_1_6}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
@@ -169,8 +208,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API App - Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-fast
         shell: bash
         run: |
@@ -179,6 +219,39 @@ jobs:
             './scripts/tests/run_test_suite.py \
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_*CONC_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster}" \
+              --target-skip-glob "{Test_TC_OO_2_7}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  matterjs-tests-app-fast:
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
+
+      - name: Run fast application cluster tests using the python parser sending commands to matter.js-controller from yaml files
+        id: test-execution-08-app-fast
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_*CONC_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster}" \
               --target-skip-glob "{Test_TC_OO_2_7}" \
@@ -202,8 +275,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: "false"
+          patch-test-yaml: "true"
 
-      - name: 0.8-API App - Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
+      - name: Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
         id: test-execution-08-app-slow
         shell: bash
         run: |
@@ -214,43 +288,13 @@ jobs:
               --chip-tool ../bin/chip-tool \
               --log-level info \
               --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
-              --target-skip-glob "{Test_TC_LVL_9_1}" \
+              --target-skip-glob "{Test_TC_LVL_9_1,Test_TC_CC_9_1,Test_TC_CC_9_2,Test_TC_CC_9_3}" \
+              --include-tags MANUAL \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
               --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
               --tv-app ../chip-testing/dist/esm/TvTestApp.js \
-            '
-
-  chip-tests-legacy:
-    needs: [prepare-chip-build, chip-tests-needed]
-    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out matter.js
-        uses: actions/checkout@v4
-
-      - name: Initialize chip tests
-        uses: ./.github/actions/prepare-chip-testing
-        with:
-          rebuild-chip-tool: "false"
-
-      - name: Legacy-API - Run Tests using the python parser sending commands to chip-tool from yaml files
-        id: test-execution-legacy
-        shell: bash
-        run: |
-          cd connectedhomeip
-          ./scripts/run_in_build_env.sh  \
-            './scripts/tests/run_test_suite.py \
-              --runner chip_tool_python \
-              --chip-tool ../bin/chip-tool \
-              --log-level info \
-              --target-glob "{Test_TC_ACE_*,Test_TC_ACL_*,Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DESC_*,Test_TC_?LABEL_*,Test_TC_OO_*,Test_TC_OPCREDS_*,TestAccessControlC*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestAccessControlC*,TestCommissionerNodeId,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster,TestDiscovery}" \
-              --target-skip-glob "{Test_TC_ACE_1_6,Test_TC_OO_2_7}" \
-              run \
-              --iterations 1 \
-              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
-              --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
             '
 
   chip-tests-long:
@@ -265,8 +309,9 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
 
-      - name: 0.8-API - Long Test execution
+      - name: Long Test execution
         id: test-execution-long-08
         shell: bash
         run: |
@@ -282,8 +327,7 @@ jobs:
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
               --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
             '
-
-  chip-tests-long-legacy:
+  matterjs-tests-long:
     needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
@@ -295,32 +339,31 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
 
-      - name: Legacy-API - Long Test execution
-        id: test-execution-long-legacy
+      - name: Long Test execution with matter.js controller
+        id: test-execution-long-08
         shell: bash
         run: |
           cd connectedhomeip
           ./scripts/run_in_build_env.sh  \
             './scripts/tests/run_test_suite.py \
               --runner chip_tool_python \
-              --chip-tool ../bin/chip-tool \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
               --log-level info \
               --target-glob "{Test_TC_CADMIN_1_3,Test_TC_CADMIN_1_4,Test_TC_CADMIN_1_5,Test_TC_CADMIN_1_6,Test_TC_CADMIN_1_9,Test_TC_CADMIN_1_10,Test_TC_CADMIN_1_16,Test_TC_CADMIN_1_23,Test_TC_CADMIN_1_24}" \
               --include-tags MANUAL \
               run \
-              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
-              --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
             '
 
   python-repl-tests:
     needs: [prepare-chip-build, chip-tests-needed]
-
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     env:
       TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -329,6 +372,7 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          patch-test-yaml: "true"
 
       - name: Generate an argument environment file
         run: |
@@ -345,7 +389,7 @@ jobs:
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
 
-      - name: 0.8-API - Run Tests
+      - name: Run Tests
         id: python-tests-08
         shell: bash
         run: |
@@ -358,6 +402,10 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_5.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factory-reset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_ACL_2_2.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_9.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_11.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_22_24.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_3_4.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CC_2_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CGEN_2_4.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_5.py'
@@ -366,66 +414,68 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DeviceBasicComposition.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_IDM_1_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_IDM_4_2.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_LVL_2_3.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_TestEventTrigger.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_2.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_4.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_5.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_PWRTL_2_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_7_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SWTCH.py'
 
-  python-repl-tests-legacy:
-    needs: [prepare-chip-build, chip-tests-needed]
 
-    env:
-      TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
+  #        scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CADMIN_1_19.py'
 
+  # Execute the core cluster tests
+  docker-chip-tests-core:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out matter.js
-        uses: actions/checkout@v4
-
-      - name: Initialize chip tests
-        uses: ./.github/actions/prepare-chip-testing
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
         with:
-          rebuild-chip-tool: 'false'
-
-      - name: Generate an argument environment file
+          node-version: 22.x
+      - name: Execute tests
         run: |
-          echo -n "" >/tmp/test_env.yaml
-          echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "CHIP_LOCK_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "ENERGY_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "LIT_ICD_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "CHIP_MICROWAVE_OVEN_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "CHIP_RVC_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "NETWORK_MANAGEMENT_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "LIGHTING_APP_NO_UNIQUE_ID: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
-          echo "TRACE_APP: out/trace_data/app-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
-          echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
-          echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-core
 
-      - name: Legacy-API - Run Tests
-        id: python-tests-legacy
-        shell: bash
+  docker-chip-tests-fast:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
         run: |
-          cd connectedhomeip
-          mkdir -p out/trace_data
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DeviceBasicComposition.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_2.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_3.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_4.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_5.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factory-reset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_ACL_2_2.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_CGEN_2_4.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_2.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_5.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_DA_1_7.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_IDM_1_2.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_IDM_1_4.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_IDM_4_2.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_1.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_OPCREDS_3_2.py'
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-app-fast
 
+  docker-chip-tests-slow:
+    needs: [chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: 22.x
+      - name: Execute tests
+        run: |
+          cd chip
+          ./bin/pull
+          cd ../chip-testing
+          npm run test-app-slow

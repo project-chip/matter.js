@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -328,8 +328,24 @@ export abstract class ModelVariantTraversal<S = void> {
                 const mapping =
                     mappings[child.tag] || (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
 
-                const idKey = child.key;
-                let nameKey = this.getCanonicalName(child);
+                let idKey: string | undefined;
+                let nameKey: string | undefined;
+
+                // Determine matching keys.  These are based on ID and/or name unless explicitly overridden
+                if (child.matchTo !== undefined) {
+                    const { id, name } = child.matchTo;
+
+                    if (id !== undefined) {
+                        idKey = id.toString();
+                    }
+
+                    if (name !== undefined) {
+                        nameKey = name.toString();
+                    }
+                } else {
+                    idKey = child.key;
+                    nameKey = this.getCanonicalName(child) as string | undefined;
+                }
 
                 if (child.discriminator !== undefined) {
                     nameKey = `${nameKey}␜${child.discriminator}`;
@@ -343,7 +359,7 @@ export abstract class ModelVariantTraversal<S = void> {
                 }
 
                 // Find existing slot by name
-                if (slot === undefined) {
+                if (slot === undefined && nameKey !== undefined) {
                     slot = mapping.nameToSlot[nameKey];
                 }
 
@@ -354,14 +370,12 @@ export abstract class ModelVariantTraversal<S = void> {
                 }
 
                 // Map the child's ID to the slot
-                if (idKey !== undefined) {
-                    if (mapping.idToSlot[idKey] === undefined) {
-                        mapping.idToSlot[idKey] = slot;
-                    }
+                if (idKey !== undefined && mapping.idToSlot[idKey] === undefined) {
+                    mapping.idToSlot[idKey] = slot;
                 }
 
                 // Map the child's name to the slot
-                if (mapping.nameToSlot[nameKey] === undefined) {
+                if (nameKey !== undefined && mapping.nameToSlot[nameKey] === undefined) {
                     mapping.nameToSlot[nameKey] = slot;
                 }
 

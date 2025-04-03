@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,7 @@ export namespace LowPowerInterface {
         /**
          * This command shall put the device into low power mode.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.11.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.11.4.1
          */
         sleep(): MaybePromise;
     }

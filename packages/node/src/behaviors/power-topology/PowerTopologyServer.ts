@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,7 +26,7 @@ const PowerTopologyBase = PowerTopologyBehavior.with(
  * The default implementation verifies that the active endpoints are a subset of the available endpoints when
  * the SetTopology and DynamicPowerFlow features are used.
  */
-export class PowerTopologyServerLogic extends PowerTopologyBase {
+export class PowerTopologyBaseServer extends PowerTopologyBase {
     override async initialize() {
         if (this.agent.has(ElectricalPowerMeasurementBehavior) || this.agent.has(ElectricalEnergyMeasurementBehavior)) {
             (await this.agent.load(DescriptorServer)).addDeviceTypes("ElectricalSensor");
@@ -48,4 +48,4 @@ export class PowerTopologyServerLogic extends PowerTopologyBase {
     }
 }
 
-export class PowerTopologyServer extends PowerTopologyServerLogic.for(ClusterType(PowerTopology.Base)) {}
+export class PowerTopologyServer extends PowerTopologyBaseServer.for(ClusterType(PowerTopology.Base)) {}

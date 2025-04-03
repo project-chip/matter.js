@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,6 +14,7 @@ import {
     CarbonMonoxideConcentrationMeasurementServer,
     ColorControlServer,
     DescriptorServer,
+    DoorLockServer,
     FixedLabelServer,
     FlowMeasurementServer,
     FormaldehydeConcentrationMeasurementServer,
@@ -48,6 +49,7 @@ import {
     ColorControl,
     ConcentrationMeasurement,
     Descriptor,
+    DoorLock,
     LevelControl,
     ModeSelect,
     OccupancySensing,
@@ -69,14 +71,14 @@ import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitori
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
-import { TestInstanceConfig } from "./GenericTestApp.js";
+import { DeviceTestInstanceConfig } from "./GenericTestApp.js";
 import { NodeTestInstance } from "./NodeTestInstance.js";
 import { SwitchSimulator } from "./simulators/SwitchSimulator.js";
 
 export class AllClustersTestInstance extends NodeTestInstance {
     static override id = "binford-6100";
 
-    constructor(config: TestInstanceConfig) {
+    constructor(config: DeviceTestInstanceConfig) {
         super(config);
     }
 
@@ -224,6 +226,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     //lastNetworkId: networkId,
                     //lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 },
+                operationalCredentials: {
+                    supportedFabrics: 16,
+                },
                 timeFormatLocalization: {
                     hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
                     activeCalendarType: TimeFormatLocalization.CalendarType.Gregorian,
@@ -263,6 +268,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ColorControl.Feature.ColorTemperature,
                 ),
                 DescriptorServer.with(Descriptor.Feature.TagList),
+                DoorLockServer,
                 FixedLabelServer,
                 FlowMeasurementServer,
                 FormaldehydeConcentrationMeasurementServer.with(
@@ -396,11 +402,14 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 colorControl: {
-                    coupleColorTempToLevelMinMireds: 0,
+                    colorTempPhysicalMinMireds: 1,
+                    colorTempPhysicalMaxMireds: 65279,
+                    coupleColorTempToLevelMinMireds: 1,
                     remainingTime: 0,
                     driftCompensation: 0,
                     compensationText: "foo",
                     startUpColorTemperatureMireds: 32639,
+
                     numberOfPrimaries: 6,
                     primary1X: 0,
                     primary1Y: 0,
@@ -435,6 +444,12 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 },
                 descriptor: {
                     tagList: [NumberTag.One],
+                },
+                doorLock: {
+                    lockState: DoorLock.LockState.Unlocked,
+                    lockType: DoorLock.LockType.CylindricalLock,
+                    actuatorEnabled: true,
+                    operatingMode: DoorLock.OperatingMode.Normal,
                 },
                 fixedLabel: {
                     labelList: [

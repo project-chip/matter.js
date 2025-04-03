@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -202,7 +202,7 @@ function buildBitmap(scope: Scope, model: ValueModel) {
             maxBit = Math.trunc(Math.log2(defaultValue)) + 1;
         }
 
-        for (let i = 0, mask = 1 << minBit; i < maxBit - minBit; i++, mask << 1) {
+        for (let i = 0, mask = 1 << minBit; i < maxBit - minBit; i++, mask <<= 1) {
             if (fieldsDefined & mask) {
                 continue;
             }
@@ -219,8 +219,12 @@ function buildBitmap(scope: Scope, model: ValueModel) {
 function decodeBitmap(model: ValueModel, value: number | bigint) {
     const fields = new Map<ValueModel, number | boolean>();
 
+    // Value is 0, so no bit set
+    if (value === 0) {
+        return {};
+    }
     // Test each bit.  If set, install appropriate value into object
-    for (let bit = 0; Math.pow(bit, 2) <= value; bit++) {
+    for (let bit = 0; Math.pow(2, bit) <= value; bit++) {
         if (typeof value === "bigint") {
             if (!(value & (1n << BigInt(bit)))) {
                 continue;
@@ -241,7 +245,7 @@ function decodeBitmap(model: ValueModel, value: number | bigint) {
         } else if (constraint.min !== undefined) {
             // Bit range
             const fieldBit = 1 << (bit - (constraint.min as number));
-            fields.set(definition, ((fields.get(definition) as number) ?? 0) & fieldBit);
+            fields.set(definition, ((fields.get(definition) as number) ?? 0) | fieldBit);
         }
     }
 

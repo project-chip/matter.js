@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -44,10 +44,6 @@ export class AttributeModel extends PropertyModel<AttributeElement> implements A
         super(definition);
     }
 
-    static {
-        Model.types[AttributeElement.Tag] = this;
-    }
-
     static isGlobal(model: Model) {
         return model instanceof AttributeModel && GLOBAL_IDS.has(model.id);
     }
@@ -58,3 +54,5 @@ export class AttributeModel extends PropertyModel<AttributeElement> implements A
 
     static Tag = AttributeElement.Tag;
 }
+
+AttributeModel.register();

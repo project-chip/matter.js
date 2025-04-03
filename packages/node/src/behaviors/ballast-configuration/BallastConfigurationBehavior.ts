@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,8 +10,8 @@ import { BallastConfiguration } from "#clusters/ballast-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * BallastConfigurationBehavior is the base class for objects that support interaction with {@link
- * BallastConfiguration.Cluster}.
+ * BallastConfigurationBehavior is the base class for objects that support interaction with
+ * {@link BallastConfiguration.Cluster}.
  */
 export const BallastConfigurationBehavior = ClusterBehavior.for(BallastConfiguration.Cluster);
 

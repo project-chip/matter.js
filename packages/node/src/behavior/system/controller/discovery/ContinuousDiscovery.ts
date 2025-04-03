@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Observable } from "#general";
 import type { ClientNode } from "#node/ClientNode.js";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { Discovery } from "./Discovery.js";
 
 /**

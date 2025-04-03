@@ -1,16 +1,17 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Events } from "#behavior/Events.js";
 import type { Agent } from "#endpoint/Agent.js";
-import { AsyncObservable, EventEmitter, ImplementationError, MaybePromise, Observable } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
+import type { Schema } from "#model";
 import { ClusterComposer, ClusterType, ElementModifier, TypeFromBitSchema } from "#types";
 import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
-import { Schema } from "../supervision/Schema.js";
 import { NetworkBehavior } from "../system/network/NetworkBehavior.js";
 import { ExtensionInterfaceOf, createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
 import type { ClusterEvents } from "./ClusterEvents.js";
@@ -199,6 +200,8 @@ export class ClusterBehavior extends Behavior {
             );
         }
     }
+
+    static override Events = Events;
 }
 
 export namespace ClusterBehavior {
@@ -361,21 +364,6 @@ export namespace ClusterBehavior {
 
                 [Symbol.asyncDispose](): MaybePromise<void>;
             };
-
-    /**
-     * All cluster behaviors support interaction events in addition to cluster-specific attribute mutation events.
-     */
-    export class Events extends EventEmitter {
-        /**
-         * Emitted when state associated with this behavior is first mutated by a specific interaction.
-         */
-        interactionBegin = Observable<[]>();
-
-        /**
-         * Emitted when a mutating interaction completes.
-         */
-        interactionEnd = AsyncObservable<[]>();
-    }
 
     /**
      * This is an unfortunate kludge required to work around https://github.com/microsoft/TypeScript/issues/27965.  It

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,22 +11,21 @@ import { RootEndpoint } from "#endpoints/root";
 import { MaybePromise, Time, Timer } from "#general";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 
-const Base = OnOffBehavior.with(OnOff.Feature.Lighting);
+const OnOffLogicBase = OnOffBehavior.with(OnOff.Feature.Lighting);
 
 /**
  * This is the default server implementation of {@link OnOffBehavior}.
  *
- * This implementation includes all features of {@link OnOff.Cluster} and automatically enables the "Level Control
- * for Lighting" Feature. You should use {@link OnOffServer.with} to specialize the class for the features your
- * implementation supports. Alternatively you can extend this class and override the methods you need to change or add
- * mandatory commands.
+ * This implementation includes all features of {@link OnOff.Cluster}. You should use {@link OnOffServer.with} to
+ * specialize the class for the features your implementation supports. Alternatively you can extend this class and
+ * override the methods you need to change or add mandatory commands.
  *
- * The "OffOnly" feature is automatically supported because the commands are disabled by conformance.
+ * The "OffOnly" and "Lighting" features are automatically supported because the commands are disabled by conformance.
  * The default implementation do not contain any logic for the DeadFrontBehavior feature because this is very use case
  * specific, so this needs to be implemented by the device implementor as needed.
  */
-export class OnOffServer extends Base {
-    declare protected internal: OnOffServer.Internal;
+export class OnOffBaseServer extends OnOffLogicBase {
+    declare protected internal: OnOffBaseServer.Internal;
 
     override initialize() {
         if (this.features.lighting && this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
@@ -195,9 +194,13 @@ export class OnOffServer extends Base {
     }
 }
 
-export namespace OnOffServer {
+export namespace OnOffBaseServer {
     export class Internal {
         timedOnTimer?: Timer;
         delayedOffTimer?: Timer;
     }
 }
+
+// We had turned on some more features to provide a default implementation, but export the cluster with default
+// Features again.
+export class OnOffServer extends OnOffBaseServer.with() {}

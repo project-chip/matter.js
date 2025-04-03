@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,8 +12,8 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const struct = Datatype({
     name: "struct", description: "Struct", isSeed: true, metatype: "object",
 
-    details: "A struct is a sequence of fields of any data type. Individual fields are identified by a field ID " +
-        "of unsigned integer, starting at 0 (zero), for the first field." +
+    details: "A struct is a sequence of fields of any data type. Individual fields are identified by a field ID of " +
+        "unsigned integer, starting at 0 (zero), for the first field." +
         "\n" +
         "  • A struct itself shall have no constraint qualities." +
         "\n" +
@@ -53,23 +53,23 @@ export const struct = Datatype({
         "  • The global FabricIndex field SHOULD NOT be indicated on a fabric-scoped struct contained in the " +
         "    payload of a command request." +
         "\n" +
-        "  • The global FabricIndex field shall be ignored on a fabric-scoped struct contained in the " +
-        "    payload of a command request." +
+        "  • The global FabricIndex field shall be ignored on a fabric-scoped struct contained in the payload " +
+        "    of a command request." +
         "\n" +
         "  • When a write interaction creates a fabric-scoped struct entry (in a fabric-scoped list), the " +
-        "    server shall implicitly load the accessing fabric-index into the global FabricIndex field of " +
-        "    the struct." +
+        "    server shall implicitly load the accessing fabric-index into the global FabricIndex field of the " +
+        "    struct." +
         "\n" +
         "  • When the payload of a command request contains a fabric-scoped struct, the server shall " +
         "    implicitly load the accessing fabric-index into the global FabricIndex field of the struct." +
         "\n" +
         "### • A fabric-scoped struct may be defined with some fields that are fabric-sensitive." +
         "\n" +
-        "  • For interactions on a fabric-scoped struct that report back data, fabric-sensitive struct " +
-        "    fields shall NOT be indicated when reporting data back to the client, when the struct has an " +
-        "    associated fabric, and it is not the accessing fabric.",
+        "  • For interactions on a fabric-scoped struct that report back data, fabric-sensitive struct fields " +
+        "    shall NOT be indicated when reporting data back to the client, when the struct has an associated " +
+        "    fabric, and it is not the accessing fabric.",
 
-    xref: { document: "core", section: "7.18.1.9" }
+    xref: { document: "core", section: "7.19.1.9" }
 });
 
 MatterDefinition.children.push(struct);

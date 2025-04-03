@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -122,8 +122,11 @@ describe("DescriptorServer", () => {
     it("fully populates device types", async () => {
         const light = await MockEndpoint.create(ColorTemperatureLightDevice, {
             colorControl: {
-                coupleColorTempToLevelMinMireds: 0,
-                startUpColorTemperatureMireds: 0,
+                colorMode: 0,
+                colorTempPhysicalMinMireds: 1,
+                colorTempPhysicalMaxMireds: 65279,
+                coupleColorTempToLevelMinMireds: 1,
+                startUpColorTemperatureMireds: null,
             },
         });
 

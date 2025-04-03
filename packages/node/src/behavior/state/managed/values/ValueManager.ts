@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Schema } from "#model";
 import { Metatype } from "#model";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import type { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { BitmapManager } from "./BitmapManager.js";
 import { ListManager } from "./ListManager.js";

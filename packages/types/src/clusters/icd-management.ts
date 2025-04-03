@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,10 +20,10 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { TlvSubjectId } from "../datatype/SubjectId.js";
+import { TlvEnum, TlvUInt32, TlvUInt16, TlvBitmap } from "../tlv/TlvNumber.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { AccessLevel } from "#model";
-import { TlvUInt32, TlvUInt16, TlvBitmap, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { Identity } from "#general";
@@ -33,7 +33,7 @@ export namespace IcdManagement {
     /**
      * These are optional features supported by IcdManagementCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.4
+     * @see {@link MatterSpecification.v14.Core} § 9.17.4
      */
     export enum Feature {
         /**
@@ -42,7 +42,7 @@ export namespace IcdManagement {
          * When this feature is supported, the device shall support all the associated commands and attributes to
          * properly support the Check-In Protocol.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.1
+         * @see {@link MatterSpecification.v14.Core} § 9.17.4.1
          */
         CheckInProtocolSupport = "CheckInProtocolSupport",
 
@@ -51,7 +51,7 @@ export namespace IcdManagement {
          *
          * This feature is supported if and only if the device has a user active mode trigger.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.2
+         * @see {@link MatterSpecification.v14.Core} § 9.17.4.2
          */
         UserActiveModeTrigger = "UserActiveModeTrigger",
 
@@ -60,22 +60,45 @@ export namespace IcdManagement {
          *
          * This feature is supported if and only the device is a Long Idle Time ICD.
          *
-         * NOTE In this version of the specification, the support for the feature is provisional.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.3
+         * @see {@link MatterSpecification.v14.Core} § 9.17.4.3
          */
-        LongIdleTimeSupport = "LongIdleTimeSupport"
+        LongIdleTimeSupport = "LongIdleTimeSupport",
+
+        /**
+         * DynamicSitLitSupport (DSLS)
+         *
+         * This feature is supported if and only if the device can switch between SIT and LIT operating modes even if it
+         * has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
+         *
+         * @see {@link MatterSpecification.v14.Core} § 9.17.4.4
+         */
+        DynamicSitLitSupport = "DynamicSitLitSupport"
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 9.17.5.2
+     * @see {@link MatterSpecification.v14.Core} § 9.17.5.1.1
+     */
+    export enum ClientType {
+        /**
+         * The client is typically resident, always-on, fixed infrastructure in the home.
+         */
+        Permanent = 0,
+
+        /**
+         * The client is mobile or non-resident or not always-on and may not always be available in the home.
+         */
+        Ephemeral = 1
+    }
+
+    /**
+     * @see {@link MatterSpecification.v14.Core} § 9.17.5.3
      */
     export const TlvMonitoringRegistration = TlvObject({
         /**
          * This field shall indicate the NodeID of the Node to which Check-In messages will be sent when the
          * MonitoredSubject is not subscribed.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.5.2.1
+         * @see {@link MatterSpecification.v14.Core} § 9.17.5.3.1
          */
         checkInNodeId: TlvField(1, TlvNodeId),
 
@@ -95,47 +118,56 @@ export namespace IcdManagement {
          * For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers to the
          * server on the entry’s associated fabric bears that Node ID, then the entry matches.
          *
-         * Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the subscribers
-         * to the server on the entry’s associated fabric bears the CASE Authenticated TAG value 0xAA12 and the version
-         * 0x0002 or higher within its NOC, then the entry matches.
+         * Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.5.2.2
+         * subscribers to the server on the entry’s associated fabric bears the CASE Authenticated TAG value 0xAA12 and
+         * the version 0x0002 or higher within its NOC, then the entry matches.
+         *
+         * @see {@link MatterSpecification.v14.Core} § 9.17.5.3.2
          */
         monitoredSubject: TlvField(2, TlvSubjectId),
+
+        /**
+         * This field shall indicate the client’s type to inform the ICD of the availability for communication of the
+         * client.
+         *
+         * @see {@link MatterSpecification.v14.Core} § 9.17.5.4
+         */
+        clientType: TlvField(4, TlvEnum<ClientType>()),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 9.17.5.2
+     * @see {@link MatterSpecification.v14.Core} § 9.17.5.3
      */
     export interface MonitoringRegistration extends TypeFromSchema<typeof TlvMonitoringRegistration> {}
 
     /**
      * Input to the IcdManagement registerClient command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.1
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.1
      */
     export const TlvRegisterClientRequest = TlvObject({
         /**
          * This field shall provide the node ID to which a Check-In message will be sent if there are no active
          * subscriptions matching MonitoredSubject.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.1.1
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1.1
          */
         checkInNodeId: TlvField(0, TlvNodeId),
 
         /**
          * This field shall provide the monitored subject ID.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.1.2
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1.2
          */
         monitoredSubject: TlvField(1, TlvSubjectId),
 
         /**
          * This field shall provide the shared secret between the client and the ICD to encrypt the Check-In message.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.1.3
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1.3
          */
         key: TlvField(2, TlvByteString.bound({ length: 16 })),
 
@@ -147,15 +179,22 @@ export namespace IcdManagement {
          * provided by clients with administrator permissions for the server cluster. The verification key shall be
          * ignored by the server if it is provided by a client with administrator permissions for the server cluster.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.1.4
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1.4
          */
-        verificationKey: TlvOptionalField(3, TlvByteString.bound({ length: 16 }))
+        verificationKey: TlvOptionalField(3, TlvByteString.bound({ length: 16 })),
+
+        /**
+         * This field shall provide the client type of the client registering.
+         *
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.1.5
+         */
+        clientType: TlvField(4, TlvEnum<ClientType>())
     });
 
     /**
      * Input to the IcdManagement registerClient command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.1
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.1
      */
     export interface RegisterClientRequest extends TypeFromSchema<typeof TlvRegisterClientRequest> {}
 
@@ -163,7 +202,7 @@ export namespace IcdManagement {
      * This command shall be sent by the ICD Management Cluster server in response to a successful RegisterClient
      * command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.2
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.2
      */
     export const TlvRegisterClientResponse = TlvObject({ icdCounter: TlvField(0, TlvUInt32) });
 
@@ -171,33 +210,33 @@ export namespace IcdManagement {
      * This command shall be sent by the ICD Management Cluster server in response to a successful RegisterClient
      * command.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.2
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.2
      */
     export interface RegisterClientResponse extends TypeFromSchema<typeof TlvRegisterClientResponse> {}
 
     /**
      * Input to the IcdManagement unregisterClient command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.3
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.3
      */
     export const TlvUnregisterClientRequest = TlvObject({
         /**
          * This field shall provide the registered client node ID to remove from storage.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.3.1
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.3.1
          */
         checkInNodeId: TlvField(0, TlvNodeId),
 
         /**
          * This field shall provide the verification key associated with the CheckInNodeID to remove from storage. The
-         * verification key represents the key already stored on the server. The verification key provided in this
-         * field shall be used by the server to guarantee that a client with manage permissions can only remove entries
-         * that contain a Key equal to the stored key. The verification key shall be provided for clients with manage
+         * verification key represents the key already stored on the server. The verification key provided in this field
+         * shall be used by the server to guarantee that a client with manage permissions can only remove entries that
+         * contain a Key equal to the stored key. The verification key shall be provided for clients with manage
          * permissions. The verification key SHOULD NOT be provided by clients with administrator permissions for the
          * server cluster. The verification key shall be ignored by the server if it is provided by a client with
          * administrator permissions for the server cluster.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.3.2
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.3.2
          */
         verificationKey: TlvOptionalField(1, TlvByteString.bound({ length: 16 }))
     });
@@ -205,14 +244,14 @@ export namespace IcdManagement {
     /**
      * Input to the IcdManagement unregisterClient command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.3
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.3
      */
     export interface UnregisterClientRequest extends TypeFromSchema<typeof TlvUnregisterClientRequest> {}
 
     /**
      * See the UserActiveModeTriggerHint table for requirements associated to each bit.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.5.1
+     * @see {@link MatterSpecification.v14.Core} § 9.17.5.1
      */
     export const UserActiveModeTrigger = {
         /**
@@ -302,7 +341,7 @@ export namespace IcdManagement {
     };
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 9.17.5.3
+     * @see {@link MatterSpecification.v14.Core} § 9.17.5.2
      */
     export enum OperatingMode {
         /**
@@ -319,22 +358,22 @@ export namespace IcdManagement {
     /**
      * Input to the IcdManagement stayActiveRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
      */
     export const TlvStayActiveRequest = TlvObject({ stayActiveDuration: TlvField(0, TlvUInt32) });
 
     /**
      * Input to the IcdManagement stayActiveRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
      */
     export interface StayActiveRequest extends TypeFromSchema<typeof TlvStayActiveRequest> {}
 
     /**
-     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the
-     * computed duration (in milliseconds) that the ICD intends to stay active for.
+     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the computed
+     * duration (in milliseconds) that the ICD intends to stay active for.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.5
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.5
      */
     export const TlvStayActiveResponse = TlvObject({
         /**
@@ -346,16 +385,16 @@ export namespace IcdManagement {
          * The minimum value of the PromisedActiveDuration field shall be equal to either 30000 milliseconds or
          * StayActiveDuration (from the received StayActiveRequest command), whichever is smaller.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.7.5.1
+         * @see {@link MatterSpecification.v14.Core} § 9.17.7.5.1
          */
         promisedActiveDuration: TlvField(0, TlvUInt32)
     });
 
     /**
-     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the
-     * computed duration (in milliseconds) that the ICD intends to stay active for.
+     * This message shall be sent by the ICD in response to the StayActiveRequest command and shall contain the computed
+     * duration (in milliseconds) that the ICD intends to stay active for.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.7.5
+     * @see {@link MatterSpecification.v14.Core} § 9.17.7.5
      */
     export interface StayActiveResponse extends TypeFromSchema<typeof TlvStayActiveResponse> {}
 
@@ -370,7 +409,7 @@ export namespace IcdManagement {
              * fabric supported on the server, as indicated by the value of the SupportedFabrics attribute in the
              * Operational Credentials cluster.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.4
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.4
              */
             registeredClients: FabricScopedAttribute(
                 0x3,
@@ -381,7 +420,7 @@ export namespace IcdManagement {
             /**
              * This attribute returns the value of the ICD Counter.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.5
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.5
              */
             icdCounter: Attribute(
                 0x4,
@@ -400,9 +439,19 @@ export namespace IcdManagement {
              * Indicates the maximum number of entries that the server is able to store for each fabric in the
              * RegisteredClients attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.6
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.6
              */
-            clientsSupportedPerFabric: FixedAttribute(0x5, TlvUInt16.bound({ min: 1 }), { default: 1 })
+            clientsSupportedPerFabric: FixedAttribute(0x5, TlvUInt16.bound({ min: 1 }), { default: 1 }),
+
+            /**
+             * Indicates the maximum time in seconds between two Check-In messages when back-off is active. The
+             * MaximumCheckInBackoff shall NOT be smaller than the IdleModeDuration.
+             *
+             * If the MaximumCheckInBackoff is equal to the IdleModeDuration, it means the ICD does notback- off.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.10
+             */
+            maximumCheckInBackoff: FixedAttribute(0x9, TlvUInt32.bound({ max: 64800 }), { default: 1 })
         },
 
         commands: {
@@ -410,7 +459,7 @@ export namespace IcdManagement {
              * This command allows a client to register itself with the ICD to be notified when the device is available
              * for communication.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.7.1
+             * @see {@link MatterSpecification.v14.Core} § 9.17.7.1
              */
             registerClient: Command(
                 0x0,
@@ -422,11 +471,10 @@ export namespace IcdManagement {
 
             /**
              * This command allows a client to unregister itself with the ICD. Example: a client that is leaving the
-             * network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions
-             * and send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent
-             * client.
+             * network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and
+             * send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.7.3
+             * @see {@link MatterSpecification.v14.Core} § 9.17.7.3
              */
             unregisterClient: Command(
                 0x2,
@@ -454,11 +502,11 @@ export namespace IcdManagement {
              * a dependency on the UserActiveModeTriggerInstruction attribute but do not require the attribute to be
              * present.
              *
-             * An ICD can indicate multiple ways of being put into Active Mode by setting multiple bits in the bitmap
-             * at the same time. However, a device shall NOT set more than one bit which has a dependency on the
+             * ### An ICD can indicate multiple ways of being put into Active Mode by setting multiple bits in the
+             * bitmap at the same time. However, a device shall NOT set more than one bit which has a dependency on the
              * UserActiveModeTriggerInstruction attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.7
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.7
              */
             userActiveModeTriggerHint: FixedAttribute(0x6, TlvBitmap(TlvUInt32, UserActiveModeTrigger))
         }
@@ -476,7 +524,7 @@ export namespace IcdManagement {
              *
              *   • If the ICD is operating as a SIT ICD, OperatingMode shall be SIT.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.9
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.9
              */
             operatingMode: Attribute(0x8, TlvEnum<OperatingMode>())
         },
@@ -486,12 +534,12 @@ export namespace IcdManagement {
              * This command allows a client to request that the server stays in active mode for at least a given time
              * duration (in milliseconds) from when this command is received.
              *
-             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used
-             * by the client to request the server to stay active and responsive for this period to allow a sequence of
+             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
+             * the client to request the server to stay active and responsive for this period to allow a sequence of
              * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD
              * to be active for, in order to account for network delays.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
+             * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
              */
             stayActiveRequest: Command(0x3, TlvStayActiveRequest, 0x4, TlvStayActiveResponse)
         }
@@ -503,7 +551,7 @@ export namespace IcdManagement {
     export const Base = MutableCluster.Component({
         id: 0x46,
         name: "IcdManagement",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
@@ -512,7 +560,7 @@ export namespace IcdManagement {
              * When this feature is supported, the device shall support all the associated commands and attributes to
              * properly support the Check-In Protocol.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.4.1
+             * @see {@link MatterSpecification.v14.Core} § 9.17.4.1
              */
             checkInProtocolSupport: BitFlag(0),
 
@@ -521,7 +569,7 @@ export namespace IcdManagement {
              *
              * This feature is supported if and only if the device has a user active mode trigger.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.4.2
+             * @see {@link MatterSpecification.v14.Core} § 9.17.4.2
              */
             userActiveModeTrigger: BitFlag(1),
 
@@ -530,11 +578,19 @@ export namespace IcdManagement {
              *
              * This feature is supported if and only the device is a Long Idle Time ICD.
              *
-             * NOTE In this version of the specification, the support for the feature is provisional.
-             *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.4.3
+             * @see {@link MatterSpecification.v14.Core} § 9.17.4.3
              */
-            longIdleTimeSupport: BitFlag(2)
+            longIdleTimeSupport: BitFlag(2),
+
+            /**
+             * DynamicSitLitSupport
+             *
+             * This feature is supported if and only if the device can switch between SIT and LIT operating modes even
+             * if it has a valid registered client. See the dynamic SIT / LIT operating mode switching for more details.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 9.17.4.4
+             */
+            dynamicSitLitSupport: BitFlag(3)
         },
 
         attributes: {
@@ -542,7 +598,7 @@ export namespace IcdManagement {
              * Indicates the maximum interval in seconds the server can stay in idle mode. The IdleModeDuration shall
              * NOT be smaller than the ActiveModeDuration.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.1
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.1
              */
             idleModeDuration: FixedAttribute(0x0, TlvUInt32.bound({ min: 1, max: 64800 }), { default: 1 }),
 
@@ -550,7 +606,7 @@ export namespace IcdManagement {
              * Indicates the minimum interval in milliseconds the server typically will stay in active mode after
              * initial transition out of idle mode. The ActiveModeDuration does not include the ActiveModeThreshold.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.2
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.2
              */
             activeModeDuration: FixedAttribute(0x1, TlvUInt32, { default: 300 }),
 
@@ -558,7 +614,7 @@ export namespace IcdManagement {
              * Indicates the minimum amount of time in milliseconds the server typically will stay active after network
              * activity when in active mode.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.3
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.3
              */
             activeModeThreshold: FixedAttribute(0x2, TlvUInt16, { default: 300 }),
 
@@ -568,29 +624,26 @@ export namespace IcdManagement {
              * UserActiveModeTriggerInstruction attribute may give additional information on how to transition the
              * device to Active Mode. If the attribute is present, the value shall be encoded as a valid UTF-8 string
              * with a maximum length of 128 bytes. If the UserActiveModeTriggerHint has the ActuateSensorSeconds,
-             * ActuateSensorTimes, ResetButtonSeconds, ResetButtonTimes, SetupButtonSeconds or SetupButtonTimes set,
-             * the string shall consist solely of an encoding of N as a decimal
+             * ActuateSensorTimes, ResetButtonSeconds, ResetButtonTimes, SetupButtonSeconds or SetupButtonTimes set, the
+             * string shall consist solely of an encoding of N as a decimal unsigned integer using the ASCII digits 0-9,
+             * and without leading zeros.
              *
-             * unsigned integer using the ASCII digits 0-9, and without leading zeros.
+             * For example, given UserActiveModeTriggerHint="2048", ResetButtonTimes is set which indicates "Press Reset
+             * Button for N seconds". Therefore, a value of UserActiveModeTriggerInstruction="10" would indicate that N
+             * is 10 in that context.
              *
-             * For example, given UserActiveModeTriggerHint="2048", ResetButtonTimes is set which indicates "Press
-             * Reset Button for N seconds". Therefore, a value of UserActiveModeTriggerInstruction="10" would indicate
-             * that N is 10 in that context.
+             * When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indicating presence of a custom
+             * string, the ICD SHOULD perform localization (translation to user’s preferred language, as indicated in
+             * the Device’s currently configured locale). The Custom Instruction option SHOULD NOT be used by an ICD
+             * that does not have knowledge of the user’s language preference.
              *
-             * When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indicating presence of a
-             * custom string, the ICD SHOULD perform localization (translation to user’s preferred language, as
-             * indicated in the Device’s currently configured locale). The Custom Instruction option SHOULD NOT be used
-             * by an ICD that does not have knowledge of the user’s language preference.
-             *
-             * ### When the UserActiveModeTriggerHint key indicates a light to blink (ActuateSensorLightsBlink,
+             * When the UserActiveModeTriggerHint key indicates a light to blink (ActuateSensorLightsBlink,
              * ResetButtonLightsBlink or SetupButtonLightsBlink), information on color of light may be made available
              * via the UserActiveModeTriggerInstruction attribute. When using such color indication in the
-             * UserActiveModeTriggerInstruction attribute, only basic primary and secondary colors that could
-             * unambiguously be decoded by a commissioner and understood by an end-user, but without worry of
-             * localization, SHOULD be used, e.g. white, red, green, blue, orange, yellow, purple. The length of the
-             * attribute SHOULD be kept small.
+             * UserActiveModeTriggerInstruction attribute, the string shall consist of exactly 6 hexadecimal digits
+             * using the ASCII characters 0-F and encoding the RGB color value as used in HTML encodings.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.6.8
+             * @see {@link MatterSpecification.v14.Core} § 9.17.6.8
              */
             userActiveModeTriggerInstruction: OptionalFixedAttribute(
                 0x7,
@@ -604,12 +657,12 @@ export namespace IcdManagement {
              * This command allows a client to request that the server stays in active mode for at least a given time
              * duration (in milliseconds) from when this command is received.
              *
-             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used
-             * by the client to request the server to stay active and responsive for this period to allow a sequence of
+             * This StayActiveDuration may be longer than the ActiveModeThreshold value and would, typically, be used by
+             * the client to request the server to stay active and responsive for this period to allow a sequence of
              * message exchanges during that period. The client may slightly overestimate the duration it wants the ICD
              * to be active for, in order to account for network delays.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.17.7.4
+             * @see {@link MatterSpecification.v14.Core} § 9.17.7.4
              */
             stayActiveRequest: OptionalCommand(0x3, TlvStayActiveRequest, 0x4, TlvStayActiveResponse)
         },
@@ -623,7 +676,8 @@ export namespace IcdManagement {
             { flags: { userActiveModeTrigger: true }, component: UserActiveModeTriggerComponent },
             { flags: { longIdleTimeSupport: true }, component: LongIdleTimeSupportComponent },
             { flags: { longIdleTimeSupport: true, checkInProtocolSupport: false }, component: false },
-            { flags: { longIdleTimeSupport: true, userActiveModeTrigger: false }, component: false }
+            { flags: { longIdleTimeSupport: true, userActiveModeTrigger: false }, component: false },
+            { flags: { dynamicSitLitSupport: true, longIdleTimeSupport: false }, component: false }
         )
     });
 
@@ -638,12 +692,10 @@ export namespace IcdManagement {
      *
      * The cluster implements the requirements of the Check-In Protocol that enables the ICD Check-In use case.
      *
-     * NOTE This feature is provisional.
-     *
      * IcdManagementCluster supports optional features that you can enable with the IcdManagementCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.17
+     * @see {@link MatterSpecification.v14.Core} § 9.17
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -682,6 +734,10 @@ export namespace IcdManagement {
             operatingMode: MutableCluster.AsConditional(
                 LongIdleTimeSupportComponent.attributes.operatingMode,
                 { mandatoryIf: [LITS] }
+            ),
+            maximumCheckInBackoff: MutableCluster.AsConditional(
+                CheckInProtocolSupportComponent.attributes.maximumCheckInBackoff,
+                { mandatoryIf: [CIP] }
             )
         },
 
@@ -705,8 +761,8 @@ export namespace IcdManagement {
     /**
      * This cluster supports all IcdManagement features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@ import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 
 const logger = Logger.get("ModeSelectServer");
 
-const ModeSelectServerBase = ModeSelectBehavior.with(ModeSelect.Feature.OnOff);
+const ModeSelectBase = ModeSelectBehavior.with(ModeSelect.Feature.OnOff);
 
 /**
  * This is the default server implementation of {@link ModeSelectBehavior}.
@@ -27,7 +27,7 @@ const ModeSelectServerBase = ModeSelectBehavior.with(ModeSelect.Feature.OnOff);
  *
  * It should be sufficient to use the class without changes and just react on the currentMode changed events.
  */
-export class ModeSelectServerLogic extends ModeSelectServerBase {
+export class ModeSelectBaseServer extends ModeSelectBase {
     override initialize() {
         this.#assertCurrentMode();
         this.#assertStartUpMode();
@@ -38,7 +38,11 @@ export class ModeSelectServerLogic extends ModeSelectServerBase {
         if (this.features.onOff && this.state.onMode !== undefined && this.state.onMode !== null) {
             const onOffServer = this.agent.get(OnOffServer);
             if (onOffServer !== undefined) {
-                if (onOffServer.features.lighting && onOffServer.state.startUpOnOff === OnOff.StartUpOnOff.On) {
+                if (
+                    onOffServer.features.lighting &&
+                    "startUpOnOff" in onOffServer.state &&
+                    onOffServer.state.startUpOnOff === OnOff.StartUpOnOff.On
+                ) {
                     this.state.currentMode = this.state.onMode;
                     currentModeOverridden = true;
                 }
@@ -104,4 +108,4 @@ export class ModeSelectServerLogic extends ModeSelectServerBase {
     }
 }
 
-export class ModeSelectServer extends ModeSelectServerLogic.for(ClusterType(ModeSelect.Base)) {}
+export class ModeSelectServer extends ModeSelectBaseServer.for(ClusterType(ModeSelect.Base)) {}

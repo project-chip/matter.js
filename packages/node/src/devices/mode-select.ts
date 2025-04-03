@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Mode Select device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 11.1
+ * @see {@link MatterSpecification.v14.Device} § 11.1
  */
 export interface ModeSelectDevice extends Identity<typeof ModeSelectDeviceDefinition> {}
 

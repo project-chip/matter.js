@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Mei } from "../common/Mei.js";
 import { CommandElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
-import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
 export class CommandModel extends ValueModel<CommandElement> implements CommandElement {
@@ -57,9 +56,7 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
         return this.direction;
     }
 
-    static {
-        Model.types[CommandElement.Tag] = this;
-    }
-
     static Tag = CommandElement.Tag;
 }
+
+CommandModel.register();

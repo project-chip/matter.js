@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,11 +12,11 @@ import { MicrowaveOvenControlInterface } from "./MicrowaveOvenControlInterface.j
 import { ClusterType } from "#types";
 
 /**
- * MicrowaveOvenControlBehavior is the base class for objects that support interaction with {@link
- * MicrowaveOvenControl.Cluster}.
+ * MicrowaveOvenControlBehavior is the base class for objects that support interaction with
+ * {@link MicrowaveOvenControl.Cluster}.
  *
- * MicrowaveOvenControl.Cluster requires you to enable one or more optional features. You can do so using {@link
- * MicrowaveOvenControlBehavior.with}.
+ * MicrowaveOvenControl.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link MicrowaveOvenControlBehavior.with}.
  */
 export const MicrowaveOvenControlBehavior = ClusterBehavior
     .withInterface<MicrowaveOvenControlInterface>()

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,9 +19,9 @@ export const ipv6Pre = Datatype({
         "    ◦ A value of 0 indicates an absent/invalid prefix." +
         "\n" +
         "  • The subsequent octets shall encode the contiguous leftmost bits of the prefix, in network byte " +
-        "    order, with left justification, such that the first bit of the prefix is in the most " +
-        "    significant bit of the first octet. Encoding SHOULD use the least number of bytes to encode the " +
-        "    prefix but may include unused trailing zeroes." +
+        "    order, with left justification, such that the first bit of the prefix is in the most significant " +
+        "    bit of the first octet. Encoding SHOULD use the least number of bytes to encode the prefix but " +
+        "    may include unused trailing zeroes." +
         "\n" +
         "Examples of encoding:" +
         "\n" +
@@ -31,7 +31,7 @@ export const ipv6Pre = Datatype({
         "\n" +
         "  • Allowed non-minimal encoding: Prefix 2001:0DB8:BB00::/40 → 7 octets → 2820010DB8BB00",
 
-    xref: { document: "core", section: "7.18.2.40" }
+    xref: { document: "core", section: "7.19.2.40" }
 });
 
 MatterDefinition.children.push(ipv6Pre);

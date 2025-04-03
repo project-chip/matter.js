@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const map32 = Datatype({
     name: "map32", byteSize: 4, description: "32-bit bitmap", isSeed: true, metatype: "bitmap",
-    xref: { document: "core", section: "7.18.1" }
+    xref: { document: "core", section: "7.19.1" }
 });
 MatterDefinition.children.push(map32);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -106,37 +106,47 @@ export class AttributeClient<T = any> {
         });
     }
 
-    /** Get the value of the attribute. Fabric scoped reads are always done with the remote. */
-    async get(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
-        if (alwaysRequestFromRemote === undefined) {
-            alwaysRequestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions;
-        } else if (!alwaysRequestFromRemote && this.#isFabricScoped) {
-            alwaysRequestFromRemote = true;
+    /**
+     * Get the value of the attribute. Fabric scoped reads are always done with the remote.
+     * The `requestFromRemote` parameter allowed to force or prevent remote reads:
+     * - `true` forces a remote read
+     * - `false` forces a local read, return undefined if no value is available
+     * - `undefined` returns local values if available or if the read is fabric filtered, otherwise remote read
+     */
+    async get(requestFromRemote?: boolean, isFabricFiltered = true) {
+        if (requestFromRemote === undefined) {
+            requestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions ? true : undefined;
+        } else if (!requestFromRemote && this.#isFabricScoped) {
+            requestFromRemote = true;
         }
         return await this.#interactionClient.getAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
             isFabricFiltered,
-            alwaysRequestFromRemote,
+            requestFromRemote,
         });
     }
 
     /**
      * Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
-     * */
-    async getWithVersion(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
-        if (alwaysRequestFromRemote === undefined) {
-            alwaysRequestFromRemote = this.#isFabricScoped;
-        } else if (!alwaysRequestFromRemote && this.#isFabricScoped) {
-            alwaysRequestFromRemote = true;
+     * The `requestFromRemote` parameter allowed to force or prevent remote reads:
+     * - `true` forces a remote read
+     * - `false` forces a local read, return undefined if no value is available
+     * - `undefined` returns local values if available or if the read is fabric filtered, otherwise remote read
+     */
+    async getWithVersion(requestFromRemote?: boolean, isFabricFiltered = true) {
+        if (requestFromRemote === undefined) {
+            requestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions ? true : undefined;
+        } else if (!requestFromRemote && this.#isFabricScoped) {
+            requestFromRemote = true;
         }
         return await this.#interactionClient.getAttributeWithVersion({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
             isFabricFiltered,
-            alwaysRequestFromRemote,
+            requestFromRemote,
         });
     }
 

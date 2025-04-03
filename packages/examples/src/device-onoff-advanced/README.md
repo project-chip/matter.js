@@ -9,7 +9,7 @@ This example shows how to build a simple Device node with just one socket or lig
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../examples/README.md#cli-usage).
 
 The CLI parameter are else documented at the [Device Node Readme](../device-onoff/README.md).
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -65,8 +65,17 @@ export class DeviceCommissioner {
 
         this.#observers.on(this.#context.advertiser.timedOut, this.endCommissioning);
 
-        // If a commissioning window is open then we reannounce this because it was ended as fabric got added
-        this.#observers.on(this.#context.fabrics.events.deleted, this.reactivateAdvertiser);
+        // If a commissioning window is open then we re-announce this because it was ended as fabric got added
+        this.#observers.on(this.#context.fabrics.events.deleted, async () => {
+            // If a commissioning window is open, or we removed the last fabric, then we re-announce this
+            // because it was ended as fabric got added
+            if (
+                this.#context.fabrics.length === 0 ||
+                this.#windowStatus !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen
+            ) {
+                this.reactivateAdvertiser();
+            }
+        });
 
         // No fabric paired yet, so announce as "ready for commissioning"
         this.#observers.on(this.#context.advertiser.operationalModeEnded, this.allowBasicCommissioning);

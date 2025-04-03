@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,12 +20,12 @@ export const KeypadInput = Cluster(
         name: "KeypadInput", id: 0x509, classification: "application", pics: "KEYPADINPUT",
 
         details: "This cluster provides an interface for key code based input and control on a device like a Video " +
-            "Player or an endpoint like a Content App. This may include text or action commands such as UP, " +
-            "DOWN, and SELECT." +
+            "Player or an endpoint like a Content App. This may include text or action commands such as UP, DOWN, " +
+            "and SELECT." +
             "\n" +
             "This cluster would be supported on Video Player devices as well as devices that support remote " +
-            "control input from a keypad or remote. This cluster provides the list of supported keypad inputs " +
-            "and provides a command for sending them." +
+            "control input from a keypad or remote. This cluster provides the list of supported keypad inputs and " +
+            "provides a command for sending them." +
             "\n" +
             "The cluster server for Keypad Input is implemented by a device that can receive keypad input, such " +
             "as a Video Player, or an endpoint that can receive keypad input, such as a Content App." +
@@ -66,9 +66,9 @@ export const KeypadInput = Cluster(
                 "process the keycode as input. In other words, a specific content app endpoint shall NOT process a " +
                 "keycode received by a different content app endpoint." +
                 "\n" +
-                "If a second SendKey request with the same KeyCode value is received within 200 ms, then the " +
-                "endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value " +
-                "is not received within 200 ms, then the endpoint will consider the last key press to be a release.",
+                "If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint " +
+                "will consider the first key press to be a press and hold. When such a repeat KeyCode value is not " +
+                "received within 200 ms, then the endpoint will consider the last key press to be a release.",
 
             xref: { document: "cluster", section: "6.8.6.1" }
         },
@@ -83,9 +83,11 @@ export const KeypadInput = Cluster(
     Command(
         {
             name: "SendKeyResponse", id: 0x1, conformance: "M", direction: "response",
-            details: "This command shall be generated in response to a SendKey command.",
+            details: "This command shall be generated in response to a SendKey command. The data for this command shall be " +
+                "as follows:",
             xref: { document: "cluster", section: "6.8.6.2" }
         },
+
         Field({
             name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
             details: "This field shall indicate the status of the request.",

@@ -1,15 +1,16 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { existsSync, readFileSync, statSync } from "fs";
-import { readdir, readFile, stat, writeFile } from "fs/promises";
-import { dirname, join, relative, resolve } from "path";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join, relative, resolve } from "node:path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { isFile, maybeReadJsonSync, maybeStatSync } from "./file.js";
 import { globSync } from "./glob.js";
+import { ImportAliases } from "./import-aliases.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
 
@@ -53,7 +54,7 @@ export class Package {
     hasTests: boolean;
     hasConfig: boolean;
     isLibrary: boolean;
-    #aliases?: Record<string, string>;
+    #importAliases?: ImportAliases;
 
     constructor({
         path = ".",
@@ -89,11 +90,11 @@ export class Package {
     }
 
     get name() {
-        return this.json.name;
+        return this.json.name ?? `<${this.path}>`;
     }
 
     get version() {
-        return this.json.version;
+        return this.json.version ?? "?";
     }
 
     get exports() {
@@ -217,9 +218,9 @@ export class Package {
         if (!name.startsWith(".")) {
             name = `./${name}`;
         }
-        const exportDetail = this.exports?.[name];
+        const exportDetail = typeof this.exports === "object" ? this.exports?.[name] : undefined;
 
-        if (exportDetail) {
+        if (typeof exportDetail === "object") {
             const exp = findExportCondition(exportDetail, type);
             if (exp) {
                 return this.resolve(exp);
@@ -314,7 +315,11 @@ export class Package {
                 if (existsSync(join(path, "package.json"))) {
                     result = new Package({ path });
                 } else {
-                    result = find(dirname(path));
+                    const parentDir = dirname(path);
+                    if (parentDir === path) {
+                        return null;
+                    }
+                    result = find(parentDir);
                 }
                 packageForPath[path] = result;
             }
@@ -334,17 +339,17 @@ export class Package {
         throw new Error(`Cannot find package.json for "${path}"`);
     }
 
-    get aliases(): Record<string, string> {
-        if (this.#aliases !== undefined) {
-            return this.#aliases;
+    get importAliases(): ImportAliases {
+        if (this.#importAliases !== undefined) {
+            return this.#importAliases;
         }
 
-        this.#aliases = {
-            ...Package.maybeForPath(dirname(this.path))?.aliases,
-            ...this.json.imports,
-        };
+        this.#importAliases = new ImportAliases(
+            this.json.imports,
+            Package.maybeForPath(dirname(this.path))?.importAliases,
+        );
 
-        return this.#aliases;
+        return this.#importAliases;
     }
 
     get modules() {
@@ -381,14 +386,20 @@ export class Package {
 }
 
 export type PackageJson = {
-    name: string;
-    version: string;
-    imports: Record<string, string>;
+    name?: string;
+    version?: string;
+    imports?: Record<string, string>;
     matter?: {
         test?: boolean;
     };
     scripts?: Record<string, string>;
-    [key: string]: any;
+    exports?: Exports;
+    module?: string;
+    main?: string;
+    workspaces?: Array<string>;
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+    [key: string]: unknown;
 };
 
 let workingDir = ".";
@@ -403,8 +414,12 @@ function find(startDir: string, selector: (pkg: Package) => boolean): Package {
     return pkg;
 }
 
-function selectFormats(json: any) {
+function selectFormats(json: Record<string, unknown>) {
     let esm: boolean, cjs: boolean;
+
+    if (typeof json !== "object") {
+        throw new Error(`Invalid package JSON ${typeof json}`);
+    }
 
     if (json.type === "module") {
         esm = true;
@@ -450,7 +465,7 @@ function findModules(
     target: Record<string, string>,
     prefix: string,
     path: string,
-    exports: Exports,
+    exports?: Exports,
 ) {
     if (typeof exports === "string") {
         addModuleGlobs(source, target, prefix, path, exports);

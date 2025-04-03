@@ -1,18 +1,16 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { camelize } from "#general";
+import type { Schema } from "#model";
 import { Conformance, DataModelPath, FeatureSet, FieldValue, Metatype, ValueModel } from "#model";
-import { AccessControl } from "../../AccessControl.js";
-import { ConformanceError, SchemaImplementationError } from "../../errors.js";
-import { Schema } from "../../supervision/Schema.js";
+import { AccessControl, ConformanceError, SchemaImplementationError, Val } from "#protocol";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NameResolver } from "../managed/NameResolver.js";
-import { Val } from "../Val.js";
 import {
     Code,
     ConformantNode,
@@ -57,6 +55,29 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
         supervisor.featureMap,
         supervisor.supportedFeatures,
     );
+
+    // Create a node for the given name.
+    //
+    // Name resolution scope may change as we visit the AST; the base version creates a name reference if the the name
+    // is visible in scope.  Other nodes may temporarily override this though
+    let createNameReference = (name: string): DynamicNode => {
+        const resolver = NameResolver(supervisor, schema.parent, camelize(name));
+        if (resolver) {
+            return {
+                code: Code.Evaluate,
+
+                evaluate: (_value, options) => {
+                    return {
+                        code: Code.Value,
+                        value: resolver(options?.siblings),
+                    };
+                },
+            };
+        }
+
+        // Unresolved names are always undefined
+        return { code: Code.Value, value: undefined };
+    };
 
     // Compile the AST
     const compiledNode = compile(ast);
@@ -211,6 +232,7 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
             count: 0,
             target: param.num,
             orMore: !!param.orMore,
+            orLess: !!param.orLess,
         };
 
         return {
@@ -309,29 +331,13 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
             // results in a static node that is conformant iff the feature is supported
             if (featuresSupported.has(param)) {
                 return ConformantNode;
-            } else {
-                return NonconformantNode;
             }
-        } else {
-            // Name references another value.  This results in a value node but must be evaluated at runtime against a
-            // specific struct
-            const resolver = NameResolver(supervisor, schema.parent, camelize(param));
-            if (resolver) {
-                return {
-                    code: Code.Evaluate,
-
-                    evaluate: (_value, options) => {
-                        return {
-                            code: Code.Value,
-                            value: resolver(options?.siblings),
-                        };
-                    },
-                };
-            }
-
-            // Unresolved names are always undefined
-            return { code: Code.Value, value: undefined };
+            return NonconformantNode;
         }
+
+        // Name references another value.  This results in a value node but must be evaluated at runtime against a
+        // specific struct
+        return createNameReference(param);
     }
 
     /**
@@ -502,7 +508,40 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
         operator: Conformance.Operator,
         { lhs, rhs }: Conformance.Ast.BinaryOperands,
     ): DynamicNode {
-        return createComparison(operator, compile(lhs), compile(rhs), schema);
+        const originalCreateNameReference = createNameReference;
+        try {
+            // Special case for binary operators where LHS references an enum - the RHS may reference a member of the
+            // enum by name.  This feature is used in exactly one place as of 1.4, in
+            // ModeBase.ChangeToModeResponse.StatusText.  And it's not formally specified as legal. But we support for
+            // completeness
+            if (lhs.type === Conformance.Special.Name) {
+                const name = camelize(lhs.param, false);
+                const field = supervisor.membersOf(schema).find(model => camelize(model.name, false) === name);
+                if (field?.effectiveMetatype === Metatype.enum) {
+                    let enumValues: undefined | Record<string, number | undefined>;
+                    createNameReference = (name: string) => {
+                        if (enumValues === undefined) {
+                            enumValues = {};
+                            for (const member of supervisor.membersOf(field)) {
+                                enumValues[camelize(member.name, true)] = member.id;
+                            }
+                        }
+                        const id = enumValues[camelize(name, true)];
+                        if (id !== undefined) {
+                            return {
+                                code: Code.Value,
+                                value: id,
+                            };
+                        }
+                        return originalCreateNameReference(name);
+                    };
+                }
+            }
+
+            return createComparison(operator, compile(lhs), compile(rhs), schema);
+        } finally {
+            createNameReference = originalCreateNameReference;
+        }
     }
 
     /**

@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "#util/Bytes.js";
 import type { Lifecycle } from "../util/Lifecycle.js";
 import { LogLevel } from "./LogLevel.js";
 
@@ -375,6 +376,26 @@ export namespace Diagnostic {
     }
 
     /**
+     * Convert a value to unstyled JSON.
+     *
+     * Specializes support for bigints and byte arrays.
+     */
+    export function json(data: any) {
+        return JSON.stringify(data, (_, value) => {
+            if (typeof value === "bigint") {
+                return value.toString();
+            }
+            if (value instanceof Uint8Array) {
+                return Bytes.toHex(value);
+            }
+            if (value === undefined) {
+                return "undefined";
+            }
+            return value;
+        });
+    }
+
+    /**
      * Convert an object with keys to a flag list listing the truthy keys in a keylike/flag presentation.
      */
     export function asFlags(flags: Record<string, unknown>) {
@@ -390,12 +411,138 @@ export namespace Diagnostic {
             .map(([key]) => key)
             .join(" ");
     }
+
+    /**
+     * Extract message and stack diagnostic details.
+     */
+    export function messageAndStackFor(
+        error: any,
+        parentStack?: string[],
+    ): { message: string; stack?: unknown[]; stackLines?: string[] } {
+        let message: string | undefined;
+        let rawStack: string | undefined;
+        if (error !== undefined && error !== null) {
+            if (typeof error === "string" || typeof error === "number") {
+                return { message: `${error}` };
+            }
+            if ("message" in error) {
+                ({ message, stack: rawStack } = error);
+            } else if (error.message) {
+                message = typeof error.message === "string" ? message : error.toString();
+            }
+        }
+        if (message === undefined || message === null || message === "") {
+            if (error !== undefined && error !== null) {
+                message = error.constructor.name;
+                if (!message || message === "Error") {
+                    message = "(unknown error)";
+                }
+            } else {
+                message = "(unknown error)";
+            }
+        }
+        if (!rawStack) {
+            return { message };
+        }
+
+        rawStack = rawStack.toString();
+
+        // Strip extra node garbage off stack from node asserts
+        rawStack = rawStack.replace(/^.*?\n\nError: /gs, "Error: ");
+
+        // Strip off redundant error tag from v8
+        if (rawStack.startsWith("Error: ")) {
+            rawStack = rawStack.slice(7);
+        }
+
+        // Strip off redundant message from v8
+        const pos = rawStack.indexOf(message);
+        if (pos !== -1) {
+            rawStack = rawStack.slice(pos + message.length).trim();
+        }
+
+        // Extract raw lines
+        let stackLines = rawStack
+            .split("\n")
+            .map(line => line.trim())
+            .filter(line => line !== "");
+
+        // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
+        if (stackLines[0] === "Error") {
+            stackLines.shift();
+        }
+
+        // If there's a parent stack, identify the portion of the stack in common so we don't have to repeat it.  The stacks
+        // may be truncated by the VM so this is not 100% guaranteed correct with recursive functions, but accidental
+        // mismatches are unlikely
+        let truncatedToParent = false;
+        if (parentStack) {
+            let truncateTo = 0;
+
+            // For each line in the stack, find the line in the parent.  Skip the last two lines because truncating them
+            // won't save space
+            stackSearch: for (; truncateTo < stackLines.length - 1; truncateTo++) {
+                let parentPos = parentStack.indexOf(stackLines[truncateTo]);
+                if (parentPos === -1) {
+                    continue;
+                }
+
+                // Found the line.  If all subsequent lines match then we truncate.  If either stack terminates before the
+                // other, assume the stacks are truncated and consider a match
+                parentPos++;
+                for (
+                    let pos = truncateTo + 1;
+                    pos < stackLines.length && parentPos < parentStack.length;
+                    pos++, parentPos++
+                ) {
+                    if (stackLines[pos] !== parentStack[parentPos]) {
+                        continue stackSearch;
+                    }
+                }
+
+                // Found a match.  Truncate but leave the top-most shared frame to make it clear where the commonality
+                // with the parent starts
+                stackLines = stackLines.slice(0, truncateTo + 1);
+                truncatedToParent = true;
+                break;
+            }
+        }
+
+        // Spiff up stack lines a bit
+        const stack = Array<unknown>();
+        for (const line of stackLines) {
+            const match1 = line.match(/^at\s+(?:(\S|\S.*\S)\s+\(([^)]+)\)|(<anonymous>))$/);
+            if (match1) {
+                const value = [Diagnostic.weak("at "), match1[1] ?? match1[3]];
+                if (match1[2] !== undefined) {
+                    value.push(Diagnostic.weak(" ("), Diagnostic.weak(match1[2]), Diagnostic.weak(")"));
+                }
+                stack.push(Diagnostic.squash(...value));
+                continue;
+            }
+
+            const match2 = line.match(/^at\s+(\S.*)(:\d+:\d+)$/);
+            if (match2) {
+                stack.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
+                continue;
+            }
+
+            stack.push(line);
+        }
+
+        // Add truncation note
+        if (truncatedToParent) {
+            stack.push(Diagnostic.weak("(see parent frames)"));
+        }
+
+        return { message, stack, stackLines };
+    }
 }
 
 function formatError(error: any, options: { messagePrefix?: string; parentStack?: string[] } = {}) {
     const { messagePrefix, parentStack } = options;
 
-    const messageAndStack = messageAndStackFor(error, parentStack);
+    const messageAndStack = Diagnostic.messageAndStackFor(error, parentStack);
     let { stack, stackLines } = messageAndStack;
 
     let { message } = messageAndStack;
@@ -455,124 +602,4 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
     }
 
     return list as Diagnostic;
-}
-
-function messageAndStackFor(error: any, parentStack?: string[]) {
-    let message: string | undefined;
-    let rawStack: string | undefined;
-    if (error !== undefined && error !== null) {
-        if (typeof error === "string" || typeof error === "number") {
-            return { message: `${error}` };
-        }
-        if ("message" in error) {
-            ({ message, stack: rawStack } = error);
-        } else if (error.message) {
-            message = typeof error.message === "string" ? message : error.toString();
-        }
-    }
-    if (message === undefined || message === null || message === "") {
-        if (error !== undefined && error !== null) {
-            message = error.constructor.name;
-            if (!message || message === "Error") {
-                message = "(unknown error)";
-            }
-        } else {
-            message = "(unknown error)";
-        }
-    }
-    if (!rawStack) {
-        return { message };
-    }
-
-    rawStack = rawStack.toString();
-
-    // Strip extra node garbage off stack from node asserts
-    rawStack = rawStack.replace(/^.*?\n\nError: /gs, "Error: ");
-
-    // Strip off redundant error tag from v8
-    if (rawStack.startsWith("Error: ")) {
-        rawStack = rawStack.slice(7);
-    }
-
-    // Strip off redundant message from v8
-    const pos = rawStack.indexOf(message);
-    if (pos !== -1) {
-        rawStack = rawStack.slice(pos + message.length).trim();
-    }
-
-    // Extract raw lines
-    let stackLines = rawStack
-        .split("\n")
-        .map(line => line.trim())
-        .filter(line => line !== "");
-
-    // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
-    if (stackLines[0] === "Error") {
-        stackLines.shift();
-    }
-
-    // If there's a parent stack, identify the portion of the stack in common so we don't have to repeat it.  The stacks
-    // may be truncated by the VM so this is not 100% guaranteed correct with recursive functions, but accidental
-    // mismatches are unlikely
-    let truncatedToParent = false;
-    if (parentStack) {
-        let truncateTo = 0;
-
-        // For each line in the stack, find the line in the parent.  Skip the last two lines because truncating them
-        // won't save space
-        stackSearch: for (; truncateTo < stackLines.length - 1; truncateTo++) {
-            let parentPos = parentStack.indexOf(stackLines[truncateTo]);
-            if (parentPos === -1) {
-                continue;
-            }
-
-            // Found the line.  If all subsequent lines match then we truncate.  If either stack terminates before the
-            // other, assume the stacks are truncated and consider a match
-            parentPos++;
-            for (
-                let pos = truncateTo + 1;
-                pos < stackLines.length && parentPos < parentStack.length;
-                pos++, parentPos++
-            ) {
-                if (stackLines[pos] !== parentStack[parentPos]) {
-                    continue stackSearch;
-                }
-            }
-
-            // Found a match.  Truncate but leave the top-most shared frame to make it clear where the commonality
-            // with the parent starts
-            stackLines = stackLines.slice(0, truncateTo + 1);
-            truncatedToParent = true;
-            break;
-        }
-    }
-
-    // Spiff up stack lines a bit
-    const stack = Array<unknown>();
-    for (const line of stackLines) {
-        const match1 = line.match(/^at\s+(?:(.+)\s+\(([^)]+)\)|(<anonymous>))$/);
-        if (match1) {
-            const value = [Diagnostic.weak("at "), match1[1] ?? match1[3]];
-            if (match1[2] !== undefined) {
-                value.push(Diagnostic.weak(" ("), Diagnostic.weak(match1[2]), Diagnostic.weak(")"));
-            }
-            stack.push(Diagnostic.squash(...value));
-            continue;
-        }
-
-        const match2 = line.match(/^at\s+(.+)(:\d+:\d+)$/);
-        if (match2) {
-            stack.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
-            continue;
-        }
-
-        stack.push(line);
-    }
-
-    // Add truncation note
-    if (truncatedToParent) {
-        stack.push(Diagnostic.weak("(see parent frames)"));
-    }
-
-    return { message, stack, stackLines };
 }

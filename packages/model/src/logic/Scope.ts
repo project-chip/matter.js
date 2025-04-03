@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -148,10 +148,14 @@ export function Scope(subject: Model, options: Scope.ScopeOptions = {}) {
     };
 
     function membersOf<T extends Model>(parent: T, options: Scope.MemberOptions = {}) {
-        const { conformance: conformanceMode, tags } = options;
-        const allMembers = findAllMembers(parent, Array.isArray(tags) ? new Set(tags) : (tags ?? DEFAULT_TAGS), result);
+        const { conformance: conformanceMode } = options;
+        let { tags = DEFAULT_TAGS } = options;
+        if (Array.isArray(tags)) {
+            tags = new Set(tags);
+        }
+        const allMembers = findAllMembers(parent, tags, result);
 
-        if (parent.tag === ElementTag.Cluster) {
+        if (parent.tag === ElementTag.Cluster && tags.has(ElementTag.Attribute)) {
             injectGlobalAttributes(owner, allMembers);
         }
 

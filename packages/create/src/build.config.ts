@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Project } from "@matter/tools";
-import { mkdir, readFile, writeFile } from "fs/promises";
-import { basename, dirname } from "path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { basename, dirname } from "node:path";
 import { Config, Template } from "./config.js";
 
 /**
@@ -45,7 +45,7 @@ export async function before({ project }: Project.Context) {
 
             // Quick hack to pull out imports, assumes modules formatted by prettier.  More than sufficient for current
             // needs
-            for (const [, pkgName] of source.matchAll(/import .* from "(@[^/"]+\/[^/"]+|[^/"]+)[^"]*";/g)) {
+            for (const [, pkgName] of source.matchAll(/import .* from "(@[^/"]+\/[^/"]+|[^/"]+)";/g)) {
                 if (dependencies[pkgName]) {
                     continue;
                 }
@@ -55,7 +55,7 @@ export async function before({ project }: Project.Context) {
                     continue;
                 }
 
-                const version = examplesPkg.json.dependencies[pkgName];
+                const version = examplesPkg.json.dependencies?.[pkgName];
                 if (version !== undefined) {
                     dependencies[pkgName] = version;
                 }
@@ -79,8 +79,8 @@ export async function before({ project }: Project.Context) {
     }
 
     const tools = project.pkg.findPackage("@matter/tools").json;
-    const typescriptVersion = tools.dependencies.typescript;
-    const nodeTypesVersion = tools.devDependencies["@types/node"];
+    const typescriptVersion = tools.dependencies?.typescript as string;
+    const nodeTypesVersion = tools.devDependencies?.["@types/node"] as string;
 
     const config: Config = {
         typescriptVersion,

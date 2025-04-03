@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -34,6 +34,7 @@ const logger = Logger.get("CertificateAuthority");
 
 /**
  * Manages the root key pair for a fabric owned by a local node.
+ * TODO: Add support for (optional) ICACs
  */
 export class CertificateAuthority {
     private rootCertId = BigInt(0);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -62,6 +62,7 @@ export type TypeFromFields<F extends TlvFields> = Merge<
  * @see {@link MatterSpecification.v10.Core} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
+    readonly isFabricScoped: boolean;
     private readonly fieldById = new Array<{ name: string; field: FieldType<any> }>();
 
     constructor(
@@ -71,6 +72,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     ) {
         super();
 
+        let isFabricScoped = false;
         // TODO Add sorting option to enforce order of fields in encoded TLV If Ty is Structure
         //  Requirements @see {@link MatterSpecification.Core.v12} § A.2.4
         for (const name in this.fieldDefinitions) {
@@ -79,7 +81,11 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 throw new Error("Repeated fields are only allowed in TLV List.");
             }
             this.fieldById[field.id] = { name, field };
+            if (field.id === FabricIndex.id) {
+                isFabricScoped = true;
+            }
         }
+        this.isFabricScoped = isFabricScoped;
     }
 
     #encodeEntryToTlv(writer: TlvWriter, name: string, value: TypeFromFields<F>, options?: TlvEncodingOptions) {

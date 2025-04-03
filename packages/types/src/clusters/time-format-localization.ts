@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,7 @@ export namespace TimeFormatLocalization {
     /**
      * These are optional features supported by TimeFormatLocalizationCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.4.4
+     * @see {@link MatterSpecification.v14.Core} § 11.4.4
      */
     export enum Feature {
         /**
@@ -31,7 +31,7 @@ export namespace TimeFormatLocalization {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.4.5.2
+     * @see {@link MatterSpecification.v14.Core} § 11.4.5.2
      */
     export enum CalendarType {
         /**
@@ -101,7 +101,7 @@ export namespace TimeFormatLocalization {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.4.5.1
+     * @see {@link MatterSpecification.v14.Core} § 11.4.5.1
      */
     export enum HourFormat {
         /**
@@ -131,10 +131,10 @@ export namespace TimeFormatLocalization {
              * If not UseActiveLocale, this value shall take priority over any unit implied through the ActiveLocale
              * attribute.
              *
-             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the calendar type,
-             * and if ActiveLocale is not present, the calendar type is unknown.
+             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the calendar type, and
+             * if ActiveLocale is not present, the calendar type is unknown.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.4.6.2
+             * @see {@link MatterSpecification.v14.Core} § 11.4.6.2
              */
             activeCalendarType: WritableAttribute(
                 0x1,
@@ -148,7 +148,7 @@ export namespace TimeFormatLocalization {
              * length of the SupportedCalendarTypes list shall be equivalent to the number of enumerations within
              * CalendarTypeEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.4.6.3
+             * @see {@link MatterSpecification.v14.Core} § 11.4.6.3
              */
             supportedCalendarTypes: FixedAttribute(0x2, TlvArray(TlvEnum<CalendarType>()), { default: [] })
         }
@@ -181,7 +181,7 @@ export namespace TimeFormatLocalization {
              * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the hour format, and
              * if ActiveLocale is not present, the hour format is unknown.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.4.6.1
+             * @see {@link MatterSpecification.v14.Core} § 11.4.6.1
              */
             hourFormat: WritableAttribute(
                 0x0,
@@ -213,7 +213,7 @@ export namespace TimeFormatLocalization {
      * TimeFormatLocalizationCluster supports optional features that you can enable with the
      * TimeFormatLocalizationCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.4
+     * @see {@link MatterSpecification.v14.Core} § 11.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -245,8 +245,8 @@ export namespace TimeFormatLocalization {
     /**
      * This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

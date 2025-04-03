@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,7 +21,7 @@ import { Identity } from "#general";
  * A Cook Surface device type represents a heating object on a cooktop or other similar device. It shall only be used
  * when composed as part of another device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 13.7
+ * @see {@link MatterSpecification.v14.Device} § 13.7
  */
 export interface CookSurfaceDevice extends Identity<typeof CookSurfaceDeviceDefinition> {}
 

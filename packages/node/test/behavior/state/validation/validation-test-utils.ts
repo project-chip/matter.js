@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -81,7 +81,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     // Perform validation
     try {
         manager.validate?.(record ?? {}, OfflineContext.ReadOnly, { path: DataModelPath(cluster.path) });
-        expect(error).undefined;
+        expect(error, `Expected ${error?.constructor.name} but none thrown`);
     } catch (e) {
         if (!error || (e as any).constructor.name === "AssertionError") {
             throw e;
@@ -92,11 +92,15 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
 }
 
 export function testValidation(description: string, what: Tests | Test, structure: ClusterStructure = {}) {
-    if (what.fields) {
-        structure = { ...structure, fields: what.fields };
+    const { only, fields, features } = what;
+    if (only) {
+        structure = { ...structure, only };
     }
-    if (what.features) {
-        structure = { ...structure, features: what.features };
+    if (fields) {
+        structure = { ...structure, fields };
+    }
+    if (features) {
+        structure = { ...structure, features };
     }
 
     if (what[NESTING]) {
@@ -106,7 +110,11 @@ export function testValidation(description: string, what: Tests | Test, structur
             }
         });
     } else {
-        it(description, () => validate(structure, what));
+        let generator = it;
+        if (only) {
+            generator = generator.only as Mocha.TestFunction;
+        }
+        generator(description, () => validate(structure, what));
     }
 }
 
@@ -114,12 +122,14 @@ type Fields = FieldModel[];
 type Features = AttributeModel;
 
 type ClusterStructure = {
+    only?: boolean;
     fields?: Fields;
     features?: Features;
 };
 
 type Test = ClusterStructure & {
     [NESTING]?: false;
+    only?: boolean;
     supports?: FeatureSet.Definition;
     record?: Properties;
     error?: { type: new (...args: any[]) => StatusResponseError; message?: string };

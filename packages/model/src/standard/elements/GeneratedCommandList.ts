@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,10 @@ export const GeneratedCommandList = Attribute(
             "This attribute shall be a list of the command IDs for server generated commands." +
             "\n" +
             "For each command in this list that is a response to a client command request, the request command " +
-            "shall be indicated in the AcceptedCommandList attribute.",
+            "shall be indicated in the AcceptedCommandList attribute." +
+            "\n" +
+            "If any attribute on a server supports atomic writes, this attribute shall contain the command ID for " +
+            "AtomicResponse.",
 
         xref: { document: "core", section: "7.13.5" }
     },

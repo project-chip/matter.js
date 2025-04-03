@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { MatterFlowError, StorageBackendMemory, StorageManager } from "#general";
 import { FabricManager, FabricNotFoundError, FabricTableFullError } from "#protocol";
 import { FabricIndex } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 
 describe("FabricManager", () => {

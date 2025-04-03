@@ -1,9 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, MatterFlowError } from "#general";
+import { Diagnostic, MatterFlowError } from "#general";
 import {
     ArraySchema,
     AttributeId,
@@ -30,14 +30,20 @@ type FullAttributePath = {
     dataVersion?: number;
 };
 
+/** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
+type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, "data"> & {
+    schema: TlvSchema<any>;
+    payload: any;
+};
+
 /** Type for TlvAttributeReport where the real data are represented with the schema and the JS value. */
 export type AttributeReportPayload = Omit<TypeFromSchema<typeof TlvAttributeReport>, "attributeData"> & {
     attributeData?: AttributeDataPayload;
     hasFabricSensitiveData: boolean;
 };
 
-/** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
-type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, "data"> & {
+/** Type for TlvEventData where the real data are represented with the schema and the JS value. */
+export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
     schema: TlvSchema<any>;
     payload: any;
 };
@@ -48,17 +54,36 @@ export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "ev
     hasFabricSensitiveData: boolean;
 };
 
-/** Type for TlvEventData where the real data are represented with the schema and the JS value. */
-export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
-    schema: TlvSchema<any>;
-    payload: any;
-};
+export type EventOrAttributeDataPayload = AttributeReportPayload | EventReportPayload;
+
+/** A base type for a DataReport which removes the fields of the actual attribute or event content */
+export type BaseDataReport = Omit<TypeFromSchema<typeof TlvDataReport>, "attributeReports" | "eventReports">;
 
 /** Type for TlvDataReport where the real data are represented with the schema and the JS value. */
-export type DataReportPayload = Omit<TypeFromSchema<typeof TlvDataReport>, "attributeReports" | "eventReports"> & {
+export type DataReportPayload = BaseDataReport & {
     attributeReportsPayload?: AttributeReportPayload[];
     eventReportsPayload?: EventReportPayload[];
 };
+
+/**
+ * Type for the DataReport Generator function to send all data
+ */
+export type DataReportPayloadIterator = IterableIterator<EventOrAttributeDataPayload>;
+
+export function encodeAttributePayloadData(
+    attributePayload: AttributeReportPayload,
+    options?: TlvEncodingOptions,
+): TlvStream {
+    const { attributeData } = attributePayload;
+    if (attributeData === undefined) {
+        throw new MatterFlowError(
+            `Cannot encode Attribute Payload data with just a attributeStatus: ${Diagnostic.json(attributePayload)}`,
+        );
+    }
+
+    const { schema, payload } = attributeData;
+    return schema.encodeTlv(payload, options);
+}
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
 export function encodeAttributePayload(
@@ -127,13 +152,13 @@ export function chunkAttributePayload(attributePayload: AttributeReportPayload):
     const { hasFabricSensitiveData, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
-            `Cannot chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+            `Cannot chunk an AttributePayload with just a attributeStatus: ${Diagnostic.json(attributePayload)}`,
         );
     }
     const { schema, path, dataVersion, payload } = attributeData;
     if (!(schema instanceof ArraySchema) || !Array.isArray(payload)) {
         throw new MatterFlowError(
-            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
+            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Diagnostic.json(
                 attributePayload,
             )}`,
         );

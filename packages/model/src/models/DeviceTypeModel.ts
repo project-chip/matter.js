@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -35,10 +35,10 @@ export class DeviceTypeModel extends Model<DeviceTypeElement> implements DeviceT
         );
     }
 
-    static {
-        Model.types[DeviceTypeElement.Tag] = this;
-    }
+    static Tag = DeviceTypeElement.Tag;
 }
+
+DeviceTypeModel.register();
 
 export namespace DeviceTypeModel {
     export type Child = RequirementModel | FieldModel;

@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Logger } from "#general";
-import { lstatSync, readdirSync } from "fs";
-import { homedir } from "os";
-import { resolve } from "path";
+import { lstatSync, readdirSync } from "node:fs";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
 import { IntermediateModel } from "../common/intermediate-model.js";
 import { DEFAULT_MATTER_VERSION, IndexDetail, identifyDocument } from "./doc-utils.js";
 import { loadClusters } from "./load-clusters.js";

@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./AccessControl.js";
 export * from "./Behavior.js";
 export * from "./cluster/index.js";
 export * from "./context/index.js";

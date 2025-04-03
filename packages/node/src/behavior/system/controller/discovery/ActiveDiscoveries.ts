@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Environment, Environmental } from "#general";
-import { Discovery } from "./Discovery.js";
+import type { Discovery } from "./Discovery.js";
 
 /**
  * Ongoing node discoveries registered with the environment.

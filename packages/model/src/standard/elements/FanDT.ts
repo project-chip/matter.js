@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,14 +12,14 @@ import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } fr
 export const FanDt = DeviceType(
     {
         name: "Fan", id: 0x2b, category: "HVAC", classification: "simple",
-        details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air " +
-            "in a room.",
+        details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air in " +
+            "a room.",
         xref: { document: "device", section: "9.2" }
     },
 
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 43, revision: 2 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 43, revision: 3 } ], element: "attribute" })
     ),
     Requirement({
         name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
@@ -27,6 +27,10 @@ export const FanDt = DeviceType(
     }),
     Requirement({
         name: "Groups", id: 0x4, conformance: "M", element: "serverCluster",
+        xref: { document: "device", section: "9.2.5" }
+    }),
+    Requirement({
+        name: "OnOff", id: 0x6, conformance: "O", element: "serverCluster",
         xref: { document: "device", section: "9.2.5" }
     }),
 

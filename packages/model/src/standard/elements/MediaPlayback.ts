@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -58,11 +58,14 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "AA", constraint: "4", description: "AudioAdvance",
-            details: "This feature is for a device or app that supports playing audio during fast and slow advance and " +
+
+            details: "This feature is for a device or app that supports playing audio during fast and slow advance and" +
+                "\n" +
                 "rewind (e.g., while playback speed is not 1). A device that supports this feature may only support " +
                 "playing audio during certain speeds." +
                 "\n" +
                 "A cluster implementing AA shall implement AS.",
+
             xref: { document: "cluster", section: "6.10.4.5" }
         })
     ),
@@ -104,8 +107,8 @@ export const MediaPlayback = Cluster(
             "attribute. The client may use the SampledPosition attribute to compute the current position within " +
             "the media stream based on the PlaybackSpeed, PlaybackPositionStruct.UpdatedAt and " +
             "PlaybackPositionStruct.Position fields. To enable this, the SampledPosition attribute shall be " +
-            "updated whenever a change in either the playback speed or the playback position is triggered " +
-            "outside the normal playback of the media. The events which may cause this to happen include:" +
+            "updated whenever a change in either the playback speed or the playback position is triggered outside " +
+            "the normal playback of the media. The events which may cause this to happen include:" +
             "\n" +
             "  • Starting or resumption of playback" +
             "\n" +
@@ -139,8 +142,8 @@ export const MediaPlayback = Cluster(
             "the playback assuming no changes to media playback (for example buffering events or requests to " +
             "pause/rewind/forward)." +
             "\n" +
-            "  • A value for PlaybackSpeed of 1 shall indicate normal playback where, for example, playback for " +
-            "    1 second causes the media to advance by 1 second within the duration of the media." +
+            "  • A value for PlaybackSpeed of 1 shall indicate normal playback where, for example, playback for 1 " +
+            "    second causes the media to advance by 1 second within the duration of the media." +
             "\n" +
             "  • A value for PlaybackSpeed which is greater than 0 shall indicate that as playback is happening " +
             "    the media is currently advancing in time within the duration of the media." +
@@ -148,9 +151,9 @@ export const MediaPlayback = Cluster(
             "  • A value for PlaybackSpeed which is less than 0 shall indicate that as playback is happening the " +
             "    media is currently going back in time within the duration of the media." +
             "\n" +
-            "  • A value for PlaybackSpeed of 0 shall indicate that the media is currently not playing back. " +
-            "    When the CurrentState attribute has the value of PAUSED, NOT_PLAYING or BUFFERING, the " +
-            "    PlaybackSpeed shall be set to 0 to reflect that the media is not playing." +
+            "  • A value for PlaybackSpeed of 0 shall indicate that the media is currently not playing back. When " +
+            "    the CurrentState attribute has the value of PAUSED, NOT_PLAYING or BUFFERING, the PlaybackSpeed " +
+            "    shall be set to 0 to reflect that the media is not playing." +
             "\n" +
             "Following examples illustrate the PlaybackSpeed attribute values in various conditions.",
 
@@ -163,10 +166,10 @@ export const MediaPlayback = Cluster(
 
         details: "Indicates the furthest forward valid position to which a client may seek forward, in milliseconds " +
             "from the start of the media. When the media has an associated StartTime, a value of null shall " +
-            "indicate that a seek forward is valid only until the current time within the media, using a " +
-            "position computed from the difference between the current time offset and StartTime, in " +
-            "milliseconds from start of the media, truncating fractional milliseconds towards 0. A value of Nas " +
-            "when StartTime is not specified shall indicate that seeking forward is not allowed.",
+            "indicate that a seek forward is valid only until the current time within the media, using a position " +
+            "computed from the difference between the current time offset and StartTime, in milliseconds from " +
+            "start of the media, truncating fractional milliseconds towards 0. A value of Nas when StartTime is " +
+            "not specified shall indicate that seeking forward is not allowed.",
 
         xref: { document: "cluster", section: "6.10.6.7" }
     }),
@@ -174,8 +177,8 @@ export const MediaPlayback = Cluster(
     Attribute({
         name: "SeekRangeStart", id: 0x6, type: "uint64", access: "R V", conformance: "AS",
         constraint: "desc", default: null, quality: "X",
-        details: "Indicates the earliest valid position to which a client may seek back, in milliseconds from start " +
-            "of the media. A value of Nas shall indicate that seeking backwards is not allowed.",
+        details: "Indicates the earliest valid position to which a client may seek back, in milliseconds from start of " +
+            "the media. A value of Nas shall indicate that seeking backwards is not allowed.",
         xref: { document: "cluster", section: "6.10.6.6" }
     }),
 
@@ -262,8 +265,8 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "PlaybackSpeed", id: 0x4, type: "single", conformance: "AS", constraint: "desc",
-            details: "This field shall indicate the updated speed at which the current media is being played as defined " +
-                "by the PlaybackSpeed attribute, and has the same constraint as that attribute.",
+            details: "This field shall indicate the updated speed at which the current media is being played as defined by " +
+                "the PlaybackSpeed attribute, and has the same constraint as that attribute.",
             xref: { document: "cluster", section: "6.10.8.1.5" }
         }),
 
@@ -276,8 +279,8 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "SeekRangeStart", id: 0x6, type: "uint64", conformance: "AS", constraint: "desc",
-            details: "This field shall indicate the updated start of the seek range start as defined by the " +
-                "SeekRangeStart attribute, and has the same constraint as that attribute.",
+            details: "This field shall indicate the updated start of the seek range start as defined by the SeekRangeStart " +
+                "attribute, and has the same constraint as that attribute.",
             xref: { document: "cluster", section: "6.10.8.1.6" }
         }),
 
@@ -354,17 +357,16 @@ export const MediaPlayback = Cluster(
             name: "Rewind", id: 0x6, access: "O", conformance: "VS", direction: "request",
             response: "PlaybackResponse",
 
-            details: "Upon receipt, this shall start playback of the media backward in case the media is currently " +
-                "playing in the forward direction or is not playing. If the playback is already happening in the " +
-                "backwards direction receipt of this command shall increase the speed of the media playback " +
-                "backwards." +
+            details: "Upon receipt, this shall start playback of the media backward in case the media is currently playing " +
+                "in the forward direction or is not playing. If the playback is already happening in the backwards " +
+                "direction receipt of this command shall increase the speed of the media playback backwards." +
                 "\n" +
                 "Different \"rewind\" speeds may be reflected on the media playback device based upon the number of " +
                 "sequential calls to this function and the capability of the device. This is to avoid needing to " +
-                "define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported " +
-                "it shall be updated to reflect the new speed of playback. If the playback speed cannot be changed " +
-                "for the media being played(for example, in live streaming content not supporting seek), the status " +
-                "of NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for " +
+                "define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it " +
+                "shall be updated to reflect the new speed of playback. If the playback speed cannot be changed for " +
+                "the media being played(for example, in live streaming content not supporting seek), the status of " +
+                "NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for " +
                 "media playing backwards, the status of SPEED_OUT_OF_RANGE shall be returned.",
 
             xref: { document: "cluster", section: "6.10.7.7" }
@@ -392,10 +394,10 @@ export const MediaPlayback = Cluster(
                 "\n" +
                 "Different \"fast-forward\" speeds may be reflected on the media playback device based upon the number " +
                 "of sequential calls to this function and the capability of the device. This is to avoid needing to " +
-                "define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported " +
-                "it shall be updated to reflect the new speed of playback. If the playback speed cannot be changed " +
-                "for the media being played(for example, in live streaming content not supporting seek), the status " +
-                "of NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for " +
+                "define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it " +
+                "shall be updated to reflect the new speed of playback. If the playback speed cannot be changed for " +
+                "the media being played(for example, in live streaming content not supporting seek), the status of " +
+                "NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for " +
                 "media playing forward, the status of SPEED_OUT_OF_RANGE shall be returned.",
 
             xref: { document: "cluster", section: "6.10.7.8" }
@@ -448,8 +450,8 @@ export const MediaPlayback = Cluster(
                 "milliseconds. In case the resulting position falls in the middle of a frame, the server shall set " +
                 "the position to the beginning of that frame and set the SampledPosition attribute on the cluster " +
                 "accordingly. If the resultant position falls before the earliest valid position to which a client " +
-                "may seek back to, the position should be set to that earliest valid position. If the " +
-                "SampledPosition attribute is supported it shall be updated on the cluster accordingly.",
+                "may seek back to, the position should be set to that earliest valid position. If the SampledPosition " +
+                "attribute is supported it shall be updated on the cluster accordingly.",
 
             xref: { document: "cluster", section: "6.10.7.10.1" }
         })
@@ -467,7 +469,7 @@ export const MediaPlayback = Cluster(
             xref: { document: "cluster", section: "6.10.7.12.1" }
         }),
         Field({
-            name: "Data", id: 0x1, type: "string", conformance: "O",
+            name: "Data", id: 0x1, type: "string", conformance: "O", constraint: "any",
             details: "This field shall indicate Optional app-specific data.",
             xref: { document: "cluster", section: "6.10.7.12.2" }
         })
@@ -486,10 +488,10 @@ export const MediaPlayback = Cluster(
 
             details: "This field shall indicate the position (in milliseconds) in the media to seek to. In case the " +
                 "position falls in the middle of a frame, the server shall set the position to the beginning of that " +
-                "frame and set the SampledPosition attribute on the cluster accordingly. If the position falls " +
-                "before the earliest valid position or beyond the furthest valid position to which a client may seek " +
-                "back or forward to respectively, the status of SEEK_OUT_OF_RANGE shall be returned and no change " +
-                "shall be made to the position of the playback.",
+                "frame and set the SampledPosition attribute on the cluster accordingly. If the position falls before " +
+                "the earliest valid position or beyond the furthest valid position to which a client may seek back or " +
+                "forward to respectively, the status of SEEK_OUT_OF_RANGE shall be returned and no change shall be " +
+                "made to the position of the playback.",
 
             xref: { document: "cluster", section: "6.10.7.11.1" }
         })
@@ -526,10 +528,10 @@ export const MediaPlayback = Cluster(
         {
             name: "ActivateTextTrack", id: 0xd, access: "O", conformance: "TT", direction: "request",
             response: "status",
-            details: "Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in " +
-                "the Track catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR " +
-                "does not correspond to the streaming media OR no media is being streamed at the time of receipt of " +
-                "this command, the server shall return an error status of INVALID_ARGUMENT.",
+            details: "Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in the " +
+                "Track catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does " +
+                "not correspond to the streaming media OR no media is being streamed at the time of receipt of this " +
+                "command, the server shall return an error status of INVALID_ARGUMENT.",
             xref: { document: "cluster", section: "6.10.7.14" }
         },
 
@@ -671,13 +673,12 @@ export const MediaPlayback = Cluster(
 
             details: "This field shall indicate the associated discrete position within the media stream, in milliseconds " +
                 "from the beginning of the stream, being associated with the time indicated by the UpdatedAt field. " +
-                "The Position shall not be greater than the duration of the media if duration is specified. The " +
-                "Position shall not be greater than the time difference between current time and start time of the " +
+                "The Position shall NOT be greater than the duration of the media if duration is specified. The " +
+                "Position shall NOT be greater than the time difference between current time and start time of the " +
                 "media when start time is specified." +
                 "\n" +
-                "A value of null shall indicate that playback position is not applicable for the current state of " +
-                "the media playback (For example : Live media with no known duration and where seek is not " +
-                "supported).",
+                "A value of null shall indicate that playback position is not applicable for the current state of the " +
+                "media playback (For example : Live media with no known duration and where seek is not supported).",
 
             xref: { document: "cluster", section: "6.10.5.4.2" }
         })
@@ -692,8 +693,8 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "Id", id: 0x0, type: "string", conformance: "M", constraint: "max 32",
-            details: "This field shall indicate the Identifier for the Track which is unique within the Track catalog. " +
-                "The Track catalog contains all the Text/Audio tracks corresponding to the main media content.",
+            details: "This field shall indicate the Identifier for the Track which is unique within the Track catalog. The " +
+                "Track catalog contains all the Text/Audio tracks corresponding to the main media content.",
             xref: { document: "cluster", section: "6.10.5.5.1" }
         }),
 

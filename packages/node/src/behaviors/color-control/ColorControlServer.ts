@@ -1,16 +1,21 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "#behavior/context/ActionContext.js";
+import { Transitions } from "#behavior/Transitions.js";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { OnOffServer } from "#behaviors/on-off";
 import { ColorControl } from "#clusters/color-control";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
+import { Endpoint } from "#endpoint/Endpoint.js";
 import { RootEndpoint } from "#endpoints/root";
-import { addValueWithOverflow, cropValueRange, ImplementationError, Logger, MaybePromise, Time, Timer } from "#general";
+import { addValueWithOverflow, cropValueRange, ImplementationError, Logger, MaybePromise } from "#general";
 import { ClusterType, StatusCode, StatusResponseError, TypeFromPartialBitSchema } from "#types";
+import { AsyncObservable } from "@matter/general";
+import { Val } from "@matter/protocol";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 import {
     hsvToMireds,
@@ -24,15 +29,13 @@ import {
 
 const logger = Logger.get("ColorControlServer");
 
-const ColorControlServerBase = ColorControlBehavior.with(
+const ColorControlBase = ColorControlBehavior.with(
     ColorControl.Feature.HueSaturation,
     ColorControl.Feature.EnhancedHue,
     ColorControl.Feature.ColorLoop,
     ColorControl.Feature.Xy,
     ColorControl.Feature.ColorTemperature,
 );
-
-type ManagedTransitionType = "hue" | "enhancedHue" | "saturation" | "colorTemperature" | "x" | "y";
 
 const MIN_CIE_XY_VALUE = 0;
 const MAX_CIE_XY_VALUE = 0xfeff; // this value comes directly from the ZCL specification table 5.3
@@ -70,55 +73,56 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
  * already done and you can focus on the actual hardware interaction:
  *
- * * {@link ColorControlServerLogic.moveToHueLogic} Logic to move the hue to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveHueLogic} Logic to move the hue by a defined rate/second
- * * {@link ColorControlServerLogic.stepHueLogic} Logic to move the hue one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
+ * * {@link ColorControlBaseServer.moveToHueLogic} Logic to move the hue to a defined value in a defined time
+ * * {@link ColorControlBaseServer.moveHueLogic} Logic to move the hue by a defined rate/second
+ * * {@link ColorControlBaseServer.stepHueLogic} Logic to move the hue one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
  *   time
- * * {@link ColorControlServerLogic.moveSaturationLogic} Logic to move the saturation by a defined rate/second
- * * {@link ColorControlServerLogic.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
+ * * {@link ColorControlBaseServer.moveSaturationLogic} Logic to move the saturation by a defined rate/second
+ * * {@link ColorControlBaseServer.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
  *   in a defined time
- * * {@link ColorControlServerLogic.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorLogic} Logic to move the x/y color by a defined rate/second
- * * {@link ColorControlServerLogic.stepColorLogic} Logic to move the x/y color one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
+ * * {@link ColorControlBaseServer.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
+ * * {@link ColorControlBaseServer.moveColorLogic} Logic to move the x/y color by a defined rate/second
+ * * {@link ColorControlBaseServer.stepColorLogic} Logic to move the x/y color one defined step in a defined time
+ * * {@link ColorControlBaseServer.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
  *   in a defined time
- * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
+ * * {@link ColorControlBaseServer.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
  *   to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined
+ * * {@link ColorControlBaseServer.moveColorTemperatureLogic} Logic to move the color temperature by a defined
  *   rate/second
- * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
+ * * {@link ColorControlBaseServer.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
  *   defined time
- * * {@link ColorControlServerLogic.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
- * * {@link ColorControlServerLogic.stopAllColorMovement} Logic to stop any color movements
- * * {@link ColorControlServerLogic.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
- * * {@link ColorControlServerLogic.stopColorLoopLogic} Logic to stop the color loop
- * * {@link ColorControlServerLogic.stopMoveStepLogic} Logic to stop all movements beside color loops
- * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of
+ * * {@link ColorControlBaseServer.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
+ * * {@link ColorControlBaseServer.stopAllColorMovement} Logic to stop any color movements
+ * * {@link ColorControlBaseServer.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
+ * * {@link ColorControlBaseServer.stopColorLoopLogic} Logic to stop the color loop
+ * * {@link ColorControlBaseServer.stopMoveStepLogic} Logic to stop all movements beside color loops
+ * * {@link ColorControlBaseServer.switchColorMode} Logic to switch the color mode and to set the current attributes of
  *   the new mode
  *
  * All overridable methods can be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
  *
- * * {@link ColorControlServerLogic#setColorMode} to set the color mode
- * * {@link ColorControlServerLogic#setEnhancedColorMode} to set the enhanced color mode
+ * * {@link ColorControlBaseServer#setColorMode} to set the color mode
+ * * {@link ColorControlBaseServer#setEnhancedColorMode} to set the enhanced color mode
  *
- * The default implementation of {@link ColorControlServerLogic.switchColorMode} tries to convert the color values
+ * The default implementation of {@link ColorControlBaseServer.switchColorMode} tries to convert the color values
  * between the different modi. When switching from color temperature mode to any other mode the value can be converted
  * when the color temperature was between 1000K and 20.000K. For other values no conversion takes place.
  *
- * The method {@link ColorControlServerLogic.syncColorTemperatureWithLevelLogic} is handling the sync between the
+ * The method {@link ColorControlBaseServer.syncColorTemperatureWithLevelLogic} is handling the sync between the
  * LevelControl and ColorControl cluster when the color temperature is used.
  *
  * Additionally there are some convenience properties to access the current attribute values for all relevant color
  * attributes (x,y, hue, saturation, mireds/kelvin, colorTemperatur, ...) in their CIE value format instead the matter
  * data ranges.
  */
-export class ColorControlServerLogic extends ColorControlServerBase {
-    declare protected internal: ColorControlServerLogic.Internal;
-    declare state: ColorControlServerLogic.State;
+export class ColorControlBaseServer extends ColorControlBase {
+    declare protected internal: ColorControlBaseServer.Internal;
+    declare state: ColorControlBaseServer.State;
+    declare events: ColorControlBaseServer.Events;
 
     /*
      * The following block contains some convenience methods to allow to easily work with the CIE color space values
@@ -331,16 +335,36 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     }
 
     override initialize() {
-        this.#initializeManagedTransitionTimers();
+        // As a virtual attribute remaining time change only emits when we do so manually.  This works out well because
+        // as a continuous value it should only emit under limited circumstances defined by spec
+        //
+        // We disable normal "quieter" suppression so it always emits when we emit manually
+        if (this.events.remainingTime$Changed !== undefined) {
+            this.events.remainingTime$Changed.quiet.config = {
+                suppressionEnabled: false,
+            };
+        }
+
+        // Configure transition management
+        this.internal.transitions = this.initializeTransitions();
 
         // Sync the colorCapabilities with the features for convenience
         this.state.colorCapabilities = this.features;
 
+        // Configure Color Temperature Feature
+        if (this.features.colorTemperature) {
+            this.initializeColorTemperature();
+        }
+    }
+
+    /**
+     * Initialize Color Temperature features.
+     *
+     * This only applies if the Color Control cluster has the "CT" feature enabled.
+     */
+    protected initializeColorTemperature() {
         // Handle startup color Temperature when the color Temperature feature is supported
-        if (
-            this.features.colorTemperature &&
-            this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted
-        ) {
+        if (this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
             const startUpMiredsValue = this.state.startUpColorTemperatureMireds ?? null;
             const currentMiredsValue = this.state.colorTemperatureMireds;
             let targetMiredsValue: number | null;
@@ -399,30 +423,19 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
         isEnhancedHue = false,
     ): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopHueTransition();
-            if (isEnhancedHue) {
-                this.state.enhancedCurrentHue = targetHue;
-            } else {
-                this.state.currentHue = targetHue;
-            }
-            this.state.remainingTime = 0;
-            return;
-        }
-
         const currentHue = isEnhancedHue ? this.state.enhancedCurrentHue : this.state.currentHue;
         const maxHue = isEnhancedHue ? MAX_ENHANCED_HUE_VALUE : MAX_HUE_VALUE;
 
-        const effectiveRate = Math.ceil(
-            (this.#getHueDistanceByDirection(currentHue, targetHue, direction, maxHue) / transitionTime) * 10,
-        );
-        this.#initiateTransition(
-            isEnhancedHue ? "enhancedHue" : "hue",
-            effectiveRate,
-            MIN_HUE_VALUE,
-            maxHue,
-            targetHue,
-        );
+        const effectiveRate =
+            (this.#getHueDistanceByDirection(currentHue, targetHue, direction, maxHue) / transitionTime) * 10;
+        this.#startTransition({
+            name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
+            owner: this,
+            changePerS: effectiveRate,
+            targetValue: targetHue,
+            calculateCyclicDistance: (current, target) =>
+                this.#getHueDistanceByDirection(current, target, direction, maxHue),
+        });
     }
 
     /**
@@ -454,7 +467,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * last parameter.
      * If the managed transition time handling is disabled the method directly increases the hue value by one rate step.
      * So without managed transition not too much happens.
-     * Otherwise the method initiates a transition with the given rate.
+     * Otherwise, the method initiates a transition with the given rate.
      *
      * @param moveMode Move Mode to move the hue up or down (Stop should not be provided in here because already handled)
      * @param rate The rate to move the hue up or down. 0 should never be provided her because handled here.
@@ -462,30 +475,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected moveHueLogic(moveMode: ColorControl.MoveMode, rate: number, isEnhancedHue = false): MaybePromise {
-        const maxHue = isEnhancedHue ? MAX_ENHANCED_HUE_VALUE : MAX_HUE_VALUE;
+        const name = isEnhancedHue ? "enhancedCurrentHue" : "currentHue";
 
-        if (!this.state.managedTransitionTimeHandling) {
-            this.internal.stopHueTransition();
-            if (isEnhancedHue) {
-                this.state.enhancedCurrentHue = addValueWithOverflow(
-                    this.state.enhancedCurrentHue,
-                    rate,
-                    MIN_HUE_VALUE,
-                    maxHue,
-                );
-            } else {
-                this.state.currentHue = addValueWithOverflow(this.state.currentHue, rate, MIN_HUE_VALUE, maxHue);
-            }
-            this.state.remainingTime = 0;
-            return;
-        }
-
-        this.#initiateTransition(
-            isEnhancedHue ? "enhancedHue" : "hue",
-            rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
-            MIN_HUE_VALUE,
-            maxHue,
-        );
+        this.#startTransition({
+            name,
+            owner: this,
+            changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
+        });
     }
 
     /**
@@ -495,8 +491,15 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected stopHueAndSaturationMovement(): MaybePromise {
-        this.internal.stopHueTransition();
-        this.internal.stopSaturationTransition();
+        this.internal.transitions?.stop("currentHue");
+        this.internal.transitions?.stop("enhancedCurrentHue");
+        this.internal.transitions?.stop("currentSaturation");
+    }
+
+    #assertStepSize(stepSize: number, errorContext: string) {
+        if (stepSize === 0) {
+            throw new StatusResponseError(`${errorContext} step size must not be 0`, StatusCode.InvalidCommand);
+        }
     }
 
     /**
@@ -514,6 +517,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepHueRequest) {
+        this.#assertStepSize(stepSize, "Hue");
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -543,32 +547,24 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         const currentHue = isEnhancedHue ? this.state.enhancedCurrentHue : this.state.currentHue;
         const maxHue = isEnhancedHue ? MAX_ENHANCED_HUE_VALUE : MAX_HUE_VALUE;
 
-        const targetValue = addValueWithOverflow(
-            currentHue,
-            stepMode === ColorControl.StepMode.Up ? stepSize : -stepSize,
-            MIN_HUE_VALUE,
-            maxHue,
-        );
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopHueTransition();
-            if (isEnhancedHue) {
-                this.state.enhancedCurrentHue = targetValue;
-            } else {
-                this.state.currentHue = targetValue;
-            }
-            this.state.remainingTime = 0;
-            return;
-        }
+        const direction = stepMode === ColorControl.StepMode.Up ? 1 : -1;
+        const effectiveRate = (stepSize / transitionTime) * 10 * direction;
 
-        const effectiveRate =
-            Math.ceil((stepSize / transitionTime) * 10) * (stepMode === ColorControl.StepMode.Up ? 1 : -1);
-        this.#initiateTransition(
-            isEnhancedHue ? "enhancedHue" : "hue",
-            effectiveRate,
-            MIN_HUE_VALUE,
-            maxHue,
+        const targetValue = addValueWithOverflow(currentHue, stepSize * direction, MIN_HUE_VALUE, maxHue);
+
+        this.#startTransition({
+            name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
+            owner: this,
+            changePerS: effectiveRate,
             targetValue,
-        );
+            calculateCyclicDistance: (current, target) =>
+                this.#getHueDistanceByDirection(
+                    current,
+                    target,
+                    stepMode === ColorControl.StepMode.Up ? ColorControl.Direction.Up : ColorControl.Direction.Down,
+                    maxHue,
+                ),
+        });
     }
 
     /**
@@ -598,29 +594,20 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     /**
      * Default implementation of the moveToSaturation logic.
      * If the managed transition time handling is disabled the method directly sets the new saturation value.
-     * Otherwise the method initiates a transition with the given rate.
+     * Otherwise, the method initiates a transition with the given rate.
      *
      * @param targetSaturation The target saturation value to move to
      * @param transitionTime The time in seconds to move to the target saturation. 0 means "as fast as possible"
      * @protected
      */
     protected moveToSaturationLogic(targetSaturation: number, transitionTime: number): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopSaturationTransition();
-            this.state.currentSaturation = targetSaturation;
-            this.state.remainingTime = 0;
-            return;
-        }
-
-        // Else calculate a rate by second and manage the transition
-        const effectiveRate = Math.ceil(((targetSaturation - this.state.currentSaturation) / transitionTime) * 10);
-        this.#initiateTransition(
-            "saturation",
-            effectiveRate,
-            MIN_SATURATION_VALUE,
-            MAX_SATURATION_VALUE,
-            targetSaturation,
-        );
+        const effectiveRate = ((targetSaturation - this.state.currentSaturation) / transitionTime) * 10;
+        this.#startTransition({
+            name: "currentSaturation",
+            owner: this,
+            changePerS: effectiveRate,
+            targetValue: targetSaturation,
+        });
     }
 
     /**
@@ -655,20 +642,11 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected moveSaturationLogic(moveMode: ColorControl.MoveMode, rate: number): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling) {
-            this.internal.stopSaturationTransition();
-            this.state.currentSaturation =
-                moveMode === ColorControl.MoveMode.Up ? MAX_SATURATION_VALUE : MIN_SATURATION_VALUE;
-            this.state.remainingTime = 0;
-            return;
-        }
-
-        this.#initiateTransition(
-            "saturation",
-            rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
-            MIN_SATURATION_VALUE,
-            MAX_SATURATION_VALUE,
-        );
+        this.#startTransition({
+            name: "currentSaturation",
+            owner: this,
+            changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
+        });
     }
 
     /**
@@ -687,6 +665,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.StepSaturationRequest) {
+        this.#assertStepSize(stepSize, "Saturation");
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -710,28 +689,16 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize: number,
         transitionTime: number,
     ): MaybePromise {
-        const effectiveRate =
-            Math.ceil((stepSize / transitionTime) * 10) * (stepMode === ColorControl.StepMode.Up ? 1 : -1);
-        const targetValue = cropValueRange(
-            stepMode === ColorControl.StepMode.Up
-                ? this.state.currentSaturation + stepSize
-                : this.state.currentSaturation - stepSize,
-            MIN_SATURATION_VALUE,
-            MAX_SATURATION_VALUE,
-        );
+        const direction = stepMode === ColorControl.StepMode.Up ? 1 : -1;
 
-        if (
-            !this.state.managedTransitionTimeHandling ||
-            transitionTime === 0 ||
-            this.state.currentSaturation === targetValue
-        ) {
-            this.internal.stopSaturationTransition();
-            this.state.currentSaturation = targetValue;
-            this.state.remainingTime = 0;
-            return;
-        }
+        const effectiveRate = (stepSize / transitionTime) * 10 * direction;
 
-        this.#initiateTransition("saturation", effectiveRate, MIN_SATURATION_VALUE, MAX_SATURATION_VALUE, targetValue);
+        this.#startTransition({
+            name: "currentSaturation",
+            owner: this,
+            changePerS: effectiveRate,
+            targetValue: this.state.currentSaturation + stepSize * direction,
+        });
     }
 
     /**
@@ -776,7 +743,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetHue, ColorControl.Direction.ShortestDistance, transitionTime, false),
+            this.moveToHueLogic(targetHue, ColorControl.Direction.Shortest, transitionTime, false),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -817,21 +784,18 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected moveToColorLogic(targetX: number, targetY: number, transitionTime: number): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopXTransition();
-            this.internal.stopYTransition();
-            this.state.currentX = cropValueRange(targetX, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
-            this.state.currentY = cropValueRange(targetY, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
-            this.state.remainingTime = 0;
-            return;
-        }
-
-        // Else calculate a rate by second and manage the transition
-        const effectiveRateX = Math.floor(((targetX - this.state.currentX) / transitionTime) * 10);
-        const effectiveRateY = Math.floor(((targetY - this.state.currentY) / transitionTime) * 10);
-
-        this.#initiateTransition("x", effectiveRateX, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE, targetX);
-        this.#initiateTransition("y", effectiveRateY, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE, targetY);
+        this.#startTransition({
+            name: "currentX",
+            owner: this,
+            changePerS: ((targetX - this.state.currentX) / transitionTime) * 10,
+            targetValue: targetX,
+        });
+        this.#startTransition({
+            name: "currentY",
+            owner: this,
+            changePerS: ((targetY - this.state.currentY) / transitionTime) * 10,
+            targetValue: targetY,
+        });
     }
 
     /**
@@ -863,12 +827,10 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected stopAllColorMovement(): MaybePromise {
-        this.internal.stopXTransition();
-        this.internal.stopYTransition();
-        this.internal.stopHueTransition();
-        this.internal.stopSaturationTransition();
-        this.internal.stopColorTemperatureTransition();
-        this.state.remainingTime = 0;
+        this.internal.transitions?.stop("currentX");
+        this.internal.transitions?.stop("currentY");
+        this.internal.transitions?.stop("colorTemperatureMireds");
+        return this.stopHueAndSaturationMovement();
     }
 
     /**
@@ -881,24 +843,19 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected moveColorLogic(rateX: number, rateY: number): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling) {
-            this.internal.stopXTransition();
-            this.internal.stopYTransition();
-            if (rateX !== 0) {
-                this.state.currentX = MAX_CIE_XY_VALUE;
-            }
-            if (rateY !== 0) {
-                this.state.currentY = MAX_CIE_XY_VALUE;
-            }
-            this.state.remainingTime = 0;
-            return;
-        }
-
         if (rateX !== 0) {
-            this.#initiateTransition("x", rateX, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
+            this.#startTransition({
+                name: "currentX",
+                owner: this,
+                changePerS: rateX,
+            });
         }
         if (rateY !== 0) {
-            this.#initiateTransition("y", rateY, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
+            this.#startTransition({
+                name: "currentY",
+                owner: this,
+                changePerS: rateY,
+            });
         }
     }
 
@@ -917,6 +874,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepY,
         transitionTime,
     }: ColorControl.StepColorRequest): MaybePromise {
+        if (stepX === 0 && stepY === 0) {
+            throw new StatusResponseError("Color step sizes must not be 0", StatusCode.InvalidCommand);
+        }
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -928,7 +888,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     /**
      * Default implementation of the stepColor logic.
      * If the managed transition time handling is disabled the method directly sets the new x and y values.
-     * Otherwise the method initiates a transition with the given rate.
+     * Otherwise, the method initiates a transition with the given rate.
      *
      * @param stepX The step size to move the x value up or down
      * @param stepY The step size to move the y value up or down
@@ -936,25 +896,22 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected stepColorLogic(stepX: number, stepY: number, transitionTime: number): MaybePromise {
-        const targetValueX = cropValueRange(this.state.currentX + stepX, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
-        const targetValueY = cropValueRange(this.state.currentY + stepY, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopXTransition();
-            this.internal.stopYTransition();
-            this.state.currentX = targetValueX;
-            this.state.currentY = targetValueY;
-            this.state.remainingTime = 0;
-            return;
-        }
-
         // Else calculate a rate by second and manage the transition
         if (stepX !== 0) {
-            const effectiveRateX = Math.floor((stepX / transitionTime) * 10);
-            this.#initiateTransition("x", effectiveRateX, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE, targetValueX);
+            this.#startTransition({
+                name: "currentX",
+                owner: this,
+                changePerS: (stepX / transitionTime) * 10,
+                targetValue: this.state.currentX + stepX,
+            });
         }
         if (stepY !== 0) {
-            const effectiveRateY = Math.floor((stepY / transitionTime) * 10);
-            this.#initiateTransition("y", effectiveRateY, MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE, targetValueY);
+            this.#startTransition({
+                name: "currentY",
+                owner: this,
+                changePerS: (stepY / transitionTime) * 10,
+                targetValue: this.state.currentY + stepY,
+            });
         }
     }
 
@@ -990,22 +947,12 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected moveToColorTemperatureLogic(targetMireds: number, transitionTime: number): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopColorTemperatureTransition();
-            this.state.colorTemperatureMireds = targetMireds;
-            this.state.remainingTime = 0;
-            return;
-        }
-
-        // Else calculate a rate by second and manage the transition
-        const effectiveRate = Math.ceil(((targetMireds - this.state.colorTemperatureMireds) / transitionTime) * 10);
-        this.#initiateTransition(
-            "colorTemperature",
-            effectiveRate,
-            this.minimumColorTemperatureMireds,
-            this.maximumColorTemperatureMireds,
-            targetMireds,
-        );
+        this.#startTransition({
+            name: "colorTemperatureMireds",
+            owner: this,
+            changePerS: ((targetMireds - this.state.colorTemperatureMireds) / transitionTime) * 10,
+            targetValue: targetMireds,
+        });
     }
 
     /**
@@ -1075,6 +1022,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepSize,
         transitionTime,
     }: ColorControl.EnhancedStepHueRequest) {
+        this.#assertStepSize(stepSize, "Enhanced Hue");
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1124,7 +1072,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.ShortestDistance, transitionTime, true),
+            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.Shortest, transitionTime, true),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1151,38 +1099,44 @@ export class ColorControlServerLogic extends ColorControlServerBase {
             return;
         }
 
+        let loopConfigChanged = false;
         if (updateFlags.updateDirection) {
-            this.state.colorLoopDirection = direction as unknown as ColorControl.ColorLoopDirection;
+            if (this.state.colorLoopDirection !== direction) {
+                this.state.colorLoopDirection = direction as unknown as ColorControl.ColorLoopDirection;
+                loopConfigChanged = true;
+            }
         }
         if (updateFlags.updateTime) {
-            this.state.colorLoopTime = time;
+            if (this.state.colorLoopTime !== time) {
+                this.state.colorLoopTime = time;
+                loopConfigChanged = true;
+            }
         }
         if (updateFlags.updateStartHue) {
             this.state.colorLoopStartEnhancedHue = startHue;
         }
         if (updateFlags.updateAction) {
-            if (action === ColorControl.Action.DeActivateTheColorLoop) {
-                return this.#stopColorLoop();
+            if (action === ColorControl.ColorLoopAction.Deactivate) {
+                if (this.state.colorLoopActive === ColorControl.ColorLoopActive.Active) {
+                    return this.#stopColorLoop();
+                }
             } else {
                 return MaybePromise.then(
                     this.setEnhancedColorMode(ColorControl.EnhancedColorMode.EnhancedCurrentHueAndCurrentSaturation),
                     () => {
                         this.state.colorLoopStoredEnhancedHue = this.state.enhancedCurrentHue;
                         this.state.colorLoopActive = ColorControl.ColorLoopActive.Active;
-                        if (
-                            action ===
-                            ColorControl.Action.ActivateTheColorLoopFromTheValueInTheColorLoopStartEnhancedHueField
-                        ) {
+                        if (action === ColorControl.ColorLoopAction.ActivateFromColorLoopStartEnhancedHue) {
                             return this.startColorLoopLogic(this.state.colorLoopStartEnhancedHue);
-                        } else if (
-                            action ===
-                            ColorControl.Action.ActivateTheColorLoopFromTheValueOfTheEnhancedCurrentHueAttribute
-                        ) {
+                        } else if (action === ColorControl.ColorLoopAction.ActivateFromEnhancedCurrentHue) {
                             return this.startColorLoopLogic(this.state.enhancedCurrentHue);
                         }
                     },
                 );
             }
+        } else if (loopConfigChanged && this.state.colorLoopActive === ColorControl.ColorLoopActive.Active) {
+            // If the loop config changed while the loop is running, we need to restart from current value
+            return this.startColorLoopLogic(this.state.enhancedCurrentHue);
         }
     }
 
@@ -1205,7 +1159,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * @protected
      */
     protected stopColorLoopLogic(): MaybePromise {
-        this.internal.stopHueTransition();
+        this.internal.transitions?.stop("enhancedCurrentHue");
     }
 
     /**
@@ -1249,12 +1203,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      */
     protected stopMoveStepLogic(): MaybePromise {
         if (this.state.colorLoopActive === ColorControl.ColorLoopActive.Inactive) {
-            this.internal.stopHueTransition();
+            this.internal.transitions?.stop("enhancedCurrentHue");
         }
-        this.internal.stopSaturationTransition();
-        this.internal.stopColorTemperatureTransition();
-        this.internal.stopXTransition();
-        this.internal.stopYTransition();
+        this.internal.transitions?.stop("currentHue");
+        this.internal.transitions?.stop("currentSaturation");
+        this.internal.transitions?.stop("currentX");
+        this.internal.transitions?.stop("currentY");
+        this.internal.transitions?.stop("colorTemperatureMireds");
     }
 
     /**
@@ -1328,21 +1283,17 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds: number,
         colorTemperatureMaximumMireds: number,
     ): MaybePromise {
-        if (!this.state.managedTransitionTimeHandling) {
-            this.internal.stopColorTemperatureTransition();
-            this.state.colorTemperatureMireds =
-                moveMode === ColorControl.MoveMode.Up ? colorTemperatureMaximumMireds : colorTemperatureMinimumMireds;
-            this.state.remainingTime = 0;
-            return;
-        }
+        const direction = moveMode === ColorControl.MoveMode.Up ? 1 : -1;
 
-        const effectiveRate = rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1);
-        this.#initiateTransition(
-            "colorTemperature",
-            effectiveRate,
-            colorTemperatureMinimumMireds,
-            colorTemperatureMaximumMireds,
-        );
+        // Custom min/max so we define an explicit target value here
+        const targetValue =
+            moveMode === ColorControl.MoveMode.Up ? colorTemperatureMaximumMireds : colorTemperatureMinimumMireds;
+        this.#startTransition({
+            name: "colorTemperatureMireds",
+            owner: this,
+            changePerS: rate * direction,
+            targetValue,
+        });
     }
 
     /**
@@ -1363,6 +1314,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
     }: ColorControl.StepColorTemperatureRequest) {
+        this.#assertStepSize(stepSize, "ColorTemperature");
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1414,26 +1366,21 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds: number,
         colorTemperatureMaximumMireds: number,
     ): MaybePromise {
-        const targetValue = cropValueRange(
-            this.state.colorTemperatureMireds + (stepMode === ColorControl.StepMode.Up ? stepSize : -stepSize),
-            colorTemperatureMinimumMireds,
-            colorTemperatureMaximumMireds,
-        );
-        if (!this.state.managedTransitionTimeHandling || transitionTime === 0) {
-            this.internal.stopColorTemperatureTransition();
-            this.state.colorTemperatureMireds = targetValue;
-            this.state.remainingTime = 0;
-            return;
-        }
+        const direction = stepMode === ColorControl.StepMode.Up ? 1 : -1;
 
-        const effectiveRate =
-            Math.ceil((stepSize / transitionTime) * 10) * (stepMode === ColorControl.StepMode.Up ? 1 : -1);
-        this.#initiateTransition(
-            "colorTemperature",
-            effectiveRate,
+        // Custom min/max so crop here already
+        const targetValue = cropValueRange(
+            this.state.colorTemperatureMireds + stepSize * direction,
             colorTemperatureMinimumMireds,
             colorTemperatureMaximumMireds,
         );
+
+        this.#startTransition({
+            name: "colorTemperatureMireds",
+            owner: this,
+            changePerS: (stepSize / transitionTime) * 10 * direction,
+            targetValue,
+        });
     }
 
     /**
@@ -1573,37 +1520,6 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     }
 
     /**
-     * This method is used to set the remaining Time by checking the current transition timers depending on the color mode.
-     */
-    #setRemainingTime() {
-        let remaining = 0;
-        switch (this.state.colorMode) {
-            case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
-                if (this.internal.hueTransitionIntervalTimer?.isRunning) {
-                    remaining = this.internal.currentHueTransitionData?.remainingTime ?? 0;
-                }
-                if (this.internal.saturationTransitionIntervalTimer?.isRunning) {
-                    remaining = Math.max(remaining, this.internal.currentSaturationTransitionData?.remainingTime ?? 0);
-                }
-                break;
-            case ColorControl.ColorMode.CurrentXAndCurrentY:
-                if (this.internal.xTransitionIntervalTimer?.isRunning) {
-                    remaining = this.internal.currentXTransitionData?.remainingTime ?? 0;
-                }
-                if (this.internal.yTransitionIntervalTimer?.isRunning) {
-                    remaining = Math.max(remaining, this.internal.currentYTransitionData?.remainingTime ?? 0);
-                }
-                break;
-            case ColorControl.ColorMode.ColorTemperatureMireds:
-                if (this.internal.colorTemperatureTransitionIntervalTimer?.isRunning) {
-                    remaining = this.internal.currentColorTemperatureTransitionData?.remainingTime ?? 0;
-                }
-                break;
-        }
-        this.state.remainingTime = remaining;
-    }
-
-    /**
      * This method is used internally to potentially handle the dependency between the ColorControl and LevelControl
      * cluster.
      * Do not override this method! Please use the {@link syncColorTemperatureWithLevelLogic} method instead which is
@@ -1674,10 +1590,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
 
     /** Calculate the hue distance depending on the direction and the current and target hue. */
     #getHueDistanceByDirection(currentHue: number, targetHue: number, direction: ColorControl.Direction, max: number) {
-        const distance = (targetHue > currentHue ? targetHue : max + targetHue) - currentHue;
-        logger.info(
-            `Distance: ${distance}, direction: ${direction}, max/2: ${max / 2}, max-distance: ${max - distance}`,
-        );
+        const distance = (targetHue > currentHue ? targetHue : max + targetHue + 1) - currentHue;
         if (distance === 0) {
             return 0;
         }
@@ -1686,13 +1599,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         } else if (direction === ColorControl.Direction.Down) {
             return -(max - distance);
         }
-        if (direction === ColorControl.Direction.ShortestDistance) {
+        if (direction === ColorControl.Direction.Shortest) {
             if (Math.abs(distance) > max / 2) {
                 return -(max - distance);
             }
             return distance;
         }
-        if (direction === ColorControl.Direction.LongestDistance) {
+        if (direction === ColorControl.Direction.Longest) {
             if (Math.abs(distance) > max / 2) {
                 return distance;
             }
@@ -1701,36 +1614,84 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         throw new ImplementationError(`Unknown direction: ${direction}`);
     }
 
-    /** Initialize the managed transition timers.. */
-    #initializeManagedTransitionTimers() {
-        if (!this.state.managedTransitionTimeHandling) {
-            return;
+    /**
+     * Initialize transition management.
+     *
+     * We manage transitions using {@link Transitions} if
+     * {@link ColorControlBaseServer.State#managedTransitionTimeHandling} is true.
+     *
+     * You may override this method to replace the {@link Transitions} implementation customized for your application.
+     */
+    protected initializeTransitions() {
+        const { endpoint } = this;
+        // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
+        // this efficient we use the read-only view of our state provided by the endpoint as it is always available
+        const readOnlyState = (endpoint.state as Record<string, unknown>).colorControl as ColorControlBaseServer.State;
+        return new Transitions(this.endpoint, {
+            type: ColorControlBaseServer,
+
+            remainingTimeEvent: this.events.remainingTime$Changed,
+
+            get manageTransitions() {
+                return readOnlyState.managedTransitionTimeHandling;
+            },
+
+            get transitionEndTimeMs() {
+                return readOnlyState.transitionEndTimeMs;
+            },
+
+            get stepIntervalMs() {
+                return readOnlyState.transitionStepIntervalMs;
+            },
+
+            properties: {
+                currentHue: {
+                    min: MIN_HUE_VALUE,
+                    max: MAX_HUE_VALUE,
+                    cyclic: true,
+                },
+                enhancedCurrentHue: {
+                    min: MIN_HUE_VALUE,
+                    max: MAX_ENHANCED_HUE_VALUE,
+                    cyclic: true,
+                },
+                currentSaturation: {
+                    min: MIN_SATURATION_VALUE,
+                    max: MAX_SATURATION_VALUE,
+                },
+                colorTemperatureMireds: {
+                    get min() {
+                        const colorTempPhysicalMinMireds = readOnlyState.colorTempPhysicalMinMireds;
+                        return colorTempPhysicalMinMireds === 0 ? MIN_TEMPERATURE_VALUE : colorTempPhysicalMinMireds;
+                    },
+                    get max() {
+                        const colorTempPhysicalMaxMireds = readOnlyState.colorTempPhysicalMaxMireds;
+                        return colorTempPhysicalMaxMireds === 0 ? MAX_TEMPERATURE_VALUE : colorTempPhysicalMaxMireds;
+                    },
+                },
+                currentX: {
+                    min: MIN_CIE_XY_VALUE,
+                    max: MAX_CIE_XY_VALUE,
+                },
+                currentY: {
+                    min: MIN_CIE_XY_VALUE,
+                    max: MAX_CIE_XY_VALUE,
+                },
+            },
+        });
+    }
+
+    #startTransition(transition: Transitions.Transition<ColorControlBaseServer>) {
+        const { name } = transition;
+
+        // When we start a Hue transition make sure both potential relevant are stopped
+        if (name === "currentHue") {
+            this.internal.transitions?.stop("enhancedCurrentHue");
+        } else if (name === "enhancedCurrentHue") {
+            this.internal.transitions?.stop("currentHue");
         }
-        this.internal.hueTransitionIntervalTimer = Time.getPeriodicTimer(
-            "ColorControl.hue.transition",
-            1000,
-            this.callback(this.#hueStepIntervalTick, { lock: true }),
-        );
-        this.internal.saturationTransitionIntervalTimer = Time.getPeriodicTimer(
-            "ColorControl.saturation.transition",
-            1000,
-            this.callback(this.#saturationStepIntervalTick, { lock: true }),
-        );
-        this.internal.colorTemperatureTransitionIntervalTimer = Time.getPeriodicTimer(
-            "ColorControl.colorTemperature.transition",
-            1000,
-            this.callback(this.#colorTemperatureStepIntervalTick, { lock: true }),
-        );
-        this.internal.xTransitionIntervalTimer = Time.getPeriodicTimer(
-            "ColorControl.x.transition",
-            1000,
-            this.callback(this.#xStepIntervalTick, { lock: true }),
-        );
-        this.internal.yTransitionIntervalTimer = Time.getPeriodicTimer(
-            "ColorControl.y.transition",
-            1000,
-            this.callback(this.#yStepIntervalTick, { lock: true }),
-        );
+
+        this.internal.transitions?.start(transition);
     }
 
     #getBootReason() {
@@ -1758,314 +1719,6 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         return options.executeIfOff || !this.agent.has(OnOffServer) || this.agent.get(OnOffServer).state.onOff;
     }
 
-    #initiateTransition(
-        transitionType: ManagedTransitionType,
-        changeRate: number,
-        minValue: number,
-        maxValue: number,
-        targetValue?: number,
-    ) {
-        if (changeRate === 0) {
-            logger.warn(`Change rate for ${transitionType} is 0, nothing to do.`);
-        }
-        let currentValue: number;
-        switch (transitionType) {
-            case "hue":
-                currentValue = this.state.currentHue;
-                break;
-            case "enhancedHue":
-                currentValue = this.state.enhancedCurrentHue;
-                break;
-            case "saturation":
-                currentValue = this.state.currentSaturation;
-                break;
-            case "colorTemperature":
-                currentValue = this.state.colorTemperatureMireds;
-                break;
-            case "x":
-                currentValue = this.state.currentX;
-                break;
-            case "y":
-                currentValue = this.state.currentY;
-                break;
-        }
-
-        let hueDistanceLeft: number | undefined = undefined;
-        let remainingTime = 0xffff; // Assume a looping for now, we adjust later
-        if (transitionType === "enhancedHue" || transitionType === "hue") {
-            if (targetValue !== undefined) {
-                const direction = changeRate > 0 ? ColorControl.Direction.Up : ColorControl.Direction.Down;
-                hueDistanceLeft = this.#getHueDistanceByDirection(currentValue, targetValue, direction, maxValue);
-                remainingTime = Math.floor(Math.ceil(hueDistanceLeft / changeRate) * 10);
-            }
-        } else {
-            if (changeRate > 0) {
-                remainingTime = Math.floor(Math.ceil((maxValue - currentValue) / changeRate) * 10);
-            } else {
-                remainingTime = Math.floor(Math.ceil((currentValue - minValue) / -changeRate) * 10);
-            }
-        }
-
-        const transitionData: TransitionData = {
-            changeRate,
-            targetValue,
-            minValue,
-            maxValue,
-            remainingTime,
-        };
-
-        logger.debug(`Starting ${transitionType} transition interval with stepSize: ${changeRate}.`);
-        switch (transitionType) {
-            case "hue":
-                this.internal.hueTransitionIntervalTimer?.stop();
-                this.internal.currentHueTransitionData = {
-                    ...transitionData,
-                    isEnhancedHue: false,
-                    distanceLeft: hueDistanceLeft !== undefined ? Math.abs(hueDistanceLeft) : undefined,
-                };
-                this.internal.hueTransitionIntervalTimer?.start();
-                break;
-            case "enhancedHue":
-                this.internal.hueTransitionIntervalTimer?.stop();
-                this.internal.currentHueTransitionData = {
-                    ...transitionData,
-                    isEnhancedHue: true,
-                    distanceLeft: hueDistanceLeft !== undefined ? Math.abs(hueDistanceLeft) : undefined,
-                };
-                this.internal.hueTransitionIntervalTimer?.start();
-                break;
-            case "saturation":
-                this.internal.saturationTransitionIntervalTimer?.stop();
-                this.internal.currentSaturationTransitionData = transitionData;
-                this.internal.saturationTransitionIntervalTimer?.start();
-                break;
-            case "colorTemperature":
-                this.internal.colorTemperatureTransitionIntervalTimer?.stop();
-                this.internal.currentColorTemperatureTransitionData = transitionData;
-                this.internal.colorTemperatureTransitionIntervalTimer?.start();
-                break;
-            case "x":
-                this.internal.xTransitionIntervalTimer?.stop();
-                this.internal.currentXTransitionData = transitionData;
-                this.internal.xTransitionIntervalTimer?.start();
-                break;
-            case "y":
-                this.internal.yTransitionIntervalTimer?.stop();
-                this.internal.currentYTransitionData = transitionData;
-                this.internal.yTransitionIntervalTimer?.start();
-                break;
-        }
-    }
-
-    #hueStepIntervalTick() {
-        const transitionData = this.internal.currentHueTransitionData;
-        this.#stepIntervalTick(
-            transitionData?.isEnhancedHue ? "enhancedHue" : "hue",
-            this.internal.hueTransitionIntervalTimer,
-            transitionData,
-            transitionData?.isEnhancedHue ? this.state.enhancedCurrentHue : this.state.currentHue,
-        );
-    }
-
-    #saturationStepIntervalTick() {
-        this.#stepIntervalTick(
-            "saturation",
-            this.internal.saturationTransitionIntervalTimer,
-            this.internal.currentSaturationTransitionData,
-            this.state.currentSaturation,
-        );
-    }
-
-    #colorTemperatureStepIntervalTick() {
-        this.#stepIntervalTick(
-            "colorTemperature",
-            this.internal.colorTemperatureTransitionIntervalTimer,
-            this.internal.currentColorTemperatureTransitionData,
-            this.state.colorTemperatureMireds,
-        );
-    }
-
-    #xStepIntervalTick() {
-        this.#stepIntervalTick(
-            "x",
-            this.internal.xTransitionIntervalTimer,
-            this.internal.currentXTransitionData,
-            this.state.currentX,
-        );
-    }
-
-    #yStepIntervalTick() {
-        this.#stepIntervalTick(
-            "y",
-            this.internal.yTransitionIntervalTimer,
-            this.internal.currentYTransitionData,
-            this.state.currentY,
-        );
-    }
-
-    #stepIntervalTick(
-        transitionType: ManagedTransitionType,
-        transitionTimer: Timer | undefined,
-        transitionData: TransitionData | undefined,
-        currentValue: number,
-    ) {
-        // Do some sanity checks to make sure we have a valid state
-        if (transitionData === undefined) {
-            transitionTimer?.stop();
-            return;
-        }
-        if (transitionTimer === undefined) {
-            transitionData.remainingTime = 0;
-            return;
-        }
-        if ("isEnhancedHue" in transitionData && transitionData.isEnhancedHue && transitionType !== "enhancedHue") {
-            throw new ImplementationError(
-                "Transition data is for enhanced hue, but transition type is not enhanced hue",
-            );
-        }
-
-        const { changeRate, targetValue, minValue, maxValue } = transitionData;
-
-        let newValue: number;
-        switch (transitionType) {
-            case "hue":
-            case "enhancedHue":
-                const maxHueRange = transitionType === "hue" ? MAX_HUE_VALUE : MAX_ENHANCED_HUE_VALUE;
-                // Hue is a circle, so we need to handle the wrap around
-                newValue = addValueWithOverflow(
-                    currentValue,
-                    changeRate,
-                    minValue ?? MIN_HUE_VALUE,
-                    maxValue ?? maxHueRange,
-                );
-                break;
-            case "saturation":
-                newValue = cropValueRange(
-                    currentValue + changeRate,
-                    minValue ?? MIN_SATURATION_VALUE,
-                    maxValue ?? MAX_SATURATION_VALUE,
-                );
-                break;
-            case "colorTemperature":
-                newValue = cropValueRange(
-                    currentValue + changeRate,
-                    minValue ?? this.minimumColorTemperatureMireds,
-                    maxValue ?? this.maximumColorTemperatureMireds,
-                );
-                break;
-            case "x":
-            case "y":
-                newValue = cropValueRange(
-                    currentValue + changeRate,
-                    minValue ?? MIN_CIE_XY_VALUE,
-                    maxValue ?? MAX_CIE_XY_VALUE,
-                );
-                break;
-            default:
-                throw new ImplementationError(`Unknown transition type: ${transitionType}`);
-        }
-
-        const isHueTransition = transitionType === "hue" || transitionType === "enhancedHue"; // min/max irrelevant here
-        if (isHueTransition) {
-            logger.info(
-                `Setting new value in ${transitionType} transition interval: ${newValue}, target: ${targetValue}, changeRate: ${changeRate}`,
-            );
-            let distanceLeft = (transitionData as HueTransitionData).distanceLeft;
-            if (targetValue !== undefined && distanceLeft !== undefined) {
-                distanceLeft -= Math.abs(changeRate);
-                if (distanceLeft <= 0) {
-                    logger.debug(`Stopping ${transitionType} transition interval at targetLevel: ${targetValue}.`);
-                    transitionTimer?.stop();
-                    transitionData.remainingTime = 0;
-                    newValue = targetValue;
-                } else {
-                    (transitionData as HueTransitionData).distanceLeft = distanceLeft;
-                }
-            }
-            if (transitionTimer.isRunning) {
-                logger.debug(
-                    `Setting new value in ${transitionType} transition interval: ${newValue} (distance left ${distanceLeft})`,
-                );
-
-                // There is no definition on how often the remaining time should be updated, so we update it with every step
-                if (distanceLeft === undefined) {
-                    // We loop on hue
-                    transitionData.remainingTime = 0xffff;
-                } else {
-                    transitionData.remainingTime = Math.floor(Math.ceil(distanceLeft / Math.abs(changeRate)) * 10);
-                }
-            }
-        } else {
-            if (minValue !== undefined && newValue === minValue) {
-                logger.debug(`Stopping ${transitionType} transition interval at minValue: ${minValue}.`);
-                transitionTimer?.stop();
-                transitionData.remainingTime = 0;
-            } else if (maxValue !== undefined && newValue === maxValue) {
-                logger.debug(`Stopping ${transitionType} transition interval at maxLevel: ${maxValue}.`);
-                transitionTimer?.stop();
-                transitionData.remainingTime = 0;
-            } else {
-                logger.info(
-                    `Setting new value in ${transitionType} transition interval: ${newValue}, target: ${targetValue}, changeRate: ${changeRate}`,
-                );
-
-                // Check if we reached the targetLevel if there is one
-                if (targetValue !== undefined) {
-                    if (changeRate > 0 && newValue >= targetValue) {
-                        logger.debug(`Stopping ${transitionType} transition interval at targetLevel: ${targetValue}.`);
-                        transitionTimer?.stop();
-                        transitionData.remainingTime = 0;
-                        newValue = targetValue;
-                    } else if (changeRate < 0 && newValue <= targetValue) {
-                        logger.debug(`Stopping ${transitionType} transition interval at targetLevel: ${targetValue}.`);
-                        transitionTimer?.stop();
-                        transitionData.remainingTime = 0;
-                        newValue = targetValue;
-                    }
-                }
-                if (transitionTimer.isRunning) {
-                    logger.debug(`Setting new value in ${transitionType} transition interval: ${newValue}`);
-
-                    // There is no definition on how often the remaining time should be updated, so we update it with every step
-                    if (targetValue === undefined) {
-                        // We loop on hue
-                        transitionData.remainingTime = 0xffff;
-                    } else if (changeRate > 0) {
-                        transitionData.remainingTime = Math.floor(
-                            Math.ceil(((targetValue ?? maxValue) - newValue) / changeRate) * 10,
-                        );
-                    } else {
-                        transitionData.remainingTime = Math.floor(
-                            Math.ceil((newValue - (targetValue ?? minValue)) / -changeRate) * 10,
-                        );
-                    }
-                }
-            }
-        }
-
-        switch (transitionType) {
-            case "hue":
-                this.state.currentHue = newValue;
-                break;
-            case "enhancedHue":
-                this.state.enhancedCurrentHue = newValue;
-                break;
-            case "saturation":
-                this.state.currentSaturation = newValue;
-                break;
-            case "colorTemperature":
-                this.state.colorTemperatureMireds = newValue;
-                break;
-            case "x":
-                this.state.currentX = newValue;
-                break;
-            case "y":
-                this.state.currentY = newValue;
-                break;
-        }
-        this.#setRemainingTime();
-    }
-
     #returnAsXyValue(value: number) {
         return value / 65536;
     }
@@ -2089,97 +1742,23 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     }
 
     override async [Symbol.asyncDispose]() {
-        this.internal.stopHueTransition();
-        this.internal.stopSaturationTransition();
-        this.internal.stopColorTemperatureTransition();
-        this.internal.stopXTransition();
-        this.internal.stopYTransition();
+        if (this.internal.transitions) {
+            await this.internal.transitions.close();
+            this.internal.transitions = undefined;
+        }
         await super[Symbol.asyncDispose]?.();
     }
 }
 
-type TransitionData = {
-    changeRate: number;
-    targetValue?: number;
-    minValue: number;
-    maxValue: number;
-    remainingTime?: number;
-};
-
-type HueTransitionData = TransitionData & {
-    isEnhancedHue: boolean;
-    distanceLeft?: number;
-};
-
-export namespace ColorControlServerLogic {
+export namespace ColorControlBaseServer {
     export class Internal {
-        /** Timer for the managed hue transition */
-        hueTransitionIntervalTimer?: Timer;
-
-        /** Timer for the managed saturation transition */
-        saturationTransitionIntervalTimer?: Timer;
-
-        /** Timer for the managed colorTemperature transition */
-        colorTemperatureTransitionIntervalTimer?: Timer;
-
-        /** Timer for the managed x transition */
-        xTransitionIntervalTimer?: Timer;
-
-        /** Timer for the managed y transition */
-        yTransitionIntervalTimer?: Timer;
-
-        /** Structure to store the data of the current managed hue transition */
-        currentHueTransitionData?: HueTransitionData;
-
-        /** Structure to store the data of the current managed saturation transition */
-        currentSaturationTransitionData?: TransitionData;
-
-        /** Structure to store the data of the current managed color Temperature transition */
-        currentColorTemperatureTransitionData?: TransitionData;
-
-        /** Structure to store the data of the current managed x transition */
-        currentXTransitionData?: TransitionData;
-
-        /** Structure to store the data of the current managed y transition */
-        currentYTransitionData?: TransitionData;
-
-        stopHueTransition() {
-            this.hueTransitionIntervalTimer?.stop();
-            if (this.currentHueTransitionData !== undefined) {
-                this.currentHueTransitionData.remainingTime = 0;
-            }
-        }
-
-        stopSaturationTransition() {
-            this.saturationTransitionIntervalTimer?.stop();
-            if (this.currentSaturationTransitionData !== undefined) {
-                this.currentSaturationTransitionData.remainingTime = 0;
-            }
-        }
-
-        stopColorTemperatureTransition() {
-            this.colorTemperatureTransitionIntervalTimer?.stop();
-            if (this.currentColorTemperatureTransitionData !== undefined) {
-                this.currentColorTemperatureTransitionData.remainingTime = 0;
-            }
-        }
-
-        stopXTransition() {
-            this.xTransitionIntervalTimer?.stop();
-            if (this.currentXTransitionData !== undefined) {
-                this.currentXTransitionData.remainingTime = 0;
-            }
-        }
-
-        stopYTransition() {
-            this.yTransitionIntervalTimer?.stop();
-            if (this.currentYTransitionData !== undefined) {
-                this.currentYTransitionData.remainingTime = 0;
-            }
-        }
+        /**
+         * Transition management.
+         */
+        transitions?: Transitions<ColorControlBaseServer>;
     }
 
-    export class State extends ColorControlServerBase.State {
+    export class State extends ColorControlBase.State {
         /**
          * The default implementation always set the target level immediately and so ignores all transition times
          * requested or configured.
@@ -2188,6 +1767,45 @@ export namespace ColorControlServerLogic {
          * or target value and transition time.
          */
         managedTransitionTimeHandling = false;
+
+        /**
+         * If transition management is disabled you may specify this as the "end time" for transitions.  The remaining
+         * time attribute will then report correctly.
+         */
+        transitionEndTimeMs = undefined;
+
+        /**
+         * When managing transitions, this is the interval at which steps occur in ms.
+         */
+        transitionStepIntervalMs = 100;
+
+        [Val.properties](endpoint: Endpoint) {
+            // Only return remaining time if the attribute is defined in the endpoint
+            if (
+                (endpoint.behaviors.optionsFor(ColorControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined &&
+                (endpoint.behaviors.defaultsFor(ColorControlBaseServer) as Record<string, unknown>)?.remainingTime ===
+                    undefined
+            ) {
+                return {};
+            }
+            return {
+                set remainingTime(value: number) {
+                    const transition = endpoint.behaviors.internalsOf(ColorControlBaseServer).transitions;
+                    if (transition) {
+                        transition.remainingTime = value;
+                    }
+                },
+
+                get remainingTime() {
+                    return endpoint.behaviors.internalsOf(ColorControlBaseServer).transitions?.remainingTime ?? 0;
+                },
+            };
+        }
+    }
+
+    export class Events extends ColorControlBase.Events {
+        transitionEndTime$Changed = AsyncObservable<[value: number, oldValue: number, context: ActionContext]>();
     }
 
     export declare const ExtensionInterface: {
@@ -2244,4 +1862,4 @@ export namespace ColorControlServerLogic {
 
 // We had turned on some more features to provide a default implementation, but export the cluster with default
 // Features again.
-export class ColorControlServer extends ColorControlServerLogic.for(ClusterType(ColorControl.Base)) {}
+export class ColorControlServer extends ColorControlBaseServer.for(ClusterType(ColorControl.Base)) {}

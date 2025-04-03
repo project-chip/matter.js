@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,7 @@ export const systimeUs = Datatype({
     name: "systime-us", type: "uint64", description: "System Time in microseconds", isSeed: true,
     details: "System time in microseconds is an unsigned 64-bit value representing the number of microseconds " +
         "since boot.",
-    xref: { document: "core", section: "7.18.2.8" }
+    xref: { document: "core", section: "7.19.2.8" }
 });
 
 MatterDefinition.children.push(systimeUs);

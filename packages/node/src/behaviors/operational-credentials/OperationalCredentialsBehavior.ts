@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { OperationalCredentialsInterface } from "./OperationalCredentialsInterface.js";
 
 /**
- * OperationalCredentialsBehavior is the base class for objects that support interaction with {@link
- * OperationalCredentials.Cluster}.
+ * OperationalCredentialsBehavior is the base class for objects that support interaction with
+ * {@link OperationalCredentials.Cluster}.
  */
 export const OperationalCredentialsBehavior = ClusterBehavior
     .withInterface<OperationalCredentialsInterface>()

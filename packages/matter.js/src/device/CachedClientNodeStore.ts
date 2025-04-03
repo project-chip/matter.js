@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { StorageContext } from "#general";
 import { Construction, Logger } from "#general";
-import { Val } from "#node";
-import { DecodedAttributeReportValue, PeerDataStore } from "#protocol";
+import { DecodedAttributeReportValue, PeerDataStore, Val } from "#protocol";
 import { AttributeId, ClusterId, EndpointNumber, EventNumber } from "#types";
 import { ClientEndpointStore } from "./ClientEndpointStore.js";
 

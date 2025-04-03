@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,8 +18,8 @@ import {
 import { DatatypeModel, FieldElement } from "#model";
 import type { Node } from "#node/Node.js";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
-import { ServerNode } from "#node/ServerNode.js";
-import { ExposedFabricInformation, FabricAction, FabricManager, FailsafeContext, PaseClient } from "#protocol";
+import type { ServerNode } from "#node/ServerNode.js";
+import { ExposedFabricInformation, FabricAction, FabricManager, FailsafeContext, PaseClient, Val } from "#protocol";
 import {
     CommissioningFlowType,
     CommissioningOptions,
@@ -33,7 +33,6 @@ import { BasicInformationBehavior } from "../../../behaviors/basic-information/B
 import { OperationalCredentialsBehavior } from "../../../behaviors/operational-credentials/OperationalCredentialsBehavior.js";
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";
-import { Val } from "../../state/Val.js";
 import { NetworkServer } from "../network/NetworkServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 
@@ -98,23 +97,7 @@ export class CommissioningServer extends Behavior {
             }
         }
 
-        const fabrics = this.env.get(FabricManager);
-        const commissioned = !!fabrics.length;
-        if (fabricAction === FabricAction.Removed) {
-            delete this.state.fabrics[fabricIndex];
-        } else {
-            const fabric = fabrics.find(fabric => fabric.fabricIndex === fabricIndex);
-            if (fabric !== undefined) {
-                this.state.fabrics[fabricIndex] = {
-                    fabricIndex: fabric.fabricIndex,
-                    fabricId: fabric.fabricId,
-                    nodeId: fabric.nodeId,
-                    rootNodeId: fabric.rootNodeId,
-                    rootVendorId: fabric.rootVendorId,
-                    label: fabric.label,
-                };
-            }
-        }
+        const commissioned = !!this.env.get(FabricManager).fabrics.length;
 
         let doFactoryReset = false;
         if (commissioned !== this.state.commissioned) {
@@ -253,17 +236,8 @@ export class CommissioningServer extends Behavior {
     });
 
     #nodeOnline() {
-        const fabrics = this.env.get(FabricManager).fabrics;
-        if (!fabrics.length) {
-            if (this.state.enabled) {
-                this.initiateCommissioning();
-            }
-        } else {
-            const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
-            fabrics.forEach(
-                ({ fabricIndex, externalInformation }) => (exposedFabrics[fabricIndex] = externalInformation),
-            );
-            this.state.fabrics = exposedFabrics;
+        if (this.state.enabled && !this.env.get(FabricManager).fabrics.length) {
+            this.initiateCommissioning();
         }
     }
 
@@ -297,6 +271,17 @@ export namespace CommissioningServer {
             return {
                 get pairingCodes() {
                     return CommissioningServer.pairingCodesFor(endpoint);
+                },
+
+                get fabrics() {
+                    const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+                    endpoint.env
+                        .get(FabricManager)
+                        .fabrics.forEach(
+                            ({ fabricIndex, externalInformation }) =>
+                                (exposedFabrics[fabricIndex] = externalInformation),
+                        );
+                    return exposedFabrics;
                 },
             };
         }

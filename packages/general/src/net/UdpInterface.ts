@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -66,7 +66,7 @@ class UdpConnection implements IpNetworkChannel<Uint8Array> {
     }
 
     get name() {
-        return `${this.type}://${this.peerAddress}:${this.peerPort}`;
+        return `${this.type}://[${this.peerAddress}]:${this.peerPort}`;
     }
 
     get networkAddress(): ServerAddressIp {

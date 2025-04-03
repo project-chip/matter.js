@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -155,10 +155,19 @@ export class TlvGenerator {
 
             case Metatype.enum:
                 {
-                    const dt = this.defineDatatype(model);
-                    if (dt) {
+                    const dts = new Set<string>();
+                    for (let m = this.#scope.definingModelFor(model); m; m = m.base) {
+                        if (!m.children.length) {
+                            continue;
+                        }
+                        const dt = this.#defineSpecificDatatype(m);
+                        if (dt !== undefined) {
+                            dts.add(dt);
+                        }
+                    }
+                    if (dts.size) {
                         this.importTlv("number", "TlvEnum");
-                        tlv = `TlvEnum<${dt}>()`;
+                        tlv = `TlvEnum<${[...dts].join(" | ")}>()`;
                     } else {
                         // No fields; revert to the primitive type the enum derives from
                         tlv = this.#primitiveTlv(metabase, model);
@@ -193,7 +202,7 @@ export class TlvGenerator {
      * Get the filename for global datatypes.
      */
     static filenameFor(model: Model) {
-        const name = model.name.replace(/(Enum|Bitmap|Struct)$/, "");
+        const name = model.name.replace(/Enum|Bitmap|Struct$/, "");
         return camelize(name, true);
     }
 
@@ -260,7 +269,7 @@ export class TlvGenerator {
         const enumBlock = this.definitions.expressions(`export enum ${name} {`, "}");
 
         this.definitions.insertingBefore(enumBlock, () => {
-            model.members.forEach(child => {
+            model.children.forEach(child => {
                 let name = child.name;
                 if (name.match(/^\d+$/)) {
                     // Typescript doesn't allow numeric enum keys
@@ -337,7 +346,7 @@ export class TlvGenerator {
                     type = `BitField`;
                 }
 
-                type = `${type}(${constraint.min}, ${constraint.max - constraint.min})`;
+                type = `${type}(${constraint.min}, ${constraint.max - constraint.min + 1})`;
             } else {
                 // Can't do anything without a property constrained definition
                 continue;
@@ -352,14 +361,17 @@ export class TlvGenerator {
     defineDatatype(model: ValueModel) {
         // Obtain the defining model.  This is the actual datatype definition
         const defining = this.#scope.definingModelFor(model);
-        if (defining) {
-            model = defining;
-        } else {
+
+        if (!defining) {
             // If there's no defining model, the datatype is empty.  Use either the base or the model directly for
             // naming.  Handling of this is context specific
             return;
         }
 
+        return this.#defineSpecificDatatype(defining);
+    }
+
+    #defineSpecificDatatype(model: ValueModel) {
         // Special case for status codes.  "Status code" in door lock cluster seems to be the global status codes
         // instead of the local one.  So always reference the global one until we see something different
         if (model.isGlobal && model.name === status.name && this.file.scope.owner !== model) {
@@ -375,9 +387,9 @@ export class TlvGenerator {
 
         // If the model is not local, import rather than define
         const isObject = model.effectiveMetatype === Metatype.object;
-        const location = this.#scope.locationOf(model);
+        const location = this.#scope.locationOf(model, true);
         if (!location.isLocal) {
-            return this.#file.reference(model, isObject);
+            return this.#file.reference(model, isObject, true);
         }
 
         // If the type is already defined we reference the existing definition

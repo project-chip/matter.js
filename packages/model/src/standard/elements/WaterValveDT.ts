@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ export const WaterValveDt = DeviceType(
         name: "WaterValve", id: 0x42, category: "Smart Plugs/Outlets and other Actuators",
         classification: "simple",
         details: "This defines conformance to the Water Valve device type.",
-        xref: { document: "device", section: "5.4" }
+        xref: { document: "device", section: "5.6" }
     },
 
     Requirement(
@@ -23,20 +23,20 @@ export const WaterValveDt = DeviceType(
     ),
     Requirement({
         name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-        xref: { document: "device", section: "5.4.4" }
+        xref: { document: "device", section: "5.6.4" }
     }),
     Requirement({
         name: "ValveConfigurationAndControl", id: 0x81, conformance: "M", element: "serverCluster",
-        xref: { document: "device", section: "5.4.4" }
+        xref: { document: "device", section: "5.6.4" }
     }),
     Requirement({
         name: "FlowMeasurement", id: 0x404, conformance: "O", element: "serverCluster",
-        xref: { document: "device", section: "5.4.4" }
+        xref: { document: "device", section: "5.6.4" }
     }),
     Requirement({
         name: "FlowMeasurement", id: 0x404, conformance: "O", element: "clientCluster",
-        xref: { document: "device", section: "5.4.4" }
+        xref: { document: "device", section: "5.6.4" }
     })
-)
+);
 
 MatterDefinition.children.push(WaterValveDt);

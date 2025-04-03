@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -61,10 +61,6 @@ export class RequirementModel extends Model<RequirementElement> implements Requi
         Aspects.setAspect(this, QUALITY, Quality, definition);
     }
 
-    static {
-        Model.types[RequirementElement.Tag] = this;
-    }
-
     get requirements() {
         return this.all(RequirementModel);
     }
@@ -86,7 +82,11 @@ export class RequirementModel extends Model<RequirementElement> implements Requi
     get isMandatory() {
         return this.conformance.isMandatory;
     }
+
+    static Tag = RequirementElement.Tag;
 }
+
+RequirementModel.register();
 
 export namespace RequirementModel {
     export type Child = RequirementModel | FieldModel;

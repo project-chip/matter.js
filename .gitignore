@@ -4,9 +4,9 @@ dist/
 .DS_Store
 .idea/
 /bin/
-.*
 !.mergify.yml
 !.pullapprove.yml
 *.tsbuildinfo
 .vscode/
 isolated-*.log
+*.log

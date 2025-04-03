@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,8 +13,8 @@ import { ClusterType } from "#types";
 /**
  * PowerTopologyBehavior is the base class for objects that support interaction with {@link PowerTopology.Cluster}.
  *
- * PowerTopology.Cluster requires you to enable one or more optional features. You can do so using {@link
- * PowerTopologyBehavior.with}.
+ * PowerTopology.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link PowerTopologyBehavior.with}.
  */
 export const PowerTopologyBehavior = ClusterBehavior.for(ClusterType(PowerTopology.Base));
 

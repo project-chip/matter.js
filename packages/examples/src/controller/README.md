@@ -4,7 +4,7 @@ This example shows basically how a controller could be implemented by showing pa
 
 ## Usage
 
-For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../../README.md#cli-usage).
+For general documentation about the CLI parameters or environment variables that can be used for matter.js please refer to the [Examples README](../../README.md#cli-usage).
 
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
 Please **do not** use this for production, we will replace the API soon!
@@ -28,7 +28,7 @@ This will commission a MatterServer device (for debugging/capability showing pur
 The following parameters are available and used to initially commission a device (they can be omitted after this):
 * --fabriclabel: the fabric label to use for commissioning (default: "matter.js Controller")
 * If the IP and Port of the device is known (should be only the case in testing cases) you can use the following parameters:
-    * --ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
+    * --ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passcode) is most likely better)
     * --port the port of the device to commission (default: 5540)
 * Device identification options:
     * --pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored) - usually the code below the QR Code on the device or displayed in the app!

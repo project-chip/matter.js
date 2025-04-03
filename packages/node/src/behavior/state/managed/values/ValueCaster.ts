@@ -1,16 +1,15 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize } from "#general";
+import type { Schema } from "#model";
 import { ClusterModel, DataModelPath, Metatype, UnsupportedCastError, ValueModel } from "#model";
-import { SchemaImplementationError } from "../../../errors.js";
+import { SchemaImplementationError, Val } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 
 /**
  * Obtain a {@link ValueSupervisor.Caster} function for the given schema.

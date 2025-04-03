@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -63,7 +63,7 @@ export const BooleanStateConfiguration = Cluster(
 
     Attribute({
         name: "CurrentSensitivityLevel", id: 0x0, type: "uint8", access: "RW VO", conformance: "SENSLVL",
-        constraint: "max SupportedSensitivityLevels - 1", quality: "N",
+        constraint: "max supportedSensitivityLevels - 1", quality: "N",
         details: "Indicates the currently selected sensitivity level." +
             "\n" +
             "If a write interaction to this attribute contains an unsupported sensitivity value, a " +
@@ -89,7 +89,7 @@ export const BooleanStateConfiguration = Cluster(
 
     Attribute({
         name: "DefaultSensitivityLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[SENSLVL]",
-        constraint: "max SupportedSensitivityLevels - 1", quality: "F",
+        constraint: "max supportedSensitivityLevels - 1", quality: "F",
         details: "Indicates the default sensitivity level selected by the manufacturer.",
         xref: { document: "cluster", section: "1.8.6.3" }
     }),
@@ -103,8 +103,8 @@ export const BooleanStateConfiguration = Cluster(
                 "longer triggered, this attribute shall be set to the inactive state, by setting the bit to 0, for " +
                 "all supported alarm modes." +
                 "\n" +
-                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
-                "shall indicate whether the alarm mode inactive or not:" +
+                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall " +
+                "indicate whether the alarm mode inactive or not:" +
                 "\n" +
                 "  • 0 = Inactive" +
                 "\n" +
@@ -123,8 +123,8 @@ export const BooleanStateConfiguration = Cluster(
                 "longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, " +
                 "for all supported alarm modes." +
                 "\n" +
-                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
-                "shall indicate whether the alarm mode is suppressed or not:" +
+                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall " +
+                "indicate whether the alarm mode is suppressed or not:" +
                 "\n" +
                 "  • 0 = Not suppressed" +
                 "\n" +

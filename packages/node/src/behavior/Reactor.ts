@@ -1,14 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { Endpoint } from "#endpoint/Endpoint.js";
-import type { Observable, Observer } from "#general";
+import type { Observable, Observer, Transaction } from "#general";
 import { MaybePromise } from "#general";
 import type { Behavior } from "./Behavior.js";
-import { Resource } from "./state/transaction/Resource.js";
 
 /**
  * A reactor is an {@link Observer} managed by a {@link Behavior}.  You install reactors using {@link Behavior.reactTo}
@@ -70,11 +69,19 @@ export namespace Reactor {
          *
          *   - The reaction will defer until the resource locks become available
          */
-        lock?: true | Resource | Resource[];
+        lock?: true | Transaction.Resource | Transaction.Resource[];
 
         /**
          * Only react the next time the event emits.
          */
         once?: boolean;
+    }
+
+    /**
+     * Filter for selecting reactors.
+     */
+    export interface Selector {
+        observable?: Observable;
+        reactor?: Reactor;
     }
 }

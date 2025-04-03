@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ export namespace PowerTopology {
     /**
      * These are optional features supported by PowerTopologyCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.8.4
+     * @see {@link MatterSpecification.v14.Core} § 11.8.4
      */
     export enum Feature {
         /**
@@ -59,7 +59,7 @@ export namespace PowerTopology {
              * Indicates the list of endpoints capable of providing power to and/or consuming power from the endpoint
              * hosting this server.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.8.5.1
+             * @see {@link MatterSpecification.v14.Core} § 11.8.5.1
              */
             availableEndpoints: FixedAttribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 20 }), { default: [] })
         }
@@ -74,7 +74,7 @@ export namespace PowerTopology {
              * Indicates the current list of endpoints currently providing or consuming power to or from the endpoint
              * hosting this server. This list shall be a subset of the value of the AvailableEndpoints attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.8.5.2
+             * @see {@link MatterSpecification.v14.Core} § 11.8.5.2
              */
             activeEndpoints: Attribute(
                 0x1,
@@ -148,7 +148,7 @@ export namespace PowerTopology {
      * Per the Matter specification you cannot use {@link PowerTopologyCluster} without enabling certain feature
      * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.8
+     * @see {@link MatterSpecification.v14.Core} § 11.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -180,8 +180,8 @@ export namespace PowerTopology {
     /**
      * This cluster supports all PowerTopology features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

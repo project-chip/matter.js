@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 // TODO - implement more efficient specialization for Array and ArrayBuffer
 // TODO - currently will hang on self-referential data structures
-export function isDeepEqual(a: any, b: any) {
+export function isDeepEqual(a: any, b: any, ignoreUndefinedProperties = false): boolean {
     if (
         a === null ||
         a === undefined ||
@@ -22,7 +22,7 @@ export function isDeepEqual(a: any, b: any) {
     const bProps = Object.getOwnPropertyNames(b);
 
     // If number of properties is different, objects are not equivalent
-    if (aProps.length !== bProps.length) {
+    if (aProps.length !== bProps.length && !ignoreUndefinedProperties) {
         return false;
     }
 

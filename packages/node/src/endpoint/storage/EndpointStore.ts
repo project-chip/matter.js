@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { DatasourceStore } from "#endpoint/storage/DatasourceStore.js";
 import { Construction, ImplementationError, StorageContext, SupportedStorageTypes } from "#general";
+import { Val } from "#protocol";
 
 const NUMBER_KEY = "__number__";
 

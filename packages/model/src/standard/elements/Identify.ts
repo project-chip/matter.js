@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -32,13 +32,13 @@ export const Identify = Cluster(
         xref: { document: "cluster", section: "1.2" }
     },
 
-    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 4 }),
+    Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 5 }),
 
     Attribute({
         name: "IdentifyTime", id: 0x0, type: "uint16", access: "RW VO", conformance: "M", default: 0,
 
-        details: "This attribute specifies the remaining length of time, in seconds, that the endpoint will continue " +
-            "to identify itself." +
+        details: "Indicates the remaining length of time, in seconds, that the endpoint will continue to identify " +
+            "itself." +
             "\n" +
             "If this attribute is set to a value other than 0 then the device shall enter its identification " +
             "state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is " +
@@ -54,11 +54,11 @@ export const Identify = Cluster(
     Attribute({
         name: "IdentifyType", id: 0x1, type: "IdentifyTypeEnum", access: "R V", conformance: "M",
         constraint: "desc",
-        details: "This attribute specifies how the identification state is presented to the user." +
+        details: "Indicates how the identification state is presented to the user." +
             "\n" +
-            "This field shall contain one of the values defined in IdentifyTypeEnum. The value None shall NOT be " +
-            "used if the device is capable of presenting its identification state using one of the other methods " +
-            "defined in IdentifyTypeEnum.",
+            "This attribute shall contain one of the values defined in IdentifyTypeEnum. The value None shall NOT " +
+            "be used if the device is capable of presenting its identification state using one of the other " +
+            "methods defined in IdentifyTypeEnum.",
         xref: { document: "cluster", section: "1.2.5.2" }
     }),
 
@@ -80,8 +80,8 @@ export const Identify = Cluster(
                 "to allow an implementation to provide visual feedback to the user under certain circumstances such " +
                 "as a color light turning green when it has successfully connected to a network. The use of this " +
                 "command and the effects themselves are entirely up to the implementer to use whenever a visual " +
-                "feedback is useful but it is not the same as and does not replace the identify mechanism used " +
-                "during commissioning.",
+                "feedback is useful but it is not the same as and does not replace the identify mechanism used during " +
+                "commissioning.",
 
             xref: { document: "cluster", section: "1.2.6.2" }
         },
@@ -90,21 +90,21 @@ export const Identify = Cluster(
             name: "EffectIdentifier", id: 0x0, type: "EffectIdentifierEnum", conformance: "M",
             constraint: "desc",
 
-            details: "This field specifies the identify effect to use and shall contain one of the non-reserved values in " +
-                "EffectIdentifierEnum." +
+            details: "This field shall indicate the identify effect to use and shall contain one of the non-reserved " +
+                "values in EffectIdentifierEnum." +
                 "\n" +
-                "All values of the EffectIdentifierEnum shall be supported. Implementors may deviate from the " +
-                "example light effects in EffectIdentifierEnum, but they SHOULD indicate during testing how they " +
-                "handle each effect.",
+                "All values of the EffectIdentifierEnum shall be supported. Implementors may deviate from the example " +
+                "light effects in EffectIdentifierEnum, but they SHOULD indicate during testing how they handle each " +
+                "effect.",
 
             xref: { document: "cluster", section: "1.2.6.2.1" }
         }),
 
         Field({
             name: "EffectVariant", id: 0x1, type: "EffectVariantEnum", conformance: "M", constraint: "desc",
-            details: "This field is used to indicate which variant of the effect, indicated in the EffectIdentifier " +
-                "field, SHOULD be triggered. If a device does not support the given variant, it shall use the " +
-                "default variant. This field shall contain one of the values in EffectVariantEnum.",
+            details: "This field shall indicate which variant of the effect, indicated in the EffectIdentifier field, " +
+                "SHOULD be triggered. If a device does not support the given variant, it shall use the default " +
+                "variant. This field shall contain one of the values in EffectVariantEnum.",
             xref: { document: "cluster", section: "1.2.6.2.2" }
         })
     ),

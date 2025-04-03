@@ -1,10 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FieldValue } from "../common/index.js";
+import { type Model } from "#models/Model.js";
+import { type ValueModel } from "#models/ValueModel.js";
+import { FieldValue, Metatype } from "../common/index.js";
 import { BasicToken, Lexer, TokenStream } from "../parser/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -58,7 +60,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
         this.freeze();
     }
 
-    validateReferences(errorTarget: Conformance.ErrorTarget, lookup: Conformance.ReferenceResolver<boolean>) {
+    validateReferences(errorTarget: Conformance.ErrorTarget, lookup: Conformance.ReferenceResolver) {
         return Conformance.validateReferences(this, this.ast, errorTarget, lookup);
     }
 
@@ -178,6 +180,7 @@ export namespace Conformance {
             name: ChoiceName;
             num: number;
             orMore?: boolean;
+            orLess?: boolean;
             expr: Ast;
         };
     }
@@ -262,7 +265,7 @@ export namespace Conformance {
         | "y"
         | "z";
 
-    export type ReferenceResolver<T> = (name: string) => T;
+    export type ReferenceResolver = (name: string) => Model | undefined;
     export type ErrorTarget = { error(code: string, message: string): void };
 
     /**
@@ -286,7 +289,7 @@ export namespace Conformance {
         conformance: Conformance,
         ast: Ast,
         errorTarget: ErrorTarget,
-        resolver: ReferenceResolver<boolean>,
+        resolver: ReferenceResolver,
     ) {
         switch (ast.type) {
             case Operator.OR:
@@ -299,7 +302,24 @@ export namespace Conformance {
             case Operator.GTE:
             case Operator.LTE:
                 validateReferences(conformance, ast.param.lhs, errorTarget, resolver);
-                validateReferences(conformance, ast.param.rhs, errorTarget, resolver);
+
+                // Special case for binary operators -- if LHS references an enum, RHS may reference enum values using
+                // unqualified names
+                let operatorResolver = resolver;
+                if (ast.param.lhs.type === "name") {
+                    const referenced = resolver(ast.param.lhs.param);
+                    if ((referenced as ValueModel)?.effectiveMetatype === Metatype.enum) {
+                        operatorResolver = (name: string) => {
+                            const enumValue = (referenced as ValueModel).member(name);
+                            if (enumValue) {
+                                return enumValue as ValueModel;
+                            }
+                            return resolver(name);
+                        };
+                    }
+                }
+
+                validateReferences(conformance, ast.param.rhs, errorTarget, operatorResolver);
                 break;
 
             case Operator.NOT:
@@ -353,7 +373,11 @@ export namespace Conformance {
                     result = `${result}${ast.param.num}`;
                 }
                 if (ast.param.orMore) {
-                    result = `${result}+`;
+                    if (!ast.param.orLess) {
+                        result = `${result}+`;
+                    }
+                } else if (ast.param.orLess) {
+                    result = `${result}-`;
                 }
                 return result;
 
@@ -539,6 +563,10 @@ function ParsedAst(conformance: Conformance, definition: string) {
         const choice: Conformance.Ast.Choice = { name, expr, num };
         if (atOperator("+")) {
             choice.orMore = true;
+            tokens.next();
+        }
+        if (atOperator("-")) {
+            choice.orLess = true;
             tokens.next();
         }
 

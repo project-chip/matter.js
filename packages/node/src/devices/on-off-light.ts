@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,7 +25,7 @@ import { Identity } from "#general";
  * device such as an On/Off Light Switch or a Dimmer Switch. In addition, an on/off light is also capable of being
  * switched by means of a bound occupancy sensor.
  *
- * @see {@link MatterSpecification.v13.Device} § 4.1
+ * @see {@link MatterSpecification.v14.Device} § 4.1
  */
 export interface OnOffLightDevice extends Identity<typeof OnOffLightDeviceDefinition> {}
 

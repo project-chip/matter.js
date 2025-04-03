@@ -1,13 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { OnlineEvent } from "#behavior/Events.js";
 import { BasicInformation } from "#clusters/basic-information";
-import { Diagnostic, Logger, Observable } from "#general";
-import { Specification } from "#model";
+import { Diagnostic, ImplementationError, InternalError, Logger } from "#general";
+import { AttributeModel, EventModel, Schema, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager } from "#protocol";
 import { DEFAULT_MAX_PATHS_PER_INVOKE, VendorId } from "#types";
@@ -57,6 +58,9 @@ export class BasicInformationServer extends Base {
         setDefault("softwareVersionString", state.softwareVersion.toString());
         setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
         setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE);
+        if (this.state.uniqueId === undefined) {
+            this.state.uniqueId = BasicInformationServer.createUniqueId();
+        }
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
@@ -64,13 +68,23 @@ export class BasicInformationServer extends Base {
         this.reactTo(lifecycle.goingOffline, this.#goingOffline);
 
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
-            // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
-            if (this.events.reachableChanged === undefined) {
-                this.events.reachableChanged = Observable<
-                    [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
-                    void
-                >();
+            const reachableChangedSchema = BasicInformationBehavior.schema!.get(
+                EventModel,
+                BasicInformation.Cluster.events.reachableChanged.id,
+            );
+            if (reachableChangedSchema === undefined) {
+                throw new ImplementationError("Reachable Changed event schema is missing");
             }
+
+            // Manually enable the reachableChanged event if not yet existing when reachable attribute exists (TODO -
+            // make a more elegant way of doing this once introspection API is fleshed out)
+            if (this.events.reachableChanged === undefined) {
+                this.events.reachableChanged = new OnlineEvent<
+                    [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
+                    EventModel
+                >(reachableChangedSchema, this.events);
+            }
+
             this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
         }
 
@@ -81,6 +95,26 @@ export class BasicInformationServer extends Base {
         ) {
             logger.warn("uniqueId and serialNumber shall not be the same.");
         }
+    }
+
+    static override schema = this.enableUniqueIdPersistence(Base.schema);
+
+    static enableUniqueIdPersistence(schema?: Schema): Schema {
+        if (schema === undefined) {
+            throw new InternalError("Basic information schema is undefined");
+        }
+
+        return schema.extend({}, schema.require(AttributeModel, "uniqueId").extend({ quality: "FN" }));
+    }
+
+    static createUniqueId() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charLength = chars.length;
+        let id = "";
+        for (let i = 0; i < 32; i++) {
+            id += chars.charAt(Math.floor(Math.random() * charLength));
+        }
+        return id;
     }
 
     #online() {

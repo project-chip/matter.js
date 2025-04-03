@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,5 +10,9 @@ import { LaundryWasherControlsBehavior } from "./LaundryWasherControlsBehavior.j
 
 /**
  * This is the default server implementation of {@link LaundryWasherControlsBehavior}.
+ *
+ * The Matter specification requires the LaundryWasherControls cluster to support features we do not enable by default.
+ * You should use {@link LaundryWasherControlsServer.with} to specialize the class for the features your implementation
+ * supports.
  */
 export class LaundryWasherControlsServer extends LaundryWasherControlsBehavior {}

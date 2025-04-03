@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -52,6 +52,7 @@ export function ClusterClient<const T extends ClusterType>(
             interactionClient,
             !!globalAttributeValues?.attributeList?.includes(attribute.id),
         );
+        (attributes as any)[attribute.id] = (attributes as any)[attributeName];
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
         result[`get${capitalizedAttributeName}Attribute`] = async (
@@ -94,6 +95,7 @@ export function ClusterClient<const T extends ClusterType>(
 
     function addEventToResult(event: Event<any, any>, eventName: string) {
         (events as any)[eventName] = createEventClient(event, eventName, endpointId, clusterId, interactionClient);
+        (events as any)[event.id] = (events as any)[eventName];
         eventToId[event.id] = eventName;
         const capitalizedEventName = capitalize(eventName);
         result[`get${capitalizedEventName}Event`] = async (
@@ -316,6 +318,7 @@ export function ClusterClient<const T extends ClusterType>(
                 useExtendedFailSafeMessageResponseTimeout,
             });
         };
+        commands[requestId as unknown as keyof T["commands"]] = commands[commandName as keyof T["commands"]];
         result[commandName] = result.commands[commandName];
     }
     if (globalAttributeValues?.acceptedCommandList !== undefined) {

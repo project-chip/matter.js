@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,12 +17,8 @@ export const PumpControllerDt = DeviceType(
     },
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 772, revision: 3 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 772, revision: 4 } ], element: "attribute" })
     ),
-    Requirement({
-        name: "Binding", id: 0x1e, conformance: "M", element: "clientCluster",
-        xref: { document: "device", section: "6.5.3" }
-    }),
     Requirement({
         name: "OnOff", id: 0x6, conformance: "M", element: "clientCluster",
         xref: { document: "device", section: "6.5.3" }

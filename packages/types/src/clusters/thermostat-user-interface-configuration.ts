@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,7 +15,7 @@ import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace ThermostatUserInterfaceConfiguration {
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.5.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 4.5.5.1
      */
     export enum TemperatureDisplayMode {
         /**
@@ -32,7 +32,7 @@ export namespace ThermostatUserInterfaceConfiguration {
     /**
      * The interpretation of the various levels is device-dependent.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.5.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 4.5.5.2
      */
     export enum KeypadLockout {
         /**
@@ -67,7 +67,7 @@ export namespace ThermostatUserInterfaceConfiguration {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 4.5.5.3
+     * @see {@link MatterSpecification.v14.Cluster} § 4.5.5.3
      */
     export enum ScheduleProgrammingVisibility {
         /**
@@ -93,7 +93,7 @@ export namespace ThermostatUserInterfaceConfiguration {
             /**
              * Indicates the units of the temperature displayed on the thermostat screen.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.5.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 4.5.6.1
              */
             temperatureDisplayMode: WritableAttribute(
                 0x0,
@@ -104,7 +104,7 @@ export namespace ThermostatUserInterfaceConfiguration {
             /**
              * Indicates the level of functionality that is available to the user via the keypad.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.5.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 4.5.6.2
              */
             keypadLockout: WritableAttribute(
                 0x1,
@@ -113,15 +113,15 @@ export namespace ThermostatUserInterfaceConfiguration {
             ),
 
             /**
-             * This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat
-             * from a user to prevent local user programming of the weekly schedule. The schedule programming may still
-             * be performed via a remote interface, and the thermostat may operate in schedule programming mode.
+             * This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat from
+             * a user to prevent local user programming of the weekly schedule. The schedule programming may still be
+             * performed via a remote interface, and the thermostat may operate in schedule programming mode.
              *
              * This attribute is designed to prevent local tampering with or disabling of schedules that may have been
              * programmed by users or service providers via a more capable remote interface. The programming schedule
              * shall continue to run even though it is not visible to the user locally at the thermostat.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 4.5.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 4.5.6.3
              */
             scheduleProgrammingVisibility: OptionalWritableAttribute(
                 0x2,
@@ -132,10 +132,10 @@ export namespace ThermostatUserInterfaceConfiguration {
     });
 
     /**
-     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a
-     * thermostat controller device, that supports a keypad and LCD screen.
+     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a thermostat
+     * controller device, that supports a keypad and LCD screen.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.5
+     * @see {@link MatterSpecification.v14.Cluster} § 4.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

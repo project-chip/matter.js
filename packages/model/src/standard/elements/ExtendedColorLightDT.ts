@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,8 +16,8 @@ export const ExtendedColorLightDt = DeviceType(
         details: "An Extended Color Light is a lighting device that is capable of being switched on or off, the " +
             "intensity of its light adjusted, and its color adjusted by means of a bound controller device such " +
             "as a Color Dimmer Switch or Control Bridge. The device supports adjustment of color by means of " +
-            "hue/saturation, enhanced hue, color looping, XY coordinates, and color temperature. In addition, " +
-            "the extended color light is also capable of being switched by means of a bound occupancy sensor.",
+            "hue/saturation, enhanced hue, color looping, XY coordinates, and color temperature. In addition, the " +
+            "extended color light is also capable of being switched by means of a bound occupancy sensor.",
         xref: { document: "device", section: "4.4" }
     },
 
@@ -84,6 +84,6 @@ export const ExtendedColorLightDt = DeviceType(
         name: "OccupancySensing", id: 0x406, conformance: "O", element: "clientCluster",
         xref: { document: "device", section: "4.4.4" }
     })
-)
+);
 
 MatterDefinition.children.push(ExtendedColorLightDt);

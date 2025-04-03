@@ -1,12 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Metatype } from "../common/index.js";
 import { DatatypeElement } from "../elements/DatatypeElement.js";
-import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
 export class DatatypeModel extends ValueModel<DatatypeElement> implements DatatypeElement {
@@ -23,7 +22,7 @@ export class DatatypeModel extends ValueModel<DatatypeElement> implements Dataty
         return false;
     }
 
-    static {
-        Model.types[DatatypeElement.Tag] = this;
-    }
+    static Tag = DatatypeElement.Tag;
 }
+
+DatatypeModel.register();

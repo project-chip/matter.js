@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,7 @@ export const tod = Datatype(
     {
         name: "tod", type: "struct", description: "Time of day", isSeed: true,
         details: "Represents time without a date component.",
-        xref: { document: "core", section: "7.18.2.3" }
+        xref: { document: "core", section: "7.19.2.3" }
     },
     Field({ name: "hours", type: "uint8", constraint: "0 to 23", description: "Hour of the current day." }),
     Field({ name: "minutes", type: "uint8", constraint: "0 to 59", description: "Minute of the current hour." }),

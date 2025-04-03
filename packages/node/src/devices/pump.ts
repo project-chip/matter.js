@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -46,7 +46,7 @@ import { Identity } from "#general";
  * PumpDevice requires PumpConfigurationAndControl cluster but PumpConfigurationAndControl is not added by default
  * because you must select the features your device supports. You can add manually using PumpDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 5.3
+ * @see {@link MatterSpecification.v14.Device} § 5.5
  */
 export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
 

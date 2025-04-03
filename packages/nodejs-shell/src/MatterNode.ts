@@ -1,17 +1,17 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { Environment, Logger, StorageContext, StorageManager, StorageService } from "@matter/general";
+import { Environment, Logger, StorageContext, StorageService } from "@matter/general";
 import { ControllerStore } from "@matter/node";
 import { StorageBackendDiskAsync } from "@matter/nodejs";
-import { CommissioningController, MatterServer } from "@project-chip/matter.js";
-import { NodeId } from "@project-chip/matter.js/datatype";
+import { EndpointInterface } from "@matter/protocol";
+import { NodeId } from "@matter/types";
+import { CommissioningController } from "@project-chip/matter.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
-import { EndpointInterface } from "@project-chip/matter.js/endpoint";
 import { join } from "node:path";
 
 const logger = Logger.get("Node");
@@ -19,22 +19,17 @@ const logger = Logger.get("Node");
 export class MatterNode {
     #storageLocation?: string;
     private storage?: StorageBackendDiskAsync;
-    private storageManager?: StorageManager;
     private storageContext?: StorageContext;
 
     #environment?: Environment;
     commissioningController?: CommissioningController;
-    private matterController?: MatterServer;
     private started = false;
 
     constructor(
         private readonly nodeNum: number,
         private readonly netInterface?: string,
-        useLegacyStorage = true,
     ) {
-        if (!useLegacyStorage) {
-            this.#environment = Environment.default;
-        }
+        this.#environment = Environment.default;
     }
 
     get storageLocation() {
@@ -71,35 +66,16 @@ export class MatterNode {
             }
             this.storageContext = controllerStore.storage.createContext("Node");
 
-            if (await this.Store.has("ControllerFabricLabel")) {
-                await this.commissioningController.updateFabricLabel(
-                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
-                );
-            }
-
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
             if (baseLocation !== undefined) {
                 this.#storageLocation = join(baseLocation, id);
             }
         } else {
-            this.#storageLocation = `.matter-shell-${this.nodeNum}`;
-            this.storage = new StorageBackendDiskAsync(this.#storageLocation, false);
-            logger.info(`Storage location: ${this.#storageLocation} (Directory)`);
-            this.storageManager = new StorageManager(this.storage);
-            await this.storageManager.initialize();
-            this.storageContext = this.storageManager.createContext("Node");
-            if (resetStorage) {
-                await this.storage.clearAll([]);
-            }
-
-            // Build up the legacy Controller
-            this.matterController = new MatterServer(this.storageManager, { mdnsInterface: this.netInterface });
-            this.commissioningController = new CommissioningController({
-                autoConnect: false,
-                adminFabricLabel: await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
-            });
-            await this.matterController.addCommissioningController(this.commissioningController);
+            console.log(
+                "Legacy support was removed in Matter.js 0.13. Please downgrade or migrate the storage manually",
+            );
+            process.exit(1);
         }
     }
 
@@ -111,7 +87,7 @@ export class MatterNode {
     }
 
     async close() {
-        await this.matterController?.close();
+        await this.commissioningController?.close();
         await this.closeStorage();
     }
 
@@ -130,10 +106,14 @@ export class MatterNode {
         }
         logger.info(`matter.js shell controller started for node ${this.nodeNum}`);
 
-        if (this.matterController !== undefined) {
-            await this.matterController.start();
-        } else if (this.commissioningController !== undefined) {
+        if (this.commissioningController !== undefined) {
             await this.commissioningController.start();
+
+            if (await this.Store.has("ControllerFabricLabel")) {
+                await this.commissioningController.updateFabricLabel(
+                    await this.Store.get<string>("ControllerFabricLabel", "matter.js Shell"),
+                );
+            }
         } else {
             throw new Error("No controller initialized");
         }

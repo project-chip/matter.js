@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ import { Identity } from "#general";
  * Examples of consumer products that may make use of this device type include refrigerators, freezers, and wine
  * coolers.
  *
- * @see {@link MatterSpecification.v13.Device} § 13.2
+ * @see {@link MatterSpecification.v14.Device} § 13.2
  */
 export interface RefrigeratorDevice extends Identity<typeof RefrigeratorDeviceDefinition> {}
 
@@ -37,8 +37,8 @@ export namespace RefrigeratorRequirements {
     /**
      * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification.
      *
-     * We provide this alias to the default implementation
-     * {@link RefrigeratorAndTemperatureControlledCabinetModeServer} for convenience.
+     * We provide this alias to the default implementation {@link RefrigeratorAndTemperatureControlledCabinetModeServer}
+     * for convenience.
      */
     export const RefrigeratorAndTemperatureControlledCabinetModeServer = BaseRefrigeratorAndTemperatureControlledCabinetModeServer;
 
@@ -65,7 +65,7 @@ export namespace RefrigeratorRequirements {
 export const RefrigeratorDeviceDefinition = MutableEndpoint({
     name: "Refrigerator",
     deviceType: 0x70,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: RefrigeratorRequirements,
     behaviors: SupportedBehaviors()
 });

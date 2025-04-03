@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,10 +29,6 @@ export const WindowCoveringControllerDt = DeviceType(
     }),
     Requirement({
         name: "Groups", id: 0x4, conformance: "Active, O", element: "clientCluster",
-        xref: { document: "device", section: "8.4.4" }
-    }),
-    Requirement({
-        name: "ScenesManagement", id: 0x62, conformance: "P, Active, O", element: "clientCluster",
         xref: { document: "device", section: "8.4.4" }
     }),
     Requirement({

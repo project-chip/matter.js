@@ -1,14 +1,19 @@
-import { Agent } from "#endpoint/Agent.js";
-import { Endpoint } from "#endpoint/Endpoint.js";
-import { EndpointType } from "#endpoint/type/EndpointType.js";
-import { Diagnostic, MaybePromise } from "#general";
+/**
+ * @license
+ * Copyright 2022-2025 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import type { Agent } from "#endpoint/Agent.js";
+import type { Endpoint } from "#endpoint/Endpoint.js";
+import type { EndpointType } from "#endpoint/type/EndpointType.js";
+import { Diagnostic, MaybePromise, Transaction } from "#general";
 import { AccessLevel } from "#model";
-import { Transaction } from "../../state/transaction/Transaction.js";
-import { ReadOnlyTransaction } from "../../state/transaction/Tx.js";
-import { ActionContext } from "../ActionContext.js";
-import { ActionTracer } from "../ActionTracer.js";
+import { AccessControl } from "#protocol";
+import type { ActionContext } from "../ActionContext.js";
+import type { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
-import { NodeActivity } from "../NodeActivity.js";
+import type { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
 
 export let nextInternalId = 1;
@@ -24,6 +29,7 @@ export const OfflineContext = {
      *
      * {@link act} provides an {@link ActionContext} you can use to access agents for a {@link Endpoint}.
      * State changes and change events occur once {@link actor} returns.
+     * It can return a promise even if the actor method does not return a promise, so manual checks are needed.
      *
      * The {@link Transaction} is destroyed with {@link act} exits so you should not keep a reference to any agents
      * beyond the lifespan of {@link actor}.
@@ -76,7 +82,7 @@ export const OfflineContext = {
      *
      * Write operations will throw an error with this context.
      */
-    ReadOnly: createOfflineContext(ReadOnlyTransaction),
+    ReadOnly: createOfflineContext(Transaction.ReadOnly),
 
     [Symbol.toStringTag]: "OfflineContext",
 };
@@ -87,6 +93,7 @@ export namespace OfflineContext {
      */
     export interface Options {
         trace?: ActionTracer.Action;
+        command?: boolean;
     }
 }
 
@@ -106,9 +113,11 @@ function createOfflineContext(
         transaction,
         activity,
 
-        authorizedFor(desiredAccessLevel: AccessLevel) {
+        authorityAt(desiredAccessLevel: AccessLevel) {
             // Be as restrictive as possible.  The offline flag should make this irrelevant
-            return desiredAccessLevel === AccessLevel.View;
+            return desiredAccessLevel === AccessLevel.View
+                ? AccessControl.Authority.Granted
+                : AccessControl.Authority.Unauthorized;
         },
 
         agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {

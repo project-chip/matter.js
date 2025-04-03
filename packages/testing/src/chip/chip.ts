@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -71,6 +71,11 @@ export interface Chip extends chip.Builder {
     defaultSubject: Subject.Factory;
 
     /**
+     * Clear the MDNS cache.
+     */
+    clearMdns(): Promise<void>;
+
+    /**
      * The CHIP container.  Must be initialized before access.
      */
     container: Container;
@@ -96,9 +101,14 @@ export interface Chip extends chip.Builder {
     pics: PicsFile;
 
     /**
-     * The timeout for tests without an explicit timeout.
+     * The timeout for tests without an explicit timeout (defaults to 30s).
      */
-    defaultTimeoutMs: 30_000;
+    defaultTimeoutMs: number;
+
+    /**
+     * Set to false to disable container pull before test execution.
+     */
+    pullBeforeTesting: boolean;
 }
 
 function createBuilder(initial: {
@@ -333,14 +343,27 @@ Object.defineProperties(chipFn, {
         get: () => State.pics,
     },
 
+    pullBeforeTesting: {
+        get() {
+            return State.pullBeforeTesting;
+        },
+
+        set(value: boolean) {
+            State.pullBeforeTesting = value;
+        },
+    },
+
     initialize: { value: State.initialize.bind(State) },
     close: { value: State.close.bind(State) },
     openPipe: { value: State.openPipe.bind(State) },
     onClose: { value: State.onClose.bind(State) },
     testFor: { value: State.testFor.bind(State) },
+    clearMdns: { value: State.clearMdns.bind(State) },
 });
 
 export const chip = chipFn as Chip;
+
+chip.defaultTimeoutMs = 30 * 60 * 1000;
 
 function runBeforeHooks(hooks: chip.BeforeHook[], ...args: Parameters<chip.BeforeHook>) {
     const promises = new Array<Promise<void>>();
@@ -363,6 +386,10 @@ export namespace chip {
 
     export interface BeforeHook {
         (subject: Subject, test: Test): void | Promise<void>;
+    }
+
+    export interface BeforeHookOptions {
+        timeout?: number;
     }
 
     export interface Builder {

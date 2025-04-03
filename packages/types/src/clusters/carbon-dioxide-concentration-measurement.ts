@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,8 +26,8 @@ export namespace CarbonDioxideConcentrationMeasurement {
     /**
      * This alias specializes the semantics of {@link ConcentrationMeasurement.Base}.
      *
-     * Per the Matter specification you cannot use {@link CarbonDioxideConcentrationMeasurementCluster} without
-     * enabling certain feature combinations. You must use the {@link with} factory method to obtain a working cluster.
+     * Per the Matter specification you cannot use {@link CarbonDioxideConcentrationMeasurementCluster} without enabling
+     * certain feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -37,8 +37,8 @@ export namespace CarbonDioxideConcentrationMeasurement {
      * This cluster supports all CarbonDioxideConcentrationMeasurement features. It may support illegal feature
      * combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export const CompleteInstance = MutableCluster({
         ...ConcentrationMeasurement.Complete,

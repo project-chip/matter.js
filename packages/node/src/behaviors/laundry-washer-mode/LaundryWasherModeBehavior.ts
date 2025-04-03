@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,8 +10,8 @@ import { LaundryWasherMode } from "#clusters/laundry-washer-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * LaundryWasherModeBehavior is the base class for objects that support interaction with {@link
- * LaundryWasherMode.Cluster}.
+ * LaundryWasherModeBehavior is the base class for objects that support interaction with
+ * {@link LaundryWasherMode.Cluster}.
  */
 export const LaundryWasherModeBehavior = ClusterBehavior.for(LaundryWasherMode.Cluster);
 

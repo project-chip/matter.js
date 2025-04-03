@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ export const vendorId = Datatype({
     details: "A Vendor ID." +
         "\n" +
         "Vendor IDs may be used as a prefix in a Manufacturer Extensible Identifier format.",
-    xref: { document: "core", section: "7.18.2.24" }
+    xref: { document: "core", section: "7.19.2.24" }
 });
 
 MatterDefinition.children.push(vendorId);

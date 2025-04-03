@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { MatterError } from "@matter/general";
-import { createWriteStream, readFileSync } from "fs";
+import { createWriteStream, readFileSync } from "node:fs";
 import readline from "node:readline";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";

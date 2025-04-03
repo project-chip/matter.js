@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,8 +13,8 @@ import { IcdManagementInterface } from "./IcdManagementInterface.js";
 /**
  * IcdManagementBehavior is the base class for objects that support interaction with {@link IcdManagement.Cluster}.
  *
- * This class does not have optional features of IcdManagement.Cluster enabled. You can enable additional features
- * using IcdManagementBehavior.with.
+ * This class does not have optional features of IcdManagement.Cluster enabled. You can enable additional features using
+ * IcdManagementBehavior.with.
  */
 export const IcdManagementBehavior = ClusterBehavior
     .withInterface<IcdManagementInterface>()

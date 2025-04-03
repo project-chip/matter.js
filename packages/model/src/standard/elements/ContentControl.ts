@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,8 +25,8 @@ export const ContentControl = Cluster(
             "media device such as a TV, or Set-top Box." +
             "\n" +
             "This cluster allows to configure content control settings by clients with the Management privilege. " +
-            "It is responsibility of the end product to enforce appropriate right access (for example, to " +
-            "prevent a child from disabling this feature)." +
+            "It is responsibility of the end product to enforce appropriate right access (for example, to prevent " +
+            "a child from disabling this feature)." +
             "\n" +
             "NOTE Support for Content Control cluster is provisional.",
 
@@ -71,8 +71,8 @@ export const ContentControl = Cluster(
 
     Attribute({
         name: "Enabled", id: 0x0, type: "bool", access: "R V", conformance: "M",
-        details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) " +
-            "or turned on (TRUE).",
+        details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) or " +
+            "turned on (TRUE).",
         xref: { document: "cluster", section: "6.13.7.1" }
     }),
 
@@ -82,12 +82,12 @@ export const ContentControl = Cluster(
 
             details: "This attribute shall provide the collection of ratings that are currently valid for this media " +
                 "device. The items should honor the metadata of the on-demand content (e.g. Movie) rating system for " +
-                "one country or region where the media device has been provisioned. For example, for the MPAA " +
-                "system, RatingName may be one value out of \"G\", \"PG\", \"PG-13\", \"R\", \"NC-17\"." +
+                "one country or region where the media device has been provisioned. For example, for the MPAA system, " +
+                "RatingName may be one value out of \"G\", \"PG\", \"PG-13\", \"R\", \"NC-17\"." +
                 "\n" +
-                "The media device shall have a way to determine which rating system applies for the on-demand " +
-                "content and then populate this attribute. For example, it can do it through examining the Location " +
-                "attribute in the Basic Information cluster, and then determining which rating system applies." +
+                "The media device shall have a way to determine which rating system applies for the on-demand content " +
+                "and then populate this attribute. For example, it can do it through examining the Location attribute " +
+                "in the Basic Information cluster, and then determining which rating system applies." +
                 "\n" +
                 "The ratings in this collection shall be in order from a rating for the youngest viewers to the one " +
                 "for the oldest viewers. Each rating in the list shall be unique.",
@@ -172,8 +172,8 @@ export const ContentControl = Cluster(
             "the current day when the Content Control feature is activated. When this value equals 0, the media " +
             "device shall terminate the playback of content." +
             "\n" +
-            "This attribute shall be updated when the AddBonusTime command is received and processed " +
-            "successfully (with the correct PIN).",
+            "This attribute shall be updated when the AddBonusTime command is received and processed successfully " +
+            "(with the correct PIN).",
 
         xref: { document: "cluster", section: "6.13.7.7" }
     }),
@@ -182,9 +182,8 @@ export const ContentControl = Cluster(
         name: "BlockUnrated", id: 0x7, type: "bool", access: "R V", conformance: "BU",
 
         details: "Indicates whether the playback of unrated content is allowed when the Content Control feature is " +
-            "activated. If this attribute equals FALSE, then playback of unrated content" +
-            "\n" +
-            "shall be permitted. Otherwise, the media device shall prevent the playback of unrated content." +
+            "activated. If this attribute equals FALSE, then playback of unrated content shall be permitted. " +
+            "Otherwise, the media device shall prevent the playback of unrated content." +
             "\n" +
             "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
             "For example, if the feature does not control content within apps, then the device should make this " +
@@ -218,9 +217,9 @@ export const ContentControl = Cluster(
 
             details: "Indicates a set of periods during which the playback of content on media device shall be blocked " +
                 "when the Content Control feature is activated. The media device shall reject any request to play " +
-                "content during one period of this attribute. If it is entering any one period of this attribute, " +
-                "the media device shall block content which is playing and generate an event " +
-                "EnteringBlockContentTimeWindow. There shall not be multiple entries in this attribute list for the " +
+                "content during one period of this attribute. If it is entering any one period of this attribute, the " +
+                "media device shall block content which is playing and generate an event " +
+                "EnteringBlockContentTimeWindow. There shall NOT be multiple entries in this attribute list for the " +
                 "same day of week.",
 
             xref: { document: "cluster", section: "6.13.7.11" }
@@ -259,9 +258,9 @@ export const ContentControl = Cluster(
                 "Otherwise a response with InvalidPINCode error status shall be returned." +
                 "\n" +
                 "The media device may provide a default PIN to the User via an out of band mechanism. For security " +
-                "reasons, it is recommended that a client encourage the user to update the PIN from its default " +
-                "value when performing configuration of the Content Control settings exposed by this cluster. The " +
-                "ResetPIN command can also be used to obtain the default PIN.",
+                "reasons, it is recommended that a client encourage the user to update the PIN from its default value " +
+                "when performing configuration of the Content Control settings exposed by this cluster. The ResetPIN " +
+                "command can also be used to obtain the default PIN.",
 
             xref: { document: "cluster", section: "6.13.8.1" }
         },
@@ -326,20 +325,19 @@ export const ContentControl = Cluster(
 
             details: "The purpose of this command is to add the extra screen time for the user." +
                 "\n" +
-                "If a client with Operate privilege invokes this command, the media device shall check whether" +
-                "\n" +
-                "the PINCode passed in the command matches the current PINCode value. If these match, then the " +
+                "If a client with Operate privilege invokes this command, the media device shall check whether the " +
+                "PINCode passed in the command matches the current PINCode value. If these match, then the " +
                 "RemainingScreenTime attribute shall be increased by the specified BonusTime value." +
                 "\n" +
-                "If the PINs do not match, then a response with InvalidPINCode error status shall be returned, and " +
-                "no changes shall be made to RemainingScreenTime." +
+                "If the PINs do not match, then a response with InvalidPINCode error status shall be returned, and no " +
+                "changes shall be made to RemainingScreenTime." +
                 "\n" +
-                "If a client with Manage privilege or greater invokes this command, the media device shall ignore " +
-                "the PINCode field and directly increase the RemainingScreenTime attribute by the specified " +
-                "BonusTime value." +
+                "If a client with Manage privilege or greater invokes this command, the media device shall ignore the " +
+                "PINCode field and directly increase the RemainingScreenTime attribute by the specified BonusTime " +
+                "value." +
                 "\n" +
-                "A server that does not support the PM feature shall respond with InvalidPINCode to clients that " +
-                "only have Operate privilege unless:" +
+                "A server that does not support the PM feature shall respond with InvalidPINCode to clients that only " +
+                "have Operate privilege unless:" +
                 "\n" +
                 "  • It has been provided with the PIN value to expect via an out of band mechanism, and" +
                 "\n" +
@@ -353,9 +351,9 @@ export const ContentControl = Cluster(
 
             details: "This field shall indicate the PIN." +
                 "\n" +
-                "This field shall be optional for clients with Manage or greater privilege but shall be mandatory " +
-                "for clients with Operate privilege. The PIN provided in this field shall be used to guarantee that " +
-                "a client with Operate permission is allowed to invoke this command only if the PIN passed in this " +
+                "This field shall be optional for clients with Manage or greater privilege but shall be mandatory for " +
+                "clients with Operate privilege. The PIN provided in this field shall be used to guarantee that a " +
+                "client with Operate permission is allowed to invoke this command only if the PIN passed in this " +
                 "command is equal to the current PIN value.",
 
             xref: { document: "cluster", section: "6.13.8.6.1" }
@@ -364,7 +362,7 @@ export const ContentControl = Cluster(
         Field({
             name: "BonusTime", id: 0x1, type: "elapsed-s", conformance: "M", constraint: "desc", default: 300,
             details: "This field shall indicate the amount of extra time (in seconds) to increase RemainingScreenTime. " +
-                "This field shall not exceed the remaining time of this day.",
+                "This field shall NOT exceed the remaining time of this day.",
             xref: { document: "cluster", section: "6.13.8.6.2" }
         })
     ),
@@ -382,8 +380,7 @@ export const ContentControl = Cluster(
 
         Field({
             name: "ScreenTime", id: 0x0, type: "elapsed-s", conformance: "M", constraint: "max 86400",
-            details: "This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on" +
-                "\n" +
+            details: "This field shall indicate the time (in seconds) which the User is allowed to spend watching TV on " +
                 "this media device within one day.",
             xref: { document: "cluster", section: "6.13.8.7.1" }
         })
@@ -392,8 +389,8 @@ export const ContentControl = Cluster(
     Command({
         name: "BlockUnratedContent", id: 0x7, access: "M", conformance: "BU", direction: "request",
         response: "status",
-        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
-            "by this media device." +
+        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked by " +
+            "this media device." +
             "\n" +
             "Upon receipt of the BlockUnratedContent command, the media device shall set the BlockUnrated " +
             "attribute to TRUE.",
@@ -403,8 +400,8 @@ export const ContentControl = Cluster(
     Command({
         name: "UnblockUnratedContent", id: 0x8, access: "M", conformance: "BU", direction: "request",
         response: "status",
-        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked " +
-            "by this media device." +
+        details: "The purpose of this command is to specify whether programs with no Content rating must be blocked by " +
+            "this media device." +
             "\n" +
             "Upon receipt of the UnblockUnratedContent command, the media device shall set the BlockUnrated " +
             "attribute to FALSE.",
@@ -446,9 +443,7 @@ export const ContentControl = Cluster(
         Field({
             name: "Rating", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
             details: "This field indicates a threshold rating for filtering scheduled content. This field shall be set to " +
-                "one" +
-                "\n" +
-                "of the values present in the ScheduledContentRatings attribute.",
+                "one of the values present in the ScheduledContentRatings attribute.",
             xref: { document: "cluster", section: "6.13.8.11.1" }
         })
     ),
@@ -460,9 +455,10 @@ export const ContentControl = Cluster(
 
             details: "The purpose of this command is to set BlockChannelList attribute." +
                 "\n" +
-                "Upon receipt of the AddBlockChannels command, the media device shall check if the channels passed " +
-                "in this command are valid. If the channel is invalid, then a response with InvalidChannel error " +
-                "Status shall be returned." +
+                "Upon receipt of the AddBlockChannels command, the media device shall check if the channels" +
+                "\n" +
+                "passed in this command are valid. If the channel is invalid, then a response with InvalidChannel " +
+                "error Status shall be returned." +
                 "\n" +
                 "If there is at least one channel in Channels field which is not in the BlockChannelList attribute, " +
                 "the media device shall process the request by adding these new channels into the BlockChannelList " +
@@ -496,9 +492,9 @@ export const ContentControl = Cluster(
             details: "The purpose of this command is to remove channels from the BlockChannelList attribute." +
                 "\n" +
                 "Upon receipt of the RemoveBlockChannels command, the media device shall check if the channels " +
-                "indicated by ChannelIndexes passed in this command are present in BlockChannelList attribute. If " +
-                "one or more channels indicated by ChannelIndexes passed in this command field are not present in " +
-                "the BlockChannelList attribute, then a response with ChannelNotExist error Status shall be returned.",
+                "indicated by ChannelIndexes passed in this command are present in BlockChannelList attribute. If one " +
+                "or more channels indicated by ChannelIndexes passed in this command field are not present in the " +
+                "BlockChannelList attribute, then a response with ChannelNotExist error Status shall be returned.",
 
             xref: { document: "cluster", section: "6.13.8.13" }
         },
@@ -524,7 +520,8 @@ export const ContentControl = Cluster(
                 "\n" +
                 "Upon receipt of the AddBlockApplications command, the media device shall check if the Applications " +
                 "passed in this command are installed. If there is an application in Applications field which is not " +
-                "identified by media device, then a response with UnidentifiableApplication error Status may be " +
+                "identified by media device, then a response with UnidentifiableApplication error Status may be" +
+                "\n" +
                 "returned." +
                 "\n" +
                 "If there is one or more applications which are not present in BlockApplicationList attribute, the " +
@@ -540,8 +537,8 @@ export const ContentControl = Cluster(
         Field(
             {
                 name: "Applications", id: 0x0, type: "list", conformance: "M",
-                details: "This field indicates a set of applications that shall be blocked when the Content Control feature " +
-                    "is activated.",
+                details: "This field indicates a set of applications that shall be blocked when the Content Control feature is " +
+                    "activated.",
                 xref: { document: "cluster", section: "6.13.8.14.1" }
             },
 
@@ -558,8 +555,8 @@ export const ContentControl = Cluster(
                 "\n" +
                 "Upon receipt of the RemoveBlockApplications command, the media device shall check if the " +
                 "applications passed in this command present in the BlockApplicationList attribute. If one or more " +
-                "applications in Applications field which are not present in the BlockApplicationList attribute, " +
-                "then a response with ApplicationNotExist error Status shall be returned.",
+                "applications in Applications field which are not present in the BlockApplicationList attribute, then " +
+                "a response with ApplicationNotExist error Status shall be returned.",
 
             xref: { document: "cluster", section: "6.13.8.15" }
         },
@@ -583,8 +580,7 @@ export const ContentControl = Cluster(
 
             details: "The purpose of this command is to set the BlockContentTimeWindow attribute." +
                 "\n" +
-                "Upon receipt of the SetBlockContentTimeWindow command, the media device shall check if the" +
-                "\n" +
+                "Upon receipt of the SetBlockContentTimeWindow command, the media device shall check if the " +
                 "TimeWindowIndex field passed in this command is NULL. If the TimeWindowIndex field is NULL, the " +
                 "media device shall check if there is an entry in the BlockContentTimeWindow attribute which matches " +
                 "with the TimePeriod and DayOfWeek fields passed in this command. * If Yes, then a response with " +
@@ -634,35 +630,42 @@ export const ContentControl = Cluster(
     ),
 
     Datatype(
-        { name: "RatingNameStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.1" } },
+        { name: "DayOfWeekBitmap", type: "map8", xref: { document: "cluster", section: "6.13.5.1" } },
+        Field({ name: "Sunday", constraint: "0", description: "Sunday" }),
+        Field({ name: "Monday", constraint: "1", description: "Monday" }),
+        Field({ name: "Tuesday", constraint: "2", description: "Tuesday" }),
+        Field({ name: "Wednesday", constraint: "3", description: "Wednesday" }),
+        Field({ name: "Thursday", constraint: "4", description: "Thursday" }),
+        Field({ name: "Friday", constraint: "5", description: "Friday" }),
+        Field({ name: "Saturday", constraint: "6", description: "Saturday" })
+    ),
+
+    Datatype(
+        { name: "RatingNameStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.2" } },
 
         Field({
             name: "RatingName", id: 0x0, type: "string", conformance: "M", constraint: "max 8",
             details: "This field shall indicate the name of the rating level of the applied rating system. The applied " +
                 "rating system is dependent upon the region or country where the Node has been provisioned, and may " +
                 "vary from one country to another.",
-            xref: { document: "cluster", section: "6.13.5.1.1" }
+            xref: { document: "cluster", section: "6.13.5.2.1" }
         }),
 
         Field({
             name: "RatingNameDesc", id: 0x1, type: "string", conformance: "O", constraint: "max 64",
             details: "This field shall specify a human readable (displayable) description for RatingName.",
-            xref: { document: "cluster", section: "6.13.5.1.2" }
+            xref: { document: "cluster", section: "6.13.5.2.2" }
         })
     ),
 
     Datatype(
-        {
-            name: "BlockChannelStruct", type: "struct",
-            details: "[options=\"header\",valign=\"middle\"]b",
-            xref: { document: "cluster", section: "6.13.5.2" }
-        },
+        { name: "BlockChannelStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.3" } },
 
         Field({
             name: "BlockChannelIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
             details: "This field shall indicate a unique index value for a blocked channel. This value may be used to " +
                 "indicate one selected channel which will be removed from BlockChannelList attribute.",
-            xref: { document: "cluster", section: "6.13.5.2.1" }
+            xref: { document: "cluster", section: "6.13.5.3.1" }
         }),
 
         Field({
@@ -671,7 +674,7 @@ export const ContentControl = Cluster(
                 "channel number is expressed as a string, such as \"13.1\" or \"256\", the major number would be 13 or " +
                 "256, respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
                 "channels that are not represented by a major or minor number.",
-            xref: { document: "cluster", section: "6.13.5.2.2" }
+            xref: { document: "cluster", section: "6.13.5.3.2" }
         }),
 
         Field({
@@ -680,19 +683,19 @@ export const ContentControl = Cluster(
                 "channel number is expressed as a string, such as \"13.1\" or \"256\", the minor number would be 1 or 0, " +
                 "respectively. This field is required but shall be set to 0 for channels such as over-the-top " +
                 "channels that are not represented by a major or minor number.",
-            xref: { document: "cluster", section: "6.13.5.2.3" }
+            xref: { document: "cluster", section: "6.13.5.3.3" }
         }),
 
         Field({
             name: "Identifier", id: 0x3, type: "string", conformance: "O",
             details: "This field shall indicate the unique identifier for a specific channel. This field is optional, but " +
                 "SHOULD be provided when MajorNumber and MinorNumber are not available.",
-            xref: { document: "cluster", section: "6.13.5.2.4" }
+            xref: { document: "cluster", section: "6.13.5.3.4" }
         })
     ),
 
     Datatype(
-        { name: "AppInfoStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.3" } },
+        { name: "AppInfoStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.4" } },
 
         Field({
             name: "CatalogVendorId", id: 0x0, type: "uint16", conformance: "M",
@@ -701,52 +704,41 @@ export const ContentControl = Cluster(
                 "\n" +
                 "Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) " +
                 "and will assign an ApplicationID to each Content App.",
-            xref: { document: "cluster", section: "6.13.5.3.1" }
+            xref: { document: "cluster", section: "6.13.5.4.1" }
         }),
 
         Field({
             name: "ApplicationId", id: 0x1, type: "string", conformance: "M",
-            details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" " +
-                "or \"Company X\". This field shall be unique within a catalog.",
-            xref: { document: "cluster", section: "6.13.5.3.2" }
+            details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" or " +
+                "\"Company X\". This field shall be unique within a catalog.",
+            xref: { document: "cluster", section: "6.13.5.4.2" }
         })
     ),
 
     Datatype(
-        { name: "TimeWindowStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.4" } },
+        { name: "TimeWindowStruct", type: "struct", xref: { document: "cluster", section: "6.13.5.5" } },
 
         Field({
             name: "TimeWindowIndex", id: 0x0, type: "uint16", conformance: "M", quality: "X",
             details: "This field shall indicate a unique index of a specific time window. This value may be used to " +
                 "indicate a selected time window which will be removed from the BlockContentTimeWindow attribute.",
-            xref: { document: "cluster", section: "6.13.5.4.1" }
+            xref: { document: "cluster", section: "6.13.5.5.1" }
         }),
 
         Field({
             name: "DayOfWeek", id: 0x1, type: "DayOfWeekBitmap", conformance: "M", constraint: "desc",
             details: "This field shall indicate a day of week.",
-            xref: { document: "cluster", section: "6.13.5.4.2" }
+            xref: { document: "cluster", section: "6.13.5.5.2" }
         }),
 
         Field(
             {
                 name: "TimePeriod", id: 0x2, type: "list", conformance: "M", constraint: "desc",
                 details: "This field shall indicate one or more discrete time periods.",
-                xref: { document: "cluster", section: "6.13.5.4.3" }
+                xref: { document: "cluster", section: "6.13.5.5.3" }
             },
             Field({ name: "entry", type: "TimePeriodStruct" })
         )
-    ),
-
-    Datatype(
-        { name: "DayOfWeekBitmap", type: "enum8", xref: { document: "cluster", section: "6.13.5.5" } },
-        Field({ name: "Sunday", id: 0x0, description: "Sunday" }),
-        Field({ name: "Monday", id: 0x1, description: "Monday" }),
-        Field({ name: "Tuesday", id: 0x2, description: "Tuesday" }),
-        Field({ name: "Wednesday", id: 0x3, description: "Wednesday" }),
-        Field({ name: "Thursday", id: 0x4, description: "Thursday" }),
-        Field({ name: "Friday", id: 0x5, description: "Friday" }),
-        Field({ name: "Saturday", id: 0x6, description: "Saturday" })
     ),
 
     Datatype(

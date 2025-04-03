@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ export const ipv4Adr = Datatype({
         "\n" +
         "  • Address 10.4.200.75 → 0A04C84B",
 
-    xref: { document: "core", section: "7.18.2.38" }
+    xref: { document: "core", section: "7.19.2.38" }
 });
 
 MatterDefinition.children.push(ipv4Adr);

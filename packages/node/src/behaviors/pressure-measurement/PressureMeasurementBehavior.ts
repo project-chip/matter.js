@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,11 +10,11 @@ import { PressureMeasurement } from "#clusters/pressure-measurement";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * PressureMeasurementBehavior is the base class for objects that support interaction with {@link
- * PressureMeasurement.Cluster}.
+ * PressureMeasurementBehavior is the base class for objects that support interaction with
+ * {@link PressureMeasurement.Cluster}.
  *
- * This class does not have optional features of PressureMeasurement.Cluster enabled. You can enable additional
- * features using PressureMeasurementBehavior.with.
+ * This class does not have optional features of PressureMeasurement.Cluster enabled. You can enable additional features
+ * using PressureMeasurementBehavior.with.
  */
 export const PressureMeasurementBehavior = ClusterBehavior.for(PressureMeasurement.Cluster);
 

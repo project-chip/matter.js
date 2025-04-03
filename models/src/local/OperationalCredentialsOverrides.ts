@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,8 @@ LocalMatter.children.push({
     name: "OperationalCredentials",
 
     children: [
-        // Spec specifies uint8, assuming this is actually fabric-idx
+        // Spec-Wise it is an uint8 becauae 0 is officially no valid FabricIndex.
+        // Our FabricIndex type allows that
         {
             tag: "attribute",
             id: 0x5,

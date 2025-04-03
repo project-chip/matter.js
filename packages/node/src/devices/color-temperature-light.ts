@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,7 +26,7 @@ import { Identity } from "#general";
  * light adjusted, and its color temperature adjusted by means of a bound controller device such as a Color Dimmer
  * Switch.
  *
- * @see {@link MatterSpecification.v13.Device} § 4.3
+ * @see {@link MatterSpecification.v14.Device} § 4.3
  */
 export interface ColorTemperatureLightDevice extends Identity<typeof ColorTemperatureLightDeviceDefinition> {}
 

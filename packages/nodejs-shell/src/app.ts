@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogFormat, LogLevel, Logger, singleton } from "@matter/general";
+import { LogDestination, LogFormat, LogLevel, Logger, singleton } from "@matter/general";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
 import { Ble } from "@matter/protocol";
@@ -86,19 +86,14 @@ async function main() {
                             type: "string",
                             default: undefined,
                         },
-                        legacyStorage: {
-                            description: "Use legacy storage structure (pre 0.11)",
-                            type: "boolean",
-                            default: false,
-                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile, legacyStorage } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
 
-                theNode = new MatterNode(nodeNum, netInterface, legacyStorage);
+                theNode = new MatterNode(nodeNum, netInterface);
                 await theNode.initialize(factoryReset);
 
                 if (logfile !== undefined) {
@@ -107,9 +102,10 @@ async function main() {
                 if (await theNode.Store.has("LogFile")) {
                     const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
-                        Logger.addLogger("file", await createFileLogger(storedLogFileName), {
-                            defaultLogLevel: await theNode.Store.get<LogLevel>("LoglevelFile", LogLevel.DEBUG),
-                            logFormat: LogFormat.PLAIN,
+                        Logger.destinations.file = LogDestination({
+                            write: await createFileLogger(storedLogFileName),
+                            level: LogLevel(await theNode.Store.get<LogLevel>("LoglevelFile", LogLevel.DEBUG)),
+                            format: LogFormat("plain"),
                         });
                     }
                 }

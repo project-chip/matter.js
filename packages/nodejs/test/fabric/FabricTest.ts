@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Bytes, Crypto, StorageBackendMemory, StorageManager } from "#general";
 import { Fabric, FabricManager, SecureSession, SessionManager } from "#protocol";
 import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 
 const OPERATIONAL_ID = Bytes.fromHex("d559af361549a9a2");

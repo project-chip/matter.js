@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { EndpointInitializer } from "#endpoint/index.js";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
 import { FabricManager, SessionManager } from "#protocol";
 import { ServerEndpointInitializer } from "../../endpoint/server/ServerEndpointInitializer.js";

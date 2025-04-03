@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { mkdir, writeFile } from "fs/promises";
-import type { Session } from "inspector/promises";
 import Mocha from "mocha";
-import { relative } from "path";
+import { mkdir, writeFile } from "node:fs/promises";
+import type { Session } from "node:inspector/promises";
+import { relative } from "node:path";
 import { adaptReporter, afterRun, beforeRun, extendApi, generalSetup, runMocha } from "./mocha.js";
 import { TestOptions } from "./options.js";
 import type { TestRunner } from "./runner.js";
@@ -16,6 +16,7 @@ import type { TestRunner } from "./runner.js";
 import { chip } from "./chip/chip.js";
 import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
+import { TestDescriptor } from "./test-descriptor.js";
 
 extendApi(Mocha);
 
@@ -44,7 +45,19 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
 
     try {
         const mocha = await createNodejsMocha(runner, format);
+
         await runMocha(mocha);
+
+        const report = mocha.suite.descriptor;
+        const path = runner.pkg.resolve(TestDescriptor.DEFAULT_FILENAME);
+        const previous = await TestDescriptor.open(path);
+        const merged = TestDescriptor.merge(previous, report);
+
+        if (format === "esm") {
+            await TestDescriptor.save(path, merged);
+        }
+
+        return merged;
     } finally {
         process.off("unhandledRejection", unhandledRejection);
 
@@ -58,9 +71,11 @@ export async function testNodejs(runner: TestRunner, format: "cjs" | "esm") {
 }
 
 export async function createNodejsMocha(runner: TestRunner, format: "esm" | "cjs") {
+    const updateStats = runner.pkg.supportsEsm ? format === "esm" : true;
+
     const mocha = new Mocha({
         inlineDiffs: true,
-        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
+        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter, updateStats),
     });
 
     chip.mocha = mocha;
@@ -93,7 +108,7 @@ class Profiler {
 
         let Session;
         try {
-            Session = (await import("inspector/promises")).Session;
+            Session = (await import("node:inspector/promises")).Session;
         } catch (e) {
             console.error(`We don't support profiling on this version of Node.js: ${e}`);
             return;

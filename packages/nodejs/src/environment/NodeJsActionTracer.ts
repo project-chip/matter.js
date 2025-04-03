@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Environment, MaybePromise, serialize } from "#general";
 import { ActionTracer } from "#node";
-import { FileHandle, open } from "fs/promises";
-import { resolve } from "path";
+import { FileHandle, open } from "node:fs/promises";
+import { resolve } from "node:path";
 
 export class NodeJsActionTracer extends ActionTracer {
     #path: string;

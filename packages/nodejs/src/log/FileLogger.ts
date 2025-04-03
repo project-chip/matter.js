@@ -1,11 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogLevel } from "#general";
-import { open } from "fs/promises";
+import { open } from "node:fs/promises";
 
 /**
  * Creates a file based logger to append to the given path.
@@ -20,7 +19,7 @@ export async function createFileLogger(path: string) {
         () => void fileHandle.close().catch(err => err && console.error(`Failed to close log file: ${err}`)),
     );
 
-    return (_level: LogLevel, formattedLog: string) => {
+    return (formattedLog: string) => {
         try {
             writer.write(`${formattedLog}\n`);
         } catch (error) {

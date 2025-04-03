@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,14 +20,14 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin getSetupPin command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.1
      */
     export const TlvGetSetupPinRequest = TlvObject({
         /**
          * This field shall specify the client’s Temporary Account Identifier. The length of this field shall be at
          * least 16 characters to protect the account holder against password guessing attacks.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.1.1
          */
         tempAccountIdentifier: TlvField(0, TlvString.bound({ minLength: 16, maxLength: 100 }))
     });
@@ -35,7 +35,7 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin getSetupPin command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.1
      */
     export interface GetSetupPinRequest extends TypeFromSchema<typeof TlvGetSetupPinRequest> {}
 
@@ -43,7 +43,7 @@ export namespace AccountLogin {
      * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
      * account identified in the request does not match the active account of the running Content App.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.2
      */
     export const TlvGetSetupPinResponse = TlvObject({
         /**
@@ -55,7 +55,7 @@ export namespace AccountLogin {
          * Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit minimum
          * length.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.2.1
          */
         setupPin: TlvField(0, TlvString)
     });
@@ -64,20 +64,20 @@ export namespace AccountLogin {
      * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
      * account identified in the request does not match the active account of the running Content App.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.2
      */
     export interface GetSetupPinResponse extends TypeFromSchema<typeof TlvGetSetupPinResponse> {}
 
     /**
      * Input to the AccountLogin login command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3
      */
     export const TlvLoginRequest = TlvObject({
         /**
          * This field shall specify the client’s temporary account identifier.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3.1
          */
         tempAccountIdentifier: TlvField(0, TlvString.bound({ minLength: 16, maxLength: 100 })),
 
@@ -89,7 +89,7 @@ export namespace AccountLogin {
          * Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit minimum
          * length.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3.2
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3.2
          */
         setupPin: TlvField(1, TlvString.bound({ minLength: 8 })),
 
@@ -97,7 +97,7 @@ export namespace AccountLogin {
          * This optional field shall provide the Node ID of the Client. This field can be used by the Content App to
          * keep track of Nodes which currently have access to it.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3.3
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3.3
          */
         node: TlvOptionalField(2, TlvNodeId)
     });
@@ -105,14 +105,14 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin login command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3
      */
     export interface LoginRequest extends TypeFromSchema<typeof TlvLoginRequest> {}
 
     /**
      * Input to the AccountLogin logout command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.4
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.4
      */
     export const TlvLogoutRequest = TlvObject({
         /**
@@ -120,7 +120,7 @@ export namespace AccountLogin {
          *
          * App to keep track of Nodes which currently have access to it.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.4.1
          */
         node: TlvOptionalField(0, TlvNodeId)
     });
@@ -128,21 +128,21 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin logout command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.4
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.4
      */
     export interface LogoutRequest extends TypeFromSchema<typeof TlvLogoutRequest> {}
 
     /**
      * Body of the AccountLogin loggedOut event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.5.1
      */
     export const TlvLoggedOutEvent = TlvObject({
         /**
          * This field shall provide the Node ID corresponding to the user account that has logged out, if that Node ID
          * is available. If it is NOT available, this field shall NOT be present in the event.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.2.5.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.2.5.1.1
          */
         node: TlvOptionalField(0, TlvNodeId)
     });
@@ -150,7 +150,7 @@ export namespace AccountLogin {
     /**
      * Body of the AccountLogin loggedOut event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2.5.1
      */
     export interface LoggedOutEvent extends TypeFromSchema<typeof TlvLoggedOutEvent> {}
 
@@ -168,9 +168,9 @@ export namespace AccountLogin {
              * the active user account of a given Commissionee, and when it does, return a Setup PIN code which can be
              * used for password-authenticated session establishment (PASE) with the Commissionee.
              *
-             * For example, a Video Player with a Content App Platform may invoke this command on one of its Content
-             * App endpoints to facilitate commissioning of a Phone App made by the same vendor as the Content App. If
-             * the accounts match, then the Content App may return a setup code that can be used
+             * For example, a Video Player with a Content App Platform may invoke this command on one of its Content App
+             * endpoints to facilitate commissioning of a Phone App made by the same vendor as the Content App. If the
+             * accounts match, then the Content App may return a setup code that can be used
              *
              * by the Video Player to commission the Phone App without requiring the user to physically input a setup
              * code.
@@ -187,10 +187,10 @@ export namespace AccountLogin {
              * and Content App, while the Commissioner/Admin ensures user consent by prompting the user prior to
              * invocation of the command.
              *
-             * Upon receipt of this command, the Content App checks if the account associated with the Temporary
-             * Account Identifier sent by the client is the same account that is active on itself. If the accounts are
-             * the same, then the Content App returns the GetSetupPIN Response which includes a Setup PIN that may be
-             * used for PASE with the Commissionee.
+             * Upon receipt of this command, the Content App checks if the account associated with the Temporary Account
+             * Identifier sent by the client is the same account that is active on itself. If the accounts are the same,
+             * then the Content App returns the GetSetupPIN Response which includes a Setup PIN that may be used for
+             * PASE with the Commissionee.
              *
              * The Temporary Account Identifier for a Commissionee may be populated with the Rotating ID field of the
              * client’s commissionable node advertisement (see Rotating Device Identifier section in [MatterCore])
@@ -207,10 +207,10 @@ export namespace AccountLogin {
              * commands received within the 10 minute period. Because access to this command is limited to nodes with
              * Admin-level access, and the user is prompted for consent prior to Commissioning, there are in place
              * multiple obstacles to successfully mounting a brute force attack. A Content App that supports this
-             * command shall ensure that the Temporary Account Identifier used by its clients is not valid for more
-             * than 10 minutes.
+             * command shall ensure that the Temporary Account Identifier used by its clients is not valid for more than
+             * 10 minutes.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.1
              */
             getSetupPin: Command(
                 0x0,
@@ -224,20 +224,20 @@ export namespace AccountLogin {
              * The purpose of this command is to allow the Content App to assume the user account of a given
              * Commissionee by leveraging the Setup PIN code input by the user during the commissioning process.
              *
-             * For example, a Video Player with a Content App Platform may invoke this command on one of its Content
-             * App endpoints after the commissioning has completed of a Phone App made by the same vendor as the
-             * Content App. The Content App may determine whether the Temporary Account Identifier maps to an account
-             * with a corresponding Setup PIN and, if so, it may automatically login to the account for the
-             * corresponding user. The end result is that a user performs commissioning of a Phone App to a Video
-             * Player by inputting the Setup PIN for the Phone App into the Video Player UX. Once commissioning has
-             * completed, the Video Player invokes this command to allow the corresponding Content App to assume the
-             * same user account as the Phone App.
+             * For example, a Video Player with a Content App Platform may invoke this command on one of its Content App
+             * endpoints after the commissioning has completed of a Phone App made by the same vendor as the Content
+             * App. The Content App may determine whether the Temporary Account Identifier maps to an account with a
+             * corresponding Setup PIN and, if so, it may automatically login to the account for the corresponding user.
+             * The end result is that a user performs commissioning of a Phone App to a Video Player by inputting the
+             * Setup PIN for the Phone App into the Video Player UX. Once commissioning has completed, the Video Player
+             * invokes this command to allow the corresponding Content App to assume the same user account as the Phone
+             * App.
              *
-             * The verification of Setup PIN for the given Temporary Account Identifier is determined by the Content
-             * App using a method which is outside the scope of this specification and will typically involve a central
-             * service which is in communication with both the Content App and the Commissionee. Implementations of
-             * such a service should impose aggressive time outs for any mapping of Temporary Account Identifier to
-             * Setup PIN in order to prevent accidental login due to delayed invocation.
+             * The verification of Setup PIN for the given Temporary Account Identifier is determined by the Content App
+             * using a method which is outside the scope of this specification and will typically involve a central
+             * service which is in communication with both the Content App and the Commissionee. Implementations of such
+             * a service should impose aggressive time outs for any mapping of Temporary Account Identifier to Setup PIN
+             * in order to prevent accidental login due to delayed invocation.
              *
              * Upon receipt, the Content App checks if the account associated with the client’s Temp Account Identifier
              * has a current active Setup PIN with the given value. If the Setup PIN is valid for the user account
@@ -249,8 +249,8 @@ export namespace AccountLogin {
              * hexadecimal number, using uppercase letters.
              *
              * The Setup PIN for a Commissionee may be populated with the Manual Pairing Code encoded as a string of
-             * decimal numbers (11 characters) or the Passcode portion of the Manual Pairing Code encoded as a string
-             * of decimal numbers (8 characters) .
+             * decimal numbers (11 characters) or the Passcode portion of the Manual Pairing Code encoded as a string of
+             * decimal numbers (8 characters) .
              *
              * The server shall implement rate limiting to prevent brute force attacks. No more than 10 unique requests
              * in a 10 minute period shall be allowed; a command response status of FAILURE should sent for additional
@@ -259,7 +259,7 @@ export namespace AccountLogin {
              * obstacles to successfully mounting a brute force attack. A Content App that supports this command shall
              * ensure that the Temporary Account Identifier used by its clients is not valid for more than 10 minutes.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.3
+             * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.3
              */
             login: Command(
                 0x2,
@@ -273,7 +273,7 @@ export namespace AccountLogin {
              * The purpose of this command is to instruct the Content App to clear the current user account. This
              * command SHOULD be used by clients of a Content App to indicate the end of a user session.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 6.2.4.4
+             * @see {@link MatterSpecification.v14.Cluster} § 6.2.4.4
              */
             logout: Command(0x3, TlvLogoutRequest, 0x3, TlvNoResponse, { timed: true })
         },
@@ -281,10 +281,10 @@ export namespace AccountLogin {
         events: {
             /**
              * This event can be used by the Content App to indicate that the current user has logged out. In response
-             * to this event, the Fabric Admin shall remove access to this Content App by the specified Node. If no
-             * Node is provided, then the Fabric Admin shall remove access to all non-Admin Nodes.
+             * to this event, the Fabric Admin shall remove access to this Content App by the specified Node. If no Node
+             * is provided, then the Fabric Admin shall remove access to all non-Admin Nodes.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 6.2.5.1
+             * @see {@link MatterSpecification.v14.Cluster} § 6.2.5.1
              */
             loggedOut: OptionalEvent(
                 0x0,
@@ -321,7 +321,7 @@ export namespace AccountLogin {
      * the Video Player device, may implement the cluster server for this cluster to simplify account login for its
      * users.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

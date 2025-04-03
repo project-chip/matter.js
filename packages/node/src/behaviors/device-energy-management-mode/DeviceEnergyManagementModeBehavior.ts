@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,11 +10,8 @@ import { DeviceEnergyManagementMode } from "#clusters/device-energy-management-m
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * DeviceEnergyManagementModeBehavior is the base class for objects that support interaction with {@link
- * DeviceEnergyManagementMode.Cluster}.
- *
- * This class does not have optional features of DeviceEnergyManagementMode.Cluster enabled. You can enable additional
- * features using DeviceEnergyManagementModeBehavior.with.
+ * DeviceEnergyManagementModeBehavior is the base class for objects that support interaction with
+ * {@link DeviceEnergyManagementMode.Cluster}.
  */
 export const DeviceEnergyManagementModeBehavior = ClusterBehavior.for(DeviceEnergyManagementMode.Cluster);
 

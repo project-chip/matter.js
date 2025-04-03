@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,14 +8,14 @@
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { FixedAttribute, Attribute, WritableAttribute, Command, TlvNoResponse } from "../cluster/Cluster.js";
+import { FixedAttribute, Attribute, Command } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvUInt8, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ModeBase } from "./mode-base.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -23,117 +23,94 @@ export namespace DishwasherMode {
     /**
      * These are optional features supported by DishwasherModeCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     * @see {@link MatterSpecification.v14.Cluster} § 8.3.4
      */
     export enum Feature {
         /**
          * OnOff (DEPONOFF)
          *
-         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
-         * endpoint. See OnMode for more information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         * Dependency with the OnOff cluster
          */
         OnOff = "OnOff"
     }
 
     export enum ModeTag {
         /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Auto = 0,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Quick = 1,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Quiet = 2,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        LowNoise = 3,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        LowEnergy = 4,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Vacation = 5,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Min = 6,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Max = 7,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Night = 8,
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1
+         */
+        Day = 9,
+
+        /**
          * The normal regime of operation.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.3.6.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1.1
          */
         Normal = 16384,
 
         /**
          * Mode optimized for washing heavily-soiled dishes.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.3.6.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1.2
          */
         Heavy = 16385,
 
         /**
          * Mode optimized for light washing.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.3.6.1.3
+         * @see {@link MatterSpecification.v14.Cluster} § 8.3.7.1.3
          */
-        Light = 16386,
-
-        /**
-         * The device decides which options, features and setting values to use.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Auto = 0,
-
-        /**
-         * The mode of the device is optimizing for faster completion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quick = 1,
-
-        /**
-         * The device is silent or barely audible while in this mode.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Quiet = 2,
-
-        /**
-         * Either the mode is inherently low noise or the device optimizes for that.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowNoise = 3,
-
-        /**
-         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        LowEnergy = 4,
-
-        /**
-         * A mode suitable for use during vacations or other extended absences.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Vacation = 5,
-
-        /**
-         * The mode uses the lowest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Min = 6,
-
-        /**
-         * The mode uses the highest available setting value.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Max = 7,
-
-        /**
-         * The mode is recommended or suitable for use during night time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Night = 8,
-
-        /**
-         * The mode is recommended or suitable for use during day time.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
-         */
-        Day = 9
+        Light = 16386
     }
 
     /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1
      */
     export const TlvModeTagStruct = TlvObject({
         /**
@@ -147,7 +124,7 @@ export namespace DishwasherMode {
          * whose purpose is to choose the amount of sugar, or in a cluster whose purpose is to choose the amount of
          * salt.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1.1
          */
         mfgCode: TlvOptionalField(0, TlvVendorId),
 
@@ -155,15 +132,15 @@ export namespace DishwasherMode {
          * This field shall indicate the mode tag within a mode tag namespace which is either manufacturer specific or
          * standard.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1.2
          */
-        value: TlvField(1, TlvEnum<ModeTag>())
+        value: TlvField(1, TlvEnum<ModeTag | ModeBase.ModeTag>())
     });
 
     /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.1
      */
     export interface ModeTagStruct extends TypeFromSchema<typeof TlvModeTagStruct> {}
 
@@ -171,9 +148,7 @@ export namespace DishwasherMode {
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
      *
-     * At least one entry in the SupportedModes attribute shall include the Normal mode tag in the ModeTags field list.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.3.4.1
+     * @see {@link MatterSpecification.v14.Cluster} § 8.3.5.1
      */
     export const TlvModeOption = TlvObject({
         /**
@@ -181,21 +156,21 @@ export namespace DishwasherMode {
          * the user to indicate what this option means. This field is meant to be readable and understandable by the
          * user.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 64 })),
 
         /**
          * This field is used to identify the mode option.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.2
          */
         mode: TlvField(1, TlvUInt8),
 
         /**
-         * This field shall contain a list of tags that are associated with the mode option. This may be used by
-         * clients to determine the full or the partial semantics of a certain mode, depending on which tags they
-         * understand, using standard definitions and/or manufacturer specific namespace definitions.
+         * This field shall contain a list of tags that are associated with the mode option. This may be used by clients
+         * to determine the full or the partial semantics of a certain mode, depending on which tags they understand,
+         * using standard definitions and/or manufacturer specific namespace definitions.
          *
          * The standard mode tags are defined in this cluster specification. For the derived cluster instances, if the
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
@@ -206,8 +181,8 @@ export namespace DishwasherMode {
          * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
-         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard
-         * and manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
+         * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
+         * manufacturer specific mode tags. A mode option shall be associated with at least one standard mode tag.
          *
          * A few examples are provided below.
          *
@@ -226,7 +201,7 @@ export namespace DishwasherMode {
          *   • A mode that includes both a generic Quick tag (defined here), and Vacuum and Mop tags, (defined in the
          *     RVC Clean cluster that is a derivation of this cluster).
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.3
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.5.2.3
          */
         modeTags: TlvField(2, TlvArray(TlvModeTagStruct, { maxLength: 8 }))
     });
@@ -235,9 +210,7 @@ export namespace DishwasherMode {
      * The table below lists the changes relative to the Mode Base cluster for the fields of the ModeOptionStruct type.
      * A blank field indicates no change.
      *
-     * At least one entry in the SupportedModes attribute shall include the Normal mode tag in the ModeTags field list.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.3.4.1
+     * @see {@link MatterSpecification.v14.Cluster} § 8.3.5.1
      */
     export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
 
@@ -247,23 +220,23 @@ export namespace DishwasherMode {
     export const Base = MutableCluster.Component({
         id: 0x59,
         name: "DishwasherMode",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
              * OnOff
              *
-             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
-             * same endpoint. See OnMode for more information.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             * Dependency with the OnOff cluster
              */
             onOff: BitFlag(0)
         },
 
         attributes: {
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 8.3.5
+             * At least one entry in the SupportedModes attribute shall include the Normal mode tag in the ModeTags
+             * field list.
+             *
+             * @see {@link MatterSpecification.v14.Cluster} § 8.3.6.1
              */
             supportedModes: FixedAttribute(
                 0x0,
@@ -272,23 +245,9 @@ export namespace DishwasherMode {
             ),
 
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 8.3.5
+             * @see {@link MatterSpecification.v14.Cluster} § 8.3.6
              */
-            currentMode: Attribute(0x1, TlvUInt8, { scene: true, persistent: true }),
-
-            /**
-             * If this attribute is supported, the device SHOULD initially set this to one of the supported modes that
-             * has the Normal tag associated with it. See the Mode Base cluster specification for full details about
-             * the StartUpMode attribute.
-             *
-             * @see {@link MatterSpecification.v13.Cluster} § 8.3.5.1
-             */
-            startUpMode: WritableAttribute(0x2, TlvUInt8, { persistent: true }),
-
-            /**
-             * @see {@link MatterSpecification.v13.Cluster} § 8.3.5
-             */
-            onMode: WritableAttribute(0x3, TlvUInt8, { persistent: true })
+            currentMode: Attribute(0x1, TlvUInt8, { persistent: true })
         },
 
         commands: {
@@ -297,16 +256,16 @@ export namespace DishwasherMode {
              *
              * On receipt of this command the device shall respond with a ChangeToModeResponse command.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.1
              */
-            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x0, TlvNoResponse)
+            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, ModeBase.TlvChangeToModeResponse)
         },
 
         /**
          * This metadata controls which DishwasherModeCluster elements matter.js activates for specific feature
          * combinations.
          */
-        extensions: MutableCluster.Extensions()
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: false })
     });
 
     /**
@@ -315,13 +274,13 @@ export namespace DishwasherMode {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced enumerated
+     * This cluster is derived from the Mode Base cluster and defines additional mode tags and namespaced enumerated
      * values for dishwasher devices.
      *
      * DishwasherModeCluster supports optional features that you can enable with the DishwasherModeCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.3
+     * @see {@link MatterSpecification.v14.Cluster} § 8.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

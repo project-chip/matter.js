@@ -1,14 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, MatterError } from "@matter/general";
+import { Diagnostic, MatterError } from "@matter/general";
+import { DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, NodeId, QrCode, QrPairingCodeCodec } from "@matter/types";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@matter/types/clusters";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
-import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
-import { NodeId } from "@project-chip/matter.js/datatype";
-import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { createDiagnosticCallbacks } from "./cmd_nodes";
@@ -48,20 +47,56 @@ export default function commands(theNode: MatterNode) {
                                 async argv => {
                                     const {
                                         pairingCode,
+                                        qrCode,
                                         nodeId: nodeIdStr,
                                         ipPort,
                                         ip,
                                         ble = false,
                                         instanceId,
                                     } = argv;
-                                    let { setupPinCode, discriminator, shortDiscriminator } = argv;
+                                    let { setupPinCode, discriminator, shortDiscriminator, qrCodeIndex } = argv;
 
-                                    if (typeof pairingCode === "string") {
+                                    if (typeof pairingCode === "string" && pairingCode.length > 0) {
                                         const { shortDiscriminator: pairingCodeShortDiscriminator, passcode } =
                                             ManualPairingCodeCodec.decode(pairingCode);
                                         shortDiscriminator = pairingCodeShortDiscriminator;
                                         setupPinCode = passcode;
                                         discriminator = undefined;
+                                    } else if (typeof qrCode === "string" && qrCode.length > 0) {
+                                        const pairingCodeCodec = QrPairingCodeCodec.decode(qrCode);
+                                        if (typeof qrCodeIndex !== "number") {
+                                            if (!Number.isFinite(qrCodeIndex)) {
+                                                console.log("Invalid QR-Code index provided. Using first.");
+                                                qrCodeIndex = 1;
+                                            }
+                                        }
+                                        let qrIndex = Number(qrCodeIndex);
+                                        if (pairingCodeCodec.length > 1) {
+                                            if (qrIndex < 1 || qrIndex > pairingCodeCodec.length) {
+                                                console.log(
+                                                    `Multiple (${pairingCodeCodec.length}) pairing codes found in the provided QR-Code. Using first.`,
+                                                );
+                                                qrIndex = 1;
+                                            } else {
+                                                console.log(
+                                                    `Multiple (${pairingCodeCodec.length}) pairing codes found in the provided QR-Code. Using index ${qrIndex}`,
+                                                );
+                                            }
+                                        } else {
+                                            qrIndex = 1;
+                                        }
+                                        const qrResult = pairingCodeCodec[qrIndex - 1];
+                                        discriminator = qrResult.discriminator;
+                                        shortDiscriminator = undefined;
+                                        setupPinCode = qrResult.passcode;
+                                        if (
+                                            DiscoveryCapabilitiesSchema.decode(qrResult.discoveryCapabilities).ble &&
+                                            !ble
+                                        ) {
+                                            console.log(
+                                                "QR-Code contains BLE discovery capabilities, but BLE is disabled. Please enable if device is not already on network.",
+                                            );
+                                        }
                                     } else if (discriminator === undefined && shortDiscriminator === undefined) {
                                         discriminator = 3840;
                                     }
@@ -101,7 +136,7 @@ export default function commands(theNode: MatterNode) {
                                         regulatoryCountryCode: "XX",
                                     };
 
-                                    console.log(Logger.toJSON(options));
+                                    console.log(Diagnostic.json(options));
 
                                     if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
                                         options.commissioning.wifiNetwork = {
@@ -161,6 +196,16 @@ export default function commands(theNode: MatterNode) {
                                     describe: "pairing code",
                                     default: undefined,
                                     type: "string",
+                                },
+                                qrCode: {
+                                    describe: "QR code string (MT:...)",
+                                    default: undefined,
+                                    type: "string",
+                                },
+                                qrCodeIndex: {
+                                    describe: "Index of QR code entry if multiple (1..n)",
+                                    default: 1,
+                                    type: "number",
                                 },
                                 setupPinCode: {
                                     describe: "setup pin code",

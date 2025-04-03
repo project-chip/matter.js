@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
 import { CommissioningServer } from "#behavior/system/commissioning/CommissioningServer.js";
 import { ProductDescriptionServer } from "#behavior/system/product-description/ProductDescriptionServer.js";
@@ -29,6 +28,7 @@ import {
     PublicKeyError,
     TlvAttestation,
     TlvCertSigningRequest,
+    Val,
 } from "#protocol";
 import {
     Command,
@@ -321,17 +321,21 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         if (timedOp.rootCertSet) {
-            throw new StatusResponseError(
-                "UpdateNoc is illegal after AddTrustedRootCertificate in same failsafe context",
-                StatusCode.ConstraintError,
-            );
+            // CERTIFICATION BUG WORKAROUND
+            // This should be a ConstraintError but tests require this error
+            // See https://github.com/CHIP-Specifications/chip-test-plans/issues/4807
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
+            };
         }
 
         if (timedOp.forUpdateNoc === undefined) {
-            throw new StatusResponseError(
-                "UpdateNoc is illegal before CsrRequest in same failsafe context",
-                StatusCode.ConstraintError,
-            );
+            // CERTIFICATION BUG WORKAROUND
+            // This should be a ConstraintError but tests require this error
+            // See https://github.com/CHIP-Specifications/chip-test-plans/issues/4807
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
+            };
         }
 
         if (this.session.associatedFabric.fabricIndex !== timedOp.associatedFabric?.fabricIndex) {

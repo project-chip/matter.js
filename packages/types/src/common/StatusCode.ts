@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,3 +26,6 @@ export class StatusResponseError extends MatterError {
         return error instanceof StatusResponseError && (!codes.length || codes.includes(error.code));
     }
 }
+
+/** Error class for Status response errors that were received from the other node. */
+export class ReceivedStatusResponseError extends StatusResponseError {}

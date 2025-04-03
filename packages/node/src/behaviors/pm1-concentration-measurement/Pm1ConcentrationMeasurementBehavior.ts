@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * Pm1ConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link
- * Pm1ConcentrationMeasurement.Cluster}.
+ * Pm1ConcentrationMeasurementBehavior is the base class for objects that support interaction with
+ * {@link Pm1ConcentrationMeasurement.Cluster}.
  *
- * Pm1ConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using {@link
- * Pm1ConcentrationMeasurementBehavior.with}.
+ * Pm1ConcentrationMeasurement.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link Pm1ConcentrationMeasurementBehavior.with}.
  */
 export const Pm1ConcentrationMeasurementBehavior = ClusterBehavior.for(ClusterType(Pm1ConcentrationMeasurement.Base));
 

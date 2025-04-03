@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,8 +10,8 @@ import { PowerSourceConfiguration } from "#clusters/power-source-configuration";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 
 /**
- * PowerSourceConfigurationBehavior is the base class for objects that support interaction with {@link
- * PowerSourceConfiguration.Cluster}.
+ * PowerSourceConfigurationBehavior is the base class for objects that support interaction with
+ * {@link PowerSourceConfiguration.Cluster}.
  */
 export const PowerSourceConfigurationBehavior = ClusterBehavior.for(PowerSourceConfiguration.Cluster);
 

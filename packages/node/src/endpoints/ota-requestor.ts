@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@ import { Identity } from "#general";
 /**
  * An OTA Requestor is a device that is capable of receiving an OTA software update.
  *
- * @see {@link MatterSpecification.v13.Device} § 2.3
+ * @see {@link MatterSpecification.v14.Device} § 2.3
  */
 export interface OtaRequestorEndpoint extends Identity<typeof OtaRequestorEndpointDefinition> {}
 

@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { createPromise } from "#general";
-import { FailsafeTimer } from "@project-chip/matter.js/common";
-import * as assert from "assert";
+import { FailsafeTimer } from "@matter/protocol";
+import * as assert from "node:assert";
 
 // TODO identify more cases that are not handled by chip tool tests
 describe("FailSafeTimer Test", () => {

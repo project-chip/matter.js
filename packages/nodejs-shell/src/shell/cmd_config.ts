@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -281,7 +281,7 @@ async function doLogfilePath(
             break;
         case "delete":
             await theNode.Store.delete("LogFile");
-            console.log(`LogFile path removed. Please restart the shell for teh changes to take effect.`);
+            console.log(`LogFile path removed. Please restart the shell for the changes to take effect.`);
             break;
     }
 }
@@ -334,11 +334,11 @@ async function doBleHci(
                 return;
             }
             await theNode.Store.set("BleHciId", value);
-            console.log(`New HCI ID:" ${value}". Please restart the shell for teh changes to take effect.`);
+            console.log(`New HCI ID:" ${value}". Please restart the shell for the changes to take effect.`);
             break;
         case "delete":
             await theNode.Store.delete("BleHciId");
-            console.log(`BLE HCI ID reset to default (0). Please restart the shell for teh changes to take effect.`);
+            console.log(`BLE HCI ID reset to default (0). Please restart the shell for the changes to take effect.`);
             break;
     }
 }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -103,23 +103,19 @@ describe("SwitchServer", () => {
     describe("test custom validators", () => {
         it("Accept valid currentPosition", async () => {
             const device = await createLatchingSwitch();
-            await expect(device.set({ switch: { currentPosition: 1 } })).to.not.be.rejectedWith(
-                "Rolled back due to pre-commit error",
-            );
+            await expect(device.set({ switch: { currentPosition: 1 } })).to.not.be.rejected;
         });
 
         it("Reject invalid currentPosition", async () => {
             const device = await createLatchingSwitch();
             await expect(device.set({ switch: { currentPosition: 2 } })).to.be.rejectedWith(
-                "Error in reactor<node0.part0.switch.#assertPositionInRange>: (135) Position 2 invalid",
+                'Validating node0.part0.switch.state: Constraint "max numberOfPositions - 1": Value 2 is not within bounds defined by constraint (135)',
             );
         });
 
         it("Accept valid rawPosition", async () => {
             const device = await createLatchingSwitch();
-            await expect(device.set({ switch: { rawPosition: 1 } })).to.not.be.rejectedWith(
-                "Rolled back due to pre-commit error",
-            );
+            await expect(device.set({ switch: { rawPosition: 1 } })).to.not.be.rejected;
         });
 
         it("Reject invalid rawPosition", async () => {

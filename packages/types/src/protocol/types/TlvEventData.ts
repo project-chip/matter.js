@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { EventPriority } from "../../cluster/Cluster.js";
 import { TlvEventNumber } from "../../datatype/EventNumber.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
@@ -24,3 +25,5 @@ export const TlvEventData = TlvObject({
     deltaSystemTimestamp: TlvOptionalField(6, TlvSysTimeMS),
     data: TlvOptionalField(7, TlvAny),
 });
+
+export type EventData = TypeFromSchema<typeof TlvEventData>;

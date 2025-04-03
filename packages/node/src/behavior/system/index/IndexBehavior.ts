@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { EventEmitter, Observable, Timer } from "#general";
-import { IdentityService } from "#node/server/IdentityService.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
@@ -44,8 +43,8 @@ export class IndexBehavior extends Behavior {
     /**
      * Retrieve a {@link Endpoint} by number.
      *
-     * Note that {@link state.partsByNumber} does not include {@link endpoint} but this method will return it if the number
-     * matches.
+     * Note that {@link internal.partsByNumber} does not include {@link endpoint} but this method will return it if the
+     * number matches.
      */
     forNumber(number: number) {
         if (this.endpoint.lifecycle.hasNumber && number === this.endpoint.number) {
@@ -71,10 +70,13 @@ export class IndexBehavior extends Behavior {
     }
 
     #add(endpoint: Endpoint) {
-        // This assertion is a sanity check; if there is a conflict then state is already corrupted
         if (endpoint.lifecycle.hasNumber) {
-            this.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
+            // Add to endpoint number index
             this.internal.partsByNumber[endpoint.number] = endpoint;
+        }
+
+        if (endpoint.lifecycle.hasId) {
+            this.internal.partsById[endpoint.id] = endpoint;
         }
 
         for (const child of endpoint.parts) {
@@ -119,12 +121,12 @@ export namespace IndexBehavior {
         /**
          * Map of ID to {@link Endpoint}.
          */
-        partsById = {} as Record<string, Endpoint | undefined>;
+        partsById = {} as Record<string, Endpoint>;
 
         /**
          * Map of number to {@link Endpoint}.
          */
-        partsByNumber = {} as Record<number, Endpoint | undefined>;
+        partsByNumber = {} as Record<number, Endpoint>;
     }
 
     export class Events extends EventEmitter {

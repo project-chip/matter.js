@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -176,7 +176,7 @@ export namespace Metatype {
 
     cast.enum = (value: any): number | string | null | undefined => {
         if (typeof value === "string") {
-            if (value.trim().match(/^(?:[0-9]+|0x[0-9a-f]+|0b[01]+)$/)) {
+            if (value.trim().match(/^(?:\d+|0x[0-9a-f]+|0b[01]+)$/)) {
                 value = Number.parseInt(value);
             } else {
                 return value;

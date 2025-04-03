@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -59,21 +59,20 @@ export const OnOff = Cluster(
                 "  • Report Transactions shall continue to be generated. Such transactions may include best-effort " +
                 "    values as noted above." +
                 "\n" +
-                "  • Event generation logic for clusters other than this cluster is unchanged (noting possible use " +
-                "    of best-effort attribute values as in the preceding bullets)." +
+                "  • Event generation logic for clusters other than this cluster is unchanged (noting possible use of " +
+                "    best-effort attribute values as in the preceding bullets)." +
                 "\n" +
                 "When this feature is supported and the OnOff attribute changes from TRUE to FALSE (e.g. when " +
                 "receiving an Off Command, or due to a manual interaction on the device), it shall start executing " +
                 "this \"dead front\" behavior." +
                 "\n" +
                 "When this feature is supported and the OnOff attribute changes from FALSE to TRUE (e.g. when " +
-                "receiving an On Command, or due to a manual interaction on the device), it shall stop executing " +
-                "this \"dead front\" behavior." +
+                "receiving an On Command, or due to a manual interaction on the device), it shall stop executing this " +
+                "\"dead front\" behavior." +
                 "\n" +
                 "When this feature is supported, and any change of the \"dead front\" state leads to changes in " +
                 "attributes of other clusters due to the \"dead front\" feature, these attribute changes shall NOT be " +
-                "skipped or omitted from the usual processing associated with attribute changes. For example, if an" +
-                "\n" +
+                "skipped or omitted from the usual processing associated with attribute changes. For example, if an " +
                 "attribute changes from value 4 to null on \"dead front\" behavior due to an Off command being " +
                 "received, this change shall be processed for reporting and subscriptions.",
 
@@ -97,8 +96,8 @@ export const OnOff = Cluster(
     Attribute({
         name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: false,
         quality: "N S",
-        details: "This attribute indicates whether the device type implemented on the endpoint is turned off or " +
-            "turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.",
+        details: "This attribute indicates whether the device type implemented on the endpoint is turned off or turned " +
+            "on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.",
         xref: { document: "cluster", section: "1.5.6.2" }
     }),
 
@@ -106,10 +105,10 @@ export const OnOff = Cluster(
         name: "GlobalSceneControl", id: 0x4000, type: "bool", access: "R V", conformance: "LT",
         default: true,
 
-        details: "In order to support the use case where the user gets back the last setting of a set of devices " +
-            "(e.g. level settings for lights), a global scene is introduced which is stored when the devices are " +
-            "turned off and recalled when the devices are turned on. The global scene is defined as the scene " +
-            "that is stored with group identifier 0 and scene identifier 0." +
+        details: "In order to support the use case where the user gets back the last setting of a set of devices (e.g. " +
+            "level settings for lights), a global scene is introduced which is stored when the devices are turned " +
+            "off and recalled when the devices are turned on. The global scene is defined as the scene that is " +
+            "stored with group identifier 0 and scene identifier 0." +
             "\n" +
             "This attribute is defined in order to prevent a second Off command storing the all-devices-off " +
             "situation as a global scene, and to prevent a second On command destroying the current settings by " +
@@ -139,9 +138,9 @@ export const OnOff = Cluster(
         details: "This attribute specifies the length of time (in 1/10ths second) that the Off state shall be guarded " +
             "to prevent another OnWithTimedOff command turning the server back to its On state (e.g., when " +
             "leaving a room, the lights are turned off but an occupancy sensor detects the leaving person and " +
-            "attempts to turn the lights back on). This attribute can be written at any time, but writing a " +
-            "value only has an effect when in the Timed On state followed by a transition to the Delayed Off " +
-            "state, or in the Delayed Off state. See OnWithTimedOff for more details.",
+            "attempts to turn the lights back on). This attribute can be written at any time, but writing a value " +
+            "only has an effect when in the Timed On state followed by a transition to the Delayed Off state, or " +
+            "in the Delayed Off state. See OnWithTimedOff for more details.",
 
         xref: { document: "cluster", section: "1.5.6.5" }
     }),
@@ -193,10 +192,10 @@ export const OnOff = Cluster(
 
         Field({
             name: "EffectVariant", id: 0x1, type: "enum8", conformance: "M", constraint: "desc", default: 0,
-            details: "This field is used to indicate which variant of the effect, indicated in the EffectIdentifier " +
-                "field, SHOULD be triggered. If the server does not support the given variant, it shall use the " +
-                "default variant. This field is dependent on the value of the EffectIdentifier field and shall " +
-                "contain one of the non-reserved values listed in either DelayedAllOffEffectVariantEnum or " +
+            details: "This field is used to indicate which variant of the effect, indicated in the EffectIdentifier field, " +
+                "SHOULD be triggered. If the server does not support the given variant, it shall use the default " +
+                "variant. This field is dependent on the value of the EffectIdentifier field and shall contain one of " +
+                "the non-reserved values listed in either DelayedAllOffEffectVariantEnum or " +
                 "DyingLightEffectVariantEnum.",
             xref: { document: "cluster", section: "1.5.7.4.2" }
         })

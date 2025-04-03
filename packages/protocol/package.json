@@ -43,7 +43,7 @@
         "@matter/general": "*",
         "@matter/model": "*",
         "@matter/types": "*",
-        "@noble/curves": "^1.8.0"
+        "@noble/curves": "^1.8.1"
     },
     "devDependencies": {
         "@matter/tools": "*",

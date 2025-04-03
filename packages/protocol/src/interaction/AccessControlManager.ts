@@ -6,8 +6,16 @@
 import { AccessControl } from "#clusters/access-control";
 import { Logger, MatterFlowError, toHex } from "#general";
 import { AccessLevel } from "#model";
-import { CaseAuthenticatedTag, ClusterId, FabricIndex, NodeId, StatusCode, StatusResponseError } from "#types";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
+import {
+    CaseAuthenticatedTag,
+    ClusterId,
+    DeviceTypeId,
+    EndpointNumber,
+    FabricIndex,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+} from "#types";
 import { Fabric } from "../fabric/Fabric.js";
 import { SecureSession } from "../session/SecureSession.js";
 
@@ -20,6 +28,11 @@ export type AclList = AclEntry[];
 
 export type AclExtensionEntry = AccessControl.AccessControlExtension;
 export type AclExtensionList = AclExtensionEntry[];
+
+export type AclEndpointContext = {
+    id: EndpointNumber;
+    deviceTypes: DeviceTypeId[];
+};
 
 const ImplicitDefaultPaseAclEntry: AclEntry = {
     fabricIndex: FabricIndex.NO_FABRIC, // not fabric-specific
@@ -55,7 +68,7 @@ export class AccessControlManager {
         aclList: AclList,
         aclEntry: AclEntry,
         subjectDesc: IncomingSubjectDescriptor,
-        endpoint: EndpointInterface,
+        endpoint: AclEndpointContext,
         clusterId: ClusterId,
     ) => boolean = () => true;
 
@@ -65,7 +78,7 @@ export class AccessControlManager {
             aclList: AclList,
             aclEntry: AclEntry,
             subjectDesc: IncomingSubjectDescriptor,
-            endpoint: EndpointInterface,
+            endpoint: AclEndpointContext,
             clusterId: ClusterId,
         ) => boolean,
     ) {
@@ -140,7 +153,7 @@ export class AccessControlManager {
      */
     allowsPrivilege(
         session: SecureSession,
-        endpoint: EndpointInterface,
+        endpoint: AclEndpointContext,
         clusterId: ClusterId,
         privilege: AccessLevel,
     ): boolean {
@@ -150,7 +163,7 @@ export class AccessControlManager {
         }
 
         logger.notice(
-            `Failed access control check for ${endpoint.number}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
+            `Failed access control check for ${endpoint.id}/0x${toHex(clusterId)} and fabricIndex ${session.associatedFabric.fabricIndex}, acl=`,
             this.#getAccessControlEntriesForFabric(session.associatedFabric),
             "with ISD=",
             this.#getIsdFromMessage(session),
@@ -166,8 +179,8 @@ export class AccessControlManager {
     /**
      * Determines the granted privileges for the given session, endpoint, and cluster ID and returns them.
      */
-    getGrantedPrivileges(session: SecureSession, endpoint: EndpointInterface, clusterId: ClusterId): AccessLevel[] {
-        const endpointId = endpoint.number;
+    getGrantedPrivileges(session: SecureSession, endpoint: AclEndpointContext, clusterId: ClusterId): AccessLevel[] {
+        const endpointId = endpoint.id;
         const fabric = session.fabric;
         const subjectDesc = this.#getIsdFromMessage(session);
         const acl = fabric ? this.#getAccessControlEntriesForFabric(fabric) : [ImplicitDefaultPaseAclEntry];
@@ -258,8 +271,7 @@ export class AccessControlManager {
                         continue;
                     }
                     // Endpoint may be specified indirectly via device type
-                    // TODO adjust to array check once we use multiple devicetypes
-                    if (targetDeviceType !== null && endpoint.deviceType !== targetDeviceType) {
+                    if (targetDeviceType !== null && !endpoint.deviceTypes.includes(targetDeviceType)) {
                         continue;
                     }
                     matchedTarget = true;

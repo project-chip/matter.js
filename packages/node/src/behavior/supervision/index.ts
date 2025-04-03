@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 export * from "./BehaviorSupervisor.js";
 export * from "./RootSupervisor.js";
-export * from "./Schema.js";
 export * from "./ValueSupervisor.js";

@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { StorageBackendDiskAsync } from "#storage/index.js";
-import * as assert from "assert";
-import { readFile, rm, stat } from "fs/promises";
-import { tmpdir } from "os";
-import { resolve } from "path";
+import * as assert from "node:assert";
+import { readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
 
 const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage-async");
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -625,6 +625,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     async close() {
+        this.lifecycle.change(EndpointLifecycle.Change.Destroying);
         await this.env.get(EndpointInitializer).deactivateDescendant(this);
         await this.#construction.close();
     }
@@ -633,8 +634,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         await this.#parts?.close();
         await this.#behaviors?.close();
 
-        for (const events of Object.values(this.#events)) {
-            events[Symbol.dispose]();
+        for (const id in this.#events) {
+            this.#events[id][Symbol.dispose]();
         }
 
         this.lifecycle.change(EndpointLifecycle.Change.Destroyed);

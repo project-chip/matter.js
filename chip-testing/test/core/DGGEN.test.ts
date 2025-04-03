@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,5 +16,8 @@ describe("DGGEN", () => {
         ),
     );
 
-    chip("DGGEN/*");
+    chip("DGGEN/*").exclude(
+        // Needs time sync cluster
+        "DGGEN/2.4",
+    );
 });

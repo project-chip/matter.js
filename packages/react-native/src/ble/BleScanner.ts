@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -220,8 +220,16 @@ export class BleScanner implements Scanner {
     async findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
         timeoutSeconds = 10,
+        ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
         let storedRecords = this.getCommissionableDevices(identifier);
+        if (ignoreExistingRecords) {
+            // We want to have a fresh discovery result, so clear out the stored records because they might be outdated
+            for (const record of storedRecords) {
+                this.discoveredMatterDevices.delete(record.peripheral.id);
+            }
+            storedRecords = [];
+        }
         if (storedRecords.length === 0) {
             const queryKey = this.buildCommissionableQueryIdentifier(identifier);
 

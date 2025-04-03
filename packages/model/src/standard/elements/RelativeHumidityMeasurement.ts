@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -45,7 +45,7 @@ export const RelativeHumidityMeasurement = Cluster(
 
     Attribute({
         name: "MinMeasuredValue", id: 0x1, type: "uint16", access: "R V", conformance: "M",
-        constraint: "0 to maxMeasuredValue1", quality: "X",
+        constraint: "max 9999", quality: "X",
         details: "The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. " +
             "The null value means this attribute is not defined. See Measured Value for more details.",
         xref: { document: "cluster", section: "2.6.4.2" }
@@ -53,15 +53,14 @@ export const RelativeHumidityMeasurement = Cluster(
 
     Attribute({
         name: "MaxMeasuredValue", id: 0x2, type: "uint16", access: "R V", conformance: "M",
-        constraint: "minMeasuredValue1 to 10000", quality: "X",
+        constraint: "minMeasuredValue + 1 to 10000", quality: "X",
         details: "The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. " +
             "The null value means this attribute is not defined. See Measured Value for more details.",
         xref: { document: "cluster", section: "2.6.4.3" }
     }),
 
     Attribute({
-        name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O",
-        constraint: "0 to 2048",
+        name: "Tolerance", id: 0x3, type: "uint16", access: "R V", conformance: "O", constraint: "max 2048",
         details: "See Measured Value.",
         xref: { document: "cluster", section: "2.6.4.4" }
     })

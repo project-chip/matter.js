@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,6 +15,7 @@ import {
     DerKey,
     DerObject,
     DerType,
+    Diagnostic,
     ImplementationError,
     Key,
     Logger,
@@ -788,13 +789,13 @@ export namespace CertificateManager {
         if (rootCert.subject.fabricId !== undefined) {
             if (Array.isArray(rootCert.subject.fabricId)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(rootCert.subject.fabricId)}`,
                 );
             }
             // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
             if (rootCert.subject.fabricId === FabricId(0)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(rootCert.subject.fabricId)}`,
                 );
             }
         }
@@ -806,7 +807,9 @@ export namespace CertificateManager {
 
         // The subject DN SHALL encode exactly one matter-rcac-id attribute.
         if (rootCert.subject.rcacId === undefined || Array.isArray(rootCert.subject.rcacId)) {
-            throw new CertificateError(`Invalid rcacId in Root certificate: ${Logger.toJSON(rootCert.subject.rcacId)}`);
+            throw new CertificateError(
+                `Invalid rcacId in Root certificate: ${Diagnostic.json(rootCert.subject.rcacId)}`,
+            );
         }
 
         // The subject DN SHALL NOT encode any matter-noc-cat attribute.
@@ -819,12 +822,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Root certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
-        if (!rootCert.extensions.keyUsage.keyCertSign || !rootCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Root certificate keyUsage must have keyCertSign and CRLSign set.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Root certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.
@@ -863,30 +869,31 @@ export namespace CertificateManager {
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
     export function verifyNodeOperationalCertificate(
-        rootOrIcaCert: RootCertificate | IntermediateCertificate,
         nocCert: OperationalCertificate,
+        rootCert: RootCertificate,
+        icaCert?: IntermediateCertificate,
     ) {
         CertificateManager.validateGeneralCertificateFields(nocCert);
 
         // The subject DN SHALL encode exactly one matter-node-id attribute.
         if (nocCert.subject.nodeId === undefined || Array.isArray(nocCert.subject.nodeId)) {
-            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Diagnostic.json(nocCert.subject.nodeId)}`);
         }
         // The matter-node-id attribute’s value SHALL be in the Operational Node ID
         if (!NodeId.isOperationalNodeId(nocCert.subject.nodeId)) {
-            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Diagnostic.json(nocCert.subject.nodeId)}`);
         }
 
         // The subject DN SHALL encode exactly one matter-fabric-id attribute.
         if (nocCert.subject.fabricId === undefined || Array.isArray(nocCert.subject.fabricId)) {
             throw new CertificateError(
-                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                `Invalid fabricId in NoC certificate: ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
         // The matter-fabric-id attribute’s value SHALL NOT be 0
         if (nocCert.subject.fabricId === FabricId(0)) {
             throw new CertificateError(
-                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                `Invalid fabricId in NoC certificate: ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
 
@@ -908,14 +915,22 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
+        if (rootCert.subject.fabricId !== undefined && rootCert.subject.fabricId !== nocCert.subject.fabricId) {
+            throw new CertificateError(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
+                    rootCert.subject.fabricId,
+                )} !== ${Diagnostic.json(nocCert.subject.fabricId)}`,
+            );
+        }
         if (
-            rootOrIcaCert.subject.fabricId !== undefined &&
-            rootOrIcaCert.subject.fabricId !== nocCert.subject.fabricId
+            icaCert !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== nocCert.subject.fabricId
         ) {
             throw new CertificateError(
-                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                    rootOrIcaCert.subject.fabricId,
-                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
+                    icaCert.subject.fabricId,
+                )} !== ${Diagnostic.json(nocCert.subject.fabricId)}`,
             );
         }
 
@@ -938,7 +953,7 @@ export namespace CertificateManager {
             (!nocCert.extensions.extendedKeyUsage.includes(1) && !nocCert.extensions.extendedKeyUsage.includes(2))
         ) {
             throw new CertificateError(
-                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Logger.toJSON(nocCert.extensions.extendedKeyUsage)}`,
+                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Diagnostic.json(nocCert.extensions.extendedKeyUsage)}`,
             );
         }
 
@@ -959,14 +974,19 @@ export namespace CertificateManager {
         }
 
         // Validate authority key identifier against subject key identifier
-        if (!Bytes.areEqual(nocCert.extensions.authorityKeyIdentifier, rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+        if (
+            !Bytes.areEqual(
+                nocCert.extensions.authorityKeyIdentifier,
+                (icaCert ?? rootCert).extensions.subjectKeyIdentifier,
+            )
+        ) {
             throw new CertificateError(
                 `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
             );
         }
 
         Crypto.verify(
-            PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
+            PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
             nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
         );
@@ -988,28 +1008,20 @@ export namespace CertificateManager {
         if (icaCert.subject.fabricId !== undefined) {
             if (Array.isArray(icaCert.subject.fabricId)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(icaCert.subject.fabricId)}`,
                 );
             }
             // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
             if (icaCert.subject.fabricId === FabricId(0)) {
                 throw new CertificateError(
-                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
-                );
-            }
-            // If present on root certificate fabric-id needs to match with Ica fabric Id
-            if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
-                throw new CertificateError(
-                    `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
-                        rootCert.subject.fabricId,
-                    )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                    `Invalid fabricId in NoC certificate: ${Diagnostic.json(icaCert.subject.fabricId)}`,
                 );
             }
         }
 
         // The subject DN SHALL encode exactly one matter-icac-id attribute.
         if (icaCert.subject.icacId === undefined || Array.isArray(icaCert.subject.icacId)) {
-            throw new CertificateError(`Invalid icacId in Ica certificate: ${Logger.toJSON(icaCert.subject.icacId)}`);
+            throw new CertificateError(`Invalid icacId in Ica certificate: ${Diagnostic.json(icaCert.subject.icacId)}`);
         }
 
         // The subject DN SHALL NOT encode any matter-rcac-id attribute.
@@ -1025,20 +1037,25 @@ export namespace CertificateManager {
         // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
         // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
         // the same certificate chain.
-        if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+        // Here means: When both are set, they must match
+        if (
+            rootCert.subject.fabricId !== undefined &&
+            icaCert.subject.fabricId !== undefined &&
+            rootCert.subject.fabricId !== icaCert.subject.fabricId
+        ) {
             throw new CertificateError(
-                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Diagnostic.json(
                     rootCert.subject.fabricId,
-                )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                )} !== ${Diagnostic.json(icaCert.subject.fabricId)}`,
             );
         }
 
         // Verify the certificate chain by checking rcac ids in subject and issuer
         if (rootCert.subject.rcacId !== icaCert.issuer.rcacId) {
             throw new CertificateError(
-                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Logger.toJSON(
+                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Diagnostic.json(
                     rootCert.subject.rcacId,
-                )} !== ${Logger.toJSON(icaCert.issuer.rcacId)}`,
+                )} !== ${Diagnostic.json(icaCert.issuer.rcacId)}`,
             );
         }
 
@@ -1047,12 +1064,15 @@ export namespace CertificateManager {
             throw new CertificateError(`Ica certificate must have isCa set to true.`);
         }
 
-        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
-        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
-        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
-        //if (ExtensionKeyUsageSchema.encode(icaCert.extensions.keyUsage) !== 0x0060) {
-        if (!icaCert.extensions.keyUsage.keyCertSign || !icaCert.extensions.keyUsage.cRLSign) {
-            throw new CertificateError(`Ica certificate must have keyUsage set to keyCertSign and CRLSign.`);
+        // The key usage extension SHALL be encoded with at least two flags: keyCertSign (0x0020) and CRLSign (0x0040)
+        // and optionally with digitalSignature (0x0001).
+        if (
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060 &&
+            ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0061
+        ) {
+            throw new CertificateError(
+                `Ica certificate keyUsage must have keyCertSign and CRLSign and optionally digitalSignature set.`,
+            );
         }
 
         // The extended key usage extension SHALL NOT be present.

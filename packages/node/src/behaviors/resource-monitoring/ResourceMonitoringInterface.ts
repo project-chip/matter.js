@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@ export namespace ResourceMonitoringInterface {
          * LastChangedTime to be updated automatically based on the clock of the server, if the server supports setting
          * the attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.8.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 2.8.7.1
          */
         resetCondition(): MaybePromise;
     }

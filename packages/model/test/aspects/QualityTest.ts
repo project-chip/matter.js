@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -53,7 +53,7 @@ describe("Quality", () => {
         });
 
         it("serialize", () => {
-            expect(`${quality}`).equal("X N F S P C I Q L K");
+            expect(`${quality}`).equal("X N F S P C I Q L K T");
         });
     });
 

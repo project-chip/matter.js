@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { SoftwareDiagnosticsInterface } from "./SoftwareDiagnosticsInterface.js";
 
 /**
- * SoftwareDiagnosticsBehavior is the base class for objects that support interaction with {@link
- * SoftwareDiagnostics.Cluster}.
+ * SoftwareDiagnosticsBehavior is the base class for objects that support interaction with
+ * {@link SoftwareDiagnostics.Cluster}.
  *
- * This class does not have optional features of SoftwareDiagnostics.Cluster enabled. You can enable additional
- * features using SoftwareDiagnosticsBehavior.with.
+ * This class does not have optional features of SoftwareDiagnostics.Cluster enabled. You can enable additional features
+ * using SoftwareDiagnosticsBehavior.with.
  */
 export const SoftwareDiagnosticsBehavior = ClusterBehavior
     .withInterface<SoftwareDiagnosticsInterface>()

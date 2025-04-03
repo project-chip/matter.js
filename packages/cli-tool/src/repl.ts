@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,13 +9,13 @@ import { IncompleteError } from "#errors.js";
 import { Environment, InternalError, Observable, RuntimeService, StorageService, Time } from "#general";
 import { isCommand } from "#parser.js";
 import colors from "ansi-colors";
-import { readFile } from "fs/promises";
-import { homedir } from "os";
-import { dirname, join } from "path";
-import { exit, stderr, stdout } from "process";
-import { AsyncCompleter, CompleterResult, Key } from "readline";
-import { Recoverable, REPLEval, ReplOptions, REPLServer, start } from "repl";
-import { Context } from "vm";
+import { readFile } from "node:fs/promises";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
+import { exit, stderr, stdout } from "node:process";
+import { AsyncCompleter, CompleterResult, Key } from "node:readline";
+import { Recoverable, REPLEval, ReplOptions, REPLServer, start } from "node:repl";
+import { Context } from "node:vm";
 import "./commands/index.js";
 import "./providers/index.js";
 
@@ -252,7 +252,7 @@ function evaluate(
             } else {
                 // Look for the "matter-cli-" marker which we prefix on the "filename"
                 specialLine = lines.findIndex(line => {
-                    const match = line.match(/at matter-cli-(?:[a-z]+):([0-9]+:[0-9]+)?/);
+                    const match = line.match(/at matter-cli-[a-z]+:(\d+:\d+)?/);
                     if (match) {
                         specialLoc = match[1];
                         return true;

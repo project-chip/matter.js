@@ -1,18 +1,16 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize, InternalError } from "#general";
-import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, Model, Scope, ValueModel } from "#model";
-import { AccessControl } from "../AccessControl.js";
-import { Val } from "../state/Val.js";
+import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, Model, Schema, Scope, ValueModel } from "#model";
+import { AccessControl, Val } from "#protocol";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";
 import { ValueValidator } from "../state/validation/ValueValidator.js";
-import { Schema } from "./Schema.js";
 import { ValueSupervisor } from "./ValueSupervisor.js";
 
 /**

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Build the CHIP container
+#
+# Takes an optional single argument:
+#
+#   - If not provided, builds full container from latest CHIP master branch
+#
+#   - If argument is "fast", re-uses previous CHIP commit and skips building apps
+#
+#   - Otherwise the argument should be a CHIP SHA or tag and triggers a full container build of that version
+
+set -e
+
+if ! docker buildx inspect matter.js-chip > /dev/null 2>&1; then
+    docker buildx create --name matter.js-chip
+fi
+
+if [ -z "$1" ]; then
+    CHIP_COMMIT=$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)
+elif [ "$1" == fast ]; then
+    CHIP_COMMIT=master
+    SKIP_APPS=1
+else
+    CHIP_COMMIT="$1"
+fi
+
+if [ -e "$GITHUB_ACTION" ]; then
+    ACTOR=ci
+else
+    ACTOR=$(whoami)
+fi
+
+VERSION="$ACTOR-$(date -u +%Y%m%dT%H%M%S)-$(git rev-parse HEAD | cut -c 1-12)"
+
+docker buildx build . \
+    --builder matter.js-chip \
+    --load \
+    -t ghcr.io/matter-js/chip \
+    --label org.opencontainers.image.name=matter.js-chip \
+    --label org.opencontainers.image.version="$VERSION" \
+    --label org.opencontainers.image.revision="$CHIP_COMMIT" \
+    --platform linux/amd64 \
+    --build-arg CHIP_COMMIT="$CHIP_COMMIT" \
+    --build-arg SKIP_APPS="$SKIP_APPS"

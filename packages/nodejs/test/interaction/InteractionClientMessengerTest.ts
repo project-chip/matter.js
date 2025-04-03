@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ import {
     TlvSubscribeResponse,
 } from "#types";
 import { Specification } from "@matter/model";
-import assert from "assert";
+import assert from "node:assert";
 import { createDummyMessageExchange } from "./InteractionTestUtils.js";
 
 function handleReadRequest(exchange: MessageExchange, messageType: number, payload: Uint8Array) {

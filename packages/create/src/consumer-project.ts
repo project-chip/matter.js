@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { execSync } from "child_process";
-import { cp, mkdir, writeFile } from "fs/promises";
-import { basename, resolve } from "path";
-import { stderr } from "process";
+import { execSync } from "node:child_process";
+import { cp, mkdir, writeFile } from "node:fs/promises";
+import { basename, resolve } from "node:path";
+import { stderr } from "node:process";
 import { Config, Template, TEMPLATE_DIR } from "./config.js";
 import { bold } from "./formatting.js";
 import { notice } from "./messages.js";

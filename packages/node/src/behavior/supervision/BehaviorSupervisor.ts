@@ -1,16 +1,15 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize } from "#general";
-import { Access, FieldModel, Scope } from "#model";
+import { Access, FieldModel, Schema, Scope } from "#model";
+import type { Val } from "#protocol";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
-import type { Val } from "../state/Val.js";
 import { RootSupervisor } from "./RootSupervisor.js";
-import { Schema } from "./Schema.js";
 
 /**
  * Create a {@link RootSupervisor} for a {@link Behavior}.

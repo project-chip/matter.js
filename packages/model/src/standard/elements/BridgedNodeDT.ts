@@ -1,13 +1,17 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterDefinition } from "../MatterDefinition.js";
-import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
+import {
+    DeviceTypeElement as DeviceType,
+    RequirementElement as Requirement,
+    FieldElement as Field
+} from "../../elements/index.js";
 
 export const BridgedNodeDt = DeviceType(
     {
@@ -21,7 +25,7 @@ export const BridgedNodeDt = DeviceType(
 
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 19, revision: 2 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 19, revision: 3 } ], element: "attribute" })
     ),
     Requirement({
         name: "BridgedDeviceBasicInformation", id: 0x39, conformance: "M", element: "serverCluster",
@@ -35,7 +39,25 @@ export const BridgedNodeDt = DeviceType(
     Requirement({
         name: "PowerSource", id: 0x2f, conformance: "BridgedPowerSourceInfo", element: "serverCluster",
         xref: { document: "device", section: "2.5.5" }
-    })
+    }),
+    Requirement({
+        name: "EcosystemInformation", id: 0x750, conformance: "FabricSynchronizedNode, O",
+        element: "serverCluster",
+        xref: { document: "device", section: "2.5.5" }
+    }),
+    Requirement({
+        name: "AdministratorCommissioning", id: 0x3c, conformance: "FabricSynchronizedNode",
+        element: "serverCluster",
+        xref: { document: "device", section: "2.5.5" }
+    }),
+
+    Field(
+        { name: "conditions", type: "enum8" },
+        Field({
+            name: "FabricSynchronizedNode", description: "See description below.",
+            xref: { document: "device", section: "2.5.3" }
+        })
+    )
 );
 
 MatterDefinition.children.push(BridgedNodeDt);

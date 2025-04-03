@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,10 +24,10 @@ export namespace SoftwareDiagnosticsInterface {
          * If implemented, the server shall set the value of the CurrentHeapHighWatermark attribute to the value of the
          * CurrentHeapUsed attribute.
          *
-         * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the value
-         * of the corresponding thread’s StackFreeCurrent field.
+         * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the value of
+         * the corresponding thread’s StackFreeCurrent field.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.13.7.1
+         * @see {@link MatterSpecification.v14.Core} § 11.13.7.1
          */
         resetWatermarks(): MaybePromise;
     }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -64,8 +64,8 @@ export const ConcentrationMeasurement = Cluster(
     }),
 
     Attribute({
-        name: "MinMeasuredValue", id: 0x1, type: "single", access: "R V", conformance: "MEA",
-        constraint: "max maxMeasuredValue", default: null, quality: "X",
+        name: "MinMeasuredValue", id: 0x1, type: "single", access: "R V", conformance: "MEA", default: null,
+        quality: "X",
         details: "Indicates the minimum value of MeasuredValue that is capable of being measured. A MinMeasuredValue " +
             "of null indicates that the MinMeasuredValue is not defined.",
         xref: { document: "cluster", section: "2.10.6.2" }

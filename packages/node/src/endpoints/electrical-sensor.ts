@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,7 +24,7 @@ import { Identity } from "#general";
  * ElectricalSensorEndpoint requires PowerTopology cluster but PowerTopology is not added by default because you must
  * select the features your device supports. You can add manually using ElectricalSensorEndpoint.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 2.6
+ * @see {@link MatterSpecification.v14.Device} § 2.6
  */
 export interface ElectricalSensorEndpoint extends Identity<typeof ElectricalSensorEndpointDefinition> {}
 

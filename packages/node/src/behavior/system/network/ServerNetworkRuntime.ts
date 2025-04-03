@@ -1,22 +1,26 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SubscriptionBehavior } from "#behavior/system/subscription/index.js";
 import {
-    ImplementationError,
+    Construction,
     InterfaceType,
     Logger,
+    NetInterfaceSet,
     Network,
     NetworkInterface,
     NetworkInterfaceDetailed,
+    NoAddressAvailableError,
     ObserverGroup,
     TransportInterface,
     TransportInterfaceSet,
     UdpInterface,
 } from "#general";
-import { ServerNode } from "#node/ServerNode.js";
+import type { ServerNode } from "#node/ServerNode.js";
+import { NodePeerAddressStore } from "#node/index.js";
 import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
 import {
     Ble,
@@ -26,8 +30,12 @@ import {
     DeviceCommissioner,
     ExchangeManager,
     InstanceBroadcaster,
+    InteractionServer,
     MdnsInstanceBroadcaster,
     MdnsService,
+    PeerAddressStore,
+    PeerSet,
+    ScannerSet,
     SecureChannelProtocol,
     SessionManager,
 } from "#protocol";
@@ -52,11 +60,11 @@ function convertNetworkEnvironmentType(type: string | number) {
  * Handles network functionality for {@link NodeServer}.
  */
 export class ServerNetworkRuntime extends NetworkRuntime {
-    #interactionServer?: TransactionalInteractionServer;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
     #observers = new ObserverGroup(this);
+    #formerSubscriptionsHandled = false;
 
     override get owner() {
         return super.owner as ServerNode;
@@ -100,8 +108,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return interfaceDetails;
     }
 
-    openAdvertisementWindow() {
-        return this.owner.env.get(DeviceAdvertiser).startAdvertising();
+    async openAdvertisementWindow() {
+        if (!this.#formerSubscriptionsHandled) {
+            await this.#reestablishFormerSubscriptions();
+        }
+
+        await this.owner.env.get(DeviceAdvertiser).startAdvertising();
     }
 
     advertiseNow() {
@@ -136,25 +148,36 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         const netconf = this.owner.state.network;
 
         const port = this.owner.state.network.port;
-        const ipv6Intf = await UdpInterface.create(
-            this.owner.env.get(Network),
-            "udp6",
-            port ? port : undefined,
-            netconf.listeningAddressIpv6,
-        );
-        interfaces.add(ipv6Intf);
+        try {
+            const ipv6Intf = await UdpInterface.create(
+                this.owner.env.get(Network),
+                "udp6",
+                port ? port : undefined,
+                netconf.listeningAddressIpv6,
+            );
+            interfaces.add(ipv6Intf);
 
-        await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+            await this.owner.set({ network: { operationalPort: ipv6Intf.port } });
+        } catch (error) {
+            NoAddressAvailableError.accept(error);
+            logger.info(`IPv6 UDP interface not created because IPv6 is not available, but required my Matter.`);
+            throw error;
+        }
 
         if (netconf.ipv4) {
-            interfaces.add(
-                await UdpInterface.create(
-                    this.owner.env.get(Network),
-                    "udp4",
-                    netconf.port,
-                    netconf.listeningAddressIpv4,
-                ),
-            );
+            try {
+                interfaces.add(
+                    await UdpInterface.create(
+                        this.owner.env.get(Network),
+                        "udp4",
+                        netconf.port,
+                        netconf.listeningAddressIpv4,
+                    ),
+                );
+            } catch (error) {
+                NoAddressAvailableError.accept(error);
+                logger.info(`IPv4 UDP interface not created because IPv4 is not available`);
+            }
         }
 
         if (netconf.ble) {
@@ -231,16 +254,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await bleTransport.close();
     }
 
-    /**
-     * Expose the internal InteractionServer for testing.
-     */
-    get interactionServer() {
-        if (this.#interactionServer === undefined) {
-            throw new ImplementationError("Interaction server is not available yet");
-        }
-        return this.#interactionServer;
-    }
-
     get #commissionedFabrics() {
         return this.owner.state.operationalCredentials.commissionedFabrics;
     }
@@ -258,7 +271,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         const advertiser = env.get(DeviceAdvertiser);
         // Configure network
-        await this.addTransports(env.get(TransportInterfaceSet));
+        const interfaces = env.get(TransportInterfaceSet);
+        await this.addTransports(interfaces);
+        env.set(NetInterfaceSet, interfaces);
         await this.addBroadcasters(advertiser);
 
         await owner.act("start-network", agent => agent.load(ProductDescriptionServer));
@@ -272,8 +287,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         };
 
         // Install our interaction server
-        this.#interactionServer = await TransactionalInteractionServer.create(this.owner, env.get(SessionManager));
-        env.get(ExchangeManager).addProtocolHandler(this.#interactionServer);
+        const interactionServer = await TransactionalInteractionServer.create(this.owner, env.get(SessionManager));
+        env.set(InteractionServer, interactionServer);
+        env.get(ExchangeManager).addProtocolHandler(interactionServer);
 
         await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
 
@@ -312,7 +328,17 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         // Ensure there is a device commissioner if (but only if) commissioning is enabled
         await this.configureCommissioning();
+
         this.#observers.on(this.owner.eventsOf(CommissioningServer).enabled$Changed, this.configureCommissioning);
+    }
+
+    override async [Construction.construct]() {
+        await super[Construction.construct]();
+
+        // Initialize ScannerSet
+        this.owner.env.get(ScannerSet).add((await this.owner.env.load(MdnsService)).scanner);
+        this.owner.env.set(PeerAddressStore, new NodePeerAddressStore(this.owner));
+        await this.owner.env.load(PeerSet);
 
         await this.openAdvertisementWindow();
     }
@@ -338,13 +364,11 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.env.close(ExchangeManager);
         await this.owner.env.close(SecureChannelProtocol);
         await this.owner.env.close(TransportInterfaceSet);
-
-        await this.#interactionServer?.[Symbol.asyncDispose]();
-        this.#interactionServer = undefined;
+        await this.owner.env.close(InteractionServer);
     }
 
     protected override blockNewActivity() {
-        this.#interactionServer?.blockNewActivity();
+        (this.owner.env.maybeGet(InteractionServer) as TransactionalInteractionServer)?.blockNewActivity();
     }
 
     protected async configureCommissioning() {
@@ -355,5 +379,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             // Ensure no DeviceCommissioner is active
             await this.owner.env.close(DeviceCommissioner);
         }
+    }
+
+    async #reestablishFormerSubscriptions() {
+        const { env } = this.owner;
+        if (!env.has(InteractionServer)) {
+            return;
+        }
+        this.#formerSubscriptionsHandled = true;
+
+        await this.owner.act(agent =>
+            agent
+                .get(SubscriptionBehavior)
+                .reestablishFormerSubscriptions(env.get(InteractionServer) as TransactionalInteractionServer),
+        );
     }
 }

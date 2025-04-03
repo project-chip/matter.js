@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ import {
     UdpChannel,
     UdpChannelOptions,
 } from "#general";
-import { NetworkInterfaceInfo, networkInterfaces } from "os";
+import { NetworkInterfaceInfo, networkInterfaces } from "node:os";
 import { NodeJsUdpChannel } from "./NodeJsUdpChannel.js";
 
 const logger = Logger.get("NetworkNode");
@@ -26,9 +26,9 @@ export class NodeJsNetwork extends Network {
     static getMulticastInterfaceIpv4(netInterface: string): string | undefined {
         const netInterfaceInfo = networkInterfaces()[netInterface];
         if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
-        for (const { address, family } of netInterfaceInfo) {
-            if (family === "IPv4") {
-                return address;
+        for (const info of netInterfaceInfo) {
+            if (familyIs(4, info)) {
+                return info.address;
             }
         }
         return undefined;
@@ -113,7 +113,7 @@ export class NodeJsNetwork extends Network {
         }
         if (netInterfaceInfos === undefined) return undefined;
         return netInterfaceInfos
-            .find(({ address, family }) => family === "IPv6" && address.startsWith("fe80::"))
+            .find(info => familyIs(6, info) && info.address.startsWith("fe80::"))
             ?.scopeid?.toString();
     }
 
@@ -146,12 +146,18 @@ export class NodeJsNetwork extends Network {
     getIpMac(netInterface: string): NetworkInterfaceDetails | undefined {
         const netInterfaceInfo = networkInterfaces()[netInterface];
         if (netInterfaceInfo === undefined) return undefined;
-        const ipV4 = netInterfaceInfo.filter(({ family }) => family === "IPv4").map(({ address }) => address);
-        const ipV6 = netInterfaceInfo.filter(({ family }) => family === "IPv6").map(({ address }) => address);
+        const ipV4 = netInterfaceInfo.filter(info => familyIs(4, info)).map(({ address }) => address);
+        const ipV6 = netInterfaceInfo.filter(info => familyIs(6, info)).map(({ address }) => address);
         return { mac: netInterfaceInfo[0].mac, ipV4, ipV6 };
     }
 
     override createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel> {
         return NodeJsUdpChannel.create(options);
     }
+}
+
+function familyIs(version: number, { family }: NetworkInterfaceInfo) {
+    // Node 18.0 - 18.3 reported family as a single digit number instead of the documented string
+    // TODO: Remove when killing Node.js 18 support after EOL
+    return family === `IPv${version}` || `${family}` === `${version}`;
 }

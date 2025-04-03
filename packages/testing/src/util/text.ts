@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,6 +19,9 @@ export function textOf(input: {}) {
 }
 
 export function base64Of(input: string | Uint8Array) {
+    if (typeof input === "string") {
+        return Buffer.from(input, "utf8").toString("base64");
+    }
     return Buffer.from(input).toString("base64");
 }
 
@@ -35,7 +38,7 @@ export async function* asyncLinesOf<C, T extends AsyncIterable<C>>(input: T, fil
         }
 
         const text = textOf(chunk);
-        const lines = text.split(/\r?\n/g);
+        const lines = text.split(/\r?\n/);
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
             if (partial) {
@@ -61,5 +64,5 @@ export async function* asyncLinesOf<C, T extends AsyncIterable<C>>(input: T, fil
 export function deansify(text: string) {
     // Credit to https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
     // eslint-disable-next-line no-control-regex
-    return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "");
+    return text.replace(/[\u001b\u009b][[()#;?]*(?:\d{1,4}(?:;\d{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "");
 }

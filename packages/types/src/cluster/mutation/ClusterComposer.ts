@@ -1,14 +1,21 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, isDeepEqual, MatterError, serialize } from "#general";
+import { camelize, MatterError, serialize } from "#general";
+import { FeatureSet } from "@matter/model";
 import { BitFlags } from "../../schema/BitmapSchema.js";
 import { ClusterType } from "../ClusterType.js";
 
 export class IllegalClusterError extends MatterError {}
+
+/**
+ * To save memory we cache clusters with specific feature variants.  Otherwise code that configures clusters dynamically
+ * may create multiple redundant copies.
+ */
+const featureSelectionCache = new WeakMap<ClusterType, Record<string, WeakRef<ClusterType>>>();
 
 /**
  * A "cluster composer" manages cluster configuration based on feature selection.
@@ -26,9 +33,28 @@ export class ClusterComposer<const T extends ClusterType> {
         this.validateFeatureSelection(selection);
 
         const extensions = this.cluster.extensions;
-        let cluster: ClusterType;
+        let cluster: ClusterType | undefined;
 
+        // First check cache
+        const cacheKey = [...selection].sort().join("␜");
+        cluster = featureSelectionCache.get(this.cluster)?.[cacheKey]?.deref();
+
+        // Next check whether feature set remains unchanged
+        if (!cluster) {
+            const currentCacheKey = [...new FeatureSet(this.cluster.supportedFeatures)].sort().join("␜");
+            if (currentCacheKey === cacheKey) {
+                cluster = featureSelectionCache.get(this.cluster)?.[cacheKey]?.deref();
+            }
+        }
+
+        // Done if either optimization above succeeded
+        if (cluster) {
+            return cluster as ClusterComposer.Of<T, SelectionT>;
+        }
+
+        // Modify feature selection
         if (extensions) {
+            // Feature selection modifies elements
             const base = this.cluster.base ?? this.cluster;
 
             const baseElements = (type: "attributes" | "commands" | "events") => {
@@ -57,16 +83,21 @@ export class ClusterComposer<const T extends ClusterType> {
                 }
             }
         } else {
+            // Feature selection does not modify elements
             const supportedFeatures = BitFlags(this.cluster.features, ...selection);
-            if (isDeepEqual(supportedFeatures, this.cluster.supportedFeatures)) {
-                cluster = this.cluster;
-            } else {
-                cluster = ClusterType({
-                    ...this.cluster,
-                    supportedFeatures,
-                    base: this.cluster.base ?? this.cluster,
-                });
-            }
+            cluster = ClusterType({
+                ...this.cluster,
+                supportedFeatures,
+                base: this.cluster.base ?? this.cluster,
+            });
+        }
+
+        // Update cache
+        const baseVariants = featureSelectionCache.get(this.cluster);
+        if (baseVariants === undefined) {
+            featureSelectionCache.set(this.cluster, { [cacheKey]: new WeakRef(cluster) });
+        } else {
+            baseVariants[cacheKey] = new WeakRef(cluster);
         }
 
         return cluster as ClusterComposer.Of<T, SelectionT>;

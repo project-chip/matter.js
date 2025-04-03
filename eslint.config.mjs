@@ -1,9 +1,16 @@
+/**
+ * @license
+ * Copyright 2022-2025 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import _import from "eslint-plugin-import";
+import nodeImport from "eslint-plugin-node-import";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,12 +44,14 @@ export default [
             "plugin:import/errors",
             "plugin:import/warnings",
             "plugin:import/typescript",
+            "plugin:regexp/recommended",
         ),
     ),
     {
         plugins: {
             "@typescript-eslint": fixupPluginRules(typescriptEslint),
             import: fixupPluginRules(_import),
+            "node-import": fixupPluginRules(nodeImport),
         },
 
         linterOptions: {
@@ -114,6 +123,10 @@ export default [
                 },
             ],
 
+            // This is not released yet so using separate plugin temporarily
+            //"import/enforce-node-protocol-usage": "error",
+            "node-import/prefer-node-protocol": "error",
+
             "@typescript-eslint/no-namespace": "off",
             "no-inner-declarations": "off",
             "no-case-declarations": "off",
@@ -128,6 +141,7 @@ export default [
             "no-ex-assign": "off",
             "@typescript-eslint/no-redundant-type-constituents": "off",
             "import/no-unresolved": "off",
+            "regexp/optimal-quantifier-concatenation": "off",
         },
     },
     {

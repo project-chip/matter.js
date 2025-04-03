@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,13 +19,13 @@ export namespace ProxyDiscovery {
     /**
      * Input to the ProxyDiscovery proxyDiscoverRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1
+     * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1
      */
     export const TlvProxyDiscoverRequest = TlvObject({
         /**
          * This is the Node ID of the source for which a client seeks to find a Proxy.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1.1
+         * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1.1
          */
         sourceNodeId: TlvField(0, TlvNodeId),
 
@@ -33,15 +33,15 @@ export namespace ProxyDiscovery {
          * The number of attribute paths the client will have in the subscription request. This is a heuristic/hint to
          * allow a Proxy to better ascertain whether it can support the ensuing subscription.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1.2
+         * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1.2
          */
         numAttributePaths: TlvField(1, TlvUInt16),
 
         /**
-         * The number of event paths the client will have in the subscription request. This is a heuristic/hint to
-         * allow a Proxy to better ascertain whether it can support the ensuing subscription.
+         * The number of event paths the client will have in the subscription request. This is a heuristic/hint to allow
+         * a Proxy to better ascertain whether it can support the ensuing subscription.
          *
-         * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1.3
+         * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1.3
          */
         numEventPaths: TlvField(2, TlvUInt16)
     });
@@ -49,7 +49,7 @@ export namespace ProxyDiscovery {
     /**
      * Input to the ProxyDiscovery proxyDiscoverRequest command
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1
+     * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1
      */
     export interface ProxyDiscoverRequest extends TypeFromSchema<typeof TlvProxyDiscoverRequest> {}
 
@@ -66,7 +66,7 @@ export namespace ProxyDiscovery {
              * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery &
              * Assignment Flow”.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1
+             * @see {@link MatterSpecification.v14.Core} § 9.15.12.4.1
              */
             proxyDiscoverRequest: Command(0x0, TlvProxyDiscoverRequest, 0x0, TlvNoResponse)
         }
@@ -74,10 +74,10 @@ export namespace ProxyDiscovery {
 
     /**
      * This cluster contains commands needed to do proxy discovery as defined in the Section 9.15.7.3, “Step 2: Proxy
-     * Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery
-     * & Assignment Flow”.
+     * Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery &
+     * Assignment Flow”.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.12
+     * @see {@link MatterSpecification.v14.Core} § 9.15.12
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

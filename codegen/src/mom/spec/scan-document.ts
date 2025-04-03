@@ -1,12 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { dirname, join } from "path";
+import { dirname, join } from "node:path";
 
 import { loadHtml, parseHeading } from "./doc-utils.js";
+import { looksLikeDatatype, looksLikeField } from "./header-detection-heuristics.js";
 import { Str } from "./html-translators.js";
 import { scanTables } from "./scan-tables.js";
 import { HtmlReference, Table } from "./spec-types.js";
@@ -95,7 +96,7 @@ export function* scanDocument(docRef: HtmlReference) {
                     const text = Str(element).replace(/\s*\([^)]+\)\s*/g, " ");
 
                     // Test for "heading" shapes with a numerical prefix followed by a label
-                    if (text?.match(/^\d+\.(\d+\.)+ [ a-zA-Z0-9]+$/) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
+                    if (text?.match(/^\d+\.(\d+\.)+ [ a-z0-9]+$/i) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
                         let possibleHeading = parseHeading(element);
 
                         // Ignore links elsewhere.  This occurs in TOC entries.  If this gets too fiddly then we can
@@ -127,11 +128,7 @@ export function* scanDocument(docRef: HtmlReference) {
                     }
 
                     // Sometimes there isn't even a section marker.  In this case we generate the missing section number
-                    if (
-                        text?.match(/^[a-z0-9]+(?: Field| Value)$/i) &&
-                        fakeSection.faking &&
-                        !fakeSection.fakingField
-                    ) {
+                    if (looksLikeField(text) && fakeSection.faking && !fakeSection.fakingField) {
                         // Already faking; treat these like a sub-headings to our fake heading
                         yield* emit();
                         fakeSection.subsection++;
@@ -144,9 +141,7 @@ export function* scanDocument(docRef: HtmlReference) {
                             },
                         };
                         break;
-                    } else if (
-                        text?.match(/^[a-z0-9]+(?:Enum|Struct| Attribute| Command| Event| Type| Field| Value| Bits?)$/i)
-                    ) {
+                    } else if (looksLikeDatatype(text)) {
                         // Looks like a section
                         const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
                         yield* emit();

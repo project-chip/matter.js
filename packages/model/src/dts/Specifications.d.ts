@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -67,6 +67,23 @@ declare namespace MatterSpecification {
         export interface Device {}
 
         /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Standard namespace Specification 1.3} */
+        export interface Namespace {}
+    }
+
+    /**
+     * Matter v1.4
+     */
+    export namespace v14 {
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.4} */
+        export interface Core {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Application Cluster Specification 1.4} */
+        export interface Cluster {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Device Library Specification 1.4} */
+        export interface Device {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Standard namespace Specification 1.4} */
         export interface Namespace {}
     }
 }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,15 +25,15 @@ import { Identity } from "#general";
 
 /**
  * A Temperature Controlled Cabinet only exists composed as part of another device type. It represents a single cabinet
- * that is capable of having its temperature controlled. Such a cabinet may be chilling or freezing food, for example
- * as part of a refrigerator, freezer, wine chiller, or other similar device. Equally, such a cabinet may be warming or
+ * that is capable of having its temperature controlled. Such a cabinet may be chilling or freezing food, for example as
+ * part of a refrigerator, freezer, wine chiller, or other similar device. Equally, such a cabinet may be warming or
  * heating food, for example as part of an oven, range, or similar device.
  *
- * TemperatureControlledCabinetDevice requires TemperatureControl cluster but TemperatureControl is not added by
- * default because you must select the features your device supports. You can add manually using
+ * TemperatureControlledCabinetDevice requires TemperatureControl cluster but TemperatureControl is not added by default
+ * because you must select the features your device supports. You can add manually using
  * TemperatureControlledCabinetDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 13.4
+ * @see {@link MatterSpecification.v14.Device} § 13.4
  */
 export interface TemperatureControlledCabinetDevice extends Identity<typeof TemperatureControlledCabinetDeviceDefinition> {}
 
@@ -55,8 +55,8 @@ export namespace TemperatureControlledCabinetRequirements {
     /**
      * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification.
      *
-     * We provide this alias to the default implementation
-     * {@link RefrigeratorAndTemperatureControlledCabinetModeServer} for convenience.
+     * We provide this alias to the default implementation {@link RefrigeratorAndTemperatureControlledCabinetModeServer}
+     * for convenience.
      */
     export const RefrigeratorAndTemperatureControlledCabinetModeServer = BaseRefrigeratorAndTemperatureControlledCabinetModeServer;
 
@@ -92,7 +92,7 @@ export namespace TemperatureControlledCabinetRequirements {
 export const TemperatureControlledCabinetDeviceDefinition = MutableEndpoint({
     name: "TemperatureControlledCabinet",
     deviceType: 0x71,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: TemperatureControlledCabinetRequirements,
     behaviors: SupportedBehaviors()
 });

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -135,13 +135,12 @@ export class ClusterComponentGenerator {
             block.atom(hex(model.id));
             block.atom(this.tlv.reference(model));
 
-            // Note - we end up mapping "status" response type to TlvNoResponse.
-            // Technically "no response" and "status response" are different things
-            // but there's currently only a single place in the specification where
-            // it makes a difference and neither we nor CHIP implement it yet
+            // Note - we end up mapping "status" response type to TlvNoResponse. Technically "no response" and "status
+            // response" are different things but there's currently only a single place in the specification where it
+            // makes a difference and neither we nor CHIP implement it yet
             let responseModel;
             if (model.response && model.response !== "status") {
-                responseModel = this.cluster.get(CommandModel, model.response);
+                responseModel = this.cluster.member(model.response, [ElementTag.Command]) as CommandModel | undefined;
             }
             if (responseModel) {
                 block.atom(hex(responseModel.id));

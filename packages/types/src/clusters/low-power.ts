@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,7 +25,7 @@ export namespace LowPower {
             /**
              * This command shall put the device into low power mode.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.11.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.11.4.1
              */
             sleep: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
         }
@@ -39,15 +39,15 @@ export namespace LowPower {
      * command here to wake up a sleeping device because that operation often involves other protocols such as Wake On
      * LAN. Most devices automatically enter low power mode based upon inactivity.
      *
-     * The cluster server for Low Power is implemented by a device that supports a low power mode, such as a TV,
-     * Set-top box, or Smart Speaker.
+     * The cluster server for Low Power is implemented by a device that supports a low power mode, such as a TV, Set-top
+     * box, or Smart Speaker.
      *
      * NOTE
      *
      * We have considered a “DisableLowPowerMode” command but have not added it due to suspected issues with energy
      * consumption regulations. This can be added in the future.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.11
+     * @see {@link MatterSpecification.v14.Cluster} § 1.11
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

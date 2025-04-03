@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
-import { CommissionableDeviceIdentifiers } from "@project-chip/matter.js/common";
-import { VendorId } from "@project-chip/matter.js/datatype";
-import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
+import { Diagnostic } from "@matter/general";
+import { CommissionableDeviceIdentifiers } from "@matter/protocol";
+import { ManualPairingCodeCodec, VendorId } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 
@@ -102,7 +101,7 @@ export default function commands(theNode: MatterNode) {
                                         : {};
 
                         console.log(
-                            `Discover devices with identifier ${Logger.toJSON(
+                            `Discover devices with identifier ${Diagnostic.json(
                                 identifierData,
                             )} for ${timeoutSeconds} seconds.`,
                         );
@@ -113,7 +112,7 @@ export default function commands(theNode: MatterNode) {
                                 ble,
                                 onIpNetwork: true,
                             },
-                            device => console.log(`Discovered device ${Logger.toJSON(device)}`),
+                            device => console.log(`Discovered device ${Diagnostic.json(device)}`),
                             timeoutSeconds,
                         );
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -52,7 +52,7 @@ function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: En
             attributeValue !== null &&
             options.logAttributeObjectValues !== false
         ) {
-            value = Logger.toJSON(attributeValue);
+            value = Diagnostic.json(attributeValue);
         }
     } catch (error) {
         if (error instanceof FabricScopeError) {

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -37,7 +37,7 @@ export const temperature = Datatype(
             "\n" +
             "0.01 resolution as expected by the ZCL format.",
 
-        xref: { document: "core", section: "7.18.2.11" }
+        xref: { document: "core", section: "7.19.2.11" }
     }
 );
 

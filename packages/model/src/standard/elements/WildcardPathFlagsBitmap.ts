@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import { DatatypeElement as Datatype, FieldElement as Field } from "../../elemen
 
 export const WildcardPathFlagsBitmap = Datatype(
     {
-        name: "WildcardPathFlagsBitmap", type: "map8",
+        name: "WildcardPathFlagsBitmap", type: "map16",
         details: "The WildcardPathFlagsBitmap indicates flags that apply to the path, affecting wildcard expansion. " +
             "The following flags are defined:",
         xref: { document: "core", section: "8.9.2.3" }
@@ -29,7 +29,7 @@ export const WildcardPathFlagsBitmap = Datatype(
         name: "WildcardSkipAttributeList", constraint: "2",
         description: "Skip the AttributeList global attribute during wildcard expansion."
     }),
-    Field({ name: "Reserved", constraint: "3", description: "Reserved" }),
+    Field({ name: "Reserved", constraint: "3" }),
     Field({
         name: "WildcardSkipCommandLists", constraint: "4",
         description: "Skip the AcceptedCommandList and GeneratedCommandList global attributes during wildcard expansion."

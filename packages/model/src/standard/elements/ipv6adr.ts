@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ export const ipv6Adr = Datatype({
         "\n" +
         "  • Address 2001:0DB8:1122:3344:5566:7788:99AA:BBCC → 20010DB8112233445566778899AABBCC",
 
-    xref: { document: "core", section: "7.18.2.39" }
+    xref: { document: "core", section: "7.19.2.39" }
 });
 
 MatterDefinition.children.push(ipv6Adr);

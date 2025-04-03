@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { spawn, SpawnOptions } from "child_process";
-import { platform } from "os";
+import { spawn, SpawnOptions } from "node:child_process";
+import { platform } from "node:os";
 
 import colors from "ansi-colors";
 

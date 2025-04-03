@@ -1,12 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
- * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2022-2025 Matter.js Authors
+ * SPDX-License-Ident[ifier: Apache-2.0
  */
 
+import { OnlineEvent } from "#behavior/Events.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { EventEmitter, GeneratedClass, Observable, ObservableProxy } from "#general";
-import { BehaviorBacking } from "./BehaviorBacking.js";
+import type { BehaviorBacking } from "./BehaviorBacking.js";
 
 type Implementation = new (target: EventEmitter) => EventEmitter;
 
@@ -38,25 +39,66 @@ export function BackingEvents(backing: BehaviorBacking): EventEmitter {
 }
 
 const TARGET = Symbol("target");
+const PROXIES = Symbol("proxies");
+
+class EventProxy extends ObservableProxy {
+    constructor(target: Observable) {
+        super(target);
+    }
+
+    get isQuieter() {
+        return (this.target as OnlineEvent).isQuieter;
+    }
+
+    get quiet() {
+        return (this.target as OnlineEvent).quiet;
+    }
+
+    get online() {
+        return (this.target as OnlineEvent).online;
+    }
+
+    override toString() {
+        return this.target.toString();
+    }
+}
+
+interface InternalEventEmitterProxy {
+    [TARGET]: Record<string, Observable>;
+    [PROXIES]?: Record<string, Observable>;
+}
 
 /**
  * Generates a proxy {@link EventEmitter} for the given {@link EventEmitter} instance.
  *
- * This is a {@link Proxy} that automatically adds {@link ObservableProxy} properties for events on reference.
+ * This is a class that automatically adds {@link ObservableProxy} properties for events on reference.
  */
 function EventEmitterProxy(instance: EventEmitter) {
-    const descriptors = {} as PropertyDescriptorMap;
+    const descriptors: PropertyDescriptorMap = {
+        [Symbol.dispose]: {
+            value(this: InternalEventEmitterProxy) {
+                const proxies = this[PROXIES];
+                if (!proxies) {
+                    return;
+                }
+                for (const proxy of Object.values(proxies)) {
+                    proxy[Symbol.dispose]();
+                }
+                this[PROXIES] = undefined;
+            },
+        },
+    };
 
     for (const key in instance) {
-        const property = Symbol(key);
-
         descriptors[key] = {
-            get(this: { [TARGET]: Record<string, Observable>; [property]: Observable }) {
-                let observable = this[property];
-                if (observable === undefined) {
-                    observable = this[property] = new ObservableProxy(this[TARGET][key]);
+            get(this: InternalEventEmitterProxy) {
+                let proxies = this[PROXIES];
+                if (proxies === undefined) {
+                    proxies = this[PROXIES] = {};
+                } else if (key in proxies) {
+                    return proxies[key];
                 }
-                return observable;
+                return (proxies[key] = new EventProxy(this[TARGET][key]));
             },
         };
     }

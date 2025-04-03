@@ -1,17 +1,15 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { Participant } from "#behavior/state/transaction/Participant.js";
-import { Transaction } from "#behavior/state/transaction/Transaction.js";
-import { MaybePromise } from "#general";
+import { MaybePromise, Transaction } from "#general";
+import { Val } from "#protocol";
 import type { EndpointStore } from "./EndpointStore.js";
 
-interface StorageParticipant extends Participant {
+interface StorageParticipant extends Transaction.Participant {
     mutations?: Record<string, Val.Struct>;
 }
 
@@ -29,13 +27,18 @@ export function DatasourceStore(
         initialValues,
 
         async set(transaction: Transaction, values: Val.Struct) {
+            if (behaviorId === "__proto__") {
+                return;
+            }
             const participant = participantFor(transaction, endpointStore);
             if (!participant.mutations) {
                 participant.mutations = {};
             }
             const behaviorMutations = participant.mutations[behaviorId];
             if (behaviorMutations) {
-                Object.assign(behaviorMutations, values);
+                for (const key in values) {
+                    behaviorMutations[key] = values[key];
+                }
             } else {
                 participant.mutations[behaviorId] = { ...values };
             }

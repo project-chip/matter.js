@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,8 +38,8 @@ export const ValveConfigurationAndControl = Cluster(
 
         Field({
             name: "LVL", conformance: "O", constraint: "1", description: "Level",
-            details: "This feature shall indicate that the valve is capable of being adjusted to a specific position, as " +
-                "a percentage, of its full range of motion.",
+            details: "This feature shall indicate that the valve is capable of being adjusted to a specific position, as a " +
+                "percentage, of its full range of motion.",
             xref: { document: "cluster", section: "4.6.4.2" }
         })
     ),
@@ -85,8 +85,8 @@ export const ValveConfigurationAndControl = Cluster(
             "position, shall match the behavior described in the Close command." +
             "\n" +
             "If this attribute is not null and the Time Synchronization cluster receives a SetUTCTime command, " +
-            "modifying the current UTC time of the device, the value of this attribute shall be adjusted to " +
-            "match the new UTC time plus the value of the RemainingDuration attribute.",
+            "modifying the current UTC time of the device, the value of this attribute shall be adjusted to match " +
+            "the new UTC time plus the value of the RemainingDuration attribute.",
 
         xref: { document: "cluster", section: "4.6.7.3" }
     }),
@@ -147,10 +147,9 @@ export const ValveConfigurationAndControl = Cluster(
         name: "CurrentLevel", id: 0x6, type: "percent", access: "R V", conformance: "LVL", default: null,
         quality: "X",
 
-        details: "Indicates the current level of the valve as a percentage value, between fully closed and fully " +
-            "open. During a transition from one level to another level, the valve SHOULD keep this attribute " +
-            "updated to the best of its ability, in order to represent the actual level of the valve during the " +
-            "movement." +
+        details: "Indicates the current level of the valve as a percentage value, between fully closed and fully open. " +
+            "During a transition from one level to another level, the valve SHOULD keep this attribute updated to " +
+            "the best of its ability, in order to represent the actual level of the valve during the movement." +
             "\n" +
             "A value of 100 percent shall indicate the fully open position. A value of 0 percent shall indicate " +
             "the fully closed position." +
@@ -204,8 +203,8 @@ export const ValveConfigurationAndControl = Cluster(
         details: "Indicates the step size the valve can support." +
             "\n" +
             "The step size defined by this attribute is counted from 0 and the final step towards 100 may be " +
-            "different than what is defined in this attribute. For example, if the value of this attribute is " +
-            "15, it results in these target values being supported; 0, 15, 30, 45, 60, 75, 90 and 100." +
+            "different than what is defined in this attribute. For example, if the value of this attribute is 15, " +
+            "it results in these target values being supported; 0, 15, 30, 45, 60, 75, 90 and 100." +
             "\n" +
             "The values of 0 and 100 shall always be supported, regardless of the value of this attribute.",
 
@@ -302,7 +301,7 @@ export const ValveConfigurationAndControl = Cluster(
     Datatype(
         { name: "StatusCodeEnum", type: "enum8", xref: { document: "cluster", section: "4.6.6.1" } },
         Field({
-            name: "FailureDueToFault", id: 0x2,
+            name: "FailureDueToFault", id: 0x2, conformance: "M",
             description: "The requested action could not be performed due to a fault on the valve."
         })
     )

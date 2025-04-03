@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -106,7 +106,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context: ActionContext]>;
                 };
             };
 

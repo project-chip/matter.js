@@ -1,5 +1,6 @@
 import { FanControlServer } from "#behaviors/fan-control";
 import { FanControl } from "#clusters/fan-control";
+import { AirPurifierDevice } from "#devices/air-purifier";
 import { OnOffPlugInUnitDevice } from "#devices/on-off-plug-in-unit";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
@@ -17,5 +18,20 @@ describe("FanControlServer", () => {
         });
         await node.start();
         await node.close();
+    });
+
+    it("has not-off-only commands by default", async () => {
+        const node = await MockServerNode.create();
+        const fan = await node.add(AirPurifierDevice.with(AirPurifierDevice.requirements.OnOffServer), {
+            fanControl: {
+                fanMode: FanControl.FanMode.Off,
+                fanModeSequence: FanControl.FanModeSequence.OffLowMedHigh,
+                percentSetting: 50,
+                percentCurrent: 50,
+            },
+        });
+        await fan.act(async agent => {
+            await agent.onOff.on();
+        });
     });
 });

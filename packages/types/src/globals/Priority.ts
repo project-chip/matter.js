@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,10 +10,10 @@
  * Priority
  *
  * This is an enumeration of priority used to tag events and possibly other data. The data type does not define any
- * particular ordering among the values. Specific uses of the data type may assign semantics to the values that imply
- * an ordering relationship.
+ * particular ordering among the values. Specific uses of the data type may assign semantics to the values that imply an
+ * ordering relationship.
  *
- * @see {@link MatterSpecification.v13.Core} § 7.18.2.17
+ * @see {@link MatterSpecification.v14.Core} § 7.19.2.17
  */
 export enum Priority {
     /**

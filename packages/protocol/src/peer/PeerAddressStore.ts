@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ export abstract class PeerAddressStore {
     abstract loadPeers(): MaybePromise<Iterable<OperationalPeer>>;
     abstract updatePeer(peer: OperationalPeer): MaybePromise<void>;
     abstract deletePeer(address: PeerAddress): MaybePromise<void>;
-    abstract createNodeStore(address: PeerAddress): Promise<PeerDataStore>;
+    abstract createNodeStore(address: PeerAddress): MaybePromise<PeerDataStore | undefined>;
 }
 
 export abstract class PeerDataStore {

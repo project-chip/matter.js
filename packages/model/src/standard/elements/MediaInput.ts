@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -59,7 +59,8 @@ export const MediaInput = Cluster(
         {
             name: "SelectInput", id: 0x0, access: "O", conformance: "M", direction: "request",
             response: "status",
-            details: "Upon receipt, this command shall change the media input on the device to the input at a specific " +
+            details: "Upon receipt, this command shall change the media input on the device to the input at a specific" +
+                "\n" +
                 "index in the Input List.",
             xref: { document: "cluster", section: "6.9.7.1" }
         },

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const dataVer = Datatype({
     name: "data-ver", type: "uint32", description: "Data Version", isSeed: true,
-    details: "An unsigned number that indicates a Data Version.",
-    xref: { document: "core", section: "7.18.2.34" }
+    details: "An unsigned number that indicates a Data Version Type.",
+    xref: { document: "core", section: "7.19.2.34" }
 });
 MatterDefinition.children.push(dataVer);

@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Logger } from "#general";
-import { AnyElement, DatatypeElement, FabricIndex, FieldElement, Metatype } from "#model";
+import { AnyElement, DatatypeElement, ElementTag, FabricIndex, FieldElement, Metatype } from "#model";
 import { addDocumentation } from "./add-documentation.js";
 import {
     Bits,
@@ -24,9 +24,9 @@ import { HtmlReference } from "./spec-types.js";
 import {
     Alias,
     Children,
+    chooseIdentityAliases,
     Optional,
     TableRecord,
-    chooseIdentityAliases,
     translateRecordsToMatter,
     translateTable,
 } from "./translate-table.js";
@@ -40,29 +40,24 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
     let name = repairTypeIdentifier(definition.name);
 
     const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
-    if (!text) {
-        logger.warn(`no text to search for base type`);
-    }
 
     // Up through 1.1 prose was informal but remarkably consistent; "derived from" always matches
-    let match = text?.match(/derived from ([a-z0-9\-_]+)/i);
+    let match = text?.match(/derived from ([\w-]+)/i);
 
     // This now applies to cluster 1.2 § 1.14.15.1, because consistency is overrated
     if (!match) {
-        match = text?.match(/data type shall be a ([a-z0-9\-_]+)/i);
+        match = text?.match(/data type shall be a ([\w-]+)/i);
     }
 
     // Applies to a handful of overrides of ModeOptionStruct in cluster 1.2
     if (!match) {
-        match = text?.match(
-            /lists the changes relative to the [a-z0-9\-_ ]+ cluster for the fields of the ([a-z0-9\-_]+) type/i,
-        );
+        match = text?.match(/lists the changes relative to the [\w\- ]+ cluster for the fields of the ([\w-]+) type/i);
     }
 
     // And 1.3 throws in this beaut
     let constraint: string | undefined;
     if (!match) {
-        match = text?.match(/This data type is an? ([a-z0-9\-_]+) of fixed length (\d+)/i);
+        match = text?.match(/This data type is an? ([\w-]+) of fixed length (\d+)/i);
         constraint = match?.[2];
     }
 
@@ -106,12 +101,15 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
 
     if (!type && name.match(/\s/)) {
         // This isn't actually a datatype
+        if (!text) {
+            logger.warn(`${definition.xref.document} § ${definition.xref.section} does not appear to be a datatype`);
+        }
         return;
     }
 
     const datatype = DatatypeElement({
         type: type,
-        name,
+        name: name.replace(/\s+/g, ""),
         description,
         constraint,
         xref: definition.xref,
@@ -168,7 +166,9 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
         return true;
     });
 
-    applyAccessNotes(fields, records);
+    if (type.Tag !== ElementTag.Attribute) {
+        applyAccessNotes(fields, records);
+    }
 
     return translateRecordsToMatter(type.Tag, records, type) as ReturnType<T>[] | undefined;
 }

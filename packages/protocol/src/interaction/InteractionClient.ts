@@ -1,25 +1,28 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
+    Diagnostic,
+    Environment,
+    Environmental,
     ImplementationError,
-    InternalError,
     Logger,
     MatterFlowError,
-    MaybePromise,
     PromiseQueue,
-    Time,
+    ServerAddressIp,
     Timer,
     UnexpectedDataError,
     isDeepEqual,
 } from "#general";
 import { Specification } from "#model";
-import { PeerAddress } from "#peer/PeerAddress.js";
+import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { PeerDataStore } from "#peer/PeerAddressStore.js";
+import { DiscoveryOptions, PeerSet } from "#peer/PeerSet.js";
 import {
+    ArraySchema,
     Attribute,
     AttributeId,
     AttributeJsType,
@@ -29,8 +32,9 @@ import {
     Event,
     EventId,
     EventNumber,
-    INTERACTION_PROTOCOL_ID,
+    FabricIndex,
     NodeId,
+    ObjectSchema,
     RequestType,
     ResponseType,
     StatusCode,
@@ -45,17 +49,13 @@ import {
     resolveCommandName,
     resolveEventName,
 } from "#types";
+import { MessageChannel } from "../protocol/ExchangeManager.js";
 import { ExchangeProvider, ReconnectableExchangeProvider } from "../protocol/ExchangeProvider.js";
-import { MessageExchange } from "../protocol/MessageExchange.js";
-import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
-import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
-import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
-import {
-    DataReport,
-    IncomingInteractionClientMessenger,
-    InteractionClientMessenger,
-    ReadRequest,
-} from "./InteractionMessenger.js";
+import { DecodedAttributeReportStatus, DecodedAttributeReportValue } from "./AttributeDataDecoder.js";
+import { DecodedDataReport } from "./DecodedDataReport.js";
+import { DecodedEventData, DecodedEventReportStatus, DecodedEventReportValue } from "./EventDataDecoder.js";
+import { DataReport, InteractionClientMessenger, ReadRequest } from "./InteractionMessenger.js";
+import { RegisteredSubscription, SubscriptionClient } from "./SubscriptionClient.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -73,102 +73,126 @@ export interface AttributeStatus {
     status: StatusCode;
 }
 
-export class SubscriptionClient implements ProtocolHandler {
-    private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => MaybePromise<void>>();
-    private readonly subscriptionUpdateTimers = new Map<number, Timer>();
+export class InteractionClientProvider {
+    readonly #peers: PeerSet;
+    readonly #clients = new PeerAddressMap<InteractionClient>();
 
-    constructor() {}
-
-    getId() {
-        return INTERACTION_PROTOCOL_ID;
+    constructor(peers: PeerSet) {
+        this.#peers = peers;
+        this.#peers.deleted.on(peer => this.#onPeerLoss(peer.address));
+        this.#peers.disconnected.on(address => this.#onPeerLoss(address));
     }
 
-    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => MaybePromise<void>) {
-        this.subscriptionListeners.set(subscriptionId, listener);
+    static [Environmental.create](env: Environment) {
+        const instance = new InteractionClientProvider(env.get(PeerSet));
+        env.set(InteractionClientProvider, instance);
+        return instance;
     }
 
-    removeSubscriptionListener(subscriptionId: number) {
-        this.subscriptionListeners.delete(subscriptionId);
+    get peers() {
+        return this.#peers;
     }
 
-    registerSubscriptionUpdateTimer(subscriptionId: number, timer: Timer) {
-        this.subscriptionUpdateTimers.set(subscriptionId, timer);
+    async connect(
+        address: PeerAddress,
+        options: {
+            discoveryOptions: DiscoveryOptions;
+            allowUnknownPeer?: boolean;
+            operationalAddress?: ServerAddressIp;
+        },
+    ): Promise<InteractionClient> {
+        await this.#peers.ensureConnection(address, options);
+
+        const { discoveryOptions } = options;
+        return this.getInteractionClient(address, discoveryOptions);
     }
 
-    removeSubscriptionUpdateTimer(subscriptionId: number) {
-        this.subscriptionUpdateTimers.get(subscriptionId)?.stop();
-        this.subscriptionUpdateTimers.delete(subscriptionId);
+    async getInteractionClientForChannel(channel: MessageChannel): Promise<InteractionClient> {
+        const exchangeProvider = await this.#peers.exchangeProviderFor(channel);
+
+        return new InteractionClient(
+            exchangeProvider,
+            this.#peers.subscriptionClient,
+            undefined,
+            this.#peers.interactionQueue,
+        );
     }
 
-    async onNewExchange(exchange: MessageExchange) {
-        const messenger = new IncomingInteractionClientMessenger(exchange);
-
-        let dataReport: DataReport;
-        try {
-            // TODO Adjust this to getting packages as callback when received to handle error cases and checks outside
-            dataReport = await messenger.readDataReports([...this.subscriptionListeners.keys()]);
-        } finally {
-            messenger.close().catch(error => logger.info("Error closing client messenger", error));
+    async getInteractionClient(address: PeerAddress, discoveryOptions: DiscoveryOptions) {
+        let client = this.#clients.get(address);
+        if (client !== undefined) {
+            return client;
         }
-        const subscriptionId = dataReport.subscriptionId as number; // this is checked in the messenger already because we hand over allowed list
 
-        const listener = this.subscriptionListeners.get(subscriptionId);
-        const timer = this.subscriptionUpdateTimers.get(subscriptionId);
+        const nodeStore = this.#peers.get(address)?.dataStore;
+        await nodeStore?.construction; // Lazy initialize the data if not already done
 
-        if (timer !== undefined) {
-            timer.stop().start(); // Restart timer because we received data
-        }
+        const exchangeProvider = await this.#peers.exchangeProviderFor(address, discoveryOptions);
 
-        await listener?.(dataReport);
+        client = new InteractionClient(
+            exchangeProvider,
+            this.#peers.subscriptionClient,
+            address,
+            this.#peers.interactionQueue,
+            nodeStore,
+        );
+        this.#clients.set(address, client);
+
+        return client;
     }
 
-    async close() {
-        this.subscriptionListeners.clear();
-        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
-        this.subscriptionUpdateTimers.clear();
+    #onPeerLoss(address: PeerAddress) {
+        const client = this.#clients.get(address);
+        if (client !== undefined) {
+            client.close();
+            this.#clients.delete(address);
+        }
     }
 }
 
 export class InteractionClient {
+    readonly #exchangeProvider: ExchangeProvider;
     readonly #nodeStore?: PeerDataStore;
     readonly #ownSubscriptionIds = new Set<number>();
     readonly #subscriptionClient: SubscriptionClient;
     readonly #queue?: PromiseQueue;
+    readonly #address?: PeerAddress;
 
     constructor(
-        private readonly exchangeProvider: ExchangeProvider,
-        readonly address: PeerAddress,
+        exchangeProvider: ExchangeProvider,
+        subscriptionClient: SubscriptionClient,
+        address?: PeerAddress,
         queue?: PromiseQueue,
         nodeStore?: PeerDataStore,
     ) {
+        this.#exchangeProvider = exchangeProvider;
         this.#nodeStore = nodeStore;
+        this.#subscriptionClient = subscriptionClient;
         this.#queue = queue;
+        this.#address = address;
+    }
 
-        const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
-        if (client === undefined || !(client instanceof SubscriptionClient)) {
-            throw new InternalError(
-                `Subscription protocol handler ${INTERACTION_PROTOCOL_ID} missing or unexpected type.`,
-            );
+    get address() {
+        if (this.#address === undefined) {
+            throw new ImplementationError("This InteractionClient is not bound to a specific peer.");
         }
-        this.#subscriptionClient = client;
+        return this.#address;
+    }
+
+    get isReconnectable() {
+        return this.#exchangeProvider instanceof ReconnectableExchangeProvider;
     }
 
     get channelUpdated() {
-        if (this.exchangeProvider instanceof ReconnectableExchangeProvider) {
-            return this.exchangeProvider.channelUpdated;
+        if (this.#exchangeProvider instanceof ReconnectableExchangeProvider) {
+            return this.#exchangeProvider.channelUpdated;
         }
         throw new ImplementationError("ExchangeProvider does not support channelUpdated");
     }
 
-    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => MaybePromise<void>) {
-        this.#ownSubscriptionIds.add(subscriptionId);
-        this.#subscriptionClient.registerSubscriptionListener(subscriptionId, listener);
-    }
-
     removeSubscription(subscriptionId: number) {
         this.#ownSubscriptionIds.delete(subscriptionId);
-        this.#subscriptionClient.removeSubscriptionListener(subscriptionId);
-        this.#subscriptionClient.removeSubscriptionUpdateTimer(subscriptionId);
+        this.#subscriptionClient.delete(subscriptionId);
     }
 
     async getAllAttributes(
@@ -237,6 +261,22 @@ export class InteractionClient {
         return (await this.getMultipleAttributesAndEvents(options)).attributeReports;
     }
 
+    async getMultipleAttributesAndStatus(
+        options: {
+            attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            enrichCachedAttributeData?: boolean;
+            isFabricFiltered?: boolean;
+            executeQueued?: boolean;
+        } = {},
+    ): Promise<{
+        attributeData: DecodedAttributeReportValue<any>[];
+        attributeStatus?: DecodedAttributeReportStatus[];
+    }> {
+        const { attributeReports, attributeStatus } = await this.getMultipleAttributesAndEvents(options);
+        return { attributeData: attributeReports, attributeStatus };
+    }
+
     async getMultipleEvents(
         options: {
             events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
@@ -246,6 +286,18 @@ export class InteractionClient {
         } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
         return (await this.getMultipleAttributesAndEvents(options)).eventReports;
+    }
+
+    async getMultipleEventsAndStatus(
+        options: {
+            events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+            executeQueued?: boolean;
+        } = {},
+    ): Promise<{ eventData: DecodedEventReportValue<any>[]; eventStatus?: DecodedEventReportStatus[] }> {
+        const { eventReports, eventStatus } = await this.getMultipleAttributesAndEvents(options);
+        return { eventData: eventReports, eventStatus };
     }
 
     async getMultipleAttributesAndEvents(
@@ -258,10 +310,7 @@ export class InteractionClient {
             isFabricFiltered?: boolean;
             executeQueued?: boolean;
         } = {},
-    ): Promise<{
-        attributeReports: DecodedAttributeReportValue<any>[];
-        eventReports: DecodedEventReportValue<any>[];
-    }> {
+    ): Promise<DecodedDataReport> {
         const {
             attributes: attributeRequests,
             dataVersionFilters,
@@ -301,10 +350,7 @@ export class InteractionClient {
             );
         }
 
-        const result = await this.withMessenger<{
-            attributeReports: DecodedAttributeReportValue<any>[];
-            eventReports: DecodedEventReportValue<any>[];
-        }>(async messenger => {
+        const result = await this.withMessenger(async messenger => {
             const { isFabricFiltered = true } = options;
             return await this.processReadRequest(messenger, {
                 attributeRequests,
@@ -331,13 +377,13 @@ export class InteractionClient {
         clusterId: ClusterId;
         attribute: A;
         isFabricFiltered?: boolean;
-        alwaysRequestFromRemote?: boolean;
+        requestFromRemote?: boolean;
         executeQueued?: boolean;
     }): Promise<AttributeJsType<A> | undefined> {
-        const { alwaysRequestFromRemote = false } = options;
+        const { requestFromRemote } = options;
         const response = await this.getAttributeWithVersion({
             ...options,
-            alwaysRequestFromRemote,
+            requestFromRemote,
         });
         return response?.value;
     }
@@ -347,22 +393,20 @@ export class InteractionClient {
         clusterId: ClusterId;
         attribute: A;
         isFabricFiltered?: boolean;
-        alwaysRequestFromRemote?: boolean;
+        requestFromRemote?: boolean;
         executeQueued?: boolean;
     }): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
-        const {
-            endpointId,
-            clusterId,
-            attribute,
-            alwaysRequestFromRemote = false,
-            isFabricFiltered,
-            executeQueued,
-        } = options;
+        const { endpointId, clusterId, attribute, requestFromRemote, isFabricFiltered, executeQueued } = options;
         const { id: attributeId } = attribute;
-        if (!alwaysRequestFromRemote && this.#nodeStore !== undefined) {
-            const { value, version } = this.#nodeStore.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
-            if (value !== undefined && version !== undefined) {
-                return { value, version } as { value: AttributeJsType<A>; version: number };
+        if (this.#nodeStore !== undefined) {
+            if (!requestFromRemote) {
+                const { value, version } = this.#nodeStore.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+                if (value !== undefined && version !== undefined) {
+                    return { value, version } as { value: AttributeJsType<A>; version: number };
+                }
+            }
+            if (requestFromRemote === false) {
+                return undefined;
             }
         }
 
@@ -403,7 +447,7 @@ export class InteractionClient {
     private async processReadRequest(
         messenger: InteractionClientMessenger,
         request: ReadRequest,
-    ): Promise<{ attributeReports: DecodedAttributeReportValue<any>[]; eventReports: DecodedEventReportValue<any>[] }> {
+    ): Promise<DecodedDataReport> {
         const { attributeRequests, eventRequests } = request;
         logger.debug(
             `Sending read request to ${messenger.getExchangeChannelName()} for attributes ${attributeRequests
@@ -414,16 +458,24 @@ export class InteractionClient {
         const response = await messenger.sendReadRequest(request);
 
         // Normalize and decode the response
-        const normalizedResult = {
-            attributeReports: normalizeAndDecodeReadAttributeReport(response.attributeReports ?? []),
-            eventReports: normalizeAndDecodeReadEventReport(response.eventReports ?? []),
-        };
+        const normalizedResult = DecodedDataReport(response);
+        const { attributeReports, attributeStatus, eventReports, eventStatus } = normalizedResult;
+
+        const logData = Array<string>();
+        if (attributeReports.length > 0) {
+            logData.push(`attributes ${attributeReports.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventReports.length > 0) {
+            logData.push(`events ${eventReports.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
+        if (attributeStatus !== undefined && attributeStatus.length > 0) {
+            logData.push(`attributeErrors ${attributeStatus.map(({ path }) => resolveAttributeName(path)).join(", ")}`);
+        }
+        if (eventStatus !== undefined && eventStatus.length > 0) {
+            logData.push(`eventErrors ${eventStatus.map(({ path }) => resolveEventName(path)).join(", ")}`);
+        }
         logger.debug(
-            `Received read response with attributes ${normalizedResult.attributeReports
-                .map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`)
-                .join(", ")} and events ${normalizedResult.eventReports
-                .map(({ path, events }) => `${resolveEventName(path)} = ${Logger.toJSON(events)}`)
-                .join(", ")}`,
+            logData.length ? `Received read response with ${logData.join(", ")}` : "Received empty read response",
         );
         return normalizedResult;
     }
@@ -440,8 +492,10 @@ export class InteractionClient {
         timedRequestTimeoutMs?: number;
         suppressResponse?: boolean;
         executeQueued?: boolean;
+        chunkLists?: boolean;
     }): Promise<void> {
-        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse, executeQueued } = options;
+        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse, executeQueued, chunkLists } =
+            options;
         const { endpointId, clusterId, attribute, value, dataVersion } = attributeData;
         const response = await this.setMultipleAttributes({
             attributes: [{ endpointId, clusterId, attribute, value, dataVersion }],
@@ -449,6 +503,7 @@ export class InteractionClient {
             timedRequestTimeoutMs,
             suppressResponse,
             executeQueued,
+            chunkLists,
         });
 
         // Response contains Status error if there was an error on write
@@ -478,6 +533,7 @@ export class InteractionClient {
         timedRequestTimeoutMs?: number;
         suppressResponse?: boolean;
         executeQueued?: boolean;
+        chunkLists?: boolean;
     }): Promise<AttributeStatus[]> {
         const { executeQueued } = options;
 
@@ -486,23 +542,37 @@ export class InteractionClient {
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
             suppressResponse = false, // TODO needs to be TRUE for Group writes
+            chunkLists = true, // Should be true currently to stay in sync with chip sdk
         } = options;
         logger.debug(
             `Sending write request: ${attributes
                 .map(
                     ({ endpointId, clusterId, attribute: { id }, value, dataVersion }) =>
-                        `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Logger.toJSON(
+                        `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Diagnostic.json(
                             value,
                         )} (version=${dataVersion})`,
                 )
                 .join(", ")}`,
         );
-        const writeRequests = attributes.map(
-            ({ endpointId, clusterId, attribute: { id, schema }, value, dataVersion }) => ({
-                path: { endpointId, clusterId, attributeId: id },
-                data: schema.encodeTlv(value, { forWriteInteraction: true }),
-                dataVersion,
-            }),
+        const writeRequests = attributes.flatMap(
+            ({ endpointId, clusterId, attribute: { id, schema }, value, dataVersion }) => {
+                if (chunkLists && Array.isArray(value) && schema instanceof ArraySchema) {
+                    return schema
+                        .encodeAsChunkedArray(value, { forWriteInteraction: true })
+                        .map(({ element: data, listIndex }) => ({
+                            path: { endpointId, clusterId, attributeId: id, listIndex },
+                            data,
+                            dataVersion,
+                        }));
+                }
+                return [
+                    {
+                        path: { endpointId, clusterId, attributeId: id },
+                        data: schema.encodeTlv(value, { forWriteInteraction: true }),
+                        dataVersion,
+                    },
+                ];
+            },
         );
         const timedRequest =
             attributes.some(({ attribute: { timed } }) => timed) ||
@@ -624,33 +694,39 @@ export class InteractionClient {
                 return;
             }
 
-            const data = normalizeAndDecodeReadAttributeReport(dataReport.attributeReports);
+            const { attributeReports } = DecodedDataReport(dataReport);
 
-            if (data.length === 0) {
+            if (attributeReports.length === 0) {
                 throw new MatterFlowError("Subscription result reporting undefined/no value not specified");
             }
-            if (data.length > 1) {
+            if (attributeReports.length > 1) {
                 throw new UnexpectedDataError("Unexpected response with more then one attribute");
             }
-            const { value, version } = data[0];
+            const { value, version } = attributeReports[0];
             if (value === undefined)
                 throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
-            await this.#nodeStore?.persistAttributes([data[0]]);
+            await this.#nodeStore?.persistAttributes([attributeReports[0]]);
 
             listener?.(value, version);
         };
 
-        this.registerSubscriptionListener(subscriptionId, subscriptionListener);
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
-        await subscriptionListener(report);
+                maxIntervalS: maxInterval,
+                onData: subscriptionListener,
+                onTimeout: updateTimeoutHandler,
+            },
+            report,
+        );
+    }
+
+    async #registerSubscription(subscription: RegisteredSubscription, initialReport: DataReport) {
+        this.#ownSubscriptionIds.add(subscription.id);
+        this.#subscriptionClient.add(subscription);
+        await subscription.onData(initialReport);
     }
 
     async subscribeEvent<T, E extends Event<T, any>>(options: {
@@ -717,30 +793,30 @@ export class InteractionClient {
                 return;
             }
 
-            const data = normalizeAndDecodeReadEventReport(dataReport.eventReports);
+            const { eventReports } = DecodedDataReport(dataReport);
 
-            if (data.length === 0) {
+            if (eventReports.length === 0) {
                 throw new MatterFlowError("Received empty subscription result value.");
             }
-            if (data.length > 1) {
+            if (eventReports.length > 1) {
                 throw new UnexpectedDataError("Unexpected response with more then one attribute.");
             }
-            const { events } = data[0];
+            const { events } = eventReports[0];
             if (events === undefined)
                 throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
             events.forEach(event => listener?.(event));
         };
-        this.registerSubscriptionListener(subscriptionId, subscriptionListener);
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
-        subscriptionListener(report);
+                maxIntervalS: maxInterval,
+                onData: subscriptionListener,
+                onTimeout: updateTimeoutHandler,
+            },
+            report,
+        );
     }
 
     async subscribeAllAttributesAndEvents(options: {
@@ -882,46 +958,21 @@ export class InteractionClient {
             eventReports?: DecodedEventReportValue<any>[];
             subscriptionId?: number;
         }) => {
-            updateReceived?.();
             if (
                 (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                 (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
             ) {
+                updateReceived?.();
                 return;
             }
             const { attributeReports, eventReports } = dataReport;
 
-            if (attributeReports !== undefined) {
-                for (const data of attributeReports) {
-                    const {
-                        path: { endpointId, clusterId, attributeId },
-                        value,
-                        version,
-                    } = data;
-                    logger.debug(
-                        `Received attribute update: ${resolveAttributeName({
-                            endpointId,
-                            clusterId,
-                            attributeId,
-                        })} = ${Logger.toJSON(value)} (version=${version})`,
-                    );
-                    if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
-                    const { value: oldValue } =
-                        this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
-                    const changed = oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined;
-                    if (changed !== false) {
-                        await this.#nodeStore?.persistAttributes([data]);
-                    }
-
-                    attributeListener?.(data, changed, oldValue);
-                }
-            }
-
+            // We emit events first because events usually happened and lead to a new final attribute value
             if (eventReports !== undefined) {
                 let maxEventNumber = this.#nodeStore?.maxEventNumber ?? eventReports[0].events[0].eventNumber;
                 eventReports.forEach(data => {
                     logger.debug(
-                        `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
+                        `Received event update: ${resolveEventName(data.path)}: ${Diagnostic.json(data.events)}`,
                     );
                     const { events } = data;
 
@@ -936,40 +987,49 @@ export class InteractionClient {
                 });
                 await this.#nodeStore?.updateLastEventNumber(maxEventNumber);
             }
-        };
-        this.registerSubscriptionListener(subscriptionId, async dataReport => {
-            await subscriptionListener({
-                ...dataReport,
-                attributeReports:
-                    dataReport.attributeReports !== undefined
-                        ? normalizeAndDecodeReadAttributeReport(dataReport.attributeReports)
-                        : undefined,
-                eventReports:
-                    dataReport.eventReports !== undefined
-                        ? normalizeAndDecodeReadEventReport(dataReport.eventReports)
-                        : undefined,
-            });
-        });
 
-        if (updateTimeoutHandler !== undefined) {
-            this.registerSubscriptionUpdateTimer(
+            if (attributeReports !== undefined) {
+                for (const data of attributeReports) {
+                    const {
+                        path: { endpointId, clusterId, attributeId },
+                        value,
+                        version,
+                    } = data;
+                    logger.debug(
+                        `Received attribute update: ${resolveAttributeName({
+                            endpointId,
+                            clusterId,
+                            attributeId,
+                        })} = ${Diagnostic.json(value)} (version=${version})`,
+                    );
+                    if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
+                    const { value: oldValue } =
+                        this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+                    const changed = oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined;
+                    if (changed !== false) {
+                        await this.#nodeStore?.persistAttributes([data]);
+                    }
+
+                    attributeListener?.(data, changed, oldValue);
+                }
+            }
+            updateReceived?.();
+        };
+
+        const seedReport = DecodedDataReport(report);
+
+        await this.#registerSubscription(
+            {
+                id: subscriptionId,
                 maximumPeerResponseTime,
-                subscriptionId,
-                maxInterval,
-                updateTimeoutHandler,
-            );
-        }
+                maxIntervalS: maxInterval,
 
-        const seedReport = {
-            attributeReports:
-                report.attributeReports !== undefined
-                    ? normalizeAndDecodeReadAttributeReport(report.attributeReports)
-                    : undefined,
-            eventReports:
-                report.eventReports !== undefined ? normalizeAndDecodeReadEventReport(report.eventReports) : undefined,
-            subscriptionId,
-        };
-        await subscriptionListener(seedReport);
+                onData: dataReport => subscriptionListener(DecodedDataReport(dataReport)),
+
+                onTimeout: updateTimeoutHandler,
+            },
+            seedReport,
+        );
 
         if (dataVersionFilters !== undefined && dataVersionFilters.length > 0 && enrichCachedAttributeData) {
             this.#enrichCachedAttributeData(seedReport.attributeReports ?? [], dataVersionFilters);
@@ -983,33 +1043,59 @@ export class InteractionClient {
         clusterId: ClusterId;
         request: RequestType<C>;
         command: C;
+
+        /** Send as timed request. If no timedRequestTimeoutMs is provided the default of 10s will be used. */
         asTimedRequest?: boolean;
+
+        /** Use this timeout and send the request as Timed Request. If this is specified the above parameter is implied. */
         timedRequestTimeoutMs?: number;
+
+        /** Use an extended Message Response Timeout as defined for FailSafe cases which is 30s. */
         useExtendedFailSafeMessageResponseTimeout?: boolean;
+
+        /** Execute this request queued - mainly used to execute invokes sequentially for thread devices. */
         executeQueued?: boolean;
+
+        /** Skip request data validation. Use this only when you know that your data is correct and validation would return an error. */
+        skipValidation?: boolean;
     }): Promise<ResponseType<C>> {
         const { executeQueued } = options;
 
         const {
             endpointId,
             clusterId,
-            request,
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
             useExtendedFailSafeMessageResponseTimeout = false,
+            skipValidation,
         } = options;
-        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+        let { request } = options;
+        const timedRequest =
+            (timed && !skipValidation) || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
+        if (requestSchema instanceof ObjectSchema) {
+            if (request === undefined) {
+                // If developer did not provide a request object, create an empty one if it needs to be an object
+                // This can happen when all object properties are optional
+                request = {} as RequestType<C>;
+            }
+            if (requestSchema.isFabricScoped && request.fabricIndex === undefined) {
+                request.fabricIndex = FabricIndex.NO_FABRIC;
+            }
+        }
 
         logger.debug(
             `Invoking command: ${resolveCommandName({
                 endpointId,
                 clusterId,
                 commandId: requestId,
-            })} with ${Logger.toJSON(request)}`,
+            })} with ${Diagnostic.json(request)}`,
         );
 
-        requestSchema.validate(request);
+        if (!skipValidation) {
+            requestSchema.validate(request);
+        }
 
         const commandFields = requestSchema.encodeTlv(request);
 
@@ -1073,7 +1159,7 @@ export class InteractionClient {
                     endpointId,
                     clusterId,
                     commandId: requestId,
-                })} with ${Logger.toJSON(response)})}`,
+                })} with ${Diagnostic.json(response)})}`,
             );
             return response;
         }
@@ -1109,7 +1195,7 @@ export class InteractionClient {
                 endpointId,
                 clusterId,
                 commandId: requestId,
-            })} with ${Logger.toJSON(request)}`,
+            })} with ${Diagnostic.json(request)}`,
         );
         const commandFields = requestSchema.encodeTlv(request);
 
@@ -1144,7 +1230,7 @@ export class InteractionClient {
         invoke: (messenger: InteractionClientMessenger) => Promise<T>,
         executeQueued = false,
     ): Promise<T> {
-        const messenger = await InteractionClientMessenger.create(this.exchangeProvider);
+        const messenger = await InteractionClientMessenger.create(this.#exchangeProvider);
         let result: T;
         try {
             if (executeQueued) {
@@ -1161,27 +1247,6 @@ export class InteractionClient {
         return result;
     }
 
-    private registerSubscriptionUpdateTimer(
-        maximumPeerResponseTime: number,
-        subscriptionId: number,
-        maxIntervalS: number,
-        updateTimeoutHandler: Timer.Callback,
-    ) {
-        if (!this.#ownSubscriptionIds.has(subscriptionId)) {
-            throw new MatterFlowError(
-                `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
-            );
-        }
-        const maxIntervalMs = maxIntervalS * 1000 + maximumPeerResponseTime;
-
-        const timer = Time.getTimer("Subscription timeout", maxIntervalMs, () => {
-            logger.info(`Subscription ${subscriptionId} timed out after ${maxIntervalMs}ms ...`);
-            this.removeSubscription(subscriptionId);
-            updateTimeoutHandler();
-        }).start();
-        this.#subscriptionClient.registerSubscriptionUpdateTimer(subscriptionId, timer);
-    }
-
     removeAllSubscriptions() {
         for (const subscriptionId of this.#ownSubscriptionIds) {
             this.removeSubscription(subscriptionId);
@@ -1193,11 +1258,11 @@ export class InteractionClient {
     }
 
     get session() {
-        return this.exchangeProvider.session;
+        return this.#exchangeProvider.session;
     }
 
     get channelType() {
-        return this.exchangeProvider.channelType;
+        return this.#exchangeProvider.channelType;
     }
 
     /** Enrich cached data to get complete responses when data version filters were used. */
@@ -1235,6 +1300,24 @@ export class InteractionClient {
                     `Enriching cached data (${clusterValues.length} attributes) for ${endpointId}/${clusterId} with version=${version}`,
                 );
                 attributeReports.push(...clusterValues);
+            }
+        }
+    }
+
+    /**
+     * Allows to add the data received by e.g. a Read request to the cache
+     */
+    async addAttributesToCache(attributeReports: DecodedAttributeReportValue<any>[]) {
+        for (const data of attributeReports) {
+            const {
+                path: { endpointId, clusterId, attributeId },
+                value,
+            } = data;
+            if (value === undefined) continue;
+            const { value: oldValue } = this.#nodeStore?.retrieveAttribute(endpointId, clusterId, attributeId) ?? {};
+            const changed = oldValue !== undefined ? !isDeepEqual(oldValue, value) : undefined;
+            if (changed !== false) {
+                await this.#nodeStore?.persistAttributes([data]);
             }
         }
     }

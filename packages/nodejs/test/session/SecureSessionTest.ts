@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Bytes } from "#general";
 import { Message, MessageCodec, SecureSession, SessionType } from "#protocol";
 import { NodeId } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 export const DECRYPT_KEY = Bytes.fromHex("bacb178b2588443d5d5b1e4559e7accc");
 const MESSAGE_ENCRYPTED = Bytes.fromHex(

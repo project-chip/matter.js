@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,9 +15,9 @@ import {
 export const PowerSourceNs = SemanticNamespace(
     {
         name: "PowerSource", id: 0xf,
-        details: "The tags contained in this namespace are restricted for use in the power source domain and shall " +
-            "NOT be used in any other domain or context.",
-        xref: { document: "namespace", section: "12" }
+        details: "The tags contained in this namespace are restricted for use in the power source domain and shall NOT " +
+            "be used in any other domain or context.",
+        xref: { document: "namespace", section: "15" }
     },
 
     SemanticTag({
@@ -29,28 +29,28 @@ export const PowerSourceNs = SemanticNamespace(
         name: "Grid", id: 0x1,
         description: "The Power Source cluster is related to power provided from the electrical grid",
         details: "Power Source clusters with this tag shall implement the WIRED feature.",
-        xref: { document: "namespace", section: "12.1" }
+        xref: { document: "namespace", section: "15.1" }
     }),
 
     SemanticTag({
         name: "Solar", id: 0x2,
         description: "The Power Source cluster is related to power provided from a solar panel array",
         details: "Power Source clusters with this tag shall implement the WIRED feature.",
-        xref: { document: "namespace", section: "12.2" }
+        xref: { document: "namespace", section: "15.2" }
     }),
 
     SemanticTag({
         name: "Battery", id: 0x3,
         description: "The Power Source cluster is related to power provided from a battery",
         details: "Power Source clusters with this tag shall implement the BAT feature.",
-        xref: { document: "namespace", section: "12.3" }
+        xref: { document: "namespace", section: "15.3" }
     }),
 
     SemanticTag({
         name: "EV", id: 0x4,
         description: "The Power Source cluster is related to power provided from an electric vehicle",
         details: "Power Source clusters with this tag shall implement the BAT feature.",
-        xref: { document: "namespace", section: "12.4" }
+        xref: { document: "namespace", section: "15.4" }
     })
 );
 

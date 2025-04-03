@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +12,7 @@ import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
  * The tags contained in this namespace are restricted for use in the power source domain and shall NOT be used in any
  * other domain or context.
  *
- * @see {@link MatterSpecification.v13.Namespace} § 12
+ * @see {@link MatterSpecification.v14.Namespace} § 15
  */
 export const PowerSourceTag = SemanticNamespace({
     id: 0xf,
@@ -28,7 +28,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * Power Source clusters with this tag shall implement the WIRED feature.
          *
-         * @see {@link MatterSpecification.v13.Namespace} § 12.1
+         * @see {@link MatterSpecification.v14.Namespace} § 15.1
          */
         Grid: { id: 0x1, label: "Grid" },
 
@@ -37,7 +37,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * Power Source clusters with this tag shall implement the WIRED feature.
          *
-         * @see {@link MatterSpecification.v13.Namespace} § 12.2
+         * @see {@link MatterSpecification.v14.Namespace} § 15.2
          */
         Solar: { id: 0x2, label: "Solar" },
 
@@ -46,7 +46,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * Power Source clusters with this tag shall implement the BAT feature.
          *
-         * @see {@link MatterSpecification.v13.Namespace} § 12.3
+         * @see {@link MatterSpecification.v14.Namespace} § 15.3
          */
         Battery: { id: 0x3, label: "Battery" },
 
@@ -55,7 +55,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * Power Source clusters with this tag shall implement the BAT feature.
          *
-         * @see {@link MatterSpecification.v13.Namespace} § 12.4
+         * @see {@link MatterSpecification.v14.Namespace} § 15.4
          */
         Ev: { id: 0x4, label: "EV" }
     }

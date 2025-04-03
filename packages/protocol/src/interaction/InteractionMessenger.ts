@@ -1,26 +1,33 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
+import {
+    Diagnostic,
+    InternalError,
+    Logger,
+    MatterFlowError,
+    NoResponseTimeoutError,
+    UnexpectedDataError,
+} from "#general";
 import { Specification } from "#model";
 import {
+    ReceivedStatusResponseError,
     Status,
     StatusCode,
     StatusResponseError,
     TlvAny,
-    TlvAttributeReport,
     TlvDataReport,
     TlvDataReportForSend,
     TlvDataVersionFilter,
-    TlvEventReport,
     TlvInvokeRequest,
     TlvInvokeResponse,
     TlvReadRequest,
     TlvSchema,
     TlvStatusResponse,
+    TlvStream,
     TlvSubscribeRequest,
     TlvSubscribeResponse,
     TlvTimedRequest,
@@ -38,11 +45,15 @@ import {
     UnexpectedMessageError,
 } from "../protocol/MessageExchange.js";
 import {
-    DataReportPayload,
+    AttributeReportPayload,
+    BaseDataReport,
     canAttributePayloadBeChunked,
     chunkAttributePayload,
+    DataReportPayloadIterator,
     encodeAttributePayload,
+    encodeAttributePayloadData,
     encodeEventPayload,
+    EventReportPayload,
 } from "./AttributeDataEncoder.js";
 
 export enum MessageType {
@@ -69,6 +80,19 @@ export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;
 export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 
 const logger = Logger.get("InteractionMessenger");
+
+/**
+ * Maximum number of messages that can be queued for a DataReport because they were not fitting into
+ * the current Report. If we reach this number we send them out forced.
+ */
+const DATA_REPORT_MAX_QUEUED_ATTRIBUTE_MESSAGES = 20;
+
+/**
+ * An empty DataReport with all fields is roughly 23 bytes without data content.
+ * So as soon as available bytes are less than 40 we should send the message. This value is the result
+ * of some manual tests with usual device types
+ */
+const DATA_REPORT_MIN_AVAILABLE_BYTES_BEFORE_SENDING = 40;
 
 class InteractionMessenger {
     constructor(protected exchange: MessageExchange) {}
@@ -161,7 +185,10 @@ class InteractionMessenger {
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
         if (status !== StatusCode.Success)
-            throw new StatusResponseError(`Received error status: ${status}${logHint ? ` (${logHint})` : ""}`, status);
+            throw new ReceivedStatusResponseError(
+                `Received error status: ${status}${logHint ? ` (${logHint})` : ""}`,
+                status,
+            );
     }
 
     getExchangeChannelName() {
@@ -170,7 +197,11 @@ class InteractionMessenger {
 }
 
 export interface InteractionRecipient {
-    handleReadRequest(exchange: MessageExchange, request: ReadRequest, message: Message): Promise<DataReport>;
+    handleReadRequest(
+        exchange: MessageExchange,
+        request: ReadRequest,
+        message: Message,
+    ): Promise<{ dataReport: DataReport; payload?: DataReportPayloadIterator }>;
     handleWriteRequest(exchange: MessageExchange, request: WriteRequest, message: Message): Promise<WriteResponse>;
     handleSubscribeRequest(
         exchange: MessageExchange,
@@ -205,11 +236,15 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             );
                         }
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        // This potentially sends multiple DataReport Messages
-                        await this.sendDataReport(
-                            await recipient.handleReadRequest(this.exchange, readRequest, message),
-                            readRequest.isFabricFiltered,
+
+                        const { dataReport, payload } = await recipient.handleReadRequest(
+                            this.exchange,
+                            readRequest,
+                            message,
                         );
+
+                        // This potentially sends multiple DataReport Messages
+                        await this.sendDataReport(dataReport, readRequest.isFabricFiltered, payload);
                         break;
                     }
                     case MessageType.WriteRequest: {
@@ -268,17 +303,16 @@ export class InteractionServerMessenger extends InteractionMessenger {
     }
 
     /**
-     * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
+     * Handle a DataReport with a Payload Iterator for a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean, waitForAck = true) {
-        const {
-            subscriptionId,
-            attributeReportsPayload,
-            eventReportsPayload,
-            suppressResponse,
-            interactionModelRevision,
-        } = dataReportPayload;
+    async sendDataReport(
+        baseDataReport: BaseDataReport,
+        forFabricFilteredRead: boolean,
+        payload?: DataReportPayloadIterator,
+        waitForAck = true,
+    ) {
+        const { subscriptionId, suppressResponse, interactionModelRevision } = baseDataReport;
 
         const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
             subscriptionId,
@@ -288,78 +322,300 @@ export class InteractionServerMessenger extends InteractionMessenger {
             eventReports: undefined,
         };
 
-        if (attributeReportsPayload !== undefined || eventReportsPayload !== undefined) {
+        if (payload !== undefined) {
             // TODO Add tag compressing once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
-
-            const attributeReportsToSend = [...(attributeReportsPayload ?? [])];
-            const eventReportsToSend = [...(eventReportsPayload ?? [])];
-
+            //  (or likely remove it)
             dataReport.moreChunkedMessages = true; // Assume we have multiple chunks, also for size calculation
+
+            /** The empty data report to calculate the size of the message. */
             const emptyDataReportBytes = TlvDataReportForSend.encode(dataReport);
 
-            let firstAttributeAddedToReportMessage = false;
-            let firstEventAddedToReportMessage = false;
+            /** Do we have received all data? In that case only the queue is left if filled. */
+            let allDataReceived = false;
+
+            /** Should the queue be sent out first? This defaults to true and is set to false if we try to fill up the message. */
+            let processQueueFirst = true;
+
+            /** Helper method to send out the current dataReport and reset the relevant state for the next chunk. */
             const sendAndResetReport = async () => {
                 await this.sendDataReportMessage(dataReport, waitForAck);
-                dataReport.attributeReports = undefined;
-                dataReport.eventReports = undefined;
+                // Empty the dataReport data fields for the next chunk and reset the messageSize
+                delete dataReport.attributeReports;
+                delete dataReport.eventReports;
                 messageSize = emptyDataReportBytes.length;
-                firstAttributeAddedToReportMessage = false;
-                firstEventAddedToReportMessage = false;
+                processQueueFirst = true; // After sending a message we first try to process queue
             };
 
+            /** Current size of the message */
             let messageSize = emptyDataReportBytes.length;
+
+            /** Queue of attribute reports to send */
+            const attributeReportsToSend = new Array<{
+                /** The attribute report to send */
+                attributeReport: AttributeReportPayload;
+                /** The encoded attribute report */
+                encoded: TlvStream;
+                /** The size of the encoded attribute report */
+                encodedSize: number;
+
+                /** If the attribute report needs to be sent in the next message. When set no new data are added. */
+                needSendNext?: boolean;
+            }>();
+
+            /** Queue of event reports to send */
+            const eventReportsToSend = new Array<{
+                /** The event report to send */
+                eventReport: EventReportPayload;
+
+                /** The encoded event report */
+                encoded: TlvStream;
+
+                /** The size of the encoded event report */
+                encodedSize: number;
+            }>();
+
             while (true) {
-                if (attributeReportsToSend.length > 0) {
-                    const attributeReport = attributeReportsToSend.shift();
-                    if (attributeReport !== undefined) {
-                        if (!firstAttributeAddedToReportMessage) {
-                            firstAttributeAddedToReportMessage = true;
-                            messageSize += 3; // Array element is added now which needs 3 bytes
+                // Decide if entries in the queue are processed first or if we read new data
+                if (
+                    !allDataReceived &&
+                    ((attributeReportsToSend.length === 0 && eventReportsToSend.length === 0) ||
+                        (attributeReportsToSend.length <= DATA_REPORT_MAX_QUEUED_ATTRIBUTE_MESSAGES &&
+                            !processQueueFirst &&
+                            !attributeReportsToSend[0].needSendNext))
+                ) {
+                    const { done, value } = payload.next();
+                    if (done) {
+                        allDataReceived = true;
+                        if (attributeReportsToSend.length === 0 && eventReportsToSend.length === 0) {
+                            // No more chunks to send and queue is empty, so we are done
+                            delete dataReport.moreChunkedMessages;
+                            break;
+                        } else {
+                            // We got all data, so only queue needs to be sent now, so flag all values to be sent next
+                            // but leave moreChunkedMessages flag set because we do not know if all queue entries match
+                            // into the message
+                            for (const attributeReport of attributeReportsToSend) {
+                                attributeReport.needSendNext = true;
+                            }
+                            continue;
                         }
+                    }
+                    if (value === undefined) {
+                        // Should never happen but better handle here
+                        continue;
+                    }
+
+                    if ("attributeData" in value || "attributeStatus" in value) {
+                        // If read value is an attributeReport, encode it and add it to the queue
                         const allowMissingFieldsForNonFabricFilteredRead =
-                            !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
-                        const encodedAttribute = encodeAttributePayload(attributeReport, {
+                            !forFabricFilteredRead && value.hasFabricSensitiveData;
+                        const encoded = encodeAttributePayload(value, {
                             allowMissingFieldsForNonFabricFilteredRead,
                         });
-                        const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
-                        if (messageSize + attributeReportBytes > this.exchange.maxPayloadSize) {
-                            if (canAttributePayloadBeChunked(attributeReport)) {
-                                // Attribute is a non-empty array: chunk it and add the chunks to the beginning of the queue
-                                attributeReportsToSend.unshift(...chunkAttributePayload(attributeReport));
-                                continue;
+                        const encodedSize = TlvAny.getEncodedByteLength(encoded);
+                        if (attributeReportsToSend.length === 0) {
+                            attributeReportsToSend.push({
+                                attributeReport: value,
+                                encoded,
+                                encodedSize,
+                            });
+                        } else {
+                            // Check if the new attribute belongs to the same endpoint and cluster as the first queued attribute
+                            // Remove once https://github.com/project-chip/connectedhomeip/issues/37384 is fixed and some time passed
+                            const firstQueuedAttributeData = attributeReportsToSend[0].attributeReport.attributeData;
+                            if (
+                                firstQueuedAttributeData !== undefined &&
+                                value.attributeData !== undefined &&
+                                firstQueuedAttributeData.path.nodeId === value.attributeData.path.nodeId &&
+                                firstQueuedAttributeData.path.endpointId === value.attributeData.path.endpointId &&
+                                firstQueuedAttributeData.path.clusterId === value.attributeData.path.clusterId
+                            ) {
+                                // Prioritize this attribute in queue because we know others are too big for current message
+                                attributeReportsToSend.unshift({
+                                    attributeReport: value,
+                                    encoded,
+                                    encodedSize,
+                                });
+                            } else {
+                                // No, we have a cluster change: Queue needs to go out next before we can process this one
+                                // SO flag all queued entries to be sent next and add the new one to the end of the queue
+                                for (const attributeReport of attributeReportsToSend) {
+                                    attributeReport.needSendNext = true;
+                                }
+                                attributeReportsToSend.push({
+                                    attributeReport: value,
+                                    encoded,
+                                    encodedSize,
+                                });
                             }
-                            await sendAndResetReport();
                         }
-                        messageSize += attributeReportBytes;
-                        if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
-                        dataReport.attributeReports.push(encodedAttribute);
+                    } else if ("eventData" in value || "eventStatus" in value) {
+                        // If read value is an eventReport, encode it and add it to the queue
+                        const allowMissingFieldsForNonFabricFilteredRead =
+                            !forFabricFilteredRead && value.hasFabricSensitiveData;
+
+                        const encoded = encodeEventPayload(value, { allowMissingFieldsForNonFabricFilteredRead });
+                        const encodedSize = TlvAny.getEncodedByteLength(encoded);
+                        eventReportsToSend.push({
+                            eventReport: value,
+                            encoded,
+                            encodedSize,
+                        });
+                    } else {
+                        throw new InternalError(`Invalid report type: ${value}`);
                     }
+                }
+
+                // If we have attribute data to send, we add them first
+                if (attributeReportsToSend.length > 0) {
+                    const attributeToSend = attributeReportsToSend.shift();
+                    if (attributeToSend === undefined) {
+                        continue; // should never happen, but better check
+                    }
+
+                    const { attributeReport, encoded, encodedSize, needSendNext } = attributeToSend;
+
+                    /** Number of bytes available in the message. */
+                    let availableBytes = this.exchange.maxPayloadSize - messageSize - 3; // 3 bytes for the attributeReports array
+
+                    /** Does the message need to be sent out before we can send this packet? */
+                    let sendOutTheMessage = false;
+                    if (encodedSize > availableBytes) {
+                        // This packet is too big for the current message ...
+                        if ((allDataReceived || needSendNext) && canAttributePayloadBeChunked(attributeReport)) {
+                            // Attribute is a non-empty array: chunk it and try to get as much as possible into the
+                            // initial REPLACE ALL message and add rest to the queue
+                            const chunks = chunkAttributePayload(attributeReport);
+
+                            // Get the Array and the first data chunk of the list and pack them together.
+                            // If this is already too big, it is more optimal to postpone this list completely to the next message
+                            const initialChunk = chunks.shift(); // This is the empty array chunk
+                            const firstDataChunk = chunks.shift(); // First data chunk
+                            if (initialChunk === undefined || firstDataChunk === undefined) {
+                                throw new InternalError(
+                                    "Chunked attribute payload is unexpected. This should not happen!",
+                                );
+                            }
+                            initialChunk.attributeData!.payload.push(firstDataChunk.attributeData!.payload);
+
+                            // Let's encode the initial REPLACE-ALL entry including one array entry
+                            const allowMissingFieldsForNonFabricFilteredRead =
+                                !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
+                            const encodedInitialChunk = encodeAttributePayload(initialChunk, {
+                                allowMissingFieldsForNonFabricFilteredRead,
+                            });
+                            const encodedInitialChunkSize = TlvAny.getEncodedByteLength(encodedInitialChunk);
+                            if (availableBytes > encodedInitialChunkSize) {
+                                // The initial chunk fits into the message, so lets see how much more we can add
+                                availableBytes -= encodedInitialChunkSize;
+                                messageSize += encodedInitialChunkSize;
+                                while (chunks.length > 0) {
+                                    const nextChunk = chunks.shift();
+                                    if (nextChunk === undefined) {
+                                        throw new InternalError(
+                                            "Chunked attribute payload is undefined. This should not happen!",
+                                        );
+                                    }
+                                    const encodedChunkData = encodeAttributePayloadData(nextChunk, {
+                                        allowMissingFieldsForNonFabricFilteredRead,
+                                    });
+                                    const encodedChunkDataSize = TlvAny.getEncodedByteLength(encodedChunkData);
+                                    if (encodedChunkDataSize > availableBytes) {
+                                        // This chunks does not match anymore, put it and next chunks back to the queue
+                                        chunks.unshift(nextChunk);
+                                        for (let i = chunks.length - 1; i >= 0; i--) {
+                                            const chunk = chunks[i];
+                                            const encodedChunk = encodeAttributePayload(chunk, {
+                                                allowMissingFieldsForNonFabricFilteredRead,
+                                            });
+                                            const encodedChunkSize = TlvAny.getEncodedByteLength(encodedChunk);
+                                            attributeReportsToSend.unshift({
+                                                attributeReport: chunk,
+                                                encoded: encodedChunk,
+                                                encodedSize: encodedChunkSize,
+                                                needSendNext: true,
+                                            });
+                                        }
+                                        if (dataReport.attributeReports === undefined) {
+                                            dataReport.attributeReports = [];
+                                        }
+                                        dataReport.attributeReports.push(
+                                            encodeAttributePayload(initialChunk, {
+                                                allowMissingFieldsForNonFabricFilteredRead,
+                                            }),
+                                        );
+                                        break;
+                                    }
+                                    availableBytes -= encodedChunkDataSize;
+                                    messageSize += encodedChunkDataSize;
+                                    initialChunk.attributeData!.payload.push(nextChunk.attributeData!.payload);
+                                }
+                                continue;
+                            } else if (needSendNext) {
+                                // The initial chunk does not fit into the message, but we need to send it next, flag that
+                                sendOutTheMessage = true;
+                            }
+                        } else {
+                            // Current attribute is too big for the current message, and we can't/won't chunk it
+                            if (needSendNext) {
+                                // ... but if we need to send it now, flag that we need to send it next
+                                sendOutTheMessage = true;
+                            } else {
+                                // ... otherwise we start filling up the queue
+                                processQueueFirst = false;
+                            }
+                        }
+
+                        let messageWasSent = false;
+                        // If only 40 bytes are left, or we added a chunked array element as prio,
+                        // or the queue has reached its maximum size, then we send the message now because it is full
+                        if (
+                            sendOutTheMessage ||
+                            availableBytes < DATA_REPORT_MIN_AVAILABLE_BYTES_BEFORE_SENDING ||
+                            (attributeReportsToSend.length > 0 && attributeReportsToSend[0].needSendNext) ||
+                            attributeReportsToSend.length >= DATA_REPORT_MAX_QUEUED_ATTRIBUTE_MESSAGES
+                        ) {
+                            await sendAndResetReport();
+                            messageWasSent = true;
+                        }
+                        if (!messageWasSent) {
+                            // We did not send the message, means assumption is that there is more space in the message
+                            // So we add the current attribute to the end of the queue
+                            attributeReportsToSend.push(attributeToSend);
+                            continue;
+                        }
+                        if (encodedSize > this.exchange.maxPayloadSize - emptyDataReportBytes.length - 3) {
+                            // We sent the message but the current attribute is too big for a message alone so needs to
+                            // be chunked, so add it to the queue at the beginning
+                            attributeReportsToSend.unshift(attributeToSend);
+                            continue;
+                        }
+                    }
+                    messageSize += encodedSize;
+                    if (dataReport.attributeReports === undefined) {
+                        dataReport.attributeReports = [];
+                    }
+                    dataReport.attributeReports.push(encoded);
                 } else if (eventReportsToSend.length > 0) {
-                    const eventReport = eventReportsToSend.shift();
-                    if (eventReport === undefined) {
-                        // No more chunks to send
-                        delete dataReport.moreChunkedMessages;
-                        break;
+                    const eventToSend = eventReportsToSend.shift();
+                    if (eventToSend === undefined) {
+                        continue;
                     }
-                    if (!firstEventAddedToReportMessage) {
-                        firstEventAddedToReportMessage = true;
-                        messageSize += 3; // Array element is added now which needs 3 bytes
-                    }
-                    const allowMissingFieldsForNonFabricFilteredRead =
-                        !forFabricFilteredRead && eventReport.hasFabricSensitiveData;
-                    const encodedEvent = encodeEventPayload(eventReport, {
-                        allowMissingFieldsForNonFabricFilteredRead,
-                    });
-                    const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
-                    if (messageSize + eventReportBytes > this.exchange.maxPayloadSize) {
+
+                    const { encoded, encodedSize } = eventToSend;
+                    if (
+                        messageSize + 3 + (dataReport.attributeReports ? 3 : 0) + encodedSize >
+                        this.exchange.maxPayloadSize
+                    ) {
                         await sendAndResetReport();
                     }
-                    messageSize += eventReportBytes;
-                    if (dataReport.eventReports === undefined) dataReport.eventReports = [];
-                    dataReport.eventReports.push(encodedEvent);
-                } else {
-                    // No more chunks to send
+                    messageSize += encodedSize;
+                    if (dataReport.eventReports === undefined) {
+                        dataReport.eventReports = [];
+                    }
+                    dataReport.eventReports.push(encoded);
+                } else if (allDataReceived) {
+                    // We have received all data and queue is empty, so we are done
                     delete dataReport.moreChunkedMessages;
                     break;
                 }
@@ -377,7 +633,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
         const encodedMessage = TlvDataReportForSend.encode(dataReportToSend);
         if (encodedMessage.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `DataReport is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
+                `DataReport with ${encodedMessage.length}bytes is too long to fit in a single chunk (${this.exchange.maxPayloadSize}bytes), This should not happen! Data: ${Diagnostic.json(
                     dataReportToSend,
                 )}`,
             );
@@ -428,7 +684,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         if (receivedMessageType !== messageType) {
             if (receivedMessageType === MessageType.StatusResponse) {
                 const statusCode = TlvStatusResponse.decode(message.payload).status;
-                throw new StatusResponseError(`Received status response ${statusCode}`, statusCode);
+                throw new ReceivedStatusResponseError(`Received status response ${statusCode}`, statusCode);
             }
             throw new MatterFlowError(
                 `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
@@ -439,15 +695,10 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
         return message;
     }
 
-    // TODO: Adjust to use callbacks or events to push put received data to allow parallel processing
-    async readDataReports(expectedSubscriptionIds?: number[]): Promise<DataReport> {
-        let subscriptionId: number | undefined;
-        const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
-        const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
+    async readAggregateDataReport(expectedSubscriptionIds?: number[]): Promise<DataReport> {
+        let result: DataReport | undefined;
 
-        while (true) {
-            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
-            const report = TlvDataReport.decode(dataReportMessage.payload);
+        for await (const report of this.readDataReports()) {
             if (expectedSubscriptionIds !== undefined) {
                 if (report.subscriptionId === undefined || !expectedSubscriptionIds.includes(report.subscriptionId)) {
                     await this.sendStatus(StatusCode.InvalidSubscription, {
@@ -464,55 +715,81 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger {
                 }
             }
 
-            if (subscriptionId === undefined && report.subscriptionId !== undefined) {
-                subscriptionId = report.subscriptionId;
-            } else if (
-                (subscriptionId !== undefined || report.subscriptionId !== undefined) &&
-                report.subscriptionId !== subscriptionId
-            ) {
+            if (result?.subscriptionId !== undefined && report.subscriptionId !== result.subscriptionId) {
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
-            const logContext = {
-                subId: report.subscriptionId,
-                dataReportFlags: Diagnostic.asFlags({
-                    empty: !report.attributeReports?.length && !report.eventReports?.length,
-                    suppressResponse: report.suppressResponse,
-                    moreChunkedMessages: report.moreChunkedMessages,
-                }),
-                attr: report.attributeReports?.length,
-                ev: report.eventReports?.length,
-            };
+            if (!result) {
+                result = report;
+            } else {
+                if (Array.isArray(report.attributeReports)) {
+                    if (!result.attributeReports) {
+                        result.attributeReports = report.attributeReports;
+                    } else {
+                        result.attributeReports.push(...report.attributeReports);
+                    }
+                }
+                if (Array.isArray(report.eventReports)) {
+                    if (!result.eventReports) {
+                        result.eventReports = report.eventReports;
+                    } else {
+                        result.eventReports.push(...report.eventReports);
+                    }
+                }
+            }
+        }
 
-            if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
-                attributeValues.push(...report.attributeReports);
-            }
-            if (Array.isArray(report.eventReports) && report.eventReports.length > 0) {
-                eventValues.push(...report.eventReports);
-            }
+        if (result === undefined) {
+            // readDataReports should have thrown
+            throw new InternalError("No data reports loaded during read");
+        }
+
+        return result;
+    }
+
+    /**
+     * Read data reports as they come in on the wire.
+     *
+     * Data reports payloads are decoded but list attributes may be split across messages; these will require reassembly.
+     */
+    async *readDataReports() {
+        while (true) {
+            const dataReportMessage = await this.waitFor("DataReport", MessageType.ReportData);
+            const report = TlvDataReport.decode(dataReportMessage.payload);
+
+            yield report;
 
             if (report.moreChunkedMessages) {
                 await this.sendStatus(StatusCode.Success, {
                     multipleMessageInteraction: true,
-                    logContext,
+                    logContext: this.#logContextOf(report),
                 });
             } else if (!report.suppressResponse) {
-                // We received the last message and need to send a final Success, but we do not need to wait for it and
+                // We received the last message and need to send a final success, but we do not need to wait for it and
                 // also don't care if it fails
                 this.sendStatus(StatusCode.Success, {
                     multipleMessageInteraction: true,
-                    logContext,
-                }).catch(error =>
-                    logger.info("Error while sending final Success after receiving all DataReport chunks", error),
-                );
+                    logContext: this.#logContextOf(report),
+                }).catch(error => logger.info("Error sending success after final data report chunk", error));
             }
 
             if (!report.moreChunkedMessages) {
-                report.attributeReports = attributeValues;
-                report.eventReports = eventValues;
-                return report;
+                break;
             }
         }
+    }
+
+    #logContextOf(report: DataReport) {
+        return {
+            subId: report.subscriptionId,
+            dataReportFlags: Diagnostic.asFlags({
+                empty: !report.attributeReports?.length && !report.eventReports?.length,
+                suppressResponse: report.suppressResponse,
+                moreChunkedMessages: report.moreChunkedMessages,
+            }),
+            attr: report.attributeReports?.length,
+            ev: report.eventReports?.length,
+        };
     }
 }
 
@@ -539,6 +816,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
             if (
+                this.exchangeProvider.supportsReconnect &&
                 (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) &&
                 !options?.multipleMessageInteraction
             ) {
@@ -561,7 +839,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     async sendReadRequest(readRequest: ReadRequest) {
         await this.send(MessageType.ReadRequest, this.#encodeReadingRequest(TlvReadRequest, readRequest));
 
-        return this.readDataReports();
+        return this.readAggregateDataReport();
     }
 
     #encodeReadingRequest<T extends TlvSchema<any>>(schema: T, request: TypeFromSchema<T>) {
@@ -578,7 +856,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         });
         if (requestWithoutDataVersionFilters.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
-                `Request is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(request)}`,
+                `Request is too long to fit in a single chunk, This should not happen! Data: ${Diagnostic.json(request)}`,
             );
         }
 
@@ -622,7 +900,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const request = this.#encodeReadingRequest(TlvSubscribeRequest, subscribeRequest);
         await this.send(MessageType.SubscribeRequest, request);
 
-        const report = await this.readDataReports();
+        const report = await this.readAggregateDataReport();
         const { subscriptionId } = report;
 
         if (subscriptionId === undefined) {

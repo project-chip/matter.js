@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,13 +19,12 @@ export const TimeFormatLocalization = Cluster(
         name: "TimeFormatLocalization", id: 0x2c, classification: "node", pics: "LTIME",
 
         details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
-            "may have differing preferences for how dates and times are conveyed. As such, Nodes that visually " +
-            "or audibly convey time information need a mechanism by which they can be configured to use a user’s " +
+            "may have differing preferences for how dates and times are conveyed. As such, Nodes that visually or " +
+            "audibly convey time information need a mechanism by which they can be configured to use a user’s " +
             "preferred format." +
             "\n" +
-            "This cluster supports an interface to a Node. It provides attributes for determining and " +
-            "configuring time and date formatting information that a Node shall utilize when conveying values to " +
-            "a user.",
+            "This cluster supports an interface to a Node. It provides attributes for determining and configuring " +
+            "time and date formatting information that a Node shall utilize when conveying values to a user.",
 
         xref: { document: "core", section: "11.4" }
     },
@@ -58,7 +57,7 @@ export const TimeFormatLocalization = Cluster(
 
     Attribute({
         name: "ActiveCalendarType", id: 0x1, type: "CalendarTypeEnum", access: "RW VM",
-        conformance: "CALFMT", constraint: "in supportedCalendarTypes", quality: "N",
+        conformance: "CALFMT", constraint: "in SupportedCalendarTypes", quality: "N",
 
         details: "Indicates the calendar format that the Node is currently configured to use when conveying dates." +
             "\n" +
@@ -76,8 +75,8 @@ export const TimeFormatLocalization = Cluster(
             name: "SupportedCalendarTypes", id: 0x2, type: "list", access: "R V", conformance: "CALFMT",
             constraint: "desc", quality: "F",
             details: "Indicates a list of CalendarTypeEnum values that are supported by the Node. The list shall NOT " +
-                "contain any duplicate entries. The ordering of items within the list SHOULD NOT express any " +
-                "meaning. The maximum length of the SupportedCalendarTypes list shall be equivalent to the number of " +
+                "contain any duplicate entries. The ordering of items within the list SHOULD NOT express any meaning. " +
+                "The maximum length of the SupportedCalendarTypes list shall be equivalent to the number of " +
                 "enumerations within CalendarTypeEnum.",
             xref: { document: "core", section: "11.4.6.3" }
         },

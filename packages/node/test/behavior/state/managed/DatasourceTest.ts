@@ -1,21 +1,21 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
 import { OfflineContext } from "#behavior/context/server/OfflineContext.js";
-import { StateType } from "#behavior/state/StateType.js";
-import { Val } from "#behavior/state/Val.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
-import { FinalizationError } from "#behavior/state/transaction/Errors.js";
+import { StateType } from "#behavior/state/StateType.js";
 import { BehaviorSupervisor } from "#behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "#behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
-import { AsyncObservable, MaybePromise, Observable } from "#general";
+import { AsyncObservable, MaybePromise, Observable, UnsettledStateError } from "#general";
 import { DataModelPath, DatatypeModel, FieldElement, FieldModel } from "#model";
+import { Val } from "#protocol";
+import { EndpointNumber } from "#types";
 
 class MyState {
     foo = "bar";
@@ -52,7 +52,10 @@ function createDatasource<const T extends StateType = typeof MyState>(
     options: Partial<Datasource.Options<T>> = {},
 ): Datasource<T> {
     return Datasource({
-        path: DataModelPath("TestDatasource"),
+        location: {
+            endpoint: EndpointNumber(1),
+            path: DataModelPath("TestDatasource"),
+        },
         type: (options.type ?? MyState) as T,
         supervisor,
         ...options,
@@ -278,7 +281,11 @@ describe("Datasource", () => {
             expect(ds.view.foo).equals("xxxx");
         });
 
-        async function assertRejects(observer: (ds: Datasource<typeof MyState>, ...args: any[]) => MaybePromise) {
+        async function assertRejects(
+            type: new () => Error,
+            message: string,
+            observer: (ds: Datasource<typeof MyState>, ...args: any[]) => MaybePromise,
+        ) {
             const events = { foo$Changing: AsyncObservable<any>() };
 
             const ds = createDatasource({ events });
@@ -286,27 +293,31 @@ describe("Datasource", () => {
             events.foo$Changing.on((...args: any[]) => observer(ds, ...args));
 
             await expect(withReference(ds, async ({ state }) => (state.foo = "x"))).eventually.rejectedWith(
-                FinalizationError,
-                "Rolled back due to pre-commit error",
+                type,
+                message,
             );
 
             expect(ds.view.foo).equals("bar");
         }
 
         it("disallows infinite cascading mutations", async () => {
-            await assertRejects(async (ds, newValue, _oldValue, context) => {
-                ds.reference(context).foo = `${newValue}x`;
-            });
+            await assertRejects(
+                UnsettledStateError,
+                "State has not settled after 5 pre-commit cycles which likely indicates an infinite loop",
+                async (ds, newValue, _oldValue, context) => {
+                    ds.reference(context).foo = `${newValue}x`;
+                },
+            );
         });
 
         it("aborts on sync listener error", async () => {
-            await assertRejects(() => {
+            await assertRejects(Error, "oops", () => {
                 throw new Error("oops");
             });
         });
 
         it("aborts on async listener error", async () => {
-            await assertRejects(async () => {
+            await assertRejects(Error, "oops", async () => {
                 throw new Error("oops");
             });
         });

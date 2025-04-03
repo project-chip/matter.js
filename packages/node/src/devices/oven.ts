@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,11 +12,11 @@ import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js
 import { Identity } from "#general";
 
 /**
- * An oven represents a device that contains one or more cabinets, and optionally a single cooktop, that are all
- * capable of heating food. Examples of consumer products implementing this device type include ovens, wall ovens,
- * convection ovens, etc.
+ * An oven represents a device that contains one or more cabinets, and optionally a single cooktop, that are all capable
+ * of heating food. Examples of consumer products implementing this device type include ovens, wall ovens, convection
+ * ovens, etc.
  *
- * @see {@link MatterSpecification.v13.Device} § 13.9
+ * @see {@link MatterSpecification.v14.Device} § 13.9
  */
 export interface OvenDevice extends Identity<typeof OvenDeviceDefinition> {}
 
@@ -37,7 +37,7 @@ export namespace OvenRequirements {
 export const OvenDeviceDefinition = MutableEndpoint({
     name: "Oven",
     deviceType: 0x7b,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: OvenRequirements,
     behaviors: SupportedBehaviors()
 });

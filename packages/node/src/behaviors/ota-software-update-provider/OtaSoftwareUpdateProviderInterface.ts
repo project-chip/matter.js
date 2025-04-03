@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,17 +15,17 @@ export namespace OtaSoftwareUpdateProviderInterface {
          * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider to
          * match the OTA Requestor’s constraints provided in the payload fields.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.1
          */
         queryImage(request: OtaSoftwareUpdateProvider.QueryImageRequest): MaybePromise<OtaSoftwareUpdateProvider.QueryImageResponse>;
 
         /**
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.3
          */
         applyUpdateRequest(request: OtaSoftwareUpdateProvider.ApplyUpdateRequest): MaybePromise<OtaSoftwareUpdateProvider.ApplyUpdateResponse>;
 
         /**
-         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5
+         * @see {@link MatterSpecification.v14.Core} § 11.20.6.5.5
          */
         notifyUpdateApplied(request: OtaSoftwareUpdateProvider.NotifyUpdateAppliedRequest): MaybePromise;
     }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,14 +20,15 @@ export const GroupKeyManagement = Cluster(
         name: "GroupKeyManagement", id: 0x3f, classification: "node", pics: "GRPKEY",
 
         details: "The Group Key Management cluster manages group keys for the node. The cluster is scoped to the node " +
-            "and is a singleton for the node. This cluster maintains a list of groups supported by the node. " +
-            "Each group list entry supports a single group, with a single group ID and single group key. " +
-            "Duplicate groups are not allowed in the list. Additions or removal of a group entry are performed " +
-            "via modifications of the list. Such modifications require Administer privilege." +
+            "and is a singleton for the node. This cluster maintains a list of groups supported by the node. Each " +
+            "group list entry supports a single group, with a single group ID and single group key. Duplicate " +
+            "groups are not allowed in the list. Additions or removal of a group entry are performed via " +
+            "modifications of the list. Such modifications require Administer privilege." +
             "\n" +
             "Each group entry includes a membership list of zero of more endpoints that are members of the group " +
-            "on the node. Modification of this membership list is done via the Groups cluster, which is scoped " +
-            "to an endpoint. Please see the System Model specification for more information on groups.",
+            "on the node. Modification of this membership list is done via the Groups cluster, which is" +
+            "\n" +
+            "scoped to an endpoint. Please see the System Model specification for more information on groups.",
 
         xref: { document: "core", section: "11.2" }
     },
@@ -37,7 +38,7 @@ export const GroupKeyManagement = Cluster(
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.2.4" } },
         Field({
-            name: "CS", constraint: "0", description: "CacheAndSync",
+            name: "CS", conformance: "P", constraint: "0", description: "CacheAndSync",
             details: "The ability to support CacheAndSync security policy and MCSP."
         })
     ),
@@ -46,8 +47,8 @@ export const GroupKeyManagement = Cluster(
         {
             name: "GroupKeyMap", id: 0x0, type: "list", access: "RW F VM", conformance: "M", constraint: "desc",
             default: [], quality: "N",
-            details: "This attribute is a list of GroupKeyMapStruct entries. Each entry associates a logical Group Id " +
-                "with a particular group key set.",
+            details: "This attribute is a list of GroupKeyMapStruct entries. Each entry associates a logical Group Id with " +
+                "a particular group key set.",
             xref: { document: "core", section: "11.2.6.1" }
         },
 
@@ -60,9 +61,10 @@ export const GroupKeyManagement = Cluster(
             default: [],
 
             details: "This attribute is a list of GroupInfoMapStruct entries. Each entry provides read-only information " +
-                "about how a given logical Group ID maps to a particular set of endpoints, and a name for the group. " +
-                "The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and " +
-                "is in general terms referred to as the 'node-wide Group Table'." +
+                "about how a given logical Group ID maps to a particular set of endpoints, and a name for the group." +
+                "\n" +
+                "The content of this attribute reflects data managed via the Groups cluster (see AppClusters), and is " +
+                "in general terms referred to as the 'node-wide Group Table'." +
                 "\n" +
                 "The GroupTable shall NOT contain any entry whose GroupInfoMapStruct has an empty Endpoints list. If " +
                 "a RemoveGroup or RemoveAllGroups command causes the removal of a group mapping from its last mapped " +
@@ -112,8 +114,8 @@ export const GroupKeyManagement = Cluster(
                 "    CONSTRAINT_ERROR status code responded to the client." +
                 "\n" +
                 "  • If the EpochStartTime0 is set to 0, then this command shall fail with an INVALID_COMMAND status " +
-                "    code responded to the client. Note that internally, a GroupKeySetStruct’s EpochStartTime0 may " +
-                "    be set to zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct " +
+                "    code responded to the client. Note that internally, a GroupKeySetStruct’s EpochStartTime0 may be " +
+                "    set to zero, due to the behavior of the AddNOC command which synthesizes a GroupKeySetStruct " +
                 "    (see IPKValue). However, the value 0 is illegal in the GroupKeySet field sent by a client." +
                 "\n" +
                 "  • If the EpochKey1 field is not null, then the EpochKey0 field shall NOT be null. Otherwise this " +
@@ -148,17 +150,18 @@ export const GroupKeyManagement = Cluster(
                 "\n" +
                 "If there exists a Group Key Set associated with the accessing fabric which has the same " +
                 "GroupKeySetID as that provided in the GroupKeySet field, then the contents of that group key set " +
-                "shall be replaced. A replacement shall be done by executing the equivalent of entirely removing the " +
-                "previous Group Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set " +
-                "with the provided configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a " +
-                "new Group Key Set associated with the accessing fabric shall be created with the provided data. The " +
-                "Group Key Set shall be written to non-volatile storage." +
+                "shall be" +
+                "\n" +
+                "replaced. A replacement shall be done by executing the equivalent of entirely removing the previous " +
+                "Group Key Set with the given GroupKeySetID, followed by an addition of a Group Key Set with the " +
+                "provided configuration. Otherwise, if the GroupKeySetID did not match an existing entry, a new Group " +
+                "Key Set associated with the accessing fabric shall be created with the provided data. The Group Key " +
+                "Set shall be written to non-volatile storage." +
                 "\n" +
                 "Upon completion, this command shall send a status code back to the initiator:" +
                 "\n" +
-                "  • If the Group Key Set was properly installed or updated on the Node, the status code shall be" +
-                "\n" +
-                "set to SUCCESS." +
+                "  • If the Group Key Set was properly installed or updated on the Node, the status code shall be set " +
+                "    to SUCCESS." +
                 "\n" +
                 "  • If there are insufficient resources on the receiver to store an additional Group Key Set, the " +
                 "    status code shall be set to RESOURCE_EXHAUSTED (see group key limits);" +
@@ -215,18 +218,17 @@ export const GroupKeyManagement = Cluster(
                 "\n" +
                 "Effect on Receipt" +
                 "\n" +
-                "If there exists a Group Key Set associated with the accessing fabric which has the same GroupKey" +
-                "\n" +
-                "SetID as that provided in the GroupKeySetID field, then the contents of that Group Key Set shall be " +
-                "removed, including all epoch keys it contains." +
+                "If there exists a Group Key Set associated with the accessing fabric which has the same " +
+                "GroupKeySetID as that provided in the GroupKeySetID field, then the contents of that Group Key Set " +
+                "shall be removed, including all epoch keys it contains." +
                 "\n" +
                 "If there exist any entries for the accessing fabric within the GroupKeyMap attribute that refer to " +
                 "the GroupKeySetID just removed, then these entries shall be removed from that list." +
                 "\n" +
                 "This command shall fail with an INVALID_COMMAND status code back to the initiator if the " +
                 "GroupKeySetID being removed is 0, which is the Key Set associated with the Identity Protection Key " +
-                "(IPK). The only method to remove the IPK is usage of the RemoveFabric command or any operation " +
-                "which causes the equivalent of a RemoveFabric to occur by side-effect." +
+                "(IPK). The only method to remove the IPK is usage of the RemoveFabric command or any operation which " +
+                "causes the equivalent of a RemoveFabric to occur by side-effect." +
                 "\n" +
                 "This command shall send a SUCCESS status code back to the initiator on success, or NOT_FOUND if the " +
                 "GroupKeySetID requested did not exist.",
@@ -245,8 +247,6 @@ export const GroupKeyManagement = Cluster(
             details: "This command is used by Administrators to query a list of all Group Key Sets associated with the " +
                 "accessing fabric." +
                 "\n" +
-                "NOTE Field 0 for this command is reserved and shall NOT be used." +
-                "\n" +
                 "Effect on Receipt" +
                 "\n" +
                 "Upon receipt, this command shall iterate all stored GroupKeySetStruct associated with the accessing " +
@@ -256,15 +256,14 @@ export const GroupKeyManagement = Cluster(
             xref: { document: "core", section: "11.2.7.5" }
         },
 
-        Field({ name: "Reserved", id: 0x0, conformance: "X" }),
-        Field({ name: "GroupKeySetIDs", id: 0x1, conformance: "X" })
+        Field({ name: "DoNotUse", id: 0x0, conformance: "X" })
     ),
 
     Command(
         {
             name: "KeySetReadAllIndicesResponse", id: 0x5, conformance: "M", direction: "response",
-            details: "This command shall be generated in response to KeySetReadAllIndices and it shall contain the list " +
-                "of GroupKeySetID for all Group Key Sets associated with the scoped Fabric.",
+            details: "This command shall be generated in response to KeySetReadAllIndices and it shall contain the list of " +
+                "GroupKeySetID for all Group Key Sets associated with the scoped Fabric.",
             xref: { document: "core", section: "11.2.7.6" }
         },
 
@@ -324,7 +323,7 @@ export const GroupKeyManagement = Cluster(
             name: "GroupKeySetId", id: 0x2, type: "uint16", access: "F", conformance: "M",
             constraint: "1 to 65535",
             details: "This field references the set of group keys that generate operational group keys for use with this " +
-                "group, as specified in Section 4.16.3.5.1, “Group Key Set ID”." +
+                "group, as specified in Section 4.17.3.5.1, “Group Key Set ID”." +
                 "\n" +
                 "A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for the IPK.",
             xref: { document: "core", section: "11.2.5.3.2" }
@@ -339,7 +338,7 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M",
             details: "This field shall provide the fabric-unique index for the associated group key set, as specified in " +
-                "Section 4.16.3.5.1, “Group Key Set ID”.",
+                "Section 4.17.3.5.1, “Group Key Set ID”.",
             xref: { document: "core", section: "11.2.5.4.1" }
         }),
 
@@ -356,15 +355,15 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey0", id: 0x2, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
-                "group key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 " +
-                "shall NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.3" }
         }),
 
         Field({
             name: "EpochStartTime0", id: 0x3, type: "epoch-us", access: "S", conformance: "M", quality: "X",
-            details: "This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.16.3, " +
+            details: "This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.17.3, " +
                 "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
             xref: { document: "core", section: "11.2.5.4.4" }
         }),
@@ -372,16 +371,15 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey1", id: 0x4, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational group" +
-                "\n" +
-                "key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall " +
-                "NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.5" }
         }),
 
         Field({
             name: "EpochStartTime1", id: 0x5, type: "epoch-us", access: "S", conformance: "M", quality: "X",
-            details: "This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.16.3, " +
+            details: "This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.17.3, " +
                 "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
             xref: { document: "core", section: "11.2.5.4.6" }
         }),
@@ -389,15 +387,15 @@ export const GroupKeyManagement = Cluster(
         Field({
             name: "EpochKey2", id: 0x6, type: "octstr", access: "S", conformance: "M", constraint: "16",
             quality: "X",
-            details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
-                "group key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 " +
-                "shall NOT be null.",
+            details: "This field, if not null, shall be the root credential used in the derivation of an operational group " +
+                "key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 shall NOT " +
+                "be null.",
             xref: { document: "core", section: "11.2.5.4.7" }
         }),
 
         Field({
             name: "EpochStartTime2", id: 0x7, type: "epoch-us", access: "S", conformance: "M", quality: "X",
-            details: "This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.16.3, " +
+            details: "This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.17.3, " +
                 "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
             xref: { document: "core", section: "11.2.5.4.8" }
         }),

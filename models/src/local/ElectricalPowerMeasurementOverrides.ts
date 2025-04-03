@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,7 +21,7 @@ LocalMatter.children.push({
                     tag: "field",
                     name: "Ranges",
 
-                    // 1.3 spec mislabels the "access" column as "default"
+                    // 1.3 spec mislabels the "access" column as "default" (still present in 1.4 as well)
                     default: [],
                     access: "R V",
                 },

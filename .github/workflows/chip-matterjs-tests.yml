@@ -1,0 +1,123 @@
+# This workflow executed the chip tool tests against matter.js
+name: Matter.js Controller vs Chip Device Tests
+
+on:
+  schedule:
+    - cron: 0 4 * * * # Every day at 04:00 (chip-tool-test should have finished by then and rebuild is done)
+  workflow_dispatch: # Manually on demand
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  merge_group:
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}-chip-matterjs-tests
+  cancel-in-progress: true
+
+jobs:
+  head-commit-message:
+    if: github.repository == 'project-chip/matter.js'
+    name: get head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      head-commit-message: ${{ steps.get_head_commit_message.outputs.headCommitMsg }}
+    steps:
+      - name: Get repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Print head git commit message
+        id: get_head_commit_message
+        run: echo "headCommitMsg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
+  # Find out what is needed to be done by this test workflow
+  tests-needed:
+    needs: [head-commit-message]
+    if: github.repository == 'project-chip/matter.js'
+    runs-on: ubuntu-latest
+    outputs:
+      controller-tests-required: ${{ steps.check-trigger.outputs.controller-tests-required }}
+
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || ((github.event_name == 'push' || github.event_name == 'pull_request') && contains(needs.head-commit-message.outputs.head-commit-message, '[execute-controllertests]') == true) }}
+        name: Controller tests required to run?
+        id: check-trigger
+        run: echo "controller-tests-required=true" >> $GITHUB_OUTPUT
+
+  # If we need to do anything make sure that chip binaries are build and environment can be set up
+  prepare-chip-build:
+    needs: [tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Prepare chip tests and rebuild chip-tool if needed
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+          build-matter-js: "false"
+
+  matterjs-all-chip-apps:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.tests-needed.outputs.controller-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: 'false'
+
+      - name: Patch Test runner interface-id
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const fs = require("fs");
+            let file= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
+            // Patch the test runner to execute controlelr and app on same network interface
+            file = file.replaceAll("'ip netns exec tool'", "'ip netns exec app'");
+            fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file);
+
+      - name: Chip-Apps execution with matter.js controller
+        id: test-execution-matterjs-chip
+        shell: bash
+        run: |
+          sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+          sudo sysctl -w net.ipv4.conf.all.forwarding=1
+          sudo sysctl -w net.ipv6.conf.all.forwarding=1
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../chip-testing/dist/esm/ControllerWebSocketTestApp.js \
+              --log-level info \
+              --target-glob "{Test_*,}" \
+              --target-skip-glob "{Test_TC_BDX_*,Test_TC_DGTHREAD*,Test_TC_DGWIFI*,Test_TC_ACE_1_6,Test_TC_SC_5_2,Test_TC_S_2_3}" \
+              run \
+              --all-clusters-app ../bin/chip-all-clusters-app \
+              --lock-app ../bin/chip-lock-app \
+              --bridge-app ../bin/chip-bridge-app \
+              --tv-app ../bin/chip-tv-app \
+              --lit-icd-app ../bin/lit-icd-app \
+              --microwave-oven-app ../bin/chip-microwave-oven-app \
+              --rvc-app ../bin/chip-rvc-app \
+              --network-manager-app ../bin/matter-network-manager-app \
+            '
+      - name: Verify that Matter.js controller was used
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ls -la test_controller.log
+          if [ ! -f ./test_controller.log ]; then
+              exit 1
+          fi

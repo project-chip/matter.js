@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,6 +26,7 @@ import { Subscription } from "#interaction/Subscription.js";
 import { Specification } from "#model";
 import { PeerAddress, PeerAddressMap } from "#peer/PeerAddress.js";
 import { CaseAuthenticatedTag, DEFAULT_MAX_PATHS_PER_INVOKE, FabricId, FabricIndex, NodeId } from "#types";
+import { SupportedTransportsSchema } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";
@@ -34,6 +35,7 @@ import {
     FALLBACK_DATAMODEL_REVISION,
     FALLBACK_INTERACTIONMODEL_REVISION,
     FALLBACK_MAX_PATHS_PER_INVOKE,
+    FALLBACK_MAX_TCP_MESSAGE_SIZE,
     FALLBACK_SPECIFICATION_VERSION,
     Session,
     SESSION_ACTIVE_INTERVAL_MS,
@@ -53,6 +55,8 @@ const DEFAULT_SESSION_PARAMETERS = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     specificationVersion: Specification.SPECIFICATION_VERSION,
     maxPathsPerInvoke: DEFAULT_MAX_PATHS_PER_INVOKE,
+    supportedTransports: {},
+    maxTcpMessageSize: FALLBACK_MAX_TCP_MESSAGE_SIZE,
 };
 
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
@@ -80,6 +84,8 @@ type ResumptionStorageRecord = {
         interactionModelRevision: number;
         specificationVersion: number;
         maxPathsPerInvoke: number;
+        supportedTransports?: number;
+        maxTcpMessageSize?: number;
     };
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
@@ -115,8 +121,8 @@ export class SessionManager {
     #resumptionRecords = new PeerAddressMap<ResumptionRecord>();
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = Observable<[session: SecureSession, subscription: Subscription]>();
-    #sessionParameters;
-    readonly #resubmissionStarted = new Observable<[session: Session]>();
+    #sessionParameters: SessionParameters;
+    readonly #resubmissionStarted = Observable<[session: Session]>();
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
     readonly #subscriptionUpdateMutex = new Mutex(this);
@@ -378,14 +384,16 @@ export class SessionManager {
         });
     }
 
-    async removeAllSessionsForNode(address: PeerAddress, sendClose = false) {
+    async removeAllSessionsForNode(address: PeerAddress, sendClose = false, closeBeforeCreatedTimestamp?: number) {
         await this.#construction;
 
         for (const session of this.#sessions) {
             if (!session.isSecure) continue;
+            if (closeBeforeCreatedTimestamp !== undefined && session.createdAt >= closeBeforeCreatedTimestamp) continue;
             const secureSession = session;
             if (secureSession.peerIs(address)) {
                 await secureSession.destroy(sendClose, false);
+                this.#sessions.delete(session);
             }
         }
     }
@@ -441,7 +449,12 @@ export class SessionManager {
                         resumptionId,
                         fabricId: fabric.fabricId,
                         peerNodeId: peerNodeId,
-                        sessionParameters,
+                        sessionParameters: {
+                            ...sessionParameters,
+                            supportedTransports: sessionParameters.supportedTransports
+                                ? SupportedTransportsSchema.encode(sessionParameters.supportedTransports)
+                                : undefined,
+                        },
                         caseAuthenticatedTags,
                     }) as ResumptionStorageRecord,
             ),
@@ -471,6 +484,8 @@ export class SessionManager {
                     interactionModelRevision,
                     specificationVersion,
                     maxPathsPerInvoke,
+                    supportedTransports,
+                    maxTcpMessageSize,
                 } = {},
                 caseAuthenticatedTags,
             }) => {
@@ -501,6 +516,11 @@ export class SessionManager {
                         interactionModelRevision: interactionModelRevision ?? FALLBACK_INTERACTIONMODEL_REVISION,
                         specificationVersion: specificationVersion ?? FALLBACK_SPECIFICATION_VERSION,
                         maxPathsPerInvoke: maxPathsPerInvoke ?? FALLBACK_MAX_PATHS_PER_INVOKE,
+                        supportedTransports:
+                            supportedTransports !== undefined
+                                ? SupportedTransportsSchema.decode(supportedTransports)
+                                : {},
+                        maxTcpMessageSize: maxTcpMessageSize ?? FALLBACK_MAX_TCP_MESSAGE_SIZE,
                     },
                     caseAuthenticatedTags,
                 });
@@ -563,17 +583,12 @@ export class SessionManager {
     }
 
     /** Clears all subscriptions for a given node and returns how many were cleared. */
-    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
+    async clearSubscriptionsForNode(peerAddress: PeerAddress, flushSubscriptions?: boolean) {
         let clearedCount = 0;
         for (const session of this.#sessions) {
-            if (session.fabric?.fabricIndex !== fabricIndex) {
-                continue;
+            if (PeerAddress.is(session.peerAddress, peerAddress)) {
+                clearedCount += await session.clearSubscriptions(flushSubscriptions, true);
             }
-            if (session.peerNodeId !== nodeId) {
-                continue;
-            }
-            await session.clearSubscriptions(flushSubscriptions);
-            clearedCount++;
         }
         return clearedCount;
     }

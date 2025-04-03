@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "#behavior/AccessControl.js";
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { ActionTracer } from "#behavior/context/ActionTracer.js";
 import { NodeActivity } from "#behavior/context/NodeActivity.js";
@@ -16,6 +15,7 @@ import { EndpointLifecycle } from "#endpoint/properties/EndpointLifecycle.js";
 import { EndpointServer } from "#endpoint/server/EndpointServer.js";
 import { Diagnostic, InternalError, Logger, MaybePromise } from "#general";
 import {
+    AccessControl,
     AccessDeniedError,
     AnyAttributeServer,
     AnyEventServer,
@@ -32,12 +32,12 @@ import {
     InteractionServerMessenger,
     Message,
     MessageExchange,
-    NumberedOccurrence,
+    MessageType,
     SessionManager,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
-import { TlvEventFilter, TypeFromSchema } from "#types";
+import { StatusCode, StatusResponseError, TlvEventFilter, TypeFromSchema } from "#types";
 import { AccessControlServer } from "../../behaviors/access-control/AccessControlServer.js";
 import { ServerNode } from "../ServerNode.js";
 
@@ -67,33 +67,33 @@ const AclAttributeId = AccessControlCluster.attributes.acl.id;
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #changeListener: (type: EndpointLifecycle.Change, endpoint: Endpoint) => void;
-    #endpoint: Endpoint<ServerNode.RootEndpoint>;
+    #node: ServerNode;
     #activity: NodeActivity;
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayedInExchange = new Set<MessageExchange>();
 
-    static async create(endpoint: Endpoint<ServerNode.RootEndpoint>, sessions: SessionManager) {
+    static async create(node: ServerNode, sessions: SessionManager) {
         const structure = new InteractionEndpointStructure();
 
-        return new TransactionalInteractionServer(endpoint, {
+        return new TransactionalInteractionServer(node, {
             sessions,
             structure,
-            subscriptionOptions: endpoint.state.network.subscriptionOptions,
-            maxPathsPerInvoke: endpoint.state.basicInformation.maxPathsPerInvoke,
+            subscriptionOptions: node.state.network.subscriptionOptions,
+            maxPathsPerInvoke: node.state.basicInformation.maxPathsPerInvoke,
             initiateExchange: (address, protocolId) =>
-                endpoint.env.get(ExchangeManager).initiateExchange(address, protocolId),
+                node.env.get(ExchangeManager).initiateExchange(address, protocolId),
         });
     }
 
-    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>, context: InteractionContext) {
+    constructor(node: ServerNode, context: InteractionContext) {
         super(context);
 
         const { structure } = context;
 
-        this.#activity = endpoint.env.get(NodeActivity);
+        this.#activity = node.env.get(NodeActivity);
 
-        this.#endpoint = endpoint;
+        this.#node = node;
         this.#endpointStructure = structure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
@@ -113,24 +113,30 @@ export class TransactionalInteractionServer extends InteractionServer {
             }
         };
 
-        endpoint.lifecycle.changed.on(this.#changeListener);
+        node.lifecycle.changed.on(this.#changeListener);
     }
 
     async [Symbol.asyncDispose]() {
-        this.#endpoint.lifecycle.changed.off(this.#changeListener);
+        this.#node.lifecycle.changed.off(this.#changeListener);
         await this.close();
         this.#endpointStructure.close();
-        await EndpointServer.forEndpoint(this.#endpoint)[Symbol.asyncDispose]();
+        await EndpointServer.forEndpoint(this.#node)[Symbol.asyncDispose]();
     }
 
     blockNewActivity() {
         this.#newActivityBlocked = true;
     }
 
-    override async onNewExchange(exchange: MessageExchange) {
+    override async onNewExchange(exchange: MessageExchange, message: Message) {
         // When closing, ignore anything newly incoming
         if (this.#newActivityBlocked || this.isClosing) {
             return;
+        }
+
+        // An incoming data report as the first message is not a valid server operation.  We instead delegate to a
+        // client implementation if available
+        if (message.payloadHeader.messageType === MessageType.ReportData && this.clientHandler) {
+            return this.clientHandler.onNewExchange(exchange, message);
         }
 
         // Activity tracking.  This provides diagnostic information and prevents the server from shutting down whilst
@@ -148,40 +154,99 @@ export class TransactionalInteractionServer extends InteractionServer {
         if (this.#aclServer !== undefined) {
             return this.#aclServer;
         }
-        const aclServer = this.#endpoint.act(agent => agent.get(AccessControlServer));
+        const aclServer = this.#node.act(agent => agent.get(AccessControlServer));
         if (MaybePromise.is(aclServer)) {
             throw new InternalError("AccessControlServer should already be initialized.");
         }
         return (this.#aclServer = aclServer);
     }
 
-    protected override async readAttribute(
+    protected override readAttribute(
         path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange,
         fabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
         offline = false,
     ) {
-        const readAttribute = () =>
-            super.readAttribute(path, attribute, exchange, fabricFiltered, message, endpoint, offline);
+        const readAttribute = () => super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
 
-        // Offline read do not require ACL checks
-        if (offline) {
-            return OfflineContext.act("offline-read", this.#activity, readAttribute);
+        const endpoint = this.#endpointStructure.getEndpoint(path.endpointId);
+        if (!endpoint) {
+            throw new InternalError("Endpoint not found for ACL check. This should never happen.");
         }
 
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            endpoint,
-            root: this.#endpoint,
-        }).act(readAttribute);
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttribute)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  node: this.#node,
+              }).act(readAttribute);
+
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Reads should not return a promise.");
+        }
+        return result;
+    }
+
+    /**
+     * Reads the attributes for the given endpoint.
+     * This can currently only be used for subscriptions because errors are ignored!
+     */
+    protected override readEndpointAttributesForSubscription(
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
+        exchange: MessageExchange,
+        fabricFiltered: boolean,
+        message: Message,
+        offline = false,
+    ) {
+        const readAttributes = () => {
+            const result = new Array<{
+                path: AttributePath;
+                attribute: AnyAttributeServer<unknown>;
+                value: any;
+                version: number;
+            }>();
+            for (const { path, attribute } of attributes) {
+                try {
+                    const value = super.readAttribute(path, attribute, exchange, fabricFiltered, message, offline);
+                    result.push({ path, attribute, value: value.value, version: value.version });
+                } catch (error) {
+                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                        logger.warn(
+                            `Permission denied reading attribute ${this.#endpointStructure.resolveAttributeName(path)}`,
+                        );
+                    } else {
+                        logger.warn(
+                            `Error reading attribute ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                            error,
+                        );
+                    }
+                }
+            }
+            return result;
+        };
+
+        const result = offline
+            ? OfflineContext.act("offline-read", this.#activity, readAttributes)
+            : OnlineContext({
+                  activity: (exchange as WithActivity)[activityKey],
+                  fabricFiltered,
+                  message,
+                  exchange,
+                  tracer: this.#tracer,
+                  actionType: ActionTracer.ActionType.Read,
+                  node: this.#node,
+              }).act(readAttributes);
+        if (MaybePromise.is(result)) {
+            throw new InternalError("Online read should not return a promise.");
+        }
+        return result;
     }
 
     protected override async readEvent(
@@ -191,15 +256,19 @@ export class TransactionalInteractionServer extends InteractionServer {
         exchange: MessageExchange,
         fabricFiltered: boolean,
         message: Message,
-        endpoint: EndpointInterface,
-    ): Promise<NumberedOccurrence[]> {
+    ) {
         const readEvent = (context: ActionContext) => {
-            if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (
+                context.authorityAt(event.readAcl, {
+                    endpoint: path.endpointId,
+                    cluster: path.clusterId,
+                } as AccessControl.Location) !== AccessControl.Authority.Granted
+            ) {
                 throw new AccessDeniedError(
-                    `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
+                    `Access to ${path.endpointId}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
             }
-            return super.readEvent(path, eventFilters, event, exchange, fabricFiltered, message, endpoint);
+            return super.readEvent(path, eventFilters, event, exchange, fabricFiltered, message);
         };
 
         return OnlineContext({
@@ -209,8 +278,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Read,
-            endpoint,
-            root: this.#endpoint,
+            node: this.#node,
         }).act(readEvent);
     }
 
@@ -291,8 +359,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             fabricFiltered: true,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Write,
-            endpoint,
-            root: this.#endpoint,
+            node: this.#node,
         }).act(writeAttribute);
     }
 
@@ -306,7 +373,12 @@ export class TransactionalInteractionServer extends InteractionServer {
         timed = false,
     ) {
         const invokeCommand = (context: ActionContext) => {
-            if (!context.authorizedFor(command.invokeAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (
+                context.authorityAt(command.invokeAcl, {
+                    endpoint: endpoint.number,
+                    cluster: path.clusterId,
+                } as AccessControl.Location) !== AccessControl.Authority.Granted
+            ) {
                 throw new AccessDeniedError(
                     `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
@@ -322,20 +394,19 @@ export class TransactionalInteractionServer extends InteractionServer {
             exchange,
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Invoke,
-            endpoint,
-            root: this.#endpoint,
+            node: this.#node,
         }).act(invokeCommand);
     }
 
     get #tracer() {
-        if (this.#endpoint.env.has(ActionTracer)) {
-            return this.#endpoint.env.get(ActionTracer);
+        if (this.#node.env.has(ActionTracer)) {
+            return this.#node.env.get(ActionTracer);
         }
     }
 
     #updateStructure() {
-        if (this.#endpoint.lifecycle.isPartsReady) {
-            const server = EndpointServer.forEndpoint(this.#endpoint);
+        if (this.#node.lifecycle.isPartsReady) {
+            const server = EndpointServer.forEndpoint(this.#node);
             this.#endpointStructure.initializeFromEndpoint(server);
         }
     }

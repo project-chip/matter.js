@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { stderr, stdout } from "process";
+import { stderr, stdout } from "node:process";
 import { bold, dim, fittedTextOf, green, red, visibleWidthOf, yellow } from "./formatting.js";
 
 const WELCOME_TO = "🎉 Welcome to";

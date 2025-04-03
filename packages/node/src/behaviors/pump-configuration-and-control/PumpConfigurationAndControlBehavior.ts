@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,11 +11,11 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ClusterType } from "#types";
 
 /**
- * PumpConfigurationAndControlBehavior is the base class for objects that support interaction with {@link
- * PumpConfigurationAndControl.Cluster}.
+ * PumpConfigurationAndControlBehavior is the base class for objects that support interaction with
+ * {@link PumpConfigurationAndControl.Cluster}.
  *
- * PumpConfigurationAndControl.Cluster requires you to enable one or more optional features. You can do so using {@link
- * PumpConfigurationAndControlBehavior.with}.
+ * PumpConfigurationAndControl.Cluster requires you to enable one or more optional features. You can do so using
+ * {@link PumpConfigurationAndControlBehavior.with}.
  */
 export const PumpConfigurationAndControlBehavior = ClusterBehavior.for(ClusterType(PumpConfigurationAndControl.Base));
 

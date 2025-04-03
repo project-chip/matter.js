@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ export namespace ContentAppObserverInterface {
          *
          * This command returns a ContentAppMessage Response.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.12.5.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.12.5.1
          */
         contentAppMessage(request: ContentAppObserver.ContentAppMessageRequest): MaybePromise<ContentAppObserver.ContentAppMessageResponse>;
     }

@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Bytes, Crypto, Spake2p } from "#general";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 describe("Spake2p", () => {
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {

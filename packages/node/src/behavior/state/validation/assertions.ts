@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { isObject } from "#general";
 import { SchemaErrorPath } from "#model";
-import { DatatypeError } from "../../errors.js";
-import { Val } from "../Val.js";
+import { DatatypeError, Val } from "#protocol";
 
 export function assertNumber(value: Val, path: SchemaErrorPath): asserts value is number {
     if (Number.isFinite(value)) {

@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ConformanceError } from "#behavior/errors.js";
 import { FieldElement } from "#model";
+import { ConformanceError } from "#protocol";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
 function missing(conformance: string, fieldName = "test") {
@@ -517,6 +517,35 @@ const AllTests = Tests({
                 "disallows if >": {
                     record: { value: 4, isLessThan: true },
                     error: disallowed("Value < 4", "isLessThan"),
+                },
+            },
+        ),
+
+        "hairy real-world": Tests(
+            Features({
+                PIR: "PIR",
+                US: "US",
+                PHY: "PHY",
+            }),
+            Fields(
+                {
+                    name: "HoldTime",
+                    type: "uint16",
+                },
+                {
+                    name: "PirUnoccupiedToOccupiedThreshold",
+                    type: "uint8",
+                },
+                {
+                    name: "PirUnoccupiedToOccupiedDelay",
+                    type: "uint8",
+                    conformance:
+                        "HoldTime & (PIR | !PIR & !US & !PHY) & PirUnoccupiedToOccupiedThreshold, [HoldTime & (PIR | !PIR & !US & !PHY)], D",
+                },
+            ),
+            {
+                "OccupancySensing.PirUnoccupiedToOccupiedDelay": {
+                    record: { pirUnoccupiedToOccupiedDelay: 4 },
                 },
             },
         ),

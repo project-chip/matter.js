@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Val } from "#protocol";
 import type { Behavior } from "../../Behavior.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import type { Val } from "../Val.js";
 
 /**
  * Instrumentation points for the managed values used for {@link Behavior.state}.

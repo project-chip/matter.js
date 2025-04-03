@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Bytes } from "@matter/general";
 import { ValueModel } from "@matter/model";
-import { ValidationDatatypeMismatchError } from "@project-chip/matter.js/common";
+import { ValidationDatatypeMismatchError } from "@matter/types";
 import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {

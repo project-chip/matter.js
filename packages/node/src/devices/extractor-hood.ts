@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,7 +38,7 @@ import { Identity } from "#general";
  *
  *   • Telescoping Extractors
  *
- * @see {@link MatterSpecification.v13.Device} § 13.10
+ * @see {@link MatterSpecification.v14.Device} § 13.10
  */
 export interface ExtractorHoodDevice extends Identity<typeof ExtractorHoodDeviceDefinition> {}
 

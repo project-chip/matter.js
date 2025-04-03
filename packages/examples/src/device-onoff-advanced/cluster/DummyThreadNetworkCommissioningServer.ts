@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Logger } from "@matter/main";
+import { Bytes, Diagnostic } from "@matter/main";
 import { GeneralCommissioningBehavior } from "@matter/main/behaviors/general-commissioning";
 import { NetworkCommissioningBehavior } from "@matter/main/behaviors/network-commissioning";
 import { NetworkCommissioning } from "@matter/main/clusters";
@@ -48,7 +48,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
                 lqi: 50,
             },
         ];
-        console.log(Logger.toJSON(threadScanResults));
+        console.log(Diagnostic.json(threadScanResults));
 
         return {
             networkingStatus,

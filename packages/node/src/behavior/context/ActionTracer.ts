@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { DataModelPath } from "#model";
+import { Val } from "#protocol";
 import { StatusCode } from "#types";
-import { Val } from "../state/Val.js";
 
 /**
  * This is an instrumentation interface that allows for recording of attribute I/O, commands, events and state

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import { repl } from "#repl.js";
 import { Environment, LogFormat, MatterError } from "@matter/general";
 import "@matter/nodejs";
 import colors from "ansi-colors";
-import { stdout } from "process";
+import { stdout } from "node:process";
 
 export async function main(argv: string[]) {
     colors.enabled = stdout.isTTY;
@@ -82,7 +82,7 @@ export async function main(argv: string[]) {
             domain.out(domain.inspect(result), "\n");
         }
     } catch (e) {
-        domain.err(LogFormat.ansi(e), "\n");
+        domain.err(LogFormat.formats.ansi(e), "\n");
         process.exitCode = 1;
     }
 }

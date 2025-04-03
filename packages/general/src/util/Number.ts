@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -63,9 +63,9 @@ export function cropValueRange(value: number, min: number, max: number): number 
 export function addValueWithOverflow(value: number, add: number, min: number, max: number): number {
     const newValue = value + add;
     if (newValue < min) {
-        return newValue + max + 1;
+        return newValue - min + max;
     } else if (newValue > max) {
-        return newValue - max - 1;
+        return newValue - max + min;
     }
     return newValue;
 }

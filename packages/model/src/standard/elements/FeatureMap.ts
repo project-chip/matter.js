@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,9 @@ export const FeatureMap = Attribute({
         "features. A cluster feature is a set of cluster elements that are mandatory or optional for a " +
         "defined feature of the cluster. If a cluster feature is supported by the cluster instance, then the " +
         "corresponding bit shall be set to 1, otherwise the bit shall be set to 0 (zero). All undefined bits " +
-        "in this attribute shall be set to 0 (zero)." +
+        "in" +
+        "\n" +
+        "this attribute shall be set to 0 (zero)." +
         "\n" +
         "The set of cluster elements that are designated as mandatory (M) are implicitly part of the " +
         "mandatory cluster feature set, and do not have a bit in the FeatureMap attribute." +
@@ -35,18 +37,18 @@ export const FeatureMap = Attribute({
         "\n" +
         "Feature sets are revision controlled as part of a cluster using the ClusterRevision attribute. The " +
         "cluster specification is the independent element that is revision controlled. A remote application " +
-        "reading the FeatureMap Attribute and ClusterRevision Attribute will then know exactly what features " +
-        "are supported in the cluster instance." +
+        "reading the FeatureMap and ClusterRevision Attribute will then know exactly what features are " +
+        "supported in the cluster instance." +
         "\n" +
         "Each feature set shall be well defined within the cluster specification. Each feature shall be " +
-        "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag " +
-        "in the cluster specification text, including the Conformance columns defining the elements of the " +
+        "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag in " +
+        "the cluster specification text, including the Conformance columns defining the elements of the " +
         "cluster." +
         "\n" +
         "If a cluster defines more than 32 feature sets, then it will be necessary to add another feature " +
-        "bitmap attribute. Any client trying to reference the new feature set will know about the new " +
-        "bitmap, because it knows about the new feature set(s). Legacy products will not know about the new " +
-        "feature set nor the new bitmap." +
+        "bitmap attribute. Any client trying to reference the new feature set will know about the new bitmap, " +
+        "because it knows about the new feature set(s). Legacy products will not know about the new feature " +
+        "set nor the new bitmap." +
         "\n" +
         "For a cluster whose definition which does not define a FeatureMap, the server shall set this " +
         "attribute to 0 (zero)." +

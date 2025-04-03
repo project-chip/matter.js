@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
 import { TlvAttributeId } from "../../datatype/AttributeId.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -26,3 +27,5 @@ export const TlvAttributePath = TlvTaggedList({
     listIndex: TlvOptionalField(5, TlvNullable(TlvUInt16)),
     wildcardPathFlags: TlvOptionalField(6, TlvBitmap(TlvUInt32, WildcardPathFlagsBitmap)),
 });
+
+export type AttributePath = TypeFromSchema<typeof TlvAttributePath>;

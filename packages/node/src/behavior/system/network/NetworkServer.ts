@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,7 +9,7 @@ import { Ble, ServerSubscriptionConfig } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "#types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
-import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
+import type { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
 
 const logger = Logger.get("NetworkingServer");
 

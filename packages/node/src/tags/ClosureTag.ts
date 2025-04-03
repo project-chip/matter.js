@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +12,7 @@ import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
  * The tags contained in this namespace may be used in any domain or context, to indicate an association with a feature
  * of a Closure, e.g. the button to activate opening a garage door.
  *
- * @see {@link MatterSpecification.v13.Namespace} § 2
+ * @see {@link MatterSpecification.v14.Namespace} § 2
  */
 export const ClosureTag = SemanticNamespace({
     id: 0x1,

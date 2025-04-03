@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,8 +20,8 @@ import { Input, parseInput } from "#parser.js";
 import { Directory } from "#stat.js";
 import { ServerNode } from "@matter/node";
 import colors from "ansi-colors";
-import { inspect } from "util";
-import { createContext, runInContext, RunningCodeOptions } from "vm";
+import { inspect } from "node:util";
+import { createContext, runInContext, RunningCodeOptions } from "node:vm";
 
 export interface TextWriter {
     (...text: string[]): void;
@@ -174,7 +174,7 @@ export async function Domain(context: DomainContext): Promise<Domain> {
                 value !== null &&
                 (Diagnostic.value in value || Diagnostic.presentation in value || value instanceof Error)
             ) {
-                return LogFormat[colors.enabled ? "ansi" : "plain"](value);
+                return LogFormat.formats[colors.enabled ? "ansi" : "plain"](value);
             }
 
             return inspect(value, false, 1, this.colorize);

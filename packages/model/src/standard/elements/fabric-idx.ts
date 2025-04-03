@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@ export const fabricIdx = Datatype({
         "  • the accessing fabric index of an interaction" +
         "\n" +
         "  • the FabricIndex global field in fabric-scoped data",
-    xref: { document: "core", section: "7.18.2.20" }
+    xref: { document: "core", section: "7.19.2.20" }
 });
 
 MatterDefinition.children.push(fabricIdx);

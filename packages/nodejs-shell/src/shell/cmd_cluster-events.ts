@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@matter/general";
+import { Diagnostic } from "@matter/general";
 import { ClusterModel, EventModel, MatterModel } from "@matter/model";
-import { ClusterId } from "@project-chip/matter.js/datatype";
+import { ClusterId } from "@matter/types";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { camelize } from "../util/String";
@@ -74,7 +74,7 @@ function generateEventHandler(
             }
             const eventClient = clusterClient.events[eventName];
             console.log(
-                `Event value for ${eventName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${event.id}: ${Logger.toJSON(await eventClient.get())}`,
+                `Event value for ${eventName} ${node.nodeId.toString()}/${endpointId}/${clusterId}/${event.id}: ${Diagnostic.json(await eventClient.get())}`,
             );
         },
     );

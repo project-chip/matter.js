@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,15 +29,15 @@ export const FanControl = Cluster(
         Field({
             name: "SPD", constraint: "0", description: "MultiSpeed",
 
-            details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic " +
-                "speed control but left it up to the implementer to decide what was supported. Therefore, it is " +
-                "assumed that legacy client implementations are capable of determining, from the server, the number " +
-                "of speeds supported between 1, 2, or 3, and whether automatic speed control is supported." +
+            details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed " +
+                "control but left it up to the implementer to decide what was supported. Therefore, it is assumed " +
+                "that legacy client implementations are capable of determining, from the server, the number of speeds " +
+                "supported between 1, 2, or 3, and whether automatic speed control is supported." +
                 "\n" +
                 "The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to " +
                 "SpeedMax, which has a maximum of 100." +
                 "\n" +
-                "See Speed Rules for more details.",
+                "See Section 4.4.6.6.1 for more details.",
 
             xref: { document: "cluster", section: "4.4.4.1" }
         }),
@@ -53,21 +53,21 @@ export const FanControl = Cluster(
     ),
 
     Attribute({
-        name: "FanMode", id: 0x0, type: "FanModeEnum", access: "RW VO", conformance: "M",
-        constraint: "0 to 6", default: 0, quality: "N",
+        name: "FanMode", id: 0x0, type: "FanModeEnum", access: "RW VO", conformance: "M", default: 0,
+        quality: "N",
 
         details: "Indicates the current speed mode of the fan. This attribute may be written by the client to request " +
             "a different fan mode. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-            "state where the FanMode can be changed to the requested value. A server may have FanMode values " +
-            "that it can never be set to. For example, where this cluster appears on the same or another " +
-            "endpoint as other clusters with a system dependency, for example the Thermostat cluster, attempting " +
-            "to set the FanMode attribute of this cluster to Off may not be allowed by the system." +
+            "state where the FanMode can be changed to the requested value. A server may have FanMode values that " +
+            "it can never be set to. For example, where this cluster appears on the same or another endpoint as " +
+            "other clusters with a system dependency, for example the Thermostat cluster, attempting to set the " +
+            "FanMode attribute of this cluster to Off may not be allowed by the system." +
             "\n" +
             "This attribute shall be set to one of the values in FanModeEnum." +
             "\n" +
             "When the FanMode attribute is successfully written to, the PercentSetting and SpeedSetting (if " +
-            "present) attributes shall be set to appropriate values, as defined by the Percent Rules and Speed " +
-            "Rules respectively, unless otherwise specified below." +
+            "present) attributes shall be set to appropriate values, as defined by the Section 4.4.6.3.1 and " +
+            "Section 4.4.6.6.1 respectively, unless otherwise specified below." +
             "\n" +
             "When the FanMode attribute is set to any given mode, the PercentCurrent and SpeedCurrent (if " +
             "present) shall indicate the actual currently operating fan speed, unless otherwise specified below.",
@@ -77,14 +77,14 @@ export const FanControl = Cluster(
 
     Attribute({
         name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R V", conformance: "M",
-        constraint: "0 to 5", quality: "F",
+        quality: "F",
         details: "This attribute indicates the fan speed ranges that shall be supported.",
         xref: { document: "cluster", section: "4.4.6.2" }
     }),
 
     Attribute({
         name: "PercentSetting", id: 0x2, type: "percent", access: "RW VO", conformance: "M",
-        constraint: "0 to 100", default: 0, quality: "X",
+        constraint: "max 100", default: 0, quality: "X",
 
         details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
             "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
@@ -98,11 +98,11 @@ export const FanControl = Cluster(
 
     Attribute({
         name: "PercentCurrent", id: 0x3, type: "percent", access: "R V", conformance: "M",
-        constraint: "0 to 100",
+        constraint: "max 100",
         details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
             "may be a temporary mismatch between the value of this attribute and the value of the PercentSetting " +
             "attribute due to other system requirements that would not allow the fan to operate at the requested " +
-            "setting. See Percent Rules for more details.",
+            "setting. See Section 4.4.6.3.1 for more details.",
         xref: { document: "cluster", section: "4.4.6.4" }
     }),
 
@@ -116,7 +116,7 @@ export const FanControl = Cluster(
 
     Attribute({
         name: "SpeedSetting", id: 0x5, type: "uint8", access: "RW VO", conformance: "SPD",
-        constraint: "0 to speedMax", default: 0, quality: "X",
+        constraint: "max speedMax", default: 0, quality: "X",
 
         details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
             "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
@@ -124,14 +124,14 @@ export const FanControl = Cluster(
             "SpeedSetting can be changed to the requested value." +
             "\n" +
             "If this is successfully written to 0, the server shall set the FanMode attribute value to Off. " +
-            "Please see the Speed Rules for details on other values.",
+            "Please see the Section 4.4.6.6.1 for details on other values.",
 
         xref: { document: "cluster", section: "4.4.6.6" }
     }),
 
     Attribute({
         name: "SpeedCurrent", id: 0x6, type: "uint8", access: "R V", conformance: "SPD",
-        constraint: "0 to speedMax", quality: "P",
+        constraint: "max speedMax", quality: "P",
         details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
             "may be a temporary mismatch between the value of this attribute and the value of the SpeedSetting " +
             "attribute due to other system requirements that would not allow the fan to operate at the requested " +
@@ -151,8 +151,8 @@ export const FanControl = Cluster(
         constraint: "desc", default: 0, quality: "P",
 
         details: "This attribute is a bitmap that indicates the current active fan rocking motion settings. Each bit " +
-            "shall only be set to 1, if the corresponding bit in the RockSupport attribute is set to 1, " +
-            "otherwise a status code of CONSTRAINT_ERROR shall be returned." +
+            "shall only be set to 1, if the corresponding bit in the RockSupport attribute is set to 1, otherwise " +
+            "a status code of CONSTRAINT_ERROR shall be returned." +
             "\n" +
             "If a combination of supported bits is set by the client, and the server does not support the " +
             "combination, the lowest supported single bit in the combination shall be set and active, and all " +
@@ -177,15 +177,15 @@ export const FanControl = Cluster(
         constraint: "desc", default: 0, quality: "P",
 
         details: "This attribute is a bitmap that indicates the current active fan wind feature settings. Each bit " +
-            "shall only be set to 1, if the corresponding bit in the WindSupport attribute is set to 1, " +
-            "otherwise a status code of CONSTRAINT_ERROR shall be returned." +
+            "shall only be set to 1, if the corresponding bit in the WindSupport attribute is set to 1, otherwise " +
+            "a status code of CONSTRAINT_ERROR shall be returned." +
             "\n" +
             "If a combination of supported bits is set by the client, and the server does not support the " +
             "combination, the lowest supported single bit in the combination shall be set and active, and all " +
             "other bits shall indicate zero." +
             "\n" +
-            "For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then " +
-            "only Sleep Wind becomes active.",
+            "For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then only " +
+            "Sleep Wind becomes active.",
 
         xref: { document: "cluster", section: "4.4.6.11" }
     }),

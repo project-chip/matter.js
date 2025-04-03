@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -36,8 +36,8 @@ export const EthernetNetworkDiagnostics = Cluster(
         }),
         Field({
             name: "ERRCNT", constraint: "1", description: "ErrorCounts",
-            details: "Node makes available the counts for the number of errors that have occurred during the reception " +
-                "and transmission of packets on the ethernet interface."
+            details: "Node makes available the counts for the number of errors that have occurred during the reception and " +
+                "transmission of packets on the ethernet interface."
         })
     ),
 
@@ -53,9 +53,8 @@ export const EthernetNetworkDiagnostics = Cluster(
     Attribute({
         name: "FullDuplex", id: 0x1, type: "bool", access: "R V", conformance: "O", default: null,
         quality: "X",
-        details: "The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex " +
-            "operating mode. A value of null shall indicate that the interface is not currently configured or " +
-            "operational.",
+        details: "The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating " +
+            "mode. A value of null shall indicate that the interface is not currently configured or operational.",
         xref: { document: "core", section: "11.16.6.2" }
     }),
 
@@ -80,10 +79,9 @@ export const EthernetNetworkDiagnostics = Cluster(
     Attribute({
         name: "TxErrCount", id: 0x4, type: "uint64", access: "R V", conformance: "ERRCNT", default: 0,
         quality: "C",
-        details: "The TxErrCount attribute shall indicate the number of failed packet transmissions that have " +
-            "occurred on the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a" +
-            "\n" +
-            "reboot of the Node.",
+        details: "The TxErrCount attribute shall indicate the number of failed packet transmissions that have occurred " +
+            "on the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a reboot of the " +
+            "Node.",
         xref: { document: "core", section: "11.16.6.5" }
     }),
 
@@ -99,8 +97,8 @@ export const EthernetNetworkDiagnostics = Cluster(
     Attribute({
         name: "OverrunCount", id: 0x6, type: "uint64", access: "R V", conformance: "ERRCNT", default: 0,
         quality: "C",
-        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or " +
-            "egress, due to lack of buffer memory to retain all packets on the ethernet network interface. The " +
+        details: "The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, " +
+            "due to lack of buffer memory to retain all packets on the ethernet network interface. The " +
             "OverrunCount attribute shall be reset to 0 upon a reboot of the Node.",
         xref: { document: "core", section: "11.16.6.7" }
     }),
@@ -108,17 +106,17 @@ export const EthernetNetworkDiagnostics = Cluster(
     Attribute({
         name: "CarrierDetect", id: 0x7, type: "bool", access: "R V", conformance: "O", default: null,
         quality: "X C",
-        details: "The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present " +
-            "on the ethernet network interface. A value of null shall indicate that the interface is not " +
-            "currently configured or operational.",
+        details: "The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on " +
+            "the ethernet network interface. A value of null shall indicate that the interface is not currently " +
+            "configured or operational.",
         xref: { document: "core", section: "11.16.6.8" }
     }),
 
     Attribute({
         name: "TimeSinceReset", id: 0x8, type: "uint64", access: "R V", conformance: "O", default: 0,
         quality: "C",
-        details: "The TimeSinceReset attribute shall indicate the duration of time, in minutes, that it has been " +
-            "since the ethernet network interface has reset for any reason.",
+        details: "The TimeSinceReset attribute shall indicate the duration of time, in minutes, that it has been since " +
+            "the ethernet network interface has reset for any reason.",
         xref: { document: "core", section: "11.16.6.9" }
     }),
 

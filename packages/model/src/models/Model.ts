@@ -1,16 +1,21 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, decamelize, ImplementationError, InternalError } from "#general";
+import { camelize, decamelize, ImplementationError } from "#general";
 import { DefinitionError, ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Children } from "./Children.js";
 
 const inspect = Symbol.for("nodejs.util.inspect.custom");
+
+/**
+ * Thrown when model API is used incorrectly.
+ */
+export class StructuralModelError extends ImplementationError {}
 
 /**
  * A "model" is a class that implements runtime functionality associated with the corresponding element type.
@@ -27,6 +32,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     errors?: DefinitionError[];
     asOf?: Specification.Revision;
     until?: Specification.Revision;
+    matchTo?: {
+        id?: string | number;
+        name?: string;
+    };
     declare id?: number;
     declare name: string;
 
@@ -210,9 +219,25 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     }
 
     /**
-     * Factory support.  Populated by derivatives upon definition.
+     * Factory support.
      */
-    static types = {} as { [type: string]: new (definition: any) => Model };
+    static types = {} as { [type: string]: Model.ConcreteType };
+
+    /**
+     * Add a new model implementation.
+     */
+    static register(this: Model.ConcreteType) {
+        Model.types[this.Tag] = this;
+    }
+
+    /**
+     * All possible tags for registered models of this type.
+     */
+    static get tags() {
+        return Object.values(Model.types)
+            .filter(type => type instanceof this)
+            .map(type => type.Tag);
+    }
 
     /**
      * In some circumstances the base type can be inferred.  This inference happens here.
@@ -289,12 +314,12 @@ export abstract class Model<T extends BaseElement = BaseElement> {
      */
     static create(definition: AnyElement) {
         if (typeof definition !== "object") {
-            throw new InternalError(`Model definition must be object, not ${typeof definition}`);
+            throw new StructuralModelError(`Model definition must be object, not ${typeof definition}`);
         }
         const t = definition["tag"];
         const constructor = Model.types[t];
         if (!constructor) {
-            throw new InternalError(`Unknown element tag "${t}"`);
+            throw new StructuralModelError(`Unknown element tag "${t}"`);
         }
         return new constructor(definition);
     }
@@ -406,6 +431,35 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     }
 
     /**
+     * Access a member that must exist.
+     */
+    require<T extends Model>(type: Model.ConcreteType<T>, key: Children.Selector): T {
+        let member = this.member(key, [type.Tag]);
+        if (member === undefined && typeof key === "string") {
+            member = this.member(camelize(key, true));
+        }
+        if (member !== undefined) {
+            return member as T;
+        }
+
+        let what;
+        switch (typeof key) {
+            case "string":
+                what = `"${key}"`;
+                break;
+
+            case "number":
+                what = `#${key}"`;
+                break;
+
+            default:
+                what = `selected`;
+        }
+
+        throw new StructuralModelError(`No ${type.Tag} ${what} for ${this.tag} ${this.name}`);
+    }
+
+    /**
      * Does this model derive from another?
      */
     instanceOf(other: Model | AnyElement) {
@@ -456,7 +510,7 @@ export abstract class Model<T extends BaseElement = BaseElement> {
 
     constructor(definition: Model<T> | BaseElement.Properties<T>, ...children: Model.Definition<Model>[]) {
         if (typeof definition !== "object") {
-            throw new ImplementationError(`Model definition must be an object, not ${typeof definition}`);
+            throw new StructuralModelError(`Model definition must be an object, not ${typeof definition}`);
         }
 
         const isClone = definition instanceof Model;
@@ -574,7 +628,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
         if (this.#children !== undefined && this.#children.length) {
             props.children = this.#children.length;
         }
-        return `${inspect(props, options)}`.replace(/^{/, `${decamelize(this.tag)} {`);
+        if (!inspect) {
+            inspect = (value: unknown) => `${value}`;
+        }
+        return `${inspect(props, options)}`.replace(/^\{/, `${decamelize(this.tag)} {`);
     }
 }
 
@@ -598,6 +655,11 @@ export namespace Model {
      * A model constructor.
      */
     export type Type<T extends Model = Model> = abstract new (...args: any) => T;
+
+    /**
+     * A model constructor for a specific element type.
+     */
+    export type ConcreteType<T extends Model = Model> = (new (definition: any) => T) & { Tag: ElementTag };
 
     export type LookupPredicate<T extends Model> = Type<T> | { type: Type<T>; test: (model: Model) => boolean };
 

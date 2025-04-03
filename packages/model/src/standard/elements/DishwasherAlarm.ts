@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,8 @@ export const DishwasherAlarm = Cluster(
     {
         name: "DishwasherAlarm", id: 0x5d, type: "AlarmBase", classification: "application",
         pics: "DISHALM",
-        details: "This cluster is a derived cluster of the Alarm Base cluster.",
+        details: "This cluster is a derived cluster of the Alarm Base cluster and provides the alarm definition " +
+            "related to dishwasher devices.",
         xref: { document: "cluster", section: "8.4" }
     },
 

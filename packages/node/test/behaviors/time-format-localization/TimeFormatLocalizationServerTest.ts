@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ConstraintError } from "#behavior/errors.js";
 import { TimeFormatLocalizationServer } from "#behaviors/time-format-localization";
 import { TimeFormatLocalization } from "#clusters/time-format-localization";
 import { ServerNode } from "#node/ServerNode.js";
+import { ConstraintError } from "#protocol";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 function createEndpoint() {
@@ -42,7 +42,7 @@ describe("TimeFormatLocalizationServer", () => {
             }),
         ).throws(
             ConstraintError,
-            'Validating node0.timeFormatLocalization.state: Constraint "in supportedCalendarTypes": Value 4 is not one of the values allowed by "in" constraint (135)',
+            'Validating node0.timeFormatLocalization.state: Constraint "in SupportedCalendarTypes": Value 4 is not one of the values allowed by "in" constraint (135)',
         );
     });
 });

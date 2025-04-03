@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { basename } from "path";
+import { basename } from "node:path";
 import { Subject } from "../device/subject.js";
 import { BaseTest } from "../device/test.js";
 import { Terminal } from "../docker/terminal.js";

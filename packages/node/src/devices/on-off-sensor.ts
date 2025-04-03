@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,7 +23,7 @@ import { Identity } from "#general";
  * An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as a Dimmable Light,
  * is capable of being used to switch the device on or off.
  *
- * @see {@link MatterSpecification.v13.Device} § 7.8
+ * @see {@link MatterSpecification.v14.Device} § 7.8
  */
 export interface OnOffSensorDevice extends Identity<typeof OnOffSensorDeviceDefinition> {}
 

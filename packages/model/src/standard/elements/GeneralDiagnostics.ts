@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -97,7 +97,8 @@ export const GeneralDiagnostics = Cluster(
             details: "The ActiveHardwareFaults attribute shall indicate the set of faults currently detected by the Node. " +
                 "When the Node detects a fault has been raised, the appropriate HardwareFaultEnum value shall be " +
                 "added to this list. This list shall NOT contain more than one instance of a specific " +
-                "HardwareFaultEnum value. When the Node detects that all conditions contributing to a fault has been " +
+                "HardwareFaultEnum value. When the Node detects that all conditions contributing to a fault has been" +
+                "\n" +
                 "cleared, the corresponding HardwareFaultEnum value shall be removed from this list. An empty list " +
                 "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
                 "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
@@ -116,8 +117,8 @@ export const GeneralDiagnostics = Cluster(
 
             details: "The ActiveRadioFaults attribute shall indicate the set of faults currently detected by the Node. " +
                 "When the Node detects a fault has been raised, the appropriate RadioFaultEnum value shall be added " +
-                "to this list. This list shall NOT contain more than one instance of a specific RadioFaultEnum " +
-                "value. When the Node detects that all conditions contributing to a fault has been cleared, the " +
+                "to this list. This list shall NOT contain more than one instance of a specific RadioFaultEnum value. " +
+                "When the Node detects that all conditions contributing to a fault has been cleared, the " +
                 "corresponding RadioFaultEnum value shall be removed from this list. An empty list shall indicate " +
                 "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
                 "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
@@ -135,13 +136,13 @@ export const GeneralDiagnostics = Cluster(
             constraint: "max 4",
 
             details: "The ActiveNetworkFaults attribute shall indicate the set of faults currently detected by the Node. " +
-                "When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be " +
-                "added to this list. This list shall NOT contain more than one instance of a specific " +
-                "NetworkFaultEnum value. When the Node detects that all conditions contributing to a fault has been " +
-                "cleared, the corresponding NetworkFaultEnum value shall be removed from this list. An empty list " +
-                "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
-                "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
-                "attribute, or they may subscribe to NetworkFaultChange.",
+                "When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be added " +
+                "to this list. This list shall NOT contain more than one instance of a specific NetworkFaultEnum " +
+                "value. When the Node detects that all conditions contributing to a fault has been cleared, the " +
+                "corresponding NetworkFaultEnum value shall be removed from this list. An empty list shall indicate " +
+                "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
+                "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
+                "subscribe to NetworkFaultChange.",
 
             xref: { document: "core", section: "11.12.6.8" }
         },
@@ -154,11 +155,10 @@ export const GeneralDiagnostics = Cluster(
 
         details: "The TestEventTriggersEnabled attribute shall indicate whether the Node has any TestEventTrigger " +
             "configured. When this attribute is true, the Node has been configured with one or more test event " +
-            "triggers by virtue of the internally programmed EnableKey value (see Section 11.12.7.1, " +
-            "“TestEventTrigger Command”) being set to a non-zero value. This attribute can be used by " +
-            "Administrators to detect if a device was inadvertently commissioned with test event trigger mode " +
-            "enabled, and take appropriate action (e.g. warn the user and/or offer to remove all fabrics on the " +
-            "Node).",
+            "triggers by virtue of the internally programmed EnableKey value (see TestEventTrigger) being set to " +
+            "a non-zero value. This attribute can be used by Administrators to detect if a device was " +
+            "inadvertently commissioned with test event trigger mode enabled, and take appropriate action (e.g. " +
+            "warn the user and/or offer to remove all fabrics on the Node).",
 
         xref: { document: "core", section: "11.12.6.9" }
     }),
@@ -176,19 +176,17 @@ export const GeneralDiagnostics = Cluster(
         Field(
             {
                 name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 11",
-                details: "This field shall represent the set of faults currently detected, as per Section 11.12.5.1, " +
-                    "“HardwareFaultEnum Type”.",
+                details: "This field shall represent the set of faults currently detected, as per HardwareFaultEnum.",
                 xref: { document: "core", section: "11.12.8.1.1" }
             },
-
             Field({ name: "entry", type: "HardwareFaultEnum" })
         ),
 
         Field(
             {
                 name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 11",
-                details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                    "11.12.5.1, “HardwareFaultEnum Type”.",
+                details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                    "HardwareFaultEnum.",
                 xref: { document: "core", section: "11.12.8.1.2" }
             },
 
@@ -207,19 +205,17 @@ export const GeneralDiagnostics = Cluster(
         Field(
             {
                 name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 7",
-                details: "This field shall represent the set of faults currently detected, as per Section 11.12.5.2, " +
-                    "“RadioFaultEnum Type”.",
+                details: "This field shall represent the set of faults currently detected, as per RadioFaultEnum.",
                 xref: { document: "core", section: "11.12.8.2.1" }
             },
-
             Field({ name: "entry", type: "RadioFaultEnum" })
         ),
 
         Field(
             {
                 name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 7",
-                details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                    "11.12.5.2, “RadioFaultEnum Type”.",
+                details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                    "RadioFaultEnum.",
                 xref: { document: "core", section: "11.12.8.2.2" }
             },
 
@@ -230,27 +226,25 @@ export const GeneralDiagnostics = Cluster(
     Event(
         {
             name: "NetworkFaultChange", id: 0x2, access: "V", conformance: "O", priority: "critical",
-            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently " +
-                "detected by the Node.",
+            details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected " +
+                "by the Node.",
             xref: { document: "core", section: "11.12.8.3" }
         },
 
         Field(
             {
                 name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 4",
-                details: "This field shall represent the set of faults currently detected, as per Section 11.12.5.3, " +
-                    "“NetworkFaultEnum Type”.",
+                details: "This field shall represent the set of faults currently detected, as per NetworkFaultEnum.",
                 xref: { document: "core", section: "11.12.8.3.1" }
             },
-
             Field({ name: "entry", type: "NetworkFaultEnum" })
         ),
 
         Field(
             {
                 name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 4",
-                details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                    "11.12.5.3, “NetworkFaultEnum Type”.",
+                details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                    "NetworkFaultEnum.",
                 xref: { document: "core", section: "11.12.8.3.2" }
             },
 
@@ -297,9 +291,8 @@ export const GeneralDiagnostics = Cluster(
                 "\n" +
                 "The EnableKey SHOULD be unique per exact set of devices going to a certification test." +
                 "\n" +
-                "Devices not targeted towards going to a certification test event shall NOT have a non-zero " +
-                "EnableKey value configured, so that only devices in test environments are responsive to this " +
-                "command." +
+                "Devices not targeted towards going to a certification test event shall NOT have a non-zero EnableKey " +
+                "value configured, so that only devices in test environments are responsive to this command." +
                 "\n" +
                 "In order to prevent unwittingly actuating a particular trigger, this command shall respond with a " +
                 "response status of CONSTRAINT_ERROR if the EnableKey field does not match the a-priori value " +
@@ -317,10 +310,11 @@ export const GeneralDiagnostics = Cluster(
                 "described within appropriate certification test literature provided to manufacturers by the " +
                 "Connectivity Standards Alliance, in conjunction with certification test cases documentation." +
                 "\n" +
-                "Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are " +
-                "reserved for testing use by manufacturers and will not appear in CSA certification test literature." +
+                "Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved " +
+                "for testing use by manufacturers and will not appear in CSA certification test literature." +
                 "\n" +
-                "If the value of EventTrigger received is not supported by the receiving Node, this command shall " +
+                "If the value of EventTrigger received is not supported by the receiving Node, this command shall" +
+                "\n" +
                 "fail with a status code of INVALID_COMMAND." +
                 "\n" +
                 "Otherwise, if the EnableKey value matches the configured internal value for a particular Node, and " +
@@ -342,10 +336,8 @@ export const GeneralDiagnostics = Cluster(
 
         details: "This command may be used by a client to obtain a correlated view of both System Time, and, if " +
             "currently synchronized and supported, \"wall clock time\" of the server. This can help clients " +
-            "establish" +
-            "\n" +
-            "time correlation between their concept of time and the server’s concept of time. This is especially " +
-            "useful when processing event histories where some events only contain System Time." +
+            "establish time correlation between their concept of time and the server’s concept of time. This is " +
+            "especially useful when processing event histories where some events only contain System Time." +
             "\n" +
             "Upon command invocation, the server shall respond with a TimeSnapshotResponse.",
 
@@ -435,17 +427,18 @@ export const GeneralDiagnostics = Cluster(
                 "  • The TestEventTriggersEnabled field is currently false." +
                 "\n" +
                 "Otherwise, the server shall respond with a PayloadTestResponse command with a Payload field value " +
-                "containing Count instances of the Value byte. If the response is too large to send, the server " +
-                "shall fail the command and respond with a response status of RESOURCE_EXHAUSTED." +
+                "containing Count instances of the Value byte. If the response is too large to send, the server shall " +
+                "fail the command and respond with a response status of RESOURCE_EXHAUSTED." +
                 "\n" +
                 "For example:" +
                 "\n" +
                 "  • If Value is 0x55 and the Count is zero, then the PayloadTestResponse would have the Payload " +
                 "    field set to an empty octet string." +
                 "\n" +
-                "  • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set " +
-                "    to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 " +
-                "    representation would be paWlpaWlpaWlpQ==.",
+                "  • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set" +
+                "\n" +
+                "to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 " +
+                "representation would be paWlpaWlpaWlpQ==.",
 
             xref: { document: "core", section: "11.12.7.4.3" }
         })
@@ -453,7 +446,7 @@ export const GeneralDiagnostics = Cluster(
 
     Command(
         {
-            name: "PayloadTestResponse", id: 0x4, access: "M", conformance: "DMTEST", direction: "response",
+            name: "PayloadTestResponse", id: 0x4, conformance: "DMTEST", direction: "response",
             details: "This command is sent by the server on receipt of the PayloadTestRequest command.",
             xref: { document: "core", section: "11.12.7.5" }
         },
@@ -650,7 +643,8 @@ export const GeneralDiagnostics = Cluster(
 
         Field({
             name: "HardwareAddress", id: 0x4, type: "hwadr", conformance: "M",
-            details: "This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network " +
+            details: "This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network" +
+                "\n" +
                 "interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of " +
                 "the octstr shall be in wire byte order. For addresses values less than 64 bits, the first two bytes " +
                 "shall be zero.",

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -36,9 +36,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         switch (typeof definition) {
             case "string":
                 // The spec designates a "0b000xxxxx" syntax for specifying constraints as bitmasks.  Through 1.3 we
-                // only see this on bitmaps which constraint fine using the bit definitions.  So just ignore it. We also
+                // only see this on bitmaps which constrain fine using the bit definitions.  So just ignore it. We also
                 // handle one invalid case where there is no "0b" or "0x" prefix on a mask
-                if (definition.match(/(?:0b[0x ]*x[0x ]*)|(?:0x[0x_]*x[0x_]*)|(?:00[0x]*x)/i)) {
+                if (
+                    // Mask
+                    definition.match(/^0b[0x ]+$/) ||
+                    // Hack to identify mask without 0b prefix
+                    (definition.startsWith("00") && definition.includes("x") && definition.match(/^[0x ]+$/))
+                ) {
                     break;
                 }
                 ast = Parser.parse(this, definition);

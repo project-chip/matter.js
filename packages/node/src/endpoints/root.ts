@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -74,7 +74,7 @@ import { Identity } from "#general";
  *
  *   • Other device types with Node scope may be supported on the same endpoint as this device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 2.1
+ * @see {@link MatterSpecification.v14.Device} § 2.1
  */
 export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
 
@@ -248,7 +248,7 @@ export namespace RootRequirements {
 export const RootEndpointDefinition = MutableEndpoint({
     name: "RootNode",
     deviceType: 0x16,
-    deviceRevision: 2,
+    deviceRevision: 3,
     deviceClass: DeviceClassification.Node,
     requirements: RootRequirements,
 

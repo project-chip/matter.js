@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,7 +15,7 @@ export const eventId = Datatype({
         "\n" +
         "Event IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
         "described in Data Model Types.",
-    xref: { document: "core", section: "7.18.2.29" }
+    xref: { document: "core", section: "7.19.2.29" }
 });
 
 MatterDefinition.children.push(eventId);

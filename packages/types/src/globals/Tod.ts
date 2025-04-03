@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,7 +15,7 @@ import { TypeFromSchema } from "../tlv/TlvSchema.js";
  *
  * Represents time without a date component.
  *
- * @see {@link MatterSpecification.v13.Core} § 7.18.2.3
+ * @see {@link MatterSpecification.v14.Core} § 7.19.2.3
  */
 export const TlvTod = TlvObject({
     /**
@@ -44,6 +44,6 @@ export const TlvTod = TlvObject({
  *
  * Represents time without a date component.
  *
- * @see {@link MatterSpecification.v13.Core} § 7.18.2.3
+ * @see {@link MatterSpecification.v14.Core} § 7.19.2.3
  */
 export interface Tod extends TypeFromSchema<typeof TlvTod> {}

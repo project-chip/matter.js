@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { StorageBackendMemory, StorageContext } from "#general";
 import { FabricManager, SessionManager, SessionParameters } from "#protocol";
 import { NodeId } from "#types";
-import * as assert from "assert";
+import * as assert from "node:assert";
 
 const DUMMY_BYTEARRAY = new Uint8Array();
 

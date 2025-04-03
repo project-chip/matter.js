@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,7 @@ export namespace KeypadInput {
     /**
      * These are optional features supported by KeypadInputCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.4
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.4
      */
     export enum Feature {
         /**
@@ -45,7 +45,7 @@ export namespace KeypadInput {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.5.2
      */
     export enum CecKeyCode {
         Select = 0,
@@ -138,13 +138,13 @@ export namespace KeypadInput {
     /**
      * Input to the KeypadInput sendKey command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.1
      */
     export const TlvSendKeyRequest = TlvObject({
         /**
          * This field shall indicate the key code to process.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.1.1
          */
         keyCode: TlvField(0, TlvEnum<CecKeyCode>())
     });
@@ -152,12 +152,12 @@ export namespace KeypadInput {
     /**
      * Input to the KeypadInput sendKey command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.1
      */
     export interface SendKeyRequest extends TypeFromSchema<typeof TlvSendKeyRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.5.1
      */
     export enum Status {
         /**
@@ -177,23 +177,23 @@ export namespace KeypadInput {
     }
 
     /**
-     * This command shall be generated in response to a SendKey command.
+     * This command shall be generated in response to a SendKey command. The data for this command shall be as follows:
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.2
      */
     export const TlvSendKeyResponse = TlvObject({
         /**
          * This field shall indicate the status of the request.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.2.1
          */
         status: TlvField(0, TlvEnum<Status>())
     });
 
     /**
-     * This command shall be generated in response to a SendKey command.
+     * This command shall be generated in response to a SendKey command. The data for this command shall be as follows:
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.2
      */
     export interface SendKeyResponse extends TypeFromSchema<typeof TlvSendKeyResponse> {}
 
@@ -234,14 +234,14 @@ export namespace KeypadInput {
              *
              * If a device has multiple media endpoints implementing this cluster, such as a casting video player
              * endpoint with one or more content app endpoints, then only the endpoint receiving the command shall
-             * process the keycode as input. In other words, a specific content app endpoint shall NOT process a
-             * keycode received by a different content app endpoint.
+             * process the keycode as input. In other words, a specific content app endpoint shall NOT process a keycode
+             * received by a different content app endpoint.
              *
-             * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint
-             * will consider the first key press to be a press and hold. When such a repeat KeyCode value is not
-             * received within 200 ms, then the endpoint will consider the last key press to be a release.
+             * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint will
+             * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received
+             * within 200 ms, then the endpoint will consider the last key press to be a release.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.1
              */
             sendKey: Command(0x0, TlvSendKeyRequest, 0x1, TlvSendKeyResponse)
         },
@@ -262,9 +262,9 @@ export namespace KeypadInput {
      * This cluster provides an interface for key code based input and control on a device like a Video Player or an
      * endpoint like a Content App. This may include text or action commands such as UP, DOWN, and SELECT.
      *
-     * This cluster would be supported on Video Player devices as well as devices that support remote control input
-     * from a keypad or remote. This cluster provides the list of supported keypad inputs and provides a command for
-     * sending them.
+     * This cluster would be supported on Video Player devices as well as devices that support remote control input from
+     * a keypad or remote. This cluster provides the list of supported keypad inputs and provides a command for sending
+     * them.
      *
      * The cluster server for Keypad Input is implemented by a device that can receive keypad input, such as a Video
      * Player, or an endpoint that can receive keypad input, such as a Content App.
@@ -277,7 +277,7 @@ export namespace KeypadInput {
      * KeypadInputCluster supports optional features that you can enable with the KeypadInputCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8
+     * @see {@link MatterSpecification.v14.Cluster} § 6.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ export namespace UnitLocalization {
     /**
      * These are optional features supported by UnitLocalizationCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.5.4
+     * @see {@link MatterSpecification.v14.Core} § 11.5.4
      */
     export enum Feature {
         /**
@@ -30,7 +30,7 @@ export namespace UnitLocalization {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.5.5.1
+     * @see {@link MatterSpecification.v14.Core} § 11.5.5.1
      */
     export enum TempUnit {
         /**
@@ -55,11 +55,11 @@ export namespace UnitLocalization {
     export const TemperatureUnitComponent = MutableCluster.Component({
         attributes: {
             /**
-             * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying
-             * temperature in communication to the user. If provided, this value shall take priority over any unit
-             * implied through the ActiveLocale Attribute.
+             * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying temperature
+             * in communication to the user. If provided, this value shall take priority over any unit implied through
+             * the ActiveLocale Attribute.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.5.6.1
+             * @see {@link MatterSpecification.v14.Core} § 11.5.6.1
              */
             temperatureUnit: WritableAttribute(
                 0x0,
@@ -100,10 +100,9 @@ export namespace UnitLocalization {
 
     /**
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
-     * differing preferences for the units in which values are conveyed in communication to a
-     *
-     * user. As such, Nodes that visually or audibly convey measurable values to the user need a mechanism by which
-     * they can be configured to use a user’s preferred unit.
+     * differing preferences for the units in which values are conveyed in communication to a user. As such, Nodes that
+     * visually or audibly convey measurable values to the user need a mechanism by which they can be configured to use
+     * a user’s preferred unit.
      *
      * This cluster supports an interface to a Node. It provides attributes for determining and configuring the units
      * that a Node shall utilize when conveying values in communication to a user.
@@ -111,7 +110,7 @@ export namespace UnitLocalization {
      * UnitLocalizationCluster supports optional features that you can enable with the UnitLocalizationCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.5
+     * @see {@link MatterSpecification.v14.Core} § 11.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -138,8 +137,8 @@ export namespace UnitLocalization {
     /**
      * This cluster supports all UnitLocalization features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

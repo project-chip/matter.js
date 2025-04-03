@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 /**
- * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.2
+ * @see {@link MatterSpecification.v14.Cluster} § 2.1.4.2
  */
 export enum MeasurementType {
     Unspecified = 0,

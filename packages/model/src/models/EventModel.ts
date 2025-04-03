@@ -1,12 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Mei } from "../common/Mei.js";
 import { EventElement } from "../elements/index.js";
-import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
 export class EventModel extends ValueModel<EventElement> implements EventElement {
@@ -26,9 +25,7 @@ export class EventModel extends ValueModel<EventElement> implements EventElement
         return { ...super.requiredFields, id: this.id };
     }
 
-    static {
-        Model.types[EventElement.Tag] = this;
-    }
-
     static Tag = EventElement.Tag;
 }
+
+EventModel.register();

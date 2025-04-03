@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,7 +23,7 @@ export namespace KeypadInputInterface {
          * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within
          * 200 ms, then the endpoint will consider the last key press to be a release.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.8.6.1
          */
         sendKey(request: KeypadInput.SendKeyRequest): MaybePromise<KeypadInput.SendKeyResponse>;
     }

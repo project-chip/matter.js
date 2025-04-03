@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -37,11 +37,26 @@ export enum CommissioningFlowType {
 
 /** See {@link MatterSpecification.v13.Core} § 5.1.3.1 Table 39 */
 export const DiscoveryCapabilitiesBitmap = {
-    /** Device supports BLE for discovery when not commissioned. */
+    /**
+     * BLE
+     * * Set when device supports BLE for discovery when not commissioned.
+     * * Not-Set when device does not support BLE for discovery or is currently commissioned into one or more fabrics.
+     */
     ble: BitFlag(1),
 
-    /** Device is already on the IP network. */
+    /**
+     * On the IP network
+     * * Set when device is already on the IP network.
+     */
     onIpNetwork: BitFlag(2),
+
+    /**
+     * Wi-Fi Public Action Frame
+     * * Set when device supports Wi-Fi Public Action Frame for discovery when not commissioned.
+     * * Not-Set when device does not support Wi-Fi Public Action Frame for discovery or is currently commissioned into
+     *   one or more fabrics.
+     */
+    wifiPublicActionFrame: BitFlag(3),
 };
 export const DiscoveryCapabilitiesSchema = BitmapSchema(DiscoveryCapabilitiesBitmap);
 
@@ -206,7 +221,7 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     }
 
     protected decodeInternal(encoded: string): ManualPairingData {
-        encoded = encoded.replace(/[^0-9]/g, ""); // we SHALL be robust against other characters
+        encoded = encoded.replace(/\D/g, ""); // we SHALL be robust against other characters
         if (encoded.length !== 11 && encoded.length != 21) {
             throw new UnexpectedDataError("Invalid pairing code");
         }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,9 +14,8 @@ export namespace ContentLauncherInterface {
         /**
          * Upon receipt, this shall launch content from the specified URL.
          *
-         * The content types supported include those identified in the AcceptHeader and SupportedStreaming
-         *
-         * Protocols attributes.
+         * The content types supported include those identified in the AcceptHeader and SupportedStreamingProtocols
+         * attributes.
          *
          * A check shall be made to ensure the URL is secure (uses HTTPS).
          *
@@ -29,7 +28,7 @@ export namespace ContentLauncherInterface {
          *
          * This command returns a Launch Response.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2
+         * @see {@link MatterSpecification.v14.Cluster} § 6.7.7.2
          */
         launchUrl(request: ContentLauncher.LaunchUrlRequest): MaybePromise<ContentLauncher.LauncherResponse>;
     }
@@ -39,7 +38,7 @@ export namespace ContentLauncherInterface {
          * Upon receipt, this shall launch the specified content with optional search criteria. This command returns a
          * Launch Response.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1
+         * @see {@link MatterSpecification.v14.Cluster} § 6.7.7.1
          */
         launchContent(request: ContentLauncher.LaunchContentRequest): MaybePromise<ContentLauncher.LauncherResponse>;
     }

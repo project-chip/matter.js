@@ -1,27 +1,35 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { HtmlReference } from "../spec-types.js";
+import { InternalError } from "@matter/general";
+import { ClusterReference, GlobalReference, HtmlReference } from "../spec-types.js";
 
 export enum ScanDirective {
     // Ignore section in stream
     IGNORE = 1,
 
-    // Treat as one-level higher than actual in stream
+    // Treat as one level higher than actual in stream
     POP = 2,
 
+    // Treat as two levels higher
+    POP2 = 3,
+
     // Collect section as a "namespace" entry
-    NAMESPACE = 3,
+    NAMESPACE = 4,
 }
 
 const IGNORE = () => ScanDirective.IGNORE;
 const POP = () => ScanDirective.POP;
+const POP2 = () => ScanDirective.POP2;
 const NAMESPACE = () => ScanDirective.NAMESPACE;
 
-type HtmlRepairs = Record<string, (ref: HtmlReference) => ScanDirective | void>;
+type HtmlRepairs = Record<
+    string,
+    (ref: HtmlReference, ownerRef: ClusterReference | GlobalReference) => ScanDirective | void
+>;
 
 export const ClusterHtmlRepairs: Record<string, HtmlRepairs> = {
     "General Commissioning": {
@@ -66,11 +74,28 @@ export const ClusterHtmlRepairs: Record<string, HtmlRepairs> = {
     },
 
     "Operational State": {
-        // 1.2 and 1.3 use this terminology to define a subset of the values for ErrorStateEnum.  We turn into an
-        // independent enum
-        "ErrorStateEnum GeneralErrors Range"(subref) {
-            subref.name = "GeneralErrorStateEnum Type";
-            return ScanDirective.POP;
+        // 1.2+ use this terminology to define a subset of the values for ErrorStateEnum.  We inject the table into the
+        // previous section so translation picks them up
+        "ErrorStateEnum GeneralErrors Range"(subref, ownerRef) {
+            const { datatypes } = ownerRef as ClusterReference;
+            const datatype = datatypes?.[datatypes.length - 1];
+            if (datatype?.name !== "ErrorStateEnum" || !datatype.tables || !subref.tables?.length) {
+                throw new InternalError("OperationalState.ErrorStateEnum definition uses unexpected format");
+            }
+            datatype.tables[0] = subref.tables?.[0];
+            return ScanDirective.IGNORE;
+        },
+
+        // These values are in the correct section but there is another table priori that describes ranges; this
+        // confuses translation unless we skip
+        "OperationalStateEnum Type"(subref) {
+            const tables = subref.tables;
+            if (tables?.length !== 2) {
+                return;
+            }
+            if (tables[0].rows[0]?.value?.textContent?.match(/ to /)) {
+                tables.splice(0, 1);
+            }
         },
     },
 
@@ -82,17 +107,44 @@ export const ClusterHtmlRepairs: Record<string, HtmlRepairs> = {
         // This at a reasonable level but is a one-off.  So easiest to handle here
         "Mode Namespace": NAMESPACE,
     },
+
+    "ICD Management": {
+        // ClientTypeEnum is one level too deep (1.4 core)
+        "9.17.5.1.1": POP,
+    },
+
+    "Service Area": {
+        // SelectAreaStatus and SkipAreaStatus enums are too deep (1.4 cluster)
+        "1.17.5.6.1": POP,
+        "1.17.5.6.2": POP,
+    },
+
+    "Joint Fabric Datastore": {
+        // This is a fake section number for a datatype that generates at the same level as a field for the previous
+        // datatype (1.4 core)
+        "11.24.5.4.7": POP2,
+    },
+
+    "Joint Fabric PKI": {
+        // The joint fabric guys really don't adhere to conventions.  We can mostly correct automatically but in this
+        // case they spelled out Signing Request instead of using abbreviation SR from defining table
+        "11.25.4.1"(subref) {
+            if (subref.name === "ICAC Signing Request Status Enum Type") {
+                subref.name = "IcacsrRequestStatusEnum";
+            }
+        },
+    },
 };
 
 // Modify incoming stream to workaround specific spec issues
-export function repairIncomingHtml(subref: HtmlReference, clusterRef: HtmlReference) {
-    const repairs = ClusterHtmlRepairs[clusterRef.name];
+export function repairIncomingHtml(subref: HtmlReference, ownerRef: ClusterReference | GlobalReference) {
+    const repairs = ClusterHtmlRepairs[ownerRef.name];
     if (!repairs) {
         return;
     }
 
     const repair = repairs[subref.xref.section] ?? repairs[subref.name];
     if (repair) {
-        return repair(subref);
+        return repair(subref, ownerRef);
     }
 }

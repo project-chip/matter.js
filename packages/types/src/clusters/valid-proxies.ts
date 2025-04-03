@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,28 +20,28 @@ export namespace ValidProxies {
     /**
      * Encapsulates the Node ID of a Valid Proxy.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
+     * @see {@link MatterSpecification.v14.Core} § 9.15.14.4.1
      */
     export const TlvValidProxy = TlvObject({ nodeId: TlvField(1, TlvNodeId) });
 
     /**
      * Encapsulates the Node ID of a Valid Proxy.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
+     * @see {@link MatterSpecification.v14.Core} § 9.15.14.4.1
      */
     export interface ValidProxy extends TypeFromSchema<typeof TlvValidProxy> {}
 
     /**
      * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment Flow”.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.2
+     * @see {@link MatterSpecification.v14.Core} § 9.15.14.6.2
      */
     export const TlvGetValidProxiesResponse = TlvObject({ proxyNodeIdList: TlvField(0, TlvArray(TlvNodeId)) });
 
     /**
      * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment Flow”.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.2
+     * @see {@link MatterSpecification.v14.Core} § 9.15.14.6.2
      */
     export interface GetValidProxiesResponse extends TypeFromSchema<typeof TlvGetValidProxiesResponse> {}
 
@@ -57,7 +57,7 @@ export namespace ValidProxies {
             /**
              * List of valid proxies that can proxy this Node. Each entry in this list is fabric-scoped.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.15.14.5.1
+             * @see {@link MatterSpecification.v14.Core} § 9.15.14.5.1
              */
             validProxyList: FixedAttribute(0x0, TlvArray(TlvValidProxy), { persistent: true, default: [] })
         },
@@ -67,7 +67,7 @@ export namespace ValidProxies {
              * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery &
              * Assignment Flow”.
              *
-             * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.1
+             * @see {@link MatterSpecification.v14.Core} § 9.15.14.6.1
              */
             getValidProxiesRequest: Command(0x0, TlvNoArguments, 0x1, TlvGetValidProxiesResponse)
         }
@@ -77,7 +77,7 @@ export namespace ValidProxies {
      * This cluster provides a means for a device to be told of the valid set of possible proxies that can proxy
      * subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignment Flow”.
      *
-     * @see {@link MatterSpecification.v13.Core} § 9.15.14
+     * @see {@link MatterSpecification.v14.Core} § 9.15.14
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

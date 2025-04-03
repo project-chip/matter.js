@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,9 +11,9 @@
  * because you need to adjust the code in any way depending on your use case.
  */
 
-import { Environment, Logger, singleton, StorageService, Time } from "@matter/main";
+import { Diagnostic, Environment, Logger, singleton, StorageService, Time } from "@matter/main";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning, OnOff } from "@matter/main/clusters";
-import { Ble, ClusterClientObj, ControllerCommissioningFlowOptions } from "@matter/main/protocol";
+import { Ble, ClusterClientObj } from "@matter/main/protocol";
 import { ManualPairingCodeCodec, NodeId } from "@matter/main/types";
 import { NodeJsBle } from "@matter/nodejs-ble";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
@@ -28,7 +28,7 @@ if (environment.vars.get("ble")) {
     Ble.get = singleton(
         () =>
             new NodeJsBle({
-                hciId: environment.vars.number("ble-hci-id"),
+                hciId: environment.vars.number("ble.hci.id"),
             }),
     );
 }
@@ -78,7 +78,7 @@ class ControllerNode {
             shortDiscriminator = pairingCodeCodec.shortDiscriminator;
             longDiscriminator = undefined;
             setupPin = pairingCodeCodec.passcode;
-            logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
+            logger.debug(`Data extracted from pairing code: ${Diagnostic.json(pairingCodeCodec)}`);
         } else {
             longDiscriminator =
                 environment.vars.number("longDiscriminator") ??
@@ -93,7 +93,7 @@ class ControllerNode {
         }
 
         // Collect commissioning options from commandline parameters
-        const commissioningOptions: ControllerCommissioningFlowOptions = {
+        const commissioningOptions: NodeCommissioningOptions["commissioning"] = {
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
             regulatoryCountryCode: "XX",
         };
@@ -101,10 +101,10 @@ class ControllerNode {
         let ble = false;
         if (environment.vars.get("ble")) {
             ble = true;
-            const wifiSsid = environment.vars.string("ble-wifi-ssid");
-            const wifiCredentials = environment.vars.string("ble-wifi-credentials");
-            const threadNetworkName = environment.vars.string("ble-thread-networkname");
-            const threadOperationalDataset = environment.vars.string("ble-thread-operationaldataset");
+            const wifiSsid = environment.vars.string("ble.wifi.ssid");
+            const wifiCredentials = environment.vars.string("ble.wifi.credentials");
+            const threadNetworkName = environment.vars.string("ble.thread.networkname");
+            const threadOperationalDataset = environment.vars.string("ble.thread.operationaldataset");
             if (wifiSsid !== undefined && wifiCredentials !== undefined) {
                 logger.info(`Registering Commissioning over BLE with WiFi: ${wifiSsid}`);
                 commissioningOptions.wifiNetwork = {
@@ -121,38 +121,22 @@ class ControllerNode {
             }
         }
 
-        /**
-         * Create Matter Server and Controller Node
-         *
-         * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * CommissioningController to it and add the just created device instance to it.
-         * The Controller node defines the port where the server listens for the UDP packages of the Matter protocol
-         * and initializes deice specific certificates and such.
-         *
-         * The below logic also adds command handlers for commands of clusters that normally are handled internally
-         * like testEventTrigger (General Diagnostic Cluster) that can be implemented with the logic when these commands
-         * are called.
-         */
-
+        /** Create Matter Controller Node and bind it to the Environment. */
         const commissioningController = new CommissioningController({
             environment: {
                 environment,
                 id: uniqueId,
             },
-            autoConnect: false,
+            autoConnect: false, // Do not auto connect to the commissioned nodes
             adminFabricLabel,
         });
 
-        /**
-         * Start the Matter Server
-         *
-         * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * CommissioningServer node then this command also starts the announcement of the device into the network.
-         */
+        /** Start the Matter Controller Node */
         await commissioningController.start();
 
+        // When we do not have a commissioned node we need to commission the device provided by CLI parameters
         if (!commissioningController.isCommissioned()) {
-            const options = {
+            const options: NodeCommissioningOptions = {
                 commissioning: commissioningOptions,
                 discovery: {
                     knownAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
@@ -167,40 +151,43 @@ class ControllerNode {
                     },
                 },
                 passcode: setupPin,
-            } as NodeCommissioningOptions;
-            logger.info(`Commissioning ... ${Logger.toJSON(options)}`);
+            };
+            logger.info(`Commissioning ... ${Diagnostic.json(options)}`);
             const nodeId = await commissioningController.commissionNode(options);
 
             console.log(`Commissioning successfully done with nodeId ${nodeId}`);
         }
 
-        /**
-         * TBD
-         */
+        // After commissioning or if we have a commissioned node we can connect to it
         try {
             const nodes = commissioningController.getCommissionedNodes();
-            console.log("Found commissioned nodes:", Logger.toJSON(nodes));
+            console.log("Found commissioned nodes:", Diagnostic.json(nodes));
 
             const nodeId = NodeId(environment.vars.number("nodeid") ?? nodes[0]);
             if (!nodes.includes(nodeId)) {
                 throw new Error(`Node ${nodeId} not found in commissioned nodes`);
             }
 
-            // Trigger node connection. Returns once process started, events are there to wait for completion
-            // By default will subscript to all attributes and events
-            const node = await commissioningController.connectNode(nodeId);
+            const nodeDetails = commissioningController.getCommissionedNodesDetails();
+            console.log(
+                "Commissioned nodes details:",
+                Diagnostic.json(nodeDetails.find(node => node.nodeId === nodeId)),
+            );
 
-            // React on generic events
+            // Get the node instance
+            const node = await commissioningController.getNode(nodeId);
+
+            // Subscribe to events of the node
             node.events.attributeChanged.on(({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
                 console.log(
-                    `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                    `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                         value,
                     )}`,
                 ),
             );
             node.events.eventTriggered.on(({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
                 console.log(
-                    `eventTriggeredCallback ${nodeId}: Event ${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                    `eventTriggeredCallback ${nodeId}: Event ${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                         events,
                     )}`,
                 ),
@@ -225,8 +212,15 @@ class ControllerNode {
                 console.log(`Node ${nodeId} structure changed`);
             });
 
-            // Now wait till the structure of the node gor initialized (potentially with persisted data)
-            await node.events.initialized;
+            // Connect to the node if not already connected, this will automatically subscribe to all attributes and events
+            if (!node.isConnected) {
+                node.connect();
+            }
+
+            // Wait for initialization oif not yet initialized - this should only happen if we just commissioned it
+            if (!node.initialized) {
+                await node.events.initialized;
+            }
 
             // Or use this to wait for full remote initialization and reconnection.
             // Will only return when node is connected!
@@ -255,7 +249,7 @@ class ControllerNode {
 
             // Example to get all Attributes of the commissioned node: */*/*
             //const attributesAll = await interactionClient.getAllAttributes();
-            //console.log("Attributes-All:", Logger.toJSON(attributesAll));
+            //console.log("Attributes-All:", Diagnostic.json(attributesAll));
 
             // Example to get all Attributes of all Descriptor Clusters of the commissioned node: */DescriptorCluster/*
             //const attributesAllDescriptor = await interactionClient.getMultipleAttributes([{ clusterId: DescriptorCluster.id} ]);
@@ -269,7 +263,7 @@ class ControllerNode {
             if (devices[0] && devices[0].number === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
-                //    console.log("Subscribe-All Data:", Logger.toJSON(data));
+                //    console.log("Subscribe-All Data:", Diagnostic.json(data));
                 //});
 
                 const onOff: ClusterClientObj<OnOff.Complete> | undefined = devices[0].getClusterClient(OnOff.Complete);

@@ -1,11 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { NumberedOccurrence } from "#events/Occurrence.js";
 import {
+    Diagnostic,
     InternalError,
     Logger,
     MatterAggregateError,
@@ -22,6 +23,7 @@ import { PeerAddress } from "#peer/PeerAddress.js";
 import type { MessageExchange } from "#protocol/MessageExchange.js";
 import { SecureSession } from "#session/SecureSession.js";
 import {
+    EndpointNumber,
     EventNumber,
     INTERACTION_PROTOCOL_ID,
     StatusCode,
@@ -37,7 +39,7 @@ import {
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../cluster/server/EventServer.js";
 import { NoChannelError } from "../protocol/ChannelManager.js";
-import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import { EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
@@ -133,7 +135,10 @@ export interface ServerSubscriptionContext {
         path: AttributePath,
         attribute: AnyAttributeServer<unknown>,
         offline?: boolean,
-    ): Promise<{ version: number; value: unknown }>;
+    ): { version: number; value: unknown };
+    readEndpointAttributesForSubscription(
+        attributes: { path: AttributePath; attribute: AnyAttributeServer<unknown>; offline?: boolean }[],
+    ): { path: AttributePath; attribute: AnyAttributeServer<unknown>; version: number; value: unknown }[];
     readEvent(
         path: EventPath,
         event: AnyEventServer<any, any>,
@@ -171,41 +176,58 @@ export class ServerSubscription extends Subscription {
         }
     >();
     #sendUpdatesActivated = false;
-    readonly #maxIntervalMs: number;
     readonly #sendIntervalMs: number;
-    private readonly minIntervalFloorMs: number;
-    private readonly maxIntervalCeilingMs: number;
-    private readonly peerAddress: PeerAddress;
+    readonly #minIntervalFloorMs: number;
+    readonly #maxIntervalCeilingMs: number;
+    readonly #peerAddress: PeerAddress;
 
-    private sendNextUpdateImmediately = false;
-    private sendUpdateErrorCounter = 0;
-    private attributeUpdatePromises = new Set<PromiseLike<void>>();
-    private currentUpdatePromise?: Promise<void>;
+    #sendNextUpdateImmediately = false;
+    #sendUpdateErrorCounter = 0;
+    readonly #attributeUpdatePromises = new Set<PromiseLike<void>>();
+    #currentUpdatePromise?: Promise<void>;
 
     constructor(options: {
         id: number;
         context: ServerSubscriptionContext;
         criteria: SubscriptionCriteria;
-        minIntervalFloor: number;
-        maxIntervalCeiling: number;
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
         subscriptionOptions: ServerSubscriptionConfig;
+        useAsMaxInterval?: number;
+        useAsSendInterval?: number;
     }) {
-        const { id, context, criteria, minIntervalFloor, maxIntervalCeiling, subscriptionOptions } = options;
+        const {
+            id,
+            context,
+            criteria,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            subscriptionOptions,
+            useAsMaxInterval,
+            useAsSendInterval,
+        } = options;
 
         super(context.session, id, criteria);
         this.#context = context;
         this.#structure = context.structure;
 
-        this.peerAddress = this.session.peerAddress;
-        this.minIntervalFloorMs = minIntervalFloor * 1000;
-        this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
+        this.#peerAddress = this.session.peerAddress;
+        this.#minIntervalFloorMs = minIntervalFloorSeconds * 1000;
+        this.#maxIntervalCeilingMs = maxIntervalCeilingSeconds * 1000;
 
-        const { maxInterval, sendInterval } = this.determineSendingIntervals(
-            subscriptionOptions.minIntervalSeconds * 1000,
-            subscriptionOptions.maxIntervalSeconds * 1000,
-            subscriptionOptions.randomizationWindowSeconds * 1000,
-        );
-        this.#maxIntervalMs = maxInterval;
+        let maxInterval: number;
+        let sendInterval: number;
+        if (useAsMaxInterval !== undefined && useAsSendInterval !== undefined) {
+            maxInterval = useAsMaxInterval * 1000;
+            sendInterval = useAsSendInterval * 1000;
+        } else {
+            ({ maxInterval, sendInterval } = this.#determineSendingIntervals(
+                subscriptionOptions.minIntervalSeconds * 1000,
+                subscriptionOptions.maxIntervalSeconds * 1000,
+                subscriptionOptions.randomizationWindowSeconds * 1000,
+            ));
+        }
+        this.maxIntervalMs = maxInterval;
         this.#sendIntervalMs = sendInterval;
 
         this.#updateTimer = Time.getTimer(`Subscription ${this.id} update`, this.#sendIntervalMs, () =>
@@ -213,7 +235,7 @@ export class ServerSubscription extends Subscription {
         ); // will be started later
     }
 
-    private determineSendingIntervals(
+    #determineSendingIntervals(
         subscriptionMinIntervalMs: number,
         subscriptionMaxIntervalMs: number,
         subscriptionRandomizationWindowMs: number,
@@ -226,7 +248,7 @@ export class ServerSubscription extends Subscription {
         const maxInterval = Math.min(
             Math.max(
                 subscriptionMinIntervalMs,
-                Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
+                Math.max(this.#minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.#maxIntervalCeilingMs)),
             ) + Math.floor(subscriptionRandomizationWindowMs * Math.random()),
             MAX_INTERVAL_PUBLISHER_LIMIT_S * 1000,
         );
@@ -235,7 +257,7 @@ export class ServerSubscription extends Subscription {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
             // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
             // second subscription report after first failed.
-            sendInterval = Math.max(this.minIntervalFloorMs, Math.floor(maxInterval * 0.8));
+            sendInterval = Math.max(this.#minIntervalFloorMs, Math.floor(maxInterval * 0.8));
         }
         if (sendInterval < subscriptionMinIntervalMs) {
             // But not faster than once every 2s
@@ -247,7 +269,7 @@ export class ServerSubscription extends Subscription {
         return { maxInterval, sendInterval };
     }
 
-    private registerNewAttributes() {
+    #registerNewAttributes() {
         const newAttributes = new Array<AttributeWithPath>();
         const attributeErrors = new Array<TypeFromSchema<typeof TlvAttributeStatus>>();
         const formerAttributes = new Set<string>(this.#attributeListeners.keys());
@@ -422,10 +444,10 @@ export class ServerSubscription extends Subscription {
      * controller. The data of newly added events are not sent automatically.
      */
     async updateSubscription() {
-        const { newAttributes } = this.registerNewAttributes();
+        const { newAttributes } = this.#registerNewAttributes();
 
         for (const { path, attribute } of newAttributes) {
-            const { version, value } = await this.#context.readAttribute(path, attribute);
+            const { version, value } = this.#context.readAttribute(path, attribute);
 
             // We do not do any version filtering for attributes that are newly added to make sure controller gets
             // most current state
@@ -481,15 +503,21 @@ export class ServerSubscription extends Subscription {
         this.#prepareDataUpdate();
     }
 
-    get maxInterval(): number {
-        return Math.ceil(this.#maxIntervalMs / 1000);
-    }
-
     get sendInterval(): number {
         return Math.ceil(this.#sendIntervalMs / 1000);
     }
 
-    activateSendingUpdates() {
+    get minIntervalFloorSeconds(): number {
+        return Math.ceil(this.#minIntervalFloorMs / 1000);
+    }
+
+    get maxIntervalCeilingSeconds(): number {
+        return Math.ceil(this.#maxIntervalCeilingMs / 1000);
+    }
+
+    override activate() {
+        super.activate();
+
         // We do not need these data anymore, so we can free some memory
         if (this.criteria.eventFilters !== undefined) this.criteria.eventFilters.length = 0;
         if (this.criteria.dataVersionFilters !== undefined) this.criteria.dataVersionFilters.length = 0;
@@ -529,11 +557,11 @@ export class ServerSubscription extends Subscription {
         this.#updateTimer.stop();
         const now = Time.nowMs();
         const timeSinceLastUpdateMs = now - this.#lastUpdateTimeMs;
-        if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
+        if (timeSinceLastUpdateMs < this.#minIntervalFloorMs) {
             // Respect minimum delay time between updates
             this.#updateTimer = Time.getTimer(
                 "Subscription update",
-                this.minIntervalFloorMs - timeSinceLastUpdateMs,
+                this.#minIntervalFloorMs - timeSinceLastUpdateMs,
                 () => this.#prepareDataUpdate(),
             ).start();
             return;
@@ -546,14 +574,14 @@ export class ServerSubscription extends Subscription {
     }
 
     #triggerSendUpdate() {
-        if (this.currentUpdatePromise !== undefined) {
+        if (this.#currentUpdatePromise !== undefined) {
             logger.debug("Sending update already in progress, delaying update ...");
-            this.sendNextUpdateImmediately = true;
+            this.#sendNextUpdateImmediately = true;
             return;
         }
-        this.currentUpdatePromise = this.#sendUpdate()
+        this.#currentUpdatePromise = this.#sendUpdate()
             .catch(error => logger.warn("Sending subscription update failed:", error))
-            .finally(() => (this.currentUpdatePromise = undefined));
+            .finally(() => (this.#currentUpdatePromise = undefined));
     }
 
     /**
@@ -589,20 +617,20 @@ export class ServerSubscription extends Subscription {
         this.#lastUpdateTimeMs = Time.nowMs();
 
         try {
-            await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
-            this.sendUpdateErrorCounter = 0;
+            await this.#sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
+            this.#sendUpdateErrorCounter = 0;
         } catch (error) {
             if (this.isClosed) {
                 // No need to care about resubmissions when the server is closing
                 return;
             }
 
-            this.sendUpdateErrorCounter++;
+            this.#sendUpdateErrorCounter++;
             logger.info(
-                `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
-                error instanceof MatterError ? error.message : error,
+                `Error sending subscription update message (error count=${this.#sendUpdateErrorCounter}):`,
+                (error instanceof MatterError && error.message) || error,
             );
-            if (this.sendUpdateErrorCounter <= 2) {
+            if (this.#sendUpdateErrorCounter <= 2) {
                 // fill the data back in the queue to resend with next try
                 const newAttributeUpdatesToSend = Array.from(this.#outstandingAttributeUpdates.values());
                 this.#outstandingAttributeUpdates.clear();
@@ -618,90 +646,30 @@ export class ServerSubscription extends Subscription {
                 logger.info(
                     `Sending update failed 3 times in a row, canceling subscription ${this.id} and let controller subscribe again.`,
                 );
-                this.sendNextUpdateImmediately = false;
+                this.#sendNextUpdateImmediately = false;
                 if (
                     error instanceof NoResponseTimeoutError ||
                     error instanceof NetworkError ||
                     error instanceof NoChannelError
                 ) {
-                    // We could not send at all, consider session as dead
-                    await this.session.destroy(false);
+                    // Let's consider this subscription as dead and wait for a reconnect
+                    this.isCanceledByPeer = true; // We handle this case like  if the controller canceled the subscription
+                    await this.destroy();
+                    return;
                 } else {
                     throw error;
                 }
             }
         }
 
-        if (this.sendNextUpdateImmediately) {
+        if (this.#sendNextUpdateImmediately) {
             logger.debug("Sending delayed update immediately after last one was sent.");
-            this.sendNextUpdateImmediately = false;
+            this.#sendNextUpdateImmediately = false;
             await this.#sendUpdate(true); // Send but only if non-empty
         }
     }
 
-    async sendInitialReport(messenger: InteractionServerMessenger) {
-        this.#updateTimer.stop();
-
-        const { newAttributes, attributeErrors } = this.registerNewAttributes();
-
-        const dataVersionFilterMap = new Map<string, number>(
-            this.criteria.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ??
-                [],
-        );
-
-        let attributesFilteredWithVersion = false;
-        const attributes = new Array<{
-            path: TypeFromSchema<typeof TlvAttributePath>;
-            value: any;
-            version: number;
-            schema: TlvSchema<any>;
-            attribute: AnyAttributeServer<any>;
-        }>();
-        for (const { path, attribute } of newAttributes) {
-            try {
-                const { value, version } = await this.#context.readAttribute(path, attribute);
-                if (value === undefined) continue;
-
-                const { nodeId, endpointId, clusterId } = path;
-
-                const versionFilterValue =
-                    endpointId !== undefined && clusterId !== undefined
-                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                        : undefined;
-                if (versionFilterValue !== undefined && versionFilterValue === version) {
-                    attributesFilteredWithVersion = true;
-                    continue;
-                }
-
-                attributes.push({ path, value, version, schema: attribute.schema, attribute });
-            } catch (error) {
-                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                    logger.error(`Permission denied reading attribute ${this.#structure.resolveAttributeName(path)}`);
-                } else {
-                    logger.error(`Error reading attribute ${this.#structure.resolveAttributeName(path)}:`, error);
-                }
-            }
-        }
-        const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
-            ({ path, schema, value, version, attribute }) => ({
-                hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                attributeData: {
-                    path,
-                    dataVersion: version,
-                    payload: value,
-                    schema,
-                },
-            }),
-        );
-        attributeErrors.forEach(attributeStatus =>
-            attributeReportsPayload.push({
-                hasFabricSensitiveData: false,
-                attributeStatus,
-            }),
-        );
-
-        const { newEvents, eventErrors } = this.#registerNewEvents();
-
+    async #collectInitialEventReportPayloads(newEvents: EventWithPath[]) {
         let eventsFiltered = false;
         const eventReportsPayload = new Array<EventReportPayload>();
         for (const { path, event } of newEvents) {
@@ -726,7 +694,11 @@ export class ServerSubscription extends Subscription {
                     });
                 }
             } catch (error) {
-                logger.error(`Error reading event ${this.#structure.resolveEventName(path)}:`, error);
+                if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
+                    logger.warn(`Permission denied reading event ${this.#structure.resolveEventName(path)}`);
+                } else {
+                    logger.warn(`Error reading event ${this.#structure.resolveEventName(path)}:`, error);
+                }
             }
         }
         eventReportsPayload.sort((a, b) => {
@@ -741,8 +713,90 @@ export class ServerSubscription extends Subscription {
             }
         });
 
+        return { eventReportsPayload, eventsFiltered };
+    }
+
+    /**
+     * Returns an iterator that yields the initial subscription data to be sent to the controller.
+     * The iterator will yield all attributes and events that match the subscription criteria.
+     * A thrown exception will cancel the sending process immediately.
+     * TODO: Streamline all this with the normal Read flow to also handle Concrete Path subscriptions with errors correctly
+     */
+    *#iterateInitialSubscriptionData(
+        attributesToSend: {
+            newAttributes: AttributeWithPath[];
+            attributeErrors: TypeFromSchema<typeof TlvAttributeStatus>[];
+        },
+        eventsToSend: {
+            eventReportsPayload: EventReportPayload[];
+            eventsFiltered: boolean;
+            eventErrors: TypeFromSchema<typeof TlvEventStatus>[];
+        },
+    ) {
+        const dataVersionFilterMap = new Map<string, number>(
+            this.criteria.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ??
+                [],
+        );
+
+        const { newAttributes, attributeErrors } = attributesToSend;
+        const { eventReportsPayload, eventsFiltered, eventErrors } = eventsToSend;
+
+        logger.debug(
+            `Initializes Subscription with ${newAttributes.length} attributes and ${eventReportsPayload.length} events.`,
+        );
+
+        let attributesFilteredWithVersion = false;
+
+        const attributesPerCluster = new Map<EndpointNumber, AttributeWithPath[]>();
+        for (const { path, attribute } of newAttributes) {
+            const { endpointId } = path;
+            const endpointAttributes = attributesPerCluster.get(endpointId) ?? new Array<AttributeWithPath>();
+            endpointAttributes.push({ path, attribute });
+            attributesPerCluster.set(endpointId, endpointAttributes);
+        }
+
+        let attributesCounter = 0;
+        for (const endpointId of attributesPerCluster.keys()) {
+            const endpointAttributes = attributesPerCluster.get(endpointId)!;
+            attributesPerCluster.delete(endpointId);
+            for (const { path, attribute, value, version } of this.#context.readEndpointAttributesForSubscription(
+                endpointAttributes,
+            )) {
+                if (value === undefined) continue;
+
+                const { nodeId, endpointId, clusterId } = path;
+
+                const versionFilterValue =
+                    endpointId !== undefined && clusterId !== undefined
+                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                        : undefined;
+                if (versionFilterValue !== undefined && versionFilterValue === version) {
+                    attributesFilteredWithVersion = true;
+                    continue;
+                }
+
+                attributesCounter++;
+                yield {
+                    hasFabricSensitiveData: attribute.hasFabricSensitiveData,
+                    attributeData: {
+                        path,
+                        dataVersion: version,
+                        payload: value,
+                        schema: attribute.schema,
+                    },
+                };
+            }
+        }
+
+        for (const attributeStatus of attributeErrors) {
+            yield {
+                hasFabricSensitiveData: false,
+                attributeStatus,
+            };
+        }
+
         if (
-            attributes.length === 0 &&
+            attributesCounter === 0 &&
             !attributesFilteredWithVersion &&
             eventReportsPayload.length === 0 &&
             !eventsFiltered
@@ -753,27 +807,38 @@ export class ServerSubscription extends Subscription {
             );
         }
 
-        eventErrors.forEach(eventStatus =>
-            eventReportsPayload.push({
+        for (const eventReport of eventReportsPayload) {
+            yield eventReport;
+        }
+
+        for (const eventStatus of eventErrors) {
+            yield {
                 hasFabricSensitiveData: false,
                 eventStatus,
-            }),
-        );
+            };
+        }
 
-        logger.debug(
-            `Initialize Subscription with ${attributes.length} attributes and ${eventReportsPayload.length} events.`,
-        );
         this.#lastUpdateTimeMs = Time.nowMs();
+    }
+
+    async sendInitialReport(messenger: InteractionServerMessenger) {
+        this.#updateTimer.stop();
+
+        const { newAttributes, attributeErrors } = this.#registerNewAttributes();
+        const { newEvents, eventErrors } = this.#registerNewEvents();
+        const { eventReportsPayload, eventsFiltered } = await this.#collectInitialEventReportPayloads(newEvents);
 
         await messenger.sendDataReport(
             {
                 suppressResponse: false, // we always need proper response for initial report
                 subscriptionId: this.id,
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                attributeReportsPayload,
-                eventReportsPayload,
             },
             this.criteria.isFabricFiltered,
+            this.#iterateInitialSubscriptionData(
+                { newAttributes, attributeErrors },
+                { eventReportsPayload, eventsFiltered, eventErrors },
+            ),
         );
     }
 
@@ -782,8 +847,8 @@ export class ServerSubscription extends Subscription {
         if (MaybePromise.is(changeResult)) {
             const resolver = Promise.resolve(changeResult)
                 .catch(error => logger.error(`Error handling attribute change:`, error))
-                .finally(() => this.attributeUpdatePromises.delete(resolver));
-            this.attributeUpdatePromises.add(resolver);
+                .finally(() => this.#attributeUpdatePromises.delete(resolver));
+            this.#attributeUpdatePromises.add(resolver);
         }
     }
 
@@ -801,16 +866,15 @@ export class ServerSubscription extends Subscription {
             // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
             // TODO: Remove this once we remove the legacy API and go away from using AttributeServers in the background
-            return this.#context.readAttribute(path, attribute, true).then(({ value }) => {
-                this.#outstandingAttributeUpdates.set(attributePathToId(path), {
-                    attribute,
-                    path,
-                    schema,
-                    version,
-                    value,
-                });
-                this.#prepareDataUpdate();
+            const { value } = this.#context.readAttribute(path, attribute, true);
+            this.#outstandingAttributeUpdates.set(attributePathToId(path), {
+                attribute,
+                path,
+                schema,
+                version,
+                value,
             });
+            this.#prepareDataUpdate();
         }
         this.#outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.#prepareDataUpdate();
@@ -838,54 +902,95 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    async flush() {
+    async #flush() {
         this.#sendDelayTimer.stop();
         if (this.#outstandingAttributeUpdates.size > 0 || this.#outstandingEventUpdates.size > 0) {
             logger.debug(
                 `Flushing subscription ${this.id} with ${this.#outstandingAttributeUpdates.size} attributes and ${this.#outstandingEventUpdates.size} events${this.isClosed ? " (for closing)" : ""}`,
             );
             this.#triggerSendUpdate();
-            if (this.currentUpdatePromise) {
-                await this.currentUpdatePromise;
+            if (this.#currentUpdatePromise) {
+                await this.#currentUpdatePromise;
             }
         }
     }
 
-    override async close(graceful = false) {
-        this.isClosed = true;
+    protected override async destroy() {
         this.#sendUpdatesActivated = false;
         this.unregisterAttributeListeners(Array.from(this.#attributeListeners.keys()));
         this.unregisterEventListeners(Array.from(this.#eventListeners.keys()));
-        if (this.attributeUpdatePromises.size) {
-            const resolvers = [...this.attributeUpdatePromises.values()];
-            this.attributeUpdatePromises.clear();
+        if (this.#attributeUpdatePromises.size) {
+            const resolvers = [...this.#attributeUpdatePromises.values()];
+            this.#attributeUpdatePromises.clear();
             await MatterAggregateError.allSettled(resolvers, "Error receiving all outstanding attribute values").catch(
                 error => logger.error(error),
             );
         }
         this.#updateTimer.stop();
         this.#sendDelayTimer.stop();
-        if (graceful) {
-            await this.flush();
-        }
-        if (this.currentUpdatePromise) {
-            await this.currentUpdatePromise;
-        }
-        await super.close();
+        await super.destroy();
     }
 
-    private async sendUpdateMessage(
-        attributes: AttributePathWithValueVersion<any>[],
-        events: EventPathWithEventData<any>[],
-    ) {
-        const exchange = this.#context.initiateExchange(this.peerAddress, INTERACTION_PROTOCOL_ID);
+    /**
+     * Closes the subscription and flushes all outstanding data updates if requested.
+     */
+    override async close(graceful = false, cancelledByPeer = false) {
+        if (this.isClosed) {
+            return;
+        }
+        if (cancelledByPeer) {
+            this.isCanceledByPeer = true;
+        }
+        await this.destroy();
+        if (graceful) {
+            await this.#flush();
+        }
+        if (this.#currentUpdatePromise) {
+            await this.#currentUpdatePromise;
+        }
+    }
+
+    /**
+     * Iterates over all attributes and events that have changed since the last update and sends them to
+     * the controller.
+     * A thrown exception will cancel the sending process immediately.
+     */
+    *#iterateDataUpdate(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
+        for (const {
+            path,
+            schema,
+            value: payload,
+            version: dataVersion,
+            attribute: { hasFabricSensitiveData },
+        } of attributes) {
+            yield {
+                hasFabricSensitiveData,
+                attributeData: { path, dataVersion, schema, payload },
+            };
+        }
+
+        for (const {
+            path,
+            schema,
+            event,
+            data: { number: eventNumber, priority, epochTimestamp, payload },
+        } of events) {
+            yield {
+                hasFabricSensitiveData: event.hasFabricSensitiveData,
+                eventData: { path, eventNumber, priority, epochTimestamp, schema, payload },
+            };
+        }
+    }
+
+    async #sendUpdateMessage(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
+        const exchange = this.#context.initiateExchange(this.#peerAddress, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
         if (attributes.length) {
             logger.debug(
                 `Subscription attribute changes for ID ${this.id}: ${attributes
                     .map(
                         ({ path, value, version }) =>
-                            `${this.#structure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`,
+                            `${this.#structure.resolveAttributeName(path)}=${Diagnostic.json(value)} (${version})`,
                     )
                     .join(", ")}`,
             ); // TODO Format path better using endpoint structure
@@ -901,6 +1006,7 @@ export class ServerSubscription extends Subscription {
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
                     this.criteria.isFabricFiltered,
+                    undefined,
                     !this.isClosed, // Do not wait for ack when closed
                 );
             } else {
@@ -909,31 +1015,9 @@ export class ServerSubscription extends Subscription {
                         suppressResponse: false, // Non-empty data reports always need to send response
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                        attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
-                            hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                            attributeData: {
-                                path,
-                                dataVersion: version,
-                                schema,
-                                payload: value,
-                            },
-                        })),
-                        eventReportsPayload: events.map(({ path, schema, event, data }) => {
-                            const { number, priority, epochTimestamp, payload } = data;
-                            return {
-                                hasFabricSensitiveData: event.hasFabricSensitiveData,
-                                eventData: {
-                                    path,
-                                    eventNumber: number,
-                                    priority,
-                                    epochTimestamp,
-                                    schema,
-                                    payload,
-                                },
-                            };
-                        }),
                     },
                     this.criteria.isFabricFiltered,
+                    this.#iterateDataUpdate(attributes, events),
                     !this.isClosed, // Do not wait for ack when closed
                 );
             }

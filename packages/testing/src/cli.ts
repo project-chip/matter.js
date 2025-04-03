@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,13 +9,14 @@ import "./util/node-shims.js";
 
 import "./global-definitions.js";
 
-import { Builder, Graph, Package, Project } from "#tools";
-import { clear } from "console";
+import { Graph, Package, Project, ProjectBuilder } from "#tools";
+import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { chip } from "./chip/chip.js";
-import { defaultDescriptor, inspect } from "./inspect.js";
+import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
+import { TestDescriptor } from "./test-descriptor.js";
 
 enum TestType {
     esm = "esm",
@@ -62,11 +63,13 @@ export async function main(argv = process.argv) {
         .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
+        .option("report", { type: "boolean", describe: "Display test summary after testing" })
+        .option("pull", { type: "boolean", describe: "Do not update containers before testing", default: true })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
         .command("web", "run tests in web browser", () => testTypes.add(TestType.web))
-        .command("inspect", "lists details about defined tests", () => (ls = true))
+        .command("report", "display details about tests", () => (ls = true))
         .command("manual", "start web test server and print URL for manual testing", () => {
             testTypes.add(TestType.web);
             manual = true;
@@ -80,7 +83,9 @@ export async function main(argv = process.argv) {
         packageLocation = firstSpec;
     }
 
-    const builder = new Builder();
+    chip.pullBeforeTesting = args.pull;
+
+    const builder = new ProjectBuilder();
     const pkg = new Package({ path: packageLocation });
 
     // If the location is a workspace, test all packages with test
@@ -116,14 +121,19 @@ export async function main(argv = process.argv) {
 
     await chip.close();
 
+    if (args.forceExit) {
+        process.exit(0);
+    }
+
     async function test(pkg: Package, detectWeb: boolean) {
         process.chdir(pkg.path);
 
         if (ls) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
-            inspect(await defaultDescriptor(runner));
-            progress.shutdown();
+            progress.close();
+            printReport(await defaultDescriptor(runner), true);
+            console.log();
             return;
         }
 
@@ -143,9 +153,10 @@ export async function main(argv = process.argv) {
 
         const progress = pkg.start("Testing");
         const runner = new TestRunner(pkg, progress, args);
+        let report: TestDescriptor | undefined;
 
         if (thisTestTypes.has(TestType.esm)) {
-            await runner.runNode("esm");
+            report = await runner.runNode("esm");
         }
 
         if (thisTestTypes.has(TestType.cjs)) {
@@ -156,10 +167,11 @@ export async function main(argv = process.argv) {
             await runner.runWeb(manual);
         }
 
-        progress.shutdown();
+        progress.close();
 
-        if (args.forceExit) {
-            process.exit(0);
+        if (args.report && report) {
+            printReport(report);
+            console.log();
         }
     }
 }

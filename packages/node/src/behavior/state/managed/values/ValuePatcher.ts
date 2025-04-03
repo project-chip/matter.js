@@ -1,16 +1,15 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { camelize, ImplementationError, isObject } from "#general";
+import type { Schema } from "#model";
 import { DataModelPath, Metatype, ValueModel } from "#model";
-import { SchemaImplementationError, WriteError } from "../../../errors.js";
+import { SchemaImplementationError, Val, WriteError } from "#protocol";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
-import { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../../Val.js";
 
 /**
  * Obtain a {@link ValueSupervisor.Patch} function for the given schema.
@@ -179,6 +178,9 @@ function ListPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSuper
             throw new WriteError(path, `patch definition ${changes} is not an object`);
         }
 
+        // eslint reports error here when linting entire project but not individual file.  Unsure if this is a bug but
+        // disabling as code is correct as written
+        // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for (const indexStr in changes) {
             const index = Number.parseInt(indexStr);
 

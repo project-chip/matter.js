@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,7 +15,7 @@ export const priority = Datatype(
         details: "This is an enumeration of priority used to tag events and possibly other data. The data type does " +
             "not define any particular ordering among the values. Specific uses of the data type may assign " +
             "semantics to the values that imply an ordering relationship.",
-        xref: { document: "core", section: "7.18.2.17" }
+        xref: { document: "core", section: "7.19.2.17" }
     },
 
     Field({ name: "Debug", id: 0x0, description: "Information for engineering debugging/troubleshooting" }),

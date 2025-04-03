@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { mkdir, readdir } from "fs/promises";
+import { mkdir, readdir } from "node:fs/promises";
 import type { ConsumerProject } from "./consumer-project.js";
 import type { ContributorProject } from "./contributor-project.js";
 import { run } from "./run.js";

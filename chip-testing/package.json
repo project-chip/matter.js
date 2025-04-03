@@ -21,16 +21,19 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
-        "ci-test": "matter-test",
-        "ci-test-fast": "matter-test",
-        "ci-test-slow": "matter-test"
+        "test": "matter-test",
+        "test-app-fast": "matter-test --spec=test/app-fast/**/*.test.ts --report",
+        "test-app-slow": "matter-test --spec=test/app-slow/**/*.test.ts --report",
+        "test-core": "matter-test --spec=test/core/**/*.test.ts --report"
     },
     "dependencies": {
         "@matter/main": "*",
         "@project-chip/matter.js": "*"
     },
     "devDependencies": {
-        "@matter/testing": "*"
+        "@matter/testing": "*",
+        "@types/ws": "^8.18.0",
+        "ws": "^8.18.1"
     },
     "matter": {
         "test": false

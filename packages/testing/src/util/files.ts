@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Package } from "#tools";
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 
 export function listSupportFiles(format = "cjs") {
     const files = Array<string>();

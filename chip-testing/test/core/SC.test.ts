@@ -1,13 +1,22 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { edit } from "@matter/testing";
 
+// Note - SC/4.3 fails intermittently (22 of 156 runs) on step 8, sometimes because of a name mismatch, sometimes
+// because no name is found and the test doesn't check for None
+//
+// I believe this is because of other Matter devices on my local network.  Fixing will require coming up with an
+// isolated networking solution...  Easiest might be to just create an Avahi MDNS implementation and run Avahi with no
+// networking
+
 describe("SC", () => {
     before(async () => {
+        await chip.clearMdns();
+
         const sc41 = chip.testFor("SC/4.1");
         await sc41.edit(
             edit.sed(
@@ -18,7 +27,7 @@ describe("SC", () => {
                 "s/defaultValue: 65535/defaultValue: 257/",
 
                 // We do not like ridiculously long waits; reduce commissioning timeout.  Unfortunately test framework
-                // is slow so we can't reduce to a reasonable level but 10s. is still way better than 3m.
+                // is slow so we can't reduce to a reasonable level but 10s is still way better than 3m.
                 "s/value: 180/value: 10/",
 
                 // Also reduce the test delay that waits for timeout
@@ -35,10 +44,22 @@ describe("SC", () => {
                 "s/, 3840,/, 0000,/",
             ),
         );
-    });
+    }).timeout(10000);
 
-    // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited
-    //chip("SC/*").exclude("SC/5.1", "SC/5.2", "SC/7.1");
+    // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited, and 7.1 because we configure separately below
+    chip("SC/*").exclude(
+        // Our GroupKeyManagment is too limited for these
+        "SC/5.1",
+        "SC/5.2",
+
+        // These require additional configuration below
+        "SC/4.1",
+        "SC/7.1",
+    );
+
+    // SC/4.1 needs MDNS cleared
+    //
+    chip("SC/4.1").beforeStart(() => chip.clearMdns());
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();

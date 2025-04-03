@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -30,7 +30,7 @@ export namespace BooleanStateConfiguration {
     /**
      * These are optional features supported by BooleanStateConfigurationCluster.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.4
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.4
      */
     export enum Feature {
         /**
@@ -51,9 +51,8 @@ export namespace BooleanStateConfiguration {
          * AlarmSuppress (SPRS)
          *
          * This feature shall indicate that the device is able to suppress the supported alarm modes, when the user
-         * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become
-         * aware that the sensor is triggered, but it is no longer desired to have the alarm modes active on the
-         * device, e.g.:
+         * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become aware
+         * that the sensor is triggered, but it is no longer desired to have the alarm modes active on the device, e.g.:
          *
          *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting the
          *     triggering cause.
@@ -64,11 +63,11 @@ export namespace BooleanStateConfiguration {
          * Acknowledge of alarms will for the remainder of this cluster be referred to as suppress.
          *
          * A suppressed alarm is still considered active and will remain so unless it is actively disabled or the
-         * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to
-         * and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not impact
+         * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to and
+         * is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not impact
          * alarm reporting in AlarmsActive.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.4.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.4.1
          */
         AlarmSuppress = "AlarmSuppress",
 
@@ -81,7 +80,7 @@ export namespace BooleanStateConfiguration {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.5.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.5.1
      */
     export const AlarmMode = {
         /**
@@ -98,14 +97,14 @@ export namespace BooleanStateConfiguration {
     /**
      * Input to the BooleanStateConfiguration enableDisableAlarm command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.2
      */
     export const TlvEnableDisableAlarmRequest = TlvObject({
         /**
          * This field shall indicate the alarm modes to either enable or disable depending on the bit status, as
          * specified for the AlarmsEnabled attribute.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.2.1
          */
         alarmsToEnableDisable: TlvField(0, TlvBitmap(TlvUInt8, AlarmMode))
     });
@@ -113,21 +112,21 @@ export namespace BooleanStateConfiguration {
     /**
      * Input to the BooleanStateConfiguration enableDisableAlarm command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.2
      */
     export interface EnableDisableAlarmRequest extends TypeFromSchema<typeof TlvEnableDisableAlarmRequest> {}
 
     /**
      * Body of the BooleanStateConfiguration alarmsStateChanged event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.1
      */
     export const TlvAlarmsStateChangedEvent = TlvObject({
         /**
-         * This field shall indicate the state of active alarm modes, as indicated by the AlarmsActive attribute, at
-         * the time the event was generated.
+         * This field shall indicate the state of active alarm modes, as indicated by the AlarmsActive attribute, at the
+         * time the event was generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.1.1
          */
         alarmsActive: TlvField(0, TlvBitmap(TlvUInt8, AlarmMode)),
 
@@ -135,7 +134,7 @@ export namespace BooleanStateConfiguration {
          * This field shall indicate the state of suppressed alarm modes, as indicated by the AlarmsSuppressed
          * attribute, at the time the event was generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1.2
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.1.2
          */
         alarmsSuppressed: TlvOptionalField(1, TlvBitmap(TlvUInt8, AlarmMode))
     });
@@ -143,20 +142,20 @@ export namespace BooleanStateConfiguration {
     /**
      * Body of the BooleanStateConfiguration alarmsStateChanged event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.1
      */
     export interface AlarmsStateChangedEvent extends TypeFromSchema<typeof TlvAlarmsStateChangedEvent> {}
 
     /**
      * Input to the BooleanStateConfiguration suppressAlarm command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.1
      */
     export const TlvSuppressAlarmRequest = TlvObject({
         /**
          * This field shall indicate the alarm modes to suppress.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.1.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.1.1
          */
         alarmsToSuppress: TlvField(0, TlvBitmap(TlvUInt8, AlarmMode))
     });
@@ -164,12 +163,12 @@ export namespace BooleanStateConfiguration {
     /**
      * Input to the BooleanStateConfiguration suppressAlarm command
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.1
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.1
      */
     export interface SuppressAlarmRequest extends TypeFromSchema<typeof TlvSuppressAlarmRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.5.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.5.2
      */
     export const SensorFault = {
         /**
@@ -181,13 +180,13 @@ export namespace BooleanStateConfiguration {
     /**
      * Body of the BooleanStateConfiguration sensorFault event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.2
      */
     export const TlvSensorFaultEvent = TlvObject({
         /**
          * This field shall indicate the value of the SensorFault attribute, at the time this event is generated.
          *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.2.1
+         * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.2.1
          */
         sensorFault: TlvField(0, TlvBitmap(TlvUInt16, SensorFault))
     });
@@ -195,7 +194,7 @@ export namespace BooleanStateConfiguration {
     /**
      * Body of the BooleanStateConfiguration sensorFault event
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.2
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.2
      */
     export interface SensorFaultEvent extends TypeFromSchema<typeof TlvSensorFaultEvent> {}
 
@@ -210,7 +209,7 @@ export namespace BooleanStateConfiguration {
              * If a write interaction to this attribute contains an unsupported sensitivity value, a CONSTRAINT_ERROR
              * status shall be returned.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.1
              */
             currentSensitivityLevel: WritableAttribute(0x0, TlvUInt8, { persistent: true }),
 
@@ -224,14 +223,14 @@ export namespace BooleanStateConfiguration {
              * The number of supported sensitivity levels SHOULD represent unique sensitivity levels supported by the
              * device.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.2
              */
             supportedSensitivityLevels: FixedAttribute(0x1, TlvUInt8.bound({ min: 2, max: 10 })),
 
             /**
              * Indicates the default sensitivity level selected by the manufacturer.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.3
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.3
              */
             defaultSensitivityLevel: OptionalFixedAttribute(0x2, TlvUInt8)
         }
@@ -254,7 +253,7 @@ export namespace BooleanStateConfiguration {
              *
              *   • 1 = Active
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.4
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.4
              */
             alarmsActive: Attribute(0x3, TlvBitmap(TlvUInt8, AlarmMode)),
 
@@ -268,7 +267,7 @@ export namespace BooleanStateConfiguration {
              *
              *   • 1 = Enabled
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.6
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.6
              */
             alarmsEnabled: OptionalAttribute(0x5, TlvBitmap(TlvUInt8, AlarmMode), { persistent: true }),
 
@@ -279,14 +278,14 @@ export namespace BooleanStateConfiguration {
              *
              *   • 1 = Supported
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.7
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.7
              */
             alarmsSupported: FixedAttribute(0x6, TlvBitmap(TlvUInt8, AlarmMode))
         },
 
         commands: {
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.2
              */
             enableDisableAlarm: Command(0x1, TlvEnableDisableAlarmRequest, 0x1, TlvNoResponse)
         },
@@ -301,7 +300,7 @@ export namespace BooleanStateConfiguration {
              * If several alarm modes change state at the same time, a single event combining multiple changes may be
              * emitted instead of multiple events each representing a single change.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.1
              */
             alarmsStateChanged: Event(0x0, EventPriority.Info, TlvAlarmsStateChangedEvent)
         }
@@ -313,9 +312,9 @@ export namespace BooleanStateConfiguration {
     export const AlarmSuppressComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no
-             * longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, for
-             * all supported alarm modes.
+             * Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no longer
+             * triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, for all
+             * supported alarm modes.
              *
              * If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall
              * indicate whether the alarm mode is suppressed or not:
@@ -324,14 +323,14 @@ export namespace BooleanStateConfiguration {
              *
              *   • 1 = Suppressed
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.5
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.5
              */
             alarmsSuppressed: Attribute(0x4, TlvBitmap(TlvUInt8, AlarmMode))
         },
 
         commands: {
             /**
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.7.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.7.1
              */
             suppressAlarm: Command(0x0, TlvSuppressAlarmRequest, 0x0, TlvNoResponse)
         }
@@ -368,8 +367,8 @@ export namespace BooleanStateConfiguration {
              * aware that the sensor is triggered, but it is no longer desired to have the alarm modes active on the
              * device, e.g.:
              *
-             *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting
-             *     the triggering cause.
+             *   • The triggering cause have been resolved by the user, but the sensor has not yet stopped detecting the
+             *     triggering cause.
              *
              *   • The user is not able to address the triggering cause, but is aware of the alarm and
              *     suppress/acknowledge it be addressed at a later point.
@@ -377,11 +376,11 @@ export namespace BooleanStateConfiguration {
              * Acknowledge of alarms will for the remainder of this cluster be referred to as suppress.
              *
              * A suppressed alarm is still considered active and will remain so unless it is actively disabled or the
-             * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable
-             * to and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not
+             * triggering condition is not longer present. The action of suppressing an alarm mode is only applicable to
+             * and is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not
              * impact alarm reporting in AlarmsActive.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.4.1
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.4.1
              */
             alarmSuppress: BitFlag(2),
 
@@ -397,7 +396,7 @@ export namespace BooleanStateConfiguration {
             /**
              * Indicates any faults registered by the device.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.6.8
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.6.8
              */
             sensorFault: OptionalAttribute(0x7, TlvBitmap(TlvUInt16, SensorFault))
         },
@@ -406,7 +405,7 @@ export namespace BooleanStateConfiguration {
             /**
              * This event shall be generated when the device registers or clears a fault.
              *
-             * @see {@link MatterSpecification.v13.Cluster} § 1.8.8.2
+             * @see {@link MatterSpecification.v14.Cluster} § 1.8.8.2
              */
             sensorFault: OptionalEvent(0x1, EventPriority.Info, TlvSensorFaultEvent)
         },
@@ -436,7 +435,7 @@ export namespace BooleanStateConfiguration {
      * BooleanStateConfigurationCluster supports optional features that you can enable with the
      * BooleanStateConfigurationCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.8
+     * @see {@link MatterSpecification.v14.Cluster} § 1.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -510,8 +509,8 @@ export namespace BooleanStateConfiguration {
     /**
      * This cluster supports all BooleanStateConfiguration features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

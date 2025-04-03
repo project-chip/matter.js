@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createServer, IncomingMessage, Server, ServerResponse } from "http";
-import { AddressInfo } from "net";
+import { createServer, IncomingMessage, Server, ServerResponse } from "node:http";
+import { AddressInfo } from "node:net";
 import { Parser } from "xml2js";
 import { BackchannelCommand } from "../device/backchannel.js";
 

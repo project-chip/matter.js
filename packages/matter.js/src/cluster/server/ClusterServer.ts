@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { capitalize, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
+import { capitalize, Diagnostic, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
 import { AccessLevel } from "#model";
 import {
     ClusterServer as BaseClusterServer,
@@ -233,7 +233,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
     for (const attributeName in attributeDef) {
         const capitalizedAttributeName = capitalize(attributeName);
 
-        // logger.info(`check this for REQUIRED Attributes ${Logger.toJSON(attributeName)}`)
+        // logger.info(`check this for REQUIRED Attributes ${Diagnostic.json(attributeName)}`)
         if (attributeDef[attributeName].isConditional) {
             const { mandatoryIf, optionalIf } = attributeDef[attributeName];
             let conditionHasMatched = false;
@@ -244,7 +244,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                     logger.warn(
                         `InitialAttributeValue for "${
                             clusterDef.name
-                        }/${attributeName}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
+                        }/${attributeName}" is REQUIRED by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -258,7 +258,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                     logger.debug(
                         `InitialAttributeValue for "${
                             clusterDef.name
-                        }/${attributeName}" is optional by supportedFeatures: ${Logger.toJSON(
+                        }/${attributeName}" is optional by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -270,7 +270,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 logger.warn(
                     `InitialAttributeValue for "${
                         clusterDef.name
-                    }/${attributeName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Logger.toJSON(
+                    }/${attributeName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Diagnostic.json(
                         supportedFeatures,
                     )} but is set!`,
                 );
@@ -379,7 +379,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
                     logger.warn(
-                        `Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
+                        `Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -391,7 +391,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
                     logger.debug(
-                        `Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${Logger.toJSON(
+                        `Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -403,7 +403,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 logger.warn(
                     `Command "${
                         clusterDef.name
-                    }/${name}" is provided but it's neither optional nor mandatory for supportedFeatures: ${Logger.toJSON(
+                    }/${name}" is provided but it's neither optional nor mandatory for supportedFeatures: ${Diagnostic.json(
                         supportedFeatures,
                     )} but is set!`,
                 );
@@ -464,7 +464,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
                     logger.warn(
-                        `Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
+                        `Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -476,7 +476,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
                     logger.debug(
-                        `Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${Logger.toJSON(
+                        `Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${Diagnostic.json(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -488,7 +488,7 @@ export function ClusterServer<const T extends ClusterType, const H extends Clust
                 logger.warn(
                     `Event "${
                         clusterDef.name
-                    }/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Logger.toJSON(
+                    }/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Diagnostic.json(
                         supportedFeatures,
                     )} but is set!`,
                 );

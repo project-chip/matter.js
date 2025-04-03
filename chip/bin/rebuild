@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+set -e
+
+if docker buildx inspect matter.js-chip > /dev/null 2>&1; then
+    docker buildx rm matter.js-chip
+fi
+
+source "$(dirname "$0")/build"

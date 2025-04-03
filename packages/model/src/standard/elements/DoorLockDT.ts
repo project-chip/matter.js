@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,8 +12,8 @@ import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } fr
 export const DoorLockDt = DeviceType(
     {
         name: "DoorLock", id: 0xa, category: "Closure", classification: "simple",
-        details: "A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by " +
-            "means of a manual or a remote method.",
+        details: "A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means " +
+            "of a manual or a remote method.",
         xref: { document: "device", section: "8.1" }
     },
 
@@ -30,7 +30,7 @@ export const DoorLockDt = DeviceType(
         xref: { document: "device", section: "8.1.4" }
     }),
     Requirement({
-        name: "ScenesManagement", id: 0x5, conformance: "X", element: "serverCluster",
+        name: "ScenesManagement", id: 0x62, conformance: "X", element: "serverCluster",
         xref: { document: "device", section: "8.1.4" }
     }),
 
@@ -39,7 +39,7 @@ export const DoorLockDt = DeviceType(
             name: "DoorLock", id: 0x101, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "8.1.4" }
         },
-        Requirement({ name: "USER", conformance: "Matter & (PIN | RID | FPG | FACE)", element: "feature" }),
+        Requirement({ name: "USER", conformance: "Matter & (PIN | RID | FPG | FACE | ALIRO)", element: "feature" }),
         Requirement({ name: "RFIDCREDENTIAL", conformance: "P, O", element: "feature" }),
         Requirement({ name: "AlarmMask", conformance: "[Alarms]", element: "attribute" })
     )

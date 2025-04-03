@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ export const RoboticVacuumCleanerDt = DeviceType(
     },
     Requirement(
         { name: "Descriptor", id: 0x1d, element: "serverCluster" },
-        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 116, revision: 2 } ], element: "attribute" })
+        Requirement({ name: "DeviceTypeList", default: [ { deviceType: 116, revision: 3 } ], element: "attribute" })
     ),
     Requirement({
         name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
@@ -33,6 +33,10 @@ export const RoboticVacuumCleanerDt = DeviceType(
     }),
     Requirement({
         name: "RvcOperationalState", id: 0x61, conformance: "M", element: "serverCluster",
+        xref: { document: "device", section: "12.1.4" }
+    }),
+    Requirement({
+        name: "ServiceArea", id: 0x150, conformance: "O", element: "serverCluster",
         xref: { document: "device", section: "12.1.4" }
     })
 );

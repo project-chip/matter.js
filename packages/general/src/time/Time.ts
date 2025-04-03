@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Boot } from "#util/Boot.js";
-import { CancelablePromise } from "#util/Promises.js";
+import { CancelablePromise } from "#util/Cancelable.js";
 import { ImplementationError } from "../MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
@@ -84,6 +84,10 @@ export class Time {
 
     static unregister(timer: Timer) {
         registry.delete(timer);
+    }
+
+    static get timers() {
+        return registry;
     }
 }
 

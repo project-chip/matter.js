@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,7 +31,7 @@ export namespace PowerSource {
     /**
      * These are optional features supported by PowerSourceCluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.4
+     * @see {@link MatterSpecification.v14.Core} § 11.7.4
      */
     export enum Feature {
         /**
@@ -64,7 +64,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.5
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.5
      */
     export enum WiredCurrentType {
         /**
@@ -79,7 +79,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.1
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.1
      */
     export enum WiredFault {
         /**
@@ -101,20 +101,20 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource wiredFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.1
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.1
      */
     export const TlvWiredFaultChangeEvent = TlvObject({
         /**
          * This field shall represent the set of faults currently detected, as per ActiveWiredFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.1.1
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.1.1
          */
         current: TlvField(0, TlvArray(TlvEnum<WiredFault>(), { maxLength: 8 })),
 
         /**
          * This field shall represent the set of faults detected prior to this change event, as per ActiveWiredFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.1.2
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.1.2
          */
         previous: TlvField(1, TlvArray(TlvEnum<WiredFault>(), { maxLength: 8 }))
     });
@@ -122,12 +122,12 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource wiredFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.1
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.1
      */
     export interface WiredFaultChangeEvent extends TypeFromSchema<typeof TlvWiredFaultChangeEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.6
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.6
      */
     export enum BatChargeLevel {
         /**
@@ -147,7 +147,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.7
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.7
      */
     export enum BatReplaceability {
         /**
@@ -172,7 +172,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.2
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.2
      */
     export enum BatFault {
         /**
@@ -194,20 +194,20 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource batFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.2
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.2
      */
     export const TlvBatFaultChangeEvent = TlvObject({
         /**
          * This field shall represent the set of faults currently detected, as per ActiveBatFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.2.1
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.2.1
          */
         current: TlvField(0, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 })),
 
         /**
          * This field shall represent the set of faults detected prior to this change event, as per ActiveBatFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.2.2
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.2.2
          */
         previous: TlvField(1, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 }))
     });
@@ -215,12 +215,12 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource batFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.2
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.2
      */
     export interface BatFaultChangeEvent extends TypeFromSchema<typeof TlvBatFaultChangeEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.8
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.8
      */
     export enum BatCommonDesignation {
         /**
@@ -630,7 +630,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.9
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.9
      */
     export enum BatApprovedChemistry {
         /**
@@ -800,7 +800,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.10
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.10
      */
     export enum BatChargeState {
         /**
@@ -825,7 +825,7 @@ export namespace PowerSource {
     }
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.3
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.3
      */
     export enum BatChargeFault {
         /**
@@ -887,13 +887,13 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource batChargeFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.3
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.3
      */
     export const TlvBatChargeFaultChangeEvent = TlvObject({
         /**
          * This field shall represent the set of faults currently detected, as per ActiveBatChargeFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.3.1
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.3.1
          */
         current: TlvField(0, TlvArray(TlvEnum<BatChargeFault>(), { maxLength: 16 })),
 
@@ -901,7 +901,7 @@ export namespace PowerSource {
          * This field shall represent the set of faults detected prior to this change event, as per
          * ActiveBatChargeFaults.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.7.8.3.2
+         * @see {@link MatterSpecification.v14.Core} § 11.7.8.3.2
          */
         previous: TlvField(1, TlvArray(TlvEnum<BatChargeFault>(), { maxLength: 16 }))
     });
@@ -909,12 +909,12 @@ export namespace PowerSource {
     /**
      * Body of the PowerSource batChargeFaultChange event
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.8.3
+     * @see {@link MatterSpecification.v14.Core} § 11.7.8.3
      */
     export interface BatChargeFaultChangeEvent extends TypeFromSchema<typeof TlvBatChargeFaultChangeEvent> {}
 
     /**
-     * @see {@link MatterSpecification.v13.Core} § 11.7.6.4
+     * @see {@link MatterSpecification.v14.Core} § 11.7.6.4
      */
     export enum PowerSourceStatus {
         /**
@@ -944,21 +944,20 @@ export namespace PowerSource {
     export const WiredComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV
-             * (millivolts). A value of NULL shall indicate the Node is currently unable to assess the value. If the
-             * wired source is not connected, but the Node is still able to assess a value, then the assessed value may
-             * be reported.
+             * Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV (millivolts).
+             * A value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is
+             * not connected, but the Node is still able to assess a value, then the assessed value may be reported.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.4
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.4
              */
             wiredAssessedInputVoltage: OptionalAttribute(0x3, TlvNullable(TlvUInt32), { omitChanges: true }),
 
             /**
              * Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in Hz. A
-             * value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is
-             * not connected, but the Node is still able to assess a value, then the assessed value may be reported.
+             * value of NULL shall indicate the Node is currently unable to assess the value. If the wired source is not
+             * connected, but the Node is still able to assess a value, then the assessed value may be reported.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.5
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.5
              */
             wiredAssessedInputFrequency: OptionalAttribute(0x4, TlvNullable(TlvUInt16), { omitChanges: true }),
 
@@ -966,7 +965,7 @@ export namespace PowerSource {
              * Indicates the type of current the Node expects to be provided by the hard- wired source as specified in
              * WiredCurrentTypeEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.6
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.6
              */
             wiredCurrentType: FixedAttribute(0x5, TlvEnum<WiredCurrentType>()),
 
@@ -976,7 +975,7 @@ export namespace PowerSource {
              * wired source is not connected, but the Node is still able to assess a value, then the assessed value may
              * be reported.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.7
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.7
              */
             wiredAssessedCurrent: OptionalAttribute(0x6, TlvNullable(TlvUInt32), { omitChanges: true }),
 
@@ -984,7 +983,7 @@ export namespace PowerSource {
              * Indicates the nominal voltage, printed as part of the Node’s regulatory compliance label in mV
              * (millivolts), expected to be provided by the hard-wired source.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.8
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.8
              */
             wiredNominalVoltage: OptionalFixedAttribute(0x7, TlvUInt32),
 
@@ -992,28 +991,28 @@ export namespace PowerSource {
              * Indicates the maximum current, printed as part of the Node’s regulatory compliance label in mA
              * (milliamps), expected to be provided by the hard-wired source.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.9
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.9
              */
             wiredMaximumCurrent: OptionalFixedAttribute(0x8, TlvUInt32),
 
             /**
              * Indicates if the Node detects that the hard-wired power source is properly connected.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.10
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.10
              */
             wiredPresent: OptionalAttribute(0x9, TlvBoolean),
 
             /**
              * Indicates the set of wired faults currently detected by the Node on this power source. This set is
              * represented as a list of WiredFaultEnum. When the Node detects a fault has been raised, the appropriate
-             * WiredFaultEnum value shall be added to this list, provided it is not already present. This list shall
-             * NOT contain more than one instance of a specific WiredFaultEnum value. When the Node detects all
-             * conditions contributing to a fault have been cleared, the corresponding WiredFaultEnum value shall be
-             * removed from this list. An empty list shall indicate there are currently no active faults. The order of
-             * this list SHOULD have no significance. Clients interested in monitoring changes in active faults may
-             * subscribe to this attribute, or they may subscribe to WiredFaultChange.
+             * WiredFaultEnum value shall be added to this list, provided it is not already present. This list shall NOT
+             * contain more than one instance of a specific WiredFaultEnum value. When the Node detects all conditions
+             * contributing to a fault have been cleared, the corresponding WiredFaultEnum value shall be removed from
+             * this list. An empty list shall indicate there are currently no active faults. The order of this list
+             * SHOULD have no significance. Clients interested in monitoring changes in active faults may subscribe to
+             * this attribute, or they may subscribe to WiredFaultChange.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.11
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.11
              */
             activeWiredFaults: OptionalAttribute(
                 0xa,
@@ -1024,11 +1023,11 @@ export namespace PowerSource {
 
         events: {
             /**
-             * The WiredFaultChange Event shall be generated when the set of wired faults currently detected by the
-             * Node on this wired power source changes. This event shall correspond to a change in value of
+             * The WiredFaultChange Event shall be generated when the set of wired faults currently detected by the Node
+             * on this wired power source changes. This event shall correspond to a change in value of
              * ActiveWiredFaults.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.8.1
+             * @see {@link MatterSpecification.v14.Core} § 11.7.8.1
              */
             wiredFaultChange: OptionalEvent(0x0, EventPriority.Info, TlvWiredFaultChangeEvent)
         }
@@ -1043,7 +1042,7 @@ export namespace PowerSource {
              * Indicates the currently measured output voltage of the battery in mV (millivolts). A value of NULL shall
              * indicate the Node is currently unable to assess the value.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.12
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.12
              */
             batVoltage: OptionalAttribute(0xb, TlvNullable(TlvUInt32), { omitChanges: true }),
 
@@ -1053,50 +1052,62 @@ export namespace PowerSource {
              * value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently unable to assess
              * the value.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.13
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.13
              */
-            batPercentRemaining: OptionalAttribute(
-                0xc,
-                TlvNullable(TlvUInt8.bound({ max: 200 })),
-                { omitChanges: true }
-            ),
+            batPercentRemaining: OptionalAttribute(0xc, TlvNullable(TlvUInt8.bound({ max: 200 }))),
 
             /**
-             * Indicates the estimated time in seconds before the battery will no longer be able to provide power to
-             * the Node. A value of NULL shall indicate the Node is currently unable to assess the value.
+             * Indicates the estimated time in seconds before the battery will no longer be able to provide power to the
+             * Node. A value of NULL shall indicate the Node is currently unable to assess the value.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.14
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.14
              */
-            batTimeRemaining: OptionalAttribute(0xd, TlvNullable(TlvUInt32), { omitChanges: true }),
+            batTimeRemaining: OptionalAttribute(0xd, TlvNullable(TlvUInt32)),
 
             /**
              * Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention is
              * required as specified in BatChargeLevelEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.15
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.15
              */
             batChargeLevel: Attribute(0xe, TlvEnum<BatChargeLevel>()),
 
             /**
              * Indicates if the battery needs to be replaced. Replacement may be simple routine maintenance, such as
-             * with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, or
-             * serious fault with a rechargeable or even non-replaceable cell.
+             * with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, or serious
+             * fault with a rechargeable or even non-replaceable cell.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.16
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.16
              */
             batReplacementNeeded: Attribute(0xf, TlvBoolean),
 
             /**
              * Indicates the replaceability of the battery as specified in BatReplaceabilityEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.17
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.17
              */
             batReplaceability: FixedAttribute(0x10, TlvEnum<BatReplaceability>()),
 
             /**
              * Indicates whether the Node detects that the batteries are properly installed.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.18
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.18
              */
             batPresent: OptionalAttribute(0x11, TlvBoolean),
 
@@ -1108,20 +1119,22 @@ export namespace PowerSource {
              * contributing to a fault have been cleared, the corresponding BatFaultEnum value shall be removed from
              * this list. An empty list shall indicate there are currently no active faults. The order of this list
              * SHOULD have no significance. Clients interested in monitoring changes in active faults may subscribe to
-             * this attribute, or they may subscribe to BatFaultChange.
+             * this attribute, or they may subscribe to Bat
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.19
+             * FaultChange.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.19
              */
             activeBatFaults: OptionalAttribute(0x12, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 }), { default: [] })
         },
 
         events: {
             /**
-             * The BatFaultChange Event shall be generated when the set of battery faults currently detected by the
-             * Node on this battery power source changes. This event shall correspond to a change in value of
+             * The BatFaultChange Event shall be generated when the set of battery faults currently detected by the Node
+             * on this battery power source changes. This event shall correspond to a change in value of
              * ActiveBatFaults.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.8.2
+             * @see {@link MatterSpecification.v14.Core} § 11.7.8.2
              */
             batFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvBatFaultChangeEvent)
         }
@@ -1136,7 +1149,7 @@ export namespace PowerSource {
              * This attribute shall provide a user-facing description of this battery, which SHOULD contain information
              * required to identify a replacement, such as form factor, chemistry or preferred manufacturer.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.20
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.20
              */
             batReplacementDescription: FixedAttribute(0x13, TlvString.bound({ maxLength: 60 })),
 
@@ -1144,21 +1157,21 @@ export namespace PowerSource {
              * Indicates the ID of the common or colloquial designation of the battery, as specified in
              * BatCommonDesignationEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.21
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.21
              */
             batCommonDesignation: OptionalFixedAttribute(0x14, TlvEnum<BatCommonDesignation>()),
 
             /**
              * Indicates the string representing the ANSI designation for the battery as specified in ANSI C18.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.22
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.22
              */
             batAnsiDesignation: OptionalFixedAttribute(0x15, TlvString.bound({ maxLength: 20 })),
 
             /**
              * Indicates the string representing the IEC designation for the battery as specified in IEC 60086.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.23
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.23
              */
             batIecDesignation: OptionalFixedAttribute(0x16, TlvString.bound({ maxLength: 20 })),
 
@@ -1166,7 +1179,7 @@ export namespace PowerSource {
              * Indicates the ID of the preferred chemistry of the battery source as specified in
              * BatApprovedChemistryEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.24
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.24
              */
             batApprovedChemistry: OptionalFixedAttribute(0x17, TlvEnum<BatApprovedChemistry>()),
 
@@ -1174,7 +1187,7 @@ export namespace PowerSource {
              * Indicates the quantity of individual, user- or factory-serviceable battery cells or packs in the battery
              * source.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.26
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.26
              */
             batQuantity: FixedAttribute(0x19, TlvUInt8)
         }
@@ -1186,10 +1199,10 @@ export namespace PowerSource {
     export const ReplaceableOrRechargeableComponent = MutableCluster.Component({
         attributes: {
             /**
-             * Indicates the preferred minimum charge capacity rating in mAh of individual, user- or
-             * factory-serviceable battery cells or packs in the battery source.
+             * Indicates the preferred minimum charge capacity rating in mAh of individual, user- or factory-serviceable
+             * battery cells or packs in the battery source.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.25
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.25
              */
             batCapacity: OptionalFixedAttribute(0x18, TlvUInt32)
         }
@@ -1204,22 +1217,30 @@ export namespace PowerSource {
              * Indicates the current state of the battery source with respect to charging as specified in
              * BatChargeStateEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.27
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.27
              */
             batChargeState: Attribute(0x1a, TlvEnum<BatChargeState>()),
 
             /**
-             * Indicates the estimated time in seconds before the battery source will be at full charge. A value of
-             * NULL shall indicate the Node is currently unable to assess the value.
+             * Indicates the estimated time in seconds before the battery source will be at full charge. A value of NULL
+             * shall indicate the Node is currently unable to assess the value.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.28
+             * Changes to this attribute shall only be marked as reportable in the following cases:
+             *
+             *   • At most once every 10 seconds, or
+             *
+             *   • When it changes from null to any other value and vice versa.
+             *
+             * Since reporting consumes power, devices SHOULD be careful not to over-report.
+             *
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.28
              */
-            batTimeToFullCharge: OptionalAttribute(0x1b, TlvNullable(TlvUInt32), { omitChanges: true }),
+            batTimeToFullCharge: OptionalAttribute(0x1b, TlvNullable(TlvUInt32)),
 
             /**
              * Indicates whether the Node can remain operational while the battery source is charging.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.29
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.29
              */
             batFunctionalWhileCharging: Attribute(0x1c, TlvBoolean),
 
@@ -1227,7 +1248,7 @@ export namespace PowerSource {
              * Indicates assessed current in mA (milliamps) presently supplied to charge the battery source. A value of
              * NULL shall indicate the Node is currently unable to assess the value.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.30
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.30
              */
             batChargingCurrent: OptionalAttribute(0x1d, TlvNullable(TlvUInt32), { omitChanges: true }),
 
@@ -1237,11 +1258,11 @@ export namespace PowerSource {
              * appropriate BatChargeFaultEnum value shall be added to this list, provided it is not already present.
              * This list shall NOT contain more than one instance of a specific BatChargeFaultEnum value. When the Node
              * detects all conditions contributing to a fault have been cleared, the corresponding BatChargeFaultEnum
-             * value shall be removed from this list. An empty list shall indicate there are currently no active
-             * faults. The order of this list SHOULD have no significance. Clients interested in monitoring changes in
-             * active faults may subscribe to this attribute, or they may subscribe to the BatFaultChange event.
+             * value shall be removed from this list. An empty list shall indicate there are currently no active faults.
+             * The order of this list SHOULD have no significance. Clients interested in monitoring changes in active
+             * faults may subscribe to this attribute, or they may subscribe to the BatFaultChange event.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.31
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.31
              */
             activeBatChargeFaults: OptionalAttribute(
                 0x1e,
@@ -1252,11 +1273,11 @@ export namespace PowerSource {
 
         events: {
             /**
-             * The BatChargeFaultChange Event shall be generated when the set of charge faults currently detected by
-             * the Node on this battery power source changes. This event shall correspond to a change in value of
+             * The BatChargeFaultChange Event shall be generated when the set of charge faults currently detected by the
+             * Node on this battery power source changes. This event shall correspond to a change in value of
              * ActiveBatChargeFaults.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.8.3
+             * @see {@link MatterSpecification.v14.Core} § 11.7.8.3
              */
             batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, TlvBatChargeFaultChangeEvent)
         }
@@ -1268,7 +1289,7 @@ export namespace PowerSource {
     export const Base = MutableCluster.Component({
         id: 0x2f,
         name: "PowerSource",
-        revision: 2,
+        revision: 3,
 
         features: {
             /**
@@ -1305,7 +1326,7 @@ export namespace PowerSource {
              * Indicates the participation of this power source in providing power to the Node as specified in
              * PowerSourceStatusEnum.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.1
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.1
              */
             status: Attribute(0x0, TlvEnum<PowerSourceStatus>()),
 
@@ -1316,7 +1337,7 @@ export namespace PowerSource {
              *
              * Note, Order is read-only and therefore NOT intended to allow clients control over power source selection.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.2
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.2
              */
             order: Attribute(0x1, TlvUInt8, { persistent: true }),
 
@@ -1325,14 +1346,14 @@ export namespace PowerSource {
              * power sources, e.g. "DC Power", "Primary Battery" or "Battery back-up". This attribute shall NOT be used
              * to convey information such as battery form factor, or chemistry.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.3
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.3
              */
             description: FixedAttribute(0x2, TlvString.bound({ maxLength: 60 })),
 
             /**
              * Indicates a list of endpoints that are powered by the source defined by this cluster. Multiple instances
-             * of this cluster may list the same endpoint, because it is possible for power for an endpoint to come
-             * from multiple sources. In that case the Order attribute indicates their priority.
+             * of this cluster may list the same endpoint, because it is possible for power for an endpoint to come from
+             * multiple sources. In that case the Order attribute indicates their priority.
              *
              * For each power source on a node, there shall only be one instance of this cluster.
              *
@@ -1358,7 +1379,7 @@ export namespace PowerSource {
              * associated with the mains power, because it indicates the entire node, but the Power Source cluster
              * instance associated with the battery backup would list the endpoints that have a battery backup.
              *
-             * @see {@link MatterSpecification.v13.Core} § 11.7.7.32
+             * @see {@link MatterSpecification.v14.Core} § 11.7.7.32
              */
             endpointList: Attribute(0x1f, TlvArray(TlvEndpointNumber), { default: [] })
         },
@@ -1375,25 +1396,27 @@ export namespace PowerSource {
             { flags: { rechargeable: true }, component: ReplaceableOrRechargeableComponent },
             { flags: { rechargeable: true }, component: RechargeableComponent },
             { flags: { rechargeable: true, battery: false }, component: false },
-            { flags: { replaceable: true, battery: false }, component: false }
+            { flags: { replaceable: true, battery: false }, component: false },
+            { flags: { wired: true, battery: true }, component: false },
+            { flags: { wired: false, battery: false }, component: false }
         )
     });
 
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster(Base);
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
      * This cluster is used to describe the configuration and capabilities of a physical power source that provides
-     * power to one or more endpoints on a node. In case the node has multiple power sources, each is described by its
-     * own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the entire
-     * node.
+     * power to one or more endpoints on a node. In case the node has multiple power sources, each shall be described by
+     * its own cluster instance. Each instance of this cluster may be associated with one or more endpoints or the
+     * entire node.
      *
-     * PowerSourceCluster supports optional features that you can enable with the PowerSourceCluster.with() factory
-     * method.
+     * Per the Matter specification you cannot use {@link PowerSourceCluster} without enabling certain feature
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
-     * @see {@link MatterSpecification.v13.Core} § 11.7
+     * @see {@link MatterSpecification.v14.Core} § 11.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -1407,13 +1430,13 @@ export namespace PowerSource {
      * @see {@link Complete}
      */
     export const CompleteInstance = MutableCluster({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+        id: Base.id,
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
 
         attributes: {
-            ...Cluster.attributes,
+            ...Base.attributes,
             wiredAssessedInputVoltage: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputVoltage,
                 { optionalIf: [WIRED] }
@@ -1535,8 +1558,8 @@ export namespace PowerSource {
     /**
      * This cluster supports all PowerSource features. It may support illegal feature combinations.
      *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * If you use this cluster you must manually specify which features are active and ensure the set of active features
+     * is legal per the Matter specification.
      */
     export interface Complete extends Identity<typeof CompleteInstance> {}
 

@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual } from "#compat/util.js";
-import { Construction, StorageContext } from "#general";
-import { EndpointStore, Val } from "#node";
+import { Construction, isDeepEqual, StorageContext } from "#general";
+import { EndpointStore } from "#node";
+import { Val } from "@matter/protocol";
 
 /**
  * This is a simple and pragmatic adoption for EndpointStore for Client usecases to cache subscription data.

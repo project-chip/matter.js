@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,7 +27,7 @@ export const status = Datatype(
             "Status codes in an undefined range, or status codes undefined within a range are reserved and shall " +
             "NOT be indicated.",
 
-        xref: { document: "core", section: "7.18.2.18" }
+        xref: { document: "core", section: "7.19.2.18" }
     },
 
     Field({
@@ -124,6 +124,11 @@ export const status = Datatype(
         xref: { document: "core", section: "8.10.1" }
     }),
     Field({
+        name: "AccessRestricted", id: 0x9d,
+        description: "The access to the action or command by the sender is permitted by the ACL but restricted by the ARL.",
+        xref: { document: "core", section: "8.10.1" }
+    }),
+    Field({
         name: "UnsupportedCluster", id: 0xc3,
         description: "The cluster indicated is not supported on the endpoint.",
         xref: { document: "core", section: "8.10.1" }
@@ -166,6 +171,16 @@ export const status = Datatype(
     Field({
         name: "NoCommandResponse", id: 0xcc,
         description: "A CommandDataIB is missing a response in the InvokeResponses of an Invoke Response action.",
+        xref: { document: "core", section: "8.10.1" }
+    }),
+    Field({
+        name: "TermsAndConditionsChanged", id: 0xcd,
+        description: "The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl to complete this.",
+        xref: { document: "core", section: "8.10.1" }
+    }),
+    Field({
+        name: "MaintenanceRequired", id: 0xce,
+        description: "The node requires the user to visit the EnhancedSetupFlowMaintenanceUrl for instructions on further action.",
         xref: { document: "core", section: "8.10.1" }
     })
 );

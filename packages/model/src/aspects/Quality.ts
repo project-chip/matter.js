@@ -1,30 +1,82 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Aspect } from "./Aspect.js";
 
 /**
- * An operational representation of "other quality" as defined by the Matter
- * specification.
+ * An operational representation of "other quality" as defined by the Matter specification.
  *
- * "Other qualities" are defined behaviors of data fields and cluster elements
- * that do not involve access or conformance.
+ * "Other qualities" are defined behaviors of data fields and cluster elements that do not involve access or
+ * conformance.
+ *
+ * See {@link MatterSpecification.v14} § 7.7
  */
 export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
+    /**
+     * The value may be null.
+     */
     declare nullable?: boolean;
+
+    /**
+     * An attribute persists across restarts.
+     *
+     * Note that Matter designates any configuration as persistent so matter.js persists writable attributes even
+     * without this flag.
+     */
     declare nonvolatile?: boolean;
+
+    /**
+     * An attribute never changes unless software revision changes.
+     */
     declare fixed?: boolean;
+
+    /**
+     * An attribute changes rapidly so subscriptions would not be useful.  Not available for subscription.
+     */
     declare changesOmitted?: boolean;
+
+    /**
+     * An attribute contributes to a scene.
+     */
     declare scene?: boolean;
+
+    /**
+     * An attribute generates data useful for interval or change reporting.
+     */
     declare reportable?: boolean;
+
+    /**
+     * A cluster only appears once on a node for a given device type.
+     */
     declare singleton?: boolean;
-    declare disallowed?: Quality.AllProperties;
+
+    /**
+     * An attribute or event broadcasts a limited number of occurrences for performance reasons.
+     */
     declare quieter?: boolean;
+
+    /**
+     * A command's input or output may be larger than than an IPv6 MTU of 1280 bytes.
+     */
     declare largeMessage?: boolean;
+
+    /**
+     * A cluster provides verbose diagnostics and will be omitted from wildcard expansion.
+     */
     declare diagnostics?: boolean;
+
+    /**
+     * Writes to an attribute are legal only in the context of a transaction.
+     */
+    declare atomic?: boolean;
+
+    /**
+     * A set of properties disallowed for a device type.
+     */
+    declare disallowed?: Quality.AllProperties;
 
     /**
      * Initialize from a Quality.All definition or a string conforming to the
@@ -119,6 +171,7 @@ export namespace Quality {
         quieter = "Q",
         largeMessage = "L",
         diagnostics = "K",
+        atomic = "T",
     }
 
     /**
@@ -135,6 +188,7 @@ export namespace Quality {
         Q = "quieter",
         L = "largeMessage",
         K = "diagnostics",
+        T = "atomic",
     }
 
     /**
@@ -145,7 +199,7 @@ export namespace Quality {
     /**
      * Runtime version of QualityFlag.
      */
-    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I", "Q", "L", "K"];
+    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I", "Q", "L", "K", "T"];
 
     /**
      * Quality values that apply to data fields.
@@ -184,6 +238,11 @@ export namespace Quality {
          * to report.
          */
         quieter?: boolean;
+
+        /**
+         * Designates attribute as mutable only via atomic write.
+         */
+        atomic?: boolean;
     };
 
     /**

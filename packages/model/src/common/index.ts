@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,4 +12,5 @@ export * from "./errors.js";
 export * from "./FeatureSet.js";
 export * from "./FieldValue.js";
 export * from "./Metatype.js";
+export * from "./Schema.js";
 export * from "./Specification.js";

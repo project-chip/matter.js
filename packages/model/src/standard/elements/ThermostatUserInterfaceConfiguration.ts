@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,8 +18,8 @@ export const ThermostatUserInterfaceConfiguration = Cluster(
     {
         name: "ThermostatUserInterfaceConfiguration", id: 0x204, classification: "application",
         pics: "TSUIC",
-        details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, " +
-            "or a thermostat controller device, that supports a keypad and LCD screen.",
+        details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, or " +
+            "a thermostat controller device, that supports a keypad and LCD screen.",
         xref: { document: "cluster", section: "4.5" }
     },
 
@@ -27,26 +27,26 @@ export const ThermostatUserInterfaceConfiguration = Cluster(
 
     Attribute({
         name: "TemperatureDisplayMode", id: 0x0, type: "TemperatureDisplayModeEnum", access: "RW VO",
-        conformance: "M", constraint: "desc", default: 0,
+        conformance: "M", default: 0,
         details: "Indicates the units of the temperature displayed on the thermostat screen.",
         xref: { document: "cluster", section: "4.5.6.1" }
     }),
 
     Attribute({
         name: "KeypadLockout", id: 0x1, type: "KeypadLockoutEnum", access: "RW VM", conformance: "M",
-        constraint: "desc", default: 0,
+        default: 0,
         details: "Indicates the level of functionality that is available to the user via the keypad.",
         xref: { document: "cluster", section: "4.5.6.2" }
     }),
 
     Attribute({
         name: "ScheduleProgrammingVisibility", id: 0x2, type: "ScheduleProgrammingVisibilityEnum",
-        access: "RW VM", conformance: "O", constraint: "desc", default: 0,
+        access: "RW VM", conformance: "O", default: 0,
 
-        details: "This attribute is used to hide the weekly schedule programming functionality or menu on a " +
-            "thermostat from a user to prevent local user programming of the weekly schedule. The schedule " +
-            "programming may still be performed via a remote interface, and the thermostat may operate in " +
-            "schedule programming mode." +
+        details: "This attribute is used to hide the weekly schedule programming functionality or menu on a thermostat " +
+            "from a user to prevent local user programming of the weekly schedule. The schedule programming may " +
+            "still be performed via a remote interface, and the thermostat may operate in schedule programming " +
+            "mode." +
             "\n" +
             "This attribute is designed to prevent local tampering with or disabling of schedules that may have " +
             "been programmed by users or service providers via a more capable remote interface. The programming " +

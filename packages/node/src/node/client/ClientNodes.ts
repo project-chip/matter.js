@@ -1,11 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningDiscovery, ContinuousDiscovery, Discovery, InstanceDiscovery } from "#behavior/index.js";
 import { RemoteDescriptor } from "#behavior/system/commissioning/RemoteDescriptor.js";
+import { CommissioningDiscovery } from "#behavior/system/controller/discovery/CommissioningDiscovery.js";
+import { ContinuousDiscovery } from "#behavior/system/controller/discovery/ContinuousDiscovery.js";
+import { Discovery } from "#behavior/system/controller/discovery/Discovery.js";
+import { InstanceDiscovery } from "#behavior/system/controller/discovery/InstanceDiscovery.js";
 import { EndpointContainer } from "#endpoint/properties/EndpointContainer.js";
 import { CancelablePromise, Lifespan, Time } from "#general";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
@@ -13,7 +16,7 @@ import { PeerAddress, PeerAddressStore } from "#protocol";
 import { ClientNode } from "../ClientNode.js";
 import type { ServerNode } from "../ServerNode.js";
 import { ClientNodeFactory } from "./ClientNodeFactory.js";
-import { NodePeerStore } from "./NodePeerStore.js";
+import { NodePeerAddressStore } from "./NodePeerAddressStore.js";
 
 const DEFAULT_TTL = 900 * 1000;
 const EXPIRATION_INTERVAL = 60 * 1000;
@@ -33,7 +36,7 @@ export class ClientNodes extends EndpointContainer<ClientNode> {
             owner.env.set(ClientNodeFactory, new Factory(this));
         }
 
-        this.owner.env.set(PeerAddressStore, new NodePeerStore(owner));
+        this.owner.env.set(PeerAddressStore, new NodePeerAddressStore(owner));
 
         this.added.on(this.#manageExpiration.bind(this));
         this.deleted.on(this.#manageExpiration.bind(this));

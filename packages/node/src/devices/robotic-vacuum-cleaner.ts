@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,6 +12,7 @@ import {
     RvcOperationalStateServer as BaseRvcOperationalStateServer
 } from "../behaviors/rvc-operational-state/RvcOperationalStateServer.js";
 import { RvcCleanModeServer as BaseRvcCleanModeServer } from "../behaviors/rvc-clean-mode/RvcCleanModeServer.js";
+import { ServiceAreaServer as BaseServiceAreaServer } from "../behaviors/service-area/ServiceAreaServer.js";
 import { MutableEndpoint } from "../endpoint/type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../endpoint/properties/SupportedBehaviors.js";
 import { Identity } from "#general";
@@ -19,7 +20,7 @@ import { Identity } from "#general";
 /**
  * This defines conformance for the Robotic Vacuum Cleaner device type.
  *
- * @see {@link MatterSpecification.v13.Device} § 12.1
+ * @see {@link MatterSpecification.v14.Device} § 12.1
  */
 export interface RoboticVacuumCleanerDevice extends Identity<typeof RoboticVacuumCleanerDeviceDefinition> {}
 
@@ -53,6 +54,13 @@ export namespace RoboticVacuumCleanerRequirements {
     export const RvcCleanModeServer = BaseRvcCleanModeServer;
 
     /**
+     * The ServiceArea cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link ServiceAreaServer} for convenience.
+     */
+    export const ServiceAreaServer = BaseServiceAreaServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -61,14 +69,14 @@ export namespace RoboticVacuumCleanerRequirements {
             RvcRunMode: RvcRunModeServer,
             RvcOperationalState: RvcOperationalStateServer
         },
-        optional: { RvcCleanMode: RvcCleanModeServer }
+        optional: { RvcCleanMode: RvcCleanModeServer, ServiceArea: ServiceAreaServer }
     };
 }
 
 export const RoboticVacuumCleanerDeviceDefinition = MutableEndpoint({
     name: "RoboticVacuumCleaner",
     deviceType: 0x74,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: RoboticVacuumCleanerRequirements,
     behaviors: SupportedBehaviors(
         RoboticVacuumCleanerRequirements.server.mandatory.Identify,

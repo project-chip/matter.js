@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,7 +25,7 @@ export class NodeModel extends Model<NodeElement> implements NodeElement {
         return this.children;
     }
 
-    static {
-        Model.types[NodeElement.Tag] = this;
-    }
+    static Tag = NodeElement.Tag;
 }
+
+NodeModel.register();

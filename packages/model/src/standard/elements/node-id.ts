@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,7 @@ export const nodeId = Datatype({
     name: "node-id", type: "uint64", description: "Node ID", isSeed: true,
     details: "A 64-bit ID for a node scoped and unique to a particular fabric as indicated by an accompanying " +
         "fabric-index adjacent instantiation.",
-    xref: { document: "core", section: "7.18.2.21" }
+    xref: { document: "core", section: "7.19.2.21" }
 });
 
 MatterDefinition.children.push(nodeId);

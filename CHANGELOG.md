@@ -11,6 +11,143 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
+    - Especially please note that `colorTempPhysicalMinMireds` and `colorTempPhysicalMaxMireds` now need to be set when using ColorControl because the former unrealistic default values were removed from the specification. Please set proper values for your device Hint: realistic color temperature Mireds values are usually roughly between 150 (6500K) and 500 (2000K).
+
+-   chip-testing
+    -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
+    -   Feature: Added Docker based own Test Runner and execute all tests there too with chip-tool against matter.js test device
+
+-   @matter/general
+    - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
+    - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
+    - Feature: Log formatting is now extensible with custom formats
+    - Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
+    - Enhancement: Formalized concept of a logging "destination" and converted API for managing destinations to a simple object interface
+    - Enhancement: Modifying log levels and format using the `Logger` static interface now updates defaults and applies changes to all destinations
+    - Enhancement: Transaction participants no longer need implement commit-related methods if they do not participate in persistence
+    - Enhancement: Missing IPv4 addresses on network interfaces are now ignored even if IPv4 is not disabled via configuration
+    - Fix: Correctly handle MDNS records without QNames
+
+-   @matter/main
+    - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
+
+-   @matter/nodejs
+    - Enhancement: Added a UDP send guard to reject hanging send calls after maximum 1-2s
+    - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
+    - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
+
+-   @matter/nodejs-shell
+    - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
+    - Fix: Prevents crash on startup when having set a Fabric label in config
+
+-   @matter/node
+    - Breaking: The Default `OnOffServer` implementation no longer has the "Lighting" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.OnOffServer` to get the correct features enabled automatically.
+    - Breaking: The Default `LevelControlServer` implementation no longer has the "OnOff" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.LevelControlServer` to get the correct features enabled automatically.
+    - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
+    - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCOvering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
+    - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
+    - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
+    - Feature: `LevelControlServer` and `ColorControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
+    - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
+    - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
+    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+
+
+-   @matter/protocol
+    - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
+    - Feature: Enhanced `getMultipleAttributesAndEvents()` to also return attributeStatus and eventStatus properties with errors returned from the read interaction 
+    - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
+    - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
+    - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
+    - Fix: Enhances checks for Wi-Fi/Thread credentials in config for CommissioningFlow
+
+-   @project-chip/matter.js
+    - Breaking: Reduced exports to the relevant one for Controller usage. Please move for @matter/main for the rest.
+    - Breaking: Remove the Legacy Device building API. Please use the new SeverNode based API which is more flexible and powerful.
+    - Breaking: Changed signatures of `commissionNode()` and `createInteractionClient()` to provide options as object and not plain parameters
+    - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
+    - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
+    - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
+    - Enhancement: Adjusted the initial Deice connection to Read-All before subscribing to also have initial values for not-changed attributes
+
+-   @project-chip/* packages (beside above)
+    - Breaking: Packages are removed! Please use the new packages under @matter/* if needed
+
+## 0.12.6 (2025-03-20)
+
+-   @matter/protocol
+    - Fix: Fixes BLE commissioning for Controller
+
+### 0.12.5 (2025-03-02)
+
+-   @matter/node
+    - Fix: Fixed edge cases where subscriptions were not persisted correctly
+
+### 0.12.4 (2025-02-26)
+
+-   @matter/general
+    - Adjustment: Do not accept listeners on read-only transactions
+    - Enhancement: Only report locks for slow async transactions in logs
+    - Enhancement: Do not report Read transactions anymore in logs
+
+-   @matter/node
+    - Feature: Added Persisted Subscriptions to try to reestablish subscriptions after a restart, enabled by default
+    - Enhancement: Added caching for generated ClusterType and ClusterBehavior classes
+    - Enhancement: Added preparations for optimized node read handling
+
+-   @matter/protocol
+    - Feature: Allows to re-establish subscriptions after a restart
+    - Enhancement: Optimized Report Data message chunking 
+    - Fix: Handles errors when setting fabric label during commissioning as non-critical for the commissioning flow
+    - Fix: Ensure to use persisted CaseAdminTags when re-establishing a CASE session from the device side
+    - Fix: Fixed another place with a Noc/ICA Fabric-ID validation issue
+    - Fix: Fixes Session and Channel deletion in some cases
+    - Fix: Properly handle read requests with no attributes and events and just return an empty result
+
+-   @project-chip/matter.js
+    - Cleanup: Deprecated some methods fof the CommissioningController and pairedNode to better define the best practice interfaces to use
+
+### 0.12.3 (2025-02-05)
+
+-   @matter/protocol
+    - Fix: Reduced some over-exact certificate validation to unblock Aqara commissioning
+    - Fix: Prevented issues where closing subscriptions could block the session closing or establishing new subscriptions
+    - Fix: Prevented to establish new exchanges while shutting down Exchange Manager
+
+## 0.12.2 (2025-02-01)
+
+-   @matter/node
+    - Enhancement: Added support to check all device types of an endpoint against ACL definition and not only primary one
+    - Enhancement: Optimized data handling for subscriptions by reading them endpoint wise to optimize memory usage and to reuse the used context
+    - Adjustment: Refactored ACL logic to just get relevant endpoint information instead a whole EndpointInterface
+
+-   @matter/nodejs
+    - Fix: Added Workaround for IP family confusion in Node.js 18.0.0 till 18.3.0 
+
+-   @matter/protocol
+    - Enhancement: Optimized sending of DataReports to stream the read data to the encoder when needed to reduce memory usage
+    - Adjustment: Moved the handling to set the fabric label during commissioning to after commissioningComplete to work around a Tasmota-Matter bug
+
+## 0.12.1 (2025-01-25)
+
+-   @matter/protocol
+    - Adjustment: For subscriptions we now trigger event listeners before attribute listeners
+    - Fix: Added force closing of exchanges on shutdown of the node
+
+-   @project-chip/matter.js
+    - Fix: Allows more cases when checking if a device is battery powered to address real world devices
+
+## 0.12.0 (2025-01-23)
+
+-   @matter/general
+    - Enhancement: Limits MDNS expires just to te relevant operational records when removing a fabric
+
+-   @matter/model
+    - Feature: The constraint evaluator now supports simple mathematical expressions
+    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
+    - Feature: Default values may now be a reference to another field
+
 -   @matter/node
     - Feature: Constraint and conformance expressions may now reference values by name in any owner of a constrained value
     - Enhancement: Each new PASE session now automatically arms the failsafe timer for 60s as required by specs
@@ -19,16 +156,21 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/nodejs
     - Breaking: Also the Sync Storage classes mainly used in legacy API now have an async close method!
+    - Fix: Converts commissioning.fabrics into dynamically generated property to ensure it is up to date when accessed
 
 -   @matter/nodejs-ble
     - Enhancement: Restructures BLE connection handling to improve reliability and eliminate hanging commissioning processes
     - Fix: Adds support for advanced manufacturer data on Windows (Noble update)
+    - Fix: Added workaround for Noble on Windows to prevent discovery issues
+    - Fix: Considers formerly discovered devices as outdated when new discovery is started
     
 -   @matter/protocol
     - Feature: Reworks Event server handling and optionally allow Non-Volatile event storage (currently mainly used in tests)
     - Enhancement: Adds a too-fast-resubmission guard for Unicast MDNS messages
     - Enhancement: Optimized Logging for messages in various places
     - Enhancement: Added support for concurrent and non-concurrent commissioning flows
+    - Enhancement: Re-arms the failsafe timer in commissioning flows before steps that could take longer and during operative reconnection
+    - Enhancement: Stores Matter relevant MDNS host information to faster reuse when new SRV announcements come in
     - Fix: Corrects some Batch invoke checks and logic
     - Fix: Fixes MDNS discovery duration for retransmission cases to be 5s
     - Fix: Processes all TXT/SRV records in MDNS messages and optimized the processing
@@ -37,16 +179,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Fixes commissionable devices discovery with timeout
     - Fix: Restores the possibility to cancel a (continuous) discovery for commissionable devices
     - Fix: Fixes enablement of MDNS broadcasts when BLE commissioning is used
-
--   @matter/model
-    - Feature: The constraint evaluator now supports simple mathematical expressions
-    - Feature: The constraint evaluator now supports limits on the number of Unicode codepoints in a string
-    - Feature: Default values may now be a reference to another field
-
--   @project-chip/matter.js
+  
+- @project-chip/matter.js
     - Feature: (Breaking) Added Fabric Label for Controller as required property to initialize the Controller
         including setting the Fabric Label when commissioning and validating and updating the Fabric Label on
-        connection 
+        connection
+    - Feature: Added autoConnect property to node connection options to allow to not automatically connect to a node when PairedNode instance is created. Also introduces a non-blocking PairedNode.connect() method to connect to a node
+    - Feature: Added CommissioningController.getNode() method to get a PairedNode instance for a node by its node ID without a direct connection
     - Feature: Allows to update the Fabric Label during controller runtime using `updateFabricLabel()` on CommissioningController
     - Enhancement: Improves Reconnection Handling for devices that use persisted subscriptions
     - Enhancement: Use data type definitions from Model for Controller Device type definitions

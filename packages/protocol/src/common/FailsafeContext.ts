@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -249,7 +249,7 @@ export abstract class FailsafeContext {
     }
 
     async #failSafeExpired() {
-        logger.info("Failsafe timer expired, Reset fabric builder.");
+        logger.info("Failsafe timer expired; resetting fabric builder");
 
         await this.close();
     }

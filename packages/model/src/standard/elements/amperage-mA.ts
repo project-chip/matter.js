@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,6 +12,6 @@ import { DatatypeElement as Datatype } from "../../elements/index.js";
 export const amperageMA = Datatype({
     name: "amperage-mA", type: "int64", description: "Amperage", isSeed: true,
     details: "This type represents amperage measured in milliamps.",
-    xref: { document: "core", section: "7.18.2.13" }
+    xref: { document: "core", section: "7.19.2.13" }
 });
 MatterDefinition.children.push(amperageMA);

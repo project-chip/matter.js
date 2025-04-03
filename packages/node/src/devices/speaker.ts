@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,9 +15,9 @@ import { Identity } from "#general";
 /**
  * This defines conformance to the Speaker device type. This feature controls the speaker volume of the device.
  *
- * To control unmute/mute, the On/Off cluster shall be used. A value of TRUE for the OnOff attribute shall represent
- * the volume on (not muted) state, while a value of FALSE shall represent the volume off (muted) state. For volume
- * level control, the Level cluster shall be used.
+ * To control unmute/mute, the On/Off cluster shall be used. A value of TRUE for the OnOff attribute shall represent the
+ * volume on (not muted) state, while a value of FALSE shall represent the volume off (muted) state. For volume level
+ * control, the Level cluster shall be used.
  *
  * A dedicated endpoint is needed because the On/Off cluster can also be used for other purposes, such as for power
  * control.
@@ -26,7 +26,7 @@ import { Identity } from "#general";
  * in order to treat volume in a fashion consistent with lighting which also uses these clusters and has matching
  * functional requirements.
  *
- * @see {@link MatterSpecification.v13.Device} § 10.4
+ * @see {@link MatterSpecification.v14.Device} § 10.4
  */
 export interface SpeakerDevice extends Identity<typeof SpeakerDeviceDefinition> {}
 

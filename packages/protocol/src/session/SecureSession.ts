@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -292,11 +292,12 @@ export class SecureSession extends Session {
         return this.#fabric;
     }
 
-    async clearSubscriptions(flushSubscriptions = false) {
+    async clearSubscriptions(flushSubscriptions = false, cancelledByPeer = false) {
         const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
         for (const subscription of subscriptions) {
-            await subscription.close(flushSubscriptions);
+            await subscription.close(flushSubscriptions, cancelledByPeer);
         }
+        return subscriptions.length;
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
@@ -327,9 +328,13 @@ export class SecureSession extends Session {
                     await this.closer;
                 } catch (error) {
                     NoChannelError.accept(error);
+                } finally {
+                    await this.destroyed.emit();
                 }
+                return;
             }
         }
+        await this.destroyed.emit();
     }
 
     /**

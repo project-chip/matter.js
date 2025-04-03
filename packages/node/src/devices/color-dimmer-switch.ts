@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,7 +23,7 @@ import { Identity } from "#general";
  * A Color Dimmer Switch is a controller device that, when bound to a lighting device such as an Extended Color Light,
  * is capable of being used to adjust the color of the light being emitted.
  *
- * @see {@link MatterSpecification.v13.Device} § 6.3
+ * @see {@link MatterSpecification.v14.Device} § 6.3
  */
 export interface ColorDimmerSwitchDevice extends Identity<typeof ColorDimmerSwitchDeviceDefinition> {}
 

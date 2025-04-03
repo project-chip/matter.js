@@ -1,14 +1,12 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
 import { Command } from "commander";
-import process from "process";
-
-colors.enabled = process.stdout.isTTY;
+import process from "node:process";
+import { ansi } from "../ansi-text/text-builder.js";
 
 export function commander(name: string, description: string) {
     return new Command(name)
@@ -16,7 +14,7 @@ export function commander(name: string, description: string) {
         .allowExcessArguments(false)
         .configureOutput({
             writeOut: str => process.stdout.write(`\n${formatHelp(str)}\n`),
-            writeErr: str => process.stderr.write(`\n${colors.red(str)}\n`),
+            writeErr: str => process.stderr.write(`\n${ansi.red(str)}\n`),
         });
 }
 function formatHelp(help: string) {
@@ -24,11 +22,11 @@ function formatHelp(help: string) {
         return help;
     }
 
-    help = help.replace(/^Usage: (\S+)/, (_match, name) => `Usage: ${colors.bold(name)}`);
+    help = help.replace(/^Usage: (\S+)/, (_match, name) => `Usage: ${ansi.bold(name)}`);
     help = help.replace(/^( {2}.+ {2})/gm, (_match, input: string) =>
         input
             .split(",")
-            .map(item => item.replace(/(-*\w+)/, (_match, word) => colors.blue(word)))
+            .map(item => item.replace(/(-*\w+)/, (_match, word) => ansi.blue(word).toString()))
             .join(","),
     );
     return help;

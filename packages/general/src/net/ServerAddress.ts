@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,5 +26,5 @@ export interface Lifespan {
 export type ServerAddress = (ServerAddressIp | ServerAddressBle) & Partial<Lifespan>;
 
 export function serverAddressToString(address: ServerAddress): string {
-    return address.type === "udp" ? `udp://${address.ip}:${address.port}` : `ble://${address.peripheralAddress}`;
+    return address.type === "udp" ? `udp://[${address.ip}]:${address.port}` : `ble://${address.peripheralAddress}`;
 }

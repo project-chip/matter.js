@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,11 +13,10 @@
 // matching.
 
 import "./AdministratorCommissioningOverrides.js";
+import "./AlarmBaseOverrides.js";
 import "./any.js";
 import "./BasicInformationOverrides.js";
-import "./ChannelOverrides.js";
 import "./ColorControlOverrides.js";
-import "./ContentLauncherOverrides.js";
 import "./DoorLockOverrides.js";
 import "./ElectricalPowerMeasurementOverrides.js";
 import "./GroupKeyManagementOverrides.js";
@@ -30,8 +29,10 @@ import "./ModeSelectOverrides.js";
 import "./namespace.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
+import "./ScenesManagementOverrides.js";
 import "./ScenesOverrides.js";
 import "./semtag.js";
+import "./ServiceAreaOverrides.js";
 import "./subject-id.js";
 import "./tag.js";
 import "./TemperatureMeasurementOverrides.js";
@@ -40,5 +41,6 @@ import "./TimeFormatLocalizationOverrides.js";
 import "./TimeSynchronizationOverrides.js";
 import "./todOverrides.js";
 import "./UserLabelOverrides.js";
+import "./WiFiNetworkManagementOverrides.js";
 import "./WildcardPathFlagsBitmap.js";
 import "./WindowCoveringOverrides.js";

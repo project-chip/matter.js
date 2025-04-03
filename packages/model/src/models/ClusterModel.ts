@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -171,11 +171,9 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
     }
 
     static Tag = ClusterElement.Tag;
-
-    static {
-        Model.types[this.Tag] = this;
-    }
 }
+
+ClusterModel.register();
 
 export namespace ClusterModel {
     export type Definition = ClusterElement.Properties & { supportedFeatures?: FeatureSet.Definition };

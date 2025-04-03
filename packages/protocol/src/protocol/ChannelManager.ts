@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -69,7 +69,9 @@ export class ChannelManager {
     }
 
     hasChannel(address: PeerAddress) {
-        return !!this.#channels.get(address)?.length;
+        return !!this.#channels
+            .get(address)
+            ?.filter(channel => !channel.closed && !channel.session.closingAfterExchangeFinished).length;
     }
 
     getChannel(address: PeerAddress, session?: Session) {
@@ -77,6 +79,7 @@ export class ChannelManager {
         if (session !== undefined) {
             results = results.filter(channel => channel.session.id === session.id);
         }
+        results = results.filter(channel => !channel.closed && !channel.session.closingAfterExchangeFinished);
         if (results.length === 0)
             throw new NoChannelError(
                 `Can't find a channel to ${PeerAddress(address)}${session !== undefined ? ` session ${session.id}` : ""}`,
@@ -131,6 +134,7 @@ export class ChannelManager {
             async () => void this.#paseChannels.delete(session),
         );
         this.#paseChannels.set(session, msgChannel);
+        session.destroyed.on(() => msgChannel.close());
         return msgChannel;
     }
 
@@ -154,9 +158,12 @@ export class ChannelManager {
         }
 
         // Need to create
-        const result = new MessageChannel(byteArrayChannel, session, async () => this.removeChannel(address, session));
-        await this.setChannel(address, result);
-        return result;
+        const msgChannel = new MessageChannel(byteArrayChannel, session, async () =>
+            this.removeChannel(address, session),
+        );
+        await this.setChannel(address, msgChannel);
+        session.destroyed.on(() => msgChannel.close());
+        return msgChannel;
     }
 
     async close() {

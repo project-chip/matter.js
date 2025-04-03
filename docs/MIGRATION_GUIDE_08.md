@@ -50,7 +50,7 @@ In fact this is all what they have in common, so the differences are:
 
 This Environment component even more simplifies to build devices by making sure base components are handled centrally for all things needed.
 
-The environment related classes are exported unter `matter(-node).js/environment`.
+The environment related classes are exported under `matter(-node).js/environment`.
 
 ### New:ServerNode <--> Legacy:CommissioningServer
 
@@ -550,7 +550,7 @@ export class MyLevelControlServer extends LevelControlServer {
     declare state: LevelControlServerLogic.State;
 
     override async moveToLevel(request: MoveToLevelRequest) {
-        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        logger.info(`TestLevelControlServer move level to ${Diagnostic.json(request)}`);
         await this.state.myDeviceImpl.doTheMove(request.level);
         super.moveToLevel(request);
     }
@@ -562,7 +562,7 @@ export namespace MyLevelControlServer {
     }
 }
 
-const endpoint = new Endpoint(DimmableLightDeviec.with(MyLevelControlServer), {
+const endpoint = new Endpoint(DimmableLightDevice.with(MyLevelControlServer), {
     levelControl: {
         currentLevel: 0,
         remainingTime: 0,
@@ -580,7 +580,7 @@ If multiple cluster implementations need the same dynamic dependencies you can c
 ```javascript
 // create the own Behavior
 export class MyDeviceBehavior extends Behavior {
-    static override readonly id = "myDeviceImpl"; // give the Bahavior a unique name
+    static override readonly id = "myDeviceImpl"; // give the Behavior a unique name
 
     declare state: MyDeviceBehavior.State;
 }
@@ -594,7 +594,7 @@ export namespace MyDeviceBehavior {
 // Generically extend the cluster implementation(s) and generically use the device implementation
 export class MyLevelControlServer extends LevelControlServer {
     override async moveToLevel(request: MoveToLevelRequest) {
-        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        logger.info(`TestLevelControlServer move level to ${Diagnostic.json(request)}`);
         const myDeviceImpl = this.agent.get(MyDeviceBehavior).state.myDeviceImpl;
         await myDeviceImpl.doTheMove(request.level);
         super.moveToLevel(request);
@@ -670,7 +670,7 @@ The same also is possible for own Behavior classes, with the main different that
 
 ```javascript
 export class MyBehavior extends Behavior {
-    static override readonly id = "myBehavior"; // give the Bahavior a unique name
+    static override readonly id = "myBehavior"; // give the Behavior a unique name
 
     declare state: MyDeviceBehavior.State;
 

@@ -1,16 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "#behavior/AccessControl.js";
 import { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
-import { type ClusterEvents, Contextual, Resource } from "#behavior/index.js";
+import { ClusterEvents } from "#behavior/cluster/ClusterEvents.js";
+import { Contextual } from "#behavior/context/Contextual.js";
 import { StructManager } from "#behavior/state/managed/values/StructManager.js";
-import { Status } from "#behavior/state/transaction/Status.js";
-import { Val } from "#behavior/state/Val.js";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import {
     camelize,
@@ -22,9 +20,11 @@ import {
     MaybePromise,
     Observable,
     ObserverGroup,
+    Transaction,
 } from "#general";
 import { CommandModel, ElementTag } from "#model";
 import {
+    AccessControl,
     AttributeServer,
     ClusterDatasource,
     ClusterServer,
@@ -35,6 +35,7 @@ import {
     Message,
     OccurrenceManager,
     SecureSession,
+    Val,
 } from "#protocol";
 import { Attribute, Command, Event } from "#types";
 import type { EndpointServer } from "./EndpointServer.js";
@@ -168,11 +169,11 @@ function createAttributeServer(
             trace.path = endpoint.path.at(name);
         }
 
-        logger.debug("Read", Diagnostic.strong(`${endpoint}.state.${name}`), "via", behavior.context.transaction.via);
+        //logger.debug("Read", Diagnostic.strong(`${endpoint}.state.${name}`), "via", behavior.context.transaction.via);
 
         const state = behavior.state as Val.Struct;
 
-        StructManager.assertDirectReadAuthorized(state, name);
+        StructManager.assertDirectReadAuthorized(state, definition.id);
 
         if (trace) {
             trace.output = state[name];
@@ -199,7 +200,7 @@ function createAttributeServer(
         state[name] = value;
 
         // If the transaction is a write transaction, report that the attribute is updated
-        return behavior.context.transaction?.status === Status.Exclusive;
+        return behavior.context.transaction?.status === Transaction.Status.Exclusive;
     }
 
     const server = ConstructAttributeServer(
@@ -214,7 +215,7 @@ function createAttributeServer(
 
     // Wire events (FixedAttributeServer is not an AttributeServer so we skip that)
     if (server instanceof AttributeServer) {
-        const observable = observables[`${name}$Changed`] as ClusterEvents.AttributeObservable;
+        const observable = (observables[`${name}$Changed`] as ClusterEvents.ChangedObservable | undefined)?.online;
         if (observable !== undefined) {
             observers.on(observable, (_value, _oldValue, context) => {
                 const session = context.session;
@@ -267,6 +268,7 @@ function createCommandServer(
 
         access.authorizeInvoke(behavior.context, {
             path,
+            endpoint: endpoint.number,
             cluster: behavior.cluster.id,
         });
 
@@ -281,7 +283,7 @@ function createCommandServer(
             // Lock if necessary, then invoke
             if ((behavior.constructor as ClusterBehavior.Type).lockOnInvoke) {
                 const tx = behavior.context.transaction;
-                if (Resource.isLocked(behavior)) {
+                if (Transaction.Resource.isLocked(behavior)) {
                     // Automatic locking with locked resource; requires async lock acquisition
                     result = (async function invokeAsync() {
                         await tx.addResources(behavior);
@@ -358,7 +360,7 @@ function createEventServer(
     );
 
     if (observable !== undefined) {
-        observers.on(observable, (payload, _context) => {
+        observers.on(observable.online, (payload, _context) => {
             const maybePromise = server.triggerEvent(payload);
             if (MaybePromise.is(maybePromise)) {
                 endpoint.env.runtime.add(maybePromise);

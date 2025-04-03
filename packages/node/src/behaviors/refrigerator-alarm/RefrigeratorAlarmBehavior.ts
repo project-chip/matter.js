@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,8 +11,8 @@ import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { RefrigeratorAlarmInterface } from "./RefrigeratorAlarmInterface.js";
 
 /**
- * RefrigeratorAlarmBehavior is the base class for objects that support interaction with {@link
- * RefrigeratorAlarm.Cluster}.
+ * RefrigeratorAlarmBehavior is the base class for objects that support interaction with
+ * {@link RefrigeratorAlarm.Cluster}.
  *
  * This class does not have optional features of RefrigeratorAlarm.Cluster enabled. You can enable additional features
  * using RefrigeratorAlarmBehavior.with.

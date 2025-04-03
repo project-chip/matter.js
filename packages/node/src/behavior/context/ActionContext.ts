@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,6 +10,7 @@ import type { EndpointType } from "#endpoint/type/EndpointType.js";
 import type { AccessLevel } from "#model";
 import type { Message, SecureSession } from "#protocol";
 import { MessageExchange } from "#protocol";
+import { Priority } from "#types";
 import type { ValueSupervisor } from "../supervision/ValueSupervisor.js";
 import { NodeActivity } from "./NodeActivity.js";
 import type { OfflineContext } from "./server/OfflineContext.js";
@@ -56,6 +57,11 @@ export interface ActionContext extends ValueSupervisor.Session {
      * purposes.
      */
     activity?: NodeActivity.Activity;
+
+    /**
+     * The priority of actions in this context.
+     */
+    priority?: Priority;
 
     /**
      * Obtain an agent for interacting with an endpoint in this context.

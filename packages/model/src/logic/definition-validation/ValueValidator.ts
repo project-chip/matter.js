@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,16 +29,16 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             if (name.match(/^[A-Z0-9_$]+$/)) {
                 // Feature lookup
                 const cluster = this.model.owner(ClusterModel);
-                return !!cluster?.features.find(f => f.name === name);
+                return cluster?.features.find(f => f.name === name);
             }
 
             // Field lookup
             for (let model = this.model.parent; model; model = model.parent) {
-                if (model.member(name) !== undefined) {
-                    return true;
+                const member = model.member(name);
+                if (member) {
+                    return member;
                 }
             }
-            return false;
         });
 
         this.validateAspect("constraint");
@@ -259,9 +259,19 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         // Special "reference" object referencing another field by name
         if (typeof def === "object" && FieldValue.is(def, FieldValue.reference)) {
             const reference = (def as FieldValue.Reference).name;
-            const other = this.model.parent?.member(reference);
+
+            // See if the referenced name is a sibling
+            const parent = this.model.parent;
+            let other = parent?.member(reference);
+
             if (!other) {
-                this.error("MEMBER_UNKNOWN", `Default value references unknown property ${reference}`);
+                // We also allow names to reference cluster attributes
+                const cluster = parent?.owner(ClusterModel);
+                other = cluster?.member(reference);
+
+                if (other === undefined) {
+                    this.error("MEMBER_UNKNOWN", `Default value references unknown property ${reference}`);
+                }
             }
             return true;
         }

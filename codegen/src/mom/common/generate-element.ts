@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -34,6 +34,9 @@ export function generateElement(target: Block, importFrom: string, element: Mode
         properties.push(`type: ${serialize((element as any).type)}`);
         delete fields.type;
     }
+
+    // This is for codegen only
+    delete fields.matchTo;
 
     // Next: Other fields
     properties.push(

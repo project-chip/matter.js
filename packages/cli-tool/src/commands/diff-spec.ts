@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -51,7 +51,7 @@ Command({
         const fromModel = await loadModel(from);
 
         const diff = ModelDiff(fromModel, toModel, depth);
-        this.out(LogFormat.ansi(ModelDiff.diagnosticOf(diff)));
+        this.out(LogFormat.formats.ansi(ModelDiff.diagnosticOf(diff)));
     },
 });
 

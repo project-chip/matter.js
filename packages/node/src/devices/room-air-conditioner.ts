@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -35,7 +35,7 @@ import { Identity } from "#general";
  * RoomAirConditionerDevice requires Thermostat cluster but Thermostat is not added by default because you must select
  * the features your device supports. You can add manually using RoomAirConditionerDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 13.3
+ * @see {@link MatterSpecification.v14.Device} § 13.3
  */
 export interface RoomAirConditionerDevice extends Identity<typeof RoomAirConditionerDeviceDefinition> {}
 

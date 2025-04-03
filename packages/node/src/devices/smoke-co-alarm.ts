@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -28,16 +28,16 @@ import { Identity } from "#general";
  *
  * Smoke CO Alarms are capable of monitoring themselves and issuing visual and audible alerts for hardware faults,
  * critical low battery conditions, and end of service. Optionally, some of the audible alerts can be temporarily
- * silenced. Smoke CO Alarms are capable of performing a self-test which performs a diagnostic of the primary sensor
- * and issuing a cycle of the audible and visual life safety alarm indications.
+ * silenced. Smoke CO Alarms are capable of performing a self-test which performs a diagnostic of the primary sensor and
+ * issuing a cycle of the audible and visual life safety alarm indications.
  *
  * Some smoke alarms may be capable of adjusting sensitivity. Smoke CO Alarm may have the ability to detect and report
  * humidity levels, temperature levels, and contamination levels.
  *
- * SmokeCoAlarmDevice requires SmokeCoAlarm cluster but SmokeCoAlarm is not added by default because you must select
- * the features your device supports. You can add manually using SmokeCoAlarmDevice.with().
+ * SmokeCoAlarmDevice requires SmokeCoAlarm cluster but SmokeCoAlarm is not added by default because you must select the
+ * features your device supports. You can add manually using SmokeCoAlarmDevice.with().
  *
- * @see {@link MatterSpecification.v13.Device} § 7.9
+ * @see {@link MatterSpecification.v14.Device} § 7.9
  */
 export interface SmokeCoAlarmDevice extends Identity<typeof SmokeCoAlarmDeviceDefinition> {}
 

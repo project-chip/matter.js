@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ export namespace OtaSoftwareUpdateRequestorInterface {
          *
          * If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
          *
-         * @see {@link MatterSpecification.v13.Core} § 11.20.7.6.1
+         * @see {@link MatterSpecification.v14.Core} § 11.20.7.6.1
          */
         announceOtaProvider(request: OtaSoftwareUpdateRequestor.AnnounceOtaProviderRequest): MaybePromise;
     }

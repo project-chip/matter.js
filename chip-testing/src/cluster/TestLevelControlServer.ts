@@ -1,9 +1,9 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger } from "@matter/main";
+import { Diagnostic, Logger } from "@matter/main";
 import { LevelControlServer } from "@matter/main/behaviors/level-control";
 import { LevelControl } from "@matter/main/clusters/level-control";
 import { TypeFromPartialBitSchema } from "@matter/main/types";
@@ -17,7 +17,7 @@ export class TestLevelControlServer extends LevelControlServer {
     }
 
     override moveToLevel(request: LevelControl.MoveToLevelRequest) {
-        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        logger.info(`TestLevelControlServer move level to ${Diagnostic.json(request)}`);
         return super.moveToLevel(request);
     }
 

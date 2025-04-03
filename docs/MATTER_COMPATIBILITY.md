@@ -5,13 +5,13 @@ The Matter standard evolves continuously and delivers two updates per year. matt
 - **Matter 1.1**: matter.js 0.8.x - 0.9.x
 - **Matter 1.2**: skipped
 - **Matter 1.3**: matter.js 0.10.x and higher
+- **Matter 1.4**: matter.js 0.13.x and higher
 
-The following Matter 1.3 protocol level feature are not yet supported by matter.js:
+The following Matter protocol level feature are not yet supported by matter.js:
 * BDX (File transfer) and OTA is not yet implemented on server and client side
 * Groups are only partially implemented
 * Bindings are only partially implemented
 * DCL validation for controllers is not yet implemented
-* Persisted Subscriptions are not yet implemented
 * ICD is not yet implemented on client and server side
 * UDC is not yet implemented
 

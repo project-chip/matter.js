@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ type LengthConstraints = {
  */
 export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
     constructor(
-        private type: T,
+        readonly type: T,
         readonly minLength: number = 0,
         readonly maxLength: number = 1024,
     ) {

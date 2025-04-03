@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -36,8 +36,8 @@ export const Messages = Cluster(
 
         Field({
             name: "RESP", conformance: "[CONF]", constraint: "1", description: "ConfirmationResponse",
-            details: "This feature shall indicate that the device is capable of presenting a list of responses to the " +
-                "user and recording the user’s choice of response.",
+            details: "This feature shall indicate that the device is capable of presenting a list of responses to the user " +
+                "and recording the user’s choice of response.",
             xref: { document: "cluster", section: "1.16.4.2" }
         }),
 
@@ -76,8 +76,8 @@ export const Messages = Cluster(
         {
             name: "ActiveMessageIDs", id: 0x1, type: "list", access: "R V", conformance: "M",
             constraint: "max 8", default: [],
-            details: "Indicates a list of the MessageIDs of the Messages currently being presented. If this list is " +
-                "empty, no messages are currently being presented." +
+            details: "Indicates a list of the MessageIDs of the Messages currently being presented. If this list is empty, " +
+                "no messages are currently being presented." +
                 "\n" +
                 "This list shall NOT be fabric-scoped; it shall contain MessageIDs for all Messages being presented, " +
                 "no matter what fabric the client that queued them is on.",
@@ -118,8 +118,8 @@ export const Messages = Cluster(
     Event(
         {
             name: "MessageComplete", id: 0x2, access: "V", conformance: "M", priority: "info",
-            details: "This event shall be generated when the message is confirmed by the user, or when the Duration of " +
-                "the message has elapsed without confirmation.",
+            details: "This event shall be generated when the message is confirmed by the user, or when the Duration of the " +
+                "message has elapsed without confirmation.",
             xref: { document: "cluster", section: "1.16.8.3" }
         },
 
@@ -164,12 +164,12 @@ export const Messages = Cluster(
                 "list, the device shall NOT append any message to Messages, and shall return a status code of " +
                 "RESOURCE_EXHAUSTED." +
                 "\n" +
-                "When displaying a message in response to this command, an indication (ex. visual) of the origin " +
-                "node of the command shall be provided. This could be in the form of a friendly name label which " +
-                "uniquely identifies the node to the user. This friendly name label is typically assigned by the " +
-                "Matter Admin at the time of commissioning and, when it’s a device, is often editable by the user. " +
-                "It might be a combination of a company name and friendly name, for example, ”Acme” or “Acme " +
-                "Streaming Service on Alice’s Phone”." +
+                "When displaying a message in response to this command, an indication (ex. visual) of the origin node " +
+                "of the command shall be provided. This could be in the form of a friendly name label which uniquely " +
+                "identifies the node to the user. This friendly name label is typically assigned by the Matter Admin " +
+                "at the time of commissioning and, when it’s a device, is often editable by the user. It might be a " +
+                "combination of a company name and friendly name, for example, ”Acme” or “Acme Streaming Service on " +
+                "Alice’s Phone”." +
                 "\n" +
                 "NOTE" +
                 "\n" +
@@ -226,8 +226,8 @@ export const Messages = Cluster(
                 details: "This field shall indicate a list of potential responses to the message. The entries in this list " +
                     "shall have unique values of MessageResponseID." +
                     "\n" +
-                    "If the ResponseRequired bit is set on the message but this list is empty, the device shall provide " +
-                    "a generic acknowledgement button, e.g. \"OK\"." +
+                    "If the ResponseRequired bit is set on the message but this list is empty, the device shall provide a " +
+                    "generic acknowledgement button, e.g. \"OK\"." +
                     "\n" +
                     "If the ResponseRequired bit is not set on the message, this list shall be ignored. See Responses.",
 
@@ -319,8 +319,8 @@ export const Messages = Cluster(
     Datatype(
         {
             name: "FutureMessagePreferenceEnum", type: "enum8",
-            details: "A display device may include this preference in the MessageComplete event as a hint to clients " +
-                "about how to handle future similar messages.",
+            details: "A display device may include this preference in the MessageComplete event as a hint to clients about " +
+                "how to handle future similar messages.",
             xref: { document: "cluster", section: "1.16.5.3" }
         },
 
@@ -410,8 +410,8 @@ export const Messages = Cluster(
                 details: "This field shall indicate a list of potential responses to the message. The entries in this list " +
                     "shall have unique values of MessageResponseID." +
                     "\n" +
-                    "If the ResponseRequired bit is set on the message but this list is empty, the device shall provide " +
-                    "a generic acknowledgement button, e.g. \"OK\"." +
+                    "If the ResponseRequired bit is set on the message but this list is empty, the device shall provide a " +
+                    "generic acknowledgement button, e.g. \"OK\"." +
                     "\n" +
                     "If the ResponseRequired bit is not set on the message, this list shall be ignored.",
 

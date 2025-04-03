@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ import {
     CryptoVerifyError,
     PrivateKey,
 } from "#general";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 
 export class NodeJsCrypto extends Crypto {
     encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
