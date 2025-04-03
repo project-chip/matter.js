@@ -6,7 +6,7 @@
 
 import { WindowCoveringCluster } from "#clusters/window-covering.js";
 
-describe("WindowCoveringCluster", () => {
+describe("Window Covering Cluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");
 
     it("correctly initializes elements for LF & PA_LF", () => {
