@@ -444,7 +444,7 @@ jobs:
           cd chip
           ./bin/pull
           cd ../chip-testing
-          npm run test-core -- --all-logs
+          npm run test-core
 
   docker-chip-tests-fast:
     needs: [chip-tests-needed]
