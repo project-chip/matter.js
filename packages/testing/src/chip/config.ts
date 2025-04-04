@@ -36,10 +36,14 @@ export interface TestConflictResolutions {
  * Other misc configuration.
  */
 export namespace Constants {
+    export const selectedPlatform = env.MATTER_CHIP_PLATFORM;
+
     /**
      * We only publish for x86.  This is appropriate for GH CI and runs fine under emulation on MacOS
+     *
+     * TODO - if/when we do publish arm64 images, make the native architecture the default
      */
-    export const platform = env.MATTER_CHIP_PLATFORM || "linux/amd64";
+    export const platform = selectedPlatform || "linux/amd64";
 
     export const networkName = "matter.js-chip";
 

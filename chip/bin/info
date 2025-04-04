@@ -4,12 +4,17 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
+# Display information about the current CHIP image
+
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 THISDIR=$(dirname -- "${BASH_SOURCE[0]}")
 GIT_ROOT=$(realpath "${THISDIR}/../../..")
 
 IMAGE_VERSION=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.version" }}' ghcr.io/matter-js/chip)
 IMAGE_CREATED=$(docker inspect --format '{{ .Created }}' ghcr.io/matter-js/chip)
 IMAGE_SIZE=$(docker inspect --format '{{ .Size }}' ghcr.io/matter-js/chip)
+IMAGE_ARCH=$(docker inspect --format '{{ .Architecture }}' ghcr.io/matter-js/chip)
 CHIP_COMMIT=$(docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' ghcr.io/matter-js/chip | cut -c 1-12)
 
 if [ -x /usr/bin/numfmt ]; then
@@ -21,7 +26,8 @@ cat <<-END
     "image": {
         "version": "$IMAGE_VERSION",
         "created": "$IMAGE_CREATED",
-        "size": "$IMAGE_SIZE"
+        "size": "$IMAGE_SIZE",
+        "arch": "$IMAGE_ARCH"
     },
     "chip": {
         "commit": "$CHIP_COMMIT"

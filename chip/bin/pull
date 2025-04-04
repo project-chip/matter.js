@@ -4,4 +4,6 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 docker pull ghcr.io/matter-js/chip:latest

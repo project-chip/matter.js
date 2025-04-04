@@ -4,6 +4,8 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 set -e
 
 if docker buildx inspect matter.js-chip > /dev/null 2>&1; then
