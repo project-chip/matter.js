@@ -58,30 +58,34 @@ export class DeviceAdvertiser {
         this.#interval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
             // Announcement needs to await a previous announcement because otherwise in testing at least announcement
             // may crash if started simultaneously
-            this.#mutex.run(() => this.advertise()),
+            this.#mutex.run(this.advertise.bind(this)),
         );
 
-        this.#observers.on(this.#context.fabrics.events.deleted, async () => {
+        this.#observers.on(this.#context.fabrics.events.deleted, () => {
             if (this.#context.fabrics.length === 0) {
                 // Last fabric got removed, so expire all announcements
-                await this.#exitOperationalMode();
+                this.#mutex.run(this.#exitOperationalMode.bind(this));
             } else {
                 // At least one fabric is still present, so re-announce
-                await this.advertise(true);
+                this.#mutex.run(() => this.advertise(true));
             }
         });
 
         this.#observers.on(this.#context.sessions.resubmissionStarted, (session?) => {
             logger.debug(`Resubmission started, re-announce node ${session?.nodeId}`);
-            this.advertise(true).catch(error => logger.warn("Error sending announcement:", error));
+            this.#mutex.run(() => this.advertise(true));
         });
 
         this.#observers.on(this.#context.sessions.subscriptionsChanged, (_session, subscription) => {
             if (subscription.isCanceledByPeer) {
                 logger.debug(`Subscription canceled by peer, re-announce`);
-                this.startAdvertising().catch(error => logger.warn("Error sending announcement:", error));
+                this.#mutex.run(this.startAdvertising.bind(this));
             }
         });
+    }
+
+    toString() {
+        return "DeviceAdvertiser";
     }
 
     static [Environmental.create](env: Environment) {
