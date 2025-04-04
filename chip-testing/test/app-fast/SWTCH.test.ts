@@ -12,7 +12,7 @@ describe("SWTCH", () => {
         await chip.testFor("SWTCH-run3").edit(
             edit.lines({
                 after: / {8}self.step\("7b"\)/,
-                before: /[ ]*/,
+                before: / */,
                 replacement: "        self._ask_for_switch_idle(endpoint_id)",
             }),
         );

@@ -56,7 +56,6 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
     - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
 
-
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.
     - Feature: Enhanced `getMultipleAttributesAndEvents()` to also return attributeStatus and eventStatus properties with errors returned from the read interaction 
