@@ -130,6 +130,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     throw new Error(`Endpoint ${endpointId} not found`);
                 }
                 await endpoint.setStateOf(SwitchServer, { currentPosition: 0 });
+                endpoint.act(agent => agent.get(SwitchServer).resetState());
                 break;
             default:
                 await super.backchannel(command);
