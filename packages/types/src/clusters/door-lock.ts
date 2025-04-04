@@ -4563,6 +4563,7 @@ export namespace DoorLock {
 
             {
                 flags: {
+                    aliroProvisioning: false,
                     user: true,
                     pinCredential: true,
                     rfidCredential: true,
