@@ -62,7 +62,7 @@ import {
     TimeFormatLocalization,
     WindowCovering,
 } from "@matter/main/clusters";
-import { OnOffLightDevice } from "@matter/main/devices";
+import { GenericSwitchDevice, OnOffLightDevice } from "@matter/main/devices";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@matter/main/types";
 import { BackchannelCommand } from "@matter/testing";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
@@ -282,11 +282,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 TestHepaFilterMonitoringServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
-                TestLevelControlServer.with(
-                    LevelControl.Feature.OnOff,
-                    LevelControl.Feature.Lighting,
-                    LevelControl.Feature.Frequency,
-                ),
+                TestLevelControlServer.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting),
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 NitrogenDioxideConcentrationMeasurementServer.with(
                     ConcentrationMeasurement.Feature.LevelIndication,
@@ -296,7 +292,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ConcentrationMeasurement.Feature.PeakMeasurement,
                     ConcentrationMeasurement.Feature.AverageMeasurement,
                 ),
-                OccupancySensingServer,
+                OccupancySensingServer.with(OccupancySensing.Feature.PassiveInfrared),
                 OzoneConcentrationMeasurementServer.with(
                     ConcentrationMeasurement.Feature.LevelIndication,
                     ConcentrationMeasurement.Feature.MediumLevel,
@@ -361,6 +357,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     "AverageMeasurement",
                 ),
                 UserLabelServer,
+                //TestWaterTankLevelMonitoringServer, // invalid according to Device Composition test
                 TestWindowCoveringServer,
             ),
             {
@@ -505,9 +502,6 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     defaultMoveRate: 100,
                     remainingTime: 0,
                     startUpCurrentLevel: 100,
-                    currentFrequency: 50,
-                    minFrequency: 50,
-                    maxFrequency: 60,
                     managedTransitionTimeHandling: true, // enable transition management
                 },
                 modeSelect: {
@@ -536,8 +530,6 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 occupancySensing: {
-                    occupancySensorType: OccupancySensing.OccupancySensorType.Pir,
-                    occupancySensorTypeBitmap: { pir: true },
                     occupancy: { occupied: true },
                 },
                 ozoneConcentrationMeasurement: {
@@ -662,6 +654,19 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
                     levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
+                /*waterTankLevelMonitoring: {
+                    condition: 20,
+                    degradationDirection: ResourceMonitoring.DegradationDirection.Up,
+                    changeIndication: ResourceMonitoring.ChangeIndication.Ok,
+                    inPlaceIndicator: true,
+                    lastChangedTime: null,
+                    replacementProductList: [
+                        {
+                            productIdentifierType: ResourceMonitoring.ProductIdentifierType.Ean,
+                            productIdentifierValue: "1234567890123",
+                        },
+                    ],
+                },*/
                 windowCovering: {
                     type: WindowCovering.WindowCoveringType.TiltBlindLift,
                     currentPositionLiftPercent100ths: 0,
@@ -682,14 +687,28 @@ export class AllClustersTestInstance extends NodeTestInstance {
         );
         await serverNode.add(endpoint1);
 
+        const endpoint2 = new Endpoint(OnOffLightDevice.with(DescriptorServer.with(Descriptor.Feature.TagList)), {
+            number: EndpointNumber(2),
+            id: "ep2",
+            descriptor: {
+                tagList: [
+                    {
+                        ...NumberTag.Two,
+                        label: "EP2",
+                    },
+                ],
+            },
+        });
+        await serverNode.add(endpoint2);
+
         const endpoint3 = new Endpoint(
-            OnOffLightDevice.with(
+            GenericSwitchDevice.with(
                 DescriptorServer.with(Descriptor.Feature.TagList),
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
-                    Switch.Feature.MomentarySwitchRelease,
-                    Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
-                    //Switch.Feature.MomentarySwitchMultiPress, // Can not be tested right now because https://github.com/project-chip/connectedhomeip/issues/34923
+                    Switch.Feature.ActionSwitch,
+                    Switch.Feature.MomentarySwitchLongPress,
+                    Switch.Feature.MomentarySwitchMultiPress,
                 ),
             ),
             {
@@ -706,11 +725,41 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 switch: {
                     rawPosition: 0,
                     longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
-                    //multiPressDelay: 700,
+                    multiPressDelay: 100,
+                    multiPressMax: 3,
                 },
             },
         );
         await serverNode.add(endpoint3);
+
+        const endpoint4 = new Endpoint(
+            GenericSwitchDevice.with(
+                DescriptorServer.with(Descriptor.Feature.TagList),
+                SwitchServer.with(
+                    Switch.Feature.MomentarySwitch,
+                    Switch.Feature.MomentarySwitchRelease,
+                    Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
+                    Switch.Feature.MomentarySwitchMultiPress,
+                ),
+            ),
+            {
+                number: EndpointNumber(4),
+                id: "ep4",
+                descriptor: {
+                    tagList: [
+                        {
+                            ...NumberTag.Four,
+                            label: "EP4",
+                        },
+                    ],
+                },
+                switch: {
+                    rawPosition: 0,
+                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                },
+            },
+        );
+        await serverNode.add(endpoint4);
 
         return serverNode;
     }
