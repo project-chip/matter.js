@@ -546,8 +546,14 @@ export namespace Switch {
                 component: false
             },
             { flags: { actionSwitch: true, momentarySwitchMultiPress: false }, component: false },
-            { flags: { momentarySwitchMultiPress: true, momentarySwitch: false }, component: false },
-            { flags: { momentarySwitchMultiPress: true, momentarySwitchRelease: false }, component: false },
+            {
+                flags: { actionSwitch: false, momentarySwitchMultiPress: true, momentarySwitch: false },
+                component: false
+            },
+            {
+                flags: { actionSwitch: false, momentarySwitchMultiPress: true, momentarySwitchRelease: false },
+                component: false
+            },
             { flags: { actionSwitch: true, momentarySwitch: false }, component: false },
             { flags: { latchingSwitch: true, momentarySwitch: true }, component: false },
             { flags: { latchingSwitch: false, momentarySwitch: false }, component: false }

@@ -31,14 +31,14 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
     const illegal = [] as IllegalFeatureCombinations;
     const choices = {} as Choices;
 
-    for (const f of cluster.features) {
-        addFeatureNode(f, f.conformance.ast, illegal, choices);
-    }
-
     function add(flags: FeatureBitmap) {
         if (!illegal.some(e => isDeepEqual(e, flags))) {
             illegal.push(flags);
         }
+    }
+
+    for (const f of cluster.features) {
+        addFeatureNode(f, f.conformance.ast, add, choices);
     }
 
     let requiresFeatures = false;
@@ -70,7 +70,7 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
 function addFeatureNode(
     feature: FieldModel,
     node: Conformance.Ast,
-    illegal: IllegalFeatureCombinations,
+    add: (flags: FeatureBitmap) => void,
     choices: Choices,
 ) {
     switch (node.type) {
@@ -81,16 +81,71 @@ function addFeatureNode(
             break;
 
         case Conformance.Flag.Mandatory:
-            illegal.push({ [feature.name]: false });
+            add({ [feature.name]: false });
             break;
 
         case Conformance.Flag.Deprecated:
         case Conformance.Flag.Disallowed:
-            illegal.push({ [feature.name]: true });
+            add({ [feature.name]: true });
             break;
 
         case Conformance.Special.Group:
-            node.param.forEach(ast => addFeatureNode(feature, ast, illegal, choices));
+            const rules = node.param;
+
+            // Temporary storage for exclusions used in algorithm below
+            const entryExclusions = Array<IllegalFeatureCombinations>();
+
+            // Location of an "optional if" segment, which will require special handling
+            let optionalIfIndex: number | undefined;
+
+            // Collect exclusions for each entry.  If there is an "optional if" entry, we need to ensure that it only
+            // applies if the other entries *don't* apply
+            for (let i = 0; i < rules.length; i++) {
+                if (rules[i].type === Conformance.Special.OptionalIf) {
+                    if (optionalIfIndex !== undefined) {
+                        // Currently we only support one "optional if" which is likely all we'll ever need
+                        unsupported();
+                    }
+                    optionalIfIndex = i;
+                }
+
+                const thisEntryExclusions: IllegalFeatureCombinations = [];
+                entryExclusions.push(thisEntryExclusions);
+                addFeatureNode(feature, rules[i], flags => thisEntryExclusions.push(flags), choices);
+            }
+
+            // Now if there's an "optional if", add flags that will negate the rule if other rules make the element
+            // mandatory
+            if (optionalIfIndex !== undefined) {
+                const negations: FeatureBitmap = {};
+
+                for (let i = 0; i < rules.length; i++) {
+                    if (i === optionalIfIndex) {
+                        continue;
+                    }
+
+                    for (const entry of entryExclusions[i]) {
+                        for (const name in entry) {
+                            if (negations[name] !== undefined) {
+                                // Hopefully will never need to support subrules that address the same features
+                                unsupported();
+                            }
+                            negations[name] = !entry[name];
+                        }
+                    }
+                }
+
+                entryExclusions[optionalIfIndex] = entryExclusions[optionalIfIndex].map(exclusions => ({
+                    ...negations,
+                    ...exclusions,
+                }));
+            }
+
+            // Now add the exclusions
+            for (const ee of entryExclusions) {
+                ee.forEach(add);
+            }
+
             break;
 
         case Conformance.Special.Choice:
@@ -109,7 +164,7 @@ function addFeatureNode(
             break;
 
         case Conformance.Special.Name:
-            illegal.push({ [node.param]: true, [feature.name]: false });
+            add({ [node.param]: true, [feature.name]: false });
             break;
 
         case Conformance.Special.OptionalIf:
@@ -122,12 +177,12 @@ function addFeatureNode(
                 case Conformance.OR: {
                     const flags = FeatureBitmap({ [feature.name]: true });
                     addExclusivityRequirement(flags, node.param);
-                    illegal.push(flags);
+                    add(flags);
                     break;
                 }
 
                 case Conformance.Operator.NOT: {
-                    illegal.push({ [feature.name]: true, [extractName(node.param.param)]: true });
+                    add({ [feature.name]: true, [extractName(node.param.param)]: true });
                     break;
                 }
 
@@ -142,7 +197,7 @@ function addFeatureNode(
             const rhsFeature = extractFeatureFlag(node.param.rhs);
 
             for (const lhsFeature in lhsFeatures) {
-                illegal.push({
+                add({
                     feature: false,
                     [lhsFeature]: lhsFeatures[lhsFeature],
                     ...rhsFeature,
@@ -153,7 +208,7 @@ function addFeatureNode(
 
         case Conformance.Operator.OR: {
             const features = extractDisjunctFeatures(node);
-            illegal.push(Object.fromEntries(Object.entries(features).map((k, v) => [k, !v])));
+            add(Object.fromEntries(Object.entries(features).map((k, v) => [k, !v])));
             break;
         }
 
@@ -213,7 +268,7 @@ function addFeatureNode(
     function addDependencyRequirement(feature: string, node: Conformance.Ast) {
         switch (node.type) {
             case Conformance.Special.Name:
-                illegal.push({ [feature]: true, [node.param]: false });
+                add({ [feature]: true, [node.param]: false });
                 break;
 
             case Conformance.AND:
@@ -226,13 +281,13 @@ function addFeatureNode(
                     node.param.lhs.type === Conformance.Special.Name &&
                     node.param.rhs.type === Conformance.Special.Name
                 ) {
-                    illegal.push({ [feature]: true, [node.param.lhs.param]: false, [node.param.rhs.param]: false });
+                    add({ [feature]: true, [node.param.lhs.param]: false, [node.param.rhs.param]: false });
                 }
                 break;
 
             case Conformance.Operator.NOT:
                 if (node.param.type === Conformance.Special.Name) {
-                    illegal.push({ [feature]: true, [node.param.param]: true });
+                    add({ [feature]: true, [node.param.param]: true });
                 }
                 break;
 
