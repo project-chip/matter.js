@@ -250,10 +250,10 @@ export class SwitchBaseServer extends SwitchServerBase {
     }
 
     #handleMultiPressComplete() {
-        if (this.internal.previousMultiPressPosition === null) {
+        if (this.internal.previousMultiPressPosition === null || this.internal.longPressTimer?.isRunning) {
             return;
         }
-        if (!this.internal.multiPressReportingAborted && !this.internal.longPressTimer?.isRunning) {
+        if (!this.internal.multiPressReportingAborted) {
             this.events.multiPressComplete?.emit(
                 {
                     previousPosition: this.internal.previousMultiPressPosition,
