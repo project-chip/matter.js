@@ -99,14 +99,11 @@ export abstract class NodejsReporter implements Reporter {
     }
 
     #dumpFailures() {
+        std.out("\n");
         for (let i = 0; i < this.#failures.length; i++) {
-            if (i !== 0) {
-                std.out("\n");
-            }
-
             const failure = this.#failures[i];
-            const index = `⚠ Failure ${ansi.bold((i + 1).toString())} of ${this.#failures.length}`;
-            const title = `${index} ${this.#formatName(failure.suite, failure.test, failure.step)}`;
+            const index = `Failure ${ansi.bold((i + 1).toString())} of ${this.#failures.length}: `;
+            const title = `${index}${this.#formatName(failure.suite, failure.test, failure.step)}`;
 
             FailureReporter.report(std.out, failure.detail, title);
         }

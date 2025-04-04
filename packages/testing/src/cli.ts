@@ -18,6 +18,8 @@ import { defaultDescriptor, printReport } from "./print-report.js";
 import { TestRunner } from "./runner.js";
 import { TestDescriptor } from "./test-descriptor.js";
 
+const SHUTDOWN_TIMEOUT_MS = 5000;
+
 enum TestType {
     esm = "esm",
     cjs = "cjs",
@@ -174,6 +176,14 @@ export async function main(argv = process.argv) {
             console.log();
         }
     }
+
+    // Do not hang indefinitely if tests do not clean up after themselves properly.  Instead print error and exit with
+    // non-zero status code
+    const timeout = setTimeout(() => {
+        console.error(`Error: Tests passed but process did not exit cleanly after ${SHUTDOWN_TIMEOUT_MS / 1000}s.`);
+        process.exit(101);
+    }, SHUTDOWN_TIMEOUT_MS);
+    timeout.unref();
 }
 
 function supportsWebTests(pkg: Package) {

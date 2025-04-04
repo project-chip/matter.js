@@ -4,24 +4,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ansi, Printer, screen } from "#tools";
+import { ansi, Printer, STATUS_ICON_FAILURE } from "#tools";
 import { FailureDetail } from "./failure-detail.js";
 import { TextDiff } from "./text-diff.js";
 
-const OUTER_PREFIX = `${ansi.red}▌ ${ansi.not.red}`;
-const INNER_PREFIX = `${ansi.dim}┆ ${ansi.not.dim}`;
+const BEGIN_ERROR = `${ansi.red}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┅\n┃${ansi.not.red}`;
+const OUTER_PREFIX = `${ansi.red}┃  ${ansi.not.red}`;
+const INNER_PREFIX = `${ansi.dim}┆  ${ansi.not.dim}`;
+const END_ERROR = `${ansi.red}┃\n┗━┅${ansi.not.red}`;
 
 export namespace FailureReporter {
     export function report(out: Printer, failure: FailureDetail, title: string) {
-        out.state({ style: ansi.reset.white.bg.red }, () => {
-            out(screen.erase.toEol, "\n ", title, screen.erase.toEol, "\n", screen.erase.toEol, "\n");
-        });
-
-        out(screen.erase.toEol);
+        out(BEGIN_ERROR, "\n");
 
         out.state({ linePrefix: OUTER_PREFIX }, () => {
+            out(ansi.bold.red(STATUS_ICON_FAILURE), " ", title, "\n");
             dumpDetails(out, failure);
         });
+
+        out(END_ERROR, "\n");
     }
 }
 
