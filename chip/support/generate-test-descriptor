@@ -47,13 +47,13 @@ tests = []
 def load_yaml():
     """Load metadata from YAML tests.
 
-    This is fairly straightforward as the tests are inherently declarative    
+    This is fairly straightforward as the tests are inherently declarative
     """
     categories = {}
     for category_name, members in read_json_file(f"{YAML_DIR}/manualTests.json").items():
         for test_name in members:
             categories[test_name] = category_name
-    
+
     ci = set()
     for members in read_json_file(f"{YAML_DIR}/ciTests.json").values():
         for test_name in members:
@@ -98,7 +98,7 @@ def load_yaml():
                     step["description"] = match[2]
                 else:
                     step["name"] = name
-            
+
                 if "disabled" in test and test["disabled"]:
                     step["isDisabled"] = True
                 else:
@@ -171,7 +171,7 @@ def load_python():
         if steps:
             if not steps[0].is_commissioning:
                 props["startUncommissioned"] = True
-                
+
             props["members"] = list(map(lambda step: {
                 "name": step.test_plan_number,
                 "kind": "step",
@@ -187,7 +187,7 @@ def load_python():
         header = []
         with open(path) as source:
             in_yaml = False
-            
+
             while True:
                 line = source.readline()
                 if not line:
@@ -196,7 +196,7 @@ def load_python():
                 if "=== BEGIN CI TEST ARGUMENTS ===" in line:
                     in_yaml = True
                     break
-            
+
             while in_yaml:
                 line = source.readline()
                 if not line:
@@ -229,7 +229,7 @@ load_python()
 shutil.rmtree("/tmp/metadata-garbage")
 
 # Normalize/prettify names and create semantic version for sorting
-semantic_name_pattern = re.compile(r"(.*)_(\d+)_(\d+)(?:_(.*))?")
+semantic_name_pattern = re.compile(r"(.*)_(\d+)_(\d+(?:_\d+))(?:_(.*))?")
 for test in tests:
     match = semantic_name_pattern.match(test["name"])
     if match:

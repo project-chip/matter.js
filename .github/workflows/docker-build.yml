@@ -79,6 +79,11 @@ jobs:
           ./bin/build
           ./bin/info
 
+      - name: Output supported tests
+        run: |
+          cd chip-testing
+          npm run test report
+
       - name: Run tests using the docker image
         run: |
           cd chip-testing
