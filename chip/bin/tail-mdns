@@ -8,7 +8,7 @@
 #
 # Requires an active MDNS container
 
-set -e
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 
 if [ $# -gt 0 ]; then
     ARGS=("$@")

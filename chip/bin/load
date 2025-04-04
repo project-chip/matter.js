@@ -6,7 +6,7 @@
 
 # Loads build targets into a local image tagged "chip/<target>" and runs bash
 
-set -e
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 
 if ! docker buildx inspect matter.js-chip > /dev/null 2>&1; then
     docker buildx create --name matter.js-chip
@@ -25,7 +25,7 @@ docker buildx build . \
     -t "chip/${TARGET}" \
     --target "${TARGET}" \
     --label org.opencontainers.image.revision=$(git rev-parse HEAD) \
-    --platform linux/amd64 \
+    --platform "$CHIP_PLATFORM" \
     $*
 
 docker run -it --rm "chip/${TARGET}"

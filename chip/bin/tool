@@ -4,4 +4,8 @@
 # Copyright 2022-2025 Matter.js Authors
 # SPDX-License-Identifier: Apache-2.0
 
+# Run chip-tool in a container
+
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 ./shell chip-tool "$@"

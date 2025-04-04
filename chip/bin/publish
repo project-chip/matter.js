@@ -12,4 +12,6 @@
 #
 # See also https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-with-a-personal-access-token-classic
 
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 docker push ghcr.io/matter-js/chip:latest
