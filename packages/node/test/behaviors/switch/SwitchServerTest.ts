@@ -68,6 +68,16 @@ async function createMsMsrMslMsmSwitch() {
     );
 }
 
+async function createMsAsMslMsmSwitch() {
+    return MockEndpoint.createWith(
+        SwitchServer.with(
+            Switch.Feature.MomentarySwitch,
+            Switch.Feature.ActionSwitch,
+            Switch.Feature.MomentarySwitchLongPress,
+            Switch.Feature.MomentarySwitchMultiPress,
+        ),
+    );
+}
 async function doTestPress(
     device: MockEndpoint<any>,
     delay: number,
@@ -1402,6 +1412,13 @@ describe("SwitchServer", () => {
                     },
                 },
                 {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 1,
+                        totalNumberOfPressesCounted: 0,
+                    },
+                },
+                {
                     name: "currentPosition$Changed",
                     newValue: 1,
                     oldValue: 0,
@@ -1417,13 +1434,6 @@ describe("SwitchServer", () => {
                     newValue: 0,
                     oldValue: 1,
                 },
-                {
-                    name: "multiPressComplete",
-                    value: {
-                        previousPosition: 1,
-                        totalNumberOfPressesCounted: 3,
-                    },
-                },
             ]);
         });
 
@@ -1431,6 +1441,7 @@ describe("SwitchServer", () => {
             await device.set({
                 switch: {
                     numberOfPositions: 3,
+                    multiPressMax: 4,
                 },
             });
 
@@ -1560,6 +1571,855 @@ describe("SwitchServer", () => {
                         previousPosition: 2,
                         totalNumberOfPressesCounted: 4,
                     },
+                },
+            ]);
+        });
+
+        it("Test one long and one short press with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                    longPressDelay: 300,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+            ]);
+
+            await MockTime.advance(500);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+
+            await MockTime.advance(10);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(10);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "shortRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+        });
+    });
+
+    describe("Test MS & AS & MSL & MSM", () => {
+        let device: MockEndpoint<any>;
+
+        beforeEach(async () => {
+            device = await createMsAsMslMsmSwitch();
+            await device.set({ switch: { longPressDelay: 100, multiPressDelay: 150, multiPressMax: 3 } });
+        });
+
+        it("Test long Press with 2 positions", async () => {
+            await doTestPress(device, 110, [
+                {
+                    name: "initialPress",
+                    value: { newPosition: 1 },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    oldValue: 0,
+                    newValue: 1,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    oldValue: 1,
+                    newValue: 0,
+                },
+            ]);
+        });
+
+        it("Test one short Press with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+            ]);
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+
+            await MockTime.advance(160);
+            await MockTime.yield3();
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 1,
+                        totalNumberOfPressesCounted: 1,
+                    },
+                },
+            ]);
+        });
+
+        it("Test two short Presses with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(160);
+            await MockTime.yield3();
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 1,
+                        totalNumberOfPressesCounted: 2,
+                    },
+                },
+            ]);
+        });
+
+        it("Test three short Presses with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(160);
+            await MockTime.yield3();
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 1,
+                        totalNumberOfPressesCounted: 3,
+                    },
+                },
+            ]);
+        });
+
+        it("Test three short Presses, but we only support max 2, but we continue as normal for now with 2 positions", async () => {
+            const events = createEventCatcher(device);
+            await device.set({
+                switch: {
+                    multiPressMax: 2,
+                },
+            });
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(160);
+            await MockTime.yield3();
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 1,
+                        totalNumberOfPressesCounted: 0,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+        });
+
+        it("Test two short Presses with different positions", async () => {
+            await device.set({
+                switch: {
+                    numberOfPositions: 3,
+                    multiPressMax: 4,
+                },
+            });
+
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 2,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 2,
+                },
+            });
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(160);
+            await MockTime.yield3();
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 2,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 2,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 2,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 2,
+                },
+                {
+                    name: "multiPressComplete",
+                    value: {
+                        previousPosition: 2,
+                        totalNumberOfPressesCounted: 4,
+                    },
+                },
+            ]);
+        });
+
+        it("Test one long and one short press with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                    longPressDelay: 300,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+            ]);
+
+            await MockTime.advance(500);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+
+            await MockTime.advance(10);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(10);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+        });
+
+        it("Test one short press and a long press with 2 positions", async () => {
+            const events = createEventCatcher(device);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                    longPressDelay: 300,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+            ]);
+
+            await MockTime.advance(50);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+            ]);
+
+            await device.set({
+                switch: {
+                    currentPosition: 1,
+                },
+            });
+
+            await MockTime.advance(400);
+
+            await device.set({
+                switch: {
+                    currentPosition: 0,
+                },
+            });
+
+            await MockTime.advance(400);
+
+            expect(events).deep.equals([
+                {
+                    name: "initialPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 1,
+                    oldValue: 0,
+                },
+                {
+                    name: "currentPosition$Changed",
+                    newValue: 0,
+                    oldValue: 1,
                 },
             ]);
         });

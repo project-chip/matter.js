@@ -11,9 +11,13 @@ The following Matter protocol level feature are not yet supported by matter.js:
 * BDX (File transfer) and OTA is not yet implemented on server and client side
 * Groups are only partially implemented
 * Bindings are only partially implemented
-* DCL validation for controllers is not yet implemented
+* DCL validation (incl. revocation checks) for controllers is not yet implemented
 * ICD is not yet implemented on client and server side
 * UDC is not yet implemented
+* NFC and WPAF commissioning not yet implemented
+* GeneralCommissioning Cluster TC feature (and Enhanced commissioning flow) not yet implemented
+* AccessControl feature ARL not yet implemented
+* Atomic Writes not yet implemented
 
 For a list of clusters where default implementations are available see [here](./CLUSTER_DEFAULT_IMPLEMENTATIONS.md).
 
