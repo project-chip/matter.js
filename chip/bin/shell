@@ -6,6 +6,8 @@
 
 # Run a shell in a new ephemeral container (if no args) or in a running container (1 arg)
 
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
 THISDIR=$(dirname -- "${BASH_SOURCE[0]}")
 GIT_ROOT=$(realpath "${THISDIR}/../../..")
 
@@ -18,7 +20,7 @@ if [ -z "$CONTAINER" ]; then
         --workdir / \
         --security-opt apparmor:unconfined \
         -v matter.js-mdns:/run/dbus \
-        --platform linux/amd64 \
+        --platform "$CHIP_PLATFORM" \
         ghcr.io/matter-js/chip \
         "$@"
 else

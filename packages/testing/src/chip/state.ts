@@ -11,6 +11,7 @@ import { Test } from "../device/test.js";
 import { Container } from "../docker/container.js";
 import { Docker } from "../docker/docker.js";
 import { edit } from "../docker/edit.js";
+import { Image } from "../docker/image.js";
 import { Volume } from "../docker/volume.js";
 import { afterRun, beforeRun } from "../mocha.js";
 import type { TestRunner } from "../runner.js";
@@ -157,8 +158,11 @@ export const State = {
             const info = await image.inspect();
             const chipCommit = formatSha(info.Config.Labels["org.opencontainers.image.revision"] ?? "(unknown)");
             const imageVersion = info.Config.Labels["org.opencontainers.image.version"] ?? "(unknown)";
+            const arch = info.Architecture;
 
-            progress.success(`Initialized CHIP ${ansi.bold(chipCommit)} image ${ansi.bold(imageVersion)}`);
+            progress.success(
+                `Initialized CHIP ${ansi.bold(chipCommit)} image ${ansi.bold(imageVersion)} for ${ansi.bold(arch)}`,
+            );
 
             return result;
         } catch (e) {
@@ -411,8 +415,14 @@ async function initialize() {
 async function configureContainer() {
     const docker = new Docker();
 
+    let platform = Constants.platform;
+
     if (Values.pullBeforeTesting) {
-        await docker.pull(Constants.imageName, Constants.platform);
+        await docker.pull(Constants.imageName, platform);
+    } else if (Constants.selectedPlatform === undefined) {
+        // Without pull, use whatever platform is available unless explicitly configured
+        const arch = (await Image(docker, Constants.imageName).inspect()).Architecture;
+        platform = `linux/${arch}`;
     }
 
     const mdnsVolume = Volume(docker, Constants.mdnsVolumeName);
@@ -420,7 +430,7 @@ async function configureContainer() {
 
     const composition = docker.compose("matter.js", {
         image: Constants.imageName,
-        platform: Constants.platform,
+        platform,
         binds: { [mdnsVolume.name]: "/run/dbus" },
         autoRemove: true,
 
