@@ -21,19 +21,19 @@ export default function commands(theNode: MatterNode) {
         },
 
         handler: async (argv: any) => {
-            const { nodeId } = argv;
-            const node = (await theNode.connectAndGetNodes(nodeId))[0];
+            const { nodeId: subscribeNodeId } = argv;
+            const node = (await theNode.connectAndGetNodes(subscribeNodeId))[0];
 
             await node.subscribeAllAttributesAndEvents({
                 attributeChangedCallback: ({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
                     console.log(
-                        `${nodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
+                        `${subscribeNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
                             value,
                         )}`,
                     ),
                 eventTriggeredCallback: ({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
                     console.log(
-                        `${nodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
+                        `${subscribeNodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
                             events,
                         )}`,
                     ),
