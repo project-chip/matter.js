@@ -6,10 +6,12 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Switch } from "#clusters/switch";
-import { Observable, Time, Timer } from "#general";
+import { Logger, Observable, Time, Timer } from "#general";
 import { FieldElement } from "#model";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { SwitchBehavior } from "./SwitchBehavior.js";
+
+const logger = Logger.get("SwitchServer");
 
 const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
     Switch.Feature.LatchingSwitch,
@@ -17,6 +19,7 @@ const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
     Switch.Feature.MomentarySwitchRelease,
     Switch.Feature.MomentarySwitchLongPress,
     Switch.Feature.MomentarySwitchMultiPress,
+    Switch.Feature.ActionSwitch,
 );
 
 // Enhance Schema to define conformance for some of the additional state attributes
@@ -72,6 +75,21 @@ export class SwitchBaseServer extends SwitchServerBase {
         this.reactTo(this.events.currentPosition$Changed, this.#handleSwitchPositionChange);
     }
 
+    /** Method to reset the state of the Switch to start a clean new cycle. Mainly relevant for automated testing. */
+    resetState() {
+        const neutralPosition = this.state.momentaryNeutralPosition;
+        this.internal.currentUnstablePosition = neutralPosition;
+        this.internal.previouslyReportedPosition = neutralPosition;
+        this.internal.multiPressReportingAborted = false;
+        this.internal.currentNumberOfPressesCounter = 1;
+        this.internal.previousMultiPressPosition = null;
+        this.internal.currentLongPressPosition = null;
+        this.internal.currentIsLongPress = false;
+        this.internal.multiPressTimer?.stop();
+        this.internal.longPressTimer?.stop();
+        logger.info("State of Switch got reset");
+    }
+
     // TODO remove when Validator logic can assess that with 1.3 introduction
     #assertPositionInRange(position: number) {
         if (position < 0 || position >= this.state.numberOfPositions) {
@@ -107,8 +125,14 @@ export class SwitchBaseServer extends SwitchServerBase {
             return;
         }
 
+        let pressSequenceFinished = false;
+
         // Momentary Switch
-        if (newPosition !== this.state.momentaryNeutralPosition) {
+        if (
+            newPosition !== this.state.momentaryNeutralPosition &&
+            !this.internal.multiPressReportingAborted &&
+            (!this.features.actionSwitch || !this.internal.multiPressTimer?.isRunning)
+        ) {
             // This event SHALL be generated, when the momentary switch starts to be pressed.
             this.events.initialPress?.emit({ newPosition }, this.context);
         }
@@ -116,13 +140,15 @@ export class SwitchBaseServer extends SwitchServerBase {
         if (this.features.momentarySwitchLongPress) {
             if (newPosition === this.state.momentaryNeutralPosition) {
                 if (this.internal.longPressTimer?.isRunning) {
-                    // If the server supports the Momentary Switch LongPress (MSL) feature, this event SHALL be generated
-                    // when the switch is released if no LongPress event had been generated since the previous InitialPress
-                    // event.
-                    this.events.shortRelease?.emit(
-                        { previousPosition: this.internal.previouslyReportedPosition },
-                        this.context,
-                    );
+                    if (!this.features.actionSwitch) {
+                        // If the server supports the Momentary Switch LongPress (MSL) feature, this event SHALL be generated
+                        // when the switch is released if no LongPress event had been generated since the previous InitialPress
+                        // event.
+                        this.events.shortRelease?.emit(
+                            { previousPosition: this.internal.previouslyReportedPosition },
+                            this.context,
+                        );
+                    }
                 } else if (this.internal.currentIsLongPress) {
                     // This event SHALL be generated, when the momentary switch has been released (after debouncing) and
                     // after having been pressed for a long time, i.e. this event SHALL be generated when the switch is
@@ -131,6 +157,8 @@ export class SwitchBaseServer extends SwitchServerBase {
                         { previousPosition: this.internal.previouslyReportedPosition },
                         this.context,
                     );
+                    this.internal.multiPressTimer?.stop();
+                    pressSequenceFinished = true;
                 }
             }
 
@@ -156,30 +184,52 @@ export class SwitchBaseServer extends SwitchServerBase {
         }
 
         if (this.features.momentarySwitchMultiPress) {
-            if (this.internal.multiPressTimer?.isRunning && newPosition !== this.state.momentaryNeutralPosition) {
+            if (
+                this.internal.multiPressTimer?.isRunning &&
+                newPosition !== this.state.momentaryNeutralPosition &&
+                !this.internal.multiPressReportingAborted &&
+                !this.internal.currentIsLongPress &&
+                !pressSequenceFinished
+            ) {
                 // The Button is at the same position as the time before, so it is a multiPress
                 // Increment the number of presses
                 this.internal.currentNumberOfPressesCounter++;
 
-                // Emit MultiPressOngoing event
-                this.events.multiPressOngoing?.emit(
-                    {
-                        newPosition,
-                        currentNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
-                    },
-                    this.context,
-                );
+                if (!this.features.actionSwitch) {
+                    // Emit MultiPressOngoing event
+                    this.events.multiPressOngoing?.emit(
+                        {
+                            newPosition,
+                            currentNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
+                        },
+                        this.context,
+                    );
+                }
 
-                // TODO: Handle the case that there are more presses then we can handle maxNumberOfPresses
-                //  Specs do not tell anything about that so ignore for now
+                if (
+                    this.state.multiPressMax !== undefined &&
+                    this.internal.currentNumberOfPressesCounter > this.state.multiPressMax
+                ) {
+                    this.internal.multiPressReportingAborted = true;
+                    this.events.multiPressComplete?.emit(
+                        {
+                            previousPosition: newPosition,
+                            totalNumberOfPressesCounted: 0,
+                        },
+                        this.context,
+                    );
+                    pressSequenceFinished = true;
+                }
             }
             this.internal.multiPressTimer?.stop();
 
-            this.internal.multiPressTimer = Time.getTimer(
-                "multiPress",
-                this.state.multiPressDelay,
-                this.callback(this.#handleMultiPressComplete, { lock: true }),
-            ).start();
+            if (!pressSequenceFinished) {
+                this.internal.multiPressTimer = Time.getTimer(
+                    "multiPress",
+                    this.state.multiPressDelay,
+                    this.callback(this.#handleMultiPressComplete, { lock: true }),
+                ).start();
+            }
             if (this.internal.previouslyReportedPosition !== this.state.momentaryNeutralPosition) {
                 this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
             }
@@ -190,28 +240,32 @@ export class SwitchBaseServer extends SwitchServerBase {
 
     // Method is called by a timer, so no change to the position for longPressDelay
     #handleLongPress() {
-        if (this.internal.currentLongPressPosition === null) {
+        if (this.internal.currentLongPressPosition === null || this.internal.currentNumberOfPressesCounter > 1) {
             return;
         }
         // This event SHALL be generated, when the momentary switch has been pressed for a "long" time.
         this.events.longPress?.emit({ newPosition: this.internal.currentLongPressPosition }, this.context);
         this.internal.currentIsLongPress = true;
+        this.internal.multiPressTimer?.stop();
     }
 
     #handleMultiPressComplete() {
-        if (this.internal.previousMultiPressPosition === null) {
+        if (this.internal.previousMultiPressPosition === null || this.internal.longPressTimer?.isRunning) {
             return;
         }
-        this.events.multiPressComplete?.emit(
-            {
-                previousPosition: this.internal.previousMultiPressPosition,
-                totalNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
-            },
-            this.context,
-        );
+        if (!this.internal.multiPressReportingAborted) {
+            this.events.multiPressComplete?.emit(
+                {
+                    previousPosition: this.internal.previousMultiPressPosition,
+                    totalNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
+                },
+                this.context,
+            );
+        }
 
         // Reset the number of presses
         this.internal.currentNumberOfPressesCounter = 1;
+        this.internal.multiPressReportingAborted = false;
         this.internal.previousMultiPressPosition = null;
     }
 
@@ -236,6 +290,9 @@ export namespace SwitchBaseServer {
 
         /** Counter to count the number of presses. */
         currentNumberOfPressesCounter: number = 1;
+
+        /** Indicator if the multi press sequence was aborted. */
+        multiPressReportingAborted = false;
 
         /** Position previously reported in events. */
         previouslyReportedPosition: number = 0;

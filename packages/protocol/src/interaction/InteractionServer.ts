@@ -7,6 +7,7 @@
 import {
     Crypto,
     Diagnostic,
+    ImplementationError,
     InternalError,
     Logger,
     MatterError,
@@ -52,7 +53,7 @@ import { Message, SessionType } from "../codec/MessageCodec.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
-import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../session/SecureSession.js";
+import { assertSecureSession, NoAssociatedFabricError, SecureSession } from "../session/SecureSession.js";
 import {
     decodeAttributeValueWithSchema,
     decodeListAttributeValueWithSchema,
@@ -540,14 +541,15 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         attributeData: { path, dataVersion: version, payload: value, schema },
                     };
                 } catch (error) {
-                    logger.error(
-                        `Error while reading attribute from ${
-                            exchange.channel.name
-                        } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
-                        error,
-                    );
+                    const what = `reading ${this.#endpointStructure.resolveAttributeName(path)} from ${exchange.channel.name}`;
 
-                    StatusResponseError.accept(error);
+                    if (!(error instanceof StatusResponseError)) {
+                        const wrappedError = new ImplementationError(`Unhandled error ${what}`);
+                        wrappedError.cause = error;
+                        throw wrappedError;
+                    }
+
+                    logger.error(`Error ${what}:`, error.message);
 
                     // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                     if (isConcreteAttributePath(requestPath)) {

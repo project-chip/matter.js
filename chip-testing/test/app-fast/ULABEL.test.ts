@@ -18,6 +18,5 @@ describe("ULABEL", () => {
         );
     });
 
-    // chip("ULABEL/*", "UserLabelCluster", "UserLabelClusterConstraints");
-    chip("UserLabelClusterConstraints");
+    chip("ULABEL/*", "UserLabelCluster", "UserLabelClusterConstraints");
 });

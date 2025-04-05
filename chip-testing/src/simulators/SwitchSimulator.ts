@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, Timer } from "@matter/general";
+import { Logger, Time, Timer } from "@matter/general";
 import { Endpoint } from "@matter/main";
 import { SwitchServer } from "@matter/main/behaviors/switch";
-import { Switch } from "@matter/main/clusters/switch";
-import { BitFlag, BitmapSchema } from "@matter/main/types";
 import { BackchannelCommand } from "@matter/testing";
+
+const logger = Logger.get("SwitchSimulator");
 
 const NEUTRAL_SWITCH_POSITION = 0;
 
@@ -26,6 +26,7 @@ export class SwitchSimulator {
         if (this.#switchActions.length !== 0 || this.#executionDelayTimer !== undefined) {
             throw new Error("Still unprocessed actions existing ... Invalid state!");
         }
+        logger.debug("Switch action step", actions, ". Existing actions:", this.#switchActions);
         this.#switchActions = actions;
         this.#processNextAction();
     }
@@ -45,6 +46,13 @@ export class SwitchSimulator {
                 .then(
                     () => {
                         this.#executionDelayTimer = undefined;
+                        logger.debug(
+                            "Switch action to position ",
+                            action.position,
+                            ", next action in",
+                            action.delay,
+                            "ms",
+                        );
                         if (action.delay !== undefined && action.delay > 0) {
                             this.#executionDelayTimer = Time.getTimer("Switch action step", action.delay, () =>
                                 this.#processNextAction(),
@@ -103,46 +111,28 @@ export class SwitchSimulator {
     static async simulateMultiPress(endpoint: Endpoint, command: BackchannelCommand.SimulateMultiPress) {
         const simulator = new SwitchSimulator(endpoint);
 
-        const features = BitmapSchema({
-            ...Switch.Complete.features,
-            actionSwitch: BitFlag(5), // new Matter 1.4 feature, tweak in here already
-        }).decode(command.featureMap);
-        if (features.actionSwitch) {
-            // NOT SUPPPORTED
-            /*simulator.executeActions([
-                {
-                    position: command.ButtonId,
-                    delay:
-                        command.MultiPressNumPresses *
-                        (command.MultiPressPressedTimeMillis + command.MultiPressReleasedTimeMillis),
-                },
-                { position: NEUTRAL_SWITCH_POSITION },
-            ]);*/
-            throw new Error("ActionSwitch not supported, so should never be called for now.");
-        } else {
-            // Configure cluster according to tests
-            await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.multiPressReleasedTimeMillis + 500 });
+        // Configure cluster according to tests
+        await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.multiPressReleasedTimeMillis + 500 });
 
-            // Collect test steps
-            const actions: { position: number; delay?: number }[] = [];
+        // Collect test steps
+        const actions: { position: number; delay?: number }[] = [];
 
-            for (let i = 0; i < command.multiPressNumPresses; i++) {
+        for (let i = 0; i < command.multiPressNumPresses; i++) {
+            actions.push({
+                position: command.buttonId,
+                delay: command.multiPressPressedTimeMillis,
+            });
+            if (i < command.multiPressNumPresses - 1) {
                 actions.push({
-                    position: command.buttonId,
-                    delay: command.multiPressPressedTimeMillis,
+                    position: NEUTRAL_SWITCH_POSITION,
+                    delay: command.multiPressReleasedTimeMillis,
                 });
-                if (i < command.multiPressNumPresses - 1) {
-                    actions.push({
-                        position: NEUTRAL_SWITCH_POSITION,
-                        delay: command.multiPressReleasedTimeMillis,
-                    });
-                }
             }
-
-            actions.push({ position: NEUTRAL_SWITCH_POSITION });
-
-            // Execute test
-            simulator.executeActions(actions);
         }
+
+        actions.push({ position: NEUTRAL_SWITCH_POSITION });
+
+        // Execute test
+        simulator.executeActions(actions);
     }
 }

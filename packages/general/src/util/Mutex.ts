@@ -105,12 +105,12 @@ export class Mutex implements PromiseLike<unknown> {
     }
 
     /**
-     * Execute a task immediately if it is a function.
+     * Activate a task.
      */
     protected async initiateTask(task: PromiseLike<unknown> | (() => PromiseLike<unknown>)) {
         if (typeof task === "function") {
             task = task();
         }
-        return Promise.resolve(task).catch(cause => logger.error(`Error initializing ${this.#owner} worker:`, cause));
+        return Promise.resolve(task).catch(cause => logger.error(`Unhandled error in ${this.#owner} worker:`, cause));
     }
 }

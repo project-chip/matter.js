@@ -32,8 +32,7 @@ export class Events extends EventEmitter {
     #endpoint?: Endpoint;
     #behavior?: Behavior.Type;
 
-    constructor(endpoint?: Endpoint, behavior?: Behavior.Type) {
-        super();
+    setContext(endpoint: Endpoint, behavior: Behavior.Type) {
         this.#endpoint = endpoint;
         this.#behavior = behavior;
     }
@@ -57,7 +56,7 @@ export class Events extends EventEmitter {
     }
 
     override toString() {
-        return `${this.#endpoint ?? "endpoint"}.${this.#behavior?.id}.events`;
+        return `${this.#endpoint ?? "?"}.${this.#behavior?.id ?? "?"}.events`;
     }
 }
 
