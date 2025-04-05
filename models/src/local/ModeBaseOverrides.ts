@@ -24,5 +24,19 @@ LocalMatter.children.push({
                 },
             ],
         },
+
+        {
+            tag: "command",
+            name: "ChangeToModeResponse",
+            id: 0x01,
+            children: [
+                {
+                    tag: "field",
+                    id: 0,
+                    name: "status",
+                    type: "ModeChangeStatus",
+                },
+            ],
+        },
     ],
 });
