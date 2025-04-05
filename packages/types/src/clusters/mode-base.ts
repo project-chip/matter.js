@@ -22,7 +22,6 @@ import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { Status } from "../globals/Status.js";
 import { Identity } from "#general";
 
 export namespace ModeBase {
@@ -241,31 +240,6 @@ export namespace ModeBase {
      */
     export interface ChangeToModeRequest extends TypeFromSchema<typeof TlvChangeToModeRequest> {}
 
-    /**
-     * This command is sent by the device on receipt of the ChangeToMode command. This command
-     *
-     * shall have the following data fields:
-     *
-     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
-     */
-    export const TlvChangeToModeResponse = TlvObject({
-        /**
-         * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2.1
-         */
-        status: TlvField(0, TlvEnum<Status>()),
-
-        statusText: TlvField(1, TlvString.bound({ maxLength: 64 }))
-    });
-
-    /**
-     * This command is sent by the device on receipt of the ChangeToMode command. This command
-     *
-     * shall have the following data fields:
-     *
-     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
-     */
-    export interface ChangeToModeResponse extends TypeFromSchema<typeof TlvChangeToModeResponse> {}
-
     export enum ModeChangeStatus {
         /**
          * Switching to the mode indicated by the NewMode field is allowed and possible. The CurrentMode attribute is
@@ -297,6 +271,31 @@ export namespace ModeBase {
          */
         InvalidInMode = 3
     }
+
+    /**
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
+     */
+    export const TlvChangeToModeResponse = TlvObject({
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2.1
+         */
+        status: TlvField(0, TlvEnum<ModeChangeStatus>()),
+
+        statusText: TlvField(1, TlvString.bound({ maxLength: 64 }))
+    });
+
+    /**
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
+     */
+    export interface ChangeToModeResponse extends TypeFromSchema<typeof TlvChangeToModeResponse> {}
 
     /**
      * A ModeBaseCluster supports these elements if it supports feature OnOff.
