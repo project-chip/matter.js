@@ -4,11 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
+import { ModeBaseUtils } from "#behaviors/mode-base";
+import { ModeBase } from "#clusters/mode-base";
 import { RvcCleanModeBehavior } from "./RvcCleanModeBehavior.js";
 
 /**
  * This is the default server implementation of {@link RvcCleanModeBehavior}.
  */
-export class RvcCleanModeServer extends RvcCleanModeBehavior {}
+export class RvcCleanModeServer extends RvcCleanModeBehavior {
+    override initialize() {
+        ModeBaseUtils.assertSupportedModes(this.state.supportedModes);
+        ModeBaseUtils.assertMode(this.state.supportedModes, this.state.currentMode);
+        this.reactTo(this.events.currentMode$Changing, this.#assertMode);
+    }
+
+    #assertMode(newMode: number) {
+        ModeBaseUtils.assertMode(this.state.supportedModes, newMode);
+    }
+
+    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest): ModeBase.ChangeToModeResponse {
+        const result = ModeBaseUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
+        if (result.status === ModeBase.ModeChangeStatus.Success) {
+            this.state.currentMode = newMode;
+        }
+        return result;
+    }
+}
