@@ -8,11 +8,14 @@
 
 import { EnergyEvseMode } from "#clusters/energy-evse-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { EnergyEvseModeInterface } from "./EnergyEvseModeInterface.js";
 
 /**
  * EnergyEvseModeBehavior is the base class for objects that support interaction with {@link EnergyEvseMode.Cluster}.
  */
-export const EnergyEvseModeBehavior = ClusterBehavior.for(EnergyEvseMode.Cluster);
+export const EnergyEvseModeBehavior = ClusterBehavior
+    .withInterface<EnergyEvseModeInterface>()
+    .for(EnergyEvseMode.Cluster);
 
 type EnergyEvseModeBehaviorType = InstanceType<typeof EnergyEvseModeBehavior>;
 export interface EnergyEvseModeBehavior extends EnergyEvseModeBehaviorType {}

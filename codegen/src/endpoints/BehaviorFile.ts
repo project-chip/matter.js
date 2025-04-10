@@ -5,7 +5,7 @@
  */
 
 import { decamelize, Logger } from "#general";
-import { ClusterModel, ClusterVariance, CommandModel } from "#model";
+import { ClusterModel, ClusterVariance } from "#model";
 import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorFile");
@@ -36,7 +36,7 @@ export class BehaviorFile extends TsFile {
 
         // Install the interface if there are commands
         const definingCluster = this.variance.cluster;
-        if (definingCluster.all(CommandModel).length) {
+        if (definingCluster.commands.length) {
             const interfaceName = `${definingCluster.name}Interface`;
 
             if (definingCluster === this.cluster) {
