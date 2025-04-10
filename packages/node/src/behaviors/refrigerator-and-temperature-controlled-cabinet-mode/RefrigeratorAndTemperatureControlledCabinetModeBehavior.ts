@@ -10,12 +10,16 @@ import {
     RefrigeratorAndTemperatureControlledCabinetMode
 } from "#clusters/refrigerator-and-temperature-controlled-cabinet-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import {
+    RefrigeratorAndTemperatureControlledCabinetModeInterface
+} from "./RefrigeratorAndTemperatureControlledCabinetModeInterface.js";
 
 /**
  * RefrigeratorAndTemperatureControlledCabinetModeBehavior is the base class for objects that support interaction with
  * {@link RefrigeratorAndTemperatureControlledCabinetMode.Cluster}.
  */
 export const RefrigeratorAndTemperatureControlledCabinetModeBehavior = ClusterBehavior
+    .withInterface<RefrigeratorAndTemperatureControlledCabinetModeInterface>()
     .for(RefrigeratorAndTemperatureControlledCabinetMode.Cluster);
 
 type RefrigeratorAndTemperatureControlledCabinetModeBehaviorType = InstanceType<typeof RefrigeratorAndTemperatureControlledCabinetModeBehavior>;
