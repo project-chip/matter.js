@@ -8,11 +8,14 @@
 
 import { WaterHeaterMode } from "#clusters/water-heater-mode";
 import { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { WaterHeaterModeInterface } from "./WaterHeaterModeInterface.js";
 
 /**
  * WaterHeaterModeBehavior is the base class for objects that support interaction with {@link WaterHeaterMode.Cluster}.
  */
-export const WaterHeaterModeBehavior = ClusterBehavior.for(WaterHeaterMode.Cluster);
+export const WaterHeaterModeBehavior = ClusterBehavior
+    .withInterface<WaterHeaterModeInterface>()
+    .for(WaterHeaterMode.Cluster);
 
 type WaterHeaterModeBehaviorType = InstanceType<typeof WaterHeaterModeBehavior>;
 export interface WaterHeaterModeBehavior extends WaterHeaterModeBehaviorType {}

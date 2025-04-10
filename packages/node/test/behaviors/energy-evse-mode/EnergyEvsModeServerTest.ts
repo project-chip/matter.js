@@ -6,6 +6,7 @@
 
 import { EnergyEvseModeServer } from "#behaviors/energy-evse-mode";
 import { EnergyEvseMode } from "#clusters/energy-evse-mode";
+import { ModeBase } from "#clusters/mode-base";
 import { OnOffPlugInUnitDevice } from "#devices/on-off-plug-in-unit";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { NotImplementedError } from "#general";
@@ -66,5 +67,16 @@ describe("EnergyEvseModeServer", () => {
                 NotImplementedError,
             );
         });
+    });
+
+    it("supports extension of inherited commands", () => {
+        // Type-only override to verify command typing
+        class MyChangeToModeServer extends EnergyEvseModeServer {
+            override changeToMode(): ModeBase.ChangeToModeResponse {
+                return {} as ModeBase.ChangeToModeResponse;
+            }
+        }
+
+        MyChangeToModeServer satisfies typeof EnergyEvseModeServer;
     });
 });
