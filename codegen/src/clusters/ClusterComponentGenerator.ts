@@ -7,7 +7,6 @@
 import {
     Access,
     AttributeModel,
-    ClusterModel,
     CommandModel,
     ElementTag,
     EventElement,
@@ -33,10 +32,7 @@ export class ClusterComponentGenerator {
     private defaults: DefaultValueGenerator;
     private file: ClusterFile;
 
-    constructor(
-        private target: Block,
-        private cluster: ClusterModel,
-    ) {
+    constructor(private target: Block) {
         this.file = target.file as ClusterFile;
         this.tlv = new TlvGenerator(this.file, this.file.types);
         this.defaults = new DefaultValueGenerator(this.tlv);
@@ -138,10 +134,7 @@ export class ClusterComponentGenerator {
             // Note - we end up mapping "status" response type to TlvNoResponse. Technically "no response" and "status
             // response" are different things but there's currently only a single place in the specification where it
             // makes a difference and neither we nor CHIP implement it yet
-            let responseModel;
-            if (model.response && model.response !== "status") {
-                responseModel = this.cluster.member(model.response, [ElementTag.Command]) as CommandModel | undefined;
-            }
+            const responseModel = model.responseModel;
             if (responseModel) {
                 block.atom(hex(responseModel.id));
                 block.atom(this.tlv.reference(responseModel));

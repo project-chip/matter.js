@@ -7,18 +7,19 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "#general";
+import { OvenCavityOperationalState } from "#clusters/oven-cavity-operational-state";
 
 export namespace OvenCavityOperationalStateInterface {
     export interface Base {
         /**
          * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
          */
-        stop(): MaybePromise;
+        stop(): MaybePromise<OvenCavityOperationalState.OperationalCommandResponse>;
 
         /**
          * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
          */
-        start(): MaybePromise;
+        start(): MaybePromise<OvenCavityOperationalState.OperationalCommandResponse>;
     }
 }
 

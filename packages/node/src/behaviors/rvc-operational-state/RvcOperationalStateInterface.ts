@@ -14,12 +14,12 @@ export namespace RvcOperationalStateInterface {
         /**
          * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
          */
-        pause(): MaybePromise;
+        pause(): MaybePromise<RvcOperationalState.OperationalCommandResponse>;
 
         /**
          * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
          */
-        resume(): MaybePromise;
+        resume(): MaybePromise<RvcOperationalState.OperationalCommandResponse>;
 
         /**
          * On receipt of this command, the device shall start seeking the charging dock, if possible in the current

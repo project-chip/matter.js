@@ -612,9 +612,17 @@ export class ModelTraversal {
      * Find the response model for a command.
      */
     findResponse(command: CommandModel) {
-        if (command.response && command.response !== "status") {
-            return new ModelTraversal().findType(command, command.response, ElementTag.Command);
-        }
+        let response: undefined | CommandModel;
+
+        this.visitInheritance(command, model => {
+            const command = model as CommandModel;
+            if (command.response && command.response !== "status") {
+                response = this.findType(model, command.response, ElementTag.Command) as CommandModel;
+                return false;
+            }
+        });
+
+        return response;
     }
 
     /**

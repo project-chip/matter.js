@@ -28,7 +28,7 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
     }
 
     get responseModel() {
-        return new ModelTraversal().findResponse(this) as ValueModel;
+        return new ModelTraversal().findResponse(this);
     }
 
     get effectiveDirection() {
