@@ -177,7 +177,7 @@ export const ModeBase = Cluster(
         },
 
         Field({
-            name: "status", id: 0x0, type: "ModeChangeStatus", conformance: "M", constraint: "desc",
+            name: "Status", id: 0x0, type: "ModeChangeStatus", conformance: "M", constraint: "desc",
             xref: { document: "cluster", section: "1.10.7.2.1" }
         }),
         Field({ name: "StatusText", id: 0x1, type: "string", conformance: "[Status == Success], M", constraint: "max 64" })

@@ -33,7 +33,7 @@ LocalMatter.children.push({
                 {
                     tag: "field",
                     id: 0,
-                    name: "status",
+                    name: "Status",
                     type: "ModeChangeStatus",
                 },
             ],
