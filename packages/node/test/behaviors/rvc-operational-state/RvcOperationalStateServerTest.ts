@@ -5,6 +5,7 @@
  */
 
 import { RvcOperationalStateServer } from "#behaviors/rvc-operational-state";
+import { RvcOperationalState } from "#clusters/rvc-operational-state";
 import { RoboticVacuumCleanerDevice } from "#devices/robotic-vacuum-cleaner";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { NotImplementedError } from "@matter/general";
@@ -46,7 +47,9 @@ describe("RvcOperationalState", () => {
     it("knows methods are methods", () => {
         // Type-only test to ensure override works
         class MyOperationalStateServer extends RvcOperationalStateServer {
-            override pause() {}
+            override pause() {
+                return {} as RvcOperationalState.OperationalCommandResponse;
+            }
         }
 
         MyOperationalStateServer satisfies {};
