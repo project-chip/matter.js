@@ -8,7 +8,6 @@ import { ModeBaseUtils } from "#behaviors/mode-base";
 import { EnergyEvseMode } from "#clusters/energy-evse-mode";
 import { ModeBase } from "#clusters/mode-base";
 import { ImplementationError } from "@matter/general";
-import { DeviceEnergyManagementMode } from "@matter/types/dist/esm/clusters/device-energy-management-mode.js";
 import { EnergyEvseModeBehavior } from "./EnergyEvseModeBehavior.js";
 
 /**
@@ -32,8 +31,8 @@ export class EnergyEvseModeServer extends EnergyEvseModeBehavior {
                     modeTags.some(({ value }) => value === EnergyEvseMode.ModeTag.Manual) &&
                     !modeTags.some(
                         ({ value }) =>
-                            value === DeviceEnergyManagementMode.ModeTag.TimeOfUse ||
-                            value === DeviceEnergyManagementMode.ModeTag.SolarCharging,
+                            value === EnergyEvseMode.ModeTag.TimeOfUse ||
+                            value === EnergyEvseMode.ModeTag.SolarCharging,
                     ),
             )
         ) {
