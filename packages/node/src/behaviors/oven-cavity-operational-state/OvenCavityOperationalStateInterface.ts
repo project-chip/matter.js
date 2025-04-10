@@ -6,5 +6,22 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export namespace OvenCavityOperationalStateInterface {}
-export type OvenCavityOperationalStateInterface = { components: [] };
+import { MaybePromise } from "#general";
+
+export namespace OvenCavityOperationalStateInterface {
+    export interface Base {
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+         */
+        stop(): MaybePromise;
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+         */
+        start(): MaybePromise;
+    }
+}
+
+export type OvenCavityOperationalStateInterface = {
+    components: [{ flags: {}, methods: OvenCavityOperationalStateInterface.Base }]
+};

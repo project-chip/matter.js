@@ -7,12 +7,21 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Event, EventPriority, OptionalEvent } from "../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    Command,
+    TlvNoResponse,
+    Event,
+    EventPriority,
+    OptionalEvent
+} from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvUInt8, TlvUInt32, TlvEnum } from "../tlv/TlvNumber.js";
 import { OperationalState } from "./operational-state.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
@@ -117,6 +126,18 @@ export namespace OvenCavityOperationalState {
              * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.6
              */
             operationalError: Attribute(0x5, OperationalState.TlvErrorStateStruct)
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             */
+            stop: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
+
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             */
+            start: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
         },
 
         events: {

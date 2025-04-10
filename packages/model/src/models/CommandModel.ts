@@ -20,11 +20,11 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
     }
 
     get isRequest() {
-        return this.direction === CommandElement.Direction.Request;
+        return this.effectiveDirection === CommandElement.Direction.Request;
     }
 
     get isResponse() {
-        return this.direction === CommandElement.Direction.Response;
+        return this.effectiveDirection === CommandElement.Direction.Response;
     }
 
     get responseModel() {
@@ -32,7 +32,7 @@ export class CommandModel extends ValueModel<CommandElement> implements CommandE
     }
 
     get effectiveDirection() {
-        return this.direction ?? (new ModelTraversal().findShadow(this) as CommandModel | undefined)?.direction;
+        return this.direction ?? (this.base as CommandModel | undefined)?.direction;
     }
 
     override get requiredFields() {
