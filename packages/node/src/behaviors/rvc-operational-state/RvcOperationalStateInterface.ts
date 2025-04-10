@@ -12,6 +12,16 @@ import { RvcOperationalState } from "#clusters/rvc-operational-state";
 export namespace RvcOperationalStateInterface {
     export interface Base {
         /**
+         * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
+         */
+        pause(): MaybePromise;
+
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
+         */
+        resume(): MaybePromise;
+
+        /**
          * On receipt of this command, the device shall start seeking the charging dock, if possible in the current
          * state of the device.
          *

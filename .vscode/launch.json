@@ -20,7 +20,10 @@
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "00misc"
+            }
         },
         {
             "type": "node",
@@ -45,7 +48,10 @@
                 "--all-logs",
                 "esm"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "00misc"
+            }
         },
         {
             "type": "node",
@@ -67,7 +73,10 @@
                 "--clear",
                 "${file}"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "00misc"
+            }
         },
         {
             "type": "node",
@@ -90,7 +99,11 @@
                 "--clear",
                 "dist/cjs/app.js"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "tool",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "01tool"
+            }
         },
         {
             "type": "node",
@@ -113,7 +126,11 @@
                 "--clear",
                 "bin/matter.js"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "tool",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "01tool"
+            }
         },
         {
             "type": "node",
@@ -132,10 +149,14 @@
             ],
             "name": "Test @matter/testing",
             "cwd": "${workspaceFolder}/packages/testing",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -154,10 +175,14 @@
             ],
             "name": "Test @matter/general",
             "cwd": "${workspaceFolder}/packages/general",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -176,10 +201,14 @@
             ],
             "name": "Test @matter/model",
             "cwd": "${workspaceFolder}/packages/model",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -198,10 +227,14 @@
             ],
             "name": "Test @matter/types",
             "cwd": "${workspaceFolder}/packages/types",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -220,10 +253,14 @@
             ],
             "name": "Test @matter/protocol",
             "cwd": "${workspaceFolder}/packages/protocol",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -242,10 +279,14 @@
             ],
             "name": "Test @matter/node",
             "cwd": "${workspaceFolder}/packages/node",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -264,10 +305,14 @@
             ],
             "name": "Test @matter/nodejs",
             "cwd": "${workspaceFolder}/packages/nodejs",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -286,10 +331,14 @@
             ],
             "name": "Test @matter/chip-testing",
             "cwd": "${workspaceFolder}/chip-testing",
+            "group": "test",
             "args": [
                 "--clear"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "02test"
+            }
         },
         {
             "type": "node",
@@ -315,7 +364,11 @@
                 "--all-logs",
                 "esm"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "group": "chip",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "03chip"
+            }
         },
         {
             "type": "node",
@@ -341,7 +394,11 @@
                 "--all-logs",
                 "esm"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "group": "chip",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "03chip"
+            }
         },
         {
             "type": "node",
@@ -367,7 +424,11 @@
                 "--all-logs",
                 "esm"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-test"
+            "group": "chip",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "03chip"
+            }
         },
         {
             "type": "node",
@@ -389,7 +450,11 @@
                 "--clear",
                 "packages/examples/src/controller/ControllerNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -411,7 +476,11 @@
                 "--clear",
                 "packages/examples/src/device-bridge-onoff/BridgedDevicesNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -433,7 +502,11 @@
                 "--clear",
                 "packages/examples/src/device-composed-onoff/ComposedDeviceNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -455,7 +528,11 @@
                 "--clear",
                 "packages/examples/src/device-composed-wc-light/IlluminatedRollerShade.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -477,7 +554,11 @@
                 "--clear",
                 "packages/examples/src/device-measuring-socket/MeasuredSocketDevice.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -499,7 +580,11 @@
                 "--clear",
                 "packages/examples/src/device-multiple-onoff/MultiDeviceNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -521,7 +606,11 @@
                 "--clear",
                 "packages/examples/src/device-onoff/DeviceNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -543,7 +632,11 @@
                 "--clear",
                 "packages/examples/src/device-onoff-advanced/DeviceNodeFull.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -565,7 +658,11 @@
                 "--clear",
                 "packages/examples/src/device-onoff-light/LightDevice.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -587,7 +684,11 @@
                 "--clear",
                 "packages/examples/src/device-sensor/SensorDeviceNode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
         },
         {
             "type": "node",
@@ -609,7 +710,11 @@
                 "--clear",
                 "codegen/src/generate-chip.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -631,7 +736,11 @@
                 "--clear",
                 "codegen/src/generate-clusters.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -653,7 +762,11 @@
                 "--clear",
                 "codegen/src/generate-endpoints.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -675,7 +788,11 @@
                 "--clear",
                 "codegen/src/generate-forwards.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -697,7 +814,11 @@
                 "--clear",
                 "codegen/src/generate-model.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -719,10 +840,14 @@
                 "--clear",
                 "codegen/src/generate-spec.ts"
             ],
+            "group": "codegen",
             "env": {
                 "NODE_OPTIONS": "--max-old-space-size=6144"
             },
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         },
         {
             "type": "node",
@@ -744,7 +869,11 @@
                 "--clear",
                 "codegen/src/generate-vscode.ts"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/matter-run"
+            "group": "codegen",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "05codegen"
+            }
         }
     ],
     "inputs": [

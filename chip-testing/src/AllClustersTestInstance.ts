@@ -156,7 +156,6 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     events: { hardwareFaultChange: true, radioFaultChange: true, networkFaultChange: true },
                 }),
                 LocalizationConfigurationServer,
-
                 NetworkCommissioningServer.with("EthernetNetworkInterface"), // Set the correct Ethernet network Commissioning cluster
                 TimeFormatLocalizationServer.with("CalendarFormat"),
                 UnitLocalizationServer.with("TemperatureUnit"),
