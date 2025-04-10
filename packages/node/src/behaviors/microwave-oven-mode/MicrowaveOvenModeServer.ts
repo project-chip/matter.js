@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ModeBaseUtils } from "#behaviors/mode-base";
-import { ModeBase } from "#clusters/mode-base";
 import { MicrowaveOvenModeBehavior } from "./MicrowaveOvenModeBehavior.js";
 
 /**
@@ -19,13 +18,5 @@ export class MicrowaveOvenModeServer extends MicrowaveOvenModeBehavior {
 
     #assertMode(newMode: number) {
         ModeBaseUtils.assertMode(this.state.supportedModes, newMode);
-    }
-
-    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest) {
-        const result = ModeBaseUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
-        if (result.status === ModeBase.ModeChangeStatus.Success) {
-            this.state.currentMode = newMode;
-        }
-        return result;
     }
 }
