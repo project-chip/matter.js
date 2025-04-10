@@ -11,7 +11,6 @@ import {
     Attribute,
     OptionalAttribute,
     Command,
-    TlvNoResponse,
     OptionalCommand,
     Event,
     EventPriority,
@@ -362,12 +361,12 @@ export namespace RvcOperationalState {
             /**
              * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
              */
-            pause: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
+            pause: Command(0x0, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
 
             /**
              * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
              */
-            resume: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse),
+            resume: Command(0x3, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
 
             /**
              * On receipt of this command, the device shall start seeking the charging dock, if possible in the current
