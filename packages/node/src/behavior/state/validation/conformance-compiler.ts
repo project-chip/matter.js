@@ -98,6 +98,11 @@ export function astToFunction(schema: ValueModel, supervisor: RootSupervisor): V
             validator = disallowValue;
             break;
 
+        case Code.Value:
+            // Passes validation if the field is defined
+            validator = compiledNode.value === undefined ? disallowValue : requireValue;
+            break;
+
         case Code.Optional:
             // No conformance validation required
             break;

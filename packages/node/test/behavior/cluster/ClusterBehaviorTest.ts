@@ -142,6 +142,12 @@ describe("ClusterBehavior", () => {
                 expect(behavior.reqCmd).is.a("function");
                 expect(behavior.events.reqAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.reqEv).instanceof(BasicObservable);
+                expect(behavior.state.condAttr).is.undefined;
+                expect(behavior.state.condOptAttr1).is.undefined;
+                expect(behavior.state.condOptAttr2).is.undefined;
+                expect(behavior.events.condAttr$Changed).instanceof(BasicObservable);
+                expect(behavior.events.condOptAttr1$Changed).instanceof(BasicObservable);
+                expect(behavior.events.condOptAttr2$Changed).instanceof(BasicObservable);
             });
         });
 
@@ -156,7 +162,7 @@ describe("ClusterBehavior", () => {
                 } catch (error) {
                     expect(error).instanceof(ImplementationError);
                     expect((error as ImplementationError).message).equals(
-                        "To use this feature, please enable attribute optAttr by setting the value during initialization.",
+                        "To use this feature, please enable attribute optAttr by setting the value during initialization",
                     );
                     errorCount++;
                 }
@@ -165,12 +171,15 @@ describe("ClusterBehavior", () => {
                 } catch (error) {
                     expect(error).instanceof(ImplementationError);
                     expect((error as ImplementationError).message).equals(
-                        "To use this feature, please enable attribute optAttr by setting the value during initialization.",
+                        "To use this feature, please enable attribute optAttr by setting the value during initialization",
                     );
                     errorCount++;
                 }
                 expect(errorCount).equals(2);
-                expect(behavior.events.optAttr$Changed).undefined;
+
+                // The "changed" event should be present even if the attribute is not enabled
+                expect(behavior.events.optAttr$Changed).not.undefined;
+
                 expect(behavior.events.optEv).undefined;
             });
         });
@@ -356,4 +365,6 @@ describe("ClusterBehavior", () => {
             expect(new MyLevelControl2.State().remainingTime).equals(0);
         });
     });
+
+    describe("defaults", () => {});
 });

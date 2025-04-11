@@ -91,16 +91,14 @@ export class Conformance extends Aspect<Conformance.Definition> {
      * Perform limited conformance evaluation to determine whether this conformance is applicable given a feature
      * combination.
      *
-     * Ignores subexpressions that reference field values.
-     *
      * This is useful for filtering elements at compile time.  For complete accuracy you then need to filter at runtime
      * once field values are known.
      */
-    isApplicable(features: Iterable<string>, supportedFeatures: Iterable<string>) {
+    applicabilityOf(features: Iterable<string>, supportedFeatures: Iterable<string>) {
         const fset = features instanceof Set ? (features as Set<string>) : new Set(features);
         const sfset =
             supportedFeatures instanceof Set ? (supportedFeatures as Set<string>) : new Set(supportedFeatures);
-        return computeApplicability(fset, sfset, this.ast) !== false;
+        return computeApplicability(fset, sfset, this.ast);
     }
 
     override toString() {
@@ -114,6 +112,12 @@ export class Conformance extends Aspect<Conformance.Definition> {
 }
 
 export namespace Conformance {
+    export enum Applicability {
+        None = 0,
+        Unconditional = 1,
+        Conditional = 2,
+    }
+
     export type AstParam =
         | Ast.Name
         | Ast.Value
@@ -639,48 +643,68 @@ namespace Parser {
 }
 
 function computeApplicability(features: Set<string>, supportedFeatures: Set<string>, ast: Conformance.Ast) {
-    function processNode(ast: Conformance.Ast): boolean {
+    const { None, Unconditional, Conditional } = Conformance.Applicability;
+
+    function processNode(ast: Conformance.Ast): Conformance.Applicability {
         switch (ast.type) {
             case Conformance.Special.Name:
                 if (features.has(ast.param)) {
-                    return supportedFeatures.has(ast.param);
+                    return supportedFeatures.has(ast.param) ? Unconditional : None;
                 }
-                break;
+                return Conditional;
 
             case Conformance.Operator.NOT:
-                const subvalue = processNode(ast.param);
-                if (typeof subvalue === "boolean") {
-                    return !subvalue;
+                if (processNode(ast.param)) {
+                    return None;
                 }
                 break;
 
-            case Conformance.Operator.AND:
-                if (!processNode(ast.param.lhs) || !processNode(ast.param.rhs)) {
-                    return false;
+            case Conformance.Operator.AND: {
+                const lhs = processNode(ast.param.lhs);
+                const rhs = processNode(ast.param.rhs);
+                if (lhs === None || rhs === None) {
+                    return None;
+                }
+                if (lhs === Conditional || rhs === Conditional) {
+                    return Conditional;
                 }
                 break;
+            }
 
-            case Conformance.Operator.OR:
-                if (!processNode(ast.param.lhs) && !processNode(ast.param.rhs)) {
-                    return false;
+            case Conformance.Operator.OR: {
+                const lhs = processNode(ast.param.lhs);
+                const rhs = processNode(ast.param.rhs);
+                if (lhs === None && rhs === None) {
+                    return None;
+                }
+                if (lhs === Conditional || rhs === Conditional) {
+                    return Conditional;
                 }
                 break;
+            }
 
             case Conformance.Flag.Disallowed:
-                return false;
+                return None;
 
             case Conformance.Special.OptionalIf:
                 return processNode(ast.param);
 
-            case Conformance.Special.Group:
+            case Conformance.Special.Group: {
+                let result = None;
                 for (const child of ast.param) {
-                    if (processNode(child)) {
-                        return true;
+                    switch (processNode(child)) {
+                        case Unconditional:
+                            return Unconditional;
+
+                        case Conditional:
+                            result = Conditional;
+                            break;
                     }
                 }
-                return false;
+                return result;
+            }
         }
-        return true;
+        return Unconditional;
     }
     return processNode(ast);
 }

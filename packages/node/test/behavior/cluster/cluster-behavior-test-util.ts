@@ -60,6 +60,15 @@ export namespace My {
 
             /** This attribute is optional */
             optAttr: OptionalAttribute(2, TlvBoolean, { default: true }),
+
+            /** This attribute is conditionally mandatory */
+            condAttr: OptionalAttribute(12, TlvUInt8, { default: 4 }),
+
+            /** This attribute is conditionally optional */
+            condOptAttr1: OptionalAttribute(13, TlvUInt8, { default: 4 }),
+
+            /** This attribute is conditionally optional */
+            condOptAttr2: OptionalAttribute(14, TlvUInt8, { default: 4 }),
         },
 
         commands: {
@@ -93,7 +102,7 @@ export const MySchema = new ClusterModel({
 
     children: [
         AttributeElement({ id: 1, name: "ReqAttr", type: "string", conformance: "M" }),
-        AttributeElement({ id: 2, name: "Optattr", type: "bool", conformance: "O" }),
+        AttributeElement({ id: 2, name: "OptAttr", type: "bool", conformance: "O" }),
         CommandElement({ id: 5, name: "ReqCmd", response: "ReqResponse", type: "string", conformance: "M" }),
         CommandElement({ id: 5, name: "ReqResponse", direction: "response", type: "string", conformance: "M" }),
         CommandElement({ id: 6, name: "OptCmd", response: "ReqResponse", type: "string", conformance: "O" }),
@@ -101,22 +110,33 @@ export const MySchema = new ClusterModel({
         EventElement({ id: 7, name: "ReqEv", priority: "critical", type: "string" }),
         EventElement({ id: 8, name: "OptEv", priority: "debug", type: "string" }),
 
-        AttributeElement({
-            name: "FeatureMap",
-            id: 0xfffc,
-            type: "FeatureMap",
-            children: [
-                FieldElement({
-                    name: "AWE",
-                    constraint: "0",
-                    description: "Awesome",
-                    details: "That which makes me more awesome.",
-                }),
-            ],
-        }),
+        AttributeElement(
+            {
+                name: "FeatureMap",
+                id: 0xfffc,
+                type: "FeatureMap",
+            },
+
+            FieldElement({
+                name: "AWE",
+                constraint: "0",
+                description: "Awesome",
+                details: "That which makes me more awesome.",
+            }),
+        ),
+
         AttributeElement({ id: 9, name: "AwesomeSauce", conformance: "AWE", type: "uint8" }),
         CommandElement({ id: 10, name: "BecomeAwesome", conformance: "AWE", type: "uint8" }),
         EventElement({ id: 11, name: "BecameAwesome", conformance: "AWE", type: "uint8", priority: "info" }),
+        AttributeElement({ id: 12, name: "CondAttr", conformance: "OptAttr", type: "uint8", default: 4 }),
+        AttributeElement({ id: 13, name: "CondOptAttr1", conformance: "[OptAttr]", type: "uint8", default: 4 }),
+        AttributeElement({
+            id: 14,
+            name: "CondOptAttr2",
+            conformance: "[CondOptAttr2 > 4]",
+            type: "uint8",
+            default: 4,
+        }),
     ],
 });
 
