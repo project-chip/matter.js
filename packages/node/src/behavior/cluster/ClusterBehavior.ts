@@ -187,7 +187,7 @@ export class ClusterBehavior extends Behavior {
     ): Exclude<This["state"][K], undefined> {
         if ((this.state as any)[attributeName] === undefined) {
             throw new ImplementationError(
-                `To use this feature, please enable attribute ${String(attributeName)} by setting the value during initialization.`,
+                `To use this feature, please enable attribute ${String(attributeName)} by setting the value during initialization`,
             );
         }
         return (this.state as any)[attributeName];
@@ -196,7 +196,7 @@ export class ClusterBehavior extends Behavior {
     assertAttributeEnabled<This extends Behavior, K extends keyof This["state"]>(this: This, attributeName: K): void {
         if ((this.state as any)[attributeName] === undefined) {
             throw new ImplementationError(
-                `To use this feature, please enable attribute ${String(attributeName)} by setting the value during initialization.`,
+                `To use this feature, please enable attribute ${String(attributeName)} by setting the value during initialization`,
             );
         }
     }

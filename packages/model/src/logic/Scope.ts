@@ -364,13 +364,13 @@ function filterWithConformance(
             );
         }
 
-        if (conformantOnly && !conformance.isApplicable(features, supportedFeatures)) {
+        if (conformantOnly && !conformance.applicabilityOf(features, supportedFeatures)) {
             continue;
         }
 
         const other = selectedMembers[member.name];
         if (other !== undefined) {
-            if (!conformantOnly && !conformance.isApplicable(features, supportedFeatures)) {
+            if (!conformantOnly && !conformance.applicabilityOf(features, supportedFeatures)) {
                 continue;
             }
 
@@ -381,7 +381,7 @@ function filterWithConformance(
                 );
             }
 
-            if (otherConformance.isApplicable(features, supportedFeatures)) {
+            if (otherConformance.applicabilityOf(features, supportedFeatures)) {
                 throw new SchemaImplementationError(
                     parent,
                     `There are multiple definitions of "${member.name}" that cannot be differentiated by conformance`,
