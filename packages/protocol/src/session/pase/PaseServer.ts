@@ -94,7 +94,7 @@ export class PaseServer implements ProtocolHandler {
                 );
             }
         } finally {
-            // Destroy the unsecure session used to establish the secure Case session
+            // Destroy the unsecure session used to establish the Pase session
             await exchange.session.destroy();
         }
     }
