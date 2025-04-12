@@ -63,7 +63,20 @@ export class PaseServer implements ProtocolHandler {
     async onNewExchange(exchange: MessageExchange) {
         const messenger = new PaseServerMessenger(exchange);
         try {
-            await this.handlePairingRequest(messenger);
+            // When a Commissioner is either in the process of establishing a PASE session with the Commissionee or has
+            // successfully established a session, the Commissionee SHALL NOT accept any more requests for new PASE
+            // sessions until session establishment fails or the successfully established PASE session is terminated on
+            // the commissioning channel.
+            if (this.sessions.getPaseSession()) {
+                logger.info("Pase server: Pairing already in progress (PASE session exists), ignoring new exchange.");
+            } else if (this.#pairingTimer?.isRunning) {
+                logger.info(
+                    "Pase server: Pairing already in progress (PASE establishment Timer running), ignoring new exchange.",
+                );
+            } else {
+                // Ok new pairing try, handle it
+                await this.handlePairingRequest(messenger);
+            }
         } catch (error) {
             this.#pairingErrors++;
             logger.error(
@@ -81,28 +94,12 @@ export class PaseServer implements ProtocolHandler {
                 );
             }
         } finally {
-            // Destroy the unsecure session used to establish the secure Case session
+            // Destroy the unsecure session used to establish the Pase session
             await exchange.session.destroy();
         }
     }
 
     private async handlePairingRequest(messenger: PaseServerMessenger) {
-        // When a Commissioner is either in the process of establishing a PASE session with the Commissionee or has
-        // successfully established a session, the Commissionee SHALL NOT accept any more requests for new PASE
-        // sessions until session establishment fails or the successfully established PASE session is terminated on
-        // the commissioning channel.
-        if (this.sessions.getPaseSession()) {
-            throw new MatterFlowError(
-                "Pase server: Pairing already in progress (PASE session exists), ignoring new exchange.",
-            );
-        }
-
-        if (this.#pairingTimer !== undefined && this.#pairingTimer.isRunning) {
-            throw new MatterFlowError(
-                "Pase server: Pairing already in progress (PASE establishment Timer running), ignoring new exchange.",
-            );
-        }
-
         logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
 
         this.#pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
