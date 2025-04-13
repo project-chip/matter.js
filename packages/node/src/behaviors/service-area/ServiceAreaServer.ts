@@ -166,7 +166,7 @@ export class ServiceAreaBaseServer extends ServiceAreaBase {
         const { result, validatedAreas } = this.assertSelectServiceArea({ newAreas });
         if (result.status === ServiceArea.SelectAreasStatus.Success && validatedAreas !== undefined) {
             this.state.selectedAreas = validatedAreas;
-            if (validatedAreas.length > 0) {
+            if (this.state.progress !== undefined && validatedAreas.length > 0) {
                 const progress = new Array<ServiceArea.Progress>();
                 for (const area of validatedAreas) {
                     progress.push({
