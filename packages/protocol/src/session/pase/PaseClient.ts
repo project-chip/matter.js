@@ -7,6 +7,7 @@
 import { Bytes, Crypto, ec, Logger, PbkdfParameters, Spake2p, UnexpectedDataError } from "#general";
 import { SessionManager } from "#session/SessionManager.js";
 import { CommissioningOptions, NodeId } from "#types";
+import { ProtocolStatusCode } from "@matter/types";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { SessionParameters } from "../Session.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
@@ -66,8 +67,12 @@ export class PaseClient {
             responsePayload,
             response: { pbkdfParameters, responderSessionId, responderSessionParams },
         } = await messenger.readPbkdfParamResponse();
-        if (pbkdfParameters === undefined)
-            throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
+        if (pbkdfParameters === undefined) {
+            // Sending this error is not defined in the specs and should normally never happen, but better inform device
+            // that we cancel the pairing
+            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            throw new UnexpectedDataError("Missing requested PbkdfParameters in the response. Commissioning failed.");
+        }
 
         // This includes the Fallbacks for the session parameters overridden by what was sent by the device in PbkdfResponse
         sessionParameters = {
@@ -84,8 +89,12 @@ export class PaseClient {
         // Process pack2 and send pake3
         const { y: Y, verifier } = await messenger.readPasePake2();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromY(w1, X, Y);
-        if (!Bytes.areEqual(verifier, hBX))
-            throw new UnexpectedDataError("Received incorrect key confirmation from the receiver.");
+        if (!Bytes.areEqual(verifier, hBX)) {
+            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            throw new UnexpectedDataError(
+                "Received incorrect key confirmation from the receiver. Commissioning failed.",
+            );
+        }
         await messenger.sendPasePake3({ verifier: hAY });
 
         // All good! Creating the secure session
