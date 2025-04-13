@@ -30,6 +30,7 @@
         "build-clean": "matter-build --clean",
         "matter-light": "matter-run src/device-onoff-light/LightDevice.ts",
         "matter-measuredsocket": "matter-run src/device-measuring-socket/MeasuredSocketDevice.ts",
+        "matter-rvc": "matter-run src/device-robotic-vacuum-cleaner/RoboticVacuumCleanerDevice.ts",
         "matter-sensor": "matter-run src/device-sensor/SensorDeviceNode.ts",
         "matter-excelsior1000": "matter-run src/device-composed-wc-light/IlluminatedRollerShade.ts",
         "matter-device": "matter-run src/device-onoff/DeviceNode.ts",
