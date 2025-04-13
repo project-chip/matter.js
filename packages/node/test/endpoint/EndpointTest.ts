@@ -173,6 +173,81 @@ describe("Endpoint", () => {
                 },
             ]);
         });
+
+        it("replaces array when shorter", async () => {
+            const node = new MockNode();
+            await node.construction;
+
+            await node.set({
+                accessControl: {
+                    acl: [
+                        {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Pase,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                            subjects: null,
+                            targets: null,
+                        },
+                        {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                            subjects: null,
+                            targets: null,
+                        },
+                    ],
+                },
+            });
+
+            await node.set({
+                accessControl: {
+                    acl: [
+                        {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Group,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                            subjects: null,
+                            targets: null,
+                        },
+                    ],
+                },
+            });
+
+            expect(node.state.accessControl.acl).deep.equals([
+                {
+                    authMode: AccessControl.AccessControlEntryAuthMode.Group,
+                    fabricIndex: 1,
+                    privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                    subjects: null,
+                    targets: null,
+                },
+            ]);
+        });
+
+        it("replaces array to empty", async () => {
+            const node = new MockNode();
+            await node.construction;
+
+            await node.set({
+                accessControl: {
+                    acl: [
+                        {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Pase,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                        },
+                    ],
+                },
+            });
+
+            await node.set({
+                accessControl: {
+                    acl: [],
+                },
+            });
+
+            expect(node.state.accessControl.acl).deep.equals([]);
+        });
     });
 
     describe("accepts new behaviors", () => {
