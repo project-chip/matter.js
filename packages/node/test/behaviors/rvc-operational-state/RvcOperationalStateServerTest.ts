@@ -9,6 +9,7 @@ import { RvcOperationalState } from "#clusters/rvc-operational-state";
 import { RoboticVacuumCleanerDevice } from "#devices/robotic-vacuum-cleaner";
 import { Endpoint } from "#endpoint/Endpoint.js";
 import { NotImplementedError } from "@matter/general";
+import { RvcRunMode } from "@matter/types/clusters/rvc-run-mode";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 const DeviceType = RoboticVacuumCleanerDevice;
@@ -21,12 +22,26 @@ async function createNode(options?: Endpoint.Options<typeof DeviceType>) {
 
     const rvcRunMode = options.rvcRunMode ?? {};
     options.rvcRunMode = {
+        supportedModes: [
+            {
+                label: "Idle",
+                mode: 0,
+                modeTags: [{ value: RvcRunMode.ModeTag.Idle }],
+            },
+            {
+                label: "Cleaning",
+                mode: 1,
+                modeTags: [{ value: RvcRunMode.ModeTag.Cleaning }],
+            },
+        ],
+        currentMode: 0,
         ...rvcRunMode,
     };
 
     const rvcOperationalState = options.rvcOperationalState ?? {};
     options.rvcOperationalState = {
-        operationalState: 0,
+        operationalStateList: [{ operationalStateId: RvcOperationalState.OperationalState.Error }],
+        operationalState: RvcOperationalState.OperationalState.Error,
         ...rvcOperationalState,
     };
 
