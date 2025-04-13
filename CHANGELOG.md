@@ -19,6 +19,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
     -   Feature: Added Docker based own Test Runner and execute all tests there too with chip-tool against matter.js test device
 
+-   @matter/examples
+    - Enhancement: Added Robotic Vacuum Cleaner example to show the cluster dependencies and basic logic requirements
+
 -   @matter/general
     - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
     - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
@@ -44,10 +47,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: `LevelControlServer` and `ColorControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
     - Feature: Added support for the ActionSwitch feature for the `SwitchServer` default implementation
     - Feature: Added basic validation for all ModeBase derived *Mode clusters
+    - Feature: Added basic validation for OperationalState and derived *OperationalState clusters
+    - Feature: Added basic validation and logic for ServiceArea cluster
     - Enhancement: `OccupancySensingServer` is automatically filling some legacy attributes when features are correctly set as required by new revision 5 of the cluster
     - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
     - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+    - Fix: Fixed patching of arrays to correctly allow to set arrays with fewer elements than the original array using `set()`
 
 -   @matter/nodejs
     - Enhancement: Added a UDP send guard to reject hanging send calls after maximum 1-2s
