@@ -3,7 +3,9 @@
  * Copyright 2022-2025 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ModeBaseUtils } from "#behaviors/mode-base";
+import { ModeUtils } from "#behaviors/mode-base";
+import { MicrowaveOvenMode } from "#clusters/microwave-oven-mode";
+import { ImplementationError } from "#general";
 import { MicrowaveOvenModeBehavior } from "./MicrowaveOvenModeBehavior.js";
 
 /**
@@ -11,12 +13,35 @@ import { MicrowaveOvenModeBehavior } from "./MicrowaveOvenModeBehavior.js";
  */
 export class MicrowaveOvenModeServer extends MicrowaveOvenModeBehavior {
     override initialize() {
-        ModeBaseUtils.assertSupportedModes(this.state.supportedModes);
-        ModeBaseUtils.assertMode(this.state.supportedModes, this.state.currentMode);
+        this.#assertSupportedModes();
+        ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);
     }
 
+    #assertSupportedModes() {
+        ModeUtils.assertSupportedModes(this.state.supportedModes);
+        if (
+            this.state.supportedModes.filter(({ modeTags }) =>
+                modeTags.some(({ value }) => value === MicrowaveOvenMode.ModeTag.Normal),
+            ).length !== 1
+        ) {
+            throw new ImplementationError("Provided supportedModes need to include exactly one Normal mode tag");
+        }
+
+        if (
+            this.state.supportedModes.some(
+                ({ modeTags }) =>
+                    modeTags.some(({ value }) => value === MicrowaveOvenMode.ModeTag.Normal) &&
+                    modeTags.some(({ value }) => value === MicrowaveOvenMode.ModeTag.Defrost),
+            )
+        ) {
+            throw new ImplementationError(
+                "Provided supportedModes must not have Normal and Defrost mode tags together in one mode",
+            );
+        }
+    }
+
     #assertMode(newMode: number) {
-        ModeBaseUtils.assertMode(this.state.supportedModes, newMode);
+        ModeUtils.assertMode(this.state.supportedModes, newMode);
     }
 }

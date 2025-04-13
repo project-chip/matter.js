@@ -11,7 +11,7 @@ export class UnsupportedModeError extends ImplementationError {}
 // Ignore modeTags property because this is "derived cluster specific" and not used for the validation
 type GenericModeOption = Omit<ModeBase.ModeOption, "modeTags">;
 
-export namespace ModeBaseUtils {
+export namespace ModeUtils {
     export function assertSupportedModes(supportedModes: GenericModeOption[]) {
         const labels = new Set<string>();
         const modes = new Set<number>();

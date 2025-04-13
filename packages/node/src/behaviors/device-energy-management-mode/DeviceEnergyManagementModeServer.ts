@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ModeBaseUtils } from "#behaviors/mode-base";
+import { ModeUtils } from "#behaviors/mode-base";
 import { DeviceEnergyManagementMode } from "#clusters/device-energy-management-mode";
 import { ModeBase } from "#clusters/mode-base";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { DeviceEnergyManagementModeBehavior } from "./DeviceEnergyManagementModeBehavior.js";
 
 /**
@@ -16,12 +16,12 @@ import { DeviceEnergyManagementModeBehavior } from "./DeviceEnergyManagementMode
 export class DeviceEnergyManagementModeServer extends DeviceEnergyManagementModeBehavior {
     override initialize() {
         this.#assertSupportedModes();
-        ModeBaseUtils.assertMode(this.state.supportedModes, this.state.currentMode);
+        ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);
     }
 
     #assertSupportedModes() {
-        ModeBaseUtils.assertSupportedModes(this.state.supportedModes);
+        ModeUtils.assertSupportedModes(this.state.supportedModes);
 
         if (
             // Check that at least one of NoOptimization, LocalOptimization or GridOptimization is present as tags
@@ -51,11 +51,24 @@ export class DeviceEnergyManagementModeServer extends DeviceEnergyManagementMode
     }
 
     #assertMode(newMode: number) {
-        ModeBaseUtils.assertMode(this.state.supportedModes, newMode);
+        ModeUtils.assertMode(this.state.supportedModes, newMode);
     }
 
-    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest): ModeBase.ChangeToModeResponse {
-        const result = ModeBaseUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
+    /**
+     * This command is used to change device modes.
+     * On receipt of this command the device shall respond with a ChangeToModeResponse command.
+     *
+     * The default implementation automatically validates the new mode against the supported modes and returns an error
+     * if the new mode is not supported. If the new mode is supported, the current mode is updated to the new mode.
+     *
+     * If you need to override this with extra validation logic you can use
+     * `ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode)`
+     * to just execute the validation and add your own validation requirements before or after these standard checks.
+     * The above method returns a `ModeBase.ChangeToModeResponse` object that you can use to return the result of the
+     * validation.
+     */
+    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest): MaybePromise<ModeBase.ChangeToModeResponse> {
+        const result = ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
         if (result.status === ModeBase.ModeChangeStatus.Success) {
             this.state.currentMode = newMode;
         }

@@ -5,4 +5,4 @@
  */
 
 export * from "./ModeBaseInterface.js";
-export * from "./ModeBaseUtils.js";
+export * from "./ModeUtils.js";

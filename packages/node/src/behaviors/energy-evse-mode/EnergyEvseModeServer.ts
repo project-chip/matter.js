@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ModeBaseUtils } from "#behaviors/mode-base";
+import { ModeUtils } from "#behaviors/mode-base";
 import { EnergyEvseMode } from "#clusters/energy-evse-mode";
 import { ModeBase } from "#clusters/mode-base";
-import { ImplementationError } from "@matter/general";
+import { ImplementationError, MaybePromise } from "#general";
 import { EnergyEvseModeBehavior } from "./EnergyEvseModeBehavior.js";
 
 /**
@@ -16,12 +16,12 @@ import { EnergyEvseModeBehavior } from "./EnergyEvseModeBehavior.js";
 export class EnergyEvseModeServer extends EnergyEvseModeBehavior {
     override initialize() {
         this.#assertSupportedModes();
-        ModeBaseUtils.assertMode(this.state.supportedModes, this.state.currentMode);
+        ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);
     }
 
     #assertSupportedModes() {
-        ModeBaseUtils.assertSupportedModes(this.state.supportedModes);
+        ModeUtils.assertSupportedModes(this.state.supportedModes);
 
         // Check if the supported modes contain at least one mode with Manual mode tag, but not together with
         // TimeOfUse or SolarCharging
@@ -36,16 +36,31 @@ export class EnergyEvseModeServer extends EnergyEvseModeBehavior {
                     ),
             )
         ) {
-            throw new ImplementationError("Provided supportedModes invalid.");
+            throw new ImplementationError(
+                "Provided supportedModes need to include at least one Manual mode tag, but not together with TimeOfUse or SolarCharging",
+            );
         }
     }
 
     #assertMode(newMode: number) {
-        ModeBaseUtils.assertMode(this.state.supportedModes, newMode);
+        ModeUtils.assertMode(this.state.supportedModes, newMode);
     }
 
-    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest): ModeBase.ChangeToModeResponse {
-        const result = ModeBaseUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
+    /**
+     * This command is used to change device modes.
+     * On receipt of this command the device shall respond with a ChangeToModeResponse command.
+     *
+     * The default implementation automatically validates the new mode against the supported modes and returns an error
+     * if the new mode is not supported. If the new mode is supported, the current mode is updated to the new mode.
+     *
+     * If you need to override this with extra validation logic you can use
+     * `ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode)`
+     * to just execute the validation and add your own validation requirements before or after these standard checks.
+     * The above method returns a `ModeBase.ChangeToModeResponse` object that you can use to return the result of the
+     * validation.
+     */
+    override changeToMode({ newMode }: ModeBase.ChangeToModeRequest): MaybePromise<ModeBase.ChangeToModeResponse> {
+        const result = ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
         if (result.status === ModeBase.ModeChangeStatus.Success) {
             this.state.currentMode = newMode;
         }
