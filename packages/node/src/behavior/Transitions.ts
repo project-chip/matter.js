@@ -21,7 +21,6 @@ import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
 import { OfflineContext } from "./context/index.js";
 import { BehaviorBacking } from "./internal/BehaviorBacking.js";
-import PropertyOf = Transitions.PropertyOf;
 
 const logger = Logger.get("Transition");
 
@@ -495,7 +494,7 @@ export class Transitions<B extends Behavior> {
             const nextValue = Math.round(currentValue);
             if (state[name] !== nextValue && (nextValue === null || typeof nextValue === "number")) {
                 //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
-                changes[name] = nextValue as unknown as Transitions.StateOf<B>[PropertyOf<B>];
+                changes[name] = nextValue as unknown as Transitions.StateOf<B>[Transitions.PropertyOf<B>];
             }
         }
 
