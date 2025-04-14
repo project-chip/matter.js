@@ -49,8 +49,9 @@ const logger = Logger.get("Transition");
  *    completion when all attributes reach their target value or when you invoke {@link finish}.
  *
  * 4. You can also allow matter.js to operate a transition timer but apply value updates directly to hardware by
- *    overriding {@link applyUpdates} or {@link step}.  This is useful if your device does not support transitions
- *    natively, but you want to ensure that matter.js does not report values that do not reflect hardware state.
+ *    overriding {@link applyUpdates} (and use `determineUpdates()` if needed) or {@link step}.  This is useful if your
+ *    device does not support transitions natively, but you want to ensure that matter.js does not report values that
+ *    do not reflect hardware state.
  *
  * Whichever approach you take, matter.js attempts to implement the Matter protocol as accurately as possible with the
  * information available.
@@ -228,10 +229,11 @@ export class Transitions<B extends Behavior> {
     /**
      * Immediately change to a target value.
      *
-     * The default implementation updates the local state value.
+     * The default implementation updates the local state value and calls `applyUpdates()`.
      */
     protected transitionImmediately(owner: B, name: Transitions.PropertyOf<B>, targetValue: number) {
-        (owner.state as Record<string, number>)[name] = targetValue;
+        this.#propertyStates[name].currentValue = targetValue;
+        this.applyUpdates(owner);
     }
 
     /**
@@ -482,8 +484,10 @@ export class Transitions<B extends Behavior> {
         }
     }
 
-    protected applyUpdates(behavior: B): MaybePromise<void> {
+    /** Determine the changes to be applied to the behavior and return as key-value object. */
+    protected determineUpdates(behavior: B) {
         const state = behavior.state as Record<string, number>;
+        const changes = {} as Record<string, number>;
 
         for (const prop of this) {
             const { name, currentValue } = prop;
@@ -491,9 +495,31 @@ export class Transitions<B extends Behavior> {
             const nextValue = Math.round(currentValue);
             if (state[name] !== nextValue) {
                 //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
-                state[name] = nextValue;
+                changes[name] = nextValue;
             }
         }
+
+        return changes;
+    }
+
+    /**
+     * This method is called to apply the changes to the behavior.
+     * The default implementation detects the changed attributes using the method `determineChanges()`and updates the
+     * state of the behavior.  It also returns them as an key-value object, which can be useful when just requiring the
+     * changes values in an extended class.
+     */
+    protected applyUpdates(behavior: B): MaybePromise<Record<string, number>> {
+        const changes = this.determineUpdates(behavior);
+        const state = behavior.state as Record<string, number>;
+
+        for (const name in changes) {
+            const value = changes[name];
+            if (value !== undefined) {
+                state[name] = value;
+            }
+        }
+
+        return changes;
     }
 
     #step() {

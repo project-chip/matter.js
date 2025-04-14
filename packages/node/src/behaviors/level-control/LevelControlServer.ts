@@ -5,6 +5,7 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { ColorControlServer } from "#behaviors/color-control";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
@@ -31,11 +32,11 @@ const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, L
  * This implementation includes all features of {@link LevelControl.Cluster} and all mandatory commands. It also handles
  * the OnOff cluster dependency and the ColorControl dependency as defined by the Matter specification.
  *
- * By default this implementation ignores transition times and sets levels immediately.  You can set
+ * By default, this implementation ignores transition times and sets levels immediately.  You can set
  * {@link LevelControl.State#managedTransitionTimeHandling} to enable higher-level logic in Matter.js to manage level
  * changes.
  *
- * If your hardware supports transitions natively, you may override {@link initializeTransitions} to return a
+ * If your hardware supports transitions natively, you may override {@link createTransitions} to return a
  * {@link Transitions} implementation adapted to your hardware.  This allows matter.js to handle Matter requirements
  * such as remaining time and level reporting.
  *
@@ -47,7 +48,8 @@ const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, L
  * * {@link LevelControlBaseServer.moveLogic} moves the value up or down with a defined rate
  * * {@link LevelControlBaseServer.stepLogic} steps the value up or down with a defined step size and transition
  * * {@link LevelControlBaseServer.stopLogic} stops any currently running transitions
- * * {@link LevelControlBaseServer.handleOnOffChange} transition to onLevel when device when device turns on or off
+ * * {@link LevelControlBaseServer.couple} couples the current level with other clusters (e.g. ColorControl)
+ * * {@link LevelControlBaseServer.handleOnOffChange} transition to onLevel when device turns on or off
  *
  * All overridable methods may be implemented sync or async by returning a Promise.
  */
@@ -93,7 +95,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         }
 
         // Configure transition management
-        this.internal.transitions = this.initializeTransitions();
+        this.internal.transitions = this.#initializeTransitions();
 
         // Configure lighting feature
         if (this.features.lighting) {
@@ -107,21 +109,27 @@ export class LevelControlBaseServer extends LevelControlBase {
     }
 
     /**
-     * Initialize transition management.
+     * Create transition management instance.
      *
      * We manage transitions using {@link Transitions} if
      * {@link LevelControlBaseServer.State#managedTransitionTimeHandling} is true.
      *
      * You may override this method to replace the {@link Transitions} implementation customized for your application.
+     * The provided configuration object is the default one used for Level Control transitions, but can be adjusted
+     * if needed.
      */
-    protected initializeTransitions() {
+    protected createTransitions<B extends Behavior>(config: Transitions.Configuration<B>) {
+        return new Transitions(this.endpoint, config);
+    }
+
+    #initializeTransitions() {
         const { endpoint } = this;
 
         // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
         // this efficient we use the read-only view of our state provided by the endpoint as it is always available
         const readOnlyState = (endpoint.state as Record<string, unknown>).levelControl as LevelControlBaseServer.State;
 
-        return new Transitions(this.endpoint, {
+        return this.createTransitions({
             type: LevelControlBaseServer,
 
             remainingTimeEvent: this.events.remainingTime$Changed,
@@ -649,7 +657,6 @@ export namespace LevelControlBaseServer {
         ): MaybePromise<void>;
         stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
         couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
-        setRemainingTime(remainingTime: number): void;
         handleOnOffChange(onOff: boolean): void;
     };
 }
