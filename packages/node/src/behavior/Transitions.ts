@@ -21,6 +21,7 @@ import { Behavior } from "./Behavior.js";
 import { ClusterEvents } from "./cluster/ClusterEvents.js";
 import { OfflineContext } from "./context/index.js";
 import { BehaviorBacking } from "./internal/BehaviorBacking.js";
+import PropertyOf = Transitions.PropertyOf;
 
 const logger = Logger.get("Transition");
 
@@ -232,8 +233,7 @@ export class Transitions<B extends Behavior> {
      * The default implementation updates the local state value and calls `applyUpdates()`.
      */
     protected transitionImmediately(owner: B, name: Transitions.PropertyOf<B>, targetValue: number) {
-        this.#propertyStates[name].currentValue = targetValue;
-        this.applyUpdates(owner);
+        this.applyUpdates(owner, { [name]: targetValue } as unknown as Partial<Transitions.StateOf<B>>);
     }
 
     /**
@@ -478,24 +478,24 @@ export class Transitions<B extends Behavior> {
             prop.prevStepAt = now;
         }
 
-        const applyPromise = this.applyUpdates(behavior);
-        if (applyPromise) {
+        const applyPromise = this.applyUpdates(behavior, this.determineUpdates(behavior));
+        if (MaybePromise.is(applyPromise)) {
             await applyPromise;
         }
     }
 
     /** Determine the changes to be applied to the behavior and return as key-value object. */
     protected determineUpdates(behavior: B) {
-        const state = behavior.state as Record<string, number>;
-        const changes = {} as Record<string, number>;
+        const state = behavior.state as Record<string, number | null>;
+        const changes = {} as Partial<Transitions.StateOf<B>>;
 
         for (const prop of this) {
             const { name, currentValue } = prop;
 
             const nextValue = Math.round(currentValue);
-            if (state[name] !== nextValue) {
+            if (state[name] !== nextValue && (nextValue === null || typeof nextValue === "number")) {
                 //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
-                changes[name] = nextValue;
+                changes[name] = nextValue as unknown as Transitions.StateOf<B>[PropertyOf<B>];
             }
         }
 
@@ -508,13 +508,15 @@ export class Transitions<B extends Behavior> {
      * state of the behavior.  It also returns them as an key-value object, which can be useful when just requiring the
      * changes values in an extended class.
      */
-    protected applyUpdates(behavior: B): MaybePromise<Record<string, number>> {
-        const changes = this.determineUpdates(behavior);
-        const state = behavior.state as Record<string, number>;
+    protected applyUpdates(
+        behavior: B,
+        changes: Partial<Transitions.StateOf<B>>,
+    ): MaybePromise<Partial<Transitions.StateOf<B>>> {
+        const state = behavior.state as Record<string, number | null>;
 
         for (const name in changes) {
-            const value = changes[name];
-            if (value !== undefined) {
+            const value = changes[name as Transitions.PropertyOf<B>];
+            if (value !== undefined && (value === null || typeof value === "number")) {
                 state[name] = value;
             }
         }
@@ -730,9 +732,11 @@ export namespace Transitions {
         cyclic?: boolean;
     }
 
-    export type PropertyOf<B extends Behavior> = keyof {
+    export type StateOf<B extends Behavior> = {
         [N in string & keyof B["state"]]: B[N] extends number | null | undefined ? true : never;
     };
+
+    export type PropertyOf<B extends Behavior> = keyof StateOf<B>;
 
     /**
      * Configuration for transition of a specific attribute.
