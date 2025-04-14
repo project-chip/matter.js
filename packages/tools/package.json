@@ -65,7 +65,7 @@
         "minimatch": "^10.0.1",
         "typescript": "~5.8.2",
         "type-fest": "^4.39.1",
-        "typedoc": "^0.28.1",
+        "typedoc": "^0.28.2",
         "typedoc-github-theme": "^0.2.1"
     },
     "optionalDependencies": {
