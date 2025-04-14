@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { AccessControl as AccessControlTypes } from "#clusters/access-control";
-import { deepCopy, InternalError, isDeepEqual, Logger } from "#general";
+import { deepCopy, InternalError, isDeepEqual, Logger, MaybePromise } from "#general";
 import { AccessLevel } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import {
@@ -38,7 +38,7 @@ const logger = Logger.get("AccessControlServer");
 export class AccessControlServer extends AccessControlBehavior.with("Extension") {
     declare internal: AccessControlServer.Internal;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         this.reactTo(this.events.acl$Changing, this.#validateAccessControlListChanges); // Enhanced Validation
         this.reactTo(this.events.acl$Changed, this.#handleAccessControlListChange); // Event handling for changes
         if (

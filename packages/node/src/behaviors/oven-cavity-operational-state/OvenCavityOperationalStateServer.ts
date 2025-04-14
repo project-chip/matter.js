@@ -5,7 +5,7 @@
  */
 
 import { OperationalState } from "#clusters/operational-state";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { OvenCavityOperationalStateBehavior } from "./OvenCavityOperationalStateBehavior.js";
 
 /**
@@ -19,7 +19,7 @@ import { OvenCavityOperationalStateBehavior } from "./OvenCavityOperationalState
  * is set to a value other than Error.
  */
 export class OvenCavityOperationalStateServer extends OvenCavityOperationalStateBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertOperationalStateList();
         this.#assertPhaseList();
         this.#syncCurrentPhaseWithPhaseList();

@@ -13,10 +13,10 @@ import { RvcDeviceRunModes } from "../RvcDeviceLogic.js";
  * This is a custom implementation of {@link RvcRunModeServer} that makes sure that the Run Mode can not be changed
  * when the device is not in the Idle mode. SO a change from Mapping to Cleaning or such is not allowed without being
  * Idle in between which mainly means that the current operation was stopped.
- * Additionally the run mode is set to Idle on start of the device to make sure potentially old states sre reset.
+ * Additionally, the run mode is set to Idle on start of the device to make sure potentially old states sre reset.
  */
 export class CustomRvcRunModeServer extends RvcRunModeServer {
-    override async initialize() {
+    override initialize() {
         super.initialize();
         this.state.currentMode = RvcDeviceRunModes.Idle; // Always start in Idle mode
     }

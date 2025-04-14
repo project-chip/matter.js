@@ -6,7 +6,7 @@
 
 import { OperationalState } from "#clusters/operational-state";
 import { RvcOperationalState } from "#clusters/rvc-operational-state";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { RvcOperationalStateBehavior } from "./RvcOperationalStateBehavior.js";
 
 /**
@@ -24,7 +24,7 @@ import { RvcOperationalStateBehavior } from "./RvcOperationalStateBehavior.js";
  * is set to a value other than Error.
  */
 export class RvcOperationalStateServer extends RvcOperationalStateBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertOperationalStateList();
         this.#syncCurrentPhaseWithPhaseList();
 

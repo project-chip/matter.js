@@ -10,7 +10,7 @@ import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { ModeSelect } from "#clusters/mode-select";
 import { OnOff } from "#clusters/on-off";
 import { RootEndpoint } from "#endpoints/root";
-import { Logger } from "#general";
+import { Logger, MaybePromise } from "#general";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 
@@ -28,7 +28,7 @@ const ModeSelectBase = ModeSelectBehavior.with(ModeSelect.Feature.OnOff);
  * It should be sufficient to use the class without changes and just react on the currentMode changed events.
  */
 export class ModeSelectBaseServer extends ModeSelectBase {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertCurrentMode();
         this.#assertStartUpMode();
         this.#assertOnMode();
@@ -63,7 +63,7 @@ export class ModeSelectBaseServer extends ModeSelectBase {
         }
     }
 
-    override changeToMode({ newMode }: ModeSelect.ChangeToModeRequest) {
+    override changeToMode({ newMode }: ModeSelect.ChangeToModeRequest): MaybePromise {
         this.#assertModeValue("NewMode", newMode); // Generates INVALID_COMMAND on error
 
         this.state.currentMode = newMode;

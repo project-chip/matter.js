@@ -5,14 +5,14 @@
  */
 import { ModeUtils } from "#behaviors/mode-base";
 import { MicrowaveOvenMode } from "#clusters/microwave-oven-mode";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { MicrowaveOvenModeBehavior } from "./MicrowaveOvenModeBehavior.js";
 
 /**
  * This is the default server implementation of {@link MicrowaveOvenModeBehavior}.
  */
 export class MicrowaveOvenModeServer extends MicrowaveOvenModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);

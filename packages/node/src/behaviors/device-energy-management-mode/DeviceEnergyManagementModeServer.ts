@@ -14,7 +14,7 @@ import { DeviceEnergyManagementModeBehavior } from "./DeviceEnergyManagementMode
  * This is the default server implementation of {@link DeviceEnergyManagementModeBehavior}.
  */
 export class DeviceEnergyManagementModeServer extends DeviceEnergyManagementModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);

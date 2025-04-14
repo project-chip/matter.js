@@ -7,7 +7,7 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { OperationalState } from "#clusters/operational-state";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { OperationalStateBehavior } from "./OperationalStateBehavior.js";
 
 /**
@@ -17,7 +17,7 @@ import { OperationalStateBehavior } from "./OperationalStateBehavior.js";
  * * When a Non-Error `operationalState` is set it clears the `operationalError` attribute.
  */
 export class OperationalStateServer extends OperationalStateBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertOperationalStateList();
         this.#syncCurrentPhaseWithPhaseList();
 

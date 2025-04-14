@@ -14,7 +14,7 @@ import { OvenModeBehavior } from "./OvenModeBehavior.js";
  * This is the default server implementation of {@link OvenModeBehavior}.
  */
 export class OvenModeServer extends OvenModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);

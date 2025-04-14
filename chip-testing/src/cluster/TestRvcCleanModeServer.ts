@@ -10,10 +10,6 @@ import { ModeBase } from "@matter/main/clusters/mode-base";
 import { TestRvcRunModeServer } from "./TestRvcRunModeServer.js";
 
 export class TestRvcCleanModeServer extends RvcCleanModeServer {
-    override async initialize() {
-        super.initialize();
-    }
-
     override async changeToMode({ newMode }: ModeBase.ChangeToModeRequest): Promise<ModeBase.ChangeToModeResponse> {
         const result = ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
         if (result.status !== ModeBase.ModeChangeStatus.Success) {

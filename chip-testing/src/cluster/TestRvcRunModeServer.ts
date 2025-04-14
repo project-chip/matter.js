@@ -11,10 +11,6 @@ import { RvcOperationalState } from "@matter/main/clusters/rvc-operational-state
 import { TestRvcOperationalStateServer } from "./TestRvcOperationalStateServer.js";
 
 export class TestRvcRunModeServer extends RvcRunModeServer {
-    override async initialize() {
-        super.initialize();
-    }
-
     override async changeToMode({ newMode }: ModeBase.ChangeToModeRequest): Promise<ModeBase.ChangeToModeResponse> {
         const result = ModeUtils.assertModeChange(this.state.supportedModes, this.state.currentMode, newMode);
         if (result.status !== ModeBase.ModeChangeStatus.Success) {

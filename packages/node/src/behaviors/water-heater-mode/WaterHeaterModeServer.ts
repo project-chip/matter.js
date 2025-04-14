@@ -14,7 +14,7 @@ import { WaterHeaterModeBehavior } from "./WaterHeaterModeBehavior.js";
  * This is the default server implementation of {@link WaterHeaterModeBehavior}.
  */
 export class WaterHeaterModeServer extends WaterHeaterModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);

@@ -14,7 +14,7 @@ import { RefrigeratorAndTemperatureControlledCabinetModeBehavior } from "./Refri
  * This is the default server implementation of {@link RefrigeratorAndTemperatureControlledCabinetModeBehavior}.
  */
 export class RefrigeratorAndTemperatureControlledCabinetModeServer extends RefrigeratorAndTemperatureControlledCabinetModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);

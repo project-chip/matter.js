@@ -6,7 +6,7 @@
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { Switch } from "#clusters/switch";
-import { Logger, Observable, Time, Timer } from "#general";
+import { Logger, MaybePromise, Observable, Time, Timer } from "#general";
 import { FieldElement } from "#model";
 import { ClusterType, StatusCode, StatusResponseError } from "#types";
 import { SwitchBehavior } from "./SwitchBehavior.js";
@@ -59,7 +59,7 @@ export class SwitchBaseServer extends SwitchServerBase {
     declare events: SwitchBaseServer.Events;
     schema = schema;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         this.state.rawPosition = this.state.currentPosition;
         this.internal.currentUnstablePosition = this.state.currentPosition;
         this.internal.previouslyReportedPosition = this.state.currentPosition;

@@ -5,7 +5,7 @@
  */
 
 import { OccupancySensing } from "#clusters/occupancy-sensing";
-import { Logger } from "#general";
+import { Logger, MaybePromise } from "#general";
 import { OccupancySensingBehavior } from "./OccupancySensingBehavior.js";
 
 const logger = Logger.get("OccupancySensingServer");
@@ -17,7 +17,7 @@ const logger = Logger.get("OccupancySensingServer");
  * should use {@link OccupancySensingServer.with} to specialize the class for the features your implementation supports.
  */
 export class OccupancySensingServer extends OccupancySensingBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         if (!Object.values(this.features).some(feature => feature)) {
             logger.error(
                 `OccupancySensingServer: Since revision 5 of the cluster features need to be set based on the detector type. Currently no features are enabled.`,

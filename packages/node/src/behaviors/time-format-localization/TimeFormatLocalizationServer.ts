@@ -5,7 +5,7 @@
  */
 
 import { TimeFormatLocalization } from "#clusters/time-format-localization";
-import { Logger } from "#general";
+import { Logger, MaybePromise } from "#general";
 import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
 
 const logger = Logger.get("TimeFormatLocalizationServer");
@@ -14,7 +14,7 @@ const logger = Logger.get("TimeFormatLocalizationServer");
  * This is the default server implementation of {@link TimeFormatLocalizationBehavior}.
  */
 export class TimeFormatLocalizationServer extends TimeFormatLocalizationBehavior.with("CalendarFormat") {
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.hourFormat === undefined) {
             this.state.hourFormat = this.detectedHourFormat;
         }

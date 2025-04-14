@@ -5,7 +5,7 @@
  */
 
 import { GroupKeyManagement } from "#clusters/group-key-management";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { StatusCode, StatusResponseError } from "#types";
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 
@@ -13,7 +13,7 @@ import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
  * This is the default server implementation of {@link GroupKeyManagementBehavior}.
  */
 export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
-    override initialize(): void {
+    override initialize(): MaybePromise {
         if (this.state.maxGroupKeysPerFabric !== 1) {
             throw new ImplementationError("maxGroupKeysPerFabric must be 1 for now.");
         }
@@ -23,7 +23,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         this.state.groupTable = [];
     }
 
-    override keySetWrite() {
+    override keySetWrite(): MaybePromise {
         throw new StatusResponseError(
             "We do not support additional groups beyond the IPK",
             StatusCode.ResourceExhausted,
@@ -32,7 +32,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
 
     override keySetRead({
         groupKeySetId,
-    }: GroupKeyManagement.KeySetReadRequest): GroupKeyManagement.KeySetReadResponse {
+    }: GroupKeyManagement.KeySetReadRequest): MaybePromise<GroupKeyManagement.KeySetReadResponse> {
         if (this.context.session === undefined) {
             throw new ImplementationError("Session must be defined");
         }
@@ -53,7 +53,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         };
     }
 
-    override keySetRemove({ groupKeySetId }: GroupKeyManagement.KeySetRemoveRequest) {
+    override keySetRemove({ groupKeySetId }: GroupKeyManagement.KeySetRemoveRequest): MaybePromise {
         if (groupKeySetId === 0) {
             throw new StatusResponseError(`GroupKeySet ${groupKeySetId} cannot be removed`, StatusCode.InvalidCommand);
         }
@@ -62,7 +62,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         throw new StatusResponseError(`GroupKeySet ${groupKeySetId} not found`, StatusCode.NotFound);
     }
 
-    override keySetReadAllIndices() {
+    override keySetReadAllIndices(): MaybePromise<GroupKeyManagement.KeySetReadAllIndicesResponse> {
         if (this.context.session === undefined) {
             throw new ImplementationError("Session must be defined");
         }

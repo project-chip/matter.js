@@ -28,9 +28,12 @@ type AssertSelectServiceAreaResponse = {
  * This implementation offers the following extension points:
  * * - `assertSelectServiceArea` to implement custom logic when selecting areas
  * * - `assertSkipServiceArea` to implement custom logic when skipping areas
+ *
+ * Additionally, the `removeSupportedAreasEntry` and `removeSupportedMapsEntry` methods are provided to remove entries
+ * including needed adjustments of other attributes.
  */
 export class ServiceAreaBaseServer extends ServiceAreaBase {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedAreas(this.state.supportedAreas);
         this.reactTo(this.events.supportedAreas$Changing, this.#assertSupportedAreas);
         this.#assertSelectedAreas(this.state.selectedAreas);

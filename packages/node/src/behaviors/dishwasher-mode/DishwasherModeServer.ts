@@ -14,7 +14,7 @@ import { DishwasherModeBehavior } from "./DishwasherModeBehavior.js";
  * This is the default server implementation of {@link DishwasherModeBehavior}.
  */
 export class DishwasherModeServer extends DishwasherModeBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.#assertSupportedModes();
         ModeUtils.assertMode(this.state.supportedModes, this.state.currentMode);
         this.reactTo(this.events.currentMode$Changing, this.#assertMode);
