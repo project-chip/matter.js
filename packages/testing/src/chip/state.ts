@@ -311,7 +311,7 @@ export const State = {
             await State.container.exec([
                 "bash",
                 "-c",
-                'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*; rm /command-pipe.fifo',
+                'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*; rm -f /command-pipe.fifo',
             ]);
 
             if (!startCommissioned) {
