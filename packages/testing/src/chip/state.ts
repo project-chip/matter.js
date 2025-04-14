@@ -308,11 +308,7 @@ export const State = {
             // Avahi restarts too slowly currently to do this for every test
             //await this.clearMdns();
 
-            await State.container.exec([
-                "bash",
-                "-c",
-                'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*; rm -f /command-pipe.fifo',
-            ]);
+            await State.container.exec(["bash", "-c", 'export GLOBIGNORE="/tmp/*_fifo_*"; rm -rf /tmp/*']);
 
             if (!startCommissioned) {
                 // Initialize single-use subject
