@@ -62,14 +62,14 @@ function generateCommandHandler(
                         type: "string",
                         demandOption: true,
                     })
-                    .positional("endpoint-id", {
-                        describe: "endpoint id to write to",
-                        type: "number",
-                        demandOption: true,
-                    })
                     .positional("node-id", {
                         describe: "node id to write t.",
                         type: "string",
+                        demandOption: true,
+                    })
+                    .positional("endpoint-id", {
+                        describe: "endpoint id to write to",
+                        type: "number",
                         demandOption: true,
                     }),
             async argv => {
@@ -98,14 +98,14 @@ function generateCommandHandler(
         `Invoke ${clusterName}.${command.name} command`,
         yargs =>
             yargs
-                .positional("endpoint-id", {
-                    describe: "endpoint id to write to",
-                    type: "number",
-                    demandOption: true,
-                })
                 .positional("node-id", {
                     describe: "node id to write t.",
                     type: "string",
+                    demandOption: true,
+                })
+                .positional("endpoint-id", {
+                    describe: "endpoint id to write to",
+                    type: "number",
                     demandOption: true,
                 }),
         async argv => {
