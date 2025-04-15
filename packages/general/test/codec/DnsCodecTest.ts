@@ -95,6 +95,68 @@ const DNS_DECODED = {
     ],
 };
 
+const RESULT_WITH_PRIVATE_TYPE = Bytes.fromHex(
+    "0000000000010000000300001033424530464344363346373945454332085f6d617474657263045f756470056c6f63616c0000ff0001c00c001000010000119400720a56503d343837342b38330644543d3236360d444e3d45766520456e65726779075349493d383030075341493d38303003543d3006443d3233393104434d3d322752493d3039303036363945443446334338303433464344373741333945454244393646363732410550483d33360350493dc00cff2b000100000078000400000000c00c002100010000007800190000000015a41045454436323032303244373033313633c02b",
+);
+
+const DECODED_WITH_PRIVATE_TYPE = {
+    additionalRecords: [],
+    answers: [],
+    authorities: [
+        {
+            flushCache: false,
+            name: "3BE0FCD63F79EEC2._matterc._udp.local",
+            recordClass: 1,
+            recordType: 16,
+            ttl: 4500,
+            value: [
+                "VP=4874+83",
+                "DT=266",
+                "DN=Eve Energy",
+                "SII=800",
+                "SAI=800",
+                "T=0",
+                "D=2391",
+                "CM=2",
+                "RI=0900669ED4F3C8043FCD77A39EEBD96F672A",
+                "PH=36",
+                "PI=",
+            ],
+        },
+        {
+            flushCache: false,
+            name: "3BE0FCD63F79EEC2._matterc._udp.local",
+            recordClass: 1,
+            recordType: 65323,
+            ttl: 120,
+            value: Bytes.fromHex("00000000"),
+        },
+        {
+            flushCache: false,
+            name: "3BE0FCD63F79EEC2._matterc._udp.local",
+            recordClass: 1,
+            recordType: 33,
+            ttl: 120,
+            value: {
+                port: 5540,
+                priority: 0,
+                target: "EED620202D703163.local",
+                weight: 0,
+            },
+        },
+    ],
+    messageType: 0,
+    queries: [
+        {
+            name: "3BE0FCD63F79EEC2._matterc._udp.local",
+            recordClass: 1,
+            recordType: 255,
+            uniCastResponse: false,
+        },
+    ],
+    transactionId: 0,
+};
+
 const QNameTestData: { testCase: string; data: string; offset?: number; result?: string; error?: string }[] = [
     { testCase: "one item", data: "\x04test\x00", result: "test" },
     { testCase: "two items", data: "\x04test\x03com\x00", result: "test.com" },
@@ -170,6 +232,12 @@ describe("DnsCodec", () => {
 
             // Checking the encoding of this decoded message will not work because message uses compressed QNames
             // that we do not support right now on encoding side
+        });
+
+        it("decodes message with private record type", () => {
+            const result = DnsCodec.decode(RESULT_WITH_PRIVATE_TYPE);
+
+            expect(result).deep.equal(DECODED_WITH_PRIVATE_TYPE);
         });
     });
 
