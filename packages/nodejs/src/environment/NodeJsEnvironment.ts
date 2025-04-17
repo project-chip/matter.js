@@ -19,7 +19,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { NodeJsNetwork } from "../net/NodeJsNetwork.js";
-import { StorageBackendDiskAsync } from "../storage/StorageBackendDiskAsync.js";
+import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 import { NodeJsActionTracer } from "./NodeJsActionTracer.js";
 import { ProcessManager } from "./ProcessManager.js";
 
@@ -137,7 +137,7 @@ function configureStorage(env: Environment) {
     });
 
     service.factory = namespace =>
-        new StorageBackendDiskAsync(resolve(service.location ?? ".", namespace), env.vars.get("storage.clear", false));
+        new StorageBackendDisk(resolve(service.location ?? ".", namespace), env.vars.get("storage.clear", false));
 }
 
 function configureNetwork(env: Environment) {

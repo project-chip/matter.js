@@ -7,7 +7,7 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { Environment, Logger, StorageContext, StorageService } from "@matter/general";
 import { ControllerStore } from "@matter/node";
-import { StorageBackendDiskAsync } from "@matter/nodejs";
+import { StorageBackendDisk } from "@matter/nodejs";
 import { EndpointInterface } from "@matter/protocol";
 import { NodeId } from "@matter/types";
 import { CommissioningController } from "@project-chip/matter.js";
@@ -18,7 +18,7 @@ const logger = Logger.get("Node");
 
 export class MatterNode {
     #storageLocation?: string;
-    private storage?: StorageBackendDiskAsync;
+    private storage?: StorageBackendDisk;
     private storageContext?: StorageContext;
 
     #environment?: Environment;

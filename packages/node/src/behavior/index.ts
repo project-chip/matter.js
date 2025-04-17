@@ -11,3 +11,4 @@ export * from "./Reactor.js";
 export * from "./state/index.js";
 export * from "./supervision/index.js";
 export * from "./system/index.js";
+export * from "./Transitions.js";
