@@ -41,6 +41,11 @@ If you plan to officially certify a device, bridge or controller based on matter
 
 matter.js has successfully passed certification already, but there are still things to consider and to discuss when you plan to certify.
 
+## JavaScript/Node.js compatibility
+* At least ES2022 needs to be used as build target for your project!
+* This Supports Node.js 18+
+Please also see the additional [TypeScript notes](./packages/main/README.md#typescript-note).
+
 ## How to use matter.js
 
 ### Create a new project based on matter.js
