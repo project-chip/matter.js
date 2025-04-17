@@ -1,7 +1,9 @@
 # @project-chip/matter.js
 
 > [!IMPORTANT]
-> With matter.js 0.11.0 the package structure was adjusted. This package is exposing the current API for Controller implementations (a new API will follow soon) and the Legacy Device building Node API and mainly contains compatibility re-exports. Please adjust your code to just use the relevant exports from here and switch for all other matter.js general packages to the @matter/main package.
+> This package is only needed if you plan to build a Controller for the time being! To build devices or bridges please use the [@matter/main](https://www.npmjs.com/package/@matter/main) package. More details below...
+
+**With matter.js 0.11.0 the package structure was adjusted. This package is exposing the current API for Controller implementations (a new API will follow soon) and the Legacy Device building Node API and mainly contains compatibility re-exports. Please adjust your code to just use the relevant exports from here and switch for all other matter.js general packages to the [@matter/main](https://www.npmjs.com/package/@matter/main) package.**
 
 Implementation of Matter protocol in typescript with no native dependencies (and very limited dependencies).
 
