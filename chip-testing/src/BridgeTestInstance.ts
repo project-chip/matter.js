@@ -15,7 +15,7 @@ import { DeviceTypeId, VendorId } from "@matter/main/types";
 import { NodeTestInstance } from "./NodeTestInstance.js";
 
 export class BridgeTestInstance extends NodeTestInstance {
-    static override id = "bridgeford-6100-bridge";
+    static override id = "bridgeford-6100";
 
     serverNode: ServerNode | undefined;
 

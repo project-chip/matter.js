@@ -46,7 +46,7 @@ const TestRvcDevice = RoboticVacuumCleanerDevice.with(
 );
 
 export class RvcTestInstance extends NodeTestInstance {
-    static override id = "bridgeford-6100-rvc";
+    static override id = "cleanford-6100";
 
     serverNode: ServerNode | undefined;
 
