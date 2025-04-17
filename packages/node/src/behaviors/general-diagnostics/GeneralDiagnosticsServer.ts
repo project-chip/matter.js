@@ -10,7 +10,7 @@ import { NetworkCommissioningServer } from "#behaviors/network-commissioning";
 import { TimeSynchronizationBehavior } from "#behaviors/time-synchronization";
 import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "#general";
+import { Bytes, ImplementationError, ipv4ToBytes, Logger, MaybePromise, Time, Timer } from "#general";
 import { FieldElement, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { MdnsService, Val } from "#protocol";
@@ -48,7 +48,7 @@ export class GeneralDiagnosticsServer extends Base {
     declare state: GeneralDiagnosticsServer.State;
     schema = schema;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.testEventTriggersEnabled === undefined) {
             this.state.testEventTriggersEnabled = false;
         } else if (this.state.testEventTriggersEnabled) {
@@ -90,7 +90,7 @@ export class GeneralDiagnosticsServer extends Base {
         });
     }
 
-    override testEventTrigger({ eventTrigger, enableKey }: GeneralDiagnostics.TestEventTriggerRequest) {
+    override testEventTrigger({ eventTrigger, enableKey }: GeneralDiagnostics.TestEventTriggerRequest): MaybePromise {
         this.#validateTestEnabledKey(enableKey);
 
         this.triggerTestEvent(eventTrigger);
@@ -100,7 +100,7 @@ export class GeneralDiagnosticsServer extends Base {
         throw new StatusResponseError(`Unsupported test event trigger ${eventTrigger}`, StatusCode.InvalidCommand);
     }
 
-    override timeSnapshot() {
+    override timeSnapshot(): MaybePromise<GeneralDiagnostics.TimeSnapshotResponse> {
         const time = Time.nowMs();
 
         // TC_DGGEN_2_4.py fails us if we set this without TimeSynchronizationCluster support.  Spec is worded poorly
@@ -122,7 +122,7 @@ export class GeneralDiagnosticsServer extends Base {
         enableKey,
         value,
         count,
-    }: GeneralDiagnostics.PayloadTestRequest): GeneralDiagnostics.PayloadTestResponse {
+    }: GeneralDiagnostics.PayloadTestRequest): MaybePromise<GeneralDiagnostics.PayloadTestResponse> {
         this.#validateTestEnabledKey(enableKey);
 
         if (!this.state.testEventTriggersEnabled) {

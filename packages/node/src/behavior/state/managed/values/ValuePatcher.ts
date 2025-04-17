@@ -207,6 +207,10 @@ function ListPatcher(schema: ValueModel, supervisor: RootSupervisor): ValueSuper
                 target[index] = newValue;
             }
         }
+        if (Array.isArray(changes)) {
+            // We set an Array and no patching object, so set the length as requested
+            target.length = changes.length;
+        }
 
         return target;
     };

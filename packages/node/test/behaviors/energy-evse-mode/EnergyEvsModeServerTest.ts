@@ -9,7 +9,6 @@ import { EnergyEvseMode } from "#clusters/energy-evse-mode";
 import { ModeBase } from "#clusters/mode-base";
 import { OnOffPlugInUnitDevice } from "#devices/on-off-plug-in-unit";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { NotImplementedError } from "#general";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 const DeviceType = OnOffPlugInUnitDevice.with(EnergyEvseModeServer);
@@ -63,9 +62,6 @@ describe("EnergyEvseModeServer", () => {
         await endpoint.act(agent => {
             const { energyEvseMode } = agent;
             expect(typeof energyEvseMode.changeToMode === "function");
-            expect(() => energyEvseMode.changeToMode({ newMode: EnergyEvseMode.ModeTag.LowEnergy })).throws(
-                NotImplementedError,
-            );
         });
     });
 

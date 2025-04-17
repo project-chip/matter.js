@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "#general";
 import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBehavior.js";
 
 /**
  * This is the default server implementation of {@link LocalizationConfigurationBehavior}.
  */
 export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.activeLocale === undefined) {
             this.state.activeLocale = this.detectedLocale;
         }

@@ -19,6 +19,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
     -   Feature: Added Docker based own Test Runner and execute all tests there too with chip-tool against matter.js test device
 
+-   @matter/examples
+    - Enhancement: Added Robotic Vacuum Cleaner example to show the cluster dependencies and basic logic requirements
+
 -   @matter/general
     - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
     - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
@@ -33,6 +36,26 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/main
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
+-   @matter/node
+    - Breaking: The Default `OnOffServer` implementation no longer has the "Lighting" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.OnOffServer` to get the correct features enabled automatically.
+    - Breaking: The Default `LevelControlServer` implementation no longer has the "OnOff" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `DimmedLightRequirements.LevelControlServer` to get the correct features enabled automatically.
+    - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
+    - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCovering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
+    - Breaking: The DoorLock cluster attribute supportedOperatingModes bitmap requires to clear bits for supported modes. To allow to set this bitmap correctly we added a helper bit-range `alwaysSet` (with value 2047) to set the unused bits. Please make sure to set the correct bits for your device according to the specification meaning.
+    - Breaking: All default implementations now are async (as before if needed) or expose as MaybePromise to allow async or sync overriding. Ideally this does not change anything for custom implementations but check for returned promises when calling "super" methods.
+    - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
+    - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
+    - Feature: `LevelControlServer` and `ColorControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
+    - Feature: Added support for the ActionSwitch feature for the `SwitchServer` default implementation
+    - Feature: Added basic validation for all ModeBase derived *Mode clusters
+    - Feature: Added basic validation for OperationalState and derived *OperationalState clusters
+    - Feature: Added basic validation and logic for ServiceArea cluster
+    - Enhancement: `OccupancySensingServer` is automatically filling some legacy attributes when features are correctly set as required by new revision 5 of the cluster
+    - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
+    - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
+    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+    - Fix: Fixed patching of arrays to correctly allow to set arrays with fewer elements than the original array using `set()`
+
 -   @matter/nodejs
     - Breaking: The StorageBackendDisk class got removed including the "node-localstorage" dependency, but the name got reused and so the "StorageBackendDiskAsync" is now "StorageBackendDisk".
     - Enhancement: Added a UDP send guard to reject hanging send calls after maximum 1-2s
@@ -42,20 +65,6 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/nodejs-shell
     - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
     - Fix: Prevents crash on startup when having set a Fabric label in config
-
--   @matter/node
-    - Breaking: The Default `OnOffServer` implementation no longer has the "Lighting" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `OnOffLightRequirements.OnOffServer` to get the correct features enabled automatically.
-    - Breaking: The Default `LevelControlServer` implementation no longer has the "OnOff" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `DimmedLightRequirements.LevelControlServer` to get the correct features enabled automatically.
-    - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
-    - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCOvering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
-    - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
-    - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
-    - Feature: `LevelControlServer` and `ColorControlServer` performs smoother transitions with configurable transition step sizes and Matter 1.4-compliant event emitting.  It offers several new extension points for integrating with hardware and bridged devices
-    - Feature: `SwitchServer` also supports ActionSwitch feature now in the default implementation
-    - Enhancement: `OccupancySensingServer` is automatically filling some legacy attributes when features are correctly set as required by new revision 5 of the cluster
-    - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
-    - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
-    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
 
 -   @matter/protocol
     - Breaking: `updateReceived()` callback on subscriptions is triggered after all updated data event are sent out.

@@ -337,7 +337,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         this.#setFromXyValue("colorPointBx", value);
     }
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // As a virtual attribute remaining time change only emits when we do so manually.  This works out well because
         // as a continuous value it should only emit under limited circumstances defined by spec
         //

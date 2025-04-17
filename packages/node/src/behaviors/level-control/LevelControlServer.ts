@@ -83,7 +83,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.state.currentLevel;
     }
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // As a virtual attribute remaining time change only emits when we do so manually.  This works out well because
         // as a continuous value it should only emit under limited circumstances defined by spec
         //
@@ -220,7 +220,12 @@ export class LevelControlBaseServer extends LevelControlBase {
      * After checking input we use {@link moveToLevelLogic} method to set the level.  To replace the default logic,
      * override {@link moveToLevelLogic} which also implements {@link moveToLevelWithOnOff}.
      */
-    override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: LevelControl.MoveToLevelRequest) {
+    override moveToLevel({
+        level,
+        transitionTime,
+        optionsMask,
+        optionsOverride,
+    }: LevelControl.MoveToLevelRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -236,7 +241,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace this logic, override {@link moveToLevelLogic} whicih also implements {@link moveToLevel}.
      */
-    override moveToLevelWithOnOff({ level, transitionTime }: LevelControl.MoveToLevelRequest) {
+    override moveToLevelWithOnOff({ level, transitionTime }: LevelControl.MoveToLevelRequest): MaybePromise {
         this.#assertLevelValue(level);
 
         return this.moveToLevelLogic(level, transitionTime, true);
@@ -271,7 +276,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         transitionTime: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         const effectiveTransitionTime = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
         let effectiveRate;
@@ -289,7 +294,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default behavior, override {@link moveLogic} which also implements {@link moveWithOnOff}.
      */
-    override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest) {
+    override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest): MaybePromise {
         rate = this.#assertRateValue(rate);
 
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
@@ -307,7 +312,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default behavior, override {@link moveLogic} which also implements {@link move}.
      */
-    override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest) {
+    override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest): MaybePromise {
         rate = this.#assertRateValue(rate);
 
         return this.moveLogic(moveMode, rate, true);
@@ -329,7 +334,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         rate: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         let targetLevel;
         if (moveMode === LevelControl.MoveMode.Up) {
             targetLevel = Infinity;
@@ -350,7 +355,13 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default beahavior, override {@link stepLogic} which also implements {@link stepWithOnOff}.
      */
-    override step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: LevelControl.StepRequest) {
+    override step({
+        stepMode,
+        stepSize,
+        transitionTime,
+        optionsMask,
+        optionsOverride,
+    }: LevelControl.StepRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -363,7 +374,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default beahavior, override {@link stepLogic} which also implements {@link step}.
      */
-    override stepWithOnOff({ stepMode, stepSize, transitionTime }: LevelControl.StepRequest) {
+    override stepWithOnOff({ stepMode, stepSize, transitionTime }: LevelControl.StepRequest): MaybePromise {
         return this.stepLogic(stepMode, stepSize, transitionTime, true);
     }
 
@@ -385,7 +396,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         transitionTime: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         const direction = stepMode === LevelControl.StepMode.Up ? 1 : -1;
 
         let effectiveRate;
@@ -396,7 +407,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.transition(this.currentLevel + stepSize * direction, effectiveRate, withOnOff, options);
     }
 
-    override stop({ optionsMask, optionsOverride }: LevelControl.StopRequest) {
+    override stop({ optionsMask, optionsOverride }: LevelControl.StopRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -405,14 +416,14 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.stopLogic(effectiveOptions);
     }
 
-    override stopWithOnOff(request: LevelControl.StopRequest) {
+    override stopWithOnOff(request: LevelControl.StopRequest): MaybePromise {
         return this.stop(request);
     }
 
     /**
      * Default stop logic. This aborts any level transition currently underway and sets the remaining time to 0.
      */
-    protected stopLogic(_options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {}): MaybePromise<void> {
+    protected stopLogic(_options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {}): MaybePromise {
         this.internal.transitions?.stop();
     }
 
@@ -429,7 +440,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         changePerS?: number | null,
         withOnOff = false,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         this.couple(withOnOff, options, targetLevel);
 
         this.internal.transitions?.start({
@@ -453,7 +464,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
         targetLevel?: number,
-    ) {
+    ): MaybePromise {
         // Couple with On/Off state
         if (this.features.onOff && withOnOff && this.agent.has(OnOffServer)) {
             if (targetLevel === undefined) {
@@ -515,7 +526,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * @param onOff The new onOff state
      */
-    protected handleOnOffChange(onOff: boolean) {
+    protected handleOnOffChange(onOff: boolean): MaybePromise {
         if (!onOff || this.state.onLevel === null) {
             return;
         }
@@ -641,23 +652,23 @@ export namespace LevelControlBaseServer {
             transitionTime: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
+        ): MaybePromise;
         moveLogic(
             moveMode: LevelControl.MoveMode,
             rate: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
+        ): MaybePromise;
         stepLogic(
             stepMode: LevelControl.StepMode,
             stepSize: number,
             transitionTime: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
-        stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
-        couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
-        handleOnOffChange(onOff: boolean): void;
+        ): MaybePromise;
+        stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
+        couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
+        handleOnOffChange(onOff: boolean): MaybePromise;
     };
 }
 

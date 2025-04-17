@@ -12,6 +12,13 @@ export type BackchannelCommand =
     | BackchannelCommand.SimulateMultiPress
     | BackchannelCommand.SimulateLatchPosition
     | BackchannelCommand.SimulateSwitchIdle
+    | BackchannelCommand.OperationalStateChange
+    | BackchannelCommand.RvcErrors
+    | BackchannelCommand.RvcNoParameters
+    | BackchannelCommand.RvcRemoveMap
+    | BackchannelCommand.RvcAddMap
+    | BackchannelCommand.RvcRemoveArea
+    | BackchannelCommand.RvcAddArea
     | BackchannelCommand.NoParameters;
 
 export namespace BackchannelCommand {
@@ -47,6 +54,56 @@ export namespace BackchannelCommand {
         name: "simulateLatchPosition";
         endpointId: number;
         positionId: number;
+    };
+
+    export type OperationalStateChange = {
+        name: "operationalStateChange";
+        device: "Generic" | "Oven";
+        operation: "Stop" | "OnFault" | "Start" | "Resume" | "Pause"; // Stop only when Running state
+        param: number; // Only with OnFault and is the error state Id
+    };
+
+    export type RvcNoParameters = {
+        name: "reset" | "chargerFound" | "charged" | "charging" | "docked";
+    };
+
+    export type RvcErrors = {
+        name: "errorEvent";
+        error:
+            | "unableToStartOrResume"
+            | "unableToCompleteOperation"
+            | "commandInvalidInState"
+            | "failedToFindChargingDock"
+            | "stuck"
+            | "dustBinMissing"
+            | "dustBinFull"
+            | "waterTankEmpty"
+            | "waterTankMissing"
+            | "waterTankLidOpen"
+            | "mopCleaningPadMissing";
+    };
+
+    export type RvcRemoveMap = {
+        name: "removeMap";
+        mapId: number;
+    };
+
+    export type RvcAddMap = {
+        name: "addMap";
+        mapId: number;
+        mapName: string;
+    };
+
+    export type RvcRemoveArea = {
+        name: "removeArea";
+        areaId: number;
+    };
+
+    export type RvcAddArea = {
+        name: "addArea";
+        areaId: number;
+        mapId: number;
+        locationName: string;
     };
 
     export type NoParameters = {

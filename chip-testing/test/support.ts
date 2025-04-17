@@ -10,6 +10,7 @@ import { AllClustersTestInstance } from "../src/AllClustersTestInstance.js";
 import { BridgeTestInstance } from "../src/BridgeTestInstance.js";
 import { DeviceTestInstanceConstructor } from "../src/GenericTestApp.js";
 import { NodeTestInstance } from "../src/NodeTestInstance.js";
+import { RvcTestInstance } from "../src/RvcTestInstance.js";
 import { TvTestInstance } from "../src/TvTestInstance.js";
 
 chip.onClose(async () => {
@@ -38,5 +39,6 @@ export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstan
 export const AllClustersApp = App(AllClustersTestInstance);
 export const BridgeApp = App(BridgeTestInstance);
 export const TvApp = App(TvTestInstance);
+export const RvcApp = App(RvcTestInstance);
 
 chip.defaultSubject = AllClustersApp;

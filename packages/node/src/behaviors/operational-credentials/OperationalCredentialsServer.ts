@@ -11,7 +11,7 @@ import { AccessControlServer } from "#behaviors/access-control";
 import { AccessControl } from "#clusters/access-control";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { Endpoint } from "#endpoint/Endpoint.js";
-import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { CryptoVerifyError, Logger, MatterFlowError, MaybePromise, UnexpectedDataError } from "#general";
 import { AccessLevel } from "#model";
 import type { Node } from "#node/Node.js";
 import {
@@ -84,7 +84,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     declare internal: OperationalCredentialsServer.Internal;
     declare state: OperationalCredentialsServer.State;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // maximum number of fabrics. Also FabricBuilder uses 254 as max!
         if (this.state.supportedFabrics === undefined) {
             this.state.supportedFabrics = 254;
@@ -399,7 +399,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         };
     }
 
-    override addTrustedRootCertificate({ rootCaCertificate }: OperationalCredentials.AddTrustedRootCertificateRequest) {
+    override addTrustedRootCertificate({
+        rootCaCertificate,
+    }: OperationalCredentials.AddTrustedRootCertificateRequest): MaybePromise {
         const failsafeContext = this.#failsafeContext;
 
         // TC_OPCREDS_3_4 fails if we don't allow set of the root certificate in updates, even though that's illegal and

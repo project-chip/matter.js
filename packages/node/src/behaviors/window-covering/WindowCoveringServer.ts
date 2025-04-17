@@ -108,7 +108,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
     declare protected internal: WindowCoveringBaseServer.Internal;
     declare state: WindowCoveringBaseServer.State;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // Initialize Internal state from the Mode attribute and keep in sync
         this.internal.inMaintenanceMode = !!this.state.mode.maintenanceMode;
         this.internal.calibrationMode =
@@ -497,7 +497,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Move the WindowCovering up or open. For position aware devices the target position is set to 0%. The method calls
      * the handleMovement method to actually move the device.
      */
-    override upOrOpen() {
+    override upOrOpen(): MaybePromise {
         this.#assertMotionLockStatus();
 
         let targetLiftPercent100ths;
@@ -521,7 +521,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Move the WindowCovering down or close. For position aware devices the target position is set to 100%. The method
      * calls the handleMovement method to actually move the device.
      */
-    override downOrClose() {
+    override downOrClose(): MaybePromise {
         this.#assertMotionLockStatus();
 
         let targetLiftPercent100ths;
@@ -545,7 +545,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Stop any movement of the WindowCovering. The method calls the handleStopMovement method to actually stop the
      * movement of the device.
      */
-    override stopMotion() {
+    override stopMotion(): MaybePromise {
         this.#assertMotionLockStatus();
 
         return this.handleStopMovement();
@@ -555,7 +555,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
-    override goToLiftPercentage({ liftPercent100thsValue }: WindowCovering.GoToLiftPercentageRequest) {
+    override goToLiftPercentage({ liftPercent100thsValue }: WindowCovering.GoToLiftPercentageRequest): MaybePromise {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareLift) {
@@ -577,7 +577,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
-    override goToTiltPercentage({ tiltPercent100thsValue }: WindowCovering.GoToTiltPercentageRequest) {
+    override goToTiltPercentage({ tiltPercent100thsValue }: WindowCovering.GoToTiltPercentageRequest): MaybePromise {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareTilt) {
