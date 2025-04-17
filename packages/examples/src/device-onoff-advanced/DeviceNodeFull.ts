@@ -381,7 +381,7 @@ logEndpoint(EndpointServer.forEndpoint(server));
 /**
  * In order to start the node and announce it into the network we start the node. This method resolves when the Matter
  * node enters his online state. Alternatively, we could also use `await server.run()` which
- * resolves when the node goes offline again, but we want to execute code afterwards, so we use start() here
+ * resolves when the node goes offline again, but we want to execute code afterward, so we use start() here
  */
 await server.start();
 
