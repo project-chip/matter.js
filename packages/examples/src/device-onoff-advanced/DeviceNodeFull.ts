@@ -74,6 +74,7 @@ if (environment.vars.get("ble.enable")) {
     Ble.get = singleton(
         () =>
             new NodeJsBle({
+                environment,
                 hciId: environment.vars.number("ble.hciId"),
             }),
     );

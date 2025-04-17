@@ -28,6 +28,7 @@ if (environment.vars.get("ble")) {
     Ble.get = singleton(
         () =>
             new NodeJsBle({
+                environment,
                 hciId: environment.vars.number("ble.hci.id"),
             }),
     );
