@@ -18,10 +18,11 @@ import {
     BtpSessionHandler,
     ChannelNotConnectedError,
 } from "@matter/protocol";
+import type { Bleno as BlenoType } from "@stoprocent/bleno";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("BlenoBleServer");
-let Bleno: typeof import("@stoprocent/bleno");
+let Bleno: BlenoType;
 
 function initializeBleno(server: BlenoBleServer, hciId?: number) {
     // load Bleno driver with the correct device selected
@@ -35,11 +36,13 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C1_CHARACTERISTIC_UUID,
                 properties: ["write"],
+                onWriteRequest: (_handle, data, offset, withoutResponse, callback) =>
+                    this.#onWriteRequest(data, offset, withoutResponse, callback),
             });
         }
 
-        override onWriteRequest(
-            data: Buffer,
+        #onWriteRequest(
+            data: Buffer<ArrayBufferLike>,
             offset: number,
             withoutResponse: boolean,
             callback: (result: number) => void,
@@ -61,10 +64,14 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C2_CHARACTERISTIC_UUID,
                 properties: ["indicate"],
+                onSubscribe: (_handle, maxValueSize, updateValueCallback) =>
+                    this.#onSubscribe(maxValueSize, updateValueCallback),
+                onUnsubscribe: () => this.#onUnsubscribe(),
+                onIndicate: () => this.#onIndicate(),
             });
         }
 
-        override onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+        #onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
             logger.debug(`C2 subscribe ${maxValueSize}`);
 
             server
@@ -72,12 +79,12 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
                 .catch(e => logger.warn("Error happened in when handling C2 subscribe", e));
         }
 
-        override onUnsubscribe() {
+        #onUnsubscribe() {
             logger.debug("C2 unsubscribe");
             server.close().catch(e => logger.warn("Error happened when closing server for C2 unsubscribe", e));
         }
 
-        override onIndicate() {
+        #onIndicate() {
             logger.debug("C2 indicate");
             server.handleC2Indicate();
         }
@@ -88,10 +95,11 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C3_CHARACTERISTIC_UUID,
                 properties: ["read"],
+                onReadRequest: (_handle, offset, callback) => this.#onReadRequest(offset, callback),
             });
         }
 
-        override onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
+        #onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
             try {
                 const data = server.handleC3ReadRequest(offset);
                 logger.debug(`C3 read request: ${data.toString("hex")} ${offset}`);
@@ -223,7 +231,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
      * @param offset
      * @param withoutResponse
      */
-    handleC1WriteRequest(data: Buffer, offset: number, withoutResponse: boolean) {
+    handleC1WriteRequest(data: Buffer<ArrayBufferLike>, offset: number, withoutResponse: boolean) {
         if (offset !== 0 || withoutResponse) {
             throw new BleError(`Offset ${offset} or withoutResponse ${withoutResponse} not supported`);
         }
