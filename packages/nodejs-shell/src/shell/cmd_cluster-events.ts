@@ -53,14 +53,14 @@ function generateEventHandler(
         `Read ${clusterName}.${event.name} event`,
         yargs =>
             yargs
-                .positional("endpoint-id", {
-                    describe: "endpoint id to read",
-                    type: "number",
-                    demandOption: true,
-                })
                 .positional("node-id", {
                     describe: "node id to read",
                     type: "string",
+                    demandOption: true,
+                })
+                .positional("endpoint-id", {
+                    describe: "endpoint id to read",
+                    type: "number",
                     demandOption: true,
                 }),
         async argv => {
