@@ -377,7 +377,6 @@ function adaptContainer(docker: Docker, ct: Dockerode.Container): Container {
         },
 
         async createPipe(name: string) {
-            await this.exec(["rm", "-f", name]);
             await this.exec(["mkfifo", name]);
         },
     } satisfies Container;
