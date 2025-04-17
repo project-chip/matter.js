@@ -134,7 +134,10 @@ export class ChannelManager {
             async () => void this.#paseChannels.delete(session),
         );
         this.#paseChannels.set(session, msgChannel);
-        session.destroyed.on(() => msgChannel.close());
+        if (session.isSecure) {
+            // For Insecure sessions we usually reuse channels, so do not close them
+            session.destroyed.on(() => msgChannel.close());
+        }
         return msgChannel;
     }
 
