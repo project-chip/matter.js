@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendDiskAsync } from "#storage/index.js";
+import { StorageBackendDisk } from "#storage/index.js";
 import * as assert from "node:assert";
 import { readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -17,12 +17,12 @@ const CONTEXTx2 = [...CONTEXTx1, "subcontext"];
 const CONTEXTx3 = [...CONTEXTx2, "subsubcontext"];
 
 describe("StorageBackendDiskAsync", () => {
-    let storage: StorageBackendDiskAsync;
+    let storage: StorageBackendDisk;
 
     beforeEach(async () => {
         await rm(TEST_STORAGE_LOCATION, { recursive: true, force: true });
 
-        storage = new StorageBackendDiskAsync(TEST_STORAGE_LOCATION);
+        storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
         await storage.initialize();
     });
 
@@ -135,7 +135,7 @@ describe("StorageBackendDiskAsync", () => {
         await storage.set(["context", "sub's/fun"], "key", "value");
         await storage.set(CONTEXTx3, "key", "value");
 
-        const storageRead = new StorageBackendDiskAsync(TEST_STORAGE_LOCATION);
+        const storageRead = new StorageBackendDisk(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
 
         expect(await storageRead.contexts(CONTEXTx3)).deep.equal([]);

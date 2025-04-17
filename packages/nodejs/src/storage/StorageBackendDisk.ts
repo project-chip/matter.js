@@ -16,9 +16,9 @@ import {
 import { mkdir, open, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const logger = new Logger("StorageBackendDiskAsync");
+const logger = new Logger("StorageBackendDisk");
 
-export class StorageBackendDiskAsync extends MaybeAsyncStorage {
+export class StorageBackendDisk extends MaybeAsyncStorage {
     readonly #path: string;
     readonly #clear: boolean;
     protected isInitialized = false;
@@ -252,3 +252,8 @@ export class StorageBackendDiskAsync extends MaybeAsyncStorage {
         await MatterAggregateError.allSettled(promises, "Error when clearing all values from filesystem storage");
     }
 }
+
+/**
+ * @deprecated
+ */
+//export class StorageBackendDiskAsync extends StorageBackendDisk {}

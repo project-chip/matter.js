@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./StorageBackendDiskAsync.js";
+export * from "./StorageBackendDisk.js";
 export * from "./StorageBackendJsonFile.js";
