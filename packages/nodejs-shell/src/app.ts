@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogDestination, LogFormat, LogLevel, Logger, singleton } from "@matter/general";
+import { Environment, LogDestination, LogFormat, LogLevel, Logger, singleton } from "@matter/general";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
 import { Ble } from "@matter/protocol";
@@ -123,6 +123,7 @@ async function main() {
                     Ble.get = singleton(
                         () =>
                             new NodeJsBle({
+                                environment: Environment.default,
                                 hciId,
                             }),
                     );

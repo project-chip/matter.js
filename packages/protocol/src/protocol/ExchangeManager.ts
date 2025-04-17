@@ -363,18 +363,16 @@ export class ExchangeManager {
             logger.debug(`Channel for session ${sessionName} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-                if (exchange !== undefined) {
-                    logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
-                    try {
-                        const messenger = new SecureChannelMessenger(exchange);
-                        await messenger.sendCloseSession();
-                        await messenger.close();
-                    } catch (error) {
-                        if (error instanceof ChannelNotConnectedError) {
-                            logger.debug("Session already closed because channel is disconnected.");
-                        } else {
-                            logger.error("Error closing session", error);
-                        }
+                logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
+                try {
+                    const messenger = new SecureChannelMessenger(exchange);
+                    await messenger.sendCloseSession();
+                    await messenger.close();
+                } catch (error) {
+                    if (error instanceof ChannelNotConnectedError) {
+                        logger.debug("Session already closed because channel is disconnected.");
+                    } else {
+                        logger.error("Error closing session", error);
                     }
                 }
                 await exchange.destroy();

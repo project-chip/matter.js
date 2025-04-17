@@ -146,6 +146,10 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
 
     constructor(options?: BleOptions) {
         super();
+
+        const { environment } = options ?? {};
+        environment?.runtime.add(this);
+
         this.matterBleService = initializeBleno(this, options?.hciId);
 
         // Write Bleno into this class
@@ -170,6 +174,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
 
         Bleno.on("disconnect", clientAddress => {
             logger.debug(`disconnect, client: ${clientAddress}`);
+            this.isAdvertising = false;
             if (this.btpSession !== undefined) {
                 this.btpSession
                     .close()
@@ -374,6 +379,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     }
 
     async disconnect() {
+        this.isAdvertising = false;
         Bleno.disconnect();
         /*
         TODO: This is not working as expected, the disconnect event is not triggered, seems issue in Bleno
