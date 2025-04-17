@@ -377,6 +377,8 @@ function adaptContainer(docker: Docker, ct: Dockerode.Container): Container {
         },
 
         async createPipe(name: string) {
+            // TODO This remove is not right here, but working for now. Will be fixed separately
+            await this.exec(["rm", "-f", name]);
             await this.exec(["mkfifo", name]);
         },
     } satisfies Container;

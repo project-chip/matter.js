@@ -8,7 +8,7 @@ import { AdministratorCommissioningServer } from "#behaviors/administrator-commi
 import { BasicInformationServer } from "#behaviors/basic-information";
 import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
-import { Logger, MatterFlowError } from "#general";
+import { Logger, MatterFlowError, MaybePromise } from "#general";
 import { ServerNode } from "#node/ServerNode.js";
 import { assertSecureSession, DeviceCommissioner, FabricManager, SecureSession, SessionManager } from "#protocol";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
@@ -25,7 +25,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
     static override lockOnInvoke = false;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         const bci = this.state.basicCommissioningInfo;
 
         if (bci.failSafeExpiryLengthSeconds === undefined) {

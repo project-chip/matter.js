@@ -270,6 +270,31 @@ export namespace RvcRunMode {
     }
 
     /**
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
+     */
+    export const TlvChangeToModeResponse = TlvObject({
+        /**
+         * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2.1
+         */
+        status: TlvField(0, TlvEnum<ModeChangeStatus | ModeBase.ModeChangeStatus>()),
+
+        statusText: TlvField(1, TlvString.bound({ maxLength: 64 }))
+    });
+
+    /**
+     * This command is sent by the device on receipt of the ChangeToMode command. This command
+     *
+     * shall have the following data fields:
+     *
+     * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
+     */
+    export interface ChangeToModeResponse extends TypeFromSchema<typeof TlvChangeToModeResponse> {}
+
+    /**
      * These elements and properties are present in all RvcRunMode clusters.
      */
     export const Base = MutableCluster.Component({
@@ -318,7 +343,7 @@ export namespace RvcRunMode {
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.1
              */
-            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, ModeBase.TlvChangeToModeResponse)
+            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x1, TlvChangeToModeResponse)
         },
 
         /**

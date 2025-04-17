@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "#general";
 import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
 
 /**
@@ -11,7 +12,7 @@ import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
  * If the `StateChanged` event is enabled it is emitted automatically on state change.
  */
 export class BooleanStateServer extends BooleanStateBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         this.reactTo(this.events.stateValue$Changed, this.#emitStateChange);
     }
 

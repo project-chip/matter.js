@@ -122,7 +122,7 @@ export abstract class DeviceTestInstance extends TestInstance {
     }
 
     async backchannel(command: BackchannelCommand) {
-        throw new Error(`Unhandled backchannel ${command.name}`);
+        throw new Error(`Unhandled backchannel ${command.name}: ${JSON.stringify(command)}`);
     }
 }
 

@@ -37,6 +37,9 @@ export class NobleBleClient {
     private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Uint8Array) => void) | undefined;
 
     constructor(options?: BleOptions) {
+        const { environment } = options ?? {};
+        environment?.runtime.add(this);
+
         loadNoble(options?.hciId);
         /*try {
             noble.reset();
@@ -68,6 +71,10 @@ export class NobleBleClient {
             this.isScanning = true;
         });
         noble.on("scanStop", () => (this.isScanning = false));
+    }
+
+    [Symbol.asyncDispose]() {
+        return this.stopScanning();
     }
 
     public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Uint8Array) => void) {

@@ -5,13 +5,14 @@
  */
 
 import { UnitLocalization } from "#clusters/unit-localization";
+import { MaybePromise } from "#general";
 import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
 
 /**
  * This is the default server implementation of {@link UnitLocalizationBehavior}.
  */
 export class UnitLocalizationServer extends UnitLocalizationBehavior.with("TemperatureUnit") {
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.temperatureUnit === undefined) {
             this.state.temperatureUnit = UnitLocalization.TempUnit.Celsius;
         }

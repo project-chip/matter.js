@@ -27,7 +27,7 @@ const OnOffLogicBase = OnOffBehavior.with(OnOff.Feature.Lighting);
 export class OnOffBaseServer extends OnOffLogicBase {
     declare protected internal: OnOffBaseServer.Internal;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.features.lighting && this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
             const startUpOnOffValue = this.state.startUpOnOff ?? null;
             const currentOnOffStatus = this.state.onOff;
@@ -49,7 +49,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
         await super[Symbol.asyncDispose]?.();
     }
 
-    override on(): MaybePromise<void> {
+    override on(): MaybePromise {
         this.state.onOff = true;
         if (this.features.lighting) {
             this.state.globalSceneControl = true;
@@ -62,7 +62,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
         }
     }
 
-    override off(): MaybePromise<void> {
+    override off(): MaybePromise {
         this.state.onOff = false;
         if (this.features.lighting) {
             if (this.timedOnTimer.isRunning) {
@@ -80,7 +80,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
      * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override toggle(): MaybePromise<void> {
+    override toggle(): MaybePromise {
         if (this.state.onOff) {
             return this.off();
         } else {
@@ -93,7 +93,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
      * * This implementation ignores the effect and just calls off().
      * * Global Scene Control is not supported yet.
      */
-    override offWithEffect(): MaybePromise<void> {
+    override offWithEffect(): MaybePromise {
         if (this.state.globalSceneControl) {
             // TODO Store state in global scene
             this.state.globalSceneControl = false;
@@ -105,7 +105,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
      * Default implementation notes:
      * * Global Scene Control is not supported yet, so the device is just turned on.
      */
-    override onWithRecallGlobalScene(): MaybePromise<void> {
+    override onWithRecallGlobalScene(): MaybePromise {
         if (this.state.globalSceneControl) {
             return;
         }
@@ -122,7 +122,7 @@ export class OnOffBaseServer extends OnOffLogicBase {
      * * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnOff.OnWithTimedOffRequest): MaybePromise<void> {
+    override onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnOff.OnWithTimedOffRequest): MaybePromise {
         if (onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
         }
