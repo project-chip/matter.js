@@ -48,8 +48,7 @@
         "@matter/model": "*",
         "@matter/node": "*",
         "@matter/protocol": "*",
-        "@matter/types": "*",
-        "@noble/curves": "^1.8.1"
+        "@matter/types": "*"
     },
     "devDependencies": {
         "@matter/tools": "*",
