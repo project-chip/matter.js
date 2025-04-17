@@ -29,7 +29,7 @@ export class ContainerCommandPipe extends CommandPipe {
         // agents.  This would overwrite our FIFO, however, so we symlink to the real FIFO to prevent it from being
         // overwritten
         await this.#container.createPipe(FIFO_PATH);
-        await this.#container.exec(["ln", "-sf", FIFO_PATH, this.filename]);
+        await this.#container.exec(["ln", "-sf", "/command-pipe.fifo", this.filename]);
 
         this.#stopped = this.#processCommands();
     }
@@ -80,7 +80,6 @@ export class ContainerCommandPipe extends CommandPipe {
             }
 
             try {
-                await this.#container.delete(FIFO_PATH, { force: true });
                 await this.#container.delete(this.filename, { force: true });
             } catch (e) {
                 console.warn(`Error deleting FIFO ${this.filename}:`, e);
