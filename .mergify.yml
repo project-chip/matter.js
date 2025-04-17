@@ -21,5 +21,6 @@ pull_request_rules:
         - "author=dependabot[bot]"        # merge dependabot PRs automatically
         - "label=automerge"               # merge PRs with the automerge label
     actions:
+      update:
       merge:
         method: squash
