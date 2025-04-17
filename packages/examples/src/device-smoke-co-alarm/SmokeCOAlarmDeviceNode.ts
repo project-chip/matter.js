@@ -14,7 +14,6 @@ import { Endpoint, ServerNode } from "@matter/main";
 import { CarbonDioxideConcentrationMeasurementServer } from "@matter/main/behaviors/carbon-dioxide-concentration-measurement";
 import { SmokeCoAlarmServer } from "@matter/main/behaviors/smoke-co-alarm";
 import { ConcentrationMeasurement } from "@matter/main/clusters/concentration-measurement";
-import { SmokeCoAlarm } from "@matter/main/clusters/smoke-co-alarm";
 import { SmokeCoAlarmDevice } from "@matter/main/devices/smoke-co-alarm";
 
 // Define the endpoint for the device.  This is the "thing/device" that will appear on the network.
@@ -26,6 +25,8 @@ const smokeCoAlarmEndpoint = new Endpoint(
     {
         id: "smokeCoAlarm",
         smokeCoAlarm: {
+            /*
+            The following values are set as defaults by the SmokeCoAlarmServer class.  You can override them here.
             expressedState: SmokeCoAlarm.ExpressedState.Normal,
             smokeState: SmokeCoAlarm.AlarmState.Normal,
             coState: SmokeCoAlarm.AlarmState.Normal,
@@ -33,18 +34,12 @@ const smokeCoAlarmEndpoint = new Endpoint(
             testInProgress: false,
             hardwareFaultAlert: false,
             endOfServiceAlert: SmokeCoAlarm.EndOfService.Normal,
+             */
         },
         carbonDioxideConcentrationMeasurement: {
             measuredValue: 12.34,
-            minMeasuredValue: 0,
-            maxMeasuredValue: 100,
-            peakMeasuredValue: 34.56,
-            peakMeasuredValueWindow: 10000,
-            averageMeasuredValue: 23.45,
-            averageMeasuredValueWindow: 1000,
-            uncertainty: 1.5,
             measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
-            measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+            measurementMedium: ConcentrationMeasurement.MeasurementMedium.Air,
         },
     },
 );
