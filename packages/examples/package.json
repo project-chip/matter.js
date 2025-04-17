@@ -37,6 +37,8 @@
         "matter-bridge": "matter-run src/device-bridge-onoff/BridgedDevicesNode.ts",
         "matter-composeddevice": "matter-run src/device-composed-onoff/ComposedDeviceNode.ts",
         "matter-multidevice": "matter-run src/device-multiple-onoff/MultiDeviceNode.ts",
+        "matter-air-quality-sensor": "matter-run src/device-air-quality-sensor/AirQualitySensorDeviceNode.ts",
+        "matter-smoke-co-alarm": "matter-run src/device-smoke-co-alarm/SmokeCoAlarmDeviceNode.ts",
         "matter-controller": "matter-run src/controller/ControllerNode.ts",
         "bundle-device": "esbuild src/device-onoff/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@stoprocent/bleno --external:@stoprocent/bluetooth-hci-socket --sourcemap --minify --keep-names --outfile=build/bundle/DeviceNode.cjs",
         "matter-device-bundled": "node --enable-source-maps build/bundle/DeviceNode.cjs"
@@ -56,6 +58,7 @@
         "@matter/main": "*",
         "@matter/nodejs": "*",
         "@matter/tools": "*",
+        "@project-chip/matter.js": "*",
         "esbuild": "^0.25.2"
     },
     "optionalDependencies": {

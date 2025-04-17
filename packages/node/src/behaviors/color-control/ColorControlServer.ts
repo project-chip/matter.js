@@ -5,6 +5,7 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { OnOffServer } from "#behaviors/on-off";
@@ -63,15 +64,17 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * defined by the Matter specification automatically.
  *
  * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you
- * can set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
- * changing the level value step-wise every second. This might be an intermediate solution if you develop independently
- * of defined hardware.
+ * can set the {@link ColorControl.State#managedTransitionTimeHandling} state attribute to true to have matter.js manage
+ * transition times by changing the level value step-wise every second. This might be an intermediate solution if you
+ * develop independently of defined hardware.
  *
- * If you develop for a specific hardware you should extend the {@link ColorControlServer} class and implement the
- * following methods to natively use device features to correctly support the transition times. For this the default
- * implementation uses special protected methods which are used by the real commands and are only responsible for the
- * actual value change logic. The benefit of this structure is that basic data validations and options checks are
- * already done and you can focus on the actual hardware interaction:
+ * If your hardware supports transitions natively, you may override {@link createTransitions} to return a
+ * {@link Transitions} implementation adapted to your hardware.  This allows matter.js to handle Matter requirements
+ * such as remaining time and level reporting.
+ *
+ * Alternatively, you may override the following methods in this class to implement lower-level logic yourself.
+ * Implementing a cluster in this way will disable much of the logic matter.js implements for you in the default
+ * implementations.
  *
  * * {@link ColorControlBaseServer.moveToHueLogic} Logic to move the hue to a defined value in a defined time
  * * {@link ColorControlBaseServer.moveHueLogic} Logic to move the hue by a defined rate/second
@@ -101,7 +104,7 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * * {@link ColorControlBaseServer.switchColorMode} Logic to switch the color mode and to set the current attributes of
  *   the new mode
  *
- * All overridable methods can be implemented sync or async by returning a Promise.
+ * All overridable methods may be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
  *
@@ -346,7 +349,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         }
 
         // Configure transition management
-        this.internal.transitions = this.initializeTransitions();
+        this.internal.transitions = this.#initializeTransitions();
 
         // Sync the colorCapabilities with the features for convenience
         this.state.colorCapabilities = this.features;
@@ -1615,19 +1618,27 @@ export class ColorControlBaseServer extends ColorControlBase {
     }
 
     /**
-     * Initialize transition management.
+     * Create transition management instance.
      *
      * We manage transitions using {@link Transitions} if
-     * {@link ColorControlBaseServer.State#managedTransitionTimeHandling} is true.
+     * {@link LevelControlBaseServer.State#managedTransitionTimeHandling} is true.
      *
      * You may override this method to replace the {@link Transitions} implementation customized for your application.
+     * The provided configuration object is the default one used for Color Control transitions, but can be adjusted
+     * if needed.
      */
-    protected initializeTransitions() {
+    protected createTransitions<B extends Behavior>(config: Transitions.Configuration<B>) {
+        return new Transitions(this.endpoint, config);
+    }
+
+    #initializeTransitions() {
         const { endpoint } = this;
+
         // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
         // this efficient we use the read-only view of our state provided by the endpoint as it is always available
         const readOnlyState = (endpoint.state as Record<string, unknown>).colorControl as ColorControlBaseServer.State;
-        return new Transitions(this.endpoint, {
+
+        return this.createTransitions({
             type: ColorControlBaseServer,
 
             remainingTimeEvent: this.events.remainingTime$Changed,

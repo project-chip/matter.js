@@ -49,8 +49,9 @@ const logger = Logger.get("Transition");
  *    completion when all attributes reach their target value or when you invoke {@link finish}.
  *
  * 4. You can also allow matter.js to operate a transition timer but apply value updates directly to hardware by
- *    overriding {@link applyUpdates} or {@link step}.  This is useful if your device does not support transitions
- *    natively, but you want to ensure that matter.js does not report values that do not reflect hardware state.
+ *    overriding {@link applyUpdates} (and use `determineUpdates()` if needed) or {@link step}.  This is useful if your
+ *    device does not support transitions natively, but you want to ensure that matter.js does not report values that
+ *    do not reflect hardware state.
  *
  * Whichever approach you take, matter.js attempts to implement the Matter protocol as accurately as possible with the
  * information available.
@@ -228,10 +229,10 @@ export class Transitions<B extends Behavior> {
     /**
      * Immediately change to a target value.
      *
-     * The default implementation updates the local state value.
+     * The default implementation updates the local state value and calls `applyUpdates()`.
      */
     protected transitionImmediately(owner: B, name: Transitions.PropertyOf<B>, targetValue: number) {
-        (owner.state as Record<string, number>)[name] = targetValue;
+        this.applyUpdates(owner, { [name]: targetValue } as unknown as Partial<Transitions.StateOf<B>>);
     }
 
     /**
@@ -476,24 +477,50 @@ export class Transitions<B extends Behavior> {
             prop.prevStepAt = now;
         }
 
-        const applyPromise = this.applyUpdates(behavior);
-        if (applyPromise) {
+        const applyPromise = this.applyUpdates(behavior, this.determineUpdates(behavior));
+        if (MaybePromise.is(applyPromise)) {
             await applyPromise;
         }
     }
 
-    protected applyUpdates(behavior: B): MaybePromise<void> {
-        const state = behavior.state as Record<string, number>;
+    /** Determine the changes to be applied to the behavior and return as key-value object. */
+    protected determineUpdates(behavior: B) {
+        const state = behavior.state as Record<string, number | null>;
+        const changes = {} as Partial<Transitions.StateOf<B>>;
 
         for (const prop of this) {
             const { name, currentValue } = prop;
 
             const nextValue = Math.round(currentValue);
-            if (state[name] !== nextValue) {
+            if (state[name] !== nextValue && (nextValue === null || typeof nextValue === "number")) {
                 //logger.debug(this.#logPrefix, "Stepping", Diagnostic.strong(name), "to", nextValue);
-                state[name] = nextValue;
+                changes[name] = nextValue as unknown as Transitions.StateOf<B>[Transitions.PropertyOf<B>];
             }
         }
+
+        return changes;
+    }
+
+    /**
+     * This method is called to apply the changes to the behavior.
+     * The default implementation detects the changed attributes using the method `determineChanges()`and updates the
+     * state of the behavior.  It also returns them as an key-value object, which can be useful when just requiring the
+     * changes values in an extended class.
+     */
+    protected applyUpdates(
+        behavior: B,
+        changes: Partial<Transitions.StateOf<B>>,
+    ): MaybePromise<Partial<Transitions.StateOf<B>>> {
+        const state = behavior.state as Record<string, number | null>;
+
+        for (const name in changes) {
+            const value = changes[name as Transitions.PropertyOf<B>];
+            if (value !== undefined && (value === null || typeof value === "number")) {
+                state[name] = value;
+            }
+        }
+
+        return changes;
     }
 
     #step() {
@@ -704,9 +731,11 @@ export namespace Transitions {
         cyclic?: boolean;
     }
 
-    export type PropertyOf<B extends Behavior> = keyof {
+    export type StateOf<B extends Behavior> = {
         [N in string & keyof B["state"]]: B[N] extends number | null | undefined ? true : never;
     };
+
+    export type PropertyOf<B extends Behavior> = keyof StateOf<B>;
 
     /**
      * Configuration for transition of a specific attribute.

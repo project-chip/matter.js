@@ -45,8 +45,7 @@
         "@matter/model": "*",
         "@matter/node": "*",
         "@matter/protocol": "*",
-        "@matter/types": "*",
-        "@noble/curves": "^1.8.1"
+        "@matter/types": "*"
     },
     "optionalDependencies": {
         "@matter/nodejs": "*"
