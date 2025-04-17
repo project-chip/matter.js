@@ -333,8 +333,8 @@ export class SecureSession extends Session {
                 }
                 return;
             }
+            await this.destroyed.emit();
         }
-        await this.destroyed.emit();
     }
 
     /**
