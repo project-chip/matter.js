@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetInterface, TransportInterface } from "@matter/general";
+import { Environment, NetInterface, TransportInterface } from "@matter/general";
 import { Ble, InstanceBroadcaster, Scanner } from "@matter/protocol";
 import { BleBroadcaster } from "./BleBroadcaster.js";
 import { BlePeripheralInterface } from "./BlePeripheralInterface.js";
@@ -15,9 +15,11 @@ import { NobleBleClient } from "./NobleBleClient.js";
 
 export type BleOptions = {
     hciId?: number;
+    environment?: Environment;
 };
 
 export class NodeJsBle extends Ble {
+    #options?: BleOptions;
     #blePeripheralInstance?: BlenoBleServer;
     #bleCentralInstance?: NobleBleClient;
     #bleScanner?: BleScanner;
@@ -25,20 +27,21 @@ export class NodeJsBle extends Ble {
     #bleCentralInterface?: NobleBleCentralInterface;
     #blePeripheralInterface?: BlePeripheralInterface;
 
-    constructor(private readonly options?: BleOptions) {
+    constructor(options?: BleOptions) {
         super();
+        this.#options = options;
     }
 
     get #blePeripheralServer() {
         if (this.#blePeripheralInstance === undefined) {
-            this.#blePeripheralInstance = new BlenoBleServer(this.options);
+            this.#blePeripheralInstance = new BlenoBleServer(this.#options);
         }
         return this.#blePeripheralInstance;
     }
 
     get #bleCentralClient() {
         if (this.#bleCentralInstance === undefined) {
-            this.#bleCentralInstance = new NobleBleClient(this.options);
+            this.#bleCentralInstance = new NobleBleClient(this.#options);
         }
         return this.#bleCentralInstance;
     }
