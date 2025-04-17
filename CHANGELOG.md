@@ -34,6 +34,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Automatically handle basicInformation uniqueId Property as defined by specification if not set by the developer
 
 -   @matter/nodejs
+    - Breaking: The StorageBackendDisk class got removed including the "node-localstorage" dependency. Use StorageBackendDiskAsync instead.
     - Enhancement: Added a UDP send guard to reject hanging send calls after maximum 1-2s
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
     - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
