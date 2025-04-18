@@ -10,6 +10,7 @@ describe("ACE", () => {
         "ACE/1.2",
         "ACE/1.3",
         "ACE/1.4",
+        "ACE/1.5",
         // Our group management server is too limited to pass this test
         "ACE/1.6",
     );
