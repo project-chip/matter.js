@@ -9,6 +9,7 @@ describe("ACE", () => {
         // test excluded till we adjusted for https://github.com/project-chip/connectedhomeip/pull/38263
         "ACE/1.2",
         "ACE/1.3",
+        "ACE/1.4",
         // Our group management server is too limited to pass this test
         "ACE/1.6",
     );
