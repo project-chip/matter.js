@@ -117,7 +117,7 @@ export class RvcTestInstance extends NodeTestInstance {
                 break;
             case "docked":
                 await endpoint.setStateOf(TestRvcOperationalStateServer, {
-                    operationalState: RvcOperationalState.OperationalState.Docked,
+                    operationalState: RvcOperationalState.OperationalState.Charging,
                 });
                 break;
             case "errorEvent":
