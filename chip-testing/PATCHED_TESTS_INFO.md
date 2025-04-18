@@ -2,10 +2,11 @@
 
 ## Tests
 
-| Test                          | Reason                                                           |
-|-------------------------------|------------------------------------------------------------------|
-| TestAccessControlCluster.yaml | see https://github.com/project-chip/connectedhomeip/issues/33578 |
-| Test_TC_BINFO_2_1.yaml        | SDK already prepared for Matter 1.5                              |
+| Test                          | Reason                                                                                        |
+|-------------------------------|-----------------------------------------------------------------------------------------------|
+| TestAccessControlCluster.yaml | see https://github.com/project-chip/connectedhomeip/issues/33578                              |
+| Test_TC-ACL_2_*.yaml          | test excluded till we adjusted for https://github.com/project-chip/connectedhomeip/pull/38263 |
+| Test_TC_BINFO_2_1.yaml        | SDK already prepared for Matter 1.5                                                           |
 
 # CI-PICS
 

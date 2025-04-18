@@ -2,7 +2,7 @@
 
 This page shows a detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
 
-The main work (all changes without a GitHub username in brackets in the below list) is done by the core team of this project completely in their free time (see their individual profiles for sponsoring options): @Apollon77, @lauckhart, @turon and @mfucci
+The main work (all changes without a GitHub username in brackets in the below list) is done by the core team of this project completely in their free time (see their individual profiles for sponsoring options): @Apollon77 and @lauckhart
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
@@ -13,7 +13,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
     - Especially please note that `colorTempPhysicalMinMireds` and `colorTempPhysicalMaxMireds` now need to be set when using ColorControl because the former unrealistic default values were removed from the specification. Please set proper values for your device Hint: realistic color temperature Mireds values are usually roughly between 150 (6500K) and 500 (2000K).
-    - Also note the new cluster revision 5 for the OccupancySensing cluster which requires to use feature flags and also some attributes have changed behavior or got deprecated. We added logic that automatically fills the attributes occupancySensorTypeBitmap and occupancySensorType with the values according to the enabled features if needed.
+    - Also note the new cluster revision 5 for the OccupancySensing cluster which requires you to use feature flags, and also some attributes have changed behavior or got deprecated. We added logic that automatically fills the attributes occupancySensorTypeBitmap and occupancySensorType with the values according to the enabled features if needed.
 
 -   chip-testing
     -   Feature: Added Chip-Tool compatible WebSocket Controller implementation to also run interop tests with matter.js controller
