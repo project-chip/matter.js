@@ -203,6 +203,7 @@ function logClusterClient(
             logger.info("Commands:");
             Logger.nest(() => {
                 for (const commandName in clusterClient.commands) {
+                    if (commandName.match(/^[0-9]+$/)) continue;
                     const supported = clusterClient.isCommandSupportedByName(commandName);
                     if (!supported && options.logNotSupportedClusterCommands === false) continue;
                     logger.info(`"${commandName}"${supported ? "" : " (Not Supported)"}`);
