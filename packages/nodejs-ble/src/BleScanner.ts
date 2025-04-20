@@ -118,12 +118,6 @@ export class BleScanner implements Scanner {
                 `${deviceExisting ? "Re-" : ""}Discovered device ${address} data: ${Diagnostic.json(deviceData)}`,
             );
 
-            if (deviceExisting) {
-                // Device got rediscovered, so clear the state
-                // TODO: Remove once noble does that by itself
-                peripheral.state = "disconnected";
-            }
-
             this.discoveredMatterDevices.set(address, {
                 deviceData,
                 peripheral,
