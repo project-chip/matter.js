@@ -56,11 +56,11 @@ export function ClusterClient<const T extends ClusterType>(
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
         result[`get${capitalizedAttributeName}Attribute`] = async (
-            alwaysRequestFromRemote?: boolean,
+            requestFromRemote?: boolean,
             isFabricFiltered = true,
         ) => {
             try {
-                return await (attributes as any)[attributeName].get(alwaysRequestFromRemote, isFabricFiltered);
+                return await (attributes as any)[attributeName].get(requestFromRemote, isFabricFiltered);
             } catch (e) {
                 if (StatusResponseError.is(e, StatusCode.UnsupportedAttribute)) {
                     return undefined;
