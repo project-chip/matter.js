@@ -637,7 +637,7 @@ export class PairedNode {
         this.#remoteInitializationInProgress = true;
         try {
             // Enforce a new Connection
-            await this.#ensureConnection(true);
+            await this.#ensureConnection(true); // This sets state to connected when successful!
             const { autoSubscribe, attributeChangedCallback, eventTriggeredCallback } = this.#options;
 
             let deviceDetailsUpdated = false;
@@ -669,6 +669,8 @@ export class PairedNode {
                     anyInitializationDone,
                 );
 
+                this.#remoteInitializationInProgress = false; // We are done, rest is bonus and should not block reconnections
+
                 if (!deviceDetailsUpdated) {
                     const rootEndpoint = this.getRootEndpoint();
                     if (rootEndpoint !== undefined) {
@@ -678,6 +680,7 @@ export class PairedNode {
             } else {
                 const allClusterAttributes = await this.readAllAttributes();
                 await this.#initializeEndpointStructure(allClusterAttributes, anyInitializationDone);
+                this.#remoteInitializationInProgress = false; // We are done, rest is bonus and should not block reconnections
             }
             if (!this.#remoteInitializationDone) {
                 try {

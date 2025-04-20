@@ -77,7 +77,7 @@ type GetterTypeFromSpec<A extends Attribute<any, any>> =
 type ClientAttributeGetters<A extends Attributes> = Omit<
     {
         [P in keyof A as `get${Capitalize<string & P>}Attribute`]: (
-            alwaysRequestFromRemote?: boolean,
+            requestFromRemote?: boolean,
             isFabricFiltered?: boolean,
         ) => Promise<GetterTypeFromSpec<A[P]>>;
     },

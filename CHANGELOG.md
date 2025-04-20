@@ -62,6 +62,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Improves async storage reliability and error handling to prevent empty storage files in crashing edge cases. With this change write actions need a bit longer but are more reliable, which mainly effects controller use cases when persisting the device attribute data on first subscribe
     - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
 
+-   @matter/nodejs-ble
+    - Enhancement: Upgrade Noble to 2.0.3 for more stability with BLE controller operations.
+
 -   @matter/nodejs-shell
     - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
     - Fix: Prevents crash on startup when having set a Fabric label in config
@@ -84,6 +87,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
     - Enhancement: Adjusted the initial Deice connection to Read-All before subscribing to also have initial values for not-changed attributes
+    - Fix: Fixes an edge case in reconnection handling
 
 -   @project-chip/* packages (beside above)
     - Breaking: Packages are removed! Please use the new packages under @matter/* if needed
