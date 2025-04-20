@@ -305,7 +305,11 @@ export class NobleBleCentralInterface implements NetInterface {
                         } catch (error) {
                             this.#connectionsInProgress.delete(address);
                             this.#openChannels.delete(address);
-                            await peripheral.disconnectAsync();
+                            await peripheral
+                                .disconnectAsync()
+                                .catch(error =>
+                                    logger.debug(`Peripheral ${peripheral.address}: Error while disconnecting`, error),
+                                );
                             reTryHandler(error);
                             return;
                         }
@@ -332,7 +336,6 @@ export class NobleBleCentralInterface implements NetInterface {
             } else {
                 if (peripheral.state === "connecting") {
                     peripheral.cancelConnect(); // Send cancel to noble to make sure we can connect
-                    peripheral.state = "disconnected"; // Manually fix status because noble does not do it
                 }
                 // connecting, disconnected
                 connectionGuard.connectTimeout.start();
@@ -417,11 +420,13 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
 
         const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
             characteristicC2ForSubscribe.removeListener("data", handshakeHandler);
-            characteristicC2ForSubscribe
+
+            await characteristicC2ForSubscribe
                 .unsubscribeAsync()
                 .catch(error => logger.error(`Peripheral ${peripheralAddress}: Error while unsubscribing`, error));
+
             logger.debug(
-                `Peripheral ${peripheralAddress}: Handshake Response not received. Disconnected from peripheral`,
+                `Peripheral ${peripheralAddress}: Handshake Response not received. Disconnect from peripheral`,
             );
 
             handshakeRejecter(new BleError(`Peripheral ${peripheralAddress}: Handshake Response not received`));
@@ -458,6 +463,12 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
                         peripheral
                             .disconnectAsync()
                             .then(() => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`)),
+                    )
+                    .catch(error =>
+                        logger.debug(
+                            `Peripheral ${peripheralAddress}: Error while unsubscribing or disconnecting`,
+                            error,
+                        ),
                     ),
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: Uint8Array) => {

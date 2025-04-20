@@ -7,11 +7,11 @@
 import { Diagnostic, Logger } from "@matter/general";
 import { require } from "@matter/nodejs-ble/require";
 import { BLE_MATTER_SERVICE_UUID } from "@matter/protocol";
-import type { Peripheral } from "@stoprocent/noble";
+import type { Noble, Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("NobleBleClient");
-let noble: typeof import("@stoprocent/noble");
+let noble: Noble;
 
 function loadNoble(hciId?: number) {
     // load noble driver with the correct device selected
