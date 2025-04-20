@@ -12,6 +12,7 @@ import {
     PowerSource,
     ThreadNetworkDiagnostics,
 } from "#clusters";
+import { RetransmissionLimitReachedError } from "#protocol";
 import { Logger, SupportedStorageTypes } from "@matter/general";
 import { InteractionClient, PhysicalDeviceProperties, SupportedAttributeClient } from "@matter/protocol";
 import { EndpointNumber, GlobalAttributes, NodeId, TypeFromPartialBitSchema, TypeFromSchema } from "@matter/types";
@@ -78,14 +79,18 @@ export class DeviceInformation {
         const basicInformationClient = rootEndpoint.getClusterClient(BasicInformation.Cluster);
         if (basicInformationClient !== undefined) {
             for (const attributeName of Object.keys(basicInformationClient.attributes)) {
-                if (GlobalAttributeKeys.includes(attributeName)) {
+                if (
+                    GlobalAttributeKeys.includes(attributeName) ||
+                    !basicInformationClient.isAttributeSupportedByName(attributeName)
+                ) {
                     continue;
                 }
                 const attribute = (basicInformationClient.attributes as any)[attributeName];
                 if (attribute instanceof SupportedAttributeClient) {
                     try {
-                        basicInformationData[attributeName] = await attribute.get();
+                        basicInformationData[attributeName] = await attribute.get(false, false);
                     } catch (error) {
+                        RetransmissionLimitReachedError.reject(error);
                         logger.info(`Error while getting attribute ${attributeName} for node ${this.nodeId}: ${error}`);
                     }
                 }
@@ -96,7 +101,7 @@ export class DeviceInformation {
 
         const descriptorClient = rootEndpoint.getClusterClient(Descriptor.Cluster);
         if (descriptorClient !== undefined) {
-            const serverList = await descriptorClient.getServerListAttribute();
+            const serverList = await descriptorClient.getServerListAttribute(false, false);
             deviceData.rootEndpointServerList = serverList;
             if (serverList.includes(IcdManagement.Cluster.id)) {
                 deviceData.isIntermittentlyConnected = true;
@@ -107,7 +112,7 @@ export class DeviceInformation {
 
         const threadNetworkDiagnosticClient = rootEndpoint.getClusterClient(ThreadNetworkDiagnostics.Cluster);
         if (threadNetworkDiagnosticClient !== undefined) {
-            const routingRole = await threadNetworkDiagnosticClient.getRoutingRoleAttribute();
+            const routingRole = await threadNetworkDiagnosticClient.getRoutingRoleAttribute(false, false);
             if (routingRole === ThreadNetworkDiagnostics.RoutingRole.SleepyEndDevice) {
                 deviceData.isThreadSleepyEndDevice = true;
             }
@@ -122,8 +127,8 @@ export class DeviceInformation {
     async #collectEndpointStates(endpoint: Endpoint, deviceData: DeviceMetaInformation) {
         const networkCluster = endpoint.getClusterClient(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
-            if (await networkCluster.getInterfaceEnabledAttribute()) {
-                const networks = await networkCluster.getNetworksAttribute();
+            if (await networkCluster.getInterfaceEnabledAttribute(false, false)) {
+                const networks = await networkCluster.getNetworksAttribute(false, false);
                 if (networks) {
                     if (networks.some(network => network.connected)) {
                         const features = networkCluster.supportedFeatures;
@@ -149,7 +154,7 @@ export class DeviceInformation {
                     !features.wired ||
                     powerSourceCluster.isAttributeSupportedByName("batChargeLevel") // We saw devices with wrong features
                 ) {
-                    const status = await powerSourceCluster.getStatusAttribute();
+                    const status = await powerSourceCluster.getStatusAttribute(false, false);
                     if (
                         status === PowerSource.PowerSourceStatus.Active ||
                         status === PowerSource.PowerSourceStatus.Unspecified
