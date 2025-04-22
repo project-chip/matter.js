@@ -1868,6 +1868,7 @@ export namespace ColorControlBaseServer {
         setColorMode(mode: ColorControl.ColorMode): MaybePromise;
         setEnhancedColorMode(mode: ColorControl.EnhancedColorMode): MaybePromise;
         syncColorTemperatureWithLevelLogic(level: number): MaybePromise;
+        createTransitions<B extends Behavior>(config: Transitions.Configuration<B>): Transitions<B>;
     };
 }
 
