@@ -320,6 +320,9 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
 
     /**
      * Perform actual "movement".  Override to initiate movement of your device.
+     * The logic tries to determine the direction to Open or Close also when a target percentage is given. The direction
+     * value `DefinedByPosition` only is set if we can not determine the direction based on the current data.
+     * When a `targetPercent100ths` is set (not undefined) then this is the target value to use.
      *
      * The default implementation logs and immediately updates current position to the target positions.  This is
      * probably not desirable for a real device so do not invoke `super.handleMovement()` from your implementation.
@@ -375,7 +378,7 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
      * Handle a movement. If calibration is supported and needed then {@link executeCalibration} runs before the actual
      * movement. The method increases the numberOfActuations* attribute and updates the operational status.
      *
-     * Actual movement occurs in {@link handleMovement} as a worker. Thus this method returns before actual movement
+     * Actual movement occurs in {@link handleMovement} as a worker. Thus, this method returns before actual movement
      * completes.
      */
     #prepareMovement(type: MovementType, direction: MovementDirection, targetPercent100ths?: number): void {
@@ -486,11 +489,11 @@ export class WindowCoveringBaseServer extends WindowCoveringBase {
     }
 
     #triggerLiftMotion(direction: MovementDirection, targetPercent100ths?: number) {
-        this.#prepareMovement(0 /* Lift */, direction, targetPercent100ths);
+        this.#prepareMovement(MovementType.Lift, direction, targetPercent100ths);
     }
 
     #triggerTiltMotion(direction: MovementDirection, targetPercent100ths?: number) {
-        this.#prepareMovement(1 /* Tilt */, direction, targetPercent100ths);
+        this.#prepareMovement(MovementType.Tilt, direction, targetPercent100ths);
     }
 
     /**
