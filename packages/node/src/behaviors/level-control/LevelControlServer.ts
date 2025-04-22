@@ -669,6 +669,7 @@ export namespace LevelControlBaseServer {
         stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
         couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
         handleOnOffChange(onOff: boolean): MaybePromise;
+        createTransitions<B extends Behavior>(config: Transitions.Configuration<B>): Transitions<B>;
     };
 }
 
