@@ -305,11 +305,17 @@ export class NobleBleCentralInterface implements NetInterface {
                         } catch (error) {
                             this.#connectionsInProgress.delete(address);
                             this.#openChannels.delete(address);
-                            await peripheral
-                                .disconnectAsync()
-                                .catch(error =>
-                                    logger.debug(`Peripheral ${peripheral.address}: Error while disconnecting`, error),
-                                );
+                            if (peripheral.state === "connected") {
+                                logger.debug(`Disconnect because of initialization error of peripheral ${address}`);
+                                await peripheral
+                                    .disconnectAsync()
+                                    .catch(error =>
+                                        logger.debug(
+                                            `Peripheral ${peripheral.address}: Error while disconnecting`,
+                                            error,
+                                        ),
+                                    );
+                            }
                             reTryHandler(error);
                             return;
                         }
@@ -365,9 +371,12 @@ export class NobleBleCentralInterface implements NetInterface {
     async close() {
         this.#closed = true;
         for (const peripheral of this.#openChannels.values()) {
-            peripheral
-                .disconnectAsync()
-                .catch(error => logger.error(`Peripheral ${peripheral.address}: Error while disconnecting`, error));
+            if (peripheral.state === "connected") {
+                logger.debug(`Peripheral ${peripheral.address}: Disconnect from peripheral while closing central`);
+                peripheral
+                    .disconnectAsync()
+                    .catch(error => logger.error(`Peripheral ${peripheral.address}: Error while disconnecting`, error));
+            }
         }
         this.#openChannels.clear();
     }
@@ -413,7 +422,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
                 handshakeResolver(data);
             } else {
                 logger.debug(
-                    `Peripheral ${peripheralAddress}: Received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification}) - No handshake response, inforing`,
+                    `Peripheral ${peripheralAddress}: Received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification}) - No handshake response, ignoring`,
                 );
             }
         };
@@ -456,20 +465,19 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
                 return await characteristicC1ForWrite.writeAsync(Buffer.from(data.buffer), false);
             },
             // callback to disconnect the BLE connection
-            async () =>
-                void characteristicC2ForSubscribe
-                    .unsubscribeAsync()
-                    .then(() =>
-                        peripheral
-                            .disconnectAsync()
-                            .then(() => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`)),
-                    )
-                    .catch(error =>
-                        logger.debug(
-                            `Peripheral ${peripheralAddress}: Error while unsubscribing or disconnecting`,
-                            error,
+            async () => {
+                if (peripheral.state !== "connected" || !nobleChannel.connected) return;
+                logger.debug(`Peripheral ${peripheralAddress}: Disconnect from peripheral because btp session closed`);
+                characteristicC2ForSubscribe.unsubscribeAsync().then(
+                    () =>
+                        peripheral.disconnectAsync().then(
+                            () => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`),
+                            error => logger.debug(`Peripheral ${peripheralAddress}: Error while unsubscribing`, error),
                         ),
-                    ),
+                    error => logger.debug(`Peripheral ${peripheralAddress}: Error while disconnecting`, error),
+                );
+            },
+
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: Uint8Array) => {
                 if (onMatterMessageListener === undefined) {
@@ -491,7 +499,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         return nobleChannel;
     }
 
-    private connected = true;
+    #connected = true;
 
     constructor(
         private readonly peripheral: Peripheral,
@@ -499,10 +507,14 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
     ) {
         super();
         peripheral.once("disconnect", () => {
-            logger.debug(`Disconnected from peripheral ${peripheral.address}`);
-            this.connected = false;
+            logger.debug(`Disconnected from peripheral ${peripheral.address}. Closing BTP session`);
+            this.#connected = false;
             void this.btpSession.close();
         });
+    }
+
+    get connected() {
+        return this.#connected && this.peripheral.state === "connected";
     }
 
     /**
@@ -532,8 +544,12 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
 
     async close() {
         await this.btpSession.close();
-        this.peripheral
-            .disconnectAsync()
-            .catch(error => logger.error(`Peripheral ${this.peripheral.address}: Error while disconnecting`, error));
+        if (this.connected) {
+            this.peripheral
+                .disconnectAsync()
+                .catch(error =>
+                    logger.error(`Peripheral ${this.peripheral.address}: Error while disconnecting`, error),
+                );
+        }
     }
 }
