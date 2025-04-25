@@ -23,7 +23,11 @@ import {
     serverAddressToString,
 } from "#general";
 import { MdnsScanner } from "#mdns/MdnsScanner.js";
-import { ControllerCommissioningFlow, ControllerCommissioningFlowOptions } from "#peer/ControllerCommissioningFlow.js";
+import {
+    CommissioningError,
+    ControllerCommissioningFlow,
+    ControllerCommissioningFlowOptions,
+} from "#peer/ControllerCommissioningFlow.js";
 import { ControllerDiscovery, PairRetransmissionLimitReachedError } from "#peer/ControllerDiscovery.js";
 import { ChannelStatusResponseError } from "#securechannel/index.js";
 import { PaseClient } from "#session/index.js";
@@ -33,7 +37,7 @@ import { InteractionClient, InteractionClientProvider } from "../interaction/Int
 import { ExchangeManager, MessageChannel } from "../protocol/ExchangeManager.js";
 import { DedicatedChannelExchangeProvider } from "../protocol/ExchangeProvider.js";
 import { PeerAddress } from "./PeerAddress.js";
-import { NodeDiscoveryType } from "./PeerSet.js";
+import { NodeDiscoveryType, PeerSet } from "./PeerSet.js";
 
 const logger = Logger.get("PeerCommissioner");
 
@@ -116,6 +120,7 @@ export interface DiscoveryAndCommissioningOptions extends CommissioningOptions {
  * Interfaces {@link ControllerCommissioner} with other components.
  */
 export interface ControllerCommissionerContext {
+    peers: PeerSet;
     clients: InteractionClientProvider;
     scanners: ScannerSet;
     netInterfaces: NetInterfaceSet;
@@ -138,6 +143,7 @@ export class ControllerCommissioner {
 
     static [Environmental.create](env: Environment) {
         const instance = new ControllerCommissioner({
+            peers: env.get(PeerSet),
             clients: env.get(InteractionClientProvider),
             scanners: env.get(ScannerSet),
             netInterfaces: env.get(NetInterfaceSet),
@@ -153,7 +159,12 @@ export class ControllerCommissioner {
      * Commmission a previously discovered node.
      */
     async commission(options: LocatedNodeCommissioningOptions): Promise<PeerAddress> {
-        const { passcode, addresses, discoveryData } = options;
+        const { passcode, addresses, discoveryData, fabric, nodeId } = options;
+
+        // If a NodeId is set verify that this nodeId is not already used
+        if (nodeId !== undefined) {
+            this.#assertPeerAddress(fabric.addressOf(nodeId));
+        }
 
         // Prioritize UDP
         addresses.sort(a => (a.type === "udp" ? -1 : 1));
@@ -268,6 +279,12 @@ export class ControllerCommissioner {
      * Commission a node with discovery.
      */
     async commissionWithDiscovery(options: DiscoveryAndCommissioningOptions): Promise<PeerAddress> {
+        const { fabric, nodeId } = options;
+        // If a NodeId is set verify that this nodeId is not already used
+        if (nodeId !== undefined) {
+            this.#assertPeerAddress(fabric.addressOf(nodeId));
+        }
+
         // Establish PASE channel
         const { paseSecureChannel, discoveryData } = await this.discoverAndEstablishPase(options);
 
@@ -353,6 +370,29 @@ export class ControllerCommissioner {
         return new MessageChannel(paseChannel, paseSecureSession);
     }
 
+    /** Validate if a Peert Address is already known and commissioned */
+    #assertPeerAddress(address: PeerAddress) {
+        if (this.#context.peers.has(address)) {
+            throw new CommissioningError(`Node ID ${address.nodeId} is already commissioned and can not be reused.`);
+        }
+    }
+
+    /** Finds an unused random Node-ID to use for commissioning if not already provided. */
+    #determineAddress(fabric: Fabric, nodeId?: NodeId) {
+        while (true) {
+            const address = fabric.addressOf(nodeId ?? NodeId.randomOperationalNodeId());
+            try {
+                this.#assertPeerAddress(address);
+            } catch (error) {
+                if (error instanceof CommissioningError && nodeId !== undefined) {
+                    throw error;
+                }
+                continue;
+            }
+            return address;
+        }
+    }
+
     /**
      * Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
      * success.
@@ -362,17 +402,17 @@ export class ControllerCommissioner {
         options: CommissioningOptions,
         discoveryData?: DiscoveryData,
     ): Promise<PeerAddress> {
+        const {
+            fabric,
+            finalizeCommissioning: performCaseCommissioning,
+            commissioningFlowImpl = ControllerCommissioningFlow,
+        } = options;
+
         const commissioningOptions = {
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
             regulatoryCountryCode: "XX",
             ...options,
         };
-
-        const {
-            fabric,
-            finalizeCommissioning: performCaseCommissioning,
-            commissioningFlowImpl = ControllerCommissioningFlow,
-        } = commissioningOptions;
 
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -402,7 +442,7 @@ export class ControllerCommissioner {
             Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
          */
 
-        const address = fabric.addressOf(commissioningOptions.nodeId ?? NodeId.randomOperationalNodeId());
+        const address = this.#determineAddress(fabric, commissioningOptions.nodeId);
         logger.info(
             `Start commissioning of node ${address.nodeId} into fabric ${fabric.fabricId} (index ${address.fabricIndex})`,
         );

@@ -300,7 +300,7 @@ export class BleScanner implements Scanner {
     }
 
     async close() {
-        await this.nobleClient.stopScanning();
+        this.nobleClient.close();
         [...this.recordWaiters.keys()].forEach(queryId =>
             this.finishWaiter(queryId, !!this.recordWaiters.get(queryId)?.timer),
         );

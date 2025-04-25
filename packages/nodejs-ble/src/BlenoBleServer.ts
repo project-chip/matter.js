@@ -149,6 +149,8 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
         this.btpHandshakeTimeoutTriggered(),
     );
+    #disconnected = false;
+    #closing = false;
 
     private readonly matterBleService;
 
@@ -166,6 +168,8 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
             this.state = state;
             logger.debug(`stateChange: ${state}, address = ${Bleno.address}`);
             if (state !== "poweredOn") {
+                // When we shut down we expect a state change but can not call any command anmore
+                if (this.#disconnected || this.#closing) return;
                 Bleno.stopAdvertising();
             } else if (this.advertisingData) {
                 Bleno.startAdvertisingWithEIRData(this.advertisingData);
@@ -377,6 +381,10 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     }
 
     async close() {
+        if (this.#closing) {
+            return;
+        }
+        this.#closing = true;
         this.btpHandshakeTimeout.stop();
         await this.disconnect();
         if (this.btpSession !== undefined) {
@@ -388,7 +396,14 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
 
     async disconnect() {
         this.isAdvertising = false;
+        if (this.#disconnected) {
+            return;
+        }
+        this.#disconnected = true;
+        logger.debug(`Disconnecting Bleno`);
         Bleno.disconnect();
+        logger.debug(`Stopping Bleno`);
+        Bleno.stop();
         /*
         TODO: This is not working as expected, the disconnect event is not triggered, seems issue in Bleno
         return new Promise<void>(resolve => {
