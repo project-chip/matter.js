@@ -329,6 +329,7 @@ export class MatterController {
         this.clients = new InteractionClientProvider(this.peers);
 
         this.commissioner = new ControllerCommissioner({
+            peers: this.peers,
             clients: this.clients,
             scanners: this.scanners,
             netInterfaces: this.netInterfaces,
