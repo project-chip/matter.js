@@ -446,15 +446,16 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
             attMtu: mtu,
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
+
         logger.debug(
             `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Diagnostic.json(btpHandshakeRequest)}`,
         );
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 
+        characteristicC2ForSubscribe.once("data", handshakeHandler);
+
         logger.debug(`Peripheral ${peripheralAddress}: Subscribing to C2 characteristic`);
         await characteristicC2ForSubscribe.subscribeAsync();
-
-        characteristicC2ForSubscribe.once("data", handshakeHandler);
 
         const handshakeResponse = await handshakeResponseReceivedPromise;
 
