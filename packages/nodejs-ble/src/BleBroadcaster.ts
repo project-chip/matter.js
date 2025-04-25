@@ -57,7 +57,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
     async setFabrics() {
         this.#assertOpen();
         this.#advertise = false;
-        logger.info(`skip BLE announce because announcing an operational device is not supported`);
+        logger.debug(`skip BLE announce because announcing an operational device is not supported`);
         await this.#blenoServer.stopAdvertising();
         return; // Not needed because we only advertise un-commissioned devices
     }

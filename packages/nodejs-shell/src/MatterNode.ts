@@ -30,6 +30,7 @@ export class MatterNode {
         private readonly netInterface?: string,
     ) {
         this.#environment = Environment.default;
+        this.#environment.runtime.add(this);
     }
 
     get storageLocation() {
@@ -88,16 +89,11 @@ export class MatterNode {
 
     async close() {
         await this.commissioningController?.close();
-        await this.closeStorage();
+        return await this.closeStorage();
     }
 
     async closeStorage() {
-        try {
-            await this.storage?.close();
-            process.exit(0);
-        } catch {
-            process.exit(1);
-        }
+        await this.storage?.close();
     }
 
     async start() {
