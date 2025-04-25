@@ -8,6 +8,7 @@ import { Diagnostic, Logger } from "@matter/general";
 import { require } from "@matter/nodejs-ble/require";
 import { BLE_MATTER_SERVICE_UUID } from "@matter/protocol";
 import type { Noble, Peripheral } from "@stoprocent/noble";
+import { platform } from "node:process";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("NobleBleClient");
@@ -35,6 +36,7 @@ export class NobleBleClient {
     private isScanning = false;
     private nobleState = "unknown";
     private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Uint8Array) => void) | undefined;
+    #closing = false;
 
     constructor(options?: BleOptions) {
         const { environment } = options ?? {};
@@ -73,10 +75,6 @@ export class NobleBleClient {
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
-    [Symbol.asyncDispose]() {
-        return this.stopScanning();
-    }
-
     public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Uint8Array) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
@@ -101,6 +99,7 @@ export class NobleBleClient {
     }
 
     public async stopScanning() {
+        if (this.#closing) return;
         this.shouldScan = false;
         if (this.isScanning) {
             logger.debug("Stop BLE scanning for Matter Services ...");
@@ -144,5 +143,22 @@ export class NobleBleClient {
         this.discoveredPeripherals.set(address, { peripheral, matterServiceData: matterServiceData.data });
 
         this.deviceDiscoveredCallback?.(peripheral, matterServiceData.data);
+    }
+
+    close() {
+        if (this.#closing) {
+            return;
+        }
+        this.#closing = true;
+        logger.debug("Stopping Noble");
+
+        // This is a hack because it can else happen that stop is hanging because it needs response data when the HCI
+        // based driver is used. Also Check for Win32 is not 100% correct, but likely good enough for now.
+        // TODO Remove when https://github.com/stoprocent/noble/issues/30 got fixed
+        if (platform != "win32" && platform !== "darwin") {
+            noble.startScanning();
+        }
+
+        noble.stop();
     }
 }
