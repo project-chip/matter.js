@@ -21,6 +21,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   @matter/examples
     - Enhancement: Added Robotic Vacuum Cleaner example to show the cluster dependencies and basic logic requirements
+    - Enhancement: Added Air Quality Sensor example
 
 -   @matter/general
     - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
@@ -63,7 +64,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Fix: Also accept incoming UDP traffic from unknown network interfaces for Matter messages
 
 -   @matter/nodejs-ble
-    - Enhancement: Upgrade Noble to 2.0.3 for more stability with BLE controller operations.
+    - Enhancement: Upgraded Noble and Bleno and optimized stability with BLE device and controller operations
 
 -   @matter/nodejs-shell
     - Feature: Added parameters `--qrCode` and `--qrCodeIndex` to the `commission pair` command to also use QR Code strings for pairing
@@ -74,6 +75,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Enhanced `getMultipleAttributesAndEvents()` to also return attributeStatus and eventStatus properties with errors returned from the read interaction 
     - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
     - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
+    - Enhancement: Makes sure that the Node ID for commissioning of a new node is not already commissioned.
     - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
     - Fix: Enhances checks for Wi-Fi/Thread credentials in config for CommissioningFlow
     - Fix: Ensures that PASE establishments are guarded as defined by specification to prevent passcode brute force attacks
