@@ -443,6 +443,12 @@ export class LegacyControllerCommandHandler extends CommandHandler {
     }
 
     async handleInitialPairing(data: InitialPairingRequest): Promise<void> {
+        const { nodeId } = data;
+        if (nodeId !== undefined) {
+            if (this.#controllerInstance.isNodeCommissioned(nodeId)) {
+                await this.#controllerInstance.removeNode(nodeId, false);
+            }
+        }
         await this.#controllerInstance.commissionNode(this.#determineCommissionOptions(data), {
             connectNodeAfterCommissioning: false,
             commissioningFlowImpl: CustomCommissioningFlow,
