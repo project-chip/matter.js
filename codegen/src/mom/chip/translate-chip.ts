@@ -213,7 +213,7 @@ function setBounds(source: Element, element: ValueElement) {
     }
 
     function getBound(name: string) {
-        let value = int(source.getAttribute(name));
+        const value = int(source.getAttribute(name));
         if (value === undefined) {
             return;
         }
