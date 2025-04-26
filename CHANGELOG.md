@@ -76,6 +76,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
     - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
     - Enhancement: Makes sure that the Node ID for commissioning of a new node is not already commissioned.
+    - Enhancement: Returns the maximum interval in seconds when InteractionClient is used to establish a subscription 
     - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
     - Fix: Enhances checks for Wi-Fi/Thread credentials in config for CommissioningFlow
     - Fix: Ensures that PASE establishments are guarded as defined by specification to prevent passcode brute force attacks
