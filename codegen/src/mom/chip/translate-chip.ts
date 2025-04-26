@@ -173,9 +173,9 @@ function setQualities(src: Element, target: ValueElement) {
     }
 
     const conformance = Array<Conformance.Flag>();
-    if (optional === true) {
+    if (optional) {
         conformance.push(Conformance.Flag.Optional);
-    } else if (optional === false) {
+    } else {
         conformance.push(Conformance.Flag.Mandatory);
     }
 
@@ -217,10 +217,13 @@ function setBounds(source: Element, element: ValueElement) {
         if (value === undefined) {
             return;
         }
+        /*
+        // We do not remember anymore which case was handled here but the below code makes no sense
         if (value > typeBounds.max && typeBounds.min < 0) {
             // CHIP sometimes encodes signed bounds with an unsigned constant
             value = typeBounds.max - typeBounds.max;
         }
+        */
         if (value >= typeBounds.min && value <= typeBounds.max) {
             return value;
         }
