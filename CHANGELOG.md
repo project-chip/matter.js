@@ -76,6 +76,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Added `getMultipleAttributesAndStatus()` and `getMultipleEventsAndStatus()` to InteractionClient to allow to also returned attribute and event errors from the read interaction
     - Enhancement: Allows to access attributes, events and commands in CLusterClient instances also by their ID.
     - Enhancement: Makes sure that the Node ID for commissioning of a new node is not already commissioned.
+    - Enhancement: Returns the maximum interval in seconds when InteractionClient is used to establish a subscription 
     - Fix: Makes sure to not Forward StatusResponseError cases that we generate locally to the device when not wanted
     - Fix: Enhances checks for Wi-Fi/Thread credentials in config for CommissioningFlow
     - Fix: Ensures that PASE establishments are guarded as defined by specification to prevent passcode brute force attacks
@@ -88,6 +89,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
+    - Enhancement: Exposing the current Subscription Interval on PairedNode::currentSubscriptionIntervalSeconds() 
     - Enhancement: Adjusted the initial Deice connection to Read-All before subscribing to also have initial values for not-changed attributes
     - Fix: Fixes an edge case in reconnection handling
 
