@@ -260,6 +260,7 @@ export class PairedNode {
     readonly #commissioningController: CommissioningController;
     #options: CommissioningControllerNodeOptions;
     readonly #reconnectFunc: (discoveryType?: NodeDiscoveryType, noForcedConnection?: boolean) => Promise<void>;
+    #currentSubscriptionIntervalS?: number;
 
     readonly events = {
         /**
@@ -437,6 +438,11 @@ export class PairedNode {
         return this.#remoteInitializationDone || this.#localInitializationDone;
     }
 
+    /** If a subscription is established then this is the interval in seconds, otherwise undefined */
+    get currentSubscriptionIntervalSeconds() {
+        return this.#currentSubscriptionIntervalS;
+    }
+
     #invalidateSubscriptionHandler() {
         if (this.#currentSubscriptionHandler !== undefined) {
             // Make sure the former handlers do not trigger anymore
@@ -454,6 +460,9 @@ export class PairedNode {
         )
             return;
         this.#connectionState = state;
+        if (state !== NodeStates.Connected) {
+            this.#currentSubscriptionIntervalS = undefined;
+        }
         this.#options.stateInformationCallback?.(this.nodeId, state as unknown as NodeStateInformation);
         this.events.stateChanged.emit(state);
         if (state === NodeStates.Disconnected) {
@@ -649,7 +658,7 @@ export class PairedNode {
 
             const anyInitializationDone = this.#localInitializationDone || this.#remoteInitializationDone;
             if (autoSubscribe !== false) {
-                const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
+                const { attributeReports, maxInterval } = await this.subscribeAllAttributesAndEvents({
                     ignoreInitialTriggers: !anyInitializationDone, // Trigger on updates only after initialization
                     attributeChangedCallback: (data, oldValue) => {
                         attributeChangedCallback?.(this.nodeId, data);
@@ -661,13 +670,10 @@ export class PairedNode {
                     },
                 }); // Ignore Triggers from Subscribing during initialization
 
-                if (initialSubscriptionData.attributeReports === undefined) {
+                if (attributeReports === undefined) {
                     throw new InternalError("No attribute reports received when subscribing to all values!");
                 }
-                await this.#initializeEndpointStructure(
-                    initialSubscriptionData.attributeReports,
-                    anyInitializationDone,
-                );
+                await this.#initializeEndpointStructure(attributeReports, anyInitializationDone);
 
                 this.#remoteInitializationInProgress = false; // We are done, rest is bonus and should not block reconnections
 
@@ -677,6 +683,7 @@ export class PairedNode {
                         await this.#nodeDetails.enhanceDeviceDetailsFromCache(rootEndpoint);
                     }
                 }
+                this.#currentSubscriptionIntervalS = maxInterval;
             } else {
                 const allClusterAttributes = await this.readAllAttributes();
                 await this.#initializeEndpointStructure(allClusterAttributes, anyInitializationDone);
@@ -810,8 +817,12 @@ export class PairedNode {
                 this.#setConnectionState(NodeStates.Reconnecting);
                 this.#reconnectionInProgress = true;
                 try {
-                    await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
+                    const { maxInterval } = await this.subscribeAllAttributesAndEvents({
+                        ...options,
+                        ignoreInitialTriggers: false,
+                    });
                     this.#setConnectionState(NodeStates.Connected);
+                    this.#currentSubscriptionIntervalS = maxInterval;
                 } catch (error) {
                     logger.info(
                         `Node ${this.nodeId}: Error resubscribing to all attributes and events. Try to reconnect ...`,

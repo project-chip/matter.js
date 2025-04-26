@@ -625,7 +625,9 @@ export class InteractionClient {
         updateTimeoutHandler?: Timer.Callback;
         updateReceived?: () => void;
         executeQueued?: boolean;
-    }): Promise<void> {
+    }): Promise<{
+        maxInterval: number;
+    }> {
         const {
             endpointId,
             clusterId,
@@ -721,6 +723,8 @@ export class InteractionClient {
             },
             report,
         );
+
+        return { maxInterval };
     }
 
     async #registerSubscription(subscription: RegisteredSubscription, initialReport: DataReport) {
@@ -742,7 +746,9 @@ export class InteractionClient {
         updateTimeoutHandler?: Timer.Callback;
         updateReceived?: () => void;
         executeQueued?: boolean;
-    }): Promise<void> {
+    }): Promise<{
+        maxInterval: number;
+    }> {
         const {
             endpointId,
             clusterId,
@@ -817,6 +823,8 @@ export class InteractionClient {
             },
             report,
         );
+
+        return { maxInterval };
     }
 
     async subscribeAllAttributesAndEvents(options: {
@@ -840,6 +848,7 @@ export class InteractionClient {
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
+        maxInterval: number;
     }> {
         const { isUrgent } = options;
         return this.subscribeMultipleAttributesAndEvents({
@@ -867,6 +876,7 @@ export class InteractionClient {
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
+        maxInterval: number;
     }> {
         const {
             attributes: attributeRequests = [],
@@ -1035,7 +1045,10 @@ export class InteractionClient {
             this.#enrichCachedAttributeData(seedReport.attributeReports ?? [], dataVersionFilters);
         }
 
-        return seedReport;
+        return {
+            ...seedReport,
+            maxInterval,
+        };
     }
 
     async invoke<C extends Command<any, any, any>>(options: {
