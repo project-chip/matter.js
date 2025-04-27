@@ -873,6 +873,7 @@ export class PairedNode {
                 subscriptionHandler.attributeListener(data, changed, oldValue),
             eventListener: data => subscriptionHandler.eventListener(data),
             updateTimeoutHandler: () => subscriptionHandler.updateTimeoutHandler(),
+            updateReceived: () => subscriptionHandler.subscriptionAlive(),
         });
 
         // After initial data are processed we want to send out callbacks, so we set ignoreInitialTriggers to false
