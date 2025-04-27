@@ -658,7 +658,7 @@ export class InteractionClient {
                 endpointId,
                 clusterId,
                 attributeId,
-            })}${knownDataVersion !== undefined ? ` (knownDataVersion=${knownDataVersion})` : ""}`,
+            })}${knownDataVersion !== undefined ? ` (knownDataVersion=${knownDataVersion})` : ""} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
         );
 
         const {
@@ -765,7 +765,9 @@ export class InteractionClient {
         } = options;
         const { id: eventId } = event;
 
-        logger.debug(`Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })}`);
+        logger.debug(
+            `Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
+        );
 
         const {
             report,
@@ -914,7 +916,7 @@ export class InteractionClient {
                 .map(path => resolveAttributeName(path))
                 .join(
                     ", ",
-                )} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}, keepSubscriptions=${keepSubscriptions}`,
+                )} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}, keepSubscriptions=${keepSubscriptions} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
         );
         if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
             logger.debug(

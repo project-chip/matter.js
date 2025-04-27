@@ -90,7 +90,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
     - Enhancement: Exposing the current Subscription Interval on PairedNode::currentSubscriptionIntervalSeconds() 
-    - Enhancement: Adjusted the initial Deice connection to Read-All before subscribing to also have initial values for not-changed attributes
+    - Enhancement: Adjusted the initial Device connection to Read-All before subscribing to also have initial values for not-changed attributes
+    - Enhancement: Added new PairedNode event `connectionAlive` to expose the subscription alive triggers (on changes or after max interval)  
     - Fix: Fixes an edge case in reconnection handling
 
 -   @project-chip/* packages (beside above)
