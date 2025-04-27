@@ -292,6 +292,9 @@ export class PairedNode {
 
         /** Emitted when the node is decommissioned. */
         decommissioned: Observable<[void]>(),
+
+        /** Emitted when a subscription alive trigger is received (max interval trigger or any data update) */
+        connectionAlive: Observable<[void]>(),
     };
 
     static async create(
@@ -840,6 +843,7 @@ export class PairedNode {
                     this.#reconnectDelayTimer = undefined;
                     this.#setConnectionState(NodeStates.Connected);
                 }
+                this.events.connectionAlive.emit();
             },
         };
         this.#currentSubscriptionHandler = subscriptionHandler;
