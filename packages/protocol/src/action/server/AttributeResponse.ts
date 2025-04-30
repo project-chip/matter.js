@@ -25,7 +25,7 @@ import {
 import { DataModelPath } from "@matter/model";
 import { TlvSchema } from "@matter/types";
 
-export const GlobalAttrIds = new Set(Object.values(GlobalAttributes).map(attr => attr.id));
+export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
 export const WildcardPathFlagsCodec = BitmapSchema(WildcardPathFlagsBitmap);
 export const FallbackLimits: AccessControl.Limits = {
     fabricScoped: false,
@@ -129,6 +129,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
 
         const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
+        console.log(Array.from(GlobalAttrIds.values()));
         if (clusterId === undefined && attributeId !== undefined && !GlobalAttrIds.has(attributeId)) {
             throw new StatusResponseError(
                 `Illegal read of wildcard cluster with non-global attribute #${attributeId}`,

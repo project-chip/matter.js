@@ -70,6 +70,26 @@ describe("AttributeReaderRequest", () => {
         });
     });
 
+    it("reads attributeList global Attribute full wildcard", async () => {
+        const response = await read(
+            Read.Attribute({
+                attributes: "attributeList",
+            }),
+        );
+        expect(countAttrs(response)).deep.equals({
+            0: {
+                29: 1,
+                31: 1,
+                40: 1,
+                48: 1,
+                51: 1,
+                60: 1,
+                62: 1,
+                63: 1,
+            },
+        });
+    });
+
     // TODO - more tests
 });
 
