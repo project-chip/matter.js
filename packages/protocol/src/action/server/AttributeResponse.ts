@@ -193,7 +193,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         // We need some fallback location if cluster is not defined
         const location = {
             ...(cluster?.location ?? {
-                path: undefined as unknown as DataModelPath, // Hack but required here but irrelevant for ACL checks yet
+                path: DataModelPath.none,
                 endpoint: endpointId,
                 cluster: clusterId,
             }),
