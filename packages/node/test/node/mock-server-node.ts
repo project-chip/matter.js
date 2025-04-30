@@ -196,7 +196,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         builder.setOperationalCert(NEW_OP_CERT);
         builder.setIdentityProtectionKey(IPK_KEY);
         const fabric = await builder.build(FabricIndex(index));
-        await this.env.get(FabricManager).addFabric(fabric);
+        this.env.get(FabricManager).addFabric(fabric);
         await this.events.commissioning.fabricsChanged; // Wait till the fabric addition is processed
         return fabric;
     }
