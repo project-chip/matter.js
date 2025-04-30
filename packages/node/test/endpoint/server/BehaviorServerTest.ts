@@ -38,6 +38,12 @@ const FABRICS_PATH = {
     attributeId: OperationalCredentials.Cluster.attributes.fabrics.id,
 };
 
+const NOCS_PATH = {
+    endpointId: EndpointNumber(0),
+    clusterId: OperationalCredentials.Cluster.id,
+    attributeId: OperationalCredentials.Cluster.attributes.nocs.id,
+};
+
 const COMMISSIONED_FABRICS_PATH = {
     endpointId: EndpointNumber(0),
     clusterId: OperationalCredentials.Cluster.id,
@@ -87,12 +93,16 @@ async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
     });
 }
 
+async function readNocs(node: MockServerNode, fabric: Fabric, isFabricFiltered: boolean) {
+    return await interaction.read(node, fabric, isFabricFiltered, NOCS_PATH);
+}
+
 describe("BehaviorServer", () => {
     beforeEach(() => {
         MockTime.reset(676698400000);
     });
 
-    it("properly filters reads and writes", async () => {
+    it("properly fabric filters reads and writes", async () => {
         const node = await MockServerNode.createOnline();
 
         const fabric1 = await node.addFabric(1);
@@ -131,6 +141,38 @@ describe("BehaviorServer", () => {
             { privilege: undefined, authMode: undefined, subjects: undefined, targets: undefined, fabricIndex: 2 },
         ]);
 
+        const fabric1Nocs = await readNocs(node, fabric1, true);
+        expect(fabric1Nocs.length).equals(1);
+        expect(fabric1Nocs[0].fabricIndex).equals(1);
+        expect(fabric1Nocs[0].noc instanceof Uint8Array).to.be.true;
+        const fabric2Nocs = await readNocs(node, fabric2, true);
+        expect(fabric2Nocs.length).equals(1);
+        expect(fabric2Nocs[0].fabricIndex).equals(2);
+        expect(fabric2Nocs[0].noc instanceof Uint8Array).to.be.true;
+
+        await node.close();
+    });
+
+    it("properly sanitize fabric sensitive reads", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const fabric1 = await node.addFabric(1);
+        const fabric2 = await node.addFabric(2);
+
+        const fabric1Nocs = await readNocs(node, fabric1, false);
+        expect(fabric1Nocs.length).equals(2);
+        expect(fabric1Nocs[0].fabricIndex).equals(1);
+        expect(fabric1Nocs[0].noc instanceof Uint8Array).to.be.true;
+        expect(fabric1Nocs[1].fabricIndex).equals(2);
+        expect(fabric1Nocs[1].noc).to.be.undefined;
+
+        const fabric2Nocs = await readNocs(node, fabric2, false);
+        expect(fabric2Nocs.length).equals(2);
+        expect(fabric2Nocs[0].fabricIndex).equals(1);
+        expect(fabric2Nocs[0].noc).to.be.undefined;
+        expect(fabric2Nocs[1].fabricIndex).equals(2);
+        expect(fabric2Nocs[1].noc instanceof Uint8Array).to.be.true;
+
         await node.close();
     });
 
@@ -143,7 +185,7 @@ describe("BehaviorServer", () => {
         await interaction.subscribe(node, fabric1, {
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             isFabricFiltered: false,
-            attributeRequests: [FABRICS_PATH, COMMISSIONED_FABRICS_PATH],
+            attributeRequests: [FABRICS_PATH, NOCS_PATH, COMMISSIONED_FABRICS_PATH],
             eventRequests: [LEAVE_PATH],
             keepSubscriptions: true,
             minIntervalFloorSeconds: 1,

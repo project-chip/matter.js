@@ -32,7 +32,6 @@ describe("AttributeReaderRequest", () => {
                         minLength: 0,
                         type: 12,
                     },
-                    fabricSensitive: false,
                     value: "Matter.js Test Vendor",
                     version: 1,
                 },

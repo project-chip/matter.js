@@ -129,7 +129,6 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
 
         const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
-        console.log(Array.from(GlobalAttrIds.values()));
         if (clusterId === undefined && attributeId !== undefined && !GlobalAttrIds.has(attributeId)) {
             throw new StatusResponseError(
                 `Illegal read of wildcard cluster with non-global attribute #${attributeId}`,
@@ -263,7 +262,6 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 this.#currentState[attributeId],
                 cluster.version,
                 this.#currentCluster.type.attributes[attributeId]!.tlv,
-                limits.fabricSensitive,
             );
         });
     }
@@ -374,7 +372,6 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 this.#currentState[attribute.id],
                 this.#currentCluster!.version,
                 attribute.tlv,
-                attribute.limits.fabricSensitive,
             );
         }
     }
@@ -410,20 +407,13 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
     /**
      * Add an attribute value.
      */
-    #addValue(
-        path: ReadResult.ConcreteAttributePath,
-        value: unknown,
-        version: number,
-        tlv: TlvSchema<unknown>,
-        hasFabricSensitiveData: boolean,
-    ) {
+    #addValue(path: ReadResult.ConcreteAttributePath, value: unknown, version: number, tlv: TlvSchema<unknown>) {
         const report: ReadResult.AttributeValue = {
             kind: "attr-value",
             path,
             value,
             version,
             tlv,
-            fabricSensitive: hasFabricSensitiveData,
         };
 
         if (this.#chunk) {

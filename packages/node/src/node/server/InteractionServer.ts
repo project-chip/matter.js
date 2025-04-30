@@ -475,7 +475,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             for (const report of chunk) {
                 switch (report.kind) {
                     case "attr-value": {
-                        const { path, value: payload, fabricSensitive, version: dataVersion, tlv: schema } = report;
+                        const { path, value: payload, version: dataVersion, tlv: schema } = report;
                         if (schema === undefined) {
                             throw new InternalError(`Attribute ${path.clusterId}/${path.attributeId} not found`);
                         }
@@ -486,7 +486,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                                 schema,
                                 dataVersion,
                             },
-                            hasFabricSensitiveData: fabricSensitive,
+                            hasFabricSensitiveData: true, // With this we disable the validation for missing data in encoding, we trust behavior logic
                         };
                         yield data;
                         break;

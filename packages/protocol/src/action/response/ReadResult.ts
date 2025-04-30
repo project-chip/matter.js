@@ -51,7 +51,6 @@ export namespace ReadResult {
         path: ConcreteAttributePath;
         value: unknown;
         version: number;
-        fabricSensitive: boolean;
         tlv: TlvSchema<unknown>;
     }
 

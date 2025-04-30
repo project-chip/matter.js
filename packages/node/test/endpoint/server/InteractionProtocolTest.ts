@@ -123,7 +123,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
-            hasFabricSensitiveData: false,
+            hasFabricSensitiveData: true,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
                 schema: TlvVendorId,
@@ -132,7 +132,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
-            hasFabricSensitiveData: false,
+            hasFabricSensitiveData: true,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
                 schema: TlvUInt16,
@@ -142,7 +142,7 @@ const READ_RESPONSE: DataReportPayload = {
         },
 
         {
-            hasFabricSensitiveData: false,
+            hasFabricSensitiveData: true,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 schema: TlvString.bound({ maxLength: 32 }),
@@ -151,7 +151,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
-            hasFabricSensitiveData: false,
+            hasFabricSensitiveData: true,
             attributeData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -260,7 +260,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
             },
         },
         {
-            hasFabricSensitiveData: false,
+            hasFabricSensitiveData: true,
             attributeData: {
                 path: {
                     endpointId: EndpointNumber(0),
