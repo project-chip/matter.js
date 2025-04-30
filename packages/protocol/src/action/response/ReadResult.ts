@@ -15,6 +15,7 @@ import type {
     Status,
     StatusCode,
 } from "#types";
+import { TlvSchema } from "@matter/types";
 
 /**
  * Streaming result for a Matter protocol-level read.
@@ -25,7 +26,7 @@ import type {
  * Iteration occurs in chunks for performance reasons.  A chunk is an iterable of reports, one per output attribute or
  * event.
  */
-export interface ReadResult<Chunk = ReadResult.Chunk> extends AsyncIterable<ReadResult.Chunk> {}
+export interface ReadResult<Chunk = ReadResult.Chunk> extends Iterable<ReadResult.Chunk> {}
 
 export namespace ReadResult {
     export type Chunk = Iterable<Report>;
@@ -49,6 +50,9 @@ export namespace ReadResult {
         kind: "attr-value";
         path: ConcreteAttributePath;
         value: unknown;
+        version: number;
+        fabricSensitive: boolean;
+        tlv: TlvSchema<unknown>;
     }
 
     export interface GlobalAttributeStatus {
@@ -60,6 +64,7 @@ export namespace ReadResult {
     export interface ClusterAttributeStatus {
         kind: "attr-cluster-status";
         path: ConcreteAttributePath;
+        status: number;
         clusterStatus: number;
     }
 
