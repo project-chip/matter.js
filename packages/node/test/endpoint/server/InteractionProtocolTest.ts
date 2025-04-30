@@ -871,15 +871,15 @@ const wildcardTestCases: {
     }, // all filtered
 ];
 
-function fillIterableDataReport(data: {
+async function fillIterableDataReport(data: {
     dataReport: BaseDataReport;
     payload?: DataReportPayloadIterator;
-}): DataReportPayload {
+}): Promise<DataReportPayload> {
     const { dataReport: report, payload } = data;
     const dataReport: DataReportPayload = { ...report };
 
     if (payload !== undefined) {
-        for (const payloadItem of payload) {
+        for await (const payloadItem of payload) {
             if ("attributeData" in payloadItem || "attributeStatus" in payloadItem) {
                 dataReport.attributeReportsPayload = dataReport.attributeReportsPayload ?? [];
                 dataReport.attributeReportsPayload.push(payloadItem);
@@ -977,7 +977,7 @@ describe("InteractionProtocol", () => {
                 interaction.BarelyMockedMessage,
             );
 
-            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
+            expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
         });
 
         it("replies with attributes and events using (unused) version filter", async () => {
@@ -989,7 +989,7 @@ describe("InteractionProtocol", () => {
                 interaction.BarelyMockedMessage,
             );
 
-            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
+            expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
         });
 
         it("replies with attributes and events with active version filter", async () => {
@@ -1001,7 +1001,7 @@ describe("InteractionProtocol", () => {
                 interaction.BarelyMockedMessage,
             );
 
-            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WITH_FILTER);
+            expect(await fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WITH_FILTER);
         });
 
         for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
@@ -1031,7 +1031,7 @@ describe("InteractionProtocol", () => {
                     interaction.BarelyMockedMessage,
                 );
 
-                expect(fillIterableDataReport(result).attributeReportsPayload?.length || 0).equals(count);
+                expect((await fillIterableDataReport(result)).attributeReportsPayload?.length || 0).equals(count);
             });
         }
     });

@@ -26,7 +26,7 @@ import { TlvSchema } from "@matter/types";
  * Iteration occurs in chunks for performance reasons.  A chunk is an iterable of reports, one per output attribute or
  * event.
  */
-export interface ReadResult<Chunk = ReadResult.Chunk> extends Iterable<ReadResult.Chunk> {}
+export interface ReadResult<Chunk = ReadResult.Chunk> extends AsyncIterable<ReadResult.Chunk> {}
 
 export namespace ReadResult {
     export type Chunk = Iterable<Report>;

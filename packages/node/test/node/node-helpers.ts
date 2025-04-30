@@ -256,7 +256,7 @@ export namespace interaction {
             BarelyMockedMessage,
         );
 
-        const data = result.payload?.next();
+        const data = await result.payload?.next();
         return typeof data?.value === "object" && "attributeData" in data.value
             ? data.value.attributeData?.payload
             : undefined;

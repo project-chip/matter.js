@@ -722,7 +722,7 @@ export class ServerSubscription extends Subscription {
      * A thrown exception will cancel the sending process immediately.
      * TODO: Streamline all this with the normal Read flow to also handle Concrete Path subscriptions with errors correctly
      */
-    *#iterateInitialSubscriptionData(
+    async *#iterateInitialSubscriptionData(
         attributesToSend: {
             newAttributes: AttributeWithPath[];
             attributeErrors: TypeFromSchema<typeof TlvAttributeStatus>[];
@@ -955,7 +955,7 @@ export class ServerSubscription extends Subscription {
      * the controller.
      * A thrown exception will cancel the sending process immediately.
      */
-    *#iterateDataUpdate(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
+    async *#iterateDataUpdate(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
         for (const {
             path,
             schema,

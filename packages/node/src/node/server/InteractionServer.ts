@@ -453,7 +453,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     /**
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
-    *#iterateReadAttributesPaths(
+    async *#iterateReadAttributesPaths(
         readRequest: ReadRequest,
         eventReportsPayload: EventReportPayload[] | undefined,
         exchange: MessageExchange,
@@ -471,8 +471,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             node: this.#node,
         }).beginReadOnly();
 
-        for (const chunk of this.#serverInteraction.read(readRequest, context)) {
+        for await (const chunk of this.#serverInteraction.read(readRequest, context)) {
             for (const report of chunk) {
+                // TODO Centralize this conversion and at the end move into encoder
                 switch (report.kind) {
                     case "attr-value": {
                         const { path, value: payload, version: dataVersion, tlv: schema } = report;

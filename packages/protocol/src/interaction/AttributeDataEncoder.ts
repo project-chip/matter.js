@@ -68,7 +68,7 @@ export type DataReportPayload = BaseDataReport & {
 /**
  * Type for the DataReport Generator function to send all data
  */
-export type DataReportPayloadIterator = IterableIterator<EventOrAttributeDataPayload>;
+export type DataReportPayloadIterator = AsyncIterableIterator<EventOrAttributeDataPayload>;
 
 export function encodeAttributePayloadData(
     attributePayload: AttributeReportPayload,
