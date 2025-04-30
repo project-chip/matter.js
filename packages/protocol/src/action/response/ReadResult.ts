@@ -15,6 +15,7 @@ import type {
     Status,
     StatusCode,
 } from "#types";
+import { TlvSchema } from "@matter/types";
 
 /**
  * Streaming result for a Matter protocol-level read.
@@ -49,6 +50,8 @@ export namespace ReadResult {
         kind: "attr-value";
         path: ConcreteAttributePath;
         value: unknown;
+        version: number;
+        tlv: TlvSchema<unknown>;
     }
 
     export interface GlobalAttributeStatus {
@@ -60,6 +63,7 @@ export namespace ReadResult {
     export interface ClusterAttributeStatus {
         kind: "attr-cluster-status";
         path: ConcreteAttributePath;
+        status: number;
         clusterStatus: number;
     }
 

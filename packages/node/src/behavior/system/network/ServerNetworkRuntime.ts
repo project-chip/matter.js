@@ -21,7 +21,7 @@ import {
 } from "#general";
 import type { ServerNode } from "#node/ServerNode.js";
 import { NodePeerAddressStore } from "#node/index.js";
-import { TransactionalInteractionServer } from "#node/server/TransactionalInteractionServer.js";
+import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,
     ChannelManager,
@@ -30,7 +30,6 @@ import {
     DeviceCommissioner,
     ExchangeManager,
     InstanceBroadcaster,
-    InteractionServer,
     MdnsInstanceBroadcaster,
     MdnsService,
     PeerAddressStore,
@@ -287,7 +286,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         };
 
         // Install our interaction server
-        const interactionServer = await TransactionalInteractionServer.create(this.owner, env.get(SessionManager));
+        const interactionServer = new InteractionServer(this.owner, env.get(SessionManager));
         env.set(InteractionServer, interactionServer);
         env.get(ExchangeManager).addProtocolHandler(interactionServer);
 
@@ -368,7 +367,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     protected override blockNewActivity() {
-        (this.owner.env.maybeGet(InteractionServer) as TransactionalInteractionServer)?.blockNewActivity();
+        this.owner.env.maybeGet(InteractionServer)?.blockNewActivity();
     }
 
     protected async configureCommissioning() {
@@ -389,9 +388,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.#formerSubscriptionsHandled = true;
 
         await this.owner.act(agent =>
-            agent
-                .get(SubscriptionBehavior)
-                .reestablishFormerSubscriptions(env.get(InteractionServer) as TransactionalInteractionServer),
+            agent.get(SubscriptionBehavior).reestablishFormerSubscriptions(env.get(InteractionServer)),
         );
     }
 }

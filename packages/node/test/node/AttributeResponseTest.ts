@@ -27,7 +27,13 @@ describe("AttributeReaderRequest", () => {
                         clusterId: 40,
                         endpointId: 0,
                     },
+                    tlv: {
+                        maxLength: 32,
+                        minLength: 0,
+                        type: 12,
+                    },
                     value: "Matter.js Test Vendor",
+                    version: 1,
                 },
             ],
         ]);
@@ -42,7 +48,7 @@ describe("AttributeReaderRequest", () => {
 
         expect(countAttrs(response)).deep.equals({
             0: {
-                40: 28,
+                40: 21,
             },
         });
     });
@@ -53,12 +59,32 @@ describe("AttributeReaderRequest", () => {
             0: {
                 29: 9,
                 31: 8,
-                40: 28,
+                40: 21,
                 48: 10,
-                51: 14,
+                51: 10,
                 60: 8,
                 62: 10,
                 63: 9,
+            },
+        });
+    });
+
+    it("reads attributeList global Attribute full wildcard", async () => {
+        const response = await read(
+            Read.Attribute({
+                attributes: "attributeList",
+            }),
+        );
+        expect(countAttrs(response)).deep.equals({
+            0: {
+                29: 1,
+                31: 1,
+                40: 1,
+                48: 1,
+                51: 1,
+                60: 1,
+                62: 1,
+                63: 1,
             },
         });
     });

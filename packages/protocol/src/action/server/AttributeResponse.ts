@@ -22,8 +22,10 @@ import {
     StatusResponseError,
     WildcardPathFlagsBitmap,
 } from "#types";
+import { DataModelPath } from "@matter/model";
+import { TlvSchema } from "@matter/types";
 
-export const GlobalAttrIds = new Set(Object.values(GlobalAttributes).map(attr => attr.id));
+export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
 export const WildcardPathFlagsCodec = BitmapSchema(WildcardPathFlagsBitmap);
 export const FallbackLimits: AccessControl.Limits = {
     fabricScoped: false,
@@ -188,7 +190,17 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         }
 
         // Validate access.  Order here prescribed by 1.4 core spec 8.4.3.2
-        switch (this.#session.authorityAt(limits.readLevel)) {
+        // We need some fallback location if cluster is not defined
+        const location = {
+            ...(cluster?.location ?? {
+                path: DataModelPath.none,
+                endpoint: endpointId,
+                cluster: clusterId,
+            }),
+            owningFabric: this.#session.fabric,
+        };
+        const permission = this.#session.authorityAt(limits.readLevel, location);
+        switch (permission) {
             case AccessControl.Authority.Granted:
                 break;
 
@@ -201,9 +213,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 return;
 
             default:
-                throw new InternalError(
-                    `Unsupported authorization state ${this.#session.authorityAt(limits.readLevel)}`,
-                );
+                throw new InternalError(`Unsupported authorization state ${permission}`);
         }
         if (endpoint === undefined) {
             this.#addStatus(path, Status.UnsupportedEndpoint);
@@ -246,8 +256,13 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 this.#currentState = cluster.open(this.#session);
             }
 
-            // Perform actual read
-            this.#addValue(path, this.#currentState);
+            // Perform actual read of one attribute
+            this.#addValue(
+                path,
+                this.#currentState[attributeId],
+                cluster.version,
+                this.#currentCluster.type.attributes[attributeId]!.tlv,
+            );
         });
     }
 
@@ -344,15 +359,21 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         if (this.#currentState === undefined) {
             this.#currentState = this.#currentCluster!.open(this.#session);
         }
-        this.#addValue(
-            {
-                ...path,
-                endpointId: this.#currentEndpoint?.id as EndpointNumber,
-                clusterId: this.#currentCluster?.type.id as ClusterId,
-                attributeId: attribute.id,
-            },
-            this.#currentState[attribute.id],
-        );
+        const value = this.#currentState[attribute.id];
+        if (value !== undefined) {
+            // Only if we have a state value set
+            this.#addValue(
+                {
+                    ...path,
+                    endpointId: this.#currentEndpoint?.id as EndpointNumber,
+                    clusterId: this.#currentCluster?.type.id as ClusterId,
+                    attributeId: attribute.id,
+                },
+                this.#currentState[attribute.id],
+                this.#currentCluster!.version,
+                attribute.tlv,
+            );
+        }
     }
 
     /**
@@ -386,11 +407,13 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
     /**
      * Add an attribute value.
      */
-    #addValue(path: ReadResult.ConcreteAttributePath, value: unknown) {
+    #addValue(path: ReadResult.ConcreteAttributePath, value: unknown, version: number, tlv: TlvSchema<unknown>) {
         const report: ReadResult.AttributeValue = {
             kind: "attr-value",
             path,
             value,
+            version,
+            tlv,
         };
 
         if (this.#chunk) {

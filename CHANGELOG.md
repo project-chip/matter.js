@@ -11,7 +11,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
--   @matter/protocol
+-   @matter/node
+    - Enhancement: Refactors InteractionServer to cut out more legacy logic and move to Behavior logic
+    - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
+    - Fix: Fixes ACL check logic order on attribute reads
+  
+- @matter/protocol
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
 ## 0.13.0 (2025-04-28)
