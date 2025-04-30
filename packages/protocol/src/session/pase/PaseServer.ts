@@ -34,6 +34,7 @@ export class MaximumPasePairingErrorsReachedError extends MatterFlowError {}
 
 export class PaseServer implements ProtocolHandler {
     readonly id = SECURE_CHANNEL_PROTOCOL_ID;
+    readonly requiresSecureSession = false;
 
     #pairingTimer: Timer | undefined;
     #pairingErrors = 0;

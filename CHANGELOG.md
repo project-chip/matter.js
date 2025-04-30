@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   @matter/protocol
+    - Fix: Handles messages only that are secured as required for the relevant protocol
+
 ## 0.13.0 (2025-04-28)
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.3 to the latest release, Matter 1.4.0. This includes BREAKING CHANGES in a number of areas due to specification changes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js or when Datatypes or elements got renamed.
@@ -24,7 +29,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Added Air Quality Sensor example
 
 -   @matter/general
-    - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compability API should make this largely transparent
+    - Breaking: `Logger.logger` is replaced with `Logger.destinations`.  Properties of individual destinations are slightly different.  A deprecated compatibility API should make this largely transparent
     - Feature: Logging destinations may process `Diagnostic.Message` directly and bypass matter.js's formatting
     - Feature: Log formatting is now extensible with custom formats
     - Feature: `QuietObservable` is an extended event source that emits events at reduced frequency based on configuration
@@ -42,7 +47,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The Default `LevelControlServer` implementation no longer has the "OnOff" feature enabled by default! Please enable manually when the relevant device type where the cluster is used in requires it or use the Requirement-classes like `DimmedLightRequirements.LevelControlServer` to get the correct features enabled automatically.
     - Breaking: `LevelControlServer` API has a few small changes that may affect device implementors.  Most notably the `setLevel` method is replaced with `transition` which handles both immediate and gradual level shifts
     - Breaking: Removed Implementation Logic for the "AbsolutePosition" Feature in WindowCovering default implementation because this is a forbidden (Zigbee) Feature anyway that no-one should use!
-    - Breaking: The DoorLock cluster attribute supportedOperatingModes bitmap requires to clear bits for supported modes. To allow to set this bitmap correctly we added a helper bit-range `alwaysSet` (with value 2047) to set the unused bits. Please make sure to set the correct bits for your device according to the specification meaning.
+    - Breaking: The DoorLock cluster attribute `supportedOperatingModes` bitmap requires to clear bits for supported modes. To allow to set this bitmap correctly we added a helper bit-range `alwaysSet` (with value 2047) to set the unused bits. Please make sure to set the correct bits for your device according to the specification meaning.
     - Breaking: All default implementations now are async (as before if needed) or expose as MaybePromise to allow async or sync overriding. Ideally this does not change anything for custom implementations but check for returned promises when calling "super" methods.
     - Feature: `Transitions` utility class offers a flexible API for implementing Matter attributes that change gradually at a constant rate
     - Feature: Attributes marked as `Q` (quieter) quality now support an extended `quiet` property that controls how often and when they emit.  By default `Q` attributes emit once per second
@@ -54,7 +59,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: `OccupancySensingServer` is automatically filling some legacy attributes when features are correctly set as required by new revision 5 of the cluster
     - Enhancement: Event handling has received additional formality.  The node now ensures that async handlers register as tasks with the node.  Error logging contains more detail on the source of errors
     - Enhancement: `$Changed` events now run in a separate context from the emitter and errors will not interfere with the emitter
-    - Fix: Switch "boot time" to be the time the node comes online instead of the time the OS started
+    - Fix: Switched "boot time" to be the time the node comes online instead of the time the OS started
     - Fix: Fixed patching of arrays to correctly allow to set arrays with fewer elements than the original array using `set()`
 
 -   @matter/nodejs
@@ -89,7 +94,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Breaking: The handling of the `requestFromRemote` parameter (first parameter) in get*Attribute methods in ClusterClients changed behavior! providing "false" will now never try to read from remote, "true" will always try to read from remote and "undefined" will use the default behavior (read from remote if not available locally or fabric scoped read). Only relevant if you used this parameter with value "false". Other use cases stay unchanged.
     - Feature: Allows to use a custom Root-NodeId, CertificateAuthority or CommissioningFlow implementation in the Controller
     - Feature: Allows to establish a secure PASE session to a device and use this to interact with the device in special pre-commissioning cases.
-    - Enhancement: Exposing the current Subscription Interval on PairedNode::currentSubscriptionIntervalSeconds() 
+    - Enhancement: Exposing the current Subscription Interval on `PairedNode::currentSubscriptionIntervalSeconds()
     - Enhancement: Adjusted the initial Device connection to Read-All before subscribing to also have initial values for not-changed attributes
     - Enhancement: Added new PairedNode event `connectionAlive` to expose the subscription alive triggers (on changes or after max interval)  
     - Fix: Fixes an edge case in reconnection handling

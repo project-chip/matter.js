@@ -252,6 +252,7 @@ export interface InteractionContext {
  */
 export class InteractionServer implements ProtocolHandler, InteractionRecipient {
     readonly id = INTERACTION_PROTOCOL_ID;
+    readonly requiresSecureSession = true;
     #context: InteractionContext;
     #nextSubscriptionId = Crypto.getRandomUInt32();
     #isClosing = false;
