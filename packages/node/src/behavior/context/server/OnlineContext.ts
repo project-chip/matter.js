@@ -14,6 +14,7 @@ import { Node } from "#node/Node.js";
 import type { Message, NodeProtocol, SecureSession } from "#protocol";
 import { AccessControl, assertSecureSession, MessageExchange } from "#protocol";
 import { FabricIndex, NodeId, StatusResponseError, SubjectId } from "#types";
+import { AclEndpointContext } from "@matter/protocol";
 import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
@@ -217,7 +218,7 @@ export function OnlineContext(options: OnlineContext.Options) {
     /**
      * Access endpoint metadata required for access control.
      */
-    function aclEndpointContextFor({ endpoint: number }: AccessControl.Location) {
+    function aclEndpointContextFor({ endpoint: number }: AccessControl.Location): AclEndpointContext {
         if (number === undefined) {
             throw new InternalError("Online location missing required endpoint number");
         }
@@ -231,11 +232,15 @@ export function OnlineContext(options: OnlineContext.Options) {
         }
 
         const endpoint = nodeProtocol[number];
-        if (endpoint === undefined) {
-            throw new InternalError(`Unknown endpoint number ${number} in access control location`);
+        if (endpoint !== undefined) {
+            return endpoint;
         }
 
-        return endpoint;
+        // For non-existent endpoints create a fallback structure to still do basic endpoint-based ACL checks
+        return {
+            id: number,
+            deviceTypes: [],
+        };
     }
 }
 
