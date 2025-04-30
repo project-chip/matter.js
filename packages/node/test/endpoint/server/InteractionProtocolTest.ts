@@ -4,31 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, StorageBackendMemory, StorageContext, StorageManager } from "#general";
+// TODO Bring together/Sync with BehaviorServerTest
+
+import { AdministratorCommissioningServer } from "#behaviors/administrator-commissioning";
+import { OnOffServer } from "#behaviors/on-off";
+import { WiFiNetworkDiagnosticsServer } from "#behaviors/wi-fi-network-diagnostics";
+import { Crypto } from "#general";
+import { ServerNode } from "#node/index.js";
 import {
     BaseDataReport,
     DataReportPayload,
     DataReportPayloadIterator,
-    FabricManager,
-    InteractionContext,
-    InteractionEndpointStructure,
-    InteractionServer,
     InteractionServerMessenger,
     InvokeRequest,
     InvokeResponse,
     MessageType,
-    OccurrenceManager,
     ReadRequest,
-    SessionManager,
     SubscribeRequest,
-    VolatileEventStore,
     WriteRequest,
     WriteResponse,
 } from "#protocol";
 import {
     AttributeId,
     ClusterId,
-    ClusterType,
     CommandId,
     EndpointNumber,
     EventId,
@@ -54,33 +52,16 @@ import {
     TypeFromPartialBitSchema,
     VendorId,
     WildcardPathFlagsBitmap,
-    WritableAttribute,
 } from "#types";
-import { AccessLevel, Specification } from "@matter/model";
-import {
-    AccessControlCluster,
-    AdministratorCommissioning,
-    BasicInformation,
-    BasicInformationCluster,
-    OnOffCluster,
-    WiFiNetworkDiagnosticsCluster,
-} from "@matter/types/clusters";
-import { ClusterServer, ClusterServerObj } from "@project-chip/matter.js/cluster";
-import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
-import * as assert from "node:assert";
-import {
-    DummyGroupcastMessage,
-    DummyUnicastMessage,
-    createDummyMessageExchange,
-    testFabric,
-} from "./InteractionTestUtils.js";
-
-const DummyTestDevice = DeviceTypeDefinition({
-    code: 0,
-    name: "DummyTestDevice",
-    deviceClass: DeviceClasses.Simple,
-    revision: 1,
-});
+import { Observable } from "@matter/general";
+import { Specification } from "@matter/model";
+import { InteractionServer } from "@matter/node";
+import { BasicInformation } from "@matter/types/clusters";
+import { AdministratorCommissioning } from "@matter/types/clusters/administrator-commissioning";
+import { MockServerNode } from "../../node/mock-server-node.js";
+import { interaction } from "../../node/node-helpers.js";
+import { createDummyMessageExchange } from "./InteractionTestUtils.js";
+import TlvOpenBasicCommissioningWindowRequest = AdministratorCommissioning.TlvOpenBasicCommissioningWindowRequest;
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -104,48 +85,15 @@ const READ_REQUEST: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
-    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    isFabricFiltered: true,
-    attributeRequests: [
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) }, // unsupported attribute
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) }, // unsupported cluster
-        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
-        { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
-        { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
-    ],
-    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
-    eventRequests: [
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) }, // unsupported event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
-        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
-    ],
-    eventFilters: [{ eventMin: 1 }],
+    ...READ_REQUEST,
+    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
+    eventFilters: [{ eventMin: 0 }],
 };
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
-    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    isFabricFiltered: true,
-    attributeRequests: [
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) }, // unsupported attribute
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) }, // unsupported cluster
-        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
-        { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
-        { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
-    ],
-    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
-    eventRequests: [
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) }, // unsupported event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
-        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
-    ],
+    ...READ_REQUEST,
+    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
+
     eventFilters: [{ eventMin: 2 }],
 };
 
@@ -153,24 +101,6 @@ const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     suppressResponse: true,
     attributeReportsPayload: [
-        {
-            hasFabricSensitiveData: false,
-            attributeData: {
-                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
-                schema: TlvVendorId,
-                payload: 1,
-                dataVersion: 0,
-            },
-        },
-        {
-            hasFabricSensitiveData: false,
-            attributeData: {
-                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
-                schema: TlvUInt16,
-                payload: 2,
-                dataVersion: 0,
-            },
-        },
         {
             hasFabricSensitiveData: false,
             attributeStatus: {
@@ -195,10 +125,29 @@ const READ_RESPONSE: DataReportPayload = {
         {
             hasFabricSensitiveData: false,
             attributeData: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
+                schema: TlvVendorId,
+                payload: 1,
+                dataVersion: 1,
+            },
+        },
+        {
+            hasFabricSensitiveData: false,
+            attributeData: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
+                schema: TlvUInt16,
+                payload: 2,
+                dataVersion: 1,
+            },
+        },
+
+        {
+            hasFabricSensitiveData: false,
+            attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 schema: TlvString.bound({ maxLength: 32 }),
                 payload: "product",
-                dataVersion: 0,
+                dataVersion: 1,
             },
         },
         {
@@ -210,8 +159,17 @@ const READ_RESPONSE: DataReportPayload = {
                     attributeId: AttributeId(1),
                 },
                 schema: TlvArray(TlvClusterId),
-                payload: [ClusterId(29), ClusterId(40)],
-                dataVersion: 0,
+                payload: [
+                    ClusterId(40),
+                    ClusterId(31),
+                    ClusterId(63),
+                    ClusterId(48),
+                    ClusterId(60),
+                    ClusterId(62),
+                    ClusterId(51),
+                    ClusterId(29),
+                ],
+                dataVersion: 1,
             },
         },
     ],
@@ -247,7 +205,7 @@ const READ_RESPONSE: DataReportPayload = {
                 payload: {
                     softwareVersion: 2,
                 },
-                eventNumber: EventNumber(2),
+                eventNumber: EventNumber(3),
                 priority: 2,
                 epochTimestamp: 0,
             },
@@ -310,8 +268,17 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                     attributeId: AttributeId(1),
                 },
                 schema: TlvArray(TlvClusterId),
-                payload: [ClusterId(29), ClusterId(40)],
-                dataVersion: 0,
+                payload: [
+                    ClusterId(40),
+                    ClusterId(31),
+                    ClusterId(63),
+                    ClusterId(48),
+                    ClusterId(60),
+                    ClusterId(62),
+                    ClusterId(51),
+                    ClusterId(29),
+                ],
+                dataVersion: 1,
             },
         },
     ],
@@ -329,7 +296,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                 payload: {
                     softwareVersion: 2,
                 },
-                eventNumber: EventNumber(2),
+                eventNumber: EventNumber(3),
                 priority: 2,
                 epochTimestamp: 0,
             },
@@ -390,12 +357,12 @@ const WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
             data: TlvUInt8.encodeTlv(3),
-            dataVersion: 0,
+            dataVersion: 1,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(6) },
@@ -405,7 +372,7 @@ const WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
     ],
     moreChunkedMessages: false,
@@ -449,7 +416,7 @@ const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
     ],
     moreChunkedMessages: false,
@@ -465,7 +432,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
     ],
 };
 
-const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
+/*const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
@@ -473,7 +440,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
             status: { clusterStatus: undefined, status: 198 },
         },
     ],
-};
+};*/
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
@@ -483,17 +450,17 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
         {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
     ],
     moreChunkedMessages: false,
@@ -507,7 +474,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
         {
             path: { clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
-            dataVersion: 0,
+            dataVersion: 1,
         },
     ],
     moreChunkedMessages: false,
@@ -539,7 +506,6 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
             data: TlvArray(TlvAclTestSchema).encodeTlv([]),
-            dataVersion: 0,
         },
         {
             path: {
@@ -554,23 +520,6 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
                 subjects: null,
                 targets: null,
             }),
-            dataVersion: 0,
-        },
-        {
-            path: {
-                endpointId: EndpointNumber(0),
-                clusterId: ClusterId(0x1f),
-                attributeId: AttributeId(0),
-                listIndex: null,
-            },
-            data: TlvAclTestSchema.encodeTlv({
-                privilege: 1,
-                authMode: 0,
-                subjects: null,
-                targets: null,
-                fabricIndex: FabricIndex.NO_FABRIC,
-            }),
-            dataVersion: 0,
         },
         {
             path: {
@@ -584,9 +533,23 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
                 authMode: 2,
                 subjects: null,
                 targets: null,
+                fabricIndex: FabricIndex.NO_FABRIC,
+            }),
+        },
+        {
+            path: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x1f),
+                attributeId: AttributeId(0),
+                listIndex: null,
+            },
+            data: TlvAclTestSchema.encodeTlv({
+                privilege: 1,
+                authMode: 3,
+                subjects: null,
+                targets: null,
                 fabricIndex: FabricIndex(2),
             }),
-            dataVersion: 0,
         },
     ],
     moreChunkedMessages: false,
@@ -601,7 +564,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
         },
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
-            status: { clusterStatus: undefined, status: 0 },
+            status: { clusterStatus: undefined, status: 135 },
         },
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
@@ -639,9 +602,11 @@ const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
             commandPath: {
                 endpointId: EndpointNumber(0),
                 clusterId: ClusterId(0x3c),
-                commandId: CommandId(2),
+                commandId: CommandId(1),
             },
-            commandFields: TlvNoArguments.encodeTlv(undefined),
+            commandFields: TlvOpenBasicCommissioningWindowRequest.encodeTlv({
+                commissioningTimeout: 180,
+            }),
         },
     ],
 };
@@ -652,7 +617,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(1), endpointId: EndpointNumber(0) },
                 status: { status: 198 },
             },
         },
@@ -665,7 +630,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(1), endpointId: EndpointNumber(0) },
                 status: { status: 0 },
             },
         },
@@ -848,56 +813,43 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     ],
 };
 
-const BasicInformationClusterWithTimedInteraction = {
-    ...BasicInformationCluster,
-    attributes: {
-        ...BasicInformationCluster.attributes,
-        nodeLabel: WritableAttribute(0x5, TlvString.bound({ maxLength: 32 }), {
-            persistent: true,
-            default: "",
-            writeAcl: AccessLevel.Manage,
-            timed: true,
-        }),
-    },
-};
-
 const wildcardTestCases: {
     testCase: string;
     clusterId: ClusterId;
     wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
     count: number;
 }[] = [
-    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 22 },
     { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
     {
         testCase: "skipGlobalAttributes",
-        clusterId: ClusterId(0x28),
+        clusterId: ClusterId(0x28), // BasicInformationCluster
         wildcardPathFilter: { skipGlobalAttributes: true },
-        count: 18,
-    }, // 4 less
+        count: 19,
+    }, // 3 less
     {
         testCase: "skipAttributeList",
-        clusterId: ClusterId(0x28),
+        clusterId: ClusterId(0x28), // BasicInformationCluster
         wildcardPathFilter: { skipAttributeList: true },
-        count: 20,
+        count: 21,
     }, // 1 less
     {
         testCase: "skipCommandLists",
-        clusterId: ClusterId(0x28),
+        clusterId: ClusterId(0x28), // BasicInformationCluster
         wildcardPathFilter: { skipCommandLists: true },
-        count: 19,
+        count: 20,
     }, // 2 less
     {
         testCase: "skipFixedAttributes",
-        clusterId: ClusterId(0x28),
+        clusterId: ClusterId(0x28), // BasicInformationCluster
         wildcardPathFilter: { skipFixedAttributes: true },
-        count: 7,
-    }, // 13 less
+        count: 3,
+    }, // 19 less
     {
         testCase: "skipChangesOmittedAttributes",
-        clusterId: ClusterId(0x28),
+        clusterId: ClusterId(0x28), // BasicInformationCluster
         wildcardPathFilter: { skipChangesOmittedAttributes: true },
-        count: 21,
+        count: 22,
     }, // nothing filtered
     {
         testCase: "no for WiFiDiag",
@@ -940,6 +892,27 @@ function fillIterableDataReport(data: {
     return dataReport;
 }
 
+class EventedOnOffServer extends OnOffServer {
+    declare events: EventedOnOffServer.Events;
+
+    override on() {
+        this.events.onCalled.emit(undefined);
+        return super.on();
+    }
+
+    override off() {
+        this.events.offCalled.emit(undefined);
+        return super.off();
+    }
+}
+
+namespace EventedOnOffServer {
+    export class Events extends OnOffServer.Events {
+        onCalled = new Observable();
+        offCalled = new Observable();
+    }
+}
+
 describe("InteractionProtocol", () => {
     let realGetRandomData = Crypto.get().getRandomData;
 
@@ -955,59 +928,14 @@ describe("InteractionProtocol", () => {
         Crypto.get().getRandomData = realGetRandomData;
     });
 
-    let storageManager: StorageManager;
-    let storageContext: StorageContext;
-    let endpoint: Endpoint;
-    let endpointStructure: InteractionEndpointStructure;
     let interactionProtocol: InteractionServer;
-    let eventManger: OccurrenceManager;
-    let basicInfoClusterServer: ClusterServerObj<BasicInformationCluster>;
+    let node: MockServerNode;
 
-    function createInteractionServer(
-        structure: InteractionEndpointStructure,
-        storageManager: StorageManager,
-        options?: Partial<InteractionContext>,
-    ) {
-        return new InteractionServer({
-            sessions: new SessionManager({
-                fabrics: new FabricManager(),
-                storage: storageManager.createContext("sessions"),
-            }),
-            structure,
-            initiateExchange: (() => {}) as any,
-            ...options,
-        });
-    }
-
-    function withClusters<T1 extends ClusterType, T2 extends ClusterType>(
-        cluster?: ClusterServerObj<T1>,
-        cluster2?: ClusterServerObj<T2>,
-    ) {
-        function addClusterServer<const T extends ClusterType>(cluster: ClusterServerObj<T>) {
-            endpoint.addClusterServer(cluster);
-            let version = 0;
-            cluster.datasource = {
-                fabrics: [],
-                version,
-                eventHandler: eventManger,
-
-                increaseVersion() {
-                    return ++version;
-                },
-
-                changed() {},
-            };
-        }
-
-        if (cluster) {
-            addClusterServer(cluster as any);
-            if (cluster2) {
-                addClusterServer(cluster2 as any);
-            }
-        } else {
-            basicInfoClusterServer = ClusterServer(
-                BasicInformationCluster,
-                {
+    async function createNode(maxPathsPerInvoke = 100) {
+        node = await MockServerNode.createOnline({
+            config: {
+                type: ServerNode.RootEndpoint.with(AdministratorCommissioningServer.with("Basic")),
+                basicInformation: {
                     dataModelRevision: 1,
                     vendorName: "vendor",
                     vendorId: VendorId(1),
@@ -1026,97 +954,68 @@ describe("InteractionProtocol", () => {
                         subscriptionsPerFabric: 100,
                     },
                     specificationVersion: Specification.SPECIFICATION_VERSION,
-                    maxPathsPerInvoke: 100,
+                    maxPathsPerInvoke,
                 },
-                {},
-                {
-                    startUp: true,
-                },
-            );
-            addClusterServer(basicInfoClusterServer);
-        }
+            },
+            device: undefined,
+        });
 
-        endpointStructure.initializeFromEndpoint(endpoint);
+        interactionProtocol = node.env.get(InteractionServer);
     }
 
     beforeEach(async () => {
-        storageManager = new StorageManager(new StorageBackendMemory());
-        await storageManager.initialize();
-        storageContext = storageManager.createContext("test");
-        eventManger = new OccurrenceManager({
-            store: new VolatileEventStore(storageContext.createContext("EventHandler")),
-        });
-        endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-        endpointStructure = new InteractionEndpointStructure();
-        interactionProtocol = createInteractionServer(endpointStructure, storageManager);
+        await createNode();
     });
 
     describe("handleReadRequest", () => {
         it("replies with attributes and events", async () => {
-            withClusters();
-
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
 
             const result = await interactionProtocol.handleReadRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node),
                 READ_REQUEST,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
+            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
         });
 
         it("replies with attributes and events using (unused) version filter", async () => {
-            withClusters();
-
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
 
             const result = await interactionProtocol.handleReadRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node),
                 READ_REQUEST_WITH_UNUSED_FILTER,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE);
+            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE);
         });
 
         it("replies with attributes and events with active version filter", async () => {
-            withClusters();
-
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
 
             const result = await interactionProtocol.handleReadRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node),
                 READ_REQUEST_WITH_FILTER,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(fillIterableDataReport(result), READ_RESPONSE_WITH_FILTER);
+            expect(fillIterableDataReport(result)).deep.equals(READ_RESPONSE_WITH_FILTER);
         });
 
         for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
             it(`replies with attributes with ${testCase} wildcard Filter`, async () => {
-                withClusters(
-                    basicInfoClusterServer,
-                    ClusterServer(
-                        WiFiNetworkDiagnosticsCluster,
-                        {
-                            bssid: null,
-                            securityType: null,
-                            wiFiVersion: null,
-                            channelNumber: null,
-                            rssi: 0,
-                        },
-                        {},
-                        {},
-                    ),
-                );
+                node.behaviors.require(WiFiNetworkDiagnosticsServer, {
+                    bssid: null,
+                    securityType: null,
+                    wiFiVersion: null,
+                    channelNumber: null,
+                    rssi: 0,
+                });
 
                 const result = await interactionProtocol.handleReadRequest(
-                    await createDummyMessageExchange(),
+                    await createDummyMessageExchange(node),
                     {
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                         isFabricFiltered: true,
@@ -1129,10 +1028,10 @@ describe("InteractionProtocol", () => {
                             },
                         ],
                     },
-                    DummyUnicastMessage,
+                    interaction.BarelyMockedMessage,
                 );
 
-                assert.deepEqual(fillIterableDataReport(result).attributeReportsPayload?.length || 0, count);
+                expect(fillIterableDataReport(result).attributeReportsPayload?.length || 0).equals(count);
             });
         }
     });
@@ -1140,15 +1039,17 @@ describe("InteractionProtocol", () => {
     describe("handleSubscribeRequest", () => {
         // Success case is tested in Integration test
         it("errors when no path match the requested path's", async () => {
-            withClusters();
+            const fabric = await node.addFabric();
 
             let statusSent = -1;
             let closed = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                { fabric },
                 false,
                 false,
                 (messageType, payload) => {
-                    expect(messageType).to.equal(MessageType.StatusResponse);
+                    expect(messageType).equals(MessageType.StatusResponse);
                     statusSent = TlvStatusResponse.decode(payload).status;
                 },
                 undefined,
@@ -1160,542 +1061,399 @@ describe("InteractionProtocol", () => {
                 exchange,
                 INVALID_SUBSCRIBE_REQUEST,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
-            assert.equal(statusSent, 128);
-            assert.equal(closed, true);
+            expect(statusSent).equals(128);
+            expect(closed).equals(true);
         });
     });
 
     describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", async () => {
-            withClusters();
-
             const result = await interactionProtocol.handleWriteRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node),
                 WRITE_REQUEST,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(endpoint.getClusterServer(BasicInformationCluster)?.attributes.nodeLabel.getLocal(), "test");
+            expect(result).deep.equals(WRITE_RESPONSE);
+            expect(node.state.basicInformation.nodeLabel).equals("test");
         });
 
         it("write chunked array values with Fabric Index handling", async () => {
-            const accessControlCluster = ClusterServer(
-                AccessControlCluster,
-                {
-                    acl: [],
+            const fabric = await node.addFabric();
+            await node.set({
+                accessControl: {
                     subjectsPerAccessControlEntry: 4,
                     targetsPerAccessControlEntry: 4,
                     accessControlEntriesPerFabric: 4,
                 },
-                {},
-                {
-                    accessControlEntryChanged: true,
-                },
-            );
-
-            withClusters(accessControlCluster);
+            });
 
             const result = await interactionProtocol.handleWriteRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node, { fabric }),
                 CHUNKED_ARRAY_WRITE_REQUEST,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
-            assert.deepEqual(accessControlCluster.attributes.acl.getLocalForFabric(testFabric), [
-                {
-                    privilege: 1,
-                    authMode: 1,
-                    subjects: null,
-                    targets: null,
-                    fabricIndex: FabricIndex(1), // Set from session
-                },
-                {
-                    privilege: 1,
-                    authMode: 0,
-                    subjects: null,
-                    targets: null,
-                    fabricIndex: FabricIndex(1), // existing value 0
-                },
+            expect(result).deep.equals(CHUNKED_ARRAY_WRITE_RESPONSE);
+            expect(node.state.accessControl.acl).deep.equals([
                 {
                     privilege: 1,
                     authMode: 2,
                     subjects: null,
                     targets: null,
-                    fabricIndex: FabricIndex(1), // existing value 2, we override hard
+                    fabricIndex: FabricIndex(fabric.fabricIndex), // Set from session
+                },
+                {
+                    privilege: 1,
+                    authMode: 3,
+                    subjects: null,
+                    targets: null,
+                    fabricIndex: FabricIndex(fabric.fabricIndex), // existing value 2, we override hard
                 },
             ]);
         });
 
         it("rejects mass write with wildcard attribute", async () => {
-            withClusters();
-
-            await assert.rejects(
+            await expect(
                 interactionProtocol.handleWriteRequest(
-                    await createDummyMessageExchange(),
+                    await createDummyMessageExchange(node),
                     ILLEGAL_MASS_WRITE_REQUEST,
-                    DummyUnicastMessage,
+                    interaction.BarelyMockedMessage,
                 ),
-            );
+            ).rejectedWith();
         });
 
         it("performs mass write with wildcard endpoint", async () => {
-            withClusters();
-
             const result = await interactionProtocol.handleWriteRequest(
-                await createDummyMessageExchange(),
+                await createDummyMessageExchange(node),
                 MASS_WRITE_REQUEST,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
             expect(result).deep.equals(MASS_WRITE_RESPONSE);
-            assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
+            expect(node.state.basicInformation.location).equals("US");
+            expect(node.state.basicInformation.nodeLabel).equals("test");
         });
 
         it("write values and return errors on invalid values timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
-            withClusters();
-            const messageExchange = await createDummyMessageExchange(false, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, false, false, undefined, () => {
                 timedInteractionCleared = true;
             });
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleWriteRequest(
-                        messageExchange,
-                        { ...WRITE_REQUEST, timedRequest: true },
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message:
-                        "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
-                },
+            await expect(
+                interactionProtocol.handleWriteRequest(
+                    messageExchange,
+                    { ...WRITE_REQUEST, timedRequest: true },
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith(
+                "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
             );
 
-            assert.equal(timedInteractionCleared, false);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+            expect(timedInteractionCleared).equals(false);
+            expect(node.state.basicInformation.nodeLabel).equals("");
         });
 
         it("write values and return errors on invalid values timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
-            withClusters();
-            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, DummyUnicastMessage),
-                {
-                    message:
-                        "(201) timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
-                },
+            await expect(
+                interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, interaction.BarelyMockedMessage),
+            ).rejectedWith(
+                "(201) timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
             );
 
-            assert.equal(timedInteractionCleared, false);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+            expect(timedInteractionCleared).equals(false);
+            expect(node.state.basicInformation.nodeLabel).equals("");
         });
 
+        /*
+        // In the past we used an especially patched BasicInformation cluster where declared an attribute as "timed"
+        // Not that easy to tweak now, so lets leave that case out for now until we have a better way to test it.
         it("write values and return errors on invalid values timed interaction required by attribute", async () => {
             let timedInteractionCleared = false;
-            const basicCluster = ClusterServer(
-                BasicInformationClusterWithTimedInteraction,
-                {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    uniqueId: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    maxPathsPerInvoke: 100,
-                },
-                {},
-                {
-                    startUp: true,
-                },
-            );
-
-            withClusters(basicCluster);
-            const messageExchange = await createDummyMessageExchange(false, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, false, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 WRITE_REQUEST_TIMED_REQUIRED,
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, WRITE_RESPONSE_TIMED_ERROR);
-            assert.equal(timedInteractionCleared, false);
-            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "");
-        });
+            expect(result).deep.equals(WRITE_RESPONSE_TIMED_ERROR);
+            expect(timedInteractionCleared).equals(false);
+            expect(node.state.basicInformation.nodeLabel).equals("");
+        });*/
 
         it("write values and return errors on invalid values timed interaction required by attribute success", async () => {
             let timedInteractionCleared = false;
-            const basicCluster = ClusterServer(
-                BasicInformationClusterWithTimedInteraction,
-                {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    uniqueId: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
-                    specificationVersion: Specification.SPECIFICATION_VERSION,
-                    maxPathsPerInvoke: 100,
-                },
-                {},
-                {
-                    startUp: true,
-                },
-            );
 
-            withClusters(basicCluster);
-            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST_TIMED_REQUIRED, timedRequest: true },
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, WRITE_RESPONSE_TIMED_REQUIRED);
-            assert.equal(timedInteractionCleared, true);
-            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
+            expect(result).deep.equals(WRITE_RESPONSE_TIMED_REQUIRED);
+            expect(timedInteractionCleared).equals(true);
+            expect(node.state.basicInformation.nodeLabel).equals("test");
         });
 
         it("write values and return errors on invalid values timed interaction expired", async () => {
             let timedInteractionCleared = false;
-            withClusters();
-            const messageExchange = await createDummyMessageExchange(true, true, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, true, true, undefined, () => {
                 timedInteractionCleared = true;
             });
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleWriteRequest(
-                        messageExchange,
-                        { ...WRITE_REQUEST, timedRequest: true },
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message: "(148) Timed request window expired. Decline write request.",
-                },
-            );
+            await expect(
+                interactionProtocol.handleWriteRequest(
+                    messageExchange,
+                    { ...WRITE_REQUEST, timedRequest: true },
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith("(148) Timed request window expired. Decline write request.");
 
-            assert.equal(timedInteractionCleared, true);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+            expect(timedInteractionCleared).equals(true);
+            expect(node.state.basicInformation.nodeLabel).equals("");
         });
 
         it("write values and return errors on invalid values timed interaction in group message", async () => {
             let timedInteractionCleared = false;
-            withClusters();
-            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleWriteRequest(
-                        messageExchange,
-                        { ...WRITE_REQUEST, timedRequest: true },
-                        DummyGroupcastMessage,
-                    ),
-                {
-                    message:
-                        "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
-                },
+            await expect(
+                interactionProtocol.handleWriteRequest(
+                    messageExchange,
+                    { ...WRITE_REQUEST, timedRequest: true },
+                    interaction.BarelyMockedGroupMessage,
+                ),
+            ).rejectedWith(
+                "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
             );
 
-            assert.equal(timedInteractionCleared, true);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+            expect(timedInteractionCleared).equals(true);
+            expect(node.state.basicInformation.nodeLabel).equals("");
         });
 
         it("write values and return errors on invalid values in timed interaction", async () => {
             let timedInteractionCleared = false;
-            withClusters();
-            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
+            const messageExchange = await createDummyMessageExchange(node, undefined, true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST, timedRequest: true },
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.equal(timedInteractionCleared, true);
-            assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
+            expect(timedInteractionCleared).equals(true);
+            expect(result).deep.equals(WRITE_RESPONSE);
+            expect(node.state.basicInformation.nodeLabel).equals("test");
         });
     });
 
     describe("handleInvokeRequest", () => {
-        let onOffState: boolean;
-        let onOffCluster;
-        let adminCommissioningCluster;
+        let onOffState = false;
+        let triggeredOn = false;
+        let triggeredOff = false;
+
+        function initilizeOnOff() {
+            onOffState = false;
+
+            node.behaviors.require(EventedOnOffServer, { onOff: onOffState });
+            node.eventsOf(EventedOnOffServer).onOff$Changed.on(value => {
+                onOffState = value;
+            });
+            node.eventsOf(EventedOnOffServer).onCalled.on(() => {
+                triggeredOn = true;
+            });
+            node.eventsOf(EventedOnOffServer).offCalled.on(() => {
+                triggeredOff = true;
+            });
+        }
 
         beforeEach(async () => {
-            onOffState = false;
-            onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
-                },
-            );
-            adminCommissioningCluster = ClusterServer(
-                AdministratorCommissioning.Cluster,
-                { windowStatus: 0, adminFabricIndex: FabricIndex(0), adminVendorId: VendorId(0) },
-                {
-                    openCommissioningWindow: async () => {
-                        return;
-                    },
-                    revokeCommissioning: async () => {
-                        return;
-                    },
-                },
-            );
-
-            withClusters(onOffCluster, adminCommissioningCluster);
+            initilizeOnOff();
         });
 
         it("invoke command with empty args", async () => {
             let result;
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+            );
             await interactionProtocol.handleInvokeRequest(
                 exchange,
                 INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
-            assert.equal(onOffState, true);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE);
+            expect(onOffState).equals(true);
         });
 
         it("invoke command with no args", async () => {
             let result;
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+            );
             await interactionProtocol.handleInvokeRequest(
                 exchange,
                 INVOKE_COMMAND_REQUEST_WITH_NO_ARGS,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
-            assert.equal(onOffState, true);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE);
+            expect(onOffState).equals(true);
         });
 
         it("invalid invoke command", async () => {
             let result;
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+            );
             await interactionProtocol.handleInvokeRequest(
                 exchange,
                 INVOKE_COMMAND_REQUEST_INVALID,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
-            assert.equal(onOffState, false);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE_INVALID);
+            expect(onOffState).equals(false);
         });
 
         it("throws on multi invoke commands with wildcards", async () => {
-            withClusters();
-
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
-            let result = undefined;
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        INVOKE_COMMAND_REQUEST_MULTI_WILDCARD,
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message: "(128) Illegal wildcard path in batch invoke",
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
                 },
             );
-            assert.equal(result, undefined);
+            let result = undefined;
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    INVOKE_COMMAND_REQUEST_MULTI_WILDCARD,
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith("(128) Illegal wildcard path in batch invoke");
+            expect(result).equals(undefined);
         });
 
         it("throws on multi invoke commands with one 1 allowed", async () => {
             onOffState = false;
-            let triggeredOn = false;
-            let triggeredOff = false;
-            onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                        triggeredOn = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                        triggeredOff = true;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
+            triggeredOn = false;
+            triggeredOff = false;
+
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
                 },
             );
-
-            withClusters(onOffCluster);
-
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
             let result = undefined;
 
-            interactionProtocol = createInteractionServer(endpointStructure, storageManager, {
-                maxPathsPerInvoke: 1,
-            });
+            await createNode(1);
+            initilizeOnOff();
 
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        INVOKE_COMMAND_REQUEST_MULTI,
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 4",
-                },
-            );
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    INVOKE_COMMAND_REQUEST_MULTI,
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith("(128) Only 1 invoke requests are supported in one message. This message contains 4");
 
-            //assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
-            assert.equal(triggeredOn, false);
-            assert.equal(triggeredOff, false);
-            assert.equal(onOffState, false);
-            assert.equal(result, undefined);
+            //expect(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
+            expect(triggeredOn).equals(false);
+            expect(triggeredOff).equals(false);
+            expect(onOffState).equals(false);
+            expect(result).equals(undefined);
         });
 
         it("multi invoke commands are ok", async () => {
             onOffState = false;
-            let triggeredOn = false;
-            let triggeredOff = false;
-            onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                        triggeredOn = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                        triggeredOff = true;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
-                },
-            );
-
-            withClusters(onOffCluster);
+            triggeredOn = false;
+            triggeredOff = false;
 
             let result = undefined;
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+            );
 
             await interactionProtocol.handleInvokeRequest(
                 exchange,
                 INVOKE_COMMAND_REQUEST_MULTI,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
-            assert.equal(triggeredOn, true);
-            assert.equal(triggeredOff, true);
-            assert.equal(onOffState, false);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
+            expect(triggeredOn).equals(true);
+            expect(triggeredOff).equals(true);
+            expect(onOffState).equals(false);
         });
 
         it("multi invoke response is split into multiple messages if needed", async () => {
             onOffState = false;
-            let triggeredOn = false;
-            let triggeredOff = false;
-            onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                        triggeredOn = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                        triggeredOff = true;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
+            triggeredOn = false;
+            triggeredOff = false;
+
+            const result = Array<TypeFromBitmapSchema<typeof TlvInvokeResponse>>();
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result.push(TlvInvokeResponse.decode(payload));
                 },
             );
 
-            withClusters(onOffCluster);
-
-            const result = Array<TypeFromBitmapSchema<typeof TlvInvokeResponse>>();
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result.push(TlvInvokeResponse.decode(payload));
-            });
-
-            interactionProtocol = createInteractionServer(endpointStructure, storageManager, {
-                maxPathsPerInvoke: 1000,
-            });
+            await createNode(200);
+            initilizeOnOff();
 
             const request = {
                 ...INVOKE_COMMAND_REQUEST_MULTI,
@@ -1717,77 +1475,74 @@ describe("InteractionProtocol", () => {
                 exchange,
                 request,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.equal(result.length, 3);
-            assert.equal(
+            expect(result.length).equals(3);
+            expect(
                 result[0].invokeResponses.length + result[1].invokeResponses.length + result[2].invokeResponses.length,
-                103,
-            );
-            assert.equal(result[0].moreChunkedMessages, true);
-            assert.equal(result[1].moreChunkedMessages, true);
-            assert.equal(result[2].moreChunkedMessages, undefined);
-            assert.equal(triggeredOn, true);
-            assert.equal(triggeredOff, true);
-            assert.equal(onOffState, false);
+            ).equals(103);
+            expect(result[0].moreChunkedMessages).equals(true);
+            expect(result[1].moreChunkedMessages).equals(true);
+            expect(result[2].moreChunkedMessages).equals(undefined);
+            expect(triggeredOn).equals(true);
+            expect(triggeredOff).equals(true);
+            expect(onOffState).equals(false);
         });
 
         it("throws on multi invoke commands with one same commands", async () => {
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
-            let result = undefined;
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        INVOKE_COMMAND_REQUEST_MULTI_SAME,
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message: "(128) Duplicate command path (0/6/1) in batch invoke",
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
                 },
             );
+            let result = undefined;
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    INVOKE_COMMAND_REQUEST_MULTI_SAME,
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith("(128) Duplicate command path (0/6/1) in batch invoke");
 
-            assert.equal(result, undefined);
+            expect(result).equals(undefined);
         });
 
         it("handles StatusResponseError gracefully", async () => {
-            onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: false,
-                },
-                {
-                    on: async () => {
-                        throw new StatusResponseError("Sorry so swamped", StatusCode.Busy);
-                    },
-                    off: async () => {},
-                    toggle: async () => {},
-                },
-            );
-
-            withClusters(onOffCluster);
+            node.eventsOf(EventedOnOffServer).onOff$Changing.on(() => {
+                throw new StatusResponseError("Sorry so swamped", StatusCode.Busy);
+            });
 
             let result;
-            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
-                result = TlvInvokeResponse.decode(payload);
-            });
+            const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+            );
             await interactionProtocol.handleInvokeRequest(
                 exchange,
                 { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS },
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_BUSY);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE_BUSY);
         });
 
         it("invoke command with timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
                 false,
                 false,
                 (_messageType, payload) => {
@@ -1798,32 +1553,31 @@ describe("InteractionProtocol", () => {
                 },
             );
             let result = undefined;
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message:
-                        "(201) timedRequest flag of invoke interaction (true) mismatch with expected timed interaction (false).",
-                },
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith(
+                "(201) timedRequest flag of invoke interaction (true) mismatch with expected timed interaction (false).",
             );
 
-            assert.equal(timedInteractionCleared, false);
-            assert.equal(onOffState, false);
-            assert.equal(result, undefined);
+            expect(timedInteractionCleared).equals(false);
+            expect(onOffState).equals(false);
+            expect(result).equals(undefined);
         });
 
         it("invoke command with timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
                 true,
                 false,
                 (messageType, payload) => {
-                    expect(messageType).to.equal(MessageType.StatusResponse);
+                    expect(messageType).equals(MessageType.StatusResponse);
                     result = TlvStatusResponse.decode(payload);
                     console.log(result);
                 },
@@ -1832,29 +1586,28 @@ describe("InteractionProtocol", () => {
                 },
             );
             let result = undefined;
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message:
-                        "(201) timedRequest flag of invoke interaction (false) mismatch with expected timed interaction (true).",
-                },
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith(
+                "(201) timedRequest flag of invoke interaction (false) mismatch with expected timed interaction (true).",
             );
 
-            assert.equal(timedInteractionCleared, false);
-            assert.equal(onOffState, false);
-            assert.equal(result, undefined);
+            expect(timedInteractionCleared).equals(false);
+            expect(onOffState).equals(false);
+            expect(result).equals(undefined);
         });
 
         it("invoke command with timed interaction expired", async () => {
             let timedInteractionCleared = false;
             let result = undefined;
             const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
                 true,
                 true,
                 (_messageType, payload) => {
@@ -1864,27 +1617,25 @@ describe("InteractionProtocol", () => {
                     timedInteractionCleared = true;
                 },
             );
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        new InteractionServerMessenger(exchange),
-                        DummyUnicastMessage,
-                    ),
-                {
-                    message: "(148) Timed request window expired. Decline invoke request.",
-                },
-            );
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedMessage,
+                ),
+            ).rejectedWith("(148) Timed request window expired. Decline invoke request.");
 
-            assert.equal(timedInteractionCleared, true);
-            assert.equal(onOffState, false);
-            assert.equal(result, undefined);
+            expect(timedInteractionCleared).equals(true);
+            expect(onOffState).equals(false);
+            expect(result).equals(undefined);
         });
 
         it("invoke command with timed interaction as group message", async () => {
             let timedInteractionCleared = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
                 true,
                 false,
                 (_messageType, payload) => {
@@ -1895,28 +1646,27 @@ describe("InteractionProtocol", () => {
                 },
             );
             let result = undefined;
-            await assert.rejects(
-                async () =>
-                    await interactionProtocol.handleInvokeRequest(
-                        exchange,
-                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        new InteractionServerMessenger(exchange),
-                        DummyGroupcastMessage,
-                    ),
-                {
-                    message:
-                        "(128) Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
-                },
+            await expect(
+                interactionProtocol.handleInvokeRequest(
+                    exchange,
+                    { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                    new InteractionServerMessenger(exchange),
+                    interaction.BarelyMockedGroupMessage,
+                ),
+            ).rejectedWith(
+                "(128) Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
             );
 
-            assert.equal(timedInteractionCleared, true);
-            assert.equal(onOffState, false);
-            assert.equal(result, undefined);
+            expect(timedInteractionCleared).equals(true);
+            expect(onOffState).equals(false);
+            expect(result).equals(undefined);
         });
 
         it("invoke command with with timed interaction success", async () => {
             let timedInteractionCleared = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                undefined,
                 true,
                 false,
                 (_messageType, payload) => {
@@ -1931,17 +1681,21 @@ describe("InteractionProtocol", () => {
                 exchange,
                 { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
-            assert.equal(onOffState, true);
-            assert.equal(timedInteractionCleared, true);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE);
+            expect(onOffState).equals(true);
+            expect(timedInteractionCleared).equals(true);
         });
 
         it("invoke command with with timed interaction required by command errors when not send as timed request", async () => {
+            const fabric = await node.addFabric();
+
             let timedInteractionCleared = false;
             const exchange = await createDummyMessageExchange(
+                node,
+                { fabric },
                 false,
                 false,
                 (_messageType, payload) => {
@@ -1956,17 +1710,21 @@ describe("InteractionProtocol", () => {
                 exchange,
                 INVOKE_COMMAND_REQUEST_TIMED_REQUIRED,
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED);
-            assert.equal(timedInteractionCleared, false);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED);
+            expect(timedInteractionCleared).equals(false);
         });
 
         it("invoke command with with timed interaction required by command success", async () => {
+            const fabric = await node.addFabric();
+
             let timedInteractionCleared = false;
             let result;
             const exchange = await createDummyMessageExchange(
+                node,
+                { fabric },
                 true,
                 false,
                 (_messageType, payload) => {
@@ -1981,11 +1739,11 @@ describe("InteractionProtocol", () => {
                 exchange,
                 { ...INVOKE_COMMAND_REQUEST_TIMED_REQUIRED, timedRequest: true },
                 new InteractionServerMessenger(exchange),
-                DummyUnicastMessage,
+                interaction.BarelyMockedMessage,
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS);
-            assert.equal(timedInteractionCleared, true);
+            expect(result).deep.equals(INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS);
+            expect(timedInteractionCleared).equals(true);
         });
     });
 });

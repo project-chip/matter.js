@@ -12,16 +12,13 @@ import { NetworkCommissioning } from "#clusters/network-commissioning";
 import { OnOff } from "#clusters/on-off";
 import { OperationalCredentials } from "#clusters/operational-credentials";
 import { OnOffLightDevice } from "#devices/on-off-light";
-import { Bytes } from "#general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList, Specification } from "#model";
-import { Fabric, FabricBuilder, FabricManager } from "#protocol";
+import { Fabric } from "#protocol";
 import {
     AttributeId,
     ClusterId,
     CommandId,
     EndpointNumber,
-    FabricIndex,
-    NodeId,
     Status,
     TlvArray,
     TlvEnum,
@@ -31,18 +28,9 @@ import {
     TlvObject,
     TlvSubjectId,
     TypeFromSchema,
-    VendorId,
 } from "#types";
 import { MockServerNode } from "../../node/mock-server-node.js";
 import { interaction } from "../../node/node-helpers.js";
-
-const ROOT_CERT = Bytes.fromHex(
-    "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118",
-);
-
-const NEW_OP_CERT = Bytes.fromHex(
-    "153001010124020137032414001826048012542826058015203b370624150124110918240701240801300941043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba370a35012801182402013603040204011830041402cce0d7bfa29e98e454be38e27bfe6c0f162302300514e766069362d7e35b79687161644d222bdde93a6818300b4050e8183c290f438a57516faea006282d6d2b5178d5d15dfcc3ec8a9232db942894ff2d2ce941d3b42dd8a2cd51eea4f3f50b66757959368868c3a0a1b5fe665f18",
-);
 
 const FABRICS_PATH = {
     endpointId: EndpointNumber(0),
@@ -61,20 +49,6 @@ const LEAVE_PATH = {
     clusterId: BasicInformation.Cluster.id,
     eventId: BasicInformation.Cluster.events.leave.id,
 };
-
-const IPK_KEY = Bytes.fromHex("74656d706f726172792069706b203031");
-
-async function createFabric(node: MockServerNode, index = 1) {
-    const builder = new FabricBuilder();
-    builder.setRootVendorId(VendorId(0));
-    builder.setRootNodeId(NodeId(1));
-    builder.setRootCert(ROOT_CERT);
-    builder.setOperationalCert(NEW_OP_CERT);
-    builder.setIdentityProtectionKey(IPK_KEY);
-    const fabric = await builder.build(FabricIndex(index));
-    node.env.get(FabricManager).addFabric(fabric);
-    return fabric;
-}
 
 class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetworkInterface") {
     override initialize() {
@@ -121,8 +95,8 @@ describe("BehaviorServer", () => {
     it("properly filters reads and writes", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await createFabric(node, 1);
-        const fabric2 = await createFabric(node, 2);
+        const fabric1 = await node.addFabric(1);
+        const fabric2 = await node.addFabric(2);
 
         await writeAcl(node, fabric1, {
             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
@@ -163,9 +137,7 @@ describe("BehaviorServer", () => {
     it("properly handles subscribe and notify of attributes and events", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await createFabric(node, 1);
-
-        // We ignore the initial data report other than confirming receipt
+        const fabric1 = await node.addFabric(1);
 
         // Create a subscription to a couple of attributes and an event
         await interaction.subscribe(node, fabric1, {
@@ -178,15 +150,11 @@ describe("BehaviorServer", () => {
             maxIntervalCeilingSeconds: 2,
         });
 
-        // Should already be resolved
-        const exchange = await node.handleExchange();
-        await exchange.writeStatus();
-
         // Handle updated report
         const fabricAdded = interaction.receiveData(node, 2, 0);
 
         // Create another fabric so we can capture subscription messages
-        const fabric2 = await createFabric(node, 2);
+        const fabric2 = await node.addFabric(2);
         let report = await MockTime.resolve(fabricAdded);
 
         const fabricsReport = report.attributes[0]?.attributeData;
@@ -238,7 +206,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const fabric = await createFabric(node, 1);
+        const fabric = await node.addFabric(1);
 
         const commands = await interaction.read(node, fabric, false, {
             endpointId: EndpointNumber(1),
@@ -268,7 +236,7 @@ describe("BehaviorServer", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const featureMap = await interaction.read(node, await createFabric(node, 1), false, {
+        const featureMap = await interaction.read(node, await node.addFabric(1), false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(OnOff.Cluster.id),
             attributeId: AttributeId(FeatureMap.id),
@@ -301,7 +269,7 @@ describe("BehaviorServer", () => {
 
         await interaction.invoke(
             node,
-            await createFabric(node, 1),
+            await node.addFabric(1),
             {
                 commandPath: {
                     endpointId: EndpointNumber(1),

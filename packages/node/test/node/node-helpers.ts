@@ -7,12 +7,11 @@
 import { BasicInformationBehavior } from "#behaviors/basic-information";
 import { GeneralCommissioning } from "#clusters/general-commissioning";
 import { Bytes, Crypto, Key, PrivateKey } from "#general";
-import { CommissioningServer } from "#index.js";
+import { CommissioningServer, InteractionServer } from "#index.js";
 import {
     ChannelManager,
     Fabric,
     FabricManager,
-    InteractionServer,
     InteractionServerMessenger,
     Message,
     MessageType,
@@ -188,7 +187,7 @@ export function CommissioningHelper() {
                     await node.lifecycle.commissioned;
                 }
 
-                return { node, contextOptions };
+                return { node, contextOptions, fabric };
             } finally {
                 activeCommissioning = undefined;
             }
@@ -204,8 +203,12 @@ export namespace interaction {
         close: async () => {},
     } as InteractionServerMessenger;
 
-    const BarelyMockedMessage = {
+    export const BarelyMockedMessage = {
         packetHeader: { sessionType: SessionType.Unicast },
+    } as Message;
+
+    export const BarelyMockedGroupMessage = {
+        packetHeader: { sessionType: SessionType.Group },
     } as Message;
 
     export async function connect(node: MockServerNode, fabric: Fabric) {
@@ -231,9 +234,7 @@ export namespace interaction {
                 timedRequest: false,
                 writeRequests: [request],
             },
-            {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message,
+            BarelyMockedMessage,
         );
     }
 
@@ -252,9 +253,7 @@ export namespace interaction {
                 attributeRequests: [request],
                 isFabricFiltered: isFabricFiltered,
             },
-            {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message,
+            BarelyMockedMessage,
         );
 
         const data = result.payload?.next();
