@@ -23,6 +23,8 @@ import type {
 } from "#protocol";
 import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
+import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
+
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
 /**
@@ -61,14 +63,14 @@ export class ProtocolService {
 }
 
 const WildcardPathFlags = {
-    skipRootNode: 1,
-    skipGlobalAttributes: 1 << 1,
-    skipAttributeList: 1 << 2,
-    skipCommandLists: 1 << 3,
-    skipCustomElements: 1 << 4,
-    skipFixedAttributes: 1 << 5,
-    skipChangesOmittedAttributes: 1 << 6,
-    skipDiagnosticsClusters: 1 << 7,
+    skipRootNode: 1 << WildcardPathFlagsType.wildcardSkipRootNode.offset,
+    skipGlobalAttributes: 1 << WildcardPathFlagsType.wildcardSkipGlobalAttributes.offset,
+    skipAttributeList: 1 << WildcardPathFlagsType.wildcardSkipAttributeList.offset,
+    skipCommandLists: 1 << WildcardPathFlagsType.wildcardSkipCommandLists.offset,
+    skipCustomElements: 1 << WildcardPathFlagsType.wildcardSkipCustomElements.offset,
+    skipFixedAttributes: 1 << WildcardPathFlagsType.wildcardSkipFixedAttributes.offset,
+    skipChangesOmittedAttributes: 1 << WildcardPathFlagsType.wildcardSkipChangesOmittedAttributes.offset,
+    skipDiagnosticsClusters: 1 << WildcardPathFlagsType.wildcardSkipDiagnosticsClusters.offset,
 };
 
 class NodeState {
