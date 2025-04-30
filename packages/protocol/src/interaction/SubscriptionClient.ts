@@ -26,6 +26,8 @@ export interface RegisteredSubscription {
  * Incoming data reports must match to a subscription registered with {@link add} or the exchange is invalid.
  */
 export class SubscriptionClient implements ProtocolHandler {
+    readonly id = INTERACTION_PROTOCOL_ID;
+    readonly requiresSecureSession = true;
     readonly #listeners = new Map<number, (dataReport: DataReport) => MaybePromise<void>>();
     readonly #timeouts = new Map<number, Timer>();
 
@@ -36,8 +38,6 @@ export class SubscriptionClient implements ProtocolHandler {
         env.set(SubscriptionClient, client);
         return client;
     }
-
-    readonly id = INTERACTION_PROTOCOL_ID;
 
     /**
      * Register a subscription.

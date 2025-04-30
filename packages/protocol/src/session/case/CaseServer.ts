@@ -31,6 +31,7 @@ const logger = Logger.get("CaseServer");
 
 export class CaseServer implements ProtocolHandler {
     readonly id = SECURE_CHANNEL_PROTOCOL_ID;
+    readonly requiresSecureSession = false;
 
     #sessions: SessionManager;
     #fabrics: FabricManager;

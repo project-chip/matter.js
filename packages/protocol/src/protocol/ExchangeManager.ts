@@ -238,7 +238,7 @@ export class ExchangeManager {
 
         let isDuplicate;
         try {
-            session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
+            session.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
             isDuplicate = false;
         } catch (e) {
             DuplicateMessageError.accept(e);
@@ -271,7 +271,20 @@ export class ExchangeManager {
 
             const protocolHandler = this.#protocols.get(message.payloadHeader.protocolId);
 
-            if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
+            // Having a "Secure Session" means it is encrypted in our internal working
+            // TODO When adding Group sessions, we need to check how to adjust that handling
+            if (protocolHandler !== undefined && protocolHandler.requiresSecureSession !== session.isSecure) {
+                logger.debug(
+                    `Ignoring message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name} because not matching the security requirements.`,
+                );
+            }
+
+            if (
+                protocolHandler !== undefined &&
+                message.payloadHeader.isInitiatorMessage &&
+                !isDuplicate &&
+                protocolHandler.requiresSecureSession === session.isSecure
+            ) {
                 if (
                     message.payloadHeader.messageType == SecureMessageType.StandaloneAck &&
                     !message.payloadHeader.requiresAck

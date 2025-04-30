@@ -9,6 +9,7 @@ import { MessageExchange } from "./MessageExchange.js";
 
 export interface ProtocolHandler {
     readonly id: number;
+    readonly requiresSecureSession: boolean;
     onNewExchange(exchange: MessageExchange, message: Message): Promise<void>;
     close(): Promise<void>;
 }
