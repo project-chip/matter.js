@@ -37,7 +37,7 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
         this.#node = node;
     }
 
-    async *read(request: Read, session: SessionT): ReadResult {
+    *read(request: Read, session: SessionT): ReadResult {
         // TODO - validate request
 
         if (Read.isAttribute(request)) {
