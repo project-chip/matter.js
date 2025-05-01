@@ -15,6 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     - Enhancement: Refactors InteractionServer to cut out more legacy logic and move to Behavior logic
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
+    - Fix: Consider the potential async nature of `Transitions.applyUpdates()` correctly in all cases to prevent dangling promises 
   
 - @matter/protocol
     - Fix: Handles messages only that are secured as required for the relevant protocol

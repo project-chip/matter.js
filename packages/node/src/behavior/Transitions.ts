@@ -139,8 +139,7 @@ export class Transitions<B extends Behavior> {
 
             logger.info(this.#logPrefix, "Set", Diagnostic.strong(name), "to", Diagnostic.strong(targetValue));
 
-            this.transitionImmediately(owner, name, targetValue);
-            return;
+            return this.transitionImmediately(owner, name, targetValue);
         }
 
         const { min, max, cyclic } = this.#config.properties[name] ?? {};
@@ -231,8 +230,9 @@ export class Transitions<B extends Behavior> {
      *
      * The default implementation updates the local state value and calls `applyUpdates()`.
      */
-    protected transitionImmediately(owner: B, name: Transitions.PropertyOf<B>, targetValue: number) {
-        this.applyUpdates(owner, { [name]: targetValue } as unknown as Partial<Transitions.StateOf<B>>);
+    protected transitionImmediately(owner: B, name: Transitions.PropertyOf<B>, targetValue: number): MaybePromise {
+        const result = this.applyUpdates(owner, { [name]: targetValue } as unknown as Partial<Transitions.StateOf<B>>);
+        return MaybePromise.then(result, () => {});
     }
 
     /**
