@@ -431,7 +431,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const effectiveRate =
             (this.#getHueDistanceByDirection(currentHue, targetHue, direction, maxHue) / transitionTime) * 10;
-        this.#startTransition({
+        return this.#startTransition({
             name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
             owner: this,
             changePerS: effectiveRate,
@@ -480,7 +480,7 @@ export class ColorControlBaseServer extends ColorControlBase {
     protected moveHueLogic(moveMode: ColorControl.MoveMode, rate: number, isEnhancedHue = false): MaybePromise {
         const name = isEnhancedHue ? "enhancedCurrentHue" : "currentHue";
 
-        this.#startTransition({
+        return this.#startTransition({
             name,
             owner: this,
             changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
@@ -555,7 +555,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const targetValue = addValueWithOverflow(currentHue, stepSize * direction, MIN_HUE_VALUE, maxHue);
 
-        this.#startTransition({
+        return this.#startTransition({
             name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
             owner: this,
             changePerS: effectiveRate,
@@ -605,7 +605,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      */
     protected moveToSaturationLogic(targetSaturation: number, transitionTime: number): MaybePromise {
         const effectiveRate = ((targetSaturation - this.state.currentSaturation) / transitionTime) * 10;
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: effectiveRate,
@@ -645,7 +645,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveSaturationLogic(moveMode: ColorControl.MoveMode, rate: number): MaybePromise {
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
@@ -696,7 +696,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const effectiveRate = (stepSize / transitionTime) * 10 * direction;
 
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: effectiveRate,
@@ -787,18 +787,21 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveToColorLogic(targetX: number, targetY: number, transitionTime: number): MaybePromise {
-        this.#startTransition({
-            name: "currentX",
-            owner: this,
-            changePerS: ((targetX - this.state.currentX) / transitionTime) * 10,
-            targetValue: targetX,
-        });
-        this.#startTransition({
-            name: "currentY",
-            owner: this,
-            changePerS: ((targetY - this.state.currentY) / transitionTime) * 10,
-            targetValue: targetY,
-        });
+        return MaybePromise.then(
+            this.#startTransition({
+                name: "currentX",
+                owner: this,
+                changePerS: ((targetX - this.state.currentX) / transitionTime) * 10,
+                targetValue: targetX,
+            }),
+            () =>
+                this.#startTransition({
+                    name: "currentY",
+                    owner: this,
+                    changePerS: ((targetY - this.state.currentY) / transitionTime) * 10,
+                    targetValue: targetY,
+                }),
+        );
     }
 
     /**
@@ -846,20 +849,26 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveColorLogic(rateX: number, rateY: number): MaybePromise {
-        if (rateX !== 0) {
-            this.#startTransition({
-                name: "currentX",
-                owner: this,
-                changePerS: rateX,
-            });
-        }
-        if (rateY !== 0) {
-            this.#startTransition({
-                name: "currentY",
-                owner: this,
-                changePerS: rateY,
-            });
-        }
+        return MaybePromise.then(
+            () => {
+                if (rateX !== 0) {
+                    return this.#startTransition({
+                        name: "currentX",
+                        owner: this,
+                        changePerS: rateX,
+                    });
+                }
+            },
+            () => {
+                if (rateY !== 0) {
+                    return this.#startTransition({
+                        name: "currentY",
+                        owner: this,
+                        changePerS: rateY,
+                    });
+                }
+            },
+        );
     }
 
     /**
@@ -899,28 +908,33 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected stepColorLogic(stepX: number, stepY: number, transitionTime: number): MaybePromise {
-        // Else calculate a rate by second and manage the transition
-        if (stepX !== 0) {
-            this.#startTransition({
-                name: "currentX",
-                owner: this,
-                changePerS: (stepX / transitionTime) * 10,
-                targetValue: this.state.currentX + stepX,
-            });
-        }
-        if (stepY !== 0) {
-            this.#startTransition({
-                name: "currentY",
-                owner: this,
-                changePerS: (stepY / transitionTime) * 10,
-                targetValue: this.state.currentY + stepY,
-            });
-        }
+        return MaybePromise.then(
+            () => {
+                if (stepX !== 0) {
+                    return this.#startTransition({
+                        name: "currentX",
+                        owner: this,
+                        changePerS: (stepX / transitionTime) * 10,
+                        targetValue: this.state.currentX + stepX,
+                    });
+                }
+            },
+            () => {
+                if (stepY !== 0) {
+                    return this.#startTransition({
+                        name: "currentY",
+                        owner: this,
+                        changePerS: (stepY / transitionTime) * 10,
+                        targetValue: this.state.currentY + stepY,
+                    });
+                }
+            },
+        );
     }
 
     /**
      * Default implementation notes:
-     * After the options checks it uses the {@link moveToColorTemperatureLogic} method to set the color temperature.
+     * After the option checks it uses the {@link moveToColorTemperatureLogic} method to set the color temperature.
      * If you want to implement own logic just override {@link moveToColorTemperatureLogic}.
      * The logic is implemented as follows: When no transition time is provided, the server will move as fast as
      * possible, so we set the target value directly. Else the step logic is applied and the color temperature is
@@ -950,7 +964,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveToColorTemperatureLogic(targetMireds: number, transitionTime: number): MaybePromise {
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: ((targetMireds - this.state.colorTemperatureMireds) / transitionTime) * 10,
@@ -1291,7 +1305,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         // Custom min/max so we define an explicit target value here
         const targetValue =
             moveMode === ColorControl.MoveMode.Up ? colorTemperatureMaximumMireds : colorTemperatureMinimumMireds;
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: rate * direction,
@@ -1378,7 +1392,7 @@ export class ColorControlBaseServer extends ColorControlBase {
             colorTemperatureMaximumMireds,
         );
 
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: (stepSize / transitionTime) * 10 * direction,
@@ -1692,7 +1706,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         });
     }
 
-    #startTransition(transition: Transitions.Transition<ColorControlBaseServer>) {
+    #startTransition(transition: Transitions.Transition<ColorControlBaseServer>): MaybePromise {
         const { name } = transition;
 
         // When we start a Hue transition make sure both potential relevant are stopped
@@ -1702,7 +1716,7 @@ export class ColorControlBaseServer extends ColorControlBase {
             this.internal.transitions?.stop("currentHue");
         }
 
-        this.internal.transitions?.start(transition);
+        return this.internal.transitions?.start(transition);
     }
 
     #getBootReason() {
@@ -1868,7 +1882,7 @@ export namespace ColorControlBaseServer {
         setColorMode(mode: ColorControl.ColorMode): MaybePromise;
         setEnhancedColorMode(mode: ColorControl.EnhancedColorMode): MaybePromise;
         syncColorTemperatureWithLevelLogic(level: number): MaybePromise;
-        createTransitions<B extends Behavior>(config: Transitions.Configuration<B>): Transitions<B>;
+        createTransitions(config: Transitions.Configuration<any>): Transitions<any>;
     };
 }
 

@@ -441,18 +441,18 @@ export class LevelControlBaseServer extends LevelControlBase {
         withOnOff = false,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
     ): MaybePromise {
-        this.couple(withOnOff, options, targetLevel);
+        return MaybePromise.then(this.couple(withOnOff, options, targetLevel), () =>
+            this.internal.transitions?.start({
+                name: "currentLevel",
+                owner: this,
+                changePerS,
+                targetValue: targetLevel,
 
-        this.internal.transitions?.start({
-            name: "currentLevel",
-            owner: this,
-            changePerS,
-            targetValue: targetLevel,
-
-            onStep() {
-                this.couple(withOnOff, options, targetLevel);
-            },
-        });
+                onStep() {
+                    this.couple(withOnOff, options, targetLevel);
+                },
+            }),
+        );
     }
 
     /**
