@@ -260,6 +260,21 @@ export class ExchangeManager {
         }
 
         if (exchange !== undefined) {
+            if (
+                exchange.requiresSecureSession !== session.isSecure ||
+                exchange.session.id !== packet.header.sessionId ||
+                exchange.isClosing
+            ) {
+                logger.debug(
+                    `Ignoring message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name} because not matching the security requirements or session ids.`,
+                );
+                await exchange.send(SecureMessageType.StandaloneAck, new Uint8Array(0), {
+                    includeAcknowledgeMessageId: message.packetHeader.messageId,
+                });
+                await exchange.close();
+                return;
+            }
+
             await exchange.onMessageReceived(message, isDuplicate);
         } else {
             if (this.#closing) return;
