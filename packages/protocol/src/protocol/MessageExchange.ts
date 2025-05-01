@@ -142,6 +142,7 @@ export class MessageExchange {
             initialMessage.packetHeader.sourceNodeId,
             initialMessage.payloadHeader.exchangeId,
             initialMessage.payloadHeader.protocolId,
+            session.isSecure,
         );
     }
 
@@ -157,6 +158,7 @@ export class MessageExchange {
             session.peerNodeId,
             exchangeId,
             protocolId,
+            session.isSecure,
         );
     }
 
@@ -201,6 +203,7 @@ export class MessageExchange {
         peerNodeId: NodeId | undefined,
         exchangeId: number,
         protocolId: number,
+        readonly requiresSecureSession: boolean,
     ) {
         const { channel } = context;
         const { session } = channel;
@@ -282,7 +285,7 @@ export class MessageExchange {
     async onMessageReceived(message: Message, duplicate = false) {
         logger.debug("Message «", MessageCodec.messageDiagnostics(message, { duplicate }));
 
-        // Adjust the incoming message when ack was required but this exchange do not use it to skip all relevant logic
+        // Adjust the incoming message when ack was required, but this exchange does not use it to skip all relevant logic
         if (message.payloadHeader.requiresAck && !this.#useMRP) {
             logger.debug("Ignoring ack-required flag because MRP is not used for this exchange");
             message.payloadHeader.requiresAck = false;
@@ -303,14 +306,14 @@ export class MessageExchange {
         this.session.notifyActivity(true);
 
         if (duplicate) {
-            // Received a message retransmission but the reply is not ready yet, ignoring
+            // Received a message retransmission, but the reply is not ready yet, ignoring
             if (requiresAck) {
                 await this.sendStandaloneAckForMessage(message);
             }
             return;
         }
         if (messageId === this.#sentMessageToAck?.payloadHeader.ackedMessageId) {
-            // Received a message retransmission, this means that the other side didn't get our ack
+            // Received a message retransmission. This means that the other side didn't get our ack
             // Resending the previous reply message which contains the ack
             await this.channel.send(this.#sentMessageToAck);
             return;
