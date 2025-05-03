@@ -16,8 +16,7 @@ try {
     }
 }
 
-// Ensure test suite is compiled.  This is redundant when run under matter-run but allows us to avoid the extra process
-// during development (e.g. in launch.json)
+// Ensure test suite is compiled
 await import("@matter/tools/bootstrap");
 await (await import("@matter/tools")).ensureCompiled(import.meta.url);
 

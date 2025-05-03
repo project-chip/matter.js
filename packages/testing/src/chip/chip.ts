@@ -12,7 +12,7 @@ import type { Container } from "../docker/container.js";
 import { afterOne, beforeOne } from "../mocha.js";
 import type { TestRunner } from "../runner.js";
 import { TestDescriptor } from "../test-descriptor.js";
-import { PicsFile } from "./pics-file.js";
+import { PicsFile } from "./pics/file.js";
 import { State } from "./state.js";
 
 /**
@@ -28,6 +28,7 @@ import { State } from "./state.js";
  * We execute test logic within a Docker container available at {@link https://github.com/matter-js/matter.js-chip}.
  */
 export interface Chip extends chip.Builder {
+    (subject: Subject): chip.Builder;
     (...include: string[]): chip.Builder;
 
     /**
@@ -98,7 +99,12 @@ export interface Chip extends chip.Builder {
     /**
      * The active PICS configuration.
      */
-    pics: PicsFile;
+    defaultPics: PicsFile;
+
+    /**
+     * The filename for default PICS in the container.
+     */
+    defaultPicsFile: string;
 
     /**
      * The timeout for tests without an explicit timeout (defaults to 30s).
@@ -140,13 +146,12 @@ function createBuilder(initial: {
                 }
             }
 
-            const predicate = TestDescriptor.predicateFor({
+            const tests = TestDescriptor.filter(chip.tests.descriptor, {
                 includePaths: [...includePaths],
                 kinds: ["py", "yaml"],
-                pics: chip.pics,
+                pics: subject?.pics ?? chip.defaultPics,
             });
 
-            const tests = TestDescriptor.filter(chip.tests.descriptor, predicate);
             if (!tests?.members) {
                 return this;
             }
@@ -159,10 +164,7 @@ function createBuilder(initial: {
         },
 
         exclude(...glob: string[]) {
-            const tests = TestDescriptor.filter(
-                chip.tests.descriptor,
-                TestDescriptor.predicateFor({ includePaths: globSync(glob, chip.tests) }),
-            );
+            const tests = TestDescriptor.filter(chip.tests.descriptor, { includePaths: globSync(glob, chip.tests) });
 
             if (!tests) {
                 return this;
@@ -231,16 +233,16 @@ function createBuilder(initial: {
     function defineTests(descriptor: TestDescriptor) {
         switch (descriptor.kind) {
             case "suite":
-                implementSuite(descriptor);
+                defineSuite(descriptor);
                 break;
 
             default:
-                implementTest(descriptor);
+                defineTest(descriptor);
                 break;
         }
     }
 
-    function implementSuite(descriptor: TestDescriptor) {
+    function defineSuite(descriptor: TestDescriptor) {
         const mocha = State.mocha;
 
         const { name, members } = descriptor;
@@ -277,7 +279,7 @@ function createBuilder(initial: {
         });
     }
 
-    function implementTest(descriptor: TestDescriptor) {
+    function defineTest(descriptor: TestDescriptor) {
         State.install();
         const test = chip.testFor(descriptor);
         const mochaTest = it(descriptor.name, function () {
@@ -300,8 +302,16 @@ function createBuilder(initial: {
     }
 }
 
-function chipFn(...include: string[]): chip.Builder {
-    return createBuilder({ include });
+function chipFn(subjectOrFirstInclusion: Subject.Factory | string | undefined, ...include: string[]): chip.Builder {
+    if (typeof subjectOrFirstInclusion === "function") {
+        return chip.subject(subjectOrFirstInclusion).include(...include);
+    }
+
+    if (typeof subjectOrFirstInclusion === "string") {
+        include = [subjectOrFirstInclusion, ...include];
+    }
+
+    return createBuilder({ include: [...include] });
 }
 
 Object.defineProperties(chipFn, {
@@ -339,8 +349,12 @@ Object.defineProperties(chipFn, {
         get: () => State.isInitialized,
     },
 
-    pics: {
-        get: () => State.pics,
+    defaultPics: {
+        get: () => State.defaultPics,
+    },
+
+    defaultPicsFilename: {
+        get: () => State.defaultPicsFilename,
     },
 
     pullBeforeTesting: {

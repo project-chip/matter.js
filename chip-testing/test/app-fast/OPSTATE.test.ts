@@ -5,7 +5,5 @@
  */
 
 describe("OPSTATE", () => {
-    chip("OPSTATE/*")
-        // Exclude because of timing issues with the filesocket/backchannel commands
-        .exclude("OPSTATE/2.1", "OPSTATE/2.2", "OPSTATE/2.3");
+    chip("OPSTATE/*");
 });

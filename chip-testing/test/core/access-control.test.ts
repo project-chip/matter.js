@@ -10,5 +10,5 @@ describe("access-control", () => {
     // CHIP uses FAILURE error code where spec mandates RESOURCE_EXHAUSTED.  Patch the test to conform
     before(() => chip.testFor("AccessControlCluster").edit(edit.sed("s/error: FAILURE/error: RESOURCE_EXHAUSTED/")));
 
-    chip("AccessChecker", "AccessControlCluster", "AccessControlConstraints");
+    chip("AccessControlCluster", "AccessControlConstraints");
 });

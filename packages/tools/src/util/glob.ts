@@ -52,7 +52,7 @@ function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[], fs: Fil
         const stat = fs.stat(rootPath);
 
         if (stat?.[rootPath.endsWith("/") ? "isDirectory" : "isFile"]) {
-            return [rootPath];
+            return [fs.resolve(rootPath)];
         }
 
         return [];
@@ -64,7 +64,7 @@ function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[], fs: Fil
     function match(path: string, segments: ParseReturnFiltered[]) {
         // If the filter is empty then match current path
         if (!segments.length) {
-            results.add(path);
+            results.add(fs.resolve(path));
             return;
         }
 
@@ -79,7 +79,7 @@ function globOnePartSync(mm: Minimatch, segments: ParseReturnFiltered[], fs: Fil
 
         // If filter is just GLOBSTAR then all paths match but search continues
         if (segments.length === 1 && segments[0] === GLOBSTAR) {
-            results.add(path);
+            results.add(fs.resolve(path));
         }
 
         // Filter starts with magic so load directory entries to match

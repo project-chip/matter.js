@@ -9,6 +9,8 @@ import { edit } from "@matter/testing";
 // Note - SC/4.3 fails intermittently (22 of 156 runs) on step 8, sometimes because of a name mismatch, sometimes
 // because no name is found and the test doesn't check for None
 //
+// SC/4.1 seems to have a similar issue
+//
 // I believe this is because of other Matter devices on my local network.  Fixing will require coming up with an
 // isolated networking solution...  Easiest might be to just create an Avahi MDNS implementation and run Avahi with no
 // networking
@@ -46,7 +48,6 @@ describe("SC", () => {
         );
     }).timeout(10000);
 
-    // Exclude 5.1 and 5.2 because our GroupKeyManagement is too limited, and 7.1 because we configure separately below
     chip("SC/*").exclude(
         // Our GroupKeyManagment is too limited for these
         "SC/5.1",
@@ -58,8 +59,9 @@ describe("SC", () => {
     );
 
     // SC/4.1 needs MDNS cleared
-    //
-    chip("SC/4.1").beforeStart(() => chip.clearMdns());
+    chip("SC/4.1").beforeStart(async () => {
+        await chip.clearMdns();
+    });
 
     // 7.1 must start factory fresh
     chip("SC/7.1").uncommissioned();

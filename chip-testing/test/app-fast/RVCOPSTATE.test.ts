@@ -7,10 +7,5 @@
 import { RvcApp } from "../support.js";
 
 describe("RVCOPSTATE", () => {
-    chip("RVCOPSTATE/*").subject(RvcApp).exclude(
-        // Exclude because of timing issues with the filesocket/backchannel commands
-        "RVCOPSTATE/2.1",
-        "RVCOPSTATE/2.3",
-        "RVCOPSTATE/2.4",
-    );
+    chip("RVCOPSTATE/*").subject(RvcApp);
 });

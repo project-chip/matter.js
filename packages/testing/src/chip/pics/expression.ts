@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PicsFile } from "./pics-file.js";
+import { PicsFile } from "./file.js";
 
 /**
  * A set of PICS specifiers, each of which must be true for the set to apply.
@@ -112,7 +112,8 @@ function parse(definition: string) {
 
     const result = parseExpr();
 
-    if (tokenizer.peek() !== undefined) {
+    // Note - allow garbage trailing "(" as this seems to be a way to provide a hint as to purpose of expression
+    if (tokenizer.peek() !== undefined && tokenizer.peek()?.kind !== "(") {
         throw new InvalidPicsExpressionError(definition, tokenizer.peek());
     }
 
@@ -191,7 +192,7 @@ function test(ast: Ast, file: PicsFile): boolean {
             return !test(ast.operand, file);
 
         case "name":
-            return file.values[ast.name] === "1";
+            return file.values[ast.name] === 1;
 
         case "&":
             return test(ast.lhs, file) && test(ast.rhs, file);

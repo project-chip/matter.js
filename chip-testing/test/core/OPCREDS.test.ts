@@ -5,5 +5,9 @@
  */
 
 describe("OPCREDS", () => {
-    chip("OPCREDS/*");
+    chip("OPCREDS/*").exclude(
+        // These are Matter 1.5
+        "OPCREDS/3.8",
+        "OPCREDS/3.9",
+    );
 });

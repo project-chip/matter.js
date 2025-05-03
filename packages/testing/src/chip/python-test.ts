@@ -11,6 +11,7 @@ import { Terminal } from "../docker/terminal.js";
 import { TestFileDescriptor } from "../test-descriptor.js";
 import { parseStep } from "./chip-test-common.js";
 import { Constants, ContainerPaths } from "./config.js";
+import { PicsSource } from "./pics/source.js";
 
 export class PythonTest extends BaseTest {
     /**
@@ -173,11 +174,12 @@ async function createCommand(descriptor: TestFileDescriptor, subject: Subject, e
     const command = ["python3", descriptor.path, ...Constants.PythonRunnerArgs];
 
     const args = scriptArgsOf(descriptor);
-    if (args !== undefined) {
-        command.push(...args);
-    }
 
-    command.push(...extraArgs);
+    command.push(...args, ...extraArgs);
+
+    if (!command.includes("--PICS")) {
+        command.push("--PICS", await PicsSource.install(subject.pics));
+    }
 
     const qrCodePos = command.indexOf("--qr-code");
     if (qrCodePos !== -1) {
@@ -188,13 +190,18 @@ async function createCommand(descriptor: TestFileDescriptor, subject: Subject, e
 }
 
 function scriptArgsOf(descriptor: TestFileDescriptor) {
-    const scriptArgs = descriptor.config?.["script-args"];
-    if (typeof scriptArgs !== "string") {
-        return;
+    let args: string[] | undefined;
+
+    const predefined = descriptor.config?.["script-args"];
+    if (typeof predefined === "string") {
+        args = predefined.trim().split(/\s+/);
+    } else if (Array.isArray(predefined)) {
+        args = [...predefined];
     }
 
-    return scriptArgs
-        .replace(/--(?:storage-path|commissioning-method|discriminator|passcode|trace-to|PICS)\s+\S+\s+/g, "")
-        .trim()
-        .split(/\s+/);
+    if (descriptor.subpath) {
+        (args ?? (args = [])).push("--test-case", descriptor.subpath);
+    }
+
+    return args ?? [];
 }

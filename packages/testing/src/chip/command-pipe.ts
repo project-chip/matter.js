@@ -17,9 +17,13 @@ export abstract class CommandPipe {
     #filename: string;
     #subject: BackchannelCommand.Subject;
 
-    constructor(subject: BackchannelCommand.Subject, appName: string) {
+    constructor(subject: BackchannelCommand.Subject, filename: string) {
         this.#subject = subject;
-        this.#filename = `/tmp/chip_${appName}_fifo_${process.pid}`;
+        this.#filename = filename;
+    }
+
+    static filenameFor(app: string) {
+        return `/tmp/chip_${app}_fifo_${process.pid}`;
     }
 
     get filename() {

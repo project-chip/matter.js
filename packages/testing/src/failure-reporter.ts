@@ -8,21 +8,21 @@ import { ansi, Printer, STATUS_ICON_FAILURE } from "#tools";
 import { FailureDetail } from "./failure-detail.js";
 import { TextDiff } from "./text-diff.js";
 
-const BEGIN_ERROR = `${ansi.red}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┅\n┃${ansi.not.red}`;
+const BEGIN_ERROR = `${ansi.red}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┅${ansi.not.red}`;
 const OUTER_PREFIX = `${ansi.red}┃  ${ansi.not.red}`;
 const INNER_PREFIX = `${ansi.dim}┆  ${ansi.not.dim}`;
-const END_ERROR = `${ansi.red}┃\n┗━┅${ansi.not.red}`;
+const END_ERROR = `${ansi.red}┗━┅${ansi.not.red}`;
 
 export namespace FailureReporter {
     export function report(out: Printer, failure: FailureDetail, title: string) {
-        out(BEGIN_ERROR, "\n");
+        out(BEGIN_ERROR, "\n", OUTER_PREFIX, "\n");
 
         out.state({ linePrefix: OUTER_PREFIX }, () => {
             out(ansi.bold.red(STATUS_ICON_FAILURE), " ", title, "\n");
             dumpDetails(out, failure);
         });
 
-        out(END_ERROR, "\n");
+        out(OUTER_PREFIX, "\n", END_ERROR, "\n");
     }
 }
 

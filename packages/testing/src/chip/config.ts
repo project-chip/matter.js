@@ -5,6 +5,7 @@
  */
 
 import { env } from "node:process";
+import { PicsSource } from "./pics/source.js";
 
 /**
  * Significant locations within the test container.
@@ -17,7 +18,6 @@ export namespace ContainerPaths {
     export const descriptorFile = `/lib/test-descriptor.json`;
     export const pythonCommissioner = `/src/python_testing/hello_test.py`;
     export const chipPics = "/src/app/tests/suites/certification/ci-pics-values";
-    export const matterJsPics = "/matter-js-pics.properties";
     export const accessoryClient =
         "/scripts/py_matter_yamltests/matter_yamltests/pseudo_clusters/clusters/accessory_server_bridge.py";
 }
@@ -56,8 +56,6 @@ export namespace Constants {
     export const initTimeout = 60_000;
     export const defaultTimeoutMs = 60_000;
 
-    export const localPicsOverrideFile = "src/chip/matter-js-pics.properties";
-
     /**
      * We set the commissioning timeout value very low because this timeout is tested and waiting the default 180s.
      * sucks.  The timeout must be high enough for actual commissioning to succeed.
@@ -74,9 +72,6 @@ export namespace Constants {
      * Default arguments provided to the YAML runner.
      */
     export const YamlRunnerArgs = [
-        "--PICS",
-        ContainerPaths.matterJsPics,
-
         // This makes CHIP logs unconditional which would be nice if it intermingled with our logs but currently they
         // only appear once test is run; haven't tracked down how to stream them yet
         // "--show_adapter_logs",
@@ -93,12 +88,17 @@ export namespace Constants {
      * Default arguments provided to the Python runner.
      */
     export const PythonRunnerArgs = [
-        "--PICS",
-        ContainerPaths.matterJsPics,
-
         // Our PID is meaningless within the container but Python uses in the name of the command pipe.  We pass in our
         // actual PID to ensure no collision if multiple instances run
         "--app-pid",
         process.pid.toString(),
     ];
+
+    export const defaultPics: PicsSource = {
+        kind: "composite",
+        sources: [
+            { kind: "chip", name: ContainerPaths.chipPics },
+            { kind: "file", name: "src/chip/matter-js-pics.properties" },
+        ],
+    };
 }

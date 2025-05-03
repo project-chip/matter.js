@@ -12,6 +12,7 @@ import { Package } from "./package.js";
 
 export const STATUS_ICON_SUCCESS = ansi.green("✓");
 export const STATUS_ICON_FAILURE = ansi.bright.red("✗");
+export const STATUS_ICON_SKIPPED = ansi.dim.white("⁃");
 
 const SPINNER = "◐◓◑◒"; //"⡜⠔⠢⢣"; //["⚫︎", "⚪︎"]; "⡈⠔⠢⢁";
 const SPINNER_INTERVAL = 100;

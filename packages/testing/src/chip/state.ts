@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ansi, Package } from "#tools";
+import { ansi } from "#tools";
 import { BackchannelCommand } from "../device/backchannel.js";
 import { Subject } from "../device/subject.js";
 import { Test } from "../device/test.js";
@@ -15,12 +15,13 @@ import { Image } from "../docker/image.js";
 import { Volume } from "../docker/volume.js";
 import { afterRun, beforeRun } from "../mocha.js";
 import type { TestRunner } from "../runner.js";
-import { TestDescriptor, TestFileDescriptor } from "../test-descriptor.js";
+import { RootTestDescriptor, TestDescriptor, TestFileDescriptor } from "../test-descriptor.js";
 import { AccessoryServer } from "./accessory-server.js";
 import type { chip } from "./chip.js";
 import { Constants, ContainerPaths } from "./config.js";
 import { ContainerCommandPipe } from "./container-command-pipe.js";
-import { PicsFile } from "./pics-file.js";
+import { PicsFile } from "./pics/file.js";
+import { PicsSource } from "./pics/source.js";
 import { PythonTest } from "./python-test.js";
 import { YamlTest } from "./yaml-test.js";
 
@@ -35,18 +36,19 @@ const Values = {
     test: undefined as Test | undefined,
     mainContainer: undefined as Container | undefined,
     mdnsContainer: undefined as Container | undefined,
-    pics: undefined as PicsFile | undefined,
+    defaultPics: undefined as PicsFile | undefined,
+    defaultPicsFilename: undefined as string | undefined,
     tests: undefined as TestDescriptor.Filesystem | undefined,
     initializedSubjects: new WeakSet<Subject>(),
     activeSubject: undefined as Subject | undefined,
     singleUseSubject: false,
-    activePipes: new Set<string>(),
     closers: Array<() => Promise<void>>(),
     subjects: new Map<Subject.Factory, Record<string, Subject>>(),
     snapshots: new Map<Subject, {}>(),
     containerLifecycleInstalled: false,
     testMap: new Map<TestDescriptor, Test>(),
     pullBeforeTesting: true,
+    commandPipe: undefined as ContainerCommandPipe | undefined,
 };
 
 /**
@@ -113,12 +115,20 @@ export const State = {
         Values.pullBeforeTesting = value;
     },
 
-    get pics() {
-        if (Values.pics === undefined) {
+    get defaultPics() {
+        if (Values.defaultPics === undefined) {
             throw new Error("PICS not initialized");
         }
 
-        return Values.pics;
+        return Values.defaultPics;
+    },
+
+    get defaultPicsFilename() {
+        if (Values.defaultPicsFilename === undefined) {
+            throw new Error("PICS not initialized");
+        }
+
+        return Values.defaultPicsFilename;
     },
 
     get tests() {
@@ -152,7 +162,7 @@ export const State = {
 
         progress.update("Initializing containers");
         try {
-            const result = await initialize();
+            await initialize();
 
             const image = await State.container.image;
             const info = await image.inspect();
@@ -163,8 +173,6 @@ export const State = {
             progress.success(
                 `Initialized CHIP ${ansi.bold(chipCommit)} image ${ansi.bold(imageVersion)} for ${ansi.bold(arch)}`,
             );
-
-            return result;
         } catch (e) {
             progress.failure("Initializing containers");
             throw e;
@@ -240,20 +248,16 @@ export const State = {
      * Open a back-channel command pipe.
      */
     async openPipe(name: string) {
-        if (Values.activePipes.has(name)) {
-            return;
+        if (Values.commandPipe === undefined) {
+            Values.commandPipe = new ContainerCommandPipe(State.container, this);
+            await Values.commandPipe.initialize();
+            State.onClose(async () => {
+                await Values.commandPipe?.close();
+                Values.commandPipe = undefined;
+            });
         }
 
-        const pipe = new ContainerCommandPipe(State.container, this, name);
-
-        await pipe.initialize();
-
-        Values.activePipes.add(name);
-
-        State.onClose(async () => {
-            await pipe.close();
-            Values.activePipes.delete(name);
-        });
+        await Values.commandPipe.installForApp(name);
     },
 
     /**
@@ -402,6 +406,7 @@ export const State = {
  */
 async function initialize() {
     await configureContainer();
+    await configureScripts();
     await configurePics();
     await configureTests();
     await configureNetwork();
@@ -465,19 +470,29 @@ async function configureContainer() {
 }
 
 /**
+ * Monkey patch test scripts to work around bugs.
+ */
+async function configureScripts() {
+    // There is no ack on the command pipe.  Writing to it is copied in a multitude of places (pending PR fixes some of
+    // this).  Most places have a delay to try to compensate for lack of ack but in the "centralized" command writer the
+    // delay is only 1 ms. which is sometimes too short for us.  Change to 20ms
+    await State.container.edit(
+        edit.sed("s/sleep(0.001)/sleep(.02)/"),
+
+        // This is the one we actually use
+        "/usr/local/lib/python3.12/dist-packages/chip/testing/matter_testing.py",
+
+        // Patching here too just for completeness
+        "/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py",
+    );
+}
+
+/**
  * Create a PICS file in the container appropriate for matter.js.
  */
 async function configurePics() {
-    const ciPics = await State.container.read(ContainerPaths.chipPics);
-    const pics = new PicsFile(ciPics, true);
-
-    const testing = Package.tools.findPackage("@matter/testing");
-    const overrides = new PicsFile(testing.resolve(Constants.localPicsOverrideFile));
-    pics.patch(overrides);
-
-    Values.pics = pics;
-
-    await State.container.write(ContainerPaths.matterJsPics, pics.toString());
+    Values.defaultPics = await PicsSource.load(Constants.defaultPics);
+    Values.defaultPicsFilename = await PicsSource.install(Values.defaultPics);
 }
 
 /**
@@ -487,10 +502,18 @@ async function configureTests() {
     const { container } = State;
 
     // Load test descriptors
-    const descriptor = JSON.parse(await container.read(ContainerPaths.descriptorFile)) as TestDescriptor;
+    const descriptor = JSON.parse(await container.read(ContainerPaths.descriptorFile)) as RootTestDescriptor;
+
+    // Ensure this is a supported container version
+    if (descriptor.format !== TestDescriptor.CURRENT_FORMAT) {
+        throw new Error(`Invalid descriptor format "${descriptor.format}" (expected ${TestDescriptor.CURRENT_FORMAT})`);
+    }
+
+    // Ensure test descriptor isn't empty
     if (!Array.isArray(descriptor.members)) {
         throw new Error(`CHIP test descriptor has no members`);
     }
+
     Values.tests = TestDescriptor.Filesystem(descriptor);
 }
 

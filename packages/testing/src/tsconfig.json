@@ -1,12 +1,16 @@
 {
     "extends": "../../tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
+        "allowJs": true,
         "types": [
             "node"
         ]
     },
     "include": [
-        "**/*.ts"
+        "**/*.ts",
+        "**/*.mjs",
+        "**/*.cjs",
+        "**/*.cts"
     ],
     "references": [
         {
