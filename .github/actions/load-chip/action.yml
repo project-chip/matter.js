@@ -1,0 +1,19 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+name: 'Load CHIP from artifact'
+description: 'Installs CHIP docker image from build artifact into runner'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install artifact image
+      uses: actions/download-artifact@v4
+      with:
+        name: chip-image
+        path: /tmp
+
+    - name: Load image from artifact
+      shell: bash
+      run: docker load -i /tmp/chip.tar

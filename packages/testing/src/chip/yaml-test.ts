@@ -11,6 +11,7 @@ import { Terminal } from "../docker/terminal.js";
 import { deansify } from "../util/text.js";
 import { parseStep } from "./chip-test-common.js";
 import { Constants, ContainerPaths } from "./config.js";
+import { PicsSource } from "./pics/source.js";
 
 export class YamlTest extends BaseTest {
     async initializeSubject(subject: Subject) {
@@ -54,7 +55,11 @@ export class YamlTest extends BaseTest {
         }
     }
 
-    async invoke(_subject: Subject, step: (title: string) => void, args: string[]) {
+    async invoke(subject: Subject, step: (title: string) => void, args: string[]) {
+        if (!args.includes("--PICS")) {
+            args.push("--PICS", await PicsSource.install(subject.pics));
+        }
+
         const terminal = await this.container.exec(
             [
                 "python3",

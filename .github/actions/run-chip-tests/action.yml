@@ -1,0 +1,46 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+name: 'Run a group of CHIP tests'
+description: 'Runs a group of tests using matter-js/chip image'
+inputs:
+  image-source:
+    description: 'Container source (artifact or repository)'
+    required: true
+
+  test-group:
+    description: 'Name of the test group to run'
+    required: true
+
+  node-version:
+    description: 'Node.js version'
+    required: true
+    default: '22.x'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install matter.js
+      shell: bash
+      run: npm ci --foreground-scripts
+
+    - name: Pull image from repository
+      if: inputs.image-source == 'repository'
+      shell: bash
+      run: docker pull ghcr.io/matter-js/chip
+
+    - name: Load image from artifact
+      if: inputs.image-source == 'artifact'
+      uses: ./.github/actions/load-chip
+
+    - name: Run tests
+      shell: bash
+      run: |
+        cd chip-testing
+        npm run test-${{inputs.test-group}} -- --no-pull --report

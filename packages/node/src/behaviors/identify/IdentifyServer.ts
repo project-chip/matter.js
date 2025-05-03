@@ -33,6 +33,8 @@ export class IdentifyServer extends IdentifyBehavior {
             this.state.identifyType = Identify.IdentifyType.None;
         }
 
+        // TODO - identifyTime should become virtual attribute with timer to update isIdentifying
+        // Enable I/2.4 once this is done
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
             1000,

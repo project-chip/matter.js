@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Run a command in a new ephemeral container
+
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
+docker run \
+    -it \
+    --rm \
+    --workdir / \
+    --security-opt apparmor:unconfined \
+    -v matter.js-mdns:/run/dbus \
+    --platform "$CHIP_PLATFORM" \
+    ghcr.io/matter-js/chip \
+    "$@"

@@ -21,7 +21,7 @@ if [ -z "$CONTAINER" ]; then
         --security-opt apparmor:unconfined \
         -v matter.js-mdns:/run/dbus \
         --platform "$CHIP_PLATFORM" \
-        ghcr.io/matter-js/chip \
+        ghcr.io/matter-js/chip-apps \
         "$@"
 else
     docker exec \

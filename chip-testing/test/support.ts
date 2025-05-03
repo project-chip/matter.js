@@ -22,8 +22,8 @@ NodeTestInstance.forceFastTimeouts = true;
 NodeTestInstance.nonvolatileEvents = true;
 NodeTestInstance.testEnableKey = "000102030405060708090a0b0c0d0e0f";
 
-export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstance>): (domain: string) => Subject {
-    return (domain: string) => {
+export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstance>): Subject.Factory {
+    const factory = (domain: string) => {
         return new implementation({
             domain,
             storage: new StorageBackendMemory(),
@@ -34,6 +34,10 @@ export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstan
             passcode: 20202021,
         });
     };
+
+    factory.pics = implementation.pics;
+
+    return factory;
 }
 
 export const AllClustersApp = App(AllClustersTestInstance);

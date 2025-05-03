@@ -9,7 +9,7 @@ import { edit } from "@matter/testing";
 describe("SWTCH", () => {
     // We need to patch the test a bit
     before(async () => {
-        await chip.testFor("SWTCH-run3").edit(
+        await chip.testFor("SWTCH/2.1").edit(
             // Test steps are overlapping here currently, so add a reset in between
             // Remove when https://github.com/project-chip/connectedhomeip/pull/38262 was merged
             edit.lines({
@@ -20,10 +20,5 @@ describe("SWTCH", () => {
         );
     });
 
-    chip(
-        "SWTCH/*",
-
-        // There's an unnumbered python SWTCH test with multiple runs
-        "SWTCH*",
-    );
+    chip("SWTCH/**");
 }).timeout(120000);

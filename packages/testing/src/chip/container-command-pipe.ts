@@ -19,19 +19,20 @@ export class ContainerCommandPipe extends CommandPipe {
     #deactivate?: () => void;
     #stopped?: Promise<void>;
 
-    constructor(container: Container, subject: BackchannelCommand.Subject, appName: string) {
-        super(subject, appName);
+    constructor(container: Container, subject: BackchannelCommand.Subject) {
+        super(subject, "/command-pipe.fifo");
         this.#container = container;
     }
 
     override async initialize() {
-        // Many test files are hard-coded to /tmp so we swap out temp files to preserve state when we switch test
-        // agents.  This would overwrite our FIFO, however, so we symlink to the real FIFO to prevent it from being
-        // overwritten
+        // We create a single FIFO for the container and symlink to the hard-coded name expected by CHIP
         await this.#container.createPipe(FIFO_PATH);
-        await this.#container.exec(["ln", "-sf", "/command-pipe.fifo", this.filename]);
 
         this.#stopped = this.#processCommands();
+    }
+
+    async installForApp(name: string) {
+        await this.#container.exec(["ln", "-sf", this.filename, ContainerCommandPipe.filenameFor(name)]);
     }
 
     override async close() {
@@ -43,39 +44,36 @@ export class ContainerCommandPipe extends CommandPipe {
     }
 
     async #processCommands() {
-        let terminal: Terminal<string> | undefined;
+        let commands: Terminal<string> | undefined;
         try {
-            terminal = await this.#container.follow(FIFO_PATH);
+            commands = await this.#container.exec(
+                ["bash", "-c", `while true; do cat ${FIFO_PATH}; done`],
+                Terminal.StdoutLine,
+            );
 
-            const iterator = terminal[Symbol.asyncIterator]();
+            const deactivated = new Promise<void>(resolve => {
+                this.#deactivate = resolve;
+            });
+
+            const iterator = commands[Symbol.asyncIterator]();
 
             while (true) {
-                let deactivator;
-                const deactivated = new Promise<void>(resolve => {
-                    deactivator = this.#deactivate = resolve;
-                });
-
-                const iteration = iterator.next().then(result => result.value as undefined | string);
-
-                try {
-                    const line = await Promise.race([deactivated, iteration]);
-                    if (line === undefined) {
-                        break;
-                    }
-
-                    this.onData(line);
-                } finally {
-                    if (this.#deactivate === deactivator) {
-                        this.#deactivate = undefined;
-                    }
+                const command = await Promise.race([
+                    deactivated,
+                    iterator.next().then(result => result.value as string),
+                ]);
+                if (command === undefined) {
+                    break;
                 }
+                this.onData(command);
             }
+            await deactivated;
         } finally {
-            if (terminal) {
+            if (commands) {
                 try {
-                    await terminal.close();
+                    await commands.close();
                 } catch (e) {
-                    console.warn(`Error closing FIFO listener for ${this.filename}:`, e);
+                    console.warn(`Error closing command proxy for ${this.filename}:`, e);
                 }
             }
 

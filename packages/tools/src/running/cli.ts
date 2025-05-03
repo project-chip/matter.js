@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { realpath } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { exit, stdout } from "node:process";
 import { ensureCompiled } from "./ensure-compiled.js";
@@ -63,17 +64,8 @@ export async function main(argv = process.argv) {
         exit(1);
     }
 
-    script = resolve(script);
-    let dir;
-
-    if (script.match(/[\\/]node_modules[\\/].bin[\\/]/)) {
-        // When executing a script linked under node_modules, search for the project from cwd.  This occurs when running
-        // tooling such as "matter-test"
-        dir = process.cwd();
-    } else {
-        // When executing outside of node modules we want to build the project containing the script
-        dir = dirname(script);
-    }
+    script = await realpath(resolve(script));
+    const dir = dirname(script);
 
     const { format, pkg } = await ensureCompiled(dir);
 

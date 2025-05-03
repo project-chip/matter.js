@@ -10,3 +10,4 @@ dist/
 .vscode/
 isolated-*.log
 *.log
+.matter-test.json

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Revert to standard path so Python doesn't think packages are already installed
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# We don't need Mypy and it's big
+sed -i /mypy/d scripts/tests/requirements.txt
+
+# Install external python dependencies
+pip install --break-system-packages -r src/python_testing/requirements.txt
+pip install --break-system-packages -r scripts/tests/requirements.txt
+
+# Install CHIP wheels globally
+find out -name \*.whl | xargs pip install --break-system-packages --upgrade
+
+# Nuke some of the larger dependencies we don't need
+rm -rf \
+    /usr/local/lib/python*/dist-packages/{debugpy,jedi,language_data} \
+    /usr/local/lib/python*/dist-packages/*.dist-info \
+    /usr/local/lib/python*/dist-packages/*/tests \
+    /usr/lib/python*/dist-packages/*.dist-info
+
+# Strip python libs
+find /usr/local/lib/python*/dist-packages -name \*.so | xargs strip

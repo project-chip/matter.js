@@ -9,7 +9,7 @@ import "./util/node-shims.js";
 
 import "./global-definitions.js";
 
-import { Graph, Package, Project, ProjectBuilder } from "#tools";
+import { Graph, JsonNotFoundError, Package, Project, ProjectBuilder } from "#tools";
 import { clear } from "node:console";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -27,6 +27,11 @@ enum TestType {
 }
 
 Error.stackTraceLimit = 50;
+
+interface Config {
+    allLogs?: boolean;
+    pull?: boolean;
+}
 
 export async function main(argv = process.argv) {
     const testTypes = new Set<TestType>();
@@ -66,7 +71,7 @@ export async function main(argv = process.argv) {
         .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .option("clear", { type: "boolean", describe: "Clear terminal before testing" })
         .option("report", { type: "boolean", describe: "Display test summary after testing" })
-        .option("pull", { type: "boolean", describe: "Do not update containers before testing", default: true })
+        .option("pull", { type: "boolean", describe: "Update containers before testing", default: true })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -85,10 +90,28 @@ export async function main(argv = process.argv) {
         packageLocation = firstSpec;
     }
 
-    chip.pullBeforeTesting = args.pull;
-
     const builder = new ProjectBuilder();
     const pkg = new Package({ path: packageLocation });
+
+    // Load configuration
+    try {
+        const found = pkg.findJson(".matter-test.json");
+        const config = found.json as Config;
+
+        if ("allLogs" in config && !process.argv.includes("--no-all-logs")) {
+            args.allLogs = !!config.allLogs;
+        }
+
+        if ("pull" in config && !process.argv.includes("--no-pull")) {
+            args.pull = !!config.pull;
+        }
+    } catch (e) {
+        if (!(e instanceof JsonNotFoundError)) {
+            throw e;
+        }
+    }
+
+    chip.pullBeforeTesting = args.pull;
 
     // If the location is a workspace, test all packages with test
     if (pkg.isWorkspace) {
@@ -133,8 +156,9 @@ export async function main(argv = process.argv) {
         if (ls) {
             const progress = pkg.start("Inspecting");
             const runner = new TestRunner(pkg, progress, args);
+            const report = await defaultDescriptor(runner);
             progress.close();
-            printReport(await defaultDescriptor(runner), true);
+            printReport(report, true);
             console.log();
             return;
         }

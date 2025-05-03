@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { PicsValues } from "./values.js";
 
 /**
- * Manages Matter PICS files.
+ * In-memory Matter PICS file.
  *
  * Supports extended syntax for defining ranges of values of the form "NAMExx..yy=*" where xx and yy are hexadecimal
  * numbers specifying the start and end of a range (inclusive).  These are expanded in {@link patch} which modifies the
@@ -18,13 +18,14 @@ import { readFileSync, writeFileSync } from "node:fs";
  */
 export class PicsFile {
     #lines: string[];
-    #values?: Record<string, string>;
+    #values?: PicsValues;
 
-    constructor(pathOrBody: string, inline = false) {
-        if (inline === false) {
-            pathOrBody = readFileSync(pathOrBody, "utf-8");
+    constructor(lines?: string | string[]) {
+        if (typeof lines === "string") {
+            this.#lines = lines.split("\n").map(l => l.trim());
+        } else {
+            this.#lines = lines ?? [];
         }
-        this.#lines = pathOrBody.split("\n").map(l => l.trim());
     }
 
     get lines() {
@@ -33,7 +34,7 @@ export class PicsFile {
 
     get values() {
         if (!this.#values) {
-            const values = {} as Record<string, string>;
+            const values = {} as PicsValues;
             for (const line of this.lines) {
                 parseLine(line, values);
             }
@@ -51,7 +52,7 @@ export class PicsFile {
 
         const newLines = new Array<string>();
         for (const line of this.lines) {
-            const lineValues = {} as Record<string, string>;
+            const lineValues = {} as PicsValues;
             if (!parseLine(line, lineValues)) {
                 newLines.push(line);
                 continue;
@@ -75,13 +76,15 @@ export class PicsFile {
         this.#values = undefined;
         this.#lines = newLines;
     }
+}
 
-    save(path: string) {
-        writeFileSync(path, this.toString());
+export namespace PicsFile {
+    export interface Values {
+        [key: string]: 0 | 1;
     }
 }
 
-function parseLine(line: string, values: Record<string, string>): boolean {
+function parseLine(line: string, values: PicsValues): boolean {
     line = line.trim();
     if (line.startsWith("#")) {
         return false;
@@ -92,7 +95,21 @@ function parseLine(line: string, values: Record<string, string>): boolean {
         return false;
     }
 
-    const [, key, value] = valueMatch;
+    const [, key, valueStr] = valueMatch;
+    let value: 0 | 1;
+    switch (valueStr) {
+        case "0":
+            value = 0;
+            break;
+
+        case "1":
+            value = 1;
+            break;
+
+        default:
+            return false;
+    }
+
     const rangeMatch = key.match(/^(\S+)\.\.([\da-f]+)$/i);
     if (!rangeMatch) {
         values[key] = value;
