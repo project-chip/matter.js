@@ -5,15 +5,20 @@
  */
 
 describe("DA", () => {
-    chip("DA/*").args(
-        // We commission separately but at least TC_DA_1_7.py requires passcode and discriminator for recommissioning
-        "--passcode",
-        20202021,
+    chip("DA/*")
+        .exclude(
+            // We don't support DAC revocation
+            "DA/1.9",
+        )
+        .args(
+            // We commission separately but at least TC_DA_1_7.py requires passcode and discriminator for recommissioning
+            "--passcode",
+            20202021,
 
-        "--discriminator",
-        3840,
+            "--discriminator",
+            3840,
 
-        // TC_DA_1_2.py looks for certs in a relative path by default
-        "--string-arg=cd_cert_dir:/credentials/development/cd-certs",
-    );
+            // TC_DA_1_2.py looks for certs in a relative path by default
+            "--string-arg=cd_cert_dir:/credentials/development/cd-certs",
+        );
 });

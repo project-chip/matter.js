@@ -118,7 +118,7 @@ export function ManagedReference(
                 expired = true;
                 return;
             }
-            if (parent.value === undefined) {
+            if (parent.value === undefined || parent.value === null) {
                 expired = true;
                 replaceValue(undefined);
                 return;

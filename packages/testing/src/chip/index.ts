@@ -6,4 +6,4 @@
 
 export * from "./chip.js";
 export * from "./command-pipe.js";
-export * from "./pics-expression.js";
+export * from "./pics/index.js";

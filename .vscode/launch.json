@@ -94,7 +94,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run shell",
-            "cwd": "${workspaceFolder}/packages/nodejs-shell",
+            "cwd": "${workspaceFolder}/codegen/packages/nodejs-shell",
             "args": [
                 "--clear",
                 "dist/cjs/app.js"
@@ -121,7 +121,7 @@
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
             "name": "Run CLI tool",
-            "cwd": "${workspaceFolder}/packages/cli-tool",
+            "cwd": "${workspaceFolder}/codegen/packages/cli-tool",
             "args": [
                 "--clear",
                 "bin/matter.js"
@@ -355,6 +355,36 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
+            "name": "Test chip:app-cc",
+            "cwd": "${workspaceFolder}/chip-testing",
+            "args": [
+                "--clear",
+                "--spec",
+                "test/app-cc/**/*.test.ts",
+                "--all-logs",
+                "esm"
+            ],
+            "group": "chip",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-test",
+            "presentation": {
+                "group": "03chip"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
             "name": "Test chip:app-fast",
             "cwd": "${workspaceFolder}/chip-testing",
             "args": [
@@ -449,6 +479,32 @@
             "args": [
                 "--clear",
                 "packages/examples/src/controller/ControllerNode.ts"
+            ],
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Run AirQualitySensorDeviceNode",
+            "args": [
+                "--clear",
+                "packages/examples/src/device-air-quality-sensor/AirQualitySensorDeviceNode.ts"
             ],
             "group": "example",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",
@@ -679,10 +735,88 @@
                 "${workspaceFolder}/**/dist/esm/**/*.js",
                 "${workspaceFolder}/**/build/esm/**/*.js"
             ],
+            "name": "Run RoboticVacuumCleanerDevice",
+            "args": [
+                "--clear",
+                "packages/examples/src/device-robotic-vacuum-cleaner/RoboticVacuumCleanerDevice.ts"
+            ],
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Run RvcDeviceLogic",
+            "args": [
+                "--clear",
+                "packages/examples/src/device-robotic-vacuum-cleaner/RvcDeviceLogic.ts"
+            ],
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
             "name": "Run SensorDeviceNode",
             "args": [
                 "--clear",
                 "packages/examples/src/device-sensor/SensorDeviceNode.ts"
+            ],
+            "group": "example",
+            "program": "${workspaceFolder}/node_modules/.bin/matter-run",
+            "presentation": {
+                "group": "04example"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--enable-source-maps"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/dist/esm/**/*.js",
+                "${workspaceFolder}/**/build/esm/**/*.js"
+            ],
+            "name": "Run SmokeCOAlarmDeviceNode",
+            "args": [
+                "--clear",
+                "packages/examples/src/device-smoke-co-alarm/SmokeCOAlarmDeviceNode.ts"
             ],
             "group": "example",
             "program": "${workspaceFolder}/node_modules/.bin/matter-run",

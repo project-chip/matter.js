@@ -6,9 +6,6 @@
 #
 # Intermediate stages don't focus on optimization but the final image is minimal (relatively speaking).
 
-# TODO - either finish cross compilation, create CI & manifest for amd64 & arm64, or punt.  Current choice: punt
-
-
 ################################################################################
 #
 # STAGE 1 - common base image
@@ -31,8 +28,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get -qq update && \
-    apt-get -qq -y install python3 python-is-python3 libavahi-client3 libglib2.0-0
-
+    apt-get -qq -y install python3 python-is-python3 libavahi-client3 libglib2.0-0 netcat-openbsd
 
 ################################################################################
 #
@@ -52,10 +48,6 @@ RUN <<EOF
     esac
 EOF
 
-# Configure for cross compilation
-#RUN dpkg --add-architecture arm64
-#COPY support/ubuntu-arm64.sources /etc/apt/sources.list.d
-
 # Install system packages required for build
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
@@ -66,9 +58,8 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
         ninja-build python3-venv python3-dev unzip libgirepository1.0-dev libcairo2-dev libreadline-dev python3-pip
 EOF
 
-# Install x86->arm cross compilers.  Not useful because requires installation of lib dependencies which we've not
-# implemented
-# RUN apt-get -qq -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
+# INI editor.  Version that comes with Ubuntu is too old
+RUN pip install --break-system-packages git+https://github.com/pixelb/crudini.git#egg=crudini
 
 
 ################################################################################
@@ -82,29 +73,15 @@ FROM --platform=$BUILDPLATFORM build AS source
 
 ARG CHIP_COMMIT
 
-# Pull CHIP source code (which is ugly because we want want to pull a shallow copy of a specific SHA)
-RUN <<EOF
-    set -e
-    if [ -z "$CHIP_COMMIT" ]; then
-        CHIP_COMMIT="$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)"
-    fi
-    mkdir connectedhomeip
-    cd connectedhomeip
-    git config --global init.defaultBranch main
-    git config --global advice.detachedHead false
-    git init
-    git remote add origin https://github.com/project-chip/connectedhomeip.git
-    git fetch --depth 1 origin "$CHIP_COMMIT"
-    git checkout FETCH_HEAD
-    echo "$CHIP_COMMIT" > /etc/chip-version
-EOF
+# Pull CHIP source code
+COPY support/clone-chip /bin
+RUN clone-chip
 
-# Checkout submodules
 WORKDIR /connectedhomeip
-RUN ./scripts/checkout_submodules.py --shallow --platform linux
 
-# Bootstrap CHIP environment
-RUN source scripts/bootstrap.sh
+# Bootstrap CHIP
+COPY support/bootstrap-chip /bin
+RUN bootstrap-chip
 
 # Tell build scripts where to find stuff (allows us to skip bootstrap going forward)
 ENV PW_PROJECT_ROOT=/connectedhomeip
@@ -132,16 +109,8 @@ ARG SKIP_APPS
 # Build directory
 RUN mkdir -p out
 
-# Build binaries
-RUN build-one chip-tool
-RUN build-one all-clusters
-RUN build-one lock
-RUN build-one tv-app
-RUN build-one bridge
-RUN build-one lit-icd
-RUN build-one microwave-oven
-RUN build-one rvc
-RUN build-one network-manager
+# Activation is unnecessary will fail because we've dropped things it expects 
+RUN sed -i '/scripts\/activate.sh/d' scripts/build_python.sh
 
 # Build python wheels
 RUN scripts/build_python.sh --chip_mdns platform
@@ -155,16 +124,12 @@ RUN scripts/build_python.sh --chip_mdns platform
 #
 FROM bins AS install
 
-# Revert to standard path so Python doesn't think packages are already installed
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# Build chip-tool
+RUN build-one chip-tool
 
-# Install external python dependencies
-RUN pip install --break-system-packages -r src/python_testing/requirements.txt
-RUN pip install --break-system-packages -r scripts/tests/requirements.txt
-
-# Install CHIP wheels globally
-RUN find out -name \*.whl | xargs pip install --break-system-packages --upgrade
-
+# Install Python stuff
+COPY support/install-chip-python /bin
+RUN install-chip-python
 
 ################################################################################
 #
@@ -173,7 +138,7 @@ RUN find out -name \*.whl | xargs pip install --break-system-packages --upgrade
 # For the final working image we revert to the base target then copy over
 # binaries from the bins target
 #
-FROM base AS final
+FROM base AS chip
 
 # Install some runtime-only packages
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
@@ -181,7 +146,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 <<EOF
     set -e
     apt-get -qq update
-    apt-get -qq -y install avahi-daemon avahi-utils iproute2 less vim wget
+    apt-get -qq -y install avahi-daemon avahi-utils iproute2 less vim-tiny wget
 EOF
 
 LABEL org.opencontainers.image.title="matter.js CHIP tooling build"
@@ -190,7 +155,7 @@ LABEL org.opencontainers.image.source=https://github.com/project-chip/matter.js/
 
 RUN rm -rf bin.usr-is-merged boot home media mnt opt sbin.usr-is-merged srv
 
-# chip-tool and test app binaries
+# chip-tool
 COPY --from=install /dist/bin/* /bin
 
 # Installed python packages
@@ -207,7 +172,6 @@ COPY --from=source /connectedhomeip/examples/placeholder/py_matter_placeholder_a
 COPY --from=source /connectedhomeip/src/controller/python/py_matter_yamltest_repl_adapter/matter_yamltest_repl_adapter matter_yamltest_repl_adapter
 
 # Link various bits to original connectedhomeip locations for discovery and/or convenience
-RUN ln -s "$(realpath chip/testing/data_model)" /data_model
 RUN mkdir -p /scripts/tests
 RUN ln -s "$(realpath chiptest)" /scripts/tests/chiptest
 RUN mkdir -p /scripts/py_matter_yamltests
@@ -217,10 +181,8 @@ RUN ln -s "$(realpath matter_yamltests)" /scripts/py_matter_yamltests/matter_yam
 WORKDIR /
 COPY --from=source /connectedhomeip/scripts/tests/chipyaml /scripts/tests/chipyaml
 
-# Ensure python logic can find the data model (spec_parsing.yaml looks for "scraper_version" but the wheels don't
-# include it)
+# Some scripts expect pigweed root
 ENV PW_PROJECT_ROOT=/
-RUN touch /data_model/master/scraper_version
 
 # YAML tests of course use a different data model
 COPY --from=source /connectedhomeip/src/app/zap-templates/zcl/data-model/chip \
@@ -240,6 +202,12 @@ RUN mkdir /run/dbus
 COPY support/generate-test-descriptor /bin/generate-test-descriptor
 RUN generate-test-descriptor > /lib/test-descriptor.json
 
+# Install extra PICS files
+RUN mkdir -p examples/rvc-app/rvc-common/pics
+COPY --from=source \
+    /connectedhomeip/examples/rvc-app/rvc-common/pics/rvc-app-pics-values \
+    /examples/rvc-app/rvc-common/pics/rvc-app-pics-values
+
 # Install MDNS scripts
 COPY support/mdns-* /bin
 
@@ -248,3 +216,33 @@ COPY --from=source /etc/chip-version /etc
 
 # Configure avahi
 RUN echo allow-interfaces
+
+
+################################################################################
+#
+# STAGE 7 - build example apps
+#
+
+FROM install AS app-bins
+
+# Build binaries
+RUN build-one all-clusters
+RUN build-one lock
+RUN build-one tv-app
+RUN build-one bridge
+RUN build-one lit-icd
+RUN build-one microwave-oven
+RUN build-one rvc
+RUN build-one network-manager
+
+
+################################################################################
+#
+# STAGE 8 - augment base container with example binaries
+#
+
+FROM chip AS chip-apps
+
+COPY --from=app-bins /dist/bin/* /bin
+
+WORKDIR /
