@@ -16,6 +16,7 @@ import {
     Time,
     Timer,
     TransportInterface,
+    asError,
     createPromise,
 } from "@matter/general";
 import {
@@ -89,7 +90,7 @@ export class NobleBleCentralInterface implements NetInterface {
             function rejectOnce(error: unknown) {
                 if (!resolvedOrRejected) {
                     resolvedOrRejected = true;
-                    reject(error);
+                    reject(asError(error));
                 } else {
                     logger.debug(`Already resolved or rejected, ignore error:`, error);
                 }
