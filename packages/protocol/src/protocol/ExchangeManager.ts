@@ -22,6 +22,7 @@ import {
     UdpInterface,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
+import { SecureChannelProtocol } from "#securechannel/index.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
@@ -259,11 +260,15 @@ export class ExchangeManager {
             exchange = undefined;
         }
 
+        const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(
+            message.payloadHeader.protocolId,
+            message.payloadHeader.messageType,
+        );
         if (exchange !== undefined) {
             if (
                 exchange.requiresSecureSession !== session.isSecure ||
                 exchange.session.id !== packet.header.sessionId ||
-                exchange.isClosing
+                (exchange.isClosing && !isStandaloneAck)
             ) {
                 logger.debug(
                     `Ignoring message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name} because ${
@@ -306,10 +311,7 @@ export class ExchangeManager {
                 !isDuplicate &&
                 protocolHandler.requiresSecureSession === session.isSecure
             ) {
-                if (
-                    message.payloadHeader.messageType == SecureMessageType.StandaloneAck &&
-                    !message.payloadHeader.requiresAck
-                ) {
+                if (isStandaloneAck && !message.payloadHeader.requiresAck) {
                     logger.debug(
                         `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name}`,
                     );
