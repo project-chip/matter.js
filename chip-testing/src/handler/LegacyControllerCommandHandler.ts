@@ -478,11 +478,11 @@ export class LegacyControllerCommandHandler extends CommandHandler {
         const ca = await CertificateAuthority.create(caConfig);
 
         const { certSigningRequest } = TlvCertSigningRequest.decode(elements);
-        const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+        const operationalPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
         return {
             IPK: identityProtectionKey,
-            NOC: ca.generateNoc(operationalPublicKey, fabricId, nodeId),
+            NOC: await ca.generateNoc(operationalPublicKey, fabricId, nodeId),
             RCAC: rootCertBytes,
         };
     }

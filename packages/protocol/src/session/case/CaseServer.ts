@@ -148,15 +148,15 @@ export class CaseServer implements ProtocolHandler {
         ) {
             // Generate sigma 2
             // TODO: Pass through a group id?
-            const fabric = this.#fabrics.findFabricFromDestinationId(destinationId, peerRandom);
+            const fabric = await this.#fabrics.findFabricFromDestinationId(destinationId, peerRandom);
             const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
             const { publicKey: responderEcdhPublicKey, sharedSecret } =
-                Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
+                await Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
             const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
                 responderEcdhPublicKey,
-                Crypto.hash(sigma1Bytes),
+                await Crypto.hash(sigma1Bytes),
             );
             const sigma2Key = await Crypto.hkdf(sharedSecret, sigma2Salt, KDFSR2_INFO);
             const signatureData = TlvSignedData.encode({
@@ -165,7 +165,7 @@ export class CaseServer implements ProtocolHandler {
                 ecdhPublicKey: responderEcdhPublicKey,
                 peerEcdhPublicKey,
             });
-            const signature = fabric.sign(signatureData);
+            const signature = await fabric.sign(signatureData);
             const encryptedData = TlvEncryptedDataSigma2.encode({
                 nodeOpCert,
                 intermediateCACert,
@@ -187,7 +187,10 @@ export class CaseServer implements ProtocolHandler {
                 sigma3Bytes,
                 sigma3: { encrypted: peerEncrypted },
             } = await messenger.readSigma3();
-            const sigma3Salt = Bytes.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
+            const sigma3Salt = Bytes.concat(
+                operationalIdentityProtectionKey,
+                await Crypto.hash([sigma1Bytes, sigma2Bytes]),
+            );
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const peerDecryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
             const {
@@ -196,7 +199,7 @@ export class CaseServer implements ProtocolHandler {
                 signature: peerSignature,
             } = TlvEncryptedDataSigma3.decode(peerDecryptedData);
 
-            fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
+            await fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
 
             const peerSignatureData = TlvSignedData.encode({
                 nodeOpCert: peerNewOpCert,
@@ -213,12 +216,12 @@ export class CaseServer implements ProtocolHandler {
                 throw new UnexpectedDataError(`Fabric ID mismatch: ${fabric.fabricId} !== ${peerFabricId}`);
             }
 
-            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+            await Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // All good! Create secure session
             const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                await Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             const secureSession = await this.#sessions.createSecureSession({
                 sessionId: responderSessionId,

@@ -138,7 +138,7 @@ export function CommissioningHelper() {
                 });
 
                 await node.online(context, async agent => {
-                    agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
+                    await agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
                 });
 
                 await node.online(context, async agent => {

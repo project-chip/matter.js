@@ -762,7 +762,7 @@ export class ControllerCommissioningFlow {
         }
         // TODO: validate csrSignature using device public key
         const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
-        const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
+        const operationalPublicKey = await CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
@@ -770,7 +770,7 @@ export class ControllerCommissioningFlow {
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerOperationalCert = this.ca.generateNoc(
+        const peerOperationalCert = await this.ca.generateNoc(
             operationalPublicKey,
             this.fabric.fabricId,
             this.interactionClient.address.nodeId,

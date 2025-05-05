@@ -82,7 +82,7 @@ export class PaseClient {
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
-        const spake2p = Spake2p.create(Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), w0);
+        const spake2p = Spake2p.create(await Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), w0);
         const X = spake2p.computeX();
         await messenger.sendPasePake1({ x: X });
 

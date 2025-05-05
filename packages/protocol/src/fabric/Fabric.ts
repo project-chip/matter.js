@@ -171,17 +171,17 @@ export class Fabric {
         return Crypto.sign(this.#keyPair, data);
     }
 
-    verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
+    async verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         const rootCert = TlvRootCertificate.decode(this.rootCert);
         const nocCert = TlvOperationalCertificate.decode(operationalCert);
         const icaCert =
             intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
             // Validate ICACertificate against Root Certificate
-            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
         // Validate NOC Certificate against ICA Certificate
-        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
@@ -331,7 +331,7 @@ export class Fabric {
 }
 
 export class FabricBuilder {
-    #keyPair = Crypto.createKeyPair();
+    #keyPair: PrivateKey;
     #rootVendorId?: VendorId;
     #rootCert?: Uint8Array;
     #intermediateCACert?: Uint8Array;
@@ -343,6 +343,14 @@ export class FabricBuilder {
     #identityProtectionKey?: Uint8Array;
     #fabricIndex?: FabricIndex;
     #label = "";
+
+    constructor(key: PrivateKey) {
+        this.#keyPair = key;
+    }
+
+    static async create() {
+        return new FabricBuilder(await Crypto.createKeyPair());
+    }
 
     get publicKey() {
         return this.#keyPair.publicKey;
@@ -356,9 +364,9 @@ export class FabricBuilder {
         return CertificateManager.createCertificateSigningRequest(this.#keyPair);
     }
 
-    setRootCert(rootCert: Uint8Array) {
+    async setRootCert(rootCert: Uint8Array) {
         const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
-        CertificateManager.verifyRootCertificate(decodedRootCertificate);
+        await CertificateManager.verifyRootCertificate(decodedRootCertificate);
         this.#rootCert = rootCert;
         this.#rootPublicKey = decodedRootCertificate.ellipticCurvePublicKey;
         return this;
@@ -368,7 +376,7 @@ export class FabricBuilder {
         return this.#rootCert;
     }
 
-    setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
+    async setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
             intermediateCACert = undefined;
         }
@@ -396,9 +404,9 @@ export class FabricBuilder {
         const icaCert =
             intermediateCACert !== undefined ? TlvIntermediateCertificate.decode(intermediateCACert) : undefined;
         if (icaCert !== undefined) {
-            CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
+            await CertificateManager.verifyIntermediateCaCertificate(rootCert, icaCert);
         }
-        CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
+        await CertificateManager.verifyNodeOperationalCertificate(nocCert, rootCert, icaCert);
 
         this.#operationalCert = operationalCert;
         this.#intermediateCACert = intermediateCACert;
