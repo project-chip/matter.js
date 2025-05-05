@@ -84,9 +84,14 @@ jobs:
           script: |
             const fs = require("fs");
             let file= fs.readFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", "utf8");
-            // Patch the test runner to execute controlelr and app on same network interface
+            // Patch the test runner to execute controller and app on same network interface
             file = file.replaceAll("'ip netns exec tool'", "'ip netns exec app'");
             fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file);
+
+      - name: Path some Matter Yaml Files - currently because if new fields in 1.5
+        shell: bash
+        run: |
+          cp -r chip-testing/patched-test-files/certification/Test_TC_BINFO_2_1.yaml connectedhomeip/src/app/tests/suites/certification/
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
