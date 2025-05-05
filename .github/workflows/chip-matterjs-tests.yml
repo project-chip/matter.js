@@ -88,10 +88,10 @@ jobs:
             file = file.replaceAll("'ip netns exec tool'", "'ip netns exec app'");
             fs.writeFileSync("./connectedhomeip/scripts/tests/chiptest/linux.py", file);
 
-      - name: Path some Matter Yaml Files - currently because if new fields in 1.5
+      - name: Path Matter Yaml Files
         shell: bash
         run: |
-          cp -r chip-testing/patched-test-files/certification/Test_TC_BINFO_2_1.yaml connectedhomeip/src/app/tests/suites/certification/
+          cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
