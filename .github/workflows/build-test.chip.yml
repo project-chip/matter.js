@@ -91,7 +91,7 @@ jobs:
         run: |
           cd chip
           ./bin/update-version
-          cat chip-sha=$(cat sha.txt) >> $GITHUB_OUTPUT
+          echo chip-sha=$(cat sha.txt) >> $GITHUB_OUTPUT
 
       - name: Build chip image
         if: needs.workflow-conditions.outputs.build-needed == 'true'
