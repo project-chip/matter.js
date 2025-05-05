@@ -22,10 +22,10 @@ import {
     UdpInterface,
 } from "#general";
 import { PeerAddress } from "#peer/PeerAddress.js";
-import { SecureChannelProtocol } from "#securechannel/index.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
+import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
