@@ -91,7 +91,7 @@ jobs:
       - name: Path Matter Yaml Files
         shell: bash
         run: |
-          cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
+          cp -r chip-testing/patched-controller-test-files/* connectedhomeip/src/app/tests/suites/
 
       - name: Chip-Apps execution with matter.js controller
         id: test-execution-matterjs-chip
