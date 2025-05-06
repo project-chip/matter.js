@@ -397,8 +397,8 @@ export class AttributeResponse<
         this.#addValue(
             {
                 ...path,
-                endpointId: this.currentEndpoint.id as EndpointNumber,
-                clusterId: this.currentCluster.type.id as ClusterId,
+                endpointId: this.currentEndpoint.id,
+                clusterId: this.currentCluster.type.id,
                 attributeId: attribute.id,
             },
             this.#currentState[attribute.id],
