@@ -8,22 +8,23 @@ import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol 
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
+import { DataResponse, FallbackLimits, WildcardPathFlagsCodec } from "#action/server/DataResponse.js";
 import { Val } from "#action/Val.js";
-import { InternalError } from "#general";
-import { AccessLevel, AttributeModel, ElementTag } from "#model";
+import { Diagnostic, InternalError, Logger } from "#general";
+import { AttributeModel, DataModelPath, ElementTag } from "#model";
 import {
     AttributePath,
-    BitmapSchema,
     ClusterId,
     EndpointNumber,
     GlobalAttributes,
     NodeId,
     Status,
     StatusResponseError,
-    WildcardPathFlagsBitmap,
+    TlvSchema,
 } from "#types";
-import { DataModelPath } from "@matter/model";
-import { TlvSchema } from "@matter/types";
+import { StatusCode } from "@matter/types";
+
+const logger = Logger.get("AttributeResponse");
 
 export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
 
@@ -52,8 +53,10 @@ export class AttributeResponse<
     #currentState?: Val.ProtocolStruct;
     #wildcardPathFlags = 0;
 
-    // The node ID may be expensive to retrieve and is invariant so we cache it here
-    #cachedNodeId?: NodeId;
+    // Count how many attribute status (on error) and attribute values (on success) we have emitted
+    #statusCount = 0;
+    #valueCount = 0;
+    #filteredCount = 0;
 
     constructor(node: NodeProtocol, session: SessionT, { dataVersionFilters, attributeRequests }: Read.Attributes) {
         super(node, session);
@@ -121,17 +124,19 @@ export class AttributeResponse<
         return this.#currentCluster;
     }
 
+    get counts() {
+        return {
+            status: this.#statusCount,
+            value: this.#valueCount,
+            existent: this.#valueCount + this.#filteredCount,
+        };
+    }
+
     /**
      * Validate a wildcard path and update internal state.
      */
     #addWildcard(path: AttributePath) {
         const { nodeId, endpointId, clusterId, attributeId, wildcardPathFlags } = path;
-
-        if (nodeId !== undefined && nodeId !== this.#nodeId) {
-            return;
-        }
-
-        const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         if (clusterId === undefined && attributeId !== undefined && !GlobalAttrIds.has(attributeId)) {
             throw new StatusResponseError(
@@ -139,6 +144,12 @@ export class AttributeResponse<
                 Status.InvalidAction,
             );
         }
+
+        if (nodeId !== undefined && nodeId !== this.nodeId) {
+            return;
+        }
+
+        const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         if (endpointId === undefined) {
             this.#addProducer(function* (this: AttributeResponse) {
@@ -167,6 +178,7 @@ export class AttributeResponse<
 
         if (nodeId !== undefined && this.nodeId !== nodeId) {
             this.#addStatus(path, Status.UnsupportedNode);
+            return;
         }
 
         // Resolve path elements
@@ -228,7 +240,7 @@ export class AttributeResponse<
             this.#addStatus(path, Status.UnsupportedCluster);
             return;
         }
-        if (attribute === undefined) {
+        if (attribute === undefined || !cluster.supportedElements.attributes.has(attribute.name)) {
             this.#addStatus(path, Status.UnsupportedAttribute);
             return;
         }
@@ -240,6 +252,7 @@ export class AttributeResponse<
         // Skip if version is unchanged
         const skipVersion = this.#versions?.[path.endpointId]?.[path.clusterId];
         if (skipVersion !== undefined && skipVersion === cluster.version) {
+            this.#filteredCount++;
             return;
         }
 
@@ -261,13 +274,13 @@ export class AttributeResponse<
                 this.#currentState = cluster.open(this.session);
             }
 
-            // Perform actual read of one attribute
-            this.#addValue(
-                path,
-                this.#currentState[attributeId],
-                cluster.version,
-                this.#currentCluster.type.attributes[attributeId]!.tlv,
+            const value = this.#currentState[attributeId];
+            const version = cluster.version;
+            logger.debug(
+                `Reading attribute ${this.node.inspectAttributePath(path)}=${Diagnostic.json(value)} (version=${version})`,
             );
+            // Perform actual read of one attribute
+            this.#addValue(path, value, version, this.#currentCluster.type.attributes[attributeId]!.tlv);
         });
     }
 
@@ -325,17 +338,23 @@ export class AttributeResponse<
             this.#currentState = undefined;
         }
 
-        const skipVersion = this.#versions?.[this.#currentEndpoint!.id]?.[cluster.type.id];
-        if (skipVersion !== undefined && skipVersion === cluster.version) {
-            return;
-        }
-
         const { attributeId } = path;
+        const skipVersion = this.#versions?.[this.currentEndpoint.id]?.[cluster.type.id];
+        const filteredByVersion = skipVersion !== undefined && skipVersion === cluster.version;
+
         if (attributeId === undefined) {
+            if (filteredByVersion) {
+                this.#filteredCount += this.#currentCluster.supportedElements.attributes.size;
+                return;
+            }
             for (const attribute of cluster.type.attributes) {
                 this.#readAttributeForWildcard(attribute, path);
             }
         } else {
+            if (filteredByVersion) {
+                this.#filteredCount++;
+                return;
+            }
             const attribute = cluster.type.attributes[attributeId];
             if (attribute !== undefined) {
                 this.#readAttributeForWildcard(attribute, path);
@@ -349,6 +368,10 @@ export class AttributeResponse<
      * Depends on state initialized by {@link #readClusterForWildcard}.
      */
     #readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
+        if (!this.currentCluster.supportedElements.attributes.has(attribute.name)) {
+            return;
+        }
+
         if (attribute.wildcardPathFlags & this.#wildcardPathFlags) {
             return;
         }
@@ -365,20 +388,23 @@ export class AttributeResponse<
             this.#currentState = this.currentCluster.open(this.session);
         }
         const value = this.#currentState[attribute.id];
-        if (value !== undefined) {
-            // Only if we have a state value set
-            this.#addValue(
-                {
-                    ...path,
-                    endpointId: this.#currentEndpoint?.id as EndpointNumber,
-                    clusterId: this.#currentCluster?.type.id as ClusterId,
-                    attributeId: attribute.id,
-                },
-                this.#currentState[attribute.id],
-                this.#currentCluster!.version,
-                attribute.tlv,
-            );
+        if (value === undefined) {
+            // Should normally never happen
+            logger.warn(`Attribute ${this.node.inspectAttributePath(path)} defined and enabled but has no value.`);
+            return;
         }
+
+        this.#addValue(
+            {
+                ...path,
+                endpointId: this.currentEndpoint.id as EndpointNumber,
+                clusterId: this.currentCluster.type.id as ClusterId,
+                attributeId: attribute.id,
+            },
+            this.#currentState[attribute.id],
+            this.currentCluster.version,
+            attribute.tlv,
+        );
     }
 
     /**
@@ -392,21 +418,30 @@ export class AttributeResponse<
         }
     }
 
+    #addReportData(report: ReadResult.Report) {
+        if (this.#chunk) {
+            this.#chunk.push(report);
+        } else {
+            this.#chunk = [report];
+        }
+    }
+
     /**
      * Add a status value.
      */
     #addStatus(path: ReadResult.ConcreteAttributePath, status: Status) {
+        logger.debug(
+            `Error reading attribute ${this.node.inspectAttributePath(path)}: Status=${StatusCode[status]}(${status})`,
+        );
+
         const report: ReadResult.GlobalAttributeStatus = {
             kind: "attr-status",
             path,
             status,
         };
 
-        if (this.#chunk) {
-            this.#chunk.push(report);
-        } else {
-            this.#chunk = [report];
-        }
+        this.#addReportData(report);
+        this.#statusCount++;
     }
 
     /**
@@ -421,21 +456,7 @@ export class AttributeResponse<
             tlv,
         };
 
-        if (this.#chunk) {
-            this.#chunk.push(report);
-        } else {
-            this.#chunk = [report];
-        }
-    }
-
-    /**
-     * The node ID used to filter paths with node ID specified.  Unsure if this is ever actually used.
-     */
-    get #nodeId() {
-        if (this.#cachedNodeId === undefined) {
-            this.#cachedNodeId =
-                (this.#session.fabric && this.#node.nodeIdFor(this.#session.fabric)) ?? NodeId.UNSPECIFIED_NODE_ID;
-        }
-        return this.#cachedNodeId;
+        this.#addReportData(report);
+        this.#valueCount++;
     }
 }
