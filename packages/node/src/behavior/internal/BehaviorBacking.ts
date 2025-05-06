@@ -7,8 +7,8 @@
 import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "#endpoint/errors.js";
-import type { SupportedElements } from "#endpoint/properties/Behaviors.js";
 import { Construction, EventEmitter, ImplementationError, Lifecycle, Logger, MaybePromise, Observable } from "#general";
+import type { SupportedElements } from "#protocol";
 import type { ClusterId } from "@matter/types";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";

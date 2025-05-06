@@ -27,7 +27,7 @@ import {
 } from "#general";
 import { FeatureSet } from "#model";
 import { ProtocolService } from "#node/server/ProtocolService.js";
-import { ClusterTypeProtocol, Val } from "#protocol";
+import { ClusterTypeProtocol, SupportedElements, Val } from "#protocol";
 import { ClusterType } from "#types";
 import { DescriptorServer } from "../../behaviors/descriptor/DescriptorServer.js";
 import type { Agent } from "../Agent.js";
@@ -39,12 +39,6 @@ import { EndpointLifecycle } from "./EndpointLifecycle.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 
 const logger = Logger.get("Behaviors");
-
-export interface SupportedElements {
-    attributes: Set<string>;
-    commands: Set<string>;
-    events: Set<string>;
-}
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Endpoint}.

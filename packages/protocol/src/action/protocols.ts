@@ -9,6 +9,12 @@ import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex,
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
+export interface SupportedElements {
+    attributes: Set<string>;
+    commands: Set<string>;
+    events: Set<string>;
+}
+
 /**
  * Optimized Matter protocol<->JS object interface
  *
