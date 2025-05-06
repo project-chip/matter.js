@@ -26,27 +26,16 @@ import { DataModelPath } from "@matter/model";
 import { TlvSchema } from "@matter/types";
 
 export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
-export const WildcardPathFlagsCodec = BitmapSchema(WildcardPathFlagsBitmap);
-export const FallbackLimits: AccessControl.Limits = {
-    fabricScoped: false,
-    fabricSensitive: false,
-    readable: true,
-    readLevel: AccessLevel.View,
-    timed: false,
-    writable: true,
-    writeLevel: AccessLevel.Administer,
-};
 
 /**
  * Implements read of attribute data for Matter "read" and "subscribe" interactions.
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class AttributeResponse<SessionT extends AccessControl.Session = AccessControl.Session> {
-    // Configuration
-    #session: SessionT;
-    #node: NodeProtocol;
-    #versions?: Record<EndpointNumber, Record<ClusterId, number>> | undefined;
+export class AttributeResponse<
+    SessionT extends AccessControl.Session = AccessControl.Session,
+> extends DataResponse<SessionT> {
+    #versions?: Record<EndpointNumber, Record<ClusterId, number>>;
 
     // Each input AttributePathIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual attribute data
@@ -67,10 +56,9 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
     #cachedNodeId?: NodeId;
 
     constructor(node: NodeProtocol, session: SessionT, { dataVersionFilters, attributeRequests }: Read.Attributes) {
-        this.#node = node;
-        this.#session = session;
+        super(node, session);
 
-        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.#nodeId;
+        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
 
         // Index versions
         if (dataVersionFilters?.length) {
@@ -117,6 +105,22 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         }
     }
 
+    /** Guarded accessor for this.#currentEndpoint.  This should never be undefined */
+    private get currentEndpoint() {
+        if (this.#currentEndpoint === undefined) {
+            throw new InternalError("currentEndpoint is not set. Should never happen");
+        }
+        return this.#currentEndpoint;
+    }
+
+    /** Guarded accessor for this.#currentCluster.  This should never be undefined */
+    private get currentCluster(): ClusterProtocol {
+        if (this.#currentCluster === undefined) {
+            throw new InternalError("currentCluster is not set. Should never happen");
+        }
+        return this.#currentCluster;
+    }
+
     /**
      * Validate a wildcard path and update internal state.
      */
@@ -139,14 +143,14 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         if (endpointId === undefined) {
             this.#addProducer(function* (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
-                for (const endpoint of this.#node) {
+                for (const endpoint of this.node) {
                     yield* this.#readEndpointForWildcard(endpoint, path);
                 }
             });
             return;
         }
 
-        const endpoint = this.#node[endpointId];
+        const endpoint = this.node[endpointId];
         if (endpoint) {
             this.#addProducer(function (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
@@ -160,12 +164,13 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
      */
     #addConcrete(path: ReadResult.ConcreteAttributePath) {
         const { nodeId, endpointId, clusterId, attributeId } = path;
-        if (nodeId !== undefined && this.#nodeId !== nodeId) {
+
+        if (nodeId !== undefined && this.nodeId !== nodeId) {
             this.#addStatus(path, Status.UnsupportedNode);
         }
 
         // Resolve path elements
-        const endpoint = this.#node[endpointId];
+        const endpoint = this.node[endpointId];
         const cluster = endpoint?.[clusterId];
         const attribute = cluster?.type.attributes[attributeId];
         let limits;
@@ -173,7 +178,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             // We still need to authorize the user for access even though this path doesn't resolve.  Spec is not
             // explicit on what privilege level we should require as normally that information comes from the resolved
             // attribute.  So attempt to resolve via the active model
-            const modelAttr = this.#node.matter
+            const modelAttr = this.node.matter
                 .member(path.clusterId, [ElementTag.Cluster])
                 ?.member(path.attributeId, [ElementTag.Attribute]);
 
@@ -197,9 +202,9 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 endpoint: endpointId,
                 cluster: clusterId,
             }),
-            owningFabric: this.#session.fabric,
+            owningFabric: this.session.fabric,
         };
-        const permission = this.#session.authorityAt(limits.readLevel, location);
+        const permission = this.session.authorityAt(limits.readLevel, location);
         switch (permission) {
             case AccessControl.Authority.Granted:
                 break;
@@ -248,12 +253,12 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 }
                 this.#currentEndpoint = endpoint;
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             } else if (this.#currentCluster !== cluster) {
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             } else if (this.#currentState === undefined) {
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             }
 
             // Perform actual read of one attribute
@@ -350,14 +355,14 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
 
         if (
             !attribute.limits.readable ||
-            this.#session.authorityAt(attribute.limits.readLevel, this.#currentCluster!.location) !==
+            this.session.authorityAt(attribute.limits.readLevel, this.currentCluster.location) !==
                 AccessControl.Authority.Granted
         ) {
             return;
         }
 
         if (this.#currentState === undefined) {
-            this.#currentState = this.#currentCluster!.open(this.#session);
+            this.#currentState = this.currentCluster.open(this.session);
         }
         const value = this.#currentState[attribute.id];
         if (value !== undefined) {
