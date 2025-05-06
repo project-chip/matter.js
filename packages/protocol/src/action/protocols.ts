@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { DataModelPath, MatterModel } from "#model";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, NodeId, TlvSchema } from "#types";
+import { AttributePath, EventId, EventPath } from "#types";
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
@@ -45,6 +47,15 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
      * Obtain the ID of this node in the context of a specific fabric.
      */
     nodeIdFor(fabric: FabricIndex): NodeId | undefined;
+
+    /**
+     * The Event Handler for this node.
+     */
+    eventHandler: OccurrenceManager;
+
+    inspectAttributePath(path: AttributePath): string;
+
+    inspectEventPath(path: EventPath): string;
 }
 
 /**
@@ -81,10 +92,15 @@ export interface ClusterProtocol {
     location: AccessControl.Location;
 
     /**
+     * List of supported elements for this cluster instance
+     */
+    supportedElements: SupportedElements;
+
+    /**
      * Access a record of attribute values, keyed by attribute ID.
      *
      * Note that current protocol implementations do not filter data within this responsibility based on the
-     * session.  So doing so is the responsibility of the node implementation.
+     * session.  So doing is the responsibility of the node implementation.
      */
     open(session: AccessControl.Session): Val.ProtocolStruct;
 }
@@ -99,12 +115,32 @@ export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterI
      * Attribute metadata.
      */
     attributes: CollectionProtocol<AttributeTypeProtocol>;
+
+    /**
+     * Event metadata.
+     */
+    events: CollectionProtocol<EventTypeProtocol>;
 }
 
 /**
  * Descriptor for a specific property type.
  */
 export interface AttributeTypeProtocol extends AddressableElementProtocol<AttributeId> {
+    /**
+     * The TLV schema for this property.
+     */
+    tlv: TlvSchema<unknown>;
+
+    /**
+     * Access control information for the attribute.
+     */
+    limits: AccessControl.Limits;
+}
+
+/**
+ * Descriptor for a specific property type.
+ */
+export interface EventTypeProtocol extends Omit<AddressableElementProtocol<EventId>, "wildcardPathFlags"> {
     /**
      * The TLV schema for this property.
      */
@@ -124,6 +160,11 @@ export interface AddressableElementProtocol<N extends number> {
      * The numeric ID of the element defined by the Matter specification.
      */
     id: N;
+
+    /**
+     * Human readable name of the element.
+     */
+    name: string;
 
     /**
      * Bitmap with each wildcard path flag bit set where this value should be skipped.
