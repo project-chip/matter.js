@@ -272,7 +272,7 @@ export class OccurrenceManager {
     }
 
     #dropOldOccurrences() {
-        let count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
+        const count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
         if (count <= 0) {
             return;
         }
