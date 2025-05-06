@@ -33,8 +33,7 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@matter/general": "*",
-        "@noble/curves": "^1.8.1"
+        "@matter/general": "*"
     },
     "devDependencies": {
         "@matter/testing": "*",

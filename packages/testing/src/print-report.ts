@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Progress, STATUS_ICON_FAILURE, STATUS_ICON_SUCCESS } from "@matter/tools";
+import { Progress, STATUS_ICON_FAILURE, STATUS_ICON_SKIPPED, STATUS_ICON_SUCCESS } from "@matter/tools";
 import colors from "ansi-colors";
 import { chip } from "./chip/chip.js";
-import { InvalidPicsExpressionError, PicsExpression } from "./chip/pics-expression.js";
+import { InvalidPicsExpressionError, PicsExpression } from "./chip/pics/expression.js";
 import { createNodejsMocha } from "./nodejs.js";
 import { TestRunner } from "./runner.js";
 import { TestDescriptor } from "./test-descriptor.js";
@@ -64,7 +64,7 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
                     break;
 
                 default:
-                    title = `  ${title}`;
+                    title = `${STATUS_ICON_SKIPPED} ${title}`;
             }
         }
 
@@ -83,7 +83,7 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
         if (member.pics) {
             try {
                 const expr = new PicsExpression(member.pics);
-                if (expr.evaluate(chip.pics)) {
+                if (expr.evaluate(member.picsValues ?? chip.defaultPics)) {
                     title = `${title} ${colors.dim.green(member.pics)}`;
                 } else {
                     title = `${title} ${colors.dim.red(member.pics)}`;
@@ -98,7 +98,11 @@ function printDescriptor(descriptor: TestDescriptor, includeDisabled?: boolean, 
         }
 
         if (member.path && member.path !== path) {
-            title = `${title} ${colors.dim.blueBright(member.path)}`;
+            let { path } = member;
+            if (member.subpath) {
+                path = `${path}#${member.subpath}`;
+            }
+            title = `${title} ${colors.dim.blueBright(path)}`;
         }
 
         if (member.kind === "manual") {
@@ -131,19 +135,10 @@ export async function defaultDescriptor(runner: TestRunner) {
             used.add(descriptor);
         });
 
-        let unused = TestDescriptor.filter(chip.tests.descriptor, (descriptor, recurse) => {
-            if (descriptor.kind === "py" || descriptor.kind === "yaml") {
-                if (used.has(descriptor)) {
-                    return;
-                }
-            }
-
-            const result = recurse();
-            if (!result || (result.kind === "suite" && !result.members?.length)) {
-                return;
-            }
-
-            return result;
+        let unused = TestDescriptor.filter(chip.tests.descriptor, {
+            predicate(descriptor) {
+                return (descriptor.kind !== "py" && descriptor.kind !== "yaml") || !used.has(descriptor);
+            },
         });
 
         if (unused) {

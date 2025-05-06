@@ -30,23 +30,73 @@ import {
     TypeFromSchema,
     WildcardPathFlagsBitmap,
 } from "#types";
+import { TlvClusterPath } from "@matter/types";
 import { AnyAttributeServer } from "../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../cluster/server/EventServer.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import {
-    AttributePath,
-    AttributeWithPath,
-    CommandPath,
-    CommandWithPath,
-    EventPath,
-    EventWithPath,
-    attributePathToId,
-    commandPathToId,
-    eventPathToId,
-    genericElementPathToId,
-} from "./InteractionServer.js";
+
+export interface CommandPath {
+    nodeId?: NodeId;
+    endpointId: EndpointNumber;
+    clusterId: ClusterId;
+    commandId: CommandId;
+}
+
+export interface AttributePath {
+    nodeId?: NodeId;
+    endpointId: EndpointNumber;
+    clusterId: ClusterId;
+    attributeId: AttributeId;
+}
+
+export interface EventPath {
+    nodeId?: NodeId;
+    endpointId: EndpointNumber;
+    clusterId: ClusterId;
+    eventId: EventId;
+    isUrgent?: boolean;
+}
+
+export interface AttributeWithPath {
+    path: AttributePath;
+    attribute: AnyAttributeServer<any>;
+}
+
+export interface EventWithPath {
+    path: EventPath;
+    event: AnyEventServer<any, any>;
+}
+
+export interface CommandWithPath {
+    path: CommandPath;
+    command: CommandServer<any, any>;
+}
+
+export function genericElementPathToId(
+    endpointId: EndpointNumber | undefined,
+    clusterId: ClusterId | undefined,
+    elementId: number | undefined,
+) {
+    return `${endpointId}/${clusterId}/${elementId}`;
+}
+
+export function commandPathToId({ endpointId, clusterId, commandId }: CommandPath) {
+    return genericElementPathToId(endpointId, clusterId, commandId);
+}
+
+export function attributePathToId({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
+    return genericElementPathToId(endpointId, clusterId, attributeId);
+}
+
+export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
+    return genericElementPathToId(endpointId, clusterId, eventId);
+}
+
+export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
+    return `${nodeId}/${endpointId}/${clusterId}`;
+}
 
 /**
  * List of global attributes to skip when the WildcardSkipGlobalAttributes bit is set in an Wildcard Path Flags

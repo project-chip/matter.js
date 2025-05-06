@@ -21,26 +21,6 @@ export const CODEGEN_PATH = `codegen`;
 
 const packageForPath = {} as Record<string, Package | undefined | null>;
 
-function findJson(filename: string, path: string = ".", title?: string) {
-    path = resolve(path);
-    while (true) {
-        const json = ignoreErrorSync(["ENOENT", "ENOTDIR"], () =>
-            JSON.parse(readFileSync(resolve(path, filename)).toString()),
-        );
-
-        if (json) {
-            if (title === undefined || json.name === title) {
-                return { root: path, json };
-            }
-        }
-        const parent = dirname(path);
-        if (parent === path) {
-            throw new JsonNotFoundError(`Could not locate ${title ?? filename}`);
-        }
-        path = parent;
-    }
-}
-
 function isDirectory(path: string) {
     return !!ignoreErrorSync("ENOENT", () => statSync(path).isDirectory());
 }
@@ -63,7 +43,7 @@ export class Package {
         path?: string;
         name?: string;
     } = {}) {
-        const { root, json } = findJson("package.json", path, name);
+        const { root, json } = this.findJson("package.json", path, name);
         this.path = root;
         this.json = json;
 
@@ -87,6 +67,26 @@ export class Package {
         this.isLibrary = !!(this.json.main || this.json.module || this.json.exports);
 
         this.hasConfig = this.hasFile(this.resolve(CONFIG_PATH));
+    }
+
+    findJson(filename: string, path: string = this.path, title?: string) {
+        path = resolve(path);
+        while (true) {
+            const json = ignoreErrorSync(["ENOENT", "ENOTDIR"], () =>
+                JSON.parse(readFileSync(resolve(path, filename)).toString()),
+            );
+
+            if (json) {
+                if (title === undefined || json.name === title) {
+                    return { root: path, json };
+                }
+            }
+            const parent = dirname(path);
+            if (parent === path) {
+                throw new JsonNotFoundError(`Could not locate ${title ?? filename}`);
+            }
+            path = parent;
+        }
     }
 
     get name() {

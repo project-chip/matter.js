@@ -102,6 +102,9 @@ export class VariableService {
     set(name: string, value: VariableService.Value) {
         const segments = name.toLowerCase().split(".");
         const key = segments.pop() as string;
+        if (key === "__proto__" || key === "constructor" || key === "prototype") {
+            throw new ImplementationError(`Invalid variable path name: ${key}`);
+        }
         let parent: VariableService.Map = this.#vars;
         for (const segment of segments) {
             let nextParent = parent[segment];
@@ -255,17 +258,20 @@ function addVariable(into: Record<string, any>, path: string[], value: any) {
     if (!path.length) {
         return;
     }
-
-    let current = into[path[0]];
+    const firstPathEntry = path[0];
+    if (firstPathEntry === "__proto__" || firstPathEntry === "constructor" || firstPathEntry === "prototype") {
+        throw new ImplementationError(`Invalid variable path name: ${firstPathEntry}`);
+    }
+    let current = into[firstPathEntry];
     if (path.length === 1) {
         if (current === undefined) {
-            into[path[0]] = value;
+            into[firstPathEntry] = value;
         }
         return;
     }
 
     if (typeof current !== "object") {
-        current = into[path[0]] = {};
+        current = into[firstPathEntry] = {};
     }
     addVariable(current, path.slice(1), value);
 }

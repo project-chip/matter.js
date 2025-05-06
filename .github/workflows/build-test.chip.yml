@@ -1,0 +1,177 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# This workflow executes testing of matter.js using CHIP certification (and other) tests.  It also handles building of
+# new images if necessary.
+#
+# TODO - need secrets in nightly job to update CHIP SHA
+#
+#   * It automatically runs each night at 3am UTC
+#
+#   * It will build a new image if:
+#
+#     * The commit message includes [rebuild-chip]
+#
+#     * A PR modifies the workflow file or files under matter.js/chip change
+#
+#     * Run as part of the nightly job
+#
+#   * It runs CHIP tests.  If a new image was built, it tests that image.  Otherwise it tests the latest image in the
+#     registry
+#
+#   * It publishes the new image if tests pass after nightly runs
+
+name: CHIP Image - Build and Test
+
+on:
+  schedule:
+    - cron: 0 3 * * * # Every day at 03:00
+  workflow_dispatch: # Manually on demand
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  merge_group:
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}-chip-build-test
+  cancel-in-progress: true
+
+jobs:
+  # Determine whether we should run and/or build new CHIP container
+  workflow-conditions:
+    runs-on: ubuntu-latest
+    if: github.repository == 'project-chip/matter.js' || github.repository == 'lauckhart/matter.js'
+    outputs:
+      build-needed: ${{ steps.check-rebuild.outputs.build-needed }}
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          base: main
+          filters: |
+            src:
+              - "chip/**"
+              - ".github/workflows/build-test.chip.yml"
+              - ".github/actions/load-chip/action.yml"
+              - ".github/actions/run-chip-tests/action.yml"
+
+      - name: Docker rebuild needed
+        if: >-
+              github.event_name == 'schedule' ||
+              (
+                (github.event_name == 'push' || github.event_name == 'pull_request') &&
+                steps.changes.outputs.src == 'true'
+              ) ||
+              github.event_name == 'workflow_dispatch'||
+              contains(github.event.head_commit.message, '[rebuild-chip]') == true
+        id: check-rebuild
+        run: echo "build-needed=true" >> $GITHUB_OUTPUT
+
+  # Build the CHIP container if necessary
+  chip-image:
+    needs: workflow-conditions
+    runs-on: ubuntu-latest
+    outputs:
+      source: ${{ needs.workflow-conditions.outputs.build-needed == 'true' && 'artifact' || 'repository' }}
+      chip-sha: ${{ steps.increment-sha.outputs.chip-sha }}
+    steps:
+      - name: Check out matter.js
+        if: needs.workflow-conditions.outputs.build-needed == 'true'
+        uses: actions/checkout@v4
+
+      - name: Increment CHIP SHA
+        id: increment-sha
+        if: github.event_name == 'schedule'
+        run: |
+          cd chip
+          ./bin/update-version
+          echo chip-sha=$(cat sha.txt) >> $GITHUB_OUTPUT
+
+      - name: Build chip image
+        if: needs.workflow-conditions.outputs.build-needed == 'true'
+        run: |
+          cd chip
+          ./bin/build chip-artifact
+
+      - name: Upload chip artifact
+        if: needs.workflow-conditions.outputs.build-needed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: chip-image
+          path: /tmp/chip.tar
+
+  test-core:
+    needs: chip-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/run-chip-tests
+        with:
+          image-source: ${{ needs.chip-image.outputs.source }}
+          test-group: core
+
+  test-app-fast:
+    needs: chip-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+        
+      - uses: ./.github/actions/run-chip-tests
+        with:
+          image-source: ${{ needs.chip-image.outputs.source }}
+          test-group: app-fast
+
+  test-app-slow:
+    needs: chip-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+        
+      - uses: ./.github/actions/run-chip-tests
+        with:
+          image-source: ${{ needs.chip-image.outputs.source }}
+          test-group: app-slow
+
+  test-app-cc:
+    needs: chip-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+        
+      - uses: ./.github/actions/run-chip-tests
+        with:
+          image-source: ${{ needs.chip-image.outputs.source }}
+          test-group: app-cc
+
+  # Publish if this is nightly run or triggered manually
+  # TODO - create PR to commit SHA from chip-image action?
+  publish-image:
+    name: Publish docker image
+    runs-on: ubuntu-latest
+    needs: [ chip-image, test-core, test-app-fast, test-app-slow, test-app-cc ]
+    if: needs.chip-image.outputs.source == 'artifact' && github.event_name == 'schedule'
+    steps:
+      - name: Login to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: Automator77
+          password: ${{ secrets.MATTERJS_DOCKER_TOKEN }}
+
+      - name: Publish docker image
+        run: |
+          cd chip
+          ./bin/info
+          ./bin/publish
+  

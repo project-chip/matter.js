@@ -10,6 +10,7 @@ import { AllClustersTestInstance } from "../src/AllClustersTestInstance.js";
 import { BridgeTestInstance } from "../src/BridgeTestInstance.js";
 import { DeviceTestInstanceConstructor } from "../src/GenericTestApp.js";
 import { NodeTestInstance } from "../src/NodeTestInstance.js";
+import { RvcTestInstance } from "../src/RvcTestInstance.js";
 import { TvTestInstance } from "../src/TvTestInstance.js";
 
 chip.onClose(async () => {
@@ -21,8 +22,8 @@ NodeTestInstance.forceFastTimeouts = true;
 NodeTestInstance.nonvolatileEvents = true;
 NodeTestInstance.testEnableKey = "000102030405060708090a0b0c0d0e0f";
 
-export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstance>): (domain: string) => Subject {
-    return (domain: string) => {
+export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstance>): Subject.Factory {
+    const factory = (domain: string) => {
         return new implementation({
             domain,
             storage: new StorageBackendMemory(),
@@ -33,10 +34,15 @@ export function App(implementation: DeviceTestInstanceConstructor<NodeTestInstan
             passcode: 20202021,
         });
     };
+
+    factory.pics = implementation.pics;
+
+    return factory;
 }
 
 export const AllClustersApp = App(AllClustersTestInstance);
 export const BridgeApp = App(BridgeTestInstance);
 export const TvApp = App(TvTestInstance);
+export const RvcApp = App(RvcTestInstance);
 
 chip.defaultSubject = AllClustersApp;

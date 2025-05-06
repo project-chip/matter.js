@@ -411,7 +411,7 @@ async function doThreadCredentials(
             await theNode.Store.set("ThreadName", threadName);
             await theNode.Store.set("ThreadOperationalDataset", threadOperationalDataset);
             console.log(
-                `New Wifi-Credentials: SSID="${await theNode.Store.get<string>(
+                `New Thread-Credentials: name="${await theNode.Store.get<string>(
                     "ThreadName",
                     "-",
                 )}", OperationalDataset="${Logger.maskString(await theNode.Store.get<string>("ThreadOperationalDataset"))}"`,

@@ -5,6 +5,7 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
 import { OnOffServer } from "#behaviors/on-off";
@@ -63,15 +64,17 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * defined by the Matter specification automatically.
  *
  * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you
- * can set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
- * changing the level value step-wise every second. This might be an intermediate solution if you develop independently
- * of defined hardware.
+ * can set the {@link ColorControl.State#managedTransitionTimeHandling} state attribute to true to have matter.js manage
+ * transition times by changing the level value step-wise every second. This might be an intermediate solution if you
+ * develop independently of defined hardware.
  *
- * If you develop for a specific hardware you should extend the {@link ColorControlServer} class and implement the
- * following methods to natively use device features to correctly support the transition times. For this the default
- * implementation uses special protected methods which are used by the real commands and are only responsible for the
- * actual value change logic. The benefit of this structure is that basic data validations and options checks are
- * already done and you can focus on the actual hardware interaction:
+ * If your hardware supports transitions natively, you may override {@link createTransitions} to return a
+ * {@link Transitions} implementation adapted to your hardware.  This allows matter.js to handle Matter requirements
+ * such as remaining time and level reporting.
+ *
+ * Alternatively, you may override the following methods in this class to implement lower-level logic yourself.
+ * Implementing a cluster in this way will disable much of the logic matter.js implements for you in the default
+ * implementations.
  *
  * * {@link ColorControlBaseServer.moveToHueLogic} Logic to move the hue to a defined value in a defined time
  * * {@link ColorControlBaseServer.moveHueLogic} Logic to move the hue by a defined rate/second
@@ -101,7 +104,7 @@ const MAX_CURRENT_LEVEL = 0xfe;
  * * {@link ColorControlBaseServer.switchColorMode} Logic to switch the color mode and to set the current attributes of
  *   the new mode
  *
- * All overridable methods can be implemented sync or async by returning a Promise.
+ * All overridable methods may be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
  *
@@ -334,7 +337,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         this.#setFromXyValue("colorPointBx", value);
     }
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // As a virtual attribute remaining time change only emits when we do so manually.  This works out well because
         // as a continuous value it should only emit under limited circumstances defined by spec
         //
@@ -346,7 +349,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         }
 
         // Configure transition management
-        this.internal.transitions = this.initializeTransitions();
+        this.internal.transitions = this.#initializeTransitions();
 
         // Sync the colorCapabilities with the features for convenience
         this.state.colorCapabilities = this.features;
@@ -428,7 +431,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const effectiveRate =
             (this.#getHueDistanceByDirection(currentHue, targetHue, direction, maxHue) / transitionTime) * 10;
-        this.#startTransition({
+        return this.#startTransition({
             name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
             owner: this,
             changePerS: effectiveRate,
@@ -477,7 +480,7 @@ export class ColorControlBaseServer extends ColorControlBase {
     protected moveHueLogic(moveMode: ColorControl.MoveMode, rate: number, isEnhancedHue = false): MaybePromise {
         const name = isEnhancedHue ? "enhancedCurrentHue" : "currentHue";
 
-        this.#startTransition({
+        return this.#startTransition({
             name,
             owner: this,
             changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
@@ -552,7 +555,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const targetValue = addValueWithOverflow(currentHue, stepSize * direction, MIN_HUE_VALUE, maxHue);
 
-        this.#startTransition({
+        return this.#startTransition({
             name: isEnhancedHue ? "enhancedCurrentHue" : "currentHue",
             owner: this,
             changePerS: effectiveRate,
@@ -602,7 +605,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      */
     protected moveToSaturationLogic(targetSaturation: number, transitionTime: number): MaybePromise {
         const effectiveRate = ((targetSaturation - this.state.currentSaturation) / transitionTime) * 10;
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: effectiveRate,
@@ -642,7 +645,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveSaturationLogic(moveMode: ColorControl.MoveMode, rate: number): MaybePromise {
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: rate * (moveMode === ColorControl.MoveMode.Up ? 1 : -1),
@@ -693,7 +696,7 @@ export class ColorControlBaseServer extends ColorControlBase {
 
         const effectiveRate = (stepSize / transitionTime) * 10 * direction;
 
-        this.#startTransition({
+        return this.#startTransition({
             name: "currentSaturation",
             owner: this,
             changePerS: effectiveRate,
@@ -784,18 +787,21 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveToColorLogic(targetX: number, targetY: number, transitionTime: number): MaybePromise {
-        this.#startTransition({
-            name: "currentX",
-            owner: this,
-            changePerS: ((targetX - this.state.currentX) / transitionTime) * 10,
-            targetValue: targetX,
-        });
-        this.#startTransition({
-            name: "currentY",
-            owner: this,
-            changePerS: ((targetY - this.state.currentY) / transitionTime) * 10,
-            targetValue: targetY,
-        });
+        return MaybePromise.then(
+            this.#startTransition({
+                name: "currentX",
+                owner: this,
+                changePerS: ((targetX - this.state.currentX) / transitionTime) * 10,
+                targetValue: targetX,
+            }),
+            () =>
+                this.#startTransition({
+                    name: "currentY",
+                    owner: this,
+                    changePerS: ((targetY - this.state.currentY) / transitionTime) * 10,
+                    targetValue: targetY,
+                }),
+        );
     }
 
     /**
@@ -843,20 +849,26 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveColorLogic(rateX: number, rateY: number): MaybePromise {
-        if (rateX !== 0) {
-            this.#startTransition({
-                name: "currentX",
-                owner: this,
-                changePerS: rateX,
-            });
-        }
-        if (rateY !== 0) {
-            this.#startTransition({
-                name: "currentY",
-                owner: this,
-                changePerS: rateY,
-            });
-        }
+        return MaybePromise.then(
+            () => {
+                if (rateX !== 0) {
+                    return this.#startTransition({
+                        name: "currentX",
+                        owner: this,
+                        changePerS: rateX,
+                    });
+                }
+            },
+            () => {
+                if (rateY !== 0) {
+                    return this.#startTransition({
+                        name: "currentY",
+                        owner: this,
+                        changePerS: rateY,
+                    });
+                }
+            },
+        );
     }
 
     /**
@@ -896,28 +908,33 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected stepColorLogic(stepX: number, stepY: number, transitionTime: number): MaybePromise {
-        // Else calculate a rate by second and manage the transition
-        if (stepX !== 0) {
-            this.#startTransition({
-                name: "currentX",
-                owner: this,
-                changePerS: (stepX / transitionTime) * 10,
-                targetValue: this.state.currentX + stepX,
-            });
-        }
-        if (stepY !== 0) {
-            this.#startTransition({
-                name: "currentY",
-                owner: this,
-                changePerS: (stepY / transitionTime) * 10,
-                targetValue: this.state.currentY + stepY,
-            });
-        }
+        return MaybePromise.then(
+            () => {
+                if (stepX !== 0) {
+                    return this.#startTransition({
+                        name: "currentX",
+                        owner: this,
+                        changePerS: (stepX / transitionTime) * 10,
+                        targetValue: this.state.currentX + stepX,
+                    });
+                }
+            },
+            () => {
+                if (stepY !== 0) {
+                    return this.#startTransition({
+                        name: "currentY",
+                        owner: this,
+                        changePerS: (stepY / transitionTime) * 10,
+                        targetValue: this.state.currentY + stepY,
+                    });
+                }
+            },
+        );
     }
 
     /**
      * Default implementation notes:
-     * After the options checks it uses the {@link moveToColorTemperatureLogic} method to set the color temperature.
+     * After the option checks it uses the {@link moveToColorTemperatureLogic} method to set the color temperature.
      * If you want to implement own logic just override {@link moveToColorTemperatureLogic}.
      * The logic is implemented as follows: When no transition time is provided, the server will move as fast as
      * possible, so we set the target value directly. Else the step logic is applied and the color temperature is
@@ -947,7 +964,7 @@ export class ColorControlBaseServer extends ColorControlBase {
      * @protected
      */
     protected moveToColorTemperatureLogic(targetMireds: number, transitionTime: number): MaybePromise {
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: ((targetMireds - this.state.colorTemperatureMireds) / transitionTime) * 10,
@@ -1288,7 +1305,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         // Custom min/max so we define an explicit target value here
         const targetValue =
             moveMode === ColorControl.MoveMode.Up ? colorTemperatureMaximumMireds : colorTemperatureMinimumMireds;
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: rate * direction,
@@ -1375,7 +1392,7 @@ export class ColorControlBaseServer extends ColorControlBase {
             colorTemperatureMaximumMireds,
         );
 
-        this.#startTransition({
+        return this.#startTransition({
             name: "colorTemperatureMireds",
             owner: this,
             changePerS: (stepSize / transitionTime) * 10 * direction,
@@ -1615,19 +1632,27 @@ export class ColorControlBaseServer extends ColorControlBase {
     }
 
     /**
-     * Initialize transition management.
+     * Create transition management instance.
      *
      * We manage transitions using {@link Transitions} if
-     * {@link ColorControlBaseServer.State#managedTransitionTimeHandling} is true.
+     * {@link LevelControlBaseServer.State#managedTransitionTimeHandling} is true.
      *
      * You may override this method to replace the {@link Transitions} implementation customized for your application.
+     * The provided configuration object is the default one used for Color Control transitions, but can be adjusted
+     * if needed.
      */
-    protected initializeTransitions() {
+    protected createTransitions<B extends Behavior>(config: Transitions.Configuration<B>) {
+        return new Transitions(this.endpoint, config);
+    }
+
+    #initializeTransitions() {
         const { endpoint } = this;
+
         // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
         // this efficient we use the read-only view of our state provided by the endpoint as it is always available
         const readOnlyState = (endpoint.state as Record<string, unknown>).colorControl as ColorControlBaseServer.State;
-        return new Transitions(this.endpoint, {
+
+        return this.createTransitions({
             type: ColorControlBaseServer,
 
             remainingTimeEvent: this.events.remainingTime$Changed,
@@ -1681,7 +1706,7 @@ export class ColorControlBaseServer extends ColorControlBase {
         });
     }
 
-    #startTransition(transition: Transitions.Transition<ColorControlBaseServer>) {
+    #startTransition(transition: Transitions.Transition<ColorControlBaseServer>): MaybePromise {
         const { name } = transition;
 
         // When we start a Hue transition make sure both potential relevant are stopped
@@ -1691,7 +1716,7 @@ export class ColorControlBaseServer extends ColorControlBase {
             this.internal.transitions?.stop("currentHue");
         }
 
-        this.internal.transitions?.start(transition);
+        return this.internal.transitions?.start(transition);
     }
 
     #getBootReason() {
@@ -1857,6 +1882,7 @@ export namespace ColorControlBaseServer {
         setColorMode(mode: ColorControl.ColorMode): MaybePromise;
         setEnhancedColorMode(mode: ColorControl.EnhancedColorMode): MaybePromise;
         syncColorTemperatureWithLevelLogic(level: number): MaybePromise;
+        createTransitions(config: Transitions.Configuration<any>): Transitions<any>;
     };
 }
 

@@ -8,7 +8,7 @@
 import { Logger } from "@matter/general";
 import { Environment, MaybePromise, Storage } from "@matter/main";
 import { ValidationError } from "@matter/main/types";
-import { BackchannelCommand, CommandPipe } from "@matter/testing";
+import { BackchannelCommand, CommandPipe, PicsFile } from "@matter/testing";
 import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 
@@ -122,7 +122,7 @@ export abstract class DeviceTestInstance extends TestInstance {
     }
 
     async backchannel(command: BackchannelCommand) {
-        throw new Error(`Unhandled backchannel ${command.name}`);
+        throw new Error(`Unhandled backchannel ${command.name}: ${JSON.stringify(command)}`);
     }
 }
 
@@ -155,6 +155,7 @@ export interface DeviceTestInstanceConfig extends TestInstanceConfig {
 
 export interface DeviceTestInstanceConstructor<T extends DeviceTestInstance = DeviceTestInstance> {
     new (config: DeviceTestInstanceConfig): T;
+    pics?: PicsFile;
 }
 
 export async function startDeviceTestApp(
@@ -177,7 +178,7 @@ export async function startDeviceTestApp(
                         return app.backchannel(command);
                     },
                 },
-                name,
+                CommandPipe.filenameFor(name),
             );
 
             await pipe.initialize();

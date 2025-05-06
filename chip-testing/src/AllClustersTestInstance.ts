@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, InternalError } from "@matter/general";
+import { Bytes, InternalError, Logger } from "@matter/general";
 import { Endpoint, NumberTag, ServerNode } from "@matter/main";
 import {
     AdministratorCommissioningServer,
@@ -14,16 +14,22 @@ import {
     CarbonMonoxideConcentrationMeasurementServer,
     ColorControlServer,
     DescriptorServer,
+    DeviceEnergyManagementModeServer,
+    DishwasherModeServer,
     DoorLockServer,
+    EnergyEvseModeServer,
     FixedLabelServer,
     FlowMeasurementServer,
     FormaldehydeConcentrationMeasurementServer,
     IlluminanceMeasurementServer,
+    LaundryWasherModeServer,
     LocalizationConfigurationServer,
+    MicrowaveOvenModeServer,
     ModeSelectServer,
     NetworkCommissioningServer,
     NitrogenDioxideConcentrationMeasurementServer,
     OccupancySensingServer,
+    OvenModeServer,
     OzoneConcentrationMeasurementServer,
     Pm10ConcentrationMeasurementServer,
     Pm1ConcentrationMeasurementServer,
@@ -33,6 +39,7 @@ import {
     PressureMeasurementServer,
     PumpConfigurationAndControlServer,
     RadonConcentrationMeasurementServer,
+    RefrigeratorAndTemperatureControlledCabinetModeServer,
     RelativeHumidityMeasurementServer,
     SwitchServer,
     TemperatureMeasurementServer,
@@ -41,6 +48,7 @@ import {
     TotalVolatileOrganicCompoundsConcentrationMeasurementServer,
     UnitLocalizationServer,
     UserLabelServer,
+    WaterHeaterModeServer,
 } from "@matter/main/behaviors";
 import {
     AdministratorCommissioning,
@@ -49,17 +57,26 @@ import {
     ColorControl,
     ConcentrationMeasurement,
     Descriptor,
+    DeviceEnergyManagementMode,
+    DishwasherMode,
     DoorLock,
+    EnergyEvseMode,
+    LaundryWasherMode,
     LevelControl,
+    MicrowaveOvenMode,
     ModeSelect,
     OccupancySensing,
+    OperationalState,
+    OvenMode,
     PowerSource,
     PowerTopology,
     PumpConfigurationAndControl,
+    RefrigeratorAndTemperatureControlledCabinetMode,
     ResourceMonitoring,
     Switch,
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
+    WaterHeaterMode,
     WindowCovering,
 } from "@matter/main/clusters";
 import { GenericSwitchDevice, OnOffLightDevice } from "@matter/main/devices";
@@ -70,10 +87,14 @@ import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsSe
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
+import { TestOperationalStateServer } from "./cluster/TestOperationalStateServer.js";
+import { TestOvenCavityOperationalStateServer } from "./cluster/TestOvenCavityOperationalStateServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
 import { DeviceTestInstanceConfig } from "./GenericTestApp.js";
 import { NodeTestInstance } from "./NodeTestInstance.js";
 import { SwitchSimulator } from "./simulators/SwitchSimulator.js";
+
+const logger = Logger.get("AllClustersTestInstance");
 
 export class AllClustersTestInstance extends NodeTestInstance {
     static override id = "binford-6100";
@@ -92,10 +113,8 @@ export class AllClustersTestInstance extends NodeTestInstance {
     override async backchannel(command: BackchannelCommand) {
         const name = command.name;
 
-        const endpointId = "endpointId" in command ? command.endpointId : undefined;
-        let endpoint: Endpoint | undefined;
-        if (endpointId !== undefined) {
-            // Find the endpoint instance if an EndpointId is set
+        const findEndpoint = (endpointId: number) => {
+            let endpoint: Endpoint | undefined;
             this.node?.visit(visitedEndpoint => {
                 if (visitedEndpoint.number === endpointId) {
                     if (endpoint !== undefined) {
@@ -104,7 +123,17 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     endpoint = visitedEndpoint;
                 }
             });
+            return endpoint;
+        };
+
+        const endpointId = "endpointId" in command ? command.endpointId : undefined;
+        let endpoint: Endpoint | undefined;
+        if (endpointId !== undefined) {
+            // Find the endpoint instance if an EndpointId is set
+            endpoint = findEndpoint(endpointId);
         }
+
+        logger.info(`Backchannel command ${name} for endpoint ${endpointId} with command ${JSON.stringify(command)}`);
 
         switch (name) {
             case "simulateLongPress":
@@ -132,6 +161,74 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 await endpoint.setStateOf(SwitchServer, { currentPosition: 0 });
                 endpoint.act(agent => agent.get(SwitchServer).resetState());
                 break;
+            case "operationalStateChange": {
+                endpoint = findEndpoint(1);
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not found`);
+                }
+                let ServerType;
+                const { device, operation, param } = command;
+                switch (device) {
+                    case "Generic":
+                        ServerType = TestOperationalStateServer;
+                        break;
+                    case "Oven":
+                        ServerType = TestOvenCavityOperationalStateServer;
+                        break;
+                    default:
+                        throw new Error(`Unknown device type ${command.device}`);
+                }
+                switch (operation) {
+                    case "Stop":
+                        if (
+                            endpoint.stateOf(ServerType).operationalState ===
+                            OperationalState.OperationalStateEnum.Running
+                        ) {
+                            await endpoint.setStateOf(ServerType, {
+                                operationalState: OperationalState.OperationalStateEnum.Stopped,
+                            });
+                        }
+                        break;
+                    case "OnFault":
+                        await endpoint.setStateOf(ServerType, {
+                            operationalError: {
+                                errorStateId: param,
+                            },
+                        });
+                        switch (param) {
+                            case 0:
+                                await endpoint.setStateOf(ServerType, {
+                                    startBlocked: false,
+                                    operationalState: OperationalState.OperationalStateEnum.Running,
+                                });
+                                break;
+                            case 2:
+                                await endpoint.setStateOf(ServerType, {
+                                    startBlocked: true,
+                                });
+                                break;
+                        }
+                        break;
+                    case "Start":
+                        await endpoint.setStateOf(ServerType, {
+                            operationalState: OperationalState.OperationalStateEnum.Running,
+                        });
+                        break;
+                    case "Resume":
+                        await endpoint.setStateOf(ServerType, {
+                            operationalState: OperationalState.OperationalStateEnum.Running,
+                        });
+                        break;
+                    case "Pause":
+                        await endpoint.setStateOf(ServerType, {
+                            operationalState: OperationalState.OperationalStateEnum.Paused,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Unknown operation ${operation}`);
+                }
+                break;
+            }
             default:
                 await super.backchannel(command);
         }
@@ -268,7 +365,10 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ColorControl.Feature.ColorTemperature,
                 ),
                 DescriptorServer.with(Descriptor.Feature.TagList),
+                DeviceEnergyManagementModeServer,
+                DishwasherModeServer,
                 DoorLockServer,
+                EnergyEvseModeServer,
                 FixedLabelServer,
                 FlowMeasurementServer,
                 FormaldehydeConcentrationMeasurementServer.with(
@@ -282,7 +382,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 TestHepaFilterMonitoringServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
+                LaundryWasherModeServer,
                 TestLevelControlServer.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting),
+                MicrowaveOvenModeServer,
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 NitrogenDioxideConcentrationMeasurementServer.with(
                     ConcentrationMeasurement.Feature.LevelIndication,
@@ -293,6 +395,9 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ConcentrationMeasurement.Feature.AverageMeasurement,
                 ),
                 OccupancySensingServer.with(OccupancySensing.Feature.PassiveInfrared),
+                TestOperationalStateServer,
+                TestOvenCavityOperationalStateServer,
+                OvenModeServer,
                 OzoneConcentrationMeasurementServer.with(
                     ConcentrationMeasurement.Feature.LevelIndication,
                     ConcentrationMeasurement.Feature.MediumLevel,
@@ -344,6 +449,7 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     ConcentrationMeasurement.Feature.PeakMeasurement,
                     ConcentrationMeasurement.Feature.AverageMeasurement,
                 ),
+                RefrigeratorAndTemperatureControlledCabinetModeServer,
                 RelativeHumidityMeasurementServer,
                 SwitchServer.with(Switch.Feature.LatchingSwitch),
                 TemperatureMeasurementServer,
@@ -442,11 +548,61 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 descriptor: {
                     tagList: [NumberTag.One],
                 },
+                deviceEnergyManagementMode: {
+                    supportedModes: [
+                        {
+                            label: "NoOptimization",
+                            mode: 2,
+                            modeTags: [{ value: DeviceEnergyManagementMode.ModeTag.NoOptimization }],
+                        },
+                        {
+                            label: "LocalOptimization",
+                            mode: 1,
+                            modeTags: [{ value: DeviceEnergyManagementMode.ModeTag.LocalOptimization }],
+                        },
+                        {
+                            label: "GridOptimization",
+                            mode: 0,
+                            modeTags: [{ value: DeviceEnergyManagementMode.ModeTag.GridOptimization }],
+                        },
+                    ],
+                    currentMode: 2,
+                },
+                dishwasherMode: {
+                    supportedModes: [
+                        {
+                            label: "Normal",
+                            mode: 0,
+                            modeTags: [{ value: DishwasherMode.ModeTag.Normal }],
+                        },
+                        {
+                            label: "Heavy",
+                            mode: 1,
+                            modeTags: [{ value: DishwasherMode.ModeTag.Heavy }],
+                        },
+                    ],
+                    currentMode: 0,
+                },
                 doorLock: {
                     lockState: DoorLock.LockState.Unlocked,
                     lockType: DoorLock.LockType.CylindricalLock,
                     actuatorEnabled: true,
                     operatingMode: DoorLock.OperatingMode.Normal,
+                },
+                energyEvseMode: {
+                    supportedModes: [
+                        {
+                            label: "manual",
+                            mode: 2,
+                            modeTags: [{ value: EnergyEvseMode.ModeTag.Manual }],
+                        },
+                        {
+                            label: "SolarCharging",
+                            mode: 1,
+                            modeTags: [{ value: EnergyEvseMode.ModeTag.SolarCharging }],
+                        },
+                    ],
+                    currentMode: 2,
                 },
                 fixedLabel: {
                     labelList: [
@@ -490,6 +646,21 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     tolerance: 0,
                     lightSensorType: null,
                 },
+                laundryWasherMode: {
+                    supportedModes: [
+                        {
+                            label: "Normal",
+                            mode: 2,
+                            modeTags: [{ value: LaundryWasherMode.ModeTag.Normal }],
+                        },
+                        {
+                            label: "Heavy",
+                            mode: 1,
+                            modeTags: [{ value: LaundryWasherMode.ModeTag.Heavy }],
+                        },
+                    ],
+                    currentMode: 1,
+                },
                 levelControl: {
                     currentLevel: 1,
                     minLevel: 1,
@@ -503,6 +674,21 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     remainingTime: 0,
                     startUpCurrentLevel: 100,
                     managedTransitionTimeHandling: true, // enable transition management
+                },
+                microwaveOvenMode: {
+                    supportedModes: [
+                        {
+                            label: "Normal",
+                            mode: 2,
+                            modeTags: [{ value: MicrowaveOvenMode.ModeTag.Normal }],
+                        },
+                        {
+                            label: "Defrost",
+                            mode: 1,
+                            modeTags: [{ value: MicrowaveOvenMode.ModeTag.Defrost }],
+                        },
+                    ],
+                    currentMode: 2,
                 },
                 modeSelect: {
                     description: "ModeSelect",
@@ -531,6 +717,45 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 },
                 occupancySensing: {
                     occupancy: { occupied: true },
+                },
+                operationalState: {
+                    phaseList: ["phase1", "phase2", "phase3"],
+                    currentPhase: 1,
+                    operationalStateList: [
+                        { operationalStateId: OperationalState.OperationalStateEnum.Stopped },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Running },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Paused },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Error },
+                    ],
+                    operationalState: OperationalState.OperationalStateEnum.Stopped,
+                    countdownTime: null,
+                },
+                ovenCavityOperationalState: {
+                    phaseList: ["pre-heating", "pre-heated", "cooling down"],
+                    currentPhase: 1,
+                    operationalStateList: [
+                        { operationalStateId: OperationalState.OperationalStateEnum.Stopped },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Running },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Paused },
+                        { operationalStateId: OperationalState.OperationalStateEnum.Error },
+                    ],
+                    operationalState: OperationalState.OperationalStateEnum.Stopped,
+                    countdownTime: null,
+                },
+                ovenMode: {
+                    supportedModes: [
+                        {
+                            label: "Bake",
+                            mode: 2,
+                            modeTags: [{ value: OvenMode.ModeTag.Bake }],
+                        },
+                        {
+                            label: "Grill",
+                            mode: 1,
+                            modeTags: [{ value: OvenMode.ModeTag.Grill }],
+                        },
+                    ],
+                    currentMode: 2,
                 },
                 ozoneConcentrationMeasurement: {
                     measuredValue: 12.34,
@@ -624,11 +849,27 @@ export class AllClustersTestInstance extends NodeTestInstance {
                     measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
                     levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
+                refrigeratorAndTemperatureControlledCabinetMode: {
+                    supportedModes: [
+                        {
+                            label: "Auto",
+                            mode: 2,
+                            modeTags: [{ value: RefrigeratorAndTemperatureControlledCabinetMode.ModeTag.Auto }],
+                        },
+                        {
+                            label: "RapidCool",
+                            mode: 1,
+                            modeTags: [{ value: RefrigeratorAndTemperatureControlledCabinetMode.ModeTag.RapidCool }],
+                        },
+                    ],
+                    currentMode: 2,
+                },
                 relativeHumidityMeasurement: {
                     tolerance: 0,
                     minMeasuredValue: 0,
                     maxMeasuredValue: 100,
                 },
+
                 temperatureMeasurement: {
                     tolerance: 0,
                     minMeasuredValue: 0,
@@ -687,18 +928,37 @@ export class AllClustersTestInstance extends NodeTestInstance {
         );
         await serverNode.add(endpoint1);
 
-        const endpoint2 = new Endpoint(OnOffLightDevice.with(DescriptorServer.with(Descriptor.Feature.TagList)), {
-            number: EndpointNumber(2),
-            id: "ep2",
-            descriptor: {
-                tagList: [
-                    {
-                        ...NumberTag.Two,
-                        label: "EP2",
-                    },
-                ],
+        const endpoint2 = new Endpoint(
+            OnOffLightDevice.with(DescriptorServer.with(Descriptor.Feature.TagList), WaterHeaterModeServer),
+            {
+                number: EndpointNumber(2),
+                id: "ep2",
+                descriptor: {
+                    tagList: [
+                        {
+                            ...NumberTag.Two,
+                            label: "EP2",
+                        },
+                    ],
+                },
+                // TODO: Move into an own Energymanagement app later
+                waterHeaterMode: {
+                    supportedModes: [
+                        {
+                            label: "Manual",
+                            mode: 2,
+                            modeTags: [{ value: WaterHeaterMode.ModeTag.Manual }],
+                        },
+                        {
+                            label: "Off",
+                            mode: 1,
+                            modeTags: [{ value: WaterHeaterMode.ModeTag.Off }],
+                        },
+                    ],
+                    currentMode: 2,
+                },
             },
-        });
+        );
         await serverNode.add(endpoint2);
 
         const endpoint3 = new Endpoint(

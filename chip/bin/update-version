@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Update sha.txt to latest CHIP master commit
+
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
+
+echo "$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)" > "$CHIP_DIR/sha.txt"

@@ -7,16 +7,38 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Event, EventPriority, OptionalEvent } from "../cluster/Cluster.js";
+import { Attribute, OptionalAttribute, Command, Event, EventPriority, OptionalEvent } from "../cluster/Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvUInt8, TlvUInt32, TlvEnum } from "../tlv/TlvNumber.js";
 import { OperationalState } from "./operational-state.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
 export namespace OvenCavityOperationalState {
+    /**
+     * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+     */
+    export const TlvOperationalCommandResponse = TlvObject({
+        /**
+         * This shall indicate the success or otherwise of the attempted command invocation. On a successful invocation
+         * of the attempted command, the ErrorStateID shall be populated with NoError. Please see the individual command
+         * sections for additional specific requirements on population.
+         *
+         * @see {@link MatterSpecification.v14.Cluster} § 1.14.6.5.1
+         */
+        commandResponseState: TlvField(0, OperationalState.TlvErrorStateStruct)
+    });
+
+    /**
+     * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+     */
+    export interface OperationalCommandResponse extends TypeFromSchema<typeof TlvOperationalCommandResponse> {}
+
     /**
      * @see {@link Cluster}
      */
@@ -117,6 +139,18 @@ export namespace OvenCavityOperationalState {
              * @see {@link MatterSpecification.v14.Cluster} § 1.14.5.6
              */
             operationalError: Attribute(0x5, OperationalState.TlvErrorStateStruct)
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             */
+            stop: Command(0x1, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
+
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 8.10.5
+             */
+            start: Command(0x2, TlvNoArguments, 0x4, TlvOperationalCommandResponse)
         },
 
         events: {

@@ -16,6 +16,7 @@ import {
     Time,
     Timer,
     TransportInterface,
+    asError,
     createPromise,
 } from "@matter/general";
 import {
@@ -85,17 +86,37 @@ export class NobleBleCentralInterface implements NetInterface {
             throw new NetworkError("Network interface is closed");
         }
         return new Promise((resolve, reject) => {
+            let resolvedOrRejected = false;
+            function rejectOnce(error: unknown) {
+                if (!resolvedOrRejected) {
+                    resolvedOrRejected = true;
+                    reject(asError(error));
+                } else {
+                    logger.debug(`Already resolved or rejected, ignore error:`, error);
+                }
+            }
+            function resolveOnce(value: Channel<Uint8Array>) {
+                if (!resolvedOrRejected) {
+                    resolvedOrRejected = true;
+                    resolve(value);
+                } else {
+                    logger.debug(`Already resolved or rejected, ignore success`);
+                }
+            }
+
             if (this.#onMatterMessageListener === undefined) {
-                reject(new InternalError(`Network Interface was not added to the system yet, so can not connect it.`));
+                rejectOnce(
+                    new InternalError(`Network Interface was not added to the system yet, so can not connect it.`),
+                );
                 return;
             }
             if (address.type !== "ble") {
-                reject(new InternalError(`Unsupported address type ${address.type}.`));
+                rejectOnce(new InternalError(`Unsupported address type ${address.type}.`));
                 return;
             }
             const { peripheralAddress } = address;
             if (tryCount > 3) {
-                reject(new BleError(`Failed to connect to peripheral ${peripheralAddress}`));
+                rejectOnce(new BleError(`Failed to connect to peripheral ${peripheralAddress}`));
                 return;
             }
 
@@ -104,7 +125,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 this.#bleScanner.getDiscoveredDevice(peripheralAddress);
 
             if (this.#openChannels.has(address)) {
-                reject(
+                rejectOnce(
                     new BleError(
                         `Peripheral ${peripheralAddress} is already connected. Only one connection supported right now.`,
                     ),
@@ -118,7 +139,7 @@ export class NobleBleCentralInterface implements NetInterface {
 
             if (peripheral.state === "error") {
                 // Weired state, so better cancel here and try a re-discovery
-                reject(
+                rejectOnce(
                     new BleError(
                         `Can not connect to peripheral "${peripheralAddress}" because unexpected state "${peripheral.state}"`,
                     ),
@@ -138,13 +159,13 @@ export class NobleBleCentralInterface implements NetInterface {
                     peripheral.removeListener("connect", connectHandler);
                     peripheral.removeListener("disconnect", reTryHandler);
                     clearConnectionGuard();
-                    reject(new BleError(`Timeout while connecting to peripheral ${peripheralAddress}`));
+                    rejectOnce(new BleError(`Timeout while connecting to peripheral ${peripheralAddress}`));
                 }),
                 disconnectTimeout: Time.getTimer("BLE disconnect timeout", 60_000, () => {
                     logger.debug(`Timeout while disconnecting to peripheral ${peripheralAddress}`);
                     peripheral.removeListener("disconnect", reTryHandler);
                     clearConnectionGuard();
-                    reject(new BleError(`Timeout while disconnecting to peripheral ${peripheralAddress}`));
+                    rejectOnce(new BleError(`Timeout while disconnecting to peripheral ${peripheralAddress}`));
                 }),
                 // Timeout when trying to interview the device because sometimes when no response from device
                 // comes noble does not resolve promises
@@ -159,7 +180,7 @@ export class NobleBleCentralInterface implements NetInterface {
                             .disconnectAsync()
                             .catch(error => logger.error(`Ignored error while disconnecting`, error));
                     }
-                    reject(new BleError(`Timeout while interviewing peripheral ${peripheralAddress}`));
+                    rejectOnce(new BleError(`Timeout while interviewing peripheral ${peripheralAddress}`));
                 }),
             };
             this.#connectionGuards.add(connectionGuard);
@@ -192,8 +213,8 @@ export class NobleBleCentralInterface implements NetInterface {
 
                 // Try again and chain promises
                 this.openChannel(address, tryCount + 1)
-                    .then(resolve)
-                    .catch(reject);
+                    .then(resolveOnce)
+                    .catch(rejectOnce);
             };
 
             const connectHandler = async (error?: any) => {
@@ -204,12 +225,12 @@ export class NobleBleCentralInterface implements NetInterface {
                 }
                 if (error) {
                     clearConnectionGuard();
-                    reject(new BleError(`Error while connecting to peripheral ${peripheralAddress}`, error));
+                    rejectOnce(new BleError(`Error while connecting to peripheral ${peripheralAddress}`, error));
                     return;
                 }
                 if (this.#onMatterMessageListener === undefined) {
                     clearConnectionGuard();
-                    reject(new InternalError(`Network Interface was not added to the system yet or was cleared.`));
+                    rejectOnce(new InternalError(`Network Interface was not added to the system yet or was cleared.`));
                     return;
                 }
 
@@ -291,7 +312,7 @@ export class NobleBleCentralInterface implements NetInterface {
                         peripheral.removeListener("disconnect", reTryHandler);
                         this.#openChannels.set(address, peripheral);
                         try {
-                            resolve(
+                            resolveOnce(
                                 await NobleBleChannel.create(
                                     peripheral,
                                     characteristicC1ForWrite,
@@ -305,7 +326,17 @@ export class NobleBleCentralInterface implements NetInterface {
                         } catch (error) {
                             this.#connectionsInProgress.delete(address);
                             this.#openChannels.delete(address);
-                            await peripheral.disconnectAsync();
+                            if (peripheral.state === "connected") {
+                                logger.debug(`Disconnect because of initialization error of peripheral ${address}`);
+                                await peripheral
+                                    .disconnectAsync()
+                                    .catch(error =>
+                                        logger.debug(
+                                            `Peripheral ${peripheral.address}: Error while disconnecting`,
+                                            error,
+                                        ),
+                                    );
+                            }
                             reTryHandler(error);
                             return;
                         }
@@ -316,7 +347,7 @@ export class NobleBleCentralInterface implements NetInterface {
                 }
 
                 peripheral.removeListener("disconnect", reTryHandler);
-                reject(
+                rejectOnce(
                     new BleError(`Peripheral ${peripheralAddress} does not have the required Matter characteristics`),
                 );
             };
@@ -332,7 +363,6 @@ export class NobleBleCentralInterface implements NetInterface {
             } else {
                 if (peripheral.state === "connecting") {
                     peripheral.cancelConnect(); // Send cancel to noble to make sure we can connect
-                    peripheral.state = "disconnected"; // Manually fix status because noble does not do it
                 }
                 // connecting, disconnected
                 connectionGuard.connectTimeout.start();
@@ -362,9 +392,12 @@ export class NobleBleCentralInterface implements NetInterface {
     async close() {
         this.#closed = true;
         for (const peripheral of this.#openChannels.values()) {
-            peripheral
-                .disconnectAsync()
-                .catch(error => logger.error(`Peripheral ${peripheral.address}: Error while disconnecting`, error));
+            if (peripheral.state === "connected") {
+                logger.debug(`Peripheral ${peripheral.address}: Disconnect from peripheral while closing central`);
+                peripheral
+                    .disconnectAsync()
+                    .catch(error => logger.error(`Peripheral ${peripheral.address}: Error while disconnecting`, error));
+            }
         }
         this.#openChannels.clear();
     }
@@ -410,18 +443,20 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
                 handshakeResolver(data);
             } else {
                 logger.debug(
-                    `Peripheral ${peripheralAddress}: Received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification}) - No handshake response, inforing`,
+                    `Peripheral ${peripheralAddress}: Received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification}) - No handshake response, ignoring`,
                 );
             }
         };
 
         const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
             characteristicC2ForSubscribe.removeListener("data", handshakeHandler);
-            characteristicC2ForSubscribe
+
+            await characteristicC2ForSubscribe
                 .unsubscribeAsync()
                 .catch(error => logger.error(`Peripheral ${peripheralAddress}: Error while unsubscribing`, error));
+
             logger.debug(
-                `Peripheral ${peripheralAddress}: Handshake Response not received. Disconnected from peripheral`,
+                `Peripheral ${peripheralAddress}: Handshake Response not received. Disconnect from peripheral`,
             );
 
             handshakeRejecter(new BleError(`Peripheral ${peripheralAddress}: Handshake Response not received`));
@@ -432,15 +467,16 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
             attMtu: mtu,
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
+
         logger.debug(
             `Peripheral ${peripheralAddress}: Sending BTP handshake request: ${Diagnostic.json(btpHandshakeRequest)}`,
         );
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 
+        characteristicC2ForSubscribe.once("data", handshakeHandler);
+
         logger.debug(`Peripheral ${peripheralAddress}: Subscribing to C2 characteristic`);
         await characteristicC2ForSubscribe.subscribeAsync();
-
-        characteristicC2ForSubscribe.once("data", handshakeHandler);
 
         const handshakeResponse = await handshakeResponseReceivedPromise;
 
@@ -451,14 +487,19 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
                 return await characteristicC1ForWrite.writeAsync(Buffer.from(data.buffer), false);
             },
             // callback to disconnect the BLE connection
-            async () =>
-                void characteristicC2ForSubscribe
-                    .unsubscribeAsync()
-                    .then(() =>
-                        peripheral
-                            .disconnectAsync()
-                            .then(() => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`)),
-                    ),
+            async () => {
+                if (peripheral.state !== "connected" || !nobleChannel.connected) return;
+                logger.debug(`Peripheral ${peripheralAddress}: Disconnect from peripheral because btp session closed`);
+                characteristicC2ForSubscribe.unsubscribeAsync().then(
+                    () =>
+                        peripheral.disconnectAsync().then(
+                            () => logger.debug(`Peripheral ${peripheralAddress}: Disconnected from peripheral`),
+                            error => logger.debug(`Peripheral ${peripheralAddress}: Error while unsubscribing`, error),
+                        ),
+                    error => logger.debug(`Peripheral ${peripheralAddress}: Error while disconnecting`, error),
+                );
+            },
+
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: Uint8Array) => {
                 if (onMatterMessageListener === undefined) {
@@ -480,7 +521,7 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
         return nobleChannel;
     }
 
-    private connected = true;
+    #connected = true;
 
     constructor(
         private readonly peripheral: Peripheral,
@@ -488,10 +529,14 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
     ) {
         super();
         peripheral.once("disconnect", () => {
-            logger.debug(`Disconnected from peripheral ${peripheral.address}`);
-            this.connected = false;
+            logger.debug(`Disconnected from peripheral ${peripheral.address}. Closing BTP session`);
+            this.#connected = false;
             void this.btpSession.close();
         });
+    }
+
+    get connected() {
+        return this.#connected && this.peripheral.state === "connected";
     }
 
     /**
@@ -521,8 +566,12 @@ export class NobleBleChannel extends BleChannel<Uint8Array> {
 
     async close() {
         await this.btpSession.close();
-        this.peripheral
-            .disconnectAsync()
-            .catch(error => logger.error(`Peripheral ${this.peripheral.address}: Error while disconnecting`, error));
+        if (this.connected) {
+            this.peripheral
+                .disconnectAsync()
+                .catch(error =>
+                    logger.error(`Peripheral ${this.peripheral.address}: Error while disconnecting`, error),
+                );
+        }
     }
 }

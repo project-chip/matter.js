@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Observable } from "#general";
+import { MaybePromise, Observable } from "#general";
 import { LowPowerBehavior } from "./LowPowerBehavior.js";
 
 /**
@@ -13,7 +13,7 @@ import { LowPowerBehavior } from "./LowPowerBehavior.js";
 export class LowPowerServer extends LowPowerBehavior {
     declare events: LowPowerServer.Events;
 
-    override sleep() {
+    override sleep(): MaybePromise {
         this.events.enterLowPowerMode.emit();
     }
 }

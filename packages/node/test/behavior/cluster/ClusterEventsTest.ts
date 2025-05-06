@@ -152,7 +152,13 @@ describe("ClusterEvents", () => {
                 | "reqAttr$Changing"
                 | "reqAttr$Changed"
                 | "optAttr$Changing"
-                | "optAttr$Changed";
+                | "optAttr$Changed"
+                | "condAttr$Changing"
+                | "condAttr$Changed"
+                | "condOptAttr1$Changing"
+                | "condOptAttr1$Changed"
+                | "condOptAttr2$Changing"
+                | "condOptAttr2$Changed";
             "" as "reqEv" | "optEv" | "reqAttr$Changed" | "optAttr$Changed" satisfies keyof Props;
         });
 

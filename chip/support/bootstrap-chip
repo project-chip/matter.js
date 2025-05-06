@@ -1,0 +1,79 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Bootstrap CHIP environment
+
+# We do not use bootstrap.sh because it does a huge amount of unnecessary things.  Instead we use pigweed directly, and
+# only for CIPD...  Then perform minimal steps required to get build working 
+
+set -e
+
+# We do not need extra 1.3GB of ARM toolchain
+sed -i '/arm.json/d' scripts/setup/environment.json
+
+# Nor 2.5GB of other CIPD packages we don't use
+function exclude {
+    sed -i "/_LIST_OF_PACKAGES_TO_EXCLUDE =/a 'fuchsia/third_party/$1/'," scripts/setup/gen_pigweed_cipd_json.py
+}
+exclude bloaty
+exclude clang
+exclude sysroot
+exclude rust_bindgen
+exclude qemu
+
+# Configure pigweed
+export PW_PROJECT_ROOT=/connectedhomeip
+export PW_ROOT=$PW_PROJECT_ROOT/third_party/pigweed/repo
+export PW_ENVIRONMENT_ROOT=$PW_PROJECT_ROOT/.environment
+export PW_DISABLE_ROOT_GIT_REPO_CHECK=1 # We've nuked git
+export PW_ENVSETUP_NO_BANNER=1 # Visual bloat
+export PW_NO_CIPD_CACHE_DIR=1 # Layer bloat
+export PW_DOCTOR_SKIP_CIPD_CHECKS=1 # CHIP bootstrap.sh does this
+
+# Generate pigweed JSON
+mkdir -p $PW_ENVIRONMENT_ROOT
+source $PW_ROOT/pw_env_setup/util.sh
+scripts/setup/gen_pigweed_cipd_json.py \
+    -i $PW_ROOT/pw_env_setup/py/pw_env_setup/cipd_setup/pigweed.json \
+    -o $PW_ENVIRONMENT_ROOT/pigweed.json
+
+# Install CIPD packages.  We only use bootstrap for this so most of these arguments are unnecessary but keeping in case
+# we need to move back in the future
+#
+# We do not bootstrap anything else because 
+pw_bootstrap \
+    --shell-file $PW_ENVIRONMENT_ROOT/activate.sh \
+    --install-dir $PW_ENVIRONMENT_ROOT \
+    --config-file scripts/setup/environment.json \
+    --virtualenv-gn-out-dir $PW_ENVIRONMENT_ROOT/gn_out \
+    --additional-cipd-file $PW_ENVIRONMENT_ROOT/pigweed.json \
+    --cipd-only
+
+# Bootstrapping would normally create this file
+cat > $PW_PROJECT_ROOT/build_overrides/pigweed_environment.gni <<EOF
+declare_args() {
+  pw_env_setup_CIPD_PIGWEED = get_path_info("../.environment/cipd/packages/pigweed", "abspath")
+  pw_env_setup_CIPD_ZAP = get_path_info("../.environment/cipd/packages/zap", "abspath")
+  pw_env_setup_VIRTUAL_ENV = get_path_info("../.environment/pigweed-venv", "abspath")
+}
+EOF
+
+# This is the only other thing we would normally get from bootstrapping that we need
+pip install --break-system-packages -r scripts/setup/requirements.build.txt
+
+# Not convenient to install zap-cli standalone but we only need the single CLI binary
+ls .environment/cipd/packages/zap | grep -v zap-cli | xargs rm -rf
+
+# Seems bloated but stripping breaks it; must be data rather than debug symbols
+#strip .environment/cipd/packages/zap/zap-cli
+
+# Drop build artifacts we apparently don't need (unnecessary now but bring back for bootstrap.sh)
+#rm -rf .environment/gn_out
+
+# Drop python tests (unnecessary now but bring back for bootstrap.sh)
+#shopt -s globstar
+#rm -rf .environment/**/*-venv/lib/python*/**/tests
+
+# Done with git
+rm -rf .git

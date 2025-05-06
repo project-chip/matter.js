@@ -1,6 +1,7 @@
 {
     "extends": "../../packages/tools/tsc/tsconfig.lib.json",
     "compilerOptions": {
+    "allowJs": true,
         "types": [
             "node"
         ]

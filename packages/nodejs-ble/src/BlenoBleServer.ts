@@ -18,10 +18,11 @@ import {
     BtpSessionHandler,
     ChannelNotConnectedError,
 } from "@matter/protocol";
+import type { Bleno as BlenoType } from "@stoprocent/bleno";
 import { BleOptions } from "./NodeJsBle.js";
 
 const logger = Logger.get("BlenoBleServer");
-let Bleno: typeof import("@stoprocent/bleno");
+let Bleno: BlenoType;
 
 function initializeBleno(server: BlenoBleServer, hciId?: number) {
     // load Bleno driver with the correct device selected
@@ -35,11 +36,13 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C1_CHARACTERISTIC_UUID,
                 properties: ["write"],
+                onWriteRequest: (_handle, data, offset, withoutResponse, callback) =>
+                    this.#onWriteRequest(data, offset, withoutResponse, callback),
             });
         }
 
-        override onWriteRequest(
-            data: Buffer,
+        #onWriteRequest(
+            data: Buffer<ArrayBufferLike>,
             offset: number,
             withoutResponse: boolean,
             callback: (result: number) => void,
@@ -61,10 +64,14 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C2_CHARACTERISTIC_UUID,
                 properties: ["indicate"],
+                onSubscribe: (_handle, maxValueSize, updateValueCallback) =>
+                    this.#onSubscribe(maxValueSize, updateValueCallback),
+                onUnsubscribe: () => this.#onUnsubscribe(),
+                onIndicate: () => this.#onIndicate(),
             });
         }
 
-        override onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+        #onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
             logger.debug(`C2 subscribe ${maxValueSize}`);
 
             server
@@ -72,12 +79,12 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
                 .catch(e => logger.warn("Error happened in when handling C2 subscribe", e));
         }
 
-        override onUnsubscribe() {
+        #onUnsubscribe() {
             logger.debug("C2 unsubscribe");
             server.close().catch(e => logger.warn("Error happened when closing server for C2 unsubscribe", e));
         }
 
-        override onIndicate() {
+        #onIndicate() {
             logger.debug("C2 indicate");
             server.handleC2Indicate();
         }
@@ -88,10 +95,11 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
             super({
                 uuid: BLE_MATTER_C3_CHARACTERISTIC_UUID,
                 properties: ["read"],
+                onReadRequest: (_handle, offset, callback) => this.#onReadRequest(offset, callback),
             });
         }
 
-        override onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
+        #onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
             try {
                 const data = server.handleC3ReadRequest(offset);
                 logger.debug(`C3 read request: ${data.toString("hex")} ${offset}`);
@@ -141,11 +149,17 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
         this.btpHandshakeTimeoutTriggered(),
     );
+    #disconnected = false;
+    #closing = false;
 
     private readonly matterBleService;
 
     constructor(options?: BleOptions) {
         super();
+
+        const { environment } = options ?? {};
+        environment?.runtime.add(this);
+
         this.matterBleService = initializeBleno(this, options?.hciId);
 
         // Write Bleno into this class
@@ -154,6 +168,8 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
             this.state = state;
             logger.debug(`stateChange: ${state}, address = ${Bleno.address}`);
             if (state !== "poweredOn") {
+                // When we shut down we expect a state change but can not call any command anmore
+                if (this.#disconnected || this.#closing) return;
                 Bleno.stopAdvertising();
             } else if (this.advertisingData) {
                 Bleno.startAdvertisingWithEIRData(this.advertisingData);
@@ -170,6 +186,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
 
         Bleno.on("disconnect", clientAddress => {
             logger.debug(`disconnect, client: ${clientAddress}`);
+            this.isAdvertising = false;
             if (this.btpSession !== undefined) {
                 this.btpSession
                     .close()
@@ -218,7 +235,7 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
      * @param offset
      * @param withoutResponse
      */
-    handleC1WriteRequest(data: Buffer, offset: number, withoutResponse: boolean) {
+    handleC1WriteRequest(data: Buffer<ArrayBufferLike>, offset: number, withoutResponse: boolean) {
         if (offset !== 0 || withoutResponse) {
             throw new BleError(`Offset ${offset} or withoutResponse ${withoutResponse} not supported`);
         }
@@ -364,6 +381,10 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     }
 
     async close() {
+        if (this.#closing) {
+            return;
+        }
+        this.#closing = true;
         this.btpHandshakeTimeout.stop();
         await this.disconnect();
         if (this.btpSession !== undefined) {
@@ -374,7 +395,15 @@ export class BlenoBleServer extends BleChannel<Uint8Array> {
     }
 
     async disconnect() {
+        this.isAdvertising = false;
+        if (this.#disconnected) {
+            return;
+        }
+        this.#disconnected = true;
+        logger.debug(`Disconnecting Bleno`);
         Bleno.disconnect();
+        logger.debug(`Stopping Bleno`);
+        Bleno.stop();
         /*
         TODO: This is not working as expected, the disconnect event is not triggered, seems issue in Bleno
         return new Promise<void>(resolve => {

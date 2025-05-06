@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./TransactionalInteractionServer.js";
+export * from "./InteractionServer.js";

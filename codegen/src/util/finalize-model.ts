@@ -121,7 +121,7 @@ function patchIllegalCrossClusterReferences(cluster: ClusterModel, scopedDatatyp
 function patchClusterTypes(cluster: ClusterModel) {
     // First gather existing datatypes so we treat them as canonical
     const datatypes = {} as { [name: string]: ValueModel };
-    cluster.datatypes.forEach(datatype => (datatypes[datatype.name] = datatype));
+    cluster.all(DatatypeModel).forEach(datatype => (datatypes[datatype.name] = datatype));
 
     // Now add any element that may be promoted to a datatype
     cluster.visit(model => {

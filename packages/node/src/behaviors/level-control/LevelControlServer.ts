@@ -5,6 +5,7 @@
  */
 
 import { ActionContext } from "#behavior/context/ActionContext.js";
+import { Behavior } from "#behavior/index.js";
 import { Transitions } from "#behavior/Transitions.js";
 import { ColorControlServer } from "#behaviors/color-control";
 import { GeneralDiagnosticsBehavior } from "#behaviors/general-diagnostics";
@@ -31,11 +32,11 @@ const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, L
  * This implementation includes all features of {@link LevelControl.Cluster} and all mandatory commands. It also handles
  * the OnOff cluster dependency and the ColorControl dependency as defined by the Matter specification.
  *
- * By default this implementation ignores transition times and sets levels immediately.  You can set
+ * By default, this implementation ignores transition times and sets levels immediately.  You can set
  * {@link LevelControl.State#managedTransitionTimeHandling} to enable higher-level logic in Matter.js to manage level
  * changes.
  *
- * If your hardware supports transitions natively, you may override {@link initializeTransitions} to return a
+ * If your hardware supports transitions natively, you may override {@link createTransitions} to return a
  * {@link Transitions} implementation adapted to your hardware.  This allows matter.js to handle Matter requirements
  * such as remaining time and level reporting.
  *
@@ -47,7 +48,8 @@ const LevelControlBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, L
  * * {@link LevelControlBaseServer.moveLogic} moves the value up or down with a defined rate
  * * {@link LevelControlBaseServer.stepLogic} steps the value up or down with a defined step size and transition
  * * {@link LevelControlBaseServer.stopLogic} stops any currently running transitions
- * * {@link LevelControlBaseServer.handleOnOffChange} transition to onLevel when device when device turns on or off
+ * * {@link LevelControlBaseServer.couple} couples the current level with other clusters (e.g. ColorControl)
+ * * {@link LevelControlBaseServer.handleOnOffChange} transition to onLevel when device turns on or off
  *
  * All overridable methods may be implemented sync or async by returning a Promise.
  */
@@ -81,7 +83,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.state.currentLevel;
     }
 
-    override initialize() {
+    override initialize(): MaybePromise {
         // As a virtual attribute remaining time change only emits when we do so manually.  This works out well because
         // as a continuous value it should only emit under limited circumstances defined by spec
         //
@@ -93,7 +95,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         }
 
         // Configure transition management
-        this.internal.transitions = this.initializeTransitions();
+        this.internal.transitions = this.#initializeTransitions();
 
         // Configure lighting feature
         if (this.features.lighting) {
@@ -107,21 +109,27 @@ export class LevelControlBaseServer extends LevelControlBase {
     }
 
     /**
-     * Initialize transition management.
+     * Create transition management instance.
      *
      * We manage transitions using {@link Transitions} if
      * {@link LevelControlBaseServer.State#managedTransitionTimeHandling} is true.
      *
      * You may override this method to replace the {@link Transitions} implementation customized for your application.
+     * The provided configuration object is the default one used for Level Control transitions, but can be adjusted
+     * if needed.
      */
-    protected initializeTransitions() {
+    protected createTransitions<B extends Behavior>(config: Transitions.Configuration<B>) {
+        return new Transitions(this.endpoint, config);
+    }
+
+    #initializeTransitions() {
         const { endpoint } = this;
 
         // Transitions read continuously from their configuration object so the values need to be dynamic.  To make
         // this efficient we use the read-only view of our state provided by the endpoint as it is always available
         const readOnlyState = (endpoint.state as Record<string, unknown>).levelControl as LevelControlBaseServer.State;
 
-        return new Transitions(this.endpoint, {
+        return this.createTransitions({
             type: LevelControlBaseServer,
 
             remainingTimeEvent: this.events.remainingTime$Changed,
@@ -212,7 +220,12 @@ export class LevelControlBaseServer extends LevelControlBase {
      * After checking input we use {@link moveToLevelLogic} method to set the level.  To replace the default logic,
      * override {@link moveToLevelLogic} which also implements {@link moveToLevelWithOnOff}.
      */
-    override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: LevelControl.MoveToLevelRequest) {
+    override moveToLevel({
+        level,
+        transitionTime,
+        optionsMask,
+        optionsOverride,
+    }: LevelControl.MoveToLevelRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -228,7 +241,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace this logic, override {@link moveToLevelLogic} whicih also implements {@link moveToLevel}.
      */
-    override moveToLevelWithOnOff({ level, transitionTime }: LevelControl.MoveToLevelRequest) {
+    override moveToLevelWithOnOff({ level, transitionTime }: LevelControl.MoveToLevelRequest): MaybePromise {
         this.#assertLevelValue(level);
 
         return this.moveToLevelLogic(level, transitionTime, true);
@@ -263,7 +276,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         transitionTime: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         const effectiveTransitionTime = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
         let effectiveRate;
@@ -281,7 +294,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default behavior, override {@link moveLogic} which also implements {@link moveWithOnOff}.
      */
-    override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest) {
+    override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest): MaybePromise {
         rate = this.#assertRateValue(rate);
 
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
@@ -299,7 +312,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default behavior, override {@link moveLogic} which also implements {@link move}.
      */
-    override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest) {
+    override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest): MaybePromise {
         rate = this.#assertRateValue(rate);
 
         return this.moveLogic(moveMode, rate, true);
@@ -321,7 +334,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         rate: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         let targetLevel;
         if (moveMode === LevelControl.MoveMode.Up) {
             targetLevel = Infinity;
@@ -342,7 +355,13 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default beahavior, override {@link stepLogic} which also implements {@link stepWithOnOff}.
      */
-    override step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: LevelControl.StepRequest) {
+    override step({
+        stepMode,
+        stepSize,
+        transitionTime,
+        optionsMask,
+        optionsOverride,
+    }: LevelControl.StepRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -355,7 +374,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * To replace default beahavior, override {@link stepLogic} which also implements {@link step}.
      */
-    override stepWithOnOff({ stepMode, stepSize, transitionTime }: LevelControl.StepRequest) {
+    override stepWithOnOff({ stepMode, stepSize, transitionTime }: LevelControl.StepRequest): MaybePromise {
         return this.stepLogic(stepMode, stepSize, transitionTime, true);
     }
 
@@ -377,7 +396,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         transitionTime: number | null,
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
+    ): MaybePromise {
         const direction = stepMode === LevelControl.StepMode.Up ? 1 : -1;
 
         let effectiveRate;
@@ -388,7 +407,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.transition(this.currentLevel + stepSize * direction, effectiveRate, withOnOff, options);
     }
 
-    override stop({ optionsMask, optionsOverride }: LevelControl.StopRequest) {
+    override stop({ optionsMask, optionsOverride }: LevelControl.StopRequest): MaybePromise {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -397,14 +416,14 @@ export class LevelControlBaseServer extends LevelControlBase {
         return this.stopLogic(effectiveOptions);
     }
 
-    override stopWithOnOff(request: LevelControl.StopRequest) {
+    override stopWithOnOff(request: LevelControl.StopRequest): MaybePromise {
         return this.stop(request);
     }
 
     /**
      * Default stop logic. This aborts any level transition currently underway and sets the remaining time to 0.
      */
-    protected stopLogic(_options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {}): MaybePromise<void> {
+    protected stopLogic(_options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {}): MaybePromise {
         this.internal.transitions?.stop();
     }
 
@@ -421,19 +440,19 @@ export class LevelControlBaseServer extends LevelControlBase {
         changePerS?: number | null,
         withOnOff = false,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
-    ) {
-        this.couple(withOnOff, options, targetLevel);
+    ): MaybePromise {
+        return MaybePromise.then(this.couple(withOnOff, options, targetLevel), () =>
+            this.internal.transitions?.start({
+                name: "currentLevel",
+                owner: this,
+                changePerS,
+                targetValue: targetLevel,
 
-        this.internal.transitions?.start({
-            name: "currentLevel",
-            owner: this,
-            changePerS,
-            targetValue: targetLevel,
-
-            onStep() {
-                this.couple(withOnOff, options, targetLevel);
-            },
-        });
+                onStep() {
+                    this.couple(withOnOff, options, targetLevel);
+                },
+            }),
+        );
     }
 
     /**
@@ -445,7 +464,7 @@ export class LevelControlBaseServer extends LevelControlBase {
         withOnOff: boolean,
         options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
         targetLevel?: number,
-    ) {
+    ): MaybePromise {
         // Couple with On/Off state
         if (this.features.onOff && withOnOff && this.agent.has(OnOffServer)) {
             if (targetLevel === undefined) {
@@ -507,7 +526,7 @@ export class LevelControlBaseServer extends LevelControlBase {
      *
      * @param onOff The new onOff state
      */
-    protected handleOnOffChange(onOff: boolean) {
+    protected handleOnOffChange(onOff: boolean): MaybePromise {
         if (!onOff || this.state.onLevel === null) {
             return;
         }
@@ -633,24 +652,24 @@ export namespace LevelControlBaseServer {
             transitionTime: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
+        ): MaybePromise;
         moveLogic(
             moveMode: LevelControl.MoveMode,
             rate: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
+        ): MaybePromise;
         stepLogic(
             stepMode: LevelControl.StepMode,
             stepSize: number,
             transitionTime: number | null,
             withOnOff: boolean,
             options: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        ): MaybePromise<void>;
-        stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
-        couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise<void>;
-        setRemainingTime(remainingTime: number): void;
-        handleOnOffChange(onOff: boolean): void;
+        ): MaybePromise;
+        stopLogic(options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
+        couple(withOnOff: boolean, options: TypeFromPartialBitSchema<typeof LevelControl.Options>): MaybePromise;
+        handleOnOffChange(onOff: boolean): MaybePromise;
+        createTransitions<B extends Behavior>(config: Transitions.Configuration<B>): Transitions<B>;
     };
 }
 

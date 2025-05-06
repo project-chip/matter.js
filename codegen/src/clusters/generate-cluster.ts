@@ -12,6 +12,7 @@ import {
     CommandModel,
     conditionToBitmaps,
     Conformance,
+    DatatypeModel,
     DefaultValue,
     FeatureBitmap,
     translateBitmap,
@@ -48,7 +49,7 @@ function generateDefinition(file: ClusterFile) {
     const features = cluster.features;
 
     // Generate components
-    const gen = new ClusterComponentGenerator(file.ns, cluster);
+    const gen = new ClusterComponentGenerator(file.ns);
     for (const component of variance.components) {
         gen.defineComponent(component);
     }
@@ -76,7 +77,7 @@ function generateDefinition(file: ClusterFile) {
     gen.populateComponent(variance.base, base);
 
     // First generate all local compound datatypes
-    for (const datatype of cluster.datatypes) {
+    for (const datatype of cluster.all(DatatypeModel)) {
         if (!datatype.definesFields || !datatype.children.length) {
             continue;
         }

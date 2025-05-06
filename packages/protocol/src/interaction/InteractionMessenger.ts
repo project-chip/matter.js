@@ -383,7 +383,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                             !processQueueFirst &&
                             !attributeReportsToSend[0].needSendNext))
                 ) {
-                    const { done, value } = payload.next();
+                    const { done, value } = await payload.next();
                     if (done) {
                         allDataReceived = true;
                         if (attributeReportsToSend.length === 0 && eventReportsToSend.length === 0) {

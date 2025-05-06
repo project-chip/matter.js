@@ -67,3 +67,7 @@ export function DataModelPath(id: string | number, type?: string): DataModelPath
         toArray,
     };
 }
+
+export namespace DataModelPath {
+    export const none = DataModelPath("none");
+}

@@ -6,7 +6,7 @@
 
 import { deepCopy, isIpNetworkChannel, Logger, MatterError, MaybePromise, ServerAddressIp } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
-import { TransactionalInteractionServer } from "#node/index.js";
+import { InteractionServer, PeerSubscription } from "#node/server/InteractionServer.js";
 import {
     ChannelManager,
     NoChannelError,
@@ -14,7 +14,6 @@ import {
     PeerAddress,
     PeerAddressSet,
     PeerSet,
-    PeerSubscription,
     ServerSubscription,
     SessionManager,
     Subscription,
@@ -198,7 +197,7 @@ export class SubscriptionBehavior extends Behavior {
         await this.context.transaction.commit();
     }
 
-    async reestablishFormerSubscriptions(interactionServer: TransactionalInteractionServer) {
+    async reestablishFormerSubscriptions(interactionServer: InteractionServer) {
         if (this.state.persistenceEnabled === false) return;
 
         // get and clear former subscriptions

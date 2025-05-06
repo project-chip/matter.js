@@ -5,7 +5,7 @@
  */
 
 import { Identify } from "#clusters/identify";
-import { Observable, Time, Timer } from "#general";
+import { MaybePromise, Observable, Time, Timer } from "#general";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
 
 /**
@@ -28,11 +28,13 @@ export class IdentifyServer extends IdentifyBehavior {
     declare state: IdentifyServer.State;
     declare events: IdentifyServer.Events;
 
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.identifyType === undefined) {
             this.state.identifyType = Identify.IdentifyType.None;
         }
 
+        // TODO - identifyTime should become virtual attribute with timer to update isIdentifying
+        // Enable I/2.4 once this is done
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
             1000,
@@ -80,11 +82,11 @@ export class IdentifyServer extends IdentifyBehavior {
         this.state.identifyTime = time;
     }
 
-    override identify({ identifyTime }: Identify.IdentifyRequest) {
+    override identify({ identifyTime }: Identify.IdentifyRequest): MaybePromise {
         this.state.identifyTime = identifyTime;
     }
 
-    override triggerEffect(effect: Identify.TriggerEffectRequest) {
+    override triggerEffect(effect: Identify.TriggerEffectRequest): MaybePromise {
         this.events.effectTriggered.emit(effect);
     }
 }

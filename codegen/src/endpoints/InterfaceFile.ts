@@ -18,17 +18,15 @@ export class InterfaceFile extends ScopeFile {
     readonly cluster: ClusterModel;
     readonly types: Block;
     readonly ns: Block;
+    readonly #variance: ClusterVariance;
 
-    constructor(
-        name: string,
-        cluster: ClusterModel,
-        private variance: ClusterVariance,
-    ) {
+    constructor(name: string, cluster: ClusterModel, variance: ClusterVariance) {
         super({ name, scope: cluster });
         this.definitionName = `${cluster.name}Interface`;
         this.cluster = cluster;
         this.types = this.section();
         this.ns = this.statements(`export namespace ${this.definitionName} {`, "}");
+        this.#variance = variance;
 
         this.generate();
     }
@@ -38,8 +36,8 @@ export class InterfaceFile extends ScopeFile {
 
         const gen = new InterfaceGenerator(this);
 
-        gen.generateComponent("Base", this.variance.base);
-        for (const component of this.variance.components) {
+        gen.generateComponent("Base", this.#variance.base);
+        for (const component of this.#variance.components) {
             gen.generateComponent(component.name, component);
         }
 

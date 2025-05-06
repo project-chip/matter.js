@@ -15,12 +15,12 @@ import {
     TransportInterfaceSet,
 } from "#general";
 import { Node } from "#node/Node.js";
+import { InteractionServer } from "#node/server/InteractionServer.js";
 import {
     Ble,
     FabricAuthority,
     FabricAuthorityConfigurationProvider,
     FabricManager,
-    InteractionServer,
     MdnsService,
     ScannerSet,
     SubscriptionClient,

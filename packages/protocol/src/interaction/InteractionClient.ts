@@ -625,7 +625,9 @@ export class InteractionClient {
         updateTimeoutHandler?: Timer.Callback;
         updateReceived?: () => void;
         executeQueued?: boolean;
-    }): Promise<void> {
+    }): Promise<{
+        maxInterval: number;
+    }> {
         const {
             endpointId,
             clusterId,
@@ -656,7 +658,7 @@ export class InteractionClient {
                 endpointId,
                 clusterId,
                 attributeId,
-            })}${knownDataVersion !== undefined ? ` (knownDataVersion=${knownDataVersion})` : ""}`,
+            })}${knownDataVersion !== undefined ? ` (knownDataVersion=${knownDataVersion})` : ""} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
         );
 
         const {
@@ -721,6 +723,8 @@ export class InteractionClient {
             },
             report,
         );
+
+        return { maxInterval };
     }
 
     async #registerSubscription(subscription: RegisteredSubscription, initialReport: DataReport) {
@@ -742,7 +746,9 @@ export class InteractionClient {
         updateTimeoutHandler?: Timer.Callback;
         updateReceived?: () => void;
         executeQueued?: boolean;
-    }): Promise<void> {
+    }): Promise<{
+        maxInterval: number;
+    }> {
         const {
             endpointId,
             clusterId,
@@ -759,7 +765,9 @@ export class InteractionClient {
         } = options;
         const { id: eventId } = event;
 
-        logger.debug(`Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })}`);
+        logger.debug(
+            `Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
+        );
 
         const {
             report,
@@ -817,6 +825,8 @@ export class InteractionClient {
             },
             report,
         );
+
+        return { maxInterval };
     }
 
     async subscribeAllAttributesAndEvents(options: {
@@ -840,6 +850,7 @@ export class InteractionClient {
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
+        maxInterval: number;
     }> {
         const { isUrgent } = options;
         return this.subscribeMultipleAttributesAndEvents({
@@ -867,6 +878,7 @@ export class InteractionClient {
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
+        maxInterval: number;
     }> {
         const {
             attributes: attributeRequests = [],
@@ -904,7 +916,7 @@ export class InteractionClient {
                 .map(path => resolveAttributeName(path))
                 .join(
                     ", ",
-                )} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}, keepSubscriptions=${keepSubscriptions}`,
+                )} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}, keepSubscriptions=${keepSubscriptions} with minInterval=${minIntervalFloorSeconds}s/maxInterval=${maxIntervalCeilingSeconds}s`,
         );
         if (dataVersionFilters !== undefined && dataVersionFilters?.length > 0) {
             logger.debug(
@@ -1035,7 +1047,10 @@ export class InteractionClient {
             this.#enrichCachedAttributeData(seedReport.attributeReports ?? [], dataVersionFilters);
         }
 
-        return seedReport;
+        return {
+            ...seedReport,
+            maxInterval,
+        };
     }
 
     async invoke<C extends Command<any, any, any>>(options: {

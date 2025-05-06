@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 export * from "./OperationalStateInterface.js";
 export * from "./OperationalStateBehavior.js";
 export * from "./OperationalStateServer.js";
+export * from "./OperationalStateUtils.js";

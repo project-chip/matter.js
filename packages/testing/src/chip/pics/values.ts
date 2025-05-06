@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-describe("DeviceBasicComposition", () => {
-    chip("DeviceBasicComposition-run1");
-});
+export interface PicsValues {
+    [name: string]: 0 | 1;
+}

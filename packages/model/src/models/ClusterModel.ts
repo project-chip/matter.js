@@ -54,19 +54,19 @@ export class ClusterModel extends ScopeModel<ClusterElement> implements ClusterE
     }
 
     get attributes() {
-        return this.all(AttributeModel);
+        return this.scope.membersOf(this, { tags: [ElementTag.Attribute] }) as AttributeModel[];
     }
 
     get commands() {
-        return this.all(CommandModel);
+        return this.scope.membersOf(this, { tags: [ElementTag.Command] }) as CommandModel[];
     }
 
     get events() {
-        return this.all(EventModel);
+        return this.scope.membersOf(this, { tags: [ElementTag.Event] }) as EventModel[];
     }
 
     get datatypes() {
-        return this.all(DatatypeModel);
+        return this.scope.membersOf(this, { tags: [ElementTag.Datatype] }) as DatatypeModel[];
     }
 
     /**

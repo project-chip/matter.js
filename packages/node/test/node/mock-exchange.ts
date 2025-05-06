@@ -43,7 +43,7 @@ export class MockExchange extends MessageExchange {
             localSessionParameters: {},
         } as MessageExchangeContext;
 
-        super(context, true, 1, NodeId(1), NodeId(address.nodeId), 1, SECURE_CHANNEL_PROTOCOL_ID);
+        super(context, true, 1, NodeId(1), NodeId(address.nodeId), 1, SECURE_CHANNEL_PROTOCOL_ID, true);
 
         this.address = address;
     }

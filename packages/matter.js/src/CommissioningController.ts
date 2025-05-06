@@ -393,7 +393,7 @@ export class CommissioningController {
     async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions, allowUnknownNode = false) {
         const controller = this.#assertControllerIsStarted();
 
-        logger.info(`Connecting to node ${nodeId}...`, controller.getCommissionedNodes());
+        logger.info(`Connecting to node ${nodeId}...`);
         const nodeIsCommissioned = controller.getCommissionedNodes().includes(nodeId);
         if (!nodeIsCommissioned && !allowUnknownNode) {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);

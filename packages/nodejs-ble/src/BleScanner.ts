@@ -118,12 +118,6 @@ export class BleScanner implements Scanner {
                 `${deviceExisting ? "Re-" : ""}Discovered device ${address} data: ${Diagnostic.json(deviceData)}`,
             );
 
-            if (deviceExisting) {
-                // Device got rediscovered, so clear the state
-                // TODO: Remove once noble does that by itself
-                peripheral.state = "disconnected";
-            }
-
             this.discoveredMatterDevices.set(address, {
                 deviceData,
                 peripheral,
@@ -306,7 +300,7 @@ export class BleScanner implements Scanner {
     }
 
     async close() {
-        await this.nobleClient.stopScanning();
+        this.nobleClient.close();
         [...this.recordWaiters.keys()].forEach(queryId =>
             this.finishWaiter(queryId, !!this.recordWaiters.get(queryId)?.timer),
         );

@@ -27,6 +27,16 @@ from chip.testing.matter_testing import MatterBaseTest, MatterTestConfig, genera
 YAML_DIR = "/src/app/tests/suites"
 PYTHON_DIR = "/src/python_testing"
 
+# JS test harness is higher level than CHIP CI so we ignore boilerplate arguments
+PYTHON_IGNORE_ARGS = [
+    "--storage-path",
+    "--commissioning-method",
+    "--discriminator",
+    "--passcode",
+    "--trace-to",
+    "--PICS"
+]
+
 # Somewhere in the code we run for test reflection CHIP decides to create a directory for the test name.  So execute in
 # /tmp/metadata-garbage and clean up when we're done
 os.mkdir("/tmp/metadata-garbage")
@@ -117,6 +127,24 @@ def load_yaml():
 
         tests.append(props)
 
+def parse_command_line(str: str):
+    # Some scripts have strings with spaces.  Currently only use single quotes but try to handle both that and double
+    args = re.findall(r"((?:'[^']+'|\"(?:\\\"|[^\"]+)\"|\S)+)", str)
+    for i in range(len(args)):
+        arg = args[i]
+
+        # If quoted, implement rudimentary unescaping
+        parts = re.findall(r"([^'\"\\]+|'[^']*'|\"(?:\\\"|[^\"]+)\")", arg)
+        if len(parts) > 1:
+            for j in range(len(parts)):
+                part = parts[j]
+                if part.startswith("'") or part.startswith('"'):
+                    part = part[1:-1]
+                    parts[j] = bytes(part, "utf-8").decode("unicode_escape")
+            args[i] = "".join(parts)
+
+    return args
+
 def load_python():
     """ Load metadata from Python tests.  This requires a bit more fiddling because:
 
@@ -148,42 +176,10 @@ def load_python():
         name = os.path.splitext(basename)[0]
         importlib.import_module(name)
 
-    for test in MatterBaseTest.__subclasses__():
-        path = inspect.getfile(test)
+    for test_class in MatterBaseTest.__subclasses__():
+        # Read file and extract YAML header
+        path = inspect.getfile(test_class)
         basename = os.path.basename(path)
-        name = os.path.splitext(basename)[0].removeprefix("test_")
-        instance = test(mobly_test_config)
-        props = {
-            "kind": "py",
-            "name": name.removeprefix("Test").removeprefix("TC_"),
-            "path": path
-        }
-
-        desc = instance.get_test_desc(name)
-        if desc != name:
-            props["description"] = desc
-
-        pics = instance.get_test_pics(name)
-        if pics:
-            props["pics"] = " & ".join(instance.get_test_pics(name))
-
-        steps = instance.get_defined_test_steps(name)
-        if steps:
-            if not steps[0].is_commissioning:
-                props["startUncommissioned"] = True
-                
-            props["members"] = list(map(lambda step: {
-                "name": step.test_plan_number,
-                "kind": "step",
-                "description": step.description,
-            }, steps))
-
-        if basename in slow:
-            props["isSlow"] = slow[basename]
-
-        if basename in manual:
-            props["isManual"] = manual[basename]
-
         header = []
         with open(path) as source:
             in_yaml = False
@@ -207,21 +203,130 @@ def load_python():
 
                 header.append(line.removeprefix("# "))
 
-        # Install a test for each run; suffix with run name if there are multiple runs
-        if header:
-            parsed = yaml.full_load("".join(header))
-            runs = parsed["test-runner-runs"]
-            if runs:
-                for run, config in runs.items():
-                    props["config"] = config
-                    if len(runs) == 1:
-                        tests.append(props)
+        # Instantiate the test for introspection purposes
+        instance = test_class(mobly_test_config)
+        all_test_methods = instance.get_existing_test_names()
+
+        # Extract run information from the YAML header.  Much of this is encoded as command line arguments                
+        parsed_header = yaml.full_load("".join(header))
+        runs = parsed_header["test-runner-runs"] if parsed_header else None
+        run_tests = {}
+        if runs:
+            for run, config in runs.items():
+                script_args = config["script-args"]
+                tests_in_run = []
+                args = []
+                
+                if script_args:
+                    following = None
+                    for arg in parse_command_line(script_args):
+                        if following == "--tests":
+                            if arg.startswith("-"):
+                                 following = None
+                            else:
+                                tests_in_run.append(arg)
+                                continue
+                        elif following == "--test-case":
+                            tests_in_run.append(arg)
+                            following = None
+                            continue
+                        elif following == "ignored":
+                            following = None
+                            continue
+
+                        if arg in PYTHON_IGNORE_ARGS:
+                            following = "ignored"
+                            continue
+
+                        if arg == "--tests" or arg == "--test-case":
+                            following = arg
+                            continue
+
+                        args.append(arg)
+
+                    if args:
+                        config["script-args"] = args
                     else:
-                        tests.append({**props, "name": f"{props["name"]}-{run}"})
+                        del config["script-args"]
+
+                if tests_in_run:
+                    run_tests[run] = tests_in_run
+                else:
+                    run_tests[run] = all_test_methods
+
+                if "app" in config:
+                    config["app"] = (
+                        config["app"]
+                            .removeprefix("${")
+                            .removeprefix("CHIP_")
+                            .removesuffix("}")
+                            .removesuffix("_APP")
+                            .replace("_", "-")
+                            .lower()
+                    )
+        
+        # Add a test for every test/run pair
+        for test_method_name in all_test_methods:
+            name = test_method_name.removeprefix("test_").removeprefix("TC_")
+            props = {
+                "kind": "py",
+                "name": name,
+                "path": path,
+                "subpath": test_method_name,
+            }
+
+            # Extract description if present
+            desc = instance.get_test_desc(name)
+            if desc != name:
+                props["description"] = desc
+
+            # Extract PICS if present
+            pics = instance.get_test_pics(test_method_name)
+            if pics:
+                props["pics"] = " & ".join(pics)
+
+            # Extract steps if present
+            steps = instance.get_defined_test_steps(name)
+            if steps:
+                if not steps[0].is_commissioning:
+                    props["startUncommissioned"] = True
+                    
+                props["members"] = list(map(lambda step: {
+                    "name": step.test_plan_number,
+                    "kind": "step",
+                    "description": step.description,
+                }, steps))
+
+            # Integrate external metadata
+            if basename in slow:
+                props["isSlow"] = slow[basename]
+            if basename in manual:
+                props["isManual"] = manual[basename]
+
+            # Install a test for each run configured to invoke the test; if there are multiple runs we create a suite
+            # with a test for each run, otherwise the we just create the test
+            if header:
+                if runs:
+                    suite = None
+                    
+                    method_runs = {k: v for k, v in runs.items() if test_method_name in run_tests[k]}
+                    if not method_runs:
+                        continue
+
+                    if len(method_runs) > 1:
+                        suite = { "kind": "suite", "path": props["path"], "name": props["name"], "members": [] }
+                        tests.append(suite)
+                    
+                    for run, config in method_runs.items():
+                        props["config"] = config
+                        if suite:
+                            suite["members"].append({**props, "name": run, "app": config["app"]})
+                        else:
+                            tests.append(props)
+                else:
+                    tests.append(props)
             else:
                 tests.append(props)
-        else:
-            tests.append(props)
 
 load_yaml()
 load_python()
@@ -229,7 +334,7 @@ load_python()
 shutil.rmtree("/tmp/metadata-garbage")
 
 # Normalize/prettify names and create semantic version for sorting
-semantic_name_pattern = re.compile(r"(.*)_(\d+)_(\d+)(?:_(.*))?")
+semantic_name_pattern = re.compile(r"(.*)_(\d+)_(\d+)(?:[_\\-](.*))?")
 for test in tests:
     match = semantic_name_pattern.match(test["name"])
     if match:
@@ -264,4 +369,4 @@ for test in tests:
         members.append(test)
 
 # Write the result
-print(json.dumps({ "name": "chip", "kind": "suite", "members": members }))
+print(json.dumps({ "name": "chip", "format": 2, "kind": "suite", "members": members }))

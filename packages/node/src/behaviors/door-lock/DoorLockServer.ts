@@ -5,7 +5,7 @@
  */
 
 import { DoorLock } from "#clusters/door-lock";
-import { ImplementationError } from "#general";
+import { ImplementationError, MaybePromise } from "#general";
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
 import LockState = DoorLock.LockState;
 
@@ -13,7 +13,7 @@ import LockState = DoorLock.LockState;
  * This is the default server implementation of {@link DoorLockBehavior}.
  */
 export class DoorLockServer extends DoorLockBehavior {
-    override initialize() {
+    override initialize(): MaybePromise {
         if (this.state.supportedOperatingModes.alwaysSet !== 2047) {
             throw new ImplementationError(
                 `DoorLockServer: The "alwaysSet" bit-range in supportedOperatingModes must be set. Please check the specification about the meaning of this field because bits are inverted here!`,
@@ -21,11 +21,11 @@ export class DoorLockServer extends DoorLockBehavior {
         }
     }
 
-    override lockDoor() {
+    override lockDoor(): MaybePromise {
         this.state.lockState = LockState.Locked;
     }
 
-    override unlockDoor() {
+    override unlockDoor(): MaybePromise {
         this.state.lockState = LockState.Unlocked;
     }
 }

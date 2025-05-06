@@ -7,7 +7,6 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { Environment, Logger, StorageContext, StorageService } from "@matter/general";
 import { ControllerStore } from "@matter/node";
-import { StorageBackendDiskAsync } from "@matter/nodejs";
 import { EndpointInterface } from "@matter/protocol";
 import { NodeId } from "@matter/types";
 import { CommissioningController } from "@project-chip/matter.js";
@@ -18,18 +17,18 @@ const logger = Logger.get("Node");
 
 export class MatterNode {
     #storageLocation?: string;
-    private storage?: StorageBackendDiskAsync;
-    private storageContext?: StorageContext;
-
-    #environment?: Environment;
+    #storageContext?: StorageContext;
+    readonly #environment?: Environment;
     commissioningController?: CommissioningController;
-    private started = false;
+    #started = false;
+    readonly #nodeNum: number;
+    readonly #netInterface?: string;
 
-    constructor(
-        private readonly nodeNum: number,
-        private readonly netInterface?: string,
-    ) {
+    constructor(nodeNum: number, netInterface?: string) {
         this.#environment = Environment.default;
+        this.#environment.runtime.add(this);
+        this.#nodeNum = nodeNum;
+        this.#netInterface = netInterface;
     }
 
     get storageLocation() {
@@ -45,11 +44,11 @@ export class MatterNode {
          */
 
         if (this.#environment) {
-            if (this.netInterface !== undefined) {
-                this.#environment.vars.set("mdns.networkinterface", this.netInterface);
+            if (this.#netInterface !== undefined) {
+                this.#environment.vars.set("mdns.networkinterface", this.#netInterface);
             }
             // Build up the "Not-so-legacy" Controller
-            const id = `shell-${this.nodeNum.toString()}`;
+            const id = `shell-${this.#nodeNum.toString()}`;
             this.commissioningController = new CommissioningController({
                 environment: {
                     environment: this.#environment,
@@ -64,7 +63,7 @@ export class MatterNode {
             if (resetStorage) {
                 await controllerStore.erase();
             }
-            this.storageContext = controllerStore.storage.createContext("Node");
+            this.#storageContext = controllerStore.storage.createContext("Node");
 
             const storageService = this.#environment.get(StorageService);
             const baseLocation = storageService.location;
@@ -80,31 +79,21 @@ export class MatterNode {
     }
 
     get Store() {
-        if (!this.storageContext) {
+        if (!this.#storageContext) {
             throw new Error("Storage uninitialized");
         }
-        return this.storageContext;
+        return this.#storageContext;
     }
 
     async close() {
         await this.commissioningController?.close();
-        await this.closeStorage();
-    }
-
-    async closeStorage() {
-        try {
-            await this.storage?.close();
-            process.exit(0);
-        } catch {
-            process.exit(1);
-        }
     }
 
     async start() {
-        if (this.started) {
+        if (this.#started) {
             return;
         }
-        logger.info(`matter.js shell controller started for node ${this.nodeNum}`);
+        logger.info(`matter.js shell controller started for node ${this.#nodeNum}`);
 
         if (this.commissioningController !== undefined) {
             await this.commissioningController.start();
@@ -117,7 +106,7 @@ export class MatterNode {
         } else {
             throw new Error("No controller initialized");
         }
-        this.started = true;
+        this.#started = true;
     }
 
     async connectAndGetNodes(nodeIdStr?: string, connectOptions?: CommissioningControllerNodeOptions) {

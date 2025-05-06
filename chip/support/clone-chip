@@ -1,0 +1,41 @@
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+# Clone CHIP
+
+set -e
+
+# Setup
+if [ -z "$CHIP_COMMIT" ]; then
+    CHIP_COMMIT="$(git ls-remote https://github.com/project-chip/connectedhomeip -t master | cut -f 1)"
+fi
+mkdir connectedhomeip
+cd connectedhomeip
+
+# Clone; this is ugly because we pull a shallow copy of a specific SHA
+git config --global init.defaultBranch main
+git config --global advice.detachedHead false
+git init
+git remote add origin https://github.com/project-chip/connectedhomeip.git
+git fetch --depth 1 origin "$CHIP_COMMIT"
+git checkout FETCH_HEAD
+echo "$CHIP_COMMIT" > /etc/chip-version
+
+# Eliminate various unnecessary submodules
+function skip_submodule {
+    crudini --ini-options=ignoreindent --del .gitmodules "submodule \"$1\""
+}
+#skip_submodule third_party/boringssl/repo/src
+skip_submodule mbedtls
+skip_submodule openthread
+skip_submodule ot-br-posix
+skip_submodule third_party/googletest
+skip_submodule third_party/fuzztest
+skip_submodule third_party/libdatachannel/repo
+skip_submodule third_party/imgui/repo
+
+scripts/checkout_submodules.py --shallow --platform linux --jobs 8
+
+# Drop git from layer
+rm -rf .git

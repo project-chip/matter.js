@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { PicsFile } from "../chip/pics/file.js";
 import { BackchannelCommand } from "./backchannel.js";
 
 /**
@@ -11,7 +12,9 @@ import { BackchannelCommand } from "./backchannel.js";
  */
 export interface Subject {
     id: string;
+    app: string;
     commissioning: Subject.CommissioningParameters;
+    pics: PicsFile;
     initialize(): Promise<void>;
     start(): Promise<void>;
     stop(): Promise<void>;
@@ -30,6 +33,7 @@ export namespace Subject {
      */
     export interface Factory {
         (domain: string): Subject;
+        pics?: PicsFile;
     }
 
     export type CommissioningMethod = "onnetwork";

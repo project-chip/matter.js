@@ -10,6 +10,7 @@ import { MutableCluster } from "../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalAttribute,
+    Command,
     OptionalCommand,
     Event,
     EventPriority,
@@ -219,8 +220,6 @@ export namespace RvcOperationalState {
     export interface ErrorStateStruct extends TypeFromSchema<typeof TlvErrorStateStruct> {}
 
     /**
-     * Input to the RvcOperationalState operationalCommandResponse command
-     *
      * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
      */
     export const TlvOperationalCommandResponse = TlvObject({
@@ -235,8 +234,6 @@ export namespace RvcOperationalState {
     });
 
     /**
-     * Input to the RvcOperationalState operationalCommandResponse command
-     *
      * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
      */
     export interface OperationalCommandResponse extends TypeFromSchema<typeof TlvOperationalCommandResponse> {}
@@ -361,6 +358,16 @@ export namespace RvcOperationalState {
         },
 
         commands: {
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
+             */
+            pause: Command(0x0, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
+
+            /**
+             * @see {@link MatterSpecification.v14.Cluster} § 7.4.5
+             */
+            resume: Command(0x3, TlvNoArguments, 0x4, TlvOperationalCommandResponse),
+
             /**
              * On receipt of this command, the device shall start seeking the charging dock, if possible in the current
              * state of the device.

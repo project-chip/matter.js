@@ -29,6 +29,7 @@ const logger = Logger.get("SecureChannelProtocol");
 
 export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
     readonly id = SECURE_CHANNEL_PROTOCOL_ID;
+    readonly requiresSecureSession = false;
 
     async onNewExchange(exchange: MessageExchange, message: Message) {
         const messageType = message.payloadHeader.messageType;

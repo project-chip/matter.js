@@ -33,14 +33,14 @@ function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode
                     type: "string",
                     demandOption: true,
                 })
-                .positional("endpoint-id", {
-                    describe: "endpoint id to read",
-                    type: "number",
-                    demandOption: true,
-                })
                 .positional("node-id", {
                     describe: "node id to read",
                     type: "string",
+                    demandOption: true,
+                })
+                .positional("endpoint-id", {
+                    describe: "endpoint id to read",
+                    type: "number",
                     demandOption: true,
                 }),
         async argv => {
@@ -97,14 +97,14 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                         `Read all attributes of ${cluster.name}`,
                         yargs => {
                             return yargs
-                                .positional("endpoint-id", {
-                                    describe: "endpoint id to read",
-                                    type: "number",
-                                    demandOption: true,
-                                })
                                 .positional("node-id", {
                                     describe: "node id to read",
                                     type: "string",
+                                    demandOption: true,
+                                })
+                                .positional("endpoint-id", {
+                                    describe: "endpoint id to read",
+                                    type: "number",
                                     demandOption: true,
                                 })
                                 .options({
@@ -198,14 +198,14 @@ function generateAttributeReadHandler(
         `Read ${clusterName}.${attribute.name} attribute`,
         yargs =>
             yargs
-                .positional("endpoint-id", {
-                    describe: "endpoint id to read",
-                    type: "number",
-                    demandOption: true,
-                })
                 .positional("node-id", {
                     describe: "node id to read",
                     type: "string",
+                    demandOption: true,
+                })
+                .positional("endpoint-id", {
+                    describe: "endpoint id to read",
+                    type: "number",
                     demandOption: true,
                 })
                 .options({
@@ -259,9 +259,9 @@ function generateAttributeWriteHandler(
         `Write ${clusterName}.${attribute.name} attribute`,
         yargs =>
             yargs
-                .positional("endpoint-id", {
-                    describe: "endpoint id to write to",
-                    type: "number",
+                .positional("value", {
+                    describe: `value to write (${typeHint})`,
+                    type: "string",
                     demandOption: true,
                 })
                 .positional("node-id", {
@@ -269,12 +269,11 @@ function generateAttributeWriteHandler(
                     type: "string",
                     demandOption: true,
                 })
-                .positional("value", {
-                    describe: `value to write (${typeHint})`,
-                    type: "string",
+                .positional("endpoint-id", {
+                    describe: "endpoint id to write to",
+                    type: "number",
                     demandOption: true,
                 }),
-
         async argv => {
             const { nodeId, endpointId, value } = argv;
 

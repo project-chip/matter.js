@@ -28,6 +28,7 @@ if (environment.vars.get("ble")) {
     Ble.get = singleton(
         () =>
             new NodeJsBle({
+                environment,
                 hciId: environment.vars.number("ble.hci.id"),
             }),
     );
@@ -84,11 +85,11 @@ class ControllerNode {
                 environment.vars.number("longDiscriminator") ??
                 (await controllerStorage.get("longDiscriminator", 3840));
             if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
-            setupPin = environment.vars.number("pin") ?? (await controllerStorage.get("pin", 20202021));
+            setupPin = environment.vars.number("passcode") ?? (await controllerStorage.get("passcode", 20202021));
         }
         if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
             throw new Error(
-                "Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with -passcode",
+                "Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with --passcode=xxxxxx",
             );
         }
 

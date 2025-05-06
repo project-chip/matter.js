@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LogDestination, LogFormat, LogLevel, Logger, singleton } from "@matter/general";
+import { Environment, LogDestination, LogFormat, Logger, LogLevel, singleton } from "@matter/main";
 import { createFileLogger } from "@matter/nodejs";
 import { NodeJsBle } from "@matter/nodejs-ble";
 import { Ble } from "@matter/protocol";
@@ -164,6 +164,7 @@ async function main() {
                     Ble.get = singleton(
                         () =>
                             new NodeJsBle({
+                                environment: Environment.default,
                                 hciId,
                             }),
                     );
@@ -191,13 +192,16 @@ process.on("message", function (message) {
 });
 
 export async function exit(code = 0) {
-    await theNode?.close();
+    process.off("SIGINT", sigIntHandler);
+    process.emit("SIGINT");
     process.exit(code);
 }
 
-process.on("SIGINT", () => {
+const sigIntHandler = () => {
     // Pragmatic way to make sure the storage is correctly closed before the process ends.
     exit().catch(error => logger.error(error));
-});
+};
 
-main().catch(error => logger.error(error));
+process.on("SIGINT", sigIntHandler);
+
+Environment.default.runtime.add(main());

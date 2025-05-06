@@ -25,6 +25,7 @@ import { PeerAddress } from "#peer/PeerAddress.js";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, SecureMessageType } from "#types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { SecureChannelMessenger } from "../securechannel/SecureChannelMessenger.js";
+import { SecureChannelProtocol } from "../securechannel/SecureChannelProtocol.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
@@ -238,7 +239,7 @@ export class ExchangeManager {
 
         let isDuplicate;
         try {
-            session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
+            session.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
             isDuplicate = false;
         } catch (e) {
             DuplicateMessageError.accept(e);
@@ -259,7 +260,32 @@ export class ExchangeManager {
             exchange = undefined;
         }
 
+        const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(
+            message.payloadHeader.protocolId,
+            message.payloadHeader.messageType,
+        );
         if (exchange !== undefined) {
+            if (
+                exchange.requiresSecureSession !== session.isSecure ||
+                exchange.session.id !== packet.header.sessionId ||
+                (exchange.isClosing && !isStandaloneAck)
+            ) {
+                logger.debug(
+                    `Ignoring message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name} because ${
+                        exchange.isClosing
+                            ? "exchange is closing"
+                            : exchange.session.id !== packet.header.sessionId
+                              ? `session ID mismatch ${exchange.session.id} vs ${packet.header.sessionId}`
+                              : `session security requirements (${exchange.requiresSecureSession}) not fulfilled`
+                    }`,
+                );
+                await exchange.send(SecureMessageType.StandaloneAck, new Uint8Array(0), {
+                    includeAcknowledgeMessageId: message.packetHeader.messageId,
+                });
+                await exchange.close();
+                return;
+            }
+
             await exchange.onMessageReceived(message, isDuplicate);
         } else {
             if (this.#closing) return;
@@ -271,11 +297,21 @@ export class ExchangeManager {
 
             const protocolHandler = this.#protocols.get(message.payloadHeader.protocolId);
 
-            if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
-                if (
-                    message.payloadHeader.messageType == SecureMessageType.StandaloneAck &&
-                    !message.payloadHeader.requiresAck
-                ) {
+            // Having a "Secure Session" means it is encrypted in our internal working
+            // TODO When adding Group sessions, we need to check how to adjust that handling
+            if (protocolHandler !== undefined && protocolHandler.requiresSecureSession !== session.isSecure) {
+                logger.debug(
+                    `Ignoring message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name} because not matching the security requirements.`,
+                );
+            }
+
+            if (
+                protocolHandler !== undefined &&
+                message.payloadHeader.isInitiatorMessage &&
+                !isDuplicate &&
+                protocolHandler.requiresSecureSession === session.isSecure
+            ) {
+                if (isStandaloneAck && !message.payloadHeader.requiresAck) {
                     logger.debug(
                         `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId} on channel ${channel.name}`,
                     );
@@ -363,18 +399,16 @@ export class ExchangeManager {
             logger.debug(`Channel for session ${sessionName} is ${channel?.name}`);
             if (channel !== undefined) {
                 const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-                if (exchange !== undefined) {
-                    logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
-                    try {
-                        const messenger = new SecureChannelMessenger(exchange);
-                        await messenger.sendCloseSession();
-                        await messenger.close();
-                    } catch (error) {
-                        if (error instanceof ChannelNotConnectedError) {
-                            logger.debug("Session already closed because channel is disconnected.");
-                        } else {
-                            logger.error("Error closing session", error);
-                        }
+                logger.debug(`Initiated exchange ${exchange.id} to close session ${sessionName}`);
+                try {
+                    const messenger = new SecureChannelMessenger(exchange);
+                    await messenger.sendCloseSession();
+                    await messenger.close();
+                } catch (error) {
+                    if (error instanceof ChannelNotConnectedError) {
+                        logger.debug("Session already closed because channel is disconnected.");
+                    } else {
+                        logger.error("Error closing session", error);
                     }
                 }
                 await exchange.destroy();

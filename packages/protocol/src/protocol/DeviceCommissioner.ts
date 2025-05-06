@@ -259,13 +259,9 @@ export class DeviceCommissioner {
         }
 
         logger.debug("Commissioning mode ended, stop announcements.");
-        // Remove PASE responder when we close enhanced commissioning window or node is commissioned
-        if (
-            this.#windowStatus === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ||
-            this.#context.fabrics.length > 0
-        ) {
-            this.#context.secureChannelProtocol.removePaseCommissioner();
-        }
+
+        this.#context.secureChannelProtocol.removePaseCommissioner();
+
         this.#windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
 
         if (this.#activeCommissioningEndCallback !== undefined) {
@@ -276,7 +272,7 @@ export class DeviceCommissioner {
 
         await this.#context.advertiser.exitCommissioningMode();
 
-        logger.info("All announcements stopped");
+        logger.info("All commissioning announcements stopped");
     }
 
     async close() {

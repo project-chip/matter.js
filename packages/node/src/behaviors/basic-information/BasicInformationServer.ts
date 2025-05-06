@@ -7,7 +7,7 @@
 import { ActionContext } from "#behavior/context/ActionContext.js";
 import { OnlineEvent } from "#behavior/Events.js";
 import { BasicInformation } from "#clusters/basic-information";
-import { Diagnostic, ImplementationError, InternalError, Logger } from "#general";
+import { Diagnostic, ImplementationError, InternalError, Logger, MaybePromise } from "#general";
 import { AttributeModel, EventModel, Schema, Specification } from "#model";
 import { NodeLifecycle } from "#node/NodeLifecycle.js";
 import { Fabric, FabricManager } from "#protocol";
@@ -25,7 +25,7 @@ const Base = BasicInformationBehavior.enable({
  * This is the default server implementation of BasicInformationBehavior.
  */
 export class BasicInformationServer extends Base {
-    override initialize() {
+    override initialize(): MaybePromise {
         const state = this.state;
 
         const defaultsSet = {} as Record<string, any>;
