@@ -23,7 +23,11 @@ const ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT = Object.values(ROOT_ENDPOINT_FULL_C
     0,
 );
 
-describe("EventReaderRequest", () => {
+describe("EventResponse", () => {
+    beforeEach(() => {
+        MockTime.reset();
+    });
+
     it("reads concrete event", async () => {
         const response = await read(
             await MockServerNode.createOnline(),
