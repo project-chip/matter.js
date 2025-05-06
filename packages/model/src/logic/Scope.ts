@@ -87,8 +87,8 @@ export function Scope(subject: Model, options: Scope.ScopeOptions = {}) {
 
     const useCache = options.forceCache || Object.isFrozen(owner);
 
-    let deconflictedMemberCache: Map<Model, Model[]> | undefined;
-    let conformantMemberCache: Map<Model, Model[]> | undefined;
+    let deconflictedMemberCache: Map<Model, Map<Set<ElementTag>, Model[]>> | undefined;
+    let conformantMemberCache: Map<Model, Map<Set<ElementTag>, Model[]>> | undefined;
 
     let { featureNames, supportedFeatures } = owner as ClusterModel;
     if (!featureNames) {
@@ -171,6 +171,7 @@ export function Scope(subject: Model, options: Scope.ScopeOptions = {}) {
 
         return filterWithConformance(
             parent,
+            tags,
             allMembers,
             featureNames,
             supportedFeatures,
@@ -343,13 +344,14 @@ function injectGlobalAttributes(scope: Model, members: Model[]) {
  */
 function filterWithConformance(
     parent: Model,
+    tags: Set<ElementTag>,
     members: Model[],
     features: FeatureSet,
     supportedFeatures: FeatureSet,
     conformantOnly: boolean,
-    cache?: Map<Model, Model[]>,
+    cache?: Map<Model, Map<Set<ElementTag>, Model[]>>,
 ) {
-    const cached = cache?.get(parent);
+    const cached = cache?.get(parent)?.get(tags);
     if (cached) {
         return cached;
     }
@@ -397,7 +399,9 @@ function filterWithConformance(
     const result = Object.values(selectedMembers);
 
     if (cache) {
-        cache.set(parent, result);
+        const parentCache = cache.get(parent) ?? new Map();
+        parentCache.set(tags, result);
+        cache.set(parent, parentCache);
     }
 
     return result;
