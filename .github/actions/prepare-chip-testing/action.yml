@@ -88,6 +88,18 @@ runs:
         cd connectedhomeip
         ./scripts/run_in_build_env.sh './scripts/build_python.sh --install_virtual_env out/venv'
 
+    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
+      name: Patch Test runner backchannel waiting times
+      uses: actions/github-script@v7
+      with:
+        result-encoding: string
+        script: |
+          const fs = require("fs");
+          let file= fs.readFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", "utf8");
+          // Patch the test runner to execute controller and app on same network interface
+          file = file.replaceAll("sleep(0.001)", "sleep(0.1)");
+          fs.writeFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", file);
+
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build executables
