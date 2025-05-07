@@ -403,6 +403,7 @@ jobs:
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
 
+      # Remove once https://github.com/project-chip/connectedhomeip/pull/38788 got merged + 1 day
       - name: Patch Test runner backchannel waiting times
         uses: actions/github-script@v7
         with:
@@ -481,6 +482,7 @@ jobs:
           echo "TRACE_TEST_JSON: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
           echo "TRACE_TEST_PERFETTO: out/trace_data/test-{SCRIPT_BASE_NAME}" >> /tmp/test_env.yaml
 
+      # Remove once https://github.com/project-chip/connectedhomeip/pull/38788 got merged + 1 day
       - name: Patch Test runner backchannel waiting times
         uses: actions/github-script@v7
         with:
