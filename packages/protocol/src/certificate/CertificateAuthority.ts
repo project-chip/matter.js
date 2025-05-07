@@ -11,6 +11,7 @@ import {
     Crypto,
     Environment,
     Environmental,
+    InternalError,
     Logger,
     PrivateKey,
     StorageContext,
@@ -37,11 +38,11 @@ const logger = Logger.get("CertificateAuthority");
  * TODO: Add support for (optional) ICACs
  */
 export class CertificateAuthority {
-    private rootCertId = BigInt(0);
-    private rootKeyPair = Crypto.createKeyPair();
-    private rootKeyIdentifier: Uint8Array<ArrayBufferLike> = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
-    private rootCertBytes: Uint8Array<ArrayBufferLike> = this.#generateRootCert();
-    private nextCertificateId = BigInt(1);
+    #rootCertId = BigInt(0);
+    #rootKeyPair?: PrivateKey;
+    #rootKeyIdentifier?: Uint8Array<ArrayBufferLike>;
+    #rootCertBytes?: Uint8Array<ArrayBufferLike>;
+    #nextCertificateId = BigInt(1);
     #construction: Construction<CertificateAuthority>;
 
     get construction() {
@@ -57,6 +58,10 @@ export class CertificateAuthority {
             // Use provided CA config or read from storage, otherwise initialize and store
             const certValues = options instanceof StorageContext ? await options.values() : options;
 
+            this.#rootKeyPair = await Crypto.createKeyPair();
+            this.#rootKeyIdentifier = (await Crypto.hash(this.#rootKeyPair.publicKey)).slice(0, 20);
+            this.#rootCertBytes = await this.#generateRootCert();
+
             if (
                 (typeof certValues.rootCertId === "number" || typeof certValues.rootCertId === "bigint") &&
                 (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
@@ -64,24 +69,24 @@ export class CertificateAuthority {
                 ArrayBuffer.isView(certValues.rootCertBytes) &&
                 (typeof certValues.nextCertificateId === "number" || typeof certValues.nextCertificateId === "bigint")
             ) {
-                this.rootCertId = BigInt(certValues.rootCertId);
-                this.rootKeyPair = PrivateKey(certValues.rootKeyPair as BinaryKeyPair);
-                this.rootKeyIdentifier = certValues.rootKeyIdentifier;
-                this.rootCertBytes = certValues.rootCertBytes;
-                this.nextCertificateId = BigInt(certValues.nextCertificateId);
-                logger.info(`Loaded stored credentials with ID ${this.rootCertId}`);
+                this.#rootCertId = BigInt(certValues.rootCertId);
+                this.#rootKeyPair = PrivateKey(certValues.rootKeyPair as BinaryKeyPair);
+                this.#rootKeyIdentifier = certValues.rootKeyIdentifier;
+                this.#rootCertBytes = certValues.rootCertBytes;
+                this.#nextCertificateId = BigInt(certValues.nextCertificateId);
+                logger.info(`Loaded stored credentials with ID ${this.#rootCertId}`);
                 return;
             }
 
-            logger.info(`Created new credentials with ID ${this.rootCertId}`);
+            logger.info(`Created new credentials with ID ${this.#rootCertId}`);
 
             if (options instanceof StorageContext) {
                 await options.set({
-                    rootCertId: this.rootCertId,
-                    rootKeyPair: this.rootKeyPair.keyPair,
-                    rootKeyIdentifier: this.rootKeyIdentifier,
-                    rootCertBytes: this.rootCertBytes,
-                    nextCertificateId: this.nextCertificateId,
+                    rootCertId: this.#rootCertId,
+                    rootKeyPair: this.#rootKeyPair.keyPair,
+                    rootKeyIdentifier: this.#rootKeyIdentifier,
+                    rootCertBytes: this.#rootCertBytes,
+                    nextCertificateId: this.#nextCertificateId,
                 });
             }
         });
@@ -95,59 +100,62 @@ export class CertificateAuthority {
     }
 
     get rootCert() {
-        return this.rootCertBytes;
+        return this.#construction.assert("root cert", this.#rootCertBytes);
     }
 
     get config(): CertificateAuthority.Configuration {
         return {
-            rootCertId: this.rootCertId,
-            rootKeyPair: this.rootKeyPair.keyPair,
-            rootKeyIdentifier: this.rootKeyIdentifier,
-            rootCertBytes: this.rootCertBytes,
-            nextCertificateId: this.nextCertificateId,
+            rootCertId: this.#rootCertId,
+            rootKeyPair: this.construction.assert("root key pair", this.#rootKeyPair).keyPair,
+            rootKeyIdentifier: this.construction.assert("root key identifier", this.#rootKeyIdentifier),
+            rootCertBytes: this.construction.assert("root cert bytes", this.#rootCertBytes),
+            nextCertificateId: this.#nextCertificateId,
         };
     }
 
-    #generateRootCert() {
+    async #generateRootCert() {
         const now = Time.get().now();
         const unsignedCertificate: Unsigned<RootCertificate> = {
-            serialNumber: Bytes.fromHex(toHex(this.rootCertId)),
+            serialNumber: Bytes.fromHex(toHex(this.#rootCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
-            issuer: { rcacId: this.rootCertId },
+            issuer: { rcacId: this.#rootCertId },
             notBefore: jsToMatterDate(now, -1),
             notAfter: jsToMatterDate(now, 10),
-            subject: { rcacId: this.rootCertId },
-            ellipticCurvePublicKey: this.rootKeyPair.publicKey,
+            subject: { rcacId: this.#rootCertId },
+            ellipticCurvePublicKey: this.#initializedRootKeyPair.publicKey,
             extensions: {
                 basicConstraints: { isCa: true },
                 keyUsage: {
                     keyCertSign: true,
                     cRLSign: true,
                 },
-                subjectKeyIdentifier: this.rootKeyIdentifier,
-                authorityKeyIdentifier: this.rootKeyIdentifier,
+                subjectKeyIdentifier: this.#initializedRootKeyIdentifier,
+                authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
-        const signature = Crypto.sign(this.rootKeyPair, CertificateManager.rootCertToAsn1(unsignedCertificate));
+        const signature = await Crypto.sign(
+            this.#initializedRootKeyPair,
+            CertificateManager.rootCertToAsn1(unsignedCertificate),
+        );
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
 
-    generateNoc(
+    async generateNoc(
         publicKey: Uint8Array,
         fabricId: FabricId,
         nodeId: NodeId,
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
     ) {
         const now = Time.get().now();
-        const certId = this.nextCertificateId++;
+        const certId = this.#nextCertificateId++;
         const unsignedCertificate: Unsigned<OperationalCertificate> = {
             serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
-            issuer: { rcacId: this.rootCertId },
+            issuer: { rcacId: this.#rootCertId },
             notBefore: jsToMatterDate(now, -1),
             notAfter: jsToMatterDate(now, 10),
             subject: { fabricId, nodeId, caseAuthenticatedTags },
@@ -158,17 +166,31 @@ export class CertificateAuthority {
                     digitalSignature: true,
                 },
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
-                authorityKeyIdentifier: this.rootKeyIdentifier,
+                subjectKeyIdentifier: (await Crypto.hash(publicKey)).slice(0, 20),
+                authorityKeyIdentifier: this.#initializedRootKeyIdentifier,
             },
         };
 
-        const signature = Crypto.sign(
-            this.rootKeyPair,
+        const signature = await Crypto.sign(
+            this.#initializedRootKeyPair,
             CertificateManager.nodeOperationalCertToAsn1(unsignedCertificate),
         );
 
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
+    }
+
+    get #initializedRootKeyPair() {
+        if (this.#rootKeyPair === undefined) {
+            throw new InternalError("CA private key is not installed");
+        }
+        return this.#rootKeyPair;
+    }
+
+    get #initializedRootKeyIdentifier() {
+        if (this.#rootKeyIdentifier === undefined) {
+            throw new InternalError("CA key identifier is not installed");
+        }
+        return this.#rootKeyIdentifier;
     }
 }
 

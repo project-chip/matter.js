@@ -159,14 +159,15 @@ export class MatterController {
             logger.info("Creating new fabric");
             const controllerNodeId = rootNodeId ?? NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
-            const fabricBuilder = new FabricBuilder()
-                .setRootCert(ca.rootCert)
+            const fabricBuilder = await FabricBuilder.create();
+            await fabricBuilder.setRootCert(ca.rootCert);
+            fabricBuilder
                 .setRootNodeId(controllerNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
                 .setLabel(adminFabricLabel);
-            fabricBuilder.setOperationalCert(
-                ca.generateNoc(fabricBuilder.publicKey, adminFabricId, controllerNodeId, caseAuthenticatedTags),
+            await fabricBuilder.setOperationalCert(
+                await ca.generateNoc(fabricBuilder.publicKey, adminFabricId, controllerNodeId, caseAuthenticatedTags),
             );
             const fabric = await fabricBuilder.build(adminFabricIndex);
 
