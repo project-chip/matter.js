@@ -5,5 +5,7 @@
  */
 
 describe("LUNIT", () => {
-    chip("LUNIT/*");
+    chip("LUNIT/*")
+        // Matter 1.5 testing newly added attribute
+        .exclude("LUNIT/3.1");
 });
