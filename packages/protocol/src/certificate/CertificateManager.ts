@@ -664,18 +664,18 @@ export namespace CertificateManager {
         return genericCertToAsn1(cert);
     }
 
-    export function deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
+    export async function deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
         const certificate = genericBuildAsn1Structure(cert);
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    export function productAttestationIntermediateCertToAsn1(
+    export async function productAttestationIntermediateCertToAsn1(
         cert: Unsigned<ProductAttestationIntermediateCertificate>,
         key: Key,
     ) {
@@ -683,13 +683,13 @@ export namespace CertificateManager {
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
     }
 
-    export function productAttestationAuthorityCertToAsn1(
+    export async function productAttestationAuthorityCertToAsn1(
         cert: Unsigned<ProductAttestationAuthorityCertificate>,
         key: Key,
     ) {
@@ -697,7 +697,7 @@ export namespace CertificateManager {
         const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
         assertCertificateDerSize(certBytes);
         return certBytes;
@@ -777,7 +777,7 @@ export namespace CertificateManager {
      * Verify requirements a Matter Root certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export function verifyRootCertificate(rootCert: RootCertificate) {
+    export async function verifyRootCertificate(rootCert: RootCertificate) {
         CertificateManager.validateGeneralCertificateFields(rootCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
@@ -861,14 +861,14 @@ export namespace CertificateManager {
             );
         }
 
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), rootCertToAsn1(rootCert), rootCert.signature);
+        await Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), rootCertToAsn1(rootCert), rootCert.signature);
     }
 
     /**
      * Verify requirements a Matter Node Operational certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export function verifyNodeOperationalCertificate(
+    export async function verifyNodeOperationalCertificate(
         nocCert: OperationalCertificate,
         rootCert: RootCertificate,
         icaCert?: IntermediateCertificate,
@@ -985,7 +985,7 @@ export namespace CertificateManager {
             );
         }
 
-        Crypto.verify(
+        await Crypto.verify(
             PublicKey((icaCert ?? rootCert).ellipticCurvePublicKey),
             nodeOperationalCertToAsn1(nocCert),
             nocCert.signature,
@@ -996,7 +996,7 @@ export namespace CertificateManager {
      * Verify requirements a Matter Intermediate CA certificate must fulfill.
      * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
      */
-    export function verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
+    export async function verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
         CertificateManager.validateGeneralCertificateFields(icaCert);
 
         // The subject DN SHALL NOT encode any matter-node-id attribute.
@@ -1103,10 +1103,14 @@ export namespace CertificateManager {
             );
         }
 
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), intermediateCaCertToAsn1(icaCert), icaCert.signature);
+        await Crypto.verify(
+            PublicKey(rootCert.ellipticCurvePublicKey),
+            intermediateCaCertToAsn1(icaCert),
+            icaCert.signature,
+        );
     }
 
-    export function createCertificateSigningRequest(key: Key) {
+    export async function createCertificateSigningRequest(key: Key) {
         const request = {
             version: 0,
             subject: { organization: X520.OrganisationName("CSR") },
@@ -1117,11 +1121,11 @@ export namespace CertificateManager {
         return DerCodec.encode({
             request,
             signAlgorithm: X962.EcdsaWithSHA256,
-            signature: BitByteArray(Crypto.sign(key, DerCodec.encode(request), "der")),
+            signature: BitByteArray(await Crypto.sign(key, DerCodec.encode(request), "der")),
         });
     }
 
-    export function getPublicKeyFromCsr(csr: Uint8Array) {
+    export async function getPublicKeyFromCsr(csr: Uint8Array) {
         const { [DerKey.Elements]: rootElements } = DerCodec.decode(csr);
         if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
@@ -1149,7 +1153,7 @@ export namespace CertificateManager {
             )
         )
             throw new CertificateError("Unsupported signature type");
-        Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
+        await Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
 
         return publicKey;
     }

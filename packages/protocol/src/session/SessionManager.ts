@@ -110,6 +110,8 @@ export interface SessionManagerContext {
     owner?: unknown;
 }
 
+const ID_SPACE_UPPER_BOUND = 0xffff;
+
 /**
  * Manages Matter sessions associated with peer connections.
  */
@@ -126,6 +128,7 @@ export class SessionManager {
     readonly #construction: Construction<SessionManager>;
     readonly #observers = new ObserverGroup();
     readonly #subscriptionUpdateMutex = new Mutex(this);
+    #idUpperBound = ID_SPACE_UPPER_BOUND;
 
     constructor(context: SessionManagerContext) {
         this.#context = context;
@@ -342,9 +345,9 @@ export class SessionManager {
     async getNextAvailableSessionId() {
         await this.#construction;
 
-        for (let i = 0; i < 0xffff; i++) {
+        for (let i = 0; i < this.#idUpperBound; i++) {
             const id = this.#nextSessionId;
-            this.#nextSessionId = (this.#nextSessionId + 1) & 0xffff;
+            this.#nextSessionId = (this.#nextSessionId + 1) & this.#idUpperBound;
             if (this.#nextSessionId === 0) this.#nextSessionId++;
 
             if (this.getSession(id) === undefined) {
@@ -591,6 +594,14 @@ export class SessionManager {
             }
         }
         return clearedCount;
+    }
+
+    /**
+     * Compress range of IDs.  This is intended for testing.
+     */
+    compressIdRange(upperBound: number) {
+        this.#idUpperBound = upperBound;
+        this.#nextSessionId = Crypto.getRandomUInt32() % upperBound;
     }
 }
 

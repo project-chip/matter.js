@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AsyncObservable, Construction, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import {
+    AsyncObservable,
+    Construction,
+    Logger,
+    MatterFlowError,
+    UnexpectedDataError,
+    UninitializedDependencyError,
+} from "#general";
 import { CaseAuthenticatedTag, NodeId, ValidationError, VendorId } from "#types";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
@@ -32,7 +39,7 @@ export abstract class FailsafeContext {
     #associatedFabric?: Fabric;
     #csrSessionId?: number;
     #forUpdateNoc?: boolean;
-    #fabricBuilder = new FabricBuilder();
+    #fabricBuilder?: FabricBuilder;
     #rootCertSet = false;
 
     #commissioned = AsyncObservable<[], void>();
@@ -45,6 +52,7 @@ export abstract class FailsafeContext {
         this.#associatedFabric = options.associatedFabric;
 
         this.#construction = Construction(this, async () => {
+            this.#fabricBuilder = await FabricBuilder.create();
             // Ensure derived class construction is complete
             await Promise.resolve();
 
@@ -71,7 +79,7 @@ export abstract class FailsafeContext {
     }
 
     get fabricIndex() {
-        return this.#fabricBuilder.fabricIndex;
+        return this.#builder.fabricIndex;
     }
 
     get construction() {
@@ -99,11 +107,11 @@ export abstract class FailsafeContext {
     }
 
     get hasRootCert() {
-        return this.#fabricBuilder.rootCert !== undefined;
+        return this.#builder.rootCert !== undefined;
     }
 
     get rootCert() {
-        return this.#fabricBuilder.rootCert;
+        return this.#builder.rootCert;
     }
 
     async completeCommission() {
@@ -157,11 +165,11 @@ export abstract class FailsafeContext {
      * validity checks.
      */
     createCertificateSigningRequest(isForUpdateNoc: boolean, sessionId: number) {
-        if (this.#fabrics.findByKeypair(this.#fabricBuilder.keyPair)) {
+        if (this.#fabrics.findByKeypair(this.#builder.keyPair)) {
             throw new MatterFlowError("Key pair already exists."); // becomes Failure as StatusResponse
         }
 
-        const result = this.#fabricBuilder.createCertificateSigningRequest();
+        const result = this.#builder.createCertificateSigningRequest();
         this.#csrSessionId = sessionId;
         this.#forUpdateNoc = isForUpdateNoc;
         return result;
@@ -186,8 +194,8 @@ export abstract class FailsafeContext {
     }
 
     /** Handles adding a trusted root certificate from Operational Credentials cluster. */
-    setRootCert(rootCert: Uint8Array) {
-        this.#fabricBuilder.setRootCert(rootCert);
+    async setRootCert(rootCert: Uint8Array) {
+        await this.#builder.setRootCert(rootCert);
         this.#rootCertSet = true;
     }
 
@@ -199,9 +207,9 @@ export abstract class FailsafeContext {
         if (this.associatedFabric === undefined) {
             throw new MatterFlowError("No fabric associated with failsafe context, but we prepare an Fabric update.");
         }
-        this.#fabricBuilder.initializeFromFabricForUpdate(this.associatedFabric);
-        this.#fabricBuilder.setOperationalCert(nocValue, icacValue);
-        return await this.#fabricBuilder.build(this.associatedFabric.fabricIndex);
+        this.#builder.initializeFromFabricForUpdate(this.associatedFabric);
+        await this.#builder.setOperationalCert(nocValue, icacValue);
+        return await this.#builder.build(this.associatedFabric.fabricIndex);
     }
 
     /** Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster. */
@@ -212,7 +220,7 @@ export abstract class FailsafeContext {
         ipkValue: Uint8Array;
         caseAdminSubject: NodeId;
     }) {
-        const builder = this.#fabricBuilder;
+        const builder = this.#builder;
 
         const { nocValue, icacValue, adminVendorId, ipkValue, caseAdminSubject } = nocData;
 
@@ -232,7 +240,7 @@ export abstract class FailsafeContext {
             }
         }
 
-        builder.setOperationalCert(nocValue, icacValue);
+        await builder.setOperationalCert(nocValue, icacValue);
         const fabricAlreadyExisting = this.#fabrics.find(fabric => builder.matchesToFabric(fabric));
 
         if (fabricAlreadyExisting) {
@@ -320,6 +328,13 @@ export abstract class FailsafeContext {
     abstract revokeFabric(fabric: Fabric): Promise<void>;
 
     abstract restoreBreadcrumb(): Promise<void>;
+
+    get #builder() {
+        if (this.#fabricBuilder === undefined) {
+            throw new UninitializedDependencyError("FailsafeContext", "Fabric builder has not been initialized");
+        }
+        return this.#fabricBuilder;
+    }
 }
 
 export namespace FailsafeContext {

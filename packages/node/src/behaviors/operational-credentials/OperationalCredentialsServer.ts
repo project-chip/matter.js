@@ -108,7 +108,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         });
         return {
             attestationElements: elements,
-            attestationSignature: certification.sign(this.session, elements),
+            attestationSignature: await certification.sign(this.session, elements),
         };
     }
 
@@ -135,12 +135,12 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const certification = await this.getCertification();
 
-        const certSigningRequest = failsafeContext.createCertificateSigningRequest(
+        const certSigningRequest = await failsafeContext.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             this.session.id,
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: certification.sign(this.session, nocsrElements) };
+        return { nocsrElements, attestationSignature: await certification.sign(this.session, nocsrElements) };
     }
 
     override async certificateChainRequest({ certificateType }: OperationalCredentials.CertificateChainRequest) {
@@ -399,9 +399,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         };
     }
 
-    override addTrustedRootCertificate({
+    override async addTrustedRootCertificate({
         rootCaCertificate,
-    }: OperationalCredentials.AddTrustedRootCertificateRequest): MaybePromise {
+    }: OperationalCredentials.AddTrustedRootCertificateRequest) {
         const failsafeContext = this.#failsafeContext;
 
         // TC_OPCREDS_3_4 fails if we don't allow set of the root certificate in updates, even though that's illegal and
@@ -422,7 +422,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         try {
-            failsafeContext.setRootCert(rootCaCertificate);
+            await failsafeContext.setRootCert(rootCaCertificate);
         } catch (error) {
             logger.info("setting root certificate failed", error);
             if (

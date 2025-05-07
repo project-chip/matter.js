@@ -210,11 +210,11 @@ export class FabricManager {
         return this.fabrics.map(translator);
     }
 
-    findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {
+    async findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {
         this.#construction.assert();
 
         for (const fabric of this.#fabrics.values()) {
-            const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
+            const candidateDestinationId = await fabric.getDestinationId(fabric.nodeId, initiatorRandom);
             if (!Bytes.areEqual(candidateDestinationId, destinationId)) continue;
             return fabric;
         }

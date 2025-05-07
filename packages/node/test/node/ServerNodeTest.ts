@@ -250,15 +250,15 @@ describe("ServerNode", () => {
                 type: ServerNode.RootEndpoint,
                 operationalCredentials: {
                     certification: async () => {
-                        const paa = new AttestationCertificateManager(vendorId);
-                        const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                        const paa = await AttestationCertificateManager.create(vendorId);
+                        const { keyPair: dacKeyPair, dac } = await paa.getDACert(productId);
                         const declaration = CertificationDeclarationManager.generate(vendorId, productId);
 
                         commissioningServer2CertificateProviderCalled = true;
                         return {
                             privateKey: dacKeyPair.privateKey,
                             certificate: dac,
-                            intermediateCertificate: paa.getPAICert(),
+                            intermediateCertificate: await paa.getPAICert(),
                             declaration,
                         };
                     },

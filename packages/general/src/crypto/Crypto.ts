@@ -5,6 +5,7 @@
  */
 
 import { Boot } from "#util/Boot.js";
+import { MaybePromise } from "#util/Promises.js";
 import * as mod from "@noble/curves/abstract/modular";
 import * as utils from "@noble/curves/abstract/utils";
 import { p256 } from "@noble/curves/p256";
@@ -66,67 +67,62 @@ export abstract class Crypto {
         }
     };
 
-    abstract ecdhGeneratePublicKey(): { publicKey: Uint8Array; ecdh: any };
-    static readonly ecdhGeneratePublicKey = (): { publicKey: Uint8Array; ecdh: any } =>
-        Crypto.get().ecdhGeneratePublicKey();
+    abstract ecdhGeneratePublicKey(): MaybePromise<{ publicKey: Uint8Array; ecdh: any }>;
+    static readonly ecdhGeneratePublicKey = () => Crypto.get().ecdhGeneratePublicKey();
 
-    abstract ecdhGeneratePublicKeyAndSecret(peerPublicKey: Uint8Array): {
+    abstract ecdhGeneratePublicKeyAndSecret(peerPublicKey: Uint8Array): MaybePromise<{
         publicKey: Uint8Array;
         sharedSecret: Uint8Array;
-    };
-    static readonly ecdhGeneratePublicKeyAndSecret = (
-        peerPublicKey: Uint8Array,
-    ): { publicKey: Uint8Array; sharedSecret: Uint8Array } =>
+    }>;
+    static readonly ecdhGeneratePublicKeyAndSecret = (peerPublicKey: Uint8Array) =>
         Crypto.get().ecdhGeneratePublicKeyAndSecret(peerPublicKey);
 
-    abstract ecdhGenerateSecret(peerPublicKey: Uint8Array, ecdh: any): Uint8Array;
-    static readonly ecdhGenerateSecret = (peerPublicKey: Uint8Array, ecdh: any): Uint8Array =>
+    abstract ecdhGenerateSecret(peerPublicKey: Uint8Array, ecdh: any): MaybePromise<Uint8Array>;
+    static readonly ecdhGenerateSecret = (peerPublicKey: Uint8Array, ecdh: any) =>
         Crypto.get().ecdhGenerateSecret(peerPublicKey, ecdh);
 
-    abstract hash(data: Uint8Array | Uint8Array[]): Uint8Array;
-    static readonly hash = (data: Uint8Array | Uint8Array[]): Uint8Array => Crypto.get().hash(data);
+    abstract hash(data: Uint8Array | Uint8Array[]): MaybePromise<Uint8Array>;
+    static readonly hash = (data: Uint8Array | Uint8Array[]) => Crypto.get().hash(data);
 
-    abstract pbkdf2(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number): Promise<Uint8Array>;
-    static readonly pbkdf2 = (
+    abstract pbkdf2(
         secret: Uint8Array,
         salt: Uint8Array,
         iteration: number,
         keyLength: number,
-    ): Promise<Uint8Array> => Crypto.get().pbkdf2(secret, salt, iteration, keyLength);
+    ): MaybePromise<Uint8Array>;
+    static readonly pbkdf2 = (secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number) =>
+        Crypto.get().pbkdf2(secret, salt, iteration, keyLength);
 
-    abstract hkdf(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number): Promise<Uint8Array>;
-    static readonly hkdf = (
-        secret: Uint8Array,
-        salt: Uint8Array,
-        info: Uint8Array,
-        length?: number,
-    ): Promise<Uint8Array> => Crypto.get().hkdf(secret, salt, info, length);
+    abstract hkdf(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number): MaybePromise<Uint8Array>;
+    static readonly hkdf = (secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length?: number) =>
+        Crypto.get().hkdf(secret, salt, info, length);
 
-    abstract hmac(key: Uint8Array, data: Uint8Array): Uint8Array;
-    static readonly hmac = (key: Uint8Array, data: Uint8Array): Uint8Array => Crypto.get().hmac(key, data);
+    abstract hmac(key: Uint8Array, data: Uint8Array): MaybePromise<Uint8Array>;
+    static readonly hmac = (key: Uint8Array, data: Uint8Array) => Crypto.get().hmac(key, data);
 
-    abstract sign(privateKey: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding): Uint8Array;
-    static readonly sign = (
+    abstract sign(
         privateKey: JsonWebKey,
         data: Uint8Array | Uint8Array[],
         dsaEncoding?: CryptoDsaEncoding,
-    ): Uint8Array => Crypto.get().sign(privateKey, data, dsaEncoding);
+    ): MaybePromise<Uint8Array>;
+    static readonly sign = (privateKey: JsonWebKey, data: Uint8Array | Uint8Array[], dsaEncoding?: CryptoDsaEncoding) =>
+        Crypto.get().sign(privateKey, data, dsaEncoding);
 
     abstract verify(
         publicKey: JsonWebKey,
         data: Uint8Array,
         signature: Uint8Array,
         dsaEncoding?: CryptoDsaEncoding,
-    ): void;
+    ): MaybePromise<void>;
     static readonly verify = (
         publicKey: JsonWebKey,
         data: Uint8Array,
         signature: Uint8Array,
         dsaEncoding?: CryptoDsaEncoding,
-    ): void => Crypto.get().verify(publicKey, data, signature, dsaEncoding);
+    ) => Crypto.get().verify(publicKey, data, signature, dsaEncoding);
 
-    abstract createKeyPair(): PrivateKey;
-    static readonly createKeyPair = (): PrivateKey => Crypto.get().createKeyPair();
+    abstract createKeyPair(): MaybePromise<PrivateKey>;
+    static readonly createKeyPair = () => Crypto.get().createKeyPair();
 }
 
 Boot.init(() => {
