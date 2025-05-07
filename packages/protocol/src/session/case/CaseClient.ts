@@ -41,7 +41,7 @@ export class CaseClient {
         const initiatorRandom = Crypto.getRandom();
         const initiatorSessionId = await this.#sessions.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
-        const { publicKey: initiatorEcdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
+        const { publicKey: initiatorEcdhPublicKey, ecdh } = await Crypto.ecdhGeneratePublicKey();
 
         // Send sigma1
         let sigma1Bytes;
@@ -57,7 +57,7 @@ export class CaseClient {
             const initiatorResumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
-                destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
+                destinationId: await fabric.getDestinationId(peerNodeId, initiatorRandom),
                 initiatorEcdhPublicKey,
                 initiatorRandom,
                 resumptionId,
@@ -67,7 +67,7 @@ export class CaseClient {
         } else {
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
-                destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
+                destinationId: await fabric.getDestinationId(peerNodeId, initiatorRandom),
                 initiatorEcdhPublicKey,
                 initiatorRandom,
                 initiatorSessionParams: this.#sessions.sessionParameters,
@@ -133,12 +133,12 @@ export class CaseClient {
                 ...exchange.session.parameters,
                 ...(responderSessionParams ?? {}),
             };
-            const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
+            const sharedSecret = await Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
             const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
                 peerEcdhPublicKey,
-                Crypto.hash(sigma1Bytes),
+                await Crypto.hash(sigma1Bytes),
             );
             const sigma2Key = await Crypto.hkdf(sharedSecret, sigma2Salt, KDFSR2_INFO);
             const peerEncryptedData = Crypto.decrypt(sigma2Key, peerEncrypted, TBE_DATA2_NONCE);
@@ -159,7 +159,7 @@ export class CaseClient {
                 subject: { fabricId: peerFabricIdNOCert, nodeId: peerNodeIdNOCert },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
 
-            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+            await Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             if (peerNodeIdNOCert !== peerNodeId) {
                 throw new UnexpectedDataError(
@@ -182,10 +182,13 @@ export class CaseClient {
                     );
                 }
             }
-            fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
+            await fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
 
             // Generate and send sigma3
-            const sigma3Salt = Bytes.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
+            const sigma3Salt = Bytes.concat(
+                operationalIdentityProtectionKey,
+                await Crypto.hash([sigma1Bytes, sigma2Bytes]),
+            );
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const signatureData = TlvSignedData.encode({
                 nodeOpCert,
@@ -193,7 +196,7 @@ export class CaseClient {
                 ecdhPublicKey: initiatorEcdhPublicKey,
                 peerEcdhPublicKey,
             });
-            const signature = fabric.sign(signatureData);
+            const signature = await fabric.sign(signatureData);
             const encryptedData = TlvEncryptedDataSigma3.encode({ nodeOpCert, intermediateCACert, signature });
             const encrypted = Crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
             const sigma3Bytes = await messenger.sendSigma3({ encrypted });
@@ -203,7 +206,7 @@ export class CaseClient {
             const { caseAuthenticatedTags } = resumptionRecord ?? {}; // Even if resumption does not work try to reuse the caseAuthenticatedTags
             const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
-                Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
+                await Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             secureSession = await this.#sessions.createSecureSession({
                 sessionId: initiatorSessionId,

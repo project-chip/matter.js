@@ -37,42 +37,38 @@ export class DeviceCertification {
     }
 
     constructor(config?: DeviceCertification.Definition, product?: ProductDescription) {
-        // Certification Provider function is used to request the certificates delayed
+        let configProvider;
         if (typeof config === "function") {
-            const configProvider = config;
-            this.#construction = Construction(this, async () => {
-                this.#initializeFromConfig(await configProvider());
-            });
-            return;
-        }
+            configProvider = config;
+        } else if (config) {
+            configProvider = () => config;
+        } else {
+            configProvider = async () => {
+                if (product === undefined) {
+                    throw new ImplementationError(`Cannot generate device certification without product information`);
+                }
 
-        // We need a dummy construction to avoid errors
-        this.#construction = Construction(this, () => {});
+                const paa = await AttestationCertificateManager.create(product.vendorId);
+                const { keyPair: dacKeyPair, dac } = await paa.getDACert(product.productId);
 
-        // With a directly provided config or without we can initialize directly
-        if (config === undefined) {
-            if (product === undefined) {
-                throw new ImplementationError(`Cannot generate device certification without product information`);
-            }
-
-            const paa = new AttestationCertificateManager(product.vendorId);
-            const { keyPair: dacKeyPair, dac } = paa.getDACert(product.productId);
-
-            config = {
-                privateKey: PrivateKey(dacKeyPair.privateKey),
-                certificate: dac,
-                intermediateCertificate: paa.getPAICert(),
-                declaration: CertificationDeclarationManager.generate(product.vendorId, product.productId),
+                return {
+                    privateKey: PrivateKey(dacKeyPair.privateKey),
+                    certificate: dac,
+                    intermediateCertificate: await paa.getPAICert(),
+                    declaration: CertificationDeclarationManager.generate(product.vendorId, product.productId),
+                };
             };
         }
-        this.#initializeFromConfig(config);
-    }
 
-    #initializeFromConfig(config: DeviceCertification.Configuration) {
-        this.#privateKey = config.privateKey instanceof Uint8Array ? PrivateKey(config.privateKey) : config.privateKey;
-        this.#certificate = config.certificate;
-        this.#intermediateCertificate = config.intermediateCertificate;
-        this.#declaration = config.declaration;
+        this.#construction = Construction(this, async () => {
+            const config = await configProvider();
+
+            this.#privateKey =
+                config.privateKey instanceof Uint8Array ? PrivateKey(config.privateKey) : config.privateKey;
+            this.#certificate = config.certificate;
+            this.#intermediateCertificate = config.intermediateCertificate;
+            this.#declaration = config.declaration;
+        });
     }
 
     sign(session: SecureSession, data: Uint8Array) {

@@ -92,7 +92,7 @@ export class Spake2p {
     }
 
     private async computeSecretAndVerifiers(X: Uint8Array, Y: Uint8Array, Z: Uint8Array, V: Uint8Array) {
-        const TT_HASH = this.computeTranscriptHash(X, Y, Z, V);
+        const TT_HASH = await this.computeTranscriptHash(X, Y, Z, V);
         const Ka = TT_HASH.slice(0, 16);
         const Ke = TT_HASH.slice(16, 32);
 
@@ -100,8 +100,8 @@ export class Spake2p {
         const KcA = KcAB.slice(0, 16);
         const KcB = KcAB.slice(16, 32);
 
-        const hAY = Crypto.hmac(KcA, Y);
-        const hBX = Crypto.hmac(KcB, X);
+        const hAY = await Crypto.hmac(KcA, Y);
+        const hBX = await Crypto.hmac(KcB, X);
 
         return { Ke, hAY, hBX };
     }
