@@ -97,7 +97,7 @@ runs:
           const fs = require("fs");
           let file= fs.readFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", "utf8");
           // Patch the test runner to execute controller and app on same network interface
-          file = file.replaceAll("sleep(0.001)", "sleep(0.1)");
+          file = file.replaceAll("sleep(0.001)", "sleep(0.05)");
           fs.writeFileSync("./connectedhomeip/src/python_testing/matter_testing_infrastructure/chip/testing/matter_testing.py", file);
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
