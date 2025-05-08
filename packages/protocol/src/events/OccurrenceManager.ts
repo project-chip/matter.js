@@ -111,8 +111,16 @@ export class OccurrenceManager {
             return 0; // The first event number is greater than or equal to eventMin, so all entries are relevant
         }
 
-        let low = 0;
-        let high = this.#occurrences.length - 1;
+        let low = this.#occurrences.length - 1;
+        let high = low;
+        let step = 1;
+
+        // Because it is more likely that events we want are in the upper ranges we first fine a starting point from there
+        while (low > 0 && this.#occurrences[low].number >= eventMin) {
+            high = low;
+            low = Math.max(0, low - step);
+            step *= 2; // increase the step size to skip more entries
+        }
 
         while (low <= high) {
             const mid = Math.floor((low + high) / 2);
