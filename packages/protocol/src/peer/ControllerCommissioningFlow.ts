@@ -250,7 +250,7 @@ export class ControllerCommissioningFlow {
                 }
             } catch (error) {
                 if (error instanceof RecoverableCommissioningError) {
-                    logger.error(
+                    logger.warn(
                         `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} failed with recoverable error: ${error.message} ... Continuing with process`,
                     );
                 } else if (error instanceof CommissioningError || error instanceof StatusResponseError) {
