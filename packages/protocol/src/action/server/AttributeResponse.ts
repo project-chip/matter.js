@@ -109,7 +109,7 @@ export class AttributeResponse<
     }
 
     /** Guarded accessor for this.#currentEndpoint.  This should never be undefined */
-    private get currentEndpoint() {
+    get #guardedCurrentEndpoint() {
         if (this.#currentEndpoint === undefined) {
             throw new InternalError("currentEndpoint is not set. Should never happen");
         }
@@ -117,7 +117,7 @@ export class AttributeResponse<
     }
 
     /** Guarded accessor for this.#currentCluster.  This should never be undefined */
-    private get currentCluster(): ClusterProtocol {
+    get #guardedCurrentCluster(): ClusterProtocol {
         if (this.#currentCluster === undefined) {
             throw new InternalError("currentCluster is not set. Should never happen");
         }
@@ -339,7 +339,7 @@ export class AttributeResponse<
         }
 
         const { attributeId } = path;
-        const skipVersion = this.#versions?.[this.currentEndpoint.id]?.[cluster.type.id];
+        const skipVersion = this.#versions?.[this.#guardedCurrentEndpoint.id]?.[cluster.type.id];
         const filteredByVersion = skipVersion !== undefined && skipVersion === cluster.version;
 
         if (attributeId === undefined) {
@@ -347,7 +347,7 @@ export class AttributeResponse<
                 for (const attribute of cluster.type.attributes) {
                     if (
                         attribute.limits.readable &&
-                        this.currentCluster.availableElementIds.attributes.has(attribute.id)
+                        this.#guardedCurrentCluster.availableElementIds.attributes.has(attribute.id)
                     ) {
                         this.#filteredCount++;
                     }
@@ -375,7 +375,7 @@ export class AttributeResponse<
      * Depends on state initialized by {@link #readClusterForWildcard}.
      */
     #readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
-        if (!this.currentCluster.availableElementIds.attributes.has(attribute.id)) {
+        if (!this.#guardedCurrentCluster.availableElementIds.attributes.has(attribute.id)) {
             return;
         }
 
@@ -385,14 +385,14 @@ export class AttributeResponse<
 
         if (
             !attribute.limits.readable ||
-            this.session.authorityAt(attribute.limits.readLevel, this.currentCluster.location) !==
+            this.session.authorityAt(attribute.limits.readLevel, this.#guardedCurrentCluster.location) !==
                 AccessControl.Authority.Granted
         ) {
             return;
         }
 
         if (this.#currentState === undefined) {
-            this.#currentState = this.currentCluster.open(this.session);
+            this.#currentState = this.#guardedCurrentCluster.open(this.session);
         }
         const value = this.#currentState[attribute.id];
         if (value === undefined) {
@@ -404,12 +404,12 @@ export class AttributeResponse<
         this.#addValue(
             {
                 ...path,
-                endpointId: this.currentEndpoint.id,
-                clusterId: this.currentCluster.type.id,
+                endpointId: this.#guardedCurrentEndpoint.id,
+                clusterId: this.#guardedCurrentCluster.type.id,
                 attributeId: attribute.id,
             },
             this.#currentState[attribute.id],
-            this.currentCluster.version,
+            this.#guardedCurrentCluster.version,
             attribute.tlv,
         );
     }

@@ -115,7 +115,7 @@ export class EventResponse<
     }
 
     /** Guarded accessor for this.#currentEndpoint.  This should never be undefined */
-    private get currentEndpoint() {
+    get #guardedCurrentEndpoint() {
         if (this.#currentEndpoint === undefined) {
             throw new InternalError("currentEndpoint is not set. Should never happen");
         }
@@ -123,7 +123,7 @@ export class EventResponse<
     }
 
     /** Guarded accessor for this.#currentCluster.  This should never be undefined */
-    private get currentCluster(): ClusterProtocol {
+    get #guardedCurrentCluster(): ClusterProtocol {
         if (this.#currentCluster === undefined) {
             throw new InternalError("currentCluster is not set. Should never happen");
         }
@@ -300,11 +300,11 @@ export class EventResponse<
      * Depends on state initialized by {@link #addClusterForWildcard}.
      */
     #addEventForWildcard(event: EventTypeProtocol, path: EventPath) {
-        if (!this.currentCluster.availableElementIds.events.has(event.id)) {
+        if (!this.#guardedCurrentCluster.availableElementIds.events.has(event.id)) {
             return; // EVent is not active, so ignore
         }
         if (
-            this.session.authorityAt(event.limits.readLevel, this.currentCluster.location) !==
+            this.session.authorityAt(event.limits.readLevel, this.#guardedCurrentCluster.location) !==
             AccessControl.Authority.Granted
         ) {
             return;
@@ -323,11 +323,11 @@ export class EventResponse<
         this.#allowedEventPaths.set(
             this.#createEventKey({
                 ...path,
-                endpointId: this.currentEndpoint.id,
-                clusterId: this.currentCluster.type.id,
+                endpointId: this.#guardedCurrentEndpoint.id,
+                clusterId: this.#guardedCurrentCluster.type.id,
                 eventId,
             }),
-            this.currentCluster.type.events[eventId]!.tlv,
+            this.#guardedCurrentCluster.type.events[eventId]!.tlv,
         );
     }
 
