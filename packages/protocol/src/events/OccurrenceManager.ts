@@ -9,6 +9,7 @@ import {
     Construction,
     Diagnostic,
     ImplementationError,
+    InternalError,
     isObject,
     Logger,
     MatterAggregateError,
@@ -135,7 +136,7 @@ export class OccurrenceManager {
         filterForFabricIndex?: FabricIndex,
     ): MaybePromise<NumberedOccurrence[]> {
         if (filters !== undefined && filters.length > 1) {
-            logger.warn("Multi-Node filtering is not yet supported, just taking the first filter");
+            throw new InternalError("Multiple filters not supported");
         }
         // Search the index and load applicable events
         const startIndex = filters?.length ? this.#findMinEventNumberIndex(EventNumber(filters[0].eventMin)) : 0;
