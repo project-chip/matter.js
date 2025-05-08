@@ -277,7 +277,7 @@ export class AttributeResponse<
             const value = this.#currentState[attributeId];
             const version = cluster.version;
             logger.debug(
-                `Reading attribute ${this.node.inspectPath(path)}=${Diagnostic.json(value)} (version=${version})`,
+                () => `Reading attribute ${this.node.inspectPath(path)}=${Diagnostic.json(value)} (version=${version})`,
             );
             // Perform actual read of one attribute
             this.#addValue(path, value, version, this.#currentCluster.type.attributes[attributeId]!.tlv);
@@ -437,7 +437,9 @@ export class AttributeResponse<
      * Add a status value.
      */
     #addStatus(path: ReadResult.ConcreteAttributePath, status: Status) {
-        logger.debug(`Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`);
+        logger.debug(
+            () => `Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`,
+        );
 
         const report: ReadResult.GlobalAttributeStatus = {
             kind: "attr-status",
