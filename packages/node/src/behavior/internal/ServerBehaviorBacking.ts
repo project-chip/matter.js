@@ -7,10 +7,10 @@
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
 import { GlobalAttributeState } from "#behavior/cluster/ClusterState.js";
 import { ValidatedElements } from "#behavior/cluster/ValidatedElements.js";
+import type { SupportedElements } from "#endpoint/index.js";
 import { camelize } from "#general";
 import { FieldValue } from "#model";
 import { ServerNodeStore } from "#node/storage/ServerNodeStore.js";
-import type { SupportedElements } from "#protocol";
 import { Val } from "#protocol";
 import { ClusterType, TlvNoResponse } from "#types";
 import { Behavior } from "../Behavior.js";

@@ -21,11 +21,11 @@ import type {
     EndpointProtocol,
     NodeProtocol,
 } from "#protocol";
-import { AccessControl, FabricManager, SupportedElements } from "#protocol";
+import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
 import { camelize } from "@matter/general";
-import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
+import { AvailableElementIds, EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
@@ -226,7 +226,7 @@ class ClusterState implements ClusterProtocol {
     readonly #datasource: Datasource;
     readonly #endpoint: Endpoint;
     readonly #backingType: Behavior.Type;
-    #supportedElements?: SupportedElements;
+    #availableElementIds?: AvailableElementIds;
 
     get version() {
         return this.#datasource.version;
@@ -236,11 +236,25 @@ class ClusterState implements ClusterProtocol {
         return this.#datasource.location;
     }
 
-    get supportedElements() {
-        if (this.#supportedElements === undefined) {
-            this.#supportedElements = this.#endpoint.behaviors.elementsOf(this.#backingType);
+    get availableElementIds() {
+        if (this.#availableElementIds === undefined) {
+            const elements = this.#endpoint.behaviors.elementsOf(this.#backingType);
+            this.#availableElementIds = {
+                attributes: new Set(),
+                events: new Set(),
+            };
+            for (const attributes of this.type.attributes) {
+                if (elements.attributes.has(attributes.name)) {
+                    this.#availableElementIds.attributes.add(attributes.id);
+                }
+            }
+            for (const events of this.type.events) {
+                if (elements.events.has(events.name)) {
+                    this.#availableElementIds.events.add(events.id);
+                }
+            }
         }
-        return this.#supportedElements;
+        return this.#availableElementIds;
     }
 
     open(session: AccessControl.Session) {

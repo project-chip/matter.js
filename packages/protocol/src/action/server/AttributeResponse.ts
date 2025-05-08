@@ -240,7 +240,7 @@ export class AttributeResponse<
             this.#addStatus(path, Status.UnsupportedCluster);
             return;
         }
-        if (attribute === undefined || !cluster.supportedElements.attributes.has(attribute.name)) {
+        if (attribute === undefined || !cluster.availableElementIds.attributes.has(attribute.id)) {
             this.#addStatus(path, Status.UnsupportedAttribute);
             return;
         }
@@ -344,7 +344,14 @@ export class AttributeResponse<
 
         if (attributeId === undefined) {
             if (filteredByVersion) {
-                this.#filteredCount += this.#currentCluster.supportedElements.attributes.size;
+                for (const attribute of cluster.type.attributes) {
+                    if (
+                        attribute.limits.readable &&
+                        this.currentCluster.availableElementIds.attributes.has(attribute.id)
+                    ) {
+                        this.#filteredCount++;
+                    }
+                }
                 return;
             }
             for (const attribute of cluster.type.attributes) {
@@ -368,7 +375,7 @@ export class AttributeResponse<
      * Depends on state initialized by {@link #readClusterForWildcard}.
      */
     #readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
-        if (!this.currentCluster.supportedElements.attributes.has(attribute.name)) {
+        if (!this.currentCluster.availableElementIds.attributes.has(attribute.id)) {
             return;
         }
 

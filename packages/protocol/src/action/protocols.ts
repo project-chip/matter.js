@@ -11,10 +11,9 @@ import { AttributePath, EventId, EventPath } from "#types";
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
-export interface SupportedElements {
-    attributes: Set<string>;
-    commands: Set<string>;
-    events: Set<string>;
+export interface AvailableElementIds {
+    attributes: Set<AttributeId>;
+    events: Set<EventId>;
 }
 
 /**
@@ -92,7 +91,7 @@ export interface ClusterProtocol {
     /**
      * List of supported elements for this cluster instance
      */
-    supportedElements: SupportedElements;
+    availableElementIds: AvailableElementIds;
 
     /**
      * Access a record of attribute values, keyed by attribute ID.
