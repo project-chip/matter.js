@@ -87,8 +87,8 @@ export function Scope(subject: Model, options: Scope.ScopeOptions = {}) {
 
     const useCache = options.forceCache || Object.isFrozen(owner);
 
-    let deconflictedMemberCache: Map<Model, Map<Set<ElementTag>, Model[]>> | undefined;
-    let conformantMemberCache: Map<Model, Map<Set<ElementTag>, Model[]>> | undefined;
+    let deconflictedMemberCache: Map<Model, Map<ElementTag, Set<Model>>> | undefined;
+    let conformantMemberCache: Map<Model, Map<ElementTag, Set<Model>>> | undefined;
 
     let { featureNames, supportedFeatures } = owner as ClusterModel;
     if (!featureNames) {
@@ -349,16 +349,34 @@ function filterWithConformance(
     features: FeatureSet,
     supportedFeatures: FeatureSet,
     conformantOnly: boolean,
-    cache?: Map<Model, Map<Set<ElementTag>, Model[]>>,
+    cache?: Map<Model, Map<ElementTag, Set<Model>>>,
 ) {
-    const cached = cache?.get(parent)?.get(tags);
-    if (cached) {
-        return cached;
+    const tagsToCollect = new Set<ElementTag>(tags);
+    const result = Array<Model>();
+    const cached = cache ? (cache.get(parent) ?? new Map()) : undefined;
+
+    if (cache && cached) {
+        for (const tag of tagsToCollect) {
+            const cachedMembers = cached.get(tag);
+            if (cachedMembers) {
+                result.push(...cachedMembers);
+                tagsToCollect.delete(tag);
+            }
+        }
+        if (tagsToCollect.size === 0) {
+            return result;
+        }
     }
 
-    const selectedMembers = {} as Record<string, Model>;
+    const selectedMembers = {} as Record<string, Record<string, Model>>;
+    for (const tag of tagsToCollect) {
+        selectedMembers[tag] = {};
+    }
     for (const member of members) {
-        const { conformance } = member as ValueModel;
+        const { conformance, tag } = member as ValueModel;
+        if (!tagsToCollect.has(tag)) {
+            continue; // Entry belongs to a tag likely already in the result because was cached
+        }
 
         if (!conformance) {
             throw new ImplementationError(
@@ -370,7 +388,7 @@ function filterWithConformance(
             continue;
         }
 
-        const other = selectedMembers[member.name];
+        const other = selectedMembers[tag][member.name];
         if (other !== undefined) {
             if (!conformantOnly && !conformance.applicabilityOf(features, supportedFeatures)) {
                 continue;
@@ -393,15 +411,20 @@ function filterWithConformance(
             // This member takes precedence and will overwrite below
         }
 
-        selectedMembers[member.name] = member;
+        selectedMembers[tag][member.name] = member;
     }
 
-    const result = Object.values(selectedMembers);
-
-    if (cache) {
-        const parentCache = cache.get(parent) ?? new Map();
-        parentCache.set(tags, result);
-        cache.set(parent, parentCache);
+    for (const tag in selectedMembers) {
+        const tagResult = Object.values(selectedMembers[tag]);
+        if (tagResult.length) {
+            result.push(...tagResult);
+            if (cached) {
+                cached.set(tag as ElementTag, new Set(tagResult));
+            }
+        }
+    }
+    if (cache && cached) {
+        cache.set(parent, cached);
     }
 
     return result;

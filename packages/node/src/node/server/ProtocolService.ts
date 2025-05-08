@@ -308,10 +308,7 @@ function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | u
 
     // Collect all attributes and events from model and generate type protocol
     // TODO: Potentially combine the two searches again once the issue os fixed when selecting attributes and events
-    for (const member of [
-        ...behavior.supervisor.membersOf(schema), // Default Attributes and Fields for optimization because cached
-        ...behavior.supervisor.membersOf(schema, { tags: [ElementTag.Event] }), // Add events
-    ]) {
+    for (const member of behavior.supervisor.membersOf(schema, { tags: [ElementTag.Attribute, ElementTag.Event] })) {
         const { id, tag, effectiveQuality: quality } = member;
 
         if (id === undefined) {
