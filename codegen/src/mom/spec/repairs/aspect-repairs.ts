@@ -60,7 +60,10 @@ export function repairConformanceRule(conformance?: string) {
         return "M";
     }
 
-    conformance = conformance?.replace(/\|CO N/, "|CON").replace("PIRUnoccupiedToOccupied", "PirUnoccupiedToOccupied");
+    conformance = conformance?.replace("PIRUnoccupiedToOccupied", "PirUnoccupiedToOccupied");
+
+    // Words separated by space is illegal and we can safely assume should be joined
+    conformance = conformance?.replace(/([a-z])\s+([a-z])/gi, "$1$2");
 
     return conformance;
 }

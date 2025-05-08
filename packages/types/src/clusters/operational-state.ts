@@ -104,10 +104,9 @@ export namespace OperationalState {
      * be treated as reserved. As shown by the table, errors that may be specific to a certain Device Type or other
      * modality shall be defined in a derived cluster of this cluster.
      *
-     * The derived cluster-specific error definitions shall NOT duplicate the general error definitions.
-     *
-     * That is, a derived cluster specification of this cluster cannot define errors with the same semantics as the
-     * general errors defined below.
+     * The derived cluster-specific error definitions shall NOT duplicate the general error definitions. That is, a
+     * derived cluster specification of this cluster cannot define errors with the same semantics as the general errors
+     * defined below.
      *
      * The manufacturer-specific error definitions shall NOT duplicate the general error definitions or derived
      * cluster-specific error definitions. That is, a manufacturer-defined error defined for this cluster or a derived
@@ -239,10 +238,9 @@ export namespace OperationalState {
 
         /**
          * The total operational time, in seconds, from when the operation was started via an initial Start command or
-         * autonomous/manual starting action, until the operation completed. This includes any time
-         *
-         * spent while paused. There may be cases whereby the total operational time exceeds the maximum value that can
-         * be conveyed by this attribute, in such instances, this attribute shall be populated with null.
+         * autonomous/manual starting action, until the operation completed. This includes any time spent while paused.
+         * There may be cases whereby the total operational time exceeds the maximum value that can be conveyed by this
+         * attribute, in such instances, this attribute shall be populated with null.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 1.14.7.2.2
          */
@@ -289,10 +287,9 @@ export namespace OperationalState {
 
             /**
              * This attribute represents the current phase of operation being performed by the server. This shall be the
-             * positional index representing the value from the set provided in the PhaseList Attribute,
-             *
-             * where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value that
-             * is "length(PhaseList) - 1".
+             * positional index representing the value from the set provided in the PhaseList Attribute, where the first
+             * item in that list is an index of 0. Thus, this attribute shall have a maximum value that is
+             * "length(PhaseList) - 1".
              *
              * Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.
              *
@@ -379,10 +376,9 @@ export namespace OperationalState {
              * If this command is received when already in the Paused state the device shall respond with an
              * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.
              *
-             * A device that receives this command in any state which is not Pause-compatible shall respond
-             *
-             * with an OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall take
-             * no further action.
+             * A device that receives this command in any state which is not Pause-compatible shall respond with an
+             * OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall take no
+             * further action.
              *
              * States are defined as Pause-compatible as follows:
              *
@@ -443,7 +439,7 @@ export namespace OperationalState {
              * in an operational state from which it can be started. There may be either regulatory or
              * manufacturer-imposed safety and security requirements that first necessitate some specific action at the
              * device before a Start command can be honored. In such instances, a device shall respond with a status
-             * code of CommandInvalidInState if a Start command is received prior to the required on- device action.
+             * code of CommandInvalidInState if a Start command is received prior to the required on-device action.
              *
              * If this command is received when already in the Running state the device shall respond with an
              * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.

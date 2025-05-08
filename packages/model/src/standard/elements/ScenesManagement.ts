@@ -26,9 +26,7 @@ export const ScenesManagement = Cluster(
             "In most cases scenes are associated with a particular group identifier. Scenes may also exist " +
             "without a group, in which case the value 0 replaces the group identifier. Note that extra care is " +
             "required in these cases to avoid a scene identifier collision, and that commands related to scenes " +
-            "without a group may only be unicast, i.e., they shall NOT be multicast or broadcast." +
-            "\n" +
-            "NOTE Support for Scenes Management cluster is provisional.",
+            "without a group may only be unicast, i.e., they shall NOT be multicast or broadcast.",
 
         xref: { document: "cluster", section: "1.4" }
     },
@@ -62,7 +60,7 @@ export const ScenesManagement = Cluster(
         name: "SceneTableSize", id: 0x1, type: "uint16", access: "R V", conformance: "M",
         constraint: "desc", default: 16, quality: "F",
         details: "Indicates the number of entries in the Scene Table on this endpoint. This is the total across all " +
-            "fabrics; note that a single fabric cannot use all those entries (see Handling of fabric- scoping). " +
+            "fabrics; note that a single fabric cannot use all those entries (see Handling of fabric-scoping). " +
             "The minimum size of this table, (i.e., the minimum number of scenes to support across all fabrics " +
             "per endpoint) shall be 16, unless a device type in which this cluster is used, defines a larger " +
             "value in the device type definition.",
@@ -573,9 +571,8 @@ export const ScenesManagement = Cluster(
                 "ValueSigned32, ValueUnsigned64, ValueSigned64 Fields" +
                 "\n" +
                 "These fields shall indicate the attribute value as part of an extension field set, associated with a " +
-                "given AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall" +
-                "\n" +
-                "be determined by the type of the attribute indicated by AttributeID as follows:" +
+                "given AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall be " +
+                "determined by the type of the attribute indicated by AttributeID as follows:" +
                 "\n" +
                 "  • Data types bool, map8, and uint8 shall map to ValueUnsigned8." +
                 "\n" +

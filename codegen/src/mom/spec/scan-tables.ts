@@ -155,6 +155,10 @@ function convertTable(el: HTMLTableElement, previous: Table | undefined) {
                     const el = table.rows[i]?.[colName];
                     if (i) {
                         if (target && el) {
+                            if (target === el) {
+                                // We encode cells in multiple rows when there are rowspans
+                                continue;
+                            }
                             while (el.firstChild) {
                                 target.appendChild(el.firstChild);
                             }

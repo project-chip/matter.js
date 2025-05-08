@@ -83,12 +83,12 @@ export namespace EcosystemInformation {
         /**
          * This field shall indicate the timestamp of when the UniqueLocationIDs was last modified.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * If multiple server instances update the UniqueLocationIDs field at the same time, it is possible one of the
-         * updates will be missed. This is considered an acceptable limitation to reduce the complexity of the design.
-         * Since this is meant to be provided from user input, it is unlikely these signals would be happening at one
-         * time.
+         * > If multiple server instances update the UniqueLocationIDs field at the same time, it is possible one of the
+         *   updates will be missed. This is considered an acceptable limitation to reduce the complexity of the design.
+         *   Since this is meant to be provided from user input, it is unlikely these signals would be happening at one
+         *   time.
          *
          * @see {@link MatterSpecification.v14.Core} § 9.18.4.1.7
          */
@@ -121,11 +121,9 @@ export namespace EcosystemInformation {
          * location as a result of an external interaction. (For example, the user changes the location assignment.)
          *
          * UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still represents the same
-         * location. (For example, the user renames a room.)
-         *
-         * UniqueLocationID shall be changed when LocationDescriptor changes as a result of another Ecosystem
-         * Information Cluster server instance changing and the UniqueLocationID on the remote server instance also
-         * changes.
+         * location. (For example, the user renames a room.) UniqueLocationID shall be changed when LocationDescriptor
+         * changes as a result of another Ecosystem Information Cluster server instance changing and the
+         * UniqueLocationID on the remote server instance also changes.
          *
          * UniqueLocationID shall NOT be changed when LocationDescriptor changes as a result of another Ecosystem
          * Information Cluster server instance changing and the UniqueLocationID on the remote server instance does not
@@ -173,9 +171,7 @@ export namespace EcosystemInformation {
             /**
              * This attribute shall contain the list of logical devices represented by a Bridged Node. Most of the time
              * this will contain a single entry, but may grow with more complex device compositions (e.g. another
-             * bridge.)
-             *
-             * An empty list indicates that the information is not available.
+             * bridge.) An empty list indicates that the information is not available.
              *
              * @see {@link MatterSpecification.v14.Core} § 9.18.5.1
              */
@@ -189,9 +185,8 @@ export namespace EcosystemInformation {
              * This attribute shall contain the list of rooms, areas and groups associated with the DeviceDirectory
              * entries, and shall NOT contain locations which are dynamically generated and removed by an ecosystem.
              * (E.g. a location that is generated and removed based on the user being home is not permitted. However, an
-             * initially generated location name that does not quickly change is acceptable.)
-             *
-             * An empty list indicates that the information is not available.
+             * initially generated location name that does not quickly change is acceptable.) An empty list indicates
+             * that the information is not available.
              *
              * LocationDirectory entries shall be removed if there is no DeviceDirectory that references it.
              *

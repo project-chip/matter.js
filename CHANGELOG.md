@@ -11,16 +11,19 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   @matter/*
+    - Upgraded to Matter specification version 1.4.1
+
 -   @matter/node
     - Enhancement: Refactors InteractionServer to cut out more legacy logic and move to Behavior logic
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
     - Fix: Consider the potential async nature of `Transitions.applyUpdates()` correctly in all cases to prevent dangling promises 
   
-- @matter/protocol
+-   @matter/protocol
     - Fix: Handles messages only that are secured as required for the relevant protocol
 
-- @matter/general
+-   @matter/general
     - Enhancement: Allows async implementation of crypto methods
 
 ## 0.13.0 (2025-04-28)

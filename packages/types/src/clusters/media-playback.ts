@@ -75,10 +75,9 @@ export namespace MediaPlayback {
         /**
          * AudioAdvance (AA)
          *
-         * This feature is for a device or app that supports playing audio during fast and slow advance and
-         *
-         * rewind (e.g., while playback speed is not 1). A device that supports this feature may only support playing
-         * audio during certain speeds.
+         * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
+         * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
+         * during certain speeds.
          *
          * A cluster implementing AA shall implement AS.
          *
@@ -669,10 +668,9 @@ export namespace MediaPlayback {
             startTime: Attribute(0x1, TlvNullable(TlvEpochUs), { default: null }),
 
             /**
-             * Indicates the duration, in milliseconds, of the current media being played back
-             *
-             * or null when duration is not applicable (for example, in live streaming content with no known duration).
-             * This attribute shall never be 0.
+             * Indicates the duration, in milliseconds, of the current media being played back or null when duration is
+             * not applicable (for example, in live streaming content with no known duration). This attribute shall
+             * never be 0.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.10.6.3
              */
@@ -871,7 +869,6 @@ export namespace MediaPlayback {
 
             /**
              * Upon receipt, this shall start playback of the media in the forward direction in case the media is
-             *
              * currently playing in the backward direction or is not playing. If the playback is already happening in
              * the forward direction receipt of this command shall increase the speed of the media playback.
              *
@@ -939,10 +936,9 @@ export namespace MediaPlayback {
             /**
              * AudioAdvance
              *
-             * This feature is for a device or app that supports playing audio during fast and slow advance and
-             *
-             * rewind (e.g., while playback speed is not 1). A device that supports this feature may only support
-             * playing audio during certain speeds.
+             * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
+             * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
+             * during certain speeds.
              *
              * A cluster implementing AA shall implement AS.
              *
@@ -1002,8 +998,8 @@ export namespace MediaPlayback {
             previous: OptionalCommand(0x4, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
             /**
-             * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-
-             * specific. This will often Go forward to the next media playback item.
+             * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-specific.
+             * This will often Go forward to the next media playback item.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.10.7.6
              */

@@ -22,10 +22,9 @@ export namespace OperationalStateInterface {
          * If this command is received when already in the Paused state the device shall respond with an
          * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.
          *
-         * A device that receives this command in any state which is not Pause-compatible shall respond
-         *
-         * with an OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall take no
-         * further action.
+         * A device that receives this command in any state which is not Pause-compatible shall respond with an
+         * OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall take no further
+         * action.
          *
          * States are defined as Pause-compatible as follows:
          *
@@ -84,7 +83,7 @@ export namespace OperationalStateInterface {
          * an operational state from which it can be started. There may be either regulatory or manufacturer-imposed
          * safety and security requirements that first necessitate some specific action at the device before a Start
          * command can be honored. In such instances, a device shall respond with a status code of CommandInvalidInState
-         * if a Start command is received prior to the required on- device action.
+         * if a Start command is received prior to the required on-device action.
          *
          * If this command is received when already in the Running state the device shall respond with an
          * OperationalCommandResponse command with an ErrorStateID of NoError but take no further action.

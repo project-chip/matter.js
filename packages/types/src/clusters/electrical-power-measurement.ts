@@ -91,9 +91,8 @@ export namespace ElectricalPowerMeasurement {
          * milliamps (mA). A positive value indicates that the measured harmonic current is positive, and a negative
          * value indicates that the measured harmonic current is negative.
          *
-         * For the Harmonic Phases attribute, this value is the most recent phase of the given harmonic order
-         *
-         * in millidegrees (mDeg). A positive value indicates that the measured phase is leading, and a negative value
+         * For the Harmonic Phases attribute, this value is the most recent phase of the given harmonic order in
+         * millidegrees (mDeg). A positive value indicates that the measured phase is leading, and a negative value
          * indicates that the measured phase is lagging.
          *
          * If this measurement is not currently available, a value of null shall be returned.
@@ -497,9 +496,8 @@ export namespace ElectricalPowerMeasurement {
         attributes: {
             /**
              * This shall indicate a list of HarmonicMeasurementStruct values, with each HarmonicMeasurementStruct
-             * representing the most recent phase of the harmonic current reading for the harmonic
-             *
-             * order specified by Order.
+             * representing the most recent phase of the harmonic current reading for the harmonic order specified by
+             * Order.
              *
              * The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit
              * publication of deltas considered not meaningful.
@@ -527,8 +525,9 @@ export namespace ElectricalPowerMeasurement {
              *
              * If the neutral current cannot be measured or derived, a value of null shall be returned.
              *
-             * A positive value represents an imbalance between the phase currents when power is imported. A negative
-             * value represents an imbalance between the phase currents when power is exported.
+             * A positive value represents an imbalance between the phase currents when power is imported.
+             *
+             * A negative value represents an imbalance between the phase currents when power is exported.
              *
              * The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit
              * publication of deltas considered not meaningful.

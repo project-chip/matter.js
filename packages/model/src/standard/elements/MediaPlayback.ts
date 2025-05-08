@@ -58,14 +58,11 @@ export const MediaPlayback = Cluster(
 
         Field({
             name: "AA", constraint: "4", description: "AudioAdvance",
-
-            details: "This feature is for a device or app that supports playing audio during fast and slow advance and" +
-                "\n" +
+            details: "This feature is for a device or app that supports playing audio during fast and slow advance and " +
                 "rewind (e.g., while playback speed is not 1). A device that supports this feature may only support " +
                 "playing audio during certain speeds." +
                 "\n" +
                 "A cluster implementing AA shall implement AS.",
-
             xref: { document: "cluster", section: "6.10.4.5" }
         })
     ),
@@ -92,10 +89,9 @@ export const MediaPlayback = Cluster(
     Attribute({
         name: "Duration", id: 0x2, type: "uint64", access: "R V", conformance: "AS", constraint: "desc",
         default: null, quality: "X",
-        details: "Indicates the duration, in milliseconds, of the current media being played back" +
-            "\n" +
-            "or null when duration is not applicable (for example, in live streaming content with no known " +
-            "duration). This attribute shall never be 0.",
+        details: "Indicates the duration, in milliseconds, of the current media being played back or null when " +
+            "duration is not applicable (for example, in live streaming content with no known duration). This " +
+            "attribute shall never be 0.",
         xref: { document: "cluster", section: "6.10.6.3" }
     }),
 
@@ -347,8 +343,8 @@ export const MediaPlayback = Cluster(
     Command({
         name: "Next", id: 0x5, access: "O", conformance: "O", direction: "request",
         response: "PlaybackResponse",
-        details: "Upon receipt, this shall cause the handler to be invoked for \"Next\". User experience is context- " +
-            "specific. This will often Go forward to the next media playback item.",
+        details: "Upon receipt, this shall cause the handler to be invoked for \"Next\". User experience is " +
+            "context-specific. This will often Go forward to the next media playback item.",
         xref: { document: "cluster", section: "6.10.7.6" }
     }),
 
@@ -387,8 +383,7 @@ export const MediaPlayback = Cluster(
             name: "FastForward", id: 0x7, access: "O", conformance: "VS", direction: "request",
             response: "PlaybackResponse",
 
-            details: "Upon receipt, this shall start playback of the media in the forward direction in case the media is" +
-                "\n" +
+            details: "Upon receipt, this shall start playback of the media in the forward direction in case the media is " +
                 "currently playing in the backward direction or is not playing. If the playback is already happening " +
                 "in the forward direction receipt of this command shall increase the speed of the media playback." +
                 "\n" +

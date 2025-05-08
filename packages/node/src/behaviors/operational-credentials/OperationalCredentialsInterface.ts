@@ -83,7 +83,7 @@ export namespace OperationalCredentialsInterface {
          *
          * A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
          *
-         * Effect When Received
+         * ### Effect When Received
          *
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
@@ -156,8 +156,6 @@ export namespace OperationalCredentialsInterface {
          * If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate stored in
          * the Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
          *
-         * WARNING
-         *
          * This command, if referring to an already existing Fabric not under the control of the invoking Administrator,
          * shall ONLY be invoked after obtaining some form of explicit user consent through some method executed by the
          * Administrator or Commissioner. This method of obtaining consent SHOULD employ as much data as possible about
@@ -183,10 +181,8 @@ export namespace OperationalCredentialsInterface {
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
          *
          * If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period,
-         * which would cause the new invocation to add a second root certificate within a given fail-
-         *
-         * safe timer period, then this command shall fail with a CONSTRAINT_ERROR status code sent back to the
-         * initiator.
+         * which would cause the new invocation to add a second root certificate within a given fail-safe timer period,
+         * then this command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
          *
          * If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
          * command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.

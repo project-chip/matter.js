@@ -57,9 +57,8 @@ export namespace NetworkCommissioningInterface {
 
         /**
          * This command shall remove the network configuration from the Cluster if there was already a network
-         * configuration with the same NetworkID. The relative order of the entries in the Networks
-         *
-         * attribute shall remain unchanged, except for the removal of the requested network configuration.
+         * configuration with the same NetworkID. The relative order of the entries in the Networks attribute shall
+         * remain unchanged, except for the removal of the requested network configuration.
          *
          * If this command is received without an armed fail-safe context (see ArmFailSafe), then this command shall
          * fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
@@ -119,9 +118,8 @@ export namespace NetworkCommissioningInterface {
          * configuration if the CommissioningComplete command (see CommissioningComplete) is not successfully invoked
          * before expiry of the Fail-Safe timer.
          *
-         * When non-concurrent commissioning is being used by a Commissioner or Administrator, the Con
-         *
-         * nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
+         * When non-concurrent commissioning is being used by a Commissioner or Administrator, the
+         * ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing the
          * commissioning channel, even if not yet connected to the operational network, unless the device would be
          * incapable of joining that network, in which case the usual failure path described in the prior paragraphs
          * shall be followed. Once the commissioning channel is closed, the operational channel will be started. It is

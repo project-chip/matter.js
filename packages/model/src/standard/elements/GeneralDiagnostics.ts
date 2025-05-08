@@ -97,8 +97,7 @@ export const GeneralDiagnostics = Cluster(
             details: "The ActiveHardwareFaults attribute shall indicate the set of faults currently detected by the Node. " +
                 "When the Node detects a fault has been raised, the appropriate HardwareFaultEnum value shall be " +
                 "added to this list. This list shall NOT contain more than one instance of a specific " +
-                "HardwareFaultEnum value. When the Node detects that all conditions contributing to a fault has been" +
-                "\n" +
+                "HardwareFaultEnum value. When the Node detects that all conditions contributing to a fault has been " +
                 "cleared, the corresponding HardwareFaultEnum value shall be removed from this list. An empty list " +
                 "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
                 "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
@@ -270,8 +269,8 @@ export const GeneralDiagnostics = Cluster(
             name: "TestEventTrigger", id: 0x0, access: "M", conformance: "M", direction: "request",
             response: "status",
 
-            details: "This command shall be supported to provide a means for certification tests to trigger some test- " +
-                "plan-specific events, necessary to assist in automation of device interactions for some " +
+            details: "This command shall be supported to provide a means for certification tests to trigger some " +
+                "test-plan-specific events, necessary to assist in automation of device interactions for some " +
                 "certification test cases. This command shall NOT cause any changes to the state of the device that " +
                 "persist after the last fabric is removed." +
                 "\n" +
@@ -313,8 +312,7 @@ export const GeneralDiagnostics = Cluster(
                 "Values of EventTrigger in the range 0xFFFF_FFFF_0000_0000 through 0xFFFF_FFFF_FFFF_FFFF are reserved " +
                 "for testing use by manufacturers and will not appear in CSA certification test literature." +
                 "\n" +
-                "If the value of EventTrigger received is not supported by the receiving Node, this command shall" +
-                "\n" +
+                "If the value of EventTrigger received is not supported by the receiving Node, this command shall " +
                 "fail with a status code of INVALID_COMMAND." +
                 "\n" +
                 "Otherwise, if the EnableKey value matches the configured internal value for a particular Node, and " +
@@ -418,7 +416,7 @@ export const GeneralDiagnostics = Cluster(
             details: "This field shall indicate the number of times to repeat the Value in the PayloadTestResponse’s " +
                 "Payload field." +
                 "\n" +
-                "Effect upon receipt" +
+                "### Effect upon receipt" +
                 "\n" +
                 "This command shall respond with a response status of CONSTRAINT_ERROR if either:" +
                 "\n" +
@@ -435,10 +433,9 @@ export const GeneralDiagnostics = Cluster(
                 "  • If Value is 0x55 and the Count is zero, then the PayloadTestResponse would have the Payload " +
                 "    field set to an empty octet string." +
                 "\n" +
-                "  • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set" +
-                "\n" +
-                "to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 " +
-                "representation would be paWlpaWlpaWlpQ==.",
+                "  • If Value is 0xA5 and the Count is 10, the PayloadTestResponse would have the Payload field set " +
+                "    to a content whose hexadecimal representation would be A5A5A5A5A5A5A5A5A5A5, and base64 " +
+                "    representation would be paWlpaWlpaWlpQ==.",
 
             xref: { document: "core", section: "11.12.7.4.3" }
         })
@@ -521,7 +518,7 @@ export const GeneralDiagnostics = Cluster(
         }),
         Field({
             name: "ThreadFault", id: 0x3, conformance: "O",
-            description: "The Node has encountered a fault with its802.15.4 radio."
+            description: "The Node has encountered a fault with its 802.15.4 radio."
         }),
         Field({
             name: "NfcFault", id: 0x4, conformance: "O",
@@ -643,8 +640,7 @@ export const GeneralDiagnostics = Cluster(
 
         Field({
             name: "HardwareAddress", id: 0x4, type: "hwadr", conformance: "M",
-            details: "This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network" +
-                "\n" +
+            details: "This field shall contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network " +
                 "interface and contain the current extended MAC address for a 802.15.4 interface. The byte order of " +
                 "the octstr shall be in wire byte order. For addresses values less than 64 bits, the first two bytes " +
                 "shall be zero.",

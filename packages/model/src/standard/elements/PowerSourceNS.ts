@@ -47,7 +47,7 @@ export const PowerSourceNs = SemanticNamespace(
     }),
 
     SemanticTag({
-        name: "EV", id: 0x4,
+        name: "Ev", id: 0x4,
         description: "The Power Source cluster is related to power provided from an electric vehicle",
         details: "Power Source clusters with this tag shall implement the BAT feature.",
         xref: { document: "namespace", section: "15.4" }

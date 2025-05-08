@@ -154,7 +154,7 @@ export namespace SoftwareDiagnostics {
              *
              *   • The CurrentHeapHighWatermark attribute This command has no payload.
              *
-             * Effect on Receipt
+             * ### Effect on Receipt
              *
              * On receipt of this command, the Node shall make the following modifications to attributes it supports:
              *

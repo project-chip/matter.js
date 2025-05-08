@@ -12,9 +12,8 @@ import { MediaInput } from "#clusters/media-input";
 export namespace MediaInputInterface {
     export interface Base {
         /**
-         * Upon receipt, this command shall change the media input on the device to the input at a specific
-         *
-         * index in the Input List.
+         * Upon receipt, this command shall change the media input on the device to the input at a specific index in the
+         * Input List.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.9.7.1
          */

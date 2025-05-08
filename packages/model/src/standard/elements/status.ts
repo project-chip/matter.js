@@ -64,7 +64,7 @@ export const status = Datatype(
     }),
     Field({
         name: "InvalidCommand", id: 0x85,
-        description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.",
+        description: "The cluster command is malformed, has missing fields, or fields with invalid values.Command not carried out.",
         xref: { document: "core", section: "8.10.1" }
     }),
     Field({
@@ -83,7 +83,7 @@ export const status = Datatype(
     }),
     Field({
         name: "ResourceExhausted", id: 0x89,
-        description: "An action or operation failed due to insufficient available resources.INSUFFICIENT_SPACE is anobsolete name for this error code.",
+        description: "An action or operation failed due to insufficient available resources.",
         xref: { document: "core", section: "8.10.1" }
     }),
     Field({
@@ -175,12 +175,12 @@ export const status = Datatype(
     }),
     Field({
         name: "TermsAndConditionsChanged", id: 0xcd,
-        description: "The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl to complete this.",
+        description: "The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenan ceUrl to complete this.",
         xref: { document: "core", section: "8.10.1" }
     }),
     Field({
         name: "MaintenanceRequired", id: 0xce,
-        description: "The node requires the user to visit the EnhancedSetupFlowMaintenanceUrl for instructions on further action.",
+        description: "The node requires the user to visit the EnhancedSetupFlowMaintenan ceUrl for instructions on further action.",
         xref: { document: "core", section: "8.10.1" }
     })
 );

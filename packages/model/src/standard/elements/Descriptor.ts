@@ -18,10 +18,10 @@ export const Descriptor = Cluster(
     {
         name: "Descriptor", id: 0x1d, classification: "endpoint", pics: "DESC",
 
-        details: "NOTE" +
+        details: "> [!NOTE]" +
             "\n" +
-            "The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for " +
-            "describing a node, its endpoints and clusters." +
+            "> The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for " +
+            "  describing a node, its endpoints and clusters." +
             "\n" +
             "This cluster describes an endpoint instance on the node, independently from other endpoints, but " +
             "also allows composition of endpoints to conform to complex device type patterns." +

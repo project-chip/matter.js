@@ -79,99 +79,99 @@ export function* scanDocument(docRef: HtmlReference) {
                 case "H4":
                 case "H5":
                 case "H6":
-                    // If we're lucky, there's actually a header tag
-                    yield* emit();
-                    const heading = parseHeading(element);
-                    if (heading) {
-                        currentRef = { ...ref, name: heading.name, xref: { ...ref.xref, section: heading.section } };
-                        fakeSection.faking = false;
-                    }
-                    break;
-
-                case "P":
-                    // Sometimes heading is just in a P so we have to guess as to "headingness".  Most of this code is
-                    // heuristics to do that.  Otherwise we just collect as prose associated with the section
-
-                    // Extract text
-                    const text = Str(element).replace(/\s*\([^)]+\)\s*/g, " ");
-
-                    // Test for "heading" shapes with a numerical prefix followed by a label
-                    if (text?.match(/^\d+\.(\d+\.)+ [ a-z0-9]+$/i) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
-                        let possibleHeading = parseHeading(element);
-
-                        // Ignore links elsewhere.  This occurs in TOC entries.  If this gets too fiddly then we can
-                        // instead just skip TOC pages
-                        const first = element.firstElementChild;
-                        if (first?.tagName === "A") {
-                            if ((first as HTMLAnchorElement).href?.length) {
-                                possibleHeading = undefined;
+                    {
+                        // New for 1.4.1 notes are formatted such that Acrobat decides the "NOTE" marker is a heading.
+                        // Just add to prose
+                        const text = Str(element);
+                        if (text === "NOTE") {
+                            if (currentRef) {
+                                if (!currentRef.prose) {
+                                    currentRef.prose = [];
+                                }
+                                currentRef.prose.push(element);
                             }
+                            continue;
                         }
 
-                        if (possibleHeading?.section.startsWith(ref.xref.section)) {
-                            // Yep, looks like a heading
+                        // If we're lucky, there's actually a header tag
+                        const heading = parseHeading(element);
+                        if (heading) {
                             yield* emit();
                             currentRef = {
                                 ...ref,
-                                name: possibleHeading.name,
-                                xref: { ...ref.xref, section: possibleHeading.section },
+                                name: heading.name,
+                                xref: { ...ref.xref, section: heading.section },
                             };
                             fakeSection.faking = false;
                             break;
                         }
-                    }
 
-                    // If there's just a bare name hanging repeating the section name, don't let it confuse us.  Yes,
-                    // it happens, see v1.1 cluster 6.5.5.2, "OutputTypeEnum"
-                    if (currentRef?.name === text) {
-                        continue;
-                    }
-
-                    // Sometimes there isn't even a section marker.  In this case we generate the missing section number
-                    if (looksLikeField(text) && fakeSection.faking && !fakeSection.fakingField) {
-                        // Already faking; treat these like a sub-headings to our fake heading
-                        yield* emit();
-                        fakeSection.subsection++;
-                        currentRef = {
-                            ...ref,
-                            name: text,
-                            xref: {
-                                ...ref.xref,
-                                section: `${fakeSection.actual}.${fakeSection.section}.${fakeSection.subsection}`,
-                            },
-                        };
-                        break;
-                    } else if (looksLikeDatatype(text)) {
-                        // Looks like a section
-                        const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
-                        yield* emit();
-                        if (fakeSection.faking) {
-                            fakeSection.section++;
-                            fakeSection.subsection = 0;
-                        } else {
-                            fakeSection.faking = true;
-                            fakeSection.actual = realSection;
-                            fakeSection.section = 1;
-                            fakeSection.subsection = 0;
+                        // As of 1.4.1 the "fake headings" without numbers may be in header tags
+                        const fakeGen = detectUnnumberedHeading(ref, text);
+                        if (fakeGen) {
+                            yield* fakeGen();
+                            break;
                         }
-                        currentRef = {
-                            ...ref,
-                            name: text,
-                            xref: { ...ref.xref, section: `${fakeSection.actual}.${fakeSection.section}` },
-                        };
-
-                        // Note if we're faking a field or a value so we know not to treat them like subsections when we
-                        // see the next one
-                        fakeSection.fakingField = !!text.match(/(?: Field| Value)$/i);
-                        break;
                     }
+                    break;
 
-                    // Not a heading so save as prose
-                    if (text && element.className !== "nav" && currentRef) {
-                        if (!currentRef.prose) {
-                            currentRef.prose = [];
+                case "P":
+                    {
+                        // Sometimes heading is just in a P so we have to guess as to "headingness".  Most of this code is
+                        // heuristics to do that.  Otherwise we just collect as prose associated with the section
+
+                        // Extract text
+                        const text = Str(element).replace(/\s*\([^)]+\)\s*/g, " ");
+
+                        // Test for "heading" shapes with a numerical prefix followed by a label
+                        if (
+                            text?.match(/^\d+\.(\d+\.)+ [ a-z0-9]+$/i) ||
+                            text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)
+                        ) {
+                            let possibleHeading = parseHeading(element);
+
+                            // Ignore links elsewhere.  This occurs in TOC entries.  If this gets too fiddly then we can
+                            // instead just skip TOC pages
+                            const first = element.firstElementChild;
+                            if (first?.tagName === "A") {
+                                if ((first as HTMLAnchorElement).href?.length) {
+                                    possibleHeading = undefined;
+                                }
+                            }
+
+                            if (possibleHeading?.section.startsWith(ref.xref.section)) {
+                                // Yep, looks like a heading
+                                yield* emit();
+                                currentRef = {
+                                    ...ref,
+                                    name: possibleHeading.name,
+                                    xref: { ...ref.xref, section: possibleHeading.section },
+                                };
+                                fakeSection.faking = false;
+                                break;
+                            }
                         }
-                        currentRef.prose.push(element);
+
+                        // If there's just a bare name hanging repeating the section name, don't let it confuse us.  Yes,
+                        // it happens, see v1.1 cluster 6.5.5.2, "OutputTypeEnum"
+                        if (currentRef?.name === text) {
+                            continue;
+                        }
+
+                        // Worst case scenario is a "heading" in a paragraph that doesn't even have a section marker
+                        const fakeGen = detectUnnumberedHeading(ref, text);
+                        if (fakeGen) {
+                            yield* fakeGen();
+                            break;
+                        }
+
+                        // Not a heading so save as prose
+                        if (text && element.className !== "nav" && currentRef) {
+                            if (!currentRef.prose) {
+                                currentRef.prose = [];
+                            }
+                            currentRef.prose.push(element);
+                        }
                     }
                     break;
 
@@ -187,6 +187,54 @@ export function* scanDocument(docRef: HtmlReference) {
                     tables.push(element as HTMLTableElement);
                     break;
             }
+        }
+    }
+
+    // Sometimes there isn't even a section marker.  In this case we generate the missing section number
+    function detectUnnumberedHeading(ref: HtmlReference, text: string) {
+        if (looksLikeField(text) && fakeSection.faking && !fakeSection.fakingField) {
+            // Already faking; treat these like a sub-headings to our fake heading
+            return function* () {
+                yield* emit();
+                fakeSection.subsection++;
+                currentRef = {
+                    ...ref,
+                    name: text,
+                    xref: {
+                        ...ref.xref,
+                        section: `${fakeSection.actual}.${fakeSection.section}.${fakeSection.subsection}`,
+                    },
+                };
+            };
+        }
+
+        if (looksLikeDatatype(text)) {
+            // Looks like a section
+            return function* () {
+                const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
+
+                yield* emit();
+
+                if (fakeSection.faking) {
+                    fakeSection.section++;
+                    fakeSection.subsection = 0;
+                } else {
+                    fakeSection.faking = true;
+                    fakeSection.actual = realSection;
+                    fakeSection.section = 1;
+                    fakeSection.subsection = 0;
+                }
+
+                currentRef = {
+                    ...ref,
+                    name: text,
+                    xref: { ...ref.xref, section: `${fakeSection.actual}.${fakeSection.section}` },
+                };
+
+                // Note if we're faking a field or a value so we know not to treat them like subsections when we
+                // see the next one
+                fakeSection.fakingField = !!text.match(/(?: Field| Value)$/i);
+            };
         }
     }
 }

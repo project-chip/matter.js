@@ -343,9 +343,8 @@ export const TimeSynchronization = Cluster(
                 "valid time source, it may send a Granularity of NoTimeGranularity." +
                 "\n" +
                 "Upon receipt of this command, the node may update its UTCTime attribute to match the time specified " +
-                "in the command, if the stated Granularity and TimeSource are acceptable. The node shall" +
-                "\n" +
-                "update its UTCTime attribute if its current Granularity is NoTimeGranularity." +
+                "in the command, if the stated Granularity and TimeSource are acceptable. The node shall update its " +
+                "UTCTime attribute if its current Granularity is NoTimeGranularity." +
                 "\n" +
                 "If the time is updated, the node shall also update its Granularity attribute based on the " +
                 "granularity specified in the command and the expected clock drift of the node. This SHOULD normally " +
@@ -457,9 +456,8 @@ export const TimeSynchronization = Cluster(
 
             details: "This command is used to set the DST offsets for a node." +
                 "\n" +
-                "  • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with" +
-                "\n" +
-                "RESOURCE_EXHAUSTED." +
+                "  • If the length of DSTOffset is larger than DSTOffsetListMaxSize, the node shall respond with " +
+                "    RESOURCE_EXHAUSTED." +
                 "\n" +
                 "  • Else if the list entries do not conform to the list requirements for DSTOffset attribute, the " +
                 "    node shall respond with CONSTRAINT_ERROR." +
@@ -518,11 +516,11 @@ export const TimeSynchronization = Cluster(
         }),
         Field({
             name: "MillisecondsGranularity", id: 0x3, conformance: "M",
-            description: "This indicates the node is synchronized to an upstream source using high resolution time- synchronization protocol such as NTP, or has built-in GNSS with some amount of jitter applying its GNSS timestamp. UTC Time is accurate to ± 50 ms."
+            description: "This indicates the node is synchronized to an upstream source using high resolution time-synchronization protocol such as NTP, or has built-in GNSS with some amount of jitter applying its GNSS timestamp. UTC Time is accurate to ± 50 ms."
         }),
         Field({
             name: "MicrosecondsGranularity", id: 0x4, conformance: "M",
-            description: "This indicates the node is synchronized to an upstream source using a highly precise time- synchronization protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs."
+            description: "This indicates the node is synchronized to an upstream source using a highly precise time-synchronization protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs."
         })
     ),
 

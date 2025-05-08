@@ -17,12 +17,9 @@ import {
 export const BallastConfiguration = Cluster(
     {
         name: "BallastConfiguration", id: 0x301, classification: "application", pics: "BC",
-        details: "This cluster is used for configuring a lighting ballast." +
-            "\n" +
-            "NOTE Support for Ballast Configuration cluster is provisional.",
+        details: "This cluster is used for configuring a lighting ballast.",
         xref: { document: "cluster", section: "3.3" }
     },
-
     Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 4 }),
 
     Attribute({
@@ -75,11 +72,10 @@ export const BallastConfiguration = Cluster(
             "(see Dimming Curve) when the Level Control Cluster’s CurrentLevel attribute equals to 254 (and the " +
             "On/Off Cluster’s OnOff attribute equals to TRUE)." +
             "\n" +
-            "The value of this attribute shall be both less than or equal to PhysicalMaxLevel and greater than" +
-            "\n" +
-            "or equal to MinLevel. If an attempt is made to set this attribute to a level where these conditions " +
-            "are not met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level " +
-            "shall NOT be set.",
+            "The value of this attribute shall be both less than or equal to PhysicalMaxLevel and greater than or " +
+            "equal to MinLevel. If an attempt is made to set this attribute to a level where these conditions are " +
+            "not met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall " +
+            "NOT be set.",
 
         xref: { document: "cluster", section: "3.3.6.5" }
     }),
@@ -106,7 +102,7 @@ export const BallastConfiguration = Cluster(
                 "configured light output of the lamps. A typical use for this attribute is to compensate for " +
                 "reduction in efficiency over the lifetime of a lamp." +
                 "\n" +
-                "The light output is given by" +
+                "### The light output is given by" +
                 "\n" +
                 "actual light output = configured light output x BallastFactorAdjustment / 100%" +
                 "\n" +
@@ -169,9 +165,7 @@ export const BallastConfiguration = Cluster(
         name: "LampAlarmMode", id: 0x34, type: "LampAlarmModeBitmap", access: "RW VM", conformance: "O",
         default: 0,
         details: "This attribute shall specify which attributes may cause an alarm notification to be generated. Ain " +
-            "each bit position means that its associated attribute is able to generate an alarm." +
-            "\n" +
-            "NOTE All alarms are also logged in the alarm table – see Alarms cluster.",
+            "each bit position means that its associated attribute is able to generate an alarm.",
         xref: { document: "cluster", section: "3.3.6.13" }
     }),
 

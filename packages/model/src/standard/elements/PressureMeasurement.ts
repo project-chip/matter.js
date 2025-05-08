@@ -75,9 +75,7 @@ export const PressureMeasurement = Cluster(
         {
             name: "ScaledValue", id: 0x10, type: "int16", access: "R V", conformance: "EXT",
             constraint: "minScaledValue to maxScaledValue", default: 0, quality: "X",
-            details: "Indicates the pressure in Pascals as follows:" +
-                "\n" +
-                "ScaledValue = 10Scale x Pressure [Pa]" +
+            details: "Indicates the pressure in Pascals as follows: ScaledValue = 10Scale x Pressure [Pa]" +
                 "\n" +
                 "The null value indicates that the value is not available.",
             xref: { document: "cluster", section: "2.4.5.5" }
@@ -103,9 +101,8 @@ export const PressureMeasurement = Cluster(
     Attribute({
         name: "ScaledTolerance", id: 0x13, type: "uint16", access: "R V", conformance: "[EXT]",
         constraint: "max 2048", default: 0,
-        details: "Indicates the magnitude of the possible error that is associated with Scaled" +
-            "\n" +
-            "Value. The true value is located in the range" +
+        details: "Indicates the magnitude of the possible error that is associated with ScaledValue. The true value is " +
+            "located in the range" +
             "\n" +
             "(ScaledValue – ScaledTolerance) to (ScaledValue + ScaledTolerance).",
         xref: { document: "cluster", section: "2.4.5.8" }

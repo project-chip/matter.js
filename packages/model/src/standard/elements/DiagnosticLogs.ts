@@ -62,7 +62,7 @@ export const DiagnosticLogs = Cluster(
             details: "This field shall be present if the RequestedProtocol is BDX. The TransferFileDesignator shall be set " +
                 "as the File Designator of the BDX transfer if initiated." +
                 "\n" +
-                "Effect on Receipt" +
+                "### Effect on Receipt" +
                 "\n" +
                 "On receipt of this command, the Node shall respond with a RetrieveLogsResponse command." +
                 "\n" +
@@ -140,7 +140,7 @@ export const DiagnosticLogs = Cluster(
 
         Field({
             name: "EndUserSupport", id: 0x0, conformance: "M",
-            description: "Logs to be used for end- user support",
+            description: "Logs to be used for end-user support",
             details: "shall indicate that the purpose of the log request is to retrieve logs for the intention of " +
                 "providing support to an end-user.",
             xref: { document: "core", section: "11.11.4.1.1" }

@@ -26,7 +26,7 @@ import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { Identity } from "#general";
 import { ClusterRegistry } from "../cluster/ClusterRegistry.js";
 
-export namespace JointFabricDatastoreCluster {
+export namespace JointFabricDatastore {
     /**
      * @see {@link MatterSpecification.v14.Core} § 11.24.5.4
      */
@@ -406,7 +406,7 @@ export namespace JointFabricDatastoreCluster {
      */
     export const ClusterInstance = MutableCluster({
         id: 0x752,
-        name: "JointFabricDatastoreCluster",
+        name: "JointFabricDatastore",
         revision: 1,
 
         attributes: {
@@ -642,8 +642,6 @@ export namespace JointFabricDatastoreCluster {
      * The Admin level of access to the Joint Fabric Datastore cluster server shall be limited to JF Administrator Nodes
      * identified using the Administrator CAT.
      *
-     * NOTE Support for Joint Fabric Datastore cluster is provisional.
-     *
      * @see {@link MatterSpecification.v14.Core} § 11.24
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
@@ -652,6 +650,6 @@ export namespace JointFabricDatastoreCluster {
     export const Complete = Cluster;
 }
 
-export type JointFabricDatastoreClusterCluster = JointFabricDatastoreCluster.Cluster;
-export const JointFabricDatastoreClusterCluster = JointFabricDatastoreCluster.Cluster;
-ClusterRegistry.register(JointFabricDatastoreCluster.Complete);
+export type JointFabricDatastoreCluster = JointFabricDatastore.Cluster;
+export const JointFabricDatastoreCluster = JointFabricDatastore.Cluster;
+ClusterRegistry.register(JointFabricDatastore.Complete);

@@ -103,14 +103,10 @@ export const NetworkCommissioning = Cluster(
     Attribute({
         name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V", conformance: "WI | TH",
         constraint: "desc", quality: "F",
-
         details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
             "instance to report a successful or failed network connection indication. This maximum time shall " +
-            "account for all operations needed until a successful network connection is" +
-            "\n" +
-            "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
-            "necessary internal retries.",
-
+            "account for all operations needed until a successful network connection is deemed to have occurred, " +
+            "including, for example, obtaining IP addresses, or the execution of necessary internal retries.",
         xref: { document: "core", section: "11.9.6.4" }
     }),
 
@@ -417,7 +413,7 @@ export const NetworkCommissioning = Cluster(
 
             details: "Credentials is the passphrase or PSK for the network (if any is needed)." +
                 "\n" +
-                "Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- selected " +
+                "Security type, cipher and credential format (passphrase or PSK) shall be contextually auto-selected " +
                 "during execution of the ConnectNetwork Command and during subsequent operational state network " +
                 "connections, based on the most secure Wi-Fi security type available within beacons and probe " +
                 "responses for the set of all discovered BSSIDs for the configured SSID. The type of PSK or " +
@@ -438,10 +434,8 @@ export const NetworkCommissioning = Cluster(
                 "\n" +
                 "  • 8..63 bytes: WPA/WPA2/WPA3 passphrase" +
                 "\n" +
-                "  • 64 bytes: WPA/WPA2/WPA3 raw hex PSK" +
-                "\n" +
-                "These lengths shall be contextually interpreted based on the security type of the BSSID where " +
-                "connection will occur." +
+                "  • 64 bytes: WPA/WPA2/WPA3 raw hex PSK These lengths shall be contextually interpreted based on the " +
+                "    security type of the BSSID where connection will occur." +
                 "\n" +
                 "When the length of Credentials and available set of BSSID admits more than one option, such as the " +
                 "presence of both WPA2 and WPA security type within the result set, WPA2 shall be considered more " +
@@ -507,9 +501,8 @@ export const NetworkCommissioning = Cluster(
             response: "NetworkConfigResponse",
 
             details: "This command shall remove the network configuration from the Cluster if there was already a network " +
-                "configuration with the same NetworkID. The relative order of the entries in the Networks" +
-                "\n" +
-                "attribute shall remain unchanged, except for the removal of the requested network configuration." +
+                "configuration with the same NetworkID. The relative order of the entries in the Networks attribute " +
+                "shall remain unchanged, except for the removal of the requested network configuration." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see ArmFailSafe), then this command " +
                 "shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator." +
@@ -643,9 +636,8 @@ export const NetworkCommissioning = Cluster(
                 "of configuration if the CommissioningComplete command (see CommissioningComplete) is not " +
                 "successfully invoked before expiry of the Fail-Safe timer." +
                 "\n" +
-                "When non-concurrent commissioning is being used by a Commissioner or Administrator, the Con" +
-                "\n" +
-                "nectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing " +
+                "When non-concurrent commissioning is being used by a Commissioner or Administrator, the " +
+                "ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to closing " +
                 "the commissioning channel, even if not yet connected to the operational network, unless the device " +
                 "would be incapable of joining that network, in which case the usual failure path described in the " +
                 "prior paragraphs shall be followed. Once the commissioning channel is closed, the operational " +
@@ -797,7 +789,7 @@ export const NetworkCommissioning = Cluster(
 
                 details: "See Breadcrumb for usage." +
                     "\n" +
-                    "Effect when received" +
+                    "### Effect when received" +
                     "\n" +
                     "If the Networks attribute does not contain a matching entry, the command shall immediately respond " +
                     "with NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound." +
@@ -817,7 +809,7 @@ export const NetworkCommissioning = Cluster(
                     "Re-ordering to the same NetworkIndex as the current location shall be considered as a success and " +
                     "yield no visible changes of the Networks attribute." +
                     "\n" +
-                    "Examples of re-ordering" +
+                    "### Examples of re-ordering" +
                     "\n" +
                     "To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi " +
                     "device:" +
@@ -868,12 +860,12 @@ export const NetworkCommissioning = Cluster(
         {
             name: "ThreadCapabilitiesBitmap", type: "map16",
 
-            details: "The ThreadCapabilitiesBitmap encodes the supported Thread features and capabilities of a Thread- " +
-                "enabled network interface." +
+            details: "The ThreadCapabilitiesBitmap encodes the supported Thread features and capabilities of a " +
+                "Thread-enabled network interface." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "The valid combinations of capabilities are restricted and dependent on Thread version.",
+                "> The valid combinations of capabilities are restricted and dependent on Thread version.",
 
             xref: { document: "core", section: "11.9.5.2" }
         },
@@ -929,7 +921,7 @@ export const NetworkCommissioning = Cluster(
         Field({ name: "NetworkNotFound", id: 0x5, conformance: "M", description: "Cannot find AP: SSID Not found" }),
         Field({
             name: "RegulatoryError", id: 0x6, conformance: "M",
-            description: "Cannot find AP: Mismatch on band/channels/regulatory domain/ 2.4GHz vs 5GHz"
+            description: "Cannot find AP: Mismatch on band/channels/regulato ry domain / 2.4GHz vs 5GHz"
         }),
         Field({
             name: "AuthFailure", id: 0x7, conformance: "M",
@@ -969,14 +961,14 @@ export const NetworkCommissioning = Cluster(
                 "SSID for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet " +
                 "networks." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. " +
-                "Implementations must be careful to support reporting byte strings without requiring a particular " +
-                "encoding for transfer. Only the commissioner should try to potentially decode the bytes. The most " +
-                "common encoding is UTF-8, however this is just a convention. Some configurations may use Latin-1 or " +
-                "other character sets. A commissioner may decode using UTF-8, replacing encoding errors with \"?\" at " +
-                "the application level while retaining the underlying representation." +
+                "> SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. " +
+                "  Implementations must be careful to support reporting byte strings without requiring a particular " +
+                "  encoding for transfer. Only the commissioner should try to potentially decode the bytes. The most " +
+                "  common encoding is UTF-8, however this is just a convention. Some configurations may use Latin-1 " +
+                "  or other character sets. A commissioner may decode using UTF-8, replacing encoding errors with \"?\" " +
+                "  at the application level while retaining the underlying representation." +
                 "\n" +
                 "XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet " +
                 "string.",

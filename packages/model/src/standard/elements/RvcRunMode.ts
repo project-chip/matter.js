@@ -108,11 +108,11 @@ export const RvcRunMode = Cluster(
                 "or paused due to an error, due to a pause command, or for recharging etc. If currently paused and " +
                 "the device can resume, it will continue to map." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "this mode is intended to be used so the current space can be mapped by the device if the robot has " +
-                "not previously done that, or if the layout has substantially changed, for an optimal subsequent " +
-                "cleaning experience.",
+                "> this mode is intended to be used so the current space can be mapped by the device if the robot has " +
+                "  not previously done that, or if the layout has substantially changed, for an optimal subsequent " +
+                "  cleaning experience.",
 
             xref: { document: "cluster", section: "7.2.7.2.3" }
         })

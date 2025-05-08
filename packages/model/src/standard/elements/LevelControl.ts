@@ -52,7 +52,7 @@ export const LevelControl = Cluster(
 
         Field({
             name: "FQ", conformance: "P", constraint: "2", default: 0, description: "Frequency",
-            details: "NOTE The Frequency feature is provisional.",
+            details: "Supports frequency attributes and behavior.",
             xref: { document: "cluster", section: "1.6.4.3" }
         })
     ),
@@ -123,7 +123,8 @@ export const LevelControl = Cluster(
         name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
         constraint: "minFrequency to maxFrequency", default: 0, quality: "S P Q",
 
-        details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown." +
+        details: "This attribute shall indicate the frequency at which the device is at CurrentLevel. A " +
+            "CurrentFrequency of 0 is unknown." +
             "\n" +
             "Changes to this attribute shall only be marked as reportable in the following cases:" +
             "\n" +
@@ -281,9 +282,7 @@ export const LevelControl = Cluster(
                 "the DefaultMoveRate attribute shall be used if that attribute is supported and its value is not " +
                 "null. If the Rate field is null and the DefaultMoveRate attribute is either not supported or set to " +
                 "null, then the device SHOULD move as fast as it is able. If the device is not able to move at a " +
-                "variable rate, this" +
-                "\n" +
-                "field may be disregarded.",
+                "variable rate, this field may be disregarded.",
 
             xref: { document: "cluster", section: "1.6.7.2.2" }
         }),
@@ -312,8 +311,7 @@ export const LevelControl = Cluster(
             name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X",
 
             details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. A " +
-                "step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to" +
-                "\n" +
+                "step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to " +
                 "this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as " +
                 "fast as it is able." +
                 "\n" +

@@ -8,7 +8,7 @@
 
 import { MaybePromise } from "#general";
 
-export namespace JointFabricDatastoreClusterInterface {
+export namespace JointFabricDatastoreInterface {
     export interface Base {
         /**
          * @see {@link MatterSpecification.v14.Core} § 11.24.7
@@ -112,6 +112,4 @@ export namespace JointFabricDatastoreClusterInterface {
     }
 }
 
-export type JointFabricDatastoreClusterInterface = {
-    components: [{ flags: {}, methods: JointFabricDatastoreClusterInterface.Base }]
-};
+export type JointFabricDatastoreInterface = { components: [{ flags: {}, methods: JointFabricDatastoreInterface.Base }] };

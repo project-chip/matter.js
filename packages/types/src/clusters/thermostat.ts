@@ -412,7 +412,7 @@ export namespace Thermostat {
         /**
          * Users are on vacation
          *
-         * This value shall indicate the preset for periods when users are on vacation, or otherwise out-of- home for
+         * This value shall indicate the preset for periods when users are on vacation, or otherwise out-of-home for
          * extended periods of time.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 4.3.8.22.6
@@ -448,7 +448,7 @@ export namespace Thermostat {
         automatic: BitFlag(0),
 
         /**
-         * Preset supports user- provided names
+         * Preset supports user-provided names
          */
         supportsNames: BitFlag(1)
     };
@@ -1058,9 +1058,9 @@ export namespace Thermostat {
     };
 
     /**
-     * NOTE
+     * > [!NOTE]
      *
-     * CoolingAndHeating
+     * > CoolingAndHeating
      *
      * A thermostat indicating it supports CoolingAndHeating (or CoolingAndHeatingWithReheat) SHOULD be able to request
      * heating or cooling on demand and will usually support the Auto SystemMode.
@@ -1444,7 +1444,7 @@ export namespace Thermostat {
              * Indicates the absolute minimum level that the heating setpoint may be set to. This is a limitation
              * imposed by the manufacturer.
              *
-             * Refer to Setpoint Limits for constraints
+             * ### Refer to Setpoint Limits for constraints
              *
              * @see {@link MatterSpecification.v14.Cluster} § 4.3.9.5
              */
@@ -1471,9 +1471,8 @@ export namespace Thermostat {
              * If an attempt is made to set this attribute to a value greater than MaxHeatSetpointLimit or less than
              * MinHeatSetpointLimit, a response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * If this attribute is set to a value that is greater than
-             *
-             * Band), the value of OccupiedCoolingSetpoint shall be adjusted to (OccupiedHeatingSetpoint +
+             * If this attribute is set to a value that is greater than (OccupiedCoolingSetpoint - MinSetpointDeadBand),
+             * the value of OccupiedCoolingSetpoint shall be adjusted to (OccupiedHeatingSetpoint +
              * MinSetpointDeadBand).
              *
              * If the occupancy status of the room is unknown, this attribute shall be used as the heating mode
@@ -1541,7 +1540,7 @@ export namespace Thermostat {
              * Indicates the absolute maximum level that the cooling setpoint may be set to. This is a limitation
              * imposed by the manufacturer.
              *
-             * Refer to Setpoint Limits for constraints
+             * ### Refer to Setpoint Limits for constraints
              *
              * @see {@link MatterSpecification.v14.Cluster} § 4.3.9.8
              */
@@ -1631,10 +1630,10 @@ export namespace Thermostat {
              * (e.g., out of the range supported by the Thermostat server), the Thermostat server shall respond with a
              * status of SUCCESS and set the value of LocalTemperatureCalibration to the upper or lower limit reached.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * Prior to revision 8 of this cluster specification the value of this attribute was constrained to a range
-             * of -2.5°C to 2.5°C.
+             * > Prior to revision 8 of this cluster specification the value of this attribute was constrained to a
+             *   range of -2.5°C to 2.5°C.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 4.3.9.12
              */
@@ -1688,8 +1687,7 @@ export namespace Thermostat {
              *
              * If this attribute is set to a value that is greater than (UnoccupiedCoolingSetpoint -
              * MinSetpointDeadBand), the value of UnoccupiedCoolingSetpoint shall be adjusted to
-             *
-             * + MinSetpointDeadBand).
+             * (UnoccupiedHeatingSetpoint + MinSetpointDeadBand).
              *
              * If the occupancy status of the room is unknown, this attribute shall NOT be used.
              *
@@ -1714,12 +1712,10 @@ export namespace Thermostat {
              *
              * Refer to Setpoint Limits for constraints.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * Prior to revision 8 of this cluster specification the value of this attribute was constrained to a range
-             * of 0°C to 2.5°C.
-             *
-             * NOTE
+             * > Prior to revision 8 of this cluster specification the value of this attribute was constrained to a
+             *   range of 0°C to 2.5°C.
              *
              * For backwards compatibility, this attribute is optionally writeable. However any writes to this attribute
              * shall be silently ignored.
@@ -1824,8 +1820,9 @@ export namespace Thermostat {
              * Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to float
              * above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + OccupiedSetback) or below the
              * OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – OccupiedSetback) before initiating a
-             * state change to bring the temperature back to the user’s desired setpoint. This attribute is sometimes
-             * also referred to as the “span.”
+             * state change to bring the temperature back to the user’s
+             *
+             * desired setpoint. This attribute is sometimes also referred to as the “span.”
              *
              * The purpose of this attribute is to allow remote configuration of the span between the desired setpoint
              * and the measured temperature to help prevent over-cycling and reduce energy bills, though this may result
@@ -2007,8 +2004,8 @@ export namespace Thermostat {
              *     a. If the BuiltIn field is null:
              *
              *       i. If there is a PresetStruct in the current value with a matching PresetHandle field, the BuiltIn
-             *           field on the pending PresetStruct shall be set to the value of the BuiltIn on the matching
-             *           PresetStruct.
+             *          field on the pending PresetStruct shall be set to the value of the BuiltIn on the matching
+             *          PresetStruct.
              *
              *       ii. Otherwise, the BuiltIn field on the pending PresetStruct shall be set to false.
              *
@@ -2021,11 +2018,11 @@ export namespace Thermostat {
              *        PresetStruct, the server shall check for invalid removal of the PresetStruct:
              *
              *       i. If the BuiltIn field is true on the removed PresetStruct, the attribute status shall be
-             *            CONSTRAINT_ERROR.
+             *          CONSTRAINT_ERROR.
              *
              *       ii. If the MSCH feature is supported and the removed PresetHandle would be referenced by any
-             *            PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value of the
-             *            Schedules attribute, the attribute status shall be INVALID_IN_STATE.
+             *           PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value of the
+             *           Schedules attribute, the attribute status shall be INVALID_IN_STATE.
              *
              *       iii. If the removed PresetHandle is equal to the value of the ActivePresetHandle attribute, the
              *            attribute status shall be INVALID_IN_STATE.
@@ -2109,11 +2106,11 @@ export namespace Thermostat {
              *        modification of an existing schedule.
              *
              *       i. If the value of the ScheduleHandle field does not match any of the existing schedules, a
-             *            response with the status code NOT_FOUND shall be returned.
+             *          response with the status code NOT_FOUND shall be returned.
              *
              *       ii. If the BuiltIn field is true, and the ScheduleStruct in the current value with a matching
-             *            ScheduleHandle field has a BuiltIn field set to false, a response with the status code
-             *            CONSTRAINT_ERROR shall be returned.
+             *           ScheduleHandle field has a BuiltIn field set to false, a response with the status code
+             *           CONSTRAINT_ERROR shall be returned.
              *
              *       iii. If the BuiltIn field is false, and the ScheduleStruct in the current value with a matching
              *            ScheduleHandle field has a BuiltIn field set to true, a response with the status code
@@ -2150,8 +2147,8 @@ export namespace Thermostat {
              *        PresetHandle field, a response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *       i. If the SystemMode field is present, but the ScheduleTypeStruct matching the value of the
-             *           SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit
-             *           set, a response with the status code CONSTRAINT_ERROR shall be returned.
+             *          SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit set,
+             *          a response with the status code CONSTRAINT_ERROR shall be returned.
              *
              *       ii. If the SystemMode field is has a value of SystemModeOff, but the ScheduleTypeStruct matching
              *           the value of the SystemMode field on the encompassing ScheduleStruct does not have the
@@ -2181,8 +2178,8 @@ export namespace Thermostat {
              *     a. If the BuiltIn field is null:
              *
              *       i. If there is a ScheduleStruct in the current value with a matching ScheduleHandle field, the
-             *           BuiltIn field on the pending ScheduleStruct shall be set to the value of the BuiltIn on the
-             *           matching ScheduleStruct.
+             *          BuiltIn field on the pending ScheduleStruct shall be set to the value of the BuiltIn on the
+             *          matching ScheduleStruct.
              *
              *       ii. Otherwise, the BuiltIn field on the pending ScheduleStruct shall be set to false.
              *
@@ -2195,7 +2192,7 @@ export namespace Thermostat {
              *        ScheduleStruct, the server shall check for invalid removal of the ScheduleStruct:
              *
              *       i. If the BuiltIn field is true on the removed ScheduleStruct, the attribute status shall be
-             *           CONSTRAINT_ERROR.
+             *          CONSTRAINT_ERROR.
              *
              *       ii. If the removed ScheduleHandle is equal to the value of the ActiveScheduleHandle attribute, the
              *           attribute status shall be INVALID_IN_STATE.
@@ -2323,10 +2320,9 @@ export namespace Thermostat {
 
             /**
              * Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP switches
-             * to set these parameters, this information shall be available read-only
-             *
-             * from the DIP switches. If these parameters are set via software, there shall be read/write access in
-             * order to provide remote programming capability.
+             * to set these parameters, this information shall be available read-only from the DIP switches. If these
+             * parameters are set via software, there shall be read/write access in order to provide remote programming
+             * capability.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 4.3.9.11
              * @deprecated
@@ -2393,7 +2389,7 @@ export namespace Thermostat {
              * If the server supports a setpoint hold for a specific duration, it SHOULD also implement the
              * SetpointHoldExpiryTimestamp attribute.
              *
-             * If this attribute is updated to SetpointHoldOn and the TemperatureSetpointHoldDuration has a non- null
+             * If this attribute is updated to SetpointHoldOn and the TemperatureSetpointHoldDuration has a non-null
              * value and the SetpointHoldExpiryTimestamp is supported, the server shall update the
              * SetpointHoldExpiryTimestamp with a value of current UTC timestamp, in seconds, plus the value in
              * TemperatureSetpointHoldDuration multiplied by 60.
@@ -2442,10 +2438,10 @@ export namespace Thermostat {
              * When ScheduleActive is not set, the setpoint is altered only by manual up/down changes at the thermostat
              * or remotely, not by internal schedule programming.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * Modifying the ScheduleActive bit does not clear or delete previous weekly schedule programming
-             * configurations.
+             * > Modifying the ScheduleActive bit does not clear or delete previous weekly schedule programming
+             *   configurations.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 4.3.9.32
              */
@@ -2672,44 +2668,6 @@ export namespace Thermostat {
 
     /**
      * This cluster provides an interface to the functionality of a thermostat.
-     *
-     * Optional temperature, humidity and occupancy sensors
-     *
-     * Thermostat
-     *
-     * Heating / cooling control panel
-     *
-     * C
-     *
-     * Dehumidification configuration
-     *
-     * Dehumidification notification
-     *
-     * ThermostatS
-     *
-     * Heating / cooling device (e.g. indoor air handler)
-     *
-     * S
-     *
-     * user interface S
-     *
-     * configuration
-     *
-     * C
-     *
-     * Configuration tool
-     *
-     * Thermostat configuration
-     *
-     * C C Fan control S
-     *
-     * ThermostatS notification C
-     *
-     * C = Client S = Server
-     *
-     * Note: Device names are examples for illustration purposes only
-     *
-     * Figure 15. Example Usage of the Thermostat and Related Clusters"
      *
      * Per the Matter specification you cannot use {@link ThermostatCluster} without enabling certain feature
      * combinations. You must use the {@link with} factory method to obtain a working cluster.

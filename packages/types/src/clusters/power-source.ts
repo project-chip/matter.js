@@ -962,7 +962,7 @@ export namespace PowerSource {
             wiredAssessedInputFrequency: OptionalAttribute(0x4, TlvNullable(TlvUInt16), { omitChanges: true }),
 
             /**
-             * Indicates the type of current the Node expects to be provided by the hard- wired source as specified in
+             * Indicates the type of current the Node expects to be provided by the hard-wired source as specified in
              * WiredCurrentTypeEnum.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.7.7.6
@@ -970,7 +970,7 @@ export namespace PowerSource {
             wiredCurrentType: FixedAttribute(0x5, TlvEnum<WiredCurrentType>()),
 
             /**
-             * Indicates the assessed instantaneous current draw of the Node on the hard- wired source, in mA
+             * Indicates the assessed instantaneous current draw of the Node on the hard-wired source, in mA
              * (milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If the
              * wired source is not connected, but the Node is still able to assess a value, then the assessed value may
              * be reported.
@@ -1098,7 +1098,7 @@ export namespace PowerSource {
             batReplacementNeeded: Attribute(0xf, TlvBoolean),
 
             /**
-             * Indicates the replaceability of the battery as specified in BatReplaceabilityEnum.
+             * This attribute shall indicate the replaceability of the battery as specified in BatReplaceabilityEnum.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.7.7.17
              */
@@ -1119,9 +1119,7 @@ export namespace PowerSource {
              * contributing to a fault have been cleared, the corresponding BatFaultEnum value shall be removed from
              * this list. An empty list shall indicate there are currently no active faults. The order of this list
              * SHOULD have no significance. Clients interested in monitoring changes in active faults may subscribe to
-             * this attribute, or they may subscribe to Bat
-             *
-             * FaultChange.
+             * this attribute, or they may subscribe to BatFaultChange.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.7.7.19
              */
@@ -1366,13 +1364,9 @@ export namespace PowerSource {
              * The above rules allow that some endpoints can have an unknown power source, and therefore would not be
              * indicated by any instance of this cluster.
              *
-             * Empty list examples
-             *
              * Typically, there is one power source for the node. Also common is mains power for the node with battery
              * backup power for the node. In both these common cases, for each cluster instance described, the list is
              * empty.
-             *
-             * Populated list example
              *
              * A node has a mains power source with Order as 0 (zero), but some application endpoints (not all) have a
              * battery back up source with Order as 1, which means this list is empty for the Power Source cluster

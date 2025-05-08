@@ -198,6 +198,10 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 export namespace Constraint {
     export type NumberOrIdentifier = number | string;
 
+    export const KEYWORDS = ["in", "min", "max", "to", "all", "desc", "true", "false"] as const;
+
+    export const keywords = new Set<string>(KEYWORDS);
+
     /**
      * Parsed constraint.
      */
@@ -329,7 +333,7 @@ namespace Serializer {
 }
 
 namespace Parser {
-    const lexer = new Lexer(["in", "min", "max", "to", "all", "desc", "true", "false"]);
+    const lexer = new Lexer(Constraint.KEYWORDS);
 
     export function parse(constraint: Constraint, definition: string): Constraint.Ast {
         const tokens = TokenStream(lexer.lex(definition, (code, message) => constraint.error(code, message)));

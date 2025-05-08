@@ -19,9 +19,7 @@ export const JointFabricPki = Cluster(
     {
         name: "JointFabricPki", id: 0x753, classification: "node", pics: "JFPKI",
         details: "An instance of the Joint Fabric PKI Cluster only applies to Joint Fabric Administrator nodes " +
-            "fulfilling the role of Anchor CA." +
-            "\n" +
-            "NOTE Support for Joint Fabric PKI Cluster is provisional.",
+            "fulfilling the role of Anchor CA.",
         xref: { document: "core", section: "11.25" }
     },
 
@@ -119,7 +117,7 @@ export const JointFabricPki = Cluster(
         Field({ name: "Ok", id: 0x0, conformance: "M", description: "No error" }),
         Field({
             name: "TransferAnchorStatusDatastoreBusy", id: 0x1, conformance: "M",
-            description: "Anchor Transfer was not started due to on- going Datastore operations"
+            description: "Anchor Transfer was not started due to on-going Datastore operations"
         }),
         Field({
             name: "TransferAnchorStatusNoUserConsent", id: 0x2, conformance: "M",

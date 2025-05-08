@@ -59,8 +59,7 @@ export const MediaInput = Cluster(
         {
             name: "SelectInput", id: 0x0, access: "O", conformance: "M", direction: "request",
             response: "status",
-            details: "Upon receipt, this command shall change the media input on the device to the input at a specific" +
-                "\n" +
+            details: "Upon receipt, this command shall change the media input on the device to the input at a specific " +
                 "index in the Input List.",
             xref: { document: "cluster", section: "6.9.7.1" }
         },
@@ -132,7 +131,7 @@ export const MediaInput = Cluster(
         }),
         Field({
             name: "InputType", id: 0x1, type: "InputTypeEnum", conformance: "M", constraint: "desc",
-            details: "This field shall indicate the type of input",
+            details: "### This field shall indicate the type of input",
             xref: { document: "cluster", section: "6.9.5.2.2" }
         }),
 

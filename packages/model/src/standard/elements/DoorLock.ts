@@ -21,9 +21,7 @@ export const DoorLock = Cluster(
         name: "DoorLock", id: 0x101, classification: "application", pics: "DRLK",
         details: "The door lock cluster provides an interface to a generic way to secure a door. The physical object " +
             "that provides the locking functionality is abstracted from the cluster. The cluster has a small list " +
-            "of mandatory attributes and functions and a list of optional features." +
-            "\n" +
-            "Figure 16. Typical Usage of the Door Lock Cluster",
+            "of mandatory attributes and functions and a list of optional features.",
         xref: { document: "cluster", section: "5.2" }
     },
 
@@ -113,8 +111,7 @@ export const DoorLock = Cluster(
 
         Field({
             name: "COTA", conformance: "O", constraint: "7", description: "CredentialOverTheAirAccess",
-            details: "If this feature is supported then the lock supports the ability to verify a credential provided in a" +
-                "\n" +
+            details: "If this feature is supported then the lock supports the ability to verify a credential provided in a " +
                 "lock/unlock command. Currently the cluster only supports providing the PIN credential to the " +
                 "lock/unlock commands. If this feature is supported then the PIN Credential feature shall also be " +
                 "supported.",
@@ -364,7 +361,8 @@ export const DoorLock = Cluster(
     Attribute({
         name: "OperatingMode", id: 0x25, type: "OperatingModeEnum", access: "R[W] VM", conformance: "M",
         constraint: "desc", default: 0, quality: "P",
-        details: "Indicates the current operating mode of the lock as defined in OperatingModeEnum.",
+        details: "This attribute shall indicate the current operating mode of the lock as defined in " +
+            "OperatingModeEnum.",
         xref: { document: "cluster", section: "5.2.9.24" }
     }),
 
@@ -382,10 +380,8 @@ export const DoorLock = Cluster(
         conformance: "O", default: 0, quality: "P",
 
         details: "Indicates the default configurations as they are physically set on the device (example: hardware dip " +
-            "switch setting, etc…) and represents the default setting for some of the" +
-            "\n" +
-            "attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode " +
-            "attributes)." +
+            "switch setting, etc…) and represents the default setting for some of the attributes within this " +
+            "cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes)." +
             "\n" +
             "This is a read-only attribute and is intended to allow clients to determine what changes may need to " +
             "be made without having to query all the included attributes. It may be beneficial for the clients to " +
@@ -490,11 +486,10 @@ export const DoorLock = Cluster(
             "server’s TX operation. If it is false, then it is not ok for the device to send PIN in any messages " +
             "over the air." +
             "\n" +
-            "The PIN field within any door lock cluster message shall keep the first octet unchanged and" +
-            "\n" +
-            "masks the actual code by replacing with 0xFF. For example (PIN \"1234\" ): If the attribute value is " +
-            "True, 0x04 0x31 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message " +
-            "payload. If the attribute value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.",
+            "The PIN field within any door lock cluster message shall keep the first octet unchanged and masks " +
+            "the actual code by replacing with 0xFF. For example (PIN \"1234\" ): If the attribute value is True, " +
+            "0x04 0x31 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message payload. If " +
+            "the attribute value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.",
 
         xref: { document: "cluster", section: "5.2.9.34" }
     }),
@@ -617,13 +612,13 @@ export const DoorLock = Cluster(
             "applies to the sum of the number of AliroEvictableEndpointKey credentials and the number of " +
             "AliroNonEvictableEndpointKey credentials." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "The credential indices used for these two credential types are independent of each other, similar to " +
-            "all other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a client " +
-            "could add a credential of type AliroEvictableEndpointKey at any index from 1 to " +
-            "NumberOfAliroEndpointKeysSupported and also add a credential of type AliroNonEvictableEndpointKey at " +
-            "the same index, and both credentials would exist on the server.",
+            "> The credential indices used for these two credential types are independent of each other, similar " +
+            "  to all other credential types. As long as NumberOfAliroEndpointKeysSupported is at least 2 a " +
+            "  client could add a credential of type AliroEvictableEndpointKey at any index from 1 to " +
+            "  NumberOfAliroEndpointKeysSupported and also add a credential of type AliroNonEvictableEndpointKey " +
+            "  at the same index, and both credentials would exist on the server.",
 
         xref: { document: "cluster", section: "5.2.9.46" }
     }),
@@ -684,9 +679,8 @@ export const DoorLock = Cluster(
                 "    ◦ shall generate a LockOperation event of LockOperationType Unlatch when it is actuated from the " +
                 "      outside." +
                 "\n" +
-                "    ◦ may generate a LockOperation event of LockOperationType Unlatch when it is actuated" +
-                "\n" +
-                "from the inside.",
+                "    ◦ may generate a LockOperation event of LockOperationType Unlatch when it is actuated from the " +
+                "      inside.",
 
             xref: { document: "cluster", section: "5.2.11.3" }
         },
@@ -897,10 +891,10 @@ export const DoorLock = Cluster(
                 "the lock. The door lock may require a code depending on the value of the " +
                 "RequirePINForRemoteOperation attribute." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "If the attribute AutoRelockTime is supported the lock will transition to the locked state when the " +
-                "auto relock time has expired.",
+                "> If the attribute AutoRelockTime is supported the lock will transition to the locked state when the " +
+                "  auto relock time has expired.",
 
             xref: { document: "cluster", section: "5.2.10.2" }
         },
@@ -1044,10 +1038,10 @@ export const DoorLock = Cluster(
 
         details: "Clear out all PINs on the lock." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode " +
-            "command with respect to the setting of user status, user type and schedules.",
+            "> On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode " +
+            "  command with respect to the setting of user status, user type and schedules.",
 
         xref: { document: "cluster", section: "5.2.10.8" }
     }),
@@ -1736,9 +1730,7 @@ export const DoorLock = Cluster(
                 "Fields used for different use cases:" +
                 "\n" +
                 "Return status is a global status code or a cluster-specific status code from the Status Codes table " +
-                "and" +
-                "\n" +
-                "shall be one of the following values:" +
+                "and shall be one of the following values:" +
                 "\n" +
                 "  • SUCCESS, if setting User was successful." +
                 "\n" +
@@ -1867,14 +1859,10 @@ export const DoorLock = Cluster(
         {
             name: "GetUser", id: 0x1b, access: "A", conformance: "USR", direction: "request",
             response: "GetUserResponse",
-
             details: "Retrieve user." +
                 "\n" +
-                "An InvokeResponse command shall be sent with an appropriate error" +
-                "\n" +
-                "COMMAND, etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of " +
-                "SUCCESS.",
-
+                "An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, " +
+                "etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.",
             xref: { document: "cluster", section: "5.2.10.33" }
         },
 
@@ -2198,10 +2186,9 @@ export const DoorLock = Cluster(
             details: "This field shall indicate the next occupied index in the database for the credential type requested, " +
                 "which is useful for quickly identifying occupied credential slots in the database. This shall NOT be " +
                 "null if there is at least one occupied entry after the requested credential index in the " +
-                "corresponding" +
-                "\n" +
-                "database and shall be null if there are no more occupied entries. The NextCredentialIndex reported " +
-                "shall NOT exceed the maximum number of credentials for a particular credential type.",
+                "corresponding database and shall be null if there are no more occupied entries. The " +
+                "NextCredentialIndex reported shall NOT exceed the maximum number of credentials for a particular " +
+                "credential type.",
 
             xref: { document: "cluster", section: "5.2.10.39.5" }
         }),
@@ -2220,10 +2207,10 @@ export const DoorLock = Cluster(
                 "Otherwise, the value of this field shall be the value of the relevant credential, as a 65-byte " +
                 "uncompressed elliptic curve public key as defined in section 2.3.3 of SEC 1." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "Since the Aliro credentials are public keys, there is no security risk in allowing them to be read. " +
-                "Possession of the credential octet string does not allow operating the lock.",
+                "> Since the Aliro credentials are public keys, there is no security risk in allowing them to be " +
+                "  read. Possession of the credential octet string does not allow operating the lock.",
 
             xref: { document: "cluster", section: "5.2.10.39.6" }
         })
@@ -2267,10 +2254,10 @@ export const DoorLock = Cluster(
                 "includes an optional code for the lock. The door lock may require a code depending on the value of " +
                 "the RequirePINForRemoteOperation attribute." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the " +
-                "auto relock time has expired.",
+                "> If the attribute AutoRelockTime is supported, the lock will transition to the locked state when " +
+                "  the auto relock time has expired.",
 
             xref: { document: "cluster", section: "5.2.10.41" }
         },
@@ -2322,11 +2309,11 @@ export const DoorLock = Cluster(
         details: "This command allows clearing an existing Aliro Reader configuration for the lock. Administrators " +
             "shall NOT clear an Aliro Reader configuration without explicit user permission." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Using this command will revoke the ability of all existing Aliro user devices that have the old " +
-            "verification key to interact with the lock. This effect is not restricted to a single fabric or " +
-            "otherwise scoped in any way.",
+            "> Using this command will revoke the ability of all existing Aliro user devices that have the old " +
+            "  verification key to interact with the lock. This effect is not restricted to a single fabric or " +
+            "  otherwise scoped in any way.",
 
         xref: { document: "cluster", section: "5.2.10.43" }
     }),
@@ -2787,12 +2774,12 @@ export const DoorLock = Cluster(
                 "\n" +
                 "* Interface Operational: Yes, No or N/A" +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, " +
-                "and Unlock with Timeout commands with a response status Failure and not take the action requested by " +
-                "those commands. The door lock shall NOT disable the radio or otherwise unbind or leave the network. " +
-                "It shall still respond to all other commands and requests.",
+                "> For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, " +
+                "  and Unlock with Timeout commands with a response status Failure and not take the action requested " +
+                "  by those commands. The door lock shall NOT disable the radio or otherwise unbind or leave the " +
+                "  network. It shall still respond to all other commands and requests.",
 
             xref: { document: "cluster", section: "5.2.6.15" }
         },

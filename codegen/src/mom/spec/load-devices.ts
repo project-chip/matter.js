@@ -50,12 +50,12 @@ function augmentDevice(device: DeviceReference, content: HtmlReference) {
             break;
 
         default:
-            logger.warn(`ignore ${content.name}`);
+            logger.debug(`ignore ${content.name}`);
             break;
     }
 
     if (what) {
-        logger.debug(`${what} (${content.xref.document} § ${content.xref.section})`);
+        logger.info(`${what} (${content.xref.document} § ${content.xref.section})`);
     }
 }
 

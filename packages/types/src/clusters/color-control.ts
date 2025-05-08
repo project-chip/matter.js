@@ -236,14 +236,13 @@ export namespace ColorControl {
         stepSize: TlvField(1, TlvUInt8),
 
         /**
-         * This field shall indicate, in 1/10ths of a second, the time that shall be taken to perform the step.
+         * This field shall indicate, in 1/10ths of a second, the time that shall be taken to perform the step. A step
+         * is a change in the device’s hue of Step size units.
          *
-         * A step is a change in the device’s hue of Step size units.
+         * > [!NOTE]
          *
-         * NOTE
-         *
-         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime data
-         * fields in other clusters / commands.
+         * > Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime
+         *   data fields in other clusters / commands.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 3.2.8.6.3
          */
@@ -336,10 +335,10 @@ export namespace ColorControl {
          * This field shall indicate, in 1/10ths of a second, the time that shall be taken to perform the step. A step
          * is a change in the device’s saturation of Step size units.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime data
-         * fields in other clusters / commands.
+         * > Here the TransitionTime data field is of data type uint8, where uint16 is more common for TransitionTime
+         *   data fields in other clusters / commands.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 3.2.8.9.3
          */
@@ -500,7 +499,9 @@ export namespace ColorControl {
          * This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound on the
          * color temperature in kelvins) for the current move operation
          *
-         * ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds
+         * ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <=
+         *
+         * ### ColorTemperatureMireds
          *
          * As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the
          * ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. If the
@@ -515,7 +516,9 @@ export namespace ColorControl {
          * This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound on the
          * color temperature in kelvins) for the current move operation
          *
-         * ColorTemperatureMireds <= ColorTemperatureMaximumMireds field <= ColorTempPhysicalMaxMireds
+         * ColorTemperatureMireds <= ColorTemperatureMaximumMireds field <=
+         *
+         * ### ColorTempPhysicalMaxMireds
          *
          * As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the
          * ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. If the
@@ -570,7 +573,9 @@ export namespace ColorControl {
          * This field shall indicate a lower bound on the ColorTemperatureMireds attribute (≡ an upper bound on the
          * color temperature in kelvins) for the current step operation
          *
-         * ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds
+         * ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <=
+         *
+         * ### ColorTemperatureMireds
          *
          * As such if the step operation takes the ColorTemperatureMireds attribute towards the value of the
          * ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. If the
@@ -585,12 +590,11 @@ export namespace ColorControl {
          * This field shall indicate an upper bound on the ColorTemperatureMireds attribute (≡ a lower bound on the
          * color temperature in kelvins) for the current step operation
          *
-         * ColorTemperatureMireds ≤ ColorTemperatureMaximumMireds field ≤ ColorTempPhysicalMaxMireds
-         *
-         * As such if the step operation takes the ColorTemperatureMireds attribute towards the value of the
-         * ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. If the
-         * ColorTemperatureMaximumMireds field is set to 0, ColorTempPhysicalMaxMireds shall be used as the upper bound
-         * for the ColorTemperatureMireds attribute.
+         * ColorTemperatureMireds ≤ ColorTemperatureMaximumMireds field ≤ ColorTempPhysicalMaxMireds As such if the step
+         * operation takes the ColorTemperatureMireds attribute towards the value of the ColorTemperatureMaximumMireds
+         * field it shall be clipped so that the above invariant is satisfied. If the ColorTemperatureMaximumMireds
+         * field is set to 0, ColorTempPhysicalMaxMireds shall be used as the upper bound for the ColorTemperatureMireds
+         * attribute.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 3.2.8.22.5
          */
@@ -702,10 +706,10 @@ export namespace ColorControl {
          * The field shall indicate, in units of 1/10ths of a second, the time that shall be taken to perform the step.
          * A step is a change to the device’s enhanced hue of a magnitude corresponding to the StepSize field.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * Here TransitionTime data field is of data type uint16, while the TransitionTime data field of the StepHue
-         * command is of data type uint8.
+         * > Here TransitionTime data field is of data type uint16, while the TransitionTime data field of the StepHue
+         *   command is of data type uint8.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 3.2.8.17.3
          */
@@ -856,7 +860,7 @@ export namespace ColorControl {
         Deactivate = 0,
 
         /**
-         * Activate the color loop from the value in the ColorLoopStartEnhancedHue field.
+         * Activate the color loop from the value in the ColorLoopStartEnhance dHue field.
          */
         ActivateFromColorLoopStartEnhancedHue = 1,
 
@@ -1229,8 +1233,9 @@ export namespace ColorControl {
             colorTemperatureMireds: Attribute(0x7, TlvUInt16, { scene: true, persistent: true, default: 250 }),
 
             /**
-             * Indicates the minimum mired value supported by the hardware. ColorTempPhysicalMinMireds corresponds to
-             * the maximum color temperature in kelvins supported by the hardware.
+             * This attribute shall indicate the minimum mired value supported by the hardware.
+             * ColorTempPhysicalMinMireds corresponds to the maximum color temperature in kelvins supported by the
+             * hardware.
              *
              * ColorTempPhysicalMinMireds <= ColorTemperatureMireds.
              *
@@ -1239,8 +1244,9 @@ export namespace ColorControl {
             colorTempPhysicalMinMireds: Attribute(0x400b, TlvUInt16.bound({ min: 1, max: 65279 })),
 
             /**
-             * Indicates the maximum mired value supported by the hardware. ColorTempPhysicalMaxMireds corresponds to
-             * the minimum color temperature in kelvins supported by the hardware.
+             * This attribute shall indicate the maximum mired value supported by the hardware.
+             * ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins supported by the
+             * hardware.
              *
              * ColorTemperatureMireds <= ColorTempPhysicalMaxMireds.
              *
@@ -1261,9 +1267,7 @@ export namespace ColorControl {
              * Note that since this attribute is stored as a micro reciprocal degree (mired) value (i.e. color
              * temperature in kelvins = 1,000,000 / CoupleColorTempToLevelMinMireds), the
              * CoupleColorTempToLevelMinMireds attribute corresponds to an upper bound on the value of the color
-             * temperature
-             *
-             * in kelvins supported by the device.
+             * temperature in kelvins supported by the device.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 3.2.7.22
              */
@@ -1444,10 +1448,6 @@ export namespace ColorControl {
             /**
              * This command is provided to allow MoveTo and Step commands to be stopped.
              *
-             * NOTE This automatically provides symmetry to the Level Control cluster.
-             *
-             * NOTE The StopMoveStep command has no effect on an active color loop.
-             *
              * @see {@link MatterSpecification.v14.Cluster} § 3.2.8.20
              */
             stopMoveStep: Command(0x47, TlvStopMoveStepRequest, 0x47, TlvNoResponse)
@@ -1523,7 +1523,8 @@ export namespace ColorControl {
             remainingTime: OptionalAttribute(0x2, TlvUInt16, { default: 0 }),
 
             /**
-             * Indicates what mechanism, if any, is in use for compensation for color/intensity drift over time.
+             * This attribute shall indicate what mechanism, if any, is in use for compensation for color/intensity
+             * drift over time.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 3.2.7.7
              */
@@ -1609,13 +1610,6 @@ export namespace ColorControl {
              * primary with the highest maximum intensity contains the value 254.
              *
              * A value of null shall indicate that this primary is not available.
-             *
-             * 3.2.7.28. Primary2X, Primary2Y, Primary2Intensity, Primary3X, Primary3Y, Primary3Intensity, Primary4X,
-             * Primary4Y, Primary4Intensity, Primary5X, Primary5Y, Primary5Intensity, Primary6X, Primary6Y and
-             * Primary6Intensity Attributes
-             *
-             * These attributes shall represent the capabilities of the 2nd, 3rd, 4th, 5th and 6th primaries, where
-             * present, in the same way as for the Primary1X, Primary1Y and Primary1Intensity attributes.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 3.2.7.27
              */
@@ -1762,15 +1756,6 @@ export namespace ColorControl {
              * that the color point with the highest relative intensity contains the value 254.
              *
              * A value of null shall indicate an invalid value.
-             *
-             * 3.2.7.34. ColorPointGX, ColorPointGY, ColorPointGIntensity, ColorPointBX, ColorPointBY and
-             * ColorPointBIntensity Attributes
-             *
-             * These attributes shall represent the chromaticity values and intensities of the green and blue color
-             * points, in the same way as for the ColorPointRX, ColorPointRY and ColorPointRIntensity attributes.
-             *
-             * If any one of these red, green or blue color point attributes is implemented then they shall all be
-             * implemented.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 3.2.7.33
              */

@@ -380,9 +380,8 @@ export const ElectricalPowerMeasurement = Cluster(
             constraint: "desc", default: null, quality: "X Q",
 
             details: "This shall indicate a list of HarmonicMeasurementStruct values, with each HarmonicMeasurementStruct " +
-                "representing the most recent phase of the harmonic current reading for the harmonic" +
-                "\n" +
-                "order specified by Order." +
+                "representing the most recent phase of the harmonic current reading for the harmonic order specified " +
+                "by Order." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -426,8 +425,9 @@ export const ElectricalPowerMeasurement = Cluster(
             "\n" +
             "If the neutral current cannot be measured or derived, a value of null shall be returned." +
             "\n" +
-            "A positive value represents an imbalance between the phase currents when power is imported. A " +
-            "negative value represents an imbalance between the phase currents when power is exported." +
+            "A positive value represents an imbalance between the phase currents when power is imported." +
+            "\n" +
+            "A negative value represents an imbalance between the phase currents when power is exported." +
             "\n" +
             "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
             "omit publication of deltas considered not meaningful." +
@@ -602,8 +602,7 @@ export const ElectricalPowerMeasurement = Cluster(
                 "reading in milliamps (mA). A positive value indicates that the measured harmonic current is " +
                 "positive, and a negative value indicates that the measured harmonic current is negative." +
                 "\n" +
-                "For the Harmonic Phases attribute, this value is the most recent phase of the given harmonic order" +
-                "\n" +
+                "For the Harmonic Phases attribute, this value is the most recent phase of the given harmonic order " +
                 "in millidegrees (mDeg). A positive value indicates that the measured phase is leading, and a " +
                 "negative value indicates that the measured phase is lagging." +
                 "\n" +

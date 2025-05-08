@@ -57,6 +57,6 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v14.Namespace} § 15.4
          */
-        Ev: { id: 0x4, label: "EV" }
+        Ev: { id: 0x4, label: "Ev" }
     }
 });

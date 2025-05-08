@@ -31,9 +31,8 @@ export const EnergyEvse = Cluster(
             "a single wire." +
             "\n" +
             "Power Line Communication (PLC) is supported by some EVSEs (e.g. for support of ISO 15118 in Europe " +
-            "and SAE J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to" +
-            "\n" +
-            "Home (V2H) that allows for bi-directional charging/discharging of electric vehicles." +
+            "and SAE J2931/4 in NA) and may enable features such as Vehicle to Grid (V2G) or Vehicle to Home " +
+            "(V2H) that allows for bi-directional charging/discharging of electric vehicles." +
             "\n" +
             "More modern EVSE devices may optionally support ISO 15118-20 in Europe and SAE J2836/3 for NA to " +
             "support bi-directional charging (Vehicle to Grid - V2G) and Plug and Charge capabilities." +
@@ -43,15 +42,15 @@ export const EnergyEvse = Cluster(
             "\n" +
             "This cluster supports a safety mechanism that may lockout remote operation until the initial " +
             "latching conditions have been met. Some of the fault conditions defined in SAE J1772, such as " +
-            "Ground- Fault Circuit Interrupter (GFCI) or Charging Circuit Interrupting Device (CCID), may require " +
+            "Ground-Fault Circuit Interrupter (GFCI) or Charging Circuit Interrupting Device (CCID), may require " +
             "clearing by an operator by, for example, pressing a button on the equipment or breaker panel." +
             "\n" +
             "This EVSE cluster is written around support of a single EVSE. Having multiple EVSEs at home or a " +
             "business is managed by backend system and outside scope of this cluster." +
             "\n" +
             "Note that in many deployments the EVSE may be outside the home and may suffer from intermittent " +
-            "network connections (e.g. a weak WiFi signal). It also allows for a charging profile to be pre- " +
-            "configured, in case there is a temporary communications loss during a charging session.",
+            "network connections (e.g. a weak WiFi signal). It also allows for a charging profile to be " +
+            "pre-configured, in case there is a temporary communications loss during a charging session.",
 
         xref: { document: "cluster", section: "9.3" }
     },
@@ -154,14 +153,13 @@ export const EnergyEvse = Cluster(
             "The State attribute shall change when the EVSE detects change of condition of the EV (plugged in or " +
             "unplugged, whether the vehicle is asking for demand or not, and if it is charging or discharging)." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "SessionEnding is not really a state but a transition. However, the transition period may take a few " +
-            "seconds and is useful for some clean up purposes." +
+            "> SessionEnding is not really a state but a transition. However, the transition period may take a " +
+            "  few seconds and is useful for some clean up purposes." +
             "\n" +
-            "The Fault state is used to indicate that the FaultState attribute is not NoError." +
-            "\n" +
-            "A null value shall indicate that the state cannot be determined.",
+            "The Fault state is used to indicate that the FaultState attribute is not NoError. A null value shall " +
+            "indicate that the state cannot be determined.",
 
         xref: { document: "cluster", section: "9.3.8.1" }
     }),
@@ -228,9 +226,8 @@ export const EnergyEvse = Cluster(
     Attribute({
         name: "MinimumChargeCurrent", id: 0x6, type: "amperage-mA", access: "R V", conformance: "M",
         constraint: "min 0", default: 6000, quality: "N",
-        details: "Indicates the minimum current that can be delivered by the EVSE to the EV." +
-            "\n" +
-            "The attribute can be set using the EnableCharging command.",
+        details: "Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set " +
+            "using the EnableCharging command.",
         xref: { document: "cluster", section: "9.3.8.7" }
     }),
 
@@ -289,10 +286,8 @@ export const EnergyEvse = Cluster(
             "\n" +
             "This attribute value shall be limited by the EVSE to be in the range of:" +
             "\n" +
-            "MinimumChargeCurrent <= UserMaximumChargeCurrent <= MaximumChargeCurrent" +
-            "\n" +
-            "where MinimumChargeCurrent and MaximumChargeCurrent are the values received in the EnableCharging " +
-            "command." +
+            "MinimumChargeCurrent <= UserMaximumChargeCurrent <= MaximumChargeCurrent where MinimumChargeCurrent " +
+            "and MaximumChargeCurrent are the values received in the EnableCharging command." +
             "\n" +
             "Its default value SHOULD be initialized to the same as the CircuitCapacity attribute. This value " +
             "shall be persisted across reboots to ensure it does not cause charging issues during temporary power " +
@@ -367,8 +362,7 @@ export const EnergyEvse = Cluster(
 
         details: "Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged." +
             "\n" +
-            "A null value indicates that there is no scheduled charging" +
-            "\n" +
+            "A null value indicates that there is no scheduled charging (for example, the EVSE Mode is set to use " +
             "Manual mode tag), or that the vehicle is not plugged in with the SupplyState indicating that " +
             "charging is enabled, or that the next ChargingTargetStruct is using the AddedEnergy value to charge " +
             "the vehicle." +
@@ -403,7 +397,7 @@ export const EnergyEvse = Cluster(
                 "\n" +
                 "ApproxEVEfficiency (km/kWh x 1000): 4800 (i.e. 4.8km/kWh x 1000)" +
                 "\n" +
-                "AddedEnergy (Wh): 10,000" +
+                "### AddedEnergy (Wh): 10,000" +
                 "\n" +
                 "AddedRange (km) = 10,000 x 4800 / 1,000,000 = 48 km" +
                 "\n" +
@@ -855,7 +849,7 @@ export const EnergyEvse = Cluster(
         }),
         Field({
             name: "SessionEnding", id: 0x5, conformance: "M",
-            description: "The EVSE is transitioning from any plugged- in state to NotPluggedIn"
+            description: "The EVSE is transitioning from any plugged-in state to NotPluggedIn"
         }),
         Field({ name: "Fault", id: 0x6, conformance: "M", description: "There is a fault (see FaultState attribute)" })
     ),
@@ -877,7 +871,7 @@ export const EnergyEvse = Cluster(
         }),
         Field({
             name: "DisabledDiagnostics", id: 0x4, conformance: "M",
-            description: "The EV is not currently allowed to charge or discharge due to self- diagnostics mode."
+            description: "The EV is not currently allowed to charge or discharge due to self-diagnostics mode."
         }),
         Field({
             name: "Enabled", id: 0x5, conformance: "[V2X]",
@@ -1016,9 +1010,8 @@ export const EnergyEvse = Cluster(
                 "  • the AddedEnergy field shall take precedence over the TargetSoC field, and if the EVSE does not " +
                 "    support the SOC feature then the TargetSoC field may only take the values null or 100%." +
                 "\n" +
-                "  • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty" +
-                "\n" +
-                "and charge until the vehicle stops demanding a charge.",
+                "  • if the AddedEnergy field has not been provided, the EVSE SHOULD assume the vehicle is empty and " +
+                "    charge until the vehicle stops demanding a charge.",
 
             xref: { document: "cluster", section: "9.3.7.6.2" }
         }),
@@ -1040,11 +1033,11 @@ export const EnergyEvse = Cluster(
                 "should be set based on typical battery size of the vehicles on the market (e.g. 70000Wh), however " +
                 "this is up to the client to carefully choose a value." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD NOT limit this AddedEnergy " +
-                "value to the Battery Capacity of the vehicle, since the EV may also require energy for heating and " +
-                "cooling of the battery during charging, or for heating or cooling the cabin.",
+                "> If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD NOT limit this AddedEnergy " +
+                "  value to the Battery Capacity of the vehicle, since the EV may also require energy for heating and " +
+                "  cooling of the battery during charging, or for heating or cooling the cabin.",
 
             xref: { document: "cluster", section: "9.3.7.6.3" }
         })

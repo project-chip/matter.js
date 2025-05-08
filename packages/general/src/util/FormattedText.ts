@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const LIST_INDENT = 2;
+const INDENT = "  ";
 
 export { camelize, describeList, serialize } from "./String.js";
 
@@ -12,14 +12,19 @@ export { camelize, describeList, serialize } from "./String.js";
  * Performs word wrap.  Input is assumed to be a series of paragraphs separated by a newline.  Output is an array of
  * formatted lines.
  *
- * Contains specialized support for lists, ESDoc directives ans ANSI escape codes.
+ * Contains specialized support for lists, ESDoc directives and ANSI escape codes.
  */
 export function FormattedText(text: string, width = 120) {
     const structure = detectStructure(text);
-    return formatStructure(structure, width);
+    return formatBlock(structure, width);
 }
 
-enum ListType {
+/**
+ * Types of things we consider "blocks".  Most blocks are lists but we also support markdown-style quotes prefixed with
+ * ">".
+ */
+export enum BlockKind {
+    Simple = "simple",
     Bullet1 = "•",
     Bullet2 = "◦",
     Bullet3 = "▪",
@@ -28,6 +33,7 @@ enum ListType {
     Bullet6 = "‣",
     Bullet7 = "⁃",
     Bullet8 = "◘",
+    Quote = ">",
     Number = "number",
     LowerAlpha = "alpha",
     UpperAlpha = "ALPHA",
@@ -35,115 +41,114 @@ enum ListType {
     UpperRoman = "ROMAN",
 }
 
-function detectList(text: string, listState: ListType[]) {
-    function enterList(listType: ListType) {
-        const existing = listState.indexOf(listType);
-        if (existing == -1) {
-            listState.push(listType);
-        } else {
-            listState.length = existing + 1;
-        }
+export const Bullets = Object.entries(BlockKind)
+    .filter(([key]) => key.startsWith("Bullet"))
+    .map(([, value]) => value);
+
+const enumTest = "(?:\\d+|[ivx]+|[a-z])\\.";
+const listItemTest = new RegExp(`^(?:[${Bullets.join("")}]|${enumTest})\\s`, "i");
+
+export function looksLikeListItem(text: string) {
+    return !!listItemTest.exec(text);
+}
+
+type Block = {
+    kind: BlockKind;
+    indentWidth: number;
+    entries: (string | Block)[];
+};
+
+const Empty: Block = {
+    kind: BlockKind.Simple,
+    indentWidth: 0,
+    entries: [],
+};
+
+/**
+ * Detect block prefixes.  This is designed to handle scavenged, poorly formatted text so does not use indentation.  It
+ * just focus on the prefix characters of the paragraph/line (which are the same thing as paragraphs do not include
+ * newlines).
+ */
+function detectBlock(text: string, breadcrumb: Block[]) {
+    const match = text.match(/^\s*(\S+)/);
+    if (!match) {
+        return;
     }
 
-    for (const value of Object.values(ListType)) {
-        if (text[0] === value && text[1] === " ") {
-            enterList(text[0] as ListType);
+    const [, marker] = match;
+
+    if (Bullets.includes(marker as BlockKind) || marker === BlockKind.Quote) {
+        enterBlock(marker as BlockKind);
+        return;
+    }
+
+    if (detectEnumeration(/^\d+\.$/, "1", BlockKind.Number)) return;
+    if (detectEnumeration(/^[ivx]+\.$/, "i", BlockKind.LowerRoman)) return;
+    if (detectEnumeration(/^[IVX]+\.$/, "I", BlockKind.UpperRoman)) return;
+    if (detectEnumeration(/^[a-z]+\.$/, "a", BlockKind.LowerAlpha)) return;
+    if (detectEnumeration(/^[A-Z]+\.$/, "A", BlockKind.UpperAlpha)) return;
+
+    // Not in a block
+    breadcrumb.length = 1;
+
+    function enterBlock(kind: BlockKind) {
+        // If we are already in block of this kind, ensure it is the deepest level
+        const level = breadcrumb.findIndex(entry => entry.kind === kind);
+        if (level !== -1) {
+            breadcrumb.length = level + 1;
             return;
         }
+
+        // Need to start a new block
+        const block = {
+            kind,
+            indentWidth: (breadcrumb[breadcrumb.length - 1]?.indentWidth ?? 0) + kind === BlockKind.Quote ? 0 : 2,
+            entries: [],
+        };
+
+        breadcrumb[breadcrumb.length - 1].entries.push(block);
+        breadcrumb.push(block);
     }
 
-    function detectEnumeration(test: RegExp, listType: ListType, first: string) {
-        if (!text.match(test)) {
+    function detectEnumeration(test: RegExp, startsWith: string, kind: BlockKind) {
+        if (!marker.match(test)) {
             return false;
         }
 
-        if (listState.indexOf(listType) != -1 || text.startsWith(`${first}.`)) {
-            enterList(listType);
-            return true;
+        // Only consider enumeration if a.) we are already in same type of enumeration, or b.) the marker is the first
+        // element of the enumeration (e.g. "1." or "i.")
+        if (!breadcrumb.find(block => block.kind === kind)) {
+            if (marker !== `${startsWith}.`) {
+                return false;
+            }
         }
 
-        return false;
+        enterBlock(kind);
+        return true;
     }
-
-    if (detectEnumeration(/^\d+\./, ListType.Number, "1")) return;
-    if (detectEnumeration(/^[ivx]+\./, ListType.LowerRoman, "i")) return;
-    if (detectEnumeration(/^[IVX]+\./, ListType.UpperRoman, "I")) return;
-    if (detectEnumeration(/^[a-z]+\./, ListType.LowerAlpha, "a")) return;
-    if (detectEnumeration(/^[A-Z]+\./, ListType.UpperAlpha, "A")) return;
-
-    listState.length = 0;
 }
 
-type TextStructure = {
-    prefixWidth: number;
-    entries: (string | TextStructure)[];
-};
-
-function extractPrefix(text: string) {
-    const match = text.match(/^(\S+)\s+($|\S.*$)/);
-    if (match) {
-        return { prefix: match[1], text: match[2] };
+/**
+ * Builds a block structure by detecting lists and/or quoted sections.
+ */
+function detectStructure(text: string): Block {
+    const lines = text.split(/\n+/).map(line => line.trimEnd());
+    if (!lines.some(p => p)) {
+        return Empty;
     }
-    return { prefix: text, text: "" };
+
+    const breadcrumb: Block[] = [{ ...Empty, entries: [] }];
+
+    for (const line of lines) {
+        detectBlock(line, breadcrumb);
+        breadcrumb[breadcrumb.length - 1].entries.push(line.trim().replace(/\s+/g, " "));
+    }
+
+    return breadcrumb[0];
 }
 
-function detectStructure(text: string): TextStructure {
-    if (text == "") {
-        return { prefixWidth: 0, entries: [] };
-    }
-    const paragraphs = text.split(/\n+/).map(paragraph => paragraph.trim().replace(/\s+/g, " "));
-    if (!paragraphs.length) {
-        return { prefixWidth: 0, entries: [] };
-    }
-
-    const listState = Array<ListType>();
-    let index = 0;
-
-    function processLevel() {
-        const level = listState.length;
-        const structure = {
-            prefixWidth: 0,
-            entries: [],
-        } as TextStructure;
-
-        while (index < paragraphs.length) {
-            detectList(paragraphs[index], listState);
-
-            // If we've moved to a higher list, we're done with this level
-            if (listState.length < level) {
-                break;
-            }
-
-            // If we've moved to a deeper list, process the new level before continuing
-            if (listState.length > level) {
-                structure.entries.push(processLevel());
-                if (listState.length < level || index >= paragraphs.length) {
-                    break;
-                }
-            }
-
-            // This paragraph is in this level
-            structure.entries.push(paragraphs[index]);
-
-            // In lists, update the prefix width so we know how far out to pad when formatting
-            if (level) {
-                const { prefix } = extractPrefix(paragraphs[index]);
-                if (prefix.length > structure.prefixWidth) {
-                    structure.prefixWidth = prefix.length;
-                }
-            }
-
-            // Move to next line
-            index++;
-        }
-
-        return structure;
-    }
-
-    return processLevel();
-}
-
-function wrapParagraph(input: string, into: string[], wrapWidth: number, padding: number, prefixWidth: number) {
+function wrapParagraph(input: string, into: string[], wrapWidth: number, initialPrefix: string, wrapPrefix: string) {
+    const prefixWidth = visibleWidthOf(initialPrefix);
     const segments = input.split(/\s+/);
     if (!segments) {
         return;
@@ -163,50 +168,32 @@ function wrapParagraph(input: string, into: string[], wrapWidth: number, padding
         }
     }
 
-    // Configure for list prefix formatting
-    let wrapPrefix: string;
-    if (prefixWidth) {
-        // After wrapping this prefix will pad out subsequent entries
-        wrapPrefix = "".padStart(prefixWidth + 1, " ");
-    } else {
-        // No prefix
-        wrapPrefix = "";
-    }
-
     // Wrapping setup.  Track the portions of the line and current length
-    const line = Array<string>();
-    let length = 0;
+    const line = [initialPrefix];
+    let width = prefixWidth;
 
     // Perform actual wrapping
     let pushedOne = false;
-    let needWrapPrefix = false;
     for (const s of segments) {
-        const segmentLength = visibleLengthOf(s);
+        const segmentWidth = visibleWidthOf(s);
 
         // If we'll extend too far, start on a new line
-        if (length && length + segmentLength > wrapWidth) {
+        if (width && width + segmentWidth > wrapWidth) {
             addLine();
-            line.length = length = 0;
-            needWrapPrefix = true;
+            line.length = 0;
+            width = prefixWidth;
         }
 
-        // Add padding if this is a new line
-        if (!line.length && padding) {
-            line.push("".padStart(padding, " "));
-            length += padding;
-        }
-
-        // Add wrap prefix if this is a new line in a list
-        if (needWrapPrefix) {
-            needWrapPrefix = false;
+        // Add wrap prefix if this is a new line
+        if (!line.length) {
             line.push(wrapPrefix);
-            length += wrapPrefix.length;
+            width = prefixWidth;
         }
 
         // Add to the line
         line.push(s);
         line.push(" ");
-        length += segmentLength + 1;
+        width += segmentWidth + 1;
     }
 
     // If there is a remaining line, add it
@@ -227,25 +214,51 @@ function wrapParagraph(input: string, into: string[], wrapWidth: number, padding
     }
 }
 
-function formatStructure(structure: TextStructure, width: number) {
+function separatePrefixFromContent(text: string) {
+    const match = text.match(/^(\S+\s)\s*(\S.*$)/);
+    if (match) {
+        return { prefix: match[1], text: match[2] };
+    }
+    return { prefix: "", text };
+}
+
+function formatBlock(block: Block, width: number) {
     const lines = Array<string>();
 
-    function formatLevel(structure: TextStructure, padding: number) {
-        for (const entry of structure.entries) {
+    function formatLevel(block: Block, parentPrefix: string) {
+        for (const entry of block.entries) {
             if (typeof entry == "string") {
-                wrapParagraph(entry, lines, width, padding, structure.prefixWidth);
+                let prefix, text;
+                if (block.kind === BlockKind.Simple) {
+                    prefix = "";
+                    text = entry;
+                } else {
+                    ({ prefix, text } = separatePrefixFromContent(entry));
+                }
+
+                wrapParagraph(
+                    text,
+                    lines,
+                    width,
+                    parentPrefix + prefix,
+                    parentPrefix + " ".repeat(visibleWidthOf(prefix)),
+                );
             } else {
-                formatLevel(entry, padding + LIST_INDENT);
+                let childPrefix = parentPrefix;
+                if (entry.kind !== BlockKind.Quote || parentPrefix !== "") {
+                    childPrefix += INDENT;
+                }
+                formatLevel(entry, childPrefix);
             }
         }
     }
 
-    formatLevel(structure, 0);
+    formatLevel(block, "");
 
     return lines;
 }
 
-function visibleLengthOf(text: string) {
+function visibleWidthOf(text: string) {
     let length = 0;
     for (let i = 0; i < text.length; ) {
         switch (text[i]) {

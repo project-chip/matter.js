@@ -60,14 +60,14 @@ export const WakeOnLan = Cluster(
         name: "LinkLocalAddress", id: 0x1, type: "ipv6adr", access: "R V", conformance: "O",
         constraint: "desc", quality: "F",
 
-        details: "Indicates the current link-local address of the device. Only 128-bit IPv6 link- local addresses " +
-            "shall be used for this attribute." +
+        details: "Indicates the current link-local address of the device. Only 128-bit IPv6 link-local addresses shall " +
+            "be used for this attribute." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Some companies may consider MAC Address to be protected data subject to PII handling considerations " +
-            "and will therefore choose not to include it or read it. The MAC Address can often be determined " +
-            "using ARP in IPv4 or NDP in IPv6.",
+            "> Some companies may consider MAC Address to be protected data subject to PII handling " +
+            "  considerations and will therefore choose not to include it or read it. The MAC Address can often " +
+            "  be determined using ARP in IPv4 or NDP in IPv6.",
 
         xref: { document: "cluster", section: "1.12.4.2" }
     })

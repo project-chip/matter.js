@@ -109,7 +109,7 @@ export const SoftwareDiagnostics = Cluster(
             "\n" +
             "  • The CurrentHeapHighWatermark attribute This command has no payload." +
             "\n" +
-            "Effect on Receipt" +
+            "### Effect on Receipt" +
             "\n" +
             "On receipt of this command, the Node shall make the following modifications to attributes it " +
             "supports:" +

@@ -19,13 +19,11 @@ export const temperature = Datatype(
             "\n" +
             "The range is constrained by absolute zero: -273.15°C to 327.67°C." +
             "\n" +
-            "Conversion of Temperature Values for Display" +
+            "### Conversion of Temperature Values for Display" +
             "\n" +
             "When converting temperature values for display manufacturers SHOULD ensure that calculations" +
             "\n" +
-            "round to the nearest representable value. Particular care is needed when using integer arithmetic." +
-            "\n" +
-            "Sample Conversion Code" +
+            "### Sample Conversion Code" +
             "\n" +
             "Sample code provided to ensure consistent Fahrenheit to Celsius and vice-versa conversion between " +
             "devices and across vendors." +
@@ -33,9 +31,8 @@ export const temperature = Datatype(
             "For degF: the value is a int8u representing 2x temperature value in Fahrenheit (to get 0.5 " +
             "resolution)." +
             "\n" +
-            "For degC: the value is a int16s representing Celsius in" +
-            "\n" +
-            "0.01 resolution as expected by the ZCL format.",
+            "For degC: the value is a int16s representing Celsius in 0.01 resolution as expected by the ZCL " +
+            "format.",
 
         xref: { document: "core", section: "7.19.2.11" }
     }

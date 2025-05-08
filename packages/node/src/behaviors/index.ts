@@ -57,7 +57,7 @@ export * from "./hepa-filter-monitoring/index.js";
 export * from "./icd-management/index.js";
 export * from "./identify/index.js";
 export * from "./illuminance-measurement/index.js";
-export * from "./joint-fabric-datastore-cluster/index.js";
+export * from "./joint-fabric-datastore/index.js";
 export * from "./joint-fabric-pki/index.js";
 export * from "./keypad-input/index.js";
 export * from "./label/index.js";

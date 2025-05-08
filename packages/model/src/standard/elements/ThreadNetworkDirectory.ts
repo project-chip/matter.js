@@ -79,9 +79,9 @@ export const ThreadNetworkDirectory = Cluster(
     Attribute({
         name: "ThreadNetworkTableSize", id: 0x2, type: "uint8", access: "R V", conformance: "M",
         constraint: "desc", default: 10, quality: "F",
-        details: "Indicates the maximum number of entries that can be held in the ThreadNetworks list; it shall be at " +
-            "least 2 times the number of SupportedFabrics advertised in the Operational Credentials Cluster on " +
-            "the root endpoint of this node.",
+        details: "This attribute shall indicate the maximum number of entries that can be held in the ThreadNetworks " +
+            "list; it shall be at least 2 times the number of SupportedFabrics advertised in the Operational " +
+            "Credentials Cluster on the root endpoint of this node.",
         xref: { document: "cluster", section: "10.4.5.3" }
     }),
 

@@ -48,9 +48,8 @@ export const FlowMeasurement = Cluster(
     Attribute({
         name: "MaxMeasuredValue", id: 0x2, type: "uint16", access: "R V", conformance: "M",
         constraint: "min minMeasuredValue + 1", quality: "X",
-        details: "Indicates the maximum value of MeasuredValue that can be measured. See" +
-            "\n" +
-            "Measured Value for more details." +
+        details: "Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more " +
+            "details." +
             "\n" +
             "The null value indicates that the value is not available.",
         xref: { document: "cluster", section: "2.5.4.3" }

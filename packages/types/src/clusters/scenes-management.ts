@@ -146,9 +146,8 @@ export namespace ScenesManagement {
          * ValueUnsigned64, ValueSigned64 Fields
          *
          * These fields shall indicate the attribute value as part of an extension field set, associated with a given
-         * AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall
-         *
-         * be determined by the type of the attribute indicated by AttributeID as follows:
+         * AttributeID under an ExtensionFieldSetStruct’s ClusterID. Which of the fields is used shall be determined by
+         * the type of the attribute indicated by AttributeID as follows:
          *
          *   • Data types bool, map8, and uint8 shall map to ValueUnsigned8.
          *
@@ -890,7 +889,7 @@ export namespace ScenesManagement {
 
             /**
              * Indicates the number of entries in the Scene Table on this endpoint. This is the total across all
-             * fabrics; note that a single fabric cannot use all those entries (see Handling of fabric- scoping). The
+             * fabrics; note that a single fabric cannot use all those entries (see Handling of fabric-scoping). The
              * minimum size of this table, (i.e., the minimum number of scenes to support across all fabrics per
              * endpoint) shall be 16, unless a device type in which this cluster is used, defines a larger value in the
              * device type definition.
@@ -1007,8 +1006,6 @@ export namespace ScenesManagement {
      * which case the value 0 replaces the group identifier. Note that extra care is required in these cases to avoid a
      * scene identifier collision, and that commands related to scenes without a group may only be unicast, i.e., they
      * shall NOT be multicast or broadcast.
-     *
-     * NOTE Support for Scenes Management cluster is provisional.
      *
      * ScenesManagementCluster supports optional features that you can enable with the ScenesManagementCluster.with()
      * factory method.

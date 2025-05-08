@@ -22,9 +22,8 @@ export namespace CommissionerControlInterface {
          * The server may request approval from the user, but it is not required.
          *
          * The server shall always return SUCCESS to a correctly formatted RequestCommissioningApproval command, and
-         * then generate a CommissioningRequestResult event associated with the command’s
-         *
-         * accessing fabric once the result is ready.
+         * then generate a CommissioningRequestResult event associated with the command’s accessing fabric once the
+         * result is ready.
          *
          * Clients SHOULD avoid using the same RequestID. If the RequestID and client NodeID of a
          * RequestCommissioningApproval match a previously received RequestCommissioningApproval and the server has not
@@ -46,7 +45,6 @@ export namespace CommissionerControlInterface {
          * the value provided to RequestCommissioningApproval.
          *
          * If the command is not executed via a CASE session, the command shall fail with a status code of
-         *
          * UNSUPPORTED_ACCESS.
          *
          * Upon receipt, the server shall respond with ReverseOpenCommissioningWindow if CommissioningRequestResult was
