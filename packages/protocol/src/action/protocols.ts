@@ -53,9 +53,7 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
      */
     eventHandler: OccurrenceManager;
 
-    inspectAttributePath(path: AttributePath): string;
-
-    inspectEventPath(path: EventPath): string;
+    inspectPath(path: AttributePath | EventPath): string;
 }
 
 /**

@@ -433,9 +433,9 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         } = readRequest;
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.#node.protocol.inspectAttributePath(path)).join(", ") ?? "none"
+                attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
             }${dataVersionFilters?.length ? ` with ${dataVersionFilters?.length} filters` : ""}, events:${
-                eventRequests?.map(path => this.#node.protocol.inspectEventPath(path)).join(", ") ?? "none"
+                eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
             }${eventFilters?.length ? `, ${eventFilters?.length} filters` : ""}, isFabricFiltered=${isFabricFiltered}`,
         );
 
