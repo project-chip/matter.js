@@ -43,6 +43,7 @@ export class OccurrenceManager {
     #storedEventCount = 0;
     #bufferConfig: OccurrenceManager.BufferConfig;
     #cull?: Promise<void>;
+    #iteratingValuesInProgress = false;
 
     // As we don't (yet) have storage with secondary indices we currently maintain indices in memory regardless of
     // whether underlying store is volatile
@@ -230,24 +231,32 @@ export class OccurrenceManager {
      * if provided.
      */
     async *get(eventMin?: EventNumber) {
+        if (this.#cull) {
+            await this.#cull;
+        }
         const startIndex = eventMin === undefined ? 0 : this.#findMinEventNumberIndex(eventMin);
         if (startIndex === -1) {
             return; // No entry matches the filter
         }
-        for (let i = startIndex; i < this.#occurrences.length; i++) {
-            const eventNumber = this.#occurrences[i].number;
-            const occurrence = this.#store.get(eventNumber);
-            if (MaybePromise.is(occurrence)) {
-                yield {
-                    ...(await occurrence),
-                    number: eventNumber,
-                };
-            } else {
-                yield {
-                    ...occurrence,
-                    number: eventNumber,
-                };
+        this.#iteratingValuesInProgress = true;
+        try {
+            for (let i = startIndex; i < this.#occurrences.length; i++) {
+                const eventNumber = this.#occurrences[i].number;
+                const occurrence = this.#store.get(eventNumber);
+                if (MaybePromise.is(occurrence)) {
+                    yield {
+                        ...(await occurrence),
+                        number: eventNumber,
+                    };
+                } else {
+                    yield {
+                        ...occurrence,
+                        number: eventNumber,
+                    };
+                }
             }
+        } finally {
+            this.#iteratingValuesInProgress = false;
         }
     }
 
@@ -271,7 +280,7 @@ export class OccurrenceManager {
     }
 
     #startCull() {
-        if (this.#cull) {
+        if (this.#cull || this.#iteratingValuesInProgress) {
             return;
         }
         const cull = this.#dropOldOccurrences();
