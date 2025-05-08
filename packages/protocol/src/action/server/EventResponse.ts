@@ -268,7 +268,7 @@ export class EventResponse<
      *
      * Depends on state initialized by {@link #addEndpointForWildcard}.
      *
-     * TODO - skip clusters for which subject is unauthorized
+     * TODO - skip endpoints for which subject is unauthorized as optimization
      */
     #addClusterForWildcard(cluster: ClusterProtocol, path: EventPath) {
         if (this.#currentCluster !== cluster) {

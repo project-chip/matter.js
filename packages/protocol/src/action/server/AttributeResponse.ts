@@ -292,7 +292,7 @@ export class AttributeResponse<
      *
      * {@link this.#wildcardPathFlags} to numeric bitmap must be set prior to invocation.
      *
-     * TODO - skip endpoints for which subject is unauthorized
+     * TODO - skip endpoints for which subject is unauthorized as optimization
      */
     *#readEndpointForWildcard(endpoint: EndpointProtocol, path: AttributePath) {
         if (endpoint.wildcardPathFlags & this.#wildcardPathFlags) {
