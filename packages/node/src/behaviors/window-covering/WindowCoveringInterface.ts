@@ -33,7 +33,9 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTiltPercent100ths attribute shall be 0.00%.
          *
-         *   • CurrentPositionTiltPercentage attribute shall be 0%. if the AbsolutePosition feature is supported:
+         *   • CurrentPositionTiltPercentage attribute shall be 0%.
+         *
+         * if the AbsolutePosition feature is supported:
          *
          *   • CurrentPositionLift attribute shall be equal to the InstalledOpenLimitLift attribute.
          *
@@ -65,7 +67,9 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTiltPercent100ths attribute shall be 100.00%.
          *
-         *   • CurrentPositionTiltPercentage attribute shall be 100%. if the AbsolutePosition feature is supported:
+         *   • CurrentPositionTiltPercentage attribute shall be 100%.
+         *
+         * if the AbsolutePosition feature is supported:
          *
          *   • CurrentPositionLift attribute shall be equal to the InstalledClosedLimitLift attribute.
          *

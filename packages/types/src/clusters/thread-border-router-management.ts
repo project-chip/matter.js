@@ -33,11 +33,11 @@ export namespace ThreadBorderRouterManagement {
          * This feature shall indicate the ability of the Border Router to change its already configured PAN to another,
          * by setting a pending dataset.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * This feature flag can be used to protect an already-configured network from accidental configuration change,
-         * e.g. when the Thread Border Router serves non-Matter devices that do not support PAN change for an
-         * implementation-specific reason.
+         * > This feature flag can be used to protect an already-configured network from accidental configuration
+         *   change, e.g. when the Thread Border Router serves non- Matter devices that do not support PAN change for an
+         *   implementation-specific reason.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 10.3.4.1
          */
@@ -164,11 +164,11 @@ export namespace ThreadBorderRouterManagement {
              * This feature shall indicate the ability of the Border Router to change its already configured PAN to
              * another, by setting a pending dataset.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * This feature flag can be used to protect an already-configured network from accidental configuration
-             * change, e.g. when the Thread Border Router serves non-Matter devices that do not support PAN change for
-             * an implementation-specific reason.
+             * > This feature flag can be used to protect an already-configured network from accidental configuration
+             *   change, e.g. when the Thread Border Router serves non- Matter devices that do not support PAN change
+             *   for an implementation-specific reason.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 10.3.4.1
              */

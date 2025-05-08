@@ -32,7 +32,7 @@ export const ConcentrationMeasurement = Cluster(
         }),
         Field({
             name: "LEV", conformance: "O.a+", constraint: "1", description: "LevelIndication",
-            details: "Cluster supports basic level indication for substance using the ConcentrationLevel enum"
+            details: "Cluster supports basic level indication for substance using the ConcentrationLev el enum"
         }),
         Field({
             name: "MED", conformance: "[LEV]", constraint: "2", description: "MediumLevel",
@@ -107,7 +107,8 @@ export const ConcentrationMeasurement = Cluster(
     Attribute({
         name: "AverageMeasuredValueWindow", id: 0x6, type: "elapsed-s", access: "R V", conformance: "AVG",
         constraint: "max 604800", default: 1, quality: "P",
-        details: "Indicates the window of time used for determining the AverageMeasuredValue. The value is in seconds.",
+        details: "This attribute shall represent the window of time used for determining the AverageMeasuredValue. The " +
+            "value is in seconds.",
         xref: { document: "cluster", section: "2.10.6.7" }
     }),
 

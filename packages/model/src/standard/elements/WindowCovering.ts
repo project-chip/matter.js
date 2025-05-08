@@ -289,8 +289,9 @@ export const WindowCovering = Cluster(
             "\n" +
             "  • CurrentPositionTiltPercent100ths attribute shall be 0.00%." +
             "\n" +
-            "  • CurrentPositionTiltPercentage attribute shall be 0%. if the AbsolutePosition feature is " +
-            "    supported:" +
+            "  • CurrentPositionTiltPercentage attribute shall be 0%." +
+            "\n" +
+            "if the AbsolutePosition feature is supported:" +
             "\n" +
             "  • CurrentPositionLift attribute shall be equal to the InstalledOpenLimitLift attribute." +
             "\n" +
@@ -324,8 +325,9 @@ export const WindowCovering = Cluster(
             "\n" +
             "  • CurrentPositionTiltPercent100ths attribute shall be 100.00%." +
             "\n" +
-            "  • CurrentPositionTiltPercentage attribute shall be 100%. if the AbsolutePosition feature is " +
-            "    supported:" +
+            "  • CurrentPositionTiltPercentage attribute shall be 100%." +
+            "\n" +
+            "if the AbsolutePosition feature is supported:" +
             "\n" +
             "  • CurrentPositionLift attribute shall be equal to the InstalledClosedLimitLift attribute." +
             "\n" +

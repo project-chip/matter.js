@@ -43,8 +43,8 @@ const args = await yargs(hideBin(process.argv))
     .strict().argv;
 
 let revisionComponents = args.revision.split(".");
-if (revisionComponents.length > 2) {
-    revisionComponents = revisionComponents.slice(0, 2);
+if (revisionComponents.length > 3) {
+    revisionComponents = revisionComponents.slice(0, 3);
     args.revision = revisionComponents.join(".");
 }
 

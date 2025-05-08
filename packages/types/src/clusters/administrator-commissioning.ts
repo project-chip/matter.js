@@ -105,7 +105,7 @@ export namespace AdministratorCommissioning {
         commissioningTimeout: TlvField(0, TlvUInt16),
 
         /**
-         * This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, “Password-Authenticated Key
+         * This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, “Password- Authenticated Key
          * Exchange (PAKE)”) computed by the existing Administrator to be used for this commissioning. The field is
          * concatenation of two values (w0 || L) shall be (CRYPTO_GROUP_SIZE_BYTES +
          * CRYPTO_PUBLIC_KEY_SIZE_BYTES)-octets long as detailed in Crypto_PAKEValues_Responder. It shall be derived
@@ -245,11 +245,11 @@ export namespace AdministratorCommissioning {
              *
              * This attribute shall revert to WindowNotOpen upon expiry of a commissioning window.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * An initial commissioning window is not opened using either the OpenCommissioningWindow command or the
-             * OpenBasicCommissioningWindow command, and therefore this attribute shall be set to WindowNotOpen on
-             * initial commissioning.
+             * > An initial commissioning window is not opened using either the OpenCommissioningWindow command or the
+             *   OpenBasicCommissioningWindow command, and therefore this attribute shall be set to WindowNotOpen on
+             *   initial commissioning.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.19.7.1
              */
@@ -292,10 +292,9 @@ export namespace AdministratorCommissioning {
              *
              * When the OpenCommissioningWindow command expires or commissioning completes, the Node shall remove the
              * Passcode by deleting the PAKE passcode verifier as well as stop publishing the DNS-SD record
-             * corresponding to this command as described in Section 4.3.1, “Commissionable
-             *
-             * Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives a
-             * CommissioningComplete command, see Section 5.5, “Commissioning Flows”.
+             * corresponding to this command as described in Section 4.3.1, “Commissionable Node Discovery”. The
+             * commissioning into a new Fabric completes when the Node successfully receives a CommissioningComplete
+             * command, see Section 5.5, “Commissioning Flows”.
              *
              * The parameters for OpenCommissioningWindow command are as follows:
              *
@@ -338,9 +337,8 @@ export namespace AdministratorCommissioning {
              * status code of WindowNotOpen.
              *
              * If the commissioning window was open and the fail-safe was armed when this command is received, the
-             * device shall immediately expire the fail-safe and perform the cleanup steps outlined
-             *
-             * in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”.
+             * device shall immediately expire the fail-safe and perform the cleanup steps outlined in Section
+             * 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”.
              *
              * @see {@link MatterSpecification.v14.Core} § 11.19.8.3
              */

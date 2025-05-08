@@ -52,10 +52,10 @@ export const locationdesc = Datatype(
             "devices, such as for grouping devices that are located on the same level. For example, an automation " +
             "may be defined for all devices located at the basement level (floor number -1)." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Handling complex level situations, such as half levels (side split houses), or the levels from an " +
-            "apartment building, is up to the client and/or user.",
+            "> Handling complex level situations, such as half levels (side split houses), or the levels from an " +
+            "  apartment building, is up to the client and/or user.",
 
         xref: { document: "core", section: "7.19.2.45.2" }
     }),
@@ -68,10 +68,10 @@ export const locationdesc = Datatype(
             "\n" +
             "If this field is null, that indicates that the area type information is not available." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "This field only indicates the type of the area. Multiple areas of the same type, such as bedrooms, " +
-            "may exist in a user’s home.",
+            "> This field only indicates the type of the area. Multiple areas of the same type, such as bedrooms, " +
+            "  may exist in a user’s home.",
 
         xref: { document: "core", section: "7.19.2.45.3" }
     })

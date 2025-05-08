@@ -19,10 +19,9 @@ export namespace AdministratorCommissioningInterface {
          *
          * When the OpenCommissioningWindow command expires or commissioning completes, the Node shall remove the
          * Passcode by deleting the PAKE passcode verifier as well as stop publishing the DNS-SD record corresponding to
-         * this command as described in Section 4.3.1, “Commissionable
-         *
-         * Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives a
-         * CommissioningComplete command, see Section 5.5, “Commissioning Flows”.
+         * this command as described in Section 4.3.1, “Commissionable Node Discovery”. The commissioning into a new
+         * Fabric completes when the Node successfully receives a CommissioningComplete command, see Section 5.5,
+         * “Commissioning Flows”.
          *
          * The parameters for OpenCommissioningWindow command are as follows:
          *
@@ -59,9 +58,8 @@ export namespace AdministratorCommissioningInterface {
          * status code of WindowNotOpen.
          *
          * If the commissioning window was open and the fail-safe was armed when this command is received, the device
-         * shall immediately expire the fail-safe and perform the cleanup steps outlined
-         *
-         * in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”.
+         * shall immediately expire the fail-safe and perform the cleanup steps outlined in Section 11.10.7.2.2,
+         * “Behavior on expiry of Fail-Safe timer”.
          *
          * @see {@link MatterSpecification.v14.Core} § 11.19.8.3
          */

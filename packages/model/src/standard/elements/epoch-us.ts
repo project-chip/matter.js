@@ -52,7 +52,7 @@ export const epochUs = Datatype(
             "\n" +
             "  • 2000-06-01T00:00-04 if the associated local time offset is -4 hours." +
             "\n" +
-            "Conversion from NTP timestamps" +
+            "### Conversion from NTP timestamps" +
             "\n" +
             "Timestamps from NTP also do not count leap seconds, but have a different epoch. NTP 128-bit " +
             "timestamps consist of a 64-bit seconds portion (NTP(s)) and a 64-bit fractional seconds portion " +

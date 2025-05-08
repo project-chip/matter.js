@@ -199,7 +199,7 @@ export const AccessControl = Cluster(
 
     Attribute(
         {
-            name: "CommissioningArL", id: 0x5, type: "list", access: "R V", conformance: "MNGD",
+            name: "CommissioningArl", id: 0x5, type: "list", access: "R V", conformance: "MNGD",
             constraint: "desc", default: [], quality: "F",
 
             details: "This attribute shall provide the set of CommissioningAccessRestrictionEntryStruct applied during " +
@@ -452,13 +452,11 @@ export const AccessControl = Cluster(
                     "\n" +
                     "  • The query shall use the & delimiter between key/value pairs." +
                     "\n" +
-                    "  • The key-value pairs shall in the format name=<value> where name is the key name, and <value>" +
+                    "  • The key-value pairs shall in the format name=<value> where name is the key name, and <value> is " +
+                    "    the contents of the value encoded with proper URL-encoded escaping." +
                     "\n" +
-                    "is the contents of the value encoded with proper URL-encoded escaping." +
-                    "\n" +
-                    "  • If key MTcu is present, it shall have a value of \"_\" (i.e. MTcu=_). This is the \"callback URL" +
-                    "\n" +
-                    "backUrl) placeholder\"." +
+                    "  • If key MTcu is present, it shall have a value of \"_\" (i.e. MTcu=_). This is the \"callback URL " +
+                    "    (CallbackUrl) placeholder\"." +
                     "\n" +
                     "  • Any key whose name begins with MT not mentioned in the previous bullets shall be reserved for " +
                     "    future use by this specification. Manufacturers shall NOT include query keys starting with MT in " +
@@ -466,8 +464,6 @@ export const AccessControl = Cluster(
                     "\n" +
                     "Any other element in the ARLRequestFlowUrl query field not covered by the above rules, as well as " +
                     "the fragment field (if present), shall remain including the order of query key/value pairs present." +
-                    "\n" +
-                    "Expansion of ARLRequestFlowUrl by client" +
                     "\n" +
                     "Once the URL is obtained, it shall be expanded to form a final URL (ExpandedARLRequestFlowUrl) by " +
                     "proceeding with the following substitution algorithm on the original ARLRequestFlowUrl:" +
@@ -491,9 +487,8 @@ export const AccessControl = Cluster(
                     "\n" +
                     "  • The query shall use the & delimiter between key/value pairs." +
                     "\n" +
-                    "  • The key-value pairs shall follow the format name=<value> where name is the key name, and" +
-                    "\n" +
-                    "<value> is the contents of the value encoded with proper URL-encoded escaping." +
+                    "  • The key-value pairs shall follow the format name=<value> where name is the key name, and <value> " +
+                    "    is the contents of the value encoded with proper URL-encoded escaping." +
                     "\n" +
                     "  • If key MTaer is present, it shall have a value of \"_\" (i.e. MTaer=_). This is the placeholder " +
                     "    for a \"access extension response\" provided by the manufacturer flow to the client. The " +
@@ -504,13 +499,9 @@ export const AccessControl = Cluster(
                     "  • Any key whose name begins with MT not mentioned in the previous bullets shall be reserved for " +
                     "    future use by this specification." +
                     "\n" +
-                    "Any other element in the CallbackUrl query field not covered by the above rules, as well as the frag" +
-                    "\n" +
-                    "ment field (if present), shall remain as provided by the client through embedding within the" +
-                    "\n" +
+                    "Any other element in the CallbackUrl query field not covered by the above rules, as well as the " +
+                    "fragment field (if present), shall remain as provided by the client through embedding within the " +
                     "ExpandedARLRequestFlowUrl, including the order of query key/value pairs present." +
-                    "\n" +
-                    "### Expansion of CallbackUrl by the manufacturer custom flow" +
                     "\n" +
                     "Once the CallbackUrl is obtained by the manufacturer flow, it may be expanded to form a final " +
                     "ExpandedARLRequestCallbackUrl URL to be used by proceeding with the following substitution algorithm " +
@@ -538,7 +529,7 @@ export const AccessControl = Cluster(
                     "ExpandedARLRequestCallbackUrl, on completion of the request, if an ExpandedARLRequestCallbackUrl was " +
                     "computed from the CallbackUrl and opening such a URL is supported." +
                     "\n" +
-                    "Examples of ARLRequestFlowUrl URLs" +
+                    "### Examples of ARLRequestFlowUrl URLs" +
                     "\n" +
                     "Below are some examples of valid ExpandedARLRequestFlowUrl for several valid values of " +
                     "ARLRequestFlowUrl, as well as some examples of invalid values of ARLRequestFlowUrl:" +
@@ -557,10 +548,9 @@ export const AccessControl = Cluster(
                     "\n" +
                     "https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=_" +
                     "\n" +
-                    "  ◦ After expansion:" +
-                    "\n" +
-                    "https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=https%3A%2F%2Fc " +
-                    "lient.domain.example%2Fcb%3Ftoken%3DmAsJ6_vqbr-vjDiG_w%253D%253D%26MTaer%3D_" +
+                    "  ◦ After expansion: " +
+                    "    https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=https%3A%2F%2Fc " +
+                    "    lient.domain.example%2Fcb%3Ftoken%3DmAsJ6_vqbr-vjDiG_w%253D%253D%26MTaer%3D_" +
                     "\n" +
                     "  ◦ The ExpandedARLRequestFlowUrl URL contains:" +
                     "\n" +
@@ -572,7 +562,7 @@ export const AccessControl = Cluster(
                     "      return access extension completion status of Success, the ExpandedARLRequestCallbackUrl would " +
                     "      be:" +
                     "\n" +
-                    "https://client.domain.example/cb?token=mAsJ6_vqbr- vjDiG_w%3D%3D&MTaer=Success" +
+                    "https://client.domain.example/cb?token=mAsJ6_vqbr-vjDiG_w%3D%3D&MTaer=Success" +
                     "\n" +
                     "Note that the MTcu key/value pair was initially provided URL-encoded within the " +
                     "ExpandedARLRequestFlowUrl URL and the MTaer=_ key/value pair placeholder now contains a substituted " +
@@ -652,9 +642,9 @@ export const AccessControl = Cluster(
     Datatype(
         {
             name: "AccessControlEntryPrivilegeEnum", type: "enum8",
-            details: "Proxy View Value" +
+            details: "### Proxy View Value" +
                 "\n" +
-                "This value implicitly grants View privileges",
+                "### This value implicitly grants View privileges",
             xref: { document: "core", section: "9.10.5.2" }
         },
 
@@ -670,7 +660,7 @@ export const AccessControl = Cluster(
         Field({
             name: "Operate", id: 0x3, conformance: "M",
             description: "View privileges, and can perform the primary function of this Node (except Access Control Cluster)",
-            details: "This value implicitly grants View privileges",
+            details: "### This value implicitly grants View privileges",
             xref: { document: "core", section: "9.10.5.2.1" }
         }),
 
@@ -731,8 +721,6 @@ export const AccessControl = Cluster(
 
             details: "The privilege field shall specify the level of privilege granted by this Access Control Entry." +
                 "\n" +
-                "NOTE The Proxy View privilege is provisional." +
-                "\n" +
                 "Each privilege builds upon its predecessor, expanding the set of actions that can be performed upon " +
                 "a Node. Administer is the highest privilege, and is special as it pertains to the administration of " +
                 "privileges itself, via the Access Control Cluster." +
@@ -740,8 +728,6 @@ export const AccessControl = Cluster(
                 "When a Node is granted a particular privilege, it is also implicitly granted all logically lower " +
                 "privilege levels as well. The following diagram illustrates how the higher privilege levels subsume " +
                 "the lower privilege levels:" +
-                "\n" +
-                "Figure 46. Access Control Privilege Levels" +
                 "\n" +
                 "Individual clusters shall define whether attributes are readable, writable, or both readable and " +
                 "writable. Clusters also shall define which privilege is minimally required to be able to perform a " +
@@ -776,8 +762,6 @@ export const AccessControl = Cluster(
                     "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
                     "\n" +
                     "### Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:" +
-                    "\n" +
-                    "Subject Semantics" +
                     "\n" +
                     "An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node that " +
                     "successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s " +
@@ -825,8 +809,6 @@ export const AccessControl = Cluster(
                     "\n" +
                     "A target grants access based on the presence of fields as follows:" +
                     "\n" +
-                    "Target Semantics" +
-                    "\n" +
                     "An empty targets list indicates a wildcard: that is, this entry shall grant access to all cluster " +
                     "instances on all endpoints on this Node.",
 
@@ -845,8 +827,7 @@ export const AccessControl = Cluster(
         Field({
             name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M", constraint: "max 128",
 
-            details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
-                "\n" +
+            details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s " +
                 "Access Control Entries." +
                 "\n" +
                 "The contents shall consist of a top-level anonymous list; each list element shall include a " +

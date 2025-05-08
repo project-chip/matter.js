@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "#general";
+import { camelize, InternalError } from "#general";
 import { AttributeElement, DatatypeElement, FieldElement, Metatype, ValueElement } from "#model";
-import { ByteSize, Identifier, Integer, Str } from "./html-translators.js";
+import { ByteSize, Integer, Str } from "./html-translators.js";
 import { repairTypeIdentifier } from "./repairs/type-repairs.js";
 import { GlobalReference } from "./spec-types.js";
 import {
@@ -190,7 +190,10 @@ function* translateElements(ref: GlobalReference): Generator<AttributeElement | 
 
 const StatusCodeSchema = {
     id: Alias(Integer, "statuscode"),
-    name: Alias(Identifier, "value"),
+
+    // Name appears as "FOO_BAR" and any whitespace is a line wrap; should *not* be considered separate word
+    name: Alias(el => camelize(Str(el).replace(/\s+/g, ""), true), "value"),
+
     description: Alias(Str, "summary"),
 };
 
@@ -220,7 +223,7 @@ function installstatusCodes(ref: GlobalReference) {
 
     // Remove obsolete names from the "summary" column
     for (const record of records) {
-        record.description = record.description.replace(/\s*[A-Z_]+ is an obsolete.*$/, "");
+        record.description = record.description.replace(/\s*[A-Z_]+ is an ?obsolete.*$/, "");
     }
 
     statusType.children = translateRecordsToMatter("status codes", records, FieldElement);

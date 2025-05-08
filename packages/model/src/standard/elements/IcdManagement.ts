@@ -166,7 +166,7 @@ export const IcdManagement = Cluster(
 
     Attribute({
         name: "OperatingMode", id: 0x8, type: "OperatingModeEnum", access: "R V", conformance: "LITS",
-        details: "Indicates the operating mode of the ICD as specified in the OperatingModeEnum." +
+        details: "This attribute shall indicate the operating mode of the ICD as specified in the OperatingModeEnum." +
             "\n" +
             "  • If the ICD is operating as a LIT ICD, OperatingMode shall be LIT." +
             "\n" +
@@ -180,7 +180,7 @@ export const IcdManagement = Cluster(
         details: "Indicates the maximum time in seconds between two Check-In messages when back-off is active. The " +
             "MaximumCheckInBackoff shall NOT be smaller than the IdleModeDuration." +
             "\n" +
-            "If the MaximumCheckInBackoff is equal to the IdleModeDuration, it means the ICD does notback- off.",
+            "If the MaximumCheckInBackoff is equal to the IdleModeDuration, it means the ICD does not back-off.",
         xref: { document: "core", section: "9.17.6.10" }
     }),
 
@@ -307,15 +307,11 @@ export const IcdManagement = Cluster(
 
         Field({
             name: "PromisedActiveDuration", id: 0x0, type: "uint32", conformance: "M", constraint: "desc",
-
             details: "This field shall provide the actual duration that the ICD server can stay active from the time it " +
                 "receives the StayActiveRequest command." +
                 "\n" +
-                "### Minimum Value for PromisedActiveDuration" +
-                "\n" +
                 "The minimum value of the PromisedActiveDuration field shall be equal to either 30000 milliseconds or " +
                 "StayActiveDuration (from the received StayActiveRequest command), whichever is smaller.",
-
             xref: { document: "core", section: "9.17.7.5.1" }
         })
     ),
@@ -439,8 +435,7 @@ export const IcdManagement = Cluster(
                 "For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers to " +
                 "the server on the entry’s associated fabric bears that Node ID, then the entry matches." +
                 "\n" +
-                "Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the" +
-                "\n" +
+                "Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the " +
                 "subscribers to the server on the entry’s associated fabric bears the CASE Authenticated TAG value " +
                 "0xAA12 and the version 0x0002 or higher within its NOC, then the entry matches.",
 

@@ -60,9 +60,7 @@ export namespace ApplicationLauncherInterface {
          * constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on the action
          * taken, on the Application Basic cluster of the Endpoint corresponding to the application on which the action
          * was taken. The Status attribute shall be updated on any other application whose Status may have changed as a
-         * result of this command.
-         *
-         * This command returns a Launcher Response.
+         * result of this command. This command returns a Launcher Response.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.4.7.3
          */

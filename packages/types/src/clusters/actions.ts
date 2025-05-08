@@ -41,9 +41,8 @@ export namespace Actions {
          * Can be used to set a static state of the associated endpoints (typically using InstantAction or
          * InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically using
          * StartAction), where the endpoints would e.g. gradually cycle through certain colors for a pleasing effect. A
-         * voice controller could use "set" (to map to InstantAction) or "play" (to map to StartAction) to trig
-         *
-         * ger such actions.
+         * voice controller could use "set" (to map to InstantAction) or "play" (to map to StartAction) to trigger such
+         * actions.
          *
          * Example: see examples 1 and 2.
          *
@@ -301,9 +300,8 @@ export namespace Actions {
         /**
          * User-configured group of endpoints where an endpoint can be in any number of zones
          *
-         * Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the living
-         *
-         * room can be part of the "reading corner" zone (subset of the lights in the living room) but also part of the
+         * Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the living room
+         * can be part of the "reading corner" zone (subset of the lights in the living room) but also part of the
          * "downstairs" zone which contains all the lights on a floor, e.g. combining living room, kitchen and hallway.
          * This indicates that a user has defined this list of endpoints as something they logically would like to
          * control as a group, so Matter controllers could provide the user with a way to do as such.

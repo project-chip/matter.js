@@ -202,6 +202,12 @@ export class AllClustersTestInstance extends NodeTestInstance {
                                     operationalState: OperationalState.OperationalStateEnum.Running,
                                 });
                                 break;
+                            case 1:
+                                await endpoint.setStateOf(ServerType, {
+                                    startBlocked: true,
+                                    operationalState: OperationalState.OperationalStateEnum.Error,
+                                });
+                                break;
                             case 2:
                                 await endpoint.setStateOf(ServerType, {
                                     startBlocked: true,
@@ -329,7 +335,11 @@ export class AllClustersTestInstance extends NodeTestInstance {
                 timeFormatLocalization: {
                     hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
                     activeCalendarType: TimeFormatLocalization.CalendarType.Gregorian,
-                    supportedCalendarTypes: [TimeFormatLocalization.CalendarType.Gregorian],
+                    supportedCalendarTypes: [
+                        // After conversion from YAML to python CHIP requires support for Buddhist calendar
+                        TimeFormatLocalization.CalendarType.Buddhist,
+                        TimeFormatLocalization.CalendarType.Gregorian,
+                    ],
                 },
                 userLabel: {
                     labelList: [{ label: "foo", value: "bar" }],

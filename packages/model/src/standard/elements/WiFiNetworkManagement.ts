@@ -36,12 +36,12 @@ export const WiFiNetworkManagement = Cluster(
             "A value of null shall indicate that no primary Wi-Fi network is available (e.g. because the Wi-Fi " +
             "network has not yet been configured by the user)." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "The SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. " +
-            "Implementations must be careful to support transferring these byte strings without requiring a " +
-            "particular encoding. The most common encoding is UTF-8, however this is just a convention. Some " +
-            "configurations may use Latin-1 or other character sets.",
+            "> The SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. " +
+            "  Implementations must be careful to support transferring these byte strings without requiring a " +
+            "  particular encoding. The most common encoding is UTF- 8, however this is just a convention. Some " +
+            "  configurations may use Latin-1 or other character sets.",
 
         xref: { document: "cluster", section: "10.2.4.1" }
     }),
@@ -61,13 +61,11 @@ export const WiFiNetworkManagement = Cluster(
             "It is recommended that servers implement this attribute as either a timestamp or a counter. When " +
             "implemented as a counter it SHOULD be initialized with a random value." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "The passphrase itself is not exposed as an attribute to avoid its unintentional retrieval or caching " +
-            "by clients that use wildcard reads or otherwise routinely read all available attributes. It can be " +
-            "retrieved using the NetworkPassphraseRequest" +
-            "\n" +
-            "command.",
+            "> The passphrase itself is not exposed as an attribute to avoid its unintentional retrieval or " +
+            "  caching by clients that use wildcard reads or otherwise routinely read all available attributes. " +
+            "  It can be retrieved using the NetworkPassphraseRequest command.",
 
         xref: { document: "cluster", section: "10.2.4.2" }
     }),

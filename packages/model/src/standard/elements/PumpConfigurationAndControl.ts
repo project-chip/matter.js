@@ -27,13 +27,11 @@ export const PumpConfigurationAndControl = Cluster(
             "\n" +
             "C Pump configuration and control S C Level control S" +
             "\n" +
-            "C On/Off S" +
+            "### C On/Off S" +
             "\n" +
             "C = Client S = Server" +
             "\n" +
-            "Note: Device names are examples for illustration purposes only" +
-            "\n" +
-            "Figure 14. Typical Usage of Pump Configuration and Control Cluster",
+            "Note: Device names are examples for illustration purposes only",
 
         xref: { document: "cluster", section: "4.2" }
     },
@@ -145,9 +143,8 @@ export const PumpConfigurationAndControl = Cluster(
     Attribute({
         name: "MinConstSpeed", id: 0x7, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
         default: null, quality: "X F",
-        details: "This attribute specifies the minimum speed the pump can achieve when it is working with the Con" +
-            "\n" +
-            "trolMode attribute set to ConstantSpeed." +
+        details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
+            "ControlMode attribute set to ConstantSpeed." +
             "\n" +
             "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
         xref: { document: "cluster", section: "4.2.7.8" }
@@ -196,14 +193,11 @@ export const PumpConfigurationAndControl = Cluster(
     Attribute({
         name: "MaxConstTemp", id: 0xc, type: "int16", access: "R V", conformance: "TEMP, [AUTO]",
         constraint: "min -27315", default: null, quality: "X F",
-
         details: "This attribute specifies the maximum temperature the pump can maintain in the system when it is " +
             "working with the ControlMode attribute set to ConstantTemperature." +
             "\n" +
-            "MaxConstTemp shall be greater than or equal to MinConstTemp" +
-            "\n" +
-            "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
-
+            "MaxConstTemp shall be greater than or equal to MinConstTemp Valid range is –273.15 °C to 327.67 °C " +
+            "(steps of 0.01 °C). Null if the value is invalid.",
         xref: { document: "cluster", section: "4.2.7.13" }
     }),
 
@@ -211,8 +205,7 @@ export const PumpConfigurationAndControl = Cluster(
         name: "PumpStatus", id: 0x10, type: "PumpStatusBitmap", access: "R V", conformance: "O",
         constraint: "desc", default: 0, quality: "P",
         details: "This attribute specifies the activity status of the pump functions as listed in PumpStatusBitmap. " +
-            "Where a pump controller function is active, the corresponding bit shall be set to 1. Where a pump" +
-            "\n" +
+            "Where a pump controller function is active, the corresponding bit shall be set to 1. Where a pump " +
             "controller function is not active, the corresponding bit shall be set to 0.",
         xref: { document: "cluster", section: "4.2.7.14" }
     }),
@@ -355,7 +348,7 @@ export const PumpConfigurationAndControl = Cluster(
             "ControlMode and the optional connection of a remote sensor. The operation and control is prioritized " +
             "as shown in the scheme below:" +
             "\n" +
-            "Priority Scheme of Pump Operation and Control" +
+            "### Priority Scheme of Pump Operation and Control" +
             "\n" +
             "If this attribute is Maximum, Minimum or Local, the OperationMode attribute decides how the pump is " +
             "operated." +
@@ -575,10 +568,9 @@ export const PumpConfigurationAndControl = Cluster(
         Field({
             name: "ProportionalPressure", id: 0x2, conformance: "PRSCOMP",
             description: "The pump will regulate its speed to maintain a constant differential pressure over its flanges.",
-            details: "The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – Max" +
-                "\n" +
-                "CompPressure] attributes. The internal setpoint will be lowered (compensated) dependent on the flow " +
-                "in the pump (lower flow ⇒ lower internal setpoint).",
+            details: "The setpoint is interpreted as a percentage of the range derived of the [MinCompPressure – " +
+                "MaxCompPressure] attributes. The internal setpoint will be lowered (compensated) dependent on the " +
+                "flow in the pump (lower flow ⇒ lower internal setpoint).",
             xref: { document: "cluster", section: "4.2.6.3.3" }
         }),
 

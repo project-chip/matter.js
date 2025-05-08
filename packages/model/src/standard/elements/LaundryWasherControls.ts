@@ -67,7 +67,8 @@ export const LaundryWasherControls = Cluster(
             "in SpinSpeeds - 1. If a value is received that is outside of the defined constraints, a " +
             "CONSTRAINT_ERROR shall be sent as the response. If a value is attempted to be written that doesn’t " +
             "match a valid index (e.g. an index of 5 when the list has 4 values), a CONSTRAINT_ERROR shall be " +
-            "sent as the response. If null is written to this attribute, there will be no spin speed for the " +
+            "sent as the response. If null is written to this attribute, there will be no spin speed for the" +
+            "\n" +
             "selected cycle. If the value is null, there will be no spin speed on the current mode.",
 
         xref: { document: "cluster", section: "8.6.6.2" }
@@ -76,14 +77,11 @@ export const LaundryWasherControls = Cluster(
     Attribute({
         name: "NumberOfRinses", id: 0x2, type: "NumberOfRinsesEnum", access: "RW VO", conformance: "RINSE",
         constraint: "desc", default: 1,
-
         details: "Indicates how many times a rinse cycle shall be performed on a device for the current mode of " +
             "operation. A value of None shall indicate that no rinse cycle will be performed. This value may be " +
-            "set by the client to adjust the number of rinses that are performed for" +
-            "\n" +
-            "the current mode of operation. If the device is not in a compatible state to accept the provided " +
-            "value, an INVALID_IN_STATE error shall be sent as the response.",
-
+            "set by the client to adjust the number of rinses that are performed for the current mode of " +
+            "operation. If the device is not in a compatible state to accept the provided value, an " +
+            "INVALID_IN_STATE error shall be sent as the response.",
         xref: { document: "cluster", section: "8.6.6.3" }
     }),
 

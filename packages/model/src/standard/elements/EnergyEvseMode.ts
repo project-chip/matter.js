@@ -38,8 +38,7 @@ export const EnergyEvseMode = Cluster(
         details: "At least one entry in the SupportedModes attribute shall include the Manual mode tag in the ModeTags " +
             "field list." +
             "\n" +
-            "Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting" +
-            "\n" +
+            "Modes with entries in the SupportedModes attribute which contain multiple mode tags permitting " +
             "charging or discharging under different conditions shall permit the charging or discharging to occur " +
             "if any of the conditions are satisfied." +
             "\n" +
@@ -90,8 +89,7 @@ export const EnergyEvseMode = Cluster(
 
         Field({
             name: "SolarCharging", id: 0x4002,
-            details: "While in modes with this tag, and once enabled with the EnableCharging, the EVSE will attempt to" +
-                "\n" +
+            details: "While in modes with this tag, and once enabled with the EnableCharging, the EVSE will attempt to " +
                 "automatically start charging based on available excess solar PV generation, limiting the charging " +
                 "power to avoid importing energy from the grid.",
             xref: { document: "cluster", section: "9.4.7.1.3" }
@@ -104,11 +102,11 @@ export const EnergyEvseMode = Cluster(
                 "permit discharging based on the current charge state of the EV, and its control from an associated " +
                 "Device Energy Management cluster." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "being in a mode with this tag set or not does not affect the handling of the EnableDischarging " +
-                "command by the Energy EVSE cluster, but once enabled, only modes with this tag enable the " +
-                "discharging to actually occur.",
+                "> being in a mode with this tag set or not does not affect the handling of the EnableDischarging " +
+                "  command by the Energy EVSE cluster, but once enabled, only modes with this tag enable the " +
+                "  discharging to actually occur.",
 
             xref: { document: "cluster", section: "9.4.7.1.4" }
         })

@@ -34,11 +34,11 @@ export const ThreadBorderRouterManagement = Cluster(
             details: "This feature shall indicate the ability of the Border Router to change its already configured PAN to " +
                 "another, by setting a pending dataset." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "This feature flag can be used to protect an already-configured network from accidental configuration " +
-                "change, e.g. when the Thread Border Router serves non-Matter devices that do not support PAN change " +
-                "for an implementation-specific reason.",
+                "> This feature flag can be used to protect an already-configured network from accidental " +
+                "  configuration change, e.g. when the Thread Border Router serves non- Matter devices that do not " +
+                "  support PAN change for an implementation-specific reason.",
 
             xref: { document: "cluster", section: "10.3.4.1" }
         })

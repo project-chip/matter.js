@@ -75,7 +75,7 @@ export enum Status {
     UnsupportedCommand = 129,
 
     /**
-     * The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.
+     * The cluster command is malformed, has missing fields, or fields with invalid values.Command not carried out.
      *
      * @see {@link MatterSpecification.v14.Core} § 8.10.1
      */
@@ -105,8 +105,7 @@ export enum Status {
     UnsupportedWrite = 136,
 
     /**
-     * An action or operation failed due to insufficient available resources.INSUFFICIENT_SPACE is anobsolete name for
-     * this error code.
+     * An action or operation failed due to insufficient available resources.
      *
      * @see {@link MatterSpecification.v14.Core} § 8.10.1
      */
@@ -241,15 +240,15 @@ export enum Status {
     NoCommandResponse = 204,
 
     /**
-     * The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenanceUrl to
-     * complete this.
+     * The node requires updated TC acceptance. The user MAY be directed to visit the EnhancedSetupFlowMaintenan ceUrl
+     * to complete this.
      *
      * @see {@link MatterSpecification.v14.Core} § 8.10.1
      */
     TermsAndConditionsChanged = 205,
 
     /**
-     * The node requires the user to visit the EnhancedSetupFlowMaintenanceUrl for instructions on further action.
+     * The node requires the user to visit the EnhancedSetupFlowMaintenan ceUrl for instructions on further action.
      *
      * @see {@link MatterSpecification.v14.Core} § 8.10.1
      */

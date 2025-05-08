@@ -717,7 +717,7 @@ export const Channel = Cluster(
         Field({
             name: "After", id: 0x1, type: "string", conformance: "O", constraint: "max 8192",
             details: "This field shall indicate the cursor that pinpoints the start of the upcoming data page. In a " +
-                "Cursor- based pagination system, the field acts as a reference point, ensuring the set of results " +
+                "Cursor-based pagination system, the field acts as a reference point, ensuring the set of results " +
                 "corresponds directly to the data following the specified cursor. In a Offset-based pagination " +
                 "system, the field, along with limit, indicate the offset from which entries in the program guide " +
                 "will be retrieved.",
@@ -726,8 +726,8 @@ export const Channel = Cluster(
 
         Field({
             name: "Before", id: 0x2, type: "string", conformance: "O", constraint: "max 8192",
-            details: "This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a Cursor- " +
-                "based pagination system, the field acts as a reference point, ensuring the set of results " +
+            details: "This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a " +
+                "Cursor-based pagination system, the field acts as a reference point, ensuring the set of results " +
                 "corresponds directly to the data preceding the specified cursor. In a Offset-based pagination " +
                 "system, the field, along with limit, indicate the offset from which entries in the program guide " +
                 "will be retrieved.",

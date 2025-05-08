@@ -118,7 +118,7 @@ export const Identify = Cluster(
         Field({ name: "Display", id: 0x4, conformance: "M", description: "Presentation will be visible on display screen." }),
         Field({
             name: "Actuator", id: 0x5, conformance: "M",
-            description: "Presentation will be conveyed by actuator functionality such as through a window blind operation or in- wall relay."
+            description: "Presentation will be conveyed by actuator functionality such as through a window blind operation or in-wall relay."
         })
     ),
 

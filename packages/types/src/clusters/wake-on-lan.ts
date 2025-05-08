@@ -34,14 +34,14 @@ export namespace WakeOnLan {
             macAddress: OptionalFixedAttribute(0x0, TlvString.bound({ maxLength: 12 })),
 
             /**
-             * Indicates the current link-local address of the device. Only 128-bit IPv6 link- local addresses shall be
+             * Indicates the current link-local address of the device. Only 128-bit IPv6 link-local addresses shall be
              * used for this attribute.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * Some companies may consider MAC Address to be protected data subject to PII handling considerations and
-             * will therefore choose not to include it or read it. The MAC Address can often be determined using ARP in
-             * IPv4 or NDP in IPv6.
+             * > Some companies may consider MAC Address to be protected data subject to PII handling considerations and
+             *   will therefore choose not to include it or read it. The MAC Address can often be determined using ARP
+             *   in IPv4 or NDP in IPv6.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.12.4.2
              */

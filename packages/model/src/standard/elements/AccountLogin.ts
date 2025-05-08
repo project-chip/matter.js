@@ -40,10 +40,9 @@ export const AccountLogin = Cluster(
             "The cluster server for this cluster may be supported on each endpoint that represents a Content App " +
             "on a Video Player device." +
             "\n" +
-            "See Device Type Library document for details of how a Content App, represented as an endpoint on" +
-            "\n" +
-            "the Video Player device, may implement the cluster server for this cluster to simplify account login " +
-            "for its users.",
+            "See Device Type Library document for details of how a Content App, represented as an endpoint on the " +
+            "Video Player device, may implement the cluster server for this cluster to simplify account login for " +
+            "its users.",
 
         xref: { document: "cluster", section: "6.2" }
     },
@@ -78,10 +77,9 @@ export const AccountLogin = Cluster(
                 "\n" +
                 "For example, a Video Player with a Content App Platform may invoke this command on one of its " +
                 "Content App endpoints to facilitate commissioning of a Phone App made by the same vendor as the " +
-                "Content App. If the accounts match, then the Content App may return a setup code that can be used" +
-                "\n" +
-                "by the Video Player to commission the Phone App without requiring the user to physically input a " +
-                "setup code." +
+                "Content App. If the accounts match, then the Content App may return a setup code that can be used by " +
+                "the Video Player to commission the Phone App without requiring the user to physically input a setup " +
+                "code." +
                 "\n" +
                 "The account match is determined by the Content App using a method which is outside the scope of this " +
                 "specification and will typically involve a central service which is in communication with both the " +
@@ -145,10 +143,10 @@ export const AccountLogin = Cluster(
             details: "This field shall provide the setup PIN code as a text string at least 8 characters in length or " +
                 "empty string to indicate that the accounts do not match." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
-                "minimum length.",
+                "> Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                "  minimum length.",
 
             xref: { document: "cluster", section: "6.2.4.2.1" }
         })
@@ -212,10 +210,10 @@ export const AccountLogin = Cluster(
 
             details: "This field shall provide the setup PIN code as a text string at least 8 characters in length." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
-                "minimum length.",
+                "> Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                "  minimum length.",
 
             xref: { document: "cluster", section: "6.2.4.3.2" }
         }),
@@ -239,8 +237,7 @@ export const AccountLogin = Cluster(
 
         Field({
             name: "Node", id: 0x0, type: "node-id", conformance: "O",
-            details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content" +
-                "\n" +
+            details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content " +
                 "App to keep track of Nodes which currently have access to it.",
             xref: { document: "cluster", section: "6.2.4.4.1" }
         })

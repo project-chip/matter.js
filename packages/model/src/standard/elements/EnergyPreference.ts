@@ -17,12 +17,9 @@ import {
 export const EnergyPreference = Cluster(
     {
         name: "EnergyPreference", id: 0x9b, classification: "application", pics: "EPREF",
-        details: "This cluster provides an interface to specify preferences for how devices should consume energy." +
-            "\n" +
-            "NOTE Support for Energy Preference cluster is provisional.",
+        details: "This cluster provides an interface to specify preferences for how devices should consume energy.",
         xref: { document: "cluster", section: "9.7" }
     },
-
     Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
     Attribute(
@@ -119,11 +116,15 @@ export const EnergyPreference = Cluster(
         {
             name: "LowPowerModeSensitivities", id: 0x3, type: "list", access: "R V", conformance: "LPMS",
             constraint: "2 to 10", quality: "F",
+
             details: "Indicates a list of BalanceStructs, each representing a condition or set of conditions for the " +
-                "device to enter a low power mode. This shall contain at least two BalanceStructs." +
+                "device to enter a low power mode." +
+                "\n" +
+                "This shall contain at least two BalanceStructs." +
                 "\n" +
                 "Each BalanceStruct shall have a Step field larger than the Step field on the previous BalanceStruct " +
                 "in the list.",
+
             xref: { document: "cluster", section: "9.7.6.4" }
         },
 

@@ -16,7 +16,7 @@ function isNameChar(c: string) {
  *
  * Tokenizes simple text dialects.  Currently sufficient for Matter conformance and constraint tokenization.
  */
-export class Lexer<T extends BasicToken<KW>, const KW extends string[] = []> {
+export class Lexer<T extends BasicToken<KW>, const KW extends readonly string[] = []> {
     #keywords: Set<string>;
 
     constructor(keywords?: KW) {

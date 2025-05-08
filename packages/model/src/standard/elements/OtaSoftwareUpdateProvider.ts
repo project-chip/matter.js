@@ -86,8 +86,7 @@ export const OtaSoftwareUpdateProvider = Cluster(
 
         Field({
             name: "Location", id: 0x5, type: "string", conformance: "O", constraint: "2",
-            details: "The location, if present, shall provide the same value as the Basic Information Cluster Location" +
-                "\n" +
+            details: "The location, if present, shall provide the same value as the Basic Information Cluster Location " +
                 "attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow " +
                 "per-region selection of the Software Image.",
             xref: { document: "core", section: "11.20.6.5.1.6" }
@@ -127,8 +126,6 @@ export const OtaSoftwareUpdateProvider = Cluster(
                 "deny a software update to an OTA Requestor, unless both OTA Requestor and OTA Provider have an " +
                 "externally agreed-upon policy whereby strictly correct additional MetadataForProvider is expected to " +
                 "fulfill the OTA Software Update process." +
-                "\n" +
-                "Usage of the QueryImage Command" +
                 "\n" +
                 "OTA Requestors shall send a QueryImage command to the OTA Provider to determine the availability of " +
                 "a new Software Image." +
@@ -369,12 +366,8 @@ export const OtaSoftwareUpdateProvider = Cluster(
                 "new Software Image which the OTA Requestor is ready to start applying. The OTA Provider may use this " +
                 "new version to track or record Software Image application by OTA Requestors." +
                 "\n" +
-                "When Generated" +
-                "\n" +
                 "The ApplyUpdateRequest Command shall be invoked by an OTA Requestor once it is ready to apply a " +
                 "previously downloaded Software Image." +
-                "\n" +
-                "Effect on Receipt" +
                 "\n" +
                 "Upon receipt of this command the OTA Provider shall respond with an Action field consistent with the " +
                 "next action the OTA Requestor should take, including any possible time delay." +
@@ -385,8 +378,6 @@ export const OtaSoftwareUpdateProvider = Cluster(
                 "\n" +
                 "See Section 11.20.3.6, “Applying a software update” for a description of the flow in response to an " +
                 "OTA Provider receiving an invocation of this command." +
-                "\n" +
-                "Handling Error Cases" +
                 "\n" +
                 "See Section 11.20.3.6, “Applying a software update” for all error-handling information.",
 
@@ -438,8 +429,6 @@ export const OtaSoftwareUpdateProvider = Cluster(
                 "SoftwareVersion attribute in the invoking OTA Requestor’s Basic Information Cluster, and SHOULD be " +
                 "consistent with the value representing a new version running on the Node invoking the command." +
                 "\n" +
-                "When Generated" +
-                "\n" +
                 "The NotifyUpdateApplied command SHOULD be invoked in the following two circumstances:" +
                 "\n" +
                 "  1. An OTA Requestor has just successfully applied a Software Image it had obtained from a previous " +
@@ -456,8 +445,6 @@ export const OtaSoftwareUpdateProvider = Cluster(
                 "\n" +
                 "This command shall be considered optional and shall NOT result in reduced availability of the OTA " +
                 "Provider functionality if OTA Requestors never invoke this command." +
-                "\n" +
-                "Effect on Receipt" +
                 "\n" +
                 "An OTA Provider receiving an invocation of this command may log it internally." +
                 "\n" +

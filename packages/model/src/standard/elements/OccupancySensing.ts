@@ -45,7 +45,7 @@ export const OccupancySensing = Cluster(
         }),
         Field({
             name: "AIR", conformance: "O.a+", constraint: "4", description: "ActiveInfrared",
-            details: "Supports sensing using Active InfraRed measurement (e.g. time-of- flight or transflective/reflective " +
+            details: "Supports sensing using Active InfraRed measurement (e.g. time-of-flight or transflective/reflec tive " +
                 "IR sensing)"
         }),
         Field({
@@ -87,14 +87,13 @@ export const OccupancySensing = Cluster(
         quality: "N",
 
         details: "This attribute shall specify the time delay, in seconds, before the sensor changes to its unoccupied " +
-            "state after the last detection of occupancy in the sensed area. This is equivalent to the legacy " +
+            "state after the last detection of occupancy in the sensed area. This is equivalent to the legacy" +
+            "\n" +
             "*OccupiedToUnoccupiedDelay attributes." +
             "\n" +
             "The value of HoldTime shall be within the limits provided in the HoldTimeLimits attribute, i.e. " +
-            "HoldTimeMin <= HoldTime <= HoldTimeMax" +
-            "\n" +
-            "Low values of HoldTime SHOULD be avoided since they could lead to many reporting messages. A value 0 " +
-            "for HoldTime shall NOT be used." +
+            "HoldTimeMin <= HoldTime <= HoldTimeMax Low values of HoldTime SHOULD be avoided since they could " +
+            "lead to many reporting messages. A value 0 for HoldTime shall NOT be used." +
             "\n" +
             "The figure below illustrates this with an example of how this attribute is used for a PIR sensor. It " +
             "uses threshold detection to generate an \"internal detection\" signal, which needs post-processing to " +
@@ -108,9 +107,7 @@ export const OccupancySensing = Cluster(
             "the first trigger has expired; this results in a single period of the bit in the Occupancy attribute " +
             "being 1. The bit in the Occupancy attribute will be set to 1 from the start of the first period " +
             "where the PIR signal exceeds the threshold until HoldTime after the last moment where the PIR " +
-            "exceeded the threshold." +
-            "\n" +
-            "Figure 13. Processing of PIR signal towards Occupancy attribute using HoldTime",
+            "exceeded the threshold.",
 
         xref: { document: "cluster", section: "2.7.6.3" }
     }),
@@ -228,11 +225,11 @@ export const OccupancySensing = Cluster(
     Datatype(
         {
             name: "OccupancySensorTypeBitmap", type: "map8",
-            details: "NOTE" +
+            details: "> [!NOTE]" +
                 "\n" +
-                "This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature " +
-                "flags provide the sensor modality (or modalities) for later cluster revisions. See Backward " +
-                "Compatibility section.",
+                "> This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature " +
+                "  flags provide the sensor modality (or modalities) for later cluster revisions. See Backward " +
+                "  Compatibility section.",
             xref: { document: "cluster", section: "2.7.5.2" }
         },
 
@@ -244,14 +241,11 @@ export const OccupancySensing = Cluster(
     Datatype(
         {
             name: "OccupancySensorTypeEnum", type: "enum8",
-
-            details: "NOTE" +
+            details: "> [!NOTE]" +
                 "\n" +
-                "This enum is as defined in ClusterRevision 4 and its definition shall NOT be" +
-                "\n" +
-                "extended; the feature flags provide the sensor modality (or modalities) for later cluster revisions. " +
-                "See Backward Compatibility section.",
-
+                "> This enum is as defined in ClusterRevision 4 and its definition shall NOT be extended; the feature " +
+                "  flags provide the sensor modality (or modalities) for later cluster revisions. See Backward " +
+                "  Compatibility section.",
             xref: { document: "cluster", section: "2.7.5.3" }
         },
 

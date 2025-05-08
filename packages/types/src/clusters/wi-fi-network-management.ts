@@ -50,12 +50,12 @@ export namespace WiFiNetworkManagement {
              * A value of null shall indicate that no primary Wi-Fi network is available (e.g. because the Wi-Fi network
              * has not yet been configured by the user).
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * The SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified.
-             * Implementations must be careful to support transferring these byte strings without requiring a particular
-             * encoding. The most common encoding is UTF-8, however this is just a convention. Some configurations may
-             * use Latin-1 or other character sets.
+             * > The SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified.
+             *   Implementations must be careful to support transferring these byte strings without requiring a
+             *   particular encoding. The most common encoding is UTF- 8, however this is just a convention. Some
+             *   configurations may use Latin-1 or other character sets.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 10.2.4.1
              */
@@ -77,13 +77,11 @@ export namespace WiFiNetworkManagement {
              * It is recommended that servers implement this attribute as either a timestamp or a counter. When
              * implemented as a counter it SHOULD be initialized with a random value.
              *
-             * NOTE
+             * > [!NOTE]
              *
-             * The passphrase itself is not exposed as an attribute to avoid its unintentional retrieval or caching by
-             * clients that use wildcard reads or otherwise routinely read all available attributes. It can be retrieved
-             * using the NetworkPassphraseRequest
-             *
-             * command.
+             * > The passphrase itself is not exposed as an attribute to avoid its unintentional retrieval or caching by
+             *   clients that use wildcard reads or otherwise routinely read all available attributes. It can be
+             *   retrieved using the NetworkPassphraseRequest command.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 10.2.4.2
              */

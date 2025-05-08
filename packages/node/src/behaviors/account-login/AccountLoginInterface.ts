@@ -18,9 +18,8 @@ export namespace AccountLoginInterface {
          *
          * For example, a Video Player with a Content App Platform may invoke this command on one of its Content App
          * endpoints to facilitate commissioning of a Phone App made by the same vendor as the Content App. If the
-         * accounts match, then the Content App may return a setup code that can be used
-         *
-         * by the Video Player to commission the Phone App without requiring the user to physically input a setup code.
+         * accounts match, then the Content App may return a setup code that can be used by the Video Player to
+         * commission the Phone App without requiring the user to physically input a setup code.
          *
          * The account match is determined by the Content App using a method which is outside the scope of this
          * specification and will typically involve a central service which is in communication with both the Content

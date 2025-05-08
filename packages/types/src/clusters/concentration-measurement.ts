@@ -30,7 +30,7 @@ export namespace ConcentrationMeasurement {
         /**
          * LevelIndication (LEV)
          *
-         * Cluster supports basic level indication for substance using the ConcentrationLevel enum
+         * Cluster supports basic level indication for substance using the ConcentrationLev el enum
          */
         LevelIndication = "LevelIndication",
 
@@ -246,7 +246,8 @@ export namespace ConcentrationMeasurement {
             averageMeasuredValue: Attribute(0x5, TlvNullable(TlvFloat), { default: null }),
 
             /**
-             * Indicates the window of time used for determining the AverageMeasuredValue. The value is in seconds.
+             * This attribute shall represent the window of time used for determining the AverageMeasuredValue. The
+             * value is in seconds.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 2.10.6.7
              */
@@ -284,7 +285,7 @@ export namespace ConcentrationMeasurement {
             /**
              * LevelIndication
              *
-             * Cluster supports basic level indication for substance using the ConcentrationLevel enum
+             * Cluster supports basic level indication for substance using the ConcentrationLev el enum
              */
             levelIndication: BitFlag(1),
 

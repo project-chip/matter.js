@@ -170,12 +170,9 @@ export const ModeBase = Cluster(
     Command(
         {
             name: "ChangeToModeResponse", id: 0x1, conformance: "M", direction: "response",
-            details: "This command is sent by the device on receipt of the ChangeToMode command. This command" +
-                "\n" +
-                "shall have the following data fields:",
+            details: "This command is sent by the device on receipt of the ChangeToMode command.",
             xref: { document: "cluster", section: "1.10.7.2" }
         },
-
         Field({
             name: "Status", id: 0x0, type: "ModeChangeStatus", conformance: "M", constraint: "desc",
             xref: { document: "cluster", section: "1.10.7.2.1" }
@@ -249,10 +246,9 @@ export const ModeBase = Cluster(
                     "includes the mode tag values from that namespace." +
                     "\n" +
                     "Mode tags can help clients look for options that meet certain criteria, render the user interface, " +
-                    "use" +
-                    "\n" +
-                    "the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be " +
-                    "either a standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry." +
+                    "use the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall " +
+                    "be either a standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list " +
+                    "entry." +
                     "\n" +
                     "A mode option may have more than one mode tag. A mode option may be associated with a mixture of " +
                     "standard and manufacturer specific mode tags. A mode option shall be associated with at least one " +
