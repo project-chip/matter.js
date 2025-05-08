@@ -15,8 +15,7 @@ import { Shell } from "./shell/Shell";
 import { initializeWebPlumbing } from "./web_plumbing.js";
 
 const PROMPT = "matter> ";
-const DEFAULT_WEBSOCKET_PORT = 8081;
-const DEFAULT_HTTP_PORT = 3000;
+const DEFAULT_WEBSOCKET_PORT = 3000;
 const logger = Logger.get("Shell");
 let theShell: Shell;
 
@@ -97,7 +96,7 @@ async function main() {
                             default: false,
                         },
                         webSocketPort: {
-                            description: "WebSocket port",
+                            description: "WebSocket and HTTP server port",
                             type: "number",
                             default: DEFAULT_WEBSOCKET_PORT,
                         },
@@ -105,11 +104,6 @@ async function main() {
                             description: "Enable Web server when using WebSocket interface",
                             type: "boolean",
                             default: false,
-                        },
-                        webHttpPort: {
-                            description: "Web Server port",
-                            type: "number",
-                            default: DEFAULT_HTTP_PORT,
                         },
                     });
             },
@@ -127,7 +121,6 @@ async function main() {
                     webSocketInterface,
                     webSocketPort,
                     webServer,
-                    webHttpPort,
                 } = argv;
 
                 theNode = new MatterNode(nodeNum, netInterface);
@@ -150,7 +143,7 @@ async function main() {
 
                 if (webSocketInterface) {
                     Logger.format = LogFormat.PLAIN;
-                    initializeWebPlumbing(theNode, nodeNum, webSocketPort, webServer, webHttpPort); // set up but wait for connect to create Shell
+                    initializeWebPlumbing(theNode, nodeNum, webSocketPort, webServer); // set up but wait for connect to create Shell
                 } else {
                     theShell = new Shell(theNode, nodeNum, PROMPT, process.stdin, process.stdout);
                 }

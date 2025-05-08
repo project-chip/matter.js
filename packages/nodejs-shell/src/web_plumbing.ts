@@ -5,15 +5,19 @@
  */
 
 import { Logger, LogLevel, NotImplementedError } from "@matter/general";
-import { readFile } from "node:fs/promises";
-import { createServer } from "node:http";
 import { Readable, Writable } from "node:stream";
 import WebSocket, { Data, WebSocketServer } from "ws";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
 
+import fs from "fs";
+import http, { Server } from "node:http";
+import path from "path";
+
 // Store active WebSocket
 let client: WebSocket;
+let server: Server;
+let wss: WebSocketServer;
 const socketLogger = "websocket";
 
 export function initializeWebPlumbing(
@@ -21,26 +25,36 @@ export function initializeWebPlumbing(
     nodeNum: number,
     webSocketPort: number,
     webServer: boolean,
-    webPort: number,
 ): void {
     if (webServer) {
-        createServer((_, res) => {
-            readFile(`${__dirname}/index.html`)
-                .then(content => {
-                    res.writeHead(200, { "Content-Type": "text/html" });
-                    res.end(content);
-                })
-                .catch(() => {
-                    res.writeHead(404);
-                    res.end("Not Found");
+        const root: string = path.resolve(__dirname) ?? "./";
+
+        server = http
+            .createServer((req, res) => {
+                const url = req.url ?? "/";
+                const safePath: string = path.normalize(
+                    path.join(root, decodeURIComponent(url === "/" ? "/index.html" : url)),
+                );
+
+                // Check that the resolved path is within the root directory
+                if (!safePath.startsWith(root)) {
+                    res.writeHead(403).end("Forbidden");
+                    return;
+                }
+
+                fs.readFile(safePath, (err, data) => {
+                    if (err) return res.writeHead(404).end("Not Found");
+                    res.writeHead(200).end(data);
                 });
-        }).listen(webPort, () => console.info(`Server running at http://localhost:${webPort}`));
-    }
-    const wss = new WebSocketServer({ port: webSocketPort });
+            })
+            .listen(webSocketPort);
+        wss = new WebSocketServer({ server });
+    } else wss = new WebSocketServer({ port: webSocketPort });
+
     console.info(`WebSocket server running on ws://localhost:${webSocketPort}`);
 
     console.log =
-        // console.debug = // too much traffic -kills the websocket
+        // console.debug = // too much traffic - kills the websocket
         console.info =
         console.warn =
         console.error =
@@ -143,7 +157,7 @@ function createWritableStream(ws: WebSocket): Writable {
             if (ws.readyState === WebSocket.OPEN) {
                 ws.send(chunk, callback);
             } else {
-                process.stderr.write(`ERROR: WebSocket is not open. Failed to send ${chunk}\n`);
+                if (chunk.length > 0) process.stderr.write(`ERROR: WebSocket is not open. Failed to send "${chunk}"\n`);
             }
         },
         final(callback: (error?: Error | null) => void) {
