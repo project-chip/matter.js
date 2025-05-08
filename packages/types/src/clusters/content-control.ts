@@ -839,9 +839,10 @@ export namespace ContentControl {
              * activated. If this attribute equals FALSE, then playback of unrated content shall be permitted.
              * Otherwise, the media device shall prevent the playback of unrated content.
              *
-             * When this attribute changes, the device SHOULD make the user aware of any limits of this feature. For
-             * example, if the feature does not control content within apps, then the device should make this clear to
-             * the user when the attribute changes.
+             * When this attribute changes, the device SHOULD make the user aware of any limits of this feature.
+             *
+             * For example, if the feature does not control content within apps, then the device should make this clear
+             * to the user when the attribute changes.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.13.7.8
              */
@@ -890,10 +891,9 @@ export namespace ContentControl {
             /**
              * The purpose of this command is to set BlockChannelList attribute.
              *
-             * Upon receipt of the AddBlockChannels command, the media device shall check if the channels
-             *
-             * passed in this command are valid. If the channel is invalid, then a response with InvalidChannel error
-             * Status shall be returned.
+             * Upon receipt of the AddBlockChannels command, the media device shall check if the channels passed in this
+             * command are valid. If the channel is invalid, then a response with InvalidChannel error Status shall be
+             * returned.
              *
              * If there is at least one channel in Channels field which is not in the BlockChannelList attribute, the
              * media device shall process the request by adding these new channels into the BlockChannelList attribute
@@ -952,9 +952,7 @@ export namespace ContentControl {
              *
              * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications passed
              * in this command are installed. If there is an application in Applications field which is not identified
-             * by media device, then a response with UnidentifiableApplication error Status may be
-             *
-             * returned.
+             * by media device, then a response with UnidentifiableApplication error Status may be returned.
              *
              * If there is one or more applications which are not present in BlockApplicationList attribute, the media
              * device shall process the request by adding the new application to the BlockApplicationList attribute and
@@ -1234,15 +1232,12 @@ export namespace ContentControl {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * This cluster is used for managing the content control (including "parental control") settings on a
-     *
-     * media device such as a TV, or Set-top Box.
+     * This cluster is used for managing the content control (including "parental control") settings on a media device
+     * such as a TV, or Set-top Box.
      *
      * This cluster allows to configure content control settings by clients with the Management privilege. It is
      * responsibility of the end product to enforce appropriate right access (for example, to prevent a child from
      * disabling this feature).
-     *
-     * NOTE Support for Content Control cluster is provisional.
      *
      * ContentControlCluster supports optional features that you can enable with the ContentControlCluster.with()
      * factory method.

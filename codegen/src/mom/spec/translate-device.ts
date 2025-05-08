@@ -8,7 +8,7 @@ import { Diagnostic, Logger } from "#general";
 import { DeviceClassification, DeviceTypeElement, FieldElement, RequirementElement } from "#model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
-import { ConstraintStr, Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
+import { ConformanceCode, ConstraintStr, Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
 import { DeviceReference } from "./spec-types.js";
 import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
@@ -184,7 +184,7 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
             }
         }, "clientserver"),
         quality: Optional(Str),
-        conformance: Optional(Str),
+        conformance: Optional(ConformanceCode),
     });
 
     const clusters = translateRecordsToMatter("clusters", clusterRecords, RequirementElement);

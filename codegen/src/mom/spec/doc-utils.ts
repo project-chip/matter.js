@@ -53,7 +53,12 @@ export function loadHtml(path: string) {
 // Read an index file to find the portions of the spec we care about
 export function identifyDocument(path: string): IndexDetail {
     const source = loadHtml(path);
-    const titleEl = source.querySelector("h1");
+    let titleEl: Element | null | undefined = source.querySelector("h1");
+
+    if (!titleEl) {
+        titleEl = findTitleWithoutHeader(source);
+    }
+
     if (!titleEl || !titleEl.textContent) {
         throw new Error(`Cannot find specification title in ${path}`);
     }
@@ -91,13 +96,17 @@ export function identifyDocument(path: string): IndexDetail {
             throw new Error(`No version found for ${title} in ${path}`);
         }
 
-        version = versionEl.textContent.replace(/.*version ([\d.]+)[^\d.]*/i, "$1");
+        version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
     }
 
-    // Drop dotted elements except the first two.  To date these have represented trivial changes
+    // Drop dotted elements except the first two unless the third one is non-zero
     const versionParts = version.split(".");
     if (versionParts.length > 2) {
-        version = versionParts.slice(0, 2).join(".");
+        if (versionParts[2] === "0") {
+            version = versionParts.slice(0, 2).join(".");
+        } else {
+            version = versionParts.slice(0, 3).join(".");
+        }
     }
 
     logger.info("recognized", Diagnostic.dict({ doc: spec, version: version }));
@@ -116,4 +125,16 @@ export function identifyDocument(path: string): IndexDetail {
         hasDevices,
         hasNamespaces,
     };
+}
+
+function findTitleWithoutHeader(source: Document) {
+    for (const el of source.body.children) {
+        switch (el.textContent?.toLowerCase().replace(/[^a-z]/g, "")) {
+            case "matterspecification":
+            case "matterapplicationclusters":
+            case "matterdevicelibrary":
+            case "mattersemantictagnamespaces":
+                return el;
+        }
+    }
 }

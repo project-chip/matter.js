@@ -6,6 +6,6 @@
 
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
-export * from "./JointFabricDatastoreClusterInterface.js";
-export * from "./JointFabricDatastoreClusterBehavior.js";
-export * from "./JointFabricDatastoreClusterServer.js";
+export * from "./JointFabricDatastoreInterface.js";
+export * from "./JointFabricDatastoreBehavior.js";
+export * from "./JointFabricDatastoreServer.js";

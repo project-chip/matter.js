@@ -52,7 +52,7 @@ export class RequirementGenerator {
         for (const requirement of clusterReqs) {
             const definition = matter.get(ClusterModel, requirement.name);
             if (!definition) {
-                logger.error(`Skipping ${file.model.name} server cluster for unknown cluster ${requirement.name}`);
+                logger.error(`Skipping ${file.model.name} ${type} requirement for unknown cluster ${requirement.name}`);
                 continue;
             }
 

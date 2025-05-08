@@ -45,9 +45,7 @@ export namespace FlowMeasurement {
             minMeasuredValue: Attribute(0x1, TlvNullable(TlvUInt16.bound({ max: 65533 }))),
 
             /**
-             * Indicates the maximum value of MeasuredValue that can be measured. See
-             *
-             * Measured Value for more details.
+             * Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *

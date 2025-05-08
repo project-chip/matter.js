@@ -128,9 +128,8 @@ export namespace AccessControl {
      */
     export const TlvAccessControlExtension = TlvObject({
         /**
-         * This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s
-         *
-         * Access Control Entries.
+         * This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s Access
+         * Control Entries.
          *
          * The contents shall consist of a top-level anonymous list; each list element shall include a profile-specific
          * tag encoded in fully-qualified form.
@@ -485,13 +484,11 @@ export namespace AccessControl {
          *
          *   • The query shall use the & delimiter between key/value pairs.
          *
-         *   • The key-value pairs shall in the format name=<value> where name is the key name, and <value>
-         *
-         * is the contents of the value encoded with proper URL-encoded escaping.
+         *   • The key-value pairs shall in the format name=<value> where name is the key name, and <value> is the
+         *     contents of the value encoded with proper URL-encoded escaping.
          *
          *   • If key MTcu is present, it shall have a value of "_" (i.e. MTcu=_). This is the "callback URL
-         *
-         * backUrl) placeholder".
+         *     (CallbackUrl) placeholder".
          *
          *   • Any key whose name begins with MT not mentioned in the previous bullets shall be reserved for future use
          *     by this specification. Manufacturers shall NOT include query keys starting with MT in the
@@ -499,8 +496,6 @@ export namespace AccessControl {
          *
          * Any other element in the ARLRequestFlowUrl query field not covered by the above rules, as well as the
          * fragment field (if present), shall remain including the order of query key/value pairs present.
-         *
-         * Expansion of ARLRequestFlowUrl by client
          *
          * Once the URL is obtained, it shall be expanded to form a final URL (ExpandedARLRequestFlowUrl) by proceeding
          * with the following substitution algorithm on the original ARLRequestFlowUrl:
@@ -524,9 +519,8 @@ export namespace AccessControl {
          *
          *   • The query shall use the & delimiter between key/value pairs.
          *
-         *   • The key-value pairs shall follow the format name=<value> where name is the key name, and
-         *
-         * <value> is the contents of the value encoded with proper URL-encoded escaping.
+         *   • The key-value pairs shall follow the format name=<value> where name is the key name, and <value> is the
+         *     contents of the value encoded with proper URL-encoded escaping.
          *
          *   • If key MTaer is present, it shall have a value of "_" (i.e. MTaer=_). This is the placeholder for a
          *     "access extension response" provided by the manufacturer flow to the client. The manufacturer flow shall
@@ -537,13 +531,9 @@ export namespace AccessControl {
          *   • Any key whose name begins with MT not mentioned in the previous bullets shall be reserved for future use
          *     by this specification.
          *
-         * Any other element in the CallbackUrl query field not covered by the above rules, as well as the frag
-         *
-         * ment field (if present), shall remain as provided by the client through embedding within the
-         *
+         * Any other element in the CallbackUrl query field not covered by the above rules, as well as the fragment
+         * field (if present), shall remain as provided by the client through embedding within the
          * ExpandedARLRequestFlowUrl, including the order of query key/value pairs present.
-         *
-         * ### Expansion of CallbackUrl by the manufacturer custom flow
          *
          * Once the CallbackUrl is obtained by the manufacturer flow, it may be expanded to form a final
          * ExpandedARLRequestCallbackUrl URL to be used by proceeding with the following substitution algorithm on the
@@ -569,7 +559,7 @@ export namespace AccessControl {
          * ExpandedARLRequestCallbackUrl, on completion of the request, if an ExpandedARLRequestCallbackUrl was computed
          * from the CallbackUrl and opening such a URL is supported.
          *
-         * Examples of ARLRequestFlowUrl URLs
+         * ### Examples of ARLRequestFlowUrl URLs
          *
          * Below are some examples of valid ExpandedARLRequestFlowUrl for several valid values of ARLRequestFlowUrl, as
          * well as some examples of invalid values of ARLRequestFlowUrl:
@@ -588,10 +578,8 @@ export namespace AccessControl {
          *
          * https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=_
          *
-         *   ◦ After expansion:
-         *
-         * https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=https%3A%2F%2Fc
-         * lient.domain.example%2Fcb%3Ftoken%3DmAsJ6_vqbr-vjDiG_w%253D%253D%26MTaer%3D_
+         *   ◦ After expansion: https://company.domain.example/matter/arl?vid=FFF1&pid=1234&MTcu=https%3A%2F%2Fc
+         *     lient.domain.example%2Fcb%3Ftoken%3DmAsJ6_vqbr-vjDiG_w%253D%253D%26MTaer%3D_
          *
          *   ◦ The ExpandedARLRequestFlowUrl URL contains:
          *
@@ -602,7 +590,7 @@ export namespace AccessControl {
          *     ▪ After expansion of the CallbackUrl (MTcu key) into an ExpandedCallbackUrl, with an example return
          *       access extension completion status of Success, the ExpandedARLRequestCallbackUrl would be:
          *
-         * https://client.domain.example/cb?token=mAsJ6_vqbr- vjDiG_w%3D%3D&MTaer=Success
+         * https://client.domain.example/cb?token=mAsJ6_vqbr-vjDiG_w%3D%3D&MTaer=Success
          *
          * Note that the MTcu key/value pair was initially provided URL-encoded within the ExpandedARLRequestFlowUrl URL
          * and the MTaer=_ key/value pair placeholder now contains a substituted returned completion status.
@@ -626,9 +614,9 @@ export namespace AccessControl {
     export interface FabricRestrictionReviewUpdateEvent extends TypeFromSchema<typeof TlvFabricRestrictionReviewUpdateEvent> {}
 
     /**
-     * Proxy View Value
+     * ### Proxy View Value
      *
-     * This value implicitly grants View privileges
+     * ### This value implicitly grants View privileges
      *
      * @see {@link MatterSpecification.v14.Core} § 9.10.5.2
      */
@@ -646,7 +634,7 @@ export namespace AccessControl {
         /**
          * View privileges, and can perform the primary function of this Node (except Access Control Cluster)
          *
-         * This value implicitly grants View privileges
+         * ### This value implicitly grants View privileges
          *
          * @see {@link MatterSpecification.v14.Core} § 9.10.5.2.1
          */
@@ -712,8 +700,6 @@ export namespace AccessControl {
         /**
          * The privilege field shall specify the level of privilege granted by this Access Control Entry.
          *
-         * NOTE The Proxy View privilege is provisional.
-         *
          * Each privilege builds upon its predecessor, expanding the set of actions that can be performed upon a Node.
          * Administer is the highest privilege, and is special as it pertains to the administration of privileges
          * itself, via the Access Control Cluster.
@@ -721,8 +707,6 @@ export namespace AccessControl {
          * When a Node is granted a particular privilege, it is also implicitly granted all logically lower privilege
          * levels as well. The following diagram illustrates how the higher privilege levels subsume the lower privilege
          * levels:
-         *
-         * Figure 46. Access Control Privilege Levels
          *
          * Individual clusters shall define whether attributes are readable, writable, or both readable and writable.
          * Clusters also shall define which privilege is minimally required to be able to perform a particular read or
@@ -753,8 +737,6 @@ export namespace AccessControl {
          * RESOURCE_EXHAUSTED error and the entry shall NOT be created.
          *
          * ### Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:
-         *
-         * Subject Semantics
          *
          * An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node that
          * successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s AuthMode is
@@ -794,8 +776,6 @@ export namespace AccessControl {
          * both an Endpoint field and a DeviceType field.
          *
          * A target grants access based on the presence of fields as follows:
-         *
-         * Target Semantics
          *
          * An empty targets list indicates a wildcard: that is, this entry shall grant access to all cluster instances
          * on all endpoints on this Node.
@@ -930,7 +910,7 @@ export namespace AccessControl {
              *
              * @see {@link MatterSpecification.v14.Core} § 9.10.6.8
              */
-            commissioningArL: FixedAttribute(0x5, TlvArray(TlvCommissioningAccessRestrictionEntry), { default: [] }),
+            commissioningArl: FixedAttribute(0x5, TlvArray(TlvCommissioningAccessRestrictionEntry), { default: [] }),
 
             /**
              * This attribute shall provide the set of AccessRestrictionEntryStruct applied to the associated fabric on
@@ -1227,8 +1207,8 @@ export namespace AccessControl {
         attributes: {
             ...Cluster.attributes,
             extension: MutableCluster.AsConditional(ExtensionComponent.attributes.extension, { mandatoryIf: [EXTS] }),
-            commissioningArL: MutableCluster.AsConditional(
-                ManagedDeviceComponent.attributes.commissioningArL,
+            commissioningArl: MutableCluster.AsConditional(
+                ManagedDeviceComponent.attributes.commissioningArl,
                 { mandatoryIf: [MNGD] }
             ),
             arl: MutableCluster.AsConditional(ManagedDeviceComponent.attributes.arl, { mandatoryIf: [MNGD] })

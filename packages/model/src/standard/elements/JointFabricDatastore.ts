@@ -15,9 +15,9 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-export const JointFabricDatastoreCluster = Cluster(
+export const JointFabricDatastore = Cluster(
     {
-        name: "JointFabricDatastoreCluster", id: 0x752, classification: "node", pics: "JFDS",
+        name: "JointFabricDatastore", id: 0x752, classification: "node", pics: "JFDS",
 
         details: "The Joint Fabric Datastore Cluster is a cluster that provides a mechanism for the Joint Fabric " +
             "Administrators to manage the set of Nodes, Groups, and Group membership among Nodes in the Joint " +
@@ -34,9 +34,7 @@ export const JointFabricDatastoreCluster = Cluster(
             "Joint Fabric Datastore cluster shall NOT be accessible." +
             "\n" +
             "The Admin level of access to the Joint Fabric Datastore cluster server shall be limited to JF " +
-            "Administrator Nodes identified using the Administrator CAT." +
-            "\n" +
-            "NOTE Support for Joint Fabric Datastore cluster is provisional.",
+            "Administrator Nodes identified using the Administrator CAT.",
 
         xref: { document: "core", section: "11.24" }
     },
@@ -517,4 +515,4 @@ export const JointFabricDatastoreCluster = Cluster(
     )
 );
 
-MatterDefinition.children.push(JointFabricDatastoreCluster);
+MatterDefinition.children.push(JointFabricDatastore);

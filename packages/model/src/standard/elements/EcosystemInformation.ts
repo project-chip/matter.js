@@ -57,9 +57,7 @@ export const EcosystemInformation = Cluster(
             name: "DeviceDirectory", id: 0x0, type: "list", access: "R F M", conformance: "M", quality: "N",
             details: "This attribute shall contain the list of logical devices represented by a Bridged Node. Most of the " +
                 "time this will contain a single entry, but may grow with more complex device compositions (e.g. " +
-                "another bridge.)" +
-                "\n" +
-                "An empty list indicates that the information is not available.",
+                "another bridge.) An empty list indicates that the information is not available.",
             xref: { document: "core", section: "9.18.5.1" }
         },
 
@@ -74,9 +72,7 @@ export const EcosystemInformation = Cluster(
                 "entries, and shall NOT contain locations which are dynamically generated and removed by an " +
                 "ecosystem. (E.g. a location that is generated and removed based on the user being home is not " +
                 "permitted. However, an initially generated location name that does not quickly change is " +
-                "acceptable.)" +
-                "\n" +
-                "An empty list indicates that the information is not available." +
+                "acceptable.) An empty list indicates that the information is not available." +
                 "\n" +
                 "LocationDirectory entries shall be removed if there is no DeviceDirectory that references it.",
 
@@ -156,12 +152,12 @@ export const EcosystemInformation = Cluster(
 
             details: "This field shall indicate the timestamp of when the UniqueLocationIDs was last modified." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "If multiple server instances update the UniqueLocationIDs field at the same time, it is possible one " +
-                "of the updates will be missed. This is considered an acceptable limitation to reduce the complexity " +
-                "of the design. Since this is meant to be provided from user input, it is unlikely these signals " +
-                "would be happening at one time.",
+                "> If multiple server instances update the UniqueLocationIDs field at the same time, it is possible " +
+                "  one of the updates will be missed. This is considered an acceptable limitation to reduce the " +
+                "  complexity of the design. Since this is meant to be provided from user input, it is unlikely these " +
+                "  signals would be happening at one time.",
 
             xref: { document: "core", section: "9.18.4.1.7" }
         }),
@@ -191,11 +187,9 @@ export const EcosystemInformation = Cluster(
                 "assignment.)" +
                 "\n" +
                 "UniqueLocationID shall NOT be changed when the LocationDescriptor changes name, but still represents " +
-                "the same location. (For example, the user renames a room.)" +
-                "\n" +
-                "UniqueLocationID shall be changed when LocationDescriptor changes as a result of another Ecosystem " +
-                "Information Cluster server instance changing and the UniqueLocationID on the remote server instance " +
-                "also changes." +
+                "the same location. (For example, the user renames a room.) UniqueLocationID shall be changed when " +
+                "LocationDescriptor changes as a result of another Ecosystem Information Cluster server instance " +
+                "changing and the UniqueLocationID on the remote server instance also changes." +
                 "\n" +
                 "UniqueLocationID shall NOT be changed when LocationDescriptor changes as a result of another " +
                 "Ecosystem Information Cluster server instance changing and the UniqueLocationID on the remote server " +

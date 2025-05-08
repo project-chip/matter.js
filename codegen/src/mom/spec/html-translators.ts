@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Constraint } from "#model";
 import { camelize } from "../../util/string.js";
 import { Words } from "../../util/words.js";
 import { repairConformanceRule } from "./repairs/aspect-repairs.js";
@@ -52,6 +53,9 @@ export const Str = (el: HTMLElement) => {
 
             // Collapse whitespace
             .replace(/\s/g, " ")
+
+            // Convert "foo- bar" to "foo-bar"
+            .replace(/([a-z]-) ([a-z])/g, "$1$2")
     );
 };
 
@@ -63,7 +67,7 @@ export const Str = (el: HTMLElement) => {
  * Can also look for number<span>number</span> to generalize but unnecessary as of 1.3.
  */
 export const ConstraintStr = (el: HTMLElement) => {
-    const str = Str(el);
+    const str = Code(el);
 
     switch (str) {
         case "-262 to 262":
@@ -80,7 +84,35 @@ export const ConstraintStr = (el: HTMLElement) => {
         throw new Error("Unrecognized constraint definition apparently referencing 2**62");
     }
 
-    return str;
+    // As of 1.4.1 the constraint column is so badly butchered we must resolve to concatenating any two words that are
+    // side-by-side in a fashion that is illegal syntactically
+    const match = str.match(/\S+/g);
+    if (!match) {
+        return str;
+    }
+
+    const parts = [...match];
+    for (let i = 0; i < parts.length; ) {
+        // Skip parts that may legally stand alone or do not end with an identifier
+        const part = parts[i];
+        if (!part.match(/[a-z_]+$/i) || Constraint.keywords.has(part.replace(/^.*[^a-z_]/i, ""))) {
+            i++;
+            continue;
+        }
+
+        // If the next part cannot legally appear after an identifier, concatenate parts
+        const nextPart = parts[i + 1];
+        if (nextPart?.match(/^[a-z_]+/i) && nextPart !== "in" && nextPart !== "to") {
+            parts[i] += nextPart;
+            parts.splice(i + 1, 1);
+            continue;
+        }
+
+        i++;
+        continue;
+    }
+
+    return parts.join(" ");
 };
 
 /** String with no space at all */
@@ -129,33 +161,57 @@ export const Bit = (el: HTMLElement) => {
  * narrow columns and we don't want to end up with FoO
  */
 export const Code = (el: HTMLElement) => {
+    // Ensure textContent will produce space for P
+    let shouldBeSpaced = false;
+    for (let child = el.firstChild; child; child = child.nextSibling) {
+        if (shouldBeSpaced) {
+            el.insertBefore(el.ownerDocument.createTextNode(" "), child);
+            shouldBeSpaced = false;
+        }
+        switch ((child as Element).tagName) {
+            case "P":
+                shouldBeSpaced = true;
+                break;
+
+            default:
+                shouldBeSpaced = false;
+        }
+    }
+
     let str = Str(el);
 
     // Use the english dictionary to heuristically repair whitespace errors
     const parts = str.split(/\s+/);
     for (let i = 0; i < parts.length - 1; i++) {
-        // If the current word is all uppercase, assume it's a standalone
-        // identifier
+        // If the current word is all uppercase, assume it's a standalone identifier
         if (parts[i].match(/^[A-Z_]+$/)) {
             continue;
         }
 
-        // If a word starts with lowercase, see if it's a word when concatenated with the previous word
-        if (parts[i + 1].match(/^[a-z]/)) {
-            // Get beginning of word from current part
-            const beginning = parts[i].replace(/^.*([A-Z])/, "$1");
+        // For all subsequent words that start with lowercase, see if they form an actual word when concatenated with
+        // the previous word
+        let beginning = parts[i].replace(/^.*([A-Z])/, "$1");
+        for (let j = i + 1; j < parts.length; j++) {
+            // Abort if next part does not appear to be a word segment
+            if (!parts[j].match(/^[a-z]/)) {
+                break;
+            }
 
             // Get ending of word from next part
-            const ending = parts[i + 1].replace(/^([a-z]+).*/, "$1");
+            const ending = parts[j].replace(/^([a-z]+).*/, "$1");
 
             // If the concatenation is a word, assume it should be joined
             if (Words.has(`${beginning}${ending}`.toLowerCase())) {
-                parts[i] = `${parts[i]}${parts[i + 1]}`;
-                parts.splice(i + 1, 1);
+                // Join
+                parts[i] += parts.splice(i + 1, j - i).join("");
 
                 // Redo check from current point
                 i--;
+                break;
             }
+
+            // Extend beginning for next iteration
+            beginning += parts[j];
         }
     }
     str = parts.join(" ");

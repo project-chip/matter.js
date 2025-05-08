@@ -26,8 +26,7 @@ ModelValidator.validators[CommandElement.Tag] = class CommandValidator extends M
             const responseModel = this.model.responseModel;
             if (!responseModel) {
                 this.error("RESPONSE_NOT_FOUND", `response type ${response} not found`);
-            }
-            if (!(responseModel instanceof ValueModel)) {
+            } else if (!(responseModel instanceof ValueModel)) {
                 this.error("INVALID_RESPONSE_TYPE", `response type ${response} is not a ValueModel`);
             }
         }

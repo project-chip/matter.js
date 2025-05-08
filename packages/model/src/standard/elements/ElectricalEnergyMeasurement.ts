@@ -275,9 +275,9 @@ export const ElectricalEnergyMeasurement = Cluster(
             details: "This field shall indicate the time elapsed since boot at the beginning of the period during which " +
                 "the value of the Energy field was measured." +
                 "\n" +
-                "If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted. " +
-                "Otherwise, if the server had not yet determined the time in UTC at the start of the measurement" +
+                "If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted." +
                 "\n" +
+                "Otherwise, if the server had not yet determined the time in UTC at the start of the measurement " +
                 "period, or does not have the capability of determining the time in UTC, this field shall be " +
                 "indicated." +
                 "\n" +

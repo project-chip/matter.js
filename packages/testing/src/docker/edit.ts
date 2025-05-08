@@ -14,16 +14,22 @@ export namespace edit {
         (container: Container, files: string[]): Promise<void>;
     }
 
-    export interface LineEditor {
+    export interface InsertionEditor {
+        after?: LineDetector;
+        before?: LineDetector;
+        lines?: LineProducer;
+    }
+
+    export interface RegionEditor {
         from?: LineDetector;
         to?: LineDetector;
         after?: LineDetector;
         before?: LineDetector;
-        replacement?: LineReplacement;
+        replacement?: LineProducer;
     }
 
     export type LineDetector = string | RegExp | ((line: string) => boolean);
-    export type LineReplacement = string | string[] | ((lines: string[]) => string[]);
+    export type LineProducer = string | string[] | ((...lines: string[]) => string[]);
 
     /**
      * Modify a file using sed -iz.
@@ -34,12 +40,23 @@ export namespace edit {
     }
 
     /**
+     * Insert lines before/after key lines.
+     */
+    export function insert(...edits: InsertionEditor[]): Editor {
+        return async (Container, paths) => {
+            for (const path of paths) {
+                await insertLinesInto(Container, path, edits);
+            }
+        };
+    }
+
+    /**
      * Replace regions of a file demarcated by key lines.
      */
-    export function lines(...edits: LineEditor[]): Editor {
+    export function region(...edits: RegionEditor[]): Editor {
         return async (container, paths) => {
             for (const path of paths) {
-                await editLinesOf(container, path, edits);
+                await editRegionsOf(container, path, edits);
             }
         };
     }
@@ -51,8 +68,36 @@ interface CompiledLineEditor {
     finish(output: string[]): void;
 }
 
-async function editLinesOf(container: Container, path: string, edits: edit.LineEditor[]) {
-    const editors = editorsOf(edits);
+async function insertLinesInto(container: Container, path: string, edits: edit.InsertionEditor[]) {
+    const editors = insertionEditorsOf(edits);
+    const input = (await container.read(path)).split("\n");
+    const output = Array<string>();
+
+    for (const line of input) {
+        for (const editor of editors) {
+            if (editor.before?.(line)) {
+                output.push(...editor.lines(line));
+            }
+            output.push(line);
+            if (editor.after?.(line)) {
+                output.push(...editor.lines(line));
+            }
+        }
+    }
+
+    await container.write(path, output.join("\n"));
+}
+
+function insertionEditorsOf(edits: edit.InsertionEditor[]) {
+    return edits.map(({ before, after, lines }) => ({
+        before: detectorOf(before),
+        after: detectorOf(after),
+        lines: replacementOf(lines),
+    }));
+}
+
+async function editRegionsOf(container: Container, path: string, edits: edit.RegionEditor[]) {
+    const editors = regionEditorsOf(edits);
     let editor: CompiledLineEditor | undefined;
     const input = (await container.read(path)).split("\n");
     const output = Array<string>();
@@ -81,7 +126,7 @@ async function editLinesOf(container: Container, path: string, edits: edit.LineE
     await container.write(path, output.join("\n"));
 }
 
-function editorsOf(edits: edit.LineEditor[]): CompiledLineEditor[] {
+function regionEditorsOf(edits: edit.RegionEditor[]): CompiledLineEditor[] {
     return edits.map(({ from, to, after, before, replacement }) => {
         // Start out in collecting state iff we have no detector that would start collection
         let collecting = from === undefined && after === undefined;
@@ -112,13 +157,13 @@ function editorsOf(edits: edit.LineEditor[]): CompiledLineEditor[] {
             collect(line: string, output: string[]) {
                 if (collecting) {
                     if (to?.(line)) {
-                        output.push(...replacement(collected));
+                        output.push(...replacement(...collected));
                         collected.length = 0;
                         collecting = false;
                         return true;
                     }
                     if (before?.(line)) {
-                        output.push(...replacement(collected));
+                        output.push(...replacement(...collected));
                         collected.length = 0;
                         collecting = false;
                         return false;
@@ -130,7 +175,7 @@ function editorsOf(edits: edit.LineEditor[]): CompiledLineEditor[] {
 
             finish(output: string[]) {
                 if (collecting && to === undefined && before === undefined) {
-                    output.push(...replacement(collected));
+                    output.push(...replacement(...collected));
                 }
             },
         };
@@ -153,7 +198,7 @@ function detectorOf(detector?: edit.LineDetector) {
     return detector;
 }
 
-function replacementOf(replacement?: edit.LineReplacement): (lines: string[]) => string[] {
+function replacementOf(replacement?: edit.LineProducer): (...lines: string[]) => string[] {
     if (replacement === undefined) {
         return () => [];
     }

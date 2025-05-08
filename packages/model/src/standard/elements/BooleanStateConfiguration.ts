@@ -139,10 +139,10 @@ export const BooleanStateConfiguration = Cluster(
             name: "AlarmsEnabled", id: 0x5, type: "AlarmModeBitmap", access: "R V", conformance: "[VIS | AUD]",
             quality: "N",
 
-            details: "Indicates the alarm modes that will be emitted if the sensor is triggered. If an alarm mode is not " +
-                "supported, the bit indicating this alarm mode shall always be 0." +
+            details: "Indicates the alarm modes that will be emitted if the sensor is triggered." +
                 "\n" +
-                "A bit shall indicate whether the alarm mode is enabled or disabled:" +
+                "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall " +
+                "indicate whether the alarm mode is enabled or disabled:" +
                 "\n" +
                 "  • 0 = Disabled" +
                 "\n" +

@@ -35,7 +35,7 @@ export namespace GeneralCommissioningInterface {
          *     timer shall be armed for that duration.
          *
          *   • If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
-         *     matches the fail-safe context’s associated Fabric, then the fail-safe timer shall be re- armed to expire
+         *     matches the fail-safe context’s associated Fabric, then the fail-safe timer shall be re-armed to expire
          *     in ExpiryLengthSeconds.
          *
          *   • Otherwise, the command shall leave the current fail-safe state unchanged and immediately respond with
@@ -97,31 +97,31 @@ export namespace GeneralCommissioningInterface {
          *   1. Terminate any open PASE secure session by clearing any associated Secure Session Context at the Server.
          *
          *   2. Revoke the temporary administrative privileges granted to any open PASE session (see Section 6.6.2.9,
-         *       “Bootstrapping of the Access Control Cluster”) at the Server.
+         *      “Bootstrapping of the Access Control Cluster”) at the Server.
          *
          *   3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions associated
-         *       with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see ArmFailSafe) by clearing
-         *       any associated Secure Session Context at the Server.
+         *      with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see ArmFailSafe) by clearing
+         *      any associated Secure Session Context at the Server.
          *
          *   4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
-         *       Fail-Safe being armed.
+         *      Fail-Safe being armed.
          *
          *   5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
-         *       ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that
-         *       was the subject of the UpdateNOC command.
+         *      ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that
+         *      was the subject of the UpdateNOC command.
          *
          *   6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the
-         *       RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that
-         *       was the subject of the AddNOC command. This shall remove all associations to that Fabric including all
-         *       fabric-scoped data, and may possibly factory-reset the device depending on current device state. This
-         *       shall only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
+         *      RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that
+         *      was the subject of the AddNOC command. This shall remove all associations to that Fabric including all
+         *      fabric-scoped data, and may possibly factory-reset the device depending on current device state. This
+         *      shall only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
          *
          *   7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had been
-         *       successfully invoked, then the new operational key pair temporarily generated for the purposes of NOC
-         *       addition or update (see Node Operational CSR Procedure) shall be removed as it is no longer needed.
+         *      successfully invoked, then the new operational key pair temporarily generated for the purposes of NOC
+         *      addition or update (see Node Operational CSR Procedure) shall be removed as it is no longer needed.
          *
          *   8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any
-         *       entry in the Fabrics attribute.
+         *      entry in the Fabrics attribute.
          *
          *   9. Reset the Breadcrumb attribute to zero.
          *
@@ -147,11 +147,10 @@ export namespace GeneralCommissioningInterface {
          * attribute reflected by the Basic Information Cluster configuration, but the SetRegulatoryConfigResponse
          * replied shall have the ErrorCode field set to ValueOutsideRange error.
          *
-         * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value
-         *
-         * received does not match either the Indoor or Outdoor fixed value in LocationCapability, then the
-         * SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error and the
-         * RegulatoryConfig attribute and associated internal radio configuration shall remain unchanged.
+         * If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value received does not
+         * match either the Indoor or Outdoor fixed value in LocationCapability, then the SetRegulatoryConfigResponse
+         * replied shall have the ErrorCode field set to ValueOutsideRange error and the RegulatoryConfig attribute and
+         * associated internal radio configuration shall remain unchanged.
          *
          * If the LocationCapability attribute is set to Indoor/Outdoor, then the RegulatoryConfig attribute shall be
          * set to match the NewRegulatoryConfig field.
@@ -178,9 +177,8 @@ export namespace GeneralCommissioningInterface {
          * Administrator operations requiring usage of the Fail Safe timer. It ensures that the Server is configured in
          * a state such that it still has all necessary elements to be fully operable within a Fabric, such as ACL
          * entries (see Section 9.10, “Access Control Cluster”) and operational credentials (see Section 6.4, “Node
-         * Operational Credentials Specification”), and that the Node is reachable using CASE
-         *
-         * (CASE)”) over an operational network.
+         * Operational Credentials Specification”), and that the Node is reachable using CASE (see Section 4.14.2,
+         * “Certificate Authenticated Session Establishment (CASE)”) over an operational network.
          *
          * An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command was
          * received when no Fail-Safe context exists.

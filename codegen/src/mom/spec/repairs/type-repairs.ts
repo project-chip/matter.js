@@ -44,7 +44,7 @@ export function repairTypeIdentifier<T extends string | undefined>(type: T): T {
 
     // Grr core says list is list[...] but 1.4 decided DataTypeList[...] is good too without documenting.  Possibly an
     // alchemy bug
-    const listMatch = type.match(/^(?:list|DataTypeList)\[(.*)\]$/);
+    const listMatch = type!.match(/^(?:list|DataTypeList)\[(.*)\]$/);
 
     if (listMatch) {
         let entryType = listMatch[1];

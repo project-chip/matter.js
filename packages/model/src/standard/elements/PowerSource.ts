@@ -94,7 +94,7 @@ export const PowerSource = Cluster(
     Attribute({
         name: "WiredCurrentType", id: 0x5, type: "WiredCurrentTypeEnum", access: "R V",
         conformance: "WIRED", constraint: "desc", quality: "F",
-        details: "Indicates the type of current the Node expects to be provided by the hard- wired source as specified " +
+        details: "Indicates the type of current the Node expects to be provided by the hard-wired source as specified " +
             "in WiredCurrentTypeEnum.",
         xref: { document: "core", section: "11.7.7.6" }
     }),
@@ -102,7 +102,7 @@ export const PowerSource = Cluster(
     Attribute({
         name: "WiredAssessedCurrent", id: 0x6, type: "uint32", access: "R V", conformance: "[WIRED]",
         quality: "X C",
-        details: "Indicates the assessed instantaneous current draw of the Node on the hard- wired source, in mA " +
+        details: "Indicates the assessed instantaneous current draw of the Node on the hard-wired source, in mA " +
             "(milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If the " +
             "wired source is not connected, but the Node is still able to assess a value, then the assessed value " +
             "may be reported.",
@@ -215,7 +215,8 @@ export const PowerSource = Cluster(
     Attribute({
         name: "BatReplaceability", id: 0x10, type: "BatReplaceabilityEnum", access: "R V",
         conformance: "BAT", quality: "F",
-        details: "Indicates the replaceability of the battery as specified in BatReplaceabilityEnum.",
+        details: "This attribute shall indicate the replaceability of the battery as specified in " +
+            "BatReplaceabilityEnum.",
         xref: { document: "core", section: "11.7.7.17" }
     }),
 
@@ -237,9 +238,7 @@ export const PowerSource = Cluster(
                 "detects all conditions contributing to a fault have been cleared, the corresponding BatFaultEnum " +
                 "value shall be removed from this list. An empty list shall indicate there are currently no active " +
                 "faults. The order of this list SHOULD have no significance. Clients interested in monitoring changes " +
-                "in active faults may subscribe to this attribute, or they may subscribe to Bat" +
-                "\n" +
-                "FaultChange.",
+                "in active faults may subscribe to this attribute, or they may subscribe to BatFaultChange.",
 
             xref: { document: "core", section: "11.7.7.19" }
         },
@@ -381,13 +380,9 @@ export const PowerSource = Cluster(
                 "The above rules allow that some endpoints can have an unknown power source, and therefore would not " +
                 "be indicated by any instance of this cluster." +
                 "\n" +
-                "Empty list examples" +
-                "\n" +
                 "Typically, there is one power source for the node. Also common is mains power for the node with " +
                 "battery backup power for the node. In both these common cases, for each cluster instance described, " +
                 "the list is empty." +
-                "\n" +
-                "Populated list example" +
                 "\n" +
                 "A node has a mains power source with Order as 0 (zero), but some application endpoints (not all) " +
                 "have a battery back up source with Order as 1, which means this list is empty for the Power Source " +

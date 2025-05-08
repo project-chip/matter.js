@@ -120,10 +120,9 @@ export namespace ContentControlInterface {
         /**
          * The purpose of this command is to set BlockChannelList attribute.
          *
-         * Upon receipt of the AddBlockChannels command, the media device shall check if the channels
-         *
-         * passed in this command are valid. If the channel is invalid, then a response with InvalidChannel error Status
-         * shall be returned.
+         * Upon receipt of the AddBlockChannels command, the media device shall check if the channels passed in this
+         * command are valid. If the channel is invalid, then a response with InvalidChannel error Status shall be
+         * returned.
          *
          * If there is at least one channel in Channels field which is not in the BlockChannelList attribute, the media
          * device shall process the request by adding these new channels into the BlockChannelList attribute and return
@@ -156,9 +155,7 @@ export namespace ContentControlInterface {
          *
          * Upon receipt of the AddBlockApplications command, the media device shall check if the Applications passed in
          * this command are installed. If there is an application in Applications field which is not identified by media
-         * device, then a response with UnidentifiableApplication error Status may be
-         *
-         * returned.
+         * device, then a response with UnidentifiableApplication error Status may be returned.
          *
          * If there is one or more applications which are not present in BlockApplicationList attribute, the media
          * device shall process the request by adding the new application to the BlockApplicationList attribute and

@@ -31,7 +31,7 @@ export const GeneralCommissioning = Cluster(
     Attribute(
         { name: "FeatureMap", id: 0xfffc, type: "FeatureMap", xref: { document: "core", section: "11.10.4" } },
         Field({
-            name: "TC", conformance: "P", constraint: "0", description: "TermsAndConditions",
+            name: "TC", constraint: "0", description: "TermsAndConditions",
             details: "Supports Terms & Conditions acknowledgement"
         })
     ),
@@ -82,8 +82,7 @@ export const GeneralCommissioning = Cluster(
         details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be told " +
             "an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified for " +
             "outdoor use at all, and thus there is no need for a commissioner to set or ask the user about " +
-            "whether the device will be used inside or outside. However a device which states its capability is" +
-            "\n" +
+            "whether the device will be used inside or outside. However a device which states its capability is " +
             "\"Indoor/Outdoor\" means it would like clarification if possible." +
             "\n" +
             "For Nodes without radio network interfaces (e.g. Ethernet-only devices), the value IndoorOutdoor " +
@@ -99,15 +98,14 @@ export const GeneralCommissioning = Cluster(
     Attribute({
         name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
         default: true, quality: "F",
-        details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
-            "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
-            "mode.",
+        details: "This attribute shall indicate whether this device supports \"concurrent connection flow\" " +
+            "commissioning mode (see Section 5.5, “Commissioning Flows”). If false, the device only supports " +
+            "\"non-concurrent connection flow\" mode.",
         xref: { document: "core", section: "11.10.6.5" }
     }),
 
     Attribute({
-        name: "TcAcceptedVersion", id: 0x5, type: "uint16", access: "R A", conformance: "P, TC",
-        quality: "N",
+        name: "TcAcceptedVersion", id: 0x5, type: "uint16", access: "R A", conformance: "TC", quality: "N",
 
         details: "Indicates the last version of the T&Cs for which the device received user acknowledgements. On " +
             "factory reset this field shall be reset to 0." +
@@ -121,7 +119,7 @@ export const GeneralCommissioning = Cluster(
     }),
 
     Attribute({
-        name: "TcMinRequiredVersion", id: 0x6, type: "uint16", access: "R A", conformance: "P, TC",
+        name: "TcMinRequiredVersion", id: 0x6, type: "uint16", access: "R A", conformance: "TC",
         quality: "N",
 
         details: "Indicates the minimum version of the texts presented by the Enhanced Setup Flow that need to be " +
@@ -135,8 +133,7 @@ export const GeneralCommissioning = Cluster(
     }),
 
     Attribute({
-        name: "TcAcknowledgements", id: 0x7, type: "map16", access: "R A", conformance: "P, TC",
-        quality: "N",
+        name: "TcAcknowledgements", id: 0x7, type: "map16", access: "R A", conformance: "TC", quality: "N",
 
         details: "Indicates the user’s response to the presented terms. Each bit position corresponds to a user " +
             "response for the associated index of matching text, such that bit 0 (bit value 1) is for text index " +
@@ -153,7 +150,7 @@ export const GeneralCommissioning = Cluster(
     }),
 
     Attribute({
-        name: "TcAcknowledgementsRequired", id: 0x8, type: "bool", access: "R A", conformance: "P, TC",
+        name: "TcAcknowledgementsRequired", id: 0x8, type: "bool", access: "R A", conformance: "TC",
         default: true, quality: "N",
 
         details: "Indicates whether SetTCAcknowledgements is currently required to be called with the inclusion of " +
@@ -176,8 +173,7 @@ export const GeneralCommissioning = Cluster(
     }),
 
     Attribute({
-        name: "TcUpdateDeadline", id: 0x9, type: "uint32", access: "R A", conformance: "P, TC",
-        quality: "X N",
+        name: "TcUpdateDeadline", id: 0x9, type: "uint32", access: "R A", conformance: "TC", quality: "X N",
         details: "Indicates the System Time in seconds when any functionality limitations will begin due to a lack of " +
             "acceptance of updated Terms and Conditions, as described in Section 5.7.4.5, “Presenting Updated " +
             "Terms and Conditions”." +
@@ -216,7 +212,7 @@ export const GeneralCommissioning = Cluster(
                 "\n" +
                 "  • If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the " +
                 "    accessing Fabric matches the fail-safe context’s associated Fabric, then the fail-safe timer " +
-                "    shall be re- armed to expire in ExpiryLengthSeconds." +
+                "    shall be re-armed to expire in ExpiryLengthSeconds." +
                 "\n" +
                 "  • Otherwise, the command shall leave the current fail-safe state unchanged and immediately respond " +
                 "    with ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin, indicating a " +
@@ -281,36 +277,36 @@ export const GeneralCommissioning = Cluster(
                 "following sequence of clean-up steps shall be executed, in order, by the receiver:" +
                 "\n" +
                 "  1. Terminate any open PASE secure session by clearing any associated Secure Session Context at the " +
-                "      Server." +
+                "     Server." +
                 "\n" +
                 "  2. Revoke the temporary administrative privileges granted to any open PASE session (see Section " +
-                "      6.6.2.9, “Bootstrapping of the Access Control Cluster”) at the Server." +
+                "     6.6.2.9, “Bootstrapping of the Access Control Cluster”) at the Server." +
                 "\n" +
                 "  3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions " +
-                "      associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see " +
-                "      ArmFailSafe) by clearing any associated Secure Session Context at the Server." +
+                "     associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see " +
+                "     ArmFailSafe) by clearing any associated Secure Session Context at the Server." +
                 "\n" +
                 "  4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to " +
-                "      the Fail-Safe being armed." +
+                "     the Fail-Safe being armed." +
                 "\n" +
                 "  5. If an UpdateNOC command had been successfully invoked, revert the state of operational key " +
-                "      pair, NOC and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for " +
-                "      the Fabric Index that was the subject of the UpdateNOC command." +
+                "     pair, NOC and ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for " +
+                "     the Fabric Index that was the subject of the UpdateNOC command." +
                 "\n" +
                 "  6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking " +
-                "      the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the " +
-                "      Fabric Index that was the subject of the AddNOC command. This shall remove all associations to " +
-                "      that Fabric including all fabric-scoped data, and may possibly factory-reset the device " +
-                "      depending on current device state. This shall only apply to Fabrics added during the fail-safe " +
-                "      period as the result of the AddNOC command." +
+                "     the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the " +
+                "     Fabric Index that was the subject of the AddNOC command. This shall remove all associations to " +
+                "     that Fabric including all fabric-scoped data, and may possibly factory-reset the device " +
+                "     depending on current device state. This shall only apply to Fabrics added during the fail-safe " +
+                "     period as the result of the AddNOC command." +
                 "\n" +
                 "  7. If the CSRRequest command had been successfully invoked, but no AddNOC or UpdateNOC command had " +
-                "      been successfully invoked, then the new operational key pair temporarily generated for the " +
-                "      purposes of NOC addition or update (see Node Operational CSR Procedure) shall be removed as it " +
-                "      is no longer needed." +
+                "     been successfully invoked, then the new operational key pair temporarily generated for the " +
+                "     purposes of NOC addition or update (see Node Operational CSR Procedure) shall be removed as it " +
+                "     is no longer needed." +
                 "\n" +
                 "  8. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently " +
-                "      referenced by any entry in the Fabrics attribute." +
+                "     referenced by any entry in the Fabrics attribute." +
                 "\n" +
                 "  9. Reset the Breadcrumb attribute to zero." +
                 "\n" +
@@ -364,9 +360,8 @@ export const GeneralCommissioning = Cluster(
                 "still set the Location attribute reflected by the Basic Information Cluster configuration, but the " +
                 "SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error." +
                 "\n" +
-                "If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value" +
-                "\n" +
-                "received does not match either the Indoor or Outdoor fixed value in LocationCapability, then the " +
+                "If the LocationCapability attribute is not Indoor/Outdoor and the NewRegulatoryConfig value received " +
+                "does not match either the Indoor or Outdoor fixed value in LocationCapability, then the " +
                 "SetRegulatoryConfigResponse replied shall have the ErrorCode field set to ValueOutsideRange error " +
                 "and the RegulatoryConfig attribute and associated internal radio configuration shall remain " +
                 "unchanged." +
@@ -425,9 +420,8 @@ export const GeneralCommissioning = Cluster(
             "the Server is configured in a state such that it still has all necessary elements to be fully " +
             "operable within a Fabric, such as ACL entries (see Section 9.10, “Access Control Cluster”) and " +
             "operational credentials (see Section 6.4, “Node Operational Credentials Specification”), and that " +
-            "the Node is reachable using CASE" +
-            "\n" +
-            "(CASE)”) over an operational network." +
+            "the Node is reachable using CASE (see Section 4.14.2, “Certificate Authenticated Session " +
+            "Establishment (CASE)”) over an operational network." +
             "\n" +
             "An ErrorCode of NoFailSafe shall be responded to the invoker if the CommissioningComplete command " +
             "was received when no Fail-Safe context exists." +
@@ -500,7 +494,7 @@ export const GeneralCommissioning = Cluster(
 
     Command(
         {
-            name: "SetTcAcknowledgements", id: 0x6, access: "A", conformance: "P, TC", direction: "request",
+            name: "SetTcAcknowledgements", id: 0x6, access: "A", conformance: "TC", direction: "request",
             response: "SetTcAcknowledgementsResponse",
             details: "This command sets the user acknowledgements received in the Enhanced Setup Flow Terms & Conditions " +
                 "into the node.",
@@ -530,9 +524,7 @@ export const GeneralCommissioning = Cluster(
                 "This command shall result in success with an ErrorCode value of OK in the " +
                 "SetTCAcknowledgementsResponse if all required terms were accepted by the user. Specifically, all " +
                 "bits have a value of 1 in TCAcknowledgements whose ordinal is marked as required in the file located " +
-                "at EnhancedSe" +
-                "\n" +
-                "tupFlowTCUrl." +
+                "at EnhancedSetupFlowTCUrl." +
                 "\n" +
                 "If the TCVersion field is less than the TCMinRequiredVersion, then the ErrorCode of " +
                 "TCMinVersionNotMet shall be returned and TCAcknowledgements shall remain unchanged." +
@@ -547,7 +539,7 @@ export const GeneralCommissioning = Cluster(
 
     Command(
         {
-            name: "SetTcAcknowledgementsResponse", id: 0x7, conformance: "P, TC", direction: "response",
+            name: "SetTcAcknowledgementsResponse", id: 0x7, conformance: "TC", direction: "response",
             details: "This command is used to convey the result from SetTCAcknowledgements.",
             xref: { document: "core", section: "11.10.7.9" }
         },
@@ -573,15 +565,15 @@ export const GeneralCommissioning = Cluster(
         }),
         Field({
             name: "InvalidAuthentication", id: 0x2, conformance: "M",
-            description: "Executed CommissioningComplete outside CASE session."
+            description: "Executed CommissioningComplet e outside CASE session."
         }),
         Field({
             name: "NoFailSafe", id: 0x3, conformance: "M",
-            description: "Executed CommissioningComplete when there was no active Fail-Safe context."
+            description: "Executed CommissioningComplet e when there was no active Fail-Safe context."
         }),
         Field({
             name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
-            description: "Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated with the current fail- safe context."
+            description: "Attempting to arm fail-safe or execute CommissioningComplet e from a fabric different than the one associated with the current fail-safe context."
         }),
         Field({
             name: "RequiredTcNotAccepted", id: 0x5, conformance: "TC",

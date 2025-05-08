@@ -17,7 +17,7 @@ export interface Test {
     path: string;
     descriptor: TestDescriptor;
     container: Container;
-    edit(editor: edit.Editor): Promise<void>;
+    edit(...editors: edit.Editor[]): Promise<void>;
     initializeSubject(subject: Subject): Promise<void>;
     invoke(subject: Subject, step: (title: string) => void, args: string[]): Promise<void>;
 }
@@ -47,8 +47,10 @@ export abstract class BaseTest implements Test {
         return this.#container;
     }
 
-    edit(editor: edit.Editor) {
-        return this.#container.edit(editor, this.#descriptor.path);
+    async edit(...editors: edit.Editor[]) {
+        for (const editor of editors) {
+            await this.#container.edit(editor, this.#descriptor.path);
+        }
     }
 
     abstract initializeSubject(subject: Subject): Promise<void>;

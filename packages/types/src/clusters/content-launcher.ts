@@ -160,7 +160,7 @@ export namespace ContentLauncher {
         /**
          * This field shall indicate the color, in RGB or RGBA, used for styling different Video Player sections like
          * Logo, Watermark, etc. The value shall conform to the 6-digit or 8-digit format defined for CSS sRGB
-         * hexadecimal color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. Examples:
+         * hexadecimal color notation. Examples:
          *
          *   • #76DE19 for R=0x76, G=0xDE, B=0x19, A absent
          *
@@ -171,9 +171,8 @@ export namespace ContentLauncher {
         color: TlvOptionalField(1, TlvString),
 
         /**
-         * This field shall indicate the size of the image used for Styling different Video Player sections like
-         *
-         * Logo, Watermark etc.
+         * This field shall indicate the size of the image used for Styling different Video Player sections like Logo,
+         * Watermark etc.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.9.3
          */
@@ -238,7 +237,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v14.Cluster} § 6.7.5.10.6
          */
-        waterMark: TlvOptionalField(5, TlvStyleInformation)
+        watermark: TlvOptionalField(5, TlvStyleInformation)
     });
 
     /**
@@ -481,7 +480,7 @@ export namespace ContentLauncher {
         Event = 4,
 
         /**
-         * A franchise is a video entity which can represent a number of video entities, like movies or TV shows. For
+         * A franchise is a video entity which can represent a number of video entities, like movies or TV shows.For
          * example, take the fictional franchise "Intergalactic Wars" which represents a collection of movie trilogies,
          * as well as animated and live action TV shows. This entity type was introduced to account for requests by
          * customers such as "Find Intergalactic Wars movies", which would search for all 'Intergalactic Wars' programs
@@ -704,9 +703,8 @@ export namespace ContentLauncher {
     export const UrlPlaybackComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute shall provide a list of content types supported by the Video Player or Content App
-             *
-             * in the form of entries in the HTTP "Accept" request header.
+             * This attribute shall provide a list of content types supported by the Video Player or Content App in the
+             * form of entries in the HTTP "Accept" request header.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 6.7.6.1
              */

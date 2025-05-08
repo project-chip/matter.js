@@ -20,15 +20,12 @@ export const ContentControl = Cluster(
     {
         name: "ContentControl", id: 0x50f, classification: "application", pics: "CONCON",
 
-        details: "This cluster is used for managing the content control (including \"parental control\") settings on a" +
-            "\n" +
+        details: "This cluster is used for managing the content control (including \"parental control\") settings on a " +
             "media device such as a TV, or Set-top Box." +
             "\n" +
             "This cluster allows to configure content control settings by clients with the Management privilege. " +
             "It is responsibility of the end product to enforce appropriate right access (for example, to prevent " +
-            "a child from disabling this feature)." +
-            "\n" +
-            "NOTE Support for Content Control cluster is provisional.",
+            "a child from disabling this feature).",
 
         xref: { document: "cluster", section: "6.13" }
     },
@@ -185,7 +182,8 @@ export const ContentControl = Cluster(
             "activated. If this attribute equals FALSE, then playback of unrated content shall be permitted. " +
             "Otherwise, the media device shall prevent the playback of unrated content." +
             "\n" +
-            "When this attribute changes, the device SHOULD make the user aware of any limits of this feature. " +
+            "When this attribute changes, the device SHOULD make the user aware of any limits of this feature." +
+            "\n" +
             "For example, if the feature does not control content within apps, then the device should make this " +
             "clear to the user when the attribute changes.",
 
@@ -455,10 +453,9 @@ export const ContentControl = Cluster(
 
             details: "The purpose of this command is to set BlockChannelList attribute." +
                 "\n" +
-                "Upon receipt of the AddBlockChannels command, the media device shall check if the channels" +
-                "\n" +
-                "passed in this command are valid. If the channel is invalid, then a response with InvalidChannel " +
-                "error Status shall be returned." +
+                "Upon receipt of the AddBlockChannels command, the media device shall check if the channels passed in " +
+                "this command are valid. If the channel is invalid, then a response with InvalidChannel error Status " +
+                "shall be returned." +
                 "\n" +
                 "If there is at least one channel in Channels field which is not in the BlockChannelList attribute, " +
                 "the media device shall process the request by adding these new channels into the BlockChannelList " +
@@ -520,8 +517,7 @@ export const ContentControl = Cluster(
                 "\n" +
                 "Upon receipt of the AddBlockApplications command, the media device shall check if the Applications " +
                 "passed in this command are installed. If there is an application in Applications field which is not " +
-                "identified by media device, then a response with UnidentifiableApplication error Status may be" +
-                "\n" +
+                "identified by media device, then a response with UnidentifiableApplication error Status may be " +
                 "returned." +
                 "\n" +
                 "If there is one or more applications which are not present in BlockApplicationList attribute, the " +

@@ -18,50 +18,9 @@ import {
 export const Thermostat = Cluster(
     {
         name: "Thermostat", id: 0x201, asOf: "1.3", classification: "application", pics: "TSTAT",
-
-        details: "This cluster provides an interface to the functionality of a thermostat." +
-            "\n" +
-            "Optional temperature, humidity and occupancy sensors" +
-            "\n" +
-            "Thermostat" +
-            "\n" +
-            "Heating / cooling control panel" +
-            "\n" +
-            "C" +
-            "\n" +
-            "Dehumidification configuration" +
-            "\n" +
-            "Dehumidification notification" +
-            "\n" +
-            "ThermostatS" +
-            "\n" +
-            "Heating / cooling device (e.g. indoor air handler)" +
-            "\n" +
-            "S" +
-            "\n" +
-            "user interface S" +
-            "\n" +
-            "configuration" +
-            "\n" +
-            "C" +
-            "\n" +
-            "Configuration tool" +
-            "\n" +
-            "Thermostat configuration" +
-            "\n" +
-            "C C Fan control S" +
-            "\n" +
-            "ThermostatS notification C" +
-            "\n" +
-            "C = Client S = Server" +
-            "\n" +
-            "Note: Device names are examples for illustration purposes only" +
-            "\n" +
-            "Figure 15. Example Usage of the Thermostat and Related Clusters\"",
-
+        details: "This cluster provides an interface to the functionality of a thermostat.",
         xref: { document: "cluster", section: "4.3" }
     },
-
     Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 8 }),
 
     Attribute(
@@ -150,7 +109,7 @@ export const Thermostat = Cluster(
         details: "Indicates the absolute minimum level that the heating setpoint may be set to. This is a limitation " +
             "imposed by the manufacturer." +
             "\n" +
-            "Refer to Setpoint Limits for constraints",
+            "### Refer to Setpoint Limits for constraints",
         xref: { document: "cluster", section: "4.3.9.5" }
     }),
 
@@ -171,7 +130,7 @@ export const Thermostat = Cluster(
         details: "Indicates the absolute maximum level that the cooling setpoint may be set to. This is a limitation " +
             "imposed by the manufacturer." +
             "\n" +
-            "Refer to Setpoint Limits for constraints",
+            "### Refer to Setpoint Limits for constraints",
         xref: { document: "cluster", section: "4.3.9.8" }
     }),
 
@@ -199,10 +158,9 @@ export const Thermostat = Cluster(
         name: "HvacSystemTypeConfiguration", id: 0x9, type: "HVACSystemTypeBitmap", access: "R[W] VM",
         conformance: "D", constraint: "desc", default: 0, quality: "N",
         details: "Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP " +
-            "switches to set these parameters, this information shall be available read-only" +
-            "\n" +
-            "from the DIP switches. If these parameters are set via software, there shall be read/write access in " +
-            "order to provide remote programming capability.",
+            "switches to set these parameters, this information shall be available read-only from the DIP " +
+            "switches. If these parameters are set via software, there shall be read/write access in order to " +
+            "provide remote programming capability.",
         xref: { document: "cluster", section: "4.3.9.11" }
     }),
 
@@ -222,10 +180,10 @@ export const Thermostat = Cluster(
             "respond with a status of SUCCESS and set the value of LocalTemperatureCalibration to the upper or " +
             "lower limit reached." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Prior to revision 8 of this cluster specification the value of this attribute was constrained to a " +
-            "range of -2.5°C to 2.5°C.",
+            "> Prior to revision 8 of this cluster specification the value of this attribute was constrained to a " +
+            "  range of -2.5°C to 2.5°C.",
 
         xref: { document: "cluster", section: "4.3.9.12" }
     }),
@@ -264,10 +222,9 @@ export const Thermostat = Cluster(
             "If an attempt is made to set this attribute to a value greater than MaxHeatSetpointLimit or less " +
             "than MinHeatSetpointLimit, a response with the status code CONSTRAINT_ERROR shall be returned." +
             "\n" +
-            "If this attribute is set to a value that is greater than" +
-            "\n" +
-            "Band), the value of OccupiedCoolingSetpoint shall be adjusted to (OccupiedHeatingSetpoint + " +
-            "MinSetpointDeadBand)." +
+            "If this attribute is set to a value that is greater than (OccupiedCoolingSetpoint - " +
+            "MinSetpointDeadBand), the value of OccupiedCoolingSetpoint shall be adjusted to " +
+            "(OccupiedHeatingSetpoint + MinSetpointDeadBand)." +
             "\n" +
             "If the occupancy status of the room is unknown, this attribute shall be used as the heating mode " +
             "setpoint." +
@@ -315,9 +272,8 @@ export const Thermostat = Cluster(
             "than MinHeatSetpointLimit, a response with the status code CONSTRAINT_ERROR shall be returned." +
             "\n" +
             "If this attribute is set to a value that is greater than (UnoccupiedCoolingSetpoint - " +
-            "MinSetpointDeadBand), the value of UnoccupiedCoolingSetpoint shall be adjusted to" +
-            "\n" +
-            "+ MinSetpointDeadBand)." +
+            "MinSetpointDeadBand), the value of UnoccupiedCoolingSetpoint shall be adjusted to " +
+            "(UnoccupiedHeatingSetpoint + MinSetpointDeadBand)." +
             "\n" +
             "If the occupancy status of the room is unknown, this attribute shall NOT be used." +
             "\n" +
@@ -402,12 +358,10 @@ export const Thermostat = Cluster(
             "\n" +
             "Refer to Setpoint Limits for constraints." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Prior to revision 8 of this cluster specification the value of this attribute was constrained to a " +
-            "range of 0°C to 2.5°C." +
-            "\n" +
-            "NOTE" +
+            "> Prior to revision 8 of this cluster specification the value of this attribute was constrained to a " +
+            "  range of 0°C to 2.5°C." +
             "\n" +
             "For backwards compatibility, this attribute is optionally writeable. However any writes to this " +
             "attribute shall be silently ignored.",
@@ -503,8 +457,8 @@ export const Thermostat = Cluster(
             "If the server supports a setpoint hold for a specific duration, it SHOULD also implement the " +
             "SetpointHoldExpiryTimestamp attribute." +
             "\n" +
-            "If this attribute is updated to SetpointHoldOn and the TemperatureSetpointHoldDuration has a non- " +
-            "null value and the SetpointHoldExpiryTimestamp is supported, the server shall update the " +
+            "If this attribute is updated to SetpointHoldOn and the TemperatureSetpointHoldDuration has a " +
+            "non-null value and the SetpointHoldExpiryTimestamp is supported, the server shall update the " +
             "SetpointHoldExpiryTimestamp with a value of current UTC timestamp, in seconds, plus the value in " +
             "TemperatureSetpointHoldDuration multiplied by 60." +
             "\n" +
@@ -549,10 +503,10 @@ export const Thermostat = Cluster(
             "When ScheduleActive is not set, the setpoint is altered only by manual up/down changes at the " +
             "thermostat or remotely, not by internal schedule programming." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "Modifying the ScheduleActive bit does not clear or delete previous weekly schedule programming " +
-            "configurations.",
+            "> Modifying the ScheduleActive bit does not clear or delete previous weekly schedule programming " +
+            "  configurations.",
 
         xref: { document: "cluster", section: "4.3.9.32" }
     }),
@@ -605,8 +559,9 @@ export const Thermostat = Cluster(
         details: "Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to float " +
             "above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + OccupiedSetback) or below the " +
             "OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – OccupiedSetback) before initiating " +
-            "a state change to bring the temperature back to the user’s desired setpoint. This attribute is " +
-            "sometimes also referred to as the “span.”" +
+            "a state change to bring the temperature back to the user’s" +
+            "\n" +
+            "desired setpoint. This attribute is sometimes also referred to as the “span.”" +
             "\n" +
             "The purpose of this attribute is to allow remote configuration of the span between the desired " +
             "setpoint and the measured temperature to help prevent over-cycling and reduce energy bills, though " +
@@ -911,8 +866,8 @@ export const Thermostat = Cluster(
                 "    a. If the BuiltIn field is null:" +
                 "\n" +
                 "      i. If there is a PresetStruct in the current value with a matching PresetHandle field, the " +
-                "          BuiltIn field on the pending PresetStruct shall be set to the value of the BuiltIn on the " +
-                "          matching PresetStruct." +
+                "         BuiltIn field on the pending PresetStruct shall be set to the value of the BuiltIn on the " +
+                "         matching PresetStruct." +
                 "\n" +
                 "      ii. Otherwise, the BuiltIn field on the pending PresetStruct shall be set to false." +
                 "\n" +
@@ -925,11 +880,11 @@ export const Thermostat = Cluster(
                 "       PresetStruct, the server shall check for invalid removal of the PresetStruct:" +
                 "\n" +
                 "      i. If the BuiltIn field is true on the removed PresetStruct, the attribute status shall be " +
-                "           CONSTRAINT_ERROR." +
+                "         CONSTRAINT_ERROR." +
                 "\n" +
                 "      ii. If the MSCH feature is supported and the removed PresetHandle would be referenced by any " +
-                "           PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value " +
-                "           of the Schedules attribute, the attribute status shall be INVALID_IN_STATE." +
+                "          PresetHandle on any ScheduleTransitionStruct on any ScheduleStruct in the updated value of " +
+                "          the Schedules attribute, the attribute status shall be INVALID_IN_STATE." +
                 "\n" +
                 "      iii. If the removed PresetHandle is equal to the value of the ActivePresetHandle attribute, " +
                 "           the attribute status shall be INVALID_IN_STATE." +
@@ -961,11 +916,11 @@ export const Thermostat = Cluster(
                 "       modification of an existing schedule." +
                 "\n" +
                 "      i. If the value of the ScheduleHandle field does not match any of the existing schedules, a " +
-                "           response with the status code NOT_FOUND shall be returned." +
+                "         response with the status code NOT_FOUND shall be returned." +
                 "\n" +
                 "      ii. If the BuiltIn field is true, and the ScheduleStruct in the current value with a matching " +
-                "           ScheduleHandle field has a BuiltIn field set to false, a response with the status code " +
-                "           CONSTRAINT_ERROR shall be returned." +
+                "          ScheduleHandle field has a BuiltIn field set to false, a response with the status code " +
+                "          CONSTRAINT_ERROR shall be returned." +
                 "\n" +
                 "      iii. If the BuiltIn field is false, and the ScheduleStruct in the current value with a " +
                 "           matching ScheduleHandle field has a BuiltIn field set to true, a response with the status " +
@@ -1002,8 +957,8 @@ export const Thermostat = Cluster(
                 "       PresetHandle field, a response with the status code CONSTRAINT_ERROR shall be returned." +
                 "\n" +
                 "      i. If the SystemMode field is present, but the ScheduleTypeStruct matching the value of the " +
-                "          SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints " +
-                "          bit set, a response with the status code CONSTRAINT_ERROR shall be returned." +
+                "         SystemMode field on the encompassing ScheduleStruct does not have the SupportsSetpoints bit " +
+                "         set, a response with the status code CONSTRAINT_ERROR shall be returned." +
                 "\n" +
                 "      ii. If the SystemMode field is has a value of SystemModeOff, but the ScheduleTypeStruct " +
                 "          matching the value of the SystemMode field on the encompassing ScheduleStruct does not " +
@@ -1034,8 +989,8 @@ export const Thermostat = Cluster(
                 "    a. If the BuiltIn field is null:" +
                 "\n" +
                 "      i. If there is a ScheduleStruct in the current value with a matching ScheduleHandle field, the " +
-                "          BuiltIn field on the pending ScheduleStruct shall be set to the value of the BuiltIn on " +
-                "          the matching ScheduleStruct." +
+                "         BuiltIn field on the pending ScheduleStruct shall be set to the value of the BuiltIn on the " +
+                "         matching ScheduleStruct." +
                 "\n" +
                 "      ii. Otherwise, the BuiltIn field on the pending ScheduleStruct shall be set to false." +
                 "\n" +
@@ -1048,7 +1003,7 @@ export const Thermostat = Cluster(
                 "       the ScheduleStruct, the server shall check for invalid removal of the ScheduleStruct:" +
                 "\n" +
                 "      i. If the BuiltIn field is true on the removed ScheduleStruct, the attribute status shall be " +
-                "          CONSTRAINT_ERROR." +
+                "         CONSTRAINT_ERROR." +
                 "\n" +
                 "      ii. If the removed ScheduleHandle is equal to the value of the ActiveScheduleHandle attribute, " +
                 "          the attribute status shall be INVALID_IN_STATE." +
@@ -1264,7 +1219,7 @@ export const Thermostat = Cluster(
             quality: "X"
         }),
         Field({
-            name: "SetPoint", id: 0x4, type: "temperature", conformance: "M",
+            name: "Setpoint", id: 0x4, type: "temperature", conformance: "M",
             details: "This field shall indicate the target setpoint temperature when the log is captured.",
             xref: { document: "cluster", section: "4.3.10.7.5" }
         }),
@@ -1463,7 +1418,7 @@ export const Thermostat = Cluster(
     Datatype(
         { name: "PresetTypeFeaturesBitmap", type: "map16", xref: { document: "cluster", section: "4.3.8.8" } },
         Field({ name: "Automatic", constraint: "0", description: "Preset may be automatically activated by the thermostat" }),
-        Field({ name: "SupportsNames", constraint: "1", description: "Preset supports user- provided names" })
+        Field({ name: "SupportsNames", constraint: "1", description: "Preset supports user-provided names" })
     ),
 
     Datatype(
@@ -1607,9 +1562,9 @@ export const Thermostat = Cluster(
         {
             name: "ControlSequenceOfOperationEnum", type: "enum8",
 
-            details: "NOTE" +
+            details: "> [!NOTE]" +
                 "\n" +
-                "CoolingAndHeating" +
+                "> CoolingAndHeating" +
                 "\n" +
                 "A thermostat indicating it supports CoolingAndHeating (or CoolingAndHeatingWithReheat) SHOULD be " +
                 "able to request heating or cooling on demand and will usually support the Auto SystemMode." +
@@ -1673,8 +1628,8 @@ export const Thermostat = Cluster(
 
         Field({
             name: "Vacation", id: 0x5, conformance: "M", description: "Users are on vacation",
-            details: "This value shall indicate the preset for periods when users are on vacation, or otherwise out-of- " +
-                "home for extended periods of time.",
+            details: "This value shall indicate the preset for periods when users are on vacation, or otherwise " +
+                "out-of-home for extended periods of time.",
             xref: { document: "cluster", section: "4.3.8.22.6" }
         }),
 

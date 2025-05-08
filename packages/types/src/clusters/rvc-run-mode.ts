@@ -109,11 +109,11 @@ export namespace RvcRunMode {
          * due to an error, due to a pause command, or for recharging etc. If currently paused and the device can
          * resume, it will continue to map.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * this mode is intended to be used so the current space can be mapped by the device if the robot has not
-         * previously done that, or if the layout has substantially changed, for an optimal subsequent cleaning
-         * experience.
+         * > this mode is intended to be used so the current space can be mapped by the device if the robot has not
+         *   previously done that, or if the layout has substantially changed, for an optimal subsequent cleaning
+         *   experience.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 7.2.7.2.3
          */
@@ -189,9 +189,8 @@ export namespace RvcRunMode {
          * specification of the derived cluster defines a namespace, the set of standard mode tags also includes the
          * mode tag values from that namespace.
          *
-         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use
-         *
-         * the mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
+         * Mode tags can help clients look for options that meet certain criteria, render the user interface, use the
+         * mode in an automation, or to craft help text their voice-driven interfaces. A mode tag shall be either a
          * standard tag or a manufacturer specific tag, as defined in each ModeTagStruct list entry.
          *
          * A mode option may have more than one mode tag. A mode option may be associated with a mixture of standard and
@@ -270,9 +269,7 @@ export namespace RvcRunMode {
     }
 
     /**
-     * This command is sent by the device on receipt of the ChangeToMode command. This command
-     *
-     * shall have the following data fields:
+     * This command is sent by the device on receipt of the ChangeToMode command.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
      */
@@ -286,9 +283,7 @@ export namespace RvcRunMode {
     });
 
     /**
-     * This command is sent by the device on receipt of the ChangeToMode command. This command
-     *
-     * shall have the following data fields:
+     * This command is sent by the device on receipt of the ChangeToMode command.
      *
      * @see {@link MatterSpecification.v14.Cluster} § 1.10.7.2
      */

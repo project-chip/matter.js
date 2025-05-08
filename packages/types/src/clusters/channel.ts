@@ -301,7 +301,7 @@ export namespace Channel {
         limit: TlvOptionalField(0, TlvUInt16),
 
         /**
-         * This field shall indicate the cursor that pinpoints the start of the upcoming data page. In a Cursor- based
+         * This field shall indicate the cursor that pinpoints the start of the upcoming data page. In a Cursor-based
          * pagination system, the field acts as a reference point, ensuring the set of results corresponds directly to
          * the data following the specified cursor. In a Offset-based pagination system, the field, along with limit,
          * indicate the offset from which entries in the program guide will be retrieved.
@@ -311,7 +311,7 @@ export namespace Channel {
         after: TlvOptionalField(1, TlvString.bound({ maxLength: 8192 })),
 
         /**
-         * This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a Cursor- based
+         * This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a Cursor-based
          * pagination system, the field acts as a reference point, ensuring the set of results corresponds directly to
          * the data preceding the specified cursor. In a Offset-based pagination system, the field, along with limit,
          * indicate the offset from which entries in the program guide will be retrieved.

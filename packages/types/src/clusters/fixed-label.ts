@@ -42,12 +42,10 @@ export namespace FixedLabel {
      *   • A manufacturer can use this to identify a characteristic of an endpoint. For example to identify the
      *     endpoints of a luminaire, one pointing up, the other pointing down, one of the endpoints would have a
      *     LabelList entry "orientation":"up" while the other would have "orientation":"down". Using such indication,
-     *     the user interface of a Node controlling this luminaire
+     *     the user interface of a Node controlling this luminaire knows which of the endpoints is which of the lights.
      *
-     * knows which of the endpoints is which of the lights.
-     *
-     * Note that the TagList in the Descriptor cluster provides an alternative mechanism for such self- description
-     * using standardized tags rather than manufacturer-selected strings, yielding a standardized mechanism for features
+     * Note that the TagList in the Descriptor cluster provides an alternative mechanism for such self-description using
+     * standardized tags rather than manufacturer-selected strings, yielding a standardized mechanism for features
      * defined in the various namespaces. The second example above can be implemented using semantic tags
      * Direction.Upward and Direction.Downward instead of (or in addition to) the Fixed Label cluster.
      *

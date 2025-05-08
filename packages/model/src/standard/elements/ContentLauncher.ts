@@ -62,9 +62,8 @@ export const ContentLauncher = Cluster(
         {
             name: "AcceptHeader", id: 0x0, type: "list", access: "R V", conformance: "UP",
             constraint: "max 100[max 1024]", default: [], quality: "N",
-            details: "This attribute shall provide a list of content types supported by the Video Player or Content App" +
-                "\n" +
-                "in the form of entries in the HTTP \"Accept\" request header.",
+            details: "This attribute shall provide a list of content types supported by the Video Player or Content App in " +
+                "the form of entries in the HTTP \"Accept\" request header.",
             xref: { document: "cluster", section: "6.7.6.1" }
         },
 
@@ -270,7 +269,7 @@ export const ContentLauncher = Cluster(
         }),
         Field({
             name: "Franchise", id: 0x5, conformance: "M",
-            description: "A franchise is a video entity which can represent a number of video entities, like movies or TV shows. For example, take the fictional franchise \"Intergalactic Wars\" which represents a collection of movie trilogies, as well as animated and live action TV shows. This entity type was introduced to account for requests by customers such as \"Find Intergalactic Wars movies\", which would search for all 'Intergalactic Wars' programs of the MOVIE MediaType, rather than attempting to match to a single title."
+            description: "A franchise is a video entity which can represent a number of video entities, like movies or TV shows.For example, take the fictional franchise \"Intergalactic Wars\" which represents a collection of movie trilogies, as well as animated and live action TV shows. This entity type was introduced to account for requests by customers such as \"Find Intergalactic Wars movies\", which would search for all 'Intergalactic Wars' programs of the MOVIE MediaType, rather than attempting to match to a single title."
         }),
         Field({
             name: "Genre", id: 0x6, conformance: "M",
@@ -441,28 +440,24 @@ export const ContentLauncher = Cluster(
             xref: { document: "cluster", section: "6.7.5.9.1" }
         }),
 
-        Field(
-            {
-                name: "Color", id: 0x1, type: "string", conformance: "O", constraint: "7, 9",
+        Field({
+            name: "Color", id: 0x1, type: "string", conformance: "O", constraint: "7, 9",
 
-                details: "This field shall indicate the color, in RGB or RGBA, used for styling different Video Player " +
-                    "sections like Logo, Watermark, etc. The value shall conform to the 6-digit or 8-digit format defined " +
-                    "for CSS sRGB hexadecimal color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. Examples:" +
-                    "\n" +
-                    "  • #76DE19 for R=0x76, G=0xDE, B=0x19, A absent" +
-                    "\n" +
-                    "  • #76DE1980 for R=0x76, G=0xDE, B=0x19, A=0x80",
+            details: "This field shall indicate the color, in RGB or RGBA, used for styling different Video Player " +
+                "sections like Logo, Watermark, etc. The value shall conform to the 6-digit or 8-digit format defined " +
+                "for CSS sRGB hexadecimal color notation. Examples:" +
+                "\n" +
+                "  • #76DE19 for R=0x76, G=0xDE, B=0x19, A absent" +
+                "\n" +
+                "  • #76DE1980 for R=0x76, G=0xDE, B=0x19, A=0x80",
 
-                xref: { document: "cluster", section: "6.7.5.9.2" }
-            }
-        ),
+            xref: { document: "cluster", section: "6.7.5.9.2" }
+        }),
 
         Field({
             name: "Size", id: 0x2, type: "DimensionStruct", conformance: "O",
             details: "This field shall indicate the size of the image used for Styling different Video Player sections " +
-                "like" +
-                "\n" +
-                "Logo, Watermark etc.",
+                "like Logo, Watermark etc.",
             xref: { document: "cluster", section: "6.7.5.9.3" }
         })
     ),
@@ -510,7 +505,7 @@ export const ContentLauncher = Cluster(
         }),
 
         Field({
-            name: "WaterMark", id: 0x5, type: "StyleInformationStruct", conformance: "O",
+            name: "Watermark", id: 0x5, type: "StyleInformationStruct", conformance: "O",
             details: "This field shall indicate watermark shown when the media is playing.",
             xref: { document: "cluster", section: "6.7.5.10.6" }
         })

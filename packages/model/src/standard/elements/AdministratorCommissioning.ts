@@ -62,11 +62,11 @@ export const AdministratorCommissioning = Cluster(
             "\n" +
             "This attribute shall revert to WindowNotOpen upon expiry of a commissioning window." +
             "\n" +
-            "NOTE" +
+            "> [!NOTE]" +
             "\n" +
-            "An initial commissioning window is not opened using either the OpenCommissioningWindow command or " +
-            "the OpenBasicCommissioningWindow command, and therefore this attribute shall be set to WindowNotOpen " +
-            "on initial commissioning.",
+            "> An initial commissioning window is not opened using either the OpenCommissioningWindow command or " +
+            "  the OpenBasicCommissioningWindow command, and therefore this attribute shall be set to " +
+            "  WindowNotOpen on initial commissioning.",
 
         xref: { document: "core", section: "11.19.7.1" }
     }),
@@ -114,9 +114,8 @@ export const AdministratorCommissioning = Cluster(
                 "\n" +
                 "When the OpenCommissioningWindow command expires or commissioning completes, the Node shall remove " +
                 "the Passcode by deleting the PAKE passcode verifier as well as stop publishing the DNS-SD record " +
-                "corresponding to this command as described in Section 4.3.1, “Commissionable" +
-                "\n" +
-                "Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives a " +
+                "corresponding to this command as described in Section 4.3.1, “Commissionable Node Discovery”. The " +
+                "commissioning into a new Fabric completes when the Node successfully receives a " +
                 "CommissioningComplete command, see Section 5.5, “Commissioning Flows”." +
                 "\n" +
                 "The parameters for OpenCommissioningWindow command are as follows:" +
@@ -155,13 +154,13 @@ export const AdministratorCommissioning = Cluster(
         Field({
             name: "PakePasscodeVerifier", id: 0x1, type: "octstr", conformance: "M", constraint: "97",
 
-            details: "This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, " +
-                "“Password-Authenticated Key Exchange (PAKE)”) computed by the existing Administrator to be used for " +
-                "this commissioning. The field is concatenation of two values (w0 || L) shall be " +
-                "(CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES)-octets long as detailed in " +
-                "Crypto_PAKEValues_Responder. It shall be derived from an ephemeral passcode (See PAKE). It shall be " +
-                "deleted by the Node at the end of commissioning or expiration of the OpenCommissioningWindow " +
-                "command, and shall be deleted by the existing Administrator after sending it to the Node(s).",
+            details: "This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, “Password- " +
+                "Authenticated Key Exchange (PAKE)”) computed by the existing Administrator to be used for this " +
+                "commissioning. The field is concatenation of two values (w0 || L) shall be (CRYPTO_GROUP_SIZE_BYTES " +
+                "+ CRYPTO_PUBLIC_KEY_SIZE_BYTES)-octets long as detailed in Crypto_PAKEValues_Responder. It shall be " +
+                "derived from an ephemeral passcode (See PAKE). It shall be deleted by the Node at the end of " +
+                "commissioning or expiration of the OpenCommissioningWindow command, and shall be deleted by the " +
+                "existing Administrator after sending it to the Node(s).",
 
             xref: { document: "core", section: "11.19.8.1.2" }
         }),
@@ -268,9 +267,8 @@ export const AdministratorCommissioning = Cluster(
             "specific status code of WindowNotOpen." +
             "\n" +
             "If the commissioning window was open and the fail-safe was armed when this command is received, the " +
-            "device shall immediately expire the fail-safe and perform the cleanup steps outlined" +
-            "\n" +
-            "in Section 11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”.",
+            "device shall immediately expire the fail-safe and perform the cleanup steps outlined in Section " +
+            "11.10.7.2.2, “Behavior on expiry of Fail-Safe timer”.",
 
         xref: { document: "core", section: "11.19.8.3" }
     }),

@@ -23,10 +23,10 @@ export namespace DoorLockInterface {
          * This command causes the lock device to unlock the door. This command includes an optional code for the lock.
          * The door lock may require a code depending on the value of the RequirePINForRemoteOperation attribute.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
-         * relock time has expired.
+         * > If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
+         *   relock time has expired.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.2
          */
@@ -50,9 +50,8 @@ export namespace DoorLockInterface {
          *
          * Fields used for different use cases:
          *
-         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
-         *
-         * shall be one of the following values:
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and shall
+         * be one of the following values:
          *
          *   • SUCCESS, if setting User was successful.
          *
@@ -70,9 +69,8 @@ export namespace DoorLockInterface {
         /**
          * Retrieve user.
          *
-         * An InvokeResponse command shall be sent with an appropriate error
-         *
-         * COMMAND, etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.
+         * An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, etc.) as
+         * needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.33
          */
@@ -244,10 +242,10 @@ export namespace DoorLockInterface {
         /**
          * Clear out all PINs on the lock.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command with
-         * respect to the setting of user status, user type and schedules.
+         * > On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command with
+         *   respect to the setting of user status, user type and schedules.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.8
          */
@@ -266,11 +264,11 @@ export namespace DoorLockInterface {
          * This command allows clearing an existing Aliro Reader configuration for the lock. Administrators shall NOT
          * clear an Aliro Reader configuration without explicit user permission.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * Using this command will revoke the ability of all existing Aliro user devices that have the old verification
-         * key to interact with the lock. This effect is not restricted to a single fabric or otherwise scoped in any
-         * way.
+         * > Using this command will revoke the ability of all existing Aliro user devices that have the old
+         *   verification key to interact with the lock. This effect is not restricted to a single fabric or otherwise
+         *   scoped in any way.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.43
          */
@@ -356,10 +354,10 @@ export namespace DoorLockInterface {
          * optional code for the lock. The door lock may require a code depending on the value of the
          * RequirePINForRemoteOperation attribute.
          *
-         * NOTE
+         * > [!NOTE]
          *
-         * If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the auto
-         * relock time has expired.
+         * > If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the auto
+         *   relock time has expired.
          *
          * @see {@link MatterSpecification.v14.Cluster} § 5.2.10.41
          */

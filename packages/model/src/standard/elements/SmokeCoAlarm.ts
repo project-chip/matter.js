@@ -85,8 +85,8 @@ export const SmokeCoAlarm = Cluster(
 
     Attribute({
         name: "TestInProgress", id: 0x5, type: "bool", access: "R V", conformance: "M",
-        details: "Indicates whether the device self-test is currently activated. If the device self- test is " +
-            "activated, this attribute shall be set to True, otherwise it shall be set to False.",
+        details: "Indicates whether the device self-test is currently activated. If the device self-test is activated, " +
+            "this attribute shall be set to True, otherwise it shall be set to False.",
         xref: { document: "cluster", section: "2.11.6.6" }
     }),
 
@@ -302,12 +302,12 @@ export const SmokeCoAlarm = Cluster(
     ),
 
     Datatype(
-        {
-            name: "ExpressedStateEnum", type: "enum8",
+        { name: "ExpressedStateEnum", type: "enum8", xref: { document: "cluster", section: "2.11.5.3" } },
+        Field({
+            name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the device is not alarming",
             details: "This value shall indicate that this alarm is not alarming.",
-            xref: { document: "cluster", section: "2.11.5.3" }
-        },
-        Field({ name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the device is not alarming" }),
+            xref: { document: "cluster", section: "2.11.5.3.1" }
+        }),
 
         Field({
             name: "SmokeAlarm", id: 0x1, conformance: "SMOKE", description: "Smoke Alarm state",
@@ -408,14 +408,15 @@ export const SmokeCoAlarm = Cluster(
     ),
 
     Datatype(
-        {
-            name: "ContaminationStateEnum", type: "enum8",
+        { name: "ContaminationStateEnum", type: "enum8", xref: { document: "cluster", section: "2.11.5.6" } },
+
+        Field({
+            name: "Normal", id: 0x0, conformance: "M",
+            description: "Nominal state, the sensor is not contaminated",
             details: "This value shall indicate that the smoke sensor has nominal contamination levels, no customer action " +
                 "is required.",
-            xref: { document: "cluster", section: "2.11.5.6" }
-        },
-
-        Field({ name: "Normal", id: 0x0, conformance: "M", description: "Nominal state, the sensor is not contaminated" }),
+            xref: { document: "cluster", section: "2.11.5.6.1" }
+        }),
 
         Field({
             name: "Low", id: 0x1, conformance: "O", description: "Low contamination",

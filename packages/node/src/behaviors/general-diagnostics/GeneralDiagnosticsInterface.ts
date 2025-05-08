@@ -12,10 +12,9 @@ import { GeneralDiagnostics } from "#clusters/general-diagnostics";
 export namespace GeneralDiagnosticsInterface {
     export interface Base {
         /**
-         * This command shall be supported to provide a means for certification tests to trigger some test-
-         * plan-specific events, necessary to assist in automation of device interactions for some certification test
-         * cases. This command shall NOT cause any changes to the state of the device that persist after the last fabric
-         * is removed.
+         * This command shall be supported to provide a means for certification tests to trigger some test-plan-specific
+         * events, necessary to assist in automation of device interactions for some certification test cases. This
+         * command shall NOT cause any changes to the state of the device that persist after the last fabric is removed.
          *
          * The fields for the TestEventTrigger command are as follows:
          *

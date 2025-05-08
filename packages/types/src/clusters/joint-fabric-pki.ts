@@ -124,7 +124,7 @@ export namespace JointFabricPki {
         Ok = 0,
 
         /**
-         * Anchor Transfer was not started due to on- going Datastore operations
+         * Anchor Transfer was not started due to on-going Datastore operations
          */
         TransferAnchorStatusDatastoreBusy = 1,
 
@@ -186,8 +186,6 @@ export namespace JointFabricPki {
     /**
      * An instance of the Joint Fabric PKI Cluster only applies to Joint Fabric Administrator nodes fulfilling the role
      * of Anchor CA.
-     *
-     * NOTE Support for Joint Fabric PKI Cluster is provisional.
      *
      * @see {@link MatterSpecification.v14.Core} § 11.25
      */

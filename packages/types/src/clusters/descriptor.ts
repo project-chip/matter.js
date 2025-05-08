@@ -171,10 +171,10 @@ export namespace Descriptor {
     export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * NOTE
+     * > [!NOTE]
      *
-     * The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a node,
-     * its endpoints and clusters.
+     * > The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a
+     *   node, its endpoints and clusters.
      *
      * This cluster describes an endpoint instance on the node, independently from other endpoints, but also allows
      * composition of endpoints to conform to complex device type patterns.

@@ -18,7 +18,7 @@ export interface Token {
 /**
  * The base token produced by the tokenizer.
  */
-export type BasicToken<KW extends string[] = []> =
+export type BasicToken<KW extends readonly string[] = []> =
     | BasicToken.Special
     | BasicToken.Word
     | BasicToken.Number
@@ -68,7 +68,7 @@ export namespace BasicToken {
         value: FieldValue;
     }
 
-    export interface Keyword<T extends string[]> extends Token {
+    export interface Keyword<T extends readonly string[]> extends Token {
         type: T[number];
     }
 }

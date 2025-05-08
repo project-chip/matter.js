@@ -19,9 +19,7 @@ export const FeatureMap = Attribute({
         "features. A cluster feature is a set of cluster elements that are mandatory or optional for a " +
         "defined feature of the cluster. If a cluster feature is supported by the cluster instance, then the " +
         "corresponding bit shall be set to 1, otherwise the bit shall be set to 0 (zero). All undefined bits " +
-        "in" +
-        "\n" +
-        "this attribute shall be set to 0 (zero)." +
+        "in this attribute shall be set to 0 (zero)." +
         "\n" +
         "The set of cluster elements that are designated as mandatory (M) are implicitly part of the " +
         "mandatory cluster feature set, and do not have a bit in the FeatureMap attribute." +

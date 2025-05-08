@@ -104,12 +104,12 @@ export const ApplicationLauncher = Cluster(
 
             details: "This field shall specify optional app-specific data to be sent to the app." +
                 "\n" +
-                "NOTE" +
+                "> [!NOTE]" +
                 "\n" +
-                "This format and meaning of this value is proprietary and outside the specification. It provides a " +
-                "transition path for device makers that use other protocols (like DIAL) which allow for proprietary " +
-                "data. Apps that are not yet Matter aware can be launched via Matter, while retaining the existing " +
-                "ability to launch with proprietary data.",
+                "> This format and meaning of this value is proprietary and outside the specification. It provides a " +
+                "  transition path for device makers that use other protocols (like DIAL) which allow for proprietary " +
+                "  data. Apps that are not yet Matter aware can be launched via Matter, while retaining the existing " +
+                "  ability to launch with proprietary data.",
 
             xref: { document: "cluster", section: "6.4.7.1.2" }
         })
@@ -158,9 +158,7 @@ export const ApplicationLauncher = Cluster(
                 "constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on " +
                 "the action taken, on the Application Basic cluster of the Endpoint corresponding to the application " +
                 "on which the action was taken. The Status attribute shall be updated on any other application whose " +
-                "Status may have changed as a result of this command." +
-                "\n" +
-                "This command returns a Launcher Response.",
+                "Status may have changed as a result of this command. This command returns a Launcher Response.",
 
             xref: { document: "cluster", section: "6.4.7.3" }
         },

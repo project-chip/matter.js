@@ -43,12 +43,18 @@ export const LaundryWasherMode = Cluster(
     Attribute({ name: "StartUpMode", id: 0x2, conformance: "X", xref: { document: "cluster", section: "8.5.6" } }),
     Attribute({ name: "OnMode", id: 0x3, conformance: "X", xref: { document: "cluster", section: "8.5.6" } }),
 
-    Datatype({
-        name: "ModeOptionStruct", type: "ModeOptionStruct",
-        details: "The table below lists the changes relative to the Mode Base cluster for the fields of the " +
-            "ModeOptionStruct type. A blank field indicates no change.",
-        xref: { document: "cluster", section: "8.5.5.1" }
-    }),
+    Datatype(
+        {
+            name: "ModeOptionStruct", type: "struct",
+            details: "The table below lists the changes relative to the Mode Base cluster for the fields of the " +
+                "ModeOptionStruct type. A blank field indicates no change.",
+            xref: { document: "cluster", section: "8.5.5.1" }
+        },
+
+        Field({ name: "Label", id: 0x0, conformance: "M" }),
+        Field({ name: "Mode", id: 0x1, conformance: "M" }),
+        Field({ name: "ModeTags", id: 0x2, conformance: "M", constraint: "1 to 8" })
+    ),
 
     Datatype(
         { name: "ModeTag", type: "enum16" },

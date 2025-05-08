@@ -21,7 +21,7 @@ export namespace DiagnosticLogs {
      */
     export enum Intent {
         /**
-         * Logs to be used for end- user support
+         * Logs to be used for end-user support
          *
          * shall indicate that the purpose of the log request is to retrieve logs for the intention of providing support
          * to an end-user.
@@ -103,7 +103,7 @@ export namespace DiagnosticLogs {
          * This field shall be present if the RequestedProtocol is BDX. The TransferFileDesignator shall be set as the
          * File Designator of the BDX transfer if initiated.
          *
-         * Effect on Receipt
+         * ### Effect on Receipt
          *
          * On receipt of this command, the Node shall respond with a RetrieveLogsResponse command.
          *

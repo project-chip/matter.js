@@ -294,13 +294,13 @@ export namespace Switch {
              *   • a value of N when there were exactly N presses in a multi-press sequence (and the sequence has
              *     ended).
              *
-             * NOTE
+             *     > [!NOTE]
              *
-             * The introduction of TotalNumberOfPressesCounted supporting the value 0 may impact clients of switches
-             * using cluster revision 1 since such servers would not use this value of TotalNumberOfPressesCounted to
-             * indicate an aborted sequence. Clients SHOULD always act using the TotalNumberOfPressesCounted field taken
-             * into account since for values from 1 to MultiPressMax, the user action that led to the event was
-             * different depending on the count.
+             *     > The introduction of TotalNumberOfPressesCounted supporting the value 0 may impact clients of
+             *       switches using cluster revision 1 since such servers would not use this value of
+             *       TotalNumberOfPressesCounted to indicate an aborted sequence. Clients SHOULD always act using the
+             *       TotalNumberOfPressesCounted field taken into account since for values from 1 to MultiPressMax, the
+             *       user action that led to the event was different depending on the count.
              *
              * @see {@link MatterSpecification.v14.Cluster} § 1.13.6.7
              */

@@ -258,10 +258,10 @@ export namespace BooleanStateConfiguration {
             alarmsActive: Attribute(0x3, TlvBitmap(TlvUInt8, AlarmMode)),
 
             /**
-             * Indicates the alarm modes that will be emitted if the sensor is triggered. If an alarm mode is not
-             * supported, the bit indicating this alarm mode shall always be 0.
+             * Indicates the alarm modes that will be emitted if the sensor is triggered.
              *
-             * A bit shall indicate whether the alarm mode is enabled or disabled:
+             * If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit shall
+             * indicate whether the alarm mode is enabled or disabled:
              *
              *   • 0 = Disabled
              *

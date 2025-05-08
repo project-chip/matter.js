@@ -69,8 +69,7 @@ export const OperationalState = Cluster(
         quality: "X",
 
         details: "This attribute represents the current phase of operation being performed by the server. This shall " +
-            "be the positional index representing the value from the set provided in the PhaseList Attribute," +
-            "\n" +
+            "be the positional index representing the value from the set provided in the PhaseList Attribute, " +
             "where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value " +
             "that is \"length(PhaseList) - 1\"." +
             "\n" +
@@ -193,14 +192,11 @@ export const OperationalState = Cluster(
 
         Field({
             name: "TotalOperationalTime", id: 0x1, type: "elapsed-s", conformance: "O", quality: "X",
-
             details: "The total operational time, in seconds, from when the operation was started via an initial Start " +
-                "command or autonomous/manual starting action, until the operation completed. This includes any time" +
-                "\n" +
+                "command or autonomous/manual starting action, until the operation completed. This includes any time " +
                 "spent while paused. There may be cases whereby the total operational time exceeds the maximum value " +
                 "that can be conveyed by this attribute, in such instances, this attribute shall be populated with " +
                 "null.",
-
             xref: { document: "cluster", section: "1.14.7.2.2" }
         }),
 
@@ -227,10 +223,9 @@ export const OperationalState = Cluster(
             "If this command is received when already in the Paused state the device shall respond with an " +
             "OperationalCommandResponse command with an ErrorStateID of NoError but take no further action." +
             "\n" +
-            "A device that receives this command in any state which is not Pause-compatible shall respond" +
-            "\n" +
-            "with an OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall " +
-            "take no further action." +
+            "A device that receives this command in any state which is not Pause-compatible shall respond with an " +
+            "OperationalCommandResponse command with an ErrorStateID of CommandInvalidInState and shall take no " +
+            "further action." +
             "\n" +
             "States are defined as Pause-compatible as follows:" +
             "\n" +
@@ -297,7 +292,7 @@ export const OperationalState = Cluster(
             "device is in an operational state from which it can be started. There may be either regulatory or " +
             "manufacturer-imposed safety and security requirements that first necessitate some specific action at " +
             "the device before a Start command can be honored. In such instances, a device shall respond with a " +
-            "status code of CommandInvalidInState if a Start command is received prior to the required on- device " +
+            "status code of CommandInvalidInState if a Start command is received prior to the required on-device " +
             "action." +
             "\n" +
             "If this command is received when already in the Running state the device shall respond with an " +
@@ -448,8 +443,7 @@ export const OperationalState = Cluster(
                 "specific to a certain Device Type or other modality shall be defined in a derived cluster of this " +
                 "cluster." +
                 "\n" +
-                "The derived cluster-specific error definitions shall NOT duplicate the general error definitions." +
-                "\n" +
+                "The derived cluster-specific error definitions shall NOT duplicate the general error definitions. " +
                 "That is, a derived cluster specification of this cluster cannot define errors with the same " +
                 "semantics as the general errors defined below." +
                 "\n" +
@@ -484,7 +478,7 @@ export const OperationalState = Cluster(
     Datatype(
         { name: "ErrorStateStruct", type: "struct", xref: { document: "cluster", section: "1.14.4.4" } },
         Field({
-            name: "ErrorStateID", id: 0x0, type: "ErrorStateEnum", conformance: "M", default: 0,
+            name: "ErrorStateId", id: 0x0, type: "ErrorStateEnum", conformance: "M", default: 0,
             details: "This shall be populated with a value from the ErrorStateEnum.",
             xref: { document: "cluster", section: "1.14.4.4.1" }
         }),
