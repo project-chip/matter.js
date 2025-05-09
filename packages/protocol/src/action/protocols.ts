@@ -89,11 +89,6 @@ export interface ClusterProtocol {
     location: AccessControl.Location;
 
     /**
-     * List of supported elements for this cluster instance
-     */
-    availableElementIds: AvailableElementIds;
-
-    /**
      * Access a record of attribute values, keyed by attribute ID.
      *
      * Note that current protocol implementations do not filter data within this responsibility based on the

@@ -221,7 +221,7 @@ export class EventResponse<
         if (cluster === undefined) {
             return this.#asStatus(path, Status.UnsupportedCluster);
         }
-        if (event === undefined || !cluster.availableElementIds.events.has(event.id)) {
+        if (event === undefined || !cluster.type.events[event.id]) {
             return this.#asStatus(path, Status.UnsupportedEvent);
         }
 
@@ -300,7 +300,7 @@ export class EventResponse<
      * Depends on state initialized by {@link #addClusterForWildcard}.
      */
     #addEventForWildcard(event: EventTypeProtocol, path: EventPath) {
-        if (!this.#guardedCurrentCluster.availableElementIds.events.has(event.id)) {
+        if (!this.#guardedCurrentCluster.type.events[event.id]) {
             return; // EVent is not active, so ignore
         }
         if (
