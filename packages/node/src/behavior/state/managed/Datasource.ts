@@ -58,6 +58,11 @@ export interface Datasource<T extends StateType = StateType> extends Transaction
      * Path used in diagnostic messages.
      */
     location: AccessControl.Location;
+
+    /**
+     * Event that gets emitted when the state changes.
+     */
+    stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
 }
 
 /**
@@ -87,6 +92,10 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
         get location() {
             return internals.location;
+        },
+
+        get stateChanged() {
+            return internals.events.stateChanged;
         },
 
         validate(session: ValueSupervisor.Session, values?: Val.Struct) {
@@ -124,6 +133,10 @@ export namespace Datasource {
         interactionEnd?: Observable<[], MaybePromise>;
     } & {
         [K in `${string}$Changing` | `${string}$Changed`]: Observable<Parameters<ValueObserver>, MaybePromise>;
+    };
+
+    export type InternalEvents = Events & {
+        stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
     };
 
     /**
@@ -210,6 +223,7 @@ interface Internals extends Datasource.Options {
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
     featuresKey?: string;
     interactionObserver(): MaybePromise<void>;
+    events: Datasource.InternalEvents;
 }
 
 /**
@@ -221,6 +235,7 @@ interface CommitChanges {
         event: Observable<any[], MaybePromise>;
         params: Parameters<Datasource.ValueObserver>;
     }>;
+    changeList: Set<string>;
 }
 
 function configure(options: Datasource.Options): Internals {
@@ -256,8 +271,12 @@ function configure(options: Datasource.Options): Internals {
     // Location affects security so make it immutable
     Object.freeze(options.location);
 
+    const events = (options.events ?? {}) as Datasource.InternalEvents;
+    events.stateChanged = new Observable();
+
     return {
         ...options,
+        events,
         version: Crypto.getRandomUInt32(),
         values: values,
         featuresKey,
@@ -553,8 +572,9 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             const oldval = internals.values[name];
             if (oldval !== newval && !isDeepEqual(newval, oldval)) {
                 if (!changes) {
-                    changes = { notifications: [] };
+                    changes = { notifications: [], changeList: new Set() };
                 }
+                changes.changeList.add(name);
 
                 if (persistentFields.has(name)) {
                     if (changes.persistent === undefined) {
@@ -653,11 +673,15 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             }
         }
 
-        return emitChanged();
+        const changeSetResult = internals.events.stateChanged?.emit(
+            Array.from(changes.changeList.values()),
+            internals.version,
+        );
+        return MaybePromise.then(changeSetResult, () => emitChanged());
     }
 
     /**
-     * On rollback with just replace values and version with the canonical versions.
+     * On rollback, we just replace values and version with the canonical versions.
      */
     function rollback() {
         ({ values } = internals);
