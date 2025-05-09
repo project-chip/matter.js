@@ -8,4 +8,5 @@ export * from "./AccessControl.js";
 export * from "./AttributeResponse.js";
 export * from "./DataResponse.js";
 export * from "./EventResponse.js";
+export * from "./FilteredAttributeResponse.js";
 export * from "./ServerInteraction.js";

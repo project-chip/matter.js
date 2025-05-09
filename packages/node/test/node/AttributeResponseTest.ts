@@ -254,8 +254,8 @@ async function readRaw(node: MockServerNode, data: Partial<Read.Attributes>) {
         throw new Error("Expected an attribute request");
     }
     return node.online({}, ({ context }) => {
-        const response = new AttributeResponse(node.protocol, context, request);
-        const data = [...response];
+        const response = new AttributeResponse(node.protocol, context);
+        const data = [...response.process(request)];
         data.forEach(chunks => {
             if (Array.isArray(chunks)) {
                 chunks.forEach(chunk => {

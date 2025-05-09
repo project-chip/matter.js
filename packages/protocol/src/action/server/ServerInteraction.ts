@@ -45,16 +45,16 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
 
         let readInfo = "";
         if (Read.containsAttribute(request)) {
-            const attributeReader = new AttributeResponse(this.#node, session, request);
-            yield* attributeReader;
+            const attributeReader = new AttributeResponse(this.#node, session);
+            yield* attributeReader.process(request);
 
             const { existent, status, value } = attributeReader.counts;
             readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
         }
 
         if (Read.containsEvent(request)) {
-            const eventReader = new EventResponse(this.#node, session, request);
-            yield* eventReader;
+            const eventReader = new EventResponse(this.#node, session);
+            yield* eventReader.process(request);
             const { existent, status, value } = eventReader.counts;
             readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
         }

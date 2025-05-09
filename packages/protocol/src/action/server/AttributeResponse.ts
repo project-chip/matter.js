@@ -58,10 +58,12 @@ export class AttributeResponse<
     #valueCount = 0;
     #filteredCount = 0;
 
-    constructor(node: NodeProtocol, session: SessionT, { dataVersionFilters, attributeRequests }: Read.Attributes) {
+    constructor(node: NodeProtocol, session: SessionT) {
         super(node, session);
+    }
 
-        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
+    *process({ dataVersionFilters, attributeRequests }: Read.Attributes): Generator<ReadResult.Chunk, void, void> {
+        const nodeId = this.session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
 
         // Index versions
         if (dataVersionFilters?.length) {
@@ -84,17 +86,12 @@ export class AttributeResponse<
         // Register paths
         for (const path of attributeRequests) {
             if (path.endpointId === undefined || path.clusterId === undefined || path.attributeId === undefined) {
-                this.#addWildcard(path);
+                this.addWildcard(path);
             } else {
-                this.#addConcrete(path as ReadResult.ConcreteAttributePath);
+                this.addConcrete(path as ReadResult.ConcreteAttributePath);
             }
         }
-    }
 
-    /**
-     * Emits chunks produced by paths added via {@link #addWildcard} and {@link #addConcrete}.
-     */
-    *[Symbol.iterator](): Generator<ReadResult.Chunk, void, void> {
         if (this.#dataProducers) {
             for (const producer of this.#dataProducers) {
                 yield* producer.apply(this);
@@ -135,7 +132,7 @@ export class AttributeResponse<
     /**
      * Validate a wildcard path and update internal state.
      */
-    #addWildcard(path: AttributePath) {
+    protected addWildcard(path: AttributePath) {
         const { nodeId, endpointId, clusterId, attributeId, wildcardPathFlags } = path;
 
         if (clusterId === undefined && attributeId !== undefined && !GlobalAttrIds.has(attributeId)) {
@@ -155,7 +152,7 @@ export class AttributeResponse<
             this.#addProducer(function* (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
                 for (const endpoint of this.node) {
-                    yield* this.#readEndpointForWildcard(endpoint, path);
+                    yield* this.readEndpointForWildcard(endpoint, path);
                 }
             });
             return;
@@ -165,7 +162,7 @@ export class AttributeResponse<
         if (endpoint) {
             this.#addProducer(function (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
-                return this.#readEndpointForWildcard(endpoint, path);
+                return this.readEndpointForWildcard(endpoint, path);
             });
         }
     }
@@ -173,11 +170,11 @@ export class AttributeResponse<
     /**
      * Validate a concrete path and update internal state.
      */
-    #addConcrete(path: ReadResult.ConcreteAttributePath) {
+    protected addConcrete(path: ReadResult.ConcreteAttributePath) {
         const { nodeId, endpointId, clusterId, attributeId } = path;
 
         if (nodeId !== undefined && this.nodeId !== nodeId) {
-            this.#addStatus(path, Status.UnsupportedNode);
+            this.addStatus(path, Status.UnsupportedNode);
             return;
         }
 
@@ -222,30 +219,30 @@ export class AttributeResponse<
                 break;
 
             case AccessControl.Authority.Unauthorized:
-                this.#addStatus(path, Status.UnsupportedAccess);
+                this.addStatus(path, Status.UnsupportedAccess);
                 return;
 
             case AccessControl.Authority.Restricted:
-                this.#addStatus(path, Status.AccessRestricted);
+                this.addStatus(path, Status.AccessRestricted);
                 return;
 
             default:
                 throw new InternalError(`Unsupported authorization state ${permission}`);
         }
         if (endpoint === undefined) {
-            this.#addStatus(path, Status.UnsupportedEndpoint);
+            this.addStatus(path, Status.UnsupportedEndpoint);
             return;
         }
         if (cluster === undefined) {
-            this.#addStatus(path, Status.UnsupportedCluster);
+            this.addStatus(path, Status.UnsupportedCluster);
             return;
         }
         if (attribute === undefined || !cluster.type.attributes[attribute.id]) {
-            this.#addStatus(path, Status.UnsupportedAttribute);
+            this.addStatus(path, Status.UnsupportedAttribute);
             return;
         }
         if (!limits.readable) {
-            this.#addStatus(path, Status.UnsupportedRead);
+            this.addStatus(path, Status.UnsupportedRead);
             return;
         }
 
@@ -294,7 +291,7 @@ export class AttributeResponse<
      *
      * TODO - skip endpoints for which subject is unauthorized as optimization
      */
-    *#readEndpointForWildcard(endpoint: EndpointProtocol, path: AttributePath) {
+    protected *readEndpointForWildcard(endpoint: EndpointProtocol, path: AttributePath) {
         if (endpoint.wildcardPathFlags & this.#wildcardPathFlags) {
             return;
         }
@@ -311,12 +308,12 @@ export class AttributeResponse<
         const { clusterId } = path;
         if (clusterId === undefined) {
             for (const cluster of endpoint) {
-                this.#readClusterForWildcard(cluster, path);
+                this.readClusterForWildcard(cluster, path);
             }
         } else {
             const cluster = endpoint[clusterId];
             if (cluster !== undefined) {
-                this.#readClusterForWildcard(cluster, path);
+                this.readClusterForWildcard(cluster, path);
             }
         }
     }
@@ -328,7 +325,7 @@ export class AttributeResponse<
      *
      * TODO - skip clusters for which subject is unauthorized
      */
-    #readClusterForWildcard(cluster: ClusterProtocol, path: AttributePath) {
+    protected readClusterForWildcard(cluster: ClusterProtocol, path: AttributePath) {
         if (cluster.type.wildcardPathFlags & this.#wildcardPathFlags) {
             return;
         }
@@ -352,7 +349,7 @@ export class AttributeResponse<
                 return;
             }
             for (const attribute of cluster.type.attributes) {
-                this.#readAttributeForWildcard(attribute, path);
+                this.readAttributeForWildcard(attribute, path);
             }
         } else {
             if (filteredByVersion) {
@@ -361,7 +358,7 @@ export class AttributeResponse<
             }
             const attribute = cluster.type.attributes[attributeId];
             if (attribute !== undefined) {
-                this.#readAttributeForWildcard(attribute, path);
+                this.readAttributeForWildcard(attribute, path);
             }
         }
     }
@@ -371,7 +368,7 @@ export class AttributeResponse<
      *
      * Depends on state initialized by {@link #readClusterForWildcard}.
      */
-    #readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
+    protected readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
         if (!this.#guardedCurrentCluster.type.attributes[attribute.id]) {
             return;
         }
@@ -433,7 +430,7 @@ export class AttributeResponse<
     /**
      * Add a status value.
      */
-    #addStatus(path: ReadResult.ConcreteAttributePath, status: Status) {
+    protected addStatus(path: ReadResult.ConcreteAttributePath, status: Status) {
         logger.debug(
             () => `Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`,
         );
