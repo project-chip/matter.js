@@ -498,6 +498,9 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
         }
         return formatter.text(serialize(value) ?? "undefined");
     }
+    if (typeof value === "function") {
+        return renderValue(value(), formatter, squash);
+    }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
     if (!text.includes("\n")) {

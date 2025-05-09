@@ -8,45 +8,35 @@ import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol 
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
+import { DataResponse, FallbackLimits, WildcardPathFlagsCodec } from "#action/server/DataResponse.js";
 import { Val } from "#action/Val.js";
-import { InternalError } from "#general";
-import { AccessLevel, AttributeModel, ElementTag } from "#model";
+import { Diagnostic, InternalError, Logger } from "#general";
+import { AttributeModel, DataModelPath, ElementTag } from "#model";
 import {
     AttributePath,
-    BitmapSchema,
     ClusterId,
     EndpointNumber,
     GlobalAttributes,
     NodeId,
     Status,
     StatusResponseError,
-    WildcardPathFlagsBitmap,
+    TlvSchema,
 } from "#types";
-import { DataModelPath } from "@matter/model";
-import { TlvSchema } from "@matter/types";
+import { StatusCode } from "@matter/types";
+
+const logger = Logger.get("AttributeResponse");
 
 export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
-export const WildcardPathFlagsCodec = BitmapSchema(WildcardPathFlagsBitmap);
-export const FallbackLimits: AccessControl.Limits = {
-    fabricScoped: false,
-    fabricSensitive: false,
-    readable: true,
-    readLevel: AccessLevel.View,
-    timed: false,
-    writable: true,
-    writeLevel: AccessLevel.Administer,
-};
 
 /**
  * Implements read of attribute data for Matter "read" and "subscribe" interactions.
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class AttributeResponse<SessionT extends AccessControl.Session = AccessControl.Session> {
-    // Configuration
-    #session: SessionT;
-    #node: NodeProtocol;
-    #versions?: Record<EndpointNumber, Record<ClusterId, number>> | undefined;
+export class AttributeResponse<
+    SessionT extends AccessControl.Session = AccessControl.Session,
+> extends DataResponse<SessionT> {
+    #versions?: Record<EndpointNumber, Record<ClusterId, number>>;
 
     // Each input AttributePathIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual attribute data
@@ -63,14 +53,15 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
     #currentState?: Val.ProtocolStruct;
     #wildcardPathFlags = 0;
 
-    // The node ID may be expensive to retrieve and is invariant so we cache it here
-    #cachedNodeId?: NodeId;
+    // Count how many attribute status (on error) and attribute values (on success) we have emitted
+    #statusCount = 0;
+    #valueCount = 0;
+    #filteredCount = 0;
 
     constructor(node: NodeProtocol, session: SessionT, { dataVersionFilters, attributeRequests }: Read.Attributes) {
-        this.#node = node;
-        this.#session = session;
+        super(node, session);
 
-        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.#nodeId;
+        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
 
         // Index versions
         if (dataVersionFilters?.length) {
@@ -117,17 +108,35 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         }
     }
 
+    /** Guarded accessor for this.#currentEndpoint.  This should never be undefined */
+    get #guardedCurrentEndpoint() {
+        if (this.#currentEndpoint === undefined) {
+            throw new InternalError("currentEndpoint is not set. Should never happen");
+        }
+        return this.#currentEndpoint;
+    }
+
+    /** Guarded accessor for this.#currentCluster.  This should never be undefined */
+    get #guardedCurrentCluster(): ClusterProtocol {
+        if (this.#currentCluster === undefined) {
+            throw new InternalError("currentCluster is not set. Should never happen");
+        }
+        return this.#currentCluster;
+    }
+
+    get counts() {
+        return {
+            status: this.#statusCount,
+            value: this.#valueCount,
+            existent: this.#valueCount + this.#filteredCount,
+        };
+    }
+
     /**
      * Validate a wildcard path and update internal state.
      */
     #addWildcard(path: AttributePath) {
         const { nodeId, endpointId, clusterId, attributeId, wildcardPathFlags } = path;
-
-        if (nodeId !== undefined && nodeId !== this.#nodeId) {
-            return;
-        }
-
-        const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         if (clusterId === undefined && attributeId !== undefined && !GlobalAttrIds.has(attributeId)) {
             throw new StatusResponseError(
@@ -136,17 +145,23 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             );
         }
 
+        if (nodeId !== undefined && nodeId !== this.nodeId) {
+            return;
+        }
+
+        const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
+
         if (endpointId === undefined) {
             this.#addProducer(function* (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
-                for (const endpoint of this.#node) {
+                for (const endpoint of this.node) {
                     yield* this.#readEndpointForWildcard(endpoint, path);
                 }
             });
             return;
         }
 
-        const endpoint = this.#node[endpointId];
+        const endpoint = this.node[endpointId];
         if (endpoint) {
             this.#addProducer(function (this: AttributeResponse) {
                 this.#wildcardPathFlags = wpf;
@@ -160,12 +175,14 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
      */
     #addConcrete(path: ReadResult.ConcreteAttributePath) {
         const { nodeId, endpointId, clusterId, attributeId } = path;
-        if (nodeId !== undefined && this.#nodeId !== nodeId) {
+
+        if (nodeId !== undefined && this.nodeId !== nodeId) {
             this.#addStatus(path, Status.UnsupportedNode);
+            return;
         }
 
         // Resolve path elements
-        const endpoint = this.#node[endpointId];
+        const endpoint = this.node[endpointId];
         const cluster = endpoint?.[clusterId];
         const attribute = cluster?.type.attributes[attributeId];
         let limits;
@@ -173,7 +190,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             // We still need to authorize the user for access even though this path doesn't resolve.  Spec is not
             // explicit on what privilege level we should require as normally that information comes from the resolved
             // attribute.  So attempt to resolve via the active model
-            const modelAttr = this.#node.matter
+            const modelAttr = this.node.matter
                 .member(path.clusterId, [ElementTag.Cluster])
                 ?.member(path.attributeId, [ElementTag.Attribute]);
 
@@ -197,9 +214,9 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 endpoint: endpointId,
                 cluster: clusterId,
             }),
-            owningFabric: this.#session.fabric,
+            owningFabric: this.session.fabric,
         };
-        const permission = this.#session.authorityAt(limits.readLevel, location);
+        const permission = this.session.authorityAt(limits.readLevel, location);
         switch (permission) {
             case AccessControl.Authority.Granted:
                 break;
@@ -223,7 +240,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             this.#addStatus(path, Status.UnsupportedCluster);
             return;
         }
-        if (attribute === undefined) {
+        if (attribute === undefined || !cluster.type.attributes[attribute.id]) {
             this.#addStatus(path, Status.UnsupportedAttribute);
             return;
         }
@@ -235,6 +252,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         // Skip if version is unchanged
         const skipVersion = this.#versions?.[path.endpointId]?.[path.clusterId];
         if (skipVersion !== undefined && skipVersion === cluster.version) {
+            this.#filteredCount++;
             return;
         }
 
@@ -248,21 +266,21 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
                 }
                 this.#currentEndpoint = endpoint;
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             } else if (this.#currentCluster !== cluster) {
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             } else if (this.#currentState === undefined) {
-                this.#currentState = cluster.open(this.#session);
+                this.#currentState = cluster.open(this.session);
             }
 
-            // Perform actual read of one attribute
-            this.#addValue(
-                path,
-                this.#currentState[attributeId],
-                cluster.version,
-                this.#currentCluster.type.attributes[attributeId]!.tlv,
+            const value = this.#currentState[attributeId];
+            const version = cluster.version;
+            logger.debug(
+                () => `Reading attribute ${this.node.inspectPath(path)}=${Diagnostic.json(value)} (version=${version})`,
             );
+            // Perform actual read of one attribute
+            this.#addValue(path, value, version, this.#currentCluster.type.attributes[attributeId]!.tlv);
         });
     }
 
@@ -274,7 +292,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
      *
      * {@link this.#wildcardPathFlags} to numeric bitmap must be set prior to invocation.
      *
-     * TODO - skip endpoints for which subject is unauthorized
+     * TODO - skip endpoints for which subject is unauthorized as optimization
      */
     *#readEndpointForWildcard(endpoint: EndpointProtocol, path: AttributePath) {
         if (endpoint.wildcardPathFlags & this.#wildcardPathFlags) {
@@ -320,17 +338,27 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             this.#currentState = undefined;
         }
 
-        const skipVersion = this.#versions?.[this.#currentEndpoint!.id]?.[cluster.type.id];
-        if (skipVersion !== undefined && skipVersion === cluster.version) {
-            return;
-        }
-
         const { attributeId } = path;
+        const skipVersion = this.#versions?.[this.#guardedCurrentEndpoint.id]?.[cluster.type.id];
+        const filteredByVersion = skipVersion !== undefined && skipVersion === cluster.version;
+
         if (attributeId === undefined) {
+            if (filteredByVersion) {
+                for (const attribute of cluster.type.attributes) {
+                    if (attribute.limits.readable) {
+                        this.#filteredCount++;
+                    }
+                }
+                return;
+            }
             for (const attribute of cluster.type.attributes) {
                 this.#readAttributeForWildcard(attribute, path);
             }
         } else {
+            if (filteredByVersion) {
+                this.#filteredCount++;
+                return;
+            }
             const attribute = cluster.type.attributes[attributeId];
             if (attribute !== undefined) {
                 this.#readAttributeForWildcard(attribute, path);
@@ -344,36 +372,43 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
      * Depends on state initialized by {@link #readClusterForWildcard}.
      */
     #readAttributeForWildcard(attribute: AttributeTypeProtocol, path: AttributePath) {
+        if (!this.#guardedCurrentCluster.type.attributes[attribute.id]) {
+            return;
+        }
+
         if (attribute.wildcardPathFlags & this.#wildcardPathFlags) {
             return;
         }
 
         if (
             !attribute.limits.readable ||
-            this.#session.authorityAt(attribute.limits.readLevel, this.#currentCluster!.location) !==
+            this.session.authorityAt(attribute.limits.readLevel, this.#guardedCurrentCluster.location) !==
                 AccessControl.Authority.Granted
         ) {
             return;
         }
 
         if (this.#currentState === undefined) {
-            this.#currentState = this.#currentCluster!.open(this.#session);
+            this.#currentState = this.#guardedCurrentCluster.open(this.session);
         }
         const value = this.#currentState[attribute.id];
-        if (value !== undefined) {
-            // Only if we have a state value set
-            this.#addValue(
-                {
-                    ...path,
-                    endpointId: this.#currentEndpoint?.id as EndpointNumber,
-                    clusterId: this.#currentCluster?.type.id as ClusterId,
-                    attributeId: attribute.id,
-                },
-                this.#currentState[attribute.id],
-                this.#currentCluster!.version,
-                attribute.tlv,
-            );
+        if (value === undefined) {
+            // Should normally never happen
+            logger.warn(`Attribute ${this.node.inspectPath(path)} defined and enabled but has no value.`);
+            return;
         }
+
+        this.#addValue(
+            {
+                ...path,
+                endpointId: this.#guardedCurrentEndpoint.id,
+                clusterId: this.#guardedCurrentCluster.type.id,
+                attributeId: attribute.id,
+            },
+            this.#currentState[attribute.id],
+            this.#guardedCurrentCluster.version,
+            attribute.tlv,
+        );
     }
 
     /**
@@ -387,21 +422,30 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
         }
     }
 
+    #addReportData(report: ReadResult.Report) {
+        if (this.#chunk) {
+            this.#chunk.push(report);
+        } else {
+            this.#chunk = [report];
+        }
+    }
+
     /**
      * Add a status value.
      */
     #addStatus(path: ReadResult.ConcreteAttributePath, status: Status) {
+        logger.debug(
+            () => `Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`,
+        );
+
         const report: ReadResult.GlobalAttributeStatus = {
             kind: "attr-status",
             path,
             status,
         };
 
-        if (this.#chunk) {
-            this.#chunk.push(report);
-        } else {
-            this.#chunk = [report];
-        }
+        this.#addReportData(report);
+        this.#statusCount++;
     }
 
     /**
@@ -416,21 +460,7 @@ export class AttributeResponse<SessionT extends AccessControl.Session = AccessCo
             tlv,
         };
 
-        if (this.#chunk) {
-            this.#chunk.push(report);
-        } else {
-            this.#chunk = [report];
-        }
-    }
-
-    /**
-     * The node ID used to filter paths with node ID specified.  Unsure if this is ever actually used.
-     */
-    get #nodeId() {
-        if (this.#cachedNodeId === undefined) {
-            this.#cachedNodeId =
-                (this.#session.fabric && this.#node.nodeIdFor(this.#session.fabric)) ?? NodeId.UNSPECIFIED_NODE_ID;
-        }
-        return this.#cachedNodeId;
+        this.#addReportData(report);
+        this.#valueCount++;
     }
 }

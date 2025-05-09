@@ -582,9 +582,8 @@ export class Behaviors {
         if (!this.#protocol) {
             this.#protocol = this.#endpoint.env.get(ProtocolService);
         }
-        this.#protocol.addCluster(backing);
+        backing.initializeDataSource();
         backing.construction.start(agent);
-
         return backing;
     }
 

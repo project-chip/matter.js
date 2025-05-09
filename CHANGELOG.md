@@ -14,11 +14,17 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter/*
     - Upgraded to Matter specification version 1.4.1
 
+-   @matter/general
+    - Feature: Logger allows to use a function as log value which is only executed when the log level matches
+
 -   @matter/node
-    - Enhancement: Refactors InteractionServer to cut out more legacy logic and move to Behavior logic
+    - Enhancement: Refactors InteractionServer to cut out Reading legacy logic and move to Behavior logic
     - Fix: Fixes special-case in Wildcard Filtering where not all fixed attributes were filtered out
     - Fix: Fixes ACL check logic order on attribute reads
     - Fix: Consider the potential async nature of `Transitions.applyUpdates()` correctly in all cases to prevent dangling promises 
+
+-   @matter/nodejs-ble
+    - (@spudwebb) Fix: Increase BLE connect timeout fo 120seconds to optimize pairing
   
 -   @matter/protocol
     - Fix: Handles messages only that are secured as required for the relevant protocol
