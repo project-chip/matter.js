@@ -5,7 +5,8 @@
  */
 
 import { ImplementationError, Logger } from "#general";
-import { Ble, ServerSubscriptionConfig } from "#protocol";
+import { ServerSubscriptionConfig } from "#node/server/ServerSubscription.js";
+import { Ble } from "#protocol";
 import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "#types";
 import { CommissioningServer } from "../commissioning/CommissioningServer.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";

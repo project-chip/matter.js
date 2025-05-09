@@ -5,3 +5,5 @@
  */
 
 export * from "./InteractionServer.js";
+export * from "./ProtocolService.js";
+export * from "./ServerSubscription.js";

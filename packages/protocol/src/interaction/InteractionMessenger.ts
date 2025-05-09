@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ReadResult } from "#action/index.js";
 import {
     Diagnostic,
     InternalError,
