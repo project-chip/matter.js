@@ -289,7 +289,7 @@ function configure(options: Datasource.Options): Internals {
             try {
                 const result = options.events?.interactionEnd?.emit();
                 if (MaybePromise.is(result)) {
-                    return result.then(handleObserverError);
+                    return MaybePromise.then(result, undefined, handleObserverError);
                 }
             } catch (e) {
                 handleObserverError(e);
