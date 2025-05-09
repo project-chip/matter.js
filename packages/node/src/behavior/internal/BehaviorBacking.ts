@@ -8,9 +8,18 @@ import type { Agent } from "#endpoint/Agent.js";
 import type { Endpoint } from "#endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "#endpoint/errors.js";
 import type { SupportedElements } from "#endpoint/properties/Behaviors.js";
-import { Construction, EventEmitter, ImplementationError, Lifecycle, Logger, MaybePromise, Observable } from "#general";
+import {
+    Construction,
+    EventEmitter,
+    ImplementationError,
+    InternalError,
+    Lifecycle,
+    Logger,
+    MaybePromise,
+    Observable,
+} from "#general";
 import { ProtocolService } from "#node/server/ProtocolService.js";
-import type { ClusterId } from "@matter/types";
+import type { ClusterId } from "#types";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
@@ -90,6 +99,12 @@ export abstract class BehaviorBacking {
         }
     }
 
+    initializeDataSource() {
+        if (!this.#datasource) {
+            this.#datasource = Datasource(this.datasourceOptions);
+        }
+    }
+
     /**
      * Destroy the backing.
      */
@@ -160,9 +175,8 @@ export abstract class BehaviorBacking {
      */
     get datasource() {
         if (!this.#datasource) {
-            this.#datasource = Datasource(this.datasourceOptions);
+            throw new InternalError("Datasource not yet initialized");
         }
-
         return this.#datasource;
     }
 

@@ -582,7 +582,7 @@ export class Behaviors {
         if (!this.#protocol) {
             this.#protocol = this.#endpoint.env.get(ProtocolService);
         }
-        backing.datasource; // Initialize Datasource to get datatype errors directly
+        backing.initializeDataSource();
         backing.construction.start(agent);
         return backing;
     }
