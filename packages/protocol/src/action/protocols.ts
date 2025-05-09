@@ -8,6 +8,7 @@ import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { DataModelPath, MatterModel } from "#model";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, NodeId, TlvSchema } from "#types";
 import { AttributePath, EventId, EventPath } from "#types";
+import { MaybePromise, Observable } from "@matter/general";
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
@@ -52,6 +53,14 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
      */
     eventHandler: OccurrenceManager;
 
+    /**
+     * Event when data on the node changes.
+     */
+    stateChanged: Observable<[endpointId: EndpointNumber, clusterId: ClusterId, changes: AttributeId[]], MaybePromise>;
+
+    /**
+     * Inspects an Attribute- or Event path and log in human-readable form if possible
+     */
     inspectPath(path: AttributePath | EventPath): string;
 }
 
@@ -89,6 +98,11 @@ export interface ClusterProtocol {
     location: AccessControl.Location;
 
     /**
+     * The cluster datasource state change event
+     */
+    stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+
+    /**
      * Access a record of attribute values, keyed by attribute ID.
      *
      * Note that current protocol implementations do not filter data within this responsibility based on the
@@ -109,9 +123,19 @@ export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterI
     attributes: CollectionProtocol<AttributeTypeProtocol>;
 
     /**
+     * Map of attribute names to IDs.
+     */
+    attributeNameToId: Map<string, AttributeId>;
+
+    /**
      * Event metadata.
      */
     events: CollectionProtocol<EventTypeProtocol>;
+
+    /**
+     * Map of event names to IDs.
+     */
+    eventNameToId: Map<string, EventId>;
 }
 
 /**
@@ -127,6 +151,11 @@ export interface AttributeTypeProtocol extends AddressableElementProtocol<Attrib
      * Access control information for the attribute.
      */
     limits: AccessControl.Limits;
+
+    /**
+     * Changes of this attribute are omitted from subscriptions
+     */
+    changesOmitted: boolean;
 }
 
 /**
