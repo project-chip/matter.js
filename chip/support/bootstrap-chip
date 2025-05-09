@@ -63,7 +63,7 @@ EOF
 pip install --break-system-packages -r scripts/setup/requirements.build.txt
 
 # Not convenient to install zap-cli standalone but we only need the single CLI binary
-ls .environment/cipd/packages/zap | grep -v zap-cli | xargs rm -rf
+find .environment/cipd/packages/zap/* | grep -v zap-cli | xargs rm -rf
 
 # Seems bloated but stripping breaks it; must be data rather than debug symbols
 #strip .environment/cipd/packages/zap/zap-cli

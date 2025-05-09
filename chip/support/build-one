@@ -36,13 +36,37 @@ case "$TARGETPLATFORM" in
         die "Unrecognized target platform \"$TARGETPLATFORM\""
 esac
 
+# /connectedhomeip/scripts/build/build_examples.py \
+#     --target linux-$CPU-$NAME-$OPTIONS \
+#     build
+
 TARGET=linux-$CPU-$NAME-$OPTIONS
 
-/connectedhomeip/scripts/build/build_examples.py \
-    --target linux-$CPU-$NAME-$OPTIONS \
-    build
+mkdir out
 
-BINPATH="$(find "out/$TARGET" -type f -executable)"
+GN_ARGS=(
+    chip_inet_config_enable_ipv4=false
+    chip_config_network_layer_ble=false
+    chip_enable_ble=false
+    chip_enable_wifi=false
+    chip_enable_openthread=false
+    chip_build_libshell=false
+    is_clang=true
+    chip_mdns='"platform"'
+    matter_enable_tracing_support=false
+    matter_trace_config='"///src/tracing/none"'
+    matter_commandline_enable_perfetto_tracing=false
+)
+
+gn gen out \
+    --fail-on-unused-args \
+    --add-export-compile-commands=* \
+    --root=examples/$NAME \
+    --args="${GN_ARGS[*]}"
+
+ninja -C out $NAME
+
+BINPATH="$(find "out" -type f -executable)"
 if [ ! -x "$BINPATH" ]; then
     die "Could not identify executable for target \"$TARGET\""
 fi
@@ -51,4 +75,5 @@ strip "$BINPATH"
 mkdir -p /dist/bin
 mv "$BINPATH" /dist/bin
 
-rm -rf "out/$TARGET"
+#rm -rf "out/$TARGET"
+rm -rf out

@@ -26,7 +26,6 @@ echo "$CHIP_COMMIT" > /etc/chip-version
 function skip_submodule {
     crudini --ini-options=ignoreindent --del .gitmodules "submodule \"$1\""
 }
-#skip_submodule third_party/boringssl/repo/src
 skip_submodule mbedtls
 skip_submodule openthread
 skip_submodule ot-br-posix
@@ -34,8 +33,17 @@ skip_submodule third_party/googletest
 skip_submodule third_party/fuzztest
 skip_submodule third_party/libdatachannel/repo
 skip_submodule third_party/imgui/repo
+skip_submodule third_party/boringssl/repo/src
+
+# Grr, perfetto is hard-coded into the python controller.  At least we can delete most of the 100mb+ of this submodule
+#skip_submodule perfetto
 
 scripts/checkout_submodules.py --shallow --platform linux --jobs 8
+
+# Remove majority of perfetto that we don't need
+ls -d third_party/perfetto/repo/* | grep -v sdk | xargs rm -rf
+
+rm -rf third_party/boringssl
 
 # Drop git from layer
 rm -rf .git
