@@ -6,7 +6,7 @@
 
 import { DataReadQueue } from "@matter/general";
 import { Specification } from "@matter/model";
-import { Message, MessageExchange, MessageExchangeContext, MessageType, PeerAddress } from "@matter/protocol";
+import { Message, MessageExchange, MessageExchangeContext, MessageType, PeerAddress, Session } from "@matter/protocol";
 import { NodeId, SECURE_CHANNEL_PROTOCOL_ID, StatusCode, TlvStatusResponse } from "@matter/types";
 
 /**
@@ -24,14 +24,14 @@ export class MockExchange extends MessageExchange {
 
     address: PeerAddress;
 
-    constructor(address: PeerAddress) {
+    constructor(address: PeerAddress, session?: Session) {
         const context = {
             channel: {
                 name: "test",
                 send: async message => {
                     await this.#requests.write(message);
                 },
-                session: {
+                session: session ?? {
                     notifyActivity(_messageReceived: boolean) {},
                     async getIncrementedMessageCounter() {
                         return 1;

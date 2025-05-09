@@ -136,7 +136,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         await node.start();
 
         node.env.get(ExchangeManager).initiateExchange = address => {
-            const exchange = new MockExchange(address);
+            const exchange = new MockExchange(address, node.env.get(SessionManager).getSession(1));
 
             node.#newExchanges.push(exchange);
 
