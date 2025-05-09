@@ -346,73 +346,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         for await (const chunk of this.#serverInteraction.read(readRequest, context)) {
             for (const report of chunk) {
-                // TODO Centralize this conversion and at the end move into encoder
-                switch (report.kind) {
-                    case "attr-value": {
-                        const { path, value: payload, version: dataVersion, tlv: schema } = report;
-                        if (schema === undefined) {
-                            throw new InternalError(`Attribute ${path.clusterId}/${path.attributeId} not found`);
-                        }
-                        const data: AttributeReportPayload = {
-                            attributeData: {
-                                path,
-                                payload,
-                                schema,
-                                dataVersion,
-                            },
-                            hasFabricSensitiveData: true, // With this we disable the validation for missing data in encoding, we trust behavior logic
-                        };
-                        yield data;
-                        break;
-                    }
-                    case "attr-status": {
-                        const { path, status } = report;
-                        const statusReport: AttributeReportPayload = {
-                            attributeStatus: {
-                                path,
-                                status: { status },
-                            },
-                            hasFabricSensitiveData: false,
-                        };
-                        yield statusReport;
-                        break;
-                    }
-                    case "event-value": {
-                        const {
-                            path,
-                            value: payload,
-                            number: eventNumber,
-                            priority,
-                            timestamp: epochTimestamp,
-                            tlv: schema,
-                        } = report;
-                        const data: EventReportPayload = {
-                            eventData: {
-                                path,
-                                eventNumber,
-                                priority,
-                                epochTimestamp,
-                                payload,
-                                schema,
-                            },
-                            hasFabricSensitiveData: true, // There are no Fabric sensitive events as of now. If ever added sanitizing needs to be added
-                        };
-                        yield data;
-                        break;
-                    }
-                    case "event-status": {
-                        const { path, status } = report;
-                        const statusReport: EventReportPayload = {
-                            eventStatus: {
-                                path,
-                                status: { status },
-                            },
-                            hasFabricSensitiveData: false,
-                        };
-                        yield statusReport;
-                        break;
-                    }
-                }
+                yield InteractionServerMessenger.convertServerInteractionReport(report);
             }
         }
         context[Symbol.dispose]();

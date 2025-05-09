@@ -673,6 +673,76 @@ export class InteractionServerMessenger extends InteractionMessenger {
             await this.waitForSuccess("DataReport", { timeoutMs: waitForAck ? undefined : 500 });
         }
     }
+
+    /**
+     * Convert a server interaction report to a DataReport entry
+     * TODO remove when anything is migrated completely
+     */
+    static convertServerInteractionReport(report: ReadResult.Report) {
+        switch (report.kind) {
+            case "attr-value": {
+                const { path, value: payload, version: dataVersion, tlv: schema } = report;
+                if (schema === undefined) {
+                    throw new InternalError(`Attribute ${path.clusterId}/${path.attributeId} not found`);
+                }
+                const data: AttributeReportPayload = {
+                    attributeData: {
+                        path,
+                        payload,
+                        schema,
+                        dataVersion,
+                    },
+                    hasFabricSensitiveData: true, // With this we disable the validation for missing data in encoding, we trust behavior logic
+                };
+                return data;
+            }
+            case "attr-status": {
+                const { path, status } = report;
+                const statusReport: AttributeReportPayload = {
+                    attributeStatus: {
+                        path,
+                        status: { status },
+                    },
+                    hasFabricSensitiveData: false,
+                };
+                return statusReport;
+            }
+            case "event-value": {
+                const {
+                    path,
+                    value: payload,
+                    number: eventNumber,
+                    priority,
+                    timestamp: epochTimestamp,
+                    tlv: schema,
+                } = report;
+                const data: EventReportPayload = {
+                    eventData: {
+                        path,
+                        eventNumber,
+                        priority,
+                        epochTimestamp,
+                        payload,
+                        schema,
+                    },
+                    hasFabricSensitiveData: true, // There are no Fabric sensitive events as of now. If ever added sanitizing needs to be added
+                };
+                return data;
+            }
+            case "event-status": {
+                const { path, status } = report;
+                const statusReport: EventReportPayload = {
+                    eventStatus: {
+                        path,
+                        status: { status },
+                    },
+                    hasFabricSensitiveData: false,
+                };
+                return statusReport;
+            }
+        }
+        throw new InternalError(`Unknown report type: ${report.kind}`);
+    }
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
