@@ -25,7 +25,7 @@ import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
 import { camelize } from "@matter/general";
-import { AvailableElementIds, EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
+import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
@@ -151,10 +151,10 @@ class EndpointState {
 
     constructor(node: NodeState, endpoint: Endpoint) {
         this.#node = node;
-
+        const number = endpoint.number;
         this.protocol = {
-            id: endpoint.number,
-            wildcardPathFlags: endpoint.number === 0 ? WildcardPathFlags.skipRootNode : 0,
+            id: number,
+            wildcardPathFlags: number === 0 ? WildcardPathFlags.skipRootNode : 0,
             path: endpoint.path,
             name: endpoint.type.name,
             deviceTypes: [],
@@ -172,7 +172,7 @@ class EndpointState {
     }
 
     addCluster(backing: BehaviorBacking) {
-        const type = clusterTypeProtocolOf(backing.type);
+        const type = clusterTypeProtocolOf(backing);
         if (!type) {
             return;
         }
@@ -224,9 +224,7 @@ class EndpointState {
 class ClusterState implements ClusterProtocol {
     readonly type: ClusterTypeProtocol;
     readonly #datasource: Datasource;
-    readonly #endpoint: Endpoint;
-    readonly #backingType: Behavior.Type;
-    #availableElementIds?: AvailableElementIds;
+    readonly #endpointId: EndpointNumber;
 
     get version() {
         return this.#datasource.version;
@@ -234,27 +232,6 @@ class ClusterState implements ClusterProtocol {
 
     get location() {
         return this.#datasource.location;
-    }
-
-    get availableElementIds() {
-        if (this.#availableElementIds === undefined) {
-            const elements = this.#endpoint.behaviors.elementsOf(this.#backingType);
-            this.#availableElementIds = {
-                attributes: new Set(),
-                events: new Set(),
-            };
-            for (const attributes of this.type.attributes) {
-                if (elements.attributes.has(attributes.name)) {
-                    this.#availableElementIds.attributes.add(attributes.id);
-                }
-            }
-            for (const events of this.type.events) {
-                if (elements.events.has(events.name)) {
-                    this.#availableElementIds.events.add(events.id);
-                }
-            }
-        }
-        return this.#availableElementIds;
     }
 
     open(session: AccessControl.Session) {
@@ -265,7 +242,7 @@ class ClusterState implements ClusterProtocol {
     }
 
     toString() {
-        return `cluster-proto#${this.#endpoint.number}:${this.type.id}`;
+        return `cluster-proto#${this.#endpointId}:${this.type.id}`;
     }
 
     inspect() {
@@ -275,22 +252,23 @@ class ClusterState implements ClusterProtocol {
     constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
         this.#datasource = backing.datasource;
-        this.#endpoint = backing.endpoint;
-        this.#backingType = backing.type;
+        this.#endpointId = backing.endpoint.number;
     }
 }
 
-const behaviorCache = new WeakMap<Behavior.Type, ClusterTypeProtocol | undefined>();
+const behaviorCache = new WeakMap<Behavior.Type, Map<string, ClusterTypeProtocol | undefined>>();
 
-function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | undefined {
-    if (behaviorCache.has(behavior)) {
-        return behaviorCache.get(behavior);
-    }
+function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | undefined {
+    const behavior = backing.type;
 
     const { cluster, schema } = behavior as ClusterBehavior.Type;
     if (cluster === undefined || schema?.id === undefined) {
         return;
     }
+
+    const supportedElements = backing.endpoint.behaviors.elementsOf(behavior);
+    const nonMandatorySupportedAttributes = new Set<AttributeId>();
+    const nonMandatorySupportedEvents = new Set<EventId>();
 
     // Collect Attribute Metadata
     const attrTlvs = {} as Record<number, TlvSchema<unknown>>;
@@ -325,8 +303,13 @@ function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | u
             continue;
         }
 
+        const name = camelize(member.name);
         switch (tag) {
             case "attribute": {
+                if (!member.effectiveConformance.isMandatory && !supportedElements.attributes.has(name)) {
+                    continue;
+                }
+
                 const tlv = attrTlvs[id];
                 if (tlv === undefined) {
                     continue;
@@ -363,12 +346,19 @@ function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | u
                     access: { limits },
                 } = behavior.supervisor.get(member);
 
-                const attr = { id: id as AttributeId, tlv, wildcardPathFlags, limits, name: camelize(member.name) };
+                const attr = { id: id as AttributeId, tlv, wildcardPathFlags, limits, name };
                 attrList.push(attr);
                 attributes[id] = attr;
+                if (!member.effectiveConformance.isMandatory) {
+                    nonMandatorySupportedAttributes.add(id as AttributeId);
+                }
                 break;
             }
             case "event": {
+                if (!member.effectiveConformance.isMandatory && !supportedElements.events.has(name)) {
+                    continue;
+                }
+
                 const tlv = eventTlvs[id];
                 if (tlv === undefined) {
                     continue;
@@ -378,12 +368,21 @@ function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | u
                     access: { limits },
                 } = behavior.supervisor.get(member);
 
-                const event = { id: id as EventId, tlv, limits, name: camelize(member.name) };
+                const event = { id: id as EventId, tlv, limits, name };
                 eventList.push(event);
                 events[id] = event;
+                if (!member.effectiveConformance.isMandatory) {
+                    nonMandatorySupportedEvents.add(id as EventId);
+                }
                 break;
             }
         }
+    }
+
+    const elementsCacheKey = `a:${[...nonMandatorySupportedAttributes.values()].sort().join(",")},e:${[...nonMandatorySupportedEvents.values()].sort().join(",")}`;
+    const existingCache = behaviorCache.get(behavior)?.get(elementsCacheKey);
+    if (existingCache) {
+        return existingCache;
     }
 
     const descriptor: ClusterTypeProtocol = {
@@ -393,7 +392,9 @@ function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | u
         events,
         wildcardPathFlags,
     };
-    behaviorCache.set(behavior, descriptor);
+    const elementCache = behaviorCache.get(behavior) ?? new Map();
+    elementCache.set(elementsCacheKey, descriptor);
+    behaviorCache.set(behavior, elementCache);
 
     return descriptor;
 }
