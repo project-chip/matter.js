@@ -266,6 +266,36 @@ class ClusterState implements ClusterProtocol {
     readonly #endpointId: EndpointNumber;
     readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
 
+    constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
+        this.type = type;
+        this.#datasource = backing.datasource;
+        this.#endpointId = backing.endpoint.number;
+
+        const attributeNameToIdMap = backing.type.supervisor.attributeIdsToNames;
+        // For quieter attributes, we need to use the online events to get real state changes
+        for (const attr of type.attributes) {
+            attributeNameToIdMap.set(attr.name, attr.id);
+            if (attr.quieter) {
+                (this.#datasource.events[`${attr.name}$Changed`] as unknown as QuietEvent).online.on(() =>
+                    this.stateChanged.emit([attr.id], this.version),
+                );
+            }
+        }
+
+        // Emit all attributes as changed that are not omitted or quieter
+        this.#datasource.stateChanged.on((changes: string[], version: number) => {
+            const data = changes
+                .map(name => attributeNameToIdMap.get(name))
+                .filter(
+                    (id): id is AttributeId =>
+                        id !== undefined && !type.attributes[id]?.changesOmitted && !type.attributes[id]?.quieter,
+                );
+            if (data.length) {
+                this.stateChanged.emit(data, version);
+            }
+        });
+    }
+
     get version() {
         return this.#datasource.version;
     }
@@ -291,36 +321,6 @@ class ClusterState implements ClusterProtocol {
 
     inspect() {
         return this.toString();
-    }
-
-    constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
-        this.type = type;
-        this.#datasource = backing.datasource;
-        this.#endpointId = backing.endpoint.number;
-
-        const attributeNameToIdMap = new Map<string, AttributeId>();
-        // For quieter attributes, we need to use the online events to get real state changes
-        for (const attr of type.attributes) {
-            attributeNameToIdMap.set(attr.name, attr.id);
-            if (attr.quieter) {
-                (this.#datasource.events[`${attr.name}$Changed`] as unknown as QuietEvent).online.on(() =>
-                    this.stateChanged.emit([attr.id], this.version),
-                );
-            }
-        }
-
-        // Emit all attributes as changed that are not omitted or quieter
-        this.#datasource.stateChanged.on((changes: string[], version: number) => {
-            const data = changes
-                .map(name => attributeNameToIdMap.get(name))
-                .filter(
-                    (id): id is AttributeId =>
-                        id !== undefined && !type.attributes[id]?.changesOmitted && !type.attributes[id]?.quieter,
-                );
-            if (data.length) {
-                this.stateChanged.emit(data, version);
-            }
-        });
     }
 }
 

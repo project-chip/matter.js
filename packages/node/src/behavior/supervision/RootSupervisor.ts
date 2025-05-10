@@ -7,6 +7,8 @@
 import { camelize, InternalError } from "#general";
 import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, Matter, Model, Schema, Scope, ValueModel } from "#model";
 import { AccessControl, Val } from "#protocol";
+import { ElementTag } from "@matter/model";
+import { AttributeId } from "@matter/types";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";
@@ -48,6 +50,7 @@ export class RootSupervisor implements ValueSupervisor {
     #root: ValueSupervisor;
     #memberNames?: Set<string>;
     #persistentNames?: Set<string>;
+    #attributeIdsToNames?: Map<string, AttributeId>; // Whenever we need more than Attributes and Fields, we need to generalize
 
     /**
      * Create a new supervisor.
@@ -150,6 +153,21 @@ export class RootSupervisor implements ValueSupervisor {
             this.#persistentNames = persistent;
         }
         return persistent;
+    }
+
+    get attributeIdsToNames() {
+        let names = this.#attributeIdsToNames;
+        if (!names) {
+            names = new Map();
+            for (const member of this.#members) {
+                if (member.id === undefined || member.tag !== ElementTag.Attribute) {
+                    continue;
+                }
+                names.set(camelize(member.name), AttributeId(member.id));
+            }
+            this.#attributeIdsToNames = names;
+        }
+        return names;
     }
 
     /**
