@@ -1,0 +1,662 @@
+/**
+ * @license
+ * Copyright 2022-2025 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { OnlineContext } from "#behavior/context/server/OnlineContext.js";
+import { ActionTracer } from "#behavior/index.js";
+import { Logger, MatterError, NetworkError, NoResponseTimeoutError, ObserverGroup, Time, Timer } from "#general";
+import { Specification } from "#model";
+import { ServerNode } from "#node/index.js";
+import type { AttributeResponseFilter, Message, MessageExchange } from "#protocol";
+import {
+    AttributeSubscriptionResponse,
+    InteractionServerMessenger,
+    NoChannelError,
+    NumberedOccurrence,
+    PeerAddress,
+    SecureSession,
+    Subscription,
+    SubscriptionCriteria,
+} from "#protocol";
+import {
+    AttributeId,
+    ClusterId,
+    EndpointNumber,
+    EventNumber,
+    INTERACTION_PROTOCOL_ID,
+    StatusCode,
+    StatusResponseError,
+} from "#types";
+import { AttributeResponse, EventResponse, Read, ReadResult } from "@matter/protocol";
+import { WithActivity, activityKey } from "./InteractionServer.js";
+
+const logger = Logger.get("ServerSubscription");
+
+// We use 3 minutes as global max interval because with 60 min as defined by spec the timeframe until the controller
+// establishes a new subscription after e.g a reboot can be up to 60 min and the controller would assume that the value
+// is unchanged. This is too long.
+//
+// chip-tool is not using the option to choose an appropriate interval and respect the 60 min for that and only uses the
+// max sent by the controller which can lead to spamming the network with unneeded packages. So I decided for 3 minutes
+// for now as a compromise until we have something better. This value is fine for non-battery devices and might be
+// overridden for otherwise.
+//
+// To officially match the specs the developer needs to set these 60Minutes in the Subscription options!
+export const MAX_INTERVAL_PUBLISHER_LIMIT_S = 60 * 60; /** 1 hour */
+export const INTERNAL_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */
+export const MIN_INTERVAL_S = 2; // We do not send faster than 2 seconds
+export const DEFAULT_RANDOMIZATION_WINDOW_S = 10; // 10 seconds
+
+/**
+ * Server options that control subscription handling.
+ */
+export interface ServerSubscriptionConfig {
+    /**
+     * Optional maximum subscription interval to use for sending subscription reports. It will be used if not too
+     * low and inside the range requested by the connected controller.
+     */
+    maxIntervalSeconds: number;
+
+    /**
+     * Optional minimum subscription interval to use for sending subscription reports. It will be used when other
+     * calculated values are smaller than it. Use this to make sure your device hardware can handle the load and to
+     * set limits.
+     */
+    minIntervalSeconds: number;
+
+    /**
+     * Optional subscription randomization window to use for sending subscription reports. This specifies a window
+     * in seconds from which a random part is added to the calculated maximum interval to make sure that devices
+     * that get powered on in parallel not all send at the same timepoint.
+     */
+    randomizationWindowSeconds: number;
+}
+
+export namespace ServerSubscriptionConfig {
+    /**
+     * Validate options and set defaults.
+     *
+     * @returns the resulting options
+     */
+    export function of(options?: Partial<ServerSubscriptionConfig>) {
+        return {
+            maxIntervalSeconds: options?.maxIntervalSeconds ?? INTERNAL_INTERVAL_PUBLISHER_LIMIT_S,
+            minIntervalSeconds: Math.max(options?.minIntervalSeconds ?? MIN_INTERVAL_S, MIN_INTERVAL_S),
+            randomizationWindowSeconds: options?.randomizationWindowSeconds ?? DEFAULT_RANDOMIZATION_WINDOW_S,
+        };
+    }
+}
+
+/**
+ * Interface between {@link ServerSubscription} and the local Matter environment.
+ */
+export interface ServerSubscriptionContext {
+    session: SecureSession;
+    node: ServerNode;
+    tracer: ActionTracer | undefined;
+    initiateExchange(address: PeerAddress, protocolId: number): MessageExchange;
+}
+
+/**
+ * Implements the server side of a single subscription.
+ */
+export class ServerSubscription extends Subscription {
+    readonly #context: ServerSubscriptionContext;
+
+    #lastUpdateTimeMs = 0;
+    #updateTimer: Timer;
+    readonly #sendDelayTimer: Timer = Time.getTimer(`Subscription ${this.id} delay`, 50, () =>
+        this.#triggerSendUpdate(),
+    );
+    #outstandingAttributeUpdates?: AttributeResponseFilter;
+    #outstandingEventsMinNumber?: EventNumber;
+    readonly #changeHandlers = new ObserverGroup();
+
+    #sendUpdatesActivated = false;
+    readonly #sendIntervalMs: number;
+    readonly #minIntervalFloorMs: number;
+    readonly #maxIntervalCeilingMs: number;
+    readonly #peerAddress: PeerAddress;
+
+    #sendNextUpdateImmediately = false;
+    #sendUpdateErrorCounter = 0;
+    #currentUpdatePromise?: Promise<void>;
+
+    constructor(options: {
+        id: number;
+        context: ServerSubscriptionContext;
+        criteria: SubscriptionCriteria;
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        subscriptionOptions: ServerSubscriptionConfig;
+        useAsMaxInterval?: number;
+        useAsSendInterval?: number;
+    }) {
+        const {
+            id,
+            context,
+            criteria,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            subscriptionOptions,
+            useAsMaxInterval,
+            useAsSendInterval,
+        } = options;
+
+        super(context.session, id, criteria);
+        this.#context = context;
+
+        this.#peerAddress = this.session.peerAddress;
+        this.#minIntervalFloorMs = minIntervalFloorSeconds * 1000;
+        this.#maxIntervalCeilingMs = maxIntervalCeilingSeconds * 1000;
+
+        let maxInterval: number;
+        let sendInterval: number;
+        if (useAsMaxInterval !== undefined && useAsSendInterval !== undefined) {
+            maxInterval = useAsMaxInterval * 1000;
+            sendInterval = useAsSendInterval * 1000;
+        } else {
+            ({ maxInterval, sendInterval } = this.#determineSendingIntervals(
+                subscriptionOptions.minIntervalSeconds * 1000,
+                subscriptionOptions.maxIntervalSeconds * 1000,
+                subscriptionOptions.randomizationWindowSeconds * 1000,
+            ));
+        }
+        this.maxIntervalMs = maxInterval;
+        this.#sendIntervalMs = sendInterval;
+
+        this.#updateTimer = Time.getTimer(`Subscription ${this.id} update`, this.#sendIntervalMs, () =>
+            this.#prepareDataUpdate(),
+        ); // will be started later
+    }
+
+    #determineSendingIntervals(
+        subscriptionMinIntervalMs: number,
+        subscriptionMaxIntervalMs: number,
+        subscriptionRandomizationWindowMs: number,
+    ): { maxInterval: number; sendInterval: number } {
+        // Max Interval is the Max interval that the controller request, unless the configured one from the developer
+        // is lower. In that case we use the configured one. But we make sure to not be smaller than the requested
+        // controller minimum. But in general never faster than minimum interval configured or 2 seconds
+        // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
+        // devices sending at the same time. But we make sure not to exceed the global max interval.
+        const maxInterval = Math.min(
+            Math.max(
+                subscriptionMinIntervalMs,
+                Math.max(this.#minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.#maxIntervalCeilingMs)),
+            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random()),
+            MAX_INTERVAL_PUBLISHER_LIMIT_S * 1000,
+        );
+        let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
+        if (sendInterval < 60_000) {
+            // But if we have no chance of at least one full resubmission process we do like chip-tool.
+            // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
+            // second subscription report after first failed.
+            sendInterval = Math.max(this.#minIntervalFloorMs, Math.floor(maxInterval * 0.8));
+        }
+        if (sendInterval < subscriptionMinIntervalMs) {
+            // But not faster than once every 2s
+            logger.warn(
+                `Determined subscription send interval of ${sendInterval}ms is too low. Using maxInterval (${maxInterval}ms) instead.`,
+            );
+            sendInterval = subscriptionMinIntervalMs;
+        }
+        return { maxInterval, sendInterval };
+    }
+
+    #addOutstandingAttributes(endpointId: EndpointNumber, clusterId: ClusterId, changedAttrs: AttributeId[]) {
+        if (!changedAttrs.length) {
+            return;
+        }
+        this.#outstandingAttributeUpdates = this.#outstandingAttributeUpdates ?? {};
+        this.#outstandingAttributeUpdates[endpointId] = this.#outstandingAttributeUpdates[endpointId] ?? {};
+        this.#outstandingAttributeUpdates[endpointId][clusterId] =
+            this.#outstandingAttributeUpdates[endpointId][clusterId] ?? new Set();
+        for (const attributeId of changedAttrs) {
+            this.#outstandingAttributeUpdates[endpointId][clusterId].add(attributeId);
+        }
+    }
+
+    #handleClusterStateChanges(endpointId: EndpointNumber, clusterId: ClusterId, changedAttrs: AttributeId[]) {
+        if (this.isClosed || !changedAttrs.length) {
+            return;
+        }
+
+        this.#addOutstandingAttributes(endpointId, clusterId, changedAttrs);
+
+        this.#prepareDataUpdate();
+    }
+
+    #handleAddedEvents(occurrence: NumberedOccurrence) {
+        if (this.isClosed) {
+            return;
+        }
+
+        if (this.#outstandingEventsMinNumber === undefined) {
+            this.#outstandingEventsMinNumber = occurrence.number;
+        }
+
+        if (this.#sendEventUrgently(occurrence)) {
+            this.#prepareDataUpdate();
+        }
+    }
+
+    #sendEventUrgently({ endpointId, clusterId, eventId }: ReadResult.ConcreteEventPath): boolean {
+        return (this.criteria.eventRequests ?? []).some(
+            ({ endpointId: reqEndpointId, clusterId: reqClusterId, eventId: reqEventId, isUrgent }) =>
+                isUrgent &&
+                (reqEndpointId === undefined || reqEndpointId === endpointId) &&
+                (reqClusterId === undefined || reqClusterId === clusterId) &&
+                (reqEventId === undefined || reqEventId === eventId),
+        );
+    }
+
+    get sendInterval(): number {
+        return Math.ceil(this.#sendIntervalMs / 1000);
+    }
+
+    get minIntervalFloorSeconds(): number {
+        return Math.ceil(this.#minIntervalFloorMs / 1000);
+    }
+
+    get maxIntervalCeilingSeconds(): number {
+        return Math.ceil(this.#maxIntervalCeilingMs / 1000);
+    }
+
+    override activate() {
+        super.activate();
+
+        // We do not need these data anymore, so we can free some memory
+        if (this.criteria.eventFilters !== undefined) this.criteria.eventFilters.length = 0;
+        if (this.criteria.dataVersionFilters !== undefined) this.criteria.dataVersionFilters.length = 0;
+
+        this.#sendUpdatesActivated = true;
+        if (this.#outstandingAttributeUpdates !== undefined || this.#outstandingEventsMinNumber !== undefined) {
+            this.#triggerSendUpdate();
+        }
+        this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
+            this.#prepareDataUpdate(),
+        ).start();
+
+        if (this.criteria.attributeRequests?.length) {
+            this.#changeHandlers.on(
+                this.#context.node.protocol.stateChanged,
+                this.#handleClusterStateChanges.bind(this),
+            );
+        }
+        if (this.criteria.eventRequests?.length) {
+            this.#changeHandlers.on(this.#context.node.protocol.eventHandler.added, this.#handleAddedEvents.bind(this));
+        }
+    }
+
+    /**
+     * Check if data should be sent straight away or delayed because the minimum interval is not reached. Delay real
+     * sending by 50ms in any case to make sure to catch all updates.
+     */
+    #prepareDataUpdate() {
+        if (this.#sendDelayTimer.isRunning || this.isClosed) {
+            // sending data is already scheduled, data updates go in there ... or we close down already
+            return;
+        }
+
+        if (!this.#sendUpdatesActivated) {
+            return;
+        }
+
+        this.#updateTimer.stop();
+        const now = Time.nowMs();
+        const timeSinceLastUpdateMs = now - this.#lastUpdateTimeMs;
+        if (timeSinceLastUpdateMs < this.#minIntervalFloorMs) {
+            // Respect minimum delay time between updates
+            this.#updateTimer = Time.getTimer(
+                "Subscription update",
+                this.#minIntervalFloorMs - timeSinceLastUpdateMs,
+                () => this.#prepareDataUpdate(),
+            ).start();
+            return;
+        }
+
+        this.#sendDelayTimer.start();
+        this.#updateTimer = Time.getTimer(`Subscription update ${this.id}`, this.#sendIntervalMs, () =>
+            this.#prepareDataUpdate(),
+        ).start();
+    }
+
+    #triggerSendUpdate(onlyWithData: boolean = false) {
+        if (this.#currentUpdatePromise !== undefined) {
+            logger.debug("Sending update already in progress, delaying update ...");
+            this.#sendNextUpdateImmediately = true;
+            return;
+        }
+        this.#currentUpdatePromise = this.#sendUpdate(onlyWithData)
+            .catch(error => logger.warn("Sending subscription update failed:", error))
+            .finally(() => (this.#currentUpdatePromise = undefined));
+    }
+
+    /**
+     * Determine all attributes that have changed since the last update and send them tout to the subscriber.
+     * Important: This method MUST NOT be called directly. Use triggerSendUpdate() instead!
+     */
+    async #sendUpdate(onlyWithData = false) {
+        // Get all outstanding updates, make sure the order is correct per endpoint and cluster
+        const attributeFilter = this.#outstandingAttributeUpdates;
+        this.#outstandingAttributeUpdates = undefined;
+
+        const eventsMinNumber = this.#outstandingEventsMinNumber;
+        this.#outstandingEventsMinNumber = undefined;
+
+        if (onlyWithData && attributeFilter === undefined && eventsMinNumber === undefined) {
+            return;
+        }
+
+        this.#lastUpdateTimeMs = Time.nowMs();
+
+        try {
+            if (await this.#sendUpdateMessage(attributeFilter, eventsMinNumber, onlyWithData)) {
+                this.#sendUpdateErrorCounter = 0;
+            }
+        } catch (error) {
+            if (this.isClosed) {
+                // No need to care about resubmissions when the server is closing
+                return;
+            }
+
+            this.#sendUpdateErrorCounter++;
+            logger.info(
+                `Error sending subscription update message (error count=${this.#sendUpdateErrorCounter}):`,
+                (error instanceof MatterError && error.message) || error,
+            );
+            if (this.#sendUpdateErrorCounter <= 2) {
+                // fill the data back in the queue to resend with next try
+                if (attributeFilter !== undefined) {
+                    for (const [endpointId, clusters] of Object.entries(attributeFilter)) {
+                        for (const [clusterId, attributes] of Object.entries(clusters)) {
+                            this.#addOutstandingAttributes(
+                                EndpointNumber(parseInt(endpointId)),
+                                ClusterId(parseInt(clusterId)),
+                                Array.from(attributes),
+                            );
+                        }
+                    }
+                }
+                if (eventsMinNumber !== undefined) {
+                    this.#outstandingEventsMinNumber = eventsMinNumber; // newer number are always higher, so we can just set it
+                }
+            } else {
+                logger.info(
+                    `Sending update failed 3 times in a row, canceling subscription ${this.id} and let controller subscribe again.`,
+                );
+                this.#sendNextUpdateImmediately = false;
+                if (
+                    error instanceof NoResponseTimeoutError ||
+                    error instanceof NetworkError ||
+                    error instanceof NoChannelError
+                ) {
+                    // Let's consider this subscription as dead and wait for a reconnect
+                    this.isCanceledByPeer = true; // We handle this case like  if the controller canceled the subscription
+                    await this.destroy();
+                    return;
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+        if (this.#sendNextUpdateImmediately) {
+            logger.debug("Sending delayed update immediately after last one was sent.");
+            this.#sendNextUpdateImmediately = false;
+            await this.#sendUpdate(true); // Send but only if non-empty
+        }
+    }
+
+    /**
+     * Returns an iterator that yields the data reports and events data for the given read request.
+     */
+    async *#processAttributesAndEventsReport(context: OnlineContext.ReadOnly, suppressStatusReports = false) {
+        const request = {
+            ...this.criteria,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION, // irrelevant here, set to our version
+        };
+
+        const delayedStatusReports = new Array<ReadResult.Report>();
+        let hasValuesInResponse = false;
+        let validAttributes = 0;
+        let validEvents = 0;
+
+        if (Read.containsAttribute(request)) {
+            const attributeReader = new AttributeResponse(this.#context.node.protocol, context);
+            for (const chunk of attributeReader.process(request)) {
+                for (const report of chunk) {
+                    if (report.kind === "attr-status") {
+                        if (suppressStatusReports) {
+                            continue;
+                        }
+                        if (!hasValuesInResponse) {
+                            // We need to delay all status reports until we know if we have a valid response
+                            delayedStatusReports.push(report);
+                            continue;
+                        }
+                    } else if (!hasValuesInResponse && report.kind === "attr-value") {
+                        // First value response, so send out all delayed status reports first
+                        for (const delayedReport of delayedStatusReports) {
+                            yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
+                        }
+                        delayedStatusReports.length = 0;
+                        hasValuesInResponse = true;
+                    }
+                    yield InteractionServerMessenger.convertServerInteractionReport(report);
+                }
+            }
+            validAttributes = attributeReader.counts.existent;
+        }
+
+        if (Read.containsEvent(request)) {
+            const eventReader = new EventResponse(this.#context.node.protocol, context);
+            for await (const chunk of eventReader.process(request)) {
+                for (const report of chunk) {
+                    if (report.kind === "event-status") {
+                        if (suppressStatusReports) {
+                            continue;
+                        }
+                        if (!hasValuesInResponse) {
+                            // We need to delay all status reports until we know if we have a valid response
+                            delayedStatusReports.push(report);
+                            continue;
+                        }
+                    } else if (!hasValuesInResponse && report.kind === "event-value") {
+                        // First value response, so send out all delayed status reports first
+                        for (const delayedReport of delayedStatusReports) {
+                            yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
+                        }
+                        delayedStatusReports.length = 0;
+                        hasValuesInResponse = true;
+                    }
+                    yield InteractionServerMessenger.convertServerInteractionReport(report);
+                }
+            }
+            validEvents = eventReader.counts.existent;
+        }
+
+        if (validAttributes === 0 && validEvents === 0) {
+            throw new StatusResponseError(
+                "Subscription failed because no attributes or events are matching the query",
+                StatusCode.InvalidAction,
+            );
+        } else if (!hasValuesInResponse && delayedStatusReports.length) {
+            // We have no values in the response but collected status reports, so we need to send them
+            for (const delayedReport of delayedStatusReports) {
+                yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
+            }
+        }
+
+        this.#lastUpdateTimeMs = Time.nowMs();
+    }
+
+    async sendInitialReport(
+        messenger: InteractionServerMessenger,
+        readContext: OnlineContext.ReadOnly,
+        suppressStatusReports?: boolean,
+    ) {
+        this.#updateTimer.stop();
+
+        await messenger.sendDataReport({
+            baseDataReport: {
+                suppressResponse: false, // we always need proper response for initial report
+                subscriptionId: this.id,
+                interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+            },
+            forFabricFilteredRead: this.criteria.isFabricFiltered,
+            payload: this.#processAttributesAndEventsReport(readContext, suppressStatusReports),
+        });
+    }
+
+    async #flush() {
+        this.#sendDelayTimer.stop();
+        if (this.#outstandingAttributeUpdates !== undefined || this.#outstandingEventsMinNumber !== undefined) {
+            logger.debug(`Flushing subscription ${this.id}${this.isClosed ? " (for closing)" : ""}`);
+            this.#triggerSendUpdate(true);
+            if (this.#currentUpdatePromise) {
+                await this.#currentUpdatePromise;
+            }
+        }
+    }
+
+    protected override async destroy() {
+        this.#sendUpdatesActivated = false;
+
+        this.#changeHandlers.close();
+
+        this.#updateTimer.stop();
+        this.#sendDelayTimer.stop();
+        await super.destroy();
+    }
+
+    /**
+     * Closes the subscription and flushes all outstanding data updates if requested.
+     */
+    override async close(graceful = false, cancelledByPeer = false) {
+        if (this.isClosed) {
+            return;
+        }
+        if (cancelledByPeer) {
+            this.isCanceledByPeer = true;
+        }
+        await this.destroy();
+        if (graceful) {
+            await this.#flush();
+        }
+        if (this.#currentUpdatePromise) {
+            await this.#currentUpdatePromise;
+        }
+    }
+
+    /**
+     * Iterates over all attributes and events that have changed since the last update and sends them to
+     * the controller.
+     * A thrown exception will cancel the sending process immediately.
+     */
+    async *#iterateDataUpdate(
+        exchange: MessageExchange,
+        attributeFilter: AttributeResponseFilter | undefined,
+        eventsMinNumber: EventNumber | undefined,
+    ) {
+        const request = {
+            ...this.criteria,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION, // irrelevant here, set to our version
+        };
+
+        const session = OnlineContext({
+            activity: (exchange as WithActivity)[activityKey],
+            fabricFiltered: request.isFabricFiltered,
+            message: {} as Message,
+            exchange,
+            tracer: this.#context.tracer,
+            actionType: ActionTracer.ActionType.Read,
+            node: this.#context.node,
+        }).beginReadOnly();
+
+        if (attributeFilter !== undefined && Read.containsAttribute(request)) {
+            const attributeReader = new AttributeSubscriptionResponse(
+                this.#context.node.protocol,
+                session,
+                attributeFilter,
+            );
+            for (const chunk of attributeReader.process(request)) {
+                for (const report of chunk) {
+                    // No need to filter out status responses because AttributeSubscriptionResponse does that already
+                    yield InteractionServerMessenger.convertServerInteractionReport(report);
+                }
+            }
+        }
+
+        if (eventsMinNumber !== undefined && Read.containsEvent(request)) {
+            // Add the new minimum event number to the request
+            request.eventFilters = [{ eventMin: eventsMinNumber }];
+
+            const eventReader = new EventResponse(this.#context.node.protocol, session);
+            for await (const chunk of eventReader.process(request)) {
+                for (const report of chunk) {
+                    if (report.kind === "event-status") {
+                        continue;
+                    }
+                    yield InteractionServerMessenger.convertServerInteractionReport(report);
+                }
+            }
+        }
+    }
+
+    async #sendUpdateMessage(
+        attributeFilter: AttributeResponseFilter | undefined,
+        eventsMinNumber: EventNumber | undefined,
+        onlyWithData: boolean,
+    ) {
+        const exchange = this.#context.initiateExchange(this.#peerAddress, INTERACTION_PROTOCOL_ID);
+        if (exchange === undefined) return false;
+
+        const messenger = new InteractionServerMessenger(exchange);
+
+        try {
+            if (attributeFilter === undefined && eventsMinNumber === undefined) {
+                await messenger.sendDataReport({
+                    baseDataReport: {
+                        suppressResponse: true, // suppressResponse true for empty DataReports
+                        subscriptionId: this.id,
+                        interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    },
+                    forFabricFilteredRead: this.criteria.isFabricFiltered,
+                    waitForAck: !this.isClosed, // Do not wait for ack when closed
+                });
+            } else {
+                // TODO: Add correct handling for reports that would have data but in the end not send any because of
+                //  filtered out. Correct handling needs refactoring to create messenger and exchange on the fly
+                //  when data are there.
+                await messenger.sendDataReport({
+                    baseDataReport: {
+                        suppressResponse: false, // Non-empty data reports always need to send response
+                        subscriptionId: this.id,
+                        interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    },
+                    forFabricFilteredRead: this.criteria.isFabricFiltered,
+                    payload: this.#iterateDataUpdate(exchange, attributeFilter, eventsMinNumber),
+                    waitForAck: !this.isClosed, // Do not wait for ack when closed
+                    suppressEmptyReport: onlyWithData,
+                });
+            }
+        } catch (error) {
+            if (StatusResponseError.is(error, StatusCode.InvalidSubscription, StatusCode.Failure)) {
+                logger.info(`Subscription ${this.id} cancelled by peer.`);
+                this.isCanceledByPeer = true;
+                await this.close(false);
+            } else {
+                StatusResponseError.accept(error);
+                logger.info(`Subscription ${this.id} update failed:`, error);
+                await this.close(false);
+            }
+        } finally {
+            await messenger.close();
+        }
+        return true;
+    }
+}

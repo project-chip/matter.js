@@ -6,6 +6,7 @@
 
 import type { Behavior } from "#behavior/Behavior.js";
 import { ClusterBehavior } from "#behavior/cluster/ClusterBehavior.js";
+import { QuietEvent } from "#behavior/Events.js";
 import type { BehaviorBacking } from "#behavior/internal/BehaviorBacking.js";
 import { Datasource } from "#behavior/state/managed/Datasource.js";
 import { ValueSupervisor } from "#behavior/supervision/ValueSupervisor.js";
@@ -24,10 +25,14 @@ import type {
 import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
-import { camelize } from "@matter/general";
+import { camelize, Observable, ObserverGroup } from "@matter/general";
 import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
+
+interface DisposableClusterProtocol extends ClusterProtocol {
+    [Symbol.dispose]: () => void;
+}
 
 /**
  * Protocol view of a {@link Node}
@@ -79,6 +84,10 @@ class NodeState {
     readonly protocol: NodeProtocol;
     readonly #endpoints = new Set<EndpointProtocol>();
     readonly #endpointStates = {} as Record<EndpointNumber, EndpointState>;
+    readonly #endpointStateObservers = new Map<
+        EndpointNumber,
+        (clusterId: ClusterId, changes: AttributeId[], version: number) => void
+    >();
 
     constructor(node: Node) {
         let fabrics: FabricManager | undefined;
@@ -102,6 +111,10 @@ class NodeState {
             },
 
             [Symbol.iterator]: this.#endpoints[Symbol.iterator].bind(this.#endpoints),
+
+            stateChanged: new Observable<
+                [endpointId: EndpointNumber, clusterId: ClusterId, changes: AttributeId[], version: number]
+            >(),
 
             toString() {
                 return `node-proto#${node.id}`;
@@ -128,6 +141,11 @@ class NodeState {
         this.protocol[number] = state.protocol;
         this.#endpoints.add(state.protocol);
         this.#endpointStates[number] = state;
+        const observer = (clusterId: ClusterId, changes: AttributeId[], version: number) => {
+            this.protocol.stateChanged.emit(number, clusterId, changes, version);
+        };
+        state.stateChanged.on(observer);
+        this.#endpointStateObservers.set(number, observer);
 
         return state;
     }
@@ -137,6 +155,11 @@ class NodeState {
     }
 
     deleteEndpoint(endpoint: EndpointProtocol) {
+        const observer = this.#endpointStateObservers.get(endpoint.id);
+        if (observer) {
+            this.#endpointStates[endpoint.id].stateChanged.off(observer);
+            this.#endpointStateObservers.delete(endpoint.id);
+        }
         delete this.protocol[endpoint.id];
         this.#endpoints.delete(endpoint);
         delete this.#endpointStates[endpoint.id];
@@ -147,7 +170,9 @@ class EndpointState {
     readonly protocol: EndpointProtocol;
     readonly #node: NodeState;
     readonly #activeClusters = new Set<ClusterId>();
-    readonly #clusters = new Set<ClusterProtocol>();
+    readonly #clusters = new Set<DisposableClusterProtocol>();
+    readonly #clusterStateObservers = new Map<ClusterId, (changes: AttributeId[], version: number) => void>();
+    readonly stateChanged = new Observable<[clusterId: ClusterId, changes: AttributeId[], version: number]>();
 
     constructor(node: NodeState, endpoint: Endpoint) {
         this.#node = node;
@@ -190,6 +215,19 @@ class EndpointState {
         this.protocol[cluster.type.id] = cluster;
         this.#activeClusters.add(cluster.type.id);
         this.#clusters.add(cluster);
+
+        const stateObserver = (changes: AttributeId[], version: number) =>
+            this.stateChanged.emit(cluster.type.id, changes, version);
+        cluster.stateChanged.on(stateObserver);
+        this.#clusterStateObservers.set(cluster.type.id, stateObserver);
+
+        // Cluster added, emit all attributes as changed
+        const attrs = [...cluster.type.attributes]
+            .filter(attr => attr.limits.readable && !attr.changesOmitted && !attr.quieter)
+            .map(attr => attr.id);
+        if (attrs.length) {
+            this.stateChanged.emit(cluster.type.id, attrs, cluster.version);
+        }
     }
 
     deleteCluster(backing: BehaviorBacking) {
@@ -203,11 +241,17 @@ class EndpointState {
             return;
         }
 
-        const protocol = this.protocol[id];
+        const stateObserver = this.#clusterStateObservers.get(id as ClusterId);
+        const protocol = this.protocol[id] as DisposableClusterProtocol;
         if (protocol) {
+            if (stateObserver) {
+                protocol.stateChanged.off(stateObserver);
+            }
+            protocol[Symbol.dispose]();
             this.#clusters.delete(protocol);
             delete this.protocol[id];
         }
+        this.#clusterStateObservers.delete(id as ClusterId);
 
         this.#activeClusters.delete(id as ClusterId);
 
@@ -221,10 +265,43 @@ class EndpointState {
     }
 }
 
-class ClusterState implements ClusterProtocol {
+class ClusterState implements DisposableClusterProtocol {
     readonly type: ClusterTypeProtocol;
     readonly #datasource: Datasource;
     readonly #endpointId: EndpointNumber;
+    readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
+    readonly #quieterObservers = new ObserverGroup();
+
+    constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
+        this.type = type;
+        this.#datasource = backing.datasource;
+        this.#endpointId = backing.endpoint.number;
+
+        const attributeNameToIdMap = backing.type.supervisor.attributeNamesToIds;
+        // For quieter attributes, we need to use the online events to get real state changes
+        for (const attr of type.attributes) {
+            attributeNameToIdMap.set(attr.name, attr.id);
+            if (attr.quieter) {
+                this.#quieterObservers.on(
+                    (this.#datasource.events[`${attr.name}$Changed`] as unknown as QuietEvent).online,
+                    () => this.stateChanged.emit([attr.id], this.version),
+                );
+            }
+        }
+
+        // Emit all attributes as changed that are not omitted or quieter
+        this.#quieterObservers.on(this.#datasource.stateChanged, (changes: string[], version: number) => {
+            const data = changes
+                .map(name => attributeNameToIdMap.get(name))
+                .filter(
+                    (id): id is AttributeId =>
+                        id !== undefined && !type.attributes[id]?.changesOmitted && !type.attributes[id]?.quieter,
+                );
+            if (data.length) {
+                this.stateChanged.emit(data, version);
+            }
+        });
+    }
 
     get version() {
         return this.#datasource.version;
@@ -232,6 +309,10 @@ class ClusterState implements ClusterProtocol {
 
     get location() {
         return this.#datasource.location;
+    }
+
+    get stateChanged() {
+        return this.#stateChanged;
     }
 
     open(session: AccessControl.Session) {
@@ -249,10 +330,8 @@ class ClusterState implements ClusterProtocol {
         return this.toString();
     }
 
-    constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
-        this.type = type;
-        this.#datasource = backing.datasource;
-        this.#endpointId = backing.endpoint.number;
+    [Symbol.dispose]() {
+        this.#quieterObservers.close();
     }
 }
 
@@ -345,8 +424,24 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
                 const {
                     access: { limits },
                 } = behavior.supervisor.get(member);
+                const {
+                    changesOmitted,
+                    effectiveQuality: { quieter },
+                } = member;
 
-                const attr = { id: id as AttributeId, tlv, wildcardPathFlags, limits, name };
+                const attr: AttributeTypeProtocol = {
+                    id: id as AttributeId,
+                    tlv,
+                    wildcardPathFlags,
+                    limits,
+                    name,
+                };
+                if (changesOmitted) {
+                    attr.changesOmitted = true;
+                }
+                if (quieter) {
+                    attr.quieter = true;
+                }
                 attrList.push(attr);
                 attributes[id] = attr;
                 if (!member.effectiveConformance.isMandatory) {

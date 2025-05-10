@@ -199,9 +199,9 @@ async function readRaw(node: MockServerNode, data: Partial<Read.Events>) {
         throw new Error("Expected an event request");
     }
     return node.online({}, async ({ context }) => {
-        const response = new EventResponse(node.protocol, context, request);
+        const response = new EventResponse(node.protocol, context);
         const responseChunks = [];
-        for await (const chunks of response) {
+        for await (const chunks of response.process(request)) {
             if (Array.isArray(chunks)) {
                 chunks.forEach(chunk => {
                     if ("tlv" in chunk) {

@@ -36,14 +36,10 @@ export class EventResponse<
     SessionT extends AccessControl.Session = AccessControl.Session,
 > extends DataResponse<SessionT> {
     // Normalized Event Filter to just our node-id
-    readonly #eventMinVersion?: EventNumber;
+    #eventMinVersion?: EventNumber;
 
     // The Fabric filtering is done when we read the data from OccurrenceManager, so we can determine the parameter once
-    readonly #filteredForFabricIndex?: FabricIndex;
-
-    // Each input EventPathIB that does not have an error installs a producer.  Producers run after validation and
-    // generate actual event data
-    readonly #dataProducer: (this: EventResponse) => AsyncIterable<ReadResult.Chunk>;
+    #filteredForFabricIndex?: FabricIndex;
 
     // The following state updates as data producers execute.  This serves both to convey state between functions and as
     // a cache between producers that touch the same endpoint and/or cluster
@@ -57,10 +53,16 @@ export class EventResponse<
     #statusCount = 0;
     #valueCount = 0;
 
-    constructor(node: NodeProtocol, session: SessionT, { eventFilters, eventRequests, isFabricFiltered }: Read.Events) {
+    constructor(node: NodeProtocol, session: SessionT) {
         super(node, session);
+    }
 
-        const nodeId = session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
+    async *process({
+        eventFilters,
+        eventRequests,
+        isFabricFiltered,
+    }: Read.Events): AsyncGenerator<ReadResult.Chunk, void, void> {
+        const nodeId = this.session.fabric === undefined ? NodeId.UNSPECIFIED_NODE_ID : this.nodeId;
 
         if (eventFilters !== undefined) {
             for (const { nodeId: filterNodeId, eventMin } of eventFilters) {
@@ -72,38 +74,29 @@ export class EventResponse<
         }
 
         if (isFabricFiltered) {
-            this.#filteredForFabricIndex = session.fabric ?? FabricIndex.NO_FABRIC;
+            this.#filteredForFabricIndex = this.session.fabric ?? FabricIndex.NO_FABRIC;
         }
 
         // This path contributes an event value
-        this.#dataProducer = async function* (this: EventResponse) {
-            // Register paths
-            for (const path of eventRequests) {
-                if (path.endpointId === undefined || path.clusterId === undefined || path.eventId === undefined) {
-                    this.#addWildcard(path);
-                } else {
-                    const status = this.#addConcrete(path as ReadResult.ConcreteEventPath);
-                    if (status !== undefined) {
-                        // This path is not valid, so emit a status response
-                        yield [status];
-                        this.#statusCount++;
-                    }
+        // Register paths
+        for (const path of eventRequests) {
+            if (path.endpointId === undefined || path.clusterId === undefined || path.eventId === undefined) {
+                this.#addWildcard(path);
+            } else {
+                const status = this.#addConcrete(path as ReadResult.ConcreteEventPath);
+                if (status !== undefined) {
+                    // This path is not valid, so emit a status response
+                    yield [status];
+                    this.#statusCount++;
                 }
             }
+        }
 
-            // Perform actual read of all events
-            for await (const data of this.#readAllowedEvents()) {
-                yield [data];
-                this.#valueCount++;
-            }
-        };
-    }
-
-    /**
-     * Emits chunks produced by paths added via {@link #addWildcard} and {@link #addConcrete}.
-     */
-    async *[Symbol.asyncIterator](): AsyncGenerator<ReadResult.Chunk, void, void> {
-        yield* this.#dataProducer.apply(this);
+        // Perform actual read of all events
+        for await (const data of this.#readAllowedEvents()) {
+            yield [data];
+            this.#valueCount++;
+        }
     }
 
     get counts() {

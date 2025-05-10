@@ -7,6 +7,7 @@
 import { deepCopy, isIpNetworkChannel, Logger, MatterError, MaybePromise, ServerAddressIp } from "#general";
 import { DatatypeModel, FieldElement } from "#model";
 import { InteractionServer, PeerSubscription } from "#node/server/InteractionServer.js";
+import { ServerSubscription } from "#node/server/ServerSubscription.js";
 import {
     ChannelManager,
     NoChannelError,
@@ -14,7 +15,6 @@ import {
     PeerAddress,
     PeerAddressSet,
     PeerSet,
-    ServerSubscription,
     SessionManager,
     Subscription,
 } from "#protocol";

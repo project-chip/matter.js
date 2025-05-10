@@ -14,6 +14,7 @@ import {
     Logger,
     MatterAggregateError,
     MaybePromise,
+    Observable,
 } from "#general";
 import { EventNumber, FabricIndex, resolveEventName, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 import { EventStore, OccurrenceSummary } from "./EventStore.js";
@@ -44,6 +45,7 @@ export class OccurrenceManager {
     #bufferConfig: OccurrenceManager.BufferConfig;
     #cull?: Promise<void>;
     #iteratingValuesInProgress = false;
+    #added = new Observable<[occurrence: NumberedOccurrence]>();
 
     // As we don't (yet) have storage with secondary indices we currently maintain indices in memory regardless of
     // whether underlying store is volatile
@@ -89,6 +91,10 @@ export class OccurrenceManager {
                 }
             });
         });
+    }
+
+    get added() {
+        return this.#added;
     }
 
     async clear() {
@@ -272,10 +278,12 @@ export class OccurrenceManager {
             if (this.#storedEventCount > this.#bufferConfig.maxEventAllowance) {
                 this.#startCull();
             }
-            return {
+            const numberedOccurrence = {
                 number: entry.number,
                 ...occurrence,
             };
+            this.#added.emit(numberedOccurrence);
+            return numberedOccurrence;
         });
     }
 

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ReadResult } from "#action/index.js";
 import {
     Diagnostic,
     InternalError,
@@ -244,7 +245,11 @@ export class InteractionServerMessenger extends InteractionMessenger {
                         );
 
                         // This potentially sends multiple DataReport Messages
-                        await this.sendDataReport(dataReport, readRequest.isFabricFiltered, payload);
+                        await this.sendDataReport({
+                            baseDataReport: dataReport,
+                            forFabricFilteredRead: readRequest.isFabricFiltered,
+                            payload,
+                        });
                         break;
                     }
                     case MessageType.WriteRequest: {
@@ -306,12 +311,20 @@ export class InteractionServerMessenger extends InteractionMessenger {
      * Handle a DataReport with a Payload Iterator for a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(
-        baseDataReport: BaseDataReport,
-        forFabricFilteredRead: boolean,
-        payload?: DataReportPayloadIterator,
-        waitForAck = true,
-    ) {
+    async sendDataReport(options: {
+        baseDataReport: BaseDataReport;
+        forFabricFilteredRead: boolean;
+        payload?: DataReportPayloadIterator;
+        waitForAck?: boolean;
+        suppressEmptyReport?: boolean;
+    }) {
+        const {
+            baseDataReport,
+            forFabricFilteredRead,
+            payload,
+            waitForAck = true,
+            suppressEmptyReport = false,
+        } = options;
         const { subscriptionId, suppressResponse, interactionModelRevision } = baseDataReport;
 
         const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
@@ -622,7 +635,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
             }
         }
 
-        await this.sendDataReportMessage(dataReport, waitForAck);
+        if (!suppressEmptyReport || dataReport.attributeReports?.length || dataReport.eventReports?.length) {
+            await this.sendDataReportMessage(dataReport, waitForAck);
+        }
     }
 
     async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>, waitForAck = true) {
@@ -672,6 +687,76 @@ export class InteractionServerMessenger extends InteractionMessenger {
             // We wait for a Success Message - when we don't request an Ack only wait 500ms
             await this.waitForSuccess("DataReport", { timeoutMs: waitForAck ? undefined : 500 });
         }
+    }
+
+    /**
+     * Convert a server interaction report to a DataReport entry
+     * TODO remove when anything is migrated completely
+     */
+    static convertServerInteractionReport(report: ReadResult.Report) {
+        switch (report.kind) {
+            case "attr-value": {
+                const { path, value: payload, version: dataVersion, tlv: schema } = report;
+                if (schema === undefined) {
+                    throw new InternalError(`Attribute ${path.clusterId}/${path.attributeId} not found`);
+                }
+                const data: AttributeReportPayload = {
+                    attributeData: {
+                        path,
+                        payload,
+                        schema,
+                        dataVersion,
+                    },
+                    hasFabricSensitiveData: true, // With this we disable the validation for missing data in encoding, we trust behavior logic
+                };
+                return data;
+            }
+            case "attr-status": {
+                const { path, status } = report;
+                const statusReport: AttributeReportPayload = {
+                    attributeStatus: {
+                        path,
+                        status: { status },
+                    },
+                    hasFabricSensitiveData: false,
+                };
+                return statusReport;
+            }
+            case "event-value": {
+                const {
+                    path,
+                    value: payload,
+                    number: eventNumber,
+                    priority,
+                    timestamp: epochTimestamp,
+                    tlv: schema,
+                } = report;
+                const data: EventReportPayload = {
+                    eventData: {
+                        path,
+                        eventNumber,
+                        priority,
+                        epochTimestamp,
+                        payload,
+                        schema,
+                    },
+                    hasFabricSensitiveData: true, // There are no Fabric sensitive events as of now. If ever added sanitizing needs to be added
+                };
+                return data;
+            }
+            case "event-status": {
+                const { path, status } = report;
+                const statusReport: EventReportPayload = {
+                    eventStatus: {
+                        path,
+                        status: { status },
+                    },
+                    hasFabricSensitiveData: false,
+                };
+                return statusReport;
+            }
+        }
+        throw new InternalError(`Unknown report type: ${report.kind}`);
     }
 }
 

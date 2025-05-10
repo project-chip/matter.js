@@ -44,7 +44,6 @@ import {
     decodeListAttributeValueWithSchema,
     EndpointInterface,
     EventPath,
-    EventReportPayload,
     ExchangeManager,
     expandPathsInAttributeData,
     FabricScopedAttributeServer,
@@ -59,9 +58,6 @@ import {
     ProtocolHandler,
     ReadRequest,
     SecureSession,
-    ServerSubscription,
-    ServerSubscriptionConfig,
-    ServerSubscriptionContext,
     SessionManager,
     SessionType,
     SubscribeRequest,
@@ -91,14 +87,15 @@ import {
     TypeFromSchema,
     ValidationError,
 } from "#types";
-import { AttributeReportPayload, ServerInteraction } from "@matter/protocol";
+import { ServerInteraction } from "@matter/protocol";
 import { ServerNode } from "../ServerNode.js";
+import { ServerSubscription, ServerSubscriptionConfig, ServerSubscriptionContext } from "./ServerSubscription.js";
 
 const logger = Logger.get("InteractionServer");
 
-const activityKey = Symbol("activity");
+export const activityKey = Symbol("activity");
 
-interface WithActivity {
+export interface WithActivity {
     [activityKey]?: NodeActivity.Activity;
 }
 
@@ -328,13 +325,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#clientHandler = clientHandler;
     }
 
-    /**
-     * Returns an iterator that yields the data reports and events data for the given read request.
-     */
-    async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
-        const { isFabricFiltered: fabricFiltered } = readRequest;
-
-        const context = OnlineContext({
+    #createOnlineReadOnlyContext(exchange: MessageExchange, message: Message, fabricFiltered: boolean) {
+        return OnlineContext({
             activity: (exchange as WithActivity)[activityKey],
             fabricFiltered,
             message,
@@ -343,76 +335,17 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             actionType: ActionTracer.ActionType.Read,
             node: this.#node,
         }).beginReadOnly();
+    }
+
+    /**
+     * Returns an iterator that yields the data reports and events data for the given read request.
+     */
+    async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
+        const context = this.#createOnlineReadOnlyContext(exchange, message, readRequest.isFabricFiltered);
 
         for await (const chunk of this.#serverInteraction.read(readRequest, context)) {
             for (const report of chunk) {
-                // TODO Centralize this conversion and at the end move into encoder
-                switch (report.kind) {
-                    case "attr-value": {
-                        const { path, value: payload, version: dataVersion, tlv: schema } = report;
-                        if (schema === undefined) {
-                            throw new InternalError(`Attribute ${path.clusterId}/${path.attributeId} not found`);
-                        }
-                        const data: AttributeReportPayload = {
-                            attributeData: {
-                                path,
-                                payload,
-                                schema,
-                                dataVersion,
-                            },
-                            hasFabricSensitiveData: true, // With this we disable the validation for missing data in encoding, we trust behavior logic
-                        };
-                        yield data;
-                        break;
-                    }
-                    case "attr-status": {
-                        const { path, status } = report;
-                        const statusReport: AttributeReportPayload = {
-                            attributeStatus: {
-                                path,
-                                status: { status },
-                            },
-                            hasFabricSensitiveData: false,
-                        };
-                        yield statusReport;
-                        break;
-                    }
-                    case "event-value": {
-                        const {
-                            path,
-                            value: payload,
-                            number: eventNumber,
-                            priority,
-                            timestamp: epochTimestamp,
-                            tlv: schema,
-                        } = report;
-                        const data: EventReportPayload = {
-                            eventData: {
-                                path,
-                                eventNumber,
-                                priority,
-                                epochTimestamp,
-                                payload,
-                                schema,
-                            },
-                            hasFabricSensitiveData: true, // There are no Fabric sensitive events as of now. If ever added sanitizing needs to be added
-                        };
-                        yield data;
-                        break;
-                    }
-                    case "event-status": {
-                        const { path, status } = report;
-                        const statusReport: EventReportPayload = {
-                            eventStatus: {
-                                path,
-                                status: { status },
-                            },
-                            hasFabricSensitiveData: false,
-                        };
-                        yield statusReport;
-                        break;
-                    }
-                }
+                yield InteractionServerMessenger.convertServerInteractionReport(report);
             }
         }
         context[Symbol.dispose]();
@@ -1161,17 +1094,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
     ) {
         const context: ServerSubscriptionContext = {
             session,
-            structure: this.#context.structure,
-
-            readAttribute: (path, attribute, offline) =>
-                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
-
-            readEndpointAttributesForSubscription: attributes =>
-                this.readEndpointAttributesForSubscription(attributes, exchange, isFabricFiltered, message),
-
-            readEvent: (path, event, eventFilters) =>
-                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
-
+            node: this.#node,
+            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -1191,12 +1115,15 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             subscriptionOptions: this.#subscriptionConfig,
         });
 
+        const readContext = this.#createOnlineReadOnlyContext(exchange, message, isFabricFiltered);
         try {
-            // Send initial data report to prime the subscription with initial data
-            await subscription.sendInitialReport(messenger);
+            // Send the initial data report to prime the subscription with initial data
+            await subscription.sendInitialReport(messenger, readContext);
         } catch (error) {
             await subscription.close(); // Cleanup
             throw error;
+        } finally {
+            readContext[Symbol.dispose]();
         }
 
         logger.info(
@@ -1228,17 +1155,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         );
         const context: ServerSubscriptionContext = {
             session,
-            structure: this.#context.structure,
-
-            readAttribute: (path, attribute, offline) =>
-                this.readAttribute(path, attribute, exchange, isFabricFiltered, message, offline),
-
-            readEndpointAttributesForSubscription: attributes =>
-                this.readEndpointAttributesForSubscription(attributes, exchange, isFabricFiltered, message),
-
-            readEvent: (path, event, eventFilters) =>
-                this.readEvent(path, eventFilters, event, exchange, isFabricFiltered, message),
-
+            node: this.#node,
+            tracer: this.#tracer,
             initiateExchange: (address: PeerAddress, protocolId) =>
                 this.#context.exchangeManager.initiateExchange(address, protocolId),
         };
@@ -1258,9 +1176,14 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             useAsSendInterval: sendInterval,
         });
 
+        const readContext = this.#createOnlineReadOnlyContext(exchange, message, isFabricFiltered);
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscription.sendInitialReport(new InteractionServerMessenger(exchange));
+            await subscription.sendInitialReport(
+                new InteractionServerMessenger(exchange),
+                readContext,
+                true, // Do not send status responses because we simulate that the subscription is still established
+            );
             subscription.activate();
             logger.info(
                 `Successfully re-established subscription ${subscriptionId} for Session ${
@@ -1270,6 +1193,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         } catch (error) {
             await subscription.close(); // Cleanup
             throw error;
+        } finally {
+            readContext[Symbol.dispose]();
         }
         return subscription;
     }

@@ -320,6 +320,7 @@ function createDerivedEvents(
         initialize(this: EventEmitter) {
             (this as unknown as Record<string, AsyncObservable>).interactionBegin = new AsyncObservable();
             (this as unknown as Record<string, AsyncObservable>).interactionEnd = new AsyncObservable();
+            (this as unknown as Record<string, AsyncObservable>).datasourceChanged = new Observable();
 
             for (const name of eventNames) {
                 this.addEvent(name);
