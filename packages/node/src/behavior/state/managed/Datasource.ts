@@ -26,6 +26,8 @@ const logger = Logger.get("Datasource");
 
 const FEATURES_KEY = "__features__";
 
+const stateChanged = Symbol("stateChanged");
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
@@ -63,6 +65,11 @@ export interface Datasource<T extends StateType = StateType> extends Transaction
      * Event that gets emitted when the state changes.
      */
     stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+
+    /**
+     * Events registered for this Datasource
+     */
+    events: Datasource.Events;
 }
 
 /**
@@ -95,7 +102,11 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         },
 
         get stateChanged() {
-            return internals.events.stateChanged;
+            return internals.events[stateChanged];
+        },
+
+        get events() {
+            return internals.events;
         },
 
         validate(session: ValueSupervisor.Session, values?: Val.Struct) {
@@ -136,7 +147,7 @@ export namespace Datasource {
     };
 
     export type InternalEvents = Events & {
-        stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+        [stateChanged]: Observable<[changes: string[], version: number], MaybePromise>;
     };
 
     /**
@@ -272,7 +283,7 @@ function configure(options: Datasource.Options): Internals {
     Object.freeze(options.location);
 
     const events = (options.events ?? {}) as Datasource.InternalEvents;
-    events.stateChanged = new Observable();
+    events[stateChanged] = new Observable();
 
     return {
         ...options,
@@ -651,7 +662,7 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
      * Post-commit logic.  Emit "changed" events.  Observers may be synchronous or asynchronous.
      */
     function postCommit() {
-        if (!changes || !internals.events) {
+        if (!changes) {
             return;
         }
 
@@ -673,7 +684,7 @@ function createReference(resource: Transaction.Resource, internals: Internals, s
             }
         }
 
-        const changeSetResult = internals.events.stateChanged?.emit(
+        const changeSetResult = internals.events[stateChanged]?.emit(
             Array.from(changes.changeList.values()),
             internals.version,
         );

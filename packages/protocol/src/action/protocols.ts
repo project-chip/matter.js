@@ -5,10 +5,10 @@
  */
 
 import { OccurrenceManager } from "#events/OccurrenceManager.js";
+import { MaybePromise, Observable } from "#general";
 import { DataModelPath, MatterModel } from "#model";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, NodeId, TlvSchema } from "#types";
 import { AttributePath, EventId, EventPath } from "#types";
-import { MaybePromise, Observable } from "@matter/general";
 import { AccessControl } from "./server/AccessControl.js";
 import { Val } from "./Val.js";
 
@@ -56,7 +56,10 @@ export interface NodeProtocol extends CollectionProtocol<EndpointProtocol> {
     /**
      * Event when data on the node changes.
      */
-    stateChanged: Observable<[endpointId: EndpointNumber, clusterId: ClusterId, changes: AttributeId[]], MaybePromise>;
+    stateChanged: Observable<
+        [endpointId: EndpointNumber, clusterId: ClusterId, changes: AttributeId[], version: number],
+        MaybePromise
+    >;
 
     /**
      * Inspects an Attribute- or Event path and log in human-readable form if possible
@@ -100,7 +103,7 @@ export interface ClusterProtocol {
     /**
      * The cluster datasource state change event
      */
-    stateChanged: Observable<[changes: string[], version: number], MaybePromise>;
+    stateChanged: Observable<[changes: AttributeId[], version: number], MaybePromise>;
 
     /**
      * Access a record of attribute values, keyed by attribute ID.
@@ -114,18 +117,13 @@ export interface ClusterProtocol {
 /**
  * Protocol contract for a specific type of cluster (including feature variants).
  *
- * TODO - commands and events
+ * TODO - commands
  */
 export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterId> {
     /**
      * Attribute metadata.
      */
     attributes: CollectionProtocol<AttributeTypeProtocol>;
-
-    /**
-     * Map of attribute names to IDs.
-     */
-    attributeNameToId: Map<string, AttributeId>;
 
     /**
      * Event metadata.
@@ -150,7 +148,12 @@ export interface AttributeTypeProtocol extends AddressableElementProtocol<Attrib
     /**
      * Changes of this attribute are omitted from subscriptions
      */
-    changesOmitted: boolean;
+    changesOmitted?: boolean;
+
+    /**
+     * Changes of this attribute are omitted from subscriptions
+     */
+    quieter?: boolean;
 }
 
 /**
