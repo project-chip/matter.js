@@ -131,11 +131,6 @@ export interface ClusterTypeProtocol extends AddressableElementProtocol<ClusterI
      * Event metadata.
      */
     events: CollectionProtocol<EventTypeProtocol>;
-
-    /**
-     * Map of event names to IDs.
-     */
-    eventNameToId: Map<string, EventId>;
 }
 
 /**

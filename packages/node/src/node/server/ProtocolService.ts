@@ -340,7 +340,6 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
     const events: CollectionProtocol<EventTypeProtocol> = {
         [Symbol.iterator]: eventList[Symbol.iterator].bind(eventList),
     };
-    const eventNameToId = new Map<string, EventId>();
 
     // Collect all attributes and events from model and generate type protocol
     // TODO: Potentially combine the two searches again once the issue os fixed when selecting attributes and events
@@ -420,7 +419,6 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
 
                 const event = { id: id as EventId, tlv, limits, name };
                 eventList.push(event);
-                eventNameToId.set(name, id as EventId);
                 events[id] = event;
                 if (!member.effectiveConformance.isMandatory) {
                     nonMandatorySupportedEvents.add(id as EventId);
@@ -442,7 +440,6 @@ function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | 
         attributes,
         attributeNameToId,
         events,
-        eventNameToId,
         wildcardPathFlags,
     };
     const elementCache = behaviorCache.get(behavior) ?? new Map();
