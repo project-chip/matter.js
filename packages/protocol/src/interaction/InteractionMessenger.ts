@@ -245,7 +245,11 @@ export class InteractionServerMessenger extends InteractionMessenger {
                         );
 
                         // This potentially sends multiple DataReport Messages
-                        await this.sendDataReport(dataReport, readRequest.isFabricFiltered, payload);
+                        await this.sendDataReport({
+                            baseDataReport: dataReport,
+                            forFabricFilteredRead: readRequest.isFabricFiltered,
+                            payload,
+                        });
                         break;
                     }
                     case MessageType.WriteRequest: {
@@ -307,12 +311,20 @@ export class InteractionServerMessenger extends InteractionMessenger {
      * Handle a DataReport with a Payload Iterator for a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(
-        baseDataReport: BaseDataReport,
-        forFabricFilteredRead: boolean,
-        payload?: DataReportPayloadIterator,
-        waitForAck = true,
-    ) {
+    async sendDataReport(options: {
+        baseDataReport: BaseDataReport;
+        forFabricFilteredRead: boolean;
+        payload?: DataReportPayloadIterator;
+        waitForAck?: boolean;
+        suppressEmptyReport?: boolean;
+    }) {
+        const {
+            baseDataReport,
+            forFabricFilteredRead,
+            payload,
+            waitForAck = true,
+            suppressEmptyReport = false,
+        } = options;
         const { subscriptionId, suppressResponse, interactionModelRevision } = baseDataReport;
 
         const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
@@ -623,7 +635,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
             }
         }
 
-        await this.sendDataReportMessage(dataReport, waitForAck);
+        if (!suppressEmptyReport || dataReport.attributeReports?.length || dataReport.eventReports?.length) {
+            await this.sendDataReportMessage(dataReport, waitForAck);
+        }
     }
 
     async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>, waitForAck = true) {

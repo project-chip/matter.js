@@ -354,8 +354,9 @@ export class ServerSubscription extends Subscription {
         this.#lastUpdateTimeMs = Time.nowMs();
 
         try {
-            await this.#sendUpdateMessage(attributeFilter, eventsMinNumber);
-            this.#sendUpdateErrorCounter = 0;
+            if (await this.#sendUpdateMessage(attributeFilter, eventsMinNumber, onlyWithData)) {
+                this.#sendUpdateErrorCounter = 0;
+            }
         } catch (error) {
             if (this.isClosed) {
                 // No need to care about resubmissions when the server is closing
@@ -500,15 +501,15 @@ export class ServerSubscription extends Subscription {
     ) {
         this.#updateTimer.stop();
 
-        await messenger.sendDataReport(
-            {
+        await messenger.sendDataReport({
+            baseDataReport: {
                 suppressResponse: false, // we always need proper response for initial report
                 subscriptionId: this.id,
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
             },
-            this.criteria.isFabricFiltered,
-            this.#processAttributesAndEventsReport(readContext, suppressStatusReports),
-        );
+            forFabricFilteredRead: this.criteria.isFabricFiltered,
+            payload: this.#processAttributesAndEventsReport(readContext, suppressStatusReports),
+        });
     }
 
     async #flush() {
@@ -609,35 +610,39 @@ export class ServerSubscription extends Subscription {
     async #sendUpdateMessage(
         attributeFilter: AttributeResponseFilter | undefined,
         eventsMinNumber: EventNumber | undefined,
+        onlyWithData: boolean,
     ) {
         const exchange = this.#context.initiateExchange(this.#peerAddress, INTERACTION_PROTOCOL_ID);
-        if (exchange === undefined) return;
+        if (exchange === undefined) return false;
 
         const messenger = new InteractionServerMessenger(exchange);
 
         try {
             if (attributeFilter === undefined && eventsMinNumber === undefined) {
-                await messenger.sendDataReport(
-                    {
+                await messenger.sendDataReport({
+                    baseDataReport: {
                         suppressResponse: true, // suppressResponse true for empty DataReports
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
-                    this.criteria.isFabricFiltered,
-                    undefined,
-                    !this.isClosed, // Do not wait for ack when closed
-                );
+                    forFabricFilteredRead: this.criteria.isFabricFiltered,
+                    waitForAck: !this.isClosed, // Do not wait for ack when closed
+                });
             } else {
-                await messenger.sendDataReport(
-                    {
+                // TODO: Add correct handling for reports that would have data but in the end not send any because of
+                //  filtered out. Correct handling needs refactoring to create messenger and exchange on the fly
+                //  when data are there.
+                await messenger.sendDataReport({
+                    baseDataReport: {
                         suppressResponse: false, // Non-empty data reports always need to send response
                         subscriptionId: this.id,
                         interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                     },
-                    this.criteria.isFabricFiltered,
-                    this.#iterateDataUpdate(exchange, attributeFilter, eventsMinNumber),
-                    !this.isClosed, // Do not wait for ack when closed
-                );
+                    forFabricFilteredRead: this.criteria.isFabricFiltered,
+                    payload: this.#iterateDataUpdate(exchange, attributeFilter, eventsMinNumber),
+                    waitForAck: !this.isClosed, // Do not wait for ack when closed
+                    suppressEmptyReport: onlyWithData,
+                });
             }
         } catch (error) {
             if (StatusResponseError.is(error, StatusCode.InvalidSubscription, StatusCode.Failure)) {
@@ -652,5 +657,6 @@ export class ServerSubscription extends Subscription {
         } finally {
             await messenger.close();
         }
+        return true;
     }
 }

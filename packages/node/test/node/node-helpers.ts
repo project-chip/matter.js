@@ -198,7 +198,7 @@ export function CommissioningHelper() {
 export namespace interaction {
     const BarelyMockedMessenger = {
         sendStatus: _code => {},
-        sendDataReport: async (_report, _forFabricFilteredRead) => {},
+        sendDataReport: async _options => {},
         send: async (_type, _message) => {},
         close: async () => {},
     } as InteractionServerMessenger;
