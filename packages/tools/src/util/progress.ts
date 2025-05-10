@@ -89,7 +89,7 @@ const writeStatus = (() => {
 
 export class Progress {
     status = Progress.Status.Startup;
-    #ongoingText?: string;
+    #ongoing?: { text: string; extra?: string };
     #start?: number;
     #spinner = "⧗";
     #refreshInterval?: ReturnType<typeof setInterval>;
@@ -127,38 +127,37 @@ export class Progress {
 
     update(text: string, extra?: string) {
         this.status = Progress.Status.Ongoing;
-        let duration;
         if (this.#start === undefined) {
             this.#start = new Date().getTime();
-            duration = "";
-        } else {
-            duration = this.#duration;
         }
         extra = extra === undefined ? "" : ` ${extra}`;
-        this.#ongoingText = `${text} ${duration}${extra}`;
+        this.#ongoing = { text, extra };
         this.#writeOngoing();
     }
 
     #writeOngoing() {
-        if (!this.#ongoingText) {
+        if (!this.#ongoing) {
             return;
         }
 
+        const extra = this.#ongoing.extra ? ` ${this.#ongoing.extra}` : "";
+        const message = `${this.#ongoing.text} ${this.#duration}${extra}`;
+
         const subtask = this.#subtasks.length ? ansi.dim(` (${this.#subtasks[this.#subtasks.length - 1]})`) : "";
 
-        writeStatus(`  ${ansi.yellow(this.#spinner)} ${this.#ongoingText}${subtask}`, true);
+        writeStatus(`  ${ansi.yellow(this.#spinner)} ${message}${subtask}`, true);
     }
 
     success(text: string) {
         this.status = Progress.Status.Success;
         writeStatus(`  ${STATUS_ICON_SUCCESS} ${text} ${this.#duration}`);
-        this.#start = this.#ongoingText = undefined;
+        this.#start = this.#ongoing = undefined;
     }
 
     failure(text: string) {
         this.status = Progress.Status.Failure;
         writeStatus(`  ${STATUS_ICON_FAILURE} ${text} ${this.#duration}`);
-        this.#start = this.#ongoingText = undefined;
+        this.#start = this.#ongoing = undefined;
     }
 
     info(label: string, value?: any) {
