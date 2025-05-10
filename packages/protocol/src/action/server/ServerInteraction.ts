@@ -15,8 +15,11 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
-import { NotImplementedError } from "#general";
+import { EventResponse } from "#action/server/EventResponse.js";
+import { Logger, NotImplementedError } from "#general";
 import { AttributeResponse } from "./AttributeResponse.js";
+
+const logger = Logger.get("ServerInteraction");
 
 /**
  * Implementation of server interaction.
@@ -40,11 +43,22 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
     async *read(request: Read, session: SessionT): ReadResult {
         // TODO - validate request
 
-        if (Read.isAttribute(request)) {
-            yield* new AttributeResponse(this.#node, session, request);
+        let readInfo = "";
+        if (Read.containsAttribute(request)) {
+            const attributeReader = new AttributeResponse(this.#node, session, request);
+            yield* attributeReader;
+
+            const { existent, status, value } = attributeReader.counts;
+            readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
         }
 
-        // TODO - event reads
+        if (Read.containsEvent(request)) {
+            const eventReader = new EventResponse(this.#node, session, request);
+            yield* eventReader;
+            const { existent, status, value } = eventReader.counts;
+            readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
+        }
+        logger.debug(`Read request resolved to ${readInfo}`);
     }
 
     subscribe(_request: Subscribe, _session?: SessionT): SubscribeResult {

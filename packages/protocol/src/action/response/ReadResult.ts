@@ -10,12 +10,14 @@ import type {
     ClusterId,
     EndpointNumber,
     EventId,
+    EventNumber,
     EventPath,
+    EventPriority,
     NodeId,
     Status,
     StatusCode,
+    TlvSchema,
 } from "#types";
-import { TlvSchema } from "@matter/types";
 
 /**
  * Streaming result for a Matter protocol-level read.
@@ -77,6 +79,11 @@ export namespace ReadResult {
     export interface EventValue {
         kind: "event-value";
         path: ConcreteEventPath;
+        number: EventNumber;
+        timestamp: number;
+        priority: EventPriority;
+        value: unknown;
+        tlv: TlvSchema<unknown>;
     }
 
     export interface GlobalEventStatus {

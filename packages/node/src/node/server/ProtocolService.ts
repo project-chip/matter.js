@@ -24,7 +24,9 @@ import type {
 import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
-
+import { camelize } from "@matter/general";
+import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
+import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
 /**
@@ -36,7 +38,7 @@ import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavio
  * state via the public interface.
  */
 export class ProtocolService {
-    #state: NodeState;
+    readonly #state: NodeState;
 
     constructor(node: Node) {
         this.#state = new NodeState(node);
@@ -74,12 +76,13 @@ const WildcardPathFlags = {
 };
 
 class NodeState {
-    protocol: NodeProtocol;
-    #endpoints = new Set<EndpointProtocol>();
-    #endpointStates = {} as Record<EndpointNumber, EndpointState>;
+    readonly protocol: NodeProtocol;
+    readonly #endpoints = new Set<EndpointProtocol>();
+    readonly #endpointStates = {} as Record<EndpointNumber, EndpointState>;
 
     constructor(node: Node) {
         let fabrics: FabricManager | undefined;
+        let eventHandler: OccurrenceManager | undefined;
 
         this.protocol = {
             matter: Matter,
@@ -91,6 +94,13 @@ class NodeState {
                 return fabrics.findByIndex(index)?.nodeId;
             },
 
+            get eventHandler() {
+                if (eventHandler === undefined) {
+                    eventHandler = node.env.get(OccurrenceManager);
+                }
+                return eventHandler;
+            },
+
             [Symbol.iterator]: this.#endpoints[Symbol.iterator].bind(this.#endpoints),
 
             toString() {
@@ -99,6 +109,10 @@ class NodeState {
 
             inspect() {
                 return this.toString();
+            },
+
+            inspectPath(path: AttributePath | EventPath) {
+                return resolvePathForNode(this, path);
             },
         } satisfies NodeProtocol & { toString(): string; inspect(): string } as NodeProtocol;
     }
@@ -130,17 +144,19 @@ class NodeState {
 }
 
 class EndpointState {
-    protocol: EndpointProtocol;
-    #node: NodeState;
-    #activeClusters = new Set<ClusterId>();
-    #clusters = new Set<ClusterProtocol>();
+    readonly protocol: EndpointProtocol;
+    readonly #node: NodeState;
+    readonly #activeClusters = new Set<ClusterId>();
+    readonly #clusters = new Set<ClusterProtocol>();
 
     constructor(node: NodeState, endpoint: Endpoint) {
         this.#node = node;
+        const number = endpoint.number;
         this.protocol = {
-            id: endpoint.number,
-            wildcardPathFlags: endpoint.number === 0 ? WildcardPathFlags.skipRootNode : 0,
+            id: number,
+            wildcardPathFlags: number === 0 ? WildcardPathFlags.skipRootNode : 0,
             path: endpoint.path,
+            name: endpoint.type.name,
             deviceTypes: [],
 
             toString() {
@@ -156,12 +172,12 @@ class EndpointState {
     }
 
     addCluster(backing: BehaviorBacking) {
-        const type = clusterTypeProtocolOf(backing.type);
+        const type = clusterTypeProtocolOf(backing);
         if (!type) {
             return;
         }
 
-        const cluster = new ClusterState(type, backing.datasource, this.protocol.id);
+        const cluster = new ClusterState(type, backing);
 
         // When descriptor behavior initializes, sync device types
         if (backing.type.id === DescriptorBehavior.id) {
@@ -206,10 +222,9 @@ class EndpointState {
 }
 
 class ClusterState implements ClusterProtocol {
-    type: ClusterTypeProtocol;
-
-    #datasource: Datasource;
-    #endpointId: number;
+    readonly type: ClusterTypeProtocol;
+    readonly #datasource: Datasource;
+    readonly #endpointId: EndpointNumber;
 
     get version() {
         return this.#datasource.version;
@@ -234,93 +249,193 @@ class ClusterState implements ClusterProtocol {
         return this.toString();
     }
 
-    constructor(type: ClusterTypeProtocol, datasource: Datasource, endpointId: EndpointNumber) {
+    constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
-        this.#datasource = datasource;
-        this.#endpointId = endpointId;
+        this.#datasource = backing.datasource;
+        this.#endpointId = backing.endpoint.number;
     }
 }
 
-const behaviorCache = new WeakMap<Behavior.Type, ClusterTypeProtocol | undefined>();
+const behaviorCache = new WeakMap<Behavior.Type, Map<string, ClusterTypeProtocol | undefined>>();
 
-function clusterTypeProtocolOf(behavior: Behavior.Type): ClusterTypeProtocol | undefined {
-    if (behaviorCache.has(behavior)) {
-        return behaviorCache.get(behavior);
-    }
+function clusterTypeProtocolOf(backing: BehaviorBacking): ClusterTypeProtocol | undefined {
+    const behavior = backing.type;
 
     const { cluster, schema } = behavior as ClusterBehavior.Type;
     if (cluster === undefined || schema?.id === undefined) {
         return;
     }
 
-    const tlvs = {} as Record<number, TlvSchema<unknown>>;
-    for (const attr of Object.values(cluster.attributes)) {
-        tlvs[attr.id] = attr.schema;
-    }
+    const supportedElements = backing.endpoint.behaviors.elementsOf(behavior);
+    const nonMandatorySupportedAttributes = new Set<AttributeId>();
+    const nonMandatorySupportedEvents = new Set<EventId>();
 
+    // Collect Attribute Metadata
+    const attrTlvs = {} as Record<number, TlvSchema<unknown>>;
+    for (const attr of Object.values(cluster.attributes)) {
+        attrTlvs[attr.id] = attr.schema;
+    }
     let wildcardPathFlags = schema.effectiveQuality.diagnostics ? WildcardPathFlags.skipDiagnosticsClusters : 0;
     if (schema.id & 0xffff0000) {
         wildcardPathFlags |= WildcardPathFlags.skipCustomElements;
     }
-
     const attrList = Array<AttributeTypeProtocol>();
     const attributes: CollectionProtocol<AttributeTypeProtocol> = {
         [Symbol.iterator]: attrList[Symbol.iterator].bind(attrList),
     };
 
-    for (const member of behavior.supervisor.membersOf(schema)) {
+    // Collect Event Metadata
+    const eventTlvs = {} as Record<number, TlvSchema<unknown>>;
+    for (const ev of Object.values(cluster.events)) {
+        eventTlvs[ev.id] = ev.schema;
+    }
+    const eventList = Array<EventTypeProtocol>();
+    const events: CollectionProtocol<EventTypeProtocol> = {
+        [Symbol.iterator]: eventList[Symbol.iterator].bind(eventList),
+    };
+
+    // Collect all attributes and events from model and generate type protocol
+    // TODO: Potentially combine the two searches again once the issue os fixed when selecting attributes and events
+    for (const member of behavior.supervisor.membersOf(schema, { tags: [ElementTag.Attribute, ElementTag.Event] })) {
         const { id, tag, effectiveQuality: quality } = member;
 
-        if (tag !== "attribute" || id === undefined) {
+        if (id === undefined) {
             continue;
         }
 
-        const tlv = tlvs[id];
-        if (tlv === undefined) {
-            continue;
-        }
+        const name = camelize(member.name);
+        switch (tag) {
+            case "attribute": {
+                if (!member.effectiveConformance.isMandatory && !supportedElements.attributes.has(name)) {
+                    continue;
+                }
 
-        let wildcardPathFlags;
-        switch (id) {
-            case GeneratedCommandList.id:
-            case AcceptedCommandList.id:
-                wildcardPathFlags = WildcardPathFlags.skipGlobalAttributes | WildcardPathFlags.skipCommandLists;
+                const tlv = attrTlvs[id];
+                if (tlv === undefined) {
+                    continue;
+                }
+
+                let wildcardPathFlags;
+                switch (id) {
+                    case GeneratedCommandList.id:
+                    case AcceptedCommandList.id:
+                        wildcardPathFlags = WildcardPathFlags.skipGlobalAttributes | WildcardPathFlags.skipCommandLists;
+                        break;
+
+                    case AttributeList.id:
+                        wildcardPathFlags =
+                            WildcardPathFlags.skipGlobalAttributes | WildcardPathFlags.skipAttributeList;
+                        break;
+
+                    default:
+                        wildcardPathFlags = 0;
+                        break;
+                }
+
+                if (id & 0xffff0000) {
+                    wildcardPathFlags |= WildcardPathFlags.skipGlobalAttributes;
+                }
+                if (quality.fixed) {
+                    wildcardPathFlags |= WildcardPathFlags.skipFixedAttributes;
+                }
+                if (quality.changesOmitted) {
+                    wildcardPathFlags |= WildcardPathFlags.skipChangesOmittedAttributes;
+                }
+
+                const {
+                    access: { limits },
+                } = behavior.supervisor.get(member);
+
+                const attr = { id: id as AttributeId, tlv, wildcardPathFlags, limits, name };
+                attrList.push(attr);
+                attributes[id] = attr;
+                if (!member.effectiveConformance.isMandatory) {
+                    nonMandatorySupportedAttributes.add(id as AttributeId);
+                }
                 break;
+            }
+            case "event": {
+                if (!member.effectiveConformance.isMandatory && !supportedElements.events.has(name)) {
+                    continue;
+                }
 
-            case AttributeList.id:
-                wildcardPathFlags = WildcardPathFlags.skipGlobalAttributes | WildcardPathFlags.skipAttributeList;
+                const tlv = eventTlvs[id];
+                if (tlv === undefined) {
+                    continue;
+                }
+
+                const {
+                    access: { limits },
+                } = behavior.supervisor.get(member);
+
+                const event = { id: id as EventId, tlv, limits, name };
+                eventList.push(event);
+                events[id] = event;
+                if (!member.effectiveConformance.isMandatory) {
+                    nonMandatorySupportedEvents.add(id as EventId);
+                }
                 break;
-
-            default:
-                wildcardPathFlags = 0;
-                break;
+            }
         }
+    }
 
-        if (id & 0xffff0000) {
-            wildcardPathFlags |= WildcardPathFlags.skipGlobalAttributes;
-        }
-        if (quality.fixed) {
-            wildcardPathFlags |= WildcardPathFlags.skipFixedAttributes;
-        }
-        if (quality.changesOmitted) {
-            wildcardPathFlags |= WildcardPathFlags.skipChangesOmittedAttributes;
-        }
-
-        const {
-            access: { limits },
-        } = behavior.supervisor.get(member);
-
-        const attr = { id: id as AttributeId, tlv, wildcardPathFlags, limits };
-        attrList.push(attr);
-        attributes[id] = attr;
+    const elementsCacheKey = `a:${[...nonMandatorySupportedAttributes.values()].sort().join(",")},e:${[...nonMandatorySupportedEvents.values()].sort().join(",")}`;
+    const existingCache = behaviorCache.get(behavior)?.get(elementsCacheKey);
+    if (existingCache) {
+        return existingCache;
     }
 
     const descriptor: ClusterTypeProtocol = {
         id: schema.id as ClusterId,
+        name: schema.name,
         attributes,
+        events,
         wildcardPathFlags,
     };
-    behaviorCache.set(behavior, descriptor);
+    const elementCache = behaviorCache.get(behavior) ?? new Map();
+    elementCache.set(elementsCacheKey, descriptor);
+    behaviorCache.set(behavior, elementCache);
 
     return descriptor;
+}
+
+function toWildcardOrHex(value: number | bigint | undefined) {
+    return value === undefined ? "*" : `0x${value.toString(16)}`;
+}
+
+function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath) {
+    const { endpointId, clusterId } = path;
+    const isUrgentString = "isUrgent" in path && path.isUrgent ? "!" : "";
+
+    const elementId = "attributeId" in path ? path.attributeId : "eventId" in path ? path.eventId : undefined;
+
+    if (endpointId === undefined) {
+        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+    }
+
+    const endpoint = node[endpointId];
+    if (endpoint === undefined) {
+        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+    }
+    const endpointName = `${endpoint.name}(${toWildcardOrHex(endpointId)})`;
+
+    if (clusterId === undefined) {
+        return `${endpointName}/*/${toWildcardOrHex(elementId)}${isUrgentString}`;
+    }
+
+    const cluster = endpoint[clusterId];
+    if (cluster === undefined) {
+        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${isUrgentString}`;
+    }
+    const clusterName = `${cluster.type.name}(${toWildcardOrHex(clusterId)})`;
+
+    if ("eventId" in path && elementId !== undefined) {
+        const event = cluster.type.events[elementId];
+        return `${endpointName}/${clusterName}/${event?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+    } else if ("attributeId" in path && elementId !== undefined) {
+        const attribute = cluster.type.attributes[elementId];
+        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+    } else {
+        return `${endpointName}/${clusterName}/*${isUrgentString}`;
+    }
 }

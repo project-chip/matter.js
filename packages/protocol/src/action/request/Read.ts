@@ -207,7 +207,7 @@ export namespace Read {
         attributeRequests: Exclude<Read["attributeRequests"], undefined>;
     }
 
-    export function isAttribute(request: Read): request is Attributes {
+    export function containsAttribute(request: Read): request is Attributes {
         return !!request.attributeRequests?.length;
     }
 
@@ -215,7 +215,7 @@ export namespace Read {
         eventRequests: Exclude<Read["eventRequests"], undefined>;
     }
 
-    export function isEvent(request: Read): request is Events {
+    export function containsEvent(request: Read): request is Events {
         return !!request.eventRequests?.length;
     }
 

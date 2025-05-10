@@ -9,20 +9,13 @@ import {
     Construction,
     Diagnostic,
     ImplementationError,
+    InternalError,
     isObject,
     Logger,
     MatterAggregateError,
     MaybePromise,
 } from "#general";
-import {
-    EventNumber,
-    EventPriority,
-    FabricIndex,
-    resolveEventName,
-    TlvEventFilter,
-    TlvEventPath,
-    TypeFromSchema,
-} from "#types";
+import { EventNumber, FabricIndex, resolveEventName, TlvEventFilter, TlvEventPath, TypeFromSchema } from "#types";
 import { EventStore, OccurrenceSummary } from "./EventStore.js";
 import { NumberedOccurrence, Occurrence } from "./Occurrence.js";
 
@@ -50,14 +43,11 @@ export class OccurrenceManager {
     #storedEventCount = 0;
     #bufferConfig: OccurrenceManager.BufferConfig;
     #cull?: Promise<void>;
+    #iteratingValuesInProgress = false;
 
     // As we don't (yet) have storage with secondary indices we currently maintain indices in memory regardless of
     // whether underlying store is volatile
-    readonly #occurrences = {
-        [EventPriority.Critical]: new Array<OccurrenceSummary>(),
-        [EventPriority.Info]: new Array<OccurrenceSummary>(),
-        [EventPriority.Debug]: new Array<OccurrenceSummary>(),
-    };
+    readonly #occurrences = new Array<OccurrenceSummary>();
 
     #construction: Construction<OccurrenceManager>;
 
@@ -82,24 +72,20 @@ export class OccurrenceManager {
             );
         }
 
-        const totalPriorityAllowance = Object.values(bufferConfig.minPriorityEventAllowance).reduce(
-            (sum, value) => sum + value,
-            0,
-        );
-        if (totalPriorityAllowance > minEventAllowance) {
-            throw new ImplementationError(
-                `Total priority allowance ${totalPriorityAllowance} is greater than minimum allowance of ${minEventAllowance}`,
-            );
-        }
-
         this.#store = store;
         this.#bufferConfig = bufferConfig;
 
         this.#construction = Construction(this, () => {
             return MaybePromise.then(this.#store.load(), index => {
                 this.#storedEventCount = index.length;
-                for (const entry of index) {
-                    this.#occurrences[entry.priority].push(entry);
+                // To be sure, sort the entries by number
+                index.sort(
+                    // sort that way because Bigint & Number mix
+                    ({ number: numberA }, { number: numberB }) => (numberA < numberB ? -1 : numberA > numberB ? 1 : 0),
+                );
+                this.#occurrences.push(...index);
+                if (this.#occurrences.length > this.#bufferConfig.minEventAllowance) {
+                    this.#startCull();
                 }
             });
         });
@@ -109,43 +95,78 @@ export class OccurrenceManager {
         await this.construction;
         await this.#store.clear();
         this.#storedEventCount = 0;
-        for (const list of Object.values(this.#occurrences)) {
-            list.length = 0;
-        }
+        this.#occurrences.length = 0;
     }
 
+    /**
+     * Find the index of the first event number in the list that is greater than or equal to eventMin to optimize
+     * searching.
+     */
+    #findMinEventNumberIndex(eventMin: EventNumber) {
+        // if the list is empty or the eventMin is less than the last event number, no entry is relevant
+
+        if (this.#occurrences.length === 0 || eventMin > this.#occurrences[this.#occurrences.length - 1].number) {
+            return -1;
+        }
+        if (eventMin <= this.#occurrences[0].number) {
+            return 0; // The first event number is greater than or equal to eventMin, so all entries are relevant
+        }
+
+        let low = this.#occurrences.length - 1;
+        let high = low;
+        let step = 1;
+
+        // Because it is more likely that events we want are in the upper ranges we first fine a starting point from there
+        while (low > 0 && this.#occurrences[low].number >= eventMin) {
+            high = low;
+            low = Math.max(0, low - step);
+            step *= 2; // increase the step size to skip more entries
+        }
+
+        while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            if (this.#occurrences[mid].number < eventMin) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return low; // The index of the first event number that is greater than or equal to eventMin
+    }
+
+    /**
+     * Query the event store for events matching the given path and filters.
+     * @deprecated
+     */
     query(
         eventPath: TypeFromSchema<typeof TlvEventPath>,
         filters?: TypeFromSchema<typeof TlvEventFilter>[],
         filterForFabricIndex?: FabricIndex,
     ): MaybePromise<NumberedOccurrence[]> {
-        const entryFilter =
-            filters !== undefined && filters.length > 0
-                ? (event: OccurrenceSummary) =>
-                      filters.some(
-                          filter => filter.eventMin !== undefined && event.number >= EventNumber(filter.eventMin),
-                      )
-                : undefined; // TODO - filter on node ID too?
-
+        if (filters !== undefined && filters.length > 1) {
+            throw new InternalError("Multiple filters not supported");
+        }
         // Search the index and load applicable events
+        const startIndex = filters?.length ? this.#findMinEventNumberIndex(EventNumber(filters[0].eventMin)) : 0;
+        if (startIndex === -1) {
+            return []; // No entry matches the filter
+        }
+
         let isAsyncLoad = false;
-        const occurrences = new Array<MaybePromise<NumberedOccurrence>>();
         const { endpointId, clusterId, eventId } = eventPath;
-        for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
-            const entriesToCheck = this.#occurrences[priority];
-            for (const entry of entriesToCheck) {
-                if (endpointId === entry.endpointId && clusterId === entry.clusterId && eventId === entry.eventId) {
-                    if (entryFilter?.(entry) !== false) {
-                        let occurrence = this.#store.get(entry.number) as MaybePromise<NumberedOccurrence>;
-                        occurrence = MaybePromise.then(occurrence, occurrence => {
-                            occurrence.number = entry.number;
-                            return occurrence;
-                        });
-                        occurrences.push(occurrence);
-                        if (MaybePromise.is(occurrence)) {
-                            isAsyncLoad = true;
-                        }
-                    }
+        const occurrences = new Array<MaybePromise<NumberedOccurrence>>();
+        for (let i = startIndex; i < this.#occurrences.length; i++) {
+            const entry = this.#occurrences[i];
+            if (endpointId === entry.endpointId && clusterId === entry.clusterId && eventId === entry.eventId) {
+                let occurrence = this.#store.get(entry.number) as MaybePromise<NumberedOccurrence>;
+                occurrence = MaybePromise.then(occurrence, occurrence => {
+                    occurrence.number = entry.number;
+                    return occurrence;
+                });
+                occurrences.push(occurrence);
+                if (MaybePromise.is(occurrence)) {
+                    isAsyncLoad = true;
                 }
             }
         }
@@ -205,6 +226,40 @@ export class OccurrenceManager {
         return result;
     }
 
+    /**
+     * Return an iterator over all occurrences in the store that are bigger or equal to the minimum eventNumber,
+     * if provided.
+     */
+    async *get(eventMin?: EventNumber) {
+        if (this.#cull) {
+            await this.#cull;
+        }
+        const startIndex = eventMin === undefined ? 0 : this.#findMinEventNumberIndex(eventMin);
+        if (startIndex === -1) {
+            return; // No entry matches the filter
+        }
+        this.#iteratingValuesInProgress = true;
+        try {
+            for (let i = startIndex; i < this.#occurrences.length; i++) {
+                const eventNumber = this.#occurrences[i].number;
+                const occurrence = this.#store.get(eventNumber);
+                if (MaybePromise.is(occurrence)) {
+                    yield {
+                        ...(await occurrence),
+                        number: eventNumber,
+                    };
+                } else {
+                    yield {
+                        ...occurrence,
+                        number: eventNumber,
+                    };
+                }
+            }
+        } finally {
+            this.#iteratingValuesInProgress = false;
+        }
+    }
+
     close(): MaybePromise<void> {
         MaybePromise.then(this.#cull, () => this.#store.close());
     }
@@ -212,7 +267,7 @@ export class OccurrenceManager {
     add(occurrence: Occurrence): MaybePromise<NumberedOccurrence> {
         return MaybePromise.then(this.#store.add(occurrence), entry => {
             logger.debug(`Recorded event #${entry.number}: ${Diagnostic.json(occurrence)}`);
-            this.#occurrences[occurrence.priority].push(entry);
+            this.#occurrences.push(entry);
             this.#storedEventCount++;
             if (this.#storedEventCount > this.#bufferConfig.maxEventAllowance) {
                 this.#startCull();
@@ -225,7 +280,7 @@ export class OccurrenceManager {
     }
 
     #startCull() {
-        if (this.#cull) {
+        if (this.#cull || this.#iteratingValuesInProgress) {
             return;
         }
         const cull = this.#dropOldOccurrences();
@@ -235,7 +290,7 @@ export class OccurrenceManager {
     }
 
     #dropOldOccurrences() {
-        let count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
+        const count = this.#storedEventCount - this.#bufferConfig.minEventAllowance;
         if (count <= 0) {
             return;
         }
@@ -244,31 +299,15 @@ export class OccurrenceManager {
 
         const asyncDrops = Array<PromiseLike<void>>();
 
-        let totalCulled = 0;
-        for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
-            const occurrences = this.#occurrences[priority];
-            const reservation = this.#bufferConfig.minPriorityEventAllowance[PriorityNames[priority]];
-            let countThisPriority = 0;
-            while (count && occurrences.length > reservation) {
-                count--;
-                countThisPriority++;
-            }
-
-            totalCulled += countThisPriority;
-            for (const entry of occurrences.splice(0, countThisPriority)) {
-                const drop = MaybePromise.catch(this.#store.delete(entry.number), error =>
-                    logger.warn(`Error dropping occurrence #${entry}: ${error}`),
-                );
-                if (MaybePromise.is(drop)) {
-                    asyncDrops.push(drop);
-                }
-            }
-
-            if (!count) {
-                break;
+        for (const entry of this.#occurrences.splice(0, count)) {
+            const drop = MaybePromise.catch(this.#store.delete(entry.number), error =>
+                logger.warn(`Error dropping occurrence #${entry}: ${error}`),
+            );
+            if (MaybePromise.is(drop)) {
+                asyncDrops.push(drop);
             }
         }
-        this.#storedEventCount -= totalCulled;
+        this.#storedEventCount = this.#occurrences.length;
 
         if (asyncDrops.length) {
             return MatterAggregateError.allSettled(asyncDrops, "Error dropping occurrences")
@@ -277,12 +316,6 @@ export class OccurrenceManager {
         }
     }
 }
-
-const PriorityNames = {
-    [EventPriority.Critical]: "critical",
-    [EventPriority.Info]: "info",
-    [EventPriority.Debug]: "debug",
-} as const;
 
 export namespace OccurrenceManager {
     /**
@@ -301,25 +334,10 @@ export namespace OccurrenceManager {
          * {@link minimumEventAllowance}.
          */
         maxEventAllowance: number;
-
-        /**
-         * Minimum allowances by priority.  This ensures a minimum number of events for each priority avoid LRU
-         * harvesting.
-         */
-        minPriorityEventAllowance: {
-            critical: number;
-            info: number;
-            debug: number;
-        };
     }
 
     export const DefaultBufferConfig: BufferConfig = {
         minEventAllowance: 10_000,
         maxEventAllowance: 11_000,
-        minPriorityEventAllowance: {
-            critical: 2_000,
-            info: 2_000,
-            debug: 2_000,
-        },
     };
 }

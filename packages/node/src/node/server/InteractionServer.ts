@@ -74,7 +74,6 @@ import {
     ClusterId,
     CommandId,
     DEFAULT_MAX_PATHS_PER_INVOKE,
-    EventNumber,
     INTERACTION_PROTOCOL_ID,
     ReceivedStatusResponseError,
     StatusCode,
@@ -152,13 +151,6 @@ function validateWriteAttributesPath(path: TypeFromSchema<typeof TlvAttributePat
     if (isGroupSession && endpointId !== undefined) {
         throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
     }
-}
-
-function isConcreteEventPath(
-    path: TypeFromSchema<typeof TlvEventPath>,
-): path is TypeFromSchema<typeof TlvEventPath> & EventPath {
-    const { endpointId, clusterId, eventId } = path;
-    return endpointId !== undefined && clusterId !== undefined && eventId !== undefined;
 }
 
 function validateReadEventPath(path: TypeFromSchema<typeof TlvEventPath>, isGroupSession = false) {
@@ -336,134 +328,15 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         this.#clientHandler = clientHandler;
     }
 
-    async #collectEventDataForRead(
-        { eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
-        exchange: MessageExchange,
-        message: Message,
-    ) {
-        let eventReportsPayload: undefined | EventReportPayload[];
-        if (eventRequests) {
-            eventReportsPayload = [];
-            for (const requestPath of eventRequests) {
-                validateReadEventPath(requestPath);
-
-                const events = this.#context.structure.getEvents([requestPath]);
-
-                // Requested event path not found in any cluster server on any endpoint
-                if (events.length === 0) {
-                    if (isConcreteEventPath(requestPath)) {
-                        const { endpointId, clusterId, eventId } = requestPath;
-                        try {
-                            this.#context.structure.validateConcreteEventPath(endpointId, clusterId, eventId);
-                            throw new InternalError(
-                                "validateConcreteEventPath should throw StatusResponseError but did not.",
-                            );
-                        } catch (e) {
-                            StatusResponseError.accept(e);
-
-                            logger.debug(
-                                `Read event from ${
-                                    exchange.channel.name
-                                }: ${this.#context.structure.resolveEventName(requestPath)}: unsupported path: Status=${
-                                    e.code
-                                }`,
-                            );
-                            eventReportsPayload?.push({
-                                hasFabricSensitiveData: false,
-                                eventStatus: { path: requestPath, status: { status: e.code } },
-                            });
-                        }
-                    }
-                    // Wildcard path: Just leave out values
-                    logger.debug(
-                        `Read event from ${exchange.channel.name}: ${this.#context.structure.resolveEventName(
-                            requestPath,
-                        )}: ignore non-existing event`,
-                    );
-                    continue;
-                }
-
-                const reportsForPath = new Array<EventReportPayload>();
-                for (const { path, event } of events) {
-                    try {
-                        const matchingEvents = await this.readEvent(
-                            path,
-                            eventFilters,
-                            event,
-                            exchange,
-                            isFabricFiltered,
-                            message,
-                        );
-                        logger.debug(
-                            `Read event from ${exchange.channel.name}: ${this.#context.structure.resolveEventName(
-                                path,
-                            )}=${Diagnostic.json(matchingEvents)}`,
-                        );
-                        const { schema } = event;
-                        reportsForPath.push(
-                            ...matchingEvents.map(({ number, priority, epochTimestamp, payload }) => ({
-                                hasFabricSensitiveData: event.hasFabricSensitiveData,
-                                eventData: {
-                                    path,
-                                    eventNumber: number,
-                                    priority,
-                                    epochTimestamp,
-                                    payload,
-                                    schema,
-                                },
-                            })),
-                        );
-                    } catch (error) {
-                        logger.error(
-                            `Error while reading event from ${
-                                exchange.channel.name
-                            } to ${this.#context.structure.resolveEventName(path)}:`,
-                            error,
-                        );
-
-                        StatusResponseError.accept(error);
-
-                        // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
-                        if (isConcreteEventPath(requestPath)) {
-                            eventReportsPayload?.push({
-                                hasFabricSensitiveData: false,
-                                eventStatus: { path, status: { status: error.code } },
-                            });
-                        }
-                    }
-                }
-                eventReportsPayload.push(
-                    ...reportsForPath.sort((a, b) => {
-                        const eventNumberA = a.eventData?.eventNumber ?? EventNumber(0);
-                        const eventNumberB = b.eventData?.eventNumber ?? EventNumber(0);
-                        if (eventNumberA > eventNumberB) {
-                            return 1;
-                        } else if (eventNumberA < eventNumberB) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    }),
-                );
-            }
-        }
-        return eventReportsPayload;
-    }
-
     /**
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
-    async *#iterateReadAttributesPaths(
-        readRequest: ReadRequest,
-        eventReportsPayload: EventReportPayload[] | undefined,
-        exchange: MessageExchange,
-        message: Message,
-    ) {
-        const { isFabricFiltered } = readRequest;
+    async *#executeReadInteraction(readRequest: ReadRequest, exchange: MessageExchange, message: Message) {
+        const { isFabricFiltered: fabricFiltered } = readRequest;
 
         const context = OnlineContext({
             activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered: isFabricFiltered,
+            fabricFiltered,
             message,
             exchange,
             tracer: this.#tracer,
@@ -504,16 +377,45 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                         yield statusReport;
                         break;
                     }
+                    case "event-value": {
+                        const {
+                            path,
+                            value: payload,
+                            number: eventNumber,
+                            priority,
+                            timestamp: epochTimestamp,
+                            tlv: schema,
+                        } = report;
+                        const data: EventReportPayload = {
+                            eventData: {
+                                path,
+                                eventNumber,
+                                priority,
+                                epochTimestamp,
+                                payload,
+                                schema,
+                            },
+                            hasFabricSensitiveData: true, // There are no Fabric sensitive events as of now. If ever added sanitizing needs to be added
+                        };
+                        yield data;
+                        break;
+                    }
+                    case "event-status": {
+                        const { path, status } = report;
+                        const statusReport: EventReportPayload = {
+                            eventStatus: {
+                                path,
+                                status: { status },
+                            },
+                            hasFabricSensitiveData: false,
+                        };
+                        yield statusReport;
+                        break;
+                    }
                 }
             }
         }
         context[Symbol.dispose]();
-
-        if (eventReportsPayload !== undefined) {
-            for (const eventReport of eventReportsPayload) {
-                yield eventReport;
-            }
-        }
     }
 
     async handleReadRequest(
@@ -521,13 +423,20 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
         readRequest: ReadRequest,
         message: Message,
     ): Promise<{ dataReport: DataReport; payload?: DataReportPayloadIterator }> {
-        const { attributeRequests, eventRequests, isFabricFiltered, interactionModelRevision } = readRequest;
+        const {
+            attributeRequests,
+            eventRequests,
+            isFabricFiltered,
+            dataVersionFilters,
+            eventFilters,
+            interactionModelRevision,
+        } = readRequest;
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.#context.structure.resolveAttributeName(path)).join(", ") ?? "none"
-            }, events:${
-                eventRequests?.map(path => this.#context.structure.resolveEventName(path)).join(", ") ?? "none"
-            } isFabricFiltered=${isFabricFiltered}`,
+                attributeRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+            }${dataVersionFilters?.length ? ` with ${dataVersionFilters?.length} filters` : ""}, events:${
+                eventRequests?.map(path => this.#node.protocol.inspectPath(path)).join(", ") ?? "none"
+            }${eventFilters?.length ? `, ${eventFilters?.length} filters` : ""}, isFabricFiltered=${isFabricFiltered}`,
         );
 
         if (interactionModelRevision > Specification.INTERACTION_MODEL_REVISION) {
@@ -546,7 +455,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         if (message.packetHeader.sessionType !== SessionType.Unicast) {
             throw new StatusResponseError(
-                "Subscriptions are only allowed on unicast sessions",
+                "Reads are only allowed on unicast sessions", // Means "No groups"
                 StatusCode.InvalidAction,
             );
         }
@@ -556,12 +465,7 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
                 interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
                 suppressResponse: true,
             },
-            payload: this.#iterateReadAttributesPaths(
-                readRequest,
-                await this.#collectEventDataForRead(readRequest, exchange, message),
-                exchange,
-                message,
-            ),
+            payload: this.#executeReadInteraction(readRequest, exchange, message),
         };
     }
 
