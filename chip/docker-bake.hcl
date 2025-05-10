@@ -11,9 +11,8 @@ target "chip" {
     target = "chip"
 
     labels = {
-        "org.opencontainers.image.name" = "matter.js-chip"
         "org.opencontainers.image.version" = "${VERSION}"
-        "org.opencontainers.image.revision" = "${CHIP_COMMIT}"
+        "org.opencontainers.image.revision" = "${CHIP_COMMIT}",
     }
 
     args = {
@@ -21,7 +20,9 @@ target "chip" {
     }
 
     tags = [
-        "ghcr.io/matter-js/chip"
+        "ghcr.io/matter-js/chip:latest",
+        "ghcr.io/matter.js-chip:${CHIP_COMMIT}",
+        "chip:latest",
     ]
 
     output = [
@@ -58,15 +59,74 @@ target "chip-artifact" {
     ]
 }
 
-target "chip-apps" {
-    inherits = [ "chip" ]
-    target = "chip-apps"
+target "app" {
+    name = "${app.name}"
 
-    labels = {
-        "org.opencontainers.image.name" = "matter.js-chip-apps"
-        "org.opencontainers.image.version" = "${VERSION}"
-        "org.opencontainers.image.revision" = "${CHIP_COMMIT}"
+    matrix = {
+        app = [
+            {
+                name: "all-clusters",
+                target: "all-clusters",
+                bin: "chip-all-clusters-app",
+            },
+
+            {
+                name: "lock",
+                target: "lock",
+                bin: "chip-lock-app",
+            },
+
+            {
+                name: "tv",
+                target: "tv-app",
+                bin: "chip-tv-app",
+            },
+
+            {
+                name: "bridge",
+                target: "bridge",
+                bin: "chip-bridge-app",
+            },
+
+            {
+                name: "lit-icd",
+                target: "lit-icd",
+                bin: "lit-icd-app",
+            },
+
+            {
+                name: "microwave",
+                target: "microwave-oven",
+                bin: "chip-microwave-oven-app",
+            },
+
+            {
+                name: "rvc",
+                target: "rvc",
+                bin: "chip-rvc-app",
+            },
+
+            {
+                name: "network-manager",
+                target: "network-manager",
+                bin: "matter-network-manager-app",
+            },
+        ]
     }
+
+    inherits = [ "chip" ]
+    target = "chip-app"
+
+    args = {
+        APP_TARGET = "${app.target}"
+        APP_BIN = "${app.bin}"
+    }
+
+    tags = [
+        "ghcr.io/matter-js/chip-${app.name}:latest",
+        "ghcr.io/matter-js/chip-${app.name}:${CHIP_COMMIT}",
+        "chip-${app.name}:latest",
+    ]
 }
 
 target "base" {
@@ -74,7 +134,7 @@ target "base" {
     target = "base"
 
     tags = [
-        "ghcr.io/matter-js/chip-base"
+        "chip-base"
     ]
 }
 
@@ -83,7 +143,7 @@ target "build" {
     target = "build"
 
     tags = [
-        "ghcr.io/matter-js/chip-build"
+        "chip-build"
     ]
 }
 
@@ -92,7 +152,7 @@ target "source" {
     target = "source"
 
     tags = [
-        "ghcr.io/matter-js/chip-source"
+        "chip-source"
     ]
 }
 
@@ -101,15 +161,6 @@ target "bins" {
     target = "bins"
 
     tags = [
-        "ghcr.io/matter-js/chip-bins"
-    ]
-}
-
-target "install" {
-    inherits = [ "chip" ]
-    target = "install"
-
-    tags = [
-        "ghcr.io/matter-js/chip-install"
+        "chip-bins"
     ]
 }

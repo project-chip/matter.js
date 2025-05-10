@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# @license
+# Copyright 2022-2025 Matter.js Authors
+# SPDX-License-Identifier: Apache-2.0
+
+if [ -z "$1" ]; then
+    APP="all-clusters"
+else
+    APP="$1"
+    shift
+fi
+
+case "$APP" in
+    icd)
+        APP=lit-icd-app
+        ;;
+
+    network-manager)
+        APP=matter-network-manager-app
+        ;;
+
+    *)
+        APP="chip-$APP-app"
+        ;;
+esac
+
+docker run \
+    -it \
+    --rm \
+    --workdir / \
+    --security-opt apparmor:unconfined \
+    -v matter.js-mdns:/run/dbus \
+    --platform linux/amd64 \
+    --entrypoint "/bin/$APP" \
+    ghcr.io/matter-js/chip \
+    "$@"
