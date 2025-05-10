@@ -25,10 +25,14 @@ import type {
 import { AccessControl, FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
-import { camelize, Observable } from "@matter/general";
+import { camelize, Observable, ObserverGroup } from "@matter/general";
 import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
+
+interface DisposableClusterProtocol extends ClusterProtocol {
+    [Symbol.dispose]: () => void;
+}
 
 /**
  * Protocol view of a {@link Node}
@@ -166,7 +170,7 @@ class EndpointState {
     readonly protocol: EndpointProtocol;
     readonly #node: NodeState;
     readonly #activeClusters = new Set<ClusterId>();
-    readonly #clusters = new Set<ClusterProtocol>();
+    readonly #clusters = new Set<DisposableClusterProtocol>();
     readonly #clusterStateObservers = new Map<ClusterId, (changes: AttributeId[], version: number) => void>();
     readonly stateChanged = new Observable<[clusterId: ClusterId, changes: AttributeId[], version: number]>();
 
@@ -238,11 +242,12 @@ class EndpointState {
         }
 
         const stateObserver = this.#clusterStateObservers.get(id as ClusterId);
-        const protocol = this.protocol[id];
+        const protocol = this.protocol[id] as DisposableClusterProtocol;
         if (protocol) {
             if (stateObserver) {
                 protocol.stateChanged.off(stateObserver);
             }
+            protocol[Symbol.dispose]();
             this.#clusters.delete(protocol);
             delete this.protocol[id];
         }
@@ -260,11 +265,12 @@ class EndpointState {
     }
 }
 
-class ClusterState implements ClusterProtocol {
+class ClusterState implements DisposableClusterProtocol {
     readonly type: ClusterTypeProtocol;
     readonly #datasource: Datasource;
     readonly #endpointId: EndpointNumber;
     readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
+    readonly #quieterObservers = new ObserverGroup();
 
     constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
@@ -276,14 +282,15 @@ class ClusterState implements ClusterProtocol {
         for (const attr of type.attributes) {
             attributeNameToIdMap.set(attr.name, attr.id);
             if (attr.quieter) {
-                (this.#datasource.events[`${attr.name}$Changed`] as unknown as QuietEvent).online.on(() =>
-                    this.stateChanged.emit([attr.id], this.version),
+                this.#quieterObservers.on(
+                    (this.#datasource.events[`${attr.name}$Changed`] as unknown as QuietEvent).online,
+                    () => this.stateChanged.emit([attr.id], this.version),
                 );
             }
         }
 
         // Emit all attributes as changed that are not omitted or quieter
-        this.#datasource.stateChanged.on((changes: string[], version: number) => {
+        this.#quieterObservers.on(this.#datasource.stateChanged, (changes: string[], version: number) => {
             const data = changes
                 .map(name => attributeNameToIdMap.get(name))
                 .filter(
@@ -321,6 +328,10 @@ class ClusterState implements ClusterProtocol {
 
     inspect() {
         return this.toString();
+    }
+
+    [Symbol.dispose]() {
+        this.#quieterObservers.close();
     }
 }
 
