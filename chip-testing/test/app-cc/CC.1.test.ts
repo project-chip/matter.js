@@ -6,6 +6,12 @@
 
 describe("CC", () => {
     chip("CC/*").exclude(
+        // CC tests are incredibly slow so we split these out into CC.2.test.ts for CI purposes
+        "CC/5.*",
+        "CC/6.*",
+        "CC/7.*",
+        "CC/8.*",
+
         // Requires groups
         "CC/10.1",
 
