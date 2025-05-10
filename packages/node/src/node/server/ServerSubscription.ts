@@ -11,7 +11,7 @@ import { Specification } from "#model";
 import { ServerNode } from "#node/index.js";
 import type { AttributeResponseFilter, Message, MessageExchange } from "#protocol";
 import {
-    FilteredAttributeResponse,
+    AttributeSubscriptionResponse,
     InteractionServerMessenger,
     NoChannelError,
     NumberedOccurrence,
@@ -577,14 +577,14 @@ export class ServerSubscription extends Subscription {
         }).beginReadOnly();
 
         if (attributeFilter !== undefined && Read.containsAttribute(request)) {
-            const attributeReader = new FilteredAttributeResponse(
+            const attributeReader = new AttributeSubscriptionResponse(
                 this.#context.node.protocol,
                 session,
                 attributeFilter,
             );
             for (const chunk of attributeReader.process(request)) {
                 for (const report of chunk) {
-                    // No need to filter out status responses because FilteredAttributeResponse does that already
+                    // No need to filter out status responses because AttributeSubscriptionResponse does that already
                     yield InteractionServerMessenger.convertServerInteractionReport(report);
                 }
             }

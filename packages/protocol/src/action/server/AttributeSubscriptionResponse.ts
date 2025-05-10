@@ -18,10 +18,10 @@ export type AttributeResponseFilter = {
 };
 
 /**
- * FilteredAttributeResponse is a specialized version of AttributeResponse that processes a read/subscribe request
+ * AttributeSubscriptionResponse is a specialized version of AttributeResponse that processes a read/subscribe request
  * with a filter applied to the attributes. Only the attributes that match the filter will be processed.
  */
-export class FilteredAttributeResponse<
+export class AttributeSubscriptionResponse<
     SessionT extends AccessControl.Session = AccessControl.Session,
 > extends AttributeResponse<SessionT> {
     #filter: AttributeResponseFilter;

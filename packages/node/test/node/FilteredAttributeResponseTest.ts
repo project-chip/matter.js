@@ -6,7 +6,7 @@
 
 import { BasicInformationCluster } from "#clusters/basic-information";
 import { Specification } from "#model";
-import { AttributeResponseFilter, FilteredAttributeResponse, Read, ReadResult } from "#protocol";
+import { AttributeResponseFilter, AttributeSubscriptionResponse, Read, ReadResult } from "#protocol";
 import { AttributeId, ClusterId, EndpointNumber } from "#types";
 import { MockServerNode } from "./mock-server-node.js";
 import INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
@@ -101,7 +101,7 @@ async function readRaw(node: MockServerNode, filter: AttributeResponseFilter, da
         throw new Error("Expected an attribute request");
     }
     return node.online({}, ({ context }) => {
-        const response = new FilteredAttributeResponse(node.protocol, context, filter);
+        const response = new AttributeSubscriptionResponse(node.protocol, context, filter);
         const data = [...response.process(request)];
         data.forEach(chunks => {
             if (Array.isArray(chunks)) {
