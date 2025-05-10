@@ -50,7 +50,7 @@ export class RootSupervisor implements ValueSupervisor {
     #root: ValueSupervisor;
     #memberNames?: Set<string>;
     #persistentNames?: Set<string>;
-    #attributeIdsToNames?: Map<string, AttributeId>; // Whenever we need more than Attributes and Fields, we need to generalize
+    #attributeNamesToIds?: Map<string, AttributeId>; // Whenever we need more than Attributes and Fields, we need to generalize
 
     /**
      * Create a new supervisor.
@@ -155,8 +155,8 @@ export class RootSupervisor implements ValueSupervisor {
         return persistent;
     }
 
-    get attributeIdsToNames() {
-        let names = this.#attributeIdsToNames;
+    get attributeNamesToIds() {
+        let names = this.#attributeNamesToIds;
         if (!names) {
             names = new Map();
             for (const member of this.#members) {
@@ -165,7 +165,7 @@ export class RootSupervisor implements ValueSupervisor {
                 }
                 names.set(camelize(member.name), AttributeId(member.id));
             }
-            this.#attributeIdsToNames = names;
+            this.#attributeNamesToIds = names;
         }
         return names;
     }

@@ -277,7 +277,7 @@ class ClusterState implements DisposableClusterProtocol {
         this.#datasource = backing.datasource;
         this.#endpointId = backing.endpoint.number;
 
-        const attributeNameToIdMap = backing.type.supervisor.attributeIdsToNames;
+        const attributeNameToIdMap = backing.type.supervisor.attributeNamesToIds;
         // For quieter attributes, we need to use the online events to get real state changes
         for (const attr of type.attributes) {
             attributeNameToIdMap.set(attr.name, attr.id);
