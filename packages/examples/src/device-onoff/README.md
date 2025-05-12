@@ -33,7 +33,7 @@ or when starting from TS files:
 ```bash
 npm run matter-device -- --type socket --on="echo 255 > /sys/class/leds/led1/brightness" --off="echo 0 > /sys/class/leds/led1/brightness"
 ```
-(Please note the "--" to separate commandline parameters between the npm run and the executed script.
+(Please note the "--" to separate commandline parameters between the npm run and the executed script.)
 
 **If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
 
