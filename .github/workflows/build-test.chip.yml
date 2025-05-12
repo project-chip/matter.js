@@ -176,7 +176,7 @@ jobs:
       test-app-cc-1,
       test-app-cc-2
     ]
-    if: needs.chip-image.outputs.source == 'artifact' && github.event_name == 'schedule'
+    if: needs.chip-image.outputs.source == 'artifact' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     steps:
       - name: Login to GitHub Docker Registry
         uses: docker/login-action@v3
