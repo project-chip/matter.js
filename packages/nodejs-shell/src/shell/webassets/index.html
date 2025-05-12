@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!--
+* @license
+* Copyright 2022-2025 Matter.js Authors
+* SPDX-License-Identifier: Apache-2.0
+
+-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matter Web Shell</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .container>div {
+            background-color: #afa8a879;
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        .node-container {
+            background-color: #aba8af79;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tile {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: default;
+            transition: transform 0.2s;
+        }
+
+        .input-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .console {
+            background-color: #4e4e4e;
+            color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden !important;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .console div {
+            overflow-wrap: break-word !important;
+            white-space: normal !important;
+            word-break: break-all;
+            max-width: 100%;
+        }
+
+        .console .sent {
+            color: #0f0;
+        }
+
+        .console .received {
+            color: #fff;
+        }
+
+        .console .status {
+            color: #ff0;
+        }
+
+        .console .error {
+            color: #f00;
+        }
+
+        .connecting-node-status {
+            color: rgb(245, 54, 54);
+        }
+
+        .connected-node-status {
+            color: rgb(31, 218, 62);
+        }
+
+        .on {
+            background-color: lightgoldenrodyellow;
+        }
+
+        .off {
+            background-color: darkgrey;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: calc(100% - 10px);
+            margin-left: 5px;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            background-color: #d0d0d0;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="input-section">
+                <h2>Execute Shell Command</h2>
+                <input type="text" id="matterCommand" placeholder="Enter matter.js command">
+            </div>
+            <div class="input-section">
+                <h2>Pair Device</h2>
+                <input type="text" id="pairingCode" placeholder="Enter pairing code">
+            </div>
+        </div>
+        <div>
+            <h2>matter.js Web Shell Example</h2>
+            <div class="tiles" id="tiles"></div>
+            <br>
+            <div class="console" id="console"></div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_PORT = 3000; // Default port for WebSocket connection
+        const tiles = document.getElementById('tiles');
+        const consoleDiv = document.getElementById('console');
+        const matterCommand = document.getElementById('matterCommand');
+        const pairingCode = document.getElementById('pairingCode');
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.hostname || 'localhost';
+        const defaultPort = window.location.port || DEFAULT_PORT;
+        const wsUrl = `${protocol}//${host}:${defaultPort}`;
+
+        let ws = null;
+        let reconnectAttempts = 0;
+        let currentNode = null;
+        let currentEndpoint = null;
+        let currentEndpointType = "";
+        let pendingLog = [];
+
+        function logMessage(message, type) {
+            const lines = message.split('\n');
+            lines.forEach(line => {
+                const msg = document.createElement('div');
+                msg.innerText = line;
+                msg.className = type;
+                consoleDiv.appendChild(msg);
+            });
+
+            // Only scroll if the user is already at the bottom
+            if (consoleDiv.scrollTop + consoleDiv.clientHeight >= consoleDiv.scrollHeight - 50) consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        function setupWebSocket() {
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                sendCommand('config loglevel set info'); // info level required for some msgs to be passed
+                sendCommand('nodes connect');
+            }
+            ws.onclose = () => {
+                logMessage('WebSocket connection closed. Attempting to reconnect...', 'error');
+                scheduleReconnect();
+            };
+            ws.onerror = () => {
+                logMessage('WebSocket error. Attempting to reconnect...', 'error');
+                scheduleReconnect();
+            };
+            ws.onmessage = (event) => {
+                if (typeof event.data === 'string') {
+                    const message = event.data;
+                    logMessage(`Received: ${message}`, message.toLowerCase().includes('error') ? 'error' : 'received');
+
+                    // Note that the following 4 regex checks are for "node log NNN" messages. Processing is fragile as the messages
+                    // come one line at a time asyncronously and could be interleaved with other messages including
+                    // other "node log" messages. In this example, we only send one "node log" command at a time,
+
+                    let matches = message.match(/Logging structure of Node\s+(\d+)/); // logging structure of Node is underway
+                    if (matches) currentNode = matches[1];
+
+                    matches = message.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\.\d{3}\s+INFO\s+EndpointStructureLogger\s+⎸\s+Endpoint\s(\d+)\s\(([^)]+)\):$/);
+                    if (matches) { // could start collecting upcoming messages that define this endpoint
+                        currentEndpoint = matches[1];
+                        currentEndpointType = matches[2];
+                        nodeLogCollection(true); // restart the timeout for the current node log
+                    }
+
+                    // device type list for the "current" node and "current" endpoint
+                    matches = message.match(/"deviceTypeList"\s*\([^)]*\):\s*value\s*=\s*(\[[^\]]*\])/);
+                    if (matches) logMessage(`Device Type List: ${matches[1]}`, 'status');
+
+                    // could also check and handle others, i.e. toggle|on|off|moveToLevel|moveToColorTemperature etc.
+                    matches = message.match(/"(toggle)"/);
+                    if (matches) {
+                        if (!document.getElementById(`btn-${currentNode}/${currentEndpoint}`)) {
+                            const btn = document.createElement('button');
+                            btn.id = `btn-${currentNode}/${currentEndpoint}`;
+                            btn.textContent = "Toggle"; // + ": " + currentEndpointType;
+                            const cmd = `commands onoff toggle ${currentNode} ${currentEndpoint}`;
+                            btn.onclick = () => sendCommand(cmd);
+                            document.getElementById(`container-${currentNode}`).appendChild(btn);
+                            sendCommand(`attributes onoff read onoff ${currentNode} ${currentEndpoint}`); // get initial state
+                        }
+                        nodeLogCollection(true); // restart the timeout for the current node log
+                    }
+                    // end of "node log NNNN" messages processing
+
+                    // start of asynchronous messages processing
+
+                    matches = message.match(/stateInformationCallback Node (\d+) (\S+)/);
+                    if (matches) {
+                        updateTile(matches[1], matches[2]);
+                        if (matches[2] === "connected") {
+                            sendCommand(`subscribe ${matches[1]}`);
+                            pendingLog.push(matches[1]);
+                            if (pendingLog.length === 1) nodeLogCollection(false);
+                        }
+                    }
+
+                    matches = message.match(/(\d+): Attribute (\w+|\d+)\/(\d+)\/(\d+)\/(\w+) changed to (.+)/); // attribute changed
+                    if (matches && matches[4] == 6) styleButton(matches[1], matches[3], matches[6]);
+
+                    matches = message.match(/Attribute value for onOff (\d+)\/(\d+)\/(\d+)\/(\w+): (.+)/); // from "read attribute onOff"
+                    if (matches) styleButton(matches[1], matches[2], matches[5])
+                }
+            }
+        }
+        function nodeLogCollection(resetTimer) {
+            if (resetTimer) clearTimeout(logTimeout); // stop the timeout for the previous node log
+            else sendCommand(`node log ${pendingLog[0]}`);  // start collection
+
+            logTimeout = setTimeout(() => {
+                pendingLog.shift(); // timed out getting logs for this one - assume we're done
+                if (pendingLog.length > 0) nodeLogCollection(false); // start the next one
+            }, 500); // 1/2 second timeout after the last log message to make sure we get them all
+        }
+        function styleButton(nodeId, endpoint, state) {
+            const button = document.getElementById(`btn-${nodeId}/${endpoint}`);
+            if (!button) return;
+            button.classList.remove("on", "off");
+            button.classList.add(state === "true" ? "on" : "off");
+        }
+        function updateTile(nodeId, status) {
+            let tile = document.getElementById(`tile-${nodeId}`);
+            if (!tile) {
+                container = document.createElement('div');
+                container.id = `container-${nodeId}`;
+                container.className = 'node-container';
+                tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.id = `tile-${nodeId}`;
+                container.appendChild(tile);
+                tiles.appendChild(container);
+            }
+            tile.innerHTML = "<small>Node " + nodeId + "<br><span class=" +
+                ((status === "connected") ? "connected-node-status>" : "connecting-node-status>") + status + "</span></small>";
+        }
+        matterCommand.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                if (matterCommand.value === 'clear') consoleDiv.innerHTML = '';
+                else sendCommand(matterCommand.value ? matterCommand.value : "help");
+                matterCommand.value = '';
+            }
+        };
+        pairingCode.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                sendCommand(pairingCode.value ? `commission pair --pairing-code ${pairingCode.value}` : "help");
+                pairingCode.value = '';
+            }
+        };
+        function scheduleReconnect() {
+            const RECONNECT_DELAY = 1000; // Initial delay in ms
+            const MAX_RECONNECT_DELAY = 30000; // Max delay in ms
+            if (ws && ws.readyState !== WebSocket.CLOSED) return;
+            const delay = Math.min(RECONNECT_DELAY * Math.pow(2, reconnectAttempts), MAX_RECONNECT_DELAY);
+            logMessage(`Attempting to reconnect in ${delay / 1000} seconds...\n`, 'error');
+            setTimeout(() => {
+                reconnectAttempts++;
+                setupWebSocket();
+            }, delay);
+        }
+        function sendCommand(cmd, outputType = 'sent') {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(cmd + '\n');
+                logMessage(`Sent: ${cmd}`, 'sent');
+            } else logMessage(`WebSocket not connected. Command "${cmd}" skipped.\n`, 'error');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { setupWebSocket(); });
+    </script>
+</body>
+
+</html>
