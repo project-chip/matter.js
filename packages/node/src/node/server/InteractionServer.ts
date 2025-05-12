@@ -29,7 +29,6 @@ import {
     AccessControl,
     AccessDeniedError,
     AnyAttributeServer,
-    AnyEventServer,
     assertSecureSession,
     AttributePath,
     attributePathToId,
@@ -43,7 +42,6 @@ import {
     decodeAttributeValueWithSchema,
     decodeListAttributeValueWithSchema,
     EndpointInterface,
-    EventPath,
     ExchangeManager,
     expandPathsInAttributeData,
     FabricScopedAttributeServer,
@@ -77,7 +75,6 @@ import {
     TlvAny,
     TlvAttributePath,
     TlvCommandPath,
-    TlvEventFilter,
     TlvEventPath,
     TlvInvokeResponseData,
     TlvInvokeResponseForSend,
@@ -434,98 +431,6 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
             throw new InternalError("Reads should not return a promise.");
         }
         return result;
-    }
-
-    /**
-     * Reads the attributes for the given endpoint.
-     * This can currently only be used for subscriptions because errors are ignored!
-     */
-    protected readEndpointAttributesForSubscription(
-        attributes: { path: AttributePath; attribute: AnyAttributeServer<any> }[],
-        exchange: MessageExchange,
-        fabricFiltered: boolean,
-        message: Message,
-        offline = false,
-    ) {
-        const readAttributes = () => {
-            const result = new Array<{
-                path: AttributePath;
-                attribute: AnyAttributeServer<unknown>;
-                value: any;
-                version: number;
-            }>();
-            for (const { path, attribute } of attributes) {
-                try {
-                    const value = attribute.getWithVersion(
-                        exchange.session,
-                        fabricFiltered,
-                        offline ? undefined : message,
-                    );
-                    result.push({ path, attribute, value: value.value, version: value.version });
-                } catch (error) {
-                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
-                        logger.warn(
-                            `Permission denied reading attribute ${this.#context.structure.resolveAttributeName(path)}`,
-                        );
-                    } else {
-                        logger.warn(
-                            `Error reading attribute ${this.#context.structure.resolveAttributeName(path)}:`,
-                            error,
-                        );
-                    }
-                }
-            }
-            return result;
-        };
-
-        const result = offline
-            ? OfflineContext.act("offline-read", this.#activity, readAttributes)
-            : OnlineContext({
-                  activity: (exchange as WithActivity)[activityKey],
-                  fabricFiltered,
-                  message,
-                  exchange,
-                  tracer: this.#tracer,
-                  actionType: ActionTracer.ActionType.Read,
-                  node: this.#node,
-              }).act(readAttributes);
-        if (MaybePromise.is(result)) {
-            throw new InternalError("Online read should not return a promise.");
-        }
-        return result;
-    }
-
-    protected async readEvent(
-        path: EventPath,
-        eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: AnyEventServer<any, any>,
-        exchange: MessageExchange,
-        fabricFiltered: boolean,
-        message: Message,
-    ) {
-        const readEvent = (context: ActionContext) => {
-            if (
-                context.authorityAt(event.readAcl, {
-                    endpoint: path.endpointId,
-                    cluster: path.clusterId,
-                } as AccessControl.Location) !== AccessControl.Authority.Granted
-            ) {
-                throw new AccessDeniedError(
-                    `Access to ${path.endpointId}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
-                );
-            }
-            return event.get(exchange.session, fabricFiltered, message, eventFilters);
-        };
-
-        return OnlineContext({
-            activity: (exchange as WithActivity)[activityKey],
-            fabricFiltered,
-            message,
-            exchange,
-            tracer: this.#tracer,
-            actionType: ActionTracer.ActionType.Read,
-            node: this.#node,
-        }).act(readEvent);
     }
 
     async handleWriteRequest(
