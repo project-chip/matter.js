@@ -7,7 +7,7 @@
 import { BasicInformationCluster } from "#clusters/basic-information";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/index.js";
-import { AttributeResponse, Read, ReadResult } from "#protocol";
+import { AttributeReadResponse, Read, ReadResult } from "#protocol";
 import { ClusterId, EndpointNumber, StatusCode } from "#types";
 import { Specification } from "@matter/model";
 import { AttributeId } from "@matter/types";
@@ -254,7 +254,7 @@ async function readRaw(node: MockServerNode, data: Partial<Read.Attributes>) {
         throw new Error("Expected an attribute request");
     }
     return node.online({}, ({ context }) => {
-        const response = new AttributeResponse(node.protocol, context);
+        const response = new AttributeReadResponse(node.protocol, context);
         const data = [...response.process(request)];
         data.forEach(chunks => {
             if (Array.isArray(chunks)) {

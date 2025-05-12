@@ -8,7 +8,7 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import { InternalError } from "#general";
 import { AttributeId, AttributePath, ClusterId, EndpointNumber } from "#types";
 import { AccessControl } from "./AccessControl.js";
-import { AttributeResponse } from "./AttributeResponse.js";
+import { AttributeReadResponse } from "./AttributeReadResponse.js";
 
 type ClusterFilter = {
     [clusterId: ClusterId]: Set<AttributeId>;
@@ -18,12 +18,12 @@ export type AttributeResponseFilter = {
 };
 
 /**
- * AttributeSubscriptionResponse is a specialized version of AttributeResponse that processes a read/subscribe request
+ * AttributeSubscriptionResponse is a specialized version of AttributeReadResponse that processes a read/subscribe request
  * with a filter applied to the attributes. Only the attributes that match the filter will be processed.
  */
 export class AttributeSubscriptionResponse<
     SessionT extends AccessControl.Session = AccessControl.Session,
-> extends AttributeResponse<SessionT> {
+> extends AttributeReadResponse<SessionT> {
     #filter: AttributeResponseFilter;
     #currentEndpointFilter?: ClusterFilter;
     #currentClusterFilter?: Set<number>;

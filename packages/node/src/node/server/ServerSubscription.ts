@@ -29,7 +29,7 @@ import {
     StatusCode,
     StatusResponseError,
 } from "#types";
-import { AttributeResponse, EventResponse, Read, ReadResult } from "@matter/protocol";
+import { AttributeReadResponse, EventReadResponse, Read, ReadResult } from "@matter/protocol";
 import { WithActivity, activityKey } from "./InteractionServer.js";
 
 const logger = Logger.get("ServerSubscription");
@@ -426,7 +426,7 @@ export class ServerSubscription extends Subscription {
         let validEvents = 0;
 
         if (Read.containsAttribute(request)) {
-            const attributeReader = new AttributeResponse(this.#context.node.protocol, context);
+            const attributeReader = new AttributeReadResponse(this.#context.node.protocol, context);
             for (const chunk of attributeReader.process(request)) {
                 for (const report of chunk) {
                     if (report.kind === "attr-status") {
@@ -453,7 +453,7 @@ export class ServerSubscription extends Subscription {
         }
 
         if (Read.containsEvent(request)) {
-            const eventReader = new EventResponse(this.#context.node.protocol, context);
+            const eventReader = new EventReadResponse(this.#context.node.protocol, context);
             for await (const chunk of eventReader.process(request)) {
                 for (const report of chunk) {
                     if (report.kind === "event-status") {
@@ -595,7 +595,7 @@ export class ServerSubscription extends Subscription {
             // Add the new minimum event number to the request
             request.eventFilters = [{ eventMin: eventsMinNumber }];
 
-            const eventReader = new EventResponse(this.#context.node.protocol, session);
+            const eventReader = new EventReadResponse(this.#context.node.protocol, session);
             for await (const chunk of eventReader.process(request)) {
                 for (const report of chunk) {
                     if (report.kind === "event-status") {

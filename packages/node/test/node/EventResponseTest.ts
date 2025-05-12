@@ -7,7 +7,7 @@
 import { BasicInformationCluster } from "#clusters/basic-information";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/index.js";
-import { EventResponse, Read, ReadResult } from "#protocol";
+import { EventReadResponse, Read, ReadResult } from "#protocol";
 import { ClusterId, EndpointNumber, StatusCode } from "#types";
 import { Specification } from "@matter/model";
 import { EventId } from "@matter/types";
@@ -23,7 +23,7 @@ const ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT = Object.values(ROOT_ENDPOINT_FULL_C
     0,
 );
 
-describe("EventResponse", () => {
+describe("EventReadResponse", () => {
     beforeEach(() => {
         MockTime.reset();
     });
@@ -199,7 +199,7 @@ async function readRaw(node: MockServerNode, data: Partial<Read.Events>) {
         throw new Error("Expected an event request");
     }
     return node.online({}, async ({ context }) => {
-        const response = new EventResponse(node.protocol, context);
+        const response = new EventReadResponse(node.protocol, context);
         const responseChunks = [];
         for await (const chunks of response.process(request)) {
             if (Array.isArray(chunks)) {

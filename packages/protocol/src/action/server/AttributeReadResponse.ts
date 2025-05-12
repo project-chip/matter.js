@@ -24,7 +24,7 @@ import {
 } from "#types";
 import { StatusCode } from "@matter/types";
 
-const logger = Logger.get("AttributeResponse");
+const logger = Logger.get("AttributeReadResponse");
 
 export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(attr => attr.id));
 
@@ -33,14 +33,14 @@ export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(att
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class AttributeResponse<
+export class AttributeReadResponse<
     SessionT extends AccessControl.Session = AccessControl.Session,
 > extends DataResponse<SessionT> {
     #versions?: Record<EndpointNumber, Record<ClusterId, number>>;
 
     // Each input AttributePathIB that does not have an error installs a producer.  Producers run after validation and
     // generate actual attribute data
-    #dataProducers?: Array<(this: AttributeResponse) => Iterable<ReadResult.Chunk>>;
+    #dataProducers?: Array<(this: AttributeReadResponse) => Iterable<ReadResult.Chunk>>;
 
     // The initial "chunk" may be a list of errors.  As producers execute it is a set of records associated with the
     // most recently touched endpoint.  When the endpoint changes the previous chunk emits
@@ -149,7 +149,7 @@ export class AttributeResponse<
         const wpf = wildcardPathFlags ? WildcardPathFlagsCodec.encode(wildcardPathFlags) : 0;
 
         if (endpointId === undefined) {
-            this.#addProducer(function* (this: AttributeResponse) {
+            this.#addProducer(function* (this: AttributeReadResponse) {
                 this.#wildcardPathFlags = wpf;
                 for (const endpoint of this.node) {
                     yield* this.readEndpointForWildcard(endpoint, path);
@@ -160,7 +160,7 @@ export class AttributeResponse<
 
         const endpoint = this.node[endpointId];
         if (endpoint) {
-            this.#addProducer(function (this: AttributeResponse) {
+            this.#addProducer(function (this: AttributeReadResponse) {
                 this.#wildcardPathFlags = wpf;
                 return this.readEndpointForWildcard(endpoint, path);
             });
@@ -411,7 +411,7 @@ export class AttributeResponse<
     /**
      * Add a function that produces data.  These functions are run after validation of input paths.
      */
-    #addProducer(producer: (this: AttributeResponse) => Iterable<ReadResult.Chunk>) {
+    #addProducer(producer: (this: AttributeReadResponse) => Iterable<ReadResult.Chunk>) {
         if (this.#dataProducers) {
             this.#dataProducers.push(producer);
         } else {

@@ -15,9 +15,9 @@ import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
-import { EventResponse } from "#action/server/EventResponse.js";
+import { EventReadResponse } from "#action/server/EventReadResponse.js";
 import { Logger, NotImplementedError } from "#general";
-import { AttributeResponse } from "./AttributeResponse.js";
+import { AttributeReadResponse } from "./AttributeReadResponse.js";
 
 const logger = Logger.get("ServerInteraction");
 
@@ -45,7 +45,7 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
 
         let readInfo = "";
         if (Read.containsAttribute(request)) {
-            const attributeReader = new AttributeResponse(this.#node, session);
+            const attributeReader = new AttributeReadResponse(this.#node, session);
             yield* attributeReader.process(request);
 
             const { existent, status, value } = attributeReader.counts;
@@ -53,7 +53,7 @@ export class ServerInteraction<SessionT extends AccessControl.Session = AccessCo
         }
 
         if (Read.containsEvent(request)) {
-            const eventReader = new EventResponse(this.#node, session);
+            const eventReader = new EventReadResponse(this.#node, session);
             yield* eventReader.process(request);
             const { existent, status, value } = eventReader.counts;
             readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;

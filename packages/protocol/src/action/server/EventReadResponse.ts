@@ -23,7 +23,7 @@ import {
     TlvSchema,
 } from "#types";
 
-const logger = Logger.get("EventResponse");
+const logger = Logger.get("EventReadResponse");
 
 /**
  * Implements read of event data for Matter "read" and "subscribe" interactions.
@@ -32,7 +32,7 @@ const logger = Logger.get("EventResponse");
  *
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
-export class EventResponse<
+export class EventReadResponse<
     SessionT extends AccessControl.Session = AccessControl.Session,
 > extends DataResponse<SessionT> {
     // Normalized Event Filter to just our node-id
