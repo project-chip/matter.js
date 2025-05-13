@@ -183,6 +183,9 @@ jobs:
         github.event_name == 'workflow_dispatch'
       )
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
       - name: Login to GitHub Docker Registry
         uses: docker/login-action@v3
         with:
@@ -192,9 +195,6 @@ jobs:
 
       - name: Load image from artifact
         uses: ./.github/actions/load-chip
-
-      - name: Check out matter.js
-        uses: actions/checkout@v4
 
       - name: Sync CHIP SHA with built version
         env:
