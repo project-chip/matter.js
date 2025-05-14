@@ -162,6 +162,6 @@ jobs:
         body: |
           Update version by nightly dev release
         labels: |
-          automated pr
+          automated-npm-release
         assignees: Automator77
         draft: false

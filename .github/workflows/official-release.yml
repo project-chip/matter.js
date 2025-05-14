@@ -146,6 +146,6 @@ jobs:
           body: |
             Update version by release action
           labels: |
-            automated pr
+            automated-npm-release
           assignees: Automator77
           draft: false
