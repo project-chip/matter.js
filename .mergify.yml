@@ -16,7 +16,8 @@ pull_request_rules:
         - "check-success=pullapprove"
         - "check-skipped=pullapprove"
         - "check-neutral=pullapprove"
-      - label!="automated pr"             # Don't auto merge automated PRs, other processes do this
+      - label!="automated-npm-release"             # Don't auto merge automated PRs, other processes do this
+      - label!="automated-docker-release"             # Don't auto merge automated PRs, other processes do this
       - or:
         - "author=dependabot[bot]"        # merge dependabot PRs automatically
         - "label=automerge"               # merge PRs with the automerge label

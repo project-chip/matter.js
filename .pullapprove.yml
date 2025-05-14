@@ -58,7 +58,11 @@ overrides:
     ############################################################
     #  Automatic PRs for Releases
     ############################################################
-    - if: "'automated pr' in labels"
+    - if: "'automated-npm-release' in labels"
+      status: success
+      explanation: "Automatic PR for Releases, bypassing reviews"
+
+    - if: "'automated-docker-release' in labels"
       status: success
       explanation: "Automatic PR for Releases, bypassing reviews"
 
