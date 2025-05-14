@@ -20,13 +20,14 @@ import type {
     ClusterTypeProtocol,
     CollectionProtocol,
     EndpointProtocol,
+    InteractionSession,
     NodeProtocol,
 } from "#protocol";
-import { AccessControl, FabricManager } from "#protocol";
+import { FabricManager } from "#protocol";
 import type { AttributeId, ClusterId, DeviceTypeId, EndpointNumber, FabricIndex, TlvSchema } from "#types";
 import { WildcardPathFlags as WildcardPathFlagsType } from "#types";
 import { camelize, Observable, ObserverGroup } from "@matter/general";
-import { EventTypeProtocol, OccurrenceManager } from "@matter/protocol";
+import { EventTypeProtocol, OccurrenceManager, Val } from "@matter/protocol";
 import { AttributePath, EventId, EventPath } from "@matter/types";
 import { DescriptorBehavior } from "../../behaviors/descriptor/DescriptorBehavior.js";
 
@@ -311,12 +312,16 @@ class ClusterState implements DisposableClusterProtocol {
         return this.#datasource.location;
     }
 
+    get readState(): Val.ProtocolStruct {
+        return this.#datasource.view;
+    }
+
     get stateChanged() {
         return this.#stateChanged;
     }
 
-    open(session: AccessControl.Session) {
-        if (!("transaction" in session)) {
+    async openForWrite(session: InteractionSession): Promise<Val.ProtocolStruct> {
+        if (session.transaction === undefined) {
             throw new ImplementationError("Cluster protocol must be opened with a supervisor session");
         }
         return this.#datasource.reference(session as ValueSupervisor.Session);

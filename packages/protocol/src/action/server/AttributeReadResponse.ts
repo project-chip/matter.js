@@ -264,12 +264,12 @@ export class AttributeReadResponse<
                 }
                 this.#currentEndpoint = endpoint;
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState;
             } else if (this.#currentCluster !== cluster) {
                 this.#currentCluster = cluster;
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState;
             } else if (this.#currentState === undefined) {
-                this.#currentState = cluster.open(this.session);
+                this.#currentState = cluster.readState;
             }
 
             const value = this.#currentState[attributeId];
@@ -387,7 +387,7 @@ export class AttributeReadResponse<
         }
 
         if (this.#currentState === undefined) {
-            this.#currentState = this.#guardedCurrentCluster.open(this.session);
+            this.#currentState = this.#guardedCurrentCluster.readState;
         }
         const value = this.#currentState[attribute.id];
         if (value === undefined) {
