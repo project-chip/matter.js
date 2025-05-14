@@ -268,7 +268,6 @@ class EndpointState {
 
 class ClusterState implements DisposableClusterProtocol {
     readonly type: ClusterTypeProtocol;
-    readonly #behaviorType: Behavior.Type;
     readonly #datasource: Datasource;
     readonly #endpointId: EndpointNumber;
     readonly #stateChanged = new Observable<[changes: AttributeId[], version: number]>();
@@ -276,7 +275,6 @@ class ClusterState implements DisposableClusterProtocol {
 
     constructor(type: ClusterTypeProtocol, backing: BehaviorBacking) {
         this.type = type;
-        this.#behaviorType = backing.type;
         this.#datasource = backing.datasource;
         this.#endpointId = backing.endpoint.number;
 
@@ -326,7 +324,7 @@ class ClusterState implements DisposableClusterProtocol {
         if (session.transaction === undefined) {
             throw new ImplementationError("Cluster protocol must be opened with a supervisor session");
         }
-        session.transaction.addParticipants(this.#behaviorType);
+        session.transaction.addResources(this.#datasource);
         await session.transaction.begin();
         return this.#datasource.reference(session as ValueSupervisor.Session);
     }
