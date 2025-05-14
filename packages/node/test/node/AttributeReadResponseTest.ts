@@ -30,6 +30,35 @@ const ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT = Object.values(ROOT_ENDPOINT_FULL_C
 
 describe("AttributeReadResponse", () => {
     it("reads concrete attribute", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await readAttr(
+            node,
+            Read.Attribute({
+                endpoint: node,
+                cluster: BasicInformationCluster,
+                attributes: "vendorName",
+            }),
+        );
+
+        expect(response.data).deep.equals([
+            [
+                {
+                    kind: "attr-value",
+                    path: {
+                        attributeId: 1,
+                        clusterId: 40,
+                        endpointId: 0,
+                    },
+                    tlv: {},
+                    value: "Matter.js Test Vendor",
+                    version: 1,
+                },
+            ],
+        ]);
+        expect(response.counts).deep.equals({ status: 0, success: 1, existent: 1 });
+    });
+
+    it("reads endpoint wildcard attribute", async () => {
         const response = await readAttr(
             await MockServerNode.createOnline(),
             Read.Attribute({

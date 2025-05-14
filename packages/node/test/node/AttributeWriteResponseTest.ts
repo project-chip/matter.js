@@ -6,7 +6,7 @@
 
 import { BasicInformationCluster } from "#clusters/basic-information";
 import { AttributeWriteResponse, Write } from "#protocol";
-import { StatusCode } from "@matter/types";
+import { StatusCode } from "#types";
 import { MockServerNode } from "./mock-server-node.js";
 
 describe("AttributeReaderRequest", () => {
@@ -15,9 +15,36 @@ describe("AttributeReaderRequest", () => {
         const response = await writeAttr(
             node,
             Write.Attribute({
+                endpoint: node,
                 cluster: BasicInformationCluster,
                 attributes: "nodeLabel",
                 value: "Test Label",
+            }),
+        );
+
+        expect(response.data).deep.equals([
+            {
+                kind: "attr-status",
+                path: {
+                    attributeId: 5,
+                    clusterId: 40,
+                    endpointId: 0,
+                },
+                status: StatusCode.Success,
+                clusterStatus: undefined,
+            },
+        ]);
+        expect(response.counts).deep.equals({ status: 0, success: 1, existent: 1 });
+    });
+
+    it("writes endpoint wildcard attribute", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await writeAttr(
+            node,
+            Write.Attribute({
+                cluster: BasicInformationCluster,
+                attributes: "nodeLabel",
+                value: "Test Label 2",
             }),
         );
 
@@ -62,6 +89,67 @@ describe("AttributeReaderRequest", () => {
         ]);
         expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
     });
+
+    it("writes version mismatch concrete attribute with error", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await writeAttr(
+            node,
+            Write.Attribute({
+                endpoint: node,
+                cluster: BasicInformationCluster,
+                attributes: "nodeLabel",
+                value: "Test Label",
+                version: 99,
+            }),
+        );
+
+        expect(response.data).deep.equals([
+            {
+                kind: "attr-status",
+                path: {
+                    attributeId: 5,
+                    clusterId: 40,
+                    endpointId: 0,
+                },
+                status: StatusCode.DataVersionMismatch,
+                clusterStatus: undefined,
+            },
+        ]);
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
+    });
+
+    /*it("writes with invalid wildcard combination", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await writeAttr(
+            node,
+            Write({
+                writes: [
+                    {
+                        path: {
+                            endpointId: EndpointNumber(0),
+                            clusterId: BasicInformationCluster.id,
+                            attributeId: BasicInformationCluster.attributes.nodeLabel.id,
+                        },
+                        data: TlvString.encodeTlv("Test Label"),
+                    },
+                ],
+            }),
+        );
+
+        expect(response.data).deep.equals([
+            {
+                kind: "attr-status",
+                path: {
+                    attributeId: 5,
+                    clusterId: 40,
+                    endpointId: 0,
+                },
+                status: StatusCode.DataVersionMismatch,
+                clusterStatus: undefined,
+            },
+        ]);
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
+    });*/
 
     /*it("reads concrete attribute with version filter", async () => {
         const response = await readRaw(await MockServerNode.createOnline(), {
@@ -253,7 +341,7 @@ async function writeRaw(node: MockServerNode, data: Write) {
         ...data,
     } as Write;
 
-    return node.online({}, async ({ context }) => {
+    return node.online({ command: true }, async ({ context }) => {
         const response = new AttributeWriteResponse(node.protocol, context);
         return { data: await response.process(request), counts: response.counts };
     });

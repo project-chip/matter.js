@@ -10,7 +10,6 @@ import { Write } from "#action/request/Write.js";
 import { WriteResult } from "#action/response/WriteResult.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { DataResponse, FallbackLimits, WildcardPathFlagsCodec } from "#action/server/DataResponse.js";
-import { Val } from "#action/Val.js";
 import { Diagnostic, InternalError, Logger } from "#general";
 import { AttributeModel, DataModelPath, ElementTag, FabricIndex as FabricIndexField } from "#model";
 import {
@@ -39,7 +38,6 @@ export class AttributeWriteResponse<
     // a cache between producers that touch the same endpoint and/or cluster
     #currentEndpoint?: EndpointProtocol;
     #currentCluster?: ClusterProtocol;
-    #currentReadState?: Val.ProtocolStruct;
     #previousProcessedAttributePath?: WriteResult.ConcreteAttributePath;
     #wildcardPathFlags = 0;
 
@@ -89,14 +87,6 @@ export class AttributeWriteResponse<
             throw new InternalError("currentCluster is not set. Should never happen");
         }
         return this.#currentCluster;
-    }
-
-    /** Guarded accessor for this.#currentReadState.  This should never be undefined */
-    get #guardedReadState(): Val.ProtocolStruct {
-        if (this.#currentReadState === undefined) {
-            throw new InternalError("currentReadState is not set. Should never happen");
-        }
-        return this.#currentReadState;
     }
 
     get counts() {
@@ -233,12 +223,8 @@ export class AttributeWriteResponse<
         if (this.#currentEndpoint !== endpoint) {
             this.#currentEndpoint = endpoint;
             this.#currentCluster = cluster;
-            this.#currentReadState = cluster.readState(this.session);
         } else if (this.#currentCluster !== cluster) {
             this.#currentCluster = cluster;
-            this.#currentReadState = cluster.readState(this.session);
-        } else if (this.#currentReadState === undefined) {
-            this.#currentReadState = cluster.readState(this.session);
         }
 
         return await this.writeValue(attribute, path, value);
@@ -270,7 +256,6 @@ export class AttributeWriteResponse<
         if (this.#currentEndpoint !== endpoint) {
             this.#currentEndpoint = endpoint;
             this.#currentCluster = undefined;
-            this.#currentReadState = undefined;
         }
 
         const cluster = endpoint[clusterId];
@@ -293,7 +278,6 @@ export class AttributeWriteResponse<
 
         if (this.#currentCluster !== cluster) {
             this.#currentCluster = cluster;
-            this.#currentReadState = undefined;
         }
         const { attributeId } = path;
 
@@ -328,10 +312,6 @@ export class AttributeWriteResponse<
             (attribute.limits.timed && !this.session.timed)
         ) {
             return;
-        }
-
-        if (this.#currentReadState === undefined) {
-            this.#currentReadState = this.#guardedCurrentCluster.readState(this.session);
         }
 
         return this.writeValue(
@@ -397,10 +377,6 @@ export class AttributeWriteResponse<
                 const writeState = await this.#guardedCurrentCluster.openForWrite(this.session);
                 writeState[attributeId] = decoded;
                 await this.session.transaction?.commit();
-                logger.debug(
-                    () =>
-                        `CHECK attribute ${this.node.inspectPath(path)}=${Diagnostic.json(this.#guardedReadState[attributeId])}`,
-                );
             } else if (listIndex === null) {
                 if (
                     previousPath?.endpointId !== path.endpointId ||

@@ -28,11 +28,11 @@ export function Write(...data: Write.Attribute[]): Write;
 
 export function Write(optionsOrData: Write.Options | Write.Attribute, ...data: Write.Attribute[]): Write {
     let options;
-    if ("writes" in optionsOrData) {
-        options = optionsOrData;
-    } else {
+    if ("kind" in optionsOrData) {
         data = [optionsOrData as Write.Attribute, ...data];
         options = {};
+    } else {
+        options = optionsOrData;
     }
     const { writes: writeRequests = [] } = options;
 
@@ -70,20 +70,24 @@ export function Write(optionsOrData: Write.Options | Write.Attribute, ...data: W
         const { endpoint, value, version: dataVersion } = data;
 
         // Configure base AttributePath
-        const prototype: AttributeData = {
+        const prototype: Omit<AttributeData, "data"> = {
             path: {
                 endpointId: endpoint !== undefined ? Specifier.endpointIdOf(data) : undefined,
                 clusterId: cluster.id,
                 attributeId: undefined,
             },
-            data: value, //should be schema.encodeTlv(value, { forWriteInteraction: true }),
             dataVersion,
         };
 
         for (const specifier of attributes) {
+            const attribute = Specifier.attributeFor(cluster, specifier);
             writeRequests.push({
                 ...prototype,
-                path: { ...prototype.path, attributeId: Specifier.attributeFor(cluster, specifier).id },
+                path: {
+                    ...prototype.path,
+                    attributeId: attribute.id,
+                },
+                data: attribute.schema.encodeTlv(value, { forWriteInteraction: true }),
             });
         }
     }
@@ -104,12 +108,14 @@ export namespace Write {
         | Attribute.Concrete<C>
         | Attribute.WildcardEndpoint<C>
     ) & {
+        kind: "attribute";
         value: any;
         version?: number;
     };
 
-    export function Attribute<const C extends ClusterType>(data: Attribute<C>): Attribute<C> {
+    export function Attribute<const C extends ClusterType>(data: Omit<Attribute<C>, "kind">): Attribute<C> {
         return {
+            kind: "attribute",
             ...data,
         };
     }
