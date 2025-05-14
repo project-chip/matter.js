@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/index.js";
 import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
@@ -34,7 +35,7 @@ export const GlobalAttrIds = new Set(Object.values(GlobalAttributes({})).map(att
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
 export class AttributeReadResponse<
-    SessionT extends AccessControl.Session = AccessControl.Session,
+    SessionT extends InteractionSession = InteractionSession,
 > extends DataResponse<SessionT> {
     #versions?: Record<EndpointNumber, Record<ClusterId, number>>;
 

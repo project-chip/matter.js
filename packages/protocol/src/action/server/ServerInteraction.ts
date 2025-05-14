@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interactable } from "#action/Interactable.js";
+import { Interactable, InteractionSession } from "#action/Interactable.js";
 import { NodeProtocol } from "#action/protocols.js";
 import { Invoke } from "#action/request/Invoke.js";
 import { Read } from "#action/request/Read.js";
@@ -14,10 +14,10 @@ import { InvokeResult } from "#action/response/InvokeResult.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { SubscribeResult } from "#action/response/SubscribeResult.js";
 import { WriteResult } from "#action/response/WriteResult.js";
-import { AccessControl } from "#action/server/AccessControl.js";
 import { EventReadResponse } from "#action/server/EventReadResponse.js";
 import { Logger, NotImplementedError } from "#general";
 import { AttributeReadResponse } from "./AttributeReadResponse.js";
+import { AttributeWriteResponse } from "./AttributeWriteResponse.js";
 
 const logger = Logger.get("ServerInteraction");
 
@@ -31,7 +31,7 @@ const logger = Logger.get("ServerInteraction");
  *
  * - InteractionEndpointStructure ({@link NodeProtocol} is largely duplicative)
  */
-export class ServerInteraction<SessionT extends AccessControl.Session = AccessControl.Session>
+export class ServerInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
 {
     #node: NodeProtocol;

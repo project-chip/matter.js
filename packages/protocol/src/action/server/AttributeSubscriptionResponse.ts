@@ -3,11 +3,11 @@
  * Copyright 2022-2025 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { InteractionSession } from "#action/index.js";
 import { AttributeTypeProtocol, ClusterProtocol, EndpointProtocol, NodeProtocol } from "#action/protocols.js";
 import { ReadResult } from "#action/response/ReadResult.js";
 import { InternalError } from "#general";
 import { AttributeId, AttributePath, ClusterId, EndpointNumber } from "#types";
-import { AccessControl } from "./AccessControl.js";
 import { AttributeReadResponse } from "./AttributeReadResponse.js";
 
 type ClusterFilter = {
@@ -22,7 +22,7 @@ export type AttributeResponseFilter = {
  * with a filter applied to the attributes. Only the attributes that match the filter will be processed.
  */
 export class AttributeSubscriptionResponse<
-    SessionT extends AccessControl.Session = AccessControl.Session,
+    SessionT extends InteractionSession = InteractionSession,
 > extends AttributeReadResponse<SessionT> {
     #filter: AttributeResponseFilter;
     #currentEndpointFilter?: ClusterFilter;

@@ -3,6 +3,7 @@
  * Copyright 2022-2025 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { InteractionSession } from "#action/index.js";
 import { NodeProtocol } from "#action/protocols.js";
 import { AccessControl } from "#action/server/AccessControl.js";
 import { AccessLevel } from "#model";
@@ -19,12 +20,12 @@ export const FallbackLimits: AccessControl.Limits = {
     writeLevel: AccessLevel.Administer,
 };
 
-export abstract class DataResponse<SessionT extends AccessControl.Session = AccessControl.Session> {
+export abstract class DataResponse<SessionT extends InteractionSession = InteractionSession> {
     // Configuration
     #session: SessionT;
     #node: NodeProtocol;
 
-    // The node ID may be expensive to retrieve and is invariant so we cache it here
+    // The node ID may be expensive to retrieve and is invariant, so we cache it here
     #cachedNodeId?: NodeId;
 
     constructor(node: NodeProtocol, session: SessionT) {

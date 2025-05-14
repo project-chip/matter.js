@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Interactable } from "#action/Interactable.js";
+import { Interactable, InteractionSession } from "#action/Interactable.js";
 import { Invoke } from "#action/request/Invoke.js";
 import { Read } from "#action/request/Read.js";
 import { Subscribe } from "#action/request/Subscribe.js";
@@ -30,7 +30,7 @@ export interface ClientInteractableContext {
 /**
  * This is a WIP and currently largely a stub.
  */
-export class ClientInteraction<SessionT extends AccessControl.Session = AccessControl.Session>
+export class ClientInteraction<SessionT extends InteractionSession = InteractionSession>
     implements Interactable<SessionT>
 {
     readonly #exchanges: ExchangeProvider;

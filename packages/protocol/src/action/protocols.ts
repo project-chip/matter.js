@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/Interactable.js";
 import { OccurrenceManager } from "#events/OccurrenceManager.js";
 import { MaybePromise, Observable } from "#general";
 import { DataModelPath, MatterModel } from "#model";

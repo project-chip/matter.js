@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InteractionSession } from "#action/index.js";
 import { ClusterProtocol, EndpointProtocol, EventTypeProtocol, NodeProtocol } from "#action/protocols.js";
 import { Read } from "#action/request/Read.js";
 import { ReadResult } from "#action/response/ReadResult.js";
@@ -33,7 +34,7 @@ const logger = Logger.get("EventReadResponse");
  * TODO - profile; ensure nested functions are properly JITed and/or inlined
  */
 export class EventReadResponse<
-    SessionT extends AccessControl.Session = AccessControl.Session,
+    SessionT extends InteractionSession = InteractionSession,
 > extends DataResponse<SessionT> {
     // Normalized Event Filter to just our node-id
     #eventMinVersion?: EventNumber;
