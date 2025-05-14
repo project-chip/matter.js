@@ -206,16 +206,20 @@ export class AttributeWriteResponse<
             return this.#asStatus(path, Status.UnsupportedAttribute);
         }
         if (!limits.writable) {
+            this.#errorCount++;
             return this.#asStatus(path, Status.UnsupportedWrite);
         }
         if (limits.timed && !this.session.timed) {
+            this.#errorCount++;
             return this.#asStatus(path, Status.NeedsTimedInteraction);
         }
         if (limits.fabricScoped && this.session.fabric === undefined) {
+            this.#errorCount++;
             return this.#asStatus(path, Status.UnsupportedAccess);
         }
 
         if (version !== undefined && version !== cluster.version) {
+            this.#errorCount++;
             return this.#asStatus(path, Status.DataVersionMismatch);
         }
 

@@ -324,7 +324,7 @@ class ClusterState implements DisposableClusterProtocol {
         if (session.transaction === undefined) {
             throw new ImplementationError("Cluster protocol must be opened with a supervisor session");
         }
-        session.transaction.addResources(this.#datasource);
+        await session.transaction.addResources(this.#datasource);
         await session.transaction.begin();
         return this.#datasource.reference(session as ValueSupervisor.Session);
     }

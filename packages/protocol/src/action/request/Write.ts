@@ -29,7 +29,7 @@ export function Write(...data: Write.Attribute[]): Write;
 export function Write(optionsOrData: Write.Options | Write.Attribute, ...data: Write.Attribute[]): Write {
     let options;
     if ("kind" in optionsOrData) {
-        data = [optionsOrData as Write.Attribute, ...data];
+        data = [optionsOrData, ...data];
         options = {};
     } else {
         options = optionsOrData;
