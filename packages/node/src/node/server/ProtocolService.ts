@@ -506,26 +506,27 @@ function toWildcardOrHex(value: number | bigint | undefined) {
 function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath) {
     const { endpointId, clusterId } = path;
     const isUrgentString = "isUrgent" in path && path.isUrgent ? "!" : "";
+    const listIndexString = "listIndex" in path && path.listIndex === null ? "[ADD]" : "";
 
     const elementId = "attributeId" in path ? path.attributeId : "eventId" in path ? path.eventId : undefined;
 
     if (endpointId === undefined) {
-        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `*/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
 
     const endpoint = node[endpointId];
     if (endpoint === undefined) {
-        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `unknown(${toWildcardOrHex(endpointId)})/${toWildcardOrHex(clusterId)}/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
     const endpointName = `${endpoint.name}(${toWildcardOrHex(endpointId)})`;
 
     if (clusterId === undefined) {
-        return `${endpointName}/*/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `${endpointName}/*/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
 
     const cluster = endpoint[clusterId];
     if (cluster === undefined) {
-        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${isUrgentString}`;
+        return `${endpointName}/unknown(${toWildcardOrHex(clusterId)})/${toWildcardOrHex(elementId)}${listIndexString}${isUrgentString}`;
     }
     const clusterName = `${cluster.type.name}(${toWildcardOrHex(clusterId)})`;
 
@@ -534,8 +535,8 @@ function resolvePathForNode(node: NodeProtocol, path: AttributePath | EventPath)
         return `${endpointName}/${clusterName}/${event?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
     } else if ("attributeId" in path && elementId !== undefined) {
         const attribute = cluster.type.attributes[elementId];
-        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${isUrgentString}`;
+        return `${endpointName}/${clusterName}/${attribute?.name ?? "unknown"}(${toWildcardOrHex(elementId)})${listIndexString}${isUrgentString}`;
     } else {
-        return `${endpointName}/${clusterName}/*${isUrgentString}`;
+        return `${endpointName}/${clusterName}/*${listIndexString}${isUrgentString}`;
     }
 }
