@@ -1,0 +1,35 @@
+# This workflow reacts on a PR that is labeled with "automated-docker-release", will automatically merge it and
+# create a new release on npm.
+name: Automatic Labeled NPM Release
+
+on:
+  pull_request:
+    types: [labeled]
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}-auto-npm-release
+  cancel-in-progress: true
+
+jobs:
+  auto-merge:
+    if: |
+      always() &&
+      github.event_name == 'pull_request' &&
+      github.repository == 'project-chip/matter.js' &&
+      contains(github.event.pull_request.labels.*.name, 'automated-docker-release')
+    runs-on: ubuntu-latest
+    steps:
+      - id: automerge
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.16.4"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "automated-docker-release"
+          MERGE_FILTER_AUTHOR: "Automator77"
+          MERGE_FORKS: "false"
+          MERGE_DELETE_BRANCH: "false"
+          UPDATE_LABELS: "automated-docker-release"
+          MERGE_METHOD: "squash"
+          MERGE_RETRIES: "50"
+          MERGE_RETRY_SLEEP: "60000"
