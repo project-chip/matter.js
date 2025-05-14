@@ -8,6 +8,6 @@ import type { Write } from "#action/request/Write.js";
 import type { CancelablePromise } from "#general";
 import type { WriteResponse } from "#types";
 
-export type WriteResult<T extends Write> = CancelablePromise<
-    T extends { suppressResponse: true } ? void : WriteResponse
+export type WriteResult<T extends Write> = Promise<
+    T extends { suppressResponse: true } ? void : WriteResult.AttributeStatus[]
 >;
