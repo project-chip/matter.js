@@ -109,7 +109,7 @@ export interface ClusterProtocol {
     /**
      * Read-only state of the cluster
      */
-    readonly readState: Val.ProtocolStruct;
+    readState(session: InteractionSession): Val.ProtocolStruct;
 
     /**
      * Writeable record of attribute values, keyed by attribute ID.

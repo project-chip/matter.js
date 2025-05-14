@@ -312,8 +312,8 @@ class ClusterState implements DisposableClusterProtocol {
         return this.#datasource.location;
     }
 
-    get readState(): Val.ProtocolStruct {
-        return this.#datasource.view;
+    readState(session: InteractionSession): Val.ProtocolStruct {
+        return this.#datasource.reference(session as ValueSupervisor.Session);
     }
 
     get stateChanged() {
