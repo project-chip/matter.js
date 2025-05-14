@@ -1,6 +1,5 @@
-# This workflow reacts on a PR that is labeled with "automated-docker-release", will automatically merge it and
-# create a new release on npm.
-name: Automatic Labeled NPM Release
+# This workflow reacts on a PR that is labeled with "automated-docker-release", will automatically merge it
+name: Automatic Labeled Doker Release
 
 on:
   pull_request:
