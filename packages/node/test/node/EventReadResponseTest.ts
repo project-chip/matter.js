@@ -7,12 +7,10 @@
 import { BasicInformationCluster } from "#clusters/basic-information";
 import { OnOffLightDevice } from "#devices/on-off-light";
 import { Endpoint } from "#endpoint/index.js";
+import { Specification } from "#model";
 import { EventReadResponse, Read, ReadResult } from "#protocol";
-import { ClusterId, EndpointNumber, StatusCode } from "#types";
-import { Specification } from "@matter/model";
-import { EventId } from "@matter/types";
+import { ClusterId, EndpointNumber, EventId, StatusCode } from "#types";
 import { MockServerNode } from "./mock-server-node.js";
-import INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
 
 const ROOT_ENDPOINT_FULL_CLUSTER_LIST = {
     40: 2,
@@ -29,7 +27,7 @@ describe("EventReadResponse", () => {
     });
 
     it("reads concrete event", async () => {
-        const response = await read(
+        const response = await readEv(
             await MockServerNode.createOnline(),
             Read.Event({
                 cluster: BasicInformationCluster,
@@ -54,11 +52,11 @@ describe("EventReadResponse", () => {
                 },
             ],
         ]);
-        expect(response.counts).deep.equals({ status: 0, value: 1, existent: 1 });
+        expect(response.counts).deep.equals({ status: 0, success: 1, existent: 1 });
     });
 
     it("reads concrete event with version filter", async () => {
-        const response = await readRaw(await MockServerNode.createOnline(), {
+        const response = await readEvRaw(await MockServerNode.createOnline(), {
             eventRequests: [
                 {
                     clusterId: ClusterId(40),
@@ -69,11 +67,11 @@ describe("EventReadResponse", () => {
         });
 
         expect(response.data).deep.equals([]);
-        expect(response.counts).deep.equals({ status: 0, value: 0, existent: 1 });
+        expect(response.counts).deep.equals({ status: 0, success: 0, existent: 1 });
     });
 
     it("reads non-existent concrete endpoint", async () => {
-        const response = await read(
+        const response = await readEv(
             await MockServerNode.createOnline(),
             Read.Event({
                 endpoint: new Endpoint(OnOffLightDevice, { id: "test", number: 1 }),
@@ -95,12 +93,12 @@ describe("EventReadResponse", () => {
                 },
             ],
         ]);
-        expect(response.counts).deep.equals({ status: 1, value: 0, existent: 0 });
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
     });
 
     it("reads non-existent concrete event", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await read(
+        const response = await readEv(
             node,
             Read.Event({
                 endpoint: node,
@@ -122,12 +120,12 @@ describe("EventReadResponse", () => {
                 },
             ],
         ]);
-        expect(response.counts).deep.equals({ status: 1, value: 0, existent: 0 });
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
     });
 
     it("reads wildcard endpoint & events with default events", async () => {
         const node = await MockServerNode.createOnline();
-        const response = await read(
+        const response = await readEv(
             node,
             Read.Event({
                 endpoint: node,
@@ -140,14 +138,14 @@ describe("EventReadResponse", () => {
                 40: 1,
             },
         });
-        expect(response.counts).deep.equals({ status: 0, value: 1, existent: 3 });
+        expect(response.counts).deep.equals({ status: 0, success: 1, existent: 3 });
     });
 
     it("reads wildcard endpoint & events with extra emitted events", async () => {
         const node = await MockServerNode.createOnline();
         await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
 
-        const response = await read(
+        const response = await readEv(
             node,
             Read.Event({
                 endpoint: node,
@@ -160,19 +158,19 @@ describe("EventReadResponse", () => {
                 40: 2,
             },
         });
-        expect(response.counts).deep.equals({ status: 0, value: 2, existent: 3 });
+        expect(response.counts).deep.equals({ status: 0, success: 2, existent: 3 });
     });
 
     it("reads full wildcard", async () => {
         const node = await MockServerNode.createOnline();
         await node.act(agent => node.events.basicInformation.startUp.emit({ softwareVersion: 2 }, agent.context));
-        const response = await read(node, Read.Event({}));
+        const response = await readEv(node, Read.Event({}));
         expect(countEvents(response.data)).deep.equals({
             0: ROOT_ENDPOINT_FULL_CLUSTER_LIST,
         });
         expect(response.counts).deep.equals({
             status: 0,
-            value: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT,
+            success: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT,
             existent: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT + 1,
         });
     });
@@ -180,19 +178,19 @@ describe("EventReadResponse", () => {
     // TODO - more tests and Migrate some from InteractionProtocolTest
 });
 
-function read(node: MockServerNode, ...args: Parameters<typeof Read>) {
+export function readEv(node: MockServerNode, ...args: Parameters<typeof Read>) {
     const request = Read(...args);
 
     if (!Read.containsEvent(request)) {
         throw new Error("Expected an attribute request");
     }
-    return readRaw(node, request);
+    return readEvRaw(node, request);
 }
 
-async function readRaw(node: MockServerNode, data: Partial<Read.Events>) {
+export async function readEvRaw(node: MockServerNode, data: Partial<Read.Events>) {
     const request = {
         isFabricFiltered: false,
-        interactionModelRevision: INTERACTION_MODEL_REVISION,
+        interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
         ...data,
     } as Read.Attributes;
     if (!Read.containsEvent(request)) {
@@ -215,7 +213,7 @@ async function readRaw(node: MockServerNode, data: Partial<Read.Events>) {
     });
 }
 
-function countEvents(chunks: ReadResult.Chunk[]) {
+export function countEvents(chunks: ReadResult.Chunk[]) {
     const counts = {} as Record<EndpointNumber, Record<ClusterId, number>>;
     for (const chunk of chunks) {
         for (const report of chunk) {

@@ -561,9 +561,13 @@ describe("ServerNode", () => {
             expect(fm.limits.writable).equals(false);
             expect(fm.limits.readLevel).equals(AccessLevel.View);
 
-            const fmVals = bi.open(OfflineContext.ReadOnly);
-            expect((fmVals as Val.Struct).vendorName).equals("Matter.js Test Vendor");
-            expect(fmVals[BasicInformationCluster.attributes.vendorName.id]).equals("Matter.js Test Vendor");
+            const readState = bi.readState(OfflineContext.ReadOnly);
+            expect((readState as Val.Struct).vendorName).equals("Matter.js Test Vendor");
+            expect((readState as Val.Struct)[BasicInformationCluster.attributes.vendorName.id]).equals(
+                "Matter.js Test Vendor",
+            );
+
+            await expect(bi.openForWrite(OfflineContext.ReadOnly)).rejectedWith("This view is read-only");
 
             await node.close();
 

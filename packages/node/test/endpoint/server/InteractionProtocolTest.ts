@@ -9,8 +9,13 @@
 import { AdministratorCommissioningServer } from "#behaviors/administrator-commissioning";
 import { OnOffServer } from "#behaviors/on-off";
 import { WiFiNetworkDiagnosticsServer } from "#behaviors/wi-fi-network-diagnostics";
-import { Crypto } from "#general";
-import { ServerNode } from "#node/index.js";
+import { AdministratorCommissioning } from "#clusters/administrator-commissioning";
+import { BasicInformation } from "#clusters/basic-information";
+import { GeneralDiagnostics } from "#clusters/general-diagnostics";
+import { Crypto, Observable } from "#general";
+import { Specification } from "#model";
+import { InteractionServer } from "#node/server/InteractionServer.js";
+import { ServerNode } from "#node/ServerNode.js";
 import {
     BaseDataReport,
     DataReportPayload,
@@ -53,11 +58,6 @@ import {
     VendorId,
     WildcardPathFlagsBitmap,
 } from "#types";
-import { Observable } from "@matter/general";
-import { Specification } from "@matter/model";
-import { InteractionServer } from "@matter/node";
-import { BasicInformation, GeneralDiagnostics } from "@matter/types/clusters";
-import { AdministratorCommissioning } from "@matter/types/clusters/administrator-commissioning";
 import { MockServerNode } from "../../node/mock-server-node.js";
 import { interaction } from "../../node/node-helpers.js";
 import { createDummyMessageExchange } from "./InteractionTestUtils.js";
@@ -419,7 +419,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 
 const WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -486,7 +486,7 @@ const WRITE_RESPONSE: WriteResponse = {
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -520,7 +520,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -544,7 +544,7 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -576,7 +576,7 @@ const TlvAclTestSchema = TlvObject({
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
@@ -592,7 +592,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
-                authMode: 1,
+                authMode: 2,
                 subjects: null,
                 targets: null,
             }),
@@ -606,7 +606,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
-                authMode: 2,
+                authMode: 1,
                 subjects: null,
                 targets: null,
                 fabricIndex: FabricIndex.NO_FABRIC,
@@ -635,19 +635,38 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
     writeResponses: [
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+            },
             status: { clusterStatus: undefined, status: 0 },
         },
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
+            status: { clusterStatus: undefined, status: 0 },
+        },
+        {
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
             status: { clusterStatus: undefined, status: 135 },
         },
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
-            status: { clusterStatus: undefined, status: 0 },
-        },
-        {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            path: {
+                attributeId: AttributeId(0),
+                clusterId: ClusterId(31),
+                endpointId: EndpointNumber(0),
+                listIndex: null,
+            },
             status: { clusterStatus: undefined, status: 0 },
         },
     ],
@@ -1222,7 +1241,7 @@ describe("InteractionProtocol", () => {
                     ILLEGAL_MASS_WRITE_REQUEST,
                     interaction.BarelyMockedMessage,
                 ),
-            ).rejectedWith();
+            ).rejectedWith("(128) Wildcard path write must specify a clusterId and attributeId");
         });
 
         it("performs mass write with wildcard endpoint", async () => {

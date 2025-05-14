@@ -5,59 +5,65 @@
  */
 
 import { BasicInformationCluster } from "#clusters/basic-information";
-import { OnOffLightDevice } from "#devices/on-off-light";
-import { Endpoint } from "#endpoint/index.js";
-import { AttributeReadResponse, Read, ReadResult } from "#protocol";
-import { ClusterId, EndpointNumber, StatusCode } from "#types";
-import { Specification } from "@matter/model";
-import { AttributeId } from "@matter/types";
+import { AttributeWriteResponse, Write } from "#protocol";
+import { StatusCode } from "@matter/types";
 import { MockServerNode } from "./mock-server-node.js";
-import INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
-
-const ROOT_ENDPOINT_FULL_CLUSTER_LIST = {
-    29: 9,
-    31: 8,
-    40: 21,
-    48: 10,
-    51: 10,
-    60: 8,
-    62: 10,
-    63: 9,
-};
-const ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT = Object.values(ROOT_ENDPOINT_FULL_CLUSTER_LIST).reduce(
-    (acc, count) => acc + count,
-    0,
-);
 
 describe("AttributeReaderRequest", () => {
-    it("reads concrete attribute", async () => {
-        const response = await read(
-            await MockServerNode.createOnline(),
-            Read.Attribute({
+    it("writes concrete attribute", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await writeAttr(
+            node,
+            Write.Attribute({
                 cluster: BasicInformationCluster,
-                attributes: "vendorName",
+                attributes: "nodeLabel",
+                value: "Test Label",
             }),
         );
 
         expect(response.data).deep.equals([
-            [
-                {
-                    kind: "attr-value",
-                    path: {
-                        attributeId: 1,
-                        clusterId: 40,
-                        endpointId: 0,
-                    },
-                    tlv: {},
-                    value: "Matter.js Test Vendor",
-                    version: 1,
+            {
+                kind: "attr-status",
+                path: {
+                    attributeId: 5,
+                    clusterId: 40,
+                    endpointId: 0,
                 },
-            ],
+                status: StatusCode.Success,
+                clusterStatus: undefined,
+            },
         ]);
-        expect(response.counts).deep.equals({ status: 0, value: 1, existent: 1 });
+        expect(response.counts).deep.equals({ status: 0, success: 1, existent: 1 });
     });
 
-    it("reads concrete attribute with version filter", async () => {
+    it("writes non-writable concrete attribute with error", async () => {
+        const node = await MockServerNode.createOnline();
+        const response = await writeAttr(
+            node,
+            Write.Attribute({
+                endpoint: node,
+                cluster: BasicInformationCluster,
+                attributes: "vendorName",
+                value: "Matter.js Test Vendor",
+            }),
+        );
+
+        expect(response.data).deep.equals([
+            {
+                kind: "attr-status",
+                path: {
+                    attributeId: 1,
+                    clusterId: 40,
+                    endpointId: 0,
+                },
+                status: StatusCode.UnsupportedWrite,
+                clusterStatus: undefined,
+            },
+        ]);
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
+    });
+
+    /*it("reads concrete attribute with version filter", async () => {
         const response = await readRaw(await MockServerNode.createOnline(), {
             attributeRequests: [
                 {
@@ -74,7 +80,7 @@ describe("AttributeReaderRequest", () => {
         });
 
         expect(response.data).deep.equals([]);
-        expect(response.counts).deep.equals({ status: 0, value: 0, existent: 1 });
+        expect(response.counts).deep.equals({ status: 0, success: 0, existent: 1 });
     });
 
     it("reads non-existent concrete endpoint", async () => {
@@ -100,7 +106,7 @@ describe("AttributeReaderRequest", () => {
                 },
             ],
         ]);
-        expect(response.counts).deep.equals({ status: 1, value: 0, existent: 0 });
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
     });
 
     it("reads non-existent concrete attribute", async () => {
@@ -127,7 +133,7 @@ describe("AttributeReaderRequest", () => {
                 },
             ],
         ]);
-        expect(response.counts).deep.equals({ status: 1, value: 0, existent: 0 });
+        expect(response.counts).deep.equals({ status: 1, success: 0, existent: 0 });
     });
 
     it("reads wildcard endpoint & attributes", async () => {
@@ -143,7 +149,7 @@ describe("AttributeReaderRequest", () => {
                 40: 21,
             },
         });
-        expect(response.counts).deep.equals({ status: 0, value: 21, existent: 21 });
+        expect(response.counts).deep.equals({ status: 0, success: 21, existent: 21 });
     });
 
     it("reads full wildcard", async () => {
@@ -170,7 +176,7 @@ describe("AttributeReaderRequest", () => {
         });
         expect(responseWithLight.counts).deep.equals({
             status: 0,
-            value: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT + 32,
+            success: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT + 32,
             existent: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT + 32,
         });
         await endpoint.close();
@@ -181,7 +187,7 @@ describe("AttributeReaderRequest", () => {
         });
         expect(responseAfterRemove.counts).deep.equals({
             status: 0,
-            value: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT,
+            success: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT,
             existent: ROOT_ENDPOINT_FULL_CLUSTER_LIST_COUNT,
         });
     });
@@ -207,7 +213,7 @@ describe("AttributeReaderRequest", () => {
         });
         expect(response.counts).deep.equals({
             status: 0,
-            value: Object.keys(ROOT_ENDPOINT_FULL_CLUSTER_LIST).length,
+            success: Object.keys(ROOT_ENDPOINT_FULL_CLUSTER_LIST).length,
             existent: Object.keys(ROOT_ENDPOINT_FULL_CLUSTER_LIST).length,
         });
     });
@@ -227,59 +233,28 @@ describe("AttributeReaderRequest", () => {
         expect(response.data).deep.equals([]);
         expect(response.counts).deep.equals({
             status: 0,
-            value: 0,
+            success: 0,
             existent: 0,
         });
     });
-
+*/
     // TODO - more tests and Migrate some from InteractionProtocolTest
 });
 
-function read(node: MockServerNode, ...args: Parameters<typeof Read>) {
-    const request = Read(...args);
+function writeAttr(node: MockServerNode, ...args: Parameters<typeof Write>) {
+    const request = Write(...args);
 
-    if (!Read.containsAttribute(request)) {
-        throw new Error("Expected an attribute request");
-    }
-    return readRaw(node, request);
+    return writeRaw(node, request);
 }
 
-async function readRaw(node: MockServerNode, data: Partial<Read.Attributes>) {
+async function writeRaw(node: MockServerNode, data: Write) {
     const request = {
-        isFabricFiltered: false,
-        interactionModelRevision: INTERACTION_MODEL_REVISION,
+        suppressResponse: false,
         ...data,
-    } as Read.Attributes;
-    if (!Read.containsAttribute(request)) {
-        throw new Error("Expected an attribute request");
-    }
-    return node.online({}, ({ context }) => {
-        const response = new AttributeReadResponse(node.protocol, context);
-        const data = [...response.process(request)];
-        data.forEach(chunks => {
-            if (Array.isArray(chunks)) {
-                chunks.forEach(chunk => {
-                    if ("tlv" in chunk) {
-                        chunk.tlv = {};
-                    }
-                });
-            }
-        });
-        return { data, counts: response.counts };
-    });
-}
+    } as Write;
 
-function countAttrs(chunks: ReadResult.Chunk[]) {
-    const counts = {} as Record<EndpointNumber, Record<ClusterId, number>>;
-    for (const chunk of chunks) {
-        for (const report of chunk) {
-            if (report.kind !== "attr-value") {
-                throw new Error("Only attribute values expected");
-            }
-            const endpointCounts = (counts[report.path.endpointId] ??= {});
-            endpointCounts[report.path.clusterId] ??= 0;
-            endpointCounts[report.path.clusterId]++;
-        }
-    }
-    return counts;
+    return node.online({}, async ({ context }) => {
+        const response = new AttributeWriteResponse(node.protocol, context);
+        return { data: await response.process(request), counts: response.counts };
+    });
 }
