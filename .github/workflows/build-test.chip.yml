@@ -121,7 +121,7 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
@@ -145,7 +145,7 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
@@ -157,7 +157,7 @@ jobs:
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
-        
+
       - uses: ./.github/actions/run-chip-tests
         with:
           image-source: ${{ needs.chip-image.outputs.source }}
@@ -226,6 +226,6 @@ jobs:
           body: |
             New CHIP SHA from CI container build
           labels: |
-            automated pr
+            automated-docker-release
           assignees: Automator77
           draft: false
