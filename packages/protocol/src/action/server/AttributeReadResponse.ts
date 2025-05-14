@@ -125,7 +125,7 @@ export class AttributeReadResponse<
     get counts() {
         return {
             status: this.#statusCount,
-            value: this.#valueCount,
+            success: this.#valueCount,
             existent: this.#valueCount + this.#filteredCount,
         };
     }

@@ -48,15 +48,15 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
             const attributeReader = new AttributeReadResponse(this.#node, session);
             yield* attributeReader.process(request);
 
-            const { existent, status, value } = attributeReader.counts;
-            readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
+            const { existent, status, success } = attributeReader.counts;
+            readInfo = `${existent} matching attributes (${status ? `${status} status, ` : ""}${success ? `${success} values` : ""})`;
         }
 
         if (Read.containsEvent(request)) {
             const eventReader = new EventReadResponse(this.#node, session);
             yield* eventReader.process(request);
-            const { existent, status, value } = eventReader.counts;
-            readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${value ? `${value} values` : ""})`;
+            const { existent, status, success } = eventReader.counts;
+            readInfo += `${readInfo.length > 0 ? ", " : ""}${existent} matching events (${status ? `${status} status, ` : ""}${success ? `${success} values` : ""})`;
         }
         logger.debug(`Read request resolved to ${readInfo}`);
     }

@@ -64,8 +64,8 @@ export abstract class DataResponse<SessionT extends InteractionSession = Interac
         status: number;
 
         /**
-         * Number of value responses (aka success we have sent)
+         * Number of success or value responses (aka success we have sent)
          */
-        value: number;
+        success: number;
     };
 }

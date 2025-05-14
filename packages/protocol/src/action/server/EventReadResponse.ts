@@ -103,7 +103,7 @@ export class EventReadResponse<
     get counts() {
         return {
             status: this.#statusCount,
-            value: this.#valueCount,
+            success: this.#valueCount,
             existent: this.#allowedEventPaths.size,
         };
     }
