@@ -115,6 +115,8 @@ export class ServerSubscription extends Subscription {
     readonly #changeHandlers = new ObserverGroup();
 
     #sendUpdatesActivated = false;
+    #seededClusterDetails? = new Map<string, number>();
+    #latestSeededEventNumber? = EventNumber(0);
     readonly #sendIntervalMs: number;
     readonly #minIntervalFloorMs: number;
     readonly #maxIntervalCeilingMs: number;
@@ -219,9 +221,23 @@ export class ServerSubscription extends Subscription {
         }
     }
 
-    #handleClusterStateChanges(endpointId: EndpointNumber, clusterId: ClusterId, changedAttrs: AttributeId[]) {
+    #handleClusterStateChanges(
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        changedAttrs: AttributeId[],
+        version: number,
+    ) {
         if (this.isClosed || !changedAttrs.length) {
             return;
+        }
+
+        // Change received while we are seeding this subscription
+        if (this.#seededClusterDetails !== undefined) {
+            const seededVersion = this.#seededClusterDetails.get(`${endpointId}-${clusterId}`);
+            if (seededVersion === undefined || seededVersion === version) {
+                // We do not seed this cluster, or we seeded with the same version, so no change or yet to come in seed
+                return;
+            }
         }
 
         this.#addOutstandingAttributes(endpointId, clusterId, changedAttrs);
@@ -234,7 +250,9 @@ export class ServerSubscription extends Subscription {
             return;
         }
 
-        if (this.#outstandingEventsMinNumber === undefined) {
+        // Remember the minimum event number to send. If an event is received during the seeding process, we store the
+        // highest number - this is corrected after seeding.
+        if (this.#outstandingEventsMinNumber === undefined || this.#latestSeededEventNumber !== undefined) {
             this.#outstandingEventsMinNumber = occurrence.number;
         }
 
@@ -273,22 +291,24 @@ export class ServerSubscription extends Subscription {
         if (this.criteria.dataVersionFilters !== undefined) this.criteria.dataVersionFilters.length = 0;
 
         this.#sendUpdatesActivated = true;
+
+        if (this.#outstandingEventsMinNumber !== undefined && this.#latestSeededEventNumber !== undefined) {
+            if (this.#latestSeededEventNumber < this.#outstandingEventsMinNumber) {
+                this.#outstandingEventsMinNumber = EventNumber(BigInt(this.#latestSeededEventNumber) + BigInt(1));
+            } else {
+                this.#outstandingEventsMinNumber = undefined; // We already sent out the latest event number
+            }
+        }
+        // Clear temporary data from seeding
+        this.#latestSeededEventNumber = undefined;
+        this.#seededClusterDetails = undefined;
+
         if (this.#outstandingAttributeUpdates !== undefined || this.#outstandingEventsMinNumber !== undefined) {
             this.#triggerSendUpdate();
         }
         this.#updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.#prepareDataUpdate(),
         ).start();
-
-        if (this.criteria.attributeRequests?.length) {
-            this.#changeHandlers.on(
-                this.#context.node.protocol.stateChanged,
-                this.#handleClusterStateChanges.bind(this),
-            );
-        }
-        if (this.criteria.eventRequests?.length) {
-            this.#changeHandlers.on(this.#context.node.protocol.eventHandler.added, this.#handleAddedEvents.bind(this));
-        }
     }
 
     /**
@@ -414,7 +434,7 @@ export class ServerSubscription extends Subscription {
     /**
      * Returns an iterator that yields the data reports and events data for the given read request.
      */
-    async *#processAttributesAndEventsReport(context: OnlineContext.ReadOnly, suppressStatusReports = false) {
+    async *#processAttributesAndEventsReport(context: OnlineContext.Options, suppressStatusReports = false) {
         const request = {
             ...this.criteria,
             interactionModelRevision: Specification.INTERACTION_MODEL_REVISION, // irrelevant here, set to our version
@@ -425,81 +445,107 @@ export class ServerSubscription extends Subscription {
         let validAttributes = 0;
         let validEvents = 0;
 
-        if (Read.containsAttribute(request)) {
-            const attributeReader = new AttributeReadResponse(this.#context.node.protocol, context);
-            for (const chunk of attributeReader.process(request)) {
-                for (const report of chunk) {
-                    if (report.kind === "attr-status") {
-                        if (suppressStatusReports) {
-                            continue;
+        const session = OnlineContext(context).beginReadOnly();
+
+        try {
+            if (Read.containsAttribute(request)) {
+                const attributeReader = new AttributeReadResponse(this.#context.node.protocol, session);
+                for (const chunk of attributeReader.process(request)) {
+                    for (const report of chunk) {
+                        if (report.kind === "attr-status") {
+                            if (suppressStatusReports) {
+                                continue;
+                            }
+                            if (!hasValuesInResponse) {
+                                // We need to delay all status reports until we know if we have a valid response
+                                delayedStatusReports.push(report);
+                                continue;
+                            }
+                        } else if (!hasValuesInResponse && report.kind === "attr-value") {
+                            // First value response, so send out all delayed status reports first
+                            for (const delayedReport of delayedStatusReports) {
+                                yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
+                            }
+                            delayedStatusReports.length = 0;
+                            hasValuesInResponse = true;
                         }
-                        if (!hasValuesInResponse) {
-                            // We need to delay all status reports until we know if we have a valid response
-                            delayedStatusReports.push(report);
-                            continue;
+                        if (this.#seededClusterDetails !== undefined && report.kind === "attr-value") {
+                            const {
+                                path: { endpointId, clusterId },
+                                version,
+                            } = report;
+                            this.#seededClusterDetails.set(`${endpointId}-${clusterId}`, version);
                         }
-                    } else if (!hasValuesInResponse && report.kind === "attr-value") {
-                        // First value response, so send out all delayed status reports first
-                        for (const delayedReport of delayedStatusReports) {
-                            yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
-                        }
-                        delayedStatusReports.length = 0;
-                        hasValuesInResponse = true;
+                        yield InteractionServerMessenger.convertServerInteractionReport(report);
                     }
-                    yield InteractionServerMessenger.convertServerInteractionReport(report);
+                }
+                validAttributes = attributeReader.counts.existent;
+            }
+
+            if (Read.containsEvent(request)) {
+                const eventReader = new EventReadResponse(this.#context.node.protocol, session);
+                for await (const chunk of eventReader.process(request)) {
+                    for (const report of chunk) {
+                        if (report.kind === "event-status") {
+                            if (suppressStatusReports) {
+                                continue;
+                            }
+                            if (!hasValuesInResponse) {
+                                // We need to delay all status reports until we know if we have a valid response
+                                delayedStatusReports.push(report);
+                                continue;
+                            }
+                        } else if (!hasValuesInResponse && report.kind === "event-value") {
+                            // First value response, so send out all delayed status reports first
+                            for (const delayedReport of delayedStatusReports) {
+                                yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
+                            }
+                            delayedStatusReports.length = 0;
+                            hasValuesInResponse = true;
+                        }
+                        if (this.#latestSeededEventNumber !== undefined && report.kind === "event-value") {
+                            this.#latestSeededEventNumber = report.number;
+                        }
+                        yield InteractionServerMessenger.convertServerInteractionReport(report);
+                    }
+                }
+                validEvents = eventReader.counts.existent;
+            }
+
+            if (validAttributes === 0 && validEvents === 0) {
+                throw new StatusResponseError(
+                    "Subscription failed because no attributes or events are matching the query",
+                    StatusCode.InvalidAction,
+                );
+            } else if (!hasValuesInResponse && delayedStatusReports.length) {
+                // We have no values in the response but collected status reports, so we need to send them
+                for (const delayedReport of delayedStatusReports) {
+                    yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
                 }
             }
-            validAttributes = attributeReader.counts.existent;
+        } finally {
+            session[Symbol.dispose]();
         }
-
-        if (Read.containsEvent(request)) {
-            const eventReader = new EventReadResponse(this.#context.node.protocol, context);
-            for await (const chunk of eventReader.process(request)) {
-                for (const report of chunk) {
-                    if (report.kind === "event-status") {
-                        if (suppressStatusReports) {
-                            continue;
-                        }
-                        if (!hasValuesInResponse) {
-                            // We need to delay all status reports until we know if we have a valid response
-                            delayedStatusReports.push(report);
-                            continue;
-                        }
-                    } else if (!hasValuesInResponse && report.kind === "event-value") {
-                        // First value response, so send out all delayed status reports first
-                        for (const delayedReport of delayedStatusReports) {
-                            yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
-                        }
-                        delayedStatusReports.length = 0;
-                        hasValuesInResponse = true;
-                    }
-                    yield InteractionServerMessenger.convertServerInteractionReport(report);
-                }
-            }
-            validEvents = eventReader.counts.existent;
-        }
-
-        if (validAttributes === 0 && validEvents === 0) {
-            throw new StatusResponseError(
-                "Subscription failed because no attributes or events are matching the query",
-                StatusCode.InvalidAction,
-            );
-        } else if (!hasValuesInResponse && delayedStatusReports.length) {
-            // We have no values in the response but collected status reports, so we need to send them
-            for (const delayedReport of delayedStatusReports) {
-                yield InteractionServerMessenger.convertServerInteractionReport(delayedReport);
-            }
-        }
-
         this.#lastUpdateTimeMs = Time.nowMs();
     }
 
     async sendInitialReport(
         messenger: InteractionServerMessenger,
-        readContext: OnlineContext.ReadOnly,
+        readContext: OnlineContext.Options,
         suppressStatusReports?: boolean,
     ) {
         this.#updateTimer.stop();
+
+        // Register change handlers, so that we get changes directly
+        if (this.criteria.attributeRequests?.length) {
+            this.#changeHandlers.on(
+                this.#context.node.protocol.stateChanged,
+                this.#handleClusterStateChanges.bind(this),
+            );
+        }
+        if (this.criteria.eventRequests?.length) {
+            this.#changeHandlers.on(this.#context.node.protocol.eventHandler.added, this.#handleAddedEvents.bind(this));
+        }
 
         await messenger.sendDataReport({
             baseDataReport: {
@@ -577,33 +623,37 @@ export class ServerSubscription extends Subscription {
             node: this.#context.node,
         }).beginReadOnly();
 
-        if (attributeFilter !== undefined && Read.containsAttribute(request)) {
-            const attributeReader = new AttributeSubscriptionResponse(
-                this.#context.node.protocol,
-                session,
-                attributeFilter,
-            );
-            for (const chunk of attributeReader.process(request)) {
-                for (const report of chunk) {
-                    // No need to filter out status responses because AttributeSubscriptionResponse does that already
-                    yield InteractionServerMessenger.convertServerInteractionReport(report);
-                }
-            }
-        }
-
-        if (eventsMinNumber !== undefined && Read.containsEvent(request)) {
-            // Add the new minimum event number to the request
-            request.eventFilters = [{ eventMin: eventsMinNumber }];
-
-            const eventReader = new EventReadResponse(this.#context.node.protocol, session);
-            for await (const chunk of eventReader.process(request)) {
-                for (const report of chunk) {
-                    if (report.kind === "event-status") {
-                        continue;
+        try {
+            if (attributeFilter !== undefined && Read.containsAttribute(request)) {
+                const attributeReader = new AttributeSubscriptionResponse(
+                    this.#context.node.protocol,
+                    session,
+                    attributeFilter,
+                );
+                for (const chunk of attributeReader.process(request)) {
+                    for (const report of chunk) {
+                        // No need to filter out status responses because AttributeSubscriptionResponse does that already
+                        yield InteractionServerMessenger.convertServerInteractionReport(report);
                     }
-                    yield InteractionServerMessenger.convertServerInteractionReport(report);
                 }
             }
+
+            if (eventsMinNumber !== undefined && Read.containsEvent(request)) {
+                // Add the new minimum event number to the request
+                request.eventFilters = [{ eventMin: eventsMinNumber }];
+
+                const eventReader = new EventReadResponse(this.#context.node.protocol, session);
+                for await (const chunk of eventReader.process(request)) {
+                    for (const report of chunk) {
+                        if (report.kind === "event-status") {
+                            continue;
+                        }
+                        yield InteractionServerMessenger.convertServerInteractionReport(report);
+                    }
+                }
+            }
+        } finally {
+            session[Symbol.dispose]();
         }
     }
 
