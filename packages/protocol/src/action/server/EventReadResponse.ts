@@ -353,7 +353,7 @@ export class EventReadResponse<
     #asStatus(path: ReadResult.ConcreteEventPath, status: Status) {
         logger.debug(`Error reading event ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`);
 
-        const report: ReadResult.GlobalEventStatus = {
+        const report: ReadResult.EventStatus = {
             kind: "event-status",
             path,
             status,

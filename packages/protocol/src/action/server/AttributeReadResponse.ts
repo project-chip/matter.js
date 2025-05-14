@@ -436,7 +436,7 @@ export class AttributeReadResponse<
             () => `Error reading attribute ${this.node.inspectPath(path)}: Status=${StatusCode[status]}(${status})`,
         );
 
-        const report: ReadResult.GlobalAttributeStatus = {
+        const report: ReadResult.AttributeStatus = {
             kind: "attr-status",
             path,
             status,

@@ -712,7 +712,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 return data;
             }
             case "attr-status": {
-                const { path, status } = report;
+                const { path, status, clusterStatus } = report;
                 const statusReport: AttributeReportPayload = {
                     attributeStatus: {
                         path,
@@ -720,6 +720,9 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     },
                     hasFabricSensitiveData: false,
                 };
+                if (clusterStatus !== undefined) {
+                    statusReport.attributeStatus!.status.clusterStatus = clusterStatus;
+                }
                 return statusReport;
             }
             case "event-value": {
@@ -745,7 +748,7 @@ export class InteractionServerMessenger extends InteractionMessenger {
                 return data;
             }
             case "event-status": {
-                const { path, status } = report;
+                const { path, status, clusterStatus } = report;
                 const statusReport: EventReportPayload = {
                     eventStatus: {
                         path,
@@ -753,10 +756,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
                     },
                     hasFabricSensitiveData: false,
                 };
+                if (clusterStatus !== undefined) {
+                    statusReport.eventStatus!.status.clusterStatus = clusterStatus;
+                }
                 return statusReport;
             }
         }
-        throw new InternalError(`Unknown report type: ${report.kind}`);
     }
 }
 
