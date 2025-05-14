@@ -5,6 +5,7 @@ name: Automatic Labeled Release
 on:
   pull_request:
     types: [labeled]
+    branches: [ 'nightly-release', 'official-release' ]
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
