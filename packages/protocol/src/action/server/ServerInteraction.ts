@@ -66,9 +66,11 @@ export class ServerInteraction<SessionT extends InteractionSession = Interaction
         throw new NotImplementedError();
     }
 
-    write<T extends Write>(_request: T, _session?: SessionT): WriteResult<T> {
-        // TODO
-        throw new NotImplementedError();
+    write<T extends Write>(request: T, session: SessionT): WriteResult<T> {
+        // TODO - validate request
+
+        const writer = new AttributeWriteResponse(this.#node, session);
+        return writer.process(request);
     }
 
     invoke<T extends Invoke>(_request: T, _session?: SessionT): InvokeResult<T> {
