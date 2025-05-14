@@ -457,6 +457,8 @@ export class InteractionServer implements ProtocolHandler, InteractionRecipient 
 
         let result: Awaited<WriteResult<any>>;
         try {
+            // TODO: We still need to add multi message writes!
+
             result = await this.#serverInteraction.write(
                 writeRequest,
                 this.#createOnlineContext(exchange, message, true),
