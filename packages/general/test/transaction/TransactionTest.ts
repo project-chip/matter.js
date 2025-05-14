@@ -211,6 +211,27 @@ describe("Transaction", () => {
 
             p.expect("rollback");
         });
+
+        it("multiple begin/commits asynchronously", async () => {
+            const p = TestParticipant();
+
+            const result = await Transaction.act("test", async tx => {
+                expect(tx.participants.size).equals(0);
+                tx.addParticipants(p);
+                expect(tx.participants.size).equals(1);
+                expect(tx.participants.has(p)).equals(true);
+                await tx.begin();
+                tx.commit();
+                expect(tx.participants.size).equals(0);
+                tx.addParticipants(p);
+                expect(tx.participants.size).equals(1);
+                expect(tx.participants.has(p)).equals(true);
+                await tx.begin();
+            });
+            expect(result).undefined;
+
+            p.expect("commit1", "commit2", "commit1", "commit2");
+        });
     });
 
     test("handles commit and rollback on shared", async () => {
