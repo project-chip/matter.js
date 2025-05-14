@@ -60,4 +60,50 @@ describe("Access", () => {
             ]);
         });
     });
+
+    describe("readable", () => {
+        it("set by R", () => {
+            expect(new Access("R").readable).equals(true);
+            expect(new Access("R F A").readable).equals(true);
+        });
+
+        it("requires R", () => {
+            expect(new Access("W").readable).equals(false);
+            expect(new Access("W F A").readable).equals(false);
+        });
+    });
+
+    describe("writable", () => {
+        it("set by W", () => {
+            expect(new Access("W").writable).equals(true);
+            expect(new Access("W F A").writable).equals(true);
+        });
+
+        it("requires W", () => {
+            expect(new Access("R").writable).equals(false);
+            expect(new Access("R F A").writable).equals(false);
+        });
+    });
+
+    describe("complete", () => {
+        it("requires r/w privileges if RW", () => {
+            expect(new Access("RW").complete).equals(false);
+            expect(new Access("RW V").complete).equals(false);
+            expect(new Access("RW V O").complete).equals(true);
+        });
+
+        it("requires read privilege if R", () => {
+            expect(new Access("R").complete).equals(false);
+            expect(new Access("R V").complete).equals(true);
+            expect(new Access("R O").complete).equals(true);
+            expect(new Access("R V O").complete).equals(true);
+        });
+
+        it("requires write privilege if W", () => {
+            expect(new Access("W").complete).equals(false);
+            expect(new Access("W V").complete).equals(false);
+            expect(new Access("R O").complete).equals(true);
+            expect(new Access("R V O").complete).equals(true);
+        });
+    });
 });

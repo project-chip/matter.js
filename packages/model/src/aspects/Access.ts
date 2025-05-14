@@ -21,11 +21,9 @@ export enum AccessLevel {
 }
 
 /**
- * An operational representation of "access" as defined by the Matter
- * specification.
+ * An operational representation of "access" as defined by the Matter specification.
  *
- * "Access" controls the operations a remote party may perform on a data field
- * or cluster element.
+ * "Access" controls the operations a remote party may perform on a data field or cluster element.
  */
 export class Access extends Aspect<Access.Definition> implements Access.Ast {
     declare rw?: Access.Rw;
@@ -57,21 +55,19 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
     }
 
     /**
-     * Determine whether this access is fully specified.  This means we know
-     * whether reads and/or writes are allowed and if so the required access
-     * levels.
+     * Determine whether this access is fully specified.  This means we know whether reads and/or writes are allowed and
+     * if so the required access levels.
      */
     get complete() {
         return (
             this.rw !== undefined &&
-            (!this.readable || this.rw !== undefined) &&
-            (!this.writable || this.rw !== undefined)
+            (!this.readable || this.readPriv !== undefined) &&
+            (!this.writable || this.writePriv !== undefined)
         );
     }
 
     /**
-     * Initialize from an Access.Definition or the access control DSL defined
-     * by the Matter Specification.
+     * Initialize from an Access.Definition or the access control DSL defined by the Matter Specification.
      */
     constructor(definition: string | Access.Definition) {
         super(definition);
@@ -88,8 +84,7 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
     }
 
     /**
-     * Parses standard Matter access syntax into an AccessFlag set.  Extremely
-     * lenient.
+     * Parses standard Matter access syntax into an AccessFlag set.  Extremely lenient.
      */
     static parse(access: Access, definition: string) {
         definition = definition.toUpperCase();
@@ -132,8 +127,7 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
                     break;
 
                 case "[":
-                    // Optional write syntax.  Note only R[W] is legal but we
-                    // allow for bare [W]
+                    // Optional write syntax.  Note only R[W] is legal but we allow for bare [W]
                     if (i < definition.length - 2 && definition[i + 1] === "W" && definition[i + 2] === "]") {
                         flags.push(Access.Rw.ReadWriteOption);
                         i += 2;
@@ -141,8 +135,7 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
                     break;
 
                 case "*":
-                    // Deprecated syntax, again allow for *W when only R*W is
-                    // legal
+                    // Deprecated syntax, again allow for *W when only R*W is legal
                     if (i < definition.length - 1 && definition[i + 1] === "W") {
                         flags.push(Access.Rw.ReadWriteOption);
                         i++;
