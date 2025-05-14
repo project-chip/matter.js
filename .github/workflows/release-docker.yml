@@ -8,7 +8,7 @@ on:
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
-  group: ${{ github.ref }}-auto-npm-release
+  group: ${{ github.ref }}-auto-docker-release
   cancel-in-progress: true
 
 jobs:
